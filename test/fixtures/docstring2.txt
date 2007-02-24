@@ -1,0 +1,4 @@
+Returns a list of tags specified by +name+ or all tags if +name+ is not specified.
+
+@param name the tag name to return data for, or nil for all tags
+@return [Array<BaseTag>] the list of tags by the specified tag name
