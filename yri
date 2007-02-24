@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/lib/quick_doc'
+doc = YARD::QuickDoc.new(ARGV[0])

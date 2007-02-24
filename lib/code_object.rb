@@ -13,6 +13,26 @@ module YARD #:nodoc:
     attr_accessor :visibility, :scope 
     attr_accessor :parent, :children
     
+    ##
+    # Creates a new code object with necessary information such as the object's name (not full path),
+    # it's type (:class, :module, :method, etc.), visibility (:public, :private, :protected) and scope
+    # (:instance or :class level). Optionally you can specify a parent object and comments too, but these
+    # can also be assigned later through the {#parent=} and {#attach_docstring} methods.
+    #
+    # @param [String] name        the name of the object, not including its namespace ('initialize' for this method)
+    # @param [Symbol] type        the type of object this is, including (but not limited to): 
+    #                             :module, :class, :method, :constant
+    # @param [Symbol] visibility  :public, :protected or :private depending on the visibility of the object
+    # @param [Symbol] scope       :instance or :class depending on if the object is instance level or class level.
+    #                             Instance level objects use the '#' character to separate from their parent instead of '::'
+    # @param [CodeObject] parent  The parent of this object. Without a parent this object will not be registered
+    #                             in the {Namespace}
+    # @param [String] comments    Comments to be parsed as a docstring for the object. 
+    # @return [CodeObject] the created code object
+    # @yieldparam [CodeObject] _self the object is yielded during initialization to perform any initialization operations
+    #                                on it more conveniently.
+    # @see #attach_docstring
+    # @see #parent=
     def initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)
       @name, @type, @visibility, @scope = name, type, visibility.to_sym, scope.to_sym
       @tags, @attributes, @children = [], {}, []
