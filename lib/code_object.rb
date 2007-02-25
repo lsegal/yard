@@ -207,6 +207,7 @@ module YARD #:nodoc:
         obj[:class_methods] = {}
         obj[:constants] = {}
         obj[:class_variables] = {}
+        obj[:mixins] = []
         yield(obj) if block_given?
       end
     end

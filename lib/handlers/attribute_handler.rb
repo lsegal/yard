@@ -1,5 +1,5 @@
 class YARD::AttributeHandler < YARD::CodeObjectHandler
-  handles /\Aattr(_(reader|writer|accessor))?\s/
+  handles /\Aattr(_(reader|writer|accessor))?\b/
   
   def process
     attr_type   = statement.tokens.first.text.to_sym

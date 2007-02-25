@@ -245,7 +245,7 @@ module RubyToken
   def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
     token_n = token_n.id2name unless token_n.kind_of?(String)
     if RubyToken.const_defined?(token_n)
-      IRB.fail AlreadyDefinedToken, token_n
+      #IRB.fail AlreadyDefinedToken, token_n
     end
 
     token_c =  Class.new super_token

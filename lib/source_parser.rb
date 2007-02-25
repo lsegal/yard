@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/hash_struct'
-require File.dirname(__FILE__) + '/ruby_lex'
+require File.dirname(__FILE__) + '/ruby_lex' 
 require File.dirname(__FILE__) + '/namespace'
 require File.dirname(__FILE__) + '/code_object'
 require File.dirname(__FILE__) + '/handlers/all_handlers'
