@@ -1,3 +1,4 @@
+require 'stringio'
 require File.dirname(__FILE__) + '/hash_struct'
 require File.dirname(__FILE__) + '/ruby_lex' 
 require File.dirname(__FILE__) + '/namespace'
@@ -12,6 +13,10 @@ module YARD
     
     def self.parse(content)
       new.parse(content)
+    end
+    
+    def self.parse_string(content)
+      new.parse(StringIO.new(content))
     end
     
     attr_accessor :current_namespace
@@ -35,7 +40,11 @@ module YARD
       when StatementList
         statements = content
       else
-        raise ArgumentError, "Invalid argument for SourceParser::parse: #{content.inspect}:#{content.class}"
+        if content.respond_to? :read
+          statements = StatementList.new(content.read)
+        else
+          raise ArgumentError, "Invalid argument for SourceParser::parse: #{content.inspect}:#{content.class}"
+        end
       end
       
       top_level_parse(statements)

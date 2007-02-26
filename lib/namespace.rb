@@ -61,6 +61,19 @@ module YARD
       def save
         File.open("Yardoc", "w") {|f| Marshal.dump(instance.namespace, f) }
       end
+      
+      def find_from_path(path, name)
+        return at(path) if name == 'self'
+        path = path.split(/::|#/)
+        while !path.empty?
+          ["::", "#"].each do |type|
+            obj = at([path.join("::"), name].join(type))
+            return obj if obj
+          end
+          path.pop
+        end
+        nil
+      end
     end
     
     attr_reader :namespace
