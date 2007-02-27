@@ -162,6 +162,7 @@ module YARD #:nodoc:
       #                                         are passed as a String, they will
       #                                         be split by newlines. 
       def parse_comments(comments)
+        return if comments.empty?
         meta_match = /^\s*@(\S+)\s*(.*)/
         comments = comments.split(/\r?\n/) if comments.is_a? String
         @tags, @docstring = [], ""
@@ -211,6 +212,20 @@ module YARD #:nodoc:
         yield(obj) if block_given?
       end
     end
+    
+    def inherited_class_methods
+      inherited_methods(:class)
+    end
+    
+    def inherited_instance_methods
+      inherited_methods(:instance)
+    end
+    
+    def inherited_methods(scopes = [:class, :instance])
+      [scopes].flatten.each do |scope|
+        mixins.inject({}) {|hash, mixin| hash.update(mixin.send(scope + "_methods")) }
+      end
+    end
   end
 
   class ModuleObject < CodeObjectWithMethods
@@ -220,11 +235,31 @@ module YARD #:nodoc:
   end
 
   class ClassObject < CodeObjectWithMethods
-    def initialize(name, superclass = "Object", *args)
+    BASE_OBJECT = "Object"
+    
+    def initialize(name, superclass = BASE_OBJECT, *args)
       super(name, :class, *args) do |obj|
         obj[:attributes] = {}
         obj[:superclass] = superclass
       end
+    end
+    
+    def inherited_methods(scopes = [:class, :instance])
+      inherited_methods = super
+      superobject = Namespace.find_from_path(path, superclass)
+      if superobject && superobject.path != path # avoid infinite loop
+        [scopes].flatten.each do |scope|
+          inherited_methods.update(superobject.send(scope + "_methods"))
+          inherited_methods.update(superobject.send("inherited_#{scope}_methods"))
+        end
+      end
+      inherited_methods
+    end
+    
+    def inheritance_tree
+      superobject = Namespace.find_from_path(path, superclass)
+      return [BASE_OBJECT] if superclass == BASE_OBJECT || superobject.nil?
+      [superobject.path] + superobject.inheritance_tree
     end
   end
   

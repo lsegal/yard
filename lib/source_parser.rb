@@ -1,5 +1,4 @@
 require 'stringio'
-require File.dirname(__FILE__) + '/hash_struct'
 require File.dirname(__FILE__) + '/ruby_lex' 
 require File.dirname(__FILE__) + '/namespace'
 require File.dirname(__FILE__) + '/code_object'
@@ -113,7 +112,7 @@ module YARD
 
         while tk = @tokens.shift
           # Get the initial comments
-          if statement.empty? || tk.class == TkCOMMENT
+          if statement.empty?
             # Two new-lines in a row will destroy any comment blocks
             if tk.class == TkNL && (last_tk.class == TkNL || last_tk.class == TkSPACE)
               comments = nil
@@ -133,7 +132,7 @@ module YARD
             level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
 
             # If the level is greater than 0, add the code to the block text
-            # otherwise it's parse of the statement text
+            # otherwise it's part of the statement text
             if level > 0
               block ||= TokenList.new
               block << tk
