@@ -113,7 +113,7 @@ module YARD
 
         while tk = @tokens.shift
           # Get the initial comments
-          if statement.empty?
+          if statement.empty? || tk.class == TkCOMMENT
             # Two new-lines in a row will destroy any comment blocks
             if tk.class == TkNL && (last_tk.class == TkNL || last_tk.class == TkSPACE)
               comments = nil
@@ -126,8 +126,7 @@ module YARD
               comments.pop if comments.size == 1 && comments.first =~ /^\s*$/
             end
           end
-          comments = comments.compact if comments
-
+          
           # Ignore any initial comments or whitespace
           unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
@@ -138,8 +137,8 @@ module YARD
             if level > 0
               block ||= TokenList.new
               block << tk
-            elsif stmt_number == 0 && tk.class != TkNL
-              statement << tk
+            elsif stmt_number == 0 && tk.class != TkNL && tk.class != TkCOMMENT
+              statement << tk 
             end
 
   #          p "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
@@ -197,6 +196,7 @@ module YARD
 
         # Return the code block with starting token and initial comments
         # If there is no code in the block, return nil
+        comments = comments.compact if comments
         statement.empty? ? nil : Statement.new(statement, block, comments)
       end
   end
