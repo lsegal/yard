@@ -67,8 +67,9 @@ module YARD
         return at(path) if name == 'self'
         path = path.split(/::|#/)
         while !path.empty?
-          ["::", "#"].each do |type|
-            obj = at([path.join("::"), name].join(type))
+          ["::", ""].each do |type|
+            fullname = [path.join("::"), name].join(type)
+            obj = at(fullname)
             return obj if obj
           end
           path.pop

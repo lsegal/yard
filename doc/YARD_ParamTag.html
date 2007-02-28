@@ -6,6 +6,9 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::ParamTag</title>
     <style>
+    .topdoc dl dt {
+      font-weight: bold;
+    }
     .fulldoc {
       margin-left: 37px;
     }
@@ -27,6 +30,9 @@ Object
           |
           +--YARD::ParamTag</pre> 
     
+    
+    <hr />  
+    
         
           <h1>Attributes</h1>
       <p style="line-height:20px">
@@ -36,17 +42,43 @@ Object
         
                                               
         <h1>Constructor Summary</h1>
-    <pre> initialize(name, text, types = [])</pre>
-    <p>
-      
+    <pre>initialize(name, text, types = [])</pre>
+    
+        <div class="fulldoc">
+                    <p>
+            
 Create a new <tt>param</tt> tag with a description and declared types
 
-    </p>
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                            [<tt>String</tt>]
+                            <tt>name</tt> - 
+the parameter name specified by the tag
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+a description of the parameter
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+the optional types that the parameter accepts
+
+<br />
+                          </dd>
+                                    
+                                  </dl>
+                  </div>
+      </div>
+        
     
                 <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_ParamTag.html'>ParamTag</a>                          </small>
           </td>
@@ -79,7 +111,7 @@ object
                                       <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -91,12 +123,12 @@ Returns the value of attribute <tt>name</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>name=(name)</tt><br />
+            <tt>name=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>name</tt>
 
@@ -166,13 +198,23 @@ Returns the value of attribute <tt>name</tt>
           <hr />
                   <div id="instance_method-name=">
             <h3>name=</h3>
-                        <pre>public Object name=(name)</pre>
+                        <pre>public Object name=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>name</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>name</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />

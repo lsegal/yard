@@ -6,6 +6,9 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::BaseTypeTag</title>
     <style>
+    .topdoc dl dt {
+      font-weight: bold;
+    }
     .fulldoc {
       margin-left: 37px;
     }
@@ -25,6 +28,18 @@ Object
       |
       +--YARD::BaseTypeTag</pre> 
     
+    
+    <hr />  
+    
+          <div class="topdoc">
+                <p>
+          
+Similar to the <tt><a href='YARD_BaseTag.html'>BaseTag</a></tt>, this class allows for a tag to formally specify
+type data if it depends on a specific object type.
+
+        </p>
+              </div>
+      <hr />
         
           <h1>Attributes</h1>
       <p style="line-height:20px">
@@ -34,17 +49,38 @@ Object
         
                               
         <h1>Constructor Summary</h1>
-    <pre> initialize(text, types = [])</pre>
-    <p>
-      
+    <pre>initialize(text, types = [])</pre>
+    
+        <div class="fulldoc">
+                    <p>
+            
 Create a new object with formally specified types
 
-    </p>
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+the text data
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+the types that are formally specified by the tag.
+
+<br />
+                          </dd>
+                                    
+                                  </dl>
+                  </div>
+      </div>
+        
     
                 <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -56,7 +92,7 @@ Extracts the name from raw tag text returning the name and remaining value
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -80,7 +116,7 @@ Extracts the type signatures from the raw tag text
                                       <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                                                       </small>
           </td>
@@ -92,7 +128,7 @@ Convenience method to access the first type specified
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -104,12 +140,12 @@ Returns the value of attribute <tt>types</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>types=(types)</tt><br />
+            <tt>types=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>types</tt>
 
@@ -221,13 +257,23 @@ Returns the value of attribute <tt>types</tt>
           <hr />
                   <div id="instance_method-types=">
             <h3>types=</h3>
-                        <pre>public Object types=(types)</pre>
+                        <pre>public Object types=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>types</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>types</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />

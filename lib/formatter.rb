@@ -36,6 +36,7 @@ end
 
 def link_to_path(name, from_path = nil, label = nil)
   return "<a href='#instance_method-#{name[1..-1]}'>#{label || name}</a>" if name =~ /^\#/ && from_path.nil?
+  
   if from_path
     obj = Namespace.find_from_path(from_path, name)
   else

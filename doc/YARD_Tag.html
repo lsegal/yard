@@ -6,6 +6,9 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::Tag</title>
     <style>
+    .topdoc dl dt {
+      font-weight: bold;
+    }
     .fulldoc {
       margin-left: 37px;
     }
@@ -23,6 +26,9 @@ Object
   |
   +--YARD::Tag</pre> 
     
+    
+    <hr />  
+    
         
           <h1>Attributes</h1>
       <p style="line-height:20px">
@@ -35,9 +41,11 @@ Object
         
               
         <h1>Constructor Summary</h1>
-    <pre> initialize(tag_name, text, types = nil, name = nil)</pre>
-    <p>
-      
+    <pre>initialize(tag_name, text, types = nil, name = nil)</pre>
+    
+        <div class="fulldoc">
+                    <p>
+            
 Creates a new tag object with a tag name and text. Optionally, formally
 declared types and a key name can be specified.
 </p>
@@ -49,12 +57,40 @@ Types are mainly for meta tags that rely on type information, such as
 Key names are for tags that declare meta data for a specific key or name,
 such as <tt>param</tt>, <tt>raise</tt>, etc.
 
-    </p>
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                          <tt>tag_name</tt> - 
+the tag name to create the tag for
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+the descriptive text for this tag
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+optional type list of formally declared types for the tag
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>name</tt> - 
+optional key name which the tag refers to
+
+<br />
+                          </dd>
+                                    
+                                  </dl>
+                  </div>
+      </div>
+        
     
                 <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -66,7 +102,7 @@ Extracts the name from raw tag text returning the name and remaining value
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -78,7 +114,7 @@ Extracts the type signatures from the raw tag text
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_Tag.html'>Tag</a>                          </small>
           </td>
@@ -90,7 +126,7 @@ Parses tag text and creates a new tag with descriptive text
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_Tag.html'>Tag</a>                          </small>
           </td>
@@ -102,7 +138,7 @@ Parses tag text and creates a new tag with a key name and descriptive text
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_Tag.html'>Tag</a>                          </small>
           </td>
@@ -114,7 +150,7 @@ Parses tag text and creates a new tag with formally declared types and
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_Tag.html'>Tag</a>                          </small>
           </td>
@@ -130,7 +166,7 @@ Parses tag text and creates a new tag with formally declared types, a key
                               <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -142,19 +178,19 @@ Returns the value of attribute <tt>name</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>name=(name)</tt><br />
+            <tt>name=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>name</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -166,19 +202,19 @@ Returns the value of attribute <tt>tag_name</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>tag_name=(tag_name)</tt><br />
+            <tt>tag_name=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>tag_name</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -190,19 +226,19 @@ Returns the value of attribute <tt>text</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>text=(text)</tt><br />
+            <tt>text=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>text</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                                                       </small>
           </td>
@@ -214,7 +250,7 @@ Convenience method to access the first type specified
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -226,12 +262,12 @@ Returns the value of attribute <tt>types</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>types=(types)</tt><br />
+            <tt>types=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>types</tt>
 
@@ -444,13 +480,23 @@ Returns the value of attribute <tt>name</tt>
           <hr />
                   <div id="instance_method-name=">
             <h3>name=</h3>
-                        <pre>public Object name=(name)</pre>
+                        <pre>public Object name=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>name</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>name</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -468,13 +514,23 @@ Returns the value of attribute <tt>tag_name</tt>
           <hr />
                   <div id="instance_method-tag_name=">
             <h3>tag_name=</h3>
-                        <pre>public Object tag_name=(tag_name)</pre>
+                        <pre>public Object tag_name=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>tag_name</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>tag_name</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -492,13 +548,23 @@ Returns the value of attribute <tt>text</tt>
           <hr />
                   <div id="instance_method-text=">
             <h3>text=</h3>
-                        <pre>public Object text=(text)</pre>
+                        <pre>public Object text=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>text</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>text</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -520,7 +586,7 @@ be used for tags that only specify one type.
 </dd>
                                 
                                                 <dt>See Also:</dt>
-                <dd><tt>#types</tt></dd>
+                <dd><tt><a href='YARD_Tag.html#instance_method-types'>#types</a></tt></dd>
                               </dl>
                           </div>
           </div>
@@ -539,13 +605,23 @@ Returns the value of attribute <tt>types</tt>
           <hr />
                   <div id="instance_method-types=">
             <h3>types=</h3>
-                        <pre>public Object types=(types)</pre>
+                        <pre>public Object types=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>types</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>types</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />

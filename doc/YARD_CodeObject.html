@@ -6,6 +6,9 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::CodeObject</title>
     <style>
+    .topdoc dl dt {
+      font-weight: bold;
+    }
     .fulldoc {
       margin-left: 37px;
     }
@@ -23,6 +26,25 @@ Object
   |
   +--YARD::CodeObject</pre> 
     
+    
+    <hr />  
+    
+          <div class="topdoc">
+                <p>
+          
+The documentation parser is responsible for parsing the docstring into text
+and saving the meta tags attached to it
+
+        </p>
+                <dl>
+                    <dt>Author:</dt>
+          <dd>
+Loren Segal
+
+</dd>
+                                      </dl>
+              </div>
+      <hr />
         
           <h1>Attributes</h1>
       <p style="line-height:20px">
@@ -42,23 +64,107 @@ Object
         
               
         <h1>Constructor Summary</h1>
-    <pre> initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)</pre>
-    <p>
-      
+    <pre>initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)</pre>
+    
+        <div class="fulldoc">
+                    <p>
+            
 Creates a new code object with necessary information such as the
 object&#8217;s name (not full path), it&#8217;s type (:class, :module,
 :method, etc.), visibility (:public, :private, :protected) and scope
 (:instance or :class level). Optionally you can specify a parent object and
-comments too, but these can also be assigned later through the <tt>#parent=</tt>
-and <tt>#attach_docstring</tt> methods.
+comments too, but these can also be assigned later through the <tt><a href='YARD_CodeObject.html#instance_method-parent='>#parent=</a></tt>
+and <tt><a href='YARD_CodeObject.html#instance_method-attach_docstring'>#attach_docstring</a></tt> methods.
 
-    </p>
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                            [<tt>String</tt>]
+                            <tt>name</tt> - 
+the name of the object, not including its namespace
+(&#8216;initialize&#8217; for this method)
+
+<br />
+                                            [<tt>Symbol</tt>]
+                            <tt>type</tt> - 
+the type of object this is, including (but not limited to): :module,
+:class, :method, :constant
+
+<br />
+                                            [<tt>Symbol</tt>]
+                            <tt>visibility</tt> - 
+:public, :protected or :private depending on the visibility of the object
+
+<br />
+                                            [<tt>Symbol</tt>]
+                            <tt>scope</tt> - 
+:instance or :class depending on if the object is instance level or class
+level. Instance level objects use the &#8217;#&#8217; character to separate
+from their parent instead of &#8217;::&#8217;
+
+<br />
+                                            [<tt><a href='YARD_CodeObject.html'>CodeObject</a></tt>]
+                            <tt>parent</tt> - 
+The parent of this object. Without a parent this object will not be
+registered in the <tt><a href='YARD_Namespace.html'>Namespace</a></tt>
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>comments</tt> - 
+Comments to be parsed as a docstring for the object.
+
+<br />
+                          </dd>
+                                    <dt>Returns:</dt>
+            <dd>
+the created code object
+
+</dd>
+                        
+                                    <dt>See Also:</dt>
+            <dd><tt><a href='YARD_CodeObject.html#instance_method-attach_docstring'>#attach_docstring</a></tt>, <tt><a href='YARD_CodeObject.html#instance_method-parent='>#parent=</a></tt></dd>
+                      </dl>
+                  </div>
+      </div>
+        
+        <h1>Dynamic Method Handling</h1>
+    <p><em>This class handles dynamic methods through the <tt>method_missing</tt> method</em></p>
+    <pre>method_missing(meth, *args, &block)</pre>
+    
+        <div class="fulldoc">
+                    <p>
+            
+See if the method call exists in the attributes hash, and return it.
+Otherwise send the missing method call up the stack.
+
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                          <tt>meth</tt> - 
+the method name called. This method is checked in the attributes hash
+
+<br />
+                                          <tt>args</tt> - 
+the arguments to the call
+
+<br />
+                                          <tt>block</tt> - 
+an optional block for the call
+
+<br />
+                          </dd>
+                                    
+                                  </dl>
+                  </div>
+      
     
               
                               <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -67,7 +173,7 @@ and <tt>#attach_docstring</tt> methods.
                                   </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -76,7 +182,7 @@ and <tt>#attach_docstring</tt> methods.
                                   </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -89,7 +195,7 @@ the statement
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -102,7 +208,7 @@ location
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -114,19 +220,19 @@ Returns the value of attribute <tt>attributes</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>attributes=(attributes)</tt><br />
+            <tt>attributes=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>attributes</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -138,19 +244,19 @@ Returns the value of attribute <tt>children</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>children=(children)</tt><br />
+            <tt>children=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>children</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -162,19 +268,19 @@ Returns the value of attribute <tt>docstring</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>docstring=(docstring)</tt><br />
+            <tt>docstring=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>docstring</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -186,19 +292,19 @@ Returns the value of attribute <tt>file</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>file=(file)</tt><br />
+            <tt>file=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>file</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             String                          </small>
           </td>
@@ -210,7 +316,7 @@ Returns a code object formatted as a given type, defaults to html.
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Boolean                          </small>
           </td>
@@ -222,7 +328,7 @@ Returns true if at least one tag by the name <tt>name</tt> was declared
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -234,31 +340,19 @@ Returns the value of attribute <tt>line</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>line=(line)</tt><br />
+            <tt>line=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>line</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
-            <small>
-                            Object                          </small>
-          </td>
-          <td>
-            <tt>method_missing(meth, *args, &block)</tt><br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-See if the method call exists in the attributes hash, and return
-
-.                      </td>
-        </tr>
-                <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -270,19 +364,19 @@ Returns the value of attribute <tt>name</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>name=(name)</tt><br />
+            <tt>name=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>name</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -294,7 +388,7 @@ Returns the value of attribute <tt>parent</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -306,7 +400,7 @@ Sets the parent object and registers the object path with
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -318,7 +412,7 @@ Returns the unique path for this code object
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -330,19 +424,19 @@ Returns the value of attribute <tt>scope</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>scope=(scope)</tt><br />
+            <tt>scope=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>scope</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -354,19 +448,19 @@ Returns the value of attribute <tt>source</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>source=(source)</tt><br />
+            <tt>source=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>source</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             <a href='YARD_BaseTag.html'>BaseTag</a>                          </small>
           </td>
@@ -378,7 +472,7 @@ Convenience method to return the first tag
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Array<BaseTag>                          </small>
           </td>
@@ -391,7 +485,7 @@ Returns a list of tags specified by <tt>name</tt> or all tags if
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -400,7 +494,7 @@ Returns a list of tags specified by <tt>name</tt> or all tags if
                                   </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -412,19 +506,19 @@ Returns the value of attribute <tt>type</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>type=(type)</tt><br />
+            <tt>type=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>type</tt>
 
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -436,12 +530,12 @@ Returns the value of attribute <tt>visibility</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="15%" align="right" valign="top">
+          <td width="100" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
           <td>
-            <tt>visibility=(visibility)</tt><br />
+            <tt>visibility=(value)</tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>visibility</tt>
 
@@ -476,7 +570,7 @@ Sets the attribute <tt>visibility</tt>
                             <p>
                 
 Attaches a docstring to a code oject by parsing the comments attached to
-the statement and filling the <tt>#tags</tt> and <tt>#docstring</tt> methods with the
+the statement and filling the <tt><a href='YARD_CodeObject.html#instance_method-tags'>#tags</a></tt> and <tt><a href='YARD_CodeObject.html#instance_method-docstring'>#docstring</a></tt> methods with the
 parsed information.
 
               </p>
@@ -543,13 +637,23 @@ Returns the value of attribute <tt>attributes</tt>
           <hr />
                   <div id="instance_method-attributes=">
             <h3>attributes=</h3>
-                        <pre>public Object attributes=(attributes)</pre>
+                        <pre>public Object attributes=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>attributes</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>attributes</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -567,13 +671,23 @@ Returns the value of attribute <tt>children</tt>
           <hr />
                   <div id="instance_method-children=">
             <h3>children=</h3>
-                        <pre>public Object children=(children)</pre>
+                        <pre>public Object children=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>children</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>children</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -591,13 +705,23 @@ Returns the value of attribute <tt>docstring</tt>
           <hr />
                   <div id="instance_method-docstring=">
             <h3>docstring=</h3>
-                        <pre>public Object docstring=(docstring)</pre>
+                        <pre>public Object docstring=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>docstring</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>docstring</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -615,13 +739,23 @@ Returns the value of attribute <tt>file</tt>
           <hr />
                   <div id="instance_method-file=">
             <h3>file=</h3>
-                        <pre>public Object file=(file)</pre>
+                        <pre>public Object file=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>file</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>file</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -695,39 +829,18 @@ Returns the value of attribute <tt>line</tt>
           <hr />
                   <div id="instance_method-line=">
             <h3>line=</h3>
-                        <pre>public Object line=(line)</pre>
+                        <pre>public Object line=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>line</tt>
 
               </p>
-                          </div>
-          </div>
-          <hr />
-                  <div id="instance_method-method_missing">
-            <h3>method_missing</h3>
-                        <pre>public Object method_missing(meth, *args, &block)</pre>
-            <div class="fulldoc">
-                            <p>
-                
-See if the method call exists in the attributes hash, and return it.
-Otherwise send the missing method call up the stack.
-
-              </p>
                             <dl>
                                 <dt>Parameters:</dt>
                 <dd>
-                                                      <tt>meth</tt> - 
-the method name called. This method is checked in the attributes hash
-
-<br />
-                                                      <tt>args</tt> - 
-the arguments to the call
-
-<br />
-                                                      <tt>block</tt> - 
-an optional block for the call
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>line</tt> to.
 
 <br />
                                   </dd>
@@ -750,13 +863,23 @@ Returns the value of attribute <tt>name</tt>
           <hr />
                   <div id="instance_method-name=">
             <h3>name=</h3>
-                        <pre>public Object name=(name)</pre>
+                        <pre>public Object name=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>name</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>name</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -831,13 +954,23 @@ Returns the value of attribute <tt>scope</tt>
           <hr />
                   <div id="instance_method-scope=">
             <h3>scope=</h3>
-                        <pre>public Object scope=(scope)</pre>
+                        <pre>public Object scope=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>scope</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>scope</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -855,13 +988,23 @@ Returns the value of attribute <tt>source</tt>
           <hr />
                   <div id="instance_method-source=">
             <h3>source=</h3>
-                        <pre>public Object source=(source)</pre>
+                        <pre>public Object source=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>source</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>source</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -885,7 +1028,7 @@ Example:
                             <dl>
                                 <dt>Parameters:</dt>
                 <dd>
-                                                        [<tt>#to_s</tt>]
+                                                        [<tt><a href='YARD_CodeObject.html#instance_method-to_s'>#to_s</a></tt>]
                                     <tt>name</tt> - 
 the tag name to return data for
 
@@ -893,7 +1036,7 @@ the tag name to return data for
                                   </dd>
                                                 <dt>Returns:</dt>
                 <dd>
-the first tag in the list of <tt>#tags</tt>
+the first tag in the list of <tt><a href='YARD_CodeObject.html#instance_method-tags'>#tags</a></tt>
 
 </dd>
                                 
@@ -952,13 +1095,23 @@ Returns the value of attribute <tt>type</tt>
           <hr />
                   <div id="instance_method-type=">
             <h3>type=</h3>
-                        <pre>public Object type=(type)</pre>
+                        <pre>public Object type=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>type</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>type</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
@@ -976,13 +1129,23 @@ Returns the value of attribute <tt>visibility</tt>
           <hr />
                   <div id="instance_method-visibility=">
             <h3>visibility=</h3>
-                        <pre>public Object visibility=(visibility)</pre>
+                        <pre>public Object visibility=(value)</pre>
             <div class="fulldoc">
                             <p>
                 
 Sets the attribute <tt>visibility</tt>
 
               </p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>visibility</tt> to.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
                           </div>
           </div>
           <hr />
