@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/tag_library'
+require File.dirname(__FILE__) + '/formatter'
 
 module YARD #:nodoc:  
   ## 
@@ -153,6 +154,15 @@ module YARD #:nodoc:
       @tags.any? {|tag| tag.tag_name == name }
     end
     
+    ##
+    # Returns a code object formatted as a given type, defaults to html.
+    # 
+    # @param [Symbol] format the output format to generate
+    # @return [String] the code object formatted by the specified +format+
+    def format(type = :html)
+      Formatter.new.format(self, type)
+    end
+    
     private
       ##
       # Parses out comments split by newlines into a new code object
@@ -230,7 +240,9 @@ module YARD #:nodoc:
 
   class ModuleObject < CodeObjectWithMethods
     def initialize(name, *args)
-      super(name, :module, *args)
+      super(name, :module, *args) do |obj|
+        yield(obj) if block_given?
+      end
     end
   end
 
@@ -241,6 +253,7 @@ module YARD #:nodoc:
       super(name, :class, *args) do |obj|
         obj[:attributes] = {}
         obj[:superclass] = superclass
+        yield(obj) if block_given?
       end
     end
     
@@ -256,10 +269,10 @@ module YARD #:nodoc:
       inherited_methods
     end
     
-    def inheritance_tree
+    def superclasses
       superobject = Namespace.find_from_path(path, superclass)
       return [BASE_OBJECT] if superclass == BASE_OBJECT || superobject.nil?
-      [superobject.path] + superobject.inheritance_tree
+      [superobject.path] + superobject.superclasses
     end
   end
   
@@ -270,7 +283,8 @@ module YARD #:nodoc:
     # @param [CodeObjectWithMethods] parent the object that holds this method
     def initialize(name, visibility, scope, parent, comments = nil)
       super(name, :method, visibility, scope, parent, comments) do |obj|
-        parent["#{scope}_methods".to_sym].update(name => obj)
+        parent["#{scope}_methods".to_sym].update(name.to_s => obj)
+        yield(obj) if block_given?
       end
     end
   end
@@ -281,6 +295,8 @@ module YARD #:nodoc:
         if statement
           obj.attach_docstring(statement.comments)
           obj.attach_source((statement.tokens.to_s + " " + statement.block.to_s).gsub(/\r?\n/,''))
+          parent[:constants].update(name.to_s => obj)
+          yield(obj) if block_given?
         end
       end
     end

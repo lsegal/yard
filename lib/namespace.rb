@@ -47,8 +47,8 @@ module YARD
         end
       end
       
-      def load(file = "Yardoc")
-        if File.exists? file
+      def load(file = "Yardoc", reload = false)
+        if File.exists?(file) && !reload
           instance.namespace.replace(Marshal.load(IO.read(file)))
         else
           Find.find(".") do |path|
@@ -63,6 +63,7 @@ module YARD
       end
       
       def find_from_path(path, name)
+        path = path.path if path.is_a? CodeObject
         return at(path) if name == 'self'
         path = path.split(/::|#/)
         while !path.empty?

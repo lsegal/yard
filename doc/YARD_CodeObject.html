@@ -1,0 +1,955 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: YARD::CodeObject</title>
+    <style>
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc dl dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class YARD::CodeObject</h1>
+<pre>
+Object
+  |
+  +--YARD::CodeObject</pre> 
+    
+        
+          <h1>Attributes</h1>
+              <pre>attributes [R]</pre>
+              <pre>children [R, W]</pre>
+              <pre>docstring [R]</pre>
+              <pre>file [R]</pre>
+              <pre>line [R]</pre>
+              <pre>name [R]</pre>
+              <pre>parent [R, W]</pre>
+              <pre>scope [R, W]</pre>
+              <pre>source [R]</pre>
+              <pre>type [R]</pre>
+              <pre>visibility [R, W]</pre>
+              
+        
+              
+        <h1>Constructor Summary</h1>
+    <pre> initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)</pre>
+    <p>
+      
+Creates a new code object with necessary information such as the
+object&#8217;s name (not full path), it&#8217;s type (:class, :module,
+:method, etc.), visibility (:public, :private, :protected) and scope
+(:instance or :class level). Optionally you can specify a parent object and
+comments too, but these can also be assigned later through the <tt><a href='#instance_method-parent='>#parent=</a></tt>
+and <tt><a href='#instance_method-attach_docstring'>#attach_docstring</a></tt> methods.
+
+    </p>
+    
+              
+                              <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>[](key)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>[]=(key, value)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>attach_docstring(comments)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Attaches a docstring to a code oject by parsing the comments attached to
+the statement
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>attach_source(source, file = nil, line = nil)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Attaches source code to a code object with an optional file and line number
+location
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>attributes</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>attributes</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>attributes=(attributes)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>attributes</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>children</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>children</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>children=(children)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>children</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>docstring</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>docstring</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>docstring=(docstring)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>docstring</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>file</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>file</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>file=(file)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>file</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            String                          </small>
+          </td>
+          <td>
+            <tt>format(type = :html)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns a code object formatted as a given type, defaults to html.
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Boolean                          </small>
+          </td>
+          <td>
+            <tt>has_tag?(name)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns true if at least one tag by the name <tt>name</tt> was declared
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>line</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>line</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>line=(line)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>line</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>method_missing(meth, *args, &block)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+See if the method call exists in the attributes hash, and return
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>name</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>name</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>name=(name)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>name</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>parent</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>parent</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>parent=(value)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the parent object and registers the object path with
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>path</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the unique path for this code object
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>scope</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>scope</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>scope=(scope)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>scope</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>source</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>source</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>source=(source)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>source</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            <a href='YARD_BaseTag.html'>BaseTag</a>                          </small>
+          </td>
+          <td>
+            <tt>tag(name)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Convenience method to return the first tag
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Array<BaseTag>                          </small>
+          </td>
+          <td>
+            <tt>tags(name = nil)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns a list of tags specified by <tt>name</tt> or all tags if
+<tt>name</tt> is not specified.
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>to_s</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>type</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>type</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>type=(type)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>type</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>visibility</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>visibility</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>visibility=(visibility)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>visibility</tt>
+
+.          </td>
+        </tr>
+              </table>
+          
+                      
+                            <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-[]">
+            <h3>[]</h3>
+                        <pre>public Object [](key)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-[]=">
+            <h3>[]=</h3>
+                        <pre>public Object []=(key, value)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-attach_docstring">
+            <h3>attach_docstring</h3>
+                        <pre>public Object attach_docstring(comments)</pre>
+            <div class="fulldoc">
+              <p>
+Attaches a docstring to a code oject by parsing the comments attached to
+the statement and filling the <tt><a href='#instance_method-tags'>#tags</a></tt> and <tt><a href='#instance_method-docstring'>#docstring</a></tt> methods with the
+parsed information.
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>, <tt>Array<String></tt>]
+                                    <tt>comments</tt> - 
+the comments attached to the code object to be parsed into a docstring and
+meta tags.
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-attach_source">
+            <h3>attach_source</h3>
+                        <pre>public Object attach_source(source, file = nil, line = nil)</pre>
+            <div class="fulldoc">
+              <p>
+Attaches source code to a code object with an optional file and line number
+location
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>source</tt> - 
+the source code for the code object
+
+<br />
+                                                        [<tt>String</tt>]
+                                    <tt>file</tt> - 
+the filename the source resides in
+
+<br />
+                                                        [<tt>Number</tt>]
+                                    <tt>line</tt> - 
+the line number where the source code begins at in the <tt>file</tt>
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-attributes">
+            <h3>attributes</h3>
+                        <pre>public Object attributes</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>attributes</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-attributes=">
+            <h3>attributes=</h3>
+                        <pre>public Object attributes=(attributes)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>attributes</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-children">
+            <h3>children</h3>
+                        <pre>public Object children</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>children</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-children=">
+            <h3>children=</h3>
+                        <pre>public Object children=(children)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>children</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-docstring">
+            <h3>docstring</h3>
+                        <pre>public Object docstring</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>docstring</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-docstring=">
+            <h3>docstring=</h3>
+                        <pre>public Object docstring=(docstring)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>docstring</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-file">
+            <h3>file</h3>
+                        <pre>public Object file</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>file</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-file=">
+            <h3>file=</h3>
+                        <pre>public Object file=(file)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>file</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-format">
+            <h3>format</h3>
+                        <pre>public String format(type = :html)</pre>
+            <div class="fulldoc">
+              <p>
+Returns a code object formatted as a given type, defaults to html.
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>Symbol</tt>]
+                                    <tt>format</tt> - 
+the output format to generate
+
+<br />
+                                  </dd>
+                                                <dt>Returns:</dt>
+                <dd>
+the code object formatted by the specified <tt>format</tt>
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-has_tag?">
+            <h3>has_tag?</h3>
+                        <pre>public Boolean has_tag?(name)</pre>
+            <div class="fulldoc">
+              <p>
+Returns true if at least one tag by the name <tt>name</tt> was declared
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>name</tt> - 
+the tag name to search for
+
+<br />
+                                  </dd>
+                                                <dt>Returns:</dt>
+                <dd>
+whether or not the tag <tt>name</tt> was declared
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line">
+            <h3>line</h3>
+                        <pre>public Object line</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>line</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line=">
+            <h3>line=</h3>
+                        <pre>public Object line=(line)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>line</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-method_missing">
+            <h3>method_missing</h3>
+                        <pre>public Object method_missing(meth, *args, &block)</pre>
+            <div class="fulldoc">
+              <p>
+See if the method call exists in the attributes hash, and return it.
+Otherwise send the missing method call up the stack.
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>meth</tt> - 
+the method name called. This method is checked in the attributes hash
+
+<br />
+                                                      <tt>args</tt> - 
+the arguments to the call
+
+<br />
+                                                      <tt>block</tt> - 
+an optional block for the call
+
+<br />
+                                  </dd>
+                                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-name">
+            <h3>name</h3>
+                        <pre>public Object name</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>name</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-name=">
+            <h3>name=</h3>
+                        <pre>public Object name=(name)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>name</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-parent">
+            <h3>parent</h3>
+                        <pre>public Object parent</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>parent</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-parent=">
+            <h3>parent=</h3>
+                        <pre>public Object parent=(value)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the parent object and registers the object path with the <tt><a href='YARD_Namespace.html'>Namespace</a></tt>.
+If the object was already registered to an old path, it will be removed
+from the namespace.
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>CodeObject</tt>]
+                                    <tt>value</tt> - 
+the new parent object
+
+<br />
+                                  </dd>
+                                                
+                                                <dt>See Also:</dt>
+                <dd><tt><a href='YARD_Namespace.html'>Namespace</a></tt></dd>
+                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-path">
+            <h3>path</h3>
+                        <pre>public Object path</pre>
+            <div class="fulldoc">
+              <p>
+Returns the unique path for this code object. The resulting path will be a
+Ruby style path name of the namespace the object resides in plus the object
+name delimited by a &quot;::&quot; or &quot;#&quot; depending on if the
+object is an instance level object or a class level object.
+</p>
+<p>
+Example:
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-scope">
+            <h3>scope</h3>
+                        <pre>public Object scope</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>scope</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-scope=">
+            <h3>scope=</h3>
+                        <pre>public Object scope=(scope)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>scope</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-source">
+            <h3>source</h3>
+                        <pre>public Object source</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>source</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-source=">
+            <h3>source=</h3>
+                        <pre>public Object source=(source)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>source</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-tag">
+            <h3>tag</h3>
+                        <pre>public <a href='YARD_BaseTag.html'>BaseTag</a> tag(name)</pre>
+            <div class="fulldoc">
+              <p>
+Convenience method to return the first tag object in the list of tag
+objects of that name
+</p>
+<p>
+Example:
+</p>
+<pre>
+  doc = YARD::Documentation.new(&quot;@return zero when nil&quot;)
+  doc.tag(&quot;return&quot;).text  # =&gt; &quot;zero when nil&quot;
+</pre>
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>#to_s</tt>]
+                                    <tt>name</tt> - 
+the tag name to return data for
+
+<br />
+                                  </dd>
+                                                <dt>Returns:</dt>
+                <dd>
+the first tag in the list of <tt><a href='#instance_method-tags'>#tags</a></tt>
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-tags">
+            <h3>tags</h3>
+                        <pre>public Array<BaseTag> tags(name = nil)</pre>
+            <div class="fulldoc">
+              <p>
+Returns a list of tags specified by <tt>name</tt> or all tags if
+<tt>name</tt> is not specified.
+
+</p>
+                            <dl>
+                                <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>name</tt> - 
+the tag name to return data for, or nil for all tags
+
+<br />
+                                  </dd>
+                                                <dt>Returns:</dt>
+                <dd>
+the list of tags by the specified tag name
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-to_s">
+            <h3>to_s</h3>
+                        <pre>public Object to_s</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-type">
+            <h3>type</h3>
+                        <pre>public Object type</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>type</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-type=">
+            <h3>type=</h3>
+                        <pre>public Object type=(type)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>type</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-visibility">
+            <h3>visibility</h3>
+                        <pre>public Object visibility</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>visibility</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-visibility=">
+            <h3>visibility=</h3>
+                        <pre>public Object visibility=(visibility)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>visibility</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                    </body>
+</html>

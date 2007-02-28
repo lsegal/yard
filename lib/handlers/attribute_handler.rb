@@ -21,11 +21,22 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
 
     # Add all attributes
     symbols.each do |name| 
-      object[:attributes].update(name => { :read => read, :write => write })
+      name = name.to_s
+      object[:attributes].update(name.to_s => { :read => read, :write => write })
 
       # Show their methods as well
       [name, "#{name}="].each do |method|
-        YARD::MethodObject.new(method, current_visibility, current_scope, object, statement.comments)
+        YARD::MethodObject.new(method, current_visibility, current_scope, object, statement.comments) do |obj|
+          if method.to_s.include? "="
+            src = "def #{method}(#{name})\n  @#{name} = #{name}\nend"
+            doc = "Sets the attribute +#{name}+"
+          else
+            src = "def #{method}\n  @#{name}\nend"
+            doc = "Returns the value of attribute +#{name}+"
+          end
+          obj.attach_source(src)
+          obj.attach_docstring(doc)
+        end
       end
     end
   end

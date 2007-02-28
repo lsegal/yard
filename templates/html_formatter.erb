@@ -1,0 +1,178 @@
+<% class_methods = @object.class_methods.select {|k,m| m.visibility == :public }.sort %>
+<% instance_methods = @object.instance_methods.select {|k,m| m.visibility == :public && k != 'initialize' }.sort %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: <%= @object.path %></title>
+    <style>
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc dl dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class <%= @object.path %></h1>
+<pre>
+<% spaces = 0 %>
+<% @object.superclasses.reverse.each do |superclass| %>
+<%= (" " * spaces) + (spaces > 0 ? "+--" : "") + link_to_path(superclass) + "\n" %>
+<% spaces += (spaces == 0 ? 2 : 4) %>
+<%= (" " * spaces) + "|\n" %>
+<% end %>
+<%= (" " * spaces ) + "+--" + @object.path %>
+</pre> 
+    
+    <% unless @object.mixins.empty? %>
+    <p>
+      <strong>All Included Modules:</strong><br />
+      <%= "&nbsp;" * 7 %><%= @object.mixins.collect {|m| link_to_path(m, @object) }.join(", ").to_html(@object) %>
+    </p>
+    <% end %>
+    
+    <% unless @object.attributes.empty? %>
+      <h1>Attributes</h1>
+      <% @object[:attributes].sort.each do |name, rw| %>
+        <pre><%= name %> [<%= [(rw[:read] ? "R" : nil), (rw[:write] ? "W" : nil)].compact.join(", ") %>]</pre>
+      <% end %>
+    <% end %>
+    
+    <% unless @object.constants.empty? %>
+    <h1>Constants</h1>
+    <dl>
+      <% @object.constants.each do |name, constant| %>
+      <dt id="const-<%= name %>"><pre><%= constant.source %></pre></dt>
+      <dl><%= constant.docstring.to_html(@object) %></dl>
+      <% end %>
+    </dl>
+    <% end %>
+    
+    <% @object.superclasses.each do |name| %>
+      <% superclass = Namespace.at(name) or next %>
+      <% unless (consts = superclass.constants).empty? %>
+      <p><table border="1" width="100%">
+        <tr background="#ddddff">
+          <th>Constants inherited from <%= link_to_path(superclass.path) %></th>
+        </tr>
+        <tr>
+          <td><%= consts.collect {|m| "<tt>" + link_to_path(m.first, superclass.path) + "</tt>" }.join(", ") %></td>
+        </tr>
+      </table></p>
+      <% end %>
+    <% end %>
+    
+    <% if constructor = @object.instance_methods['initialize'] %>
+    <h1>Constructor Summary</h1>
+    <pre><%= constructor.source.split("\n").first.gsub(/\Adef/, '')  %></pre>
+    <p>
+      <%= constructor.docstring.to_html(@object) %>
+    </p>
+    <% end %>
+
+    <% [:class, :instance].each do |scope| %>
+      <% unless eval("#{scope}_methods").empty? %>
+      <h1>Public <%= scope.to_s.capitalize %> Method Summary</h1>
+      <table border="1" width="100%">
+        <% eval("#{scope}_methods").each do |name, method| %>
+        <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+              <% if method.tag("return") && method.tag("return").types %>
+              <%= method.tag("return").types.collect {|t| link_to_path(t, @object) }.join(", ") %>
+              <% else %>
+              <%= YARD::ClassObject::BASE_OBJECT %>
+              <% end %>
+            </small>
+          </td>
+          <td>
+            <tt><%= method.source.split("\n").first.sub(/\Adef\s+/,'') if method.source %></tt><br />
+            <%= ("&nbsp;" * 5) + method.docstring.sub(/(\.|\n).+/m,'').to_html(@object) + "." if method.docstring %>
+          </td>
+        </tr>
+        <% end %>
+      </table>
+      <% end %>
+    
+      <% @object.superclasses.each do |name| %>
+        <% superclass = Namespace.at(name) or next %>
+        <% unless (meths = superclass.class_methods.select {|k,m| m.visibility == :public }).empty? %>
+        <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>Public <%= scope %> methods inherited from <%= superclass.path %></th>
+          </tr>
+          <tr>
+            <td><%= meths.collect {|m| m.first }.join(", ") %></td>
+          </tr>
+        </table></p>
+        <% end %>
+      <% end %>
+    <% end %>
+    
+    <% [:class, :instance].each do |scope| %>
+      <% unless eval("#{scope}_methods").empty? %>
+        <h1>Public <%= scope.to_s.capitalize %> Method Details</h1>
+        <% eval("#{scope}_methods").each do |name, method| %>
+          <div id="<%= scope %>_method-<%= name %>">
+            <h3><%= name %></h3>
+            <% 
+            if method.tag("return") && !method.tag("return").types.empty? 
+              type = method.tag("return").types.collect {|t| link_to_path(t, @object) }.join(", ")
+              type = "[#{type}]" if method.tag("return").types.size > 1
+            else
+              type = YARD::ClassObject::BASE_OBJECT  
+            end
+            %>
+            <pre><%= method.source.split("\n").first.gsub(/\Adef/, "#{method.visibility} " + type) if method.source %></pre>
+            <div class="fulldoc">
+              <p><%= method.docstring.to_html(@object) %></p>
+              <% unless method.tags.empty? %>
+              <dl>
+                <% unless method.tags("param").empty? %>
+                <dt>Parameters:</dt>
+                <dd>
+                  <% method.tags("param").each do |tag| %>
+                  <% unless tag.types.empty? %>
+                    [<%= tag.types.collect {|t| "<tt>#{t}</tt>" }.join(", ") %>]
+                  <% end %>
+                  <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                  <% end %>
+                </dd>
+                <% end %>
+                <% if method.has_tag?("return") %>
+                <dt>Returns:</dt>
+                <dd><%= method.tag("return").text.to_html(@object) %></dd>
+                <% end %>
+                <% unless method.tags("raise").empty? %>
+                <dt>Raises:</dt>
+                <dd>
+                  <% method.tags("raise").each do |tag| %>
+                  <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                  <% end %>
+                </dd>
+                <% end %>
+
+                <% if method.tag("since") %>
+                <dt>Since:</dt>
+                <dd><%= method.tag("since").text.to_html(@object) %></dd>
+                <% end %>
+                <% unless method.tags("see").empty? %>
+                <dt>See Also:</dt>
+                <dd><%= method.tags("see").collect {|t| "<tt>#{link_to_path(t.text, @object)}</tt>" }.join(", ") %></dd>
+                <% end %>
+              </dl>
+              <% end %>
+            </div>
+          </div>
+          <hr />
+        <% end %>
+      <% end %>
+    <% end %>
+  </body>
+</html>

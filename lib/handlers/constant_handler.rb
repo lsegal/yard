@@ -6,6 +6,5 @@ class YARD::ConstantHandler < YARD::CodeObjectHandler
     return unless object.is_a? YARD::CodeObjectWithMethods
     const, expr = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
     obj = YARD::ConstantObject.new(const, object, statement)
-    object[:constants].update(const => obj)
   end
 end

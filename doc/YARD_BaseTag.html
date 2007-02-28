@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: YARD::BaseTag</title>
+    <style>
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc dl dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class YARD::BaseTag</h1>
+<pre>
+Object
+  |
+  +--YARD::BaseTag</pre> 
+    
+        
+          <h1>Attributes</h1>
+              <pre>text [R]</pre>
+              
+        
+              
+        <h1>Constructor Summary</h1>
+    <pre> initialize(text)</pre>
+    <p>
+          </p>
+    
+                <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>inherited(subclass)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>parse_tag(text)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses tag text from a doc string and returns a new tag
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Array<String>                          </small>
+          </td>
+          <td>
+            <tt>tag_library</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Return all valid tags in the tag library
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            String                          </small>
+          </td>
+          <td>
+            <tt>tag_name</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the tag name that the class responds to
+
+.          </td>
+        </tr>
+              </table>
+          
+                              <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>tag_name</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>text</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>text</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>text=(text)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>text</tt>
+
+.          </td>
+        </tr>
+              </table>
+          
+                      
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-inherited">
+            <h3>inherited</h3>
+                        <pre>public Object inherited(subclass)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="class_method-parse_tag">
+            <h3>parse_tag</h3>
+                        <pre>public Object parse_tag(text)</pre>
+            <div class="fulldoc">
+              <p>
+Parses tag text from a doc string and returns a new tag
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="class_method-tag_library">
+            <h3>tag_library</h3>
+                        <pre>public Array<String> tag_library</pre>
+            <div class="fulldoc">
+              <p>
+Return all valid tags in the tag library
+
+</p>
+                            <dl>
+                                                <dt>Returns:</dt>
+                <dd>
+a list of valid tags that are registered as being handled
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="class_method-tag_name">
+            <h3>tag_name</h3>
+                        <pre>public String tag_name</pre>
+            <div class="fulldoc">
+              <p>
+Returns the tag name that the class responds to. If the class name does not
+accurately represent the tag name, this method should be overrided by
+subclasses to return the correct tag name.
+
+</p>
+                            <dl>
+                                                <dt>Returns:</dt>
+                <dd>
+the tag name the class represents
+
+</dd>
+                                
+                                              </dl>
+                          </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-tag_name">
+            <h3>tag_name</h3>
+                        <pre>public Object tag_name</pre>
+            <div class="fulldoc">
+              <p></p>
+                            <dl>
+                                                
+                                                <dt>See Also:</dt>
+                <dd><tt><a href='YARD_BaseTag.html#class_method-tag_name'>BaseTag::tag_name</a></tt></dd>
+                              </dl>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-text">
+            <h3>text</h3>
+                        <pre>public Object text</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>text</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-text=">
+            <h3>text=</h3>
+                        <pre>public Object text=(text)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>text</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                    </body>
+</html>

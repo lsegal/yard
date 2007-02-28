@@ -1,0 +1,750 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: RubyLex</title>
+    <style>
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc dl dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class RubyLex</h1>
+<pre>
+Object
+  |
+  +--RubyLex</pre> 
+    
+        <p>
+      <strong>All Included Modules:</strong><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+RubyToken, IRB
+
+    </p>
+        
+          <h1>Attributes</h1>
+              <pre>continue [R]</pre>
+              <pre>exception_on_syntax_error [R]</pre>
+              <pre>indent [R]</pre>
+              <pre>lex_state [R]</pre>
+              <pre>read_auto_clean_up [R]</pre>
+              <pre>skip_space [R]</pre>
+              
+        <h1>Constants</h1>
+    <dl>
+            <dt id="const-PERCENT_LTYPE"><pre>PERCENT_LTYPE = {     "q" => "\'",    "Q" => "\"",    "x" => "\`",    "r" => "/",    "w" => "]"  </pre></dt>
+      <dl></dl>
+            <dt id="const-DLtype2Token"><pre>DLtype2Token = {}     "\"" => TkDSTRING,    "\`" => TkDXSTRING,    "/" => TkDREGEXP,  </pre></dt>
+      <dl></dl>
+            <dt id="const-Ltype2Token"><pre>Ltype2Token = {     "\'" => TkSTRING,    "\"" => TkSTRING,    "\`" => TkXSTRING,    "/" => TkREGEXP,    "]" => TkDSTRING  </pre></dt>
+      <dl></dl>
+            <dt id="const-ENINDENT_CLAUSE"><pre>ENINDENT_CLAUSE = [    "case", "class", "def", "do", "for", "if",    "module", "unless", "until", "while", "begin"  </pre></dt>
+      <dl></dl>
+            <dt id="const-Ltype2Token.default"><pre>Ltype2Token.default = TkSTRING </pre></dt>
+      <dl></dl>
+            <dt id="const-PERCENT_PAREN"><pre>PERCENT_PAREN = {     "{" => "}",    "[" => "]",    "<" => ">",    "(" => ")"  </pre></dt>
+      <dl></dl>
+            <dt id="const-DEINDENT_CLAUSE"><pre>DEINDENT_CLAUSE = ["end"  </pre></dt>
+      <dl></dl>
+          </dl>
+        
+              
+        <h1>Constructor Summary</h1>
+    <pre> initialize(content)</pre>
+    <p>
+          </p>
+    
+                <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>RubyLex.debug?</tt><br />
+                      </td>
+        </tr>
+              </table>
+          
+                              <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>char_no</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>continue</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>continue</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>continue=(continue)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>continue</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>exception_on_syntax_error</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>exception_on_syntax_error</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>exception_on_syntax_error=(exception_on_syntax_error)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>exception_on_syntax_error</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>get_read</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>getc</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>getc_of_rests</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>gets</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_comment</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_gvar</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_here_document</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_identifier</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_number(start)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_quotation(initial_char)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>identify_string(ltype, quoted = ltype, opener=nil, initial_char = nil)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>indent</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>indent</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>indent=(indent)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>indent</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>lex</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>lex_init()</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>lex_int2</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>lex_state</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>lex_state</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>lex_state=(lex_state)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>lex_state</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>line_no</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+io functions
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>peek(i = 0)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>peek_equal?(str)</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>read_auto_clean_up</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>read_auto_clean_up</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>read_auto_clean_up=(read_auto_clean_up)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>read_auto_clean_up</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>read_escape</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>skip_inner_expression</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>skip_space</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>skip_space</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>skip_space=(skip_space)</tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>skip_space</tt>
+
+.          </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>token</tt><br />
+                      </td>
+        </tr>
+                <tr>
+          <td width="15%" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>ungetc(c = nil)</tt><br />
+                      </td>
+        </tr>
+              </table>
+          
+                      
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-debug?">
+            <h3>debug?</h3>
+                        <pre>public Object RubyLex.debug?</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-char_no">
+            <h3>char_no</h3>
+                        <pre>public Object char_no</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-continue">
+            <h3>continue</h3>
+                        <pre>public Object continue</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>continue</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-continue=">
+            <h3>continue=</h3>
+                        <pre>public Object continue=(continue)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>continue</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-exception_on_syntax_error">
+            <h3>exception_on_syntax_error</h3>
+                        <pre>public Object exception_on_syntax_error</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>exception_on_syntax_error</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-exception_on_syntax_error=">
+            <h3>exception_on_syntax_error=</h3>
+                        <pre>public Object exception_on_syntax_error=(exception_on_syntax_error)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>exception_on_syntax_error</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-get_read">
+            <h3>get_read</h3>
+                        <pre>public Object get_read</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc">
+            <h3>getc</h3>
+                        <pre>public Object getc</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc_of_rests">
+            <h3>getc_of_rests</h3>
+                        <pre>public Object getc_of_rests</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-gets">
+            <h3>gets</h3>
+                        <pre>public Object gets</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_comment">
+            <h3>identify_comment</h3>
+                        <pre>public Object identify_comment</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_gvar">
+            <h3>identify_gvar</h3>
+                        <pre>public Object identify_gvar</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_here_document">
+            <h3>identify_here_document</h3>
+                        <pre>public Object identify_here_document</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_identifier">
+            <h3>identify_identifier</h3>
+                        <pre>public Object identify_identifier</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_number">
+            <h3>identify_number</h3>
+                        <pre>public Object identify_number(start)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_quotation">
+            <h3>identify_quotation</h3>
+                        <pre>public Object identify_quotation(initial_char)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_string">
+            <h3>identify_string</h3>
+                        <pre>public Object identify_string(ltype, quoted = ltype, opener=nil, initial_char = nil)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-indent">
+            <h3>indent</h3>
+                        <pre>public Object indent</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>indent</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-indent=">
+            <h3>indent=</h3>
+                        <pre>public Object indent=(indent)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>indent</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex">
+            <h3>lex</h3>
+                        <pre>public Object lex</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_init">
+            <h3>lex_init</h3>
+                        <pre>public Object lex_init()</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_int2">
+            <h3>lex_int2</h3>
+                        <pre>public Object lex_int2</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_state">
+            <h3>lex_state</h3>
+                        <pre>public Object lex_state</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>lex_state</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_state=">
+            <h3>lex_state=</h3>
+                        <pre>public Object lex_state=(lex_state)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>lex_state</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line_no">
+            <h3>line_no</h3>
+                        <pre>public Object line_no</pre>
+            <div class="fulldoc">
+              <p>
+io functions
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek">
+            <h3>peek</h3>
+                        <pre>public Object peek(i = 0)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek_equal?">
+            <h3>peek_equal?</h3>
+                        <pre>public Object peek_equal?(str)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_auto_clean_up">
+            <h3>read_auto_clean_up</h3>
+                        <pre>public Object read_auto_clean_up</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>read_auto_clean_up</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_auto_clean_up=">
+            <h3>read_auto_clean_up=</h3>
+                        <pre>public Object read_auto_clean_up=(read_auto_clean_up)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>read_auto_clean_up</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_escape">
+            <h3>read_escape</h3>
+                        <pre>public Object read_escape</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_inner_expression">
+            <h3>skip_inner_expression</h3>
+                        <pre>public Object skip_inner_expression</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_space">
+            <h3>skip_space</h3>
+                        <pre>public Object skip_space</pre>
+            <div class="fulldoc">
+              <p>
+Returns the value of attribute <tt>skip_space</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_space=">
+            <h3>skip_space=</h3>
+                        <pre>public Object skip_space=(skip_space)</pre>
+            <div class="fulldoc">
+              <p>
+Sets the attribute <tt>skip_space</tt>
+
+</p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-token">
+            <h3>token</h3>
+                        <pre>public Object token</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                  <div id="instance_method-ungetc">
+            <h3>ungetc</h3>
+                        <pre>public Object ungetc(c = nil)</pre>
+            <div class="fulldoc">
+              <p></p>
+                          </div>
+          </div>
+          <hr />
+                    </body>
+</html>
