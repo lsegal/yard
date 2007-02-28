@@ -34,20 +34,21 @@ module YARD
   end
 end
 
-def link_to_path(name, from_path = nil)
-  return "<a href='#instance_method-#{name[1..-1]}'>#{name}</a>" if name =~ /^\#/
+def link_to_path(name, from_path = nil, label = nil)
+  return "<a href='#instance_method-#{name[1..-1]}'>#{label || name}</a>" if name =~ /^\#/ && from_path.nil?
   if from_path
     obj = Namespace.find_from_path(from_path, name)
   else
     obj = Namespace.at(name)
   end
   
+  label = name if label.nil?
   if obj && obj.is_a?(ConstantObject) then
-    "<a href='#{obj.parent.path.gsub("::","_")}.html#const-#{obj.name}'>#{name}</a>"
-  elsif obj && obj.is_a?(MethodObject) && obj.scope == :class
-    "<a href='#{obj.parent.path.gsub("::","_")}.html#class_method-#{obj.name}'>#{name}</a>"
+    "<a href='#{obj.parent.path.gsub("::","_")}.html#const-#{obj.name}'>#{label}</a>"
+  elsif obj && obj.is_a?(MethodObject) 
+    "<a href='#{obj.parent.path.gsub("::","_")}.html##{obj.scope}_method-#{obj.name}'>#{label}</a>"
   elsif obj
-    "<a href='#{obj.path.gsub("::","_")}.html'>#{name}</a>"
+    "<a href='#{obj.path.gsub("::","_")}.html'>#{label}</a>"
   else
     name
   end

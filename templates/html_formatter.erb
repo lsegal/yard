@@ -59,6 +59,9 @@
     <% @object.superclasses.each do |name| %>
       <% superclass = Namespace.at(name) or next %>
       <% unless (consts = superclass.constants).empty? %>
+      <% if Namespace.find_from_path(@object, @object.superclass).path == name && @object.constants.empty? %>
+      <h1>Constants</h1>
+      <% end %>
       <p><table border="1" width="100%">
         <tr background="#ddddff">
           <th>Constants inherited from <%= link_to_path(superclass.path) %></th>
@@ -96,6 +99,9 @@
           <td>
             <tt><%= method.source.split("\n").first.sub(/\Adef\s+/,'') if method.source %></tt><br />
             <%= ("&nbsp;" * 5) + method.docstring.sub(/(\.|\n).+/m,'').to_html(@object) + "." if method.docstring %>
+            <% if method.tag("deprecated") %>
+            <br /><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text %></em>
+            <% end %>
           </td>
         </tr>
         <% end %>
@@ -104,13 +110,16 @@
     
       <% @object.superclasses.each do |name| %>
         <% superclass = Namespace.at(name) or next %>
-        <% unless (meths = superclass.class_methods.select {|k,m| m.visibility == :public }).empty? %>
+        <% unless (meths = superclass.send("#{scope}_methods").select {|k,m| m.visibility == :public }).empty? %>
+        <% if Namespace.find_from_path(@object, @object.superclass).path == name && eval("#{scope}_methods").empty? %>
+        <h1>Public <%= scope.to_s.capitalize %> Method Summary</h1>
+        <% end %>
         <p><table border="1" width="100%">
           <tr background="#ddddff">
             <th>Public <%= scope %> methods inherited from <%= superclass.path %></th>
           </tr>
           <tr>
-            <td><%= meths.collect {|m| m.first }.join(", ") %></td>
+            <td><%= meths.collect {|m| "<tt>" + link_to_path(superclass.path + (scope == :instance ? "#" : "::") + m.first, nil, m.first) + "</tt>" }.join(", ") %></td>
           </tr>
         </table></p>
         <% end %>
@@ -133,7 +142,12 @@
             %>
             <pre><%= method.source.split("\n").first.gsub(/\Adef/, "#{method.visibility} " + type) if method.source %></pre>
             <div class="fulldoc">
-              <p><%= method.docstring.to_html(@object) %></p>
+              <% if method.tag("deprecated") %>
+              <p><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text %></em></p>
+              <% end %>
+              <p>
+                <%= method.docstring.to_html(@object) %>
+              </p>
               <% unless method.tags.empty? %>
               <dl>
                 <% unless method.tags("param").empty? %>
@@ -155,7 +169,7 @@
                 <dt>Raises:</dt>
                 <dd>
                   <% method.tags("raise").each do |tag| %>
-                  <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                  <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
                   <% end %>
                 </dd>
                 <% end %>

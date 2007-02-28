@@ -7,7 +7,7 @@ class YARD::MethodHandler < YARD::CodeObjectHandler
     holding_object = object
     
     # Use the third token (after the period) if statement begins with a "Constant." or "self."
-    if [RubyToken::TkCONSTANT, RubyToken::TkSELF].include?(stmt_nospace[1].class)
+    if [RubyToken::TkCOLON2,RubyToken::TkDOT].include?(stmt_nospace[2].class)
       method_class = stmt_nospace[1].text
       holding_object = YARD::Namespace.find_from_path(object.path, method_class)
       holding_object = YARD::Namespace.find_or_create_namespace(method_class) if holding_object.nil?
