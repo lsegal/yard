@@ -37,11 +37,13 @@
     </p>
     <% end %>
     
-    <% unless @object.attributes.empty? %>
+    <% unless @object[:attributes].empty? %>
       <h1>Attributes</h1>
+      <p style="line-height:20px">
       <% @object[:attributes].sort.each do |name, rw| %>
-        <pre><%= name %> [<%= [(rw[:read] ? "R" : nil), (rw[:write] ? "W" : nil)].compact.join(", ") %>]</pre>
+        <tt><%= name %> [<%= [(rw[:read] ? "R" : nil), (rw[:write] ? "W" : nil)].compact.join(", ") %>]</tt><br />
       <% end %>
+      </p>
     <% end %>
     
     <% unless @object.constants.empty? %>
@@ -139,7 +141,7 @@
                 <dd>
                   <% method.tags("param").each do |tag| %>
                   <% unless tag.types.empty? %>
-                    [<%= tag.types.collect {|t| "<tt>#{t}</tt>" }.join(", ") %>]
+                    [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
                   <% end %>
                   <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
                   <% end %>
