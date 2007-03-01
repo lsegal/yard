@@ -28,13 +28,16 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
       [name, "#{name}="].each do |method|
         YARD::MethodObject.new(method, current_visibility, current_scope, object, statement.comments) do |obj|
           if method.to_s.include? "="
-            src = "def #{method}(value)\n  @#{name} = value\nend"
+            src = "def #{method}(value)"
+            full_src = "#{src}\n  @#{name} = value\nend"
             doc = "Sets the attribute +#{name}+\n@param value the value to set the attribute +#{name}+ to."
           else
-            src = "def #{method}\n  @#{name}\nend"
+            src = "def #{method}"
+            full_src = "#{src}\n  @#{name}\nend"
             doc = "Returns the value of attribute +#{name}+"
           end
           obj.attach_source(src)
+          obj.attach_full_source(full_src)
           obj.attach_docstring(doc)
         end
       end

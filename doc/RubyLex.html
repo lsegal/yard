@@ -16,6 +16,7 @@
       font-weight: bold;
     }
     h1 { color: #000; }
+    td { padding: 3px; }
     </style>
   <base target="_self" />
   </head>
@@ -28,10 +29,7 @@ Object
     
         <p>
       <strong>All Included Modules:</strong><br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-RubyToken, IRB
-
-    </p>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='RubyToken.html'>RubyToken</a>, IRB    </p>
     
     <hr />  
     
@@ -46,39 +44,46 @@ RubyToken, IRB
               <tt>skip_space [R]</tt><br />
             </p>
         
-        <h1>Constants</h1>
-    <dl>
-            <dt id="const-PERCENT_LTYPE"><pre>PERCENT_LTYPE = {     "q" => "\'",    "Q" => "\"",    "x" => "\`",    "r" => "/",    "w" => "]"  </pre></dt>
+            <h1>Constants</h1>    <dl>
+            <dt id="const-PERCENT_LTYPE"><pre>PERCENT_LTYPE = { "q" => "\'", "Q" => "\"", "x" => "\`", "r" => "/", "w" => "]" end</pre></dt>
       <dl></dl>
-            <dt id="const-DLtype2Token"><pre>DLtype2Token = {}     "\"" => TkDSTRING,    "\`" => TkDXSTRING,    "/" => TkDREGEXP,  </pre></dt>
+            <dt id="const-DLtype2Token"><pre>DLtype2Token = {} "\"" => TkDSTRING, "\`" => TkDXSTRING, "/" => TkDREGEXP, end</pre></dt>
       <dl></dl>
-            <dt id="const-Ltype2Token"><pre>Ltype2Token = {     "\'" => TkSTRING,    "\"" => TkSTRING,    "\`" => TkXSTRING,    "/" => TkREGEXP,    "]" => TkDSTRING  </pre></dt>
+            <dt id="const-Ltype2Token"><pre>Ltype2Token = { "\'" => TkSTRING, "\"" => TkSTRING, "\`" => TkXSTRING, "/" => TkREGEXP, "]" => TkDSTRING end</pre></dt>
       <dl></dl>
-            <dt id="const-ENINDENT_CLAUSE"><pre>ENINDENT_CLAUSE = [    "case", "class", "def", "do", "for", "if",    "module", "unless", "until", "while", "begin"  </pre></dt>
+            <dt id="const-ENINDENT_CLAUSE"><pre>ENINDENT_CLAUSE = [ "case", "class", "def", "do", "for", "if", "module", "unless", "until", "while", "begin" </pre></dt>
       <dl></dl>
-            <dt id="const-Ltype2Token.default"><pre>Ltype2Token.default = TkSTRING </pre></dt>
+            <dt id="const-Ltype2Token.default"><pre>Ltype2Token.default = TkSTRING</pre></dt>
       <dl></dl>
-            <dt id="const-PERCENT_PAREN"><pre>PERCENT_PAREN = {     "{" => "}",    "[" => "]",    "<" => ">",    "(" => ")"  </pre></dt>
+            <dt id="const-PERCENT_PAREN"><pre>PERCENT_PAREN = { "{" => "}", "[" => "]", "<" => ">", "(" => ")" end</pre></dt>
       <dl></dl>
-            <dt id="const-DEINDENT_CLAUSE"><pre>DEINDENT_CLAUSE = ["end"  </pre></dt>
+            <dt id="const-DEINDENT_CLAUSE"><pre>DEINDENT_CLAUSE = ["end" </pre></dt>
       <dl></dl>
           </dl>
         
-              
+                                  <p><table border="1" width="100%">
+        <tr background="#ddddff">
+          <th>Constants included from <a href='RubyToken.html'>RubyToken</a></th>
+        </tr>
+        <tr>
+          <td><tt><a href='RubyToken.html#const-TkSymbol2Token'>TkSymbol2Token</a></tt>, <tt><a href='RubyToken.html#const-EXPR_MID'>EXPR_MID</a></tt>, <tt><a href='RubyToken.html#const-EXPR_DOT'>EXPR_DOT</a></tt>, <tt><a href='RubyToken.html#const-EXPR_ARG'>EXPR_ARG</a></tt>, <tt><a href='RubyToken.html#const-TkReading2Token'>TkReading2Token</a></tt>, <tt><a href='RubyToken.html#const-NEWLINE_TOKEN'>NEWLINE_TOKEN</a></tt>, <tt><a href='RubyToken.html#const-TokenDefinitions'>TokenDefinitions</a></tt>, <tt><a href='RubyToken.html#const-EXPR_CLASS'>EXPR_CLASS</a></tt>, <tt><a href='RubyToken.html#const-EXPR_FNAME'>EXPR_FNAME</a></tt>, <tt><a href='RubyToken.html#const-EXPR_BEG'>EXPR_BEG</a></tt>, <tt><a href='RubyToken.html#const-EXPR_END'>EXPR_END</a></tt></td>
+        </tr>
+      </table></p>
+                    
         <h1>Constructor Summary</h1>
     <pre>initialize(content)</pre>
     
-        <div class="fulldoc">
+        <div id="instance_method-initialize" class="fulldoc">
                     <p>
                       </p>
                   </div>
       </div>
         
-    
-                <h1>Public Class Method Summary</h1>
+                                                    
+                          <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -88,10 +93,20 @@ RubyToken, IRB
         </tr>
               </table>
           
-                              <h1>Public Instance Method Summary</h1>
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public class methods included 
+              from <a href='RubyToken.html'>RubyToken</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='RubyToken.html#class_method-def_token'>def_token</a></tt></td>
+          </tr>
+        </table></p>
+                                            <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -100,7 +115,7 @@ RubyToken, IRB
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -112,7 +127,7 @@ Returns the value of attribute <tt>continue</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -124,7 +139,7 @@ Sets the attribute <tt>continue</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -136,7 +151,7 @@ Returns the value of attribute <tt>exception_on_syntax_error</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -148,7 +163,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -157,7 +172,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -166,7 +181,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -175,7 +190,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -184,7 +199,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -193,7 +208,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -202,7 +217,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -211,7 +226,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -220,7 +235,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -229,7 +244,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -238,7 +253,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -247,7 +262,7 @@ Sets the attribute <tt>exception_on_syntax_error</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -259,7 +274,7 @@ Returns the value of attribute <tt>indent</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -271,7 +286,7 @@ Sets the attribute <tt>indent</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -280,7 +295,7 @@ Sets the attribute <tt>indent</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -289,7 +304,7 @@ Sets the attribute <tt>indent</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -298,7 +313,7 @@ Sets the attribute <tt>indent</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -310,7 +325,7 @@ Returns the value of attribute <tt>lex_state</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -322,7 +337,7 @@ Sets the attribute <tt>lex_state</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -334,7 +349,7 @@ io functions
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -343,7 +358,7 @@ io functions
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -352,7 +367,7 @@ io functions
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -364,7 +379,7 @@ Returns the value of attribute <tt>read_auto_clean_up</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -376,7 +391,7 @@ Sets the attribute <tt>read_auto_clean_up</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -385,7 +400,7 @@ Sets the attribute <tt>read_auto_clean_up</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -394,7 +409,7 @@ Sets the attribute <tt>read_auto_clean_up</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -406,7 +421,7 @@ Returns the value of attribute <tt>skip_space</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -418,7 +433,7 @@ Sets the attribute <tt>skip_space</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -427,7 +442,7 @@ Sets the attribute <tt>skip_space</tt>
                                   </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -437,7 +452,17 @@ Sets the attribute <tt>skip_space</tt>
         </tr>
               </table>
           
-                      
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public instance methods included 
+              from <a href='RubyToken.html'>RubyToken</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='RubyToken.html#instance_method-set_token_position'>set_token_position</a></tt>, <tt><a href='RubyToken.html#instance_method-Token'>Token</a></tt></td>
+          </tr>
+        </table></p>
+                              
                   <h1>Public Class Method Details</h1>
                   <div id="class_method-debug?">
             <h3>debug?</h3>
@@ -445,7 +470,10 @@ Sets the attribute <tt>skip_space</tt>
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                                 <h1>Public Instance Method Details</h1>
@@ -455,7 +483,10 @@ Sets the attribute <tt>skip_space</tt>
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-continue">
@@ -467,7 +498,10 @@ Sets the attribute <tt>skip_space</tt>
 Returns the value of attribute <tt>continue</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-continue=">
@@ -479,8 +513,8 @@ Returns the value of attribute <tt>continue</tt>
 Sets the attribute <tt>continue</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>continue</tt> to.
@@ -489,7 +523,7 @@ the value to set the attribute <tt>continue</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-exception_on_syntax_error">
@@ -501,7 +535,10 @@ the value to set the attribute <tt>continue</tt> to.
 Returns the value of attribute <tt>exception_on_syntax_error</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-exception_on_syntax_error=">
@@ -513,8 +550,8 @@ Returns the value of attribute <tt>exception_on_syntax_error</tt>
 Sets the attribute <tt>exception_on_syntax_error</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>exception_on_syntax_error</tt> to.
@@ -523,7 +560,7 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-get_read">
@@ -532,7 +569,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-getc">
@@ -541,7 +581,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-getc_of_rests">
@@ -550,7 +593,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-gets">
@@ -559,7 +605,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_comment">
@@ -568,7 +617,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_gvar">
@@ -577,7 +629,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_here_document">
@@ -586,7 +641,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_identifier">
@@ -595,7 +653,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_number">
@@ -604,7 +665,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_quotation">
@@ -613,7 +677,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-identify_string">
@@ -622,7 +689,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-indent">
@@ -634,7 +704,10 @@ the value to set the attribute <tt>exception_on_syntax_error</tt> to.
 Returns the value of attribute <tt>indent</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-indent=">
@@ -646,8 +719,8 @@ Returns the value of attribute <tt>indent</tt>
 Sets the attribute <tt>indent</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>indent</tt> to.
@@ -656,7 +729,7 @@ the value to set the attribute <tt>indent</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-lex">
@@ -665,7 +738,10 @@ the value to set the attribute <tt>indent</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-lex_init">
@@ -674,7 +750,10 @@ the value to set the attribute <tt>indent</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-lex_int2">
@@ -683,7 +762,10 @@ the value to set the attribute <tt>indent</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-lex_state">
@@ -695,7 +777,10 @@ the value to set the attribute <tt>indent</tt> to.
 Returns the value of attribute <tt>lex_state</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-lex_state=">
@@ -707,8 +792,8 @@ Returns the value of attribute <tt>lex_state</tt>
 Sets the attribute <tt>lex_state</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>lex_state</tt> to.
@@ -717,7 +802,7 @@ the value to set the attribute <tt>lex_state</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-line_no">
@@ -729,7 +814,10 @@ the value to set the attribute <tt>lex_state</tt> to.
 io functions
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-peek">
@@ -738,7 +826,10 @@ io functions
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-peek_equal?">
@@ -747,7 +838,10 @@ io functions
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-read_auto_clean_up">
@@ -759,7 +853,10 @@ io functions
 Returns the value of attribute <tt>read_auto_clean_up</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-read_auto_clean_up=">
@@ -771,8 +868,8 @@ Returns the value of attribute <tt>read_auto_clean_up</tt>
 Sets the attribute <tt>read_auto_clean_up</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>read_auto_clean_up</tt> to.
@@ -781,7 +878,7 @@ the value to set the attribute <tt>read_auto_clean_up</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-read_escape">
@@ -790,7 +887,10 @@ the value to set the attribute <tt>read_auto_clean_up</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-skip_inner_expression">
@@ -799,7 +899,10 @@ the value to set the attribute <tt>read_auto_clean_up</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-skip_space">
@@ -811,7 +914,10 @@ the value to set the attribute <tt>read_auto_clean_up</tt> to.
 Returns the value of attribute <tt>skip_space</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-skip_space=">
@@ -823,8 +929,8 @@ Returns the value of attribute <tt>skip_space</tt>
 Sets the attribute <tt>skip_space</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>skip_space</tt> to.
@@ -833,7 +939,7 @@ the value to set the attribute <tt>skip_space</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-token">
@@ -842,7 +948,10 @@ the value to set the attribute <tt>skip_space</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-ungetc">
@@ -851,7 +960,10 @@ the value to set the attribute <tt>skip_space</tt> to.
             <div class="fulldoc">
                             <p>
                               </p>
-                          </div>
+              <dl>
+                                                                                                                                                        
+                                              </dl>
+            </div>
           </div>
           <hr />
                     </body>

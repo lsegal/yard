@@ -2,13 +2,13 @@ class YARD::ClassHandler < YARD::CodeObjectHandler
   handles RubyToken::TkCLASS
   
   def process
-    words = statement.tokens.to_s.gsub(/#.+$/, '').strip.split(/\s+/)
+    words = statement.tokens.to_s.strip.split(/\s+/)
     class_name, superclass = words[1], (words[3] || "Object")
     if class_name == "<<"
       if words[2] == "self"
         class_name = nil
       else
-        class_name = "Unknown"
+        class_name = "Anonymous$#{class_name}"
       end
     end
     

@@ -20,9 +20,7 @@ class YARD::MethodHandler < YARD::CodeObjectHandler
     enter_namespace(method_object) do |obj|
       #puts "->\tMethod #{obj.path} (visibility: #{obj.visibility})"
       # Attach better source code
-      obj.attach_source(statement.tokens.to_s + "\n" + statement.block.to_s + "end", 
-                        parser.file, statement.tokens.first.line_no)
-      
+      obj.attach_source(statement, parser.file)
       parse_block
     end
   end

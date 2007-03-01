@@ -32,6 +32,9 @@ class YARD::CodeObjectHandler
     @statement = stmt
   end
   
+  def process
+  end
+  
   protected
     def current_visibility
       current_namespace.attributes[:visibility]

@@ -62,17 +62,16 @@ module YARD
         File.open("Yardoc", "w") {|f| Marshal.dump(instance.namespace, f) }
       end
       
-      def find_from_path(path, name)
-        path = path.path if path.is_a? CodeObject
-        return at(path) if name == 'self'
-        path = path.split(/::|#/)
-        while !path.empty?
+      def find_from_path(object, name)
+        object = at(object) unless object.is_a? CodeObject
+        return object if name == 'self'
+        
+        while object
           ["::", ""].each do |type|
-            fullname = [path.join("::"), name].join(type)
-            obj = at(fullname)
+            obj = at(object.path + type + name)
             return obj if obj
           end
-          path.pop
+          object = object.parent
         end
         nil
       end

@@ -8,7 +8,7 @@ module YARD #:nodoc:
   # 
   # @author Loren Segal
   class CodeObject
-    attr_reader :source, :file, :line, :docstring, :attributes
+    attr_reader :source, :full_source, :file, :line, :docstring, :attributes
     
     attr_reader :name, :type
     attr_accessor :visibility, :scope 
@@ -47,13 +47,30 @@ module YARD #:nodoc:
     end
     
     ##
-    # Attaches source code to a code object with an optional file and line number location
+    # Attaches source code to a code object with an optional file location
     #
-    # @param [String] source the source code for the code object
+    # @param [Statement, String] statement the +Statement+ holding the source code
+    #                                      or the raw source as a +String+ for the 
+    #                                      definition of the code object only (not the block)
     # @param [String] file the filename the source resides in
-    # @param [Number] line the line number where the source code begins at in the +file+
-    def attach_source(source, file = nil, line = nil)
-      @source, @file, @line = source, file, line
+    def attach_source(statement, file = nil)
+      if statement.is_a? String
+        @source = statement
+      else
+        @source = statement.tokens.to_s
+        @line = statement.tokens.first.line_no
+        attach_full_source statement.tokens.to_s + (statement.block ? "#{statement.block}\nend" : "")
+      end
+      @file = file
+    end
+    
+    ##
+    # Manually attaches full source code for an object given the source
+    # as a +String+
+    # 
+    # @param [String] source the source code for the object
+    def attach_full_source(source)
+      @full_source = source
     end
     
     ##
@@ -233,8 +250,12 @@ module YARD #:nodoc:
     
     def inherited_methods(scopes = [:class, :instance])
       [scopes].flatten.each do |scope|
-        mixins.inject({}) {|hash, mixin| hash.update(mixin.send(scope + "_methods")) }
+        full_mixins.inject({}) {|hash, mixin| hash.update(mixin.send(scope + "_methods")) }
       end
+    end
+    
+    def full_mixins 
+      mixins.collect {|mixin| Namespace.find_from_path(self, mixin).path rescue mixin }
     end
   end
 
@@ -274,6 +295,10 @@ module YARD #:nodoc:
       return [BASE_OBJECT] if superclass == BASE_OBJECT || superobject.nil?
       [superobject.path] + superobject.superclasses
     end
+    
+    def inheritance_tree
+      full_mixins.reverse + superclasses
+    end
   end
   
   class MethodObject < CodeObject
@@ -294,7 +319,7 @@ module YARD #:nodoc:
       super(name, :constant, :public, :class, parent) do |obj| 
         if statement
           obj.attach_docstring(statement.comments)
-          obj.attach_source((statement.tokens.to_s + " " + statement.block.to_s).gsub(/\r?\n/,''))
+          obj.attach_source(statement)
           parent[:constants].update(name.to_s => obj)
           yield(obj) if block_given?
         end

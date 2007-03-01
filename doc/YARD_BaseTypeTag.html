@@ -16,6 +16,7 @@
       font-weight: bold;
     }
     h1 { color: #000; }
+    td { padding: 3px; }
     </style>
   <base target="_self" />
   </head>
@@ -46,12 +47,12 @@ type data if it depends on a specific object type.
               <tt>types [R]</tt><br />
             </p>
         
-        
+            
                               
         <h1>Constructor Summary</h1>
     <pre>initialize(text, types = [])</pre>
     
-        <div class="fulldoc">
+        <div id="instance_method-initialize" class="fulldoc">
                     <p>
             
 Create a new object with formally specified types
@@ -60,7 +61,7 @@ Create a new object with formally specified types
                     <dl>
                         <dt>Parameters:</dt>
             <dd>
-                                            [<tt>String</tt>]
+                                            [<tt><a href='String.html'>String</a></tt>]
                             <tt>text</tt> - 
 the text data
 
@@ -76,11 +77,11 @@ the types that are formally specified by the tag.
                   </div>
       </div>
         
-    
-                <h1>Public Class Method Summary</h1>
+                                            
+                          <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -92,7 +93,7 @@ Extracts the name from raw tag text returning the name and remaining value
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Array                          </small>
           </td>
@@ -105,18 +106,20 @@ Extracts the type signatures from the raw tag text
         </tr>
               </table>
           
-                                      <p><table border="1" width="100%">
+                                        <p><table border="1" width="100%">
           <tr background="#ddddff">
-            <th>Public class methods inherited from YARD::BaseTag</th>
+            <th>
+              Public class methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
           </tr>
           <tr>
             <td><tt><a href='YARD_BaseTag.html#class_method-tag_library'>tag_library</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-parse_tag'>parse_tag</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-inherited'>inherited</a></tt></td>
           </tr>
         </table></p>
-                                      <h1>Public Instance Method Summary</h1>
+                                            <h1>Public Instance Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                                                       </small>
           </td>
@@ -128,7 +131,7 @@ Convenience method to access the first type specified
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -140,7 +143,7 @@ Returns the value of attribute <tt>types</tt>
 .                      </td>
         </tr>
                 <tr>
-          <td width="100" align="right" valign="top">
+          <td width="70" align="right" valign="top">
             <small>
                             Object                          </small>
           </td>
@@ -153,12 +156,14 @@ Sets the attribute <tt>types</tt>
         </tr>
               </table>
           
-                                      <p><table border="1" width="100%">
+                                        <p><table border="1" width="100%">
           <tr background="#ddddff">
-            <th>Public instance methods inherited from YARD::BaseTag</th>
+            <th>
+              Public instance methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
           </tr>
           <tr>
-            <td><tt><a href='YARD_BaseTag.html#instance_method-text'>text</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-initialize'>initialize</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-text='>text=</a></tt></td>
+            <td><tt><a href='YARD_BaseTag.html#instance_method-text'>text</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-text='>text=</a></tt></td>
           </tr>
         </table></p>
                               
@@ -172,10 +177,10 @@ Sets the attribute <tt>types</tt>
 Extracts the name from raw tag text returning the name and remaining value
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
                 <dd>
-                                                        [<tt>String</tt>]
+                                                        [<tt><a href='String.html'>String</a></tt>]
                                     <tt>text</tt> - 
 the raw tag text
 
@@ -189,7 +194,7 @@ element
 </dd>
                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="class_method-extract_types_and_text">
@@ -201,10 +206,10 @@ element
 Extracts the type signatures from the raw tag text
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
                 <dd>
-                                                        [<tt>String</tt>]
+                                                        [<tt><a href='String.html'>String</a></tt>]
                                     <tt>text</tt> - 
 the raw tag text
 
@@ -218,7 +223,7 @@ the second element
 </dd>
                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                                 <h1>Public Instance Method Details</h1>
@@ -232,15 +237,15 @@ Convenience method to access the first type specified. This should mainly
 be used for tags that only specify one type.
 
               </p>
-                            <dl>
-                                                <dt>Returns:</dt>
+              <dl>
+                                                                                                                                      <dt>Returns:</dt>
                 <dd>
 (String) the first of the list of specified types
 
 </dd>
                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-types">
@@ -252,7 +257,10 @@ be used for tags that only specify one type.
 Returns the value of attribute <tt>types</tt>
 
               </p>
-                          </div>
+              <dl>
+                                                                                                                                      
+                                              </dl>
+            </div>
           </div>
           <hr />
                   <div id="instance_method-types=">
@@ -264,8 +272,8 @@ Returns the value of attribute <tt>types</tt>
 Sets the attribute <tt>types</tt>
 
               </p>
-                            <dl>
-                                <dt>Parameters:</dt>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
                 <dd>
                                                       <tt>value</tt> - 
 the value to set the attribute <tt>types</tt> to.
@@ -274,7 +282,7 @@ the value to set the attribute <tt>types</tt> to.
                                   </dd>
                                                 
                                               </dl>
-                          </div>
+            </div>
           </div>
           <hr />
                     </body>
