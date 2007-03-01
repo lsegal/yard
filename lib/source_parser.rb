@@ -108,13 +108,21 @@ module YARD
         statement, block, comments = TokenList.new, nil, nil
         stmt_number, level = 0, 0
         new_statement, open_block = true, false
-        last_tk = nil
+        last_tk, before_last_tk = nil, nil
+        open_parens = 0
 
         while tk = @tokens.shift
+          #p tk.class
+          open_parens += 1 if [TkLPAREN, TkLBRACK].include? tk.class
+          open_parens -= 1 if [TkRPAREN, TkRBRACK].include?(tk.class) if open_parens > 0
+          
+#          raise block.to_s + " TOKEN #{tk.inspect}" if open_parens < 0
+
           # Get the initial comments
           if statement.empty?
             # Two new-lines in a row will destroy any comment blocks
-            if tk.class == TkNL && (last_tk.class == TkNL || last_tk.class == TkSPACE)
+            if tk.class == TkCOMMENT && last_tk.class == TkNL && 
+              (before_last_tk && (before_last_tk.class == TkNL || before_last_tk.class == TkSPACE))
               comments = nil
             elsif tk.class == TkCOMMENT
               # Remove the "#" and up to 1 space before the text
@@ -125,7 +133,7 @@ module YARD
               comments.pop if comments.size == 1 && comments.first =~ /^\s*$/
             end
           end
-          
+                    
           # Ignore any initial comments or whitespace
           unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
@@ -133,14 +141,14 @@ module YARD
 
             # If the level is greater than 0, add the code to the block text
             # otherwise it's part of the statement text
-            if level > 0
+            if stmt_number > 0
               block ||= TokenList.new
               block << tk
             elsif stmt_number == 0 && tk.class != TkNL && tk.class != TkCOMMENT
               statement << tk 
             end
 
-  #          p "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
+#            puts "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
 
             # Increase level if we have a 'do' or block opening
             if tk.class == TkLBRACE
@@ -155,7 +163,9 @@ module YARD
             open_block = true if (new_statement || (last_tk && last_tk.lex_state == EXPR_BEG)) && @@open_block_tokens.include?(tk.class)
 
             # Check if this token creates a new statement or not
-            if [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT, TkCOMMENT].include? tk.class
+            #puts "#{open_parens} open brackets for: #{statement.to_s}"
+            if open_parens == 0 && ([TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class) ||
+              (statement.first.class == TkDEF && tk.class == TkRPAREN))
               # Make sure we don't have any running expressions
               # This includes things like
               #
@@ -167,7 +177,7 @@ module YARD
               if [EXPR_END, EXPR_ARG].include? last_tk.lex_state
                 stmt_number += 1
                 new_statement = true
-  #              p "NEW STATEMENT"
+                #p "NEW STATEMENT #{statement.to_s}"
 
                 # The statement started with a if/while/begin, so we must go to the next level now
                 if open_block
@@ -190,6 +200,7 @@ module YARD
             break if new_statement && level == 0
           end
 
+          before_last_tk = last_tk
           last_tk = tk # Save last token
         end
 

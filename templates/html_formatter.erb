@@ -111,7 +111,7 @@
     <h1>Class Variables</h1><% displayed_cvars = true %>
     <dl>
     <% @object.class_variables.each do |name, cvar| %>
-    <dt><pre><%= cvar.source %></pre></dt>
+    <dt><pre><%= cvar.source.gsub(/\s+/,' ') %></pre></dt>
     <dd><%= cvar.docstring.to_html(@object) %></dd>
     <% end %>
     </dl>

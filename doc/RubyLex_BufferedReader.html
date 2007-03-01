@@ -30,6 +30,41 @@ Object
     
     <hr />  
     
+          <div class="topdoc">
+                <p>
+          
+Read an input stream character by character. We allow for unlimited
+ungetting of characters just read.
+</p>
+<p>
+We simplify the implementation greatly by reading the entire input into a
+buffer initially, and then simply traversing it using pointers.
+</p>
+<p>
+We also have to allow for the <em>here document diversion</em>. This little
+gem comes about when the lexer encounters a here document. At this point we
+effectively need to split the input stream into two parts: one to read the
+body of the here document, the other to read the rest of the input line
+where the here document was initially encountered. For example, we might
+have
+</p>
+<pre>
+  do_something(&lt;&lt;-A, &lt;&lt;-B)
+    stuff
+    for
+
+    stuff
+    for
+</pre>
+<p>
+When the lexer encounters the &lt;&lt;A, it reads until the end of the
+line, and keeps it around for later. It then reads the body of the here
+document. Once complete, it needs to read the rest of the original line,
+but then skip the here document body.
+
+        </p>
+              </div>
+      <hr />
         
           <h1>Attributes</h1>
       <p style="line-height:20px">

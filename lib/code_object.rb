@@ -59,7 +59,7 @@ module YARD #:nodoc:
       else
         @source = statement.tokens.to_s
         @line = statement.tokens.first.line_no
-        attach_full_source statement.tokens.to_s + (statement.block ? "#{statement.block}\nend" : "")
+        attach_full_source statement.tokens.to_s + (statement.block.to_s rescue "")
       end
       @file = file
     end
