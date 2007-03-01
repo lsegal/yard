@@ -292,7 +292,7 @@ module YARD #:nodoc:
     
     def superclasses
       superobject = Namespace.find_from_path(path, superclass)
-      return [BASE_OBJECT] if superclass == BASE_OBJECT || superobject.nil?
+      return [superclass] if superobject.nil?
       [superobject.path] + superobject.superclasses
     end
     

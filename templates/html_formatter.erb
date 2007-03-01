@@ -86,7 +86,7 @@
     <dl>
       <% @object.constants.each do |name, constant| %>
       <dt id="const-<%= name %>"><pre><%= constant.full_source.gsub(/\s+/,' ') %></pre></dt>
-      <dl><%= constant.docstring.to_html(@object) %></dl>
+      <dd><%= constant.docstring.to_html(@object) %></dd>
       <% end %>
     </dl>
     <% end %>
@@ -111,8 +111,8 @@
     <h1>Class Variables</h1><% displayed_cvars = true %>
     <dl>
     <% @object.class_variables.each do |name, cvar| %>
-    <dt><tt><%= cvar.source %></tt></dt>
-    <dd><% if cvar.docstring %><br /><%= cvar.docstring.to_html(@object) %><% end %></dd>
+    <dt><pre><%= cvar.source %></pre></dt>
+    <dd><%= cvar.docstring.to_html(@object) %></dd>
     <% end %>
     </dl>
     <% end %>

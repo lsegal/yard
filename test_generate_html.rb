@@ -1,4 +1,4 @@
-require 'yard'
+require File.dirname(__FILE__) + '/yard'
 include YARD
 
 Namespace.load("Yardoc", true)
@@ -14,7 +14,7 @@ eof
 meths = []
 Namespace.all.sort.each do |path|
   object = Namespace.at(path)
-  if object.is_a? MethodObject
+  if object.is_a?(MethodObject) && object.visibility == :public
     meths << [object.name, object]
   end
   
@@ -37,4 +37,23 @@ eof
   meths.sort {|a,b| a.first <=> b.first }.each do |name, object|
     f.puts "<a href='" + object.parent.path.gsub("::", "_") + ".html##{object.scope}_method-#{name}'>#{name}</a><br />"
   end
+end
+File.open("doc/index.html", "w") do |f|
+  f.puts <<-eof
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+  <html>
+    <head>
+      <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+      <title>Ruby Classes</title>
+    </head>
+    <frameset cols="250,*">
+      <frameset rows="*,40%">
+        <frame src="all-classes.html">
+        <frame src="all-methods.html">
+      </frameset>
+      <frame name="main" src="YARD_CodeObject.html">
+    </frameset>
+  </html>
+eof
 end

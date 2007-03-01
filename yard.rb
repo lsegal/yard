@@ -1,2 +1,2 @@
-require 'lib/namespace'
-require 'lib/source_parser'
+require File.dirname(__FILE__) + '/lib/namespace'
+require File.dirname(__FILE__) + '/lib/source_parser'
