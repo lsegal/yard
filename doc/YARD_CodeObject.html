@@ -6,13 +6,13 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::CodeObject</title>
     <style>
-    .topdoc dl dt {
+    .topdoc * dt {
       font-weight: bold;
     }
     .fulldoc {
       margin-left: 37px;
     }
-    .fulldoc dl dt {
+    .fulldoc * dt {
       font-weight: bold;
     }
     h1 { color: #000; }
@@ -65,11 +65,16 @@ Loren Segal
         
             
               
+            
+          
         <h1>Constructor Summary</h1>
-    <pre>initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)</pre>
+    <tt>
+      initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)              {|_self| ... }
+        
+    </tt>
     
         <div id="instance_method-initialize" class="fulldoc">
-                    <p>
+                              <p>
             
 Creates a new code object with necessary information such as the
 object&#8217;s name (not full path), it&#8217;s type (:class, :module,
@@ -118,6 +123,15 @@ Comments to be parsed as a docstring for the object.
 
 <br />
                           </dd>
+                                    <dt>Yield Parameters:</dt>
+              <dd>
+                                                [<tt><a href='YARD_CodeObject.html'>CodeObject</a></tt>]
+                                <tt>_self</tt> - 
+the object is yielded during initialization to perform any initialization
+operations on it more conveniently.
+
+<br />
+                            </dd>
                                     <dt>Returns:</dt>
             <dd>
 the created code object
@@ -132,10 +146,12 @@ the created code object
         
         <h1>Dynamic Method Handling</h1>
     <p><em>This class handles dynamic methods through the <tt>method_missing</tt> method</em></p>
-    <pre>method_missing(meth, *args, &block)</pre>
+    <tt>
+    method_missing(meth, *args, &block)      
+    </tt>
     
         <div id="instance_method-method_missing" class="fulldoc">
-                    <p>
+                              <p>
             
 See if the method call exists in the attributes hash, and return it.
 Otherwise send the missing method call up the stack.
@@ -157,7 +173,7 @@ an optional block for the call
 
 <br />
                           </dd>
-                                    
+                                                
                                   </dl>
                   </div>
       
@@ -171,7 +187,9 @@ an optional block for the call
                             Object                          </small>
           </td>
           <td>
-            <tt>[](key)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-[]'>[]</a>(key)                
+            </tt><br />
                                   </td>
         </tr>
                 <tr>
@@ -180,7 +198,9 @@ an optional block for the call
                             Object                          </small>
           </td>
           <td>
-            <tt>[]=(key, value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-[]='>[]=</a>(key, value)                
+            </tt><br />
                                   </td>
         </tr>
                 <tr>
@@ -189,7 +209,9 @@ an optional block for the call
                             Object                          </small>
           </td>
           <td>
-            <tt>attach_docstring(comments)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-attach_docstring'>attach_docstring</a>(comments)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Attaches a docstring to a code oject by parsing the comments attached to
 the statement
@@ -202,7 +224,9 @@ the statement
                             Object                          </small>
           </td>
           <td>
-            <tt>attach_full_source(source)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-attach_full_source'>attach_full_source</a>(source)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Manually attaches full source code for an object given the source
 
@@ -214,7 +238,9 @@ Manually attaches full source code for an object given the source
                             Object                          </small>
           </td>
           <td>
-            <tt>attach_source(statement, file = nil)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-attach_source'>attach_source</a>(statement, file = nil)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Attaches source code to a code object with an optional file location
 
@@ -226,7 +252,9 @@ Attaches source code to a code object with an optional file location
                             Object                          </small>
           </td>
           <td>
-            <tt>attributes</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-attributes'>attributes</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>attributes</tt>
 
@@ -238,7 +266,9 @@ Returns the value of attribute <tt>attributes</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>attributes=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-attributes='>attributes=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>attributes</tt>
 
@@ -250,7 +280,9 @@ Sets the attribute <tt>attributes</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>children</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-children'>children</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>children</tt>
 
@@ -262,7 +294,9 @@ Returns the value of attribute <tt>children</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>children=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-children='>children=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>children</tt>
 
@@ -274,7 +308,9 @@ Sets the attribute <tt>children</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>docstring</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-docstring'>docstring</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>docstring</tt>
 
@@ -286,7 +322,9 @@ Returns the value of attribute <tt>docstring</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>docstring=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-docstring='>docstring=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>docstring</tt>
 
@@ -298,7 +336,9 @@ Sets the attribute <tt>docstring</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>file</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-file'>file</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>file</tt>
 
@@ -310,7 +350,9 @@ Returns the value of attribute <tt>file</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>file=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-file='>file=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>file</tt>
 
@@ -322,7 +364,9 @@ Sets the attribute <tt>file</tt>
                             <a href='String.html'>String</a>                          </small>
           </td>
           <td>
-            <tt>format(type = :html)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-format'>format</a>(type = :html)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns a code object formatted as a given type, defaults to html.
 
@@ -334,7 +378,9 @@ Returns a code object formatted as a given type, defaults to html.
                             Object                          </small>
           </td>
           <td>
-            <tt>full_source</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-full_source'>full_source</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>full_source</tt>
 
@@ -346,7 +392,9 @@ Returns the value of attribute <tt>full_source</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>full_source=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-full_source='>full_source=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>full_source</tt>
 
@@ -358,7 +406,9 @@ Sets the attribute <tt>full_source</tt>
                             Boolean                          </small>
           </td>
           <td>
-            <tt>has_tag?(name)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-has_tag?'>has_tag?</a>(name)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns true if at least one tag by the name <tt>name</tt> was declared
 
@@ -370,7 +420,9 @@ Returns true if at least one tag by the name <tt>name</tt> was declared
                             Object                          </small>
           </td>
           <td>
-            <tt>line</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-line'>line</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>line</tt>
 
@@ -382,7 +434,9 @@ Returns the value of attribute <tt>line</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>line=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-line='>line=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>line</tt>
 
@@ -394,7 +448,9 @@ Sets the attribute <tt>line</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>name</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-name'>name</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>name</tt>
 
@@ -406,7 +462,9 @@ Returns the value of attribute <tt>name</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>name=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-name='>name=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>name</tt>
 
@@ -418,7 +476,9 @@ Sets the attribute <tt>name</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>parent</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-parent'>parent</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>parent</tt>
 
@@ -430,7 +490,9 @@ Returns the value of attribute <tt>parent</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>parent=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-parent='>parent=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the parent object and registers the object path with
 
@@ -442,7 +504,9 @@ Sets the parent object and registers the object path with
                             Object                          </small>
           </td>
           <td>
-            <tt>path</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-path'>path</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the unique path for this code object
 
@@ -454,7 +518,9 @@ Returns the unique path for this code object
                             Object                          </small>
           </td>
           <td>
-            <tt>scope</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-scope'>scope</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>scope</tt>
 
@@ -466,7 +532,9 @@ Returns the value of attribute <tt>scope</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>scope=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-scope='>scope=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>scope</tt>
 
@@ -478,7 +546,9 @@ Sets the attribute <tt>scope</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>source</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-source'>source</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>source</tt>
 
@@ -490,7 +560,9 @@ Returns the value of attribute <tt>source</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>source=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-source='>source=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>source</tt>
 
@@ -502,7 +574,9 @@ Sets the attribute <tt>source</tt>
                             <a href='YARD_BaseTag.html'>BaseTag</a>                          </small>
           </td>
           <td>
-            <tt>tag(name)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-tag'>tag</a>(name)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Convenience method to return the first tag
 
@@ -514,7 +588,9 @@ Convenience method to return the first tag
                             Array<BaseTag>                          </small>
           </td>
           <td>
-            <tt>tags(name = nil)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-tags'>tags</a>(name = nil)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns a list of tags specified by <tt>name</tt> or all tags if
 <tt>name</tt> is not specified.
@@ -527,7 +603,9 @@ Returns a list of tags specified by <tt>name</tt> or all tags if
                             Object                          </small>
           </td>
           <td>
-            <tt>to_s</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-to_s'>to_s</a>                
+            </tt><br />
                                   </td>
         </tr>
                 <tr>
@@ -536,7 +614,9 @@ Returns a list of tags specified by <tt>name</tt> or all tags if
                             Object                          </small>
           </td>
           <td>
-            <tt>type</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-type'>type</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>type</tt>
 
@@ -548,7 +628,9 @@ Returns the value of attribute <tt>type</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>type=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-type='>type=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>type</tt>
 
@@ -560,7 +642,9 @@ Sets the attribute <tt>type</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>visibility</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-visibility'>visibility</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>visibility</tt>
 
@@ -572,7 +656,9 @@ Returns the value of attribute <tt>visibility</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>visibility=(value)</tt><br />
+            <tt>
+              <a href='YARD_CodeObject.html#instance_method-visibility='>visibility=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>visibility</tt>
 
@@ -584,33 +670,39 @@ Sets the attribute <tt>visibility</tt>
                             <h1>Public Instance Method Details</h1>
                   <div id="instance_method-[]">
             <h3>[]</h3>
-                        <pre>public Object [](key)</pre>
+                        <tt>
+              public Object [](key)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-[]=">
             <h3>[]=</h3>
-                        <pre>public Object []=(key, value)</pre>
+                        <tt>
+              public Object []=(key, value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-attach_docstring">
             <h3>attach_docstring</h3>
-                        <pre>public Object attach_docstring(comments)</pre>
+                        <tt>
+              public Object attach_docstring(comments)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Attaches a docstring to a code oject by parsing the comments attached to
 the statement and filling the <tt><a href='YARD_CodeObject.html#instance_method-tags'>#tags</a></tt> and <tt><a href='YARD_CodeObject.html#instance_method-docstring'>#docstring</a></tt> methods with the
@@ -627,16 +719,18 @@ meta tags.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-attach_full_source">
             <h3>attach_full_source</h3>
-                        <pre>public Object attach_full_source(source)</pre>
+                        <tt>
+              public Object attach_full_source(source)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Manually attaches full source code for an object given the source as a
 <tt>String</tt>
@@ -651,16 +745,18 @@ the source code for the object
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-attach_source">
             <h3>attach_source</h3>
-                        <pre>public Object attach_source(statement, file = nil)</pre>
+                        <tt>
+              public Object attach_source(statement, file = nil)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Attaches source code to a code object with an optional file location
 
@@ -680,31 +776,35 @@ the filename the source resides in
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-attributes">
             <h3>attributes</h3>
-                        <pre>public Object attributes</pre>
+                        <tt>
+              public Object attributes                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>attributes</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-attributes=">
             <h3>attributes=</h3>
-                        <pre>public Object attributes=(value)</pre>
+                        <tt>
+              public Object attributes=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>attributes</tt>
 
@@ -717,31 +817,35 @@ the value to set the attribute <tt>attributes</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-children">
             <h3>children</h3>
-                        <pre>public Object children</pre>
+                        <tt>
+              public Object children                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>children</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-children=">
             <h3>children=</h3>
-                        <pre>public Object children=(value)</pre>
+                        <tt>
+              public Object children=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>children</tt>
 
@@ -754,31 +858,35 @@ the value to set the attribute <tt>children</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-docstring">
             <h3>docstring</h3>
-                        <pre>public Object docstring</pre>
+                        <tt>
+              public Object docstring                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>docstring</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-docstring=">
             <h3>docstring=</h3>
-                        <pre>public Object docstring=(value)</pre>
+                        <tt>
+              public Object docstring=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>docstring</tt>
 
@@ -791,31 +899,35 @@ the value to set the attribute <tt>docstring</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-file">
             <h3>file</h3>
-                        <pre>public Object file</pre>
+                        <tt>
+              public Object file                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>file</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-file=">
             <h3>file=</h3>
-                        <pre>public Object file=(value)</pre>
+                        <tt>
+              public Object file=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>file</tt>
 
@@ -828,16 +940,18 @@ the value to set the attribute <tt>file</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-format">
             <h3>format</h3>
-                        <pre>public <a href='String.html'>String</a> format(type = :html)</pre>
+                        <tt>
+              public <a href='String.html'>String</a> format(type = :html)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns a code object formatted as a given type, defaults to html.
 
@@ -851,7 +965,7 @@ the output format to generate
 
 <br />
                                   </dd>
-                                                <dt>Returns:</dt>
+                                                                <dt>Returns:</dt>
                 <dd>
 the code object formatted by the specified <tt>format</tt>
 
@@ -863,24 +977,28 @@ the code object formatted by the specified <tt>format</tt>
           <hr />
                   <div id="instance_method-full_source">
             <h3>full_source</h3>
-                        <pre>public Object full_source</pre>
+                        <tt>
+              public Object full_source                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>full_source</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-full_source=">
             <h3>full_source=</h3>
-                        <pre>public Object full_source=(value)</pre>
+                        <tt>
+              public Object full_source=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>full_source</tt>
 
@@ -893,16 +1011,18 @@ the value to set the attribute <tt>full_source</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-has_tag?">
             <h3>has_tag?</h3>
-                        <pre>public Boolean has_tag?(name)</pre>
+                        <tt>
+              public Boolean has_tag?(name)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns true if at least one tag by the name <tt>name</tt> was declared
 
@@ -916,7 +1036,7 @@ the tag name to search for
 
 <br />
                                   </dd>
-                                                <dt>Returns:</dt>
+                                                                <dt>Returns:</dt>
                 <dd>
 whether or not the tag <tt>name</tt> was declared
 
@@ -928,24 +1048,28 @@ whether or not the tag <tt>name</tt> was declared
           <hr />
                   <div id="instance_method-line">
             <h3>line</h3>
-                        <pre>public Object line</pre>
+                        <tt>
+              public Object line                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>line</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-line=">
             <h3>line=</h3>
-                        <pre>public Object line=(value)</pre>
+                        <tt>
+              public Object line=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>line</tt>
 
@@ -958,31 +1082,35 @@ the value to set the attribute <tt>line</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-name">
             <h3>name</h3>
-                        <pre>public Object name</pre>
+                        <tt>
+              public Object name                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>name</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-name=">
             <h3>name=</h3>
-                        <pre>public Object name=(value)</pre>
+                        <tt>
+              public Object name=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>name</tt>
 
@@ -995,31 +1123,35 @@ the value to set the attribute <tt>name</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-parent">
             <h3>parent</h3>
-                        <pre>public Object parent</pre>
+                        <tt>
+              public Object parent                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>parent</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-parent=">
             <h3>parent=</h3>
-                        <pre>public Object parent=(value)</pre>
+                        <tt>
+              public Object parent=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the parent object and registers the object path with the <tt><a href='YARD_Namespace.html'>Namespace</a></tt>.
 If the object was already registered to an old path, it will be removed
@@ -1035,7 +1167,7 @@ the new parent object
 
 <br />
                                   </dd>
-                                                
+                                                                
                                                 <dt>See Also:</dt>
                 <dd><tt><a href='YARD_Namespace.html'>Namespace</a></tt></dd>
                               </dl>
@@ -1044,9 +1176,11 @@ the new parent object
           <hr />
                   <div id="instance_method-path">
             <h3>path</h3>
-                        <pre>public Object path</pre>
+                        <tt>
+              public Object path                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the unique path for this code object. The resulting path will be a
 Ruby style path name of the namespace the object resides in plus the object
@@ -1058,31 +1192,35 @@ Example:
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-scope">
             <h3>scope</h3>
-                        <pre>public Object scope</pre>
+                        <tt>
+              public Object scope                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>scope</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-scope=">
             <h3>scope=</h3>
-                        <pre>public Object scope=(value)</pre>
+                        <tt>
+              public Object scope=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>scope</tt>
 
@@ -1095,31 +1233,35 @@ the value to set the attribute <tt>scope</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-source">
             <h3>source</h3>
-                        <pre>public Object source</pre>
+                        <tt>
+              public Object source                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>source</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-source=">
             <h3>source=</h3>
-                        <pre>public Object source=(value)</pre>
+                        <tt>
+              public Object source=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>source</tt>
 
@@ -1132,16 +1274,18 @@ the value to set the attribute <tt>source</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-tag">
             <h3>tag</h3>
-                        <pre>public <a href='YARD_BaseTag.html'>BaseTag</a> tag(name)</pre>
+                        <tt>
+              public <a href='YARD_BaseTag.html'>BaseTag</a> tag(name)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Convenience method to return the first tag object in the list of tag
 objects of that name
@@ -1163,7 +1307,7 @@ the tag name to return data for
 
 <br />
                                   </dd>
-                                                <dt>Returns:</dt>
+                                                                <dt>Returns:</dt>
                 <dd>
 the first tag in the list of <tt><a href='YARD_CodeObject.html#instance_method-tags'>#tags</a></tt>
 
@@ -1175,9 +1319,11 @@ the first tag in the list of <tt><a href='YARD_CodeObject.html#instance_method-t
           <hr />
                   <div id="instance_method-tags">
             <h3>tags</h3>
-                        <pre>public Array<BaseTag> tags(name = nil)</pre>
+                        <tt>
+              public Array<BaseTag> tags(name = nil)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns a list of tags specified by <tt>name</tt> or all tags if
 <tt>name</tt> is not specified.
@@ -1191,7 +1337,7 @@ the tag name to return data for, or nil for all tags
 
 <br />
                                   </dd>
-                                                <dt>Returns:</dt>
+                                                                <dt>Returns:</dt>
                 <dd>
 the list of tags by the specified tag name
 
@@ -1203,36 +1349,42 @@ the list of tags by the specified tag name
           <hr />
                   <div id="instance_method-to_s">
             <h3>to_s</h3>
-                        <pre>public Object to_s</pre>
+                        <tt>
+              public Object to_s                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-type">
             <h3>type</h3>
-                        <pre>public Object type</pre>
+                        <tt>
+              public Object type                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>type</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-type=">
             <h3>type=</h3>
-                        <pre>public Object type=(value)</pre>
+                        <tt>
+              public Object type=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>type</tt>
 
@@ -1245,31 +1397,35 @@ the value to set the attribute <tt>type</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-visibility">
             <h3>visibility</h3>
-                        <pre>public Object visibility</pre>
+                        <tt>
+              public Object visibility                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>visibility</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-visibility=">
             <h3>visibility=</h3>
-                        <pre>public Object visibility=(value)</pre>
+                        <tt>
+              public Object visibility=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>visibility</tt>
 
@@ -1282,7 +1438,7 @@ the value to set the attribute <tt>visibility</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>

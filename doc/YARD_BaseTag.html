@@ -6,13 +6,13 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::BaseTag</title>
     <style>
-    .topdoc dl dt {
+    .topdoc * dt {
       font-weight: bold;
     }
     .fulldoc {
       margin-left: 37px;
     }
-    .fulldoc dl dt {
+    .fulldoc * dt {
       font-weight: bold;
     }
     h1 { color: #000; }
@@ -46,11 +46,15 @@ Represents a tag and its respective tag name and value.
         
             
               
+            
+          
         <h1>Constructor Summary</h1>
-    <pre>initialize(text)</pre>
+    <tt>
+      initialize(text)        
+    </tt>
     
         <div id="instance_method-initialize" class="fulldoc">
-                    <p>
+                              <p>
                       </p>
                   </div>
       </div>
@@ -64,8 +68,10 @@ Represents a tag and its respective tag name and value.
                             Object                          </small>
           </td>
           <td>
-            <tt>inherited(subclass)</tt><br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.                      </td>
+            <tt>
+              <a href='YARD_BaseTag.html#class_method-inherited'>inherited</a>(subclass)                
+            </tt><br />
+                                  </td>
         </tr>
                 <tr>
           <td width="70" align="right" valign="top">
@@ -73,7 +79,9 @@ Represents a tag and its respective tag name and value.
                             Object                          </small>
           </td>
           <td>
-            <tt>parse_tag(text)</tt><br />
+            <tt>
+              <a href='YARD_BaseTag.html#class_method-parse_tag'>parse_tag</a>(text)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Parses tag text from a doc string and returns a new tag
 
@@ -85,7 +93,9 @@ Parses tag text from a doc string and returns a new tag
                             Array<String>                          </small>
           </td>
           <td>
-            <tt>tag_library</tt><br />
+            <tt>
+              <a href='YARD_BaseTag.html#class_method-tag_library'>tag_library</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Return all valid tags in the tag library
 
@@ -97,7 +107,9 @@ Return all valid tags in the tag library
                             <a href='String.html'>String</a>                          </small>
           </td>
           <td>
-            <tt>tag_name</tt><br />
+            <tt>
+              <a href='YARD_BaseTag.html#class_method-tag_name'>tag_name</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the tag name that the class responds to
 
@@ -113,8 +125,10 @@ Returns the tag name that the class responds to
                             Object                          </small>
           </td>
           <td>
-            <tt>tag_name</tt><br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.                      </td>
+            <tt>
+              <a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a>                
+            </tt><br />
+                                  </td>
         </tr>
                 <tr>
           <td width="70" align="right" valign="top">
@@ -122,7 +136,9 @@ Returns the tag name that the class responds to
                             Object                          </small>
           </td>
           <td>
-            <tt>text</tt><br />
+            <tt>
+              <a href='YARD_BaseTag.html#instance_method-text'>text</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>text</tt>
 
@@ -134,7 +150,9 @@ Returns the value of attribute <tt>text</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>text=(value)</tt><br />
+            <tt>
+              <a href='YARD_BaseTag.html#instance_method-text='>text=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>text</tt>
 
@@ -146,42 +164,48 @@ Sets the attribute <tt>text</tt>
                   <h1>Public Class Method Details</h1>
                   <div id="class_method-inherited">
             <h3>inherited</h3>
-                        <pre>public Object inherited(subclass)</pre>
+                        <tt>
+              public Object inherited(subclass)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="class_method-parse_tag">
             <h3>parse_tag</h3>
-                        <pre>public Object parse_tag(text)</pre>
+                        <tt>
+              public Object parse_tag(text)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Parses tag text from a doc string and returns a new tag
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="class_method-tag_library">
             <h3>tag_library</h3>
-                        <pre>public Array<String> tag_library</pre>
+                        <tt>
+              public Array<String> tag_library                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Return all valid tags in the tag library
 
               </p>
               <dl>
-                                                                                  <dt>Returns:</dt>
+                                                                                                  <dt>Returns:</dt>
                 <dd>
 a list of valid tags that are registered as being handled
 
@@ -193,9 +217,11 @@ a list of valid tags that are registered as being handled
           <hr />
                   <div id="class_method-tag_name">
             <h3>tag_name</h3>
-                        <pre>public <a href='String.html'>String</a> tag_name</pre>
+                        <tt>
+              public <a href='String.html'>String</a> tag_name                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the tag name that the class responds to. If the class name does not
 accurately represent the tag name, this method should be overrided by
@@ -203,7 +229,7 @@ subclasses to return the correct tag name.
 
               </p>
               <dl>
-                                                                                  <dt>Returns:</dt>
+                                                                                                  <dt>Returns:</dt>
                 <dd>
 the tag name the class represents
 
@@ -216,12 +242,14 @@ the tag name the class represents
                                 <h1>Public Instance Method Details</h1>
                   <div id="instance_method-tag_name">
             <h3>tag_name</h3>
-                        <pre>public Object tag_name</pre>
+                        <tt>
+              public Object tag_name                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                                 <dt>See Also:</dt>
                 <dd><tt><a href='YARD_BaseTag.html#class_method-tag_name'>BaseTag::tag_name</a></tt></dd>
                               </dl>
@@ -230,24 +258,28 @@ the tag name the class represents
           <hr />
                   <div id="instance_method-text">
             <h3>text</h3>
-                        <pre>public Object text</pre>
+                        <tt>
+              public Object text                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>text</tt>
 
               </p>
               <dl>
-                                                                                  
+                                                                                                  
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-text=">
             <h3>text=</h3>
-                        <pre>public Object text=(value)</pre>
+                        <tt>
+              public Object text=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>text</tt>
 
@@ -260,7 +292,7 @@ the value to set the attribute <tt>text</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>

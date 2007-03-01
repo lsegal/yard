@@ -6,13 +6,13 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::ParamTag</title>
     <style>
-    .topdoc dl dt {
+    .topdoc * dt {
       font-weight: bold;
     }
     .fulldoc {
       margin-left: 37px;
     }
-    .fulldoc dl dt {
+    .fulldoc * dt {
       font-weight: bold;
     }
     h1 { color: #000; }
@@ -42,11 +42,15 @@ Object
         
             
                                               
+            
+                                          
         <h1>Constructor Summary</h1>
-    <pre>initialize(name, text, types = [])</pre>
+    <tt>
+      initialize(name, text, types = [])        
+    </tt>
     
         <div id="instance_method-initialize" class="fulldoc">
-                    <p>
+                              <p>
             
 Create a new <tt>param</tt> tag with a description and declared types
 
@@ -70,7 +74,7 @@ the optional types that the parameter accepts
 
 <br />
                           </dd>
-                                    
+                                                
                                   </dl>
                   </div>
       </div>
@@ -84,7 +88,9 @@ the optional types that the parameter accepts
                             <a href='YARD_ParamTag.html'>ParamTag</a>                          </small>
           </td>
           <td>
-            <tt>self.parse_tag(text)</tt><br />
+            <tt>
+              <a href='YARD_ParamTag.html#class_method-parse_tag'>parse_tag</a>(text)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
 object
@@ -121,7 +127,9 @@ object
                             Object                          </small>
           </td>
           <td>
-            <tt>name</tt><br />
+            <tt>
+              <a href='YARD_ParamTag.html#instance_method-name'>name</a>                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Returns the value of attribute <tt>name</tt>
 
@@ -133,7 +141,9 @@ Returns the value of attribute <tt>name</tt>
                             Object                          </small>
           </td>
           <td>
-            <tt>name=(value)</tt><br />
+            <tt>
+              <a href='YARD_ParamTag.html#instance_method-name='>name=</a>(value)                
+            </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Sets the attribute <tt>name</tt>
 
@@ -165,9 +175,11 @@ Sets the attribute <tt>name</tt>
                   <h1>Public Class Method Details</h1>
                   <div id="class_method-parse_tag">
             <h3>parse_tag</h3>
-                        <pre>public <a href='YARD_ParamTag.html'>ParamTag</a> self.parse_tag(text)</pre>
+                        <tt>
+              public <a href='YARD_ParamTag.html'>ParamTag</a> self.parse_tag(text)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
 object
@@ -187,7 +199,7 @@ the raw tag value to parse type specifications from
 
 <br />
                                   </dd>
-                                                <dt>Returns:</dt>
+                                                                <dt>Returns:</dt>
                 <dd>
 the new typed tag object with the type values parsed from raw text
 
@@ -200,24 +212,28 @@ the new typed tag object with the type values parsed from raw text
                                 <h1>Public Instance Method Details</h1>
                   <div id="instance_method-name">
             <h3>name</h3>
-                        <pre>public Object name</pre>
+                        <tt>
+              public Object name                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Returns the value of attribute <tt>name</tt>
 
               </p>
               <dl>
-                                                                                                                                                                                          
+                                                                                                                                                                                                          
                                               </dl>
             </div>
           </div>
           <hr />
                   <div id="instance_method-name=">
             <h3>name=</h3>
-                        <pre>public Object name=(value)</pre>
+                        <tt>
+              public Object name=(value)                
+            </tt>
             <div class="fulldoc">
-                            <p>
+                                          <p>
                 
 Sets the attribute <tt>name</tt>
 
@@ -230,7 +246,7 @@ the value to set the attribute <tt>name</tt> to.
 
 <br />
                                   </dd>
-                                                
+                                                                
                                               </dl>
             </div>
           </div>

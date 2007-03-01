@@ -326,4 +326,15 @@ module YARD #:nodoc:
       end
     end
   end
+  
+  class ClassVariableObject < CodeObject
+    def initialize(statement, parent)
+      name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
+      super(name, :class_variable, :public, :class, parent) do |obj| 
+        obj.parent[:class_variables].update(name => obj)
+        obj.attach_docstring(statement.comments)
+        obj.attach_source("#{name} = #{value}")
+      end
+    end
+  end
 end

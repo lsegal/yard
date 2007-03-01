@@ -44,12 +44,18 @@ def link_to_path(name, from_path = nil, label = nil)
   end
   
   label = name if label.nil?
-  if obj && obj.is_a?(ConstantObject) then
-    "<a href='#{obj.parent.path.gsub("::","_")}.html#const-#{obj.name}'>#{label}</a>"
-  elsif obj && obj.is_a?(MethodObject) 
-    "<a href='#{obj.parent.path.gsub("::","_")}.html##{obj.scope}_method-#{obj.name}'>#{label}</a>"
-  elsif obj
-    "<a href='#{obj.path.gsub("::","_")}.html'>#{label}</a>"
+  if obj
+    file = obj.parent.path.gsub("::","_") + ".html"
+    case obj
+      when ConstantObject
+        "<a href='#{file}#const-#{obj.name}'>#{label}</a>"
+      when ClassVariableObject
+        "<a href='#{file}#cvar-#{obj.name}'>#{label}</a>"
+      when MethodObject
+        "<a href='#{file}##{obj.scope}_method-#{obj.name}'>#{label}</a>"
+      else
+        "<a href='#{obj.path.gsub("::","_")}.html'>#{label}</a>"
+    end
   else
     name
   end

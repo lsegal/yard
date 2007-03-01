@@ -6,13 +6,13 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Ruby documentation: YARD::StatementList</title>
     <style>
-    .topdoc dl dt {
+    .topdoc * dt {
       font-weight: bold;
     }
     .fulldoc {
       margin-left: 37px;
     }
-    .fulldoc dl dt {
+    .fulldoc * dt {
       font-weight: bold;
     }
     h1 { color: #000; }
@@ -45,11 +45,23 @@ Object
         </tr>
       </table></p>
                     
+            <h1>Class Variables</h1>    <dl>
+        <dt><tt>@@open_block_tokens = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,                           TkIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]</tt></dt>
+    <dd><br />
+The following list of tokens will require a block to be opened if used at
+the beginning of a statement.
+
+</dd>
+        </dl>
+        
+          
         <h1>Constructor Summary</h1>
-    <pre>initialize(content)</pre>
+    <tt>
+      initialize(content)        
+    </tt>
     
         <div id="instance_method-initialize" class="fulldoc">
-                    <p>
+                              <p>
             
 Creates a new statement list
 
@@ -63,7 +75,7 @@ the tokens to create the list from
 
 <br />
                           </dd>
-                                    
+                                                
                                   </dl>
                   </div>
       </div>
