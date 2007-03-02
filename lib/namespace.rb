@@ -60,8 +60,8 @@ module YARD
         save
       end
       
-      def save
-        File.open("Yardoc", "w") {|f| Marshal.dump(instance.namespace, f) }
+      def save(file = DEFAULT_YARDOC_FILE)
+        File.open(file, "w") {|f| Marshal.dump(instance.namespace, f) }
       end
       
       def find_from_path(object, name)
