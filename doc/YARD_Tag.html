@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: YARD::Tag</title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class YARD::Tag</h1>
+<pre>
+Object
+  |
+  +--YARD::Tag</pre> 
+    
+    
+    <hr />  
+    
+        
+          <h1>Attributes</h1>
+      <p style="line-height:20px">
+              <tt>name [R]</tt><br />
+              <tt>tag_name [R]</tt><br />
+              <tt>text [R]</tt><br />
+              <tt>types [R]</tt><br />
+            </p>
+        
+            
+              
+            
+          
+        <h1>Constructor Summary</h1>
+    <tt>
+      initialize(tag_name, text, types = nil, name = nil)        
+    </tt>
+    
+        <div id="instance_method-initialize" class="fulldoc">
+                              <p>
+            
+Creates a new tag object with a tag name and text. Optionally, formally
+declared types and a key name can be specified.
+</p>
+<p>
+Types are mainly for meta tags that rely on type information, such as
+<tt>param</tt>, <tt>return</tt>, etc.
+</p>
+<p>
+Key names are for tags that declare meta data for a specific key or name,
+such as <tt>param</tt>, <tt>raise</tt>, etc.
+
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                          <tt>tag_name</tt> - 
+the tag name to create the tag for
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+the descriptive text for this tag
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+optional type list of formally declared types for the tag
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>name</tt> - 
+optional key name which the tag refers to
+
+<br />
+                          </dd>
+                                                
+                                  </dl>
+                  </div>
+      </div>
+        
+                      
+                          <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Array                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-extract_name_from_text'>extract_name_from_text</a>(text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Extracts the name from raw tag text returning the name and remaining value
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Array                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-extract_types_from_text'>extract_types_from_text</a>(text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Extracts the type signatures from the raw tag text
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            <a href='YARD_Tag.html'>Tag</a>                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-parse_tag'>parse_tag</a>(tag_name, text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses tag text and creates a new tag with descriptive text
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            <a href='YARD_Tag.html'>Tag</a>                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-parse_tag_with_name'>parse_tag_with_name</a>(tag_name, text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses tag text and creates a new tag with a key name and descriptive text
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            <a href='YARD_Tag.html'>Tag</a>                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-parse_tag_with_types'>parse_tag_with_types</a>(tag_name, text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses tag text and creates a new tag with formally declared types and
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            <a href='YARD_Tag.html'>Tag</a>                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#class_method-parse_tag_with_types_and_name'>parse_tag_with_types_and_name</a>(tag_name, text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses tag text and creates a new tag with formally declared types, a key
+
+.                      </td>
+        </tr>
+              </table>
+          
+                                    <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-name'>name</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>name</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-name='>name=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>name</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-tag_name'>tag_name</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>tag_name</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-tag_name='>tag_name=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>tag_name</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-text'>text</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>text</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-text='>text=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>text</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                                                      </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-type'>type</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Convenience method to access the first type specified
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-types'>types</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>types</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Tag.html#instance_method-types='>types=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>types</tt>
+
+.                      </td>
+        </tr>
+              </table>
+          
+                      
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-extract_name_from_text">
+            <h3>extract_name_from_text</h3>
+                        <tt>
+              public Array extract_name_from_text(text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Extracts the name from raw tag text returning the name and remaining value
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+an array holding the name as the first element and the value as the second
+element
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-extract_types_from_text">
+            <h3>extract_types_from_text</h3>
+                        <tt>
+              public Array extract_types_from_text(text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Extracts the type signatures from the raw tag text
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+an array holding the value as the first element and the array of types as
+the second element
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-parse_tag">
+            <h3>parse_tag</h3>
+                        <tt>
+              public <a href='YARD_Tag.html'>Tag</a> parse_tag(tag_name, text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Parses tag text and creates a new tag with descriptive text
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>tag_name</tt> - 
+the name of the tag to parse
+
+<br />
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+a tag object with the tag_name and text values filled
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-parse_tag_with_name">
+            <h3>parse_tag_with_name</h3>
+                        <tt>
+              public <a href='YARD_Tag.html'>Tag</a> parse_tag_with_name(tag_name, text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Parses tag text and creates a new tag with a key name and descriptive text
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>tag_name</tt> - 
+the name of the tag to parse
+
+<br />
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+a tag object with the tag_name, name and text values filled
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-parse_tag_with_types">
+            <h3>parse_tag_with_types</h3>
+                        <tt>
+              public <a href='YARD_Tag.html'>Tag</a> parse_tag_with_types(tag_name, text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Parses tag text and creates a new tag with formally declared types and
+descriptive text
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>tag_name</tt> - 
+the name of the tag to parse
+
+<br />
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+a tag object with the tag_name, types and text values filled
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-parse_tag_with_types_and_name">
+            <h3>parse_tag_with_types_and_name</h3>
+                        <tt>
+              public <a href='YARD_Tag.html'>Tag</a> parse_tag_with_types_and_name(tag_name, text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Parses tag text and creates a new tag with formally declared types, a key
+name and descriptive text
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>tag_name</tt> - 
+the name of the tag to parse
+
+<br />
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+a tag object with the tag_name, name, types and text values filled
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-name">
+            <h3>name</h3>
+                        <tt>
+              public Object name                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>name</tt>
+
+              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-name=">
+            <h3>name=</h3>
+                        <tt>
+              public Object name=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>name</tt>
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>name</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-tag_name">
+            <h3>tag_name</h3>
+                        <tt>
+              public Object tag_name                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>tag_name</tt>
+
+              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-tag_name=">
+            <h3>tag_name=</h3>
+                        <tt>
+              public Object tag_name=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>tag_name</tt>
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>tag_name</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-text">
+            <h3>text</h3>
+                        <tt>
+              public Object text                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>text</tt>
+
+              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-text=">
+            <h3>text=</h3>
+                        <tt>
+              public Object text=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>text</tt>
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>text</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-type">
+            <h3>type</h3>
+                        <tt>
+              public Object type                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Convenience method to access the first type specified. This should mainly
+be used for tags that only specify one type.
+
+              </p>
+              <dl>
+                                                                                                  <dt>Returns:</dt>
+                <dd>
+(String) the first of the list of specified types
+
+</dd>
+                                
+                                                <dt>See Also:</dt>
+                <dd><tt><a href='YARD_Tag.html#instance_method-types'>#types</a></tt></dd>
+                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-types">
+            <h3>types</h3>
+                        <tt>
+              public Object types                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>types</tt>
+
+              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-types=">
+            <h3>types=</h3>
+                        <tt>
+              public Object types=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>types</tt>
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>types</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                    </body>
+</html>

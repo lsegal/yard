@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: RubyLex::BufferedReader</title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class RubyLex::BufferedReader</h1>
+<pre>
+Object
+  |
+  +--RubyLex::BufferedReader</pre> 
+    
+    
+    <hr />  
+    
+          <div class="topdoc">
+                <p>
+          
+Read an input stream character by character. We allow for unlimited
+ungetting of characters just read.
+</p>
+<p>
+We simplify the implementation greatly by reading the entire input into a
+buffer initially, and then simply traversing it using pointers.
+</p>
+<p>
+We also have to allow for the <em>here document diversion</em>. This little
+gem comes about when the lexer encounters a here document. At this point we
+effectively need to split the input stream into two parts: one to read the
+body of the here document, the other to read the rest of the input line
+where the here document was initially encountered. For example, we might
+have
+</p>
+<pre>
+  do_something(&lt;&lt;-A, &lt;&lt;-B)
+    stuff
+    for
+
+    stuff
+    for
+</pre>
+<p>
+When the lexer encounters the &lt;&lt;A, it reads until the end of the
+line, and keeps it around for later. It then reads the body of the here
+document. Once complete, it needs to read the rest of the original line,
+but then skip the here document body.
+
+        </p>
+              </div>
+      <hr />
+        
+          <h1>Attributes</h1>
+      <p style="line-height:20px">
+              <tt>line_num [R]</tt><br />
+            </p>
+        
+            
+              
+            
+          
+        <h1>Constructor Summary</h1>
+    <tt>
+      initialize(content)        
+    </tt>
+    
+        <div id="instance_method-initialize" class="fulldoc">
+                              <p>
+                      </p>
+                  </div>
+      </div>
+        
+                      
+                  
+                                    <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-column'>column</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-divert_read_from'>divert_read_from</a>(reserve)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-get_read'>get_read</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-getc'>getc</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-getc_already_read'>getc_already_read</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-line_num'>line_num</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>line_num</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-line_num='>line_num=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>line_num</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-peek'>peek</a>(at)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-peek_equal'>peek_equal</a>(str)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex_BufferedReader.html#instance_method-ungetc'>ungetc</a>(ch)                
+            </tt><br />
+                                  </td>
+        </tr>
+              </table>
+          
+                      
+                            <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-column">
+            <h3>column</h3>
+                        <tt>
+              public Object column                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-divert_read_from">
+            <h3>divert_read_from</h3>
+                        <tt>
+              public Object divert_read_from(reserve)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-get_read">
+            <h3>get_read</h3>
+                        <tt>
+              public Object get_read                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc">
+            <h3>getc</h3>
+                        <tt>
+              public Object getc                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc_already_read">
+            <h3>getc_already_read</h3>
+                        <tt>
+              public Object getc_already_read                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line_num">
+            <h3>line_num</h3>
+                        <tt>
+              public Object line_num                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>line_num</tt>
+
+              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line_num=">
+            <h3>line_num=</h3>
+                        <tt>
+              public Object line_num=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>line_num</tt>
+
+              </p>
+              <dl>
+                                                                  <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>line_num</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek">
+            <h3>peek</h3>
+                        <tt>
+              public Object peek(at)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek_equal">
+            <h3>peek_equal</h3>
+                        <tt>
+              public Object peek_equal(str)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                  
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-ungetc">
+            <h3>ungetc</h3>
+                        <tt>
+              public Object ungetc(ch)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                  <dt>Raises:</dt>
+                <dd>
+                                    <tt>RuntimeError</tt> <br />
+                                  </dd>
+                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                    </body>
+</html>

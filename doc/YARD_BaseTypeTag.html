@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: YARD::BaseTypeTag</title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class YARD::BaseTypeTag</h1>
+<pre>
+Object
+  |
+  +--<a href='YARD_BaseTag.html'>YARD::BaseTag</a>
+      |
+      +--YARD::BaseTypeTag</pre> 
+    
+    
+    <hr />  
+    
+          <div class="topdoc">
+                <p>
+          
+Similar to the <tt><a href='YARD_BaseTag.html'>BaseTag</a></tt>, this class allows for a tag to formally specify
+type data if it depends on a specific object type.
+
+        </p>
+              </div>
+      <hr />
+        
+          <h1>Attributes</h1>
+      <p style="line-height:20px">
+              <tt>types [R]</tt><br />
+            </p>
+        
+            
+                              
+            
+                          
+        <h1>Constructor Summary</h1>
+    <tt>
+      initialize(text, types = [])        
+    </tt>
+    
+        <div id="instance_method-initialize" class="fulldoc">
+                              <p>
+            
+Create a new object with formally specified types
+
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+the text data
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+the types that are formally specified by the tag.
+
+<br />
+                          </dd>
+                                                
+                                  </dl>
+                  </div>
+      </div>
+        
+                                            
+                          <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Array                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_BaseTypeTag.html#class_method-extract_name_and_text'>extract_name_and_text</a>(text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Extracts the name from raw tag text returning the name and remaining value
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Array                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_BaseTypeTag.html#class_method-extract_types_and_text'>extract_types_and_text</a>(text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Extracts the type signatures from the raw tag text
+
+.                      </td>
+        </tr>
+              </table>
+          
+                                        <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public class methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTag.html#class_method-tag_library'>tag_library</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-parse_tag'>parse_tag</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-inherited'>inherited</a></tt></td>
+          </tr>
+        </table></p>
+                                            <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                                                      </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_BaseTypeTag.html#instance_method-type'>type</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Convenience method to access the first type specified
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_BaseTypeTag.html#instance_method-types'>types</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>types</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_BaseTypeTag.html#instance_method-types='>types=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>types</tt>
+
+.                      </td>
+        </tr>
+              </table>
+          
+                                        <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public instance methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTag.html#instance_method-text'>text</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-text='>text=</a></tt></td>
+          </tr>
+        </table></p>
+                              
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-extract_name_and_text">
+            <h3>extract_name_and_text</h3>
+                        <tt>
+              public Array self.extract_name_and_text(text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Extracts the name from raw tag text returning the name and remaining value
+
+              </p>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+an array holding the name as the first element and the value as the second
+element
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="class_method-extract_types_and_text">
+            <h3>extract_types_and_text</h3>
+                        <tt>
+              public Array self.extract_types_and_text(text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Extracts the type signatures from the raw tag text
+
+              </p>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag text
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+an array holding the value as the first element and the array of types as
+the second element
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-type">
+            <h3>type</h3>
+                        <tt>
+              public Object type                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Convenience method to access the first type specified. This should mainly
+be used for tags that only specify one type.
+
+              </p>
+              <dl>
+                                                                                                                                                      <dt>Returns:</dt>
+                <dd>
+(String) the first of the list of specified types
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-types">
+            <h3>types</h3>
+                        <tt>
+              public Object types                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>types</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                      
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-types=">
+            <h3>types=</h3>
+                        <tt>
+              public Object types=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>types</tt>
+
+              </p>
+              <dl>
+                                                                                                                      <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>types</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                    </body>
+</html>
