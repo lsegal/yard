@@ -2,8 +2,13 @@
 require File.dirname(__FILE__) + '/../lib/yard'
 include YARD
 
+if ARGV[0] == "-h"
+  puts "yardoc 0.2.0"
+  return
+end
+
 Dir.mkdir("doc") unless FileTest.directory?("doc")
-Namespace.load("Yardoc", true)
+Namespace.load(Namespace::DEFAULT_YARDOC_FILE, true)
 ac = File.open("doc/all-classes.html", "w") 
 ac.puts <<-eof
 <html>
@@ -40,6 +45,13 @@ eof
     f.puts "<a href='" + object.parent.path.gsub("::", "_") + ".html##{object.scope}_method-#{name}'>#{name}</a><br />"
   end
 end
+
+if ARGV[0]
+  main_page = ARGV[0]
+else
+  main_page = Namespace.all.sort.find {|name| Namespace.at(name).is_a? YARD::ClassObject }
+end
+main_page = main_page.gsub("::", "_") + ".html"
 File.open("doc/index.html", "w") do |f|
   f.puts <<-eof
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -54,7 +66,7 @@ File.open("doc/index.html", "w") do |f|
         <frame src="all-classes.html">
         <frame src="all-methods.html">
       </frameset>
-      <frame name="main" src="YARD_CodeObject.html">
+      <frame name="main" src="#{main_page}">
     </frameset>
   </html>
 eof

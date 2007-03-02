@@ -1,0 +1,1114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: RubyLex</title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class RubyLex</h1>
+<pre>
+Object
+  |
+  +--RubyLex</pre> 
+    
+        <p>
+      <strong>All Included Modules:</strong><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='RubyToken.html'>RubyToken</a>, IRB    </p>
+    
+    <hr />  
+    
+        
+          <h1>Attributes</h1>
+      <p style="line-height:20px">
+              <tt>continue [R]</tt><br />
+              <tt>exception_on_syntax_error [R]</tt><br />
+              <tt>indent [R]</tt><br />
+              <tt>lex_state [R]</tt><br />
+              <tt>read_auto_clean_up [R]</tt><br />
+              <tt>skip_space [R]</tt><br />
+            </p>
+        
+            <h1>Constants</h1>    <dl>
+            <dt id="const-PERCENT_LTYPE"><pre>PERCENT_LTYPE = { "q" => "\'", "Q" => "\"", "x" => "\`", "r" => "/", "w" => "]" } </pre></dt>
+      <dd></dd>
+            <dt id="const-DLtype2Token"><pre>DLtype2Token = { "\"" => TkDSTRING, "\`" => TkDXSTRING, "/" => TkDREGEXP, }</pre></dt>
+      <dd></dd>
+            <dt id="const-Ltype2Token"><pre>Ltype2Token = { "\'" => TkSTRING, "\"" => TkSTRING, "\`" => TkXSTRING, "/" => TkREGEXP, "]" => TkDSTRING } </pre></dt>
+      <dd></dd>
+            <dt id="const-ENINDENT_CLAUSE"><pre>ENINDENT_CLAUSE = [ "case", "class", "def", "do", "for", "if", "module", "unless", "until", "while", "begin" ]</pre></dt>
+      <dd></dd>
+            <dt id="const-Ltype2Token.default"><pre>Ltype2Token.default = TkSTRING</pre></dt>
+      <dd></dd>
+            <dt id="const-PERCENT_PAREN"><pre>PERCENT_PAREN = { "{" => "}", "[" => "]", "<" => ">", "(" => ")" } </pre></dt>
+      <dd></dd>
+            <dt id="const-DEINDENT_CLAUSE"><pre>DEINDENT_CLAUSE = ["end" ]</pre></dt>
+      <dd></dd>
+          </dl>
+        
+                                  <p><table border="1" width="100%">
+        <tr background="#ddddff">
+          <th>Constants included from <a href='RubyToken.html'>RubyToken</a></th>
+        </tr>
+        <tr>
+          <td><tt><a href='RubyToken.html#const-TkSymbol2Token'>TkSymbol2Token</a></tt>, <tt><a href='RubyToken.html#const-EXPR_MID'>EXPR_MID</a></tt>, <tt><a href='RubyToken.html#const-EXPR_DOT'>EXPR_DOT</a></tt>, <tt><a href='RubyToken.html#const-EXPR_ARG'>EXPR_ARG</a></tt>, <tt><a href='RubyToken.html#const-TkReading2Token'>TkReading2Token</a></tt>, <tt><a href='RubyToken.html#const-NEWLINE_TOKEN'>NEWLINE_TOKEN</a></tt>, <tt><a href='RubyToken.html#const-TokenDefinitions'>TokenDefinitions</a></tt>, <tt><a href='RubyToken.html#const-EXPR_CLASS'>EXPR_CLASS</a></tt>, <tt><a href='RubyToken.html#const-EXPR_FNAME'>EXPR_FNAME</a></tt>, <tt><a href='RubyToken.html#const-EXPR_BEG'>EXPR_BEG</a></tt>, <tt><a href='RubyToken.html#const-EXPR_END'>EXPR_END</a></tt></td>
+        </tr>
+      </table></p>
+                    
+            
+          
+        <h1>Constructor Summary</h1>
+    <tt>
+      initialize(content)        
+    </tt>
+    
+        <div id="instance_method-initialize" class="fulldoc">
+                              <p>
+                      </p>
+                  </div>
+      </div>
+        
+                                                    
+                          <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#class_method-debug?'>debug?</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+              </table>
+          
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public class methods included 
+              from <a href='RubyToken.html'>RubyToken</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='RubyToken.html#class_method-def_token'>def_token</a></tt></td>
+          </tr>
+        </table></p>
+                                            <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-char_no'>char_no</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-continue'>continue</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>continue</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-continue='>continue=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>continue</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-exception_on_syntax_error'>exception_on_syntax_error</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>exception_on_syntax_error</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-exception_on_syntax_error='>exception_on_syntax_error=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>exception_on_syntax_error</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-get_read'>get_read</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-getc'>getc</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-getc_of_rests'>getc_of_rests</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-gets'>gets</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_comment'>identify_comment</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_gvar'>identify_gvar</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_here_document'>identify_here_document</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_identifier'>identify_identifier</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_number'>identify_number</a>(start)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_quotation'>identify_quotation</a>(initial_char)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-identify_string'>identify_string</a>(ltype, quoted = ltype, opener=nil, initial_char = nil)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-indent'>indent</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>indent</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-indent='>indent=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>indent</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-lex'>lex</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-lex_init'>lex_init</a>()                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-lex_int2'>lex_int2</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-lex_state'>lex_state</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>lex_state</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-lex_state='>lex_state=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>lex_state</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-line_no'>line_no</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+io functions
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-peek'>peek</a>(i = 0)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-peek_equal?'>peek_equal?</a>(str)                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-read_auto_clean_up'>read_auto_clean_up</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>read_auto_clean_up</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-read_auto_clean_up='>read_auto_clean_up=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>read_auto_clean_up</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-read_escape'>read_escape</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-skip_inner_expression'>skip_inner_expression</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-skip_space'>skip_space</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>skip_space</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-skip_space='>skip_space=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>skip_space</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-token'>token</a>                
+            </tt><br />
+                                  </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='RubyLex.html#instance_method-ungetc'>ungetc</a>(c = nil)                
+            </tt><br />
+                                  </td>
+        </tr>
+              </table>
+          
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public instance methods included 
+              from <a href='RubyToken.html'>RubyToken</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='RubyToken.html#instance_method-set_token_position'>set_token_position</a></tt>, <tt><a href='RubyToken.html#instance_method-Token'>Token</a></tt></td>
+          </tr>
+        </table></p>
+                              
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-debug?">
+            <h3>debug?</h3>
+                        <tt>
+              public Object RubyLex.debug?                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-char_no">
+            <h3>char_no</h3>
+                        <tt>
+              public Object char_no                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-continue">
+            <h3>continue</h3>
+                        <tt>
+              public Object continue                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>continue</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-continue=">
+            <h3>continue=</h3>
+                        <tt>
+              public Object continue=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>continue</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>continue</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-exception_on_syntax_error">
+            <h3>exception_on_syntax_error</h3>
+                        <tt>
+              public Object exception_on_syntax_error                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>exception_on_syntax_error</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-exception_on_syntax_error=">
+            <h3>exception_on_syntax_error=</h3>
+                        <tt>
+              public Object exception_on_syntax_error=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>exception_on_syntax_error</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>exception_on_syntax_error</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-get_read">
+            <h3>get_read</h3>
+                        <tt>
+              public Object get_read                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc">
+            <h3>getc</h3>
+                        <tt>
+              public Object getc                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-getc_of_rests">
+            <h3>getc_of_rests</h3>
+                        <tt>
+              public Object getc_of_rests                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-gets">
+            <h3>gets</h3>
+                        <tt>
+              public Object gets                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_comment">
+            <h3>identify_comment</h3>
+                        <tt>
+              public Object identify_comment                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_gvar">
+            <h3>identify_gvar</h3>
+                        <tt>
+              public Object identify_gvar                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_here_document">
+            <h3>identify_here_document</h3>
+                        <tt>
+              public Object identify_here_document                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_identifier">
+            <h3>identify_identifier</h3>
+                        <tt>
+              public Object identify_identifier                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_number">
+            <h3>identify_number</h3>
+                        <tt>
+              public Object identify_number(start)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_quotation">
+            <h3>identify_quotation</h3>
+                        <tt>
+              public Object identify_quotation(initial_char)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-identify_string">
+            <h3>identify_string</h3>
+                        <tt>
+              public Object identify_string(ltype, quoted = ltype, opener=nil, initial_char = nil)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-indent">
+            <h3>indent</h3>
+                        <tt>
+              public Object indent                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>indent</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-indent=">
+            <h3>indent=</h3>
+                        <tt>
+              public Object indent=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>indent</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>indent</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex">
+            <h3>lex</h3>
+                        <tt>
+              public Object lex                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_init">
+            <h3>lex_init</h3>
+                        <tt>
+              public Object lex_init()                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_int2">
+            <h3>lex_int2</h3>
+                        <tt>
+              public Object lex_int2                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_state">
+            <h3>lex_state</h3>
+                        <tt>
+              public Object lex_state                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>lex_state</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-lex_state=">
+            <h3>lex_state=</h3>
+                        <tt>
+              public Object lex_state=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>lex_state</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>lex_state</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-line_no">
+            <h3>line_no</h3>
+                        <tt>
+              public Object line_no                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+io functions
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek">
+            <h3>peek</h3>
+                        <tt>
+              public Object peek(i = 0)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-peek_equal?">
+            <h3>peek_equal?</h3>
+                        <tt>
+              public Object peek_equal?(str)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_auto_clean_up">
+            <h3>read_auto_clean_up</h3>
+                        <tt>
+              public Object read_auto_clean_up                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>read_auto_clean_up</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_auto_clean_up=">
+            <h3>read_auto_clean_up=</h3>
+                        <tt>
+              public Object read_auto_clean_up=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>read_auto_clean_up</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>read_auto_clean_up</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-read_escape">
+            <h3>read_escape</h3>
+                        <tt>
+              public Object read_escape                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_inner_expression">
+            <h3>skip_inner_expression</h3>
+                        <tt>
+              public Object skip_inner_expression                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_space">
+            <h3>skip_space</h3>
+                        <tt>
+              public Object skip_space                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>skip_space</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-skip_space=">
+            <h3>skip_space=</h3>
+                        <tt>
+              public Object skip_space=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>skip_space</tt>
+
+              </p>
+              <dl>
+                                                                                                                                        <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>skip_space</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-token">
+            <h3>token</h3>
+                        <tt>
+              public Object token                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-ungetc">
+            <h3>ungetc</h3>
+                        <tt>
+              public Object ungetc(c = nil)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                              </p>
+              <dl>
+                                                                                                                                                                        
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                    </body>
+</html>

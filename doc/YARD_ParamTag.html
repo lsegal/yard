@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: YARD::ParamTag</title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Class YARD::ParamTag</h1>
+<pre>
+Object
+  |
+  +--<a href='YARD_BaseTag.html'>YARD::BaseTag</a>
+      |
+      +--<a href='YARD_BaseTypeTag.html'>YARD::BaseTypeTag</a>
+          |
+          +--YARD::ParamTag</pre> 
+    
+    
+    <hr />  
+    
+        
+          <h1>Attributes</h1>
+      <p style="line-height:20px">
+              <tt>name [R]</tt><br />
+            </p>
+        
+            
+                                              
+            
+                                          
+        <h1>Constructor Summary</h1>
+    <tt>
+      initialize(name, text, types = [])        
+    </tt>
+    
+        <div id="instance_method-initialize" class="fulldoc">
+                              <p>
+            
+Create a new <tt>param</tt> tag with a description and declared types
+
+          </p>
+                    <dl>
+                        <dt>Parameters:</dt>
+            <dd>
+                                            [<tt>String</tt>]
+                            <tt>name</tt> - 
+the parameter name specified by the tag
+
+<br />
+                                            [<tt>String</tt>]
+                            <tt>text</tt> - 
+a description of the parameter
+
+<br />
+                                            [<tt>Array<String></tt>]
+                            <tt>types</tt> - 
+the optional types that the parameter accepts
+
+<br />
+                          </dd>
+                                                
+                                  </dl>
+                  </div>
+      </div>
+        
+                                                                  
+                          <h1>Public Class Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            <a href='YARD_ParamTag.html'>ParamTag</a>                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_ParamTag.html#class_method-parse_tag'>parse_tag</a>(text)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
+object
+
+.                      </td>
+        </tr>
+              </table>
+          
+                                        <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public class methods inherited 
+              from <a href='YARD_BaseTypeTag.html'>YARD::BaseTypeTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTypeTag.html#class_method-extract_types_and_text'>extract_types_and_text</a></tt>, <tt><a href='YARD_BaseTypeTag.html#class_method-extract_name_and_text'>extract_name_and_text</a></tt></td>
+          </tr>
+        </table></p>
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public class methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTag.html#class_method-tag_library'>tag_library</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-inherited'>inherited</a></tt></td>
+          </tr>
+        </table></p>
+                                            <h1>Public Instance Method Summary</h1>
+      <table border="1" width="100%">
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_ParamTag.html#instance_method-name'>name</a>                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Returns the value of attribute <tt>name</tt>
+
+.                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_ParamTag.html#instance_method-name='>name=</a>(value)                
+            </tt><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Sets the attribute <tt>name</tt>
+
+.                      </td>
+        </tr>
+              </table>
+          
+                                        <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public instance methods inherited 
+              from <a href='YARD_BaseTypeTag.html'>YARD::BaseTypeTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTypeTag.html#instance_method-type'>type</a></tt>, <tt><a href='YARD_BaseTypeTag.html#instance_method-types'>types</a></tt>, <tt><a href='YARD_BaseTypeTag.html#instance_method-types='>types=</a></tt></td>
+          </tr>
+        </table></p>
+                                                <p><table border="1" width="100%">
+          <tr background="#ddddff">
+            <th>
+              Public instance methods inherited 
+              from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
+          </tr>
+          <tr>
+            <td><tt><a href='YARD_BaseTag.html#instance_method-text'>text</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-text='>text=</a></tt></td>
+          </tr>
+        </table></p>
+                              
+                  <h1>Public Class Method Details</h1>
+                  <div id="class_method-parse_tag">
+            <h3>parse_tag</h3>
+                        <tt>
+              public <a href='YARD_ParamTag.html'>ParamTag</a> self.parse_tag(text)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
+object
+
+              </p>
+              <dl>
+                                                                                                                            <dt>Overrides: 
+                    <dd>
+                      <tt><a href='YARD_BaseTag.html#class_method-parse_tag'>parse_tag</a></tt> 
+                      in class <tt><a href='YARD_BaseTag.html'>YARD::BaseTag</a></tt>
+                    </dd>
+                                                    <dt>Parameters:</dt>
+                <dd>
+                                                        [<tt>String</tt>]
+                                    <tt>text</tt> - 
+the raw tag value to parse type specifications from
+
+<br />
+                                  </dd>
+                                                                <dt>Returns:</dt>
+                <dd>
+the new typed tag object with the type values parsed from raw text
+
+</dd>
+                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                                <h1>Public Instance Method Details</h1>
+                  <div id="instance_method-name">
+            <h3>name</h3>
+                        <tt>
+              public Object name                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Returns the value of attribute <tt>name</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                                                          
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                  <div id="instance_method-name=">
+            <h3>name=</h3>
+                        <tt>
+              public Object name=(value)                
+            </tt>
+            <div class="fulldoc">
+                                          <p>
+                
+Sets the attribute <tt>name</tt>
+
+              </p>
+              <dl>
+                                                                                                                                                                          <dt>Parameters:</dt>
+                <dd>
+                                                      <tt>value</tt> - 
+the value to set the attribute <tt>name</tt> to.
+
+<br />
+                                  </dd>
+                                                                
+                                              </dl>
+            </div>
+          </div>
+          <hr />
+                    </body>
+</html>

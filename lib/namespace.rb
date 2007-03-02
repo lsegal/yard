@@ -6,6 +6,8 @@ require File.dirname(__FILE__) + '/source_parser'
 
 module YARD
   class Namespace
+    DEFAULT_YARDOC_FILE = "_Yardoc"
+    
     include Singleton
     
     class << self
@@ -47,7 +49,7 @@ module YARD
         end
       end
       
-      def load(file = "Yardoc", reload = false)
+      def load(file = DEFAULT_YARDOC_FILE, reload = false)
         if File.exists?(file) && !reload
           instance.namespace.replace(Marshal.load(IO.read(file)))
         else
