@@ -1,4 +1,4 @@
 #!/usr/bin/ruby
-require 'rubygems'
-require 'yard'
+require File.dirname(__FILE__) + '/../lib/yard'
+require File.dirname(__FILE__) + '/../lib/quick_doc'
 YARD::QuickDoc.new(ARGV[0])

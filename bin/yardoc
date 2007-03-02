@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
-require 'rubygems'
-require 'yard'
+require File.dirname(__FILE__) + '/../lib/yard'
 include YARD
 
 Dir.mkdir("doc") unless FileTest.directory?("doc")
