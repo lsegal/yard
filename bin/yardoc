@@ -1,6 +1,9 @@
-require File.dirname(__FILE__) + '/yard'
+#!/usr/bin/ruby
+require 'rubygems'
+require 'yard'
 include YARD
 
+Dir.mkdir("doc") unless FileTest.directory?("doc")
 Namespace.load("Yardoc", true)
 ac = File.open("doc/all-classes.html", "w") 
 ac.puts <<-eof

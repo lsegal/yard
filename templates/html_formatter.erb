@@ -49,17 +49,17 @@
         <p><strong>Deprecated.</strong> <em><%= @object.tag("deprecated").text %></em></p>
         <% end %>
         <p>
-          <%= @object.docstring.to_html(@object) %>
+          <%= to_html @object.docstring %>
         </p>
         <% unless @object.tags.empty? %>
         <dl>
           <% if @object.tag("author") %>
           <dt>Author:</dt>
-          <dd><%= @object.tag("author").text.to_html(@object) %></dd>
+          <dd><%= to_html @object.tag("author").text %></dd>
           <% end %>
           <% if @object.tag("since") %>
           <dt>Since:</dt>
-          <dd><%= @object.tag("since").text.to_html(@object) %></dd>
+          <dd><%= to_html @object.tag("since").text %></dd>
           <% end %>
           <% unless @object.tags("see").empty? %>
           <dt>See Also:</dt>
@@ -86,7 +86,7 @@
     <dl>
       <% @object.constants.each do |name, constant| %>
       <dt id="const-<%= name %>"><pre><%= constant.full_source.gsub(/\s+/,' ') %></pre></dt>
-      <dd><%= constant.docstring.to_html(@object) %></dd>
+      <dd><%= to_html constant.docstring %></dd>
       <% end %>
     </dl>
     <% end %>
@@ -112,7 +112,7 @@
     <dl>
     <% @object.class_variables.each do |name, cvar| %>
     <dt><pre><%= cvar.source.gsub(/\s+/,' ') %></pre></dt>
-    <dd><%= cvar.docstring.to_html(@object) %></dd>
+    <dd><%= to_html cvar.docstring %></dd>
     <% end %>
     </dl>
     <% end %>
@@ -144,13 +144,13 @@
     
         <div id="instance_method-initialize" class="fulldoc">
           <% if method.tag("deprecated") %>
-          <p><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text.to_html(@object) %></em></p>
+          <p><strong>Deprecated.</strong> <em><%= to_html method.tag("deprecated").text %></em></p>
           <% end %>
           <% if method.tag("yield") %>
-          <p><strong>Yields Block.</strong> <em><%= method.tag("yield").text.to_html(@object) %></em></p>
+          <p><strong>Yields Block.</strong> <em><%= to_html method.tag("yield").text %></em></p>
           <% end %>
           <p>
-            <%= method.docstring.to_html(@object) %>
+            <%= to_html method.docstring %>
           </p>
           <% unless method.tags.empty? %>
           <dl>
@@ -161,7 +161,7 @@
               <% unless tag.types.empty? %>
                 [<%= tag.types.collect {|t| "<tt>" + link_to_path(t,@object) + "</tt>" }.join(", ") %>]
               <% end %>
-              <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+              <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
             </dd>
             <% end %>
@@ -172,26 +172,26 @@
                 <% unless tag.types.empty? %>
                   [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
                 <% end %>
-                <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
               </dd>
             <% end %>
             <% if method.has_tag?("return") %>
             <dt>Returns:</dt>
-            <dd><%= method.tag("return").text.to_html(@object) %></dd>
+            <dd><%= to_html method.tag("return").text %></dd>
             <% end %>
             <% unless method.tags("raise").empty? %>
             <dt>Raises:</dt>
             <dd>
               <% method.tags("raise").each do |tag| %>
-              <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+              <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
             </dd>
             <% end %>
 
             <% if method.tag("since") %>
             <dt>Since:</dt>
-            <dd><%= method.tag("since").text.to_html(@object) %></dd>
+            <dd><%= to_html method.tag("since").text %></dd>
             <% end %>
             <% unless method.tags("see").empty? %>
             <dt>See Also:</dt>
@@ -226,13 +226,13 @@
     
         <div id="instance_method-method_missing" class="fulldoc">
           <% if method.tag("deprecated") %>
-          <p><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text.to_html(@object) %></em></p>
+          <p><strong>Deprecated.</strong> <em><%= to_html method.tag("deprecated").text %></em></p>
           <% end %>
           <% if method.tag("yield") %>
-          <p><strong>Yields Block.</strong> <em><%= method.tag("yield").text.to_html(@object) %></em></p>
+          <p><strong>Yields Block.</strong> <em><%= to_html method.tag("yield").text %></em></p>
           <% end %>
           <p>
-            <%= method.docstring.to_html(@object) %>
+            <%= to_html method.docstring %>
           </p>
           <% unless method.tags.empty? %>
           <dl>
@@ -243,7 +243,7 @@
               <% unless tag.types.empty? %>
                 [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
               <% end %>
-              <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+              <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
             </dd>
             <% end %>
@@ -254,26 +254,26 @@
                 <% unless tag.types.empty? %>
                   [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
                 <% end %>
-                <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
               </dd>
             <% end %>
             <% if method.has_tag?("return") %>
             <dt>Returns:</dt>
-            <dd><%= method.tag("return").text.to_html(@object) %></dd>
+            <dd><%= to_html method.tag("return").text %></dd>
             <% end %>
             <% unless method.tags("raise").empty? %>
             <dt>Raises:</dt>
             <dd>
               <% method.tags("raise").each do |tag| %>
-              <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+              <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
               <% end %>
             </dd>
             <% end %>
 
             <% if method.tag("since") %>
             <dt>Since:</dt>
-            <dd><%= method.tag("since").text.to_html(@object) %></dd>
+            <dd><%= to_html method.tag("since").text %></dd>
             <% end %>
             <% unless method.tags("see").empty? %>
             <dt>See Also:</dt>
@@ -326,7 +326,7 @@
                 {|<%= method.tags("yieldparam").collect {|t| t.name }.join(", ") %>| ... }
               <% end %>  
             </tt><br />
-            <%= ("&nbsp;" * 5) + method.docstring.sub(/(\.|\n).+/m,'').to_html(@object) + "." if method.docstring && !method.docstring.empty? %>
+            <%= ("&nbsp;" * 5) + to_html(method.docstring.sub(/(\.|\n).+/m,'')) + "." if method.docstring && !method.docstring.empty? %>
             <% if method.tag("deprecated") %>
             <br /><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text %></em>
             <% end %>
@@ -381,13 +381,13 @@
             </tt>
             <div class="fulldoc">
               <% if method.tag("deprecated") %>
-              <p><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text.to_html(@object) %></em></p>
+              <p><strong>Deprecated.</strong> <em><%= to_html method.tag("deprecated").text %></em></p>
               <% end %>
               <% if method.tag("yield") %>
-              <p><strong>Yields Block.</strong> <em><%= method.tag("yield").text.to_html(@object) %></em></p>
+              <p><strong>Yields Block.</strong> <em><%= to_html method.tag("yield").text %></em></p>
               <% end %>
               <p>
-                <%= method.docstring.to_html(@object) %>
+                <%= to_html method.docstring %>
               </p>
               <dl>
                 <% @object.inheritance_tree.each do |name| %>
@@ -408,7 +408,7 @@
                   <% unless tag.types.empty? %>
                     [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
                   <% end %>
-                  <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                  <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
                   <% end %>
                 </dd>
                 <% end %>
@@ -419,26 +419,26 @@
                     <% unless tag.types.empty? %>
                       [<%= tag.types.collect {|t| "<tt>#{link_to_path(t,@object)}</tt>" }.join(", ") %>]
                     <% end %>
-                    <tt><%= tag.name %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                    <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
                   <% end %>
                   </dd>
                 <% end %>
                 <% if method.has_tag?("return") %>
                 <dt>Returns:</dt>
-                <dd><%= method.tag("return").text.to_html(@object) %></dd>
+                <dd><%= to_html method.tag("return").text %></dd>
                 <% end %>
                 <% unless method.tags("raise").empty? %>
                 <dt>Raises:</dt>
                 <dd>
                   <% method.tags("raise").each do |tag| %>
-                  <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + tag.text.to_html(@object) if tag.text %><br />
+                  <tt><%= link_to_path(tag.name, @object) %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
                   <% end %>
                 </dd>
                 <% end %>
 
                 <% if method.tag("since") %>
                 <dt>Since:</dt>
-                <dd><%= method.tag("since").text.to_html(@object) %></dd>
+                <dd><%= to_html method.tag("since").text %></dd>
                 <% end %>
                 <% unless method.tags("see").empty? %>
                 <dt>See Also:</dt>

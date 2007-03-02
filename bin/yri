@@ -1,0 +1,4 @@
+#!/usr/bin/ruby
+require 'rubygems'
+require 'yard'
+YARD::QuickDoc.new(ARGV[0])

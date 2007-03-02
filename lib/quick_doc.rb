@@ -1,31 +1,18 @@
 require File.dirname(__FILE__) + '/namespace'
 
-class String
-  def word_wrap(length = 80)
-    gsub(/(.{0,#{length - 3}}\s)/, "\n" + '\1')
-  end
-  
-  def format_code(indent_size = 2)
-    last_indent, tab = nil, 0
-    split(/\r?\n/).collect do |line|
-      indent = line[/^(\s*)/, 1].length
-      if last_indent && indent > last_indent
-        tab += indent_size
-      elsif last_indent && indent < last_indent
-        tab -= indent_size
-      end
-      last_indent = indent
-      (" " * tab) + line.sub(/^\s*/, '')
-    end.join("\n")
-  end
-end    
-
 module YARD
   class QuickDoc
     def initialize(name)
       Namespace.load
+      if name.nil?
+        puts "Method Listing:"
+        puts "---------------"
+        puts Namespace.all.select {|n| Namespace.at(n).is_a? MethodObject }.sort.join("\n") 
+        return 
+      end
+      
       meth = Namespace.at(name)
-      if meth.nil?
+      if meth.nil? 
         puts "No entry for #{name}"
         return
       end
@@ -52,7 +39,7 @@ module YARD
         puts
       end
       if meth.docstring
-        puts meth.docstring.word_wrap(ns.length + 18) 
+        puts word_wrap(meth.docstring, ns.length + 18)
         puts 
       end
       unless meth.tags("param").empty? && meth.tags("raise").empty? && meth.tags("return").empty?
@@ -82,7 +69,7 @@ module YARD
       if meth.source
         puts "Definition:"
         puts "-----------"
-        puts meth.source.sub("\n", "#{block}" + (return_type ? " # -> " + return_type : "") + "\n").format_code
+        puts format_code(meth.source.sub("\n", "#{block}" + (return_type ? " # -> " + return_type : "") + "\n"))
         puts    
       end
       unless meth.tags("see").empty?
@@ -94,5 +81,24 @@ module YARD
         puts
       end
     end
+    
+    protected
+      def word_wrap(text, length = 80)
+        text.gsub(/(.{0,#{length - 3}}\s)/, "\n" + '\1')
+      end
+
+      def format_code(text, indent_size = 2)
+        last_indent, tab = nil, 0
+        text.split(/\r?\n/).collect do |line|
+          indent = line[/^(\s*)/, 1].length
+          if last_indent && indent > last_indent
+            tab += indent_size
+          elsif last_indent && indent < last_indent
+            tab -= indent_size
+          end
+          last_indent = indent
+          (" " * tab) + line.sub(/^\s*/, '')
+        end.join("\n")
+      end
   end
 end

@@ -2,6 +2,9 @@ require 'erb'
 require 'rdoc/markup/simple_markup'
 require 'rdoc/markup/simple_markup/to_html'
 
+SMP = SM::SimpleMarkup.new
+SMH = SM::ToHtml.new
+
 module YARD
   ##
   # Formats the code objects in the {Namespace} in a variety of formats
@@ -32,54 +35,44 @@ module YARD
       File.join(File.dirname(__FILE__), '..', 'templates')
     end
   end
-end
+  
+  protected
+    def link_to_path(name, from_path = nil, label = nil)
+      return "<a href='#instance_method-#{name[1..-1]}'>#{label || name}</a>" if name =~ /^\#/ && from_path.nil?
 
-def link_to_path(name, from_path = nil, label = nil)
-  return "<a href='#instance_method-#{name[1..-1]}'>#{label || name}</a>" if name =~ /^\#/ && from_path.nil?
-  
-  if from_path
-    obj = Namespace.find_from_path(from_path, name)
-  else
-    obj = Namespace.at(name)
-  end
-  
-  label = name if label.nil?
-  if obj
-    file = obj.parent.path.gsub("::","_") + ".html"
-    case obj
-      when ConstantObject
-        "<a href='#{file}#const-#{obj.name}'>#{label}</a>"
-      when ClassVariableObject
-        "<a href='#{file}#cvar-#{obj.name}'>#{label}</a>"
-      when MethodObject
-        "<a href='#{file}##{obj.scope}_method-#{obj.name}'>#{label}</a>"
+      if from_path
+        obj = Namespace.find_from_path(from_path, name)
       else
-        "<a href='#{obj.path.gsub("::","_")}.html'>#{label}</a>"
+        obj = Namespace.at(name)
+      end
+
+      label = name if label.nil?
+      if obj
+        file = obj.parent.path.gsub("::","_") + ".html"
+        case obj
+          when ConstantObject
+            "<a href='#{file}#const-#{obj.name}'>#{label}</a>"
+          when ClassVariableObject
+            "<a href='#{file}#cvar-#{obj.name}'>#{label}</a>"
+          when MethodObject
+            "<a href='#{file}##{obj.scope}_method-#{obj.name}'>#{label}</a>"
+          else
+            "<a href='#{obj.path.gsub("::","_")}.html'>#{label}</a>"
+        end
+      else
+        name
+      end
     end
-  else
-    name
-  end
-end
 
-SMP = SM::SimpleMarkup.new
-SMH = SM::ToHtml.new
-
-class String
-  def to_html(path = nil)
-    SMP.convert(self, SMH).gsub(/\A<p>|<\/p>\Z/,'').resolve_links(path)
-  end
-  
-  def resolve_links(path = nil)
-    t, re = self, /\{(.+?)\}/
-    while t =~ re
-      t.sub!(re, "<tt>" + link_to_path($1, path) + "</tt>")
+    def to_html(text, path = @object)
+      resolve_links(SMP.convert(text || "", SMH).gsub(/\A<p>|<\/p>\Z/,''), path)
     end
-    t
-  end
-end
 
-class NilClass
-  def to_html(path = nil)
-    ""
-  end
+    def resolve_links(text, path)
+      t, re = text, /\{(.+?)\}/
+      while t =~ re
+        t.sub!(re, "<tt>" + link_to_path($1, path) + "</tt>")
+      end
+      t
+    end
 end
