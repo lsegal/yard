@@ -8,6 +8,9 @@ module YARD #:nodoc:
   # 
   # @author Loren Segal
   class CodeObject
+    SCOPES = [:class, :instance]
+    VISIBILITIES = [:private, :protected, :public]
+    
     attr_reader :source, :full_source, :file, :line, :docstring, :attributes
     
     attr_reader :name, :type
@@ -40,10 +43,6 @@ module YARD #:nodoc:
       self.parent = parent
       attach_docstring(comments)
       yield(self) if block_given?
-    end
-    
-    def to_s
-      "#{visibility} #{type} #{path}"
     end
     
     ##
@@ -170,16 +169,7 @@ module YARD #:nodoc:
       name = name.to_s
       @tags.any? {|tag| tag.tag_name == name }
     end
-    
-    ##
-    # Returns a code object formatted as a given type, defaults to html.
-    # 
-    # @param [Symbol] format the output format to generate
-    # @return [String] the code object formatted by the specified +format+
-    def format(type = :html)
-      Formatter.new.format(self, type)
-    end
-    
+        
     private
       ##
       # Parses out comments split by newlines into a new code object

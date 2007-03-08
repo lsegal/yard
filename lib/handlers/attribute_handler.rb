@@ -22,7 +22,7 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
     # Add all attributes
     symbols.each do |name| 
       name = name.to_s
-      object[:attributes].update(name.to_s => { :read => read, :write => write })
+      object[:attributes].update(name.to_s => { :read => read, :write => write }) if object.type == :class
 
       # Show their methods as well
       [name, "#{name}="].each do |method|

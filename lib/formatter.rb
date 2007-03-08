@@ -12,21 +12,17 @@ module YARD
   # @author Loren Segal
   # @version 1.0
   class Formatter
-    OUTPUT_FORMATS = [ :html, :xhtml, :xml ]
-    
     ##
     # Formats an object as a specified output format. Default is +:html+.
     # 
-    # @param [String, CodeObject] object the code object to format or the path to the code object
-    # @param [Symbol] format the output format to generate documentation in. 
-    #                        Defaults to +:html+, which is a synonym for +:xhtml+.
+    # @param format the output format to generate documentation in. 
+    #               Defaults to +:html+, which is a synonym for <tt>:xhtml</tt>
+    # @param template the template sub directory to use, default is <tt>:default</tt>
     # @see OUTPUT_FORMATS
-    def format(object, format = :html)
+    def format(object, format, template)
       object = Namespace.at(object) if object.is_a? String
-      erb = File.join(template_directory, "#{format}_formatter.erb")
-
-      @object = object
-      ERB.new(IO.read(erb), nil, ">").result(binding)
+      @object, @format, @template = object, format, template
+      render(@object.type)
     end
     
     ## 
@@ -34,9 +30,17 @@ module YARD
     def template_directory
       File.join(File.dirname(__FILE__), '..', 'templates')
     end
+    
+    def render(type, format = @format, template = @template)
+      formatter = self
+      _binding = @object ? @object.instance_eval("binding") : binding 
+      filename = File.join(template_directory, template.to_s, format.to_s, "#{type}.erb")
+      ERB.new("<% extend #{format.to_s.capitalize}Formatter %>\n" + 
+                IO.read(filename), nil, ">").result(_binding)
+    end
   end
   
-  protected
+  module HtmlFormatter
     def link_to_path(name, from_path = nil, label = nil)
       return "<a href='#instance_method-#{name[1..-1]}'>#{label || name}</a>" if name =~ /^\#/ && from_path.nil?
 
@@ -69,10 +73,13 @@ module YARD
     end
 
     def resolve_links(text, path)
-      t, re = text, /\{(.+?)\}/
-      while t =~ re
-        t.sub!(re, "<tt>" + link_to_path($1, path) + "</tt>")
-      end
-      t
+      text.gsub(/\{(.+?)\}/) {|match| "<tt>" + link_to_path(match, path) + "</tt>" }
     end
+  end
+  
+  class CodeObject
+    def to_s(format = :html, template = :default)
+      Formatter.new.format(self, format, template)
+    end
+  end
 end

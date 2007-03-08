@@ -1,5 +1,5 @@
 class YARD::MethodHandler < YARD::CodeObjectHandler
-  handles RubyToken::TkDEF
+  handles YARD::RubyToken::TkDEF
   
   def process
     stmt_nospace = statement.tokens.reject {|t| t.is_a? RubyToken::TkSPACE }

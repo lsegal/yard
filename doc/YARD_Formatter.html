@@ -31,27 +31,29 @@ Object
     <hr />  
     
           <div class="topdoc">
-                <p>
-          
-Formats the code objects in the <tt><a href='YARD_Namespace.html'>Namespace</a></tt> in a variety of formats
+        <p>
+  
+Formats the code objects in the <tt>{Namespace}</tt> in a variety of formats
 
-        </p>
-                <dl>
-                    <dt>Author:</dt>
-          <dd>
+</p>
+<dl>
+        
+    <dt>Author:</dt>
+  <dd>
 Loren Segal
 
 </dd>
-                                      </dl>
-              </div>
+      <dt>Version:</dt>
+  <dd>
+1.0
+
+</dd>
+      </dl>
+      </div>
       <hr />
         
         
-            <h1>Constants</h1>    <dl>
-            <dt id="const-OUTPUT_FORMATS"><pre>OUTPUT_FORMATS = [ :html, :xhtml, :xml ]</pre></dt>
-      <dd></dd>
-          </dl>
-        
+            
               
             
           
@@ -67,12 +69,23 @@ Loren Segal
           </td>
           <td>
             <tt>
-              <a href='YARD_Formatter.html#instance_method-format'>format</a>(object, format = :html)                
+              <a href='YARD_Formatter.html#instance_method-format'>format</a>(object, format, template)                
             </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Formats an object as a specified output format
 
 .                      </td>
+        </tr>
+                <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+                            Object                          </small>
+          </td>
+          <td>
+            <tt>
+              <a href='YARD_Formatter.html#instance_method-render'>render</a>(type, format = @format, template = @template)                
+            </tt><br />
+                                  </td>
         </tr>
                 <tr>
           <td width="70" align="right" valign="top">
@@ -93,54 +106,57 @@ Directory for templates
                       
                             <h1>Public Instance Method Details</h1>
                   <div id="instance_method-format">
-            <h3>format</h3>
-                        <tt>
-              public Object format(object, format = :html)                
-            </tt>
-            <div class="fulldoc">
-                                          <p>
-                
+  <h3>format</h3>
+    <tt>
+    public Object format(object, format, template)      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
 Formats an object as a specified output format. Default is +:html+.
 
-              </p>
-              <dl>
-                                                                  <dt>Parameters:</dt>
-                <dd>
-                                                        [<tt>String</tt>, <tt><a href='YARD_CodeObject.html'>CodeObject</a></tt>]
-                                    <tt>object</tt> - 
-the code object to format or the path to the code object
-
-<br />
-                                                        [<tt>Symbol</tt>]
-                                    <tt>format</tt> - 
+</p>
+<dl>
+    <dt>Parameters:</dt>
+  <dd>
+            <tt>format</tt> - 
 the output format to generate documentation in. Defaults to +:html+, which
-is a synonym for +:xhtml+.
+is a synonym for <tt>:xhtml</tt>
 
 <br />
-                                  </dd>
-                                                                
-                                                <dt>See Also:</dt>
-                <dd><tt><a href='YARD_Formatter.html#const-OUTPUT_FORMATS'>OUTPUT_FORMATS</a></tt></dd>
-                              </dl>
-            </div>
-          </div>
-          <hr />
+            <tt>template</tt> - 
+the template sub directory to use, default is <tt>:default</tt>
+
+<br />
+      </dd>
+        
+          <dt>See Also:</dt>
+  <dd><tt>OUTPUT_FORMATS</tt></dd>
+  </dl>
+  </div>
+</div>          <hr />
+                  <div id="instance_method-render">
+  <h3>render</h3>
+    <tt>
+    public Object render(type, format = @format, template = @template)      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  </p>
+  </div>
+</div>          <hr />
                   <div id="instance_method-template_directory">
-            <h3>template_directory</h3>
-                        <tt>
-              public Object template_directory                
-            </tt>
-            <div class="fulldoc">
-                                          <p>
-                
+  <h3>template_directory</h3>
+    <tt>
+    public Object template_directory      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
 Directory for templates. Override this to load your own templates
 
-              </p>
-              <dl>
-                                                                                                  
-                                              </dl>
-            </div>
-          </div>
-          <hr />
+</p>
+  </div>
+</div>          <hr />
                     </body>
 </html>

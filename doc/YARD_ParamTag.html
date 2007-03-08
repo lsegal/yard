@@ -48,51 +48,54 @@ Object
     <tt>
       initialize(name, text, types = [])        
     </tt>
-    
-        <div id="instance_method-initialize" class="fulldoc">
-                              <p>
-            
+      <div id="instance_method-initialize">
+  <h3>initialize</h3>
+    <tt>
+    public Object initialize(name, text, types = [])      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
 Create a new <tt>param</tt> tag with a description and declared types
 
-          </p>
-                    <dl>
-                        <dt>Parameters:</dt>
-            <dd>
-                                            [<tt>String</tt>]
-                            <tt>name</tt> - 
+</p>
+<dl>
+    <dt>Parameters:</dt>
+  <dd>
+              [<tt>String</tt>]
+        <tt>name</tt> - 
 the parameter name specified by the tag
 
 <br />
-                                            [<tt>String</tt>]
-                            <tt>text</tt> - 
+              [<tt>String</tt>]
+        <tt>text</tt> - 
 a description of the parameter
 
 <br />
-                                            [<tt>Array<String></tt>]
-                            <tt>types</tt> - 
+              [<tt>Array<String></tt>]
+        <tt>types</tt> - 
 the optional types that the parameter accepts
 
 <br />
-                          </dd>
-                                                
-                                  </dl>
-                  </div>
-      </div>
+      </dd>
         
+        </dl>
+  </div>
+</div>        
                                                                   
                           <h1>Public Class Method Summary</h1>
       <table border="1" width="100%">
                 <tr>
           <td width="70" align="right" valign="top">
             <small>
-                            <a href='YARD_ParamTag.html'>ParamTag</a>                          </small>
+                            ParamTag                          </small>
           </td>
           <td>
             <tt>
               <a href='YARD_ParamTag.html#class_method-parse_tag'>parse_tag</a>(text)                
             </tt><br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
+Parses a typed tag&#8217;s value section and returns a new <tt>{ParamTag}</tt>
 object
 
 .                      </td>
@@ -106,7 +109,7 @@ object
               from <a href='YARD_BaseTypeTag.html'>YARD::BaseTypeTag</a>            </th>
           </tr>
           <tr>
-            <td><tt><a href='YARD_BaseTypeTag.html#class_method-extract_types_and_text'>extract_types_and_text</a></tt>, <tt><a href='YARD_BaseTypeTag.html#class_method-extract_name_and_text'>extract_name_and_text</a></tt></td>
+            <td></td>
           </tr>
         </table></p>
                                                 <p><table border="1" width="100%">
@@ -116,7 +119,7 @@ object
               from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
           </tr>
           <tr>
-            <td><tt><a href='YARD_BaseTag.html#class_method-tag_library'>tag_library</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#class_method-inherited'>inherited</a></tt></td>
+            <td></td>
           </tr>
         </table></p>
                                             <h1>Public Instance Method Summary</h1>
@@ -158,7 +161,7 @@ Sets the attribute <tt>name</tt>
               from <a href='YARD_BaseTypeTag.html'>YARD::BaseTypeTag</a>            </th>
           </tr>
           <tr>
-            <td><tt><a href='YARD_BaseTypeTag.html#instance_method-type'>type</a></tt>, <tt><a href='YARD_BaseTypeTag.html#instance_method-types'>types</a></tt>, <tt><a href='YARD_BaseTypeTag.html#instance_method-types='>types=</a></tt></td>
+            <td></td>
           </tr>
         </table></p>
                                                 <p><table border="1" width="100%">
@@ -168,88 +171,77 @@ Sets the attribute <tt>name</tt>
               from <a href='YARD_BaseTag.html'>YARD::BaseTag</a>            </th>
           </tr>
           <tr>
-            <td><tt><a href='YARD_BaseTag.html#instance_method-text'>text</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-tag_name'>tag_name</a></tt>, <tt><a href='YARD_BaseTag.html#instance_method-text='>text=</a></tt></td>
+            <td></td>
           </tr>
         </table></p>
                               
                   <h1>Public Class Method Details</h1>
                   <div id="class_method-parse_tag">
-            <h3>parse_tag</h3>
-                        <tt>
-              public <a href='YARD_ParamTag.html'>ParamTag</a> self.parse_tag(text)                
-            </tt>
-            <div class="fulldoc">
-                                          <p>
-                
-Parses a typed tag&#8217;s value section and returns a new <tt><a href='YARD_ParamTag.html'>ParamTag</a></tt>
+  <h3>parse_tag</h3>
+    <tt>
+    public <a href='YARD_ParamTag.html'>ParamTag</a> self.parse_tag(text)      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
+Parses a typed tag&#8217;s value section and returns a new <tt>{ParamTag}</tt>
 object
 
-              </p>
-              <dl>
-                                                                                                                            <dt>Overrides: 
-                    <dd>
-                      <tt><a href='YARD_BaseTag.html#class_method-parse_tag'>parse_tag</a></tt> 
-                      in class <tt><a href='YARD_BaseTag.html'>YARD::BaseTag</a></tt>
-                    </dd>
-                                                    <dt>Parameters:</dt>
-                <dd>
-                                                        [<tt>String</tt>]
-                                    <tt>text</tt> - 
+</p>
+<dl>
+    <dt>Parameters:</dt>
+  <dd>
+              [<tt>String</tt>]
+        <tt>text</tt> - 
 the raw tag value to parse type specifications from
 
 <br />
-                                  </dd>
-                                                                <dt>Returns:</dt>
-                <dd>
+      </dd>
+        <dt>Returns:</dt>
+  <dd>
 the new typed tag object with the type values parsed from raw text
 
 </dd>
-                                
-                                              </dl>
-            </div>
-          </div>
-          <hr />
+    
+        </dl>
+  </div>
+</div>          <hr />
                                 <h1>Public Instance Method Details</h1>
                   <div id="instance_method-name">
-            <h3>name</h3>
-                        <tt>
-              public Object name                
-            </tt>
-            <div class="fulldoc">
-                                          <p>
-                
+  <h3>name</h3>
+    <tt>
+    public Object name      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
 Returns the value of attribute <tt>name</tt>
 
-              </p>
-              <dl>
-                                                                                                                                                                                                          
-                                              </dl>
-            </div>
-          </div>
-          <hr />
+</p>
+  </div>
+</div>          <hr />
                   <div id="instance_method-name=">
-            <h3>name=</h3>
-                        <tt>
-              public Object name=(value)                
-            </tt>
-            <div class="fulldoc">
-                                          <p>
-                
+  <h3>name=</h3>
+    <tt>
+    public Object name=(value)      
+  </tt>
+  <div class="fulldoc">  
+  <p>
+  
 Sets the attribute <tt>name</tt>
 
-              </p>
-              <dl>
-                                                                                                                                                                          <dt>Parameters:</dt>
-                <dd>
-                                                      <tt>value</tt> - 
+</p>
+<dl>
+    <dt>Parameters:</dt>
+  <dd>
+            <tt>value</tt> - 
 the value to set the attribute <tt>name</tt> to.
 
 <br />
-                                  </dd>
-                                                                
-                                              </dl>
-            </div>
-          </div>
-          <hr />
+      </dd>
+        
+        </dl>
+  </div>
+</div>          <hr />
                     </body>
 </html>

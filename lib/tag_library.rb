@@ -31,28 +31,41 @@ module YARD
   # @see TagLibrary::define_tag!
   module TagLibrary
     class << self
+      attr_reader :labels
+      
+      ## 
+      # Sorts the labels lexically by their label name, often used when displaying
+      # the tags.
+      # 
+      # @return [Array<Symbol,String>] the sorted labels as an array of the tag name and label
+      def sorted_labels
+        labels.sort_by {|a| a.last }
+      end
+      
       ##
       # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
       # regular {Tag::parse_tag} factory method if none is supplied.
       #
       # @param tag the tag name to create
       # @param meth the {Tag} factory method to call when creating the tag
-      def self.define_tag!(tag, meth = "")
+      def self.define_tag!(label, tag, meth = "")
         meth = meth.to_s
         send_name = meth.empty? ? "" : "_" + meth
         class_eval "def #{tag}_tag(text) Tag.parse_tag#{send_name}(#{tag.inspect}, text) end"
+        @labels ||= {}
+        @labels.update(tag => label)
       end
       
-      define_tag! :param, :with_types_and_name
-      define_tag! :yieldparam, :with_types_and_name
-      define_tag! :yield
-      define_tag! :return, :with_types
-      define_tag! :deprecated
-      define_tag! :author
-      define_tag! :raise, :with_name
-      define_tag! :see
-      define_tag! :since
-      define_tag! :version
+      define_tag! "Parameters",       :param,       :with_types_and_name
+      define_tag! "Block Parameters", :yieldparam,  :with_types_and_name
+      define_tag! "Yields",           :yield
+      define_tag! "Returns",          :return,      :with_types
+      define_tag! "Deprecated",       :deprecated
+      define_tag! "Author",           :author
+      define_tag! "Raises",           :raise,       :with_name
+      define_tag! "See Also",         :see
+      define_tag! "Since",            :since
+      define_tag! "Version",          :version
     end
   end
   

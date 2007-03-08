@@ -1,0 +1,20 @@
+<div id="<%= scope %>_method-<%= name %>">
+  <h3><%= name %></h3>
+  <% 
+  if tag("return") && !tag("return").types.empty? 
+    type = tag("return").types.collect {|t| link_to_path(t, parent) }.join(", ")
+    type = "[#{type}]" if tag("return").types.size > 1
+  else
+    type = ClassObject::BASE_OBJECT  
+  end
+  %>
+  <tt>
+    <%= source.gsub(/\Adef/, "#{visibility} " + type) if source %>
+    <% unless tags("yieldparam").empty? %>
+      {|<%= tags("yieldparam").map {|t| t.name }.join(", ") %>| ... }
+    <% end %>  
+  </tt>
+  <div class="fulldoc">  
+  <%= formatter.render('_fulldoc') %>
+  </div>
+</div>
