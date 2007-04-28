@@ -51,11 +51,15 @@ module YARD
     
     private
       def top_level_parse(statements)
-        statements.each do |stmt|
-          find_handlers(stmt).each do |handler| 
-            handler.new(self, stmt).process
+          statements.each do |stmt|
+            find_handlers(stmt).each do |handler| 
+              begin
+                handler.new(self, stmt).process
+              rescue => e
+                raise "Handler error: #{e} in #{file}:#{stmt.tokens.first.line_no}"
+              end
+            end
           end
-        end
       end
     
       def find_handlers(stmt)
@@ -174,7 +178,7 @@ module YARD
               # 
               # if a ||
               #    b
-              if [EXPR_END, EXPR_ARG].include? last_tk.lex_state
+              if last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state)
                 stmt_number += 1
                 new_statement = true
                 #p "NEW STATEMENT #{statement.to_s}"

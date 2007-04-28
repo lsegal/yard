@@ -2,9 +2,14 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
   handles /\Aattr(_(reader|writer|accessor))?\b/
   
   def process
-    attr_type   = statement.tokens.first.text.to_sym
-    symbols     = eval("[" + statement.tokens[1..-1].to_s + "]")
-    read, write = true, false
+    begin
+      attr_type   = statement.tokens.first.text.to_sym
+      symbols     = eval("[" + statement.tokens[1..-1].to_s + "]")
+      read, write = true, false
+    rescue
+      Logger.warning "in AttributeHandler: Undocumentable attribute statement: '#{statement.tokens.to_s}'"
+      return
+    end
     
     # Change read/write based on attr_reader/writer/accessor
     case attr_type

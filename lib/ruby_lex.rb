@@ -538,7 +538,8 @@ module YARD
       "Q" => "\"",
       "x" => "\`",
       "r" => "/",
-      "w" => "]"
+      "w" => "]",
+      "W" => "]"
     }
   
     PERCENT_PAREN = {
@@ -832,16 +833,16 @@ module YARD
       @OP.def_rule("[") do
         @indent += 1
         if @lex_state == EXPR_FNAME
-  	t = Token(TkfLBRACK)
+  	      t = Token(TkfLBRACK)
         else
-  	if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-  	  t = Token(TkLBRACK)
-  	elsif @lex_state == EXPR_ARG && @space_seen
-  	  t = Token(TkLBRACK)
-  	else
-  	  t = Token(TkfLBRACK)
-  	end
-  	@lex_state = EXPR_BEG
+  	      if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+  	        t = Token(TkLBRACK)
+  	      elsif @lex_state == EXPR_ARG && @space_seen
+  	        t = Token(TkLBRACK)
+  	      else
+  	        t = Token(TkfLBRACK)
+  	      end
+  	      @lex_state = EXPR_BEG
         end
         t.set_text("[")
       end
@@ -849,9 +850,9 @@ module YARD
       @OP.def_rule("{") do
         @indent += 1
         if @lex_state != EXPR_END && @lex_state != EXPR_ARG
-  	t = Token(TkLBRACE)
+  	      t = Token(TkLBRACE)
         else
-  	t = Token(TkfLBRACE)
+  	      t = Token(TkfLBRACE)
         end
         @lex_state = EXPR_BEG
         t.set_text("{")
@@ -859,27 +860,27 @@ module YARD
 
       @OP.def_rule('\\') do   #'
         if getc == "\n" 
-  	@space_seen = true
-  	@continue = true
-  	Token(TkSPACE).set_text("\\\n")
+  	      @space_seen = true
+  	      @continue = true
+  	      Token(TkSPACE).set_text("\\\n")
         else 
-  	ungetc
-  	Token("\\").set_text("\\")  #"
+  	      ungetc
+  	      Token("\\").set_text("\\")  #"
         end 
       end 
 
       @OP.def_rule('%') do
         |op, io|
         if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-  	identify_quotation('%')
+  	      identify_quotation('%')
         elsif peek(0) == '='
-  	getc
-  	Token(TkOPASGN, "%").set_text("%=")
+  	      getc
+  	      Token(TkOPASGN, "%").set_text("%=")
         elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
-  	identify_quotation('%')
+  	      identify_quotation('%')
         else
-  	@lex_state = EXPR_BEG
-  	Token("%").set_text("%")
+  	      @lex_state = EXPR_BEG
+  	      Token("%").set_text("%")
         end
       end
 
@@ -889,10 +890,10 @@ module YARD
 
       @OP.def_rule('@') do
         if peek(0) =~ /[@\w_]/
-  	ungetc
-  	identify_identifier
+  	      ungetc
+  	      identify_identifier
         else
-  	Token("@").set_text("@")
+  	      Token("@").set_text("@")
         end
       end
 

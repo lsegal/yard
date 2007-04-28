@@ -2,6 +2,7 @@ class YARD::MethodHandler < YARD::CodeObjectHandler
   handles YARD::RubyToken::TkDEF
   
   def process
+    return unless object.is_a? YARD::CodeObjectWithMethods
     stmt_nospace = statement.tokens.reject {|t| t.is_a? RubyToken::TkSPACE }
     method_name, method_scope = stmt_nospace[1].text, current_scope
     holding_object = object
