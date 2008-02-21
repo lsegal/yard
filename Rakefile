@@ -9,7 +9,6 @@ Rake::GemPackageTask.new(SPEC) do |pkg|
 end
 
 task :install do 
-  install = "sudo gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local"
+  puts(install = "sudo gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local")
   `rake gem && #{install}`
-  puts install
 end
