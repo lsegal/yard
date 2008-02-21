@@ -7,7 +7,7 @@ class YARD::ExceptionHandler < YARD::CodeObjectHandler
       break index if token.class == RubyToken::TkIDENTIFIER && token.text == 'raise'
     end
     if from.is_a? Fixnum
-      exception_class = tokens[(from+1)..-1].to_s[/^\s*(\S+?),?/, 1]
+      exception_class = tokens[(from+1)..-1].to_s[/^\W+(\w+)/, 1]
       # RuntimeError for Strings or no parameter
       exception_class = "RuntimeError" if exception_class =~ /^\"/ || exception_class.nil?
       

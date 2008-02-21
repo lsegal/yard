@@ -6,7 +6,7 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
       attr_type   = statement.tokens.first.text.to_sym
       symbols     = eval("[" + statement.tokens[1..-1].to_s + "]")
       read, write = true, false
-    rescue
+    rescue SyntaxError
       Logger.warning "in AttributeHandler: Undocumentable attribute statement: '#{statement.tokens.to_s}'"
       return
     end
