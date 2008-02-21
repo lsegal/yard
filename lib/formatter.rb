@@ -1,4 +1,5 @@
-require 'erb'
+require 'rubygems'
+require 'erubis'
 require 'rdoc/markup/simple_markup'
 require 'rdoc/markup/simple_markup/to_html'
 
@@ -35,8 +36,8 @@ module YARD
       formatter = self
       _binding = @object ? @object.instance_eval("binding") : binding 
       filename = File.join(template_directory, template.to_s, format.to_s, "#{type}.erb")
-      ERB.new("<% extend #{format.to_s.capitalize}Formatter %>\n" + 
-                IO.read(filename), nil, ">").result(_binding)
+      Erubis::Eruby.new("<% extend #{format.to_s.capitalize}Formatter %>\n" + 
+                IO.read(filename)).result(_binding)
     end
   end
   
