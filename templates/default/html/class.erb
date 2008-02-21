@@ -25,13 +25,8 @@
   <body>
     <h1>Class <%= path %></h1>
 <pre>
-<% spaces = 0 %>
-<% superclasses.reverse.each do |superclass| %>
-<%= (" " * spaces) + (spaces > 0 ? "+--" : "") + link_to_path(superclass) + "\n" %>
-<% spaces += (spaces == 0 ? 2 : 4) %>
-<%= (" " * spaces) + "|\n" %>
-<% end %>
-<%= (" " * spaces ) + "+--" + path %>
+<% spaces = 0 -%>
+<% superclasses.reverse.each do |superclass| -%><%= (" " * spaces) + (spaces > 0 ? "+--" : "") + link_to_path(superclass) + "\n" %><% spaces += (spaces == 0 ? 2 : 4) -%><%= (" " * spaces) + "|\n" %><% end -%><%= (" " * spaces ) + "+--" + path %>
 </pre> 
     
     <% unless mixins.empty? %>

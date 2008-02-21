@@ -37,7 +37,7 @@ module YARD
       _binding = @object ? @object.instance_eval("binding") : binding 
       filename = File.join(template_directory, template.to_s, format.to_s, "#{type}.erb")
       Erubis::Eruby.new("<% extend #{format.to_s.capitalize}Formatter %>\n" + 
-                IO.read(filename)).result(_binding)
+                IO.read(filename), :trim => true).result(_binding)
     end
   end
   

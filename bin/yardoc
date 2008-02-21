@@ -27,7 +27,8 @@ Namespace.all.sort.each do |path|
   
   next unless object.is_a? ClassObject
   ac.puts "<a href='" + path.gsub("::","_") + ".html'>" + path + "</a><br />"
-  File.open("doc/#{path.gsub('::','_')}.html", "w") {|f| f.write(object.to_s) }
+  puts "Generating " + (docfile = "doc/#{path.gsub('::','_')}.html") + "..."
+  File.open(docfile, "w") {|f| f.write(object.to_s) }
 end
 ac.puts "</body></html>"
 ac.close

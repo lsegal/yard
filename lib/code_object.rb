@@ -283,7 +283,7 @@ module YARD #:nodoc:
     def superclasses
       superobject = Namespace.find_from_path(path, superclass)
       return [superclass] if superobject.nil?
-      [superobject.path] + superobject.superclasses
+      [superobject.path] + (superobject.path == 'Object' ? [] : superobject.superclasses)
     end
     
     def inheritance_tree
