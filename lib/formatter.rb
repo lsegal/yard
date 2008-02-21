@@ -53,7 +53,7 @@ module YARD
 
       label = name if label.nil?
       if obj
-        file = obj.parent.path.gsub("::","_") + ".html"
+        file = (obj.parent || obj).path.gsub("::","_") + ".html"
         case obj
           when ConstantObject
             "<a href='#{file}#const-#{obj.name}'>#{label}</a>"
