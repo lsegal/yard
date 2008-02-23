@@ -1,6 +1,3 @@
-require "e2mmap"
-require "irb/slex"
-
 module YARD
   module RubyToken
     EXPR_BEG   = :EXPR_BEG
@@ -90,9 +87,6 @@ module YARD
       case token
       when String, Symbol
         source = token.kind_of?(String) ? TkReading2Token : TkSymbol2Token
-        if (tk = source[token]).nil?
-        	IRB.fail TkReading2TokenNoKey, token
-        end
         tk = Token(tk[0], value) 
       else 
         tk = if (token.ancestors & [TkId, TkVal, TkOPASGN, TkUnknownChar]).empty?
@@ -245,18 +239,12 @@ module YARD
 
     def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
       token_n = token_n.id2name unless token_n.kind_of?(String)
-      if RubyToken.const_defined?(token_n)
-        #IRB.fail AlreadyDefinedToken, token_n
-      end
 
       token_c =  Class.new super_token
       RubyToken.const_set token_n, token_c
   #    token_c.inspect
  
       if reading
-        if TkReading2Token[reading]
-  	      IRB.fail TkReading2TokenDuplicateError, token_n, reading
-        end
         if opts.empty?
   	      TkReading2Token[reading] = [token_c]
         else
@@ -411,7 +399,6 @@ module YARD
     def_exception(:SyntaxError, "%s")
   
     include RubyToken
-    include IRB
 
     attr_reader :continue
     attr_reader :lex_state
