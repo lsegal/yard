@@ -131,7 +131,7 @@ module YARD #:nodoc:
     #
     #
     def path
-      [(parent.path if parent && parent.type != :root), name].join(scope == :instance ? "#" : "::").gsub(/^::/, '')
+      [(parent.path if parent && parent.type != :root), name].join(scope == :instance ? "#" : "::").gsub(/^::/, '').strip
     end
     
     ## 
@@ -221,6 +221,7 @@ module YARD #:nodoc:
   class CodeObjectWithMethods < CodeObject
     def initialize(name, type, parent = nil, comments = nil)
       super(name, type, :public, :class, parent, comments) do |obj|
+        obj[:attributes] = {}
         obj[:instance_methods] = {}
         obj[:class_methods] = {}
         obj[:constants] = {}
@@ -255,6 +256,11 @@ module YARD #:nodoc:
         yield(obj) if block_given?
       end
     end
+    
+    def superclasses
+      #STDERR.puts "Warning: someone expected module #{path} to respond to #superclasses"
+      []
+    end
   end
 
   class ClassObject < CodeObjectWithMethods
@@ -262,7 +268,6 @@ module YARD #:nodoc:
     
     def initialize(name, superclass = BASE_OBJECT, *args)
       super(name, :class, *args) do |obj|
-        obj[:attributes] = {}
         obj[:superclass] = superclass
         yield(obj) if block_given?
       end
@@ -282,8 +287,9 @@ module YARD #:nodoc:
     
     def superclasses
       superobject = Namespace.find_from_path(path, superclass)
-      return [superclass] unless superobject.respond_to? :superclasses
-      [superobject.path] + (superobject.path == 'Object' ? [] : superobject.superclasses)
+      return ["Object"] unless superobject
+      return [] if path == superobject.path
+      [superobject.path, *superobject.superclasses]
     end
     
     def inheritance_tree
@@ -298,7 +304,8 @@ module YARD #:nodoc:
     # @param [CodeObjectWithMethods] parent the object that holds this method
     def initialize(name, visibility, scope, parent, comments = nil)
       super(name, :method, visibility, scope, parent, comments) do |obj|
-        parent["#{scope}_methods".to_sym].update(name.to_s => obj)
+        pmethods = parent["#{scope}_methods".to_sym]
+        pmethods.update(name.to_s => obj) if pmethods
         yield(obj) if block_given?
       end
     end

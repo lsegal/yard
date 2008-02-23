@@ -56,7 +56,10 @@ module YARD
               begin
                 handler.new(self, stmt).process
               rescue => e
-                raise "Handler error: #{e} in #{file}:#{stmt.tokens.first.line_no}"
+                STDERR.puts "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
+                STDERR.puts "Exception message: #{e.message}"
+                STDERR.puts e.backtrace[0, 5]
+                STDERR.puts
               end
             end
           end

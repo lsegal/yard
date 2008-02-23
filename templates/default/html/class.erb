@@ -21,13 +21,17 @@
     td { padding: 3px; }
     </style>
   <base target="_self" />
-  </head>
+  </head
   <body>
     <h1>Class <%= path %></h1>
+<% unless superclasses.empty? %>
 <pre>
 <% spaces = 0 -%>
-<% superclasses.reverse.each do |superclass| -%><%= (" " * spaces) + (spaces > 0 ? "+--" : "") + link_to_path(superclass) + "\n" %><% spaces += (spaces == 0 ? 2 : 4) -%><%= (" " * spaces) + "|\n" %><% end -%><%= (" " * spaces ) + "+--" + path %>
+<% superclasses.reverse.each do |superclass| -%><%= (" " * spaces) + (spaces > 0 ? "+--" : "") + link_to_path(superclass) %>
+<% spaces += (spaces == 0 ? 2 : 4) -%><%= (" " * spaces) + "|" %>
+<% end -%><%= (" " * spaces ) + "+--" + path %>
 </pre> 
+<% end %>
     
     <% unless mixins.empty? %>
     <p>
@@ -200,7 +204,7 @@
             </th>
           </tr>
           <tr>
-            <td><%= meths.reject {|name, m| superclass.send("#{scope}_methods").has_key? name }.
+            <td><%= superclass.send("#{scope}_methods").reject {|name, m| meths.include? name }.
               collect {|name, m| "<tt>" + link_to_path(superclass.path + (scope == :instance ? "#" : "::") + 
                           name, nil, name) + "</tt>" }.join(", ") %></td>
           </tr>
