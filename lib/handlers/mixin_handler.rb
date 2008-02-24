@@ -8,6 +8,7 @@ class YARD::MixinHandler < YARD::CodeObjectHandler
     rescue NameError
       object.mixins.push statement.tokens[1..-1].to_s
     end
+    object.mixins.map! {|mixin| mixin.strip }
     object.mixins.flatten!
     object.mixins.uniq!
   end

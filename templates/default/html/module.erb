@@ -1,0 +1,126 @@
+<% _class_methods = class_methods.select {|k,m| m.visibility == :public }.sort %>
+<% _instance_methods = instance_methods.select {|k,m| m.visibility == :public && k != 'initialize' && k != 'method_missing' }.sort %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Ruby documentation: <%= path %></title>
+    <style>
+    .topdoc * dt {
+      font-weight: bold;
+    }
+    .fulldoc {
+      margin-left: 37px;
+    }
+    .fulldoc * dt {
+      font-weight: bold;
+    }
+    h1 { color: #000; }
+    td { padding: 3px; }
+    </style>
+  <base target="_self" />
+  </head>
+  <body>
+    <h1>Module <%= path %></h1>
+  
+    <% if mixins && !mixins.empty? %>
+    <p>
+      <strong>All Included Modules:</strong><br />
+      <%= "&nbsp;" * 7 %><%= mixins.collect {|m| link_to_path(m) }.join(", ") %>
+    </p>
+    <% end %>
+
+    <hr />  
+    
+    <% if docstring %>
+      <div class="topdoc">
+        <%= formatter.render('_fulldoc') %>
+      </div>
+      <hr />
+    <% end %>
+    
+    <% if self[:attributes] && !self[:attributes].empty? %>
+      <h1>Attributes</h1>
+      <p style="line-height:20px">
+      <% self[:attributes].sort.each do |name, rw| %>
+        <tt><%= name %> [<%= [(rw[:read] ? "R" : nil), (rw[:write] ? "W" : nil)].compact.join(", ") %>]</tt><br />
+      <% end %>
+      </p>
+    <% end %>
+    
+    <% displayed_constants = false %>
+    <% if constants && !constants.empty? %>
+    <h1>Constants</h1><% displayed_constants = true %>
+    <dl>
+      <% constants.each do |name, constant| %>
+      <dt id="const-<%= name %>"><pre><%= constant.full_source.gsub(/\s+/,' ') %></pre></dt>
+      <dd><%= to_html constant.docstring %></dd>
+      <% end %>
+    </dl>
+    <% end %>
+    
+    <% if method = instance_methods['initialize'] %>
+    <h1>Constructor Summary</h1>
+    <tt>
+      <%= method.source.gsub(/\Adef\s+/, '')  %>
+      <% unless method.tags("yieldparam").empty? %>
+        {|<%= method.tags("yieldparam").collect {|t| t.name }.join(", ") %>| ... }
+      <% end %>  
+    </tt>
+      <%= method.to_s(format, template) %>
+    <% end %>
+    
+    <% if method = instance_methods['method_missing'] %>
+      <h1>Dynamic Method Handling</h1>
+      <p><em>This class handles dynamic methods through the <tt>method_missing</tt> method</em></p>
+      <%= method.to_s(format, template) %>
+    <% end %>
+
+    <% displayed_public_meth_summary = false %>
+    <% CodeObject::SCOPES.each do |scope| %>
+      <% unless eval("_#{scope}_methods").empty? %>
+      <% displayed_public_meth_summary = true %>
+      <h1>Public <%= scope.to_s.capitalize %> Method Summary</h1>
+      <table border="1" width="100%">
+        <% eval("_#{scope}_methods").each do |name, method| %>
+        <tr>
+          <td width="70" align="right" valign="top">
+            <small>
+              <% if method.tag("return") && method.tag("return").types %>
+              <%= method.tag("return").types.collect {|t| link_to_path(t) }.join(", ") %>
+              <% else %>
+              <%= ClassObject::BASE_OBJECT %>
+              <% end %>
+            </small>
+          </td>
+          <td>
+            <tt>
+              <%= method.source.sub(/\Adef\s+\S+?(\(|\s|;|$)/, link_to_path(method.path, nil, method.name) + '\1') if method.source %>
+              <% unless method.tags("yieldparam").empty? %>
+                {|<%= method.tags("yieldparam").collect {|t| t.name }.join(", ") %>| ... }
+              <% end %>  
+            </tt><br />
+            <%= ("&nbsp;" * 5) + to_html(method.docstring.sub(/(\.|\n).+/m,'')) + "." if method.docstring && !method.docstring.empty? %>
+            <% if method.tag("deprecated") %>
+            <br /><strong>Deprecated.</strong> <em><%= method.tag("deprecated").text %></em>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+        </table>
+      <% end %>
+    <% end %>
+    
+    <% CodeObject::SCOPES.each do |scope| %>
+      <% unless eval("_#{scope}_methods").empty? %>
+        <h1>Public <%= scope.to_s.capitalize %> Method Details</h1>
+        <% eval("_#{scope}_methods").each do |name, method| %>
+          <%= method.to_s(format, template) %>
+          <hr />
+        <% end %>
+      <% end %>
+    <% end %>
+  </body>
+</html>

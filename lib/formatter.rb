@@ -38,6 +38,10 @@ module YARD
       filename = File.join(template_directory, template.to_s, format.to_s, "#{type}.erb")
       Erubis::Eruby.new("<% extend #{format.to_s.capitalize}Formatter %>\n" + 
                 IO.read(filename), :trim => true).result(_binding)
+    rescue => e
+      STDERR.puts "Could not render template #{filename}: #{e.message}"
+      STDERR.puts e.backtrace[0, 5].map {|x| "\t#{x}" }
+      STDERR.puts
     end
   end
   

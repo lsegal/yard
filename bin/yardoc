@@ -18,20 +18,41 @@ ac.puts <<-eof
   <body>
   <h3>All Classes</h3>
 eof
+am = File.open("doc/all-modules.html", "w") 
+am.puts <<-eof
+<html>
+  <head>
+    <base target="main" />
+  </head>
+  <body>
+  <h3>All Modules</h3>
+eof
 meths = []
 Namespace.all.sort.each do |path|
   object = Namespace.at(path)
-  if object.is_a?(MethodObject) && object.visibility == :public
+  if object.is_a?(MethodObject) && (object.visibility == :protected || object.visibility == :public)
     meths << [object.name, object]
   end
   
-  next unless object.is_a? ClassObject
-  ac.puts "<a href='" + path.gsub("::","_") + ".html'>" + path + "</a><br />"
+  indexfile = nil
+
+  case object
+  when ClassObject
+    indexfile = ac
+  when ModuleObject
+    indexfile = am
+  else
+    next
+  end
+  
+  indexfile.puts "<a href='" + path.gsub("::","_") + ".html'>" + path + "</a><br />"
   puts "Generating " + (docfile = "doc/#{path.gsub('::','_')}.html") + "..."
   File.open(docfile, "w") {|f| f.write(object.to_s) }
 end
 ac.puts "</body></html>"
 ac.close
+am.puts "</body></html>"
+am.close
 
 File.open("doc/all-methods.html", "w") do |f|
   f.puts <<-eof
@@ -41,7 +62,7 @@ File.open("doc/all-methods.html", "w") do |f|
       </head>
       <body>
       <h3>All Methods</h3>
-eof
+  eof
   meths.sort {|a,b| a.first <=> b.first }.each do |name, object|
     f.puts "<a href='" + object.parent.path.gsub("::", "_") + ".html##{object.scope}_method-#{name}'>#{name}</a><br />"
   end
@@ -63,8 +84,9 @@ File.open("doc/index.html", "w") do |f|
       <title>Ruby Classes</title>
     </head>
     <frameset cols="250,*">
-      <frameset rows="*,40%">
+      <frameset rows="40%,40%,20%">
         <frame src="all-classes.html">
+        <frame src="all-modules.html">
         <frame src="all-methods.html">
       </frameset>
       <frame name="main" src="#{main_page}">
