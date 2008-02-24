@@ -1,3 +1,6 @@
+require "e2mmap"
+require "irb/slex"
+
 module YARD
   module RubyToken
     EXPR_BEG   = :EXPR_BEG
@@ -87,6 +90,9 @@ module YARD
       case token
       when String, Symbol
         source = token.kind_of?(String) ? TkReading2Token : TkSymbol2Token
+        if (tk = source[token]).nil?
+        	IRB.fail TkReading2TokenNoKey, token
+        end
         tk = Token(tk[0], value) 
       else 
         tk = if (token.ancestors & [TkId, TkVal, TkOPASGN, TkUnknownChar]).empty?
@@ -239,12 +245,18 @@ module YARD
 
     def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
       token_n = token_n.id2name unless token_n.kind_of?(String)
+      if RubyToken.const_defined?(token_n)
+        #IRB.fail AlreadyDefinedToken, token_n
+      end
 
       token_c =  Class.new super_token
       RubyToken.const_set token_n, token_c
   #    token_c.inspect
  
       if reading
+        if TkReading2Token[reading]
+  	      IRB.fail TkReading2TokenDuplicateError, token_n, reading
+        end
         if opts.empty?
   	      TkReading2Token[reading] = [token_c]
         else
@@ -399,6 +411,7 @@ module YARD
     def_exception(:SyntaxError, "%s")
   
     include RubyToken
+    include IRB
 
     attr_reader :continue
     attr_reader :lex_state
@@ -1247,49 +1260,49 @@ module YARD
       when /[0-7]/
         ungetc ch
         3.times do
-  	case ch = getc
-  	when /[0-7]/
-  	when nil
-  	  break
-  	else
-  	  ungetc
-  	  break
-  	end
-          res << ch
-        end
+      	case ch = getc
+      	when /[0-7]/
+      	when nil
+      	  break
+      	else
+      	  ungetc
+      	  break
+      	end
+        res << ch
+      end
       
       when "x"
         res << ch
         2.times do
-  	case ch = getc
-  	when /[0-9a-fA-F]/
-  	when nil
-  	  break
-  	else
-  	  ungetc
-  	  break
-  	end
+      	case ch = getc
+      	when /[0-9a-fA-F]/
+      	when nil
+    	    break
+    	  else
+    	    ungetc
+    	    break
+    	  end
           res << ch
         end
 
       when "M"
         res << ch
         if (ch = getc) != '-'
-  	ungetc
+  	      ungetc
         else
           res << ch
-  	if (ch = getc) == "\\" #"
+  	      if (ch = getc) == "\\" #"
             res << ch
-  	  res << read_escape
+  	        res << read_escape
           else
             res << ch
-  	end
+  	      end
         end
 
       when "C", "c" #, "^"
         res << ch
         if ch == "C" and (ch = getc) != "-"
-  	ungetc
+  	      ungetc
         else
           res << ch
           if (ch = getc) == "\\" #"
