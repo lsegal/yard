@@ -14,7 +14,7 @@
   <dd>
     <% tags("param").each do |tag| %>
     <% unless tag.types.empty? %>
-      [<%= tag.types.collect {|t| "<tt>" + link_to_path(t, parent) + "</tt>" }.join(", ") %>]
+      &lt;<%= tag.types.collect {|t| "<tt>" + link_to_path(t, parent) + "</tt>" }.join(", ") %>&gt;
     <% end %>
     <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
     <% end %>
@@ -25,7 +25,7 @@
     <dd>
     <% tags("yieldparam").each do |tag| %>
       <% unless tag.types.empty? %>
-        [<%= tag.types.collect {|t| "<tt>" + link_to_path(t, parent) + "</tt>" }.join(", ") %>]
+        &lt;<%= tag.types.collect {|t| "<tt>" + link_to_path(t, parent) + "</tt>" }.join(", ") %>&gt;
       <% end %>
       <tt><%= tag.name %></tt> <%= "- " + to_html(tag.text) if tag.text %><br />
     <% end %>

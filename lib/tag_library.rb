@@ -37,7 +37,7 @@ module YARD
       # Sorts the labels lexically by their label name, often used when displaying
       # the tags.
       # 
-      # @return [Array<Symbol,String>] the sorted labels as an array of the tag name and label
+      # @return <Array[Symbol],String> the sorted labels as an array of the tag name and label
       def sorted_labels
         labels.sort_by {|a| a.last }
       end
@@ -46,7 +46,7 @@ module YARD
       # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
       # regular {Tag::parse_tag} factory method if none is supplied.
       #
-      # @param tag the tag name to create
+      # @param tag<#to_s> the tag name to create
       # @param meth the {Tag} factory method to call when creating the tag
       def self.define_tag!(label, tag, meth = "")
         meth = meth.to_s
@@ -77,8 +77,8 @@ module YARD
       # Parses tag text and creates a new tag with descriptive text
       #
       # @param tag_name        the name of the tag to parse
-      # @param [String] text   the raw tag text
-      # @return [Tag]          a tag object with the tag_name and text values filled
+      # @param text<String>    the raw tag text
+      # @return <Tag>          a tag object with the tag_name and text values filled
       def parse_tag(tag_name, text)
         new(tag_name, text)
       end
@@ -87,8 +87,8 @@ module YARD
       # Parses tag text and creates a new tag with a key name and descriptive text
       #
       # @param tag_name        the name of the tag to parse
-      # @param [String] text   the raw tag text
-      # @return [Tag]          a tag object with the tag_name, name and text values filled
+      # @param text<String>    the raw tag text
+      # @return <Tag>          a tag object with the tag_name, name and text values filled
       def parse_tag_with_name(tag_name, text)
         name, text = *extract_name_from_text(text)
         new(tag_name, text, nil, name)
@@ -99,10 +99,11 @@ module YARD
       # descriptive text
       #
       # @param tag_name        the name of the tag to parse
-      # @param [String] text   the raw tag text
-      # @return [Tag]          a tag object with the tag_name, types and text values filled
+      # @param text<String>    the raw tag text
+      # @return <Tag>          a tag object with the tag_name, types and text values filled
       def parse_tag_with_types(tag_name, text)
-        types, text = *extract_types_from_text(text)
+        _, types, text = *extract_types_from_text(text)
+        # TODO warn if name value ('_') is not nil, because that's invalid syntax
         new(tag_name, text, types)
       end
       
@@ -111,36 +112,36 @@ module YARD
       # name and descriptive text
       #
       # @param tag_name        the name of the tag to parse
-      # @param [String] text   the raw tag text
-      # @return [Tag]          a tag object with the tag_name, name, types and text values filled
+      # @param text<String>    the raw tag text
+      # @return <Tag>          a tag object with the tag_name, name, types and text values filled
       def parse_tag_with_types_and_name(tag_name, text)
-        types, text = *extract_types_from_text(text)
-        name, text = *extract_name_from_text(text)
+        name, types, text = *extract_types_from_text(text)
+        name, text = *extract_name_from_text(text) if name.nil?
         new(tag_name, text, types, name)
       end
       
       ##
       # Extracts the name from raw tag text returning the name and remaining value
       #
-      # @param [String] text the raw tag text
-      # @return [Array] an array holding the name as the first element and the 
+      # @param text<String> the raw tag text
+      # @return <Array> an array holding the name as the first element and the 
       #                 value as the second element
       def extract_name_from_text(text)
         text.strip.split(" ", 2)
       end
       
       ##
-      # Extracts the type signatures from the raw tag text
+      # Extracts the type signatures with an optional name from the raw tag text
       #
-      # @param [String] text the raw tag text
-      # @return [Array] an array holding the value as the first element and
-      #                 the array of types as the second element
+      # @param text<String> the raw tag text
+      # @return <Array> an array holding the name as the first element (nil if empty),
+      #                 array of types as the second element and the raw text as the last.
       def extract_types_from_text(text)
-        types, text = [], text.strip
-        if text =~ /^\s*\[(.+?)\]\s*(.*)/
-          text, types = $2, $1.split(",").collect {|e| e.strip }
+        name, types, text = nil, [], text.strip
+        if text =~ /^\s*(\S*)\s*<(.+?)>\s*(.*)/
+          name, text, types = $1, $3, $2.split(",").collect {|e| e.strip }
         end
-        [types, text]
+        [name, types, text]
       end
     end
     
@@ -154,12 +155,12 @@ module YARD
     # +raise+, etc.
     #
     # @param tag_name                the tag name to create the tag for
-    # @param [String] text           the descriptive text for this tag
-    # @param [Array<String>] types   optional type list of formally declared types
+    # @param text  <String>          the descriptive text for this tag
+    # @param types <Array[String]>   optional type list of formally declared types
     #                                for the tag
-    # @param [String] name           optional key name which the tag refers to
+    # @param name <String>           optional key name which the tag refers to
     def initialize(tag_name, text, types = nil, name = nil)
-      @tag_name, @text, @types, @name = tag_name.to_s, text, types, name
+      @tag_name, @text, @name, @types = tag_name.to_s, text, name, types
     end
     
     ##
@@ -167,7 +168,7 @@ module YARD
     # be used for tags that only specify one type.
     #
     # @see #types
-    # @return (String) the first of the list of specified types 
+    # @return <String> the first of the list of specified types 
     def type
       types.first
     end

@@ -105,7 +105,7 @@
         </tr>
         <tr>
           <td><%= consts.reject {|name, cvar| class_variables.has_key? name }.
-                    collect {|name, cvar| "<tt>" + link_to_path(cvar, nil, name) + "</tt>" }.join(", ") %></td>
+                    collect {|name, cvar| "<tt>" + link_to_path(name) + "</tt>" }.join(", ") %></td>
         </tr>
       </table></p>
       <% end %>

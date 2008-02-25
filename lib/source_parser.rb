@@ -58,7 +58,7 @@ module YARD
               rescue => e
                 STDERR.puts "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
                 STDERR.puts "Exception message: #{e.message}"
-                STDERR.puts e.backtrace[0, 5]
+                STDERR.puts e.backtrace[0, 5].map {|x| "\t#{x}" }
                 STDERR.puts
               end
             end
@@ -145,13 +145,13 @@ module YARD
           unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
             level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
-
+            
             # If the level is greater than 0, add the code to the block text
             # otherwise it's part of the statement text
             if stmt_number > 0
               block ||= TokenList.new
               block << tk
-            elsif stmt_number == 0 && tk.class != TkNL && tk.class != TkCOMMENT
+            elsif stmt_number == 0 && tk.class != TkNL && tk.class != TkSEMICOLON && tk.class != TkCOMMENT
               statement << tk 
             end
 
@@ -181,7 +181,7 @@ module YARD
               # 
               # if a ||
               #    b
-              if last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state)
+              if last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state) 
                 stmt_number += 1
                 new_statement = true
                 #p "NEW STATEMENT #{statement.to_s}"
