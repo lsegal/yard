@@ -3,6 +3,11 @@ class YARD::ClassHandler < YARD::CodeObjectHandler
   
   def process
     words = statement.tokens.to_s.strip.split(/\s+/)
+    if words.length > 4
+      Logger.warning "in ClassHandler: Undocumentable class: '#{words[0,4].to_s}'\n" +
+                     "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
+      return
+    end
     class_name, superclass = words[1], (words[3] || "Object")
     if class_name == "<<"
       if words[2] == "self"
