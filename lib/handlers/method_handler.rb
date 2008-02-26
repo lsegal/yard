@@ -16,8 +16,8 @@ class YARD::MethodHandler < YARD::CodeObjectHandler
       method_scope = :class
     end
   
-    method_object = YARD::MethodObject.new(method_name, current_visibility, 
-                                           method_scope, holding_object, statement.comments)
+    method_object = YARD::MethodObject.new(holding_object, method_name, current_visibility, 
+                                           method_scope, statement.comments)
     enter_namespace(method_object) do |obj|
       #puts "->\tMethod #{obj.path} (visibility: #{obj.visibility})"
       # Attach better source code

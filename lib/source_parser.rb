@@ -123,7 +123,10 @@ module YARD
           open_parens += 1 if [TkLPAREN, TkLBRACK].include? tk.class
           open_parens -= 1 if [TkRPAREN, TkRBRACK].include?(tk.class) if open_parens > 0
           
-#          raise block.to_s + " TOKEN #{tk.inspect}" if open_parens < 0
+          #if open_parens < 0 || level < 0
+          #  STDERR.puts block.to_s + " TOKEN #{tk.inspect}"
+          #  exit
+          #end
 
           # Get the initial comments
           if statement.empty?
@@ -155,19 +158,21 @@ module YARD
               statement << tk 
             end
 
-#            puts "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
+            #puts "#{tk.line_no} #{level} #{tk} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
 
             # Increase level if we have a 'do' or block opening
-            if tk.class == TkLBRACE
+            if tk.class == TkLBRACE || tk.class == TkfLBRACE
               level += 1    
-            elsif [TkDO, TkfLBRACE, TkBEGIN].include?(tk.class)
+            elsif [TkDO, TkBEGIN].include?(tk.class) 
               #p "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
               level += 1    
               open_block = false  # Cancel our wish to open a block for the if, we're doing it now
             end
 
             # Vouch to open a block when this statement would otherwise end
-            open_block = true if (new_statement || (last_tk && last_tk.lex_state == EXPR_BEG)) && @@open_block_tokens.include?(tk.class)
+            open_block = [level, tk.class] if (new_statement || 
+                                (last_tk && last_tk.lex_state == EXPR_BEG)) && 
+                                 @@open_block_tokens.include?(tk.class)
 
             # Check if this token creates a new statement or not
             #puts "#{open_parens} open brackets for: #{statement.to_s}"
@@ -187,7 +192,7 @@ module YARD
                 #p "NEW STATEMENT #{statement.to_s}"
 
                 # The statement started with a if/while/begin, so we must go to the next level now
-                if open_block
+                if open_block && open_block.first == level
                   open_block = false
                   level += 1
                 end
@@ -205,7 +210,11 @@ module YARD
 
             # We're done if we've ended a statement and we're at level 0
             break if new_statement && level == 0
+            
+            #raise "Unexpected end" if level < 0
           end
+          
+          #break if new_statement && level == 0
 
           before_last_tk = last_tk
           last_tk = tk # Save last token

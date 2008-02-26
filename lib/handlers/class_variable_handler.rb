@@ -4,6 +4,6 @@ class YARD::ClassVariableHandler < YARD::CodeObjectHandler
   
   def process
     return unless object.is_a? YARD::CodeObjectWithMethods
-    YARD::ClassVariableObject.new(statement, object)
+    YARD::ClassVariableObject.new(object, statement)
   end
 end

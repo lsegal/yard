@@ -21,7 +21,7 @@ module YARD
       def find_or_create_namespace(namespace)
         return at(namespace) if at(namespace)
         name = namespace.split("::").last
-        object = ModuleObject.new(name)
+        object = ModuleObject.new(nil, name)
         instance.namespace.update(namespace => object)
         object
       end
@@ -64,6 +64,8 @@ module YARD
         File.open(file, "w") {|f| Marshal.dump(instance.namespace, f) }
       end
       
+      # @param [String, CodeObject] object the starting point in the search
+      # @param [String] name               the object name to resolve
       def find_from_path(object, name)
         object = at(object) unless object.is_a? CodeObject
         return object if name == 'self'
@@ -82,7 +84,7 @@ module YARD
     attr_reader :namespace
     
     def initialize
-      @namespace = { '' => CodeObjectWithMethods.new('', :root) }
+      @namespace = { '' => ModuleObject.new(nil, '') {|m| m.type = :root } }
     end
     
     def add_object(object)

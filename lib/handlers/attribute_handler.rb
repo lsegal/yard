@@ -32,7 +32,7 @@ class YARD::AttributeHandler < YARD::CodeObjectHandler
 
       # Show their methods as well
       [name, "#{name}="].each do |method|
-        YARD::MethodObject.new(method, current_visibility, current_scope, object, statement.comments) do |obj|
+        YARD::MethodObject.new(object, method, current_visibility, current_scope, statement.comments) do |obj|
           if method.to_s.include? "="
             src = "def #{method}(value)"
             full_src = "#{src}\n  @#{name} = value\nend"
