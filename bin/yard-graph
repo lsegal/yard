@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../lib/yard'
+include YARD
+
+Namespace.load(Namespace::DEFAULT_YARDOC_FILE)
+
+def s(n) '  ' * n end
+def idname(m) m.gsub('::', '_') end
+def node(a,b) "node [label=#{a.inspect}] #{idname(b)}" end
+
+$unresolved_classes, $edges = {}, {}
+def enter_module(mod, l = 1)
+  s(l) + "subgraph cluster_#{idname(mod.path)} {\n" +
+  s(l+1) + "label = #{mod.name.inspect};\n" +
+  mod.children.map do |submod|
+    if submod.is_a? ModuleObject
+      enter_module(submod, l+1)
+    elsif submod.is_a? ClassObject
+      superclass = Namespace.find_from_path(submod.parent, submod.superclass)
+      superclass = superclass ? superclass.path : submod.superclass
+      $unresolved_classes[superclass] = true unless $unresolved_classes.has_key?(superclass)
+      $unresolved_classes[submod.path] = false
+      $edges[submod.path] = superclass
+      s(l+1) + node(submod.name, submod.path) + ";"
+    end
+  end.compact.join("\n") + "\n" + 
+  s(l) + "}\n"
+end
+
+subgraphs = enter_module(Namespace.at(''))
+$unresolved_classes.delete("Object")
+resolved = $unresolved_classes.map {|k,v| s(2) + node(k, k) + ";" if v }.compact
+edges = $edges.map {|a,b| s(1) + "#{idname(a)} -> #{idname(b)};" unless b == "Object" }.compact
+output = "digraph yard {\n  node [shape=box];\n"
+output << s(1) + "subgraph cluster_0 {\n"
+output << s(2) + "label = \"Unknown\";\n"
+output << resolved.join("\n") + "\n"
+output << s(1) + "}\n\n"
+output << subgraphs
+output << edges.join("\n") + "\n"
+output << "}\n"
+puts output
