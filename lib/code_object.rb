@@ -98,11 +98,16 @@ module YARD #:nodoc:
     # @param [CodeObject] value the new parent object
     # @see Namespace
     def parent=(value)
-      # Delete old object path if there was one
-      Namespace.instance.namespace.delete(path) if parent
+      # Delete old object path if there was one 
+      # and remove ourself from its children
+      if parent
+        parent.children.delete(self) 
+        Namespace.instance.namespace.delete(path) 
+      end
       
       @parent = value
-      
+      @parent.children << self if parent
+
       # Register new path with namespace
       Namespace.add_object(self) if value
     end
