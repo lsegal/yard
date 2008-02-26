@@ -40,7 +40,7 @@ module YARD
       end
       
       def all
-        instance.namespace.keys
+        instance.namespace.keys - ['']
       end
       
       def each_object
