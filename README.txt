@@ -56,7 +56,7 @@ Table 1. Meta-tags and their descriptions
 	what type. 
 	
 @see name
-References another object, URL, or other for extra information. 
+	References another object, URL, or other for extra information. 
 
 @since number                                                                 
 	Lists the version number in which the object first appeared. 
