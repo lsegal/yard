@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
-require File.dirname(__FILE__) + '/formatter'
+require File.dirname(__FILE__) + '/../lib/formatter'
 include YARD
 
 if ARGV[0] == "-h"
@@ -72,7 +72,7 @@ end
 if ARGV[0]
   main_page = ARGV[0]
 else
-  main_page = Namespace.all.sort.find {|name| Namespace.at(name).is_a? YARD::ClassObject }
+  main_page = Namespace.all.sort.find {|name| [ClassObject, ModuleObject].include? Namespace.at(name).class  }
 end
 main_page = main_page.gsub("::", "_") + ".html"
 File.open("doc/index.html", "w") do |f|
