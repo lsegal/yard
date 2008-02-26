@@ -5,13 +5,13 @@ class TestCodeObject < Test::Unit::TestCase
   FIXTURES_PATH = File.dirname(__FILE__) + '/fixtures/'
   
   def setup
-    @doc = YARD::CodeObject.new('node', 'module') do |obj|
+    @doc = YARD::CodeObject.new(nil, 'node', 'module') do |obj|
       obj.attach_docstring read_fixture('docstring.txt')
     end
   end
   
   def test_return
-    @doc = YARD::CodeObject.new('node', 'method') do |obj|
+    @doc = YARD::CodeObject.new(nil, 'node', 'method') do |obj|
       obj.attach_docstring read_fixture('docstring2.txt')
     end
     assert @doc.has_tag?("return")

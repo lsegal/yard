@@ -23,7 +23,7 @@ class YARD::ClassHandler < YARD::CodeObjectHandler
     else
       class_name = move_to_namespace(class_name)
       class_obj = Namespace.find_from_path(object, class_name)
-      class_obj ||= YARD::ClassObject.new(class_name, superclass, object, statement.comments)
+      class_obj ||= YARD::ClassObject.new(object, class_name, superclass, statement.comments)
       enter_namespace(class_obj) { parse_block }
     end
   end

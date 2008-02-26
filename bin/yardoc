@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
+require File.dirname(__FILE__) + '/formatter'
 include YARD
 
 if ARGV[0] == "-h"

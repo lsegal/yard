@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/tag_library'
-require File.dirname(__FILE__) + '/formatter'
 
 module YARD #:nodoc:  
   ## 
@@ -13,9 +12,21 @@ module YARD #:nodoc:
     
     attr_reader :source, :full_source, :file, :line, :docstring, :attributes
     
-    attr_reader :name, :type
+    attr_accessor :name, :type
     attr_accessor :visibility, :scope 
     attr_accessor :parent, :children
+    
+    ##
+    # Checks the parent before allocating a new object. If the object exists, only the comments,
+    # visibility and scope will be updated.
+    def self.new(parent, name, *args, &block)
+      if parent && (me = parent.children.find {|c| c.name == name })
+        yield(me) if block_given?
+        me
+      else
+        super(parent, name, *args, &block)
+      end
+    end
     
     ##
     # Creates a new code object with necessary information such as the object's name (not full path),
@@ -23,21 +34,21 @@ module YARD #:nodoc:
     # (:instance or :class level). Optionally you can specify a parent object and comments too, but these
     # can also be assigned later through the {#parent=} and {#attach_docstring} methods.
     #
+    # @param [CodeObject] parent  The parent of this object. If parent is +nil+ this object will not be registered
+    #                             in the {Namespace}
     # @param [String] name        the name of the object, not including its namespace ('initialize' for this method)
     # @param [Symbol] type        the type of object this is, including (but not limited to): 
     #                             :module, :class, :method, :constant
     # @param [Symbol] visibility  :public, :protected or :private depending on the visibility of the object
     # @param [Symbol] scope       :instance or :class depending on if the object is instance level or class level.
     #                             Instance level objects use the '#' character to separate from their parent instead of '::'
-    # @param [CodeObject] parent  The parent of this object. Without a parent this object will not be registered
-    #                             in the {Namespace}
     # @param [String] comments    Comments to be parsed as a docstring for the object. 
     # @return [CodeObject] the created code object
     # @yieldparam [CodeObject] _self the object is yielded during initialization to perform any initialization operations
     #                                on it more conveniently.
     # @see #attach_docstring
     # @see #parent=
-    def initialize(name, type, visibility = :public, scope = :instance, parent = nil, comments = nil)
+    def initialize(parent, name, type, visibility = :public, scope = :instance, comments = nil)
       @name, @type, @visibility, @scope = name, type, visibility.to_sym, scope.to_sym
       @tags, @attributes, @children = [], {}, []
       self.parent = parent
@@ -121,8 +132,7 @@ module YARD #:nodoc:
     # @param args the arguments to the call
     # @param block an optional block for the call
     def method_missing(meth, *args, &block)
-      return self[meth] if self[meth]
-      super
+      self[meth] || super
     end
     
     ##
@@ -224,8 +234,8 @@ module YARD #:nodoc:
   end
   
   class CodeObjectWithMethods < CodeObject
-    def initialize(name, type, parent = nil, comments = nil)
-      super(name, type, :public, :class, parent, comments) do |obj|
+    def initialize(parent, name, type, comments = nil)
+      super(parent, name, type, :public, :class, comments) do |obj|
         obj[:attributes] = {}
         obj[:instance_methods] = {}
         obj[:class_methods] = {}
@@ -256,8 +266,9 @@ module YARD #:nodoc:
   end
 
   class ModuleObject < CodeObjectWithMethods
-    def initialize(name, *args)
-      super(name, :module, *args) do |obj|
+    def initialize(parent, name, *args)
+      super(parent, name, :module, *args) do |obj|
+        self.parent = parent
         yield(obj) if block_given?
       end
     end
@@ -271,8 +282,8 @@ module YARD #:nodoc:
   class ClassObject < CodeObjectWithMethods
     BASE_OBJECT = "Object"
     
-    def initialize(name, superclass = BASE_OBJECT, *args)
-      super(name, :class, *args) do |obj|
+    def initialize(parent, name, superclass = BASE_OBJECT, *args)
+      super(parent, name, :class, *args) do |obj|
         obj[:superclass] = superclass
         yield(obj) if block_given?
       end
@@ -307,8 +318,8 @@ module YARD #:nodoc:
     # @param visibility the object visibility (:public, :private, :protected)
     # @param [String] scope the object scope (:instance, :class)
     # @param [CodeObjectWithMethods] parent the object that holds this method
-    def initialize(name, visibility, scope, parent, comments = nil)
-      super(name, :method, visibility, scope, parent, comments) do |obj|
+    def initialize(parent, name, visibility, scope, comments = nil)
+      super(parent, name, :method, visibility, scope, comments) do |obj|
         pmethods = parent["#{scope}_methods".to_sym]
         pmethods.update(name.to_s => obj) if pmethods
         yield(obj) if block_given?
@@ -317,8 +328,8 @@ module YARD #:nodoc:
   end
   
   class ConstantObject < CodeObject
-    def initialize(name, parent = nil, statement = nil)
-      super(name, :constant, :public, :class, parent) do |obj| 
+    def initialize(parent, name, statement = nil)
+      super(parent, name, :constant, :public, :class) do |obj| 
         if statement
           obj.attach_docstring(statement.comments)
           obj.attach_source(statement)
@@ -330,9 +341,9 @@ module YARD #:nodoc:
   end
   
   class ClassVariableObject < CodeObject
-    def initialize(statement, parent)
+    def initialize(parent, statement)
       name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
-      super(name, :class_variable, :public, :class, parent) do |obj| 
+      super(parent, name, :class_variable, :public, :class) do |obj| 
         obj.parent[:class_variables].update(name => obj)
         obj.attach_docstring(statement.comments)
         obj.attach_source("#{name} = #{value}")

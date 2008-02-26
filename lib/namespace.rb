@@ -21,7 +21,7 @@ module YARD
       def find_or_create_namespace(namespace)
         return at(namespace) if at(namespace)
         name = namespace.split("::").last
-        object = ModuleObject.new(name)
+        object = ModuleObject.new(nil, name)
         instance.namespace.update(namespace => object)
         object
       end
@@ -82,7 +82,7 @@ module YARD
     attr_reader :namespace
     
     def initialize
-      @namespace = { '' => CodeObjectWithMethods.new('', :root) }
+      @namespace = { '' => ModuleObject.new(nil, '') {|m| m.type = :root } }
     end
     
     def add_object(object)
