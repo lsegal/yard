@@ -8,10 +8,10 @@ SPEC = Gem::Specification.new do |s|
   s.homepage    = "http://yard.soen.ca"
   s.platform    = Gem::Platform::RUBY
   s.summary     = "A documentation tool for consistent and usable documentation in Ruby." 
-  s.files       = Dir.glob("{bin,lib,test,templates}/**/*") + ['LICENSE.txt', 'README.pdf']
+  s.files       = Dir.glob("{bin,lib,test,templates}/**/*") + ['LICENSE.txt', 'README.txt', 'help.pdf']
   s.executables = [ 'yardoc', 'yri' ]
   s.add_dependency 'erubis' 
-#  s.has_rdoc    = false
+  s.has_rdoc    = false
 end
   
   
