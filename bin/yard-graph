@@ -17,6 +17,7 @@ def enter_module(mod, l = 1)
       enter_module(submod, l+1)
     elsif submod.is_a? ClassObject
       superclass = Namespace.find_from_path(submod.parent, submod.superclass)
+<<<<<<< HEAD:bin/yard-graph
       unless superclass.is_a? ClassObject
         superclass = submod.superclass 
       else
@@ -24,6 +25,9 @@ def enter_module(mod, l = 1)
       end
       superclass = submod.superclass if superclass == submod.path
       superclass.gsub!(/^::/,'') # TODO: Move this to Namespace
+=======
+      superclass = superclass ? superclass.path : submod.superclass
+>>>>>>> Add Graphviz diagram tool for visualization:bin/yard-graph
       $unresolved_classes[superclass] = true unless $unresolved_classes.has_key?(superclass)
       $unresolved_classes[submod.path] = false
       $edges[submod.path] = superclass
