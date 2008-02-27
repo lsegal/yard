@@ -6,15 +6,37 @@ Namespace.load(Namespace::DEFAULT_YARDOC_FILE)
 
 def s(n) '  ' * n end
 def idname(m) m.gsub('::', '_') end
-def node(a,b) "node [label=#{a.inspect}] #{idname(b)}" end
+def ismod(a) Namespace.at(a) ? Namespace.at(a).type.to_s : 'class' end
+def consts(mod)
+  if Namespace.at(mod) 
+    v = Namespace.at(mod).children.select {|x| x.is_a? ConstantObject }.
+      collect {|x| "+ #{x.name}" } +
+      Namespace.at(mod)[:attributes].collect {|k, v| "- #{k} [#{v[:read] ? 'R': ''}#{v[:write] ? 'W' : ''}]" }
+    v.join("\\l")  
+  end
+end
+def pubmeths(mod) 
+  if Namespace.at(mod) 
+    Namespace.at(mod).children.select {|x| x.is_a? MethodObject }.
+      collect do |x| 
+        next if Namespace.at(mod)[:attributes].has_key? x.name.gsub(/=$/,'')
+        "#{x.scope == :class ? '+' : '-'} #{x.name}" 
+      end.compact.join("\\l") 
+  end 
+end
+def node(a,b) "#{idname(b)} [label=\"{#{ismod(a)} #{a}|#{consts(b)}\\l|#{pubmeths(b)}\\l}\" rank=sink]" end
 
-$unresolved_classes, $edges = {}, {}
+$unresolved_classes, $edges, $mixins = {}, {}, {}
 def enter_module(mod, l = 1)
   s(l) + "subgraph cluster_#{idname(mod.path)} {\n" +
-  s(l+1) + "label = #{mod.name.inspect};\n" +
+  s(l+1) + "label = \"#{mod.name}\"; labelloc=b;\n" +
   mod.children.map do |submod|
     if submod.is_a? ModuleObject
-      enter_module(submod, l+1)
+      if submod.children.select {|x| [ClassObject, ModuleObject].include? x.class }.empty?
+        node(submod.name, submod.path)
+      else
+        enter_module(submod, l+1)
+      end
     elsif submod.is_a? ClassObject
       superclass = Namespace.find_from_path(submod.parent, submod.superclass)
       unless superclass.is_a? ClassObject
@@ -24,6 +46,7 @@ def enter_module(mod, l = 1)
       end
       superclass = submod.superclass if superclass == submod.path
       superclass.gsub!(/^::/,'') # TODO: Move this to Namespace
+      submod.full_mixins.each {|mix| $mixins[idname(mix)] = idname(submod.path) }
       $unresolved_classes[superclass] = true unless $unresolved_classes.has_key?(superclass)
       $unresolved_classes[submod.path] = false
       $edges[submod.path] = superclass
@@ -37,12 +60,15 @@ subgraphs = enter_module(Namespace.at(''))
 $unresolved_classes.delete("Object")
 resolved = $unresolved_classes.map {|k,v| s(2) + node(k, k) + ";" if v }.compact
 edges = $edges.map {|a,b| s(1) + "#{idname(a)} -> #{idname(b)};" unless b == "Object" }.compact
-output = "digraph yard {\n  node [shape=box];\n"
-output << s(1) + "subgraph cluster_0 {\n"
-output << s(2) + "label = \"Unknown\";\n"
+mixins = $mixins.map {|a,b| s(1) + "#{a} -> #{b} [style=dashed rank=sink];" }
+output =  "digraph yard {\n"
+output << s(1) + "graph [labeljust=l rankdir=BT rank=sink outputMode=nodesfirst packMode=\"graph\" splines=true];\n"
+output << s(1) + "node [shape=record rank=sink rankType=sink];\n"
+output << s(1) + "subgraph unknown {\n"
 output << resolved.join("\n") + "\n"
 output << s(1) + "}\n\n"
 output << subgraphs
 output << edges.join("\n") + "\n"
+output << mixins.join("\n") + "\n"
 output << "}\n"
 puts output
