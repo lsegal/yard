@@ -3,10 +3,13 @@ require File.dirname(__FILE__) + '/../lib/yard'
 include YARD
 
 Namespace.load(Namespace::DEFAULT_YARDOC_FILE)
+$full = ARGV.index('--full') ? true : false
+$empty_modules = ARGV.index('--empty-mixins') ? true : false
+$dependencies = ARGV.index('--dependencies') ? true : false
 
 def s(n) '  ' * n end
 def idname(m) m.gsub('::', '_') end
-def ismod(a) Namespace.at(a) ? Namespace.at(a).type.to_s : 'class' end
+def ismod(a) return '' unless $full; Namespace.at(a) ? Namespace.at(a).type.to_s : 'class' end
 def consts(mod)
   if Namespace.at(mod) 
     v = Namespace.at(mod).children.select {|x| x.is_a? ConstantObject }.
@@ -24,7 +27,8 @@ def pubmeths(mod)
       end.compact.join("\\l") 
   end 
 end
-def node(a,b) "#{idname(b)} [label=\"{#{ismod(a)} #{a}|#{consts(b)}\\l|#{pubmeths(b)}\\l}\" rank=sink]" end
+def full(b) $full ? "|#{consts(b)}\\l|#{pubmeths(b)}\\l" : "" end
+def node(a,b) "#{idname(b)} [label=\"{#{ismod(b)} #{a}#{full(b)}}\" rank=sink]" end
 
 $unresolved_classes, $edges, $mixins = {}, {}, {}
 def enter_module(mod, l = 1)
@@ -32,7 +36,8 @@ def enter_module(mod, l = 1)
   s(l+1) + "label = \"#{mod.name}\"; labelloc=b;\n" +
   mod.children.map do |submod|
     if submod.is_a? ModuleObject
-      if submod.children.select {|x| [ClassObject, ModuleObject].include? x.class }.empty?
+      $unresolved_classes[submod.path] = false
+      if $empty_modules && submod.children.select {|x| [ClassObject, ModuleObject].include? x.class }.empty?
         s(l+1) + node(submod.name, submod.path) + ";\n"
       else
         enter_module(submod, l+1)
@@ -46,7 +51,10 @@ def enter_module(mod, l = 1)
       end
       superclass = submod.superclass if superclass == submod.path
       superclass.gsub!(/^::/,'') # TODO: Move this to Namespace
-      submod.full_mixins.each {|mix| $mixins[idname(mix)] = idname(submod.path) }
+      submod.full_mixins.each do |mix| 
+        $unresolved_classes[mix] = true unless $unresolved_classes.has_key?(mix)
+        $mixins[idname(mix)] = idname(submod.path) 
+      end if $dependencies
       $unresolved_classes[superclass] = true unless $unresolved_classes.has_key?(superclass)
       $unresolved_classes[submod.path] = false
       $edges[submod.path] = superclass
@@ -69,6 +77,6 @@ output << resolved.join("\n") + "\n"
 output << s(1) + "}\n\n"
 output << subgraphs
 output << edges.join("\n") + "\n"
-output << mixins.join("\n") + "\n"
+output << mixins.join("\n") + "\n" if $dependencies
 output << "}\n"
 puts output
