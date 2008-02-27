@@ -7,6 +7,8 @@ class YARD::MixinHandler < YARD::CodeObjectHandler
       object.mixins.push eval("[ " + statement.tokens[1..-1].to_s + " ]").to_s
     rescue NameError
       object.mixins.push statement.tokens[1..-1].to_s
+    rescue SyntaxError
+      Logger.warning "Undocumentable included module #{statement.tokens[1..-1].to_s}"
     end
     object.mixins.map! {|mixin| mixin.strip }
     object.mixins.flatten!
