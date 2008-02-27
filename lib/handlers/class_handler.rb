@@ -2,18 +2,22 @@ class YARD::ClassHandler < YARD::CodeObjectHandler
   handles YARD::RubyToken::TkCLASS
   
   def process
-    words = statement.tokens.to_s.strip.split(/\s+/)
+    words = statement.tokens.to_s.strip.split(/\s+/m)
     if words.length > 4
-      Logger.warning "in ClassHandler: Undocumentable class: '#{words[0,4].to_s}'\n" +
+      Logger.warning "in ClassHandler: Undocumentable class: '#{statement.tokens[0,4].to_s}'\n" +
                      "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
       return
     end
     class_name, superclass = words[1], (words[3] || "Object")
-    if class_name == "<<"
+    if class_name =~ /^<</
+      words[2] ||= class_name.gsub(/^<</,'')
       if words[2] == "self"
         class_name = nil
       else
-        class_name = "Anonymous$#{class_name}"
+        #class_name = "Anonymous$#{class_name}"
+        Logger.warning "in ClassHandler: Undocumentable class: '#{words[2] || class_name}'\n" +
+                       "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
+        return
       end
     end
     
