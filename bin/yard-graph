@@ -20,7 +20,7 @@ def consts(mod)
 end
 def pubmeths(mod) 
   if Namespace.at(mod) 
-    Namespace.at(mod).children.select {|x| x.is_a? MethodObject }.
+    Namespace.at(mod).children.select {|x| x.is_a? MethodObject && x.visibility == :public }.
       collect do |x| 
         next if Namespace.at(mod)[:attributes].has_key? x.name.gsub(/=$/,'')
         "#{x.scope == :class ? '+' : '-'} #{x.name.gsub(/([<>])/,'\\\1')}" 
