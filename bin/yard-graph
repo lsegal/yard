@@ -12,8 +12,7 @@ def idname(m) m.gsub('::', '_') end
 def ismod(a) return '' unless $full; Namespace.at(a) ? Namespace.at(a).type.to_s : 'class' end
 def consts(mod)
   if Namespace.at(mod) 
-    v = Namespace.at(mod).children.select {|x| x.is_a? ConstantObject }.
-      collect {|x| "+ #{x.name}" } +
+    v = Namespace.at(mod).children.select {|x| x.is_a? ConstantObject }.collect {|x| "+ #{x.name}" } +
       Namespace.at(mod)[:attributes].collect {|k, v| "- #{k} [#{v[:read] ? 'R': ''}#{v[:write] ? 'W' : ''}]" }
     v.join("\\l")  
   end
