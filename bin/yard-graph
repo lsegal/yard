@@ -9,7 +9,7 @@ $dependencies = ARGV.index('--dependencies') ? true : false
 
 def s(n) '  ' * n end
 def idname(m) m.gsub('::', '_') end
-def ismod(a) return '' unless $full; Namespace.at(a) ? Namespace.at(a).type.to_s : 'class' end
+def ismod(a,b) return '' unless $full; Namespace.at(a) ? Namespace.at(a).type.to_s : b.to_s end
 def consts(mod)
   if Namespace.at(mod) 
     v = Namespace.at(mod).children.select {|x| x.is_a? ConstantObject }.collect {|x| "+ #{x.name}" } +
@@ -27,7 +27,7 @@ def pubmeths(mod)
   end 
 end
 def full(b) $full ? "|#{consts(b)}\\l|#{pubmeths(b)}\\l" : "" end
-def node(a,b) "#{idname(b)} [label=\"{#{ismod(b)} #{a}#{full(b)}}\" rank=sink]" end
+def node(a,b,c=:class) "#{idname(b)} [label=\"{#{ismod(b,c)} #{a}#{full(b)}}\" rank=sink]" end
 
 $unresolved_classes, $edges, $mixins = {}, {}, {}
 def enter_module(mod, l = 1)
@@ -51,10 +51,10 @@ def enter_module(mod, l = 1)
       superclass = submod.superclass if superclass == submod.path
       superclass.gsub!(/^::/,'') # TODO: Move this to Namespace
       submod.full_mixins.each do |mix| 
-        $unresolved_classes[mix] = true unless $unresolved_classes.has_key?(mix)
+        $unresolved_classes[mix] = :module unless $unresolved_classes.has_key?(mix)
         $mixins[idname(mix)] = idname(submod.path) 
       end if $dependencies
-      $unresolved_classes[superclass] = true unless $unresolved_classes.has_key?(superclass)
+      $unresolved_classes[superclass] = :class unless $unresolved_classes.has_key?(superclass)
       $unresolved_classes[submod.path] = false
       $edges[submod.path] = superclass
       s(l+1) + node(submod.name, submod.path) + ";"
@@ -65,7 +65,7 @@ end
 
 subgraphs = enter_module(Namespace.at(''))
 $unresolved_classes.delete("Object")
-resolved = $unresolved_classes.map {|k,v| s(2) + node(k, k) + ";" if v }.compact
+resolved = $unresolved_classes.map {|k,v| s(2) + node(k, k, v) + ";" if v }.compact
 edges = $edges.map {|a,b| s(1) + "#{idname(a)} -> #{idname(b)};" unless b == "Object" }.compact
 mixins = $mixins.map {|a,b| s(1) + "#{a} -> #{b} [style=dashed rank=sink];" }
 output =  "digraph yard {\n"
