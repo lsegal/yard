@@ -2,3 +2,6 @@ doc
 _Yardoc
 .DS_Store
 pkg
+*.dot
+*.png
+*.pdf
