@@ -1,47 +1,33 @@
 require 'singleton'
 
-class YARD::Registry
-  include Singleton
+module YARD
+  class Registry
+    include Singleton
   
-  def self.at(path)
-    instance.at(path)
-  end
-  
-  def self.root
-    instance.root
-  end
-  
-  def self.register(object)
-    instance.register(object)
-  end
-  
-  def self.delete(object)
-    instance.delete(object)
-  end
+    def self.at(path) instance.at(path) end
+    def self.root; instance.root end
+    def self.register(object) instance.register(object) end
+    def self.delete(object) instance.delete(object) end
+    def self.clear; instance.clear end
 
-  def initialize
-    @namespace = SymbolHash.new
-    @namespace[''] = YARD::CodeObjects::NamespaceObject.new(nil, :"!root!")
-  end
+    def at(path) namespace[path] end
+    def root; namespace[:root] end
+    def delete(object) namespace.delete(object.path) end
+    def clear; initialize end
+
+    def initialize
+      @namespace = SymbolHash.new
+      @namespace[:root] = CodeObjects::NamespaceObject.new(nil, :root, nil, nil, nil)
+    end
   
-  def at(path)
-    namespace[path]
-  end
+    def register(object)
+      return if object.is_a?(CodeObjects::Proxy)
+      namespace[object.path] = object
+    end
+
+    private
   
-  def root
-    namespace['']
-  end
-  
-  def register(object)
-    namespace[object.path] = object
-  end
-  
-  def delete(object)
-    namespace.delete(object.path)
-  end
-  
-  private
-  
-  attr_accessor :namespace
+    attr_accessor :namespace
     
+  end
 end
