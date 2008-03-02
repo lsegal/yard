@@ -1,6 +1,6 @@
 module YARD
   module CodeObjects
-    class Proxy 
+    class Proxy
       # Make this object a true proxy class by removing all Object methods except
       # for some sane defaults like __send__ (which we need)
       instance_methods.
