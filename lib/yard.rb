@@ -1,6 +1,8 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'yard')
 
-require 'logger'
+['logger'].each do |file|
+  require File.join(File.dirname(__FILE__), 'yard', file)
+end
 
 module YARD
   VERSION = "0.2.1"
@@ -15,11 +17,17 @@ module YARD
   module TagLibrary; end
 end
 
-#['logger', 'namespace', 'source_parser'].each do |file|
-#  require(File.dirname(__FILE__) + '/' + file)
-#end
-
-Dir[File.dirname(__FILE__) + "/yard/**/*.rb"].each do |file|
-  log.debug "Loading #{file}..."
-  require file                                        
+%w[ 
+  symbol_hash
+  code_objects/base 
+  code_objects/namespace_object
+  code_objects/*
+  registry
+].each do |file|
+  file = File.join(File.dirname(__FILE__), 'yard', file + ".rb")
+  Dir[file].each do |f|
+    if require(f)
+      log.debug "Loading #{f}..."
+    end
+  end
 end

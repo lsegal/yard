@@ -29,6 +29,30 @@ module YARD
       end
     
       def name; @name.to_sym end
+      
+      def is_a?(klass)
+        if obj = to_obj
+          obj.is_a?(klass)
+        else
+          self.class <= klass
+        end
+      end
+      
+      def ===(other)
+        if obj = to_obj
+          obj === other
+        else
+          self.class <= other.class
+        end
+      end
+      
+      def class
+        if obj = to_obj
+          obj.class
+        else
+          Proxy
+        end
+      end
 
       # Dispatches the method to the resolved object
       # 

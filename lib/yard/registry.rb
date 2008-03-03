@@ -17,7 +17,7 @@ module YARD
 
     def initialize
       @namespace = SymbolHash.new
-      @namespace[:root] = CodeObjects::NamespaceObject.new(nil, :root, nil, nil, nil)
+      @namespace[:root] = CodeObjects::ModuleObject.new(nil, :root)
     end
   
     def register(object)
