@@ -14,7 +14,7 @@ describe YARD::CodeObjects::Proxy do
 
   it "should make itself obvious that it's a proxy" do
     pathobj = P(:root, :YARD)
-    p pathobj.is_a? Base
+    pathobj.class == Proxy
   end    
 
   it "should pretend it's the object's type if it can resolve" do
