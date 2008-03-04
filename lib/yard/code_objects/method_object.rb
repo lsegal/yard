@@ -4,8 +4,8 @@ module YARD::CodeObjects
     
     def initialize(namespace, name, visibility, scope) 
       super(namespace, name) do |o|
-        o.visibility = visibility
-        o.scope = scope
+        o.visibility = visibility.to_sym
+        o.scope = scope.to_sym
         yield(o) if block_given?
       end
     end
