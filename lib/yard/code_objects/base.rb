@@ -6,18 +6,24 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
-      attr_accessor :visibility, :scope, :type
           
-      def initialize(namespace, name, type, visibility, scope)
+      def initialize(namespace, name)
         if namespace && namespace != :root && !namespace.is_a?(NamespaceObject)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end
 
         @name = name
         self.namespace = namespace
-        self.type = type
-        self.visibility = visibility
-        self.scope = scope
+        yield(self) if block_given?
+      end
+      
+      # Default type is the lowercase class name without the "Object" suffix
+      # 
+      # Override this method to provide a custom object type 
+      # 
+      # @return [String] the type of code object this represents
+      def type
+        self.class.name.split(/::/).last.gsub(/Object$/, '').downcase
       end
     
       def path

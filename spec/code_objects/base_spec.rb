@@ -6,25 +6,25 @@ describe YARD::CodeObjects::Base do
   it "should return a unique instance of any registered object"
   
   it "should allow namespace to be nil and not register in the Registry" do
-    obj = Base.new(nil, :Me, nil, nil, nil)
+    obj = Base.new(nil, :Me)
     obj.namespace.should == nil
     Registry.at(:Me).should == nil
   end
 
   it "should allow namespace to be a NamespaceObject" do
     ns = ModuleObject.new(:root, :Name)
-    obj = Base.new(ns, :Me, nil, nil, nil)
+    obj = Base.new(ns, :Me)
     obj.namespace.should == ns
   end
   
   it "should allow :root to be the shorthand namespace of `Registry.root`" do
-    obj = Base.new(:root, :Me, nil, nil, nil)
+    obj = Base.new(:root, :Me)
     obj.namespace.should == Registry.root
   end
   
   
   it "should not allow any other types as namespace" do
-    lambda { Base.new("ROOT!", :Me, nil, nil, nil) }.should raise_error(ArgumentError)
+    lambda { Base.new("ROOT!", :Me) }.should raise_error(ArgumentError)
   end
   
   it "should register itself in the registry if namespace is supplied" do
