@@ -3,7 +3,18 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe YARD::CodeObjects::Base do
   before { Registry.clear }
   
-  it "should return a unique instance of any registered object"
+  it "should return a unique instance of any registered object" do
+    obj = ClassObject.new(:root, :Me)
+    obj2 = ModuleObject.new(:root, :Me)
+    obj.object_id.should == obj2.object_id
+    
+    obj3 = ModuleObject.new(obj, :Too)
+    obj4 = Base.new(obj3, :Hello)
+    obj4.parent = obj
+    
+    obj5 = Base.new(obj3, :hello)
+    obj4.object_id.should_not == obj5.object_id
+  end
   
   it "should allow namespace to be nil and not register in the Registry" do
     obj = Base.new(nil, :Me)
@@ -33,5 +44,11 @@ describe YARD::CodeObjects::Base do
     
     obj2 = ModuleObject.new(obj, :Too)
     Registry.at(:"Me::Too").should == obj2
+  end
+  
+  it "should set any attribute using []=" do
+    obj = ModuleObject.new(:root, :YARD)
+    obj[:some_attr] = "hello"
+    obj[:some_attr].should == "hello"
   end
 end

@@ -4,11 +4,21 @@ module YARD
   class Registry
     include Singleton
   
-    def self.at(path) instance.at(path) end
-    def self.root; instance.root end
-    def self.register(object) instance.register(object) end
-    def self.delete(object) instance.delete(object) end
-    def self.clear; instance.clear end
+    @objects = {}
+
+    class << self
+      attr_reader :objects
+
+      def at(path) instance.at(path) end
+      def root; instance.root end
+      def register(object) instance.register(object) end
+      def delete(object) instance.delete(object) end
+      
+      def clear
+        instance.clear 
+        objects.clear
+      end
+    end
 
     def at(path) namespace[path] end
     def root; namespace[:root] end

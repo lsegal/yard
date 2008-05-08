@@ -5,6 +5,7 @@ module YARD::CodeObjects
     def initialize(namespace, name, *args, &block)
       super
       @children = []
+      @mixins = []
     end
   end
 end

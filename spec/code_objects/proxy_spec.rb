@@ -10,11 +10,16 @@ describe YARD::CodeObjects::Proxy do
     proxyobj.path.should == :YARD
   end
   
-  it "should return the object if it's an included Module"
+  it "should return the object if it's an included Module" do
+    yardobj = ModuleObject.new(:root, :YARD)
+    pathobj = ClassObject.new(:root, :TestClass)
+    pathobj[:mixins] << yardobj
+    P(P(nil, :TestClass), :YARD).should be_instance_of(ModuleObject)
+  end
 
   it "should make itself obvious that it's a proxy" do
     pathobj = P(:root, :YARD)
-    pathobj.class == Proxy
+    pathobj.class.should == Proxy
   end    
 
   it "should pretend it's the object's type if it can resolve" do

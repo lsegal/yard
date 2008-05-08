@@ -6,6 +6,20 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
+      
+      class << self
+        attr_accessor :instances
+        
+        def new(namespace, name, *args, &block)
+          self.instances ||= {}
+          keyname = "#{namespace && namespace.respond_to?(:path) ? namespace.path : ''}+#{name.inspect}"
+          if obj = Registry.objects[keyname]
+            obj
+          else
+            Registry.objects[keyname] = super(namespace, name, *args, &block)
+          end
+        end
+      end
           
       def initialize(namespace, name)
         if namespace && namespace != :root && !namespace.is_a?(NamespaceObject)
@@ -15,6 +29,14 @@ module YARD
         @name = name
         self.namespace = namespace
         yield(self) if block_given?
+      end
+      
+      def [](key)
+        instance_variable_get("@#{key}")
+      end
+      
+      def []=(key, value)
+        instance_variable_set("@#{key}", value)
       end
       
       # Default type is the lowercase class name without the "Object" suffix
