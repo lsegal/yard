@@ -10,10 +10,16 @@ describe YARD::CodeObjects::Proxy do
     proxyobj.path.should == :YARD
   end
   
+  it "should handle complex string namespaces" do
+    ModuleObject.new(:root, :A)
+    pathobj = ModuleObject.new(P(nil, :A), :B)
+    P(:root, "A::B").should be_instance_of(ModuleObject)
+  end
+  
   it "should return the object if it's an included Module" do
     yardobj = ModuleObject.new(:root, :YARD)
     pathobj = ClassObject.new(:root, :TestClass)
-    pathobj[:mixins] << yardobj
+    pathobj.add_mixin yardobj
     P(P(nil, :TestClass), :YARD).should be_instance_of(ModuleObject)
   end
 
