@@ -35,6 +35,8 @@ module YARD
         end
       end
       
+      def process; end
+      
       attr_reader :parser, :statement
 
       def initialize(source_parser, stmt)

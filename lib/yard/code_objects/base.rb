@@ -1,5 +1,27 @@
 module YARD
   module CodeObjects
+    class CodeObjectList < Array
+      def initialize(owner)
+        @owner = owner
+      end
+      
+      def <<(value)
+        if value.is_a? CodeObjects::Base
+          super
+        elsif value.is_a?(String) || value.is_a?(Symbol)
+          super P(@owner, value) 
+        else
+          raise ArgumentError, "#{value.class} is not a valid CodeObject"
+        end
+      end
+      
+      def push(value)
+        self << value
+      end
+      
+      undef :unshift
+    end
+    
     NAMESPACE_SEPARATOR = '::'
     INSTANCE_METHOD_SEPARATOR = '#'
     
