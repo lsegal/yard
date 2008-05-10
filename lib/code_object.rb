@@ -189,10 +189,9 @@ module YARD #:nodoc:
       ##
       # Parses out comments split by newlines into a new code object
       #
-      # @param [Array<String>, String] comments the newline delimited 
-      #                                         array of comments. If the comments
-      #                                         are passed as a String, they will
-      #                                         be split by newlines. 
+      # @param [Array<String>, String] comments 
+      #   the newline delimited array of comments. If the comments
+      #   are passed as a String, they will be split by newlines. 
       def parse_comments(comments)
         return if comments.empty?
         meta_match = /^\s*@(\S+)\s*(.*)/

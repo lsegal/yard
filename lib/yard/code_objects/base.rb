@@ -6,6 +6,7 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
+      attr_reader :source, :file, :line, :docstring
       
       class << self
         attr_accessor :instances
@@ -32,13 +33,36 @@ module YARD
       end
       
       def [](key)
-        instance_variable_get("@#{key}")
+        if respond_to?(key)
+          send(key)
+        else
+          instance_variable_get("@#{key}")
+        end
       end
       
       def []=(key, value)
-        instance_variable_set("@#{key}", value)
+        if respond_to?("#{key}=")
+          send("#{key}=", value)
+        else
+          instance_variable_set("@#{key}", value)
+        end
       end
-      
+
+      ##
+      # Attaches source code to a code object with an optional file location
+      #
+      # @param [Statement, String] statement 
+      #   the +Statement+ holding the source code or the raw source 
+      #   as a +String+ for the definition of the code object only (not the block)
+      def source=(statement)
+        if statement.is_a? Statement
+          @source = statement.tokens.to_s + (statement.block ? statement.block.to_s : "")
+          self.line = statement.tokens.first.line_no
+        else
+          @source = statement.to_s
+        end
+      end
+
       # Default type is the lowercase class name without the "Object" suffix
       # 
       # Override this method to provide a custom object type 
@@ -72,7 +96,7 @@ module YARD
     
       alias_method :parent, :namespace
       alias_method :parent=, :namespace=
-    
+      
       protected
     
       def sep; NAMESPACE_SEPARATOR end

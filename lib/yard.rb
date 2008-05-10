@@ -22,7 +22,9 @@ end
   code_objects/base 
   code_objects/namespace_object
   code_objects/*
+  parser/**/*
   registry
+  tag_library
 ].each do |file|
   file = File.join(File.dirname(__FILE__), 'yard', file + ".rb")
   Dir[file].each do |f|

@@ -46,9 +46,17 @@ describe YARD::CodeObjects::Base do
     Registry.at(:"Me::Too").should == obj2
   end
   
-  it "should set any attribute using []=" do
+  it "should set any attribute using #[]=" do
     obj = ModuleObject.new(:root, :YARD)
     obj[:some_attr] = "hello"
     obj[:some_attr].should == "hello"
+  end
+  
+  it "#[]= should use the accessor method if available" do
+    obj = Base.new(:root, :YARD)
+    obj[:source] = "hello"
+    obj.source.should == "hello"
+    obj.source = "unhello"
+    obj[:source].should == "unhello"
   end
 end
