@@ -8,6 +8,11 @@ module YARD::CodeObjects
       @mixins = []
     end
     
+    def mixins=(mixin)
+      log.warning "Do not use #mixins= to add mixins, use #add_mixin instead."
+      add_mixin(mixin)
+    end
+    
     def add_mixin(mixin)
       if mixin.is_a? NamespaceObject
         @mixins << mixin

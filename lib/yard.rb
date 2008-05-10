@@ -22,6 +22,7 @@ end
   code_objects/base 
   code_objects/namespace_object
   code_objects/*
+  handlers/*
   parser/**/*
   registry
   tag_library

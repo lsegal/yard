@@ -7,6 +7,7 @@ module YARD
       attr_reader :name
       attr_accessor :namespace
       attr_reader :source, :file, :line, :docstring
+      attr_reader :tags
       
       class << self
         attr_accessor :instances
@@ -28,6 +29,8 @@ module YARD
         end
 
         @name = name
+        @tags = []
+        @docstring = ""
         self.namespace = namespace
         yield(self) if block_given?
       end

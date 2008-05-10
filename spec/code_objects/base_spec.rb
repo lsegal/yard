@@ -9,33 +9,33 @@ describe YARD::CodeObjects::Base do
     obj.object_id.should == obj2.object_id
     
     obj3 = ModuleObject.new(obj, :Too)
-    obj4 = Base.new(obj3, :Hello)
+    obj4 = CodeObjects::Base.new(obj3, :Hello)
     obj4.parent = obj
     
-    obj5 = Base.new(obj3, :hello)
+    obj5 = CodeObjects::Base.new(obj3, :hello)
     obj4.object_id.should_not == obj5.object_id
   end
   
   it "should allow namespace to be nil and not register in the Registry" do
-    obj = Base.new(nil, :Me)
+    obj = CodeObjects::Base.new(nil, :Me)
     obj.namespace.should == nil
     Registry.at(:Me).should == nil
   end
 
   it "should allow namespace to be a NamespaceObject" do
     ns = ModuleObject.new(:root, :Name)
-    obj = Base.new(ns, :Me)
+    obj = CodeObjects::Base.new(ns, :Me)
     obj.namespace.should == ns
   end
   
   it "should allow :root to be the shorthand namespace of `Registry.root`" do
-    obj = Base.new(:root, :Me)
+    obj = CodeObjects::Base.new(:root, :Me)
     obj.namespace.should == Registry.root
   end
   
   
   it "should not allow any other types as namespace" do
-    lambda { Base.new("ROOT!", :Me) }.should raise_error(ArgumentError)
+    lambda { CodeObjects::Base.new("ROOT!", :Me) }.should raise_error(ArgumentError)
   end
   
   it "should register itself in the registry if namespace is supplied" do
@@ -53,7 +53,7 @@ describe YARD::CodeObjects::Base do
   end
   
   it "#[]= should use the accessor method if available" do
-    obj = Base.new(:root, :YARD)
+    obj = CodeObjects::Base.new(:root, :YARD)
     obj[:source] = "hello"
     obj.source.should == "hello"
     obj.source = "unhello"
