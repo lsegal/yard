@@ -6,6 +6,10 @@ module YARD
       include YARD::CodeObjects
       
       class << self
+        def clear_subclasses
+          @@subclasses = []
+        end
+        
         def subclasses
           @@subclasses || []
         end

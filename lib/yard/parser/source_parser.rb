@@ -15,6 +15,7 @@ module YARD
       attr_accessor :namespace, :visibility, :scope
 
       def initialize
+        @file = "<STDIN>"
         @namespace = YARD::Registry.root
         @visibility = :public
         @scope = :instance
@@ -54,7 +55,7 @@ module YARD
                 rescue => e
                   log.error "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
                   log.error "Exception message: #{e.message}"
-                  log.error e.backtrace[0, 5].map {|x| "\t#{x}" }
+                  log.error e.backtrace[0, 5].map {|x| "\n#{x}" }
                   log.error 
                 end
               end
