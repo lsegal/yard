@@ -1,5 +1,5 @@
 YARD Release 0.1a (Feb. 24 2007)                                              
-Copyright © 2007 Loren Segal                                                 
+Copyright © 2007-2008 Loren Segal                                                 
                                                                               
 SYNOPSIS                                                                      
                                                                               
