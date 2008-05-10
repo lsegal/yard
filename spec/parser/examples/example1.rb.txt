@@ -1,0 +1,7 @@
+module Hello
+  class Hi
+    def me
+      "Value"
+    end
+  end
+end
