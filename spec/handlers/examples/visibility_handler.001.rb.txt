@@ -1,0 +1,15 @@
+class Testing
+  def pub; end
+  
+  private
+
+  def priv; end
+
+  protected
+
+  def prot; end
+
+  public
+
+  def pub2; end
+end
