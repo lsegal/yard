@@ -28,6 +28,9 @@ module YARD
     def initialize
       @namespace = SymbolHash.new
       @namespace[:root] = CodeObjects::ModuleObject.new(nil, :root)
+      class << @namespace[:root]
+        def path; "" end # root namespace has no path.
+      end
     end
   
     def register(object)

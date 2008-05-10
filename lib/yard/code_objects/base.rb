@@ -7,12 +7,13 @@ module YARD
       
       def <<(value)
         if value.is_a? CodeObjects::Base
-          super
+          super unless include?(value)
         elsif value.is_a?(String) || value.is_a?(Symbol)
-          super P(@owner, value) 
+          super P(@owner, value) unless include?(P(@owner, value))
         else
           raise ArgumentError, "#{value.class} is not a valid CodeObject"
         end
+        self
       end
       
       def push(value)

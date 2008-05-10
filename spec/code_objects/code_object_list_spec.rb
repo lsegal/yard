@@ -5,7 +5,7 @@ describe YARD::CodeObjects::CodeObjectList do
     list = CodeObjectList.new(nil)
     lambda { list.push(:hash => 1) }.should raise_error(ArgumentError)
     list << "Test"
-    list << :Test
+    list << :Test2
     list << ModuleObject.new(nil, :YARD)
     list.size.should == 3
   end
@@ -14,5 +14,18 @@ describe YARD::CodeObjects::CodeObjectList do
     list = CodeObjectList.new(nil)
     list << "Test"
     list.first.class.should == Proxy
+  end
+  
+  it "should contain a unique list of objects" do
+    obj = ModuleObject.new(nil, :YARD)
+    list = CodeObjectList.new(nil)
+    
+    list << P(nil, :YARD)
+    list << obj
+    list.size.should == 1
+    
+    list << :Test
+    list << "Test"
+    list.size.should == 2
   end
 end

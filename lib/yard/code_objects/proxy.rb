@@ -1,8 +1,6 @@
 module YARD
   module CodeObjects
     class Proxy
-      attr_reader :namespace
-      
       # Make this object a true proxy class by removing all Object methods except
       # for some sane defaults like __send__ (which we need)
       instance_methods.
@@ -10,6 +8,8 @@ module YARD
         each {|name| class_eval "undef #{name.to_sym}" }
         
       #undef :type # Hack, Ruby 1.8.x still registers #type as an object method
+
+      attr_reader :namespace
 
       # @raise ArgumentError if namespace is not a NamespaceObject
       def initialize(namespace, name)
@@ -48,6 +48,18 @@ module YARD
         end
       end
       
+      def ==(other)
+        if other.class == Proxy
+          a = (@namespace ? @namespace.path : "") + "::" + @name.to_s
+          b = (other.namespace ? other.namespace.path : "") + "::" + other.name.to_s
+          a == b
+        elsif other.is_a? CodeObjects::Base
+          to_obj == other
+        else
+          false
+        end
+      end
+      
       def class
         if obj = to_obj
           obj.class
@@ -66,7 +78,7 @@ module YARD
           begin 
             super
           rescue NoMethodError
-            raise NoMethodError, "Proxy cannot find #{name} and call ##{meth}"
+            raise NoMethodError, "Proxy cannot call method ##{meth} on object named '#{name}'"
           end
         end
       end
