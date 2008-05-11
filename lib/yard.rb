@@ -22,9 +22,9 @@ end
   code_objects/base 
   code_objects/namespace_object
   code_objects/*
+  parser/**/*
   handlers/base
   handlers/*
-  parser/**/*
   registry
   tag_library
 ].each do |file|
