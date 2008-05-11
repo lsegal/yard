@@ -43,6 +43,23 @@ module YARD
         @parser = source_parser
         @statement = stmt
       end
+      
+      def parse_block(new_namespace = nil, new_scope = :instance)
+        if new_namespace
+          ns, vis, scope = namespace, visibility, scope
+          self.namespace = new_namespace
+          self.visibility = :public
+          self.scope = new_scope
+        end
+
+        parser.parse(statement.block) if statement.block
+        
+        if new_namespace
+          self.namespace = ns
+          self.visibility = vis
+          self.scope = scope
+        end
+      end
 
       def namespace; @parser.namespace end
       def namespace=(v); @parser.namespace=(v) end
