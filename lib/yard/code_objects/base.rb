@@ -77,11 +77,11 @@ module YARD
       ##
       # Attaches source code to a code object with an optional file location
       #
-      # @param [Statement, String] statement 
-      #   the +Statement+ holding the source code or the raw source 
+      # @param [Parser::Statement, String] statement 
+      #   the +Parser::Statement+ holding the source code or the raw source 
       #   as a +String+ for the definition of the code object only (not the block)
       def source=(statement)
-        if statement.is_a? Statement
+        if statement.is_a? Parser::Statement
           @source = statement.tokens.to_s + (statement.block ? statement.block.to_s : "")
           self.line = statement.tokens.first.line_no
         else
@@ -105,16 +105,16 @@ module YARD
       # 
       # Override this method to provide a custom object type 
       # 
-      # @return [String] the type of code object this represents
+      # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split(/::/).last.gsub(/Object$/, '').downcase
+        self.class.name.split(/::/).last.gsub(/Object$/, '').downcase.to_sym
       end
     
       def path
         if parent && parent != Registry.root
-          [parent.path.to_s, name.to_s].join(sep).to_sym
+          [parent.path.to_s, name.to_s].join(sep)
         else
-          name
+          name.to_s
         end
       end
     
