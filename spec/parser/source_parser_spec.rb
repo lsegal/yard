@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/spec_helper'
-
 describe YARD::Parser::SourceParser do
   # Need to remove all TestHandlers from the handler specs *HACK*
   before { Handlers::Base.clear_subclasses }
@@ -15,7 +13,7 @@ describe YARD::Parser::SourceParser do
   end
   
   it "should parse a basic Ruby file" do
-    parse_file :example1
+    parse_file :example1, __FILE__
   end
   
   it "should start with public visibility" do

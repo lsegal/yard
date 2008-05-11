@@ -1,0 +1,7 @@
+module ModName
+  private
+
+  # Docstring
+  module OtherModName
+  end
+end

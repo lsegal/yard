@@ -8,12 +8,14 @@ class TestStringHandler < Handlers::Base
 end
 
 class TestTokenHandler < Handlers::Base
-  handles RubyToken::TkMODULE
+  handles Parser::RubyToken::TkMODULE
 end
 
 class TestRegexHandler < Handlers::Base
   handles /^nothello$/
 end
+
+include Parser
 
 describe YARD::Handlers::Base do
   it "should keep track of subclasses" do
@@ -43,4 +45,7 @@ describe YARD::Handlers::Base do
     TestTokenHandler.handles?(TokenList.new([mod])).should == true
     TestTokenHandler.handles?(TokenList.new([tkif])).should == false
   end
+  
+  it "should reset visibility/scope when a namespace is entered" 
+  
 end
