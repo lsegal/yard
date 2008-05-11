@@ -7,7 +7,7 @@ describe YARD::CodeObjects::Proxy do
     pathobj = ModuleObject.new(nil, :YARD)
     Registry.should_receive(:at).at_least(:once).with("YARD").and_return(pathobj)
     proxyobj = P(:root, :YARD)
-    proxyobj.path.should == :YARD
+    proxyobj.type.should == :module
   end
   
   it "should handle complex string namespaces" do
@@ -32,5 +32,11 @@ describe YARD::CodeObjects::Proxy do
     pathobj = ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
     proxyobj.should be_instance_of(ModuleObject)
+  end
+  
+  it "should handle instance method names" do
+    obj = P(nil, '#test')
+    obj.name.should == :test
+    obj.namespace.should == Registry.root
   end
 end

@@ -28,6 +28,26 @@ module YARD
           @name.gsub!(/^#{NAMESPACE_SEPARATOR}/, '')
           @namespace = Registry.root
         end
+        
+        # If the name has '#' in it, it's an instance method.
+        # The fun part is that it may be in the middle of the
+        # string. We have to make a new namespace Proxy for
+        # the namespace plus the part on the left of the #
+        # if there is anything.
+        if @name =~ /^(\S*)#{INSTANCE_METHOD_SEPARATOR}(\S+)$/
+          ns, @name, @imethod = $1, $2, true
+          if ns
+            @namespace = P(nil, [@namespace.path, ns].join(NAMESPACE_SEPARATOR))
+          end
+        end
+      end
+      
+      def path
+        if @namespace == Registry.root
+          name.to_s
+        else
+          [@namespace.path, @name].join(@imethod ? INSTANCE_METHOD_SEPARATOR : NAMESPACE_SEPARATOR)
+        end
       end
     
       def name; @name.to_sym end
@@ -50,9 +70,7 @@ module YARD
       
       def ==(other)
         if other.class == Proxy
-          a = (@namespace ? @namespace.path : "") + "::" + @name.to_s
-          b = (other.namespace ? other.namespace.path : "") + "::" + other.name.to_s
-          a == b
+          path == other.path
         elsif other.is_a? CodeObjects::Base
           to_obj == other
         else
