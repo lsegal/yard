@@ -29,7 +29,7 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
-      attr_reader :source, :file, :line, :docstring
+      attr_accessor :source, :file, :line, :docstring
       attr_reader :tags
       
       class << self
