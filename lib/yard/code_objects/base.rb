@@ -107,7 +107,7 @@ module YARD
       # 
       # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split(/::/).last.gsub(/Object$/, '').downcase.to_sym
+        self.class.name.split(/#{NAMESPACE_SEPARATOR}/).last.gsub(/Object$/, '').downcase.to_sym
       end
     
       def path
