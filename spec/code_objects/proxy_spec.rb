@@ -5,7 +5,7 @@ describe YARD::CodeObjects::Proxy do
   
   it "should return the object if it's in the Registry" do
     pathobj = ModuleObject.new(nil, :YARD)
-    Registry.should_receive(:at).at_least(:once).with("YARD").and_return(pathobj)
+    Registry.should_receive(:at).at_least(:once).with(:YARD).and_return(pathobj)
     proxyobj = P(:root, :YARD)
     proxyobj.type.should == :module
   end
@@ -37,6 +37,14 @@ describe YARD::CodeObjects::Proxy do
   it "should handle instance method names" do
     obj = P(nil, '#test')
     obj.name.should == :test
+    obj.path.should == "#test"
     obj.namespace.should == Registry.root
+  end
+  
+  it "should handle instance method names under a namespace" do
+    pathobj = ModuleObject.new(:root, :YARD)
+    obj = P(pathobj, "A::B#test")
+    obj.name.should == :test
+    obj.path.should == "A::B#test"
   end
 end

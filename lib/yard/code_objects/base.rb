@@ -23,8 +23,8 @@ module YARD
       undef :unshift
     end
     
-    NAMESPACE_SEPARATOR = '::'
-    INSTANCE_METHOD_SEPARATOR = '#'
+    NSEP = '::'
+    ISEP = '#'
     
     class Base  
       attr_reader :name
@@ -36,6 +36,10 @@ module YARD
         attr_accessor :instances
         
         def new(namespace, name, *args, &block)
+          if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+            return new(Registry.resolve(namespace, $`, true), $1, *args, &block)
+          end
+          
           self.instances ||= {}
           keyname = "#{namespace && namespace.respond_to?(:path) ? namespace.path : ''}+#{name.inspect}"
           if obj = Registry.objects[keyname]
@@ -47,11 +51,12 @@ module YARD
       end
           
       def initialize(namespace, name)
-        if namespace && namespace != :root && !namespace.is_a?(NamespaceObject)
+        if namespace && namespace != :root && 
+            !namespace.is_a?(NamespaceObject) && !namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end
 
-        @name = name
+        @name = name.to_sym
         @tags = []
         @docstring = ""
         self.namespace = namespace
@@ -107,12 +112,12 @@ module YARD
       # 
       # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split(/#{NAMESPACE_SEPARATOR}/).last.gsub(/Object$/, '').downcase.to_sym
+        self.class.name.split(/#{NSEP}/).last.gsub(/Object$/, '').downcase.to_sym
       end
     
       def path
         if parent && parent != Registry.root
-          [parent.path.to_s, name.to_s].join(sep)
+          [parent.path, name.to_s].join(sep)
         else
           name.to_s
         end
@@ -127,7 +132,7 @@ module YARD
         @namespace = (obj == :root ? Registry.root : obj)
       
         if @namespace
-          @namespace.children << self 
+          @namespace.children << self unless @namespace.is_a?(Proxy)
           Registry.register(self)
         end
       end
@@ -173,7 +178,7 @@ module YARD
 
       protected
     
-      def sep; NAMESPACE_SEPARATOR end
+      def sep; NSEP end
 
       private
 

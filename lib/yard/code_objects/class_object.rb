@@ -4,7 +4,7 @@ module YARD::CodeObjects
     
     def initialize(namespace, name, *args, &block)
       @subclasses = CodeObjectList.new(self)
-      @superclass = P(nil, Object)
+      @superclass = P(nil, :Object)
       super
     end
   end

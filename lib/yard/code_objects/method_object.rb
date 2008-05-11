@@ -12,6 +12,6 @@ module YARD::CodeObjects
     
     protected
     
-    def sep; scope == :class ? super : INSTANCE_METHOD_SEPARATOR end
+    def sep; scope == :class ? super : ISEP end
   end
 end

@@ -16,6 +16,12 @@ describe YARD::CodeObjects::Base do
     obj4.object_id.should_not == obj5.object_id
   end
   
+  it "should allow complex name and convert that to namespace" do
+    obj = CodeObjects::Base.new(nil, "A::B")
+    obj.namespace.path.should == "A"
+    obj.name.should == :B
+  end
+  
   it "should allow namespace to be nil and not register in the Registry" do
     obj = CodeObjects::Base.new(nil, :Me)
     obj.namespace.should == nil
