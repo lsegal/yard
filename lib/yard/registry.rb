@@ -20,7 +20,7 @@ module YARD
       end
     end
 
-    def at(path) namespace[path] end
+    def at(path) path.to_s.empty? ? root : namespace[path] end
     def root; namespace[:root] end
     def delete(object) namespace.delete(object.path) end
     def clear; initialize end
