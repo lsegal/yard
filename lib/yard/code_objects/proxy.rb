@@ -1,5 +1,7 @@
 module YARD
   module CodeObjects
+    class ProxyMethodError < NoMethodError; end
+    
     class Proxy
       # Make this object a true proxy class by removing all Object methods except
       # for some sane defaults like __send__ (which we need)
@@ -95,7 +97,7 @@ module YARD
           begin 
             super
           rescue NoMethodError
-            raise NoMethodError, "Proxy cannot call method ##{meth} on object named '#{name}'"
+            raise ProxyMethodError, "Proxy cannot call method ##{meth} on object named '#{name}'"
           end
         end
       end

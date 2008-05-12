@@ -1,0 +1,9 @@
+module A
+  class B
+    @@somevar = "hello"
+
+    def method
+      @@somevar = "don't document this"
+    end
+  end
+end
