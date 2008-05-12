@@ -1,7 +1,7 @@
 module YARD::CodeObjects
   class NamespaceObject < Base
     attr_accessor :children, :mixins
-    attr_accessor :cvars, :ivars, :methods
+    attr_accessor :cvars, :ivars, :methods, :constants
     
     def initialize(namespace, name, *args, &block)
       @children = CodeObjectList.new(self)
@@ -9,6 +9,7 @@ module YARD::CodeObjects
       @cvars = CodeObjectList.new(self)
       @ivars = CodeObjectList.new(self)
       @methods = CodeObjectList.new(self)
+      @constants = CodeObjectList.new(self)
       super
     end
   end

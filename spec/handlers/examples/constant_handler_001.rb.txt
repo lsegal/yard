@@ -1,0 +1,9 @@
+module A
+  class B
+    SOMECONSTANT= "hello"
+
+    def method
+      SOMECONSTANT = "don't document this"
+    end
+  end
+end
