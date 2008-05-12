@@ -21,6 +21,7 @@ module YARD
       end
       
       def resolve(namespace, name, proxy_fallback = false)
+        namespace = Registry.root if namespace == :root || !namespace
         while namespace
           [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
             path = name

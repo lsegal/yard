@@ -5,6 +5,9 @@ module YARD
       # instead of the full qualified namespace
       include YARD::CodeObjects
       
+      # For tokens like TkDEF, TkCLASS, etc.
+      include YARD::Parser::RubyToken
+      
       class << self
         def clear_subclasses
           @@subclasses = []
@@ -22,7 +25,7 @@ module YARD
         def handles(token)
           @handler = token
         end
-
+        
         def handles?(tokens)
           case @handler
           when String
@@ -44,23 +47,32 @@ module YARD
         @statement = stmt
       end
       
-      def parse_block(new_namespace = nil, new_scope = :instance)
-        if new_namespace
-          ns, vis, scope = namespace, visibility, scope
-          self.namespace = new_namespace
+      def parse_block(opts = nil)
+        opts = {
+          :namespace => nil,
+          :scope => :instance,
+          :owner => nil
+        }.update(opts || {})
+        
+        if opts[:namespace]
+          ns, vis, sc = namespace, visibility, scope
+          self.namespace = opts[:namespace]
           self.visibility = :public
-          self.scope = new_scope
+          self.scope = opts[:scope]
         end
 
+        self.owner = opts[:owner] ? opts[:owner] : namespace
         parser.parse(statement.block) if statement.block
         
-        if new_namespace
+        if opts[:namespace]
           self.namespace = ns
           self.visibility = vis
-          self.scope = scope
+          self.scope = sc
         end
       end
 
+      def owner; @parser.owner end
+      def owner=(v) @parser.owner=(v) end
       def namespace; @parser.namespace end
       def namespace=(v); @parser.namespace=(v) end
       def visibility; @parser.visibility end
