@@ -12,13 +12,14 @@ module YARD
         new.parse(StringIO.new(content))
       end
 
-      attr_accessor :namespace, :visibility, :scope
+      attr_accessor :namespace, :visibility, :scope, :owner
 
       def initialize
         @file = "<STDIN>"
         @namespace = YARD::Registry.root
         @visibility = :public
         @scope = :instance
+        @owner = @namespace
       end
 
       ##
