@@ -1,0 +1,14 @@
+# Docstring
+class A
+  module B; end
+  private
+  class B::C < String; 
+    def method1; end
+    def method2; end
+  end
+  class X<B::C
+  end
+  class<<self
+    def classmethod1; end
+  end
+end

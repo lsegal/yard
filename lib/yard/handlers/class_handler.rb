@@ -1,5 +1,5 @@
 class YARD::Handlers::ClassHandler < YARD::Handlers::Base
-  handles YARD::Parser::RubyToken::TkCLASS
+  handles TkCLASS
   
   def process
     if statement.tokens.to_s =~ /^class\s+([\w\:]+)(?:\s*<\s*([\w\:]+))?/
@@ -8,13 +8,14 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       klass = ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass
         o.docstring = statement.comments
-        o.source = statement
+        #o.source = statement
+        o.line = statement.tokens.first.line_no
         o.file = parser.file
       end
-      parse_block(klass)
+      parse_block(:namespace => klass)
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       if $1 == "self"
-        parse_block(namespace, :class)
+        parse_block(:namespace => namespace, :scope => :class)
       else
         log.warning "in ClassHandler: Undocumentable class: '#{$1}'\n"
                     "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
