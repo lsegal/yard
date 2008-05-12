@@ -1,16 +1,7 @@
 module YARD
   module CodeObjects
     class ProxyMethodError < NoMethodError; end
-    
     class Proxy
-      # Make this object a true proxy class by removing all Object methods except
-      # for some sane defaults like __send__ (which we need)
-      instance_methods.
-        reject {|m| [:new, :inspect, :to_s, :__id__, :__send__, :respond_to?].include? m.to_sym }.
-        each {|name| class_eval "undef #{name.to_sym}" }
-        
-      #undef :type # Hack, Ruby 1.8.x still registers #type as an object method
-
       attr_reader :namespace, :name
       alias_method :parent, :namespace
 
@@ -84,6 +75,30 @@ module YARD
           obj.class
         else
           Proxy
+        end
+      end
+      
+      def type
+        if obj = to_obj
+          obj.type
+        else
+          :proxy
+        end
+      end
+      
+      def instance_of?(klass)
+        self.class == klass
+      end
+      
+      def kind_of?(klass)
+        self.class <= klass
+      end
+
+      def object_id
+        if obj = to_obj
+          obj.object_id
+        else
+          nil
         end
       end
 
