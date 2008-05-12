@@ -45,7 +45,4 @@ describe YARD::Handlers::Base do
     TestTokenHandler.handles?(TokenList.new([mod])).should == true
     TestTokenHandler.handles?(TokenList.new([tkif])).should == false
   end
-  
-  it "should reset visibility/scope when a namespace is entered" 
-  
 end

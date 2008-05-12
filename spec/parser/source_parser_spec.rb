@@ -8,25 +8,21 @@ describe YARD::Parser::SourceParser do
     Parser::SourceParser.parse_string(<<-eof)
       module Hello
         class Hi
-          # Doctstring
+          # Docstring
           def me; "VALUE" end
         end
       end
     eof
     Registry.at(:Hello).should_not == nil
-    pending("Class and method not yet implemented") do
-      Registry.at("Hello::Hi#me").should_not == nil
-      Registry.at("Hello::Hi#me").docstring.should == "Docstring"
-    end
+    Registry.at("Hello::Hi#me").should_not == nil
+    Registry.at("Hello::Hi#me").docstring.should == "Docstring"
   end
   
   it "should parse a basic Ruby file" do
     parse_file :example1, __FILE__
     Registry.at(:Hello).should_not == nil
-    pending("Class and method not yet implemented") do
-      Registry.at("Hello::Hi#me").should_not == nil
-      Registry.at("Hello::Hi#me").docstring.should == "Docstring"
-    end
+    Registry.at("Hello::Hi#me").should_not == nil
+    Registry.at("Hello::Hi#me").docstring.should == "Docstring"
   end
   
   it "should start with public visibility" do

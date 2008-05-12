@@ -66,6 +66,7 @@ module YARD
         
         if opts[:namespace]
           self.namespace = ns
+          self.owner = namespace
           self.visibility = vis
           self.scope = sc
         end
