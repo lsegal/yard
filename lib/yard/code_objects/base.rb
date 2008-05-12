@@ -50,7 +50,7 @@ module YARD
         end
       end
           
-      def initialize(namespace, name)
+      def initialize(namespace, name, *args)
         if namespace && namespace != :root && 
             !namespace.is_a?(NamespaceObject) && !namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
