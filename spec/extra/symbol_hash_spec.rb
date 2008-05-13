@@ -46,4 +46,10 @@ describe SymbolHash do
     h['test'] = [1,2,3]
     h['test'].should == [1,2,3]
   end
+  
+  it "should support symbolization using #update" do
+    h = SymbolHash.new
+    h.update('test' => 'value')
+    h[:test].should == :value
+  end
 end
