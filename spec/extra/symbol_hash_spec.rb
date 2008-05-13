@@ -33,12 +33,14 @@ describe SymbolHash do
     h.has_key?('test').should == true
   end
   
-  it "should symbolize value if it is a String" do
+  it "should symbolize value if it is a String (and only a string)" do
     class Substring < String; end
       
     h = SymbolHash.new
-    h['test'] = Substring.new("hello")
-    h['test'].should == :hello
+    h['test1'] = "hello"
+    h['test2'] = Substring.new("hello")
+    h['test1'].should == :hello
+    h['test2'].should == "hello"
   end 
   
   it "should not symbolize value if it is not a String" do
