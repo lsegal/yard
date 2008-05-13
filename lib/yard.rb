@@ -14,11 +14,14 @@ module YARD
     module Ruby; end
   end
   module Handlers; end
-  module TagLibrary; end
+  module Tags
+    module Library; end
+  end
 end
 
 %w[ 
   symbol_hash
+  tags/*
   code_objects/base 
   code_objects/namespace_object
   code_objects/*

@@ -203,8 +203,8 @@ module YARD
 
           if (indent < last_indent && tag_name) || line == '' || line =~ meta_match
             tag_method = "#{tag_name}_tag"
-            if tag_name && TagLibrary.respond_to?(tag_method)
-              @tags << TagLibrary.send(tag_method, tag_buf.squeeze(" ")) 
+            if tag_name && Tags::Library.respond_to?(tag_method)
+              @tags << Tags::Library.send(tag_method, tag_buf.squeeze(" ")) 
             end
             tag_name, tag_buf = nil, ''
           end
