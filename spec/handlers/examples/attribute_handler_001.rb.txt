@@ -1,0 +1,13 @@
+module A
+  attr_reader :x
+end
+
+class B
+  attr :a, true
+  attr :a2, false
+  attr :a3
+  # Docstring
+  attr_reader :b, :c, :d
+  attr_writer :e
+  attr_accessor 'f'
+end
