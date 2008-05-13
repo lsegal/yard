@@ -33,7 +33,7 @@ module YARD
           end
           namespace = namespace.parent
         end
-        proxy_fallback ? P(namespace, name) : nil
+        proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
       end
     end
 
