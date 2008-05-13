@@ -6,7 +6,7 @@ module YARD
       end
       
       def <<(value)
-        if value.is_a? CodeObjects::Base
+        if value.is_a?(CodeObjects::Base) || value.is_a?(Proxy)
           super unless include?(value)
         elsif value.is_a?(String) || value.is_a?(Symbol)
           super P(@owner, value) unless include?(P(@owner, value))

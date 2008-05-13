@@ -1,0 +1,11 @@
+module A; end
+module B; module C; end end
+
+class X
+  include A
+  include B, B::C, NOTEXIST
+end
+
+module Y
+  include A
+end
