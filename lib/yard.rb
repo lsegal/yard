@@ -1,4 +1,7 @@
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'yard')
+YARD_ROOT = File.join(File.dirname(__FILE__), 'yard')
+YARD_TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
+
+$LOAD_PATH.unshift(YARD_ROOT)
 
 ['logger'].each do |file|
   require File.join(File.dirname(__FILE__), 'yard', file)
