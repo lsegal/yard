@@ -34,4 +34,10 @@ describe YARD::Registry do
     r = Registry.all
     r.should include(o1, o2)
   end
+  
+  it "should respond to #paths" do
+    o1 = ModuleObject.new(:root, :A)
+    o2 = ClassObject.new(:root, :B)
+    Registry.paths.should include(:A, :B)
+  end
 end

@@ -1,7 +1,10 @@
 require 'singleton'
+require 'find'
 
 module YARD
   class Registry
+    DEFAULT_YARDOC_FILE = ".yardoc"
+    
     include Singleton
   
     @objects = {}
@@ -39,6 +42,21 @@ module YARD
       end
     end
 
+    def load(file = DEFAULT_YARDOC_FILE, reload = false)
+      if File.exists?(file) && !reload
+        namespace.replace(Marshal.load(IO.read(file)))
+      else
+        Find.find(".") do |path|
+          Parser::SourceParser.parse(path) if path =~ /\.rb$/
+        end
+      end
+      save
+    end
+    
+    def save(file = DEFAULT_YARDOC_FILE)
+      File.open(file, "w") {|f| Marshal.dump(namespace, f) }
+    end
+
     def all(*types)
       namespace.values.select do |obj| 
         if types.empty?
@@ -50,6 +68,10 @@ module YARD
             end
         end
       end
+    end
+    
+    def paths
+      namespace.keys
     end
       
     def at(path) path.to_s.empty? ? root : namespace[path] end
