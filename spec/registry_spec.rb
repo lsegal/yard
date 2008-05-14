@@ -25,4 +25,10 @@ describe YARD::Registry do
     MethodObject.new(:root, :testing)
     Registry.all(CodeObjects::NamespaceObject).should == [o1, o2]
   end
+  
+  it "should allow #all to omit list" do
+    o1 = ModuleObject.new(:root, :A)
+    o2 = ClassObject.new(:root, :B)
+    Registry.all.should == [o1, o2]
+  end
 end
