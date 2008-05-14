@@ -16,13 +16,13 @@ describe YARD::Registry do
     ModuleObject.new(:root, :A)
     o1 = ClassObject.new(:root, :B)
     o2 = MethodObject.new(:root, :testing)
-    Registry.all(:method, :class).should == [[:B, o1], [:testing, o2]]
+    Registry.all(:method, :class).should == [o1, o2]
   end
   
   it "should allow code object classes in #all" do
     o1 = ModuleObject.new(:root, :A)
     o2 = ClassObject.new(:root, :B)
     MethodObject.new(:root, :testing)
-    Registry.all(CodeObjects::NamespaceObject).should == [[:A, o1], [:B, o2]]
+    Registry.all(CodeObjects::NamespaceObject).should == [o1, o2]
   end
 end

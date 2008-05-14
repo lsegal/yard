@@ -40,13 +40,13 @@ module YARD
     end
 
     def all(*types)
-      namespace.select do |k,v| 
+      namespace.values.select do |obj| 
         if types.empty?
-          k != :root
+          obj != Registry.root
         else
-          k != :root &&
+          obj != Registry.root &&
             types.any? do |type| 
-              type.is_a?(Symbol) ? v.type == type : v.is_a?(type)
+              type.is_a?(Symbol) ? obj.type == type : obj.is_a?(type)
             end
         end
       end
