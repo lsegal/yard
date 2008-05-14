@@ -16,19 +16,22 @@ describe YARD::Registry do
     ModuleObject.new(:root, :A)
     o1 = ClassObject.new(:root, :B)
     o2 = MethodObject.new(:root, :testing)
-    Registry.all(:method, :class).should == [o1, o2]
+    r = Registry.all(:method, :class)
+    r.should include(o1, o2)
   end
   
   it "should allow code object classes in #all" do
     o1 = ModuleObject.new(:root, :A)
     o2 = ClassObject.new(:root, :B)
     MethodObject.new(:root, :testing)
-    Registry.all(CodeObjects::NamespaceObject).should == [o1, o2]
+    r = Registry.all(CodeObjects::NamespaceObject)
+    r.should include(o1, o2)
   end
   
   it "should allow #all to omit list" do
     o1 = ModuleObject.new(:root, :A)
     o2 = ClassObject.new(:root, :B)
-    Registry.all.should == [o1, o2]
+    r = Registry.all
+    r.should include(o1, o2)
   end
 end
