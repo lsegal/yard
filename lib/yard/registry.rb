@@ -9,11 +9,13 @@ module YARD
     class << self
       attr_reader :objects
 
-      def all; instance.all end
-      def at(path) instance.at(path) end
-      def root; instance.root end
-      def register(object) instance.register(object) end
-      def delete(object) instance.delete(object) end
+      def method_missing(meth, *args, &block)
+        if instance.respond_to? meth
+          instance.send(meth, *args, &block)
+        else
+          super
+        end
+      end
       
       def clear
         instance.clear 
@@ -37,7 +39,19 @@ module YARD
       end
     end
 
-    def all; namespace.keys.reject {|x| x == :root } end
+    def all(*types)
+      namespace.select do |k,v| 
+        if types.empty?
+          k != :root
+        else
+          k != :root &&
+            types.any? do |type| 
+              type.is_a?(Symbol) ? v.type == type : v.is_a?(type)
+            end
+        end
+      end
+    end
+      
     def at(path) path.to_s.empty? ? root : namespace[path] end
     def root; namespace[:root] end
     def delete(object) namespace.delete(object.path) end
