@@ -136,5 +136,5 @@ end
 # 
 # @see YARD::CodeObjects::Proxy
 def P(namespace, name) 
-  Registry.resolve(namespace, name, true)
+  YARD::Registry.resolve(namespace, name, true)
 end
