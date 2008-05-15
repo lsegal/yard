@@ -4,9 +4,32 @@ module YARD::CodeObjects
     attr_reader :attributes
     
     def initialize(namespace, name, *args, &block)
-      @superclass = P(nil, :Object)
+      @superclass = P(:Object)
       @attributes = SymbolHash.new
       super
+    end
+    
+    def inheritance_tree(include_mods = true)
+      list = [self]
+      if superclass.is_a? Proxy
+        list << superclass unless superclass == P(:Object)
+      else
+        list += superclass.inheritance_tree(include_mods)
+      end
+      list
+    end
+    
+    def meths(opts = {})
+      opts = SymbolHash[:inherited_methods => false].update(opts)
+      list = super(opts)
+      
+      if opts[:inherited_methods]
+        inheritance_tree[1..-1].each do |superclass|
+          list += superclass.meths(opts)
+        end
+      end
+      
+      list
     end
     
     ##
