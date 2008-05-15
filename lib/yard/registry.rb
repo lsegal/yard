@@ -54,7 +54,7 @@ module YARD
     end
     
     def save(file = DEFAULT_YARDOC_FILE)
-      File.open(file, "w") {|f| Marshal.dump(namespace, f) }
+      File.open(file, "w") {|f| Marshal.dump(@namespace, f) }
     end
 
     def all(*types)
@@ -81,10 +81,7 @@ module YARD
 
     def initialize
       @namespace = SymbolHash.new
-      @namespace[:root] = CodeObjects::ModuleObject.new(nil, :root)
-      class << @namespace[:root]
-        def path; "" end # root namespace has no path.
-      end
+      @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
     end
   
     def register(object)
