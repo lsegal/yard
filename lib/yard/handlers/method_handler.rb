@@ -2,6 +2,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
   handles TkDEF
     
   def process
+    nobj = namespace
     mscope = scope
     meth = statement.tokens.to_s[/^def\s+([\s\w\:\.=<>\?^%\/\*\[\]]+)/, 1].gsub(/\s+/,'')
     
@@ -11,13 +12,14 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
       nobj = YARD::Registry.resolve(namespace, $`, true) unless $` == "self"
     end
     
-    obj = MethodObject.new(namespace, meth, mscope) do |o|
+    obj = MethodObject.new(nobj, meth, mscope) do |o|
       o.docstring = statement.comments
       o.source = statement
       o.file = parser.file
       o.visibility = visibility
     end
     
+    nobj.meths << obj unless nobj.is_a? Proxy
     parse_block(:owner => obj) # mainly for yield/exceptions
   end
 end

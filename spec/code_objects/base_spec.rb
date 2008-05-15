@@ -65,4 +65,10 @@ describe YARD::CodeObjects::Base do
     obj.source = "unhello"
     obj[:source].should == "unhello"
   end
+  
+  it "should exist in the parent's #children after creation" do
+    obj = ModuleObject.new(:root, :YARD)
+    obj2 = MethodObject.new(obj, :testing)
+    obj.children.should include(obj2)
+  end
 end

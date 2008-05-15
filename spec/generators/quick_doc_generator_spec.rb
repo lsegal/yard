@@ -1,5 +1,7 @@
 describe YARD::Generators::QuickDocGenerator do
-  it "should generate output" do
+  before { Registry.clear }
+  
+  it "should call all sections" do
     Parser::SourceParser.parse_string(<<-eof)
       class A
         # Docstring

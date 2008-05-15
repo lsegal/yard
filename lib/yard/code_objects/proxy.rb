@@ -135,6 +135,8 @@ end
 # via a path
 # 
 # @see YARD::CodeObjects::Proxy
-def P(namespace, name) 
+# @see YARD::Registry::resolve
+def P(namespace, name = nil)
+  namespace, name = nil, namespace if name.nil?
   YARD::Registry.resolve(namespace, name, true)
 end

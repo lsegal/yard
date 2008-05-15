@@ -1,0 +1,12 @@
+class Foo
+  def method1; end
+ 
+  def self.method2; end
+
+  # Docstring
+  def String :: hello; "" end
+
+  def [](key) puts key end
+  def []=(key, value) end
+  def allowed?; end
+end
