@@ -51,8 +51,8 @@ module YARD
 
         while tk = @tokens.shift
           #p tk.class
-          open_parens += 1 if [TkLPAREN, TkLBRACK].include? tk.class
-          open_parens -= 1 if [TkRPAREN, TkRBRACK].include?(tk.class) if open_parens > 0
+          open_parens += 1 if [TkLPAREN, TkLBRACK, TkfLBRACK].include? tk.class
+          open_parens -= 1 if [TkRPAREN, TkRBRACK].include?(tk.class) 
       
           #if open_parens < 0 || level < 0
           #  STDERR.puts block.to_s + " TOKEN #{tk.inspect}"
@@ -108,7 +108,7 @@ module YARD
             # Check if this token creates a new statement or not
             #puts "#{open_parens} open brackets for: #{statement.to_s}"
             if open_parens == 0 && ([TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class) ||
-              (statement.first.class == TkDEF && tk.class == TkRPAREN))
+              (open_block && open_block.last == TkDEF && tk.class == TkRPAREN))
               # Make sure we don't have any running expressions
               # This includes things like
               #
