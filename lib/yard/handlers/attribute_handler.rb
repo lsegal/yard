@@ -9,7 +9,7 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
       symbols     = eval("[" + statement.tokens[1..-1].to_s + "]")
       read, write = true, false
     rescue SyntaxError
-      Logger.warning "in AttributeHandler: Undocumentable attribute statement: '#{statement.tokens.to_s}'\n" +
+      YARD.logger.warning "in AttributeHandler: Undocumentable attribute statement: '#{statement.tokens.to_s}'\n" +
                      "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
       return
     end

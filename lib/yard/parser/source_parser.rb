@@ -54,10 +54,10 @@ module YARD
                 begin
                   handler.new(self, stmt).process
                 rescue => e
-                  log.error "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
-                  log.error "Exception message: #{e.message}"
-                  log.error e.backtrace[0..5].map {|x| "\n#{x}" }
-                  log.error 
+                  YARD.logger.error "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
+                  YARD.logger.error "Exception message: #{e.message}"
+                  YARD.logger.error e.backtrace[0..5].map {|x| "\n#{x}" }
+                  YARD.logger.error 
                 end
               end
             end
