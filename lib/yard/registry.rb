@@ -42,7 +42,7 @@ module YARD
       end
     end
 
-    def load(file = DEFAULT_YARDOC_FILE, reload = false)
+    def load(reload = false, file = DEFAULT_YARDOC_FILE)
       if File.exists?(file) && !reload
         namespace.replace(Marshal.load(IO.read(file)))
       else

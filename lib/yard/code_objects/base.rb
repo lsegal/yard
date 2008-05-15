@@ -6,13 +6,14 @@ module YARD
       def initialize(owner)
         @owner = owner
         @list = []
-        class << @list
-          undef :unshift
-        end
       end
       
       def __getobj__
         @list
+      end
+      
+      def __setobj__(value)
+        @list = value
       end
       
       def <<(value)
