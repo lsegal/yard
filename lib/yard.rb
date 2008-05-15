@@ -3,7 +3,7 @@ YARD_TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
 
 $LOAD_PATH.unshift(YARD_ROOT)
 
-['logger'].each do |file|
+['yard_logger'].each do |file|
   require File.join(File.dirname(__FILE__), 'yard', file)
 end
 
@@ -22,6 +22,8 @@ module YARD
   end
 end
 
+YARD.logger.level = YARD.level
+
 %w[ 
   symbol_hash
   tags/*
@@ -37,7 +39,7 @@ end
   file = File.join(File.dirname(__FILE__), 'yard', file + ".rb")
   Dir[file].each do |f|
     if require(f)
-      log.debug "Loading #{f}..."
+      YARD.logger.debug "Loading #{f}..."
     end
   end
 end

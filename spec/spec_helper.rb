@@ -1,5 +1,12 @@
 require "rubygems"
 require "spec"
+
+module YARD
+  def self.level
+    Logger::INFO
+  end
+end
+
 require File.join(File.dirname(__FILE__), '..', 'lib', 'yard')
 
 def parse_file(file, thisfile = __FILE__)

@@ -20,7 +20,7 @@ module YARD
         self << value
       end
       
-      undef :unshift
+      undef :unshift if methods.include?("unshift") || methods.include?(:unshift)
     end
     
     NSEP = '::'
