@@ -7,7 +7,6 @@ module YARD::CodeObjects
       self.scope = scope
 
       super
-      self.namespace.meths << self unless namespace.is_a? Proxy
     end
     
     def scope=(v) @scope = v.to_sym end
