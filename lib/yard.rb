@@ -4,7 +4,7 @@ YARD_TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
 $LOAD_PATH.unshift(YARD_ROOT)
 
 ['yard_logger'].each do |file|
-  require File.join(File.dirname(__FILE__), 'yard', file)
+  require File.join(YARD_ROOT, file)
 end
 
 module YARD
@@ -33,6 +33,8 @@ YARD.logger.level = YARD.level
   parser/**/*
   handlers/base
   handlers/*
+  generators/*
+  serializers/*
   registry
   tag_library
 ].each do |file|
