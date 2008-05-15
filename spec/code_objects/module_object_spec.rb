@@ -9,11 +9,14 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     #   YARD:module
     #   YARD#foo:method
     #   YARD#foo2:method
+    #   YARD#xyz:method
     #   YARD::bar:method
     #   SomeMod#mixmethod
+    #   SomeMod#xyz:method
     # 
     @yard = ModuleObject.new(:root, :YARD)
     MethodObject.new(@yard, :foo)
+    MethodObject.new(@yard, :xyz)
     MethodObject.new(@yard, :foo2) do |o|
       o.visibility = :protected
     end
@@ -22,6 +25,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     end
     @other = ModuleObject.new(:root, :SomeMod)
     MethodObject.new(@other, :mixmethod)
+    MethodObject.new(@other, :xyz)
     
     @yard.mixins << @other
   end
@@ -56,5 +60,14 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should include(P("YARD#foo"))
     meths.should include(P("YARD#foo2"))
     meths.should include(P("YARD::bar"))
+  end
+  
+  it "should choose the method defined in the class over an included module" do
+    meths = @yard.meths
+    meths.should_not include(P("SomeMod#xyz"))
+    meths.should include(P("YARD#xyz"))
+    
+    meths = @other.meths
+    meths.should include(P("SomeMod#xyz"))
   end
 end
