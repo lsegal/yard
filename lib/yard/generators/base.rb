@@ -1,13 +1,10 @@
-require 'erb'
+require 'rubygems'
+require 'erubis'
 
 module YARD
   module Generators
     class Base
       class << self
-        def generator_name
-          self.class.to_s.gsub(/Generator$/, '').downcase
-        end
-        
         def template_paths
           @template_paths ||= [YARD_TEMPLATE_ROOT]
         end
@@ -37,11 +34,15 @@ module YARD
         }).update(opts)
         
         @options = opts
-        self.format = opts[:format]
-        self.template = opts[:template]
-        self.serializer = opts[:serializer]
+        self.format = options[:format]
+        self.template = options[:template] 
+        self.serializer = options[:serializer]
       end
       
+      def generator_name
+        self.class.to_s.split("::").last.gsub(/Generator$/, '').downcase
+      end
+
       def generate(*list)
         output = ""
         serializer.before_serialize if serializer
@@ -63,7 +64,8 @@ module YARD
       def render_section(section, object)
         begin
           if section == Generators::Base
-            opts = options.dup.update(:serializer => nil)
+            opts = options.dup
+            opts.update(:serializer => nil)
             sobj = section.new(opts)
             sobj.generate(object)
           elsif section.is_a?(Generators::Base)
@@ -71,8 +73,8 @@ module YARD
           elsif section.is_a?(Symbol)
             if respond_to?(section)
               send(section, object)
-            else
-              raise ArgumentError
+            else # treat it as a String
+              render(object, section)
             end
           elsif section.is_a?(String)
             render(object, section)
@@ -86,7 +88,13 @@ module YARD
       
       def render(object, file = nil)
         path = template_path(file)
-        ERB.new(File.read(find_template(path))).result(binding)
+        f = find_template(path)
+        if f
+          Erubis::Eruby.new(File.read(f)).result(binding)
+        else
+          YARD.logger.warn "Cannot find template `#{path}`"
+          ""
+        end
       end
       
       def template_path(meth)
@@ -94,9 +102,11 @@ module YARD
       end
       
       def find_template(path)
-        self.class.template_paths.find do |basepath| 
-          File.exist? File.join(basepath, path)
+        self.class.template_paths.each do |basepath| 
+          f = File.join(basepath, path)
+          return f if File.file?(f)
         end
+        nil
       end
     end
   end
