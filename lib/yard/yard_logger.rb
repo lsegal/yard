@@ -2,6 +2,10 @@ require "logger"
 
 module YARD
   def self.logger
-    @logger ||= Logger.new(STDOUT)
+    unless @logger
+      @logger = Logger.new(STDOUT)
+      @logger.datetime_format = ""
+    end
+    @logger
   end
 end

@@ -56,8 +56,7 @@ module YARD
                 rescue => e
                   YARD.logger.error "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
                   YARD.logger.error "Exception message: #{e.message}"
-                  YARD.logger.error e.backtrace[0..5].map {|x| "\n#{x}" }
-                  YARD.logger.error 
+                  YARD.logger.error e.backtrace[0..5].map {|x| "\n#{x}" }.join + "\n"
                 end
               end
             end
