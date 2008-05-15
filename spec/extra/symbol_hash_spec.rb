@@ -56,4 +56,19 @@ describe SymbolHash do
     h.merge('test' => 'value2')
     h[:test].should == :value2
   end
+  
+  it "should support #initializing of a hash" do
+    h = SymbolHash[:test => 1]
+    h[:test].should == 1
+    h[:somethingelse].should be_nil
+  end
+  
+  it "should support reverse merge syntax" do
+    opts = {}
+    opts = SymbolHash[
+      'default' => 1
+    ].update(opts)
+    opts.keys.should == [:default]
+    opts[:default].should == 1
+  end
 end
