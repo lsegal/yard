@@ -49,9 +49,11 @@ describe SymbolHash do
     h['test'].should == [1,2,3]
   end
   
-  it "should support symbolization using #update" do
+  it "should support symbolization using #update or #merge" do
     h = SymbolHash.new
     h.update('test' => 'value')
     h[:test].should == :value
+    h.merge('test' => 'value2')
+    h[:test].should == :value2
   end
 end

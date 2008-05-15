@@ -4,4 +4,5 @@ class SymbolHash < Hash
   def delete(key) super(key.to_sym) end
   def has_key?(key) super(key.to_sym) end
   def update(hsh) hsh.each {|k,v| self[k] = v } end
+  alias_method :merge, :update
 end
