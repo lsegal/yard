@@ -22,8 +22,6 @@ module YARD
   end
 end
 
-YARD.logger.level = YARD.level
-
 %w[ 
   symbol_hash
   tags/*

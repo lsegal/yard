@@ -5,6 +5,7 @@ module YARD
     unless @logger
       @logger = Logger.new(STDOUT)
       @logger.datetime_format = ""
+      @logger.level = Logger::INFO
     end
     @logger
   end
