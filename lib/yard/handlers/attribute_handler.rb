@@ -46,6 +46,7 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
           o.source = full_src
           o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
           o.file = parser.file
+          o.line = statement.tokens.first.line_no
         end
       end
 
