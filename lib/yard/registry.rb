@@ -48,9 +48,10 @@ module YARD
       else
         Find.find(".") do |path|
           Parser::SourceParser.parse(path) if path =~ /\.rb$/
+          save
         end
       end
-      save
+      nil
     end
     
     def save(file = DEFAULT_YARDOC_FILE)
