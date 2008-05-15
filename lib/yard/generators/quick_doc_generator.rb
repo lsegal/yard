@@ -9,10 +9,12 @@ module YARD
       end
       
       def a(object)
+        p "called a"
         "test"
       end
       
       def b(object)
+        p "called b"
         "test2"
       end
     end

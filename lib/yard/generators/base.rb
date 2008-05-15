@@ -24,10 +24,6 @@ module YARD
         def register_template_path(path)
           template_paths.unshift(path)
         end
-        
-        def generate(*args)
-          new(*args).generate
-        end
       end
 
       attr_accessor :format, :template, :serializer
@@ -40,21 +36,24 @@ module YARD
           :serializer => nil
         }).update(opts)
         
+        @options = opts
         self.format = opts[:format]
         self.template = opts[:template]
         self.serializer = opts[:serializer]
-        self.options = opts
       end
       
       def generate(*list)
+        output = ""
         serializer.before_serialize if serializer
         list.flatten.each do |object|
           (sections_for(object) || []).each do |section|
             data = render_section(section, object)
             serializer.serialize(object, data) if serializer
+            output << data
           end
         end
         serializer.after_serialize if serializer
+        output
       end
       
       protected
