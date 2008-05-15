@@ -122,6 +122,7 @@ module YARD
           name.to_s
         end
       end
+      alias_method :inspect, :path
     
       def namespace=(obj)
         if @namespace
