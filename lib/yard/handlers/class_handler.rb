@@ -17,12 +17,12 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       if $1 == "self"
         parse_block(:namespace => namespace, :scope => :class)
       else
-        YARD.logger.warning "in ClassHandler: Undocumentable class: '#{$1}'\n"
+        YARD.logger.warn "in ClassHandler: Undocumentable class: '#{$1}'\n"
                     "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
         return 
       end
     else
-      YARD.logger.warning "in ClassHandler: Undocumentable class: #{statement.tokens}\n" +
+      YARD.logger.warn "in ClassHandler: Undocumentable class: #{statement.tokens}\n" +
                   "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
       return
     end
