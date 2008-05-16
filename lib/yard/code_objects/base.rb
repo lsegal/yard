@@ -2,34 +2,22 @@ require "delegate"
 
 module YARD
   module CodeObjects
-    class CodeObjectList < Delegator
+    class CodeObjectList < Array
       def initialize(owner)
         @owner = owner
-        @list = []
       end
       
-      def __getobj__
-        @list
-      end
-      
-      def __setobj__(value)
-        @list = value
-      end
-      
-      def <<(value)
+      def push(value)
         if value.is_a?(CodeObjects::Base) || value.is_a?(Proxy)
-          @list << value unless @list.include?(value)
+          super(value) unless include?(value)
         elsif value.is_a?(String) || value.is_a?(Symbol)
-          @list << P(@owner, value) unless @list.include?(P(@owner, value))
+          super(P(@owner, value)) unless include?(P(@owner, value))
         else
           raise ArgumentError, "#{value.class} is not a valid CodeObject"
         end
         self
       end
-      
-      def push(value)
-        self << value
-      end
+      alias_method :<<, :push
     end
     
     NSEP = '::'
