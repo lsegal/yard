@@ -18,7 +18,7 @@ describe YARD::Registry do
     o3 = ModuleObject.new(o2, :C)
     Registry.resolve(o3, "::A").should == o1
     
-    Registry.resolve(o3, "::String").should == P(:String)
+    Registry.resolve(o3, "::String", true).should == P(:String)
   end
   
   it "should allow symbols as object type in #all" do
