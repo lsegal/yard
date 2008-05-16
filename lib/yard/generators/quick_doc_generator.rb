@@ -4,7 +4,7 @@ module YARD
       def sections_for(object)
         case object
         when CodeObjects::MethodObject
-          [DeprecatedGenerator, TagsGenerator]
+          [:header, DeprecatedGenerator, DocstringGenerator, TagsGenerator, SourceGenerator]
         end
       end
     end

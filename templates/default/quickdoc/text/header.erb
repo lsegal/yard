@@ -1,0 +1,5 @@
+Documentation for <%= object.path %>
+==================<%= "=" * object.path.length %>
+<% if object.file %>File: '<%= object.file %>'<% end %>
+Type: <%= object.tag(:return) && object.tag(:return).type ? object.tag(:return).type : "undefined" %>   Visibility: <%= object.visibility %>
+

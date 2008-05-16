@@ -1,3 +1,4 @@
 <% for tag in object.tags(:param) -%>
-> Parameter: <%= format_tag_types tag.types %> 
+> Parameter: <%= format_tag_types tag.types %> <%= tag.name %>
+<%= "\t" + tag.text + "\n" if tag.text -%>
 <% end -%>

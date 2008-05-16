@@ -63,7 +63,7 @@ module YARD
 
       def render_section(section, object)
         begin
-          if section == Generators::Base
+          if section.is_a?(Class) && section <= Generators::Base
             opts = options.dup
             opts.update(:serializer => nil)
             sobj = section.new(opts)
@@ -82,7 +82,8 @@ module YARD
             raise ArgumentError
           end
         rescue ArgumentError
-          YARD.logger.debug "Ignoring invalid section in #{self.class}"
+          type = section <= Generators::Base ? "generator" : "section"
+          YARD.logger.debug "Ignoring invalid #{type} '#{section}' in #{self.class}"
           ""
         end
       end
@@ -91,7 +92,15 @@ module YARD
         path = template_path(file)
         f = find_template(path)
         if f
-          Erubis::Eruby.new(File.read(f)).result(binding)
+          begin
+            Erubis::Eruby.new(File.read(f)).result(binding)
+          rescue => e
+            YARD.logger.error "Failed to parse template `#{path}`:"
+            YARD.logger.error "Exception message: " + e.message
+            YARD.logger.error "\n" + e.backtrace[0..5].join("\n")
+            YARD.logger.error ""
+            raise
+          end
         else
           YARD.logger.warn "Cannot find template `#{path}`"
           ""

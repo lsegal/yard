@@ -1,8 +1,8 @@
 module YARD
   module Generators
-    class DeprecatedGenerator < Base
+    class DocstringGenerator < Base
       def sections_for(object) 
-        [:main] if object.tag(:deprecated)
+        [:main] if object.docstring
       end
     end
   end

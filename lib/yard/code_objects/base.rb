@@ -149,8 +149,7 @@ module YARD
       # @param [#to_s] name the tag name to return data for
       # @return [BaseTag] the first tag in the list of {#tags}
       def tag(name)
-        name = name.to_s
-        @tags.find {|tag| tag.tag_name == name }
+        @tags.find {|tag| tag.tag_name.to_s == name.to_s }
       end
 
       ##
@@ -160,8 +159,7 @@ module YARD
       # @return [Array<BaseTag>] the list of tags by the specified tag name
       def tags(name = nil)
         return @tags if name.nil?
-        name = name.to_s
-        @tags.select {|tag| tag.tag_name == name }
+        @tags.select {|tag| tag.tag_name.to_s == name.to_s }
       end
 
       ##
@@ -170,8 +168,7 @@ module YARD
       # @param [String] name the tag name to search for
       # @return [Boolean] whether or not the tag +name+ was declared
       def has_tag?(name)
-        name = name.to_s
-        @tags.any? {|tag| tag.tag_name == name }
+        @tags.any? {|tag| tag.tag_name.to_s == name.to_s }
       end
 
       protected
