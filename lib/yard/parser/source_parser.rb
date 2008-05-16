@@ -26,7 +26,7 @@ module YARD
       # Creates a new SourceParser that parses a file and returns
       # analysis information about it.
       #
-      # @param [String, TokenList, StatementList] content the source file to parse
+      # @param [String, TokenList, StatementList, #read] content the source file to parse
       def parse(content = __FILE__)
         case content
         when String
