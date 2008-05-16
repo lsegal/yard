@@ -3,7 +3,12 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
   
   def process
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
-      namespace.mixins << P(namespace, mixin.strip)
+      mixin.strip!
+      if mixin =~ /^[A-Z\:]/
+        namespace.mixins << P(namespace, mixin)
+      else
+        YARD.logger.warn "in #{self.class.name}: Undocumentable mixin #{mixin} for class #{namespace.path}"
+      end
     end
   end
 end
