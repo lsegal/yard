@@ -83,6 +83,7 @@ module YARD
           end
         rescue ArgumentError
           YARD.logger.debug "Ignoring invalid section in #{self.class}"
+          ""
         end
       end
       

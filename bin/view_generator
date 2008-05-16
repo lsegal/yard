@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
 
+YARD.logger.level = Logger::DEBUG
 YARD::Registry.load 
 gclass = eval("YARD::Generators::#{ARGV[0]}")
 sclass = ARGV[1] == "nil" ? nil : eval("YARD::Serializers::#{ARGV[1]}") 
