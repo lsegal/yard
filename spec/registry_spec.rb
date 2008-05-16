@@ -12,6 +12,15 @@ describe YARD::Registry do
     Registry.resolve(:root, "A::B::C")
   end
   
+  it "should resolve an object in the root namespace when prefixed with ::" do
+    o1 = ModuleObject.new(:root, :A)
+    o2 = ModuleObject.new(o1, :B)
+    o3 = ModuleObject.new(o2, :C)
+    Registry.resolve(o3, "::A").should == o1
+    
+    Registry.resolve(o3, "::String").should == P(:String)
+  end
+  
   it "should allow symbols as object type in #all" do
     ModuleObject.new(:root, :A)
     o1 = ClassObject.new(:root, :B)
