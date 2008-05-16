@@ -3,8 +3,8 @@ module YARD::CodeObjects
     attr_reader :children, :cvars, :meths, :constants, :mixins
     
     def initialize(namespace, name, *args, &block)
-      @children = []
-      @mixins = []
+      @children = CodeObjectList.new(self)
+      @mixins = CodeObjectList.new(self)
       super
     end
     
