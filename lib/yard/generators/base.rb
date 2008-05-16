@@ -27,11 +27,11 @@ module YARD
       attr_reader :options
       
       def initialize(opts = {})
-        opts = SymbolHash.new({
+        opts = SymbolHash[
           :format => :html,
           :template => :default,
           :serializer => nil
-        }).update(opts)
+        ].update(opts)
         
         @options = opts
         self.format = options[:format]
