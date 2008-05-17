@@ -32,6 +32,14 @@ module YARD
         end
       end
       
+      def inspect
+        if obj = to_obj
+          obj.inspect
+        else
+          "P(#{path})"
+        end
+      end
+      
       def path
         if obj = to_obj
           obj.path
