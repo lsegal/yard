@@ -1,4 +1,9 @@
 class Foo
+  def ==(other)
+ 	'hello' 
+  end
+  def /(other) 'hi' end
+
   def method1; end
  
   def self.method2; end

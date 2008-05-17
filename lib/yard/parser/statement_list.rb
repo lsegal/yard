@@ -51,7 +51,7 @@ module YARD
 
         while tk = @tokens.shift
           #p tk.class
-          open_parens += 1 if [TkLPAREN, TkLBRACK, TkfLBRACK].include? tk.class
+          open_parens += 1 if [TkLPAREN, TkfLPAREN, TkLBRACK, TkfLBRACK].include? tk.class
           open_parens -= 1 if [TkRPAREN, TkRBRACK].include?(tk.class) 
       
           #if open_parens < 0 || level < 0
@@ -89,7 +89,7 @@ module YARD
               statement << tk 
             end
 
-            #puts "#{tk.line_no} #{level} #{tk} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
+            #puts "#{tk.line_no} #{level} #{open_parens} #{tk.class.to_s.split("::").last} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
 
             # Increase level if we have a 'do' or block opening
             if tk.class == TkLBRACE || tk.class == TkfLBRACE

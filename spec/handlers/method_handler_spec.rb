@@ -19,5 +19,7 @@ describe YARD::Handlers::MethodHandler do
     P("Foo#[]").should_not be_nil
     P("Foo#[]=").should_not be_nil
     P("Foo#allowed?").should_not be_nil
+    P("Foo#/").should_not be_nil
+    P("Foo#==").should_not be_nil
   end
 end
