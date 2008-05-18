@@ -11,4 +11,6 @@ class A
   class<<self
     def classmethod1; end
   end
+
+  class << A::B::C; def Hello; end end
 end
