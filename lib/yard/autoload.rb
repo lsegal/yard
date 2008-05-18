@@ -61,3 +61,11 @@ module YARD
 
   autoload :Registry, 'registry'
 end
+
+# Load all handlers
+module YARD
+  module Handlers
+    [ AliasHandler, AttributeHandler, ClassHandler, ClassVariableHandler,
+    ConstantHandler, MethodHandler, MixinHandler, ModuleHandler, VisibilityHandler ]
+  end
+end
