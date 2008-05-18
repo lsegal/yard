@@ -5,14 +5,15 @@ module YARD
     class FileSystemSerializer < Base
       attr_reader :basepath, :extension
       
-      def initialize(basepath, extension)
-        @basepath = options[:basepath] || '.' 
+      def initialize(opts = {})
+        super
+        @basepath = options[:basepath] || '.'
         @extension = options[:extension] || 'html'
       end
       
       def serialize(object, data)
         path = fs_path(object)
-        FileUtils.mkdir_p path.gsub(/#{object.name}\.#{extension}$/, '')
+        FileUtils.mkdir_p File.join(*path.split('/')[0..-2])
         YARD.logger.debug "Serializing to #{path}"
         File.new(path, "w") {|f| f.write data }
       end
@@ -20,11 +21,13 @@ module YARD
       protected
       
       def fs_path(object)
-        fspath = [
-          object.namespace.path.split(CodeObjects::NSEP), 
-          object.name.to_s + ".#{extension}"
-        ].flatten.map do |p| 
-          p.gsub(/([a-z])([A-Z])/) {|a| a[0] + "_" + a[1].downcase } 
+        fspath = [object.name.to_s + ".#{extension}"]
+        if object.namespace && object.namespace.path != ""
+          fspath.unshift *object.namespace.path.split(CodeObjects::NSEP)
+        end
+        
+        fspath.map! do |p| 
+          p.gsub(/([a-z])([A-Z])/, '\1_\2').downcase 
         end
         
         File.join(basepath, *fspath)
