@@ -1,3 +1,5 @@
+require 'stringio'
+
 module YARD
   module Parser
     # Responsible for parsing a source file into the namespace
