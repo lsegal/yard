@@ -68,6 +68,7 @@ module YARD
         define_tag! "Since",            :since
         define_tag! "Version",          :version
         define_tag! "API Visibility",   :api
+        define_tag! "Example",          :example
       end
     end
   end

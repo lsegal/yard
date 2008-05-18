@@ -20,6 +20,18 @@ module YARD
   module Tags
     module Library; end
   end
+  
+  def self.parse(paths = "**/*.rb", level = Logger::INFO)
+    old_level, YARD.logger.level = YARD.logger.level, level
+    
+    files = Dir[File.join(Dir.pwd, paths)]
+    files.each do |file|
+      YARD.logger.debug("Processing #{file}")
+      YARD::Parser::SourceParser.parse(file)
+    end
+    
+    YARD.logger.level = old_level
+  end
 end
 
 %w[ 
