@@ -122,6 +122,14 @@ describe YARD::CodeObjects::Base do
       end
     eof
     obj.source.should == "def mymethod\n  if x == 2\n    3\n  else\n    1\n  end\nend"
+    
+    Registry.clear
+    Parser::SourceParser.parse_string <<-eof
+      def key?(key)
+        super(key)
+      end
+    eof
+    Registry.at('key?').source.should == "def key?(key)\n  super(key)\nend"
   end
   
   it "should handle source for 'def x; end'" do

@@ -252,8 +252,9 @@ module YARD
       
       # Formats source code by removing leading indentation
       def format_source(source)
-        indent = source.split(/\r\n/).last[/^(\s*)/, 1].length
-        source.gsub(/^\s{#{indent}}|[\r\n]+\Z/, '')
+        source.gsub!(/(\r?\n)+\Z/, '')
+        indent = source.split(/\r?\n/).last[/^(\s*)/, 1].length
+        source.gsub(/^\s{#{indent}}/, '')
       end
     end
   end
