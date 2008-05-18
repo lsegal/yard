@@ -1,11 +1,9 @@
 module YARD::CodeObjects
   class ClassObject < NamespaceObject
     attr_accessor :superclass
-    attr_reader :attributes
     
     def initialize(namespace, name, *args, &block)
       @superclass = P(:Object)
-      @attributes = SymbolHash.new
       super
     end
     

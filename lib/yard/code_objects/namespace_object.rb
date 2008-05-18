@@ -1,10 +1,11 @@
 module YARD::CodeObjects
   class NamespaceObject < Base
-    attr_reader :children, :cvars, :meths, :constants, :mixins
+    attr_reader :children, :cvars, :meths, :constants, :mixins, :attributes
     
     def initialize(namespace, name, *args, &block)
       @children = CodeObjectList.new(self)
       @mixins = CodeObjectList.new(self)
+      @attributes = SymbolHash.new
       super
     end
     

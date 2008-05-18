@@ -2,8 +2,6 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
   handles /\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/
   
   def process
-    return unless namespace.is_a?(ClassObject) # attributes only work from classes
-    
     begin
       attr_type   = statement.tokens.first.text.to_sym
       symbols     = eval("[" + statement.tokens[1..-1].to_s + "]")

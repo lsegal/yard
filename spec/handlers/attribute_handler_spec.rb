@@ -22,8 +22,8 @@ describe YARD::Handlers::AttributeHandler do
     attrs[:write].should == write
   end
   
-  it "should only parse attributes inside classes" do
-    Registry.at("A#x=").should == nil
+  it "should parse attributes inside modules too" do
+    Registry.at("A#x=").should_not == nil
   end
   
   it "should parse 'attr'" do
