@@ -109,4 +109,24 @@ describe YARD::CodeObjects::Base do
       end
     end
   end
+  
+  it "should properly re-indent source starting from 0 indentation" do
+    obj = CodeObjects::Base.new(nil, :test)
+    obj.source = <<-eof
+      def mymethod
+        if x == 2
+          3
+        else
+          1
+        end
+      end
+    eof
+    obj.source.should == "def mymethod\n  if x == 2\n    3\n  else\n    1\n  end\nend"
+  end
+  
+  it "should handle source for 'def x; end'" do
+    Registry.clear
+    Parser::SourceParser.parse_string "def x; 2 end"
+    Registry.at(:x).source.should == "def x; 2 end"
+  end
 end

@@ -85,10 +85,16 @@ module YARD
       #   as a +String+ for the definition of the code object only (not the block)
       def source=(statement)
         if statement.is_a? Parser::Statement
-          @source = statement.tokens.to_s + (statement.block ? statement.block.to_s : "")
+          src = statement.tokens.to_s
+          blk = statement.block ? statement.block.to_s : ""
+          if src =~ /^def\s.*[^\)]$/ && blk[0,1] !~ /\r|\n/
+            blk = ";" + blk
+          end
+          
+          @source = format_source(src + blk)
           self.line = statement.tokens.first.line_no
         else
-          @source = statement.to_s
+          @source = format_source(statement.to_s)
         end
       end
 
@@ -243,6 +249,12 @@ module YARD
         # Remove trailing/leading whitespace / newlines
         @docstring.gsub!(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
       end      
+      
+      # Formats source code by removing leading indentation
+      def format_source(source)
+        indent = source.split(/\r\n/).last[/^(\s*)/, 1].length
+        source.gsub(/^\s{#{indent}}|[\r\n]+\Z/, '')
+      end
     end
   end
 end
