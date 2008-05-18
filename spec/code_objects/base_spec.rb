@@ -71,4 +71,28 @@ describe YARD::CodeObjects::Base do
     obj2 = MethodObject.new(obj, :testing)
     obj.children.should include(obj2)
   end
+  
+  it "should parse comments into tags" do
+    obj = CodeObjects::Base.new(nil, :Object)
+    comments = <<-eof
+      @param name Hello world
+        how are you?
+      @param name2 
+        this is a new line
+      @param name3 and this
+        is a new paragraph:
+
+        right here.
+    eof
+    obj.send(:parse_comments, comments)
+    obj.tags("param").each do |tag|
+      if tag.name == "name"
+        tag.text.should == "Hello world how are you?"
+      elsif tag.name == "name2"
+        tag.text.should == "this is a new line"
+      elsif tag.name == "name3"
+        tag.text.should == "and this is a new paragraph:\n\nright here."
+      end
+    end
+  end
 end

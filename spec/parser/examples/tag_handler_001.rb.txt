@@ -1,7 +1,7 @@
 class Foo
 
   # @api public
-  # @returns nil
+  # @return nil
   def foo
   end
 
