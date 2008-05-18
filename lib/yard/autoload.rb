@@ -70,4 +70,5 @@ module YARD
   end
 end
 
-autoload :P, 'code_objects/proxy'
+# P() needs to be loaded right away
+require File.join(YARD::ROOT, 'code_objects', 'proxy') 
