@@ -8,6 +8,19 @@ module YARD
         @block  = block
         @comments = comments
       end
+      
+      def inspect(lines = nil)
+        flineno = tokens.first.line_no
+        buf = [""]
+        tokens.each do |tk|
+          if tk.is_a?(RubyToken::TkNL)
+            buf.push ""
+          else
+            buf.last << tk.text
+          end
+        end
+        buf.map {|line| "\t#{flineno}: #{line}" }.join("\n")
+      end
 
       private
         def clean_tokens(tokens)

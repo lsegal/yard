@@ -1,0 +1,12 @@
+module A
+  def a; end
+  alias_method :b, :a
+end
+
+class C
+  def x; end
+end
+
+class B < C
+  alias_method :q, :x
+end

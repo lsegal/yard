@@ -9,6 +9,7 @@ module YARD
     autoload :ModuleObject,         'code_objects/module_object'
     autoload :NamespaceObject,      'code_objects/namespace_object'
     autoload :Proxy,                'code_objects/proxy'
+    autoload :ProxyMethodError,     'code_objects/proxy'
     autoload :RootObject,           'code_objects/root_object'
   end
   
@@ -23,6 +24,7 @@ module YARD
   end
   
   module Handlers
+    autoload :AliasHandler,         'handlers/alias_handler'
     autoload :AttributeHandler,     'handlers/attribute_handler'
     autoload :Base,                 'handlers/base'
     autoload :ClassHandler,         'handlers/class_handler'
@@ -32,6 +34,7 @@ module YARD
     autoload :MixinHandler,         'handlers/mixin_handler'
     autoload :ModuleHandler,        'handlers/module_handler'
     autoload :VisibilityHandler,    'handlers/visibility_handler'
+    autoload :UndocumentableError,  'handlers/base'
   end
 
   module Parser
