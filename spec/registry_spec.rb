@@ -1,3 +1,6 @@
+require File.join(File.dirname(__FILE__), "spec_helper")
+include CodeObjects
+
 describe YARD::Registry do
   before { Registry.clear }
   it "should have an empty path for root" do
@@ -47,6 +50,6 @@ describe YARD::Registry do
   it "should respond to #paths" do
     o1 = ModuleObject.new(:root, :A)
     o2 = ClassObject.new(:root, :B)
-    Registry.paths.should include(:A, :B)
+    Registry.paths.should include('A', 'B')
   end
 end
