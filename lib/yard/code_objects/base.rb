@@ -34,12 +34,13 @@ module YARD
         
         def new(namespace, name, *args, &block)
           if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
-            return new(Registry.resolve(namespace, $`, true), $1, *args, &block)
+            return new(P(namespace, $`), $1, *args, &block)
           end
           
           self.instances ||= {}
           keyname = "#{namespace && namespace.respond_to?(:path) ? namespace.path : ''}+#{name.inspect}"
           if obj = Registry.objects[keyname]
+            yield(obj) if block_given?
             obj
           else
             Registry.objects[keyname] = super(namespace, name, *args, &block)
