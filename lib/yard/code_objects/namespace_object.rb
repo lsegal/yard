@@ -6,7 +6,7 @@ module YARD::CodeObjects
       @children = CodeObjectList.new(self)
       @mixins = CodeObjectList.new(self)
       @attributes = SymbolHash.new
-      @aliases = SymbolHash.new
+      @aliases = {}
       super
     end
     

@@ -2,10 +2,9 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
   handles /\Aalias_method/
   
   def process
-    toks = statement.tokens.squeeze
     begin
-      new_meth, old_meth = toks[2..-1].to_s.split(',')
-      new_meth, old_meth = eval(new_meth), eval(old_meth)
+      statement.tokens.to_s[2..-1].to_s =~ /\s*(\S+)\s*,\s*(\S+)/
+      new_meth, old_meth = eval($1), eval($2)
     rescue SyntaxError, NameError
       raise YARD::Handlers::UndocumentableError, "alias_method"
     end
@@ -26,6 +25,6 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
       end
     end
     
-    namespace.aliases[old_meth] = new_obj
+    namespace.aliases[new_obj] = old_meth
   end
 end

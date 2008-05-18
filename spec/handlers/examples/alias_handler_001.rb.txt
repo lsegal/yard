@@ -9,4 +9,7 @@ end
 
 class B < C
   alias_method :q, :x
+  alias_method :r?, :x
+  alias_method :s, :to_s 
+  alias_method :t, :inspect if 500 = 3 * CONSTANT
 end

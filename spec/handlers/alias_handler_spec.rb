@@ -7,7 +7,7 @@ describe YARD::Handlers::AliasHandler do
   end
 
   it "should throw alias into namespace object list" do
-    P(:A).aliases[:a].should == P("A#b")
+    P(:A).aliases[P("A#b")].should == :a
   end
   
   it "should create a new method object for the alias" do
@@ -15,6 +15,15 @@ describe YARD::Handlers::AliasHandler do
   end
   
   it "should pull the method into the current class if it's from another one" do
-    P(:B).aliases[:x].should == P("B#q")
+    P(:B).aliases[P("B#q")].should == :x
+    P(:B).aliases[P("B#r?")].should == :x
+  end
+  
+  it "should gracefully fail to pull a method in if the original method cannot be found" do
+    P(:B).aliases[P("B#s")].should == :to_s
+  end
+  
+  it "should allow complex Ruby expressions after the alias parameters" do
+    P(:B).aliases[P("B#t")].should == :inspect
   end
 end
