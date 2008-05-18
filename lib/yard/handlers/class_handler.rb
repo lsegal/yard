@@ -20,14 +20,10 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       elsif classname[0,1] =~ /[A-Z]/
         parse_block(:namespace => P(namespace, classname), :scope => :class)
       else
-        YARD.logger.warn "in ClassHandler: Undocumentable class: '#{klass}'\n"
-                    "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
-        return 
+        raise YARD::Handlers::UndocumentableError, "class '#{klass}'"
       end
     else
-      YARD.logger.warn "in ClassHandler: Undocumentable class: #{statement.tokens}\n" +
-                  "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
-      return
+      raise YARD::Handlers::UndocumentableError, "class: #{statement.tokens}"
     end
   end
 end
