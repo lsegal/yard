@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
+include Parser
+
 class TestHandler < Handlers::Base
 end
 
@@ -8,14 +10,12 @@ class TestStringHandler < Handlers::Base
 end
 
 class TestTokenHandler < Handlers::Base
-  handles Parser::RubyToken::TkMODULE
+  handles RubyToken::TkMODULE
 end
 
 class TestRegexHandler < Handlers::Base
   handles /^nothello$/
 end
-
-include Parser
 
 describe YARD::Handlers::Base do
   it "should keep track of subclasses" do
