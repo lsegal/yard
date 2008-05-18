@@ -7,4 +7,9 @@ describe YARD::CodeObjects::NamespaceObject do
     obj.child(:Other).should == other
     obj.child('Other').should == other
   end
+  
+  it "should return #meths even if parent is a Proxy" do
+    obj = NamespaceObject.new(P(:String), :YARD)
+    obj.meths.should be_empty
+  end
 end
