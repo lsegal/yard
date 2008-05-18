@@ -6,7 +6,7 @@ module YARD
     class Base
       class << self
         def template_paths
-          @template_paths ||= [YARD_TEMPLATE_ROOT]
+          @template_paths ||= [TEMPLATE_ROOT]
         end
 
         ##

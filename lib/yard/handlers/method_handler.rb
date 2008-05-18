@@ -9,7 +9,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
     # Class method if prefixed by self(::|.) or Module(::|.)
     if meth =~ /(?:#{NSEP}|\.)([^#{NSEP}\.]+)$/
       mscope, meth = :class, $1
-      nobj = YARD::Registry.resolve(namespace, $`, true) unless $` == "self"
+      nobj = P(namespace, $`) unless $` == "self"
     end
     
     obj = MethodObject.new(nobj, meth, mscope) do |o|

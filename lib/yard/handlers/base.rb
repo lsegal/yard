@@ -1,5 +1,7 @@
 module YARD
   module Handlers
+    class UndocumentableError < Exception; end
+    
     class Base
       # For accessing convenience, eg. "MethodObject" 
       # instead of the full qualified namespace

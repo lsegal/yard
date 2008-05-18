@@ -126,6 +126,9 @@ module YARD
                 if open_block && open_block.first == level
                   open_block = false
                   level += 1
+                  
+                  block ||= TokenList.new
+                  block << tk if tk.class == TkNL
                 end
               end
             elsif tk.class != TkSPACE

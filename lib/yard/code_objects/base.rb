@@ -34,12 +34,13 @@ module YARD
         
         def new(namespace, name, *args, &block)
           if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
-            return new(Registry.resolve(namespace, $`, true), $1, *args, &block)
+            return new(P(namespace, $`), $1, *args, &block)
           end
           
           self.instances ||= {}
           keyname = "#{namespace && namespace.respond_to?(:path) ? namespace.path : ''}+#{name.inspect}"
           if obj = Registry.objects[keyname]
+            yield(obj) if block_given?
             obj
           else
             Registry.objects[keyname] = super(namespace, name, *args, &block)
@@ -190,32 +191,53 @@ module YARD
         @tags, @docstring = [], ""
 
         indent, last_indent = comments.first[/^\s*/].length, 0
-        tag_name, tag_klass, tag_buf = nil, nil, ""
+        orig_indent = 0
+        last_line = ""
+        tag_name, tag_klass, tag_buf, raw_buf = nil, nil, "", []
 
-        # Add an extra line to catch a meta directive on the last line
-        (comments+['']).each do |line|
+        (comments+['']).each_with_index do |line, index|
           indent = line[/^\s*/].length 
+          empty = (line =~ /^\s*$/ ? true : false)
+          done = comments.size == index
 
-          if (indent < last_indent && tag_name) || line == '' || line =~ meta_match
+          if tag_name && (((indent < orig_indent && !empty) || done) || 
+              (indent <= last_indent && line =~ meta_match))
             tag_method = "#{tag_name}_tag"
             if tag_name && Tags::Library.respond_to?(tag_method)
-              @tags << Tags::Library.send(tag_method, tag_buf.squeeze(" ")) 
+              if Tags::Library.method(tag_method).arity == 1
+                @tags << Tags::Library.send(tag_method, tag_buf) 
+              else
+                @tags << Tags::Library.send(tag_method, tag_buf, raw_buf.join("\n"))
+              end
+            else
+              YARD.logger.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
             end
-            tag_name, tag_buf = nil, ''
+            tag_name, tag_buf, raw_buf = nil, '', []
+            orig_indent = 0
           end
 
           # Found a meta tag
           if line =~ meta_match
+            orig_indent = indent
             tag_name, tag_buf = $1, $2 
-          elsif indent >= last_indent && tag_name
+          elsif tag_name && indent >= orig_indent && !empty
             # Extra data added to the tag on the next line
-            tag_buf << line
-          else
+            last_empty = last_line =~ /^\s*$/ ? true : false
+            
+            if last_empty
+              tag_buf << "\n\n" 
+              raw_buf << ''
+            end
+            
+            tag_buf << line.gsub(/^\s{#{indent}}/, last_empty ? '' : ' ')
+            raw_buf << line.gsub(/^\s{#{orig_indent}}/, '')
+          elsif !tag_name
             # Regular docstring text
             @docstring << line << "\n" 
           end
 
           last_indent = indent
+          last_line = line
         end
 
         # Remove trailing/leading whitespace / newlines

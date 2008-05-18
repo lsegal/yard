@@ -1,5 +1,5 @@
 module A
-  attr_reader :x
+  attr_writer :x
 end
 
 class B

@@ -14,17 +14,16 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       end
       parse_block(:namespace => klass)
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
-      if $1 == "self"
+      classname = $1
+      if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
+      elsif classname[0,1] =~ /[A-Z]/
+        parse_block(:namespace => P(namespace, classname), :scope => :class)
       else
-        YARD.logger.warn "in ClassHandler: Undocumentable class: '#{$1}'\n"
-                    "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
-        return 
+        raise YARD::Handlers::UndocumentableError, "class '#{klass}'"
       end
     else
-      YARD.logger.warn "in ClassHandler: Undocumentable class: #{statement.tokens}\n" +
-                  "\tin file '#{parser.file}':#{statement.tokens.first.line_no}"
-      return
+      raise YARD::Handlers::UndocumentableError, "class: #{statement.tokens}"
     end
   end
 end

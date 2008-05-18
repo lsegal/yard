@@ -78,10 +78,12 @@ module YARD
     end
     
     def paths
-      namespace.keys
+      namespace.keys.map {|k| k.to_s }
     end
       
     def at(path) path.to_s.empty? ? root : namespace[path] end
+    alias_method :[], :at
+    
     def root; namespace[:root] end
     def delete(object) namespace.delete(object.path) end
     def clear; initialize end

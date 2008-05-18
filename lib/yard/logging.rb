@@ -10,3 +10,5 @@ module YARD
     @logger
   end
 end
+
+def log; YARD.logger end

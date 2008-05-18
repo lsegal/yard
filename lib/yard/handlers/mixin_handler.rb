@@ -7,7 +7,7 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
       if mixin =~ /^[A-Z\:]/
         namespace.mixins << P(namespace, mixin)
       else
-        YARD.logger.warn "in #{self.class.name}: Undocumentable mixin #{mixin} for class #{namespace.path}"
+        raise YARD::Handlers::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
       end
     end
   end

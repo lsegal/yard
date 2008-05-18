@@ -1,3 +1,5 @@
+require 'stringio'
+
 module YARD
   module Parser
     # Responsible for parsing a source file into the namespace
@@ -53,10 +55,15 @@ module YARD
               find_handlers(stmt).each do |handler| 
                 begin
                   handler.new(self, stmt).process
+                rescue Handlers::UndocumentableError => undocerr
+                  log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
+                  log.warn "\tin file '#{file}':#{stmt.tokens.first.line_no}\n\n" + stmt.inspect + "\n"
                 rescue => e
-                  YARD.logger.error "#{handler.to_s} error in `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
-                  YARD.logger.error "Exception message: #{e.message}"
-                  YARD.logger.error e.backtrace[0..5].map {|x| "\n#{x}" }.join + "\n"
+                  log.error "#{handler.to_s}: Unhandled exception: #{e.message}"
+                  log.error "\tin `#{file}`:#{stmt.tokens.first.line_no}: #{stmt.tokens.to_s}"
+                  log.error ""
+                  log.error "Stack trace:"
+                  log.error e.backtrace[0..5].map {|x| "\n#{x}" }.join + "\n"
                 end
               end
             end
