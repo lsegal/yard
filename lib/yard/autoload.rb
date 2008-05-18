@@ -69,3 +69,5 @@ module YARD
     ConstantHandler, MethodHandler, MixinHandler, ModuleHandler, VisibilityHandler ]
   end
 end
+
+autoload :P, 'code_objects/proxy'
