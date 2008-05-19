@@ -21,7 +21,7 @@ describe YARD::Serializers::FileSystemSerializer do
       './foo_bar.html' => yard }.each do |path, obj|
       io = StringIO.new
       FileUtils.stub!(:mkdir_p)
-      File.should_receive(:new).with(path, 'w').and_yield(io)
+      File.should_receive(:open).with(path, 'w').and_yield(io)
       io.should_receive(:write).with("data")
     
       s = Serializers::FileSystemSerializer.new
@@ -35,7 +35,7 @@ describe YARD::Serializers::FileSystemSerializer do
     o3 = CodeObjects::ClassObject.new(o2, :PathName)
     obj = CodeObjects::MethodObject.new(o3, :foo)
 
-    File.stub!(:new)
+    File.stub!(:open)
     FileUtils.should_receive(:mkdir_p).once.with('./really/long/path_name')
     
     s = Serializers::FileSystemSerializer.new

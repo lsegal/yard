@@ -23,20 +23,22 @@ module YARD
         end
       end
 
-      attr_accessor :format, :template, :serializer
+      attr_accessor :format, :template, :serializer, :verifier
       attr_reader :options
       
       def initialize(opts = {})
         opts = SymbolHash[
           :format => :html,
           :template => :default,
-          :serializer => nil
+          :serializer => nil,
+          :verifier => nil
         ].update(opts)
         
         @options = opts
         self.format = options[:format]
         self.template = options[:template] 
         self.serializer = options[:serializer]
+        self.verifier = options[:verifier]
       end
       
       def generator_name
@@ -47,18 +49,31 @@ module YARD
         output = ""
         serializer.before_serialize if serializer
         list.flatten.each do |object|
+          if verifier.respond_to?(:call)
+            next if verifier.call(object).is_a?(FalseClass)
+          end
+          
           (sections_for(object) || []).each do |section|
             data = render_section(section, object)
-            serializer.serialize(object, data) if serializer
-            output << data
+            
+            if serializer
+              serializer.serialize(object, data) 
+            else
+              output << data
+            end
           end
         end
-        serializer.after_serialize if serializer
-        output
+        
+        if serializer
+          serializer.after_serialize 
+          nil
+        else
+          output
+        end
       end
       
       protected
-
+      
       def sections_for(object); [] end
 
       def render_section(section, object)
@@ -83,7 +98,7 @@ module YARD
           end
         rescue ArgumentError
           type = section <= Generators::Base ? "generator" : "section"
-          YARD.logger.debug "Ignoring invalid #{type} '#{section}' in #{self.class}"
+          log.warn "Ignoring invalid #{type} '#{section}' in #{self.class}"
           ""
         end
       end
@@ -95,14 +110,14 @@ module YARD
           begin
             Erubis::Eruby.new(File.read(f)).result(binding)
           rescue => e
-            YARD.logger.error "Failed to parse template `#{path}`:"
-            YARD.logger.error "Exception message: " + e.message
-            YARD.logger.error "\n" + e.backtrace[0..5].join("\n")
-            YARD.logger.error ""
+            log.error "Failed to parse template `#{path}`:"
+            log.error "Exception message: " + e.message
+            log.error "\n" + e.backtrace[0..5].join("\n")
+            log.error ""
             raise
           end
         else
-          YARD.logger.warn "Cannot find template `#{path}`"
+          log.warn "Cannot find template `#{path}`"
           ""
         end
       end

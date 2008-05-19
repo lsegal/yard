@@ -2,7 +2,11 @@ module YARD
   module Generators
     class TagsGenerator < Base
       def sections_for(object)
-        [:header, :params, :returns] #[:raises, :yields, :yieldparams]
+        if format == :html
+          [:header, :tags]
+        else
+          [:header, :params, :returns] #[:raises, :yields, :yieldparams]
+        end
       end
       
       protected

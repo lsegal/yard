@@ -1,0 +1,13 @@
+<% for tag_name in object.tags.map {|t| t.tag_name.to_s }.uniq.sort -%>
+  <h3><%= Tags::Library.labels[tag_name] %></h3>
+  <dl class='<%= tag_name %>'>
+    <% for tag in object.tags(tag_name) -%>
+      <dt>
+        <span class='type'><%= format_tag_types tag.types %></span>
+        <span class='name'><%= tag.name %></span>
+      </dt>
+      <dd>
+        <span class='desc'><%= tag.text %></span>
+      </dd>
+    <% end -%>
+<% end -%>

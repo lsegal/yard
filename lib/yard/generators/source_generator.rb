@@ -8,8 +8,7 @@ module YARD
       protected
       
       def format_code(text)
-        indent = text[/\n(\s*)/, 1].length - 2
-        text.gsub(/^(\s){#{indent}}/, '')
+        text
       end
     end
   end

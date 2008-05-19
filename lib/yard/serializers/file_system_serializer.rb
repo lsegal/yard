@@ -15,7 +15,7 @@ module YARD
         path = fs_path(object)
         FileUtils.mkdir_p File.join(*path.split('/')[0..-2])
         YARD.logger.debug "Serializing to #{path}"
-        File.new(path, "w") {|f| f.write data }
+        File.open(path, "w") {|f| f.write data }
       end
       
       protected

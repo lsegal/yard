@@ -7,9 +7,17 @@ module YARD
       
       protected
       
-      def format_signature(object)
-        sig = object.signature.gsub(/^def\s*/, '')
-        "#{object.visibility} #{sig}"
+      def format_def(object)
+        object.signature.gsub(/^def\s*/, '')
+      end
+      
+      def format_return_types(object)
+        typenames = "Object"
+        if object.has_tag?(:return)
+          types = object.tags(:return).map {|t| t.types }.flatten
+          typenames = types.size == 1 ? types.first : "[#{types.join(", ")}]"
+        end
+        typenames
       end
     end
   end
