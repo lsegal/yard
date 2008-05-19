@@ -4,6 +4,8 @@ require 'erubis'
 module YARD
   module Generators
     class Base
+      include Helpers::BaseHelper
+      
       class << self
         def template_paths
           @template_paths ||= [TEMPLATE_ROOT]
@@ -49,27 +51,23 @@ module YARD
         output = ""
         serializer.before_serialize if serializer
         list.flatten.each do |object|
+          objout = ""
+          
           if verifier.respond_to?(:call)
             next if verifier.call(object).is_a?(FalseClass)
           end
           
           (sections_for(object) || []).each do |section|
             data = render_section(section, object)
-            
-            if serializer
-              serializer.serialize(object, data) 
-            else
-              output << data
-            end
+            objout << data
           end
+
+          serializer.serialize(object, objout) if serializer && !objout.empty?
+          output << objout
         end
         
-        if serializer
-          serializer.after_serialize 
-          nil
-        else
-          output
-        end
+        serializer.after_serialize(output) if serializer
+        output
       end
       
       protected
