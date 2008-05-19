@@ -53,7 +53,7 @@ module YARD
           meth = meth.to_s
           send_name = meth.empty? ? "" : "_" + meth
           class_eval "def #{tag}_tag(text) Tag.parse_tag#{send_name}(#{tag.inspect}, text) end"
-          @labels ||= {}
+          @labels ||= SymbolHash.new
           @labels.update(tag => label)
         end
       
