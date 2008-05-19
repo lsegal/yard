@@ -1,4 +1,8 @@
 class SymbolHash < Hash
+  def initialize(symbolize_value = true)
+    @symbolize_value = symbolize_value
+  end
+  
   def self.[](*hsh)
     obj = new;
     if hsh.size == 1 && hsh.first.is_a?(Hash)
@@ -9,7 +13,9 @@ class SymbolHash < Hash
     obj
   end
   
-  def []=(key, value) super(key.to_sym, value.instance_of?(String) ? value.to_sym : value) end
+  def []=(key, value) 
+    super(key.to_sym, value.instance_of?(String) && @symbolize_value ? value.to_sym : value) 
+  end
   def [](key) super(key.to_sym) end
   def delete(key) super(key.to_sym) end
   def has_key?(key) super(key.to_sym) end

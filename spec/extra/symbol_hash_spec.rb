@@ -8,7 +8,7 @@ describe SymbolHash do
     h[:test].should == true
     h['test'].should == true
   end
-  
+    
   it "should #delete by key as String or Symbol" do
     h = SymbolHash.new
     h.keys.length.should == 0
@@ -42,6 +42,12 @@ describe SymbolHash do
     h['test1'].should == :hello
     h['test2'].should == "hello"
   end 
+  
+  it "should not symbolize value if SymbolHash.new(false) is created" do
+    h = SymbolHash.new(false)
+    h['test'] = "hello"
+    h[:test].should == "hello"
+  end
   
   it "should not symbolize value if it is not a String" do
     h = SymbolHash.new
