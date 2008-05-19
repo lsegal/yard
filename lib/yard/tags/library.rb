@@ -38,6 +38,10 @@ module YARD
         def default_factory
           @default_factory ||= DefaultFactory.new
         end
+        
+        def default_factory=(factory)
+          @default_factory = factory.is_a?(Class) ? factory.new : factory
+        end
       
         ## 
         # Sorts the labels lexically by their label name, often used when displaying
