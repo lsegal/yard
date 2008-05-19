@@ -3,9 +3,9 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 require 'stringio'
 
 describe YARD::Serializers::FileSystemSerializer do
-  it "should default the base path to the current directory" do
+  it "should default the base path to the 'doc/'" do
     obj = Serializers::FileSystemSerializer.new
-    obj.basepath.should == '.'
+    obj.basepath.should == 'doc'
   end
   
   it "should default the file extension to .html" do
@@ -17,14 +17,14 @@ describe YARD::Serializers::FileSystemSerializer do
     yard = CodeObjects::ClassObject.new(nil, :FooBar)
     meth = CodeObjects::MethodObject.new(yard, :baz)
     
-    { './foo_bar/baz.html' => meth,
-      './foo_bar.html' => yard }.each do |path, obj|
+    { 'foo/FooBar/baz.txt' => meth,
+      'foo/FooBar.txt' => yard }.each do |path, obj|
       io = StringIO.new
       FileUtils.stub!(:mkdir_p)
       File.should_receive(:open).with(path, 'w').and_yield(io)
       io.should_receive(:write).with("data")
     
-      s = Serializers::FileSystemSerializer.new
+      s = Serializers::FileSystemSerializer.new(:basepath => 'foo', :extension => 'txt')
       s.serialize(obj, "data")
     end
   end
@@ -36,7 +36,7 @@ describe YARD::Serializers::FileSystemSerializer do
     obj = CodeObjects::MethodObject.new(o3, :foo)
 
     File.stub!(:open)
-    FileUtils.should_receive(:mkdir_p).once.with('./really/long/path_name')
+    FileUtils.should_receive(:mkdir_p).once.with('doc/Really/Long/PathName')
     
     s = Serializers::FileSystemSerializer.new
     s.serialize(obj, "data")
