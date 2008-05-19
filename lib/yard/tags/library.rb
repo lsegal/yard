@@ -20,8 +20,8 @@ module YARD
     # be auto expanded into ruby code similar to what is shown in method #1. If you
     # do not provide a factory method to use, it will default to {Tag::parse_tag}
     # Example:
-    #   define_tag! :param, :with_types_and_name
-    #   define_tag! :author
+    #   define_tag :param, :with_types_and_name
+    #   define_tag :author
     #
     # The first line will expand to the code:
     #   def param_tag(text) Tag.parse_tag_with_types_and_name(text) end
@@ -29,10 +29,15 @@ module YARD
     # The second line will expand to:
     #   def author_tag(text) Tag.parse_tag(text) end
     #
-    # @see Library::define_tag!
-    module Library
+    # @see Library::define_tag
+    class Library
       class << self
         attr_reader :labels
+        attr_accessor :default_factory
+        
+        def default_factory
+          @default_factory ||= DefaultFactory.new
+        end
       
         ## 
         # Sorts the labels lexically by their label name, often used when displaying
@@ -49,27 +54,37 @@ module YARD
         #
         # @param tag<#to_s> the tag name to create
         # @param meth the {Tag} factory method to call when creating the tag
-        def self.define_tag!(label, tag, meth = "")
+        def define_tag(label, tag, meth = "")
           meth = meth.to_s
           send_name = meth.empty? ? "" : "_" + meth
-          class_eval "def #{tag}_tag(text) Tag.parse_tag#{send_name}(#{tag.inspect}, text) end"
-          @labels ||= SymbolHash.new
+          class_eval <<-eof
+            def #{tag}_tag(text) 
+              @factory.parse_tag#{send_name}(#{tag.inspect}, text) 
+            end
+          eof
+          
+          @labels ||= SymbolHash.new(false)
           @labels.update(tag => label)
+          tag
         end
-      
-        define_tag! "Parameters",       :param,       :with_types_and_name
-        define_tag! "Block Parameters", :yieldparam,  :with_types_and_name
-        define_tag! "Yields",           :yield
-        define_tag! "Returns",          :return,      :with_types
-        define_tag! "Deprecated",       :deprecated
-        define_tag! "Author",           :author
-        define_tag! "Raises",           :raise,       :with_name
-        define_tag! "See Also",         :see
-        define_tag! "Since",            :since
-        define_tag! "Version",          :version
-        define_tag! "API Visibility",   :api
-        define_tag! "Example",          :example
       end
+      
+      def initialize(factory = Library.default_factory)
+        @factory = factory
+      end
+
+      define_tag "Parameters",       :param,       :with_types_and_name
+      define_tag "Block Parameters", :yieldparam,  :with_types_and_name
+      define_tag "Yields",           :yield
+      define_tag "Returns",          :return,      :with_types
+      define_tag "Deprecated",       :deprecated
+      define_tag "Author",           :author
+      define_tag "Raises",           :raise,       :with_name
+      define_tag "See Also",         :see
+      define_tag "Since",            :since
+      define_tag "Version",          :version
+      define_tag "API Visibility",   :api
+      define_tag "Example",          :example
     end
   end
 end

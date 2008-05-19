@@ -208,12 +208,13 @@ module YARD
 
           if tag_name && (((indent < orig_indent && !empty) || done) || 
               (indent <= last_indent && line =~ meta_match))
+            tagfactory = Tags::Library.new
             tag_method = "#{tag_name}_tag"
-            if tag_name && Tags::Library.respond_to?(tag_method)
-              if Tags::Library.method(tag_method).arity == 1
-                @tags << Tags::Library.send(tag_method, tag_buf) 
+            if tag_name && tagfactory.respond_to?(tag_method)
+              if tagfactory.method(tag_method).arity == 1
+                @tags << tagfactory.send(tag_method, tag_buf) 
               else
-                @tags << Tags::Library.send(tag_method, tag_buf, raw_buf.join("\n"))
+                @tags << tagfactory.send(tag_method, tag_buf, raw_buf.join("\n"))
               end
             else
               YARD.logger.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"

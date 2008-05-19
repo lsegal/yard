@@ -14,6 +14,10 @@ module YARD
   end
   
   module Generators
+    module Helpers
+      autoload :BaseHelper,             'generators/helpers/base_helper'
+    end
+    
     autoload :Base,                     'generators/base'
     autoload :DeprecatedGenerator,      'generators/deprecated_generator'
     autoload :DocstringGenerator,       'generators/docstring_generator'
@@ -39,7 +43,7 @@ module YARD
 
   module Parser
     module RubyToken
-      require File.join(YARD::ROOT, 'parser/ruby_lex') # Too much to include manually
+      require File.join(YARD::ROOT, 'parser', 'ruby_lex') # Too much to include manually
     end
     
     autoload :SourceParser,   'parser/source_parser'
@@ -55,8 +59,9 @@ module YARD
   end
   
   module Tags
-    autoload :Library,  'tags/library'
-    autoload :Tag,      'tags/tag'
+    autoload :DefaultFactory, 'tags/default_factory'
+    autoload :Library,        'tags/library'
+    autoload :Tag,            'tags/tag'
   end
 
   autoload :Registry, 'registry'
@@ -71,4 +76,4 @@ module YARD
 end
 
 # P() needs to be loaded right away
-require File.join(YARD::ROOT, 'code_objects', 'proxy') 
+YARD::CodeObjects::Proxy
