@@ -26,4 +26,9 @@ describe YARD::Handlers::AliasHandler do
   it "should allow complex Ruby expressions after the alias parameters" do
     P(:B).aliases[P("B#t")].should == :inspect
   end
+  
+  it "should show up in #is_alias? for method" do
+    P("B#t").is_alias?.should == true 
+    P('B#r?').is_alias?.should == true
+  end
 end
