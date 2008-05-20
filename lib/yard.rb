@@ -18,7 +18,7 @@ end
 
 $:.unshift(YARD::ROOT)
 
-['logging', 'symbol_hash', 'autoload'].each do |file|
+['logging', 'autoload', 'symbol_hash', 'extra'].each do |file|
   require file
 end
 
