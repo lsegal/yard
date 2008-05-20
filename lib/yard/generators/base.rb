@@ -25,8 +25,10 @@ module YARD
         end
       end
 
-      attr_accessor :format, :template, :serializer, :verifier
+      attr_reader :format, :template, :verifier
+      attr_reader :serializer, :ignore_serializer
       attr_reader :options
+      attr_reader :current_object
       
       def initialize(opts = {})
         opts = SymbolHash[
@@ -37,10 +39,11 @@ module YARD
         ].update(opts)
         
         @options = opts
-        self.format = options[:format]
-        self.template = options[:template] 
-        self.serializer = options[:serializer]
-        self.verifier = options[:verifier]
+        @format = options[:format]
+        @template = options[:template] 
+        @serializer = options[:serializer] 
+        @ignore_serializer = options[:ignore_serializer]
+        @verifier = options[:verifier]
       end
       
       def generator_name
@@ -49,9 +52,10 @@ module YARD
 
       def generate(*list)
         output = ""
-        serializer.before_serialize if serializer
+        serializer.before_serialize if serializer && !ignore_serializer
         list.flatten.each do |object|
           objout = ""
+          @current_object = object
           
           if verifier.respond_to?(:call)
             next if verifier.call(object).is_a?(FalseClass)
@@ -62,11 +66,15 @@ module YARD
             objout << data
           end
 
-          serializer.serialize(object, objout) if serializer && !objout.empty?
+          if serializer && !ignore_serializer && !objout.empty?
+            serializer.serialize(object, objout) 
+          end
           output << objout
         end
         
-        serializer.after_serialize(output) if serializer
+        if serializer && !ignore_serializer
+          serializer.after_serialize(output) 
+        end
         output
       end
       
@@ -78,7 +86,7 @@ module YARD
         begin
           if section.is_a?(Class) && section <= Generators::Base
             opts = options.dup
-            opts.update(:serializer => nil)
+            opts.update(:ignore_serializer => true)
             sobj = section.new(opts)
             sobj.generate(object)
           elsif section.is_a?(Generators::Base)
