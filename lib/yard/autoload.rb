@@ -16,6 +16,7 @@ module YARD
   module Generators
     module Helpers
       autoload :BaseHelper,             'generators/helpers/base_helper'
+      autoload :HtmlHelper,             'generators/helpers/html_helper'
     end
     
     autoload :Base,                     'generators/base'

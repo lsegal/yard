@@ -4,8 +4,6 @@ require 'erubis'
 module YARD
   module Generators
     class Base
-      include Helpers::BaseHelper
-      
       class << self
         def template_paths
           @template_paths ||= [TEMPLATE_ROOT]
@@ -49,7 +47,12 @@ module YARD
       def generator_name
         self.class.to_s.split("::").last.gsub(/Generator$/, '').downcase
       end
-
+      
+      def before_section(object)
+        extend Helpers::BaseHelper
+        extend Helpers::HtmlHelper if format == :html
+      end
+      
       def generate(*list)
         output = ""
         serializer.before_serialize if serializer && !ignore_serializer
@@ -83,6 +86,8 @@ module YARD
       def sections_for(object); [] end
 
       def render_section(section, object)
+        before_section(object)
+        
         begin
           if section.is_a?(Class) && section <= Generators::Base
             opts = options.dup
@@ -106,6 +111,13 @@ module YARD
           type = section <= Generators::Base ? "generator" : "section"
           log.warn "Ignoring invalid #{type} '#{section}' in #{self.class}"
           ""
+        rescue => e
+          log.error "In generator #{self.class.name}, section #{section}:"
+          log.error "\tFailed to parse object: " + object.inspect
+          log.error "\tException message: " + e.message
+          log.error "\n" + e.backtrace[0..5].join("\n\t")
+          log.error ""
+          raise
         end
       end
       
@@ -116,9 +128,10 @@ module YARD
           begin
             Erubis::Eruby.new(File.read(f)).result(binding)
           rescue => e
-            log.error "Failed to parse template `#{path}`:"
-            log.error "Exception message: " + e.message
-            log.error "\n" + e.backtrace[0..5].join("\n")
+            log.error "In generator #{self.class.name}, rendering: #{path}:"
+            log.error "\tFailed to parse object: " + object.inspect
+            log.error "\tException message: " + e.message
+            log.error "\n" + e.backtrace[0..5].join("\n\t")
             log.error ""
             raise
           end
