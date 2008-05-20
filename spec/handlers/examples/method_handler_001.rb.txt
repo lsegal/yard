@@ -4,7 +4,9 @@ class Foo
   end
   def /(other) 'hi' end
 
-  def method1; end
+  def method1
+    def dynamic; end
+  end
  
   def self.method2; end
 

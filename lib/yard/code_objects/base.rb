@@ -26,8 +26,10 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
-      attr_accessor :source, :file, :line, :docstring
+      attr_accessor :source, :file, :line, :docstring, :dynamic
       attr_reader :tags
+      
+      def dynamic?; @dynamic end
       
       class << self
         attr_accessor :instances
@@ -154,7 +156,7 @@ module YARD
       #   doc.tag("return").text  # => "zero when nil"
       #
       # @param [#to_s] name the tag name to return data for
-      # @return [BaseTag] the first tag in the list of {#tags}
+      # @return [Tags::Tag] the first tag in the list of {#tags}
       def tag(name)
         @tags.find {|tag| tag.tag_name.to_s == name.to_s }
       end
@@ -163,7 +165,7 @@ module YARD
       # Returns a list of tags specified by +name+ or all tags if +name+ is not specified.
       #
       # @param name the tag name to return data for, or nil for all tags
-      # @return [Array<BaseTag>] the list of tags by the specified tag name
+      # @return [Array<Tags::Tag>] the list of tags by the specified tag name
       def tags(name = nil)
         return @tags if name.nil?
         @tags.select {|tag| tag.tag_name.to_s == name.to_s }

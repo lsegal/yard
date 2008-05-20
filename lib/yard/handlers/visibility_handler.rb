@@ -16,8 +16,9 @@ class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
         end
         
         if name
-          MethodObject.new(namespace, name, scope) do |obj|
-            obj.visibility = vis
+          MethodObject.new(namespace, name, scope) do |o|
+            o.visibility = vis
+            o.dynamic = true if owner != namespace
           end
         end
         

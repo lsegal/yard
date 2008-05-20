@@ -11,6 +11,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
         #o.source = statement
         o.line = statement.tokens.first.line_no
         o.file = parser.file
+        o.dynamic = true if owner != namespace
       end
       parse_block(:namespace => klass)
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/

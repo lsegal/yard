@@ -12,6 +12,7 @@ class YARD::Handlers::ConstantHandler < YARD::Handlers::Base
       o.docstring = statement.comments
       o.source = statement
       o.file = parser.file
+      o.dynamic = true if owner != namespace
     end
   end
 end

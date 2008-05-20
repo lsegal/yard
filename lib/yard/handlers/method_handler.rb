@@ -18,6 +18,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
       o.source = statement
       o.file = parser.file
       o.visibility = visibility
+      o.dynamic = true if owner != namespace
     end
     
     parse_block(:owner => obj) # mainly for yield/exceptions

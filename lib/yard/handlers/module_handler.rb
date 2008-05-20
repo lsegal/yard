@@ -8,6 +8,7 @@ class YARD::Handlers::ModuleHandler < YARD::Handlers::Base
       #o.source = statement
       o.line = statement.tokens.first.line_no
       o.file = parser.file
+      o.dynamic = true if owner != namespace
     end
     parse_block(:namespace => mod)
   end

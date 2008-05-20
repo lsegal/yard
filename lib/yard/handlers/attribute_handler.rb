@@ -45,6 +45,7 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
           o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
           o.file = parser.file
           o.line = statement.tokens.first.line_no
+          o.dynamic = true if owner != namespace
         end
       end
 
