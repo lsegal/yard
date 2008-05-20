@@ -12,8 +12,8 @@ module YARD
       end
       
       def serialize(object, data)
-        path = serialized_path(object)
-        FileUtils.mkdir_p File.join(*path.split('/')[0..-2])
+        path = File.join(basepath, *serialized_path(object))
+        FileUtils.mkdir_p File.dirname(path)
         YARD.logger.debug "Serializing to #{path}"
         File.open(path, "w") {|f| f.write data }
       end
@@ -30,7 +30,7 @@ module YARD
         #  p.gsub(/([a-z])([A-Z])/, '\1_\2').downcase 
         #end
         
-        File.join(basepath, *fspath)
+        File.join(fspath)
       end
     end
   end
