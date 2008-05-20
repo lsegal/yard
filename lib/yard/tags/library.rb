@@ -47,7 +47,7 @@ module YARD
         # Sorts the labels lexically by their label name, often used when displaying
         # the tags.
         # 
-        # @return <Array[Symbol],String> the sorted labels as an array of the tag name and label
+        # @return [Array<Symbol>, String] the sorted labels as an array of the tag name and label
         def sorted_labels
           labels.sort_by {|a| a.last }
         end
@@ -56,7 +56,7 @@ module YARD
         # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
         # regular {Tag::parse_tag} factory method if none is supplied.
         #
-        # @param tag<#to_s> the tag name to create
+        # @param [#to_s] tag the tag name to create
         # @param meth the {Tag} factory method to call when creating the tag
         def define_tag(label, tag, meth = "")
           meth = meth.to_s
