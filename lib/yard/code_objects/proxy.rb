@@ -68,11 +68,17 @@ module YARD
         end
       end
       
+      def <=>(other)
+        if other.respond_to? :path
+          path <=> other.path
+        else
+          false
+        end
+      end
+      
       def ==(other)
-        if other.class == Proxy
+        if other.respond_to? :path
           path == other.path
-        elsif other.is_a? CodeObjects::Base
-          to_obj == other
         else
           false
         end

@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::CodeObjects::CodeObjectList do
+  before { Registry.clear }
+  
   it "pushing a value should only allow CodeObjects::Base, String or Symbol" do
     list = CodeObjectList.new(nil)
     lambda { list.push(:hash => 1) }.should raise_error(ArgumentError)
@@ -20,7 +22,7 @@ describe YARD::CodeObjects::CodeObjectList do
     obj = ModuleObject.new(nil, :YARD)
     list = CodeObjectList.new(nil)
     
-    list << P(nil, :YARD)
+    list << P(:YARD)
     list << obj
     list.size.should == 1
     

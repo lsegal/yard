@@ -39,20 +39,18 @@ module YARD::CodeObjects
           opts[:scope].include?(o.scope)
       end
       
-      if opts[:mixins]
-        methnames = ourmeths.map {|o| o.name }
-        mixinmeths = mixins.inject([]) do |list, mixin|
-          if mixin.is_a?(Proxy)
-            list
-          else
-            list += mixin.meths(opts).reject do |o| 
-              methnames.include? o.name 
-            end
+      ourmeths + (opts[:mixins] ? mixin_meths(opts) : [])
+    end
+    
+    def mixin_meths(opts = {})
+      mixins.inject([]) do |list, mixin|
+        if mixin.is_a?(Proxy)
+          list
+        else
+          list += mixin.meths(opts).reject do |o| 
+            child(:name => o.name, :scope => o.scope)
           end
         end
-        mixinmeths + ourmeths
-      else
-        ourmeths
       end
     end
     

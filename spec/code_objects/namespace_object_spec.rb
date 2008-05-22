@@ -22,4 +22,26 @@ describe YARD::CodeObjects::NamespaceObject do
     obj = NamespaceObject.new(P(:String), :YARD)
     obj.meths.should be_empty
   end
+  
+  it "should not list included methods that are already defined in the namespace using #meths" do
+    a = ModuleObject.new(nil, :Mod)
+    ameth = MethodObject.new(a, :testing)
+    ameth2 = MethodObject.new(a, :foo, :class)
+    b = NamespaceObject.new(nil, :YARD)
+    bmeth = MethodObject.new(b, :testing)
+    bmeth2 = MethodObject.new(b, :foo)
+    b.mixins << a
+    
+    meths = b.meths
+    meths.should include(bmeth)
+    meths.should include(bmeth2)
+    meths.should include(ameth2)
+    meths.should_not include(ameth)
+    
+    meths = b.mixin_meths
+    meths.should include(ameth2)
+    meths.should_not include(ameth)
+    meths.should_not include(bmeth)
+    meths.should_not include(bmeth2)
+  end
 end

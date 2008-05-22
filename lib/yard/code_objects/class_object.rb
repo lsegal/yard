@@ -12,37 +12,42 @@ module YARD::CodeObjects
       if superclass.is_a? Proxy
         list << superclass unless superclass == P(:Object)
       elsif superclass.respond_to? :inheritance_tree
-        list += superclass.inheritance_tree(include_mods)
+        list += superclass.inheritance_tree
       end
       list
     end
     
     def meths(opts = {})
       opts = SymbolHash[:inheritance => true].update(opts)
-      list = super(opts)
-      
-      if opts[:inheritance]
-        inheritance_tree[1..-1].each do |superclass|
-          next if superclass.is_a?(Proxy)
-          list += superclass.meths(opts)
-        end
-      end
-      
-      list
+      super(opts) + (opts[:inheritance] ? inherited_meths(opts) : [])
     end
     
-    def constants(opts = {})
-      opts = SymbolHash[:inheritance => true].update(opts)
-      list = super
-      
-      if opts[:inheritance]
-        inheritance_tree[1..-1].each do |superclass|
-          next if superclass.is_a?(Proxy)
-          list += superclass.constants(opts)
+    def inherited_meths(opts = {})
+      inheritance_tree[1..-1].inject([]) do |list, superclass|
+        if superclass.is_a?(Proxy)
+          list
+        else
+          list += superclass.meths(opts).reject do |o|
+            child(:name => o.name, :scope => o.scope)
+          end
         end
       end
-      
-      list
+    end
+    
+    def constants(inheritance = true)
+      super() + (inheritance ? inherited_constants : [])
+    end
+    
+    def inherited_constants
+      inheritance_tree[1..-1].inject([]) do |list, superclass|
+        if superclass.is_a?(Proxy)
+          list
+        else
+          list += superclass.constants.reject do |o|
+            child(:name => o.name)
+          end
+        end
+      end
     end
     
     ##

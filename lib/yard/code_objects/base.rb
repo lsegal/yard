@@ -32,16 +32,23 @@ module YARD
       def dynamic?; @dynamic end
       
       class << self
-        attr_accessor :instances
-        
         def new(namespace, name, *args, &block)
           if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
             return new(P(namespace, $`), $1, *args, &block)
           end
           
-          self.instances ||= {}
-          keyname = "#{namespace && namespace.respond_to?(:path) ? namespace.path : ''}+#{name.inspect}"
-          if obj = Registry.objects[keyname]
+          keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
+          if self == RootObject
+            keyname = :root
+          elsif keyname.empty?
+            keyname = name.to_s
+          elsif self == MethodObject
+            keyname += (!args.first || args.first.to_sym == :instance ? ISEP : NSEP) + name.to_s
+          else
+            keyname += NSEP + name.to_s
+          end
+          
+          if self != RootObject && obj = Registry[keyname]
             yield(obj) if block_given?
             obj
           else
@@ -61,6 +68,14 @@ module YARD
         @docstring = ""
         self.namespace = namespace
         yield(self) if block_given?
+      end
+      
+      def ==(other)
+        if other.is_a?(Proxy)
+          path == other.path
+        else
+          super
+        end
       end
       
       def [](key)

@@ -29,7 +29,7 @@ module YARD
         namespace = Registry.root if namespace == :root || !namespace
         
         if name.to_s =~ /^::/
-          found = Registry.root.child(name.to_s[2..-1])
+          found = Registry.root.child(:name => name.to_s[2..-1])
           return found if found
         else
           while namespace
