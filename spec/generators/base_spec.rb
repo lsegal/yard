@@ -18,10 +18,18 @@ describe YARD::Generators::Base, 'Rendering' do
     base = Generators::Base.new
     file = File.join(YARD::TEMPLATE_ROOT, 'default', 'base', 'html', 'name.erb')
     File.should_receive(:file?).with(file).and_return(true)
-    File.should_receive(:read).with(file).and_return("")
+    File.should_receive(:read).with(file).and_return("output")
     base.stub!(:sections_for).and_return([:name])
-    base.generate(Registry.root)
+    base.generate(Registry.root).should == "output"
   end
     
-  it "should allow the user to add extra search paths to find a custom template"
+  it "should allow the user to add extra search paths to find a custom template" do
+    Generators::Base.register_template_path 'doc'
+    base = Generators::Base.new
+    file = File.join('doc', 'default', 'base', 'html', 'name.erb')
+    File.should_receive(:file?).with(file).and_return(true)
+    File.should_receive(:read).with(file).and_return("output")
+    base.stub!(:sections_for).and_return([:name])
+    base.generate(Registry.root).should == "output"
+  end
 end
