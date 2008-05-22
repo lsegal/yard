@@ -57,9 +57,9 @@ module YARD
           objout = ""
           @current_object = object
 
-          next if call_verifier.is_a?(FalseClass)
+          next if call_verifier(object).is_a?(FalseClass)
           
-          render_sections {|data| objout << data }
+          render_sections(object) {|data| objout << data }
 
           if serializer && !ignore_serializer && !objout.empty?
             serializer.serialize(object, objout) 
