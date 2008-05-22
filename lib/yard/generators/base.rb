@@ -57,6 +57,8 @@ module YARD
         output = ""
         serializer.before_serialize if serializer && !ignore_serializer
         list.flatten.each do |object|
+          next unless object && object.is_a?(CodeObjects::Base)
+          
           objout = ""
           @current_object = object
           
@@ -86,7 +88,7 @@ module YARD
       def sections_for(object); [] end
 
       def render_section(section, object)
-        before_section(object)
+        return if before_section(object).is_a?(FalseClass)
         
         begin
           if section.is_a?(Class) && section <= Generators::Base
@@ -98,7 +100,7 @@ module YARD
             sobj.generate(object)
           elsif section.is_a?(Symbol)
             if respond_to?(section)
-              send(section, object)
+              send(section, object) || ""
             else # treat it as a String
               render(object, section)
             end
@@ -121,8 +123,8 @@ module YARD
         end
       end
       
-      def render(object, file = nil)
-        path = template_path(file)
+      def render(object, file = nil, generator = generator_name)
+        path = template_path(file, generator)
         f = find_template(path)
         if f
           begin
@@ -141,8 +143,8 @@ module YARD
         end
       end
       
-      def template_path(meth)
-        File.join(template.to_s, generator_name, format.to_s, meth.to_s + ".erb")
+      def template_path(meth, generator = generator_name)
+        File.join(template.to_s, generator, format.to_s, meth.to_s + ".erb")
       end
       
       def find_template(path)
