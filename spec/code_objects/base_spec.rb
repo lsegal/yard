@@ -80,6 +80,13 @@ describe YARD::CodeObjects::Base do
     obj[:source].should == "unhello"
   end
   
+  it "should set attributes via attr= through method_missing" do
+    obj = CodeObjects::Base.new(:root, :YARD)
+    obj.something = 2
+    obj.something.should == 2
+    obj[:something].should == 2
+  end
+  
   it "should exist in the parent's #children after creation" do
     obj = ModuleObject.new(:root, :YARD)
     obj2 = MethodObject.new(obj, :testing)

@@ -7,23 +7,38 @@ module YARD::CodeObjects
       super
     end
     
-    def inheritance_tree(include_mods = true)
-      list = [self]
+    def inheritance_tree(include_mods = false)
+      list = [self] + (include_mods ? mixins : [])
       if superclass.is_a? Proxy
         list << superclass unless superclass == P(:Object)
-      else
+      elsif superclass.respond_to? :inheritance_tree
         list += superclass.inheritance_tree(include_mods)
       end
       list
     end
     
     def meths(opts = {})
-      opts = SymbolHash[:inherited_methods => false].update(opts)
+      opts = SymbolHash[:inheritance => true].update(opts)
       list = super(opts)
       
-      if opts[:inherited_methods]
+      if opts[:inheritance]
         inheritance_tree[1..-1].each do |superclass|
+          next if superclass.is_a?(Proxy)
           list += superclass.meths(opts)
+        end
+      end
+      
+      list
+    end
+    
+    def constants(opts = {})
+      opts = SymbolHash[:inheritance => true].update(opts)
+      list = super
+      
+      if opts[:inheritance]
+        inheritance_tree[1..-1].each do |superclass|
+          next if superclass.is_a?(Proxy)
+          list += superclass.constants(opts)
         end
       end
       

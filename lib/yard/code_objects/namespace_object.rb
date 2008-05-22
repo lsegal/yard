@@ -10,8 +10,17 @@ module YARD::CodeObjects
       super
     end
     
-    def child(name)
-      children.find {|o| o.name == name.to_sym }
+    def child(opts = {})
+      if !opts.is_a?(Hash)
+        children.find {|o| o.name == opts.to_sym }
+      else
+        opts = SymbolHash[opts]
+        children.find do |obj| 
+          opts.each do |meth, value|
+            break false if obj[meth] != value
+          end
+        end
+      end
     end
     
     def meths(opts = {})

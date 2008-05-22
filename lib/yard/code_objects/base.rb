@@ -78,6 +78,16 @@ module YARD
           instance_variable_set("@#{key}", value)
         end
       end
+      
+      def method_missing(meth, *args, &block)
+        if meth.to_s =~ /=$/
+          self[meth.to_s[0..-2]] = *args
+        elsif instance_variable_get("@#{meth}")
+          self[meth]
+        else
+          super
+        end
+      end
 
       ##
       # Attaches source code to a code object with an optional file location

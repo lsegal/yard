@@ -9,7 +9,7 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
       raise YARD::Handlers::UndocumentableError, "alias_method"
     end
     
-    old_obj = namespace.meths(:scope => scope).find {|o| o.name == old_meth }
+    old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = MethodObject.new(namespace, new_meth, scope) do |o|
       o.visibility = visibility
       o.scope = scope
