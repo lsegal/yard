@@ -48,11 +48,6 @@ module YARD
         self.class.to_s.split("::").last.gsub(/Generator$/, '').downcase
       end
       
-      def before_section(object)
-        extend Helpers::BaseHelper
-        extend Helpers::HtmlHelper if format == :html
-      end
-      
       def generate(*list)
         output = ""
         serializer.before_serialize if serializer && !ignore_serializer
@@ -61,15 +56,10 @@ module YARD
           
           objout = ""
           @current_object = object
+
+          next if call_verifier.is_a?(FalseClass)
           
-          if verifier.respond_to?(:call)
-            next if verifier.call(object).is_a?(FalseClass)
-          end
-          
-          (sections_for(object) || []).each do |section|
-            data = render_section(section, object)
-            objout << data
-          end
+          render_sections {|data| objout << data }
 
           if serializer && !ignore_serializer && !objout.empty?
             serializer.serialize(object, objout) 
@@ -85,10 +75,41 @@ module YARD
       
       protected
       
+      def call_verifier(object)
+        if verifier.is_a?(Symbol)
+          send(verifier, object)
+        elsif verifier.respond_to?(:call)
+          verifier.call(object)
+        end
+      end
+      
       def sections_for(object); [] end
+      
+      def before_section(object)
+        extend Helpers::BaseHelper
+        extend Helpers::HtmlHelper if format == :html
+      end
+
+      def render_sections(object, sections = nil)
+        sections ||= sections_for(object) || []
+
+        sections.each_with_index do |section, index|
+          next if section.is_a?(Array)
+          
+          data = if sections[index+1].is_a?(Array)
+            render_section(section, object) do
+              render_sections(object, sections[index+1])
+            end
+          else
+            render_section(section, object)
+          end
+          
+          yield data
+        end
+      end
 
       def render_section(section, object)
-        return if before_section(object).is_a?(FalseClass)
+        return "" if before_section(object).is_a?(FalseClass)
         
         begin
           if section.is_a?(Class) && section <= Generators::Base
