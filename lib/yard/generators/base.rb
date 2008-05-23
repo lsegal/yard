@@ -48,7 +48,7 @@ module YARD
         self.class.to_s.split("::").last.gsub(/Generator$/, '').downcase
       end
       
-      def generate(*list)
+      def generate(*list, &block)
         output = ""
         serializer.before_serialize if serializer && !ignore_serializer
         list.flatten.each do |object|
@@ -59,7 +59,7 @@ module YARD
 
           next if call_verifier(object).is_a?(FalseClass)
           
-          render_sections(object) {|data| objout << data }
+          objout << render_sections(object, &block) 
 
           if serializer && !ignore_serializer && !objout.empty?
             serializer.serialize(object, objout) 
@@ -93,22 +93,22 @@ module YARD
       def render_sections(object, sections = nil)
         sections ||= sections_for(object) || []
 
+        data = ""
         sections.each_with_index do |section, index|
           next if section.is_a?(Array)
           
-          data = if sections[index+1].is_a?(Array)
-            render_section(section, object) do
-              render_sections(object, sections[index+1])
+          data << if sections[index+1].is_a?(Array)
+            render_section(section, object) do |obj|
+              render_sections(obj, sections[index+1])
             end
           else
             render_section(section, object)
           end
-          
-          yield data
         end
+        data
       end
 
-      def render_section(section, object)
+      def render_section(section, object, &block)
         return "" if before_section(object).is_a?(FalseClass)
         
         begin
@@ -116,12 +116,12 @@ module YARD
             opts = options.dup
             opts.update(:ignore_serializer => true)
             sobj = section.new(opts)
-            sobj.generate(object)
+            sobj.generate(object, &block)
           elsif section.is_a?(Generators::Base)
-            sobj.generate(object)
+            sobj.generate(object, &block)
           elsif section.is_a?(Symbol)
             if respond_to?(section)
-              send(section, object) || ""
+              send(section, object, &block) || ""
             else # treat it as a String
               render(object, section)
             end

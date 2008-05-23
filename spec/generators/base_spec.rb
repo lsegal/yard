@@ -4,7 +4,18 @@ require 'stringio'
 include YARD::Generators
 
 describe YARD::Generators::Base, 'Section handling' do
-  it "should allow a list of sections to be returned by sections_for"
+  it "should allow a list of sections to be returned by sections_for" do
+    class XYZ < Generators::Base
+      def sections_for(object) [:meth1, [:submeth1, :submeth2, [:submeth1]]] end
+      def meth1(object) object.name.to_s + yield(object) end
+      def submeth1(object) object.name.to_s end
+      def submeth2(object) object.name.to_s + yield(P(:YARD)) end
+    end
+    
+    CodeObjects::Base.new(:root, :YARD)
+    XYZ.new.generate(Registry.root).should == "rootrootrootYARD"
+  end
+  
   it "should allow a heirarchical list of sections to be returned by sections_for"
   it "should yield sub section lists to the parent section"
 end
