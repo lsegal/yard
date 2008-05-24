@@ -4,8 +4,8 @@ require 'rdoc/markup/simple_markup/to_html'
 
 module YARD::Generators::Helpers
   module HtmlHelper
-    SMP = SM::SimpleMarkup.new
-    SMH = SM::ToHtml.new
+    SimpleMarkup = SM::SimpleMarkup.new
+    SimpleMarkupHtml = SM::ToHtml.new
     
     def h(text)
       CGI.escapeHTML(text)
@@ -17,7 +17,7 @@ module YARD::Generators::Helpers
     end
 
     def htmlify(text)
-      resolve_links SMP.convert(text, SMH).gsub(/\A<p>|<\/p>\Z/,'')
+      resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
     end
 
     def resolve_links(text)
@@ -51,7 +51,10 @@ module YARD::Generators::Helpers
     end
     
     def url_for(object, relative = true)
+      return '' if serializer.nil?
       objpath = serializer.serialized_path(object)
+      return '' if objpath.nil?
+      
       if relative
         from = serializer.serialized_path(current_object)
         urlencode File.relative_path(from, objpath)
