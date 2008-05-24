@@ -1,0 +1,15 @@
+<h1>Documentation for <%= object.path %></h1>
+
+<dl class="general_info">
+<% if object.file -%>
+  <dt>File:</dt>
+  <dd><%= object.file %></dd>
+<% end -%>
+  <dt>Type:</dt>
+  <dd>
+    <%= object.tag(:return) && object.tag(:return).type ? object.tag(:return).type : "undefined" %>
+  </dd>
+  <dt>Visibility:</dt>
+  <dd><%= object.visibility %></dd>
+</dl>
+

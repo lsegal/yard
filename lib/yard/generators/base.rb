@@ -121,7 +121,7 @@ module YARD
             sobj = section.new(opts)
             sobj.generate(object, &block)
           elsif section.is_a?(Generators::Base)
-            sobj.generate(object, &block)
+            section.generate(object, &block)
           elsif section.is_a?(Symbol)
             if respond_to?(section)
               send(section, object, &block) || ""
