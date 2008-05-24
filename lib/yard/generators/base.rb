@@ -99,7 +99,10 @@ module YARD
           
           data << if sections[index+1].is_a?(Array)
             render_section(section, object) do |obj|
-              render_sections(obj, sections[index+1])
+              tmp, @current_object = @current_object, obj
+              out = render_sections(obj, sections[index+1])
+              @current_object = tmp
+              out
             end
           else
             render_section(section, object)
@@ -123,10 +126,10 @@ module YARD
             if respond_to?(section)
               send(section, object, &block) || ""
             else # treat it as a String
-              render(object, section)
+              render(object, section, &block)
             end
           elsif section.is_a?(String)
-            render(object, section)
+            render(object, section, &block)
           else
             raise ArgumentError
           end
@@ -138,13 +141,13 @@ module YARD
           log.error "In generator #{self.class.name}, section #{section}:"
           log.error "\tFailed to parse object: " + object.inspect
           log.error "\tException message: " + e.message
-          log.error "\n" + e.backtrace[0..5].join("\n\t")
+          log.error "\n\t" + e.backtrace[0..5].join("\n\t")
           log.error ""
           raise
         end
       end
       
-      def render(object, file = nil, generator = generator_name)
+      def render(object, file = nil, generator = generator_name, &block)
         path = template_path(file, generator)
         f = find_template(path)
         if f
@@ -154,7 +157,7 @@ module YARD
             log.error "In generator #{self.class.name}, rendering: #{path}:"
             log.error "\tFailed to parse object: " + object.inspect
             log.error "\tException message: " + e.message
-            log.error "\n" + e.backtrace[0..5].join("\n\t")
+            log.error "\n\t" + e.backtrace[0..5].join("\n\t")
             log.error ""
             raise
           end

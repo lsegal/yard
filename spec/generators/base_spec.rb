@@ -8,7 +8,7 @@ describe YARD::Generators::Base, 'Section handling' do
   
   it "should allow a list of sections to be returned by sections_for" do
     base = Generators::Base.new
-    base.stub!(:sections_for).and_return([:meth1, :meth2, :meth3])
+    base.stub!(:sections_for).and_return [:meth1, :meth2, :meth3]
     base.should_receive(:meth1).and_return('a')
     base.should_receive(:meth2).and_return('b')
     base.should_receive(:meth3).and_return('c')
@@ -17,11 +17,12 @@ describe YARD::Generators::Base, 'Section handling' do
   
   it "should allow a heirarchical list of sections to be returned by sections_for" do
     base = Generators::Base.new
-    base.stub!(:sections_for).and_return([:meth1, [:meth2, :meth3]])
+    base.stub!(:sections_for).and_return [:meth1, [:meth2, :meth3]]
     base.should_receive(:meth1).and_return('a')
     base.should_not_receive(:meth2)
     base.should_not_receive(:meth3)
     base.generate(Registry.root).should == 'a'
+    base.current_object.should == Registry.root
   end    
   
   it "should yield sub section lists to the parent section" do
