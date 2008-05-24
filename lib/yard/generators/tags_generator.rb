@@ -3,7 +3,7 @@ module YARD
     class TagsGenerator < Base
       def sections_for(object)
         if format == :html
-          [:header, :tags, :footer]
+          [:header, [:tags]]
         else
           [:header, :params, :returns] #[:raises, :yields, :yieldparams]
         end
