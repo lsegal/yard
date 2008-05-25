@@ -156,7 +156,7 @@ module YARD
       alias_method :to_s, :path
       
       def inspect
-        "<#{path}>:#{type}"
+        "#<yardoc #{type} #{path}>"
       end
     
       def namespace=(obj)
