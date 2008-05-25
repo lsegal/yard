@@ -5,9 +5,17 @@ module YARD::CodeObjects
     def initialize(namespace, name, *args, &block)
       @children = CodeObjectList.new(self)
       @mixins = CodeObjectList.new(self)
-      @attributes = SymbolHash.new
+      @attributes = SymbolHash[:class => SymbolHash.new, :instance => SymbolHash.new]
       @aliases = {}
       super
+    end
+    
+    def class_attributes
+      attributes[:class]
+    end
+    
+    def instance_attributes 
+      attributes[:instance]
     end
     
     def child(opts = {})

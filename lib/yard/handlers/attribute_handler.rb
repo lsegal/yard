@@ -27,12 +27,14 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
 
     # Add all attributes
     symbols.each do |name| 
+      namespace.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
+      
       # Show their methods as well
-      [name, "#{name}="].each do |meth|
-        next unless (meth.to_s.include?("=") ? write : read)
+      {:read => name, :write => "#{name}="}.each do |type, meth|
+        next unless (type == :read ? read : write)
         
-        MethodObject.new(namespace, meth, scope) do |o|
-          if meth.to_s.include? "="
+        namespace.attributes[scope][name][type] = MethodObject.new(namespace, meth, scope) do |o|
+          if type == :write
             src = "def #{meth}(value)"
             full_src = "#{src}\n  @#{name} = value\nend"
             doc = "Sets the attribute +#{name}+\n@param value the value to set the attribute +#{name}+ to."
@@ -41,15 +43,13 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
             full_src = "#{src}\n  @#{name}\nend"
             doc = "Returns the value of attribute +#{name}+"
           end
-          o.source = full_src
+          o.source ||= full_src
           o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
           o.file = parser.file
           o.line = statement.tokens.first.line_no
           o.dynamic = true if owner != namespace
         end
       end
-
-      namespace.attributes.update name => { :read => read, :write => write }
     end
   end
 end

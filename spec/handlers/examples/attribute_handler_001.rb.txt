@@ -3,6 +3,10 @@ module A
 end
 
 class B
+  class << self
+    attr_accessor :z
+  end
+
   attr :a, true
   attr :a2, false
   attr :a3
@@ -10,4 +14,6 @@ class B
   attr_reader :b, :c, :d
   attr_writer :e
   attr_accessor 'f'
+
+  attr_accessor :z
 end

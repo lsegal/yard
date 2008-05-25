@@ -44,4 +44,22 @@ describe YARD::CodeObjects::NamespaceObject do
     meths.should_not include(bmeth)
     meths.should_not include(bmeth2)
   end
+  
+  it "should list class attributes using #class_attributes" do
+    a = NamespaceObject.new(nil, :Mod)
+    a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
+    a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
+    a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
+    a.class_attributes.keys.should include(:a)
+    a.class_attributes.keys.should_not include(:b)
+  end
+  
+  it "should list instance attributes using #instance attributes" do
+    a = NamespaceObject.new(nil, :Mod)
+    a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
+    a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
+    a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
+    a.instance_attributes.keys.should include(:a)
+    a.instance_attributes.keys.should include(:b)
+  end
 end

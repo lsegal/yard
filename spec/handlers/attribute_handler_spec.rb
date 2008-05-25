@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe YARD::Handlers::AttributeHandler do
   before { parse_file :attribute_handler_001, __FILE__ }
   
-  def read_write(namespace, name, read, write)
+  def read_write(namespace, name, read, write, scope = :instance)
     rname, wname = namespace.to_s+"#"+name.to_s, namespace.to_s+"#"+name.to_s+"="
     if read
       Registry.at(rname).should be_instance_of(CodeObjects::MethodObject) 
@@ -17,9 +17,9 @@ describe YARD::Handlers::AttributeHandler do
       Registry.at(wname).should == nil
     end     
     
-    attrs = Registry.at(namespace).attributes[name]
-    attrs[:read].should == read
-    attrs[:write].should == write
+    attrs = Registry.at(namespace).attributes[scope][name]
+    attrs[:read].should == (read ? Registry.at(rname) : nil)
+    attrs[:write].should == (write ? Registry.at(wname) : nil)
   end
   
   it "should parse attributes inside modules too" do
@@ -58,5 +58,10 @@ describe YARD::Handlers::AttributeHandler do
     Registry.at("B#b").docstring.should == "Docstring"
     Registry.at("B#c").docstring.should == "Docstring"
     Registry.at("B#d").docstring.should == "Docstring"
+  end
+  
+  it "should be able to differentiate between class and instance attributes" do
+    P('B').class_attributes[:z][:read].scope.should == :class
+    P('B').instance_attributes[:z][:read].scope.should == :instance
   end
 end
