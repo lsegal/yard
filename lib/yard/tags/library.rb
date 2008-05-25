@@ -78,7 +78,7 @@ module YARD
       end
 
       define_tag "Parameters",       :param,       :with_types_and_name
-      define_tag "Block Parameters", :yieldparam,  :with_types_and_name
+      define_tag "Yield Parameters", :yieldparam,  :with_types_and_name
       define_tag "Yields",           :yield
       define_tag "Returns",          :return,      :with_types
       define_tag "Deprecated",       :deprecated
