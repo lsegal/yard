@@ -4,16 +4,18 @@
   <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
     <div class="<%= scope %>">
       <h2><%= scope.capitalize %> Attributes</h2>
+      <ul>
       <% object.attributes[scope].sort_by {|o| o.to_s }.each do |name, rw| -%>
-        <p>
+        <li>
           <tt>
             <span class="name"><%= name %></span>
-            <% ['read', 'write'].select {|t| rw[t] }.map do |type| -%>
-              <span class="<%= type %>">[<%= linkify(rw[type], type) %>]</span>
-            <% end -%>
+            <span class="readwrite">
+              [<%= ['read', 'write'].map {|t| linkify(rw[t], t[0,1].upcase) if rw[t] }.compact.join(", ") -%>]
+            </span>
           </tt>
-        </p>
+        </li>
       <% end -%>
+      </ul>
     </div>
   <% end -%>
 </div>
