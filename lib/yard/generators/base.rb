@@ -21,6 +21,28 @@ module YARD
         def register_template_path(path)
           template_paths.unshift(path)
         end
+        
+        def before_section(*args)
+          if args.size == 1
+            before_section_filters.push [nil, args.first]
+          elsif args.size == 2
+            before_section_filters.push(args)
+          else
+            raise ArgumentError, "before_section takes a generator followed by a Proc/lambda or Symbol referencing the method name"
+          end
+        end
+        
+        def before_section_filters
+          @before_section_filters ||= []
+        end
+        
+        def before_generate(meth)
+          before_generate_filters.push(meth)
+        end
+        
+        def before_generate_filters
+          @before_generate_filters ||= []
+        end
       end
 
       attr_reader :format, :template, :verifier
@@ -58,6 +80,7 @@ module YARD
           @current_object = object
 
           next if call_verifier(object).is_a?(FalseClass)
+          next if run_before_generate(object).is_a?(FalseClass)
           
           objout << render_sections(object, &block) 
 
@@ -83,13 +106,40 @@ module YARD
         end
       end
       
+      def run_before_generate(object)
+        self.class.before_generate_filters.each do |meth|
+          meth = method(meth) if meth.is_a?(Symbol)
+          result = meth.call *(meth.arity == 0 ? [] : [object])
+          return result if result.is_a?(FalseClass)
+        end
+      end
+
+      def run_before_sections(section, object)
+        self.class.before_section_filters.each do |info|
+          result, sec, meth = false, *info
+          if sec.nil? || sec == section
+            meth = method(meth) if meth.is_a?(Symbol)
+            args = [section, object]
+            if meth.arity == 1 
+              args = [object]
+            elsif meth.arity == 0
+              args = []
+            end
+
+            result = meth.call(*args)
+          end
+          return result if result.is_a?(FalseClass)
+        end
+        before_section(section, object)
+      end
+      
       def sections_for(object); [] end
       
-      def before_section(object)
+      def before_section(section, object)
         extend Helpers::BaseHelper
         extend Helpers::HtmlHelper if format == :html
       end
-
+      
       def render_sections(object, sections = nil)
         sections ||= sections_for(object) || []
 
@@ -112,8 +162,6 @@ module YARD
       end
 
       def render_section(section, object, &block)
-        return "" if before_section(object).is_a?(FalseClass)
-        
         begin
           if section.is_a?(Class) && section <= Generators::Base
             opts = options.dup
@@ -122,14 +170,18 @@ module YARD
             sobj.generate(object, &block)
           elsif section.is_a?(Generators::Base)
             section.generate(object, &block)
-          elsif section.is_a?(Symbol)
-            if respond_to?(section)
-              send(section, object, &block) || ""
-            else # treat it as a String
+          elsif section.is_a?(Symbol) || section.is_a?(String)
+            return "" if run_before_sections(section, object).is_a?(FalseClass)
+
+            if section.is_a?(Symbol)
+              if respond_to?(section)
+                send(section, object, &block) || ""
+              else # treat it as a String
+                render(object, section, &block)
+              end
+            else
               render(object, section, &block)
             end
-          elsif section.is_a?(String)
-            render(object, section, &block)
           else
             raise ArgumentError
           end
