@@ -26,7 +26,16 @@ module YARD::Generators::Helpers
       end
     end
     
-    def linkify(object, title = nil, anchor = nil) 
+    def linkify(*args) 
+      # The :// character sequence exists in no valid object path but just about every URL scheme.
+      if args.first.is_a?(String) && args.first.include?("://")
+        link_url(*args)
+      else
+        link_object(*args)
+      end
+    end
+    
+    def link_object(object, title = nil, anchor = nil)
       object = P(current_object, object) if object.is_a?(String)
       return title || object.path unless serializer
 
