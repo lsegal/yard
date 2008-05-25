@@ -23,6 +23,14 @@ module YARD
         end
         typenames
       end
+      
+      def format_block(object)
+        if object.has_tag?(:yieldparam)
+          "{|" + object.tags(:yieldparam).map {|t| t.name }.join(", ") + "| ... }"
+        else
+          ""
+        end
+      end
     end
   end
 end
