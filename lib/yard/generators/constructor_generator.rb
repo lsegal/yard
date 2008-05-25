@@ -1,6 +1,10 @@
 module YARD
   module Generators
     class ConstructorGenerator < Base
+      def before_section(object)
+        constructor_method ? super : false
+      end
+       
       def sections_for(object) 
         [:header, [MethodGenerator]] 
       end
