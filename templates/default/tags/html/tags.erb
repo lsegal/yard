@@ -1,13 +1,20 @@
-<% for tag_name in object.tags.map {|t| t.tag_name.to_s }.uniq.sort -%>
-  <h3><%= Tags::Library.labels[tag_name] %></h3>
-  <dl class='<%= tag_name %>'>
-    <% for tag in object.tags(tag_name) -%>
-      <dt>
+<% if object.has_tag?(name) -%>
+<div class="<%= name %>">
+  <h3><%= defined?(label) ? label : YARD::Tags::Library.labels[name] %>:</h3>
+  <dl>
+  <% for tag in object.tags(name) -%>
+    <dt>
+      <% unless defined?(no_types) -%>
         <span class='type'><%= format_tag_types tag.types %></span>
+      <% end -%>
+      <% unless defined?(no_names) -%>
         <span class='name'><%= tag.name %></span>
-      </dt>
-      <dd>
-        <span class='desc'><%= htmlify tag.text %></span>
-      </dd>
-    <% end -%>
+      <% end -%>
+    </dt>
+    <dd>
+      <span class='desc'><%= htmlify tag.text %></span>
+    </dd>
+  <% end -%>
+  </dl>
+</div>
 <% end -%>
