@@ -175,7 +175,11 @@ module YARD
 
             if section.is_a?(Symbol)
               if respond_to?(section)
-                send(section, object, &block) || ""
+                if method(section).arity != 1
+                  send(section, &block)
+                else
+                  send(section, object, &block) 
+                end || ""
               else # treat it as a String
                 render(object, section, &block)
               end
@@ -183,38 +187,21 @@ module YARD
               render(object, section, &block)
             end
           else
-            raise ArgumentError
+            type = section.is_a?(String) || section.is_a?(Symbol) ? 'section' : 'generator'
+            log.warn "Ignoring invalid #{type} '#{section}' in #{self.class}"
+            ""
           end
-        rescue ArgumentError
-          type = section <= Generators::Base ? "generator" : "section"
-          log.warn "Ignoring invalid #{type} '#{section}' in #{self.class}"
-          ""
-        rescue => e
-          log.error "In generator #{self.class.name}, section #{section}:"
-          log.error "\tFailed to parse object: " + object.inspect
-          log.error "\tException message: " + e.message
-          log.error "\n\t" + e.backtrace[0..5].join("\n\t")
-          log.error ""
-          raise
         end
       end
       
-      def render(object, file = nil, generator = generator_name, &block)
-        path = template_path(file, generator)
-        f = find_template(path)
-        if f
-          begin
-            Erubis::Eruby.new(File.read(f)).result(binding)
-          rescue => e
-            log.error "In generator #{self.class.name}, rendering: #{path}:"
-            log.error "\tFailed to parse object: " + object.inspect
-            log.error "\tException message: " + e.message
-            log.error "\n\t" + e.backtrace[0..5].join("\n\t")
-            log.error ""
-            raise
-          end
+      def render(object, file = nil, locals = {}, &block)
+        _path = template_path(file, generator_name)
+        _f = find_template(_path)
+        if _f
+          __l = locals.map {|k,v| "#{k} = #{v.inspect}" }.join(";")
+          Erubis::Eruby.new("<% #{__l} %>" + File.read(_f)).result(binding)
         else
-          log.warn "Cannot find template `#{path}`"
+          log.warn "Cannot find template `#{_path}`"
           ""
         end
       end
