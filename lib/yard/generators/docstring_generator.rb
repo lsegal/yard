@@ -1,8 +1,14 @@
 module YARD
   module Generators
     class DocstringGenerator < Base
-      def sections_for(object) 
-        [:main] if object.docstring
+      before_section :main, :has_docstring?
+      
+      def sections_for(object) [:main] end
+      
+      protected
+      
+      def has_docstring?
+        !current_object.docstring.empty?
       end
     end
   end

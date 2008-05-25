@@ -1,10 +1,7 @@
 module YARD
   module Generators
     class MethodGenerator < Base
-      def before_section(object)
-        super
-        return false unless current_object.is_a?(CodeObjects::MethodObject)
-      end
+      before_generate :is_method?
       
       def sections_for(object) 
         [
@@ -15,6 +12,12 @@ module YARD
           TagsGenerator, 
           SourceGenerator
         ]
+      end
+      
+      protected
+      
+      def is_method?(object)
+        object.is_a?(CodeObjects::MethodObject)
       end
     end
   end
