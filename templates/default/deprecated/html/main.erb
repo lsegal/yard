@@ -1,7 +1,4 @@
-<div class="section <%= generator_name %>">
-  <h2>Deprecated Warning</h2>
-  <p>
-    This <%= object.type %> is deprecated<%= object.tag(:deprecated).text ? ": " + object.tag(:deprecated).text : "" %>.
-  </p>
-</div>
+<p class="section <%= generator_name %>">
+  <strong>Deprecated.</strong> <em><%= htmlify object.tag(:deprecated).text %></em>
+</p>
 
