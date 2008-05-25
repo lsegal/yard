@@ -19,12 +19,16 @@ module YARD
       autoload :HtmlHelper,             'generators/helpers/html_helper'
     end
     
+    autoload :AttributesGenerator,      'generators/attributes_generator'
     autoload :Base,                     'generators/base'
+    autoload :ClassGenerator,           'generators/class_generator'
     autoload :ConstructorGenerator,     'generators/constructor_generator'
     autoload :DeprecatedGenerator,      'generators/deprecated_generator'
     autoload :DocstringGenerator,       'generators/docstring_generator'
+    autoload :InheritanceGenerator,     'generators/inheritance_generator'
     autoload :MethodGenerator,          'generators/method_generator'
     autoload :MethodSignatureGenerator, 'generators/method_signature_generator'
+    autoload :MixinsGenerator,          'generators/mixins_generator'
     autoload :QuickDocGenerator,        'generators/quick_doc_generator'
     autoload :SourceGenerator,          'generators/source_generator'
     autoload :TagsGenerator,            'generators/tags_generator'

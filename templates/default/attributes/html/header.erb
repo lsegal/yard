@@ -1,0 +1,19 @@
+<div class="section <%= generator_name %>">
+  <h1>Attributes</h1>
+
+  <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
+    <div class="<%= scope %>">
+      <h2><%= scope.capitalize %> Attributes</h2>
+      <% object.attributes[scope].sort_by {|o| o.to_s }.each do |name, rw| -%>
+        <p>
+          <tt>
+            <span class="name"><%= name %></span>
+            <% ['read', 'write'].select {|t| rw[t] }.map do |type| -%>
+              <span class="<%= type %>">[<%= linkify(rw[type], type) %>]</span>
+            <% end -%>
+          </tt>
+        </p>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>

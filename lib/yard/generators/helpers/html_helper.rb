@@ -47,7 +47,7 @@ module YARD::Generators::Helpers
         link += "#" + urlencode(anchor.path)
       end
       
-      "<a href='#{link}' title='#{title}'>#{title}</a>"
+      link.empty? ? title : "<a href='#{link}' title='#{title}'>#{title}</a>"
     end
     
     def url_for(object, relative = true)
