@@ -26,38 +26,39 @@ module YARD::Generators::Helpers
       end
     end
     
-    def linkify(*args) 
-      # The :// character sequence exists in no valid object path but just about every URL scheme.
-      if args.first.is_a?(String) && args.first.include?("://")
-        link_url(*args)
-      else
-        link_object(*args)
-      end
-    end
-    
-    def link_object(object, title = nil, anchor = nil)
-      title = title.to_s if title
+    def link_object(object, otitle = nil, anchor = nil)
       object = P(current_object, object) if object.is_a?(String)
-      return title || object.path unless serializer
+      title = h(otitle ? otitle.to_s : object.path)
+      return title unless serializer
 
       if object.is_a?(YARD::CodeObjects::Proxy)
         log.warn "Cannot resolve link to #{object.path}. Missing file #{url_for(object, false)}."
-        return object.path 
+        return title
+      elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
+        # If the object is not a namespace object make it the anchor.
+        anchor, object = object, object.namespace
       end
       
-      title = h(title || object.path)
       link = url_for(object)
       
       case anchor
       when String, Symbol
         link += "#" + urlencode(anchor)
       when YARD::CodeObjects::Base
-        link += "#" + urlencode(anchor.name.to_s + "-" + anchor.type.to_s)
+        link += "#" + anchor_for(anchor)
       when YARD::CodeObjects::Proxy
         link += "#" + urlencode(anchor.path)
       end
       
       link.empty? ? title : "<a href='#{link}' title='#{title}'>#{title}</a>"
+    end
+    
+    def anchor_for(object)
+      if object.is_a?(YARD::CodeObjects::MethodObject)
+        urlencode("#{object.name}-#{object.scope}_#{object.type}")
+      else
+        urlencode("#{object.name}-#{object.type}")
+      end
     end
     
     def url_for(object, relative = true)
