@@ -8,7 +8,7 @@ module YARD
       protected
       
       def format_def(object)
-        object.signature.gsub(/^def\s*/, '')
+        object.signature.gsub(/^def\s*(?:.+?(?:\.|::)\s*)?/, '')
       end
       
       def format_return_types(object)

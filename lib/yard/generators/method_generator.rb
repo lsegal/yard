@@ -5,12 +5,14 @@ module YARD
       
       def sections_for(object) 
         [
-          :header, 
-          DeprecatedGenerator, 
-          DocstringGenerator, 
-          MethodSignatureGenerator, 
-          TagsGenerator, 
-          SourceGenerator
+          :header,
+          [
+            DeprecatedGenerator, 
+            MethodSignatureGenerator, 
+            DocstringGenerator, 
+            TagsGenerator, 
+            SourceGenerator
+          ]
         ]
       end
       
