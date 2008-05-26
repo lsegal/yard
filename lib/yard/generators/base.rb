@@ -115,8 +115,11 @@ module YARD
       end
 
       def run_before_sections(section, object)
+        result = before_section(section, object)
+        return result if result.is_a?(FalseClass)
+        
         self.class.before_section_filters.each do |info|
-          result, sec, meth = false, *info
+          result, sec, meth = nil, *info
           if sec.nil? || sec == section
             meth = method(meth) if meth.is_a?(Symbol)
             args = [section, object]
@@ -127,10 +130,13 @@ module YARD
             end
 
             result = meth.call(*args)
+            log.debug("Calling before section filter for %s with %s, result = %s" % [
+              section.inspect, object, result.is_a?(FalseClass) ? 'fail' : 'pass'
+            ])
           end
+
           return result if result.is_a?(FalseClass)
         end
-        before_section(section, object)
       end
       
       def sections_for(object); [] end
