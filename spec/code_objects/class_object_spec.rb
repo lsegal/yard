@@ -124,13 +124,13 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     consts.should include(P("SubYard::CONST3"))
   end
   
-  it "should count CONST2 once as part of SubYard" do
+  it "should not include an inherited constant if it is overridden by the object" do
     consts = P(:SubYard).constants
     consts.should include(P("SubYard::CONST2"))
     consts.should_not include(P("YARD::CONST2"))
   end
   
-  it "should count CONST4 once from SUPERYARD" do
+  it "should not include an inherited constant if it is overridden by another subclass" do
     consts = P(:SubYard).inherited_constants
     consts.should include(P("SUPERYARD::CONST4"))
     consts.should_not include(P("YARD::CONST4"))
