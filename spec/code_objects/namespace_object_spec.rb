@@ -45,6 +45,20 @@ describe YARD::CodeObjects::NamespaceObject do
     meths.should_not include(bmeth2)
   end
   
+  it "should not list methods overridden by another included module" do
+    a = ModuleObject.new(nil, :Mod)
+    ameth = MethodObject.new(a, :testing)
+    b = ModuleObject.new(nil, :Mod2)
+    bmeth = MethodObject.new(b, :testing)
+    c = NamespaceObject.new(nil, :YARD)
+    c.mixins << a
+    c.mixins << b
+    
+    meths = c.mixin_meths
+    meths.should_not include(ameth)
+    meths.should include(bmeth)
+  end
+  
   it "should list class attributes using #class_attributes" do
     a = NamespaceObject.new(nil, :Mod)
     a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }

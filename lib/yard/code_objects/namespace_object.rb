@@ -51,12 +51,13 @@ module YARD::CodeObjects
     end
     
     def mixin_meths(opts = {})
-      mixins.inject([]) do |list, mixin|
+      mixins.reverse.inject([]) do |list, mixin|
         if mixin.is_a?(Proxy)
           list
         else
           list += mixin.meths(opts).reject do |o| 
-            child(:name => o.name, :scope => o.scope)
+            child(:name => o.name, :scope => o.scope) || 
+              list.find {|o2| o2.name == o.name && o2.scope == o.scope }
           end
         end
       end
