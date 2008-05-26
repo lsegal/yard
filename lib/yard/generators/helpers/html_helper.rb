@@ -36,6 +36,7 @@ module YARD::Generators::Helpers
     end
     
     def link_object(object, title = nil, anchor = nil)
+      title = title.to_s if title
       object = P(current_object, object) if object.is_a?(String)
       return title || object.path unless serializer
 
@@ -51,7 +52,7 @@ module YARD::Generators::Helpers
       when String, Symbol
         link += "#" + urlencode(anchor)
       when YARD::CodeObjects::Base
-        link += "#" + urlencode(anchor.name + "-" + anchor.type)
+        link += "#" + urlencode(anchor.name.to_s + "-" + anchor.type.to_s)
       when YARD::CodeObjects::Proxy
         link += "#" + urlencode(anchor.path)
       end
