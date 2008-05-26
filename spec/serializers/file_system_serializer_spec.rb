@@ -44,7 +44,8 @@ describe YARD::Serializers::FileSystemSerializer do
       :+ => '_2B_i.html', 
       :- => '_2D_i.html', 
       :[]= => '_5B_5D_3D_i.html',
-      :<< => '_3C_3C_i.html'
+      :<< => '_3C_3C_i.html',
+      :>= => '_3E_3D_i.html'
     }.each do |meth, value|
       m.stub!(:name).and_return(meth)
       s.serialized_path(m).should == value
