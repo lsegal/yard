@@ -77,3 +77,53 @@ describe YARD::CodeObjects::NamespaceObject do
     a.instance_attributes.keys.should include(:b)
   end
 end
+
+describe YARD::CodeObjects::NamespaceObject, '#constants/#included_constants' do
+  before do
+    Registry.clear
+    
+    Parser::SourceParser.parse_string <<-eof
+      module A
+        CONST1 = 1
+        CONST2 = 2
+      end
+      
+      module B
+        CONST2 = -2
+        CONST3 = -3
+      end
+      
+      class C
+        CONST3 = 3
+        CONST4 = 4
+        
+        include A
+        include B
+      end
+    eof
+  end
+  
+  it "should list all included constants by default" do
+    consts = P(:C).constants
+    consts.should include(P('A::CONST1'))
+    consts.should include(P('C::CONST4'))
+  end
+  
+  it "should allow :included to be set to false to ignore included constants" do
+    consts = P(:C).constants(:included => false)
+    consts.should_not include(P('A::CONST1'))
+    consts.should include(P('C::CONST4'))
+  end
+  
+  it "should not list an included constant if it is defined in the object" do
+    consts = P(:C).constants
+    consts.should include(P('C::CONST3'))
+    consts.should_not include(P('B::CONST3'))
+  end
+  
+  it "should not list an included constant if it is shadowed by another included constant" do
+    consts = P(:C).included_constants
+    consts.should include(P('B::CONST2'))
+    consts.should_not include(P('A::CONST2'))
+  end
+end
