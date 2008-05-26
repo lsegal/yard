@@ -18,8 +18,8 @@ module YARD::CodeObjects
     end
     
     def meths(opts = {})
-      opts = SymbolHash[:inheritance => true].update(opts)
-      super(opts) + (opts[:inheritance] ? inherited_meths(opts) : [])
+      opts = SymbolHash[:inherited => true].update(opts)
+      super(opts) + (opts[:inherited] ? inherited_meths(opts) : [])
     end
     
     def inherited_meths(opts = {})
@@ -35,8 +35,9 @@ module YARD::CodeObjects
       end
     end
     
-    def constants(inheritance = true)
-      super() + (inheritance ? inherited_constants : [])
+    def constants(opts = {})
+      opts = SymbolHash[:inherited => true].update(opts)
+      super(opts) + (opts[:inherited] ? inherited_constants : [])
     end
     
     def inherited_constants
@@ -44,9 +45,8 @@ module YARD::CodeObjects
         if superclass.is_a?(Proxy)
           list
         else
-          list += superclass.constants(false).reject do |o|
-            child(:name => o.name) ||
-              list.find {|o2| o2.name == o.name }
+          list += superclass.constants.reject do |o|
+            child(:name => o.name) || list.find {|o2| o2.name == o.name }
           end
         end
       end

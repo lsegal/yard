@@ -35,7 +35,7 @@ module YARD::CodeObjects
       opts = SymbolHash[
         :visibility => [:public, :private, :protected],
         :scope => [:class, :instance],
-        :mixins => true
+        :included => true
       ].update(opts)
       
       opts[:visibility] = [opts[:visibility]].flatten
@@ -47,10 +47,10 @@ module YARD::CodeObjects
           opts[:scope].include?(o.scope)
       end
       
-      ourmeths + (opts[:mixins] ? mixin_meths(opts) : [])
+      ourmeths + (opts[:included] ? included_meths(opts) : [])
     end
     
-    def mixin_meths(opts = {})
+    def included_meths(opts = {})
       mixins.reverse.inject([]) do |list, mixin|
         if mixin.is_a?(Proxy)
           list
@@ -63,8 +63,22 @@ module YARD::CodeObjects
       end
     end
     
-    def constants
-      children.select {|o| o.is_a? ConstantObject }
+    def constants(opts = {})
+      opts = SymbolHash[:included => true].update(opts)
+      consts = children.select {|o| o.is_a? ConstantObject }
+      consts + (opts[:included] ? included_constants : [])
+    end
+    
+    def included_constants
+      mixins.reverse.inject([]) do |list, mixin|
+        if mixin.is_a?(Proxy)
+          list
+        else
+          list += mixin.constants.reject do |o| 
+            child(:name => o.name) || list.find {|o2| o2.name == o.name }
+          end
+        end
+      end
     end
     
     def cvars 

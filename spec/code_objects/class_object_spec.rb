@@ -56,8 +56,8 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should include(P("SuperYard::bar"))
   end
   
-  it "should allow :inheritance to be set to false" do
-    meths = P(:YARD).meths(:inheritance => false)
+  it "should allow :inherited to be set to false" do
+    meths = P(:YARD).meths(:inherited => false)
     meths.should include(P("YARD#mymethod"))
     meths.should_not include(P("SuperYard#foo"))
     meths.should_not include(P("SuperYard#foo2"))
@@ -119,7 +119,7 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
   end
   
   it "should not list inherited constants if turned off" do
-    consts = P(:SubYard).constants(false)
+    consts = P(:SubYard).constants(:inherited => false)
     consts.should_not include(P("YARD::CONST1"))
     consts.should include(P("SubYard::CONST3"))
   end

@@ -54,8 +54,8 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should_not include(P("SomeMod#mixmethod"))
   end
   
-  it "should allow :mixins to be set" do
-    meths = @yard.meths(:mixins => false)
+  it "should allow :included to be set" do
+    meths = @yard.meths(:included => false)
     meths.should_not include(P("SomeMod#mixmethod"))
     meths.should include(P("YARD#foo"))
     meths.should include(P("YARD#foo2"))

@@ -38,7 +38,7 @@ describe YARD::CodeObjects::NamespaceObject do
     meths.should include(ameth2)
     meths.should_not include(ameth)
     
-    meths = b.mixin_meths
+    meths = b.included_meths
     meths.should include(ameth2)
     meths.should_not include(ameth)
     meths.should_not include(bmeth)
@@ -54,7 +54,7 @@ describe YARD::CodeObjects::NamespaceObject do
     c.mixins << a
     c.mixins << b
     
-    meths = c.mixin_meths
+    meths = c.included_meths
     meths.should_not include(ameth)
     meths.should include(bmeth)
   end
