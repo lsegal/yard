@@ -26,34 +26,30 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
   before do 
     Registry.clear 
     
-    # setup the object space:
-    # 
-    #   SuperYard:class
-    #   SuperYard#foo:method
-    #   SuperYard#foo2:method
-    #   SuperYard#bar:method
-    #   SuperYard::bar:method
-    #   YARD#mymethod:method
-    #   YARD#bar:method
-    # 
-    @superyard = ClassObject.new(:root, :SuperYard)
-    @superyard.superclass = P(:String)
-    MethodObject.new(@superyard, :foo)
-    MethodObject.new(@superyard, :foo2) do |o|
-      o.visibility = :protected
-    end
-    MethodObject.new(@superyard, :bar, :class) do |o|
-      o.visibility = :private
-    end
-    MethodObject.new(@superyard, :bar)
-    @yard = ClassObject.new(:root, :YARD)
-    @yard.superclass = @superyard
-    MethodObject.new(@yard, :bar)
-    MethodObject.new(@yard, :mymethod)
+    Parser::SourceParser.parse_string <<-eof
+      class SuperYard < String
+        def foo; end
+        def foo2; end
+        def bar; end
+        def middle; end
+        protected :foo2
+        private
+        def self.bar; end
+      end
+      
+      class MiddleYard < SuperYard
+        def middle; end
+      end
+      
+      class YARD < MiddleYard
+        def mymethod; end
+        def bar; end
+      end
+    eof
   end
   
   it "should show inherited methods by default" do
-    meths = @yard.meths
+    meths = P(:YARD).meths
     meths.should include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
@@ -61,7 +57,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
   end
   
   it "should allow :inheritance to be set to false" do
-    meths = @yard.meths(:inheritance => false)
+    meths = P(:YARD).meths(:inheritance => false)
     meths.should include(P("YARD#mymethod"))
     meths.should_not include(P("SuperYard#foo"))
     meths.should_not include(P("SuperYard#foo2"))
@@ -69,16 +65,22 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
   end
   
   it "should not show overridden methods" do 
-    meths = @yard.meths
+    meths = P(:YARD).meths
     meths.should include(P("YARD#bar"))
     meths.should_not include(P("SuperYard#bar"))
     
-    meths = @yard.inherited_meths
+    meths = P(:YARD).inherited_meths
     meths.should_not include(P("YARD#bar"))
     meths.should_not include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
     meths.should include(P("SuperYard::bar"))
+  end
+  
+  it "should not show inherited methods overridden by other subclasses" do
+    meths = P(:YARD).inherited_meths
+    meths.should include(P('MiddleYard#middle'))
+    meths.should_not include(P('SuperYard#middle'))
   end
 end
 
@@ -90,9 +92,14 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
       class YARD
         CONST1 = 1
         CONST2 = "hello"
+        CONST4 = 0
       end
       
-      class SubYard < YARD
+      class SUPERYARD < YARD
+        CONST4 = 5
+      end
+      
+      class SubYard < SUPERYARD
         CONST2 = "hi"
         CONST3 = "foo"
       end
@@ -121,6 +128,12 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     consts = P(:SubYard).constants
     consts.should include(P("SubYard::CONST2"))
     consts.should_not include(P("YARD::CONST2"))
+  end
+  
+  it "should count CONST4 once from SUPERYARD" do
+    consts = P(:SubYard).inherited_constants
+    consts.should include(P("SUPERYARD::CONST4"))
+    consts.should_not include(P("YARD::CONST4"))
   end
 end
   
