@@ -28,7 +28,8 @@ module YARD::CodeObjects
           list
         else
           list += superclass.meths(opts).reject do |o|
-            child(:name => o.name, :scope => o.scope)
+            child(:name => o.name, :scope => o.scope) ||
+              list.find {|o2| o2.name == o.name && o2.scope == o.scope }
           end
         end
       end
@@ -43,8 +44,9 @@ module YARD::CodeObjects
         if superclass.is_a?(Proxy)
           list
         else
-          list += superclass.constants.reject do |o|
-            child(:name => o.name)
+          list += superclass.constants(false).reject do |o|
+            child(:name => o.name) ||
+              list.find {|o2| o2.name == o.name }
           end
         end
       end
