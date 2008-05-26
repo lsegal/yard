@@ -3,31 +3,21 @@ require 'rake/gempackagetask'
 require 'spec'
 require 'spec/rake/spectask'
 
-SPEC = Gem::Specification.new do |s|
-  s.name        = "yard"
-  s.version     = "0.2.1"
-  s.date        = "2007-05-20"
-  s.author      = "Loren Segal"
-  s.email       = "lsegal@soen.ca"
-  s.homepage    = "http://yard.soen.ca"
-  s.platform    = Gem::Platform::RUBY
-  s.summary     = "A documentation tool for consistent and usable documentation in Ruby." 
-  s.files       = Dir.glob("{bin,lib,test,templates}/**/*") + ['LICENSE.txt', 'README.txt', 'help.pdf']
-  s.executables = [ 'yardoc', 'yri', 'yard-graph' ]
-  s.add_dependency 'erubis' 
-  s.has_rdoc    = false
-end
-  
+WINDOWS = (PLATFORM =~ /win32|cygwin/ ? true : false) rescue false
+SUDO = WINDOWS ? '' : 'sudo'
+
 task :default => :specs
 
+load 'yard.gemspec'
 Rake::GemPackageTask.new(SPEC) do |pkg|
+  pkg.gem_spec = SPEC
   pkg.need_zip = true
   pkg.need_tar = true
 end
 
-task :install do 
-  puts(install = "sudo gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local")
-  `rake gem && #{install}`
+desc "Install the gem locally"
+task :install => :package do 
+  sh "#{SUDO} gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local"
 end
 
 desc "Run all specs"
