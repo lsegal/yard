@@ -1,0 +1,6 @@
+<div class="inherited">
+  <% inherited_constants_by_class do |klass, consts| -%>
+    <h1>Constants Inherited from <%= linkify klass %></h1>
+    <p><%= consts.map {|c| linkify(c, c.name) }.join(", ") %></p>
+  <% end -%>
+</div>

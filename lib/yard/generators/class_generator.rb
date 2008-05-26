@@ -9,6 +9,7 @@ module YARD
             MixinsGenerator, 
             DocstringGenerator, 
             AttributesGenerator, 
+            ConstantsGenerator,
             ConstructorGenerator
           ]
         ]

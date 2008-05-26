@@ -22,6 +22,7 @@ module YARD
     autoload :AttributesGenerator,      'generators/attributes_generator'
     autoload :Base,                     'generators/base'
     autoload :ClassGenerator,           'generators/class_generator'
+    autoload :ConstantsGenerator,       'generators/constants_generator'
     autoload :ConstructorGenerator,     'generators/constructor_generator'
     autoload :DeprecatedGenerator,      'generators/deprecated_generator'
     autoload :DocstringGenerator,       'generators/docstring_generator'
