@@ -18,7 +18,7 @@ SPEC = Gem::Specification.new do |s|
   s.has_rdoc    = false
 end
   
-task :default => :gem
+task :default => :specs
 
 Rake::GemPackageTask.new(SPEC) do |pkg|
   pkg.need_zip = true
