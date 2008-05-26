@@ -10,6 +10,8 @@ module YARD::Generators::Helpers
     end
 
     def link_object(object, title = nil)
+      return title if title
+      
       case object
       when YARD::CodeObjects::Base, YARD::CodeObjects::Proxy
         object.path
