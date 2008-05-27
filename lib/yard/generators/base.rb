@@ -130,7 +130,7 @@ module YARD
             end
 
             result = meth.call(*args)
-            log.debug("Calling before section filter for %s%s with %s, result = %s" % [
+            log.debug("Calling before section filter for %s%s with `%s`, result = %s" % [
               self.class.to_s.split("::").last, section.inspect, object, 
               result.is_a?(FalseClass) ? 'fail' : 'pass'
             ])
