@@ -9,11 +9,11 @@ module YARD
       SimpleMarkupHtml = SM::ToHtml.new
     
       def h(text)
-        CGI.escapeHTML(text)
+        CGI.escapeHTML(text.to_s)
       end
     
       def urlencode(text)
-        CGI.escape(text)
+        CGI.escape(text.to_s)
       end
 
       def htmlify(text)
