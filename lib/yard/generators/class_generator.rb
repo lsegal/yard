@@ -10,7 +10,10 @@ module YARD
             DocstringGenerator, 
             AttributesGenerator, 
             ConstantsGenerator,
-            ConstructorGenerator
+            ConstructorGenerator,
+            MethodSummaryGenerator.new(options, :ignore_serializer => true, 
+              :scope => :instance, :visibility => :public
+            )
           ]
         ]
       end
