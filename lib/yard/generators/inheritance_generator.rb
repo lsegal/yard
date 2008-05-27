@@ -8,6 +8,7 @@ module YARD
       protected
       
       def has_inheritance_tree?(object)
+        return false unless object.is_a?(CodeObjects::ClassObject)
         object.inheritance_tree.size > 1
       end
     end

@@ -20,6 +20,7 @@ module YARD
       end
       
       def has_inherited_constants?(object)
+        return false unless object.is_a?(CodeObjects::ClassObject)
         object.inherited_constants.size > 0
       end
       
