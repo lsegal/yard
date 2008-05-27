@@ -44,6 +44,7 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
             doc = "Returns the value of attribute +#{name}+"
           end
           o.source ||= full_src
+          o.signature ||= src
           o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
           o.file = parser.file
           o.line = statement.tokens.first.line_no
