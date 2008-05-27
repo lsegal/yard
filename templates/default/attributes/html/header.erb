@@ -8,7 +8,7 @@
       <% object.attributes[scope].sort_by {|o| o.to_s }.each do |name, rw| -%>
         <li>
           <tt>
-            <span class="name"><%= name %></span>
+            <span class="name"><%= h name %></span>
             <span class="readwrite">
               [<%= ['read', 'write'].map {|t| linkify(rw[t], t[0,1].upcase) if rw[t] }.compact.join(", ") -%>]
             </span>

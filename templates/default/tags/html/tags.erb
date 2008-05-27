@@ -8,7 +8,7 @@
         <span class='type'><%= format_tag_types tag.types %></span>
       <% end -%>
       <% unless defined?(no_names) -%>
-        <span class='name'><%= tag.name %></span>
+        <span class='name'><%= h tag.name %></span>
       <% end -%>
     </dt>
     <dd>

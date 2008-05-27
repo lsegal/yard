@@ -2,8 +2,8 @@
   <h1>Constants</h1>
   <dl>
     <% object.constants(:included => false, :inherited => false).sort_by {|c| c.name.to_s }.each do |const| %>
-      <dt id="<%= anchor_for(const) %>"><%= const.name %></dt>
-      <dd><%= const.source.gsub(/\A.+?\=\s*/, '') %></dd>
+      <dt id="<%= anchor_for(const) %>"><%= h const.name %></dt>
+      <dd><%= h const.source.gsub(/\A.+?\=\s*/, '') %></dd>
     <% end -%>
   </dl>
 </div>
