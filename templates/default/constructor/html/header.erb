@@ -2,7 +2,7 @@
 <h1>Constructor Summary</h1>
 <% if constructor_method_inherited? -%>
   <p class="inherited_msg">
-    This class inherits a constructor from <%= linkify constructor_method.namespace %>.
+    This class inherits a constructor from <%= linkify constructor_method, constructor_method.namespace.path %>.
   </p>
 <% else -%>
   <%= yield constructor_method %>

@@ -1,0 +1,6 @@
+<div class="included">
+  <% included_constants_by_class do |klass, consts| -%>
+    <h1>Constants Included from <%= linkify klass %></h1>
+    <p><%= consts.sort_by {|c| c.name.to_s }.map {|c| linkify(c, c.name) }.join(", ") %></p>
+  <% end -%>
+</div>
