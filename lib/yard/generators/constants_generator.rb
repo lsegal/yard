@@ -48,11 +48,11 @@ module YARD
         end
       end
 
-      # @yield [mixin, constlist] 
+      # @yield [module, constlist] 
       #   Yields a the list of methods pertaining to a module
       #   in the module order.
       # 
-      # @yieldparam [CodeObjects::ClassObject] mixin 
+      # @yieldparam [CodeObjects::ModuleObject] module 
       #   The module the constants belong to
       # 
       # @yieldparam [Array<CodeObjects::ConstantObject>] consts
