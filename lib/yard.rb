@@ -6,7 +6,12 @@ module YARD
   def self.parse(paths = "**/*.rb", level = Logger::INFO)
     old_level, YARD.logger.level = YARD.logger.level, level
     
-    files = Dir[File.join(Dir.pwd, paths)]
+    if paths.is_a?(Array)
+      files = paths.map {|p| Dir[p] }.flatten
+    else
+      files = Dir[File.join(Dir.pwd, paths)]
+    end
+    
     files.each do |file|
       YARD.logger.debug("Processing #{file}")
       YARD::Parser::SourceParser.parse(file)
