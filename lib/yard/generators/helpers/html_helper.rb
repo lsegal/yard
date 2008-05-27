@@ -2,75 +2,77 @@ require 'cgi'
 require 'rdoc/markup/simple_markup'
 require 'rdoc/markup/simple_markup/to_html'
 
-module YARD::Generators::Helpers
-  module HtmlHelper
-    SimpleMarkup = SM::SimpleMarkup.new
-    SimpleMarkupHtml = SM::ToHtml.new
+module YARD
+  module Generators::Helpers
+    module HtmlHelper
+      SimpleMarkup = SM::SimpleMarkup.new
+      SimpleMarkupHtml = SM::ToHtml.new
     
-    def h(text)
-      CGI.escapeHTML(text)
-    end
+      def h(text)
+        CGI.escapeHTML(text)
+      end
     
-    def urlencode(text)
-      #CGI.escape(text)
-      text
-    end
+      def urlencode(text)
+        CGI.escape(text)
+      end
 
-    def htmlify(text)
-      resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
-    end
+      def htmlify(text)
+        resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
+      end
 
-    def resolve_links(text)
-      text.gsub(/\{(\S+)\}/) do 
-        "<tt>" + linkify(P(current_object, $1)) + "</tt>" 
+      def resolve_links(text)
+        text.gsub(/\{(\S+)\}/) do 
+          "<tt>" + linkify(P(current_object, $1)) + "</tt>" 
+        end
       end
-    end
     
-    def link_object(object, otitle = nil, anchor = nil)
-      object = P(current_object, object) if object.is_a?(String)
-      title = h(otitle ? otitle.to_s : object.path)
-      return title unless serializer
+      def link_object(object, otitle = nil, anchor = nil)
+        object = P(current_object, object) if object.is_a?(String)
+        title = h(otitle ? otitle.to_s : object.path)
+        return title unless serializer
 
-      if object.is_a?(YARD::CodeObjects::Proxy)
-        log.warn "Cannot resolve link to #{object.path}. Missing file #{url_for(object, false)}."
-        return title
-      elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
-        # If the object is not a namespace object make it the anchor.
-        anchor, object = object, object.namespace
+        if object.is_a?(CodeObjects::Proxy)
+          log.warn "Cannot resolve link to #{object.path}. Missing file #{url_for(object, false)}."
+          return title
+        end
+      
+        link = url_for(object, anchor)
+        link ? "<a href='#{link}' title='#{title}'>#{title}</a>" : title
       end
-      
-      link = url_for(object)
-      
-      case anchor
-      when String, Symbol
-        link += "#" + urlencode(anchor)
-      when YARD::CodeObjects::Base
-        link += "#" + anchor_for(anchor)
-      when YARD::CodeObjects::Proxy
-        link += "#" + urlencode(anchor.path)
-      end
-      
-      link.empty? ? title : "<a href='#{link}' title='#{title}'>#{title}</a>"
-    end
     
-    def anchor_for(object)
-      if object.is_a?(YARD::CodeObjects::MethodObject)
-        urlencode("#{object.name}-#{object.scope}_#{object.type}")
-      else
-        urlencode("#{object.name}-#{object.type}")
+      def anchor_for(object)
+        urlencode case object
+        when CodeObjects::MethodObject
+          "#{object.name}-#{object.scope}_#{object.type}"
+        when CodeObjects::Base
+          "#{object.name}-#{object.type}"
+        when CodeObjects::Proxy
+          object.path
+        else
+          object.to_s
+        end
       end
-    end
     
-    def url_for(object, relative = true)
-      return '' if serializer.nil?
-      objpath = serializer.serialized_path(object)
-      return '' if objpath.nil?
+      def url_for(object, anchor = nil, relative = true)
+        link = nil
+        return link unless serializer
+
+        if object.is_a?(CodeObjects::Base) && !object.is_a?(CodeObjects::NamespaceObject)
+          # If the object is not a namespace object make it the anchor.
+          anchor, object = object, object.namespace
+        end
+
+        objpath = serializer.serialized_path(object)
+        return link unless objpath
       
-      if relative
-        from = serializer.serialized_path(current_object)
-        urlencode File.relative_path(from, objpath)
-      else
-        urlencode(objpath)
+        if relative
+          from = serializer.serialized_path(current_object)
+          link = File.relative_path(from, objpath)
+        else
+          link = objpath
+        end
+      
+        link + (anchor ? '#' + anchor_for(anchor) : '')
       end
     end
   end
