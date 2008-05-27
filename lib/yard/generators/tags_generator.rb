@@ -1,6 +1,8 @@
 module YARD
   module Generators
     class TagsGenerator < Base
+      before_section :header, :has_tags?
+      
       def sections_for(object)
         if format == :html
           [:header, [:param, :yieldparam, :return, :raise, :author, :version, :since, :see]]
@@ -38,6 +40,10 @@ module YARD
       end
       
       protected
+      
+      def has_tags?(object)
+        object.tags.size > 0
+      end
       
       def render_tags(name, opts = {})
         opts = { :name => name }.update(opts)
