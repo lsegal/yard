@@ -49,16 +49,16 @@ module YARD
       end
 
       # @yield [mixin, constlist] 
-      #   Yields a the list of methods pertaining to a mixin
-      #   in the mixin order.
+      #   Yields a the list of methods pertaining to a module
+      #   in the module order.
       # 
       # @yieldparam [CodeObjects::ClassObject] mixin 
-      #   The mixin the constants belong to
+      #   The module the constants belong to
       # 
       # @yieldparam [Array<CodeObjects::ConstantObject>] consts
-      #   The list of constants included from the mixin
+      #   The list of constants included from the module
       # 
-      def included_constants_by_class
+      def included_constants_by_module
         all_consts = current_object.included_constants
         current_object.mixins.each do |superclass|
           opts = { :included => false, :inherited => false }
