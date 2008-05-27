@@ -50,13 +50,13 @@ module YARD
       attr_reader :options
       attr_reader :current_object
       
-      def initialize(opts = {})
+      def initialize(opts = {}, extra_opts = {})
         opts = SymbolHash[
           :format => :html,
           :template => :default,
           :serializer => nil,
           :verifier => nil
-        ].update(opts)
+        ].update(opts).update(extra_opts)
         
         @options = opts
         @format = options[:format]
@@ -130,8 +130,9 @@ module YARD
             end
 
             result = meth.call(*args)
-            log.debug("Calling before section filter for %s with %s, result = %s" % [
-              section.inspect, object, result.is_a?(FalseClass) ? 'fail' : 'pass'
+            log.debug("Calling before section filter for %s%s with %s, result = %s" % [
+              self.class.to_s.split("::").last, section.inspect, object, 
+              result.is_a?(FalseClass) ? 'fail' : 'pass'
             ])
           end
 
