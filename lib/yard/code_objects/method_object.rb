@@ -17,6 +17,14 @@ module YARD::CodeObjects
       namespace.aliases.has_key? self
     end
     
+    def aliases
+      list = []
+      namespace.aliases.each do |o, aname| 
+        list << o if aname == name && o.scope == scope 
+      end
+      list
+    end
+    
     protected
     
     def sep; scope == :class ? super : ISEP end
