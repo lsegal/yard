@@ -1,0 +1,6 @@
+<div class="method_header">
+  <h3><%= h object.name %></h3>
+  <% unless object.aliases.empty? -%>
+    <p>Also known as: <%= object.aliases.map {|o| o.name.to_s }.join(", ") %></p>
+  <% end -%>
+</div>
