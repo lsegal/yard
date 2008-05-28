@@ -1,4 +1,4 @@
 <div class="class <%= object.path.gsub(/::|\.|#/, '_') %>">
-  <h1 class="title"><%= h object.path %></h1>
+  <h1 class="title">Class <%= h object.path %></h1>
   <%= yield object %>
 </div>
