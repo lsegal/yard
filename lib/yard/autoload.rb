@@ -16,6 +16,7 @@ module YARD
   module Generators
     module Helpers
       autoload :BaseHelper,             'generators/helpers/base_helper'
+      autoload :FilterHelper,           'generators/helpers/filter_helper'
       autoload :HtmlHelper,             'generators/helpers/html_helper'
       autoload :MethodHelper,           'generators/helpers/method_helper'
     end
@@ -27,11 +28,15 @@ module YARD
     autoload :ConstructorGenerator,     'generators/constructor_generator'
     autoload :DeprecatedGenerator,      'generators/deprecated_generator'
     autoload :DocstringGenerator,       'generators/docstring_generator'
+    autoload :FullDocGenerator,         'generators/full_doc_generator'
     autoload :InheritanceGenerator,     'generators/inheritance_generator'
     autoload :MethodGenerator,          'generators/method_generator'
+    autoload :MethodDetailsGenerator,   'generators/method_details_generator'
+    autoload :MethodListingGenerator,   'generators/method_listing_generator'
     autoload :MethodSignatureGenerator, 'generators/method_signature_generator'
     autoload :MethodSummaryGenerator,   'generators/method_summary_generator'
     autoload :MixinsGenerator,          'generators/mixins_generator'
+    autoload :ModuleGenerator,          'generators/module_generator'
     autoload :QuickDocGenerator,        'generators/quick_doc_generator'
     autoload :SourceGenerator,          'generators/source_generator'
     autoload :TagsGenerator,            'generators/tags_generator'
