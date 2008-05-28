@@ -14,7 +14,7 @@ module YARD
       def serialize(object, data)
         path = File.join(basepath, *serialized_path(object))
         FileUtils.mkdir_p File.dirname(path)
-        YARD.logger.debug "Serializing to #{path}"
+        log.debug "Serializing to #{path}"
         File.open(path, "w") {|f| f.write data }
       end
       
