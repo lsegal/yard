@@ -15,12 +15,6 @@ module YARD
           ]
         ]
       end
-      
-      protected
-      
-      def is_method?(object)
-        object.is_a?(CodeObjects::MethodObject)
-      end
     end
   end
 end
