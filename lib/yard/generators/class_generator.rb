@@ -1,6 +1,8 @@
 module YARD
   module Generators
     class ClassGenerator < Base
+      before_generate :is_class?
+      
       def sections_for(object) 
         [
           :header,
@@ -11,9 +13,8 @@ module YARD
             AttributesGenerator, 
             ConstantsGenerator,
             ConstructorGenerator,
-            MethodSummaryGenerator.new(options, :ignore_serializer => true, 
-              :scope => :instance, :visibility => :public
-            )
+            G(MethodSummaryGenerator, :scope => :instance, :visibility => :public),
+            G(MethodDetailsGenerator, :scope => :instance, :visibility => :public)
           ]
         ]
       end
