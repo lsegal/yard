@@ -4,6 +4,8 @@ require 'erubis'
 module YARD
   module Generators
     class Base
+      include Helpers::FilterHelper
+
       class << self
         def template_paths
           @template_paths ||= [TEMPLATE_ROOT]
@@ -43,6 +45,24 @@ module YARD
         def before_generate_filters
           @before_generate_filters ||= []
         end
+      end
+      
+      # Creates a generator by adding extra options
+      # to the options hash. 
+      # 
+      # @example [Creates a new MethodSummaryGenerator for public class methods]
+      #   G(MethodSummaryGenerator, :scope => :class, :visibility => :public)
+      # 
+      # @param [Class] generator 
+      #   the generator class to use.
+      # 
+      # @options opts
+      #   :ignore_serializer -> true => value
+      #
+      # 
+      def G(generator, opts = {})
+        opts = SymbolHash[:ignore_serializer => true].update(opts)
+        generator.new(options, opts)
       end
 
       attr_reader :format, :template, :verifier
