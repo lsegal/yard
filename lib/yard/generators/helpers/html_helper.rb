@@ -21,15 +21,15 @@ module YARD
       end
 
       def resolve_links(text)
-        text.gsub(/\{(\S+)\}(?=[^<>]*<\/(?!pre))/) do 
-          title = $1
+        text.gsub(/(\s)\{(\S+)\}(?=(?:[\s\.,:!;\?][^<>]*)?<\/(?!pre))/) do 
+          title = $2
           obj = P(current_object, title)
           if obj.is_a?(CodeObjects::Proxy)
             log.warn "In documentation for #{current_object.path}: Cannot resolve link to #{obj.path} from text:"
             log.warn '...' + text[/(.{0,20}\{#{title}\}.{0,20})/, 1].gsub(/\n/,"\n\t") + '...'
           end
           
-          "<tt>" + linkify(obj, title) + "</tt>" 
+          " <tt>" + linkify(obj, title) + "</tt>" 
         end
       end
 
