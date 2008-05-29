@@ -1,0 +1,12 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="<%= url_for(self.class::CSS_FILE) %>" type="text/css" charset="utf-8" />
+    <title><%= h object.type.to_s.capitalize %> <%= h object.path %></title>
+  </head>
+  <body>
+    <%= yield object %>
+  </body>
+</html>
