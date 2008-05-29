@@ -5,7 +5,7 @@ describe YARD::CodeObjects::Proxy do
   
   it "should return the object if it's in the Registry" do
     pathobj = ModuleObject.new(nil, :YARD)
-    Registry.should_receive(:at).at_least(:once).with(:YARD).and_return(pathobj)
+    Registry.should_receive(:at).at_least(:once).with("YARD").and_return(pathobj)
     proxyobj = P(:root, :YARD)
     proxyobj.type.should == :module
   end

@@ -25,6 +25,14 @@ module YARD::CodeObjects
       list
     end
     
+    def path
+      if !namespace || namespace.path == "" 
+        sep + super
+      else
+        super
+      end
+    end
+    
     protected
     
     def sep; scope == :class ? super : ISEP end

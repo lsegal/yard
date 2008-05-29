@@ -24,6 +24,21 @@ describe YARD::Registry do
     Registry.resolve(o3, "::String", true).should == P(:String)
   end
   
+  it "should resolve instance methods with # prefix" do
+    o1 = ModuleObject.new(:root, :A)
+    o2 = ModuleObject.new(o1, :B)
+    o3 = ModuleObject.new(o2, :C)
+    o4 = MethodObject.new(o3, :methname)
+    Registry.resolve(o1, "B::C#methname").should == o4
+    Registry.resolve(o2, "C#methname").should == o4
+    Registry.resolve(o3, "#methname").should == o4
+  end
+  
+  it "should resolve instance methods in the root without # prefix" do
+    o = MethodObject.new(:root, :methname)
+    Registry.resolve(:root, 'methname').should == o
+  end
+  
   it "should allow symbols as object type in #all" do
     ModuleObject.new(:root, :A)
     o1 = ClassObject.new(:root, :B)

@@ -136,12 +136,12 @@ describe YARD::CodeObjects::Base do
         super(key)
       end
     eof
-    Registry.at('key?').source.should == "def key?(key)\n  super(key)\nend"
+    Registry.at('#key?').source.should == "def key?(key)\n  super(key)\nend"
   end
   
   it "should handle source for 'def x; end'" do
     Registry.clear
     Parser::SourceParser.parse_string "def x; 2 end"
-    Registry.at(:x).source.should == "def x; 2 end"
+    Registry.at('#x').source.should == "def x; 2 end"
   end
 end

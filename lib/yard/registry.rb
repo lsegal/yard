@@ -28,20 +28,28 @@ module YARD
       def resolve(namespace, name, proxy_fallback = false)
         namespace = Registry.root if namespace == :root || !namespace
         
-        if name.to_s =~ /^::/
-          found = Registry.root.child(:name => name.to_s[2..-1])
-          return found if found
+        newname = name.to_s.gsub(/^#/, '')
+        if name =~ /^::/
+          [name, newname[2..-1]].each do |n|
+            return at(n) if at(n)
+          end
         else
           while namespace
             [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
-              path = name
+              path = newname
               if namespace != root
-                path = [namespace.path, name].join(s)
+                path = [namespace.path, newname].join(s)
               end
               found = at(path)
               return found if found
             end
             namespace = namespace.parent
+          end
+          
+          # Look for ::name or #name in the root space
+          [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
+            found = at(s + newname)
+            return found if found
           end
         end
         proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil

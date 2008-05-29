@@ -8,7 +8,7 @@ describe YARD::CodeObjects::MethodObject do
   
   it "should have a path of testing for an instance method in the root" do
     meth = MethodObject.new(:root, :testing)
-    meth.path.should == "testing"
+    meth.path.should == "#testing"
   end
   
   it "should have a path of YARD#testing for an instance method in YARD" do
