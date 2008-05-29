@@ -6,6 +6,7 @@ class Testing
   def priv; end
   def notpriv; end
   def notpriv2; end
+  def notpriv?; end
 
   protected
 
@@ -15,5 +16,5 @@ class Testing
 
   def pub2; end
 
-  public :notpriv, 'notpriv2'
+  public :notpriv, 'notpriv2', :notpriv?
 end

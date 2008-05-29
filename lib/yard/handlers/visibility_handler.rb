@@ -11,7 +11,7 @@ class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
         name = nil
         if tk.is_a?(TkSTRING)
           name = eval(tk.text)
-        elsif tk.is_a?(TkIDENTIFIER) && last_tk.is_a?(TkSYMBEG)
+        elsif (tk.is_a?(TkIDENTIFIER) || tk.is_a?(TkFID)) && last_tk.is_a?(TkSYMBEG)
           name = eval(":" + tk.text)
         end
         

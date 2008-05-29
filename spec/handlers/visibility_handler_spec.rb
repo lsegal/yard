@@ -19,5 +19,6 @@ describe YARD::Handlers::VisibilityHandler do
   it "should support parameters and only set visibility on those methods" do
     Registry['Testing#notpriv'].visibility.should == :public
     Registry['Testing#notpriv2'].visibility.should == :public
+    Registry['Testing#notpriv?'].visibility.should == :public
   end
 end
