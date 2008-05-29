@@ -49,7 +49,7 @@ module YARD
         # 
         # @return [Array<Symbol>, String] the sorted labels as an array of the tag name and label
         def sorted_labels
-          labels.sort_by {|a| a.last }
+          labels.sort_by {|a| a.last.downcase }
         end
       
         ##

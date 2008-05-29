@@ -25,6 +25,12 @@ module YARD
           "<tt>" + linkify(P(current_object, $1)) + "</tt>" 
         end
       end
+
+      def format_object_name_list(objects)
+        objects.sort_by {|o| o.name.to_s.downcase }.map do |o| 
+          "<span class='name'>" + linkify(o, o.name) + "</span>" 
+        end.join(", ")
+      end
     
       def link_object(object, otitle = nil, anchor = nil)
         object = P(current_object, object) if object.is_a?(String)

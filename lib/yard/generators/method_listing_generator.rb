@@ -33,7 +33,7 @@ module YARD
       def method_list
         meths = current_object.meths(meths_opts)
         remove_ignored_meths!(meths)
-        meths.sort_by {|m| m.name.to_s }
+        meths.sort_by {|m| m.name.to_s.downcase }
       end
       
       # @yield [superclass, meths] 

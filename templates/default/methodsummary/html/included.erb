@@ -1,6 +1,6 @@
 <div class="included">
   <% included_meths_by_module do |klass, meths| -%>
     <h1><%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Methods Included from <%= linkify klass %></h1>
-    <p><%= meths.sort_by {|c| c.name.to_s }.map {|c| linkify(c, c.name) }.join(", ") %></p>
+    <p><%= format_object_name_list meths %></p>
   <% end -%>
 </div>
