@@ -11,7 +11,7 @@
         <% end -%>
       </tt>
       <div class="docstring">
-        <%= htmlify meth.docstring.split(/\.|\n/).first || "" if meth.docstring %>
+        <%= htmlify meth.docstring.split(/\.|\r?\n\r?\n/).first || "" if meth.docstring %>
       </div>
     </li>
   <% end -%>
