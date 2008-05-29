@@ -55,13 +55,13 @@ module YARD::CodeObjects
     ##
     # Sets the superclass of the object
     # 
-    # @param [Base, Proxy, String, Symbol] object: the superclass value
+    # @param [Base, Proxy, String, Symbol] object the superclass value
     def superclass=(object)
       case object
       when Base, Proxy, NilClass
         @superclass = object
       when String, Symbol
-        @superclass = Proxy.new(namespace, object)
+        @superclass = P(namespace, object)
       else
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
       end

@@ -12,7 +12,7 @@ module YARD
         if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
-          namespace = Registry.resolve(namespace, $`, true)
+          namespace = P(namespace, $`)
           name = $1
         end        
         
