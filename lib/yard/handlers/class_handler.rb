@@ -2,7 +2,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   handles TkCLASS
   
   def process
-    if statement.tokens.to_s =~ /^class\s+([\w\:]+)(?:\s*<\s*([\w\:]+))?/
+    if statement.tokens.to_s =~ /^class\s+((?:\:\:|[A-Z])(?:\w|::)*)(?:\s*<\s*((?:\:\:|[A-Z])(?:\w|::)*))?\s*\Z/
       classname, superclass = $1, $2
 
       klass = ClassObject.new(namespace, classname) do |o|
