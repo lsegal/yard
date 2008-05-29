@@ -30,17 +30,13 @@ describe YARD::Handlers::ClassHandler do
   
   it "should raise an UndocumentableError if the class is invalid" do
     ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
-      s = "class #{klass}; end"
-      c = ClassHandler.new(nil, StatementList.new(s).first)
-      lambda { c.process }.should raise_error(UndocumentableError)
+      undoc_error "class #{klass}; end"
     end
   end
   
   it "should raise an UndocumentableError if the superclass is invalid" do
     ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
-      s = "class A < #{klass}; end"
-      c = ClassHandler.new(nil, StatementList.new(s).first)
-      lambda { c.process }.should raise_error(UndocumentableError)
+      undoc_error "class A < #{klass}; end"
     end
   end
 end

@@ -31,4 +31,14 @@ describe YARD::Handlers::AliasHandler do
     P("B#t").is_alias?.should == true 
     P('B#r?').is_alias?.should == true
   end
+  
+  it "should raise an UndocumentableError if only one parameter is passed" do
+    undoc_error "alias_method :q"
+  end
+  
+  it "should raise an UndocumentableError if the parameter is not a Symbol or String" do
+    undoc_error "alias_method CONST, Something"
+    undoc_error "alias_method variable, ClassName"
+    undoc_error "alias_method variable, other_variable"
+  end
 end
