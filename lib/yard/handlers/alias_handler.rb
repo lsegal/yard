@@ -21,7 +21,6 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
       last_tk = tk
     end
     
-    p names
     new_meth, old_meth = names[0], names[1]
     old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = MethodObject.new(namespace, new_meth, scope) do |o|
