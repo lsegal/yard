@@ -7,11 +7,11 @@ module YARD
         [
           :header,
           [
-            DeprecatedGenerator, 
-            MethodSignatureGenerator, 
-            DocstringGenerator, 
-            TagsGenerator, 
-            SourceGenerator
+            G(DeprecatedGenerator), 
+            G(MethodSignatureGenerator), 
+            G(DocstringGenerator), 
+            G(TagsGenerator), 
+            G(SourceGenerator)
           ]
         ]
       end

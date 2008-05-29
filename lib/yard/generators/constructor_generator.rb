@@ -4,7 +4,7 @@ module YARD
       before_generate :has_constructor?
        
       def sections_for(object) 
-        [:header, [MethodGenerator]] 
+        [:header, [G(MethodGenerator)]] 
       end
       
       protected

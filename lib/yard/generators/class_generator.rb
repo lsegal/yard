@@ -7,12 +7,12 @@ module YARD
         [
           :header,
           [
-            InheritanceGenerator, 
-            MixinsGenerator, 
-            DocstringGenerator, 
-            AttributesGenerator, 
-            ConstantsGenerator,
-            ConstructorGenerator,
+            G(InheritanceGenerator), 
+            G(MixinsGenerator), 
+            G(DocstringGenerator), 
+            G(AttributesGenerator), 
+            G(ConstantsGenerator),
+            G(ConstructorGenerator),
             G(MethodSummaryGenerator, :scope => :instance, :visibility => :public),
             G(MethodDetailsGenerator, :scope => :instance, :visibility => :public)
           ]

@@ -7,10 +7,10 @@ module YARD
         [
           :header,
           [
-            MixinsGenerator, 
-            DocstringGenerator, 
-            AttributesGenerator, 
-            ConstantsGenerator,
+            G(MixinsGenerator), 
+            G(DocstringGenerator), 
+            G(AttributesGenerator), 
+            G(ConstantsGenerator),
             G(MethodSummaryGenerator, :scope => :instance, :visibility => :public),
             G(MethodDetailsGenerator, :scope => :instance, :visibility => :public)
           ]

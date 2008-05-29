@@ -6,11 +6,11 @@ module YARD
         when CodeObjects::MethodObject
           [
             :header, 
-            DeprecatedGenerator, 
-            DocstringGenerator, 
-            MethodSignatureGenerator, 
-            TagsGenerator, 
-            SourceGenerator
+            G(DeprecatedGenerator), 
+            G(DocstringGenerator), 
+            G(MethodSignatureGenerator), 
+            G(TagsGenerator), 
+            G(SourceGenerator)
           ]
         end
       end

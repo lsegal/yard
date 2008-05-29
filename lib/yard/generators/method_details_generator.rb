@@ -8,7 +8,7 @@ module YARD
           :header, 
           [ # with MethodObject
             :method_header,
-            MethodGenerator,
+            G(MethodGenerator),
           ]
         ]
       end
