@@ -19,6 +19,8 @@ module YARD
       end
       
       def serialized_path(object)
+        return object if object.is_a?(String)
+
         objname = object.name.to_s
         objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
         fspath = [objname + ".#{extension}"]

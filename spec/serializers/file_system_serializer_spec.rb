@@ -33,6 +33,11 @@ describe YARD::Serializers::FileSystemSerializer do
     end
   end
   
+  it "should return serialized_path for a String" do
+    s = Serializers::FileSystemSerializer.new(:basepath => 'foo', :extension => 'txt')
+    s.serialized_path('test.txt').should == 'test.txt'
+  end
+  
   it "should remove special chars from path" do
     m = CodeObjects::MethodObject.new(nil, 'a')
     s = Serializers::FileSystemSerializer.new
