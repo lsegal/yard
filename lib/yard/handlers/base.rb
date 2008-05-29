@@ -2,7 +2,7 @@ module YARD
   module Handlers
     class UndocumentableError < Exception; end
     
-    # = Handlers =
+    # = Handlers 
     # 
     # Handlers are pluggable semantic parsers for YARD's code generation 
     # phase. They allow developers to control what information gets 
@@ -15,7 +15,7 @@ module YARD
     # documentation in a very explicit format by treating them as first-
     # class objects in any outputted documentation.
     # 
-    # == Overview of a Typical Handler Scenario ==
+    # == Overview of a Typical Handler Scenario 
     # 
     # Generally, a handler class will declare a set of statements which
     # it will handle using the {handles} class declaration. It will then
@@ -29,7 +29,7 @@ module YARD
     # Handlers are usually simple and take up to a page of code to process
     # and register a new object or add new attributes to the current +namespace+.
     # 
-    # == Setting up a Handler for Use ==
+    # == Setting up a Handler for Use 
     # 
     # A Handler is automatically registered when it is subclassed from the
     # base class. The only other thing that needs to be done is to specify
@@ -45,14 +45,14 @@ module YARD
     #     end
     #   end
     # 
-    # == Processing Handler Data ==
+    # == Processing Handler Data 
     # 
     # The goal of a specific handler is really up to the developer, and as 
     # such there is no real guideline on how to process the data. However,
     # it is important to know where the data is coming from to be able to use
     # it.
     # 
-    # === +statement+ Attribute ===
+    # === +statement+ Attribute 
     # 
     # The +statement+ attribute pertains to the {Parser::Statement} object
     # containing a set of tokens parsed in by the parser. This is the main set
@@ -62,7 +62,7 @@ module YARD
     # can be converted to a +String+ using +#to_s+ to parse the data with
     # regular expressions (or other text processing mechanisms), if needed.
     # 
-    # === +namespace+ Attribute ===
+    # === +namespace+ Attribute 
     # 
     # The +namespace+ attribute is a {CodeObjects::NamespaceObject namespace object} 
     # which represents the current namespace that the parser is in. For instance:
@@ -80,7 +80,7 @@ module YARD
     # called on the method, the +namespace+ would be set to the 'MyClass'
     # code object.
     # 
-    # === +owner+ Attribute ===
+    # === +owner+ Attribute 
     # 
     # The +owner+ attribute is similar to the +namespace+ attribute in that
     # it also follows the scope of the code during parsing. However, a namespace
@@ -99,13 +99,13 @@ module YARD
     # of as the difference between first-class Ruby objects (namespaces) and
     # second-class Ruby objects (methods).
     # 
-    # === +visibility+ and +scope+ Attributes ===
+    # === +visibility+ and +scope+ Attributes 
     # 
     # Mainly needed for parsing methods, the +visibility+ and +scope+ attributes
     # refer to the public/protected/private and class/instance values (respectively)
     # of the current parsing position.
     # 
-    # == Parsing Blocks in Statements ==
+    # == Parsing Blocks in Statements 
     # 
     # In addition to parsing a statement and creating new objects, some
     # handlers may wish to continue parsing the code inside the statement's
