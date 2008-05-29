@@ -13,8 +13,9 @@ module YARD
             G(AttributesGenerator), 
             G(ConstantsGenerator),
             G(ConstructorGenerator),
-            G(MethodSummaryGenerator, :scope => :instance, :visibility => :public),
-            G(MethodDetailsGenerator, :scope => :instance, :visibility => :public)
+            G(VisibilityGroupGenerator, :visibility => :public),
+            G(VisibilityGroupGenerator, :visibility => :protected),
+            G(VisibilityGroupGenerator, :visibility => :private)
           ]
         ]
       end

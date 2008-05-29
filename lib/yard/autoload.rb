@@ -40,6 +40,7 @@ module YARD
     autoload :QuickDocGenerator,        'generators/quick_doc_generator'
     autoload :SourceGenerator,          'generators/source_generator'
     autoload :TagsGenerator,            'generators/tags_generator'
+    autoload :VisibilityGroupGenerator, 'generators/visibility_group_generator'
   end
   
   module Handlers
