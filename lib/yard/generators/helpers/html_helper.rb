@@ -66,18 +66,24 @@ module YARD
       def url_for(object, anchor = nil, relative = true)
         link = nil
         return link unless serializer
-
+        
         if object.is_a?(CodeObjects::Base) && !object.is_a?(CodeObjects::NamespaceObject)
           # If the object is not a namespace object make it the anchor.
           anchor, object = object, object.namespace
         end
-
+        
         objpath = serializer.serialized_path(object)
         return link unless objpath
       
         if relative
-          from = serializer.serialized_path(current_object)
-          link = File.relative_path(from, objpath)
+          fromobj = current_object
+          if current_object.is_a?(CodeObjects::Base) && 
+              !current_object.is_a?(CodeObjects::NamespaceObject)
+            fromobj = fromobj.namespace
+          end
+
+          from  = serializer.serialized_path(fromobj)
+          link  = File.relative_path(from, objpath)
         else
           link = objpath
         end
