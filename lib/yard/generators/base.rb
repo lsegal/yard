@@ -222,19 +222,19 @@ module YARD
       end
       
       def render(object, file = nil, locals = {}, &block)
-        _path = template_path(file, generator_name)
-        _f = find_template(_path)
-        if _f
-          __l = locals.map {|k,v| "#{k} = #{v.inspect}" }.join(";")
-          Erubis::Eruby.new("<% #{__l} %>" + File.read(_f)).result(binding)
+        __path = template_path(file.to_s + '.erb', generator_name)
+        __f = find_template(__path)
+        if __f
+          __l = locals.map {|k,v| "#{k} = #{v.inspect}" unless k.to_s == "__f" }.join(";")
+          Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
         else
           log.warn "Cannot find template `#{_path}`"
           ""
         end
       end
       
-      def template_path(meth, generator = generator_name)
-        File.join(template.to_s, generator, format.to_s, meth.to_s + ".erb")
+      def template_path(file, generator = generator_name)
+        File.join(template.to_s, generator, format.to_s, file.to_s)
       end
       
       def find_template(path)
