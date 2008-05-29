@@ -22,7 +22,13 @@ module YARD
 
       def resolve_links(text)
         text.gsub(/\{(\S+)\}/) do 
-          "<tt>" + linkify(P(current_object, $1)) + "</tt>" 
+          obj = P(current_object, $1)
+          if obj.is_a?(CodeObjects::Proxy)
+            log.warn "In documentation for #{current_object.path}: Cannot resolve link to #{obj.path} from text:"
+            log.warn text.gsub(/\n/,"\n\t")
+          end
+          
+          "<tt>" + linkify(obj) + "</tt>" 
         end
       end
 
@@ -37,10 +43,7 @@ module YARD
         title = h(otitle ? otitle.to_s : object.path)
         return title unless serializer
 
-        if object.is_a?(CodeObjects::Proxy)
-          log.warn "Cannot resolve link to #{object.path}. Missing file #{url_for(object, false)}."
-          return title
-        end
+        return title if object.is_a?(CodeObjects::Proxy)
       
         link = url_for(object, anchor)
         link ? "<a href='#{link}' title='#{title}'>#{title}</a>" : title
