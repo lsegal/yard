@@ -40,7 +40,9 @@ module YARD
         end
       end
       
-      def process; end
+      def process
+        raise NotImplementedError, "#{self} did not implement a #process method for handling."
+      end
       
       attr_reader :parser, :statement
 
