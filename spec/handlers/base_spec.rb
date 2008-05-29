@@ -8,7 +8,7 @@ describe YARD::Handlers::Base do
   end
   
   it "should keep track of subclasses" do
-    Handlers::Base.should_receive(:inherited)
+    Handlers::Base.should_receive(:inherited).once
     class TestHandler < Handlers::Base; end
   end
   
