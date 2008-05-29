@@ -223,7 +223,7 @@ module YARD
       #   are passed as a String, they will be split by newlines. 
       def parse_comments(comments)
         return if comments.empty?
-        meta_match = /^\s*@(\S+)\s*(.*)/
+        meta_match = /^@(\S+)\s*(.*)/
         comments = comments.split(/\r?\n/) if comments.is_a? String
         @tags, @docstring = [], ""
 
