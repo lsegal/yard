@@ -1,5 +1,6 @@
 module A
   class B
+	notaconstant = 2
     SOMECONSTANT= "hello"
 
     def method

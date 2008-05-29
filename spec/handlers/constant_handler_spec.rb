@@ -6,4 +6,8 @@ describe YARD::Handlers::ConstantHandler do
   it "should not parse constants inside methods" do
     Registry.at("A::B::SOMECONSTANT").source.should == "SOMECONSTANT= \"hello\""
   end
+  
+  it "should only parse valid constants" do
+    Registry.at("A::B::notaconstant").should be_nil
+  end
 end

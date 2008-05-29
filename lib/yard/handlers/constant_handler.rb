@@ -1,5 +1,5 @@
 class YARD::Handlers::ConstantHandler < YARD::Handlers::Base
-  HANDLER_MATCH = /\A[^@\$]\S*\s*=[^=]\s*/m
+  HANDLER_MATCH = /\A[A-Z]\w*\s*=[^=]\s*/m
   handles HANDLER_MATCH
   
   def process
