@@ -31,7 +31,6 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
       o.line = statement.tokens.first.line_no
       o.file = parser.file
       o.docstring = statement.comments
-      o.dynamic = true if owner != namespace
 
       if old_obj
         o.signature = old_obj.signature
@@ -42,5 +41,7 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
     end
     
     namespace.aliases[new_obj] = old_meth
+    
+    new_obj # return for registration
   end
 end

@@ -14,7 +14,7 @@ module YARD
       # @param [TokenList, String] content the tokens to create the list from
       def initialize(content)
         if content.is_a? TokenList
-          @tokens = content
+          @tokens = content.dup
         elsif content.is_a? String
           parse_tokens(content)
         else 

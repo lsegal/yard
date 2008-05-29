@@ -7,13 +7,9 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
 
       klass = ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass
-        o.docstring = statement.comments
-        #o.source = statement
-        o.line = statement.tokens.first.line_no
-        o.file = parser.file
-        o.dynamic = true if owner != namespace
       end
       parse_block(:namespace => klass)
+      register klass # Explicit registration
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
       if classname == "self"

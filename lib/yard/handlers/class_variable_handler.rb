@@ -8,11 +8,6 @@ class YARD::Handlers::ClassVariableHandler < YARD::Handlers::Base
     return unless owner.is_a? NamespaceObject
     
     name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
-    ClassVariableObject.new(namespace, name) do |o|
-      o.docstring = statement.comments
-      o.source = statement
-      o.file = parser.file
-      o.dynamic = true if owner != namespace
-    end
+    ClassVariableObject.new(namespace, name) 
   end
 end

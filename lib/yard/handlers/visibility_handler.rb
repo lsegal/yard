@@ -2,8 +2,6 @@ class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
   handles /\A(protected|private|public)/
   
   def process
-    objs = []
-    
     if statement.tokens.size == 1
       self.visibility = statement.tokens.to_s.to_sym
     else
@@ -18,16 +16,12 @@ class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
         end
         
         if name
-          objs << MethodObject.new(namespace, name, scope) do |o|
-            o.visibility = vis
-            o.dynamic = true if owner != namespace
-          end
+          # Explicitly register object
+          register MethodObject.new(namespace, name, scope) {|o| o.visibility = vis }
         end
         
         last_tk = tk
       end
     end
-    
-    objs
   end
 end

@@ -222,6 +222,8 @@ module YARD
       # @param [Array<CodeObjects::Base>] objects
       #   the list of objects to post-process.
       # 
+      # @return [NilClass]
+      # 
       def register(*objects)
         objects.each do |object|
           next unless object.is_a?(CodeObjects::Base)
@@ -230,14 +232,25 @@ module YARD
           object.file ||= parser.file
           object.line ||= statement.tokens.first.line_no
           
-          # Add docstring and source if they're not set
-          object.source ||= statement
-          object.docstring ||= statement.comments
+          # Add docstring if it's not set
+          object.docstring = statement.comments if object.docstring.empty?
+          
+          # Add source only to non-class non-module objects
+          unless object.is_a?(ClassObject) || object.is_a?(ModuleObject)
+            object.source ||= statement 
+          end
+          
+          # Method Object gets signature
+          if object.is_a?(MethodObject)
+            object.signature ||= statement.tokens.to_s
+          end
           
           # Make it dynamic if it's owner is not it's namespace.
           # This generally means it was defined in a method (or block of some sort)
           object.dynamic ||= true if owner != namespace
         end
+        nil # Don't return anything just in case a register call is at the
+            # end of a process method-- we don't want to accidentally do this twice. 
       end
       
       attr_reader :parser, :statement

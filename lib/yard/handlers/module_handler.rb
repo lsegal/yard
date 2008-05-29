@@ -3,13 +3,8 @@ class YARD::Handlers::ModuleHandler < YARD::Handlers::Base
   
   def process
     modname = statement.tokens.to_s[/^module\s+([^ ;]+)/, 1]
-    mod = ModuleObject.new(namespace, modname) do |o|
-      o.docstring = statement.comments
-      #o.source = statement
-      o.line = statement.tokens.first.line_no
-      o.file = parser.file
-      o.dynamic = true if owner != namespace
-    end
+    mod = ModuleObject.new(namespace, modname)
     parse_block(:namespace => mod)
+    mod # return for registration
   end
 end

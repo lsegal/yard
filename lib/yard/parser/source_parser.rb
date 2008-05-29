@@ -53,8 +53,9 @@ module YARD
         def top_level_parse(statements)
             statements.each do |stmt|
               find_handlers(stmt).each do |handler| 
+                hobj = handler.new(self, stmt)
                 begin
-                  handler.new(self, stmt).process
+                  results = [hobj.process].flatten
                 rescue Handlers::UndocumentableError => undocerr
                   log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
                   log.warn "\tin file '#{file}':#{stmt.tokens.first.line_no}:\n\n" + stmt.inspect + "\n"
@@ -64,6 +65,9 @@ module YARD
                   log.error "  in `#{file}`:#{stmt.tokens.first.line_no}:\n\n#{stmt.inspect}\n"
                   log.debug "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
                 end
+                
+                # Perform any extra tasks on objects
+                hobj.register(*results)
               end
             end
         end

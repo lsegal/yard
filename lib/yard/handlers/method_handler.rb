@@ -12,15 +12,8 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
       nobj = P(namespace, $`) unless $` == "self"
     end
     
-    obj = MethodObject.new(nobj, meth, mscope) do |o|
-      o.docstring = statement.comments
-      o.signature = statement.tokens.to_s
-      o.source = statement
-      o.file = parser.file
-      o.visibility = visibility
-      o.dynamic = true if owner != namespace
-    end
-    
+    obj = MethodObject.new(nobj, meth, mscope) {|o| o.visibility = visibility }
     parse_block(:owner => obj) # mainly for yield/exceptions
+    obj # return for registration
   end
 end

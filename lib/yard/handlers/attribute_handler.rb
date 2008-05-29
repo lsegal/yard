@@ -44,11 +44,13 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
           o.source ||= full_src
           o.signature ||= src
           o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
-          o.file = parser.file
-          o.line = statement.tokens.first.line_no
-          o.dynamic = true if owner != namespace
         end
+        
+        # Register the objects explicitly
+        register namespace.attributes[scope][name][type]
       end
     end
+    
+    nil # return nothing for registration (we did it explicitly)
   end
 end
