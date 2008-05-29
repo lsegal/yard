@@ -3,7 +3,7 @@ module YARD::CodeObjects
     attr_accessor :superclass
     
     def initialize(namespace, name, *args, &block)
-      @superclass = P(:Object)
+      @superclass = P("::Object")
       super
     end
     
@@ -61,7 +61,7 @@ module YARD::CodeObjects
       when Base, Proxy, NilClass
         @superclass = object
       when String, Symbol
-        @superclass = P(namespace, object)
+        @superclass = Proxy.new(namespace, object)
       else
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
       end

@@ -8,10 +8,9 @@ module YARD
       end
       
       def push(value)
+        value = Proxy.new(@owner, value) if value.is_a?(String) || value.is_a?(Symbol)
         if value.is_a?(CodeObjects::Base) || value.is_a?(Proxy)
           super(value) unless include?(value)
-        elsif value.is_a?(String) || value.is_a?(Symbol)
-          super(P(@owner, value)) unless include?(P(@owner, value))
         else
           raise ArgumentError, "#{value.class} is not a valid CodeObject"
         end
@@ -34,7 +33,7 @@ module YARD
       class << self
         def new(namespace, name, *args, &block)
           if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
-            return new(P(namespace, $`), $1, *args, &block)
+            return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
           keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
