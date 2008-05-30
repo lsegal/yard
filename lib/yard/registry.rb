@@ -55,21 +55,31 @@ module YARD
         proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
       end
     end
+    
+    attr_accessor :yardoc_file
 
-    def load(reload = false, file = DEFAULT_YARDOC_FILE)
-      if File.exists?(file) && !reload
-        namespace.replace(Marshal.load(IO.read(file)))
-      else
-        Find.find(".") do |path|
-          Parser::SourceParser.parse(path) if path =~ /\.rb$/
-          save
+    def load(files = [], reload = false)
+      if files.is_a?(Array)
+        if File.exists?(yardoc_file) && !reload
+          namespace.update Marshal.load(IO.read(yardoc_file))
+        else
+          size = namespace.size
+          YARD.parse(files)
+          save if namespace.size > size
         end
+        true
+      elsif files.is_a?(String)
+        return false unless File.exists?(files)
+        namespace.update Marshal.load(IO.read(files))
+        true
+      else
+        raise ArgumentError, "Must take a list of files to parse or the .yardoc file to load."
       end
-      nil
     end
     
-    def save(file = DEFAULT_YARDOC_FILE)
+    def save(file = yardoc_file)
       File.open(file, "w") {|f| Marshal.dump(@namespace, f) }
+      true
     end
 
     def all(*types)
@@ -99,6 +109,7 @@ module YARD
     def initialize
       @namespace = SymbolHash.new
       @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
+      @yardoc_file = DEFAULT_YARDOC_FILE
     end
   
     def register(object)
