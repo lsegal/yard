@@ -1,97 +1,16 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
-require File.dirname(__FILE__) + '/../lib/formatter'
-include YARD
 
-if ARGV[0] == "-h"
-  puts "yardoc #{VERSION}"
-  return
-end
+YARD::Registry.load(YARD::PATH_ORDER)
 
-Dir.mkdir("doc") unless FileTest.directory?("doc")
-Namespace.load(Namespace::DEFAULT_YARDOC_FILE, true)
-ac = File.open("doc/all-classes.html", "w") 
-ac.puts <<-eof
-<html>
-  <head>
-    <base target="main" />
-  </head>
-  <body>
-  <h3>All Classes</h3>
-eof
-am = File.open("doc/all-modules.html", "w") 
-am.puts <<-eof
-<html>
-  <head>
-    <base target="main" />
-  </head>
-  <body>
-  <h3>All Modules</h3>
-eof
-meths = []
-Namespace.all.sort.each do |path|
-  object = Namespace.at(path)
-  if object.is_a?(MethodObject) && (object.visibility == :protected || object.visibility == :public)
-    meths << [object.name, object]
+objects = YARD::Registry.all(:module, :class)
+options = {
+  :format => :html, 
+  :template => :default, 
+  :serializer => YARD::Serializers::FileSystemSerializer.new, 
+  :verifier => lambda do |gen, obj| 
+    return false if gen.respond_to?(:visibility) && [:protected, :private].include?(gen.visibility) 
   end
-  
-  indexfile = nil
+}
 
-  case object
-  when ClassObject
-    indexfile = ac
-  when ModuleObject
-    indexfile = am
-  else
-    next
-  end
-  
-  indexfile.puts "<a href='" + path.gsub("::","_") + ".html'>" + path + "</a><br />"
-  puts "Generating " + (docfile = "doc/#{path.gsub('::','_')}.html") + "..."
-  File.open(docfile, "w") {|f| f.write(object.to_s) }
-end
-ac.puts "</body></html>"
-ac.close
-am.puts "</body></html>"
-am.close
-
-File.open("doc/all-methods.html", "w") do |f|
-  f.puts <<-eof
-    <html>
-      <head>
-        <base target="main" />
-      </head>
-      <body>
-      <h3>All Methods</h3>
-  eof
-  meths.sort {|a,b| a.first <=> b.first }.each do |name, object|
-    f.puts "<a href='" + object.parent.path.gsub("::", "_") + ".html##{object.scope}_method-#{name}'>#{name}</a><br />"
-  end
-end
-
-if ARGV[0]
-  main_page = ARGV[0]
-else
-  main_page = Namespace.all.sort.find {|name| [ClassObject, ModuleObject].include? Namespace.at(name).class  }
-end
-main_page = main_page.gsub("::", "_") + ".html"
-File.open("doc/index.html", "w") do |f|
-  f.puts <<-eof
-  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-  <html>
-    <head>
-      <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-      <title>Ruby Classes</title>
-    </head>
-    <frameset cols="250,*">
-      <frameset rows="40%,40%,20%">
-        <frame src="all-classes.html">
-        <frame src="all-modules.html">
-        <frame src="all-methods.html">
-      </frameset>
-      <frame name="main" src="#{main_page}">
-    </frameset>
-  </html>
-eof
-end
+YARD::Generators::FullDocGenerator.new(options).generate(objects)
