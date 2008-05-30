@@ -1,0 +1,6 @@
+<%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Method List
+<%= '-' * (visibility.to_s+scope.to_s).length %>-------------
+<% method_list.each do |meth| -%>
+- <%= format_return_types meth %> <%= format_short_def meth %> <%= format_block meth %> <% unless meth.aliases.empty? %>-> <%= meth.aliases.map {|o| format_meth_name o }.join(", ") %><% end %>
+<% end -%>
+
