@@ -72,6 +72,7 @@ module YARD
         
         # Last minute modifications
         self.files = args
+        self.reload = true if self.files.empty?
         visibilities.uniq!
         options[:serializer] = Serializers::FileSystemSerializer.new(serialopts)
       end
