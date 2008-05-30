@@ -228,7 +228,7 @@ module YARD
           __l = locals.map {|k,v| "#{k} = #{v.inspect}" unless k.to_s == "__f" }.join(";")
           Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
         else
-          log.warn "Cannot find template `#{_path}`"
+          log.warn "Cannot find template `#{__path}`"
           ""
         end
       end
