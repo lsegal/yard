@@ -53,7 +53,7 @@ module YARD
       # 
       def format_types(typelist, brackets = true)
         list = typelist.map do |type| 
-          type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) }
+          "<tt>" + type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) } + "</tt>"
         end
         list.empty? ? "" : (brackets ? "[#{list.join(", ")}]" : list.join(", "))
       end
