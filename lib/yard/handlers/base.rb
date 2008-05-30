@@ -132,6 +132,8 @@ module YARD
     # @see #parse_block
     #
     class Base
+      attr_accessor :owner, :namespace, :visibility, :scope
+      
       # For accessing convenience, eg. "MethodObject" 
       # instead of the full qualified namespace
       include YARD::CodeObjects
@@ -229,11 +231,11 @@ module YARD
           next unless object.is_a?(CodeObjects::Base)
           
           # Add file and line number
-          object.file ||= parser.file
-          object.line ||= statement.tokens.first.line_no
+          object.file = parser.file
+          object.line = statement.tokens.first.line_no
           
           # Add docstring if it's not set
-          object.docstring = statement.comments if object.docstring.empty?
+          object.docstring = statement.comments unless statement.comments.empty?
           
           # Add source only to non-class non-module objects
           unless object.is_a?(ClassObject) || object.is_a?(ModuleObject)
