@@ -4,11 +4,7 @@ module YARD
       before_section :header, :has_tags?
       
       def sections_for(object)
-        if format == :html
-          [:header, [:param, :yieldparam, :return, :raise, :author, :version, :since, :see]]
-        else
-          [:header, :params, :returns] #[:raises, :yields, :yieldparams]
-        end
+        [:header, [:param, :yieldparam, :return, :raise, :author, :version, :since, :see]]
       end
       
       def param(object)

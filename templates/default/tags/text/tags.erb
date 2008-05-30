@@ -1,0 +1,7 @@
+<% if object.has_tag?(name) -%>
+> <%= defined?(label) ? label : YARD::Tags::Library.labels[name] %>:
+<% for tag in object.tags(name) -%>
+  <%= format_types tag.types unless defined?(no_types) -%><%= " " + tag.name.to_s unless defined?(no_names) -%>
+    <%= tag.text %>
+<% end -%>
+<% end -%>
