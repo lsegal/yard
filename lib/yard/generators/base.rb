@@ -122,7 +122,7 @@ module YARD
         if verifier.is_a?(Symbol)
           send(verifier, object)
         elsif verifier.respond_to?(:call)
-          verifier.call(object)
+          verifier.call(self, object)
         end
       end
       
