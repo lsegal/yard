@@ -1,4 +1,13 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
-require File.dirname(__FILE__) + '/../lib/quick_doc'
-YARD::QuickDoc.new(ARGV[0])
+
+YARD::Registry.load(YARD::PATH_ORDER)
+
+object = YARD::Registry.at(ARGV[0])
+options = {
+  :format => :text, 
+  :template => :default, 
+  :serializer => YARD::Serializers::ProcessSerializer.new('less')
+}
+
+YARD::Generators::QuickDocGenerator.new(options).generate(object)
