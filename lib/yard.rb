@@ -12,8 +12,8 @@ module YARD
       files = Dir[File.join(Dir.pwd, paths)]
     end
     
-    files.each do |file|
-      YARD.logger.debug("Processing #{file}")
+    files.uniq.each do |file|
+      log.debug("Processing #{file}")
       YARD::Parser::SourceParser.parse(file)
     end
     
