@@ -13,6 +13,7 @@ module YARD
             G(AttributesGenerator), 
             G(ConstantsGenerator),
             G(ConstructorGenerator),
+            G(MethodMissingGenerator),
             G(VisibilityGroupGenerator, :visibility => :public),
             G(VisibilityGroupGenerator, :visibility => :protected),
             G(VisibilityGroupGenerator, :visibility => :private)

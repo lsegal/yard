@@ -33,6 +33,7 @@ module YARD
     autoload :MethodGenerator,          'generators/method_generator'
     autoload :MethodDetailsGenerator,   'generators/method_details_generator'
     autoload :MethodListingGenerator,   'generators/method_listing_generator'
+    autoload :MethodMissingGenerator,   'generators/method_missing_generator'
     autoload :MethodSignatureGenerator, 'generators/method_signature_generator'
     autoload :MethodSummaryGenerator,   'generators/method_summary_generator'
     autoload :MixinsGenerator,          'generators/mixins_generator'
