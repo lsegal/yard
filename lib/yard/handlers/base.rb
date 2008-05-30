@@ -235,7 +235,7 @@ module YARD
           object.line = statement.tokens.first.line_no
           
           # Add docstring if it's not set
-          object.docstring = statement.comments unless statement.comments.empty?
+          object.docstring = statement.comments if statement.comments
           
           # Add source only to non-class non-module objects
           unless object.is_a?(ClassObject) || object.is_a?(ModuleObject)
