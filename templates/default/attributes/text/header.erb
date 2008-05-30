@@ -1,0 +1,10 @@
+
+
+> Attributes:
+-------------
+<% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
+<% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| -%>
+- <%= '#' if scope == 'instance' %><%= name %><%= " " if scope == 'class' %>	[<%= ['read', 'write'].map {|t| rw[t] ? t[0,1].upcase : ' ' }.compact.join %>]	(<%= rw.values.compact.first.visibility %>)
+<% end -%>
+<% end -%>
+

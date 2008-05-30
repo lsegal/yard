@@ -10,7 +10,10 @@
           <tt>
             <span class="name"><%= h name %></span>
             <span class="readwrite">
-              [<%= ['read', 'write'].map {|t| linkify(rw[t], t[0,1].upcase) if rw[t] }.compact.join(", ") -%>]
+              [<%= ['read', 'write'].map {|t| linkify(rw[t], t[0,1].upcase) if rw[t] }.compact.join(", ") -%>] 
+            </span>
+            <span class="visibility">
+              (<%= rw.values.compact.first.visibility %>)
             </span>
           </tt>
         </li>
