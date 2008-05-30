@@ -13,7 +13,7 @@ module YARD::CodeObjects
     def visibility=(v) @visibility = v.to_sym end
       
     def is_attribute?
-      namespace.attributes[scope][name] ? true : false
+      namespace.attributes[scope].has_key? name.to_s.gsub(/=$/, '')
     end
       
     def is_alias?

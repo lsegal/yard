@@ -67,5 +67,6 @@ describe YARD::Handlers::AttributeHandler do
   
   it "should respond true in method's #is_attribute?" do
     P('B#a').is_attribute?.should == true
+    P('B#a=').is_attribute?.should == true
   end
 end
