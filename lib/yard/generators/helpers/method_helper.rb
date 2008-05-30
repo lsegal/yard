@@ -8,16 +8,11 @@ module YARD
       end
       
       def format_return_types(object)
-        typenames = "Object"
-        if object.has_tag?(:return)
-          types = object.tags(:return).map do |t| 
-            t.types.map do |type| 
-              type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| $1 + linkify($2) }
-            end
-          end.flatten
-          typenames = types.size == 1 ? types.first : h("[#{types.join(", ")}]")
+        if object.has_tag?(:return) && !object.tag(:return).types.empty?
+          format_types [object.tag(:return).types.first], false
+        else
+          "Object"
         end
-        typenames
       end
       
       def format_block(object)

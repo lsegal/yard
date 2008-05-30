@@ -38,6 +38,25 @@ module YARD
           "<span class='name'>" + linkify(o, o.name) + "</span>" 
         end.join(", ")
       end
+      
+      # Formats a list of types from a tag.
+      # 
+      # @param [Array<String>, FalseClass] typelist
+      #   the list of types to be formatted. 
+      # 
+      # @param [Boolean] brackets omits the surrounding 
+      #   brackets if +brackets+ is set to +false+.
+      # 
+      # @return [String] the list of types formatted
+      #   as [Type1, Type2, ...] with the types linked
+      #   to their respective descriptions.
+      # 
+      def format_types(typelist, brackets = true)
+        list = typelist.map do |type| 
+          type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) }
+        end
+        list.empty? ? "" : (brackets ? "[#{list.join(", ")}]" : list.join(", "))
+      end
     
       def link_object(object, otitle = nil, anchor = nil)
         object = P(current_object, object) if object.is_a?(String)

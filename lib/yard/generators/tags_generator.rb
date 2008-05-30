@@ -49,12 +49,6 @@ module YARD
         opts = { :name => name }.update(opts)
         render(current_object, 'tags', opts)
       end
-      
-      def format_tag_types(typelist)
-        return "" if typelist.nil?
-        typelist = typelist.map {|t| t[0, 1] == '#' ? t : linkify(t) }
-        typelist.empty? ? "" : "[" + typelist.join(", ") + "]"
-      end
     end
   end
 end

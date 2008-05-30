@@ -193,7 +193,7 @@ module YARD
       # Subclasses should override this method to provide the handling
       # functionality for the class. 
       # 
-      # @return [CodeObjects::Base, Array<CodeObjects::Base>, Object]
+      # @return [Array<CodeObjects::Base>, CodeObjects::Base, Object]
       #   If this method returns a code object (or a list of them),
       #   they are passed to the +#register+ method which adds basic
       #   attributes. It is not necessary to return any objects and in
