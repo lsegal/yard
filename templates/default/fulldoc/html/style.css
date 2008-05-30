@@ -1,2 +1,4 @@
 .section.source pre { display: none; }
 .section.tags h2 { display: none; }
+#initialize-instance_method .methodsignature .return_types { display: none; }
+.methodsignature .visibility { display: none; }
