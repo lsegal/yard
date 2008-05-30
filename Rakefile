@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/lib/yard'
 require 'rubygems'
 require 'rake/gempackagetask'
 require 'spec'
@@ -24,4 +25,9 @@ desc "Run all specs"
 Spec::Rake::SpecTask.new("specs") do |t|
   t.spec_opts = ["--format", "specdoc", "--colour"]
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
+end
+
+desc "Generate documentation"
+YARD::Rake::YardocTask.new("yardoc") do |t|
+  t.files = YARD::PATH_ORDER
 end

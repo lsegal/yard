@@ -85,6 +85,10 @@ module YARD
     autoload :TokenList,      'parser/token_list'
   end
   
+  module Rake
+    autoload :YardocTask, 'rake/yardoc_task'
+  end
+  
   module Serializers
     autoload :Base,                 'serializers/base'
     autoload :FileSystemSerializer, 'serializers/file_system_serializer'
