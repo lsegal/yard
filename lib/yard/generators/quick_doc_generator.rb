@@ -6,19 +6,23 @@ module YARD
         when CodeObjects::MethodObject
           [
             :header, 
-            G(DeprecatedGenerator), 
-            G(DocstringGenerator), 
-            G(MethodSignatureGenerator), 
-            G(TagsGenerator), 
-            G(SourceGenerator)
+            [
+              G(DeprecatedGenerator), 
+              G(DocstringGenerator), 
+              G(MethodSignatureGenerator), 
+              G(TagsGenerator), 
+              G(SourceGenerator)
+            ]
           ]
         when CodeObjects::NamespaceObject
           [
-            :header,
-            G(DeprecatedGenerator), 
-            G(DocstringGenerator),
-            G(MethodSummaryGenerator, :scope => :class, :visibility => :public),
-            G(MethodSummaryGenerator, :scope => :instance, :visibility => :public)
+            :header, 
+            [
+              G(DeprecatedGenerator), 
+              G(DocstringGenerator),
+              G(AttributesGenerator),
+              G(MethodSummaryGenerator, :scope => [:class, :instance], :visibility => :public)
+            ]
           ]
         end
       end

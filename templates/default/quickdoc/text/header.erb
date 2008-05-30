@@ -8,3 +8,4 @@ Scop: <%= object.scope %>
 Type: <%= object.tag(:return) && object.tag(:return).type ? object.tag(:return).type : "undefined" %>
 <% end -%>
 
+<%= yield object %>
