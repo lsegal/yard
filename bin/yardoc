@@ -1,16 +1,4 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
 
-YARD::Registry.load(YARD::PATH_ORDER)
-
-objects = YARD::Registry.all(:module, :class)
-options = {
-  :format => :html, 
-  :template => :default, 
-  :serializer => YARD::Serializers::FileSystemSerializer.new, 
-  :verifier => lambda do |gen, obj| 
-    return false if gen.respond_to?(:visibility) && [:protected, :private].include?(gen.visibility) 
-  end
-}
-
-YARD::Generators::FullDocGenerator.new(options).generate(objects)
+YARD::CLI::Yardoc.run(*ARGV)

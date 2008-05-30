@@ -10,6 +10,11 @@ module YARD
     'lib/**/*.rb'
   ]
   
+  module CLI
+    autoload :Yardoc,   'cli/yardoc.rb'
+    autoload :Yri,      'cli/yri.rb'
+  end
+  
   module CodeObjects
     autoload :Base,                 'code_objects/base'
     autoload :CodeObjectList,       'code_objects/base'
