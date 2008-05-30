@@ -1,4 +1,15 @@
 module YARD
+  PATH_ORDER = [
+    'lib/yard/autoload.rb',
+    'lib/yard/code_objects/base.rb',
+    'lib/yard/code_objects/namespace_object.rb',
+    'lib/yard/handlers/base.rb',
+    'lib/yard/generators/base.rb',
+    'lib/yard/generators/method_listing_generator.rb',
+    'lib/yard/serializers/base.rb',
+    'lib/**/*.rb'
+  ]
+  
   module CodeObjects
     autoload :Base,                 'code_objects/base'
     autoload :CodeObjectList,       'code_objects/base'
@@ -72,6 +83,7 @@ module YARD
   module Serializers
     autoload :Base,                 'serializers/base'
     autoload :FileSystemSerializer, 'serializers/file_system_serializer'
+    autoload :ProcessSerializer,    'serializers/process_serializer'
     autoload :StdoutSerializer,     'serializers/stdout_serializer'
   end
   
