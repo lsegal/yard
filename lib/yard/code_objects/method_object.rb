@@ -12,8 +12,11 @@ module YARD::CodeObjects
     def scope=(v) @scope = v.to_sym end
     def visibility=(v) @visibility = v.to_sym end
       
+    def is_attribute?
+      namespace.attributes[scope][name] ? true : false
+    end
+      
     def is_alias?
-      return false if namespace.is_a?(Proxy)
       namespace.aliases.has_key? self
     end
     

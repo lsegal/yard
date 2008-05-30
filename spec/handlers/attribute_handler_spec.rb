@@ -64,4 +64,8 @@ describe YARD::Handlers::AttributeHandler do
     P('B').class_attributes[:z][:read].scope.should == :class
     P('B').instance_attributes[:z][:read].scope.should == :instance
   end
+  
+  it "should respond true in method's #is_attribute?" do
+    P('B#a').is_attribute?.should == true
+  end
 end
