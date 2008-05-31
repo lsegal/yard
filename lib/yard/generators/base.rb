@@ -4,6 +4,7 @@ require 'erubis'
 module YARD
   module Generators
     class Base
+      include Helpers::BaseHelper
       include Helpers::FilterHelper
 
       class << self
@@ -84,6 +85,8 @@ module YARD
         @serializer = options[:serializer] 
         @ignore_serializer = options[:ignore_serializer]
         @verifier = options[:verifier]
+        
+        extend Helpers::HtmlHelper if format == :html
       end
       
       def generator_name
@@ -162,10 +165,7 @@ module YARD
       
       def sections_for(object); [] end
       
-      def before_section(section, object)
-        extend Helpers::BaseHelper
-        extend Helpers::HtmlHelper if format == :html
-      end
+      def before_section(section, object); end
       
       def render_sections(object, sections = nil)
         sections ||= sections_for(object) || []
