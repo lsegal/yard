@@ -13,9 +13,6 @@ module YARD
           :template => :default, 
           :serializer => YARD::Serializers::StdoutSerializer.new
         ]
-        @visibilities = [:public]
-        @reload = true
-        @generate = true
       end
       
       def run(*args)
@@ -35,6 +32,10 @@ module YARD
         
         opts.on('--full', 'Full class diagrams (show methods and attributes).') do
           options[:full] = true
+        end
+
+        opts.on('-d', '--dependencies', 'Show mixins in dependency graph.') do
+          options[:dependencies] = true
         end
         
         opts.on('--dot [OPTIONS]', 'Send the results direclty to `dot` with optional arguments.') do |dotopts|
