@@ -4,6 +4,7 @@ module YARD
     'lib/yard/code_objects/base.rb',
     'lib/yard/code_objects/namespace_object.rb',
     'lib/yard/handlers/base.rb',
+    'lib/yard/generators/helpers/*.rb',
     'lib/yard/generators/base.rb',
     'lib/yard/generators/method_listing_generator.rb',
     'lib/yard/serializers/base.rb',
@@ -11,8 +12,8 @@ module YARD
   ]
   
   module CLI
-    autoload :Yardoc,   'cli/yardoc.rb'
-    autoload :Yri,      'cli/yri.rb'
+    autoload :YardGraph,  'cli/yard_graph.rb'
+    autoload :Yardoc,     'cli/yardoc.rb'
   end
   
   module CodeObjects
@@ -57,6 +58,7 @@ module YARD
     autoload :QuickDocGenerator,        'generators/quick_doc_generator'
     autoload :SourceGenerator,          'generators/source_generator'
     autoload :TagsGenerator,            'generators/tags_generator'
+    autoload :UMLGenerator,             'generators/uml_generator'
     autoload :VisibilityGroupGenerator, 'generators/visibility_group_generator'
   end
   

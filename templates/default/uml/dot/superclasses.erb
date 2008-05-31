@@ -1,0 +1,3 @@
+<% for obj in @objects.select {|o| CodeObjects::ClassObject === o && o.superclass != P(:Object) } -%>
+  <%= format_path obj %> -> <%= format_path obj.superclass %>;
+<% end -%>
