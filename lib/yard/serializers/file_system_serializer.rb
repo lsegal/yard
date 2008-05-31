@@ -36,7 +36,7 @@ module YARD
         
         # Remove special chars from filenames
         fspath.map! do |p|
-          p.gsub(/[\/\\\%\$\=\!\?\-\+\[\]\#\<\>]/) {|x| '_' + x[0].to_s(16).upcase }
+          p.gsub(/[\/\\\%\$\=\!\?\-\+\[\]\#\<\>`]/) {|x| '_' + x[0].to_s(16).upcase }
         end
         
         File.join(fspath)

@@ -16,4 +16,6 @@ class Foo
   def [](key) puts key end
   def []=(key, value) end
   def allowed?; end
+
+  def ` param; end
 end

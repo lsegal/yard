@@ -20,9 +20,11 @@ describe YARD::Serializers::FileSystemSerializer do
   
   it "should serialize to the correct path" do
     yard = CodeObjects::ClassObject.new(nil, :FooBar)
-    meth = CodeObjects::MethodObject.new(yard, :baz)
+    meth = CodeObjects::MethodObject.new(yard, :baz, :class)
+    meth2 = CodeObjects::MethodObject.new(yard, :baz)
     
-    { 'foo/FooBar/baz_i.txt' => meth,
+    { 'foo/FooBar/baz_c.txt' => meth,
+      'foo/FooBar/baz_i.txt' => meth2,
       'foo/FooBar.txt' => yard }.each do |path, obj|
       io = StringIO.new
       File.should_receive(:open).with(path, 'w').and_yield(io)
@@ -50,7 +52,8 @@ describe YARD::Serializers::FileSystemSerializer do
       :- => '_2D_i.html', 
       :[]= => '_5B_5D_3D_i.html',
       :<< => '_3C_3C_i.html',
-      :>= => '_3E_3D_i.html'
+      :>= => '_3E_3D_i.html',
+      :` => '_60_i.html'
     }.each do |meth, value|
       m.stub!(:name).and_return(meth)
       s.serialized_path(m).should == value

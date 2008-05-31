@@ -21,6 +21,7 @@ describe YARD::Handlers::MethodHandler do
     P("Foo#allowed?").should_not be_nil
     P("Foo#/").should_not be_nil
     P("Foo#==").should_not be_nil
+    P("Foo#`").should_not be_nil
   end
   
   it "should mark dynamic methods as such" do
