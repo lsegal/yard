@@ -4,7 +4,7 @@ module YARD
   module CLI
     class Yardoc
       attr_reader :options, :visibilities
-      attr_accessor :files, :reload
+      attr_accessor :files, :reload, :generate
       
       def self.run(*args) new.run(*args) end
         
@@ -19,12 +19,16 @@ module YARD
         ]
         @visibilities = [:public]
         @reload = true
+        @generate = true
       end
       
       def run(*args)
         optparse(*args)
         Registry.load(files, reload)
-        Generators::FullDocGenerator.new(options).generate Registry.all(:module, :class)
+        
+        if generate
+          Generators::FullDocGenerator.new(options).generate Registry.all(:module, :class)
+        end
       end
       
       private
@@ -34,8 +38,12 @@ module YARD
         
         opts = OptionParser.new
         opts.on('--use-cache', 
-                'Use the cached .yardoc file to generate documentation (defaults to no cache)') do 
+                'Use the cached .yardoc database to generate documentation (defaults to no cache)') do 
           self.reload = false
+        end
+        
+        opts.on('--no-output', 'Only generate .yardoc database, no documentation.') do
+          self.generate = false
         end
         
         opts.on('-d', '--output-dir [DIR]', 
