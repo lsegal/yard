@@ -100,7 +100,7 @@ module YARD
           (@@types||={})[path] || :proxy
         end
       end
-      def type=(type) (@@types||={})[path] = type end
+      def type=(type) (@@types||={})[path] = type.to_sym end
       
       def instance_of?(klass)
         self.class == klass
