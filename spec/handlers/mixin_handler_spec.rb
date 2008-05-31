@@ -15,6 +15,10 @@ describe YARD::Handlers::MixinHandler do
     Registry.at(:X).mixins.should include(P(nil, :NOTEXIST))
   end
   
+  it "should set the type of non-existing modules to :module" do
+    P(:NOTEXIST).type.should == :module
+  end
+  
   it "should handle includes with multiple parameters" do
     Registry.at(:X)
   end

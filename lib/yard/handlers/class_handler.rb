@@ -7,6 +7,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
 
       klass = ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
+        o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
       parse_block(:namespace => klass)
       register klass # Explicit registration

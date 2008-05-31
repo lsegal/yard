@@ -249,7 +249,7 @@ module YARD
           
           # Make it dynamic if it's owner is not it's namespace.
           # This generally means it was defined in a method (or block of some sort)
-          object.dynamic ||= true if owner != namespace
+          object.dynamic = true if owner != namespace
         end
         nil # Don't return anything just in case a register call is at the
             # end of a process method-- we don't want to accidentally do this twice. 

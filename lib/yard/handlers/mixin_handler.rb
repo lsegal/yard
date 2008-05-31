@@ -6,8 +6,8 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
       mixin.strip!
       if mixin =~ /^[A-Z\:]/
         obj = P(namespace, mixin)
+        obj.type = :module if obj.is_a?(Proxy)
         namespace.mixins << obj
-        obj.dynamic = true if !obj.is_a?(Proxy) && owner != namespace
       else
         raise YARD::Handlers::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
       end

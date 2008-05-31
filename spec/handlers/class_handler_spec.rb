@@ -12,7 +12,7 @@ describe YARD::Handlers::ClassHandler do
   end
   
   it "should handle the subclassing syntax" do
-    P("A::B::C").superclass.path.should == "String"
+    P("A::B::C").superclass.should == P(:String)
     P("A::X").superclass.should == Registry.at("A::B::C")
   end
   
@@ -28,6 +28,10 @@ describe YARD::Handlers::ClassHandler do
     P("A::B::C#method1").visibility.should == :public
   end
   
+  it "should set superclass type to :class if it is a Proxy" do
+    P("A::B::C").superclass.type.should == :class
+  end
+
   it "should raise an UndocumentableError if the class is invalid" do
     ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
       undoc_error "class #{klass}; end"
