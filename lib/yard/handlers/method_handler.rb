@@ -12,7 +12,10 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
       nobj = P(namespace, $`) unless $` == "self"
     end
     
-    obj = MethodObject.new(nobj, meth, mscope) {|o| o.visibility = visibility }
+    obj = MethodObject.new(nobj, meth, mscope) do |o| 
+      o.visibility = visibility 
+      o.source = statement
+    end
     parse_block(:owner => obj) # mainly for yield/exceptions
     obj # return for registration
   end

@@ -230,21 +230,22 @@ module YARD
         objects.each do |object|
           next unless object.is_a?(CodeObjects::Base)
           
-          # Add file and line number
-          object.file = parser.file
-          object.line = statement.tokens.first.line_no
+          # Add file and line number, but for class/modules this is 
+          # only done if there is a docstring for this specific definition.
+          if (object.is_a?(NamespaceObject) && statement.comments) || !object.is_a?(NamespaceObject)
+            object.file = parser.file
+            object.line = statement.tokens.first.line_no
+          elsif object.is_a?(NamespaceObject) && !statement.comments
+            object.file ||= parser.file
+            object.line ||= statement.tokens.first.line_no
+          end
           
-          # Add docstring if it's not set
+          # Add docstring if there is one.
           object.docstring = statement.comments if statement.comments
           
           # Add source only to non-class non-module objects
-          unless object.is_a?(ClassObject) || object.is_a?(ModuleObject)
+          unless object.is_a?(NamespaceObject)
             object.source ||= statement 
-          end
-          
-          # Method Object gets signature
-          if object.is_a?(MethodObject)
-            object.signature ||= statement.tokens.to_s
           end
           
           # Make it dynamic if it's owner is not it's namespace.

@@ -25,7 +25,7 @@ module YARD
     class Base  
       attr_reader :name
       attr_accessor :namespace
-      attr_accessor :source, :file, :line, :docstring, :dynamic
+      attr_accessor :source, :signature, :file, :line, :docstring, :dynamic
       attr_reader :tags
       
       def dynamic?; @dynamic end
@@ -119,6 +119,7 @@ module YARD
           
           @source = format_source(src + blk)
           self.line = statement.tokens.first.line_no
+          self.signature = src
         else
           @source = format_source(statement.to_s)
         end

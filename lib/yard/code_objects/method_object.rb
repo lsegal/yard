@@ -1,6 +1,6 @@
 module YARD::CodeObjects
   class MethodObject < Base
-    attr_accessor :visibility, :scope, :signature
+    attr_accessor :visibility, :scope
     
     def initialize(namespace, name, scope = :instance) 
       self.visibility = :public
