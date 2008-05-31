@@ -1,3 +1,4 @@
+require 'pp'
 require 'optparse'
 
 module YARD
@@ -14,7 +15,7 @@ module YARD
           :template => :default, 
           :serializer => YARD::Serializers::FileSystemSerializer.new, 
           :verifier => lambda do |gen, obj| 
-            return false if gen.respond_to?(:visibility) && visibilities.include?(gen.visibility) 
+            return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
           end
         ]
         @visibilities = [:public]
