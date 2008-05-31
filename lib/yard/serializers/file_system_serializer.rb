@@ -8,7 +8,7 @@ module YARD
       def initialize(opts = {})
         super
         @basepath = (options[:basepath] || 'doc').to_s
-        @extension = (options[:extension] || 'html').to_s
+        @extension = (options.has_key?(:extension) ? options[:extension] : 'html').to_s
       end
       
       def serialize(object, data)
@@ -23,7 +23,7 @@ module YARD
 
         objname = object.name.to_s
         objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
-        fspath = [objname + ".#{extension}"]
+        fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
         if object.namespace && object.namespace.path != ""
           fspath.unshift *object.namespace.path.split(CodeObjects::NSEP)
         end

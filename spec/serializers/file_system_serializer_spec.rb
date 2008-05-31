@@ -18,6 +18,11 @@ describe YARD::Serializers::FileSystemSerializer do
     obj.extension.should == "html"
   end
   
+  it "should allow no extension to be used" do
+    obj = Serializers::FileSystemSerializer.new :extension => nil
+    obj.serialized_path(Registry.root).should == 'root'
+  end
+  
   it "should serialize to the correct path" do
     yard = CodeObjects::ClassObject.new(nil, :FooBar)
     meth = CodeObjects::MethodObject.new(yard, :baz, :class)
