@@ -12,7 +12,7 @@ module YARD
       def initialize(name = :yardoc)
         @name = name
         @options = []
-        @files = []
+        @files = ['lib/**/*.rb']
         
         yield self if block_given?
         self.options +=  ENV['OPTS'].split(/[ ,]/) if ENV['OPTS'] 
