@@ -6,7 +6,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       classname, superclass = $1, $2
 
       klass = ClassObject.new(namespace, classname) do |o|
-        o.superclass = superclass
+        o.superclass = superclass if superclass
       end
       parse_block(:namespace => klass)
       register klass # Explicit registration
