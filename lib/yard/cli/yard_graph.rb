@@ -42,7 +42,7 @@ module YARD
         end
         
         opts.on('-f', '--file [FILE]', 'Writes output to a file instead of stdout.') do |file|
-          options[:serializer] = Serializers::FileSystemSerializer(:basepath => '.', :extension => nil)
+          options[:serializer] = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
           options[:serializer].instance_eval "def serialized_path(object) #{file.inspect} end"
         end
 
