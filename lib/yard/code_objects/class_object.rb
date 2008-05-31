@@ -3,7 +3,7 @@ module YARD::CodeObjects
     attr_accessor :superclass
     
     def initialize(namespace, name, *args, &block)
-      @superclass = P("::Object")
+      @superclass = P(:Object)
       super
     end
     
