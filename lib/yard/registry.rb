@@ -24,10 +24,10 @@ module YARD
         instance.clear 
         objects.clear
       end
-      
+
       def resolve(namespace, name, proxy_fallback = false)
-        namespace = Registry.root if namespace == :root || !namespace
-        
+        namespace = root if namespace == :root || !namespace
+
         newname = name.to_s.gsub(/^#/, '')
         if name =~ /^::/
           [name, newname[2..-1]].each do |n|
@@ -45,7 +45,7 @@ module YARD
             end
             namespace = namespace.parent
           end
-          
+
           # Look for ::name or #name in the root space
           [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
             found = at(s + newname)
@@ -55,13 +55,16 @@ module YARD
         proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
       end
     end
-    
+
     attr_accessor :yardoc_file
+    attr_reader :proxy_types
 
     def load(files = [], reload = false)
       if files.is_a?(Array)
         if File.exists?(yardoc_file) && !reload
-          namespace.update Marshal.load(IO.read(yardoc_file))
+          ns, pt = *Marshal.load(IO.read(yardoc_file))
+          namespace.update(ns)
+          proxy_types.update(pt)
         else
           size = namespace.size
           YARD.parse(files)
@@ -78,7 +81,7 @@ module YARD
     end
     
     def save(file = yardoc_file)
-      File.open(file, "w") {|f| Marshal.dump(@namespace, f) }
+      File.open(file, "w") {|f| Marshal.dump([@namespace, @proxy_types], f) }
       true
     end
 
@@ -104,12 +107,16 @@ module YARD
     
     def root; namespace[:root] end
     def delete(object) namespace.delete(object.path) end
-    def clear; initialize end
 
-    def initialize
+    def clear
       @namespace = SymbolHash.new
       @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
+      @proxy_types = {}
+    end
+
+    def initialize
       @yardoc_file = DEFAULT_YARDOC_FILE
+      clear
     end
   
     def register(object)

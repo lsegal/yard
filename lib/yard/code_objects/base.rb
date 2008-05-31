@@ -3,7 +3,7 @@ require "delegate"
 module YARD
   module CodeObjects
     class CodeObjectList < Array
-      def initialize(owner)
+      def initialize(owner = Registry.root)
         @owner = owner
       end
       

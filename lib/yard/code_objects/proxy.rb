@@ -10,6 +10,11 @@ module YARD
       def initialize(namespace, name)
         namespace = Registry.root if !namespace || namespace == :root
         
+        if name =~ /^#{NSEP}/
+          namespace = Registry.root
+          name = name[2..-1]
+        end
+        
         if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
@@ -97,10 +102,10 @@ module YARD
         if obj = to_obj
           obj.type
         else
-          (@@types||={})[path] || :proxy
+          Registry.proxy_types[path] || :proxy
         end
       end
-      def type=(type) (@@types||={})[path] = type.to_sym end
+      def type=(type) Registry.proxy_types[path] = type.to_sym end
       
       def instance_of?(klass)
         self.class == klass
