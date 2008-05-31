@@ -47,4 +47,11 @@ describe YARD::CodeObjects::Proxy do
     obj.name.should == :test
     obj.path.should == "A::B#test"
   end
+  
+  it "should allow type to be changed" do
+    obj = P("InvalidClass")
+    obj.type.should == :proxy
+    obj.type = :class
+    obj.type.should == :class
+  end
 end

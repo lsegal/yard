@@ -96,9 +96,10 @@ module YARD
         if obj = to_obj
           obj.type
         else
-          :proxy
+          @type || :proxy
         end
       end
+      def type=(type) @type = type end
       
       def instance_of?(klass)
         self.class == klass
