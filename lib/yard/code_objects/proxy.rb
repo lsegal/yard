@@ -1,7 +1,8 @@
 module YARD
   module CodeObjects
     class ProxyMethodError < NoMethodError; end
-    class Proxy
+
+    class Proxy    
       attr_reader :namespace, :name
       alias_method :parent, :namespace
 
@@ -96,10 +97,10 @@ module YARD
         if obj = to_obj
           obj.type
         else
-          @type || :proxy
+          (@@types||={})[path] || :proxy
         end
       end
-      def type=(type) @type = type end
+      def type=(type) (@@types||={})[path] = type end
       
       def instance_of?(klass)
         self.class == klass

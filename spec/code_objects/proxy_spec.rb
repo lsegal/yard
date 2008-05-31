@@ -54,4 +54,9 @@ describe YARD::CodeObjects::Proxy do
     obj.type = :class
     obj.type.should == :class
   end
+  
+  it "should retain a type change between Proxy objects" do
+    P("InvalidClass").type = :class
+    P("InvalidClass").type.should == :class
+  end
 end
