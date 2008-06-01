@@ -16,12 +16,9 @@ describe YARD::Handlers::MethodHandler do
   end
   
   it "should allow punctuation in method names ([], ?, =~, <<, etc.)" do
-    P("Foo#[]").should_not be_nil
-    P("Foo#[]=").should_not be_nil
-    P("Foo#allowed?").should_not be_nil
-    P("Foo#/").should_not be_nil
-    P("Foo#==").should_not be_nil
-    P("Foo#`").should_not be_nil
+    [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^'].each do |name|
+      P("Foo##{name}").should_not be_instance_of(Proxy)
+    end
   end
   
   it "should mark dynamic methods as such" do

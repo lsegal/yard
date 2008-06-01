@@ -34,9 +34,11 @@ module YARD
         #  p.gsub(/([a-z])([A-Z])/, '\1_\2').downcase 
         #end
         
-        # Remove special chars from filenames
+        # Remove special chars from filenames.
+        # Windows disallows \ / : * ? " < > | but we will just remove any
+        # non alphanumeric (plus period, underscore and dash).
         fspath.map! do |p|
-          p.gsub(/[\/\\\%\$\=\!\?\-\+\[\]\#\<\>`]/) {|x| '_' + x[0].to_s(16).upcase }
+          p.gsub(/[^\w\.-]/) {|x| '_' + x[0].to_s(16).upcase }
         end
         
         File.join(fspath)

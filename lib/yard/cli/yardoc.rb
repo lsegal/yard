@@ -1,4 +1,3 @@
-require 'pp'
 require 'optparse'
 
 module YARD

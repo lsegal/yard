@@ -4,7 +4,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
   def process
     nobj = namespace
     mscope = scope
-    meth = statement.tokens.to_s[/^def\s+([\s\w\:\.=<>\?^%\/\*\[\]\!`]+)/, 1].gsub(/\s+/,'')
+    meth = statement.tokens.to_s[/^def\s+(#{METHODMATCH}+)/m, 1].gsub(/\s+/,'')
     
     # Class method if prefixed by self(::|.) or Module(::|.)
     if meth =~ /(?:#{NSEP}|\.)([^#{NSEP}\.]+)$/

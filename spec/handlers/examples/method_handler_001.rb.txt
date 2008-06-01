@@ -15,7 +15,16 @@ class Foo
 
   def [](key) puts key end
   def []=(key, value) end
-  def allowed?; end
+  def 
+allowed?
+end
 
   def ` param; end
+  def /(x) end
+  def |; end; def =~ ()
+end
+  def *(o) end
+  def &(o) end
+  def %(o) end
+  def ^(o) end
 end

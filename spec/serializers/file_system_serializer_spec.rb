@@ -54,11 +54,16 @@ describe YARD::Serializers::FileSystemSerializer do
       :ask? => 'ask_3F_i.html', 
       :=== => '_3D_3D_3D_i.html', 
       :+ => '_2B_i.html', 
-      :- => '_2D_i.html', 
+      :- => '-_i.html', 
       :[]= => '_5B_5D_3D_i.html',
       :<< => '_3C_3C_i.html',
       :>= => '_3E_3D_i.html',
-      :` => '_60_i.html'
+      :` => '_60_i.html',
+      :& => '_26_i.html',
+      :* => '_2A_i.html',
+      :| => '_7C_i.html',
+      :/ => '_2F_i.html',
+      :=~ => '_3D_7E_i.html'
     }.each do |meth, value|
       m.stub!(:name).and_return(meth)
       s.serialized_path(m).should == value
