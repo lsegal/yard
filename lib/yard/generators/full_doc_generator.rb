@@ -3,6 +3,7 @@ module YARD
     class FullDocGenerator < Base
       before_generate :is_namespace?
       before_generate :generate_stylesheet
+      before_generate :generate_index
       
       def sections_for(object) 
         case object
@@ -22,6 +23,10 @@ module YARD
           cssfile = find_template template_path(CSS_FILE)
           serializer.serialize(CSS_FILE, File.read(cssfile))
         end
+      end
+      
+      def generate_index
+        @index = render(nil, :index)
       end
     end
   end

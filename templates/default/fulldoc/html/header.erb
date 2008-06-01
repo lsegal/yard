@@ -7,6 +7,11 @@
     <title><%= h object.type.to_s.capitalize %> <%= h object.path %></title>
   </head>
   <body>
-    <%= yield object %>
+    <div id="nav">
+      <%= @index %>
+    </div>
+    <div id="content">
+      <%= yield object %>
+    </div>
   </body>
 </html>

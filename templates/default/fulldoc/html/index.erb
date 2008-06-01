@@ -1,0 +1,27 @@
+<div id="all-modules">
+  <h1>Module List</h1>
+  <ul>
+  <% for obj in YARD::Registry.all(:module).sort_by {|o| o.path } -%>
+  <li><%= linkify(obj, obj.path) %></li>
+  <% end -%>
+  </ul>
+</div>
+
+<div id="all-modules">
+  <h1>Class List</h1>
+  <ul>
+  <% for obj in YARD::Registry.all(:class).sort_by {|o| o.path } -%>
+  <li><%= linkify(obj, obj.path) %></li>
+  <% end -%>
+  </ul>
+</div>
+
+<div id="all-modules">
+  <h1>Method List</h1>
+  <ul>
+  <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } -%>
+    <li><%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %></li>
+  <% end -%>
+  </ul>
+</div>
+
