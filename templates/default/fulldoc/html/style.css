@@ -1,8 +1,7 @@
 body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10pt; }
-h1 { border-top: 1px solid #ccc; }
+h1 { border-top: 1px solid #ccc; padding-top: 7px; }
 .section.module h1.title, .section.class h1.title { background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
 .section.source pre { display: none; }
-.section.tags h2 { display: none; }
 #initialize-instance_method .methodsignature .return_types { display: none; }
 .methodsignature .visibility { display: none; }
 .methodsignature .name { font-weight: bold; }
@@ -23,4 +22,12 @@ h1 { border-top: 1px solid #ccc; }
 .section.inheritance ul { list-style: none; padding-left: 1em; font-size: 1.1em; }
 .section.inheritance ul li { line-height: 1.5em }
 .section.inheritance ul:first-child {  padding-left: 1em; }
-.param h3 { font-size: 1em; }
+.section.tags div { clear: both; }
+.section.tags h2 { display: none; }
+.section.tags h3 { font-size: 1.0em; margin-top: 3px; }
+.section.tags dl { margin-left: 2em; }
+.section.methodmissing p.note { font-style: italic; }
+.included h1, .inherited h1 { font-size: 1.1em; border: 0; margin: 0; padding: 5px; border-bottom: 1px solid #ccc; }
+.included div, .inherited div { color: #444; margin: 1.5em 0; width: 500px; border: 1px solid #ccc; }
+.included p .name, .inherited p .name { font-family: monospace; }
+.included p, .inherited p { padding: 0 7px; }
