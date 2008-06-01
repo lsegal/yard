@@ -3,15 +3,13 @@ module YARD
     module MethodHelper
       protected
       
-      def format_def(object)
-        h(object.signature.gsub(/^def\s*(?:.+?(?:\.|::)\s*)?/, ''))
+      def format_args(object)
+        h object.signature[/#{Regexp.quote object.name.to_s}\s*(.*)/, 1]
       end
       
       def format_return_types(object)
         if object.has_tag?(:return) && !object.tag(:return).types.empty?
           format_types [object.tag(:return).types.first], false
-        else
-          "Object"
         end
       end
       

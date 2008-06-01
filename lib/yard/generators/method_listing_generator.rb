@@ -91,10 +91,6 @@ module YARD
         end
       end
       
-      def format_short_def(object)
-        format_def(object).gsub(/^[^\s\(]+/) {|match| linkify(object, match) }
-      end
-      
       private
       
       def meths_opts

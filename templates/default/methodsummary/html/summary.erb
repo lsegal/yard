@@ -4,7 +4,7 @@
     <li>
       <tt class="signature">
         <span class='return_types'><%= format_return_types meth %></span>
-        <span class='name_args'><%= format_short_def meth %></span>
+        <span class='name'><%= linkify(meth, meth.name) %></span><span class='args'><%= format_args meth %></span>
         <span class='block'><%= format_block meth %></span>
         <% unless meth.aliases.empty? -%>
           <span class='aliases'>-&gt; <%= meth.aliases.map {|o| format_meth_name o }.join(", ") %></span>
