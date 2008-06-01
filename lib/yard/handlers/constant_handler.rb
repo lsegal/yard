@@ -8,6 +8,6 @@ class YARD::Handlers::ConstantHandler < YARD::Handlers::Base
     return unless owner.is_a? NamespaceObject
     
     name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
-    ConstantObject.new(namespace, name)
+    ConstantObject.new(namespace, name) {|o| o.source = statement }
   end
 end

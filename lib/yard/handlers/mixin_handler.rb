@@ -4,7 +4,7 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
   def process
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
       mixin.strip!
-      if mixin =~ /^[A-Z\:]/
+      if mixin =~ /\A#{NAMESPACEMATCH}\Z/
         obj = P(namespace, mixin)
         obj.type = :module if obj.is_a?(Proxy)
         namespace.mixins << obj
