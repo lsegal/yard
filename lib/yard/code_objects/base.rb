@@ -29,7 +29,6 @@ module YARD
       attr_reader :name
       attr_accessor :namespace
       attr_accessor :source, :signature, :file, :line, :docstring, :dynamic
-      attr_reader :tags
       
       def dynamic?; @dynamic end
       
@@ -136,7 +135,17 @@ module YARD
       #   the comments attached to the code object to be parsed 
       #   into a docstring and meta tags.
       def docstring=(comments)
+        @short_docstring = nil
         parse_comments(comments) if comments
+      end
+      
+      ##
+      # Gets the first line of a docstring to the period or the first paragraph.
+      # 
+      # @return [String] The first line or paragraph of the docstring; always ends with a period.
+      def short_docstring
+        @short_docstring ||= (docstring.split(/\.|\r?\n\r?\n/).first || '')
+        @short_docstring += '.' unless @short_docstring.empty?
       end
 
       ##
