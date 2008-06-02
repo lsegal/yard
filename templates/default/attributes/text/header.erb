@@ -4,7 +4,7 @@
 -------------
 <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
 <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| -%>
-- <%= rw.values.compact.first.name(true) %><%= " " if scope == 'class' %>	[<%= ['read', 'write'].map {|t| rw[t] ? t[0,1].upcase : ' ' }.compact.join %>]	(<%= rw.values.compact.first.visibility %>)
+<%= uml_visibility rw.values.compact.first %> <%= rw.values.compact.first.name(true) %><%= " " if scope == 'class' %>	[<%= ['read', 'write'].map {|t| rw[t] ? t[0,1].upcase : ' ' }.compact.join %>]	(<%= rw.values.compact.first.visibility %>)
 <% end -%>
 <% end -%>
 
