@@ -46,7 +46,7 @@ module YARD
         statement, block, comments = TokenList.new, nil, nil
         stmt_number, level = 0, 0
         new_statement, open_block = true, false
-        last_tk, before_last_tk = nil, nil
+        last_tk, last_ns_tk, before_last_tk = nil, nil, nil
         open_parens = 0
 
         while tk = @tokens.shift
@@ -62,10 +62,10 @@ module YARD
           # Get the initial comments
           if statement.empty?
             # Two new-lines in a row will destroy any comment blocks
-            if tk.class == TkCOMMENT && last_tk.class == TkNL && 
+            if [TkCOMMENT, TkRD_COMMENT].include?(tk.class)  && last_tk.class == TkNL && 
               (before_last_tk && (before_last_tk.class == TkNL || before_last_tk.class == TkSPACE))
               comments = nil
-            elsif tk.class == TkCOMMENT
+            elsif tk.class == TkCOMMENT || tk.class == TkRD_COMMENT
               # Remove the "#" and up to 1 space before the text
               # Since, of course, the convention is to have "# text"
               # and not "#text", which I deem ugly (you heard it here first)
@@ -76,7 +76,7 @@ module YARD
           end
                 
           # Ignore any initial comments or whitespace
-          unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          unless statement.empty? && [TkSPACE, TkNL, TkRD_COMMENT, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
             level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
         
@@ -118,7 +118,7 @@ module YARD
               # if a ||
               #    b
               if (last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state)) || 
-                  (open_block && tk.class == TkSEMICOLON)
+                  (open_block && [TkNL, TkSEMICOLON].include?(tk.class) && last_ns_tk.class != open_block.last)
                 stmt_number += 1
                 new_statement = true
                 #p "NEW STATEMENT #{block.to_s}"
@@ -153,6 +153,7 @@ module YARD
 
           before_last_tk = last_tk
           last_tk = tk # Save last token
+          last_ns_tk = tk unless [TkSPACE, TkNL, TkEND_OF_SCRIPT].include? tk.class
         end
 
         # Return the code block with starting token and initial comments
