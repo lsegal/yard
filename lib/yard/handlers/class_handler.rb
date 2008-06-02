@@ -2,8 +2,12 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   handles TkCLASS
   
   def process
-    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})(?:\s*<\s*(#{NAMESPACEMATCH}))?\s*\Z/
-      classname, superclass = $1, $2
+    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})(\s*<.+|\Z)/m
+      classname, extra, superclass, undocsuper = $1, $2, nil, false
+      if extra =~ /\A\s*<\s*/m
+        superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/m, 1]
+        undocsuper = true if superclass.nil?
+      end
 
       klass = ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
@@ -11,7 +15,11 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       end
       parse_block(:namespace => klass)
       register klass # Explicit registration
-    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
+       
+      if undocsuper
+        raise YARD::Handlers::UndocumentableError, 'added class, but cannot document superclass'
+      end
+    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/m
       classname = $1
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)

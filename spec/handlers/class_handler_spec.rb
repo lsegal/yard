@@ -38,9 +38,12 @@ describe YARD::Handlers::ClassHandler do
     end
   end
   
-  it "should raise an UndocumentableError if the superclass is invalid" do
+  it "should raise an UndocumentableError if the superclass is invalid but it should create the class." do
     ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
+      Registry.clear
       undoc_error "class A < #{klass}; end"
+      Registry.at('A').should_not be_nil
+      Registry.at('A').superclass.should == P(:Object)
     end
   end
 end
