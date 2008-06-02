@@ -26,7 +26,7 @@ module YARD
 
       def has_included_methods?(object)
         meths = object.included_meths(:scope => scope, :visibility => visibility)
-        remove_ignored_meths!(meths)
+        remove_ignored_meths!(meths, false)
         meths.size > 0
       end
       
@@ -85,10 +85,10 @@ module YARD
         }
       end
       
-      def remove_ignored_meths!(list)
+      def remove_ignored_meths!(list, explicit_attr = true)
         list.reject! do |o| 
           ignored_meths[o.scope].include?(o.name) || 
-            o.is_alias? || (o.is_attribute? && !o.is_explicit?)
+            o.is_alias? || (explicit_attr ? (o.is_attribute? && !o.is_explicit?) : o.is_attribute?)
         end
       end
       
