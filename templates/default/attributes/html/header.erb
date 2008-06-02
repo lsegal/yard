@@ -4,21 +4,30 @@
   <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
     <div class="<%= scope %>">
       <h2><%= scope.capitalize %> Attributes</h2>
-      <ul>
+      <table>
       <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| -%>
-        <li>
-          <tt>
-            <span class="name"><%= h name %></span>
-            <span class="readwrite">
-              [<%= ['read', 'write'].map {|t| linkify(rw[t], t[0,1].upcase) if rw[t] }.compact.join(", ") -%>] 
-            </span>
-            <span class="visibility">
-              (<%= rw.values.compact.first.visibility %>)
-            </span>
-          </tt>
-        </li>
+        <tr>
+          <th class="name"><%= h name %></span>
+          <td class="readwrite">
+            [<%= ['read', 'write'].map {|t| "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>" if rw[t] }.compact.join -%>] 
+          </td>
+          <td class="visibility">
+            <%= rw.values.compact.first.visibility %>
+          </td>
+          <td class="docstring">
+            <%= htmlify rw.values.compact.first.short_docstring %>
+            <% if rw[:read] && rw[:read].tag(:return) && rw[:read].tag(:return).types -%>
+              <p class='returns'>
+                Returns: 
+                  <span class='return_types'>
+                     <%= format_return_types rw[:read] %>
+                  </span>
+              </p>
+            <% end -%>
+          </td>
+        </tr>
       <% end -%>
-      </ul>
+      </table>
     </div>
   <% end -%>
 </div>
