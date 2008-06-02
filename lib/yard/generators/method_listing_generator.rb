@@ -19,13 +19,13 @@ module YARD
       
       def has_inherited_methods?(object)
         return false unless object.is_a?(CodeObjects::ClassObject)
-        meths = object.inherited_meths
+        meths = object.inherited_meths(:scope => scope, :visibility => visibility)
         remove_ignored_meths!(meths)
         meths.size > 0
       end
 
       def has_included_methods?(object)
-        meths = object.included_meths
+        meths = object.included_meths(:scope => scope, :visibility => visibility)
         remove_ignored_meths!(meths)
         meths.size > 0
       end
