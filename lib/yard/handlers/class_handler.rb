@@ -2,7 +2,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   handles TkCLASS
   
   def process
-    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})(\s*<.+|\Z)/m
+    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})(\s*<.+|\s*\Z)/m
       classname, extra, superclass, undocsuper = $1, $2, nil, false
       if extra =~ /\A\s*<\s*/m
         superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/m, 1]
