@@ -23,7 +23,8 @@ module YARD
     ISEP = '#'
     CONSTANTMATCH = /[A-Z]\w*/
     NAMESPACEMATCH = /(?:(?:#{Regexp.quote NSEP})?#{CONSTANTMATCH})+/
-    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?[\w=<>^%&*!~`^\|\?\/\[\]]+/
+    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?]?|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?|[-+~]@/
+    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?#{METHODNAMEMATCH}/
     
     class Base  
       attr_reader :name
