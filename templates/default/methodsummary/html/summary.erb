@@ -5,7 +5,7 @@
       <th class="signature">
         <span class='name'><%= linkify(meth, meth.name) %></span><span class='args'><%= format_args meth %></span>
         <span class='block'><%= format_block meth %></span>
-        <%= meth.aliases.each do |obj| -%>
+        <% meth.aliases.each do |obj| -%>
           <span class='alias'><%= h obj.name(true) %></span>
         <% end -%>
       </th>
