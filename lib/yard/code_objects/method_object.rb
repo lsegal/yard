@@ -40,6 +40,10 @@ module YARD::CodeObjects
       end
     end
     
+    def name(prefix = false)
+      prefix && sep == ISEP ? sep + super().to_s : super()
+    end
+    
     protected
     
     def sep; scope == :class ? super : ISEP end
