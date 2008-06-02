@@ -1,8 +1,6 @@
 module YARD
   module Generators::Helpers
     module MethodHelper
-      protected
-      
       def format_args(object)
         h object.signature[/#{Regexp.quote object.name.to_s}\s*(.*)/, 1]
       end
@@ -22,7 +20,7 @@ module YARD
       end
       
       def format_meth_name(object)
-        (object.scope == :instance ? '#' : '') + h(object.name.to_s)
+        h object.name(true)
       end
     end
   end
