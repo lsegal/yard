@@ -22,7 +22,13 @@ describe YARD::CodeObjects::Proxy do
     pathobj.mixins << yardobj
     P(P(nil, :TestClass), :YARD).should be_instance_of(ModuleObject)
   end
-
+  
+  it "should respond_to respond_to?" do
+    yardobj = ModuleObject.new(:root, :YARD)
+    P(:YARD).respond_to?(:children).should == true
+    P(:NOTYARD).respond_to?(:children).should == false
+  end
+  
   it "should make itself obvious that it's a proxy" do
     pathobj = P(:root, :YARD)
     pathobj.class.should == Proxy
