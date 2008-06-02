@@ -30,6 +30,11 @@ describe YARD::CodeObjects::Base do
     o2.docstring.should == "NOT_DOCSTRING"
   end
   
+  it "should handle empty docstrings with #short_docstring" do
+    o1 = ClassObject.new(nil, :Me) 
+    o1.short_docstring.should == ""
+  end
+  
   it "should return the first sentence with #short_docstring" do
     o1 = ClassObject.new(nil, :Me) do |o|
       o.docstring = "DOCSTRING. Another sentence"

@@ -146,6 +146,7 @@ module YARD
       def short_docstring
         @short_docstring ||= (docstring.split(/\.|\r?\n\r?\n/).first || '')
         @short_docstring += '.' unless @short_docstring.empty?
+        @short_docstring
       end
 
       ##
