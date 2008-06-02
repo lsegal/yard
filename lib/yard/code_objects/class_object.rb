@@ -3,8 +3,8 @@ module YARD::CodeObjects
     attr_accessor :superclass
     
     def initialize(namespace, name, *args, &block)
-      @superclass = P(:Object)
       super
+      self.superclass ||= P(:Object) unless self == P(:Object)
     end
     
     def inheritance_tree(include_mods = false)
@@ -64,6 +64,10 @@ module YARD::CodeObjects
         @superclass = P(namespace, object)
       else
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
+      end
+      
+      if @superclass == self
+        raise ArgumentError, "superclass #{@superclass} cannot be the same as the subclass #{self}"
       end
     end
   end

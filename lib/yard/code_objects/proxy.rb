@@ -125,9 +125,9 @@ module YARD
       
       def respond_to?(meth)
         if obj = to_obj
-          to_obj.respond_to?(meth)
+          obj.respond_to?(meth)
         else
-          super 
+          super
         end
       end
 
