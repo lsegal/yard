@@ -34,11 +34,9 @@ module YARD
       protected
       
       def show_full_info?;    options.has_key? :full end
-      def show_empty_nodes?;  options.has_key? :empty_nodes end
       def show_dependencies?; options.has_key? :dependencies end
       
       def init(object)
-        @empty_nodes = CodeObjects::CodeObjectList.new
         @objects = {}
         process_objects(object)
         @objects = @objects.values

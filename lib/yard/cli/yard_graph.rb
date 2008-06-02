@@ -26,11 +26,6 @@ module YARD
       
       def optparse(*args)
         opts = OptionParser.new
-        opts.on('--empty-nodes', 
-                'Show empty nodes in graph (GraphViz hides subgraphs if they have no children).') do 
-          options[:empty_nodes] = true
-        end
-        
         opts.on('--full', 'Full class diagrams (show methods and attributes).') do
           options[:full] = true
         end
