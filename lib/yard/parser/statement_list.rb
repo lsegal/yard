@@ -109,6 +109,7 @@ module YARD
             #puts "#{open_parens} open brackets for: #{statement.to_s}"
             if open_parens == 0 && ((last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
               (open_block && open_block.last == TkDEF && tk.class == TkRPAREN))
+              
               # Make sure we don't have any running expressions
               # This includes things like
               #
@@ -129,7 +130,7 @@ module YARD
                   level += 1
                   
                   block ||= TokenList.new
-                  block << tk if tk.class == TkNL
+                  #block << tk if tk.class == TkNL
                 end
               end
             elsif tk.class != TkSPACE

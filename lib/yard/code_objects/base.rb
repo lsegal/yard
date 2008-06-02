@@ -274,15 +274,15 @@ module YARD
             tag_name, tag_buf = $1, $2 
           elsif tag_name && indent >= orig_indent && !empty
             # Extra data added to the tag on the next line
-            last_empty = last_line =~ /^\s*$/ ? true : false
+            last_empty = last_line =~ /^[ \t]*$/ ? true : false
             
             if last_empty
               tag_buf << "\n\n" 
               raw_buf << ''
             end
             
-            tag_buf << line.gsub(/^\s{#{indent}}/, last_empty ? '' : ' ')
-            raw_buf << line.gsub(/^\s{#{orig_indent}}/, '')
+            tag_buf << line.gsub(/^[ \t]{#{indent}}/, last_empty ? '' : ' ')
+            raw_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
           elsif !tag_name
             # Regular docstring text
             @docstring << line << "\n" 
@@ -299,8 +299,8 @@ module YARD
       # Formats source code by removing leading indentation
       def format_source(source)
         source.chomp!
-        indent = source.split(/\r?\n/).last[/^(\s*)/, 1].length
-        source.gsub(/^\s{#{indent}}/, '')
+        indent = source.split(/\r?\n/).last[/^([ \t]*)/, 1].length
+        source.gsub(/^[ \t]{#{indent}}/, '')
       end
     end
   end

@@ -165,14 +165,15 @@ describe YARD::CodeObjects::Base do
     obj = CodeObjects::Base.new(nil, :test)
     obj.source = <<-eof
       def mymethod
-        if x == 2
-          3
+        if x == 2 &&
+            5 == 5
+          3 
         else
           1
         end
       end
     eof
-    obj.source.should == "def mymethod\n  if x == 2\n    3\n  else\n    1\n  end\nend"
+    obj.source.should == "def mymethod\n  if x == 2 &&\n      5 == 5\n    3 \n  else\n    1\n  end\nend"
     
     Registry.clear
     Parser::SourceParser.parse_string <<-eof
@@ -181,6 +182,19 @@ describe YARD::CodeObjects::Base do
       end
     eof
     Registry.at('#key?').source.should == "def key?(key)\n  super(key)\nend"
+
+    Registry.clear
+    Parser::SourceParser.parse_string <<-eof
+        def key?(key)
+          if x == 2
+            puts key
+          else
+            exit
+          end
+        end
+    eof
+    Registry.at('#key?').source.should == "def key?(key)\n  if x == 2\n    puts key\n  else\n    exit\n  end\nend"
+
   end
   
   it "should handle source for 'def x; end'" do
