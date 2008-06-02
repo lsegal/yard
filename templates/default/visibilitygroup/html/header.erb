@@ -1,6 +1,6 @@
 <% unless (output = yield(object)).empty? -%>
   <div class="section <%= generator_name %> <%= visibility %>">
-    <h1><%= visibility.to_s.capitalize %> Visibility</h1>
+    <h2><%= visibility.to_s.capitalize %> Visibility</h2>
     <%= output %>
   </div>
 <% end -%>

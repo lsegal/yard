@@ -2,8 +2,13 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 #nav ul { list-style: none; padding: 0; margin: 0; }
 #nav ul li { white-space: nowrap; }
 #nav li em { font-size: 0.9em; color: #999; }
-#content h1 { border-top: 1px solid #ccc; padding-top: 7px; font-size: 1.5em; }
+#nav h1 { font-size: 1.2em; }
+#content h1 { border-top: 1px solid #ddd; padding-top: 7px; font-size: 1.5em; }
+#content h2 { font-size: 1.2em; text-decoration: underline; }
+#content h3 { font-size: 1.0em; }
 .section.module h1.title, .section.class h1.title, .section.readme h1 { background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
+.section.class h1.title { border-bottom: 0; margin-bottom: 0; }
+.section.class .section.docstring, .section.module .section.docstring { padding: 0; }
 .section.source pre { display: none; }
 #initialize-instance_method .methodsignature .return_types { display: none; }
 .methodsignature .visibility { display: none; }
@@ -29,9 +34,13 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 .section.attributes .docstring .return_types { font-style: normal; }
 .section.attributes .docstring { width: 80%; }
 .section.attributes .docstring * { display: inline; }
-.section.inheritance ul { list-style: none; padding-left: 1em; font-size: 1.1em; }
-.section.inheritance ul li { line-height: 1.5em }
-.section.inheritance ul:first-child {  padding-left: 1em; }
+.section.inheritance { background: #ddd; padding: 5px; border: 1px solid #ccc; border-top: 0; }
+.section.inheritance ul { list-style: none; padding-left: 2.2em; margin: 0; }
+.section.inheritance ul li { line-height: 1.2em; }
+.section.inheritance ul li:before { content: "↳ "; }
+.section.inheritance > ul { padding-left: 5px; }
+.section.inheritance > ul > li:before { content: ""; }
+.section.inheritance > ul > ul { padding-left: 1em; }
 .section.methodsummary td, .section.methodsummary th { background: #eee; vertical-align: top; padding: 5px; }
 .section.methodsummary th { background: #dde; text-align: left; white-space: nowrap; padding-right: 12px; }
 .section.methodsummary .signature { font-family: monospace; font-weight: normal; }
