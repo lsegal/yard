@@ -23,7 +23,7 @@ module YARD
     ISEP = '#'
     CONSTANTMATCH = /[A-Z]\w*/
     NAMESPACEMATCH = /(?:(?:#{Regexp.quote NSEP})?#{CONSTANTMATCH})+/
-    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?]?|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?|[-+~]@/
+    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?#{METHODNAMEMATCH}/
     
     class Base  

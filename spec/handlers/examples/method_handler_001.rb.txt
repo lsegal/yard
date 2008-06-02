@@ -24,8 +24,11 @@ end
   def ` param; end
   def /(x) end
   def |; end; def =~ ()
+  def -@; end; 
 end
-  def *(o) end
+  def *(o) def +@; end
+    def ~@
+    end end
   def &(o) end
   def %(o) end
   def ^(o) end

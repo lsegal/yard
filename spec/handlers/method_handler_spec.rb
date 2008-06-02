@@ -16,8 +16,8 @@ describe YARD::Handlers::MethodHandler do
   end
   
   it "should allow punctuation in method names ([], ?, =~, <<, etc.)" do
-    [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^'].each do |name|
-      P("Foo##{name}").should_not be_instance_of(Proxy)
+    [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^', :-@, :+@, :'~@'].each do |name|
+      Registry.at("Foo##{name}").should_not be_nil
     end
   end
   
