@@ -3,7 +3,7 @@ require 'optparse'
 module YARD
   module CLI
     class YardGraph
-      attr_reader :options
+      attr_reader :options, :visibilities
       
       def self.run(*args) new.run(*args) end
         
@@ -11,7 +11,8 @@ module YARD
         @options = SymbolHash[
           :format => :dot, 
           :template => :default, 
-          :serializer => YARD::Serializers::StdoutSerializer.new
+          :serializer => YARD::Serializers::StdoutSerializer.new,
+          :visibility => [:public]
         ]
       end
       
@@ -45,6 +46,18 @@ module YARD
         opts.on('-f', '--file [FILE]', 'Writes output to a file instead of stdout.') do |file|
           options[:serializer] = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
           options[:serializer].instance_eval "def serialized_path(object) #{file.inspect} end"
+        end
+
+        opts.on('--[no-]public', "Show or don't show public methods (default shows public)") do |value|
+          options[:visibility].send(value ? :push : :delete, :public) 
+        end
+
+        opts.on('--[no-]protected', "Show or don't show protected methods (default hides protected)") do |value|
+          options[:visibility].send(value ? :push : :delete, :protected) 
+        end
+
+        opts.on('--[no-]private', "Show or don't show private methods (default hides private)") do |value|
+          options[:visibility].send(value ? :push : :delete, :private) 
         end
 
         opts.on('-t', '--template [TEMPLATE]', 
