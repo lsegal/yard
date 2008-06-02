@@ -1,6 +1,8 @@
 module YARD
   module Generators
     class UMLGenerator < Base
+      include Helpers::UMLHelper
+      
       before_generate :init
       before_section :dependencies, :show_dependencies?
       
@@ -67,9 +69,11 @@ module YARD
       end
       
       def method_list(object)
-        object.meths(:inherited => false, :included => false, :visibility => :public).reject do |o|
+        vissort = lambda {|vis| vis == :public ? 'a' : (vis == :protected ? 'b' : 'c') }
+        
+        object.meths(:inherited => false, :included => false, :visibility => options[:visibility]).reject do |o|
           o.is_attribute?
-        end.sort_by {|o| "#{o.scope}#{o.name}" }
+        end.sort_by {|o| "#{o.scope}#{vissort.call(o.visibility)}#{o.name}" }
       end
       
       private

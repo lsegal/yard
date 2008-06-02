@@ -36,6 +36,7 @@ module YARD
       autoload :FilterHelper,           'generators/helpers/filter_helper'
       autoload :HtmlHelper,             'generators/helpers/html_helper'
       autoload :MethodHelper,           'generators/helpers/method_helper'
+      autoload :UMLHelper,              'generators/helpers/uml_helper'
     end
     
     autoload :AttributesGenerator,      'generators/attributes_generator'
