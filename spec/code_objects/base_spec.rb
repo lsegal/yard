@@ -29,6 +29,34 @@ describe YARD::CodeObjects::Base do
     o1.docstring.should == "NOT_DOCSTRING"
     o2.docstring.should == "NOT_DOCSTRING"
   end
+  
+  it "should return the first sentence with #short_docstring" do
+    o1 = ClassObject.new(nil, :Me) do |o|
+      o.docstring = "DOCSTRING. Another sentence"
+    end
+    
+    o1.short_docstring.should == "DOCSTRING."
+  end
+
+  it "should return the first paragraph with #short_docstring" do
+    o1 = ClassObject.new(nil, :Me) do |o|
+      o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
+    end
+    
+    o1.short_docstring.should == "DOCSTRING, and other stuff."
+  end
+  
+  it "should return proper short_docstring when docstring is changed" do
+    o1 = ClassObject.new(nil, :Me) do |o|
+      o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
+    end
+    o1.short_docstring.should == "DOCSTRING, and other stuff."
+
+    o1 = ClassObject.new(nil, :Me) do |o|
+      o.docstring = "DOCSTRING."
+    end
+    o1.short_docstring.should == "DOCSTRING."
+  end
 
   it "should allow complex name and convert that to namespace" do
     obj = CodeObjects::Base.new(nil, "A::B")
