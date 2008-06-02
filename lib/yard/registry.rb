@@ -24,36 +24,6 @@ module YARD
         instance.clear 
         objects.clear
       end
-
-      def resolve(namespace, name, proxy_fallback = false)
-        namespace = root if namespace == :root || !namespace
-
-        newname = name.to_s.gsub(/^#/, '')
-        if name =~ /^::/
-          [name, newname[2..-1]].each do |n|
-            return at(n) if at(n)
-          end
-        else
-          while namespace
-            [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
-              path = newname
-              if namespace != root
-                path = [namespace.path, newname].join(s)
-              end
-              found = at(path)
-              return found if found
-            end
-            namespace = namespace.parent
-          end
-
-          # Look for ::name or #name in the root space
-          [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
-            found = at(s + newname)
-            return found if found
-          end
-        end
-        proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
-      end
     end
 
     attr_accessor :yardoc_file
@@ -122,6 +92,36 @@ module YARD
     def register(object)
       return if object.is_a?(CodeObjects::Proxy)
       namespace[object.path] = object
+    end
+
+    def resolve(namespace, name, proxy_fallback = false)
+      namespace = root if namespace == :root || !namespace
+
+      newname = name.to_s.gsub(/^#{CodeObjects::ISEP}/, '')
+      if name =~ /^#{CodeObjects::NSEP}/
+        [name, newname[2..-1]].each do |n|
+          return at(n) if at(n)
+        end
+      else
+        while namespace
+          [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
+            path = newname
+            if namespace != root
+              path = [namespace.path, newname].join(s)
+            end
+            found = at(path)
+            return found if found
+          end
+          namespace = namespace.parent
+        end
+
+        # Look for ::name or #name in the root space
+        [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
+          found = at(s + newname)
+          return found if found
+        end
+      end
+      proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
     end
 
     private
