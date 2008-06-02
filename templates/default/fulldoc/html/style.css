@@ -32,10 +32,11 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 .section.inheritance ul { list-style: none; padding-left: 1em; font-size: 1.1em; }
 .section.inheritance ul li { line-height: 1.5em }
 .section.inheritance ul:first-child {  padding-left: 1em; }
-.section.methodsummary td, .section.methodsummary th { vertical-align: top; padding: 5px; }
-.section.methodsummary th { padding-left: 0; text-align: left; white-space: nowrap; }
+.section.methodsummary td, .section.methodsummary th { background: #eee; vertical-align: top; padding: 5px; }
+.section.methodsummary th { background: #dde; text-align: left; white-space: nowrap; padding-right: 12px; }
 .section.methodsummary .signature { font-family: monospace; font-weight: normal; }
 .section.methodsummary .signature .name { font-weight: bold; }
+.section.methodsummary .signature .alias { display: block; }
 .section.methodsummary .docstring { width: 80%; }
 .section.methodsummary .docstring * { display: inline; }
 .section.methodsummary .docstring p.returns { color: #555; font-style: italic; }
