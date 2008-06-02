@@ -23,6 +23,7 @@ describe YARD::CodeObjects::Proxy do
   end
   
   it "should respond_to respond_to?" do
+    obj = ClassObject.new(:root, :Object)
     yardobj = ModuleObject.new(:root, :YARD)
     P(:YARD).respond_to?(:children).should == true
     P(:NOTYARD).respond_to?(:children).should == false

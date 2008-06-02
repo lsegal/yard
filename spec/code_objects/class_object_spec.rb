@@ -135,5 +135,18 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     consts.should include(P("SUPERYARD::CONST4"))
     consts.should_not include(P("YARD::CONST4"))
   end
+  
+  it "should not set a superclass on Object class" do
+    o = ClassObject.new(:root, :Object)
+    o.superclass.should be_nil
+  end
+  
+  it "should raise ArgumentError if superclass == self" do
+    lambda do
+      o = ClassObject.new(:root, :Object) do |o|
+        o.superclass = :Object
+      end
+    end.should raise_error(ArgumentError)
+  end
 end
   
