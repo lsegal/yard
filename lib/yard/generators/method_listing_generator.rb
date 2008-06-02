@@ -87,7 +87,8 @@ module YARD
       
       def remove_ignored_meths!(list)
         list.reject! do |o| 
-          ignored_meths[o.scope].include?(o.name) || o.is_alias? || o.is_attribute?
+          ignored_meths[o.scope].include?(o.name) || 
+            o.is_alias? || (o.is_attribute? && !o.is_explicit?)
         end
       end
       

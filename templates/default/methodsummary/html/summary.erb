@@ -1,18 +1,25 @@
 <h1><%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Method Summary</h1>
-<ul class="summary">
+<table class="summary">
   <% method_list.each do |meth| -%>
-    <li>
-      <tt class="signature">
-        <span class='return_types'><%= format_return_types meth %></span>
+    <tr>
+      <th class="signature">
         <span class='name'><%= linkify(meth, meth.name) %></span><span class='args'><%= format_args meth %></span>
         <span class='block'><%= format_block meth %></span>
         <% unless meth.aliases.empty? -%>
           <span class='aliases'>-&gt; <%= meth.aliases.map {|o| format_meth_name o }.join(", ") %></span>
         <% end -%>
-      </tt>
-      <div class="docstring">
-        <%= htmlify meth.docstring.split(/\.|\r?\n\r?\n/).first || "" if meth.docstring %>
-      </div>
-    </li>
+      </th>
+      <td class="docstring">
+        <%= htmlify meth.short_docstring %>
+        <% if meth.tag(:return) && meth.tag(:return).types -%>
+          <p class='returns'>
+            Returns: 
+              <span class='return_types'>
+                 <%= format_return_types meth %>
+              </span>
+          </p>
+        <% end -%>
+      </td>
+    </tr>
   <% end -%>
-</ul>
+</table>
