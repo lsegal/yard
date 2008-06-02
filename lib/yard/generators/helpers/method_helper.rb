@@ -18,10 +18,6 @@ module YARD
           ""
         end
       end
-      
-      def format_meth_name(object)
-        h object.name(true)
-      end
     end
   end
 end
