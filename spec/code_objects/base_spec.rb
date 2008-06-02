@@ -52,11 +52,18 @@ describe YARD::CodeObjects::Base do
   end
   
   it "should return proper short_docstring when docstring is changed" do
-    o1 = ClassObject.new(nil, :Me) do |o|
+    o1 = ClassObject.new(:root, :Me) do |o|
       o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
     end
     o1.short_docstring.should == "DOCSTRING, and other stuff."
 
+    o2 = ClassObject.new(:root, :Me) do |o|
+      o.docstring = "DOCSTRING."
+    end
+    o1.short_docstring.should == "DOCSTRING."
+  end
+  
+  it "should not double the ending period in short_docstring" do
     o1 = ClassObject.new(nil, :Me) do |o|
       o.docstring = "DOCSTRING."
     end
