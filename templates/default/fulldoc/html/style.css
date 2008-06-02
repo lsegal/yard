@@ -19,12 +19,27 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 .section.constants dt:after { content: " = "; }
 .section.constants dd { margin-bottom: 1em; }
 .section.source .source_link { font-size: 0.9em; }
-.section.attributes ul { padding: 0; margin: 0; list-style: none; }
-.section.attributes .name { font-weight: bold; }
-.section.attributes .visibility { font-style: italic; }
+.section.attributes table { padding: 0; width: 100%; }
+.section.attributes .readwrite { width: 5%; }
+.section.attributes .name { font-weight: bold; width: 10%; }
+.section.attributes .visibility { font-style: italic; color: #666; width: 5%; }
+.section.attributes td, .section.attributes th { vertical-align: top; padding: 5px; }
+.section.attributes th { padding-left: 0; text-align: left; }
+.section.attributes .docstring p.returns { color: #555; font-style: italic; }
+.section.attributes .docstring .return_types { font-style: normal; }
+.section.attributes .docstring { width: 80%; }
+.section.attributes .docstring * { display: inline; }
 .section.inheritance ul { list-style: none; padding-left: 1em; font-size: 1.1em; }
 .section.inheritance ul li { line-height: 1.5em }
 .section.inheritance ul:first-child {  padding-left: 1em; }
+.section.methodsummary td, .section.methodsummary th { vertical-align: top; padding: 5px; }
+.section.methodsummary th { padding-left: 0; text-align: left; white-space: nowrap; }
+.section.methodsummary .signature { font-family: monospace; font-weight: normal; }
+.section.methodsummary .signature .name { font-weight: bold; }
+.section.methodsummary .docstring { width: 80%; }
+.section.methodsummary .docstring * { display: inline; }
+.section.methodsummary .docstring p.returns { color: #555; font-style: italic; }
+.section.methodsummary .docstring .return_types { font-style: normal; }
 .section.tags div { clear: both; }
 .section.tags h2 { display: none; }
 .section.tags h3 { font-size: 1.0em; margin-top: 3px; }
