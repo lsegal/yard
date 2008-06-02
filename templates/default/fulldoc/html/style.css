@@ -6,10 +6,10 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 h1 { font-size: 1.5em; background: #eee; color: #000; padding: 3px; text-decoration: none; }
 h2 { font-size: 1.2em; background: #eef; color: #000; padding: 3px; text-decoration: none; }
 h3 { font-size: 1.0em; }
+.clear { clear: both; }
 .section.module h1.title, .section.class h1.title, .section.readme h1 { color: #000; background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
 .section.class h1.title { border-bottom: 0; margin-bottom: 0; }
 .section.class > .section.docstring, .section.module > .section.docstring { padding: 0; }
-.section.source pre { display: none; }
 #initialize-instance_method .methodsignature .return_types { display: none; }
 .methodsignature .visibility { display: none; }
 .methodsignature .name { font-weight: bold; }
@@ -24,6 +24,10 @@ h3 { font-size: 1.0em; }
 .section.constants dt:after { content: " = "; }
 .section.constants dd { margin-bottom: 1em; }
 .section.source .source_link { font-size: 0.9em; }
+.section.source .source_code { display: none; background: #222; padding: 0 12px; margin-top: 8px; border: 1px dashed #ccc; }
+.section.source .source_code pre { color: #fff; float: left; font-family: Monaco, Courier, monospace; font-size: 0.9em; }
+.section.source .source_code pre.lines { margin-right: 20px; text-align: right; color: #888; }
+.section.source .source_code pre.code .file { color: #888; }
 .section.attributes table { padding: 0; width: 100%; }
 .section.attributes .readwrite { width: 5%; }
 .section.attributes .name { font-weight: bold; width: 10%; }

@@ -252,7 +252,14 @@ module YARD
         __f = find_template(__path)
         if __f
           __l = locals.map {|k,v| "#{k} = #{v.inspect}" unless k.to_s == "__f" }.join(";")
-          Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
+          begin
+            Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
+          rescue => e
+            log.warn e
+            log.warn "in generator #{self.class} section #{file} on '#{object}'"
+            log.warn e.backtrace[0..5].join("\n")
+            raise 
+          end
         else
           log.warn "Cannot find template `#{__path}`"
           ""

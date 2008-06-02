@@ -1,4 +1,8 @@
 <div class="section <%= generator_name %>">
   <span>[<a class="source_link" href="#">View source</a>]</span>
-  <pre><%= h object.source.inspect.gsub(/^\s*/, '') %></pre>
+  <div class="source_code">
+    <pre class="lines"><%= "\n\n\n" %><%= i = -1; h object.source.split(/\n/).map { object.line + (i += 1) }.join("\n") %></pre>
+    <pre class="code"><span class="file"># File '<%= h object.file %>', line <%= object.line %></span><%= "\n\n" %><%= h object.source %></pre>
+    <div class="clear"></div>
+  </div>
 </div>
