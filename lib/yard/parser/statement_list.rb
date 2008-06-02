@@ -107,7 +107,7 @@ module YARD
 
             # Check if this token creates a new statement or not
             #puts "#{open_parens} open brackets for: #{statement.to_s}"
-            if open_parens == 0 && ([TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class) ||
+            if open_parens == 0 && ((last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
               (open_block && open_block.last == TkDEF && tk.class == TkRPAREN))
               # Make sure we don't have any running expressions
               # This includes things like
@@ -117,10 +117,11 @@ module YARD
               # 
               # if a ||
               #    b
-              if last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state) 
+              if (last_tk && [EXPR_END, EXPR_ARG].include?(last_tk.lex_state)) || 
+                  (open_block && tk.class == TkSEMICOLON)
                 stmt_number += 1
                 new_statement = true
-                #p "NEW STATEMENT #{statement.to_s}"
+                #p "NEW STATEMENT #{block.to_s}"
 
                 # The statement started with a if/while/begin, so we must go to the next level now
                 if open_block && open_block.first == level
