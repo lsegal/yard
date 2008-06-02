@@ -4,6 +4,8 @@ class Foo
   end
   def /(other) 'hi' end
 
+  attr_reader :method1
+
   def method1
     def dynamic; end
   end

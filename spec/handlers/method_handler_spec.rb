@@ -24,4 +24,8 @@ describe YARD::Handlers::MethodHandler do
   it "should mark dynamic methods as such" do
     P('Foo#dynamic').dynamic?.should == true
   end
+  
+  it "should show that a method is explicitly defined (if it was originally defined implicitly by attribute)" do
+    P('Foo#method1').is_explicit?.should == true
+  end
 end

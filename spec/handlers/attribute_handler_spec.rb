@@ -69,4 +69,10 @@ describe YARD::Handlers::AttributeHandler do
     P('B#a').is_attribute?.should == true
     P('B#a=').is_attribute?.should == true
   end
+  
+  it "should not return true for #is_explicit? in created methods" do
+    Registry.all(:method).each do |meth|
+      meth.is_explicit?.should == false
+    end
+  end
 end

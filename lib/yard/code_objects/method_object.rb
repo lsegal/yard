@@ -1,6 +1,6 @@
 module YARD::CodeObjects
   class MethodObject < Base
-    attr_accessor :visibility, :scope
+    attr_accessor :visibility, :scope, :explicit
     
     def initialize(namespace, name, scope = :instance) 
       self.visibility = :public
@@ -18,6 +18,10 @@ module YARD::CodeObjects
       
     def is_alias?
       namespace.aliases.has_key? self
+    end
+    
+    def is_explicit?
+      explicit ? true : false
     end
     
     def aliases
