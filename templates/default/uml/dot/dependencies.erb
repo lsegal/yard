@@ -1,5 +1,10 @@
-<% for obj in @objects.select {|o| CodeObjects::ModuleObject === o } -%>
+<% for obj in @objects.select {|o| CodeObjects::NamespaceObject === o } -%>
   <% for depobj in obj.mixins -%>
-    <%= format_path obj %> -> <%= format_path depobj %> [style=dashed rank=sink];
+    <% [obj, depobj].each do |o| -%>
+      <% if o != Registry.root && (CodeObjects::Proxy === o || !namespaces(o).empty?) -%>
+        <%= format_path o %> [label="{<%= o.type %> <%= o.name %>}" rank=sink];
+      <% end -%>
+    <% end -%>
+    <%= !format_path(obj).empty? ? format_path(obj) : "Kernel" %> -> <%= format_path depobj %> [style=dashed rank=sink];
   <% end -%>
 <% end -%>
