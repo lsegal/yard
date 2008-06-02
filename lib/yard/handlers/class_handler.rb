@@ -2,7 +2,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   handles TkCLASS
   
   def process
-    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})(\s*<.+|\s*\Z)/m
+    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(<.+|\Z)/m
       classname, extra, superclass, undocsuper = $1, $2, nil, false
       if extra =~ /\A\s*<\s*/m
         superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/m, 1]
@@ -17,7 +17,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       register klass # Explicit registration
        
       if undocsuper
-        raise YARD::Handlers::UndocumentableError, 'added class, but cannot document superclass'
+        raise YARD::Handlers::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/m
       classname = $1
