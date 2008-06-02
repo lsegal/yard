@@ -2,7 +2,7 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 #nav ul { list-style: none; padding: 0; margin: 0; }
 #nav ul li { white-space: nowrap; }
 #nav li em { font-size: 0.9em; color: #999; }
-#content h1 { border-top: 1px solid #ccc; padding-top: 7px; }
+#content h1 { border-top: 1px solid #ccc; padding-top: 7px; font-size: 1.5em; }
 .section.module h1.title, .section.class h1.title, .section.readme h1 { background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
 .section.source pre { display: none; }
 #initialize-instance_method .methodsignature .return_types { display: none; }
