@@ -26,7 +26,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       elsif classname[0,1] =~ /[A-Z]/
         parse_block(:namespace => P(namespace, classname), :scope => :class)
       else
-        raise YARD::Handlers::UndocumentableError, "class '#{klass}'"
+        raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
       end
     else
       raise YARD::Handlers::UndocumentableError, "class: #{statement.tokens}"
