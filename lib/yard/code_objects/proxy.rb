@@ -122,6 +122,14 @@ module YARD
           nil
         end
       end
+      
+      def respond_to?(meth)
+        if obj = to_obj
+          to_obj.respond_to?(meth)
+        else
+          super 
+        end
+      end
 
       # Dispatches the method to the resolved object
       # 
