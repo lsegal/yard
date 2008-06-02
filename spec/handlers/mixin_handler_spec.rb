@@ -4,8 +4,8 @@ describe YARD::Handlers::MixinHandler do
   before { parse_file :mixin_handler_001, __FILE__ }
   
   it "should handle includes from classes or modules" do
-    Registry.at(:X).mixins.should include(P(nil, :A))
-    Registry.at(:Y).mixins.should include(P(nil, :A))
+    Registry.at(:X).mixins.should include(P(:A))
+    Registry.at(:Y).mixins.should include(P(:A))
   end
   
   it "should handle includes for complex namespaces" do
@@ -21,5 +21,10 @@ describe YARD::Handlers::MixinHandler do
   
   it "should handle includes with multiple parameters" do
     Registry.at(:X)
+  end
+  
+  it "should handle complex include statements" do
+    P(:Y).mixins.should include(P('B::C'))
+    P(:Y).mixins.should include(P(:B))
   end
 end

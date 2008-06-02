@@ -7,5 +7,6 @@ class X
 end
 
 module Y
+  include B::C, B if X == 2
   include A
 end
