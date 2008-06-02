@@ -4,8 +4,8 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   def process
     if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(<.+|\Z)/m
       classname, extra, superclass, undocsuper = $1, $2, nil, false
-      if extra =~ /\A\s*<\s*/m
-        superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/m, 1]
+      if extra =~ /\A\s*<\s*/
+        superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/, 1]
         undocsuper = true if superclass.nil?
       end
 
@@ -19,7 +19,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       if undocsuper
         raise YARD::Handlers::UndocumentableError, 'superclass (class was added without superclass)'
       end
-    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/m
+    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
