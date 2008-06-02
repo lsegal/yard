@@ -52,9 +52,18 @@ module YARD
           options[:template] = template.to_sym
         end
         
+        opts.on_tail('-q', '--quiet', 'Show no warnings') { log.level = Logger::ERROR }
+        opts.on_tail('--verbose', 'Show debugging information') { log.level = Logger::DEBUG }
         opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
         opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
-        opts.parse!(args)
+
+        begin
+          opts.parse!(args)
+        rescue => e
+          STDERR.puts e.message
+          STDERR << "\n" << opts
+          exit
+        end
       end
     end
   end

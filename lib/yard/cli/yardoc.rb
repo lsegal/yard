@@ -13,6 +13,7 @@ module YARD
           :format => :html, 
           :template => :default, 
           :serializer => YARD::Serializers::FileSystemSerializer.new, 
+          :readme => ['README', 'README.txt'],
           :verifier => lambda do |gen, obj| 
             return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
           end
@@ -51,6 +52,10 @@ module YARD
           serialopts[:basepath] = dir
         end
         
+        opts.on('-r', '--readme [FILE]', 'The readme file used as the title page of documentation.') do |readme|
+          options[:readme] = readme
+        end
+        
         opts.on('-t', '--template [TEMPLATE]', 
                 'The template to use (defaults to "default")') do |template|
           options[:template] = template.to_sym
@@ -74,13 +79,22 @@ module YARD
         end
         
         opts.on('=[FILES]', 'files to parse')           { }
+        opts.on_tail('-q', '--quiet', 'Show no warnings') { log.level = Logger::ERROR }
+        opts.on_tail('--verbose', 'Show debugging information') { log.level = Logger::DEBUG }
         opts.on_tail('-v', '--version', 'Show version') { puts "yard #{YARD::VERSION}"; exit }
         opts.on_tail('-h', '--help', 'Show this help')  { puts opts; exit }
-        opts.parse!(args)
+        
+        begin
+          opts.parse!(args)
+        rescue OptionParser::InvalidOption => e
+          STDERR.puts e.message
+          STDERR << "\n" << opts
+          exit
+        end
         
         # Last minute modifications
         self.files = args
-        self.reload = true if self.files.empty?
+        self.reload = false if self.files.empty?
         visibilities.uniq!
         options[:serializer] = Serializers::FileSystemSerializer.new(serialopts)
       end
