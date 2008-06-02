@@ -1,27 +1,18 @@
-<div id="all-modules">
-  <h1>Module List</h1>
-  <ul>
-  <% for obj in YARD::Registry.all(:module).sort_by {|o| o.path } -%>
-  <li><%= linkify(obj, obj.path) %></li>
-  <% end -%>
-  </ul>
-</div>
-
-<div id="all-modules">
-  <h1>Class List</h1>
-  <ul>
-  <% for obj in YARD::Registry.all(:class).sort_by {|o| o.path } -%>
-  <li><%= linkify(obj, obj.path) %></li>
-  <% end -%>
-  </ul>
-</div>
-
-<div id="all-modules">
-  <h1>Method List</h1>
-  <ul>
-  <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } -%>
-    <li><%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %></li>
-  <% end -%>
-  </ul>
-</div>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>YARD Documentation</title>
+  </head>
+  <frameset cols="20%,*">
+    <frameset rows="50%,50%">
+      <frame src="all-namespaces.html" />
+      <frame src="all-methods.html" />
+    </frameset>
+    <frame name="main" src="<%= readme_file ? 'readme.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>" />
+    <noframes>
+      <p><a href="<%= readme_file ? 'readme.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>">Click here to go to the title page</a>.</p>
+    </noframes>
+  </frameset>
+</html>

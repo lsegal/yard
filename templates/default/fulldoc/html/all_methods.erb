@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="<%= url_for(css_file) %>" type="text/css" charset="utf-8" />
+    <title>All Modules / Classes</title>
+    <base target="main" />
+  </head>
+  <body>
+    <div id="nav" class="methods">
+      <h1>Method List</h1>
+      <ul>
+      <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } -%>
+        <% next if obj.namespace == Registry.root -%>
+        <li nowrap>
+          <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %> 
+          <% if obj.namespace != Registry.root -%>
+            <em>(<%= obj.namespace.type %> <%= obj.namespace.name %>)</em>
+          <% end -%>
+        </li>
+      <% end -%>
+      </ul>
+    </div>
+  </body>
+</html>

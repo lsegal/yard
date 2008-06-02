@@ -4,11 +4,13 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="<%= url_for(css_file) %>" type="text/css" charset="utf-8" />
-    <title><%= h object.type.to_s.capitalize %>: <%= h object.path %></title>
+    <title>README</title>
   </head>
   <body>
     <div id="content">
-      <%= yield object %>
+      <div class="section docstring">
+        <%= htmlify @contents %>
+      </div>
     </div>
   </body>
 </html>

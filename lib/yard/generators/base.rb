@@ -46,6 +46,14 @@ module YARD
         def before_generate_filters
           @before_generate_filters ||= []
         end
+        
+        def before_list(meth)
+          before_list_filters.push(meth)
+        end
+        
+        def before_list_filters
+          @before_list_filters ||= []
+        end
       end
       
       # Creates a generator by adding extra options
@@ -95,8 +103,14 @@ module YARD
       
       def generate(*list, &block)
         output = ""
+
+        list = list.flatten
+        @current_object = Registry.root
+        return output if FalseClass === run_before_list(list)
+
         serializer.before_serialize if serializer && !ignore_serializer
-        list.flatten.each do |object|
+        
+        list.each do |object|
           next unless object && object.is_a?(CodeObjects::Base)
           
           objout = ""
@@ -126,6 +140,14 @@ module YARD
           send(verifier, object)
         elsif verifier.respond_to?(:call)
           verifier.call(self, object)
+        end
+      end
+      
+      def run_before_list(list)
+        self.class.before_list_filters.each do |meth|
+          meth = method(meth) if meth.is_a?(Symbol)
+          result = meth.call *(meth.arity == 0 ? [] : [list])
+          return result if result.is_a?(FalseClass)
         end
       end
       
@@ -222,6 +244,10 @@ module YARD
       end
       
       def render(object, file = nil, locals = {}, &block)
+        if object.is_a?(Symbol)
+          object, file, locals = current_object, object, (file||{})
+        end
+        
         __path = template_path(file.to_s + '.erb', generator_name)
         __f = find_template(__path)
         if __f
