@@ -1,6 +1,6 @@
 <% for obj in @objects.select {|o| CodeObjects::ClassObject === o && o.superclass != P(:Object) } -%>
   <% [obj, obj.superclass].each do |o| -%>
-    <% if o != Registry.root && (CodeObjects::Proxy === o || !namespaces(o).empty?) -%>
+    <% if o != Registry.root && (!o.respond_to?(:children) || !namespaces(o).empty?) -%>
       <%= format_path o %> [label="{<%= o.type %> <%= o.path %>}" rank=sink];
     <% end -%>
   <% end -%>
