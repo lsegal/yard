@@ -2,8 +2,9 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="<%= url_for(css_file) %>" type="text/css" charset="utf-8" />
+    <%= render :html_head %>
+    <script src="<%= url_for(js_file) %>" type="text/javascript" charset="utf-8"></script>
+    <script src="<%= url_for(js_app_file) %>" type="text/javascript" charset="utf-8"></script>
     <title><%= h object.type.to_s.capitalize %>: <%= h object.path %></title>
   </head>
   <body>

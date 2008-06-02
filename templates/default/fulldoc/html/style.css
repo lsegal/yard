@@ -3,12 +3,12 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 #nav ul li { white-space: nowrap; }
 #nav li em { font-size: 0.9em; color: #999; }
 #nav h1 { font-size: 1.2em; }
-#content h1 { border-top: 1px solid #ddd; padding-top: 7px; font-size: 1.5em; }
-#content h2 { font-size: 1.2em; text-decoration: underline; }
-#content h3 { font-size: 1.0em; }
-.section.module h1.title, .section.class h1.title, .section.readme h1 { background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
+h1 { font-size: 1.5em; background: #eee; color: #000; padding: 3px; text-decoration: none; }
+h2 { font-size: 1.2em; background: #eef; color: #000; padding: 3px; text-decoration: none; }
+h3 { font-size: 1.0em; }
+.section.module h1.title, .section.class h1.title, .section.readme h1 { color: #000; background: #ddd; border: 1px solid #ccc; padding: 7px; margin: 0; margin-bottom: 7px; }
 .section.class h1.title { border-bottom: 0; margin-bottom: 0; }
-.section.class .section.docstring, .section.module .section.docstring { padding: 0; }
+.section.class > .section.docstring, .section.module > .section.docstring { padding: 0; }
 .section.source pre { display: none; }
 #initialize-instance_method .methodsignature .return_types { display: none; }
 .methodsignature .visibility { display: none; }
@@ -56,7 +56,7 @@ body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10
 .section.tags dl { margin-left: 2em; }
 .section.methodmissing p.note { font-style: italic; }
 .section.constructor p.inherited_msg { font-style: italic; }
-.included h1, .inherited h1 { font-size: 1.1em; border: 0; margin: 0; padding: 5px; border-bottom: 1px solid #ccc; }
+.included h1, .inherited h1 { font-size: 1em !important; border: 0; margin: 0; padding: 5px; border-bottom: 1px solid #ccc; }
 .included div, .inherited div { color: #444; margin: 1.5em 0; width: 500px; border: 1px solid #ccc; }
 .included p .name, .inherited p .name { font-family: monospace; }
-.included p, .inherited p { padding: 0 7px; }
+.included p, .inherited p { margin: 5px; }

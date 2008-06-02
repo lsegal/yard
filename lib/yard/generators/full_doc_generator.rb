@@ -2,9 +2,8 @@ module YARD
   module Generators
     class FullDocGenerator < Base
       before_generate :is_namespace?
-      before_list :generate_stylesheet
+      before_list :generate_assets
       before_list :generate_index
-      before_list :generate_navigation
       before_list :generate_readme
       
       def sections_for(object) 
@@ -19,6 +18,8 @@ module YARD
       protected
       
       def css_file; 'style.css' end
+      def js_file; 'jquery.js' end
+      def js_app_file; 'app.js' end
       
       def readme_file
         @readme_file ||= [options[:readme]].flatten.compact.find do |readme|
@@ -26,10 +27,12 @@ module YARD
         end
       end
       
-      def generate_stylesheet
+      def generate_assets
         if format == :html && serializer
-          cssfile = find_template template_path(css_file)
-          serializer.serialize(css_file, File.read(cssfile))
+          [css_file, js_file, js_app_file].each do |filename|
+            template_file = find_template template_path(filename)
+            serializer.serialize(filename, File.read(template_file))
+          end
         end
         true
       end
@@ -37,12 +40,6 @@ module YARD
       def generate_index
         if format == :html && serializer
           serializer.serialize 'index.html', render(:index)
-        end
-        true
-      end
-      
-      def generate_navigation
-        if format == :html && serializer
           serializer.serialize 'all-namespaces.html', render(:all_namespaces)
           serializer.serialize 'all-methods.html', render(:all_methods)
         end

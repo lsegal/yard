@@ -1,4 +1,4 @@
 <div class="section <%= generator_name %>">
-  <span class="source_link">[<a href="#">View source</a>]</span>
-  <pre><%= h object.source %></pre>
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <pre><%= h object.source.inspect.gsub(/^\s*/, '') %></pre>
 </div>
