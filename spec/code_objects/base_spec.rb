@@ -36,40 +36,44 @@ describe YARD::CodeObjects::Base do
   end
   
   it "should return the first sentence with #short_docstring" do
-    o1 = ClassObject.new(nil, :Me) do |o|
-      o.docstring = "DOCSTRING. Another sentence"
-    end
-    
-    o1.short_docstring.should == "DOCSTRING."
+    o = ClassObject.new(nil, :Me) 
+    o.docstring = "DOCSTRING. Another sentence"
+    o.short_docstring.should == "DOCSTRING."
   end
 
   it "should return the first paragraph with #short_docstring" do
-    o1 = ClassObject.new(nil, :Me) do |o|
-      o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
-    end
-    
-    o1.short_docstring.should == "DOCSTRING, and other stuff."
+    o = ClassObject.new(nil, :Me)
+    o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
+    o.short_docstring.should == "DOCSTRING, and other stuff."
   end
   
   it "should return proper short_docstring when docstring is changed" do
-    o1 = ClassObject.new(:root, :Me) do |o|
-      o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
-    end
-    o1.short_docstring.should == "DOCSTRING, and other stuff."
-
-    o2 = ClassObject.new(:root, :Me) do |o|
-      o.docstring = "DOCSTRING."
-    end
-    o1.short_docstring.should == "DOCSTRING."
+    o = ClassObject.new(:root, :Me)
+    o.docstring = "DOCSTRING, and other stuff\n\nAnother sentence."
+    o.short_docstring.should == "DOCSTRING, and other stuff."
+    o.docstring = "DOCSTRING."
+    o.short_docstring.should == "DOCSTRING."
   end
   
   it "should not double the ending period in short_docstring" do
-    o1 = ClassObject.new(nil, :Me) do |o|
-      o.docstring = "DOCSTRING."
-    end
-    o1.short_docstring.should == "DOCSTRING."
+    o = ClassObject.new(nil, :Me)
+    o.docstring = "Returns a list of tags specified by +name+ or all tags if +name+ is not specified.\n\nTest"
+    o.short_docstring.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
+    
+    Parser::SourceParser.parse_string <<-eof
+      ##
+      # Returns a list of tags specified by +name+ or all tags if +name+ is not specified.
+      #
+      # @param name the tag name to return data for, or nil for all tags
+      # @return [Array<Tags::Tag>] the list of tags by the specified tag name
+      def tags(name = nil)
+        return @tags if name.nil?
+        @tags.select {|tag| tag.tag_name.to_s == name.to_s }
+      end
+    eof
+    P('#tags').short_docstring.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
   end
-
+  
   it "should allow complex name and convert that to namespace" do
     obj = CodeObjects::Base.new(nil, "A::B")
     obj.namespace.path.should == "A"
