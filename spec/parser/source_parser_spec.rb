@@ -1,5 +1,4 @@
 describe YARD::Parser::SourceParser do
-  # Need to remove all TestHandlers from the handler specs *HACK*
   before do 
     Registry.clear
   end
