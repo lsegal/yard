@@ -26,6 +26,7 @@ module YARD
             raise ArgumentError, "Expecting token, list of tokens or string of code to be tokenized. Got #{tok.class}"
           end
         end
+        self
       end
       alias_method :<<, :push
       
@@ -38,7 +39,19 @@ module YARD
       
       def parse_content(content)
         lex = RubyLex.new(content)
-        while tk = lex.token do self << tk end
+        while tk = lex.token do 
+          self << convert_token(lex, tk)
+        end
+      end
+      
+      def convert_token(lex, tk)
+        if TkSYMBEG === tk && next_tk = lex.token
+          sym = TkSYMBOL.new(tk.line_no, tk.char_no, nil)
+          sym.lex_state = tk.lex_state
+          sym.set_text(tk.text + next_tk.text)
+        else
+          tk 
+        end
       end
     end
   end

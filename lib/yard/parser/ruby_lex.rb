@@ -159,6 +159,7 @@ module YARD
 
         [:TkINTEGER,    TkVal],
         [:TkFLOAT,      TkVal],
+        [:TkSYMBOL,     TkVal],
         [:TkSTRING,     TkVal],
         [:TkXSTRING,    TkVal],
         [:TkREGEXP,     TkVal],
@@ -201,7 +202,6 @@ module YARD
         [:TkfLBRACE],         # func{ #
         [:TkSTAR],            # *arg
         [:TkAMPER],           # &arg #
-        [:TkSYMBOL,     TkId],          # :SYMBOL
         [:TkSYMBEG,     TkId], 
         [:TkGT,	        TkOp,   ">"],
         [:TkLT,	        TkOp,   "<"],
