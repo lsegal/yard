@@ -4,7 +4,7 @@ module YARD
       attr_reader :tokens, :comments, :block
 
       def initialize(tokens, block = nil, comments = nil)
-        @tokens = clean_tokens(tokens)
+        @tokens = tokens
         @block  = block
         @comments = comments
       end

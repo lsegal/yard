@@ -16,7 +16,7 @@ module YARD
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
-          parse_tokens(content)
+          @tokens = TokenList.new(content)
         else 
           raise ArgumentError, "Invalid content for StatementList: #{content.inspect}:#{content.class}"
         end
@@ -25,12 +25,6 @@ module YARD
       end
 
       private
-
-      def parse_tokens(content)
-        @tokens = TokenList.new
-        lex = RubyLex.new(content)
-        while tk = lex.token do @tokens << tk end
-      end
 
       def parse_statements
         while stmt = next_statement do self << stmt end
@@ -130,7 +124,7 @@ module YARD
                   level += 1
                   
                   block ||= TokenList.new
-                  #block << tk if tk.class == TkNL
+                  block << tk if tk.class == TkNL 
                 end
               end
             elsif tk.class != TkSPACE
@@ -138,7 +132,7 @@ module YARD
             end
 
             # Else keyword is kind of weird
-            if tk.is_a? RubyToken::TkELSE
+            if tk.is_a? TkELSE
               new_statement = true
               stmt_number += 1
               open_block = false
