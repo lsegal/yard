@@ -25,4 +25,9 @@ describe YARD::Parser::TokenList, "#initialize / #push" do
   it "should not accept any other input" do
     lambda { TokenList.new(:notcode) }.should raise_error(ArgumentError)
   end
+  
+  it "should not interpolate string data" do
+    x = TokenList.new('x = "hello #{world}"')
+    x.to_s.should == 'x = "hello #{world}"' + "\n"
+  end
 end
