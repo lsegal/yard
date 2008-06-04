@@ -36,6 +36,9 @@ module YARD
       class TkNode < Token
         attr :node
       end
+      
+      class TkWhitespace < Token
+      end
 
       class TkId < Token
         def initialize(line_no, char_no, name)
@@ -230,10 +233,10 @@ module YARD
         [:TkCOMMA,      Token,  ","],
         [:TkSEMICOLON,  Token,  ";"],
 
-        [:TkRD_COMMENT],
-        [:TkSPACE],
-        [:TkNL],
-        [:TkEND_OF_SCRIPT],
+        [:TkRD_COMMENT,     TkVal],
+        [:TkSPACE,          TkWhitespace],
+        [:TkNL,             TkWhitespace],
+        [:TkEND_OF_SCRIPT,  TkWhitespace],
 
         [:TkBACKSLASH,  TkUnknownChar,  "\\"],
         [:TkAT,	        TkUnknownChar,  "@"],
@@ -834,18 +837,18 @@ module YARD
 
         @OP.def_rule("[") do
           @indent += 1
-          if @lex_state == EXPR_FNAME
+#          if @lex_state == EXPR_FNAME
 #    	      t = Token(TkfLBRACK)
 #          else
 #    	      if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
 #    	        t = Token(TkLBRACK)
 #    	      elsif @lex_state == EXPR_ARG && @space_seen
-    	        t = Token(TkLBRACK)
 #    	      else
 #    	        t = Token(TkfLBRACK)
 #    	      end
-    	      @lex_state = EXPR_BEG
-          end
+#          end
+          t = Token(TkLBRACK)
+          @lex_state = EXPR_BEG
           t.set_text("[")
         end
 
