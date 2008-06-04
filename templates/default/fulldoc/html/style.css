@@ -45,6 +45,7 @@ h3 { font-size: 1.0em; }
 .section.inheritance > ul { padding-left: 5px; }
 .section.inheritance > ul > li:before { content: ""; }
 .section.inheritance > ul > ul { padding-left: 1em; }
+.section.methodsummary table { width: 100%; }
 .section.methodsummary td, .section.methodsummary th { background: #eee; vertical-align: top; padding: 5px; }
 .section.methodsummary th { background: #dde; text-align: left; white-space: nowrap; padding-right: 12px; }
 .section.methodsummary .signature { font-family: monospace; font-weight: normal; }
@@ -61,6 +62,6 @@ h3 { font-size: 1.0em; }
 .section.methodmissing p.note { font-style: italic; }
 .section.constructor p.inherited_msg { font-style: italic; }
 .included h1, .inherited h1 { font-size: 1em !important; border: 0; margin: 0; padding: 5px; border-bottom: 1px solid #ccc; }
-.included div, .inherited div { color: #444; margin: 1.5em 0; width: 500px; border: 1px solid #ccc; }
+.included div, .inherited div { color: #444; margin: 1.5em 0; width: 47%; border: 1px solid #ccc; float: left; margin-right: 12px; }
 .included p .name, .inherited p .name { font-family: monospace; }
 .included p, .inherited p { margin: 5px; }
