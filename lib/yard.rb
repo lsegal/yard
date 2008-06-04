@@ -23,7 +23,8 @@ end
 
 $:.unshift(YARD::ROOT)
 
-['logging', 'autoload', 'symbol_hash', 'extra'].each do |file|
-  require file
-end
+files  = ['logging', 'autoload']
+files += Dir.glob File.join(YARD::ROOT, 'core_ext/*')
+files.each {|file| require file.gsub(/\.rb$/, '') }
+
 

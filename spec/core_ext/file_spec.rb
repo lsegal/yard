@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../spec_helper'
+
 describe File, ".relative_path" do
   it "should return the relative path between two files" do
     File.relative_path('a/b/c/d.html', 'a/b/d/q.html').should == '../d/q.html'
