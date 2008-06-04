@@ -1,0 +1,7 @@
+pre.code .val { color: #61CE3C; }
+pre.code .dstring { color: #FF6400; }
+pre.code .fid { color: #FF6400; }
+pre.code .comment { color: #AEAEAE; }
+pre.code .constant, pre.code .symbol { color: #D8FA3C; }
+pre.code .kw { color: #FBDE2D; }
+pre.code .ivar { color: #AACEFB; }
