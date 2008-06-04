@@ -47,7 +47,7 @@ module YARD
       def convert_token(lex, tk)
         if TkSYMBEG === tk && next_tk = lex.token
           sym = TkSYMBOL.new(tk.line_no, tk.char_no, nil)
-          sym.lex_state = tk.lex_state
+          sym.lex_state = lex.lex_state
           sym.set_text(tk.text + next_tk.text)
         else
           tk 
