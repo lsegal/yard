@@ -128,6 +128,7 @@ describe YARD::Handlers::Base, "#tokval_list" do
   it "should try to skip any invalid tokens" do
     tokval_list(":a, :b, \"\#{c}\", :d", :attr).should  == [:a, :b, :d]
     tokval_list(":a, :b, File.read(\"\#{c}\", 'w', File.open { }), :d", :attr).should  == [:a, :b, :d]
+    tokval_list("CONST1, identifier, File.read(\"\#{c}\", 'w', File.open { }), CONST2", RubyToken::TkId).should  == ['CONST1', 'identifier', 'CONST2']
   end
   
   it "should ignore a token if another invalid token is read before a comma" do
