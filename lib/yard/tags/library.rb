@@ -60,10 +60,16 @@ module YARD
         # @param meth the {Tag} factory method to call when creating the tag
         def define_tag(label, tag, meth = "")
           meth = meth.to_s
-          send_name = meth.empty? ? "" : "_" + meth
-          class_eval <<-eof
-            def #{tag}_tag(text) 
-              @factory.parse_tag#{send_name}(#{tag.inspect}, text) 
+          send_name = "parse_tag" + (meth.empty? ? "" : "_" + meth)
+          
+          class_eval(<<-eof, __FILE__, __LINE__)
+            def #{tag}_tag(text, raw_text) 
+              if @factory.respond_to? :#{send_name}
+                arity = @factory.method(:#{send_name}).arity
+                @factory.#{send_name} #{tag.inspect}, text, *(arity == 3 ? [raw_text] : [])
+              else
+                raise NoMethodError, "Factory \#{@factory.class_name} does not implement factory method :#{meth}."
+              end
             end
           eof
           
@@ -77,18 +83,18 @@ module YARD
         @factory = factory
       end
 
-      define_tag "Parameters",       :param,       :with_types_and_name
-      define_tag "Yield Parameters", :yieldparam,  :with_types_and_name
+      define_tag "Parameters",       :param,        :with_types_and_name
+      define_tag "Yield Parameters", :yieldparam,   :with_types_and_name
       define_tag "Yields",           :yield
-      define_tag "Returns",          :return,      :with_types
+      define_tag "Returns",          :return,       :with_types
       define_tag "Deprecated",       :deprecated
       define_tag "Author",           :author
-      define_tag "Raises",           :raise,       :with_name
+      define_tag "Raises",           :raise,        :with_name
       define_tag "See Also",         :see
       define_tag "Since",            :since
       define_tag "Version",          :version
       define_tag "API Visibility",   :api
-      define_tag "Example",          :example
+      define_tag "Example",          :example,      :with_raw_title_and_text
     end
   end
 end

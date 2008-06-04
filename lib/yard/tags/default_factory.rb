@@ -47,6 +47,15 @@ module YARD
         Tag.new(tag_name, text, types, name)
       end
       
+      def parse_tag_with_raw_text(tag_name, text, raw_text)
+        Tag.new(tag_name, raw_text)
+      end
+      
+      def parse_tag_with_raw_title_and_text(tag_name, text, raw_text)
+        title, desc = *extract_title_and_desc_from_raw_text(raw_text)
+        Tag.new(tag_name, desc, nil, title)
+      end
+      
       private
       
       ##
@@ -71,6 +80,18 @@ module YARD
           text, types = $2, $1.split(",").collect {|e| e.strip }
         end
         [types, text]
+      end
+      
+      def extract_title_and_desc_from_raw_text(raw_text)
+        title, desc = nil, nil
+        if raw_text =~ /\A[ \t]\n/
+          desc = raw_text
+        else
+          raw_text = raw_text.split(/\r?\n/)
+          title = raw_text.shift.squeeze(' ').strip
+          desc = raw_text.join("\n")
+        end
+        [title, desc]
       end
     end
   end
