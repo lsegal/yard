@@ -63,7 +63,7 @@ module YARD
                   log.error "Unhandled exception in #{handler.to_s}:"
                   log.error "  " + e.message
                   log.error "  in `#{file}`:#{stmt.tokens.first.line_no}:\n\n#{stmt.inspect}\n"
-                  log.debug "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
+                  log.error "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
                 end
                 
                 # Perform any extra tasks on objects
