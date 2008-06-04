@@ -197,11 +197,12 @@ module YARD
         [:TkQUESTION,   TkOp,   "?"],	 #?
         [:TkCOLON,      TkOp,   ":"],        #:
     
-        [:TkfLPAREN],         # func( #
-        [:TkfLBRACK],         # func[ #
-        [:TkfLBRACE],         # func{ #
+#        [:TkfLPAREN],         # func( #
+#        [:TkfLBRACK],         # func[ #
+#        [:TkfLBRACE],         # func{ #
         [:TkSTAR],            # *arg
         [:TkAMPER],           # &arg #
+#        [:TkSYMBOL,     TkId],          # :SYMBOL
         [:TkSYMBEG,     TkId], 
         [:TkGT,	        TkOp,   ">"],
         [:TkLT,	        TkOp,   "<"],
@@ -813,13 +814,13 @@ module YARD
     
         @OP.def_rule("(") do
           @indent += 1
-          if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-    	      @lex_state = EXPR_BEG
-    	      tk = Token(TkfLPAREN)
-          else
+          #if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+    	    #  @lex_state = EXPR_BEG
+    	    #  tk = Token(TkfLPAREN)
+          #else
     	      @lex_state = EXPR_BEG
     	      tk = Token(TkLPAREN)
-          end
+          #end
           tk.set_text("(")
         end
 
@@ -834,15 +835,15 @@ module YARD
         @OP.def_rule("[") do
           @indent += 1
           if @lex_state == EXPR_FNAME
-    	      t = Token(TkfLBRACK)
-          else
-    	      if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+#    	      t = Token(TkfLBRACK)
+#          else
+#    	      if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+#    	        t = Token(TkLBRACK)
+#    	      elsif @lex_state == EXPR_ARG && @space_seen
     	        t = Token(TkLBRACK)
-    	      elsif @lex_state == EXPR_ARG && @space_seen
-    	        t = Token(TkLBRACK)
-    	      else
-    	        t = Token(TkfLBRACK)
-    	      end
+#    	      else
+#    	        t = Token(TkfLBRACK)
+#    	      end
     	      @lex_state = EXPR_BEG
           end
           t.set_text("[")
@@ -850,11 +851,12 @@ module YARD
 
         @OP.def_rule("{") do
           @indent += 1
-          if @lex_state != EXPR_END && @lex_state != EXPR_ARG
-    	      t = Token(TkLBRACE)
-          else
-    	      t = Token(TkfLBRACE)
-          end
+          #if @lex_state != EXPR_END && @lex_state != EXPR_ARG
+    	    #  t = Token(TkLBRACE)
+          #else
+    	    #  t = Token(TkfLBRACE)
+          #end
+          t = Token(TkLBRACE)
           @lex_state = EXPR_BEG
           t.set_text("{")
         end
