@@ -2,25 +2,12 @@ class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
   handles /\A(protected|private|public)/
   
   def process
+    vis = statement.tokens.first.text
     if statement.tokens.size == 1
-      self.visibility = statement.tokens.to_s.to_sym
+      self.visibility = vis
     else
-      last_tk = nil
-      vis = statement.tokens.first.text
-      statement.tokens[2..-1].each do |tk|
-        name = nil
-        if tk.is_a?(TkSTRING)
-          name = eval(tk.text)
-        elsif (tk.is_a?(TkIDENTIFIER) || tk.is_a?(TkFID)) && last_tk.is_a?(TkSYMBEG)
-          name = eval(":" + tk.text)
-        end
-        
-        if name
-          # Explicitly register object
-          register MethodObject.new(namespace, name, scope) {|o| o.visibility = vis }
-        end
-        
-        last_tk = tk
+      tokval_list(statement.tokens[2..-1], :attr).each do |name|
+        register MethodObject.new(namespace, name, scope) {|o| o.visibility = vis }
       end
     end
   end

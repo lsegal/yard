@@ -302,21 +302,22 @@ module YARD
       # Some helpers
       
       # The string value of a token. For example, the return value for the symbol :sym 
-      # would be "sym". The return value for a string "foo #{bar}" would be the literal 
+      # would be :sym. The return value for a string "foo #{bar}" would be the literal 
       # "foo #{bar}" without any interpolation. The return value of the identifier
       # 'test' would be the same value: 'test'. Here is a list of common types and
       # their return values:
       # 
       # @example 
       #   tokval(TokenList.new('"foo"').first) => "foo"
-      #   tokval(TokenList.new(':foo').first) => "foo"
+      #   tokval(TokenList.new(':foo').first) => :foo
       #   tokval(TokenList.new('CONSTANT').first, RubyToken::TkId) => "CONSTANT"
       #   tokval(TokenList.new('identifier').first, RubyToken::TkId) => "identifier"
-      #   tokval(TokenList.new('3.25').first) => "3.25"
+      #   tokval(TokenList.new('3.25').first) => 3.25
+      #   tokval(TokenList.new('/xyz/i').first) => /xyz/i
       # 
       # @param [Token] token The token of the class
       # 
-      # @param [Array<Class<Token>>, Symbol] 
+      # @param [Array<Class<Token>>, Symbol] accepted_types
       #   The allowed token types that this token can be. Defaults to [{TkVal}].
       #   A list of types would be, for example, [{TkSTRING}, {TkSYMBOL}], to return
       #   the token's value if it is either of those types. If +TkVal+ is accepted, 
@@ -329,7 +330,8 @@ module YARD
       #     :identifier   => +TkIDENTIFIER, +TkFID+ and +TkGVAR+.
       #     :number       => +TkFLOAT+, +TkINTEGER+
       # 
-      # @return [String] if the token is one of the accepted types, in its real value form.
+      # @return [Object] if the token is one of the accepted types, in its real value form.
+      #   It should be noted that identifiers and constants are kept in String form.
       # @return [nil] if the token is not any of the specified accepted types
       def tokval(token, *accepted_types)
         accepted_types = [TkVal] if accepted_types.empty?
@@ -357,7 +359,20 @@ module YARD
         when TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING 
           token.text[1..-2]
         when TkSYMBOL
-          token.text[1..-1]
+          token.text[1..-1].to_sym
+        when TkFLOAT
+          token.text.to_f
+        when TkINTEGER
+          token.text.to_i
+        when TkREGEXP
+          token.text =~ /\A\/(.+)\/([^\/])\Z/
+          Regexp.new($1, $2)
+        when TkTRUE
+          true
+        when TkFALSE
+          false
+        when TkNIL
+          nil
         else
           token.text
         end
@@ -389,33 +404,35 @@ module YARD
         parencount = 0
         needcomma = false
         tokenlist.each do |token|
+          tokval = tokval(token, *accepted_types)
+          parencond = !out.last.empty? && tokval != nil
           case token
           when TkCOMMA
-            if parencount == 0
+            if parencount <= 0
               out << [] unless out.last.empty?
               needcomma = false
             else
-              out.last << token.text if !out.last.empty?
+              out.last << token.text if parencond
             end
           when TkLPAREN, TkLBRACE, TkLBRACK, TkDO
             parencount += 1
-            out.last << token.text if !out.last.empty?
+            out.last << token.text if parencond
           when TkRPAREN, TkRBRACE, TkRBRACK, TkEND
             parencount -= 1
-            out.last << token.text if !out.last.empty?
-          when TkKW
-            break 
+            out.last << token.text if parencond
           else
-            if parencount == 0
+            break if TkKW === token && !(TkTRUE === token || TkFALSE === token)
+            
+            if parencount <= 0
               next if needcomma 
               next if TkSPACE === token || TkNL === token
-              if value = tokval(token, *accepted_types)
-                out.last << value
+              if tokval != nil
+                out.last << tokval
               else
                 out.last.clear
                 needcomma = true
               end 
-            elsif !out.last.empty? && tokval(token, *accepted_types)
+            elsif parencond
               needcomma = true
               out.last << token.text
             end
