@@ -272,7 +272,7 @@ module YARD
           if line =~ meta_match
             orig_indent = indent
             tag_name, tag_buf = $1, $2 
-            raw_buf = [tag_buf]
+            raw_buf = [tag_buf.dup]
           elsif tag_name && indent >= orig_indent && !empty
             # Extra data added to the tag on the next line
             last_empty = last_line =~ /^[ \t]*$/ ? true : false
