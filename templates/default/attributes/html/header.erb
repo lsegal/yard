@@ -7,7 +7,7 @@
       <table>
       <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| -%>
         <tr>
-          <th class="name"><%= h name %></span>
+          <th class="name"><%= h name %></td>
           <td class="readwrite">
             [<%= ['read', 'write'].map {|t| 
                 rw[t] && !rw[t].is_explicit? ? "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>" : t[0,1].upcase
