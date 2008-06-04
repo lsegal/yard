@@ -256,13 +256,13 @@ module YARD
             tagfactory = Tags::Library.new
             tag_method = "#{tag_name}_tag"
             if tag_name && tagfactory.respond_to?(tag_method)
-              if tagfactory.method(tag_method).arity == 1
-                @tags << tagfactory.send(tag_method, tag_buf) 
-              else
+              if tagfactory.method(tag_method).arity == 2
                 @tags << tagfactory.send(tag_method, tag_buf, raw_buf.join("\n"))
+              else
+                @tags << tagfactory.send(tag_method, tag_buf) 
               end
             else
-              YARD.logger.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
+              log.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
             end
             tag_name, tag_buf, raw_buf = nil, '', []
             orig_indent = 0
@@ -272,6 +272,7 @@ module YARD
           if line =~ meta_match
             orig_indent = indent
             tag_name, tag_buf = $1, $2 
+            raw_buf = [tag_buf]
           elsif tag_name && indent >= orig_indent && !empty
             # Extra data added to the tag on the next line
             last_empty = last_line =~ /^[ \t]*$/ ? true : false
