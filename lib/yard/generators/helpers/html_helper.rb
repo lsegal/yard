@@ -110,6 +110,20 @@ module YARD
       
         link + (anchor ? '#' + anchor_for(anchor) : '')
       end
+
+      def html_syntax_highlight(source)
+        tokenlist = Parser::TokenList.new(source)
+        tokenlist.map do |s| 
+          case s
+          when Parser::RubyToken::TkWhitespace, Parser::RubyToken::TkUnknownChar
+            h s.text
+          else
+            prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
+            prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
+            "<span class='#{prettyclass} #{prettysuper}'>#{h s.text}</span>"
+          end
+        end
+      end
     end
   end
 end

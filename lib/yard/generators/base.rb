@@ -176,7 +176,7 @@ module YARD
 
             result = meth.call(*args)
             log.debug("Calling before section filter for %s%s with `%s`, result = %s" % [
-              self.class.to_s.split("::").last, section.inspect, object, 
+              self.class.class_name, section.inspect, object, 
               result.is_a?(FalseClass) ? 'fail' : 'pass'
             ])
           end
@@ -255,10 +255,10 @@ module YARD
           begin
             Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
           rescue => e
-            log.warn e
-            log.warn "in generator #{self.class} section #{file} on '#{object}'"
-            log.warn e.backtrace[0..5].join("\n")
-            raise 
+            log.error "#{e.class.class_name}: #{e.message}"
+            log.error "in generator #{self.class} section #{file} on '#{object}'"
+            log.error e.backtrace[0..10].join("\n")
+            exit
           end
         else
           log.warn "Cannot find template `#{__path}`"
