@@ -28,6 +28,8 @@ describe YARD::Parser::TokenList, "#initialize / #push" do
   
   it "should not interpolate string data" do
     x = TokenList.new('x = "hello #{world}"')
+    x.size.should == 6
+    x[4].class.should == TkDSTRING
     x.to_s.should == 'x = "hello #{world}"' + "\n"
   end
 end
