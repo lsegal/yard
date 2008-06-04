@@ -66,7 +66,7 @@ describe YARD::Handlers::Base, "#tokval" do
   end
   
   it "should return a Symbol's value as a String (as if it was done via :name.to_sym)" do
-    tokval(':sym').should == "sym"
+    tokval(':sym').should == :sym
   end
   
   it "should return nil for any non accepted type" do
@@ -75,8 +75,8 @@ describe YARD::Handlers::Base, "#tokval" do
   end
   
   it "should accept TkVal tokens by default" do
-    tokval('2.5').should == "2.5"
-    tokval(':sym').should == "sym"
+    tokval('2.5').should == 2.5
+    tokval(':sym').should == :sym
   end
   
   it "should accept any ID type if TkId is set" do
@@ -85,7 +85,7 @@ describe YARD::Handlers::Base, "#tokval" do
   end
   
   it "should allow extra token types to be accepted" do 
-    tokval('2.5', RubyToken::TkFLOAT).should == '2.5'
+    tokval('2.5', RubyToken::TkFLOAT).should == 2.5
     tokval('2', RubyToken::TkFLOAT).should be_nil
     tokval(':symbol', RubyToken::TkFLOAT).should be_nil
   end
@@ -100,8 +100,8 @@ describe YARD::Handlers::Base, "#tokval" do
   end
   
   it "should allow any number type with :number" do
-    tokval('2.5', :number).should == '2.5'
-    tokval('2', :number).should == '2'
+    tokval('2.5', :number).should == 2.5
+    tokval('2', :number).should == 2
   end
   
   it "should should allow method names with :identifier" do
@@ -121,21 +121,29 @@ describe YARD::Handlers::Base, "#tokval_list" do
   end
   
   it "should return the list of tokvalues" do
-    tokval_list(":a, :b, \"\#{c}\", :d", :attr).should == ['a', 'b', 'd']
-    tokval_list(":a, :b, File.read(\"\#{c}\", 'w'), :d", RubyToken::Token).should  == ['a', 'b', 'File.read("#{c}", \'w\')', 'd']
+    tokval_list(":a, :b, \"\#{c}\", 'd'", :attr).should == [:a, :b, 'd']
+    tokval_list(":a, :b, File.read(\"\#{c}\", 'w'), :d", RubyToken::Token).should  == [:a, :b, 'File.read("#{c}", \'w\')', :d]
   end
   
   it "should try to skip any invalid tokens" do
-    tokval_list(":a, :b, \"\#{c}\", :d", :attr).should  == ['a', 'b', 'd']
-    tokval_list(":a, :b, File.read(\"\#{c}\", 'w', File.open { }), :d", :attr).should  == ['a', 'b', 'd']
+    tokval_list(":a, :b, \"\#{c}\", :d", :attr).should  == [:a, :b, :d]
+    tokval_list(":a, :b, File.read(\"\#{c}\", 'w', File.open { }), :d", :attr).should  == [:a, :b, :d]
   end
   
   it "should ignore a token if another invalid token is read before a comma" do
-    tokval_list(":a, :b XYZ, :c", RubyToken::TkSYMBOL).should == ['a', 'c']
+    tokval_list(":a, :b XYZ, :c", RubyToken::TkSYMBOL).should == [:a, :c]
+  end
+  
+  it "should stop on most keywords" do
+    tokval_list(':a rescue :x == 5', RubyToken::Token).should == [:a]
+  end
+  
+  it "should not stop on a true/false keyword (cannot handle nil)" do
+    tokval_list(':a, true, :b, false, :c, nil, File, if, XYZ', RubyToken::Token).should == [:a, true, :b, false, :c]
   end
   
   it "should ignore invalid commas" do
-    tokval_list(":a, :b, , :d").should == ['a', 'b', 'd']
+    tokval_list(":a, :b, , :d").should == [:a, :b, :d]
   end
   
   it "should return an empty list if no matches were found" do

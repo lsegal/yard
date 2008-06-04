@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+
 describe YARD::Parser, "tag handling" do
   before { parse_file :tag_handler_001, __FILE__ }
   

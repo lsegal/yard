@@ -1,5 +1,8 @@
+require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+
 describe YARD::Parser::SourceParser do
   before do 
+    p self.class.description
     Registry.clear
   end
   
