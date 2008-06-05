@@ -18,7 +18,7 @@ module YARD
         longestline = (object.line + lines.size).to_s.length
         lines.map do |line| 
           lineno = object.line + (i += 1)
-          (" " * (longestline - lineno.to_s.length)) + lineno + "    " + line
+          (" " * (longestline - lineno.to_s.length)) + lineno.to_s + "    " + line
         end.join("\n")
       end
     end
