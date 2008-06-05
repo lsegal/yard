@@ -401,31 +401,49 @@ module YARD
       # @see #tokval
       def tokval_list(tokenlist, *accepted_types)
         out = [[]]
-        parencount = 0
+        parencount, beforeparen = 0, 0
         needcomma = false
+        seen_comma = true
         tokenlist.each do |token|
           tokval = tokval(token, *accepted_types)
           parencond = !out.last.empty? && tokval != nil
+          #p "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
           case token
           when TkCOMMA
-            if parencount <= 0
+            if parencount == 0
               out << [] unless out.last.empty?
               needcomma = false
+              seen_comma = true
             else
               out.last << token.text if parencond
             end
-          when TkLPAREN, TkLBRACE, TkLBRACK, TkDO
-            parencount += 1
+          when TkLPAREN
+            if seen_comma
+              beforeparen += 1
+            else
+              parencount += 1
+              out.last << token.text if parencond
+            end
+          when TkRPAREN
+            if beforeparen > 0
+              beforeparen -= 1
+            else
+              parencount -= 1
+              out.last << token.text if parencond
+            end
+          when TkLBRACE, TkLBRACK, TkDO
+            parencount += 1 
             out.last << token.text if parencond
-          when TkRPAREN, TkRBRACE, TkRBRACK, TkEND
+          when TkRBRACE, TkRBRACK, TkEND
+            out.last << token.text if parencond
             parencount -= 1
-            out.last << token.text if parencond
           else
             break if TkKW === token && !(TkTRUE === token || TkFALSE === token)
             
-            if parencount <= 0
+            seen_comma = false unless TkWhitespace === token
+            if parencount == 0
               next if needcomma 
-              next if TkSPACE === token || TkNL === token
+              next if TkWhitespace === token
               if tokval != nil
                 out.last << tokval
               else
@@ -437,9 +455,13 @@ module YARD
               out.last << token.text
             end
           end
+
+          if beforeparen == 0 && parencount < 0
+            break
+          end
         end
         # Flatten any single element lists
-        out.map {|e| e.empty? ? nil : (e.size == 1 ? e.pop : e.join) }.compact
+        out.map {|e| e.empty? ? nil : (e.size == 1 ? e.pop : e.flatten.join) }.compact
       end
     end
   end

@@ -109,7 +109,7 @@ describe YARD::Handlers::Base, "#tokval" do
   end
   
   it "should obey documentation expectations" do
-    docspec
+    #docspec
   end
 end
 
@@ -137,6 +137,18 @@ describe YARD::Handlers::Base, "#tokval_list" do
   
   it "should stop on most keywords" do
     tokval_list(':a rescue :x == 5', RubyToken::Token).should == [:a]
+  end
+  
+  it "should handle ignore parentheses that begin the token list" do
+    tokval_list('(:a, :b, :c)', :attr).should == [:a, :b, :c]
+  end
+  
+  it "should end when a closing parenthesis was found" do
+    tokval_list(':a, :b, :c), :d', :attr).should == [:a, :b, :c]
+  end
+  
+  it "should ignore parentheses around items in a list" do
+    tokval_list(':a, (:b), :c, (:d TEST), :e, [:f], :g', :attr).should == [:a, :b, :c, :e, :g]
   end
   
   it "should not stop on a true/false keyword (cannot handle nil)" do
