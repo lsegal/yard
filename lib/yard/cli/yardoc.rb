@@ -62,7 +62,7 @@ module YARD
         end
 
         opts.separator ""
-        opts.separator "Output options"
+        opts.separator "Output options:"
   
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
           visibilities.delete(:public)
