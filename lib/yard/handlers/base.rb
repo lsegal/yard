@@ -400,6 +400,7 @@ module YARD
       # @return [Array<EMPTY>] if there are no symbols or Strings in the list 
       # @see #tokval
       def tokval_list(tokenlist, *accepted_types)
+        return [] unless tokenlist
         out = [[]]
         parencount, beforeparen = 0, 0
         needcomma = false
@@ -407,7 +408,7 @@ module YARD
         tokenlist.each do |token|
           tokval = tokval(token, *accepted_types)
           parencond = !out.last.empty? && tokval != nil
-          #p "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
+          #puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
           case token
           when TkCOMMA
             if parencount == 0
@@ -428,8 +429,8 @@ module YARD
             if beforeparen > 0
               beforeparen -= 1
             else
+              out.last << token.text if parencount > 0 && tokval != nil
               parencount -= 1
-              out.last << token.text if tokval != nil
             end
           when TkLBRACE, TkLBRACK, TkDO
             parencount += 1 

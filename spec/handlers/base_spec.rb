@@ -150,7 +150,7 @@ describe YARD::Handlers::Base, "#tokval_list" do
   it "should ignore parentheses around items in a list" do
     tokval_list(':a, (:b), :c, (:d TEST), :e, [:f], :g', :attr).should == [:a, :b, :c, :e, :g]
     tokval_list(':a, (((:f)))', :attr).should == [:a, :f]
-    tokval_list(':a, ([:f])', RubyToken::Token).should == [:a, '[:f]']
+    tokval_list(':a, ([:f]), :c)', RubyToken::Token).should == [:a, '[:f]', :c]
   end
   
   it "should not stop on a true/false keyword (cannot handle nil)" do
