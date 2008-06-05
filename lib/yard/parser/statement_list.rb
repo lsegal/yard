@@ -67,7 +67,6 @@ module YARD
               # and not "#text", which I deem ugly (you heard it here first)
               comments ||= []
               comments << tk.text.gsub(/^#+\s{0,1}/, '') 
-            end
               comments.pop if comments.size == 1 && comments.first =~ /^\s*$/
             end
           end
