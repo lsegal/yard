@@ -70,6 +70,7 @@ module YARD
     autoload :ClassHandler,         'handlers/class_handler'
     autoload :ClassVariableHandler, 'handlers/class_variable_handler'
     autoload :ConstantHandler,      'handlers/constant_handler'
+    autoload :ExceptionHandler,     'handlers/exception_handler'
     autoload :MethodHandler,        'handlers/method_handler'
     autoload :MixinHandler,         'handlers/mixin_handler'
     autoload :ModuleHandler,        'handlers/module_handler'
@@ -109,14 +110,8 @@ module YARD
   autoload :Registry, 'registry'
 end
 
-module YARD
-  module Handlers
-    # Load all handlers
-    [ AliasHandler, AttributeHandler, ClassHandler, ClassVariableHandler,
-      ConstantHandler, MethodHandler, MixinHandler, ModuleHandler, 
-      VisibilityHandler, YieldHandler ]
-  end
-end
+# Load handlers immediately
+YARD::Handlers.constants.each {|c| YARD::Handlers.const_get(c) }
 
 # P() needs to be loaded right away
 YARD::CodeObjects::Proxy

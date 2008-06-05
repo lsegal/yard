@@ -1,0 +1,26 @@
+class Testing
+  # Ignore yields outside methods
+  raise NoMethodError, "reason"
+  
+  # Should document this
+  def mymethod
+    raise ArgumentError, "Argument is missing"
+  end
+  
+  # Don't document this
+  def mymethod2
+    raise(a) 
+  end
+  
+  # Don't document this (docstring takes precedence)
+  # @raise [A]
+  def mymethod3 
+    raise SomethingElse
+  end
+  
+  # Only document the first one (limitation of exc handler)
+  def mymethod4 
+    raise(A)
+    raise B, "Argument", somethingelse
+  end
+end
