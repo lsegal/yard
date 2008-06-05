@@ -75,6 +75,7 @@ module YARD
     autoload :ModuleHandler,        'handlers/module_handler'
     autoload :VisibilityHandler,    'handlers/visibility_handler'
     autoload :UndocumentableError,  'handlers/base'
+    autoload :YieldHandler,         'handlers/yield_handler'
   end
 
   module Parser
@@ -112,7 +113,8 @@ module YARD
   module Handlers
     # Load all handlers
     [ AliasHandler, AttributeHandler, ClassHandler, ClassVariableHandler,
-    ConstantHandler, MethodHandler, MixinHandler, ModuleHandler, VisibilityHandler ]
+      ConstantHandler, MethodHandler, MixinHandler, ModuleHandler, 
+      VisibilityHandler, YieldHandler ]
   end
 end
 

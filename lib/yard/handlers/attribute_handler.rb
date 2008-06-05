@@ -4,7 +4,7 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
   def process
     begin
       attr_type   = statement.tokens.first.text.to_sym
-      symbols     = tokval_list statement.tokens[1..-1], :attr, TkTRUE, TkFALSE
+      symbols     = tokval_list statement.tokens[2..-1], :attr, TkTRUE, TkFALSE
       read, write = true, false
     rescue SyntaxError
       raise YARD::Handlers::UndocumentableError, attr_type

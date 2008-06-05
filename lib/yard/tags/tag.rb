@@ -18,7 +18,7 @@ module YARD
       #                                for the tag
       # @param [String] name           optional key name which the tag refers to
       def initialize(tag_name, text, types = nil, name = nil)
-        @tag_name, @text, @name, @types = tag_name.to_s, text, name, types
+        @tag_name, @text, @name, @types = tag_name.to_s, text, name, (types ? [types].flatten.compact : nil)
       end
 
       ##

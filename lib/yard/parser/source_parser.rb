@@ -65,9 +65,6 @@ module YARD
                   log.error "  in `#{file}`:#{stmt.tokens.first.line_no}:\n\n#{stmt.inspect}\n"
                   log.error "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
                 end
-                
-                # Perform any extra tasks on objects
-                hobj.register(*results)
               end
             end
         end

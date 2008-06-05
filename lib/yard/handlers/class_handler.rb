@@ -9,12 +9,11 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
         undocsuper = true if superclass.nil?
       end
 
-      klass = ClassObject.new(namespace, classname) do |o|
+      register klass = ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
       parse_block(:namespace => klass)
-      register klass # Explicit registration
        
       if undocsuper
         raise YARD::Handlers::UndocumentableError, 'superclass (class was added without superclass)'
