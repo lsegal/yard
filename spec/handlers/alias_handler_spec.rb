@@ -11,7 +11,8 @@ describe YARD::Handlers::AliasHandler do
   end
   
   it "should handle the Ruby 'alias' keyword syntax" do
-    P('A#c').should be_instance_of(CodeObjects::MethodObject)
+    P("A#c").should be_instance_of(CodeObjects::MethodObject)
+    P('A#d?').should be_instance_of(CodeObjects::MethodObject)
   end
   
   it "should create a new method object for the alias" do

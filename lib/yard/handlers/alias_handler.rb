@@ -4,7 +4,7 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
   def process
     if TkALIAS === statement.tokens.first 
       tokens = statement.tokens.squeeze
-      names = [tokval(tokens[2], :attr), tokval(tokens[4], :attr)]
+      names = [tokval(tokens[2], :attr, :identifier), tokval(tokens[4], :attr, :identifier)]
     else
       names = tokval_list(statement.tokens[2..-1], :attr)
     end
