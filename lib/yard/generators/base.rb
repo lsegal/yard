@@ -9,7 +9,7 @@ module YARD
 
       class << self
         def template_paths
-          @template_paths ||= [TEMPLATE_ROOT]
+          @@template_paths ||= [TEMPLATE_ROOT]
         end
 
         ##
