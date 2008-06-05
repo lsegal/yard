@@ -5,7 +5,7 @@ module YARD
     unless @logger
       @logger = Logger.new(STDERR)
       @logger.datetime_format = ""
-      @logger.level = Logger::INFO
+      @logger.level = $DEBUG ? Logger::DEBUG : Logger::INFO
     end
     @logger
   end
