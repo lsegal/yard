@@ -5,8 +5,9 @@ module YARD
 
       # The following list of tokens will require a block to be opened 
       # if used at the beginning of a statement.
-      @@open_block_tokens = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
-                             TkIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
+      OPEN_BLOCK_TOKENS = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
+                           TkIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
+      COLON_TOKENS = [TkUNTIL, TkIF, TkUNLESS, TkWHILE, TkCASE, TkWHEN]
 
       ##
       # Creates a new statement list
@@ -98,7 +99,7 @@ module YARD
             # Vouch to open a block when this statement would otherwise end
             open_block = [level, tk.class] if (new_statement || 
                                 (last_tk && last_tk.lex_state == EXPR_BEG)) && 
-                                 @@open_block_tokens.include?(tk.class)
+                                 OPEN_BLOCK_TOKENS.include?(tk.class)
 
             # Check if this token creates a new statement or not
             #puts "#{open_parens} open brackets for: #{statement.to_s}"

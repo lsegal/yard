@@ -535,6 +535,7 @@ module YARD
         "case", "class", "def", "do", "for", "if",
         "module", "unless", "until", "while", "begin" #, "when"
       ]
+      ACCEPTS_COLON = ["if", "for", "unless", "until", "while"]
       DEINDENT_CLAUSE = ["end" #, "when"
       ]
 
@@ -619,6 +620,7 @@ module YARD
 
         @OP.def_rule("\n") do
           print "\\n\n" if RubyLex.debug?
+          @colonblock_seen = false
           case @lex_state
           when EXPR_BEG, EXPR_FNAME, EXPR_DOT
     	      @continue = TRUE
@@ -752,8 +754,8 @@ module YARD
           Token(op).set_text(op)
         end
 
-        @OP.def_rule(":") do
-          if @lex_state == EXPR_END || peek(0) =~ /\s/
+        @OP.def_rule(":") do 
+          if @colonblock_seen || peek(0) =~ /\s/
     	      @lex_state = EXPR_BEG
     	      tk = Token(TkCOLON)
           else
@@ -801,6 +803,7 @@ module YARD
         #       end
     
         @OP.def_rules(",", ";") do |op, io|
+          @colonblock_seen = false
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
@@ -1010,8 +1013,15 @@ module YARD
     	  if @lex_state != EXPR_FNAME
     	    if ENINDENT_CLAUSE.include?(token)
     	      @indent += 1
+    	      
+    	      if ACCEPTS_COLON.include?(token)  
+    	        @colonblock_seen = true
+  	        else
+  	          @colonblock_seen = false
+	          end
     	    elsif DEINDENT_CLAUSE.include?(token)
     	      @indent -= 1
+    	      @colonblock_seen = false
     	    end
     	    @lex_state = trans[0]
     	  else
@@ -1025,7 +1035,7 @@ module YARD
         if @lex_state == EXPR_FNAME
           @lex_state = EXPR_END
           if peek(0) == '='
-    	token.concat getc
+    	      token.concat getc
           end
         elsif @lex_state == EXPR_BEG || @lex_state == EXPR_DOT
           @lex_state = EXPR_ARG
