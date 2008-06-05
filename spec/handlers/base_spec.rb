@@ -122,7 +122,7 @@ describe YARD::Handlers::Base, "#tokval_list" do
   
   it "should return the list of tokvalues" do
     tokval_list(":a, :b, \"\#{c}\", 'd'", :attr).should == [:a, :b, 'd']
-    tokval_list(":a, :b, File.read(\"\#{c}\", 'w'), :d", RubyToken::Token).should  == [:a, :b, 'File.read("#{c}", \'w\')', :d]
+    tokval_list(":a, :b, File.read(\"\#{c}\", ['w']), :d", RubyToken::Token).should  == [:a, :b, 'File.read("#{c}", [\'w\'])', :d]
   end
   
   it "should try to skip any invalid tokens" do
@@ -149,6 +149,8 @@ describe YARD::Handlers::Base, "#tokval_list" do
   
   it "should ignore parentheses around items in a list" do
     tokval_list(':a, (:b), :c, (:d TEST), :e, [:f], :g', :attr).should == [:a, :b, :c, :e, :g]
+    tokval_list(':a, (((:f)))', :attr).should == [:a, :f]
+    tokval_list(':a, ([:f])', RubyToken::Token).should == [:a, '[:f]']
   end
   
   it "should not stop on a true/false keyword (cannot handle nil)" do

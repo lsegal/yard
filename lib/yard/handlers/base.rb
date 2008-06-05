@@ -429,13 +429,13 @@ module YARD
               beforeparen -= 1
             else
               parencount -= 1
-              out.last << token.text if parencond
+              out.last << token.text if tokval != nil
             end
           when TkLBRACE, TkLBRACK, TkDO
             parencount += 1 
-            out.last << token.text if parencond
+            out.last << token.text if tokval != nil
           when TkRBRACE, TkRBRACK, TkEND
-            out.last << token.text if parencond
+            out.last << token.text if tokval != nil
             parencount -= 1
           else
             break if TkKW === token && !(TkTRUE === token || TkFALSE === token)
