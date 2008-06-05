@@ -95,7 +95,7 @@ module YARD
       define_tag "Returns",           :return,      :with_types
       define_tag "Deprecated",        :deprecated
       define_tag "Author",            :author
-      define_tag "Raises",            :raise,       :with_name
+      define_tag "Raises",            :raise,       :with_types
       define_tag "See Also",          :see
       define_tag "Since",             :since
       define_tag "Version",           :version
