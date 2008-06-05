@@ -1,6 +1,9 @@
 module A
   def a; end
   alias_method :b, :a
+  
+  # Handle keyword syntax too
+  alias :c :a
 end
 
 class C

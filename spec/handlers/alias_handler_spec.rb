@@ -10,8 +10,12 @@ describe YARD::Handlers::AliasHandler do
     P(:A).aliases[P("A#b")].should == :a
   end
   
+  it "should handle the Ruby 'alias' keyword syntax" do
+    P('A#c').should be_instance_of(CodeObjects::MethodObject)
+  end
+  
   it "should create a new method object for the alias" do
-    P("A#b").should be_instance_of(MethodObject)
+    P("A#b").should be_instance_of(CodeObjects::MethodObject)
   end
   
   it "should pull the method into the current class if it's from another one" do

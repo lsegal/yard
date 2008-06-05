@@ -1,9 +1,14 @@
 class YARD::Handlers::AliasHandler < YARD::Handlers::Base
-  handles /\Aalias_method/
+  handles /\Aalias(_method)?(\s|\()/
   
   def process
-    names = tokval_list(statement.tokens[2..-1], :attr)
-    raise YARD::Handlers::UndocumentableError, "alias_method" if names.size != 2
+    if TkALIAS === statement.tokens.first 
+      tokens = statement.tokens.squeeze
+      names = [tokval(tokens[2], :attr), tokval(tokens[4], :attr)]
+    else
+      names = tokval_list(statement.tokens[2..-1], :attr)
+    end
+    raise YARD::Handlers::UndocumentableError, statement.tokens.first.text if names.size != 2
     
     new_meth, old_meth = names[0].to_sym, names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
