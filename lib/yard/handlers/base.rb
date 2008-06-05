@@ -217,11 +217,19 @@ module YARD
       # @param [Array<CodeObjects::Base>] objects
       #   the list of objects to post-process.
       # 
-      # @return [NilClass]
+      # @return [CodeObjects::Base, Array<CodeObjects::Base>]
+      #   returns whatever is passed in, for chainability.
       # 
       def register(*objects)
-        objects.each do |object|
+        objects.flatten.each do |object|
           next unless object.is_a?(CodeObjects::Base)
+          
+          # Yield the object to the calling block because ruby will parse the syntax
+          #   
+          #     register obj = ClassObject.new {|o| ... }
+          # 
+          # as the block for #register. We need to make sure this gets to the object.
+          yield(object) if block_given? 
           
           # Add file and line number, but for class/modules this is 
           # only done if there is a docstring for this specific definition.
@@ -245,7 +253,7 @@ module YARD
           # This generally means it was defined in a method (or block of some sort)
           object.dynamic = true if owner != namespace
         end
-        nil # Don't return anything 
+        objects.size == 1 ? objects.first : objects
       end
       
       attr_reader :parser, :statement

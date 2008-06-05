@@ -50,7 +50,5 @@ class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
         register namespace.attributes[scope][name][type]
       end
     end
-    
-    nil # return nothing for registration (we did it explicitly)
   end
 end

@@ -7,7 +7,7 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
     
     new_meth, old_meth = names[0].to_sym, names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
-    new_obj = MethodObject.new(namespace, new_meth, scope) do |o|
+    new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
       o.visibility = visibility
       o.scope = scope
       o.line = statement.tokens.first.line_no
@@ -23,7 +23,5 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
     end
     
     namespace.aliases[new_obj] = old_meth
-    
-    new_obj # return for registration
   end
 end

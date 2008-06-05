@@ -9,7 +9,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
         undocsuper = true if superclass.nil?
       end
 
-      register klass = ClassObject.new(namespace, classname) do |o|
+      klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
