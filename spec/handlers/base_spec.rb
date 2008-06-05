@@ -108,9 +108,7 @@ describe YARD::Handlers::Base, "#tokval" do
     tokval('methodname?', :identifier).should == "methodname?"
   end
   
-  it "should obey documentation expectations" do
-    #docspec
-  end
+  #it "should obey documentation expectations" do docspec end
 end
 
 describe YARD::Handlers::Base, "#tokval_list" do 
