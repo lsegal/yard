@@ -45,9 +45,14 @@ module YARD
         opts.separator ""
         opts.separator "General Options:"
 
-        opts.on('-c', '--use-cache', 
-                'Use the cached .yardoc database to generate documentation. (defaults to no cache)') do 
+        opts.on('-c', '--use-cache [FILE]', 
+                'Use the cached .yardoc db to generate documentation. (defaults to no cache)') do |file|
+          YARD::Registry.yardoc_file = file if file
           self.reload = false
+        end
+        
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+          YARD::Registry.yardoc_file = yfile
         end
         
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
