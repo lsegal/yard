@@ -20,7 +20,7 @@ module YARD
       end
       
       def raise(object)
-        render_tags :raise, :no_types => true
+        render_tags :raise, :no_names => true
       end
       
       def author(object)
