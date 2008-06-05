@@ -194,7 +194,21 @@ describe YARD::CodeObjects::Base do
         end
     eof
     Registry.at('#key?').source.should == "def key?(key)\n  if x == 2\n    puts key\n  else\n    exit\n  end\nend"
-
+  end
+  
+  it "should not add newlines to source when parsing sub blocks" do
+    Parser::SourceParser.parse_string <<-eof
+      module XYZ
+        module ZYX
+          class ABC
+            def msg
+              hello_world
+            end
+          end
+        end
+      end
+    eof
+    Registry.at('XYZ::ZYX::ABC#msg').source.should == "def msg\n  hello_world\nend"    
   end
   
   it "should handle source for 'def x; end'" do

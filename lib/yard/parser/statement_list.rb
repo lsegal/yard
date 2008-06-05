@@ -79,13 +79,15 @@ module YARD
             # If the level is greater than 0, add the code to the block text
             # otherwise it's part of the statement text
             if stmt_number > 0
+              #puts "Block of #{statement}"
+              #puts "#{stmt_number} #{tk.line_no} #{level} #{open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
               block ||= TokenList.new
               block << tk
             elsif stmt_number == 0 && tk.class != TkNL && tk.class != TkSEMICOLON && tk.class != TkCOMMENT
               statement << tk 
             end
 
-            #puts "#{tk.line_no} #{level} #{open_parens} #{tk.class.to_s.split("::").last} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
+            #puts "#{tk.line_no} #{level} #{open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
 
             # Increase level if we have a 'do' or block opening
             if tk.class == TkLBRACE #|| tk.class == TkfLBRACE
@@ -122,11 +124,13 @@ module YARD
 
                 # The statement started with a if/while/begin, so we must go to the next level now
                 if open_block && open_block.first == level
+                  if tk.class == TkNL && block.nil?
+                    block = TokenList.new
+                    block << tk
+                  end
+
                   open_block = false
                   level += 1
-                  
-                  block ||= TokenList.new
-                  block << tk if tk.class == TkNL 
                 end
               end
             elsif tk.class != TkSPACE
