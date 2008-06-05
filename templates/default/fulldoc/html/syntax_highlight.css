@@ -1,5 +1,5 @@
 /* Canvas */
-.docstring pre, .source_code { background: #222; padding: 0 12px; margin-top: 8px; border: 1px dashed #ccc; font-size: 0.9em; overflow: scroll; }
+.docstring pre, .source_code { background: #222; padding: 0 12px; margin-top: 8px; border: 1px dashed #ccc; font-size: 0.9em; overflow-x: auto; }
 .source_code pre.lines { margin-right: 20px; text-align: right; color: #888; }
 .docstring pre { padding: 12px; padding-left: 0; }
 
