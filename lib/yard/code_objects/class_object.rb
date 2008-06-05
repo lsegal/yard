@@ -7,6 +7,14 @@ module YARD::CodeObjects
       self.superclass ||= P(:Object) unless self == P(:Object)
     end
     
+    def is_exception?
+      begin
+        Exception >= eval(inheritance_tree.last.path)
+      rescue NameError
+        false
+      end
+    end
+    
     def inheritance_tree(include_mods = false)
       list = [self] + (include_mods ? mixins : [])
       if superclass.is_a? Proxy

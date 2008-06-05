@@ -39,5 +39,14 @@ module YARD::Generators::Helpers
     def format_types(list, brackets = true)
       list.empty? ? "" : (brackets ? "[#{list.join(", ")}]" : list.join(", "))
     end
+
+    def format_object_type(object)
+      case object
+      when YARD::CodeObjects::ClassObject
+        object.is_exception? ? "Exception" : "Class"
+      else
+        object.type.to_s.capitalize
+      end
+    end
   end
 end

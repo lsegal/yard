@@ -5,7 +5,7 @@
     <%= render :html_head %>
     <script src="<%= url_for(js_file) %>" type="text/javascript" charset="utf-8"></script>
     <script src="<%= url_for(js_app_file) %>" type="text/javascript" charset="utf-8"></script>
-    <title><%= h object.type.to_s.capitalize %>: <%= h object.path %></title>
+    <title><%= h format_object_type(object) %>: <%= h object.path %></title>
   </head>
   <body>
     <div id="content">

@@ -148,5 +148,23 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
       end
     end.should raise_error(ArgumentError)
   end
+  
+  it "should tell the world if it is an exception class" do
+    o = ClassObject.new(:root, :MyClass) 
+    o2 = ClassObject.new(:root, :OtherClass)
+    o2.superclass = :SystemCallError
+
+    o.superclass = :Object
+    o.is_exception?.should == false
+    
+    o.superclass = :Exception
+    o.is_exception?.should == true
+    
+    o.superclass = :NoMethodError
+    o.is_exception?.should == true
+    
+    o.superclass = o2
+    o.is_exception?.should == true
+  end
 end
   
