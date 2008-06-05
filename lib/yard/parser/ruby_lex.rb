@@ -233,7 +233,7 @@ module YARD
         [:TkCOMMA,      Token,  ","],
         [:TkSEMICOLON,  Token,  ";"],
 
-        [:TkRD_COMMENT,     TkVal],
+#        [:TkRD_COMMENT,     TkVal],
         [:TkSPACE,          TkWhitespace],
         [:TkNL,             TkWhitespace],
         [:TkEND_OF_SCRIPT,  TkWhitespace],
@@ -614,7 +614,7 @@ module YARD
             str.sub!(/^=end.*/m, '')
             Token(TkCOMMENT).set_text(str)
           else
-            Token(TkRD_COMMENT)#.set_text(str)
+            Token(TkCOMMENT).set_text(str)
           end
         end
 

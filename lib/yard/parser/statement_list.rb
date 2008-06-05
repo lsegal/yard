@@ -58,21 +58,22 @@ module YARD
           # Get the initial comments
           if statement.empty?
             # Two new-lines in a row will destroy any comment blocks
-            if [TkCOMMENT, TkRD_COMMENT].include?(tk.class)  && last_tk.class == TkNL && 
+            if [TkCOMMENT].include?(tk.class)  && last_tk.class == TkNL && 
               (before_last_tk && (before_last_tk.class == TkNL || before_last_tk.class == TkSPACE))
               comments = nil
-            elsif tk.class == TkCOMMENT || tk.class == TkRD_COMMENT
+            elsif tk.class == TkCOMMENT
               # Remove the "#" and up to 1 space before the text
               # Since, of course, the convention is to have "# text"
               # and not "#text", which I deem ugly (you heard it here first)
               comments ||= []
-              comments << tk.text.gsub(/^#+\s{0,1}/, '')
+              comments << tk.text.gsub(/^#+\s{0,1}/, '') 
+            end
               comments.pop if comments.size == 1 && comments.first =~ /^\s*$/
             end
           end
                 
           # Ignore any initial comments or whitespace
-          unless statement.empty? && [TkSPACE, TkNL, TkRD_COMMENT, TkCOMMENT].include?(tk.class)
+          unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
             level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
         
