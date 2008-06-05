@@ -9,9 +9,9 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
         undocsuper = true if superclass.nil?
       end
 
-      if classname == superclass 
+      if classname.split(NSEP).last == superclass 
         # Same name? If we don't resolve this now we'll have a lookup problem.
-        superclass = Registry.resolve(namespace, superclass) || '::' + superclass
+        superclass = YARD::Registry.resolve(namespace, superclass) || NSEP + superclass
       end
       
       klass = register ClassObject.new(namespace, classname) do |o|
