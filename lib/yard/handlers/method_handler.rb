@@ -4,7 +4,12 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
   def process
     nobj = namespace
     mscope = scope
-    meth = statement.tokens.to_s[/^def\s+(#{METHODMATCH})/m, 1].gsub(/\s+/,'')
+
+    if meth = statement.tokens.to_s[/^def\s+(#{METHODMATCH})/m, 1]
+      meth.gsub!(/\s+/,'')
+    else
+      raise YARD::Handlers::UndocumentableError, "method: invalid name"
+    end
     
     # Class method if prefixed by self(::|.) or Module(::|.)
     if meth =~ /(?:#{NSEP}|\.)([^#{NSEP}\.]+)$/
