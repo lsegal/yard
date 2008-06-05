@@ -1113,7 +1113,7 @@ module YARD
         elsif ch =~ /\W/
           lt = "\""
         else
-          RubyLex.fail SyntaxError, "unknown type of %string ('#{ch}')"
+#          RubyLex.fail SyntaxError, "unknown type of %string ('#{ch}')"
         end
     #     if ch !~ /\W/
     #       ungetc
