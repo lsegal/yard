@@ -22,4 +22,8 @@ describe YARD::Handlers::ExceptionHandler do
   it "should only document the first raise message of a method (limitation of exception handler)" do
     P('Testing#mymethod4').tag(:raise).types.should == ['A']
   end
+  
+  it "should handle complex class names" do
+    P('Testing#mymethod5').tag(:raise).types.should == ['YARD::Handlers::UndocumentableError']
+  end
 end

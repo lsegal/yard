@@ -5,9 +5,8 @@ class YARD::Handlers::ExceptionHandler < YARD::Handlers::Base
     return unless owner.is_a?(MethodObject) # Only methods yield
     return if owner.has_tag? :raise
 
-    klass = statement.tokens[2..-1].reject {|t| TkWhitespace === t || TkLPAREN === t }.first
-    if klass && TkCONSTANT === klass
-      owner.tags << YARD::Tags::Tag.new(:raise, '', klass.text)
+    if klass = statement.tokens.to_s[/^raise[\(\s]*(#{NAMESPACEMATCH})/, 1]
+      owner.tags << YARD::Tags::Tag.new(:raise, '', klass)
     end
   end
 end

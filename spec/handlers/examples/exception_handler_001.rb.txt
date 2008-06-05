@@ -23,4 +23,8 @@ class Testing
     raise(A)
     raise B, "Argument", somethingelse
   end
+  
+  def mymethod5
+    raise YARD::Handlers::UndocumentableError
+  end
 end
