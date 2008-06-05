@@ -22,9 +22,8 @@ module YARD
     # implement the {#process} method to do the work. The processing would
     # usually involve the manipulation of the {#namespace}, {#owner} 
     # {CodeObjects::Base code objects} or the creation of new ones, in 
-    # which case they would ideally be returned by the method so that 
-    # they may be registered by {#register}, a method that sets some basic 
-    # attributes for the new objects.
+    # which case they should be registered by {#register}, a method that 
+    # sets some basic attributes for the new objects.
     # 
     # Handlers are usually simple and take up to a page of code to process
     # and register a new object or add new attributes to the current +namespace+.
@@ -209,17 +208,11 @@ module YARD
         raise NotImplementedError, "#{self} did not implement a #process method for handling."
       end
       
-      # Do some post processing on a list of code objects
-      # either returned from {#process} or explicitly
-      # called from a handler. Adds basic attributes
-      # to the list of objects like the filename, 
-      # line number, {CodeObjects::Base#dynamic},
+      # Do some post processing on a list of code objects. 
+      # Adds basic attributes to the list of objects like 
+      # the filename, line number, {CodeObjects::Base#dynamic},
       # source code and {CodeObjects::Base#docstring},
       # but only if they don't exist.
-      # 
-      # As mentioned above, this method is automatically 
-      # called on the result of {#process}. Sometimes
-      # it may be easier to explicitly call
       # 
       # @param [Array<CodeObjects::Base>] objects
       #   the list of objects to post-process.
@@ -252,8 +245,7 @@ module YARD
           # This generally means it was defined in a method (or block of some sort)
           object.dynamic = true if owner != namespace
         end
-        nil # Don't return anything just in case a register call is at the
-            # end of a process method-- we don't want to accidentally do this twice. 
+        nil # Don't return anything 
       end
       
       attr_reader :parser, :statement
@@ -439,7 +431,7 @@ module YARD
             out.last << token.text if tokval != nil
             parencount -= 1
           else
-            break if TkKW === token && !(TkTRUE === token || TkFALSE === token)
+            break if TkKW === token && ![TkTRUE, TkFALSE, TkSUPER, TkSELF, TkNIL].include?(token.class)
             
             seen_comma = false unless TkWhitespace === token
             if parencount == 0

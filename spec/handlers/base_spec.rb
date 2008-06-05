@@ -153,8 +153,8 @@ describe YARD::Handlers::Base, "#tokval_list" do
     tokval_list(':a, ([:f]), :c)', RubyToken::Token).should == [:a, '[:f]', :c]
   end
   
-  it "should not stop on a true/false keyword (cannot handle nil)" do
-    tokval_list(':a, true, :b, false, :c, nil, File, if, XYZ', RubyToken::Token).should == [:a, true, :b, false, :c]
+  it "should not stop on a true/false/self keyword (cannot handle nil)" do
+    tokval_list(':a, true, :b, self, false, :c, nil, File, super, if, XYZ', RubyToken::Token).should == [:a, true, :b, 'self', false, :c, 'File', 'super']
   end
   
   it "should ignore invalid commas" do
