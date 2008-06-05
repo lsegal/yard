@@ -23,6 +23,7 @@ end
 
 desc "Run all specs"
 Spec::Rake::SpecTask.new("specs") do |t|
+  $DEBUG = true if ENV['DEBUG']
   t.spec_opts = ["--format", "specdoc", "--colour"]
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
 end
