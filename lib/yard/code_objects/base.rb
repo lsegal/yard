@@ -239,6 +239,7 @@ module YARD
         return if comments.empty?
         meta_match = /^@(\S+)\s*(.*)/
         comments = comments.split(/\r?\n/) if comments.is_a? String
+        @tags, @docstring = [], ""
 
         indent, last_indent = comments.first[/^\s*/].length, 0
         orig_indent = 0
