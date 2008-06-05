@@ -6,6 +6,10 @@ module A
   alias :c :a
   alias d? a
   alias [] a
+  alias []= a
+  alias @- a
+  alias % a
+  alias * a
 end
 
 class C
