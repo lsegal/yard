@@ -1,5 +1,5 @@
 class YARD::Handlers::MixinHandler < YARD::Handlers::Base
-  handles /\Ainclude\b/
+  handles /\Ainclude(\s|\()/
   
   def process
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|

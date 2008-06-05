@@ -9,6 +9,7 @@ class YARD::Handlers::YieldHandler < YARD::Handlers::Base
     yieldtag = Tags::Tag.new(:yield, "", [])
     owner.tags << yieldtag
     tokval_list(statement.tokens[2..-1], Token).each do |item|
+      item = item.inspect unless item.is_a?(String)
       if item == "self"
         yieldtag.types << '_self'
         owner.tags << Tags::Tag.new(:yieldparam, 

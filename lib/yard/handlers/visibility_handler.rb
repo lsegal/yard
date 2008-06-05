@@ -1,5 +1,5 @@
 class YARD::Handlers::VisibilityHandler < YARD::Handlers::Base
-  handles /\A(protected|private|public)/
+  handles /\A(protected|private|public)(\s|\(|$)/
   
   def process
     vis = statement.tokens.first.text
