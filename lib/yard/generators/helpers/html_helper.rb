@@ -17,7 +17,9 @@ module YARD
       end
 
       def htmlify(text)
-        resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
+        html = resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
+        html = html.gsub(/<pre>(.+?)<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
+        html
       end
 
       def resolve_links(text)
@@ -114,15 +116,19 @@ module YARD
       def html_syntax_highlight(source)
         tokenlist = Parser::TokenList.new(source)
         tokenlist.map do |s| 
+          prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
+          prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
+
           case s
           when Parser::RubyToken::TkWhitespace, Parser::RubyToken::TkUnknownChar
             h s.text
+          when Parser::RubyToken::TkId
+            prettyval = h(s.text)
+            "<span class='#{prettyval} #{prettyclass} #{prettysuper}'>#{prettyval}</span>"
           else
-            prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
-            prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
             "<span class='#{prettyclass} #{prettysuper}'>#{h s.text}</span>"
           end
-        end
+        end.join
       end
     end
   end

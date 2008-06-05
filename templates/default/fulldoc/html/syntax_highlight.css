@@ -1,7 +1,17 @@
+/* Canvas */
+.docstring pre, .source_code { background: #222; padding: 0 12px; margin-top: 8px; border: 1px dashed #ccc; font-size: 0.9em; overflow: scroll; }
+.source_code pre.lines { margin-right: 20px; text-align: right; color: #888; }
+.docstring pre { padding: 12px; padding-left: 0; }
+
+/* Token colours. Borrowed from pastie.org's "Blackboard" theme */
+pre.code, pre.lines { font-family: Monaco, Courier, monospace; }
+pre.code { color: #fff; }
+pre.code .file { color: #888; }
 pre.code .val { color: #61CE3C; }
-pre.code .dstring { color: #FF6400; }
+pre.code .dstring { color: #61DE3C; }
 pre.code .fid { color: #FF6400; }
 pre.code .comment { color: #AEAEAE; }
 pre.code .constant, pre.code .symbol { color: #D8FA3C; }
 pre.code .kw { color: #FBDE2D; }
 pre.code .ivar { color: #AACEFB; }
+pre.code .regexp, .dregexp { color: #EA5EFB; }
