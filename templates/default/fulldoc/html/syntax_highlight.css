@@ -6,12 +6,16 @@
 /* Token colours. Borrowed from pastie.org's "Blackboard" theme */
 pre.code, pre.lines { font-family: Monaco, Courier, monospace; }
 pre.code { color: #fff; }
-pre.code .file { color: #888; }
+pre.code .info.file { color: #888; }
 pre.code .val { color: #61CE3C; }
 pre.code .dstring { color: #61DE3C; }
-pre.code .fid { color: #FF6400; }
+pre.code .fid, pre.code .id.new, pre.code .id.to_s, 
+pre.code .id.to_sym, pre.code .id.to_f, 
+pre.code .dot + pre.code .id,
+pre.code .id.to_i pre.code .id.each { color: #FF6400; }
 pre.code .comment { color: #AEAEAE; }
 pre.code .constant, pre.code .symbol { color: #D8FA3C; }
 pre.code .kw { color: #FBDE2D; }
 pre.code .ivar { color: #AACEFB; }
+pre.code .gvar, pre.code .id.nth_ref { color: #BADEFF; }
 pre.code .regexp, .dregexp { color: #EA5EFB; }
