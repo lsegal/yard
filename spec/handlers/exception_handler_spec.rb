@@ -13,6 +13,9 @@ describe YARD::Handlers::ExceptionHandler do
   
   it "should only document non-dynamic raises" do
     P('Testing#mymethod2').tag(:raise).should be_nil
+    P('Testing#mymethod6').tag(:raise).should be_nil
+    P('Testing#mymethod7').tag(:raise).should be_nil
+    P('Testing#mymethod8').tag(:raise).should be_nil
   end
   
   it "should not document a method with an existing @raise tag" do

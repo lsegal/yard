@@ -27,4 +27,16 @@ class Testing
   def mymethod5
     raise YARD::Handlers::UndocumentableError
   end
+  
+  def mymethod6
+    raise YARD::Handlers.constants("test")
+  end
+  
+  def mymethod7
+    raise MethodCall('argument')
+  end
+  
+  def mymethod8
+    raise File.new('filename', 'r')
+  end
 end
