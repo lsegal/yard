@@ -16,16 +16,7 @@ module YARD
       end
       
       protected
-      
-      def format_type(object)
-        case object
-        when CodeObjects::ClassObject
-          object.is_exception? ? "Exception" : "Class"
-        else
-          object.type.to_s.capitalize
-        end
-      end
-      
+    
       def css_file; 'style.css' end
       def css_syntax_file; 'syntax_highlight.css' end
       def js_file; 'jquery.js' end
