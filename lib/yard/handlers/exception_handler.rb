@@ -7,7 +7,7 @@ class YARD::Handlers::ExceptionHandler < YARD::Handlers::Base
 
     klass = statement.tokens[2..-1].reject {|t| TkWhitespace === t || TkLPAREN === t }.first
     if klass && TkCONSTANT === klass
-      owner.tags << Tags::Tag.new(:raise, '', klass.text)
+      owner.tags << YARD::Tags::Tag.new(:raise, '', klass.text)
     end
   end
 end
