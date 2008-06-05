@@ -5,6 +5,7 @@ module A
   # Handle keyword syntax too
   alias :c :a
   alias d? a
+  alias [] a
 end
 
 class C

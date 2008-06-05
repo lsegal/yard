@@ -3,8 +3,8 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
   
   def process
     if TkALIAS === statement.tokens.first 
-      tokens = statement.tokens.squeeze
-      names = [tokval(tokens[2], :attr, :identifier), tokval(tokens[4], :attr, :identifier)]
+      tokens = statement.tokens[2..-1].to_s.split(/\s+/)
+      names = [tokens[0], tokens[1]].map {|t| t.gsub(/^:/, '') }
     else
       names = tokval_list(statement.tokens[2..-1], :attr)
     end
