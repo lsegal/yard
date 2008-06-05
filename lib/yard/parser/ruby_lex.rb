@@ -498,37 +498,41 @@ module YARD
       end
 
       def lex
-        until (((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
-    	     !@continue or
-    	     tk.nil?)
-        end
-        line = get_read
+        catch(:eof) do
+          until (((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
+      	     !@continue or
+      	     tk.nil?)
+          end
+          line = get_read
 
-        if line == "" and tk.kind_of?(TkEND_OF_SCRIPT) || tk.nil?
-          nil
-        else
-          line
+          if line == "" and tk.kind_of?(TkEND_OF_SCRIPT) || tk.nil?
+            nil
+          else
+            line
+          end
         end
       end
 
       def token
         set_token_position(line_no, char_no)
-        begin
+        catch(:eof) do
           begin
-    	      tk = @OP.match(self)
-    	      @space_seen = tk.kind_of?(TkSPACE)
-          rescue SyntaxError
-    	      abort if @exception_on_syntax_error
-    	      tk = TkError.new(line_no, char_no)
+            begin
+      	      tk = @OP.match(self)
+      	      @space_seen = tk.kind_of?(TkSPACE)
+            rescue SyntaxError
+      	      abort if @exception_on_syntax_error
+      	      tk = TkError.new(line_no, char_no)
+            end
+          end while @skip_space and tk.kind_of?(TkSPACE)
+          if @read_auto_clean_up
+            get_read
           end
-        end while @skip_space and tk.kind_of?(TkSPACE)
-        if @read_auto_clean_up
-          get_read
+      #   throw :eof unless tk
+          p tk if $DEBUG
+          tk.lex_state = lex_state if tk
+          tk
         end
-    #   throw :eof unless tk
-        p tk if $DEBUG
-        tk.lex_state = lex_state if tk
-        tk
       end
   
       ENINDENT_CLAUSE = [

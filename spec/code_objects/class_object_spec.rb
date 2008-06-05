@@ -153,6 +153,9 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     o = ClassObject.new(:root, :MyClass) 
     o2 = ClassObject.new(:root, :OtherClass)
     o2.superclass = :SystemCallError
+    o3 = ClassObject.new(:root, :StandardError)
+    o3.superclass = :Object
+    o4 = ClassObject.new(:root, :Object)
 
     o.superclass = :Object
     o.is_exception?.should == false
@@ -164,6 +167,9 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     o.is_exception?.should == true
     
     o.superclass = o2
+    o.is_exception?.should == true
+    
+    o.superclass = o3
     o.is_exception?.should == true
   end
 end

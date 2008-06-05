@@ -3,14 +3,19 @@ module YARD::CodeObjects
     attr_accessor :superclass
     
     def initialize(namespace, name, *args, &block)
+      if is_exception?
+        self.superclass = :Exception 
+      else
+        self.superclass = :Object unless P(namespace, name) == P(:Object)
+      end
+
       super
-      self.superclass ||= P(:Object) unless self == P(:Object)
     end
     
     def is_exception?
       begin
-        Exception >= eval(inheritance_tree.last.path)
-      rescue NameError
+        inheritance_tree.reverse.any? {|o| Exception >= eval(o.path) }
+      rescue NameError, TypeError
         false
       end
     end
@@ -75,6 +80,7 @@ module YARD::CodeObjects
       end
       
       if @superclass == self
+        @superclass = P(:Object)
         raise ArgumentError, "superclass #{@superclass} cannot be the same as the subclass #{self}"
       end
     end

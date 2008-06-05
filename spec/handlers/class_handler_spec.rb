@@ -31,6 +31,10 @@ describe YARD::Handlers::ClassHandler do
   it "should set superclass type to :class if it is a Proxy" do
     P("A::B::C").superclass.type.should == :class
   end
+  
+  it "should look for a superclass before creating the class if it shares the same name" do
+    P('B::A').superclass.should == P('A')
+  end
 
   it "should raise an UndocumentableError if the class is invalid" do
     ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|

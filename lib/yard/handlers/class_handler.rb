@@ -9,6 +9,11 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
         undocsuper = true if superclass.nil?
       end
 
+      if classname == superclass 
+        # Same name? If we don't resolve this now we'll have a lookup problem.
+        superclass = Registry.resolve(namespace, superclass) || '::' + superclass
+      end
+      
       klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
