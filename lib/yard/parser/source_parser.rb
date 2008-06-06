@@ -6,12 +6,25 @@ module YARD
     class SourceParser 
       attr_reader :file
 
-      def self.parse(content)
-        new.parse(content)
+      def self.parse(paths = "lib/**/*.rb", level = Logger::INFO)
+        if paths.is_a?(Array)
+          files = paths.map {|p| Dir[p] }.flatten
+        else
+          files = Dir[File.join(Dir.pwd, paths)]
+        end
+
+        log.enter_level(level) do
+          files.uniq.each do |file|
+            log.debug("Processing #{file}...")
+            new.parse(file)
+          end
+        end
       end
 
-      def self.parse_string(content)
-        new.parse(StringIO.new(content))
+      def self.parse_string(content, level = Logger::INFO)
+        log.enter_level do
+          new.parse(StringIO.new(content))
+        end
       end
 
       attr_accessor :namespace, :visibility, :scope, :owner
