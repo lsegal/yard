@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../lib/yard'
 
-YARD.logger.level = Logger::DEBUG
+log.level = Logger::DEBUG
 YARD.parse [
   'lib/yard/autoload.rb',
   'lib/yard/code_objects/base.rb',

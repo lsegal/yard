@@ -1,24 +1,21 @@
 require "logger"
 
 module YARD
-  def self.logger
-    unless @logger
-      @logger = Logger.new(STDERR)
-      @logger.level = Logger::INFO
+  class Logger < ::Logger
+    def debug(*args)
+      self.level = Logger::DEBUG if $DEBUG
+      super
     end
-    class << @logger
-      def debug(*args)
-        self.level = Logger::DEBUG if $DEBUG
-        super
-      end
+    
+    def enter_level(new_level = Logger::INFO, &block) 
+      old_level, self.level = level, new_level
+      yield
+      self.level = old_level
     end
-    @logger
   end
-end
-
-class Logger::Formatter
-  def call(sev, time, prog, msg)
-    "[#{sev.downcase}]: #{msg}\n"
+  
+  def self.logger
+    @logger ||= YARD::Logger.new(STDERR)
   end
 end
 
