@@ -131,8 +131,6 @@ module YARD
     # @see #parse_block
     #
     class Base
-      attr_accessor :owner, :namespace, :visibility, :scope
-      
       # For accessing convenience, eg. "MethodObject" 
       # instead of the full qualified namespace
       include YARD::CodeObjects
@@ -188,6 +186,11 @@ module YARD
         end
       end
       
+      def initialize(source_parser, stmt)
+        @parser = source_parser
+        @statement = stmt
+      end
+      
       # The main handler method called by the parser on a statement
       # that matches the {handles} declaration.
       # 
@@ -207,6 +210,11 @@ module YARD
       def process
         raise NotImplementedError, "#{self} did not implement a #process method for handling."
       end
+      
+      protected
+      
+      attr_reader :parser, :statement
+      attr_accessor :owner, :namespace, :visibility, :scope
       
       # Do some post processing on a list of code objects. 
       # Adds basic attributes to the list of objects like 
@@ -256,13 +264,6 @@ module YARD
         objects.size == 1 ? objects.first : objects
       end
       
-      attr_reader :parser, :statement
-
-      def initialize(source_parser, stmt)
-        @parser = source_parser
-        @statement = stmt
-      end
-      
       def parse_block(opts = nil)
         opts = {
           :namespace => nil,
@@ -296,10 +297,6 @@ module YARD
       def visibility=(v); @parser.visibility=(v) end
       def scope; @parser.scope end
       def scope=(v); @parser.scope=(v) end
-      
-      protected
-      
-      # Some helpers
       
       # The string value of a token. For example, the return value for the symbol :sym 
       # would be :sym. The return value for a string "foo #{bar}" would be the literal 
