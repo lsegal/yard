@@ -130,7 +130,9 @@ module YARD
     # @see #register
     # @see #parse_block
     #
-    class Base
+    class Base 
+      attr_accessor :__context__
+
       # For accessing convenience, eg. "MethodObject" 
       # instead of the full qualified namespace
       include YARD::CodeObjects
@@ -190,7 +192,7 @@ module YARD
         @parser = source_parser
         @statement = stmt
       end
-      
+
       # The main handler method called by the parser on a statement
       # that matches the {handles} declaration.
       # 
@@ -216,6 +218,17 @@ module YARD
       attr_reader :parser, :statement
       attr_accessor :owner, :namespace, :visibility, :scope
       
+      def verify_object_loaded(object)
+        begin
+          [:namespace, :superclass].each do |name|
+            next unless object.respond_to?(name)
+
+            pobj = object.send(name)
+            load_order!(pobj)
+          end
+        end
+      end
+      
       # Do some post processing on a list of code objects. 
       # Adds basic attributes to the list of objects like 
       # the filename, line number, {CodeObjects::Base#dynamic},
@@ -231,6 +244,8 @@ module YARD
       def register(*objects)
         objects.flatten.each do |object|
           next unless object.is_a?(CodeObjects::Base)
+          
+          verify_object_loaded(object)
           
           # Yield the object to the calling block because ruby will parse the syntax
           #   
@@ -297,6 +312,25 @@ module YARD
       def visibility=(v); @parser.visibility=(v) end
       def scope; @parser.scope end
       def scope=(v); @parser.scope=(v) end
+      
+      def load_order!(object)
+        return unless Proxy === object
+        
+        retries, context = 0, nil
+        callcc {|c| context = c }
+
+        retries += 1 
+        raise(Parser::LoadOrderError, context) if retries <= 3
+
+        if !object.is_a?(Proxy)
+          object.namespace.children << object 
+        elsif !BUILTIN_ALL.include?(object.path)
+          log.warn "The #{object.type} #{object.path} has not yet been recognized." 
+          log.warn "If this class/method is part of your source tree, this will affect your documentation results." 
+          log.warn "You can correct this issue by loading the source file for this object before `#{parser.file}'"
+          log.warn 
+        end
+      end
       
       # The string value of a token. For example, the return value for the symbol :sym 
       # would be :sym. The return value for a string "foo #{bar}" would be the literal 

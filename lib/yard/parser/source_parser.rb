@@ -2,39 +2,56 @@ require 'stringio'
 
 module YARD
   module Parser
+    class LoadOrderError < Exception; end
+    
     # Responsible for parsing a source file into the namespace
     class SourceParser 
-      attr_reader :file
+      class << self
+        def parse(paths = "lib/**/*.rb", level = Logger::INFO)
+          if paths.is_a?(Array)
+            files = paths.map {|p| Dir[p] }.flatten
+          else
+            files = Dir[File.join(Dir.pwd, paths)]
+          end
 
-      def self.parse(paths = "lib/**/*.rb", level = Logger::INFO)
-        if paths.is_a?(Array)
-          files = paths.map {|p| Dir[p] }.flatten
-        else
-          files = Dir[File.join(Dir.pwd, paths)]
+          log.enter_level(level) do
+            parse_in_order(*files.uniq)
+          end
+        end
+      
+        def parse_string(content)
+          new.parse(StringIO.new(content))
         end
 
-        log.enter_level(level) do
-          files.uniq.each do |file|
-            log.debug("Processing #{file}...")
-            new.parse(file)
+        private
+        
+        def parse_in_order(*files)
+          while file = files.shift
+            begin
+              if file.is_a?(Continuation)
+                file.call
+              else
+                log.debug("Processing #{file}...")
+                new(true).parse(file)
+              end
+            rescue LoadOrderError => e
+              # Out of order file. Push the context to the end and we'll call it
+              files.push(e.message)
+            end
           end
         end
       end
 
-      def self.parse_string(content, level = Logger::INFO)
-        log.enter_level do
-          new.parse(StringIO.new(content))
-        end
-      end
+      attr_reader :file
+      attr_accessor :namespace, :visibility, :scope, :owner, :load_order_errors
 
-      attr_accessor :namespace, :visibility, :scope, :owner
-
-      def initialize
+      def initialize(load_order_errors = false)
         @file = "<STDIN>"
         @namespace = YARD::Registry.root
         @visibility = :public
         @scope = :instance
         @owner = @namespace
+        @load_order_errors = load_order_errors
       end
 
       ##
@@ -68,6 +85,8 @@ module YARD
               find_handlers(stmt).each do |handler| 
                 begin
                   handler.new(self, stmt).process
+                rescue LoadOrderError => loaderr
+                  raise # Pass this up
                 rescue Handlers::UndocumentableError => undocerr
                   log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
                   log.warn "\tin file '#{file}':#{stmt.tokens.first.line_no}:\n\n" + stmt.inspect + "\n"
