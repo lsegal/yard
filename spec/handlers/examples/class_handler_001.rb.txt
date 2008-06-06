@@ -19,3 +19,21 @@ module B
   class A < A
   end
 end
+
+class Test1 < R "something"
+end
+
+class Test2 < R(/something/)
+end
+
+class Test3 < Struct.new(:foo, :bar)
+end
+
+class Test4 < OStruct.new
+end
+
+class Test5 < DelegateClass(Array)
+end
+
+class Test6 < NotDelegateClass(Array)
+end

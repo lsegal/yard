@@ -15,7 +15,10 @@ describe YARD::Handlers::ExceptionHandler do
     P('Testing#mymethod2').tag(:raise).should be_nil
     P('Testing#mymethod6').tag(:raise).should be_nil
     P('Testing#mymethod7').tag(:raise).should be_nil
-    P('Testing#mymethod8').tag(:raise).should be_nil
+  end
+  
+  it "should treat ConstantName.new as a valid exception class" do
+    P('Testing#mymethod8').tag(:raise).types.should == ['ExceptionClass']
   end
   
   it "should not document a method with an existing @raise tag" do

@@ -42,8 +42,23 @@ describe YARD::Handlers::ClassHandler do
     end
   end
   
+  it "should handle superclass as a constant-style method (camping style < R /path/)" do
+    P('Test1').superclass.should == P(:R)
+    P('Test2').superclass.should == P(:R)
+    P('Test6').superclass.should == P(:NotDelegateClass)
+  end
+  
+  it "should handle superclass with OStruct.new or Struct.new syntax (superclass should be OStruct/Struct)" do
+    P('Test3').superclass.should == P(:Struct)
+    P('Test4').superclass.should == P(:OStruct)
+  end
+  
+  it "should handle DelegateClass(CLASSNAME) superclass syntax" do
+    P('Test5').superclass.should == P(:Array)
+  end
+  
   it "should raise an UndocumentableError if the superclass is invalid but it should create the class." do
-    ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
+    ["VSD^#}}", 'not.aclass', 'self', 'AnotherClass.new'].each do |klass|
       Registry.clear
       undoc_error "class A < #{klass}; end"
       Registry.at('A').should_not be_nil

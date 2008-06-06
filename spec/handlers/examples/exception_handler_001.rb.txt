@@ -37,6 +37,6 @@ class Testing
   end
   
   def mymethod8
-    raise File.new('filename', 'r')
+    raise ExceptionClass.new('blah')
   end
 end

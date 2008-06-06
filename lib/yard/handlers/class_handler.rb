@@ -2,12 +2,10 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
   handles TkCLASS
   
   def process
-    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(<.+|\Z)/m
-      classname, extra, superclass, undocsuper = $1, $2, nil, false
-      if extra =~ /\A\s*<\s*/
-        superclass = extra[/\A\s*<\s*(#{NAMESPACEMATCH})\s*\Z/, 1]
-        undocsuper = true if superclass.nil?
-      end
+    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/m
+      classname = $1
+      superclass = parse_superclass($2)
+      undocsuper = $2 && superclass.nil?
 
       if classname.split(NSEP).last == superclass 
         # Same name? If we don't resolve this now we'll have a lookup problem.
@@ -34,6 +32,18 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       end
     else
       raise YARD::Handlers::UndocumentableError, "class: #{statement.tokens}"
+    end
+  end
+  
+  private
+  
+  def parse_superclass(superclass)
+    case superclass
+    when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/, 
+         /\A(Struct|OStruct)\.new/,
+         /\ADelegateClass\((.+?)\)\s*\Z/,
+         /\A(#{NAMESPACEMATCH})\(/
+      $1
     end
   end
 end
