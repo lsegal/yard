@@ -314,6 +314,7 @@ module YARD
       def scope=(v); @parser.scope=(v) end
       
       def load_order!(object)
+        return unless parser.load_order_errors
         return unless Proxy === object
         
         retries, context = 0, nil
