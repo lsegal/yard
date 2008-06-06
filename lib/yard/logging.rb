@@ -2,12 +2,17 @@ require "logger"
 
 module YARD
   class Logger < ::Logger
+    def initialize(*args)
+      super
+      self.level = INFO
+    end
+    
     def debug(*args)
-      self.level = Logger::DEBUG if $DEBUG
+      self.level = DEBUG if $DEBUG
       super
     end
     
-    def enter_level(new_level = Logger::INFO, &block) 
+    def enter_level(new_level = INFO, &block) 
       old_level, self.level = level, new_level
       yield
       self.level = old_level
