@@ -99,10 +99,12 @@ module YARD
           end
           tk = Token(tk[0], value) 
         else 
-          tk = if (token.ancestors & [TkId, TkVal, TkOPASGN, TkUnknownChar]).empty?
-                 token.new(@prev_line_no, @prev_char_no)
-               else
-                 token.new(@prev_line_no, @prev_char_no, value)
+          if token
+            tk = if (token.ancestors & [TkId, TkVal, TkOPASGN, TkUnknownChar]).empty?
+                   token.new(@prev_line_no, @prev_char_no)
+                 else
+                   token.new(@prev_line_no, @prev_char_no, value)
+                 end
                end
         end
         tk
@@ -1121,7 +1123,7 @@ module YARD
     #     end
         #@ltype = lt
         @quoted = ch unless @quoted = PERCENT_PAREN[ch]
-        identify_string(lt, @quoted, ch, initial_char)
+        identify_string(lt, @quoted, ch, initial_char) if lt
       end
 
       def identify_number(start)
@@ -1225,9 +1227,9 @@ module YARD
     	end
           end
           if subtype
-    	Token(DLtype2Token[ltype], str)
+    	      Token(DLtype2Token[ltype], str)
           else
-    	Token(Ltype2Token[ltype], str)
+    	      Token(Ltype2Token[ltype], str)
           end.set_text(str)
         ensure
           @ltype = nil
