@@ -2,7 +2,11 @@ module YARD
   module Generators::Helpers
     module MethodHelper
       def format_args(object)
-        h object.signature[/#{Regexp.quote object.name.to_s}\s*(.*)/, 1]
+        if object.signature
+          h object.signature[/#{Regexp.quote object.name.to_s}\s*(.*)/, 1]
+        else
+          h "def #{object.name}"
+        end
       end
       
       def format_return_types(object)
