@@ -1,5 +1,3 @@
-require "delegate"
-
 module YARD
   module CodeObjects
     class CodeObjectList < Array
@@ -25,6 +23,19 @@ module YARD
     NAMESPACEMATCH = /(?:(?:#{Regexp.quote NSEP})?#{CONSTANTMATCH})+/
     METHODNAMEMATCH = /[a-zA-Z_]\w*[!?]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?#{METHODNAMEMATCH}/
+    
+    BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
+      "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError", 
+      "RangeError", "NoMemoryError", "ArgumentError", "ThreadError", "EOFError", "RuntimeError", 
+      "ZeroDivisionError", "StandardError", "LoadError", "NameError", "LocalJumpError", "SystemCallError", 
+      "SignalException", "ScriptError", "SystemStackError", "RegexpError", "IndexError"]
+    BUILTIN_CLASSES = ["TrueClass", "Array", "Dir", "Struct", "UnboundMethod", "Object", "Fixnum", "Float", 
+      "ThreadGroup", "MatchData", "Proc", "Binding", "Class", "Time", "Bignum", "NilClass", "Symbol", 
+      "Numeric", "String", "Data", "MatchingData", "Regexp", "Integer", "File", "IO", "Range", "FalseClass", 
+      "Method", "Continuation", "Thread", "Hash", "Module"] + BUILTIN_EXCEPTIONS
+    BUILTIN_MODULES = ["ObjectSpace", "Signal", "Marshal", "Kernel", "Process", "GC", "FileTest", "Enumerable", 
+      "Comparable", "Errno", "Precision", "Math", "DTracer"]
+    BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
     
     class Base  
       attr_reader :name

@@ -28,6 +28,17 @@ module YARD
     autoload :Proxy,                'code_objects/proxy'
     autoload :ProxyMethodError,     'code_objects/proxy'
     autoload :RootObject,           'code_objects/root_object'
+    
+    autoload :BUILTIN_ALL,          'code_objects/base'
+    autoload :BUILTIN_CLASSES,      'code_objects/base'
+    autoload :BUILTIN_MODULES,      'code_objects/base'
+    autoload :BUILTIN_EXCEPTIONS,   'code_objects/base'
+    autoload :CONSTANTMATCH,        'code_objects/base'
+    autoload :ISEP,                 'code_objects/base'
+    autoload :METHODMATCH,          'code_objects/base'
+    autoload :METHODNAMEMATCH,      'code_objects/base'
+    autoload :NAMESPACEMATCH,       'code_objects/base'
+    autoload :NSEP,                 'code_objects/base'
   end
   
   module Generators
