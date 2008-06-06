@@ -7,11 +7,6 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       superclass = parse_superclass($2)
       undocsuper = $2 && superclass.nil?
 
-      if classname.split(NSEP).last == superclass 
-        # Same name? If we don't resolve this now we'll have a lookup problem.
-        superclass = YARD::Registry.resolve(namespace, superclass) || NSEP + superclass
-      end
-      
       klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)

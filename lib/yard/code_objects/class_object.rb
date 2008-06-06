@@ -3,17 +3,17 @@ module YARD::CodeObjects
     attr_accessor :superclass
     
     def initialize(namespace, name, *args, &block)
-      if is_exception?
-        self.superclass = :Exception 
-      else
-        self.superclass = :Object unless P(namespace, name) == P(:Object)
-      end
-
       super
+
+      if is_exception?
+        self.superclass ||= :Exception 
+      else
+        self.superclass ||= :Object unless P(namespace, name) == P(:Object)
+      end
     end
     
     def is_exception?
-      inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS.include? o.path }
+      inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS_HASH.has_key? o.path }
     end
     
     def inheritance_tree(include_mods = false)
@@ -64,7 +64,7 @@ module YARD::CodeObjects
     ##
     # Sets the superclass of the object
     # 
-    # @param [Base, Proxy, String, Symbol] object the superclass value
+    # @param [Base, Proxy, String, Symbol, nil] object the superclass value
     def superclass=(object)
       case object
       when Base, Proxy, NilClass
@@ -73,6 +73,10 @@ module YARD::CodeObjects
         @superclass = P(namespace, object)
       else
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
+      end
+
+      if name == @superclass.name && namespace != Registry.root
+        @superclass = P(namespace.namespace, object)
       end
       
       if @superclass == self
