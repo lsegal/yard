@@ -13,11 +13,7 @@ module YARD::CodeObjects
     end
     
     def is_exception?
-      begin
-        inheritance_tree.reverse.any? {|o| Exception >= eval(o.path) }
-      rescue NameError, TypeError
-        false
-      end
+      inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS.include? o.path }
     end
     
     def inheritance_tree(include_mods = false)
