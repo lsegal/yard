@@ -37,6 +37,8 @@ module YARD
       "Comparable", "Errno", "Precision", "Math", "DTracer"]
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
     
+    BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
+    
     class Base  
       attr_reader :name
       attr_accessor :namespace
