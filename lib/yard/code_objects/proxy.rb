@@ -57,6 +57,7 @@ module YARD
           end
         end
       end
+      alias to_s path
     
       def is_a?(klass)
         if obj = to_obj
