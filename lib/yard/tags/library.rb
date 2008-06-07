@@ -59,9 +59,11 @@ module YARD
         # @param [#to_s] tag the tag name to create
         # @param meth the {Tag} factory method to call when creating the tag
         def define_tag(label, tag, meth = "")
-          define_method("#{tag}_tag") do |text, raw_text| 
-            send_to_factory(tag, meth, text, raw_text)
-          end
+          class_eval <<-eof, __FILE__, __LINE__
+            def #{tag}_tag(text, raw_text)
+              send_to_factory(#{tag.inspect}, #{meth.inspect}, text, raw_text)
+            end
+          eof
 
           @labels ||= SymbolHash.new(false)
           @labels.update(tag => label)
