@@ -28,7 +28,7 @@ module YARD
 
     attr_accessor :yardoc_file
     attr_reader :proxy_types
-
+    
     def load(files = [], reload = false)
       if files.is_a?(Array)
         if File.exists?(yardoc_file) && !reload
@@ -51,7 +51,7 @@ module YARD
       return false unless File.exists?(file)
       ns, pt = *Marshal.load(IO.read(file))
       namespace.update(ns)
-      proxy_types.replace(pt)
+      proxy_types.update(pt)
     end
     
     def save(file = yardoc_file)
