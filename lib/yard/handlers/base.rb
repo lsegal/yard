@@ -308,7 +308,6 @@ module YARD
         end
         
         raise NotImplementedError if RUBY_PLATFORM =~ /java/ 
-        p object.parent if Proxy === object.parent && !object.parent.is_a?(Proxy)
         return unless object.parent.is_a?(Proxy)
         
         retries, context = 0, nil
