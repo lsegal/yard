@@ -2,7 +2,7 @@ require 'singleton'
 require 'find'
 
 module YARD
-  class Registry
+  class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
     
     include Singleton
@@ -32,9 +32,7 @@ module YARD
     def load(files = [], reload = false)
       if files.is_a?(Array)
         if File.exists?(yardoc_file) && !reload
-          ns, pt = *Marshal.load(IO.read(yardoc_file))
-          namespace.update(ns)
-          proxy_types.update(pt)
+          load_yardoc
         else
           size = namespace.size
           YARD.parse(files)
@@ -42,12 +40,18 @@ module YARD
         end
         true
       elsif files.is_a?(String)
-        return false unless File.exists?(files)
-        namespace.update Marshal.load(IO.read(files))
+        load_yardoc(files)
         true
       else
         raise ArgumentError, "Must take a list of files to parse or the .yardoc file to load."
       end
+    end
+    
+    def load_yardoc(file = yardoc_file)
+      return false unless File.exists?(file)
+      ns, pt = *Marshal.load(IO.read(file))
+      namespace.update(ns)
+      proxy_types.replace(pt)
     end
     
     def save(file = yardoc_file)
