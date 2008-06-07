@@ -1,7 +1,11 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Handlers::MethodHandler do
-  before { parse_file :method_handler_001, __FILE__ }
+  before do
+    log.enter_level(Logger::ERROR) do
+      parse_file :method_handler_001, __FILE__ 
+    end
+  end
   
   it "should add methods to parent's #meths list" do
     P(:Foo).meths.should include(P("Foo#method1"))

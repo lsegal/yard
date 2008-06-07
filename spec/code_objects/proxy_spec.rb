@@ -7,12 +7,22 @@ describe YARD::CodeObjects::Proxy do
     pathobj = ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
     proxyobj.type.should == :module
+    Proxy.should_not === proxyobj
   end
   
   it "should handle complex string namespaces" do
     ModuleObject.new(:root, :A)
     pathobj = ModuleObject.new(P(nil, :A), :B)
     P(:root, "A::B").should be_instance_of(ModuleObject)
+  end
+  
+  it "should not return true to Proxy === obj if obj is a Proxy class holding a resolved object" do
+    Proxy.should === P(:root, 'a')
+    Proxy.should_not === P(:root)
+    MethodObject.new(:root, 'a')
+    Proxy.should_not === P(:root, 'a')
+    x = Proxy.new(:root, 'a')
+    Proxy.should_not === x
   end
   
   it "should return the object if it's an included Module" do
@@ -32,6 +42,7 @@ describe YARD::CodeObjects::Proxy do
   it "should make itself obvious that it's a proxy" do
     pathobj = P(:root, :YARD)
     pathobj.class.should == Proxy
+    (Proxy === pathobj).should == true
   end    
 
   it "should pretend it's the object's type if it can resolve" do
@@ -57,6 +68,7 @@ describe YARD::CodeObjects::Proxy do
   it "should allow type to be changed" do
     obj = P("InvalidClass")
     obj.type.should == :proxy
+    Proxy.should === obj
     obj.type = :class
     obj.type.should == :class
   end
