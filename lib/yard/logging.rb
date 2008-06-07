@@ -12,7 +12,7 @@ module YARD
       super
     end
     
-    def enter_level(new_level = INFO, &block) 
+    def enter_level(new_level = level, &block) 
       old_level, self.level = level, new_level
       yield
       self.level = old_level
