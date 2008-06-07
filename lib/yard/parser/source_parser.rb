@@ -7,7 +7,7 @@ module YARD
     # Responsible for parsing a source file into the namespace
     class SourceParser 
       class << self
-        def parse(paths = "lib/**/*.rb", level = Logger::INFO)
+        def parse(paths = "lib/**/*.rb", level = log.level)
           if paths.is_a?(Array)
             files = paths.map {|p| Dir[p] }.flatten
           else
@@ -28,15 +28,16 @@ module YARD
         def parse_in_order(*files)
           while file = files.shift
             begin
-              if file.is_a?(Continuation)
-                file.call
-              else
+              if file.is_a?(Array) && file.last.is_a?(Continuation)
+                log.debug("Re-processing #{file.first}")
+                file.last.call
+              elsif file.is_a?(String)
                 log.debug("Processing #{file}...")
                 new(true).parse(file)
               end
             rescue LoadOrderError => e
               # Out of order file. Push the context to the end and we'll call it
-              files.push(e.message)
+              files.push([file, e.message])
             end
           end
         end
