@@ -12,113 +12,113 @@ module YARD
   ]
   
   module CLI
-    autoload :YardGraph,  'cli/yard_graph.rb'
-    autoload :Yardoc,     'cli/yardoc.rb'
+    autoload :YardGraph,  'yard/cli/yard_graph.rb'
+    autoload :Yardoc,     'yard/cli/yardoc.rb'
   end
   
   module CodeObjects
-    autoload :Base,                 'code_objects/base'
-    autoload :CodeObjectList,       'code_objects/base'
-    autoload :ClassObject,          'code_objects/class_object'
-    autoload :ClassVariableObject,  'code_objects/class_variable_object'
-    autoload :ConstantObject,       'code_objects/constant_object'
-    autoload :MethodObject,         'code_objects/method_object'
-    autoload :ModuleObject,         'code_objects/module_object'
-    autoload :NamespaceObject,      'code_objects/namespace_object'
-    autoload :Proxy,                'code_objects/proxy'
-    autoload :ProxyMethodError,     'code_objects/proxy'
-    autoload :RootObject,           'code_objects/root_object'
+    autoload :Base,                 'yard/code_objects/base'
+    autoload :CodeObjectList,       'yard/code_objects/base'
+    autoload :ClassObject,          'yard/code_objects/class_object'
+    autoload :ClassVariableObject,  'yard/code_objects/class_variable_object'
+    autoload :ConstantObject,       'yard/code_objects/constant_object'
+    autoload :MethodObject,         'yard/code_objects/method_object'
+    autoload :ModuleObject,         'yard/code_objects/module_object'
+    autoload :NamespaceObject,      'yard/code_objects/namespace_object'
+    autoload :Proxy,                'yard/code_objects/proxy'
+    autoload :ProxyMethodError,     'yard/code_objects/proxy'
+    autoload :RootObject,           'yard/code_objects/root_object'
     
-    autoload :BUILTIN_ALL,          'code_objects/base'
-    autoload :BUILTIN_CLASSES,      'code_objects/base'
-    autoload :BUILTIN_MODULES,      'code_objects/base'
-    autoload :BUILTIN_EXCEPTIONS,   'code_objects/base'
-    autoload :CONSTANTMATCH,        'code_objects/base'
-    autoload :ISEP,                 'code_objects/base'
-    autoload :METHODMATCH,          'code_objects/base'
-    autoload :METHODNAMEMATCH,      'code_objects/base'
-    autoload :NAMESPACEMATCH,       'code_objects/base'
-    autoload :NSEP,                 'code_objects/base'
+    autoload :BUILTIN_ALL,          'yard/code_objects/base'
+    autoload :BUILTIN_CLASSES,      'yard/code_objects/base'
+    autoload :BUILTIN_MODULES,      'yard/code_objects/base'
+    autoload :BUILTIN_EXCEPTIONS,   'yard/code_objects/base'
+    autoload :CONSTANTMATCH,        'yard/code_objects/base'
+    autoload :ISEP,                 'yard/code_objects/base'
+    autoload :METHODMATCH,          'yard/code_objects/base'
+    autoload :METHODNAMEMATCH,      'yard/code_objects/base'
+    autoload :NAMESPACEMATCH,       'yard/code_objects/base'
+    autoload :NSEP,                 'yard/code_objects/base'
   end
   
   module Generators
     module Helpers
-      autoload :BaseHelper,             'generators/helpers/base_helper'
-      autoload :FilterHelper,           'generators/helpers/filter_helper'
-      autoload :HtmlHelper,             'generators/helpers/html_helper'
-      autoload :MethodHelper,           'generators/helpers/method_helper'
-      autoload :UMLHelper,              'generators/helpers/uml_helper'
+      autoload :BaseHelper,             'yard/generators/helpers/base_helper'
+      autoload :FilterHelper,           'yard/generators/helpers/filter_helper'
+      autoload :HtmlHelper,             'yard/generators/helpers/html_helper'
+      autoload :MethodHelper,           'yard/generators/helpers/method_helper'
+      autoload :UMLHelper,              'yard/generators/helpers/uml_helper'
     end
     
-    autoload :AttributesGenerator,      'generators/attributes_generator'
-    autoload :Base,                     'generators/base'
-    autoload :ClassGenerator,           'generators/class_generator'
-    autoload :ConstantsGenerator,       'generators/constants_generator'
-    autoload :ConstructorGenerator,     'generators/constructor_generator'
-    autoload :DeprecatedGenerator,      'generators/deprecated_generator'
-    autoload :DocstringGenerator,       'generators/docstring_generator'
-    autoload :FullDocGenerator,         'generators/full_doc_generator'
-    autoload :InheritanceGenerator,     'generators/inheritance_generator'
-    autoload :MethodGenerator,          'generators/method_generator'
-    autoload :MethodDetailsGenerator,   'generators/method_details_generator'
-    autoload :MethodListingGenerator,   'generators/method_listing_generator'
-    autoload :MethodMissingGenerator,   'generators/method_missing_generator'
-    autoload :MethodSignatureGenerator, 'generators/method_signature_generator'
-    autoload :MethodSummaryGenerator,   'generators/method_summary_generator'
-    autoload :MixinsGenerator,          'generators/mixins_generator'
-    autoload :ModuleGenerator,          'generators/module_generator'
-    autoload :QuickDocGenerator,        'generators/quick_doc_generator'
-    autoload :SourceGenerator,          'generators/source_generator'
-    autoload :TagsGenerator,            'generators/tags_generator'
-    autoload :UMLGenerator,             'generators/uml_generator'
-    autoload :VisibilityGroupGenerator, 'generators/visibility_group_generator'
+    autoload :AttributesGenerator,      'yard/generators/attributes_generator'
+    autoload :Base,                     'yard/generators/base'
+    autoload :ClassGenerator,           'yard/generators/class_generator'
+    autoload :ConstantsGenerator,       'yard/generators/constants_generator'
+    autoload :ConstructorGenerator,     'yard/generators/constructor_generator'
+    autoload :DeprecatedGenerator,      'yard/generators/deprecated_generator'
+    autoload :DocstringGenerator,       'yard/generators/docstring_generator'
+    autoload :FullDocGenerator,         'yard/generators/full_doc_generator'
+    autoload :InheritanceGenerator,     'yard/generators/inheritance_generator'
+    autoload :MethodGenerator,          'yard/generators/method_generator'
+    autoload :MethodDetailsGenerator,   'yard/generators/method_details_generator'
+    autoload :MethodListingGenerator,   'yard/generators/method_listing_generator'
+    autoload :MethodMissingGenerator,   'yard/generators/method_missing_generator'
+    autoload :MethodSignatureGenerator, 'yard/generators/method_signature_generator'
+    autoload :MethodSummaryGenerator,   'yard/generators/method_summary_generator'
+    autoload :MixinsGenerator,          'yard/generators/mixins_generator'
+    autoload :ModuleGenerator,          'yard/generators/module_generator'
+    autoload :QuickDocGenerator,        'yard/generators/quick_doc_generator'
+    autoload :SourceGenerator,          'yard/generators/source_generator'
+    autoload :TagsGenerator,            'yard/generators/tags_generator'
+    autoload :UMLGenerator,             'yard/generators/uml_generator'
+    autoload :VisibilityGroupGenerator, 'yard/generators/visibility_group_generator'
   end
   
   module Handlers
-    autoload :AliasHandler,         'handlers/alias_handler'
-    autoload :AttributeHandler,     'handlers/attribute_handler'
-    autoload :Base,                 'handlers/base'
-    autoload :ClassHandler,         'handlers/class_handler'
-    autoload :ClassVariableHandler, 'handlers/class_variable_handler'
-    autoload :ConstantHandler,      'handlers/constant_handler'
-    autoload :ExceptionHandler,     'handlers/exception_handler'
-    autoload :MethodHandler,        'handlers/method_handler'
-    autoload :MixinHandler,         'handlers/mixin_handler'
-    autoload :ModuleHandler,        'handlers/module_handler'
-    autoload :VisibilityHandler,    'handlers/visibility_handler'
-    autoload :UndocumentableError,  'handlers/base'
-    autoload :YieldHandler,         'handlers/yield_handler'
+    autoload :AliasHandler,         'yard/handlers/alias_handler'
+    autoload :AttributeHandler,     'yard/handlers/attribute_handler'
+    autoload :Base,                 'yard/handlers/base'
+    autoload :ClassHandler,         'yard/handlers/class_handler'
+    autoload :ClassVariableHandler, 'yard/handlers/class_variable_handler'
+    autoload :ConstantHandler,      'yard/handlers/constant_handler'
+    autoload :ExceptionHandler,     'yard/handlers/exception_handler'
+    autoload :MethodHandler,        'yard/handlers/method_handler'
+    autoload :MixinHandler,         'yard/handlers/mixin_handler'
+    autoload :ModuleHandler,        'yard/handlers/module_handler'
+    autoload :VisibilityHandler,    'yard/handlers/visibility_handler'
+    autoload :UndocumentableError,  'yard/handlers/base'
+    autoload :YieldHandler,         'yard/handlers/yield_handler'
   end
 
   module Parser
     module RubyToken
-      require File.join(YARD::ROOT, 'parser', 'ruby_lex') # Too much to include manually
+      require 'yard/parser/ruby_lex' # Too much to include manually
     end
     
-    autoload :SourceParser,   'parser/source_parser'
-    autoload :Statement,      'parser/statement'
-    autoload :StatementList,  'parser/statement_list'
-    autoload :TokenList,      'parser/token_list'
+    autoload :SourceParser,   'yard/parser/source_parser'
+    autoload :Statement,      'yard/parser/statement'
+    autoload :StatementList,  'yard/parser/statement_list'
+    autoload :TokenList,      'yard/parser/token_list'
   end
   
   module Rake
-    autoload :YardocTask, 'rake/yardoc_task'
+    autoload :YardocTask, 'yard/rake/yardoc_task'
   end
   
   module Serializers
-    autoload :Base,                 'serializers/base'
-    autoload :FileSystemSerializer, 'serializers/file_system_serializer'
-    autoload :ProcessSerializer,    'serializers/process_serializer'
-    autoload :StdoutSerializer,     'serializers/stdout_serializer'
+    autoload :Base,                 'yard/serializers/base'
+    autoload :FileSystemSerializer, 'yard/serializers/file_system_serializer'
+    autoload :ProcessSerializer,    'yard/serializers/process_serializer'
+    autoload :StdoutSerializer,     'yard/serializers/stdout_serializer'
   end
   
   module Tags
-    autoload :DefaultFactory, 'tags/default_factory'
-    autoload :Library,        'tags/library'
-    autoload :Tag,            'tags/tag'
+    autoload :DefaultFactory, 'yard/tags/default_factory'
+    autoload :Library,        'yard/tags/library'
+    autoload :Tag,            'yard/tags/tag'
   end
 
-  autoload :Registry, 'registry'
+  autoload :Registry, 'yard/registry'
 end
 
 # Load handlers immediately
