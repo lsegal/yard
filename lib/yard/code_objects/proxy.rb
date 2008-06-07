@@ -3,6 +3,8 @@ module YARD
     class ProxyMethodError < NoMethodError; end
 
     class Proxy    
+      def self.===(other) other.is_a?(self) end
+
       attr_reader :namespace, :name
       alias_method :parent, :namespace
 
@@ -18,10 +20,10 @@ module YARD
         if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
-          namespace = P(namespace, $`)
+          namespace = $`.empty? ? Registry.root : Proxy.new(namespace, $`)
           name = $1
-        end        
-        
+        end 
+
         @name = name.to_sym
         @namespace = namespace
         
@@ -53,7 +55,7 @@ module YARD
           if @namespace == Registry.root
             (@imethod ? ISEP : "") + name.to_s
           else
-            @origname.to_s
+            @origname || name.to_s
           end
         end
       end
