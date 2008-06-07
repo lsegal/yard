@@ -70,13 +70,13 @@ module YARD::CodeObjects
       when Base, Proxy, NilClass
         @superclass = object
       when String, Symbol
-        @superclass = P(namespace, object)
+        @superclass = Proxy.new(namespace, object)
       else
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
       end
 
       if name == @superclass.name && namespace != YARD::Registry.root
-        @superclass = P(namespace.namespace, object)
+        @superclass = Proxy.new(namespace.namespace, object)
       end
       
       if @superclass == self
