@@ -1,7 +1,7 @@
 SPEC = Gem::Specification.new do |s|
   s.name          = "yard"
-  s.version       = "0.2.1"
-  s.date          = "2007-05-20"
+  s.version       = "0.2.2"
+  s.date          = "2008-05-20"
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yard.soen.ca"
@@ -12,5 +12,5 @@ SPEC = Gem::Specification.new do |s|
   s.executables   = [ 'yardoc', 'yri', 'yard-graph' ]
   s.has_rdoc      = false
   s.rubyforge_project = 'yard'
-  s.add_dependency 'erubis' 
+  s.add_dependency 'tadpole' 
 end

@@ -1,6 +1,6 @@
 subgraph cluster_<%= format_path object %> {
   label = "<%= h(object.name) unless object.path == "" %>"; labelloc=b;
-  <% for obj in namespaces(object) -%>
+  <% for obj in namespaces(object) %>
     <%= subgraph(obj, &block) %>
-  <% end -%>
+  <% end %>
 }

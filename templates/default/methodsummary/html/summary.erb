@@ -1,25 +1,25 @@
 <h1><%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Method Summary</h1>
 <table class="summary">
-  <% method_list.each do |meth| -%>
+  <% method_list.each do |meth| %>
     <tr>
       <th class="signature">
         <span class='name'><%= linkify(meth, meth.name(true)) %></span><span class='args'><%= format_args meth %></span>
         <span class='block'><%= format_block meth %></span>
-        <% meth.aliases.each do |obj| -%>
+        <% meth.aliases.each do |obj| %>
           <span class='alias'><%= h obj.name(true) %></span>
-        <% end -%>
+        <% end %>
       </th>
       <td class="docstring">
         <%= htmlify meth.short_docstring %>
-        <% if meth.tag(:return) && meth.tag(:return).types -%>
+        <% if meth.tag(:return) && meth.tag(:return).types %>
           <p class='returns'>
             Returns: 
               <span class='return_types'>
                  <%= format_return_types meth %>
               </span>
           </p>
-        <% end -%>
+        <% end %>
       </td>
     </tr>
-  <% end -%>
+  <% end %>
 </table>

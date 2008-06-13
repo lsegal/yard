@@ -1,5 +1,5 @@
 require "benchmark"
-require 'lib/yard'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'yard')
 
 unless YARD::CodeObjects::Proxy.private_instance_methods.include?('to_obj')
   raise "This benchmark is dependent on YARD::CodeObjects::Proxy#to_obj" 

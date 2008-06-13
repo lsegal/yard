@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'erubis'
+require 'erb'
 
 module YARD
   module Generators
@@ -253,7 +252,7 @@ module YARD
         if __f
           __l = locals.map {|k,v| "#{k} = #{v.inspect}" unless k.to_s == "__f" }.join(";")
           begin
-            Erubis::Eruby.new("<% #{__l} %>" + File.read(__f)).result(binding)
+            erb("<% #{__l} %>" + File.read(__f)).result(binding)
           rescue => e
             log.error "#{e.class.class_name}: #{e.message}"
             log.error "in generator #{self.class} section #{file} on '#{object}'"
@@ -264,6 +263,10 @@ module YARD
           log.warn "Cannot find template `#{__path}`"
           ""
         end
+      end
+      
+      def erb(str)
+        ERB.new(str, nil, '<>')
       end
       
       def template_path(file, generator = generator_name)

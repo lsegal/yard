@@ -1,14 +1,14 @@
 <%= object.type %> <%= h object.name %>
-<% if show_full_info? -%>
+<% if show_full_info? %>
 |
-<% object.namespace.attributes.each do |scope, list| -%>
-<% list.each do |name, rw| -%>
+<% object.namespace.attributes.each do |scope, list| %>
+<% list.each do |name, rw| %>
 <%= uml_visibility(rw.values.compact.first) %> <%= h rw.values.compact.first.name(true) %> [<%= 'R' if rw[:read] %><%= 'W' if rw[:write] %>]\l
-<% end -%>
-<% end -%>
+<% end %>
+<% end %>
 |
 <% method_list(object).each do |obj| %>
 <%= uml_visibility obj %> <%= h obj.name(true) %>
 <%= h(" : #{obj.tag(:return).types.first}") if obj.has_tag?(:return) && obj.tag(:return).types.size > 0 %>\l
-<% end -%>
-<% end -%>
+<% end %>
+<% end %>

@@ -1,8 +1,8 @@
 <div class="section <%= generator_name %> <%= scope %> <%= visibility %>">
   <h1><%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Method Details</h1>
-  <% method_list.each do |meth| -%>
+  <% method_list.each do |meth| %>
     <div class="method">
       <%= yield meth %>
     </div>
-  <% end -%>
+  <% end %>
 </div>

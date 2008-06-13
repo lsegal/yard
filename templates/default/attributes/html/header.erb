@@ -1,35 +1,35 @@
 <div class="section <%= generator_name %>">
   <h1>Attributes</h1>
 
-  <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| -%>
+  <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| %>
     <div class="<%= scope %>">
       <h2><%= scope.capitalize %> Attributes</h2>
       <table>
-      <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| -%>
+      <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| %>
         <tr>
           <th class="name"><%= h name %></td>
           <td class="readwrite">
             [<%= ['read', 'write'].map {|t| 
                 rw[t] && !rw[t].is_explicit? ? "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>" : t[0,1].upcase
-              }.compact.join -%>] 
+              }.compact.join %>] 
           </td>
           <td class="visibility">
             <%= rw.values.compact.first.visibility %>
           </td>
           <td class="docstring">
             <%= htmlify rw.values.compact.first.short_docstring %>
-            <% if rw[:read] && rw[:read].tag(:return) && rw[:read].tag(:return).types -%>
+            <% if rw[:read] && rw[:read].tag(:return) && rw[:read].tag(:return).types %>
               <p class='returns'>
                 Returns: 
                   <span class='return_types'>
                      <%= format_return_types rw[:read] %>
                   </span>
               </p>
-            <% end -%>
+            <% end %>
           </td>
         </tr>
-      <% end -%>
+      <% end %>
       </table>
     </div>
-  <% end -%>
+  <% end %>
 </div>

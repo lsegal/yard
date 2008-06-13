@@ -28,8 +28,7 @@ module YARD
         object.included_constants.size > 0
       end
         
-      # @yield [superclass, constlist] 
-      #   Yields a the list of methods pertaining to a superclass
+      # @yield a the list of methods pertaining to a superclass
       #   in the inheritance order.
       # 
       # @yieldparam [CodeObjects::ClassObject] superclass 

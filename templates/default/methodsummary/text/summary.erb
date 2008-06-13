@@ -1,2 +1,2 @@
-<% method_list.sort_by {|m| "#{m.scope}#{m.name}" }.each do |meth| -%><%= meth.visibility == :class ? '+' : '-' %> <%= meth.name(true) %><%= format_args meth %> <%= format_block meth %>
-<% end -%>
+<% method_list.sort_by {|m| "#{m.scope}#{m.name}" }.each do |meth| %><%= meth.visibility == :class ? '+' : '-' %> <%= meth.name(true) %><%= format_args meth %> <%= format_block meth %>
+<% end %>

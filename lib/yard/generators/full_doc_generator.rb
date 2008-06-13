@@ -17,15 +17,15 @@ module YARD
       
       protected
     
-      def css_file; 'style.css' end
-      def css_syntax_file; 'syntax_highlight.css' end
-      def js_file; 'jquery.js' end
-      def js_app_file; 'app.js' end
+      def css_file;         'style.css'             end
+      def css_syntax_file;  'syntax_highlight.css'  end
+      def js_file;          'jquery.js'             end
+      def js_app_file;      'app.js'                end
       
       def readme_file
         @readme_file ||= [options[:readme]].flatten.compact.find do |readme|
-          File.exists?(readme)
-        end
+          File.exists?(readme.to_s)
+        end.to_s
       end
       
       def generate_assets

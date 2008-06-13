@@ -1,20 +1,20 @@
-<% if object.has_tag?(name) -%>
+<% if object.has_tag?(name) %>
 <div class="<%= name %>">
   <h3><%= defined?(label) ? label : YARD::Tags::Library.labels[name] %>:</h3>
   <dl>
-  <% for tag in object.tags(name) -%>
+  <% for tag in object.tags(name) %>
     <dt>
-      <% unless defined?(no_types) -%>
+      <% unless defined?(no_types) %>
         <span class='type'><%= format_types tag.types %></span>
-      <% end -%>
-      <% unless defined?(no_names) -%>
+      <% end %>
+      <% unless defined?(no_names) %>
         <span class='name'><%= h tag.name %></span>
-      <% end -%>
+      <% end %>
     </dt>
     <dd>
       <span class='desc'><%= htmlify tag.text %></span>
     </dd>
-  <% end -%>
+  <% end %>
   </dl>
 </div>
-<% end -%>
+<% end %>

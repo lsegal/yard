@@ -10,15 +10,15 @@
     <div id="nav" class="methods">
       <h1>Method List</h1>
       <ul>
-      <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } -%>
-        <% next if obj.namespace == Registry.root -%>
+      <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } %>
+        <% next if obj.namespace == Registry.root %>
         <li nowrap>
           <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %> 
-          <% if obj.namespace != Registry.root -%>
+          <% if obj.namespace != Registry.root %>
             <em>(<%= obj.namespace.type %> <%= obj.namespace.name %>)</em>
-          <% end -%>
+          <% end %>
         </li>
-      <% end -%>
+      <% end %>
       </ul>
     </div>
   </body>
