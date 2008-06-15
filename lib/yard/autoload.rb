@@ -1,16 +1,4 @@
 module YARD
-  PATH_ORDER = [
-    'lib/yard/autoload.rb',
-    'lib/yard/code_objects/base.rb',
-    'lib/yard/code_objects/namespace_object.rb',
-    'lib/yard/handlers/base.rb',
-    'lib/yard/generators/helpers/*.rb',
-    'lib/yard/generators/base.rb',
-    'lib/yard/generators/method_listing_generator.rb',
-    'lib/yard/serializers/base.rb',
-    'lib/**/*.rb'
-  ]
-  
   module CLI
     autoload :YardGraph,  'yard/cli/yard_graph.rb'
     autoload :Yardoc,     'yard/cli/yardoc.rb'

@@ -29,6 +29,4 @@ Spec::Rake::SpecTask.new("specs") do |t|
 end
 
 desc "Generate documentation"
-YARD::Rake::YardocTask.new("yardoc") do |t|
-  t.files = YARD::PATH_ORDER
-end
+YARD::Rake::YardocTask.new
