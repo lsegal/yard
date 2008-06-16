@@ -12,13 +12,14 @@ definitions. Below is a summary of some of YARD's notable features.
 
 == FEATURE LIST
                                                                               
-1. RDoc/SimpleMarkup Formatting Compatibility YARD is made to be compatible   
+1. <b>RDoc/SimpleMarkup Formatting Compatibility</b>: YARD is made to be compatible   
    with RDoc formatting. In fact, YARD does no processing on RDoc documentation  
    strings, and leaves this up to the output generation tool to decide how to    
    render the documentation.                                                     
+                             
                                                                               
-2. Yardoc Meta-tag Formatting Like Python, Java, Objective-C and other        
-   languages, YARD uses a '@tag' style definition syntax for meta tags alongside 
+2. <b>Yardoc Meta-tag Formatting Like Python, Java, Objective-C and other        
+   languages</b>: YARD uses a '@tag' style definition syntax for meta tags alongside 
    regular code documentation. These tags should be able to happily sit side by  
    side RDoc formatted documentation, but provide a much more consistent and     
    usable way to describe important information about objects, such as what      
@@ -27,7 +28,7 @@ definitions. Below is a summary of some of YARD's notable features.
    It also allows information to be better (and more consistently) organized     
    during the output generation phase. Some of the main tags are listed below:   
                                                                               
-   === Table 1. Meta-tags and their descriptions                                     
+   <b>Table 1. Meta-tags and their descriptions</b>                                    
                                                                               
    <tt>@param [Types] name description</tt>::
      Description Allows for the definition of a method parameter with 
@@ -65,8 +66,6 @@ definitions. Below is a summary of some of YARD's notable features.
    <tt>@author name</tt>::
      The authors responsible for the module
 
-   -----------------------------------------------------------------------------
-                                                                              
    You might have noticed the optional "types" declarations for certain tags.    
    This allows the developer to document type signatures for ruby methods and    
    parameters in a non intrusive but helpful and consistent manner. Instead of   
@@ -92,7 +91,7 @@ definitions. Below is a summary of some of YARD's notable features.
    'reverse' method, it becomes very useful when the method name may not be as   
    descriptive.                                                                  
                                                                               
-3. Custom Constructs and Extending YARD Take for instance the example:        
+3. <b>Custom Constructs and Extensibility of YARD</b>: Take for instance the example:        
    
      class A 
        class << self 
@@ -113,7 +112,7 @@ definitions. Below is a summary of some of YARD's notable features.
    documenting external API's, especially dynamic ones, a lot more consistent for
    consumption by the users.                                                     
                                                                               
-4. Raw Data Output YARD also outputs documented objects as raw data (the      
+4. <b>Raw Data Output</b>: YARD also outputs documented objects as raw data (the      
    dumped Namespace) which can be reloaded to do generation at a later date, or  
    even auditing on code. This means that any developer can use the raw data to  
    perform output generation for any custom format, such as YAML, for instance.  
@@ -131,7 +130,7 @@ There are a couple of ways to use YARD. The first is via command-line, and the
 second is the Rake task. There are also the +yard-graph+ and +yri+ binaries to
 look at, if you want to poke around.
 
-=== yardoc Command-line Tool
+=== 1. yardoc Command-line Tool
 
 The most obvious way to run YARD is to run the +yardoc+ binary file that comes
 with YARD. This will, among other things, generate the HTML documentation for
@@ -152,7 +151,7 @@ YARD will by default only document code in your public visibility. You can
 document your protected and private code by adding <tt>--protected</tt> or
 <tt>--private</tt> to the option switches.
 
-=== Rake Task
+=== 2. Rake Task
 
 The second most obvious is to generate docs via a Rake task. You can do this by 
 adding the following to your +Rakefile+:
@@ -170,7 +169,7 @@ OPTS environment variable:
 
   > rake yardoc OPTS='--any --extra --opts'
                                                                               
-=== yri RI Implementation
+=== 3. yri RI Implementation
 
 The yri binary will use the cached .yardoc database to give you quick ri-style
 access to your documentation. It's way faster than ri but currently does not
@@ -179,7 +178,7 @@ work with the stdlib or core Ruby libraries, only the active project. Example:
   > yri YARD::Handlers::Base#register
   > yri File::relative_path
 
-=== yard-graph Graphviz Generator
+=== 4. yard-graph Graphviz Generator
 
 You can use +yard-graph+ to generate dot graphs of your code. This, of course,
 requires Graphviz (http://www.graphviz.org) and the +dot+ binary. By default
