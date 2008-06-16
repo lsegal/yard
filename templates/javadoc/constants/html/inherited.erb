@@ -1,0 +1,12 @@
+<p class="inherited">
+  <table border="1" width="100%">
+    <% inherited_constants_by_class do |klass, consts| %>
+    <tr background="#ddddff">
+      <th>Constants inherited from <%= linkify klass %></th>
+    </tr>
+    <tr>
+      <td><%= format_object_name_list consts %></td>
+    </tr>
+    <% end %>
+  </table>
+</p>

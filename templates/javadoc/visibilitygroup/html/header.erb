@@ -1,0 +1,5 @@
+<% unless (output = yield(object)).empty? %>
+  <div class="section <%= generator_name %> <%= visibility %>">
+    <%= output %>
+  </div>
+<% end %>

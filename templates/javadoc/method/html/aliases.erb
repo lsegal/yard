@@ -1,0 +1,6 @@
+<p class="aliases">
+  <span class="aka">Also known as:</span>
+  <% object.aliases.map do |o| %>
+    <tt id="<%= anchor_for o %>"><%= h(o.name.to_s) %></tt>
+  <% end.join(", ") %>
+</p>

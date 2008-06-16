@@ -1,0 +1,16 @@
+<div class="section <%= generator_name %>">
+  <h1>Attributes</h1>
+
+  <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| %>
+    <div class="<%= scope %>">
+      <h2><%= scope.capitalize %> Attributes</h2>
+      <tt>
+      <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| %>
+        <%= h name %> [<%= ['read', 'write'].map {|t| 
+                rw[t] && !rw[t].is_explicit? ? "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>" : t[0,1].upcase
+              }.compact.join %>]<br />
+      <% end %>
+      </tt>
+    </div>
+  <% end %>
+</div>

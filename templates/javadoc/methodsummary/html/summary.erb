@@ -1,0 +1,25 @@
+<h1><%= visibility.to_s.capitalize %> <%= scope.to_s.capitalize %> Method Summary</h1>
+<table class="summary" border="1" width="100%">
+  <% method_list.each do |meth| %>
+    <tr>
+      <td width="70" align="right" valign="top">
+        <small><%= format_return_types(meth) || "Object" %></small>
+      </td>
+      <td>
+        <tt>
+          <span class='name'><%= linkify(meth, meth.name) %></span><span class='args'><%= format_args meth %></span>
+          <span class='block'><%= format_block meth %></span>
+        </tt>
+        <span class="indent">
+          <% if meth.short_docstring %>
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= meth.short_docstring %>
+          <% end %>
+          <% if meth.has_tag?(:deprecated) %>
+          <br /><strong>Deprecated.</strong> <em><%= meth.tag(:deprecated).text %></em>
+          <% end %>
+        </span>
+      </td>
+    </tr>
+  <% end %>
+</table>

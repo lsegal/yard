@@ -1,0 +1,12 @@
+<p class="included">
+  <table border="1" width="100%">
+    <% included_constants_by_module do |klass, consts| %>
+    <tr background="#ddddff">
+      <th>Constants included from <%= linkify klass %></th>
+    </tr>
+    <tr>
+      <td><%= format_object_name_list consts %></td>
+    </tr>
+    <% end %>
+  </table>
+</p>

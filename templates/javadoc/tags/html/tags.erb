@@ -1,0 +1,19 @@
+<% if object.has_tag?(name) %>
+  <dt><%= defined?(label) ? label : YARD::Tags::Library.labels[name] %>:</dt>
+  <% for tag in object.tags(name) %>
+    <dd>
+      <% unless defined?(no_types) %>
+        <span class='type'><%= format_types tag.types %></span>
+      <% end %>
+      <% unless defined?(no_names) %>
+        <span class='name'><tt><%= h tag.name %></tt></span>
+      <% end %>
+      <% if tag.text %>
+        <span class='desc'>
+          <%= "- " unless defined?(no_names) && defined?(no_types) %>
+          <%= tag.text %>
+        </span>
+      <% end %>
+    </dd>
+  <% end %>
+<% end %>

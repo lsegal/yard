@@ -1,0 +1,6 @@
+<div class="section docstring">
+  <%= htmlify object.docstring %>
+</div>
+<% if object.is_a?(CodeObjects::NamespaceObject) %>
+  <hr />
+<% end %>
