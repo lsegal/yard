@@ -179,7 +179,6 @@ work with the stdlib or core Ruby libraries, only the active project. Example:
   > yri YARD::Handlers::Base#register
   > yri File::relative_path
 
-
 === yard-graph Graphviz Generator
 
 You can use +yard-graph+ to generate dot graphs of your code. This, of course,
