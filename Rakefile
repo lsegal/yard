@@ -28,5 +28,4 @@ Spec::Rake::SpecTask.new("specs") do |t|
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
 end
 
-desc "Generate documentation"
 YARD::Rake::YardocTask.new

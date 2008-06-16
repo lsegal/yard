@@ -22,6 +22,7 @@ module YARD
       end
       
       def define
+        desc "Generate YARD Documentation"
         task(name) { YARD::CLI::Yardoc.run *(options + files) }
       end
     end

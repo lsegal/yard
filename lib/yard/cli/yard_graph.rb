@@ -26,6 +26,14 @@ module YARD
       
       def optparse(*args)
         opts = OptionParser.new
+
+        opts.separator ""
+        opts.separator "General Options:"
+
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+          YARD::Registry.yardoc_file = yfile
+        end
+
         opts.on('--full', 'Full class diagrams (show methods and attributes).') do
           options[:full] = true
         end
@@ -34,6 +42,21 @@ module YARD
           options[:dependencies] = true
         end
         
+        opts.on('--no-public', "Don't show public methods. (default shows public)") do 
+          options[:visibility].delete(:public)
+        end
+
+        opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
+          options[:visibility].push(:protected)
+        end
+
+        opts.on('--private', "Show or don't show private methods. (default hides private)") do 
+          options[:visibility].push(:private) 
+        end
+
+        opts.separator ""
+        opts.separator "Output options:"
+
         opts.on('--dot [OPTIONS]', 'Send the results direclty to `dot` with optional arguments.') do |dotopts|
           options[:serializer] = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
         end
@@ -42,24 +65,9 @@ module YARD
           options[:serializer] = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
           options[:serializer].instance_eval "def serialized_path(object) #{file.inspect} end"
         end
-
-        opts.on('--[no-]public', "Show or don't show public methods (default shows public)") do |value|
-          options[:visibility].send(value ? :push : :delete, :public) 
-        end
-
-        opts.on('--[no-]protected', "Show or don't show protected methods (default hides protected)") do |value|
-          options[:visibility].send(value ? :push : :delete, :protected) 
-        end
-
-        opts.on('--[no-]private', "Show or don't show private methods (default hides private)") do |value|
-          options[:visibility].send(value ? :push : :delete, :private) 
-        end
-
-        opts.on('-t', '--template [TEMPLATE]', 
-                'The template to use (defaults to "default")') do |template|
-          options[:template] = template.to_sym
-        end
         
+        opts.separator ""
+        opts.separator "Other options:"
         opts.on_tail('-q', '--quiet', 'Show no warnings') { log.level = Logger::ERROR }
         opts.on_tail('--verbose', 'Show debugging information') { log.level = Logger::DEBUG }
         opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
