@@ -16,8 +16,7 @@ definitions. Below is a summary of some of YARD's notable features.
    with RDoc formatting. In fact, YARD does no processing on RDoc documentation  
    strings, and leaves this up to the output generation tool to decide how to    
    render the documentation.                                                     
-                             
-                                                                              
+
 2. <b>Yardoc Meta-tag Formatting Like Python, Java, Objective-C and other        
    languages</b>: YARD uses a '@tag' style definition syntax for meta tags alongside 
    regular code documentation. These tags should be able to happily sit side by  
