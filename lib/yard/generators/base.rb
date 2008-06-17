@@ -247,22 +247,30 @@ module YARD
           object, file, locals = current_object, object, (file||{})
         end
         
-        __path = template_path(file.to_s + '.erb', generator_name)
-        __f = find_template(__path)
-        if __f
-          __l = locals.map {|k,v| "#{k} = #{v.inspect}" unless k.to_s == "__f" }.join(";")
+        path = template_path(file.to_s + '.erb', generator_name)
+        filename = find_template(path)
+        if filename
           begin
-            erb("<% #{__l} %>" + File.read(__f)).result(binding)
+            render_method(object, filename, locals, &block)           
           rescue => e
             log.error "#{e.class.class_name}: #{e.message}"
-            log.error "in generator #{self.class} section #{file} on '#{object}'"
+            log.error "in generator #{self.class}: #{filename}"
             log.error e.backtrace[0..10].join("\n")
             exit
           end
         else
-          log.warn "Cannot find template `#{__path}`"
+          log.warn "Cannot find template `#{path}`"
           ""
         end
+      end
+      
+      def render_method(object, filename, locals = {}, &block)
+        l = locals.map {|k,v| "#{k} = locals[#{k.inspect}]" }.join(";")
+        src = erb("<% #{l} %>" + File.read(filename)).src
+        instance_eval(src, filename, 1)
+      end
+      
+      def create_render_method(object, methname, filename, locals = {})
       end
       
       def erb(str)
