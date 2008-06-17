@@ -1,13 +1,19 @@
 = YARD Release 0.2.2 (June 16th 2008) 
-Copyright 2007-2008 Loren Segal
+
+Homepage:: {http://yard.rubyforge.org}
+IRC:: <b>Join us on IRC in #yard on irc.freenode.net!</b>
+Git:: {http://github.com/lsegal/yard}
+Author:: Loren Segal 
+Copyright:: 2007-2008
+
 
 == SYNOPSIS
 
-YARD is a documentation generation tool for the Ruby programming language
-(http://www.ruby-lang.org). It enables the user to generate consistent, usable
-documentation that can be exported to a number of formats very easily, and
-also supports extending for custom Ruby constructs such as custom class level 
-definitions. Below is a summary of some of YARD's notable features.
+YARD is a documentation generation tool for the Ruby programming language. 
+It enables the user to generate consistent, usable documentation that can be 
+exported to a number of formats very easily, and also supports extending for 
+custom Ruby constructs such as custom class level definitions. Below is a 
+summary of some of YARD's notable features.
 
 
 == FEATURE LIST
@@ -37,11 +43,11 @@ definitions. Below is a summary of some of YARD's notable features.
      Description Allows for the definition of a method parameter to a
      yield block with optional type information.
    
-   <tt>@yield description</tt>::                                        
+   <tt>@yield [paramnames] description</tt>::                                        
      Allows the developer to document the purpose of a yield block in 
      a method.
    
-   @return [Types] description</tt>::
+   <tt>@return [Types] description</tt>::
      Describes what the method returns with optional type information.
 
    <tt>@deprecated description</tt>::
