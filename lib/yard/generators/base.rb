@@ -270,9 +270,6 @@ module YARD
         instance_eval(src, filename, 1)
       end
       
-      def create_render_method(object, methname, filename, locals = {})
-      end
-      
       def erb(str)
         ERB.new(str, nil, '<>')
       end
