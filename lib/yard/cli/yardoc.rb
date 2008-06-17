@@ -85,7 +85,7 @@ module YARD
           options[:readme] = readme
         end
         
-        opts.on('-d', '--output-dir PATH', 
+        opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
           serialopts[:basepath] = dir
         end
