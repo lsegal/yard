@@ -17,9 +17,25 @@ module YARD
       end
 
       def htmlify(text)
-        html = resolve_links SimpleMarkup.convert(text, SimpleMarkupHtml)
+        html = SimpleMarkup.convert(text, SimpleMarkupHtml)
+        html = fix_dash_dash(html)
+        html = fix_typewriter(html)
+        html = resolve_links(html)
         html = html.gsub(/<pre>(.+?)<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
         html
+      end
+      
+      # @todo Refactor into own SimpleMarkup subclass
+      def fix_typewriter(text)
+        text.gsub(/\+((?:[^\+\s]|[^+\s][^+]*[^\+\s])+)\+/, '<tt>\1</tt>')
+      end
+      
+      # Don't allow -- to turn into &#8212; element. The chances of this being
+      # some --option is far more likely than the typographical meaning.
+      # 
+      # @todo Refactor into own SimpleMarkup subclass
+      def fix_dash_dash(text)
+        text.gsub(/&#8212;(?=\S)/, '--')
       end
 
       def resolve_links(text)
@@ -78,10 +94,10 @@ module YARD
       end
       
       def link_url(url, title = nil, params = {})
-        params = SymbolHash[
+        params = SymbolHash.new(false).update(
           :href => url,
           :title  => title || url
-        ].update(params)
+        ).update(params)
         "<a #{tag_attrs(params)}>#{title}</a>"
       end
       
