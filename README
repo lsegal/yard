@@ -126,7 +126,7 @@ definitions. Below is a summary of some of YARD's notable features.
 == USAGE                                                                        
 
 There are a couple of ways to use YARD. The first is via command-line, and the
-second is the Rake task. There are also the +yard-graph+ and +yri+ binaries to
+second is the Rake task. There are also the <tt>yard-graph</tt> and +yri+ binaries to
 look at, if you want to poke around.
 
 === 1. yardoc Command-line Tool
@@ -136,12 +136,12 @@ with YARD. This will, among other things, generate the HTML documentation for
 your project code. You can type <tt>yardoc --help</tt> to see the options
 that YARD provides, but the easiest way to generate docs for your code is to
 simply type +yardoc+ in your project root. This will assume your files are
-located in the +lib/+ directory. If they are located elsewhere, you can specify
+located in the <tt>lib/</tt> directory. If they are located elsewhere, you can specify
 paths and globs from the commandline via:
 
-  yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
+  > yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
   
-The tool will generate a +.yardoc+ file which will store the cached database
+The tool will generate a <tt>.yardoc</tt> file which will store the cached database
 of your source code and documentation. If you want to re-generate your docs
 with another template you can simply use the <tt>--use-cache</tt> (or -c) 
 option to speed up the generation process by skipping source parsing.
@@ -179,7 +179,7 @@ work with the stdlib or core Ruby libraries, only the active project. Example:
 
 === 4. yard-graph Graphviz Generator
 
-You can use +yard-graph+ to generate dot graphs of your code. This, of course,
+You can use <tt>yard-graph</tt> to generate dot graphs of your code. This, of course,
 requires Graphviz (http://www.graphviz.org) and the +dot+ binary. By default
 this will generate a graph of the classes and modules in the best UML2 notation
 that Graphviz can support, but without any methods listed. With the <tt>--full</tt>
