@@ -39,12 +39,12 @@ module YARD
       end
 
       def resolve_links(text)
-        text.gsub(/(\s|>)\{(\S+?)(?:\s(.+?))?\}(?=(?:[\s\.,:!;\?][^<>]*)?<\/(?!pre))/) do 
-          name = $2
+        text.gsub(/(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/(?!pre)|$)/) do 
+          sp, name = $1, $2
           title = $3 || $2
 
           if name.include?("://")
-            link_url(name, title, :target => '_parent')
+            sp + link_url(name, title, :target => '_parent')
           else
             obj = P(current_object, name)
             if obj.is_a?(CodeObjects::Proxy)
@@ -52,7 +52,7 @@ module YARD
               log.warn '...' + text[/(.{0,20}\{#{Regexp.quote name}.*?\}.{0,20})/, 1].gsub(/\n/,"\n\t") + '...'
             end
           
-            " <tt>" + linkify(obj, title) + "</tt>" 
+            "#{sp}<tt>" + linkify(obj, title) + "</tt>" 
           end
         end
       end
