@@ -23,16 +23,21 @@ module YARD
       end
 
       def resolve_links(text)
-        text.gsub(/(\s)\{(\S+?)(?:\s(.+?))?\}(?=(?:[\s\.,:!;\?][^<>]*)?<\/(?!pre))/) do 
+        text.gsub(/(\s|>)\{(\S+?)(?:\s(.+?))?\}(?=(?:[\s\.,:!;\?][^<>]*)?<\/(?!pre))/) do 
           name = $2
           title = $3 || $2
-          obj = P(current_object, name)
-          if obj.is_a?(CodeObjects::Proxy)
-            log.warn "In documentation for #{current_object.path}: Cannot resolve link to #{obj.path} from text:"
-            log.warn '...' + text[/(.{0,20}\{#{Regexp.quote name}.*?\}.{0,20})/, 1].gsub(/\n/,"\n\t") + '...'
-          end
+
+          if name.include?("://")
+            link_url(name, title, :target => '_parent')
+          else
+            obj = P(current_object, name)
+            if obj.is_a?(CodeObjects::Proxy)
+              log.warn "In documentation for #{current_object.path}: Cannot resolve link to #{obj.path} from text:"
+              log.warn '...' + text[/(.{0,20}\{#{Regexp.quote name}.*?\}.{0,20})/, 1].gsub(/\n/,"\n\t") + '...'
+            end
           
-          " <tt>" + linkify(obj, title) + "</tt>" 
+            " <tt>" + linkify(obj, title) + "</tt>" 
+          end
         end
       end
 
@@ -69,7 +74,19 @@ module YARD
         return title if object.is_a?(CodeObjects::Proxy)
       
         link = url_for(object, anchor)
-        link ? "<a href='#{link}' title='#{title}'>#{title}</a>" : title
+        link ? link_url(link, title) : title
+      end
+      
+      def link_url(url, title = nil, params = {})
+        params = SymbolHash[
+          :href => url,
+          :title  => title || url
+        ].update(params)
+        "<a #{tag_attrs(params)}>#{title}</a>"
+      end
+      
+      def tag_attrs(opts = {})
+        opts.map {|k,v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
       end
     
       def anchor_for(object)
