@@ -2,6 +2,10 @@ require 'cgi'
 require 'rdoc/markup/simple_markup'
 require 'rdoc/markup/simple_markup/to_html'
 
+require 'rubygems'
+begin require 'BlueCloth'; rescue LoadError; end
+begin require 'RedCloth'; rescue LoadError; end
+
 module YARD
   module Generators::Helpers
     module HtmlHelper
@@ -16,13 +20,30 @@ module YARD
         CGI.escape(text.to_s)
       end
 
-      def htmlify(text)
-        html = SimpleMarkup.convert(text, SimpleMarkupHtml)
-        html = fix_dash_dash(html)
-        html = fix_typewriter(html)
-        html = resolve_links(html)
-        html = html.gsub(/<pre>(.+?)<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
-        html
+      def htmlify(text, markup = options[:markup])
+        case markup
+        when :markdown
+          begin
+            BlueCloth.new(text).to_html
+          rescue NameError
+            STDERR.puts "Missing BlueCloth gem for Markdown formatting. Install it with `gem install BlueCloth`"
+            exit
+          end
+        when :textile
+          begin
+            RedCloth.new(text).to_html
+          rescue NameError
+            STDERR.puts "Missing RedCloth gem for Textile formatting. Install it with `gem install RedCloth`"
+            exit
+          end
+        else # this is :rdoc
+          html = SimpleMarkup.convert(text, SimpleMarkupHtml)
+          html = fix_dash_dash(html)
+          html = fix_typewriter(html)
+          html = resolve_links(html)
+          html = html.gsub(/<pre>(.+?)<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
+          html
+        end
       end
       
       # @todo Refactor into own SimpleMarkup subclass

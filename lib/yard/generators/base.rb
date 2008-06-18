@@ -82,6 +82,7 @@ module YARD
         opts = SymbolHash[
           :format => :html,
           :template => :default,
+          :markup => :rdoc,
           :serializer => nil,
           :verifier => nil
         ].update(opts).update(extra_opts)

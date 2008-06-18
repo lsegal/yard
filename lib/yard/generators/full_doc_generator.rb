@@ -54,6 +54,20 @@ module YARD
         end
         true
       end
+      
+      def readme_markup
+        if File.extname(readme_file) == ".markdown"
+          :markdown
+        elsif File.extname(readme_file) == ".textile"
+          :textile
+        elsif @contents =~ /\A#!(\S+)\s*$/
+          markup = $1
+          @contents.gsub!(/\A.+?\r?\n/, '')
+          markup.to_sym
+        else
+          :rdoc
+        end
+      end
     end
   end
 end

@@ -85,6 +85,11 @@ module YARD
           options[:readme] = readme
         end
         
+        opts.on('-m', '--markup MARKUP', 
+                'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
+          options[:markup] = markup.to_sym
+        end
+        
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
           serialopts[:basepath] = dir
