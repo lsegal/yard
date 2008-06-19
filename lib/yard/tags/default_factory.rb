@@ -93,6 +93,40 @@ module YARD
         end
         [title, desc]
       end
+      
+      # Parses a [], <>, {} or () block at the beginning of a line of text into a list of
+      # comma delimited values.
+      # 
+      # @example
+      #   obj.parse_types('[String, Array<Hash, String>, nil]') # => ['String', 'Array<Hash, String>', 'nil']
+      # 
+      # @return [Array<String>] The type list separated by commas from the first '[' to the last ']' 
+      # @return [nil] If no type list is present.
+      def parse_types(text)
+        list, level = [''], 0
+        text.split(//).each_with_index do |c, i|
+          if c =~ /[\[\{\(\<]/ 
+            list.last << c if level > 0
+            level += 1
+          elsif c =~ /[\]\}\)\>]/
+            level -= 1 unless list.last[-1,1] == '='
+            break if level == 0
+            list.last << c
+          elsif c == ',' && level == 1
+            list.push ''
+          elsif c =~ /\S/ && level == 0
+            break
+          elsif level >= 1
+            list.last << c
+          end
+        end
+
+        if list.size == 1 && list.first == ''
+          nil
+        else
+          list.map {|s| s.strip }
+        end
+      end
     end
   end
 end
