@@ -75,11 +75,9 @@ module YARD
       # @return [Array] an array holding the value as the first element and
       #                 the array of types as the second element
       def extract_types_from_text(text)
-        types, text = [], text.strip
-        if text =~ /^\s*\[(.+?)\]\s*(.*)/
-          text, types = $2, $1.split(",").collect {|e| e.strip }
-        end
-        [types, text]
+        text = text.strip
+        types, range = *parse_types(text)
+        [types, (range ? text[(range.end+1)..-1].strip : text)]
       end
       
       def extract_title_and_desc_from_raw_text(raw_text)
@@ -100,17 +98,20 @@ module YARD
       # @example
       #   obj.parse_types('[String, Array<Hash, String>, nil]') # => ['String', 'Array<Hash, String>', 'nil']
       # 
-      # @return [Array<String>] The type list separated by commas from the first '[' to the last ']' 
+      # @return [Array<String>, Range] The type list separated by commas from the first '[' to the last ']' 
+      #   followed by a Range specifying the location of the type list in +text+.
       # @return [nil] If no type list is present.
       def parse_types(text)
+        s, e = 0, 0
         list, level = [''], 0
         text.split(//).each_with_index do |c, i|
           if c =~ /[\[\{\(\<]/ 
             list.last << c if level > 0
+            s = i if level == 0
             level += 1
           elsif c =~ /[\]\}\)\>]/
             level -= 1 unless list.last[-1,1] == '='
-            break if level == 0
+            break e = i if level == 0
             list.last << c
           elsif c == ',' && level == 1
             list.push ''
@@ -124,7 +125,7 @@ module YARD
         if list.size == 1 && list.first == ''
           nil
         else
-          list.map {|s| s.strip }
+          [list.map {|x| x.strip }, (s..e)]
         end
       end
     end
