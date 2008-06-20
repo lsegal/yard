@@ -28,6 +28,8 @@ module YARD
         end.to_s
       end
       
+      def readme_file_exists?; not readme_file.empty?; end
+      
       def generate_assets
         if format == :html && serializer
           [css_file, css_syntax_file, js_file, js_app_file].each do |filename|
@@ -48,7 +50,7 @@ module YARD
       end
       
       def generate_readme
-        if format == :html && serializer && readme_file
+        if format == :html && serializer && readme_file_exists?
           @contents = File.read(readme_file)
           serializer.serialize 'readme.html', render(:readme)
         end
