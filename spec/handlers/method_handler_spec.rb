@@ -32,4 +32,9 @@ describe YARD::Handlers::MethodHandler do
   it "should show that a method is explicitly defined (if it was originally defined implicitly by attribute)" do
     P('Foo#method1').is_explicit?.should == true
   end
+  
+  it "should handle parameters" do
+    P('Foo#[]').parameters.should == [[:key, "'default'"]]
+    P('Foo#/').parameters.should == [[:x, "File.new('x', 'w')"], [:y, '2']]
+  end
 end

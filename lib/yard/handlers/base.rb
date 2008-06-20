@@ -446,7 +446,7 @@ module YARD
         needcomma = false
         seen_comma = true
         tokenlist.each do |token|
-          tokval = tokval(token, *accepted_types)
+          tokval = accepted_types == [:all] ? token.text : tokval(token, *accepted_types)
           parencond = !out.last.empty? && tokval != nil
           #puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
           case token

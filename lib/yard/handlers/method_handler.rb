@@ -5,8 +5,11 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
     nobj = namespace
     mscope = scope
 
-    if meth = statement.tokens.to_s[/^def\s+(#{METHODMATCH})/m, 1]
+    if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
+      meth, args = $1, $2
       meth.gsub!(/\s+/,'')
+      args = tokval_list(YARD::Parser::TokenList.new(args), :all)
+      args.map! {|a| k, v = *a.split('=', 2); [k.strip.to_sym, (v ? v.strip : nil)] } if args
     else
       raise YARD::Handlers::UndocumentableError, "method: invalid name"
     end
@@ -21,6 +24,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
       o.visibility = visibility 
       o.source = statement
       o.explicit = true
+      o.parameters = args
     end
     parse_block(:owner => obj) # mainly for yield/exceptions
   end

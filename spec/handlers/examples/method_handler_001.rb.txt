@@ -15,14 +15,14 @@ class Foo
   # Docstring
   def String :: hello; "" end
 
-  def [](key) puts key end
+  def [](key = 'default') puts key end
   def []=(key, value) end
   def 
 allowed?
 end
 
   def ` param; end
-  def /(x) end
+  def /(x = File.new('x', 'w'), y = 2) end
   def |; end; def =~ ()
   def -@; end; 
 end
