@@ -5,7 +5,7 @@
   <% for tag in object.tags(name) %>
     <dt>
       <% unless defined?(no_types) %>
-        <span class='type'><%= format_types tag.types %></span>
+        <span class='type'><%= format_types (tag.types || ['Object']) %></span>
       <% end %>
       <% unless defined?(no_names) %>
         <span class='name'><%= h tag.name %></span>

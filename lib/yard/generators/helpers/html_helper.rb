@@ -97,6 +97,7 @@ module YARD
       #   to their respective descriptions.
       # 
       def format_types(typelist, brackets = true)
+        return unless typelist.is_a?(Array)
         list = typelist.map do |type| 
           "<tt>" + type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) } + "</tt>"
         end
