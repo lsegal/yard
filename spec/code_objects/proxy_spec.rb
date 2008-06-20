@@ -38,7 +38,7 @@ describe YARD::CodeObjects::Proxy do
     P(:YARD).respond_to?(:children).should == true
     P(:NOTYARD).respond_to?(:children).should == false
 
-    private_method = Object.private_methods.first
+    private_method = P(:instantiated).private_methods.first
     P(:YARD).respond_to?(private_method).should == false
     P(:YARD).respond_to?(private_method, true).should == true
     P(:NOTYARD).respond_to?(private_method).should == false
