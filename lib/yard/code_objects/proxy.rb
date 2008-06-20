@@ -126,9 +126,9 @@ module YARD
         end
       end
       
-      def respond_to?(meth)
+      def respond_to?(meth, include_private = false)
         if obj = to_obj
-          obj.respond_to?(meth)
+          obj.respond_to?(meth, include_private)
         else
           super
         end
