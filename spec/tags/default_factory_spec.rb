@@ -16,8 +16,8 @@ describe YARD::Tags::DefaultFactory, "parse_types" do
   end
   
   it "should handle a complex list of types" do
-    v = parse_types(' [Test, Array<String, Hash{A => B}, C>, String]')
-    v.should include(["Test", "Array<String, Hash{A => B}, C>", "String"])
+    v = parse_types(' [Test, Array<String, Hash, C>, String]')
+    v.should include(["Test", "Array<String, Hash, C>", "String"])
   end
   
   it "should handle any of the following start/end delimiting chars: (), <>, {}, []" do
@@ -38,5 +38,10 @@ describe YARD::Tags::DefaultFactory, "parse_types" do
   
   it "should return nil if the type list is empty" do
     parse_types('[]').should be_nil
+  end
+  
+  it "should allow A => B syntax" do
+    v = parse_types(' [Test, Array<String, Hash{A => {B => C}}, C>, String]')
+    v.should include(["Test", "Array<String, Hash{A => {B => C}}, C>", "String"])
   end
 end
