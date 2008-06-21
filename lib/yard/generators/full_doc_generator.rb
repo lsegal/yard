@@ -58,11 +58,11 @@ module YARD
       end
       
       def readme_markup
-        if File.extname(readme_file) == ".markdown"
+        if File.extname(readme_file) == /^\.(?:mdown|markdown|markdn|md)$/
           :markdown
         elsif File.extname(readme_file) == ".textile"
           :textile
-        elsif @contents =~ /\A#!(\S+)\s*$/
+        elsif @contents =~ /\A#!(\S+)\s*$/ # Shebang support
           markup = $1
           @contents.gsub!(/\A.+?\r?\n/, '')
           markup.to_sym
