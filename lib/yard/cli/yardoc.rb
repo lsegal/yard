@@ -13,7 +13,6 @@ module YARD
           :format => :html, 
           :template => :default, 
           :serializer => YARD::Serializers::FileSystemSerializer.new, 
-          :readme => ['README', 'README.txt'],
           :verifier => lambda do |gen, obj| 
             return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
           end

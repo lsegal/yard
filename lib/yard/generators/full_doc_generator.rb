@@ -2,6 +2,7 @@ module YARD
   module Generators
     class FullDocGenerator < Base
       before_generate :is_namespace?
+      before_list :setup_options
       before_list :generate_assets
       before_list :generate_index
       before_list :generate_readme
@@ -16,6 +17,10 @@ module YARD
       end
       
       protected
+      
+      def setup_options
+        options[:readme] ||= Dir['{README,README.*}']
+      end
     
       def css_file;         'style.css'             end
       def css_syntax_file;  'syntax_highlight.css'  end
@@ -58,7 +63,7 @@ module YARD
       end
       
       def readme_markup
-        if File.extname(readme_file) == /^\.(?:mdown|markdown|markdn|md)$/
+        if File.extname(readme_file) =~ /^\.(?:mdown|markdown|markdn|md)$/
           :markdown
         elsif File.extname(readme_file) == ".textile"
           :textile

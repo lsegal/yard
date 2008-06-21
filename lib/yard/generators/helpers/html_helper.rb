@@ -24,14 +24,14 @@ module YARD
         case markup
         when :markdown
           begin
-            BlueCloth.new(text).to_html
+            html = BlueCloth.new(text).to_html
           rescue NameError
             STDERR.puts "Missing BlueCloth gem for Markdown formatting. Install it with `gem install BlueCloth`"
             exit
           end
         when :textile
           begin
-            RedCloth.new(text).to_html
+            html = RedCloth.new(text).to_html
           rescue NameError
             STDERR.puts "Missing RedCloth gem for Textile formatting. Install it with `gem install RedCloth`"
             exit
@@ -40,10 +40,11 @@ module YARD
           html = SimpleMarkup.convert(text, SimpleMarkupHtml)
           html = fix_dash_dash(html)
           html = fix_typewriter(html)
-          html = resolve_links(html)
-          html = html.gsub(/<pre>(.+?)<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
-          html
         end
+
+        html = resolve_links(html)
+        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
+        html
       end
       
       # @todo Refactor into own SimpleMarkup subclass
