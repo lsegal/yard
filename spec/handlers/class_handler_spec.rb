@@ -42,6 +42,10 @@ describe YARD::Handlers::ClassHandler do
     end
   end
   
+  it "should handle class definitions in the form ::ClassName" do
+    Registry.at("MyRootClass").should_not be_nil
+  end
+  
   it "should handle superclass as a constant-style method (camping style < R /path/)" do
     P('Test1').superclass.should == P(:R)
     P('Test2').superclass.should == P(:R)

@@ -48,7 +48,10 @@ module YARD
       
       class << self
         def new(namespace, name, *args, &block)
-          if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+          if name.to_s[0,2] == "::"
+            name = name.to_s[2..-1]
+            namespace = Registry.root
+          elsif name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           

@@ -37,3 +37,6 @@ end
 
 class Test6 < NotDelegateClass(Array)
 end
+
+class ::MyRootClass
+end

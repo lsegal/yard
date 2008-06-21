@@ -22,4 +22,8 @@ describe YARD::Handlers::ModuleHandler do
   it "should handle complex module names" do
     Registry.at("A::B").should_not == nil
   end
+  
+  it "should handle modules in the form ::ModName" do
+    Registry.at("Kernel").should_not be_nil
+  end
 end

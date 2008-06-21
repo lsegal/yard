@@ -14,3 +14,7 @@ module Q
 	module A::B
 	end
 end
+
+module ::Kernel
+  def x; end
+end
