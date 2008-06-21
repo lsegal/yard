@@ -63,7 +63,7 @@ module YARD
       end
       
       def readme_markup
-        if File.extname(readme_file) =~ /^\.(?:mdown|markdown|markdn|md)$/
+        if File.extname(readme_file) =~ /^\.(?:mdown|markdown|mkdn|markdn|md)$/
           :markdown
         elsif File.extname(readme_file) == ".textile"
           :textile
