@@ -30,47 +30,45 @@ FEATURE LIST
    YARD uses a '@tag' style definition syntax for meta tags alongside  regular code 
    documentation. These tags should be able to happily sit side by side RDoc formatted 
    documentation, but provide a much more consistent and usable way to describe 
-   important information about objects, such as what parameters they take and what types they are expected to be, what type a 
-   method should return, what exceptions it can raise, if it is deprecated, etc..
-   It also allows information to be better (and more consistently) organized 
-   during the output generation phase. Some of the main tags are listed below: 
+   important information about objects, such as what parameters they take and what types
+   they are expected to be, what type a method should return, what exceptions it can 
+   raise, if it is deprecated, etc.. It also allows information to be better (and more 
+   consistently) organized during the output generation phase. Some of the main tags 
+   are listed below: 
                                                                               
-   **Table 1. Meta-tags and their descriptions**
+   #### Table 1. Meta-tags and their descriptions ####
                                                                               
-   `@param [Types] name description`   
-     Description Allows for the definition of a method parameter with 
-     optional type information.
+   ##### `@param [Types] name Description` #####
+     Allows for the definition of a method parameter with optional type information.
                                                                               
-   `@yieldparam [Types] name description`   
-     Description Allows for the definition of a method parameter to a
-     yield block with optional type information.
+   ##### `@yieldparam [Types] name Description` #####
+     Allows for the definition of a method parameter to a yield block with optional
+     type information.
    
-   `@yield [paramnames] description`   
-     Allows the developer to document the purpose of a yield block in 
-     a method.
+   ##### `@yield [paramnames] Description` #####
+     Allows the developer to document the purpose of a yield block in a method.
    
-   `@return [Types] description`   
+   ##### `@return [Types] Description` #####
      Describes what the method returns with optional type information.
 
-   `@deprecated description`   
+   ##### `@deprecated Description` #####
      Informs the developer that a method is deprecated and should no 
      longer be used. The description offers the developer an alternative 
      solution or method for the problem.
                                                  
-   `@raise class description`   
-     Tells the developer that the method may raise an exception and of 
-     what type. 
+   ##### `@raise [Class] Description` #####
+     Tells the developer that the method may raise an exception and of what type. 
    
-   `@see name`   
+   ##### `@see name` #####
      References another object, URL, or other for extra information. 
 
-   `@since number`   
+   ##### `@since number` #####
      Lists the version number in which the object first appeared. 
 
-   `@version number`   
+   ##### `@version number` #####
      Lists the current version of the documentation for the object. 
 
-   `@author name`   
+   ##### `@author name` #####
      The authors responsible for the module
 
    You might have noticed the optional "types" declarations for certain tags. 
