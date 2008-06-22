@@ -30,7 +30,8 @@ module YARD
       # @param [String] text   the raw tag text
       # @return [Tag]          a tag object with the tag_name, types and text values filled
       def parse_tag_with_types(tag_name, text)
-        types, text = *extract_types_from_text(text)
+        name, types, text = *extract_types_and_name_from_text(text)
+        raise ArgumentError, "cannot specify a name before type list for '@#{tag_name}'" if name
         Tag.new(tag_name, text, types)
       end
       
@@ -42,8 +43,8 @@ module YARD
       # @param [String] text   the raw tag text
       # @return [Tag]          a tag object with the tag_name, name, types and text values filled
       def parse_tag_with_types_and_name(tag_name, text)
-        types, text = *extract_types_from_text(text)
-        name, text = *extract_name_from_text(text)
+        name, types, text = *extract_types_and_name_from_text(text)
+        name, text = *extract_name_from_text(text) unless name
         Tag.new(tag_name, text, types, name)
       end
       
@@ -69,15 +70,15 @@ module YARD
       end
       
       ##
-      # Extracts the type signatures from the raw tag text
+      # Extracts the type signatures and optional name from the raw tag text
       #
       # @param [String] text the raw tag text
       # @return [Array] an array holding the value as the first element and
       #                 the array of types as the second element
-      def extract_types_from_text(text)
+      def extract_types_and_name_from_text(text)
         text = text.strip
-        types, range = *parse_types(text)
-        [types, (range ? text[(range.end+1)..-1].strip : text)]
+        types, range, name = *parse_types(text)
+        [name, types, (range ? text[(range.end+1)..-1].strip : text)]
       end
       
       def extract_title_and_desc_from_raw_text(raw_text)
@@ -93,16 +94,18 @@ module YARD
       end
       
       # Parses a [], <>, {} or () block at the beginning of a line of text into a list of
-      # comma delimited values.
+      # comma delimited values. Returns the text be
       # 
       # @example
-      #   obj.parse_types('[String, Array<Hash, String>, nil]') # => ['String', 'Array<Hash, String>', 'nil']
+      #   obj.parse_types('[String, Array<Hash, String>, nil]') # => [nil, ['String', 'Array<Hash, String>', 'nil'], ""]
+      #   obj.parse_types('b<String> A string') # => ['b', ['String'], 'A string']
       # 
-      # @return [Array<String>, Range] The type list separated by commas from the first '[' to the last ']' 
-      #   followed by a Range specifying the location of the type list in +text+.
-      # @return [nil] If no type list is present.
-      def parse_types(text)
+      # @return [String, Array<String>] the text before the type list (or nil), followed by the type list parsed
+      #   into an array of strings, followed by the text following the type list.
+      # @return [nil] if no type list is present.
+      def extract_types_and_name_from_text(text)
         s, e = 0, 0
+        before = ''
         list, level = [''], 0
         text.split(//).each_with_index do |c, i|
           if c =~ /[\[\{\(\<]/ 
@@ -116,16 +119,17 @@ module YARD
           elsif c == ',' && level == 1
             list.push ''
           elsif c =~ /\S/ && level == 0
-            break
+            before << c
           elsif level >= 1
             list.last << c
           end
         end
 
+        before = before.empty? ? nil : before.strip
         if list.size == 1 && list.first == ''
-          nil
+          [nil, nil, text.strip]
         else
-          [list.map {|x| x.strip }, (s..e)]
+          [before, list.map {|x| x.strip }, text[(e+1)..-1].strip]
         end
       end
     end

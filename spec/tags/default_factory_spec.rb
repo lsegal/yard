@@ -1,18 +1,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Tags::DefaultFactory, "parse_types" do
+describe YARD::Tags::DefaultFactory, "extract_types_and_name_from_text" do
   before { @f = YARD::Tags::DefaultFactory.new }
   
   def parse_types(types)
-    @f.send(:parse_types, types)
+    @f.send(:extract_types_and_name_from_text, types)
   end
   
   it "should handle one type" do
-    parse_types('[A]').should == [['A'], (0..2)]
+    parse_types('[A]').should == [nil, ['A'], ""]
   end
 
   it "should handle a list of types" do
-    parse_types('[A, B, C]').should == [['A', 'B', 'C'], (0..8)]
+    parse_types('[A, B, C]').should == [nil, ['A', 'B', 'C'], ""]
+  end
+  
+  it "should return the text before and after the type list" do
+    parse_types(' b <String> description').should == ['b', ['String'], 'description']
   end
   
   it "should handle a complex list of types" do
@@ -31,17 +35,45 @@ describe YARD::Tags::DefaultFactory, "parse_types" do
     a.should include(['a','b','c'])
   end
   
-  it "should stop if a non delimiting char is found before the opening delimiter" do
-    parse_types('b[x, y, z]').should be_nil
-    parse_types('  ! <x>').should be_nil
+  it "should return the text before the type list as the last element" do
+    parse_types('b[x, y, z]').should == ['b', ['x', 'y', 'z'], '']
+    parse_types('  ! <x>').should == ["!", ['x'], '']
   end
   
-  it "should return nil if the type list is empty" do
-    parse_types('[]').should be_nil
+  it "should return text unparsed if there is no type list" do
+    parse_types('').should == [nil, nil, '']
+    parse_types('[]').should == [nil, nil, '[]']
   end
   
   it "should allow A => B syntax" do
     v = parse_types(' [Test, Array<String, Hash{A => {B => C}}, C>, String]')
     v.should include(["Test", "Array<String, Hash{A => {B => C}}, C>", "String"])
+  end
+end
+
+describe YARD::Tags::DefaultFactory, '#parse_tag_with_types' do
+  before { @f = YARD::Tags::DefaultFactory.new }
+  
+  def parse_types(text)
+    @f.send(:parse_tag_with_types, 'test', text)
+  end
+  
+  it "should parse given types and description" do
+    YARD::Tags::Tag.should_receive(:new).with("test", "description", ["x", "y", "z"])
+    parse_types(' [x, y, z] description')
+  end
+  
+  it "should parse given types only" do
+    YARD::Tags::Tag.should_receive(:new).with("test", "", ["x", "y", "z"])
+    parse_types(' [x, y, z] ')
+  end
+  
+  it "should allow type list to be omitted" do
+    YARD::Tags::Tag.should_receive(:new).with('test', 'description', nil)
+    parse_types('  description    ')
+  end
+  
+  it "should raise an error if a name is specified before type list" do
+    lambda { parse_types('b<String> desc') }.should raise_error(ArgumentError, 'cannot specify a name before type list for \'@test\'')
   end
 end
