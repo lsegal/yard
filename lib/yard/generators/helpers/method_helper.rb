@@ -2,10 +2,11 @@ module YARD
   module Generators::Helpers
     module MethodHelper
       def format_args(object)
-        if object.signature
-          h object.signature[/#{Regexp.quote object.name.to_s}\s*(.*)/, 1]
+        unless object.parameters.empty?
+          args = object.parameters.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
+          h("(#{args})")
         else
-          h "def #{object.name}"
+          ""
         end
       end
       
