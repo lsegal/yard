@@ -5,7 +5,7 @@ module YARD
       
       def initialize(tag_name, text, types = nil, name = nil, defaults = nil)
         super(tag_name, text, types, name)
-        @default = defaults
+        @defaults = defaults
       end
     end
   end
