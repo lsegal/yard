@@ -3,8 +3,8 @@ require 'rdoc/markup/simple_markup'
 require 'rdoc/markup/simple_markup/to_html'
 
 require 'rubygems'
-begin require 'BlueCloth'; rescue LoadError; end
-begin require 'RedCloth'; rescue LoadError; end
+begin require 'bluecloth'; rescue LoadError; end
+begin require 'redcloth'; rescue LoadError; end
 
 module YARD
   module Generators::Helpers
