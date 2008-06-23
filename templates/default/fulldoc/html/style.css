@@ -57,6 +57,9 @@ h3 { font-size: 1.0em; }
 .section.tags h2 { display: none; }
 .section.tags h3 { font-size: 1.0em; margin-top: 3px; }
 .section.tags dl { margin-left: 2em; }
+.section.tags .option table { width: 100%; border: 0; padding: 0; }
+.section.tags .option th { text-align: left; background: #e5e5e5; padding: 3px; }
+.section.tags .option td.name { font-family: monospace; }
 .section.methodmissing p.note { font-style: italic; }
 .section.constructor p.inherited_msg { font-style: italic; }
 .included h1, .inherited h1 { font-size: 1em !important; border: 0; margin: 0; padding: 5px; border-bottom: 1px solid #ccc; }
