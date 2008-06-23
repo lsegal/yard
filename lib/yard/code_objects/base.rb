@@ -34,7 +34,7 @@ module YARD
       "Numeric", "String", "Data", "MatchingData", "Regexp", "Integer", "File", "IO", "Range", "FalseClass", 
       "Method", "Continuation", "Thread", "Hash", "Module"] + BUILTIN_EXCEPTIONS
     BUILTIN_MODULES = ["ObjectSpace", "Signal", "Marshal", "Kernel", "Process", "GC", "FileTest", "Enumerable", 
-      "Comparable", "Errno", "Precision", "Math", "DTracer"]
+      "Comparable", "Errno", "Precision", "Math"]
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
     
     BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
