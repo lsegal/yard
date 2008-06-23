@@ -10,9 +10,9 @@ module YARD
       end
       
       def format_return_types(object)
-        if object.has_tag?(:return) && !object.tag(:return).types.empty?
-          format_types [object.tag(:return).types.first], false
-        end
+        return unless object.has_tag?(:return) && object.tag(:return).types
+        return if object.tag(:return).types.empty?
+        format_types [object.tag(:return).types.first], false
       end
       
       def format_block(object)
