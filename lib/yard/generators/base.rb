@@ -64,8 +64,7 @@ module YARD
       # @param [Class] generator 
       #   the generator class to use.
       # 
-      # @options opts
-      #   :ignore_serializer -> true => value
+      # @option :ignore_serializer [Boolean] (true) whether or not the serializer is ignored.
       #
       # 
       def G(generator, opts = {})

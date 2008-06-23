@@ -104,6 +104,7 @@ module YARD
     autoload :DefaultFactory, 'yard/tags/default_factory'
     autoload :Library,        'yard/tags/library'
     autoload :Tag,            'yard/tags/tag'
+    autoload :DefaultTag,     'yard/tags/default_tag'
   end
 
   autoload :Registry, 'yard/registry'

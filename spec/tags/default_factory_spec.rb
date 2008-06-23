@@ -77,3 +77,31 @@ describe YARD::Tags::DefaultFactory, '#parse_tag_with_types' do
     lambda { parse_types('b<String> desc') }.should raise_error(ArgumentError, 'cannot specify a name before type list for \'@test\'')
   end
 end
+
+describe YARD::Tags::DefaultFactory, '#parse_tag_with_types_name_and_default' do
+  before { @f = YARD::Tags::DefaultFactory.new }
+  
+  def parse_types(text)
+    @f.send(:parse_tag_with_types_name_and_default, 'test', text)
+  end
+  
+  it "should parse a standard type list with name before types (no default)" do
+    YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", ["x", "y", "z"], 'NAME', nil)
+    parse_types('NAME [x, y, z] description')
+  end
+
+  it "should parse a standard type list with name after types (no default)" do
+    YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", ["x", "y", "z"], 'NAME', nil)
+    parse_types('  [x, y, z] NAME description')
+  end
+  
+  it "should parse a tag definition with name, typelist and default" do
+    YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", ["x", "y", "z"], 'NAME', ['default', 'values'])
+    parse_types('  [x, y, z] NAME (default, values) description')
+  end
+  
+  it "should allow typelist to be omitted" do
+    YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", nil, 'NAME', ['default', 'values'])
+    parse_types('  NAME (default, values) description')
+  end
+end
