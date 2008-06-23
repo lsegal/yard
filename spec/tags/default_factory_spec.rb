@@ -99,6 +99,11 @@ describe YARD::Tags::DefaultFactory, '#parse_tag_with_types_name_and_default' do
     YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", ["x", "y", "z"], 'NAME', ['default', 'values'])
     parse_types('  [x, y, z] NAME (default, values) description')
   end
+
+  it "should parse a tag definition with name, typelist and default when name is before type list" do
+    YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", ["x", "y", "z"], 'NAME', ['default', 'values'])
+    parse_types(' NAME [x, y, z] (default, values) description')
+  end
   
   it "should allow typelist to be omitted" do
     YARD::Tags::DefaultTag.should_receive(:new).with("test", "description", nil, 'NAME', ['default', 'values'])
