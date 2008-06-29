@@ -60,7 +60,7 @@ module YARD
       
       def process_objects(object)
         @objects[object.path] = object
-        @objects[object.superclass.path] = object.superclass if object.is_a?(CodeObjects::ClassObject)
+        @objects[object.superclass.path] = object.superclass if object.is_a?(CodeObjects::ClassObject) && object.superclass
         object.mixins.each {|o| @objects[o.path] = o }
 
         namespaces(object).each {|o| process_objects(o) }
