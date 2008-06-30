@@ -72,10 +72,18 @@ module YARD
           end
                 
           # Ignore any initial comments or whitespace
-          unless statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          unless statement.empty? && stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
             # Decrease if end or '}' is seen
             level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
         
+            # Increase level if we have a 'do' or block opening
+            if [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
+              #p "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}"
+              stmt_number += 1
+              new_statement = true
+              level += 1    
+            end
+ 
             # If the level is greater than 0, add the code to the block text
             # otherwise it's part of the statement text
             if stmt_number > 0
@@ -88,15 +96,6 @@ module YARD
             end
 
             #puts "#{tk.line_no} #{level} #{open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{open_block.inspect}" 
-
-            # Increase level if we have a 'do' or block opening
-            if tk.class == TkLBRACE #|| tk.class == TkfLBRACE
-              level += 1    
-            elsif [TkDO, TkBEGIN].include?(tk.class) 
-              #p "#{tk.line_no} #{level} #{tk} \t#{tk.text} #{tk.lex_state}" 
-              level += 1    
-              open_block = false  # Cancel our wish to open a block for the if, we're doing it now
-            end
 
             # Vouch to open a block when this statement would otherwise end
             open_block = [level, tk.class] if (new_statement || 
@@ -160,7 +159,11 @@ module YARD
         # Return the code block with starting token and initial comments
         # If there is no code in the block, return nil
         comments = comments.compact if comments
-        statement.empty? ? nil : Statement.new(statement, block, comments)
+        if block || !statement.empty?
+          Statement.new(statement, block, comments)
+        else
+          nil
+        end
       end
     end
   end
