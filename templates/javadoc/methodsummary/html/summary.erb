@@ -11,9 +11,9 @@
           <span class='block'><%= format_block meth %></span>
         </tt>
         <span class="indent">
-          <% if meth.short_docstring %>
+          <% unless meth.docstring.summary.empty? %>
             <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= meth.short_docstring %>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= meth.docstring.summary %>
           <% end %>
           <% if meth.has_tag?(:deprecated) %>
           <br /><strong>Deprecated.</strong> <em><%= meth.tag(:deprecated).text %></em>

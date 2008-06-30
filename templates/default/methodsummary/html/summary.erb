@@ -10,7 +10,7 @@
         <% end %>
       </th>
       <td class="docstring">
-        <%= htmlify meth.short_docstring %>
+        <%= htmlify meth.docstring.summary %>
         <% if meth.tag(:return) && meth.tag(:return).types %>
           <p class='returns'>
             Returns: 

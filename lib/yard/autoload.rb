@@ -107,7 +107,8 @@ module YARD
     autoload :DefaultTag,     'yard/tags/default_tag'
   end
 
-  autoload :Registry, 'yard/registry'
+  autoload :Docstring, 'yard/docstring'
+  autoload :Registry,  'yard/registry'
 end
 
 # Load handlers immediately

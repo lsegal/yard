@@ -17,7 +17,7 @@
             <%= rw.values.compact.first.visibility %>
           </td>
           <td class="docstring">
-            <%= htmlify rw.values.compact.first.short_docstring %>
+            <%= htmlify rw.values.compact.first.docstring.summary %>
             <% if rw[:read] && rw[:read].tag(:return) && rw[:read].tag(:return).types %>
               <p class='returns'>
                 Returns: 
