@@ -102,9 +102,10 @@ module YARD
   
   module Tags
     autoload :DefaultFactory, 'yard/tags/default_factory'
-    autoload :Library,        'yard/tags/library'
-    autoload :Tag,            'yard/tags/tag'
     autoload :DefaultTag,     'yard/tags/default_tag'
+    autoload :Library,        'yard/tags/library'
+    autoload :RefTag,         'yard/tags/ref_tag'
+    autoload :Tag,            'yard/tags/tag'
   end
 
   autoload :Docstring, 'yard/docstring'

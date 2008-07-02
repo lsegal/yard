@@ -18,11 +18,20 @@ module YARD
     end
     
     ##
-    # Adds a tag object to the tag list
+    # Adds a tag or reftag object to the tag list
     # 
-    # @param [Tags::Tag] tag a tag object to add
-    def add_tag(tag)
-      @tags << tag
+    # @param [Tags::Tag, Tags::RefTag] *tags list of tag objects to add
+    def add_tag(*tags)
+      tags.each_with_index do |tag, i|
+        case tag
+        when Tags::Tag
+          @tags << tag
+        when Tags::RefTag
+          @ref_tags << tag
+        else
+          raise ArgumentError, "expected Tag or RefTag, got #{tag.class} (at index #{i})"
+        end
+      end
     end
     
     ## 
