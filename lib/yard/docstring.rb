@@ -2,7 +2,7 @@ module YARD
   class Docstring < String
     def initialize(content = '')
       @tag_factory = Tags::Library.new
-      @tags = []
+      @tags, @ref_tags = [], []
       
       replace parse_comments(content)
     end
@@ -17,6 +17,14 @@ module YARD
       @summmary
     end
     
+    ##
+    # Adds a tag object to the tag list
+    # 
+    # @param [Tags::Tag] tag a tag object to add
+    def add_tag(tag)
+      @tags << tag
+    end
+    
     ## 
     # Convenience method to return the first tag
     # object in the list of tag objects of that name
@@ -28,7 +36,7 @@ module YARD
     # @param [#to_s] name the tag name to return data for
     # @return [Tags::Tag] the first tag in the list of {#tags}
     def tag(name)
-      @tags.find {|tag| tag.tag_name.to_s == name.to_s }
+      tags.find {|tag| tag.tag_name.to_s == name.to_s }
     end
 
     ##
@@ -37,8 +45,9 @@ module YARD
     # @param name the tag name to return data for, or nil for all tags
     # @return [Array<Tags::Tag>] the list of tags by the specified tag name
     def tags(name = nil)
-      return @tags if name.nil?
-      @tags.select {|tag| tag.tag_name.to_s == name.to_s }
+      list = @tags + ref_tags
+      return list unless name
+      list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
 
     ##
@@ -47,9 +56,16 @@ module YARD
     # @param [String] name the tag name to search for
     # @return [Boolean] whether or not the tag +name+ was declared
     def has_tag?(name)
-      @tags.any? {|tag| tag.tag_name.to_s == name.to_s }
+      tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
     
+    ##
+    # @return [Array<RefTag>]
+    def ref_tags
+      list = @ref_tags.reject {|t| CodeObjects::Proxy === t.object }
+      list.map {|t| t.tags }.flatten
+    end
+
     private
     
     ##
@@ -59,9 +75,9 @@ module YARD
       tag_method = "#{tag_name}_tag"
       if tag_name && @tag_factory.respond_to?(tag_method)
         if @tag_factory.method(tag_method).arity == 2
-          @tags << @tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
+          @tags.push *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
         else
-          @tags << @tag_factory.send(tag_method, tag_buf) 
+          @tags.push *@tag_factory.send(tag_method, tag_buf) 
         end
       else
         log.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"

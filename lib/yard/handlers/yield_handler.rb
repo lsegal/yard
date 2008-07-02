@@ -12,11 +12,11 @@ class YARD::Handlers::YieldHandler < YARD::Handlers::Base
       item = item.inspect unless item.is_a?(String)
       if item == "self"
         yieldtag.types << '_self'
-        owner.tags << YARD::Tags::Tag.new(:yieldparam, 
+        owner.docstring.add_tag YARD::Tags::Tag.new(:yieldparam, 
           "the object that the method was called on", owner.namespace.path, '_self')
       elsif item == "super"
         yieldtag.types << '_super'
-        owner.tags << YARD::Tags::Tag.new(:yieldparam, 
+        owner.docstring.add_tag YARD::Tags::Tag.new(:yieldparam, 
           "the result of the method from the superclass", nil, '_super')
       else
         yieldtag.types << item
