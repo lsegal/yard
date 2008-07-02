@@ -51,13 +51,32 @@ module YARD
     end
     
     private
+    
+    ##
+    # Creates a tag from the TagFactory 
+    # 
+    def create_tag(tag_name, tag_buf, raw_buf)
+      tag_method = "#{tag_name}_tag"
+      if tag_name && @tag_factory.respond_to?(tag_method)
+        if @tag_factory.method(tag_method).arity == 2
+          @tags << @tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
+        else
+          @tags << @tag_factory.send(tag_method, tag_buf) 
+        end
+      else
+        log.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
+      end
+    end
 
     ##
     # Parses out comments split by newlines into a new code object
     #
-    # @param [Array<String>, String] comments 
+    # @param [String] comments 
     #   the newline delimited array of comments. If the comments
     #   are passed as a String, they will be split by newlines. 
+    # 
+    # @return [String] the non-metadata portion of the comments to
+    #   be used as a docstring
     def parse_comments(comments)
       return '' if !comments || comments.empty?
       meta_match = /^@(\S+)\s*(.*)/
@@ -76,16 +95,7 @@ module YARD
 
         if tag_name && (((indent < orig_indent && !empty) || done) || 
             (indent <= last_indent && line =~ meta_match))
-          tag_method = "#{tag_name}_tag"
-          if tag_name && @tag_factory.respond_to?(tag_method)
-            if @tag_factory.method(tag_method).arity == 2
-              @tags << @tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
-            else
-              @tags << @tag_factory.send(tag_method, tag_buf) 
-            end
-          else
-            log.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
-          end
+          create_tag(tag_name, tag_buf, raw_buf)
           tag_name, tag_buf, raw_buf = nil, '', []
           orig_indent = 0
         end
