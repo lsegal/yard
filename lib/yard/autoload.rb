@@ -105,6 +105,7 @@ module YARD
     autoload :DefaultTag,     'yard/tags/default_tag'
     autoload :Library,        'yard/tags/library'
     autoload :RefTag,         'yard/tags/ref_tag'
+    autoload :RefTagList,     'yard/tags/ref_tag_list'
     autoload :Tag,            'yard/tags/tag'
   end
 

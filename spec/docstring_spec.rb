@@ -58,5 +58,13 @@ describe YARD::Docstring do
     eof
     doc.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
   end
-
+  
+  it "should parse reference tags into ref_tags"
+  
+  it "should return all valid reference tags along with #tags"
+  
+  it "should return all valid reference tags along with #tag"
+  
+  it "should return all valid named reference tags along with #tags(name)"
+  
 end
