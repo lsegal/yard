@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Docstring do
+  before { YARD::Registry.clear }
+  
   it "should parse comments into tags" do
     doc = Docstring.new(<<-eof)
       @param name Hello world
@@ -68,17 +70,39 @@ describe YARD::Docstring do
   end
 
   it "should parse named reference tag into ref_tags" do
-    doc = Docstring.new("@param blah (see Foo#bar)")
+    doc = Docstring.new("@param blah \n   (see Foo#bar )")
     doc.ref_tags.size.should == 1
     doc.ref_tags.first.owner.should == P("Foo#bar")
     doc.ref_tags.first.tag_name.should == "param"
     doc.ref_tags.first.name.should == "blah"
   end
   
-  it "should return all valid reference tags along with #tags"
+  it "should fail to parse named reference tag into ref_tags" do
+    doc = Docstring.new("@param blah THIS_BREAKS_REFTAG (see Foo#bar)")
+    doc.ref_tags.size.should == 0
+  end
   
-  it "should return all valid reference tags along with #tag"
+  it "should return all valid reference tags along with #tags" do
+    o = CodeObjects::MethodObject.new(:root, 'Foo#bar')
+    o.docstring.add_tag Tags::Tag.new('return', 'testing')
+    doc = Docstring.new("@return (see Foo#bar)")
+    tags = doc.tags
+    tags.size.should == 1
+    tags.first.text.should == 'testing'
+    tags.first.should be_kind_of(Tags::RefTag)
+    tags.first.owner.should == o
+  end
   
-  it "should return all valid named reference tags along with #tags(name)"
+  it "should return all valid named reference tags along with #tags(name)" do
+    o = CodeObjects::MethodObject.new(:root, 'Foo#bar')
+    o.docstring.add_tag Tags::Tag.new('param', 'testing', nil, '*args')
+    o.docstring.add_tag Tags::Tag.new('param', 'NOTtesting', nil, 'notargs')
+    doc = Docstring.new("@param *args (see Foo#bar)")
+    tags = doc.tags('param')
+    tags.size.should == 1
+    tags.first.text.should == 'testing'
+    tags.first.should be_kind_of(Tags::RefTag)
+    tags.first.owner.should == o
+  end
   
 end

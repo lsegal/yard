@@ -87,7 +87,7 @@ module YARD
     # Creates a tag from the TagFactory 
     # 
     def create_tag(tag_name, tag_buf, raw_buf)
-      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(see\s+(\S+)\)\s*\Z/
+      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
         return create_ref_tag(tag_name, $1, $2)
       end
         
