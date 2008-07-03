@@ -1,25 +1,27 @@
-<div class="option">
-  <h3>Options Hash:</h3>
-  <table>
-    <tr>
-      <th class="name">Key Name</th>
-      <th class="default">Default Value</th>
-      <th class="type">Accepted Types</th>
-      <th class="desc">Description</th>
-    </tr>
-    <% for tag in object.tags(:option) %>
+<dt>Options Hash <tt><%= param %></tt></dt>
+<dd>
+  <div class="option">
+    <table>
       <tr>
-        <td class="name"><%= tag.name %></td>
-        <td class="default">
-          <% if tag.defaults %>
-            <%= tag.defaults.map {|t| "<tt>#{h t}</tt>" }.join(", ") %>
-          <% else %>
-            <span class="na">N/A</span>
-          <% end %>
-        </td>
-        <td class="type"><%= format_types (tag.types || ['Object']) %></td>
-        <td class="desc"><%= htmlify tag.text %></td>
+        <th class="name">Key Name</th>
+        <th class="default">Default Value</th>
+        <th class="type">Accepted Types</th>
+        <th class="desc">Description</th>
       </tr>
-    <% end %>
-  </table>
-</div>
+      <% for tag in object.tags(:option).select {|x| x.name.to_s == param } %>
+        <tr>
+          <td class="name"><%= tag.pair.name %></td>
+          <td class="default">
+            <% if tag.pair.defaults %>
+              <%= tag.pair.defaults.map {|t| "<tt>#{h t}</tt>" }.join(", ") %>
+            <% else %>
+              <span class="na">N/A</span>
+            <% end %>
+          </td>
+          <td class="type"><%= format_types (tag.pair.types || ['Object']) %></td>
+          <td class="desc"><%= htmlify tag.pair.text %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</dd>

@@ -73,6 +73,11 @@ module YARD
         end
       end
       
+      def parse_tag_with_options(tag_name, text)
+        name, text = *extract_name_from_text(text)
+        OptionTag.new(tag_name, name, parse_tag_with_types_name_and_default(tag_name, text))
+      end
+      
       private
       
       ##

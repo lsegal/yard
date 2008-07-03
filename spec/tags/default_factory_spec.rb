@@ -110,3 +110,26 @@ describe YARD::Tags::DefaultFactory, '#parse_tag_with_types_name_and_default' do
     parse_types('  NAME (default, values) description')
   end
 end
+
+describe YARD::Tags::DefaultFactory, '#parse_tag_with_options' do
+  before { @f = YARD::Tags::DefaultFactory.new }
+  
+  def parse_options(text)
+    @f.parse_tag_with_options('option', text)
+  end
+  
+  it "should have a name before tag info" do
+    t = parse_options("xyz key [Types] (default) description")
+    t.tag_name.should == 'option'
+    t.name.should == 'xyz'
+  end
+  
+  it "should parse the rest of the tag like DefaultTag" do
+    t = parse_options("xyz key [Types] (default) description")
+    t.pair.should be_instance_of(Tags::DefaultTag)
+    t.pair.types.should == ["Types"]
+    t.pair.name.should == "key"
+    t.pair.defaults.should == ["default"]
+    t.pair.text.should == "description"
+  end
+end

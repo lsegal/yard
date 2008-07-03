@@ -104,7 +104,7 @@ module YARD
       define_tag "API Visibility",    :api
       define_tag "Todo Item",         :todo,        :with_raw_title_and_text
       define_tag "Example",           :example,     :with_raw_title_and_text
-      define_tag "Options Hash",      :option,      :with_types_name_and_default
+      define_tag "Options Hash",      :option,      :with_options
     end
   end
 end

@@ -5,11 +5,7 @@ module YARD
       before_section :option, :has_options?
       
       def sections_for(object)
-        [:header, [:param, :option, :yieldparam, :return, :raise, :author, :version, :since, :see]]
-      end
-      
-      def param(object)
-        render_tags :param
+        [:header, [:param, :yieldparam, :return, :raise, :author, :version, :since, :see]]
       end
       
       def yieldparam(object)
@@ -49,6 +45,19 @@ module YARD
       def render_tags(name, opts = {})
         opts = { :name => name }.update(opts)
         render(current_object, 'tags', opts)
+      end
+      
+      def tags_by_param(object)
+        cache = {}
+        [:param, :option].each do |sym|
+          object.tags(sym).each do |t|
+            cache[t.name.to_s] = t
+          end
+        end
+        
+        object.parameters.map do |p|
+          cache[p.first.to_s]
+        end.compact
       end
     end
   end

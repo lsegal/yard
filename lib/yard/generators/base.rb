@@ -64,8 +64,7 @@ module YARD
       # @param [Class] generator 
       #   the generator class to use.
       # 
-      # @option :ignore_serializer [Boolean] (true) whether or not the serializer is ignored.
-      #
+      # @option opts :ignore_serializer [Boolean] (true) whether or not the serializer is ignored.
       # 
       def G(generator, opts = {})
         opts = SymbolHash[:ignore_serializer => true].update(opts)
