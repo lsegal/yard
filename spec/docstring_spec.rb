@@ -59,7 +59,21 @@ describe YARD::Docstring do
     doc.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
   end
   
-  it "should parse reference tags into ref_tags"
+  it "should parse reference tag into ref_tags" do
+    doc = Docstring.new("@return (see Foo#bar)")
+    doc.ref_tags.size.should == 1
+    doc.ref_tags.first.owner.should == P("Foo#bar")
+    doc.ref_tags.first.tag_name.should == "return"
+    doc.ref_tags.first.name.should be_nil
+  end
+
+  it "should parse named reference tag into ref_tags" do
+    doc = Docstring.new("@param blah (see Foo#bar)")
+    doc.ref_tags.size.should == 1
+    doc.ref_tags.first.owner.should == P("Foo#bar")
+    doc.ref_tags.first.tag_name.should == "param"
+    doc.ref_tags.first.name.should == "blah"
+  end
   
   it "should return all valid reference tags along with #tags"
   

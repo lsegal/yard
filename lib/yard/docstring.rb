@@ -1,5 +1,7 @@
 module YARD
   class Docstring < String
+    attr_reader :ref_tags
+    
     def initialize(content = '')
       @tag_factory = Tags::Library.new
       @tags, @ref_tags = [], []
@@ -54,7 +56,7 @@ module YARD
     # @param name the tag name to return data for, or nil for all tags
     # @return [Array<Tags::Tag>] the list of tags by the specified tag name
     def tags(name = nil)
-      list = @tags + ref_tags
+      list = @tags + convert_ref_tags
       return list unless name
       list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
@@ -67,20 +69,28 @@ module YARD
     def has_tag?(name)
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
-    
-    ##
-    # @return [Array<RefTag>]
-    def ref_tags
-      list = @ref_tags.reject {|t| CodeObjects::Proxy === t.object }
-      list.map {|t| t.tags }.flatten
-    end
 
     private
+    
+    def convert_ref_tags
+      list = @ref_tags.reject {|t| CodeObjects::Proxy === t.owner }
+      list.map {|t| t.tags }.flatten
+    end
+    
+    ##
+    # Creates a {RefTag}
+    def create_ref_tag(tag_name, name, object)
+      @ref_tags << Tags::RefTagList.new(tag_name, object, name)
+    end
     
     ##
     # Creates a tag from the TagFactory 
     # 
     def create_tag(tag_name, tag_buf, raw_buf)
+      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(see\s+(\S+)\)\s*\Z/
+        return create_ref_tag(tag_name, $1, $2)
+      end
+        
       tag_method = "#{tag_name}_tag"
       if tag_name && @tag_factory.respond_to?(tag_method)
         if @tag_factory.method(tag_method).arity == 2
