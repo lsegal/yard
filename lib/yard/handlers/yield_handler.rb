@@ -7,7 +7,7 @@ class YARD::Handlers::YieldHandler < YARD::Handlers::Base
     return if owner.has_tag? :yieldparam    # Same thing.
 
     yieldtag = YARD::Tags::Tag.new(:yield, "", [])
-    owner.tags << yieldtag
+    owner.docstring.add_tag(yieldtag)
     tokval_list(statement.tokens[2..-1], Token).each do |item|
       item = item.inspect unless item.is_a?(String)
       if item == "self"
