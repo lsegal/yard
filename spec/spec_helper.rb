@@ -1,7 +1,7 @@
 require "rubygems"
 require "spec"
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'yard')
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 
 def parse_file(file, thisfile = __FILE__)
   Registry.clear
