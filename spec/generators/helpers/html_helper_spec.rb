@@ -4,6 +4,14 @@ describe YARD::Generators::Helpers::HtmlHelper, "basic HTML methods" do
   it "should use #h to escape HTML" do
     h('Usage: foo "bar" <baz>').should == "Usage: foo &quot;bar&quot; &lt;baz&gt;"
   end
+  
+  it "should use #fix_typewriter to convert +text+ to <tt>text</tt>" do
+    fix_typewriter("Some +typewriter text+.").should == "Some <tt>typewriter text</tt>."
+    fix_typewriter("Not +typewriter text.").should == "Not +typewriter text."
+    fix_typewriter("Alternating +type writer+ text +here+.").should == "Alternating <tt>type writer</tt> text <tt>here</tt>."
+    fix_typewriter("No ++problem.").should == "No ++problem."
+    fix_typewriter("Math + stuff +is ok+").should == "Math + stuff <tt>is ok</tt>"
+  end
 end
 
 describe YARD::Generators::Helpers::HtmlHelper, "#link_object" do
