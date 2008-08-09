@@ -95,7 +95,7 @@ module YARD
         when String, Symbol
           source = token.kind_of?(String) ? TkReading2Token : TkSymbol2Token
           if (tk = source[token]).nil?
-          	IRB.fail TkReading2TokenNoKey, token
+            IRB.fail TkReading2TokenNoKey, token
           end
           tk = Token(tk[0], value) 
         else 
@@ -113,38 +113,38 @@ module YARD
       TokenDefinitions = [
         [:TkCLASS,      TkKW,  "class",  EXPR_CLASS],
         [:TkMODULE,     TkKW,  "module", EXPR_BEG],
-        [:TkDEF,	      TkKW,  "def",    EXPR_FNAME],
+        [:TkDEF,        TkKW,  "def",    EXPR_FNAME],
         [:TkUNDEF,      TkKW,  "undef",  EXPR_FNAME],
         [:TkBEGIN,      TkKW,  "begin",  EXPR_BEG],
         [:TkRESCUE,     TkKW,  "rescue", EXPR_MID],
         [:TkENSURE,     TkKW,  "ensure", EXPR_BEG],
-        [:TkEND,	      TkKW,  "end",    EXPR_END],
+        [:TkEND,        TkKW,  "end",    EXPR_END],
         [:TkIF,         TkKW,  "if",     EXPR_BEG, :TkIF_MOD],
         [:TkUNLESS,     TkKW,  "unless", EXPR_BEG, :TkUNLESS_MOD],
-        [:TkTHEN,	      TkKW,  "then",   EXPR_BEG],
+        [:TkTHEN,       TkKW,  "then",   EXPR_BEG],
         [:TkELSIF,      TkKW,  "elsif",  EXPR_BEG],
-        [:TkELSE,	      TkKW,  "else",   EXPR_BEG],
-        [:TkCASE,	      TkKW,  "case",   EXPR_BEG],
-        [:TkWHEN,	      TkKW,  "when",   EXPR_BEG],
+        [:TkELSE,       TkKW,  "else",   EXPR_BEG],
+        [:TkCASE,       TkKW,  "case",   EXPR_BEG],
+        [:TkWHEN,       TkKW,  "when",   EXPR_BEG],
         [:TkWHILE,      TkKW,  "while",  EXPR_BEG, :TkWHILE_MOD],
         [:TkUNTIL,      TkKW,  "until",  EXPR_BEG, :TkUNTIL_MOD],
-        [:TkFOR,	      TkKW,  "for",    EXPR_BEG],
+        [:TkFOR,        TkKW,  "for",    EXPR_BEG],
         [:TkBREAK,      TkKW,  "break",  EXPR_END],
-        [:TkNEXT,	      TkKW,  "next",   EXPR_END],
-        [:TkREDO,	      TkKW,  "redo",   EXPR_END],
+        [:TkNEXT,       TkKW,  "next",   EXPR_END],
+        [:TkREDO,       TkKW,  "redo",   EXPR_END],
         [:TkRETRY,      TkKW,  "retry",  EXPR_END],
-        [:TkIN,	        TkKW,  "in",     EXPR_BEG],
-        [:TkDO,	        TkKW,  "do",     EXPR_BEG],
+        [:TkIN,         TkKW,  "in",     EXPR_BEG],
+        [:TkDO,         TkKW,  "do",     EXPR_BEG],
         [:TkRETURN,     TkKW,  "return", EXPR_MID],
         [:TkYIELD,      TkKW,  "yield",  EXPR_END],
         [:TkSUPER,      TkKW,  "super",  EXPR_END],
-        [:TkSELF,	      TkKW,  "self",   EXPR_END],
-        [:TkNIL, 	      TkKW,  "nil",    EXPR_END],
-        [:TkTRUE,	      TkKW,  "true",   EXPR_END],
+        [:TkSELF,       TkKW,  "self",   EXPR_END],
+        [:TkNIL,        TkKW,  "nil",    EXPR_END],
+        [:TkTRUE,       TkKW,  "true",   EXPR_END],
         [:TkFALSE,      TkKW,  "false",  EXPR_END],
-        [:TkAND,	      TkKW,  "and",    EXPR_BEG],
-        [:TkOR, 	      TkKW,  "or",     EXPR_BEG],
-        [:TkNOT,	      TkKW,  "not",    EXPR_BEG],
+        [:TkAND,        TkKW,  "and",    EXPR_BEG],
+        [:TkOR,         TkKW,  "or",     EXPR_BEG],
+        [:TkNOT,        TkKW,  "not",    EXPR_BEG],
         [:TkIF_MOD,     TkKW],
         [:TkUNLESS_MOD, TkKW],
         [:TkWHILE_MOD,  TkKW],
@@ -152,14 +152,14 @@ module YARD
         [:TkALIAS,      TkKW,  "alias",    EXPR_FNAME],
         [:TkDEFINED,    TkKW,  "defined?", EXPR_END],
         [:TklBEGIN,     TkKW,  "BEGIN",    EXPR_END],
-        [:TklEND,	      TkKW,  "END",      EXPR_END],
+        [:TklEND,       TkKW,  "END",      EXPR_END],
         [:Tk__LINE__,   TkKW,  "__LINE__", EXPR_END],
         [:Tk__FILE__,   TkKW,  "__FILE__", EXPR_END],
 
         [:TkIDENTIFIER, TkId],
-        [:TkFID,	      TkId],
-        [:TkGVAR,	      TkId],
-        [:TkIVAR,	      TkId],
+        [:TkFID,        TkId],
+        [:TkGVAR,       TkId],
+        [:TkIVAR,       TkId],
         [:TkCONSTANT,   TkId],
 
         [:TkINTEGER,    TkVal],
@@ -178,28 +178,28 @@ module YARD
 
         [:TkUPLUS,      TkOp,   "+@"],
         [:TkUMINUS,     TkOp,   "-@"],
-        [:TkPOW,	      TkOp,   "**"],
-        [:TkCMP,	      TkOp,   "<=>"],
-        [:TkEQ,	        TkOp,   "=="],
-        [:TkEQQ,	      TkOp,   "==="],
-        [:TkNEQ,	      TkOp,   "!="],
-        [:TkGEQ,	      TkOp,   ">="],
-        [:TkLEQ,	      TkOp,   "<="],
+        [:TkPOW,        TkOp,   "**"],
+        [:TkCMP,        TkOp,   "<=>"],
+        [:TkEQ,         TkOp,   "=="],
+        [:TkEQQ,        TkOp,   "==="],
+        [:TkNEQ,        TkOp,   "!="],
+        [:TkGEQ,        TkOp,   ">="],
+        [:TkLEQ,        TkOp,   "<="],
         [:TkANDOP,      TkOp,   "&&"],
-        [:TkOROP,	      TkOp,   "||"],
+        [:TkOROP,       TkOp,   "||"],
         [:TkMATCH,      TkOp,   "=~"],
         [:TkNMATCH,     TkOp,   "!~"],
-        [:TkDOT2,	      TkOp,   ".."],
-        [:TkDOT3,	      TkOp,   "..."],
-        [:TkAREF,	      TkOp,   "[]"],
-        [:TkASET,	      TkOp,   "[]="],
+        [:TkDOT2,       TkOp,   ".."],
+        [:TkDOT3,       TkOp,   "..."],
+        [:TkAREF,       TkOp,   "[]"],
+        [:TkASET,       TkOp,   "[]="],
         [:TkLSHFT,      TkOp,   "<<"],
         [:TkRSHFT,      TkOp,   ">>"],
         [:TkCOLON2,     TkOp],
         [:TkCOLON3,     TkOp],
-        [:OPASGN,	      TkOp],               # +=, -=  etc. #
+        [:OPASGN,       TkOp],               # +=, -=  etc. #
         [:TkASSOC,      TkOp,   "=>"],
-        [:TkQUESTION,   TkOp,   "?"],	 #?
+        [:TkQUESTION,   TkOp,   "?"],  #?
         [:TkCOLON,      TkOp,   ":"],        #:
     
 #        [:TkfLPAREN],         # func( #
@@ -209,13 +209,13 @@ module YARD
         [:TkAMPER],           # &arg #
 #        [:TkSYMBOL,     TkId],          # :SYMBOL
         [:TkSYMBEG,     TkId], 
-        [:TkGT,	        TkOp,   ">"],
-        [:TkLT,	        TkOp,   "<"],
-        [:TkPLUS,	      TkOp,   "+"],
+        [:TkGT,         TkOp,   ">"],
+        [:TkLT,         TkOp,   "<"],
+        [:TkPLUS,       TkOp,   "+"],
         [:TkMINUS,      TkOp,   "-"],
-        [:TkMULT,	      TkOp,   "*"],
-        [:TkDIV,	      TkOp,   "/"],
-        [:TkMOD,	      TkOp,   "%"],
+        [:TkMULT,       TkOp,   "*"],
+        [:TkDIV,        TkOp,   "/"],
+        [:TkMOD,        TkOp,   "%"],
         [:TkBITOR,      TkOp,   "|"],
         [:TkBITXOR,     TkOp,   "^"],
         [:TkBITAND,     TkOp,   "&"],
@@ -225,7 +225,7 @@ module YARD
         [:TkBACKQUOTE,  TkOp,   "`"],
 
         [:TkASSIGN,     Token,  "="],
-        [:TkDOT,	      Token,  "."],
+        [:TkDOT,        Token,  "."],
         [:TkLPAREN,     Token,  "("],  #(exp)
         [:TkLBRACK,     Token,  "["],  #[arry]
         [:TkLBRACE,     Token,  "{"],  #{hash}
@@ -241,7 +241,7 @@ module YARD
         [:TkEND_OF_SCRIPT,  TkWhitespace],
 
         [:TkBACKSLASH,  TkUnknownChar,  "\\"],
-        [:TkAT,	        TkUnknownChar,  "@"],
+        [:TkAT,         TkUnknownChar,  "@"],
         [:TkDOLLAR,     TkUnknownChar,  "\$"], #"
       ]
 
@@ -262,12 +262,12 @@ module YARD
  
         if reading
           if TkReading2Token[reading]
-    	      IRB.fail TkReading2TokenDuplicateError, token_n, reading
+            IRB.fail TkReading2TokenDuplicateError, token_n, reading
           end
           if opts.empty?
-    	      TkReading2Token[reading] = [token_c]
+            TkReading2Token[reading] = [token_c]
           else
-    	      TkReading2Token[reading] = [token_c].concat(opts)
+            TkReading2Token[reading] = [token_c].concat(opts)
           end
         end
         TkSymbol2Token[token_n.intern] = token_c
@@ -414,7 +414,7 @@ module YARD
       def_exception(:TkReading2TokenNoKey, "key nothing(key='%s')")
       def_exception(:TkSymbol2TokenNoKey, "key nothing(key='%s')")
       def_exception(:TkReading2TokenDuplicateError, 
-    		"key duplicate(token_n='%s', key='%s')")
+        "key duplicate(token_n='%s', key='%s')")
       def_exception(:SyntaxError, "%s")
   
       include RubyToken
@@ -502,8 +502,8 @@ module YARD
       def lex
         catch(:eof) do
           until (((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
-      	     !@continue or
-      	     tk.nil?)
+             !@continue or
+             tk.nil?)
           end
           line = get_read
 
@@ -520,11 +520,11 @@ module YARD
         catch(:eof) do
           begin
             begin
-      	      tk = @OP.match(self)
-      	      @space_seen = tk.kind_of?(TkSPACE)
+              tk = @OP.match(self)
+              @space_seen = tk.kind_of?(TkSPACE)
             rescue SyntaxError
-      	      abort if @exception_on_syntax_error
-      	      tk = TkError.new(line_no, char_no)
+              abort if @exception_on_syntax_error
+              tk = TkError.new(line_no, char_no)
             end
           end while @skip_space and tk.kind_of?(TkSPACE)
           if @read_auto_clean_up
@@ -629,20 +629,20 @@ module YARD
           @colonblock_seen = false
           case @lex_state
           when EXPR_BEG, EXPR_FNAME, EXPR_DOT
-    	      @continue = TRUE
+            @continue = TRUE
           else
-    	      @continue = FALSE
-    	      @lex_state = EXPR_BEG
+            @continue = FALSE
+            @lex_state = EXPR_BEG
           end
           Token(TkNL).set_text("\n")
         end
 
-        @OP.def_rules("*", "**",	
-    		  "!", "!=", "!~",
-    		  "=", "==", "===", 
-    		  "=~", "<=>",	
-    		  "<", "<=",
-    		  ">", ">=", ">>") do |op, io|
+        @OP.def_rules("*", "**",  
+          "!", "!=", "!~",
+          "=", "==", "===", 
+          "=~", "<=>",  
+          "<", "<=",
+          ">", ">=", ">>") do |op, io|
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
@@ -651,8 +651,8 @@ module YARD
           tk = nil
           if @lex_state != EXPR_END && @lex_state != EXPR_CLASS && 
              (@lex_state != EXPR_ARG || @space_seen)
-          	c = peek(0)
-          	tk = identify_here_document if /[-\w_\"\'\`]/ =~ c
+            c = peek(0)
+            tk = identify_here_document if /[-\w_\"\'\`]/ =~ c
           end
           if !tk
             @lex_state = EXPR_BEG
@@ -667,31 +667,31 @@ module YARD
 
         @OP.def_rules("`") do |op, io|
           if @lex_state == EXPR_FNAME
-    	      Token(op).set_text(op)
+            Token(op).set_text(op)
           else
-    	      identify_string(op)
+            identify_string(op)
           end
         end
 
         @OP.def_rules('?') do |op, io|
           if @lex_state == EXPR_END
-    	      @lex_state = EXPR_BEG
-    	      Token(TkQUESTION).set_text(op)
+            @lex_state = EXPR_BEG
+            Token(TkQUESTION).set_text(op)
           else
-    	      ch = getc
-    	      if @lex_state == EXPR_ARG && ch !~ /\s/
-    	        ungetc
-    	        @lex_state = EXPR_BEG
-    	        Token(TkQUESTION).set_text(op)
-    	      else
+            ch = getc
+            if @lex_state == EXPR_ARG && ch !~ /\s/
+              ungetc
+              @lex_state = EXPR_BEG
+              Token(TkQUESTION).set_text(op)
+            else
               str = op
               str << ch
-          	  if (ch == '\\') #'
-          	    str << read_escape
-          	  end
-          	  @lex_state = EXPR_END
-          	  Token(TkINTEGER).set_text(str)
-    	      end
+              if (ch == '\\') #'
+                str << read_escape
+              end
+              @lex_state = EXPR_END
+              Token(TkINTEGER).set_text(str)
+            end
           end
         end
 
@@ -701,7 +701,7 @@ module YARD
         end
     
         @OP.def_rules("+=", "-=", "*=", "**=", 
-    		  "&=", "|=", "^=", "<<=", ">>=", "||=", "&&=") do |op, io|
+          "&=", "|=", "^=", "<<=", ">>=", "||=", "&&=") do |op, io|
           @lex_state = EXPR_BEG
           op =~ /^(.*)=$/
           Token(TkOPASGN, $1).set_text(op)
@@ -717,30 +717,30 @@ module YARD
 
         @OP.def_rules("+", "-") do |op, io|
           catch(:RET) do
-          	if @lex_state == EXPR_ARG
-          	  if @space_seen and peek(0) =~ /[0-9]/
-          	    throw :RET, identify_number(op)
-          	  else
-          	    @lex_state = EXPR_BEG
-          	  end
-          	elsif @lex_state != EXPR_END and peek(0) =~ /[0-9]/
-          	  throw :RET, identify_number(op)
-          	else
-          	  @lex_state = EXPR_BEG
-          	end
-    	      Token(op).set_text(op)
+            if @lex_state == EXPR_ARG
+              if @space_seen and peek(0) =~ /[0-9]/
+                throw :RET, identify_number(op)
+              else
+                @lex_state = EXPR_BEG
+              end
+            elsif @lex_state != EXPR_END and peek(0) =~ /[0-9]/
+              throw :RET, identify_number(op)
+            else
+              @lex_state = EXPR_BEG
+            end
+            Token(op).set_text(op)
           end
         end
 
         @OP.def_rule(".") do
           @lex_state = EXPR_BEG
           if peek(0) =~ /[0-9]/
-          	ungetc
-          	identify_number("")
+            ungetc
+            identify_number("")
           else
-    	      # for obj.if
-    	      @lex_state = EXPR_DOT
-    	      Token(TkDOT).set_text(".")
+            # for obj.if
+            @lex_state = EXPR_DOT
+            Token(TkDOT).set_text(".")
           end
         end
 
@@ -762,11 +762,11 @@ module YARD
 
         @OP.def_rule(":") do 
           if @colonblock_seen || peek(0) =~ /\s/
-    	      @lex_state = EXPR_BEG
-    	      tk = Token(TkCOLON)
+            @lex_state = EXPR_BEG
+            tk = Token(TkCOLON)
           else
-    	      @lex_state = EXPR_FNAME
-    	      tk = Token(TkSYMBEG)
+            @lex_state = EXPR_FNAME
+            tk = Token(TkSYMBEG)
           end
           tk.set_text(":")
         end
@@ -774,26 +774,26 @@ module YARD
         @OP.def_rule("::") do
     #      p @lex_state.id2name, @space_seen
           if @lex_state == EXPR_BEG or @lex_state == EXPR_ARG && @space_seen
-    	      @lex_state = EXPR_BEG
-    	      tk = Token(TkCOLON3)
+            @lex_state = EXPR_BEG
+            tk = Token(TkCOLON3)
           else
-    	      @lex_state = EXPR_DOT
-    	      tk = Token(TkCOLON2)
+            @lex_state = EXPR_DOT
+            tk = Token(TkCOLON2)
           end
           tk.set_text("::")
         end
 
         @OP.def_rule("/") do |op, io|
           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-    	      identify_string(op)
+            identify_string(op)
           elsif peek(0) == '='
-    	      getc
-    	      @lex_state = EXPR_BEG
-    	      Token(TkOPASGN, :/).set_text("/=") #")
+            getc
+            @lex_state = EXPR_BEG
+            Token(TkOPASGN, :/).set_text("/=") #")
           elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
-    	      identify_string(op)
+            identify_string(op)
           else 
-    	      @lex_state = EXPR_BEG
+            @lex_state = EXPR_BEG
             Token("/").set_text(op)
           end
         end
@@ -804,8 +804,8 @@ module YARD
         end
 
         #       @OP.def_rules("^=") do
-        # 	@lex_state = EXPR_BEG
-        # 	Token(TkOPASGN, :^)
+        #   @lex_state = EXPR_BEG
+        #   Token(TkOPASGN, :^)
         #       end
     
         @OP.def_rules(",", ";") do |op, io|
@@ -827,11 +827,11 @@ module YARD
         @OP.def_rule("(") do
           @indent += 1
           #if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-    	    #  @lex_state = EXPR_BEG
-    	    #  tk = Token(TkfLPAREN)
+          #  @lex_state = EXPR_BEG
+          #  tk = Token(TkfLPAREN)
           #else
-    	      @lex_state = EXPR_BEG
-    	      tk = Token(TkLPAREN)
+            @lex_state = EXPR_BEG
+            tk = Token(TkLPAREN)
           #end
           tk.set_text("(")
         end
@@ -847,14 +847,14 @@ module YARD
         @OP.def_rule("[") do
           @indent += 1
 #          if @lex_state == EXPR_FNAME
-#    	      t = Token(TkfLBRACK)
+#           t = Token(TkfLBRACK)
 #          else
-#    	      if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-#    	        t = Token(TkLBRACK)
-#    	      elsif @lex_state == EXPR_ARG && @space_seen
-#    	      else
-#    	        t = Token(TkfLBRACK)
-#    	      end
+#           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+#             t = Token(TkLBRACK)
+#           elsif @lex_state == EXPR_ARG && @space_seen
+#           else
+#             t = Token(TkfLBRACK)
+#           end
 #          end
           t = Token(TkLBRACK)
           @lex_state = EXPR_BEG
@@ -864,9 +864,9 @@ module YARD
         @OP.def_rule("{") do
           @indent += 1
           #if @lex_state != EXPR_END && @lex_state != EXPR_ARG
-    	    #  t = Token(TkLBRACE)
+          #  t = Token(TkLBRACE)
           #else
-    	    #  t = Token(TkfLBRACE)
+          #  t = Token(TkfLBRACE)
           #end
           t = Token(TkLBRACE)
           @lex_state = EXPR_BEG
@@ -875,27 +875,27 @@ module YARD
 
         @OP.def_rule('\\') do   #'
           if getc == "\n" 
-    	      @space_seen = true
-    	      @continue = true
-    	      Token(TkSPACE).set_text("\\\n")
+            @space_seen = true
+            @continue = true
+            Token(TkSPACE).set_text("\\\n")
           else 
-    	      ungetc
-    	      Token("\\").set_text("\\")  #"
+            ungetc
+            Token("\\").set_text("\\")  #"
           end 
         end 
 
         @OP.def_rule('%') do
           |op, io|
           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-    	      identify_quotation('%')
+            identify_quotation('%')
           elsif peek(0) == '='
-    	      getc
-    	      Token(TkOPASGN, "%").set_text("%=")
+            getc
+            Token(TkOPASGN, "%").set_text("%=")
           elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
-    	      identify_quotation('%')
+            identify_quotation('%')
           else
-    	      @lex_state = EXPR_BEG
-    	      Token("%").set_text("%")
+            @lex_state = EXPR_BEG
+            Token("%").set_text("%")
           end
         end
 
@@ -905,21 +905,21 @@ module YARD
 
         @OP.def_rule('@') do
           if peek(0) =~ /[@\w_]/
-    	      ungetc
-    	      identify_identifier
+            ungetc
+            identify_identifier
           else
-    	      Token("@").set_text("@")
+            Token("@").set_text("@")
           end
         end
 
         #       @OP.def_rule("def", proc{|op, io| /\s/ =~ io.peek(0)}) do 
-        # 	|op, io|
-        # 	@indent += 1
-        # 	@lex_state = EXPR_FNAME
-        # #	@lex_state = EXPR_END
-        # #	until @rests[0] == "\n" or @rests[0] == ";"
-        # #	  rests.shift
-        # #	end
+        #   |op, io|
+        #   @indent += 1
+        #   @lex_state = EXPR_FNAME
+        # # @lex_state = EXPR_END
+        # # until @rests[0] == "\n" or @rests[0] == ";"
+        # #   rests.shift
+        # # end
         #       end
 
         @OP.def_rule("__END__", proc{@prev_char_no == 0 && peek(0) =~ /[\r\n]/}) do
@@ -930,9 +930,9 @@ module YARD
           |op, io|
           printf "MATCH: start %s: %s\n", op, io.inspect if RubyLex.debug?
           if peek(0) =~ /[0-9]/
-    	t = identify_number("")
+      t = identify_number("")
           elsif peek(0) =~ /[\w_]/
-    	t = identify_identifier
+      t = identify_identifier
           end
           printf "MATCH: end %s: %s\n", op, io.inspect if RubyLex.debug?
           t
@@ -1007,41 +1007,41 @@ module YARD
 
           token_c, *trans = TkReading2Token[token]
           if token_c
-    	# reserved word?
+      # reserved word?
 
-    	if (@lex_state != EXPR_BEG &&
-    	    @lex_state != EXPR_FNAME &&
-    	    trans[1])
-    	  # modifiers
-    	  token_c = TkSymbol2Token[trans[1]]
-    	  @lex_state = trans[0]
-    	else
-    	  if @lex_state != EXPR_FNAME
-    	    if ENINDENT_CLAUSE.include?(token)
-    	      @indent += 1
-    	      
-    	      if ACCEPTS_COLON.include?(token)  
-    	        @colonblock_seen = true
-  	        else
-  	          @colonblock_seen = false
-	          end
-    	    elsif DEINDENT_CLAUSE.include?(token)
-    	      @indent -= 1
-    	      @colonblock_seen = false
-    	    end
-    	    @lex_state = trans[0]
-    	  else
-    	    @lex_state = EXPR_END
-    	  end
-    	end
-    	return Token(token_c, token).set_text(token)
+      if (@lex_state != EXPR_BEG &&
+          @lex_state != EXPR_FNAME &&
+          trans[1])
+        # modifiers
+        token_c = TkSymbol2Token[trans[1]]
+        @lex_state = trans[0]
+      else
+        if @lex_state != EXPR_FNAME
+          if ENINDENT_CLAUSE.include?(token)
+            @indent += 1
+            
+            if ACCEPTS_COLON.include?(token)  
+              @colonblock_seen = true
+            else
+              @colonblock_seen = false
+            end
+          elsif DEINDENT_CLAUSE.include?(token)
+            @indent -= 1
+            @colonblock_seen = false
+          end
+          @lex_state = trans[0]
+        else
+          @lex_state = EXPR_END
+        end
+      end
+      return Token(token_c, token).set_text(token)
           end
         end
 
         if @lex_state == EXPR_FNAME
           @lex_state = EXPR_END
           if peek(0) == '='
-    	      token.concat getc
+            token.concat getc
           end
         elsif @lex_state == EXPR_BEG || @lex_state == EXPR_DOT
           @lex_state = EXPR_ARG
@@ -1068,13 +1068,13 @@ module YARD
           lt = ch
           quoted = ""
           while (c = getc) && c != lt
-    	quoted.concat c
+      quoted.concat c
           end
         else
           lt = '"'
           quoted = ch.dup
           while (c = getc) && c =~ /\w/
-    	quoted.concat c
+      quoted.concat c
           end
           ungetc
         end
@@ -1086,9 +1086,9 @@ module YARD
           reserve << ch
           if ch == "\\"    #"
             ch = getc
-    	reserve << ch
+      reserve << ch
           elsif ch == "\n"
-    	break
+      break
           end
         end
 
@@ -1115,13 +1115,13 @@ module YARD
         elsif ch =~ /\W/
           lt = "\""
         else
-#          RubyLex.fail SyntaxError, "unknown type of %string ('#{ch}')"
+          # RubyLex.fail SyntaxError, "unknown type of %string ('#{ch}')"
         end
-    #     if ch !~ /\W/
-    #       ungetc
-    #       next
-    #     end
-        #@ltype = lt
+        # if ch !~ /\W/
+        #   ungetc
+        #   next
+        # end
+        # @ltype = lt
         @quoted = ch unless @quoted = PERCENT_PAREN[ch]
         identify_string(lt, @quoted, ch, initial_char) if lt
       end
@@ -1164,25 +1164,25 @@ module YARD
             str << ch
 
           when allow_point && "."
-    	type = TkFLOAT
-    	if peek(0) !~ /[0-9]/
-    	  ungetc
-    	  break
-    	end
+      type = TkFLOAT
+      if peek(0) !~ /[0-9]/
+        ungetc
+        break
+      end
             str << ch
-    	allow_point = false
+      allow_point = false
 
           when allow_e && "e", allow_e && "E"
             str << ch
-    	type = TkFLOAT
-    	if peek(0) =~ /[+-]/
-    	  str << getc
-    	end
-    	allow_e = false
-    	allow_point = false
+      type = TkFLOAT
+      if peek(0) =~ /[+-]/
+        str << getc
+      end
+      allow_e = false
+      allow_point = false
           else
-    	ungetc
-    	break
+      ungetc
+      break
           end
         end
         Token(type).set_text(str)
@@ -1200,8 +1200,8 @@ module YARD
         nest = 0
         begin
           while ch = getc 
-    	str << ch
-    	if @quoted == ch 
+      str << ch
+      if @quoted == ch 
               if nest == 0
                 break
               else
@@ -1209,7 +1209,7 @@ module YARD
               end
             elsif opener == ch
               nest += 1
-    	elsif @ltype != "'" && @ltype != "]" and ch == "#"
+      elsif @ltype != "'" && @ltype != "]" and ch == "#"
               ch = getc
               if ch == "{"
                 subtype = true
@@ -1217,19 +1217,19 @@ module YARD
               else
                 ungetc(ch)
               end
-    	elsif ch == '\\' #'
-    	  str << read_escape
-    	end
+      elsif ch == '\\' #'
+        str << read_escape
+      end
           end
           if @ltype == "/"
-    	if peek(0) =~ /i|o|n|e|s/
-    	  str << getc
-    	end
+      if peek(0) =~ /i|o|n|e|s/
+        str << getc
+      end
           end
           if subtype
-    	      Token(DLtype2Token[ltype], str)
+            Token(DLtype2Token[ltype], str)
           else
-    	      Token(Ltype2Token[ltype], str)
+            Token(Ltype2Token[ltype], str)
           end.set_text(str)
         ensure
           @ltype = nil
@@ -1282,49 +1282,49 @@ module YARD
         when /[0-7]/
           ungetc ch
           3.times do
-        	case ch = getc
-        	when /[0-7]/
-        	when nil
-        	  break
-        	else
-        	  ungetc
-        	  break
-        	end
+          case ch = getc
+          when /[0-7]/
+          when nil
+            break
+          else
+            ungetc
+            break
+          end
           res << ch
         end
       
         when "x"
           res << ch
           2.times do
-        	case ch = getc
-        	when /[0-9a-fA-F]/
-        	when nil
-      	    break
-      	  else
-      	    ungetc
-      	    break
-      	  end
+          case ch = getc
+          when /[0-9a-fA-F]/
+          when nil
+            break
+          else
+            ungetc
+            break
+          end
             res << ch
           end
 
         when "M"
           res << ch
           if (ch = getc) != '-'
-    	      ungetc
+            ungetc
           else
             res << ch
-    	      if (ch = getc) == "\\" #"
+            if (ch = getc) == "\\" #"
               res << ch
-    	        res << read_escape
+              res << read_escape
             else
               res << ch
-    	      end
+            end
           end
 
         when "C", "c" #, "^"
           res << ch
           if ch == "C" and (ch = getc) != "-"
-    	      ungetc
+            ungetc
           else
             res << ch
             if (ch = getc) == "\\" #"
