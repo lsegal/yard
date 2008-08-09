@@ -105,7 +105,7 @@ module YARD
                  else
                    token.new(@prev_line_no, @prev_char_no, value)
                  end
-               end
+          end
         end
         tk
       end
@@ -253,12 +253,12 @@ module YARD
       def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
         token_n = token_n.id2name unless token_n.kind_of?(String)
         if RubyToken.const_defined?(token_n)
-          #IRB.fail AlreadyDefinedToken, token_n
+          # IRB.fail AlreadyDefinedToken, token_n
         end
 
         token_c =  Class.new super_token
         RubyToken.const_set token_n, token_c
-    #    token_c.inspect
+        # token_c.inspect
  
         if reading
           if TkReading2Token[reading]
@@ -530,7 +530,7 @@ module YARD
           if @read_auto_clean_up
             get_read
           end
-      #   throw :eof unless tk
+          # throw :eof unless tk
           p tk if $DEBUG
           tk.lex_state = lex_state if tk
           tk
@@ -772,7 +772,7 @@ module YARD
         end
 
         @OP.def_rule("::") do
-    #      p @lex_state.id2name, @space_seen
+          # p @lex_state.id2name, @space_seen
           if @lex_state == EXPR_BEG or @lex_state == EXPR_ARG && @space_seen
             @lex_state = EXPR_BEG
             tk = Token(TkCOLON3)
@@ -803,10 +803,10 @@ module YARD
           Token("^").set_text("^")
         end
 
-        #       @OP.def_rules("^=") do
+        # @OP.def_rules("^=") do
         #   @lex_state = EXPR_BEG
         #   Token(TkOPASGN, :^)
-        #       end
+        # end
     
         @OP.def_rules(",", ";") do |op, io|
           @colonblock_seen = false
@@ -826,13 +826,13 @@ module YARD
     
         @OP.def_rule("(") do
           @indent += 1
-          #if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+          # if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
           #  @lex_state = EXPR_BEG
           #  tk = Token(TkfLPAREN)
-          #else
+          # else
             @lex_state = EXPR_BEG
             tk = Token(TkLPAREN)
-          #end
+          # end
           tk.set_text("(")
         end
 
@@ -846,16 +846,16 @@ module YARD
 
         @OP.def_rule("[") do
           @indent += 1
-#          if @lex_state == EXPR_FNAME
-#           t = Token(TkfLBRACK)
-#          else
-#           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-#             t = Token(TkLBRACK)
-#           elsif @lex_state == EXPR_ARG && @space_seen
-#           else
-#             t = Token(TkfLBRACK)
-#           end
-#          end
+          # if @lex_state == EXPR_FNAME
+          #   t = Token(TkfLBRACK)
+          # else
+          #   if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+          #     t = Token(TkLBRACK)
+          #   elsif @lex_state == EXPR_ARG && @space_seen
+          #   else
+          #     t = Token(TkfLBRACK)
+          #   end
+          # end
           t = Token(TkLBRACK)
           @lex_state = EXPR_BEG
           t.set_text("[")
@@ -863,11 +863,11 @@ module YARD
 
         @OP.def_rule("{") do
           @indent += 1
-          #if @lex_state != EXPR_END && @lex_state != EXPR_ARG
-          #  t = Token(TkLBRACE)
-          #else
-          #  t = Token(TkfLBRACE)
-          #end
+          # if @lex_state != EXPR_END && @lex_state != EXPR_ARG
+          #   t = Token(TkLBRACE)
+          # else
+          #   t = Token(TkfLBRACE)
+          # end
           t = Token(TkLBRACE)
           @lex_state = EXPR_BEG
           t.set_text("{")
@@ -912,7 +912,7 @@ module YARD
           end
         end
 
-        #       @OP.def_rule("def", proc{|op, io| /\s/ =~ io.peek(0)}) do 
+        # @OP.def_rule("def", proc{|op, io| /\s/ =~ io.peek(0)}) do 
         #   |op, io|
         #   @indent += 1
         #   @lex_state = EXPR_FNAME
@@ -920,19 +920,18 @@ module YARD
         # # until @rests[0] == "\n" or @rests[0] == ";"
         # #   rests.shift
         # # end
-        #       end
+        # end
 
         @OP.def_rule("__END__", proc{@prev_char_no == 0 && peek(0) =~ /[\r\n]/}) do
           throw :eof
         end
 
-        @OP.def_rule("") do
-          |op, io|
+        @OP.def_rule("") do |op, io|
           printf "MATCH: start %s: %s\n", op, io.inspect if RubyLex.debug?
           if peek(0) =~ /[0-9]/
-      t = identify_number("")
+            t = identify_number("")
           elsif peek(0) =~ /[\w_]/
-      t = identify_identifier
+            t = identify_identifier
           end
           printf "MATCH: end %s: %s\n", op, io.inspect if RubyLex.debug?
           t
@@ -1007,34 +1006,34 @@ module YARD
 
           token_c, *trans = TkReading2Token[token]
           if token_c
-      # reserved word?
+            # reserved word?
 
-      if (@lex_state != EXPR_BEG &&
-          @lex_state != EXPR_FNAME &&
-          trans[1])
-        # modifiers
-        token_c = TkSymbol2Token[trans[1]]
-        @lex_state = trans[0]
-      else
-        if @lex_state != EXPR_FNAME
-          if ENINDENT_CLAUSE.include?(token)
-            @indent += 1
-            
-            if ACCEPTS_COLON.include?(token)  
-              @colonblock_seen = true
+            if (@lex_state != EXPR_BEG &&
+                @lex_state != EXPR_FNAME &&
+                trans[1])
+              # modifiers
+              token_c = TkSymbol2Token[trans[1]]
+              @lex_state = trans[0]
             else
-              @colonblock_seen = false
+              if @lex_state != EXPR_FNAME
+                if ENINDENT_CLAUSE.include?(token)
+                  @indent += 1
+            
+                  if ACCEPTS_COLON.include?(token)  
+                    @colonblock_seen = true
+                  else
+                    @colonblock_seen = false
+                  end
+                elsif DEINDENT_CLAUSE.include?(token)
+                  @indent -= 1
+                  @colonblock_seen = false
+                end
+                @lex_state = trans[0]
+              else
+                @lex_state = EXPR_END
+              end
             end
-          elsif DEINDENT_CLAUSE.include?(token)
-            @indent -= 1
-            @colonblock_seen = false
-          end
-          @lex_state = trans[0]
-        else
-          @lex_state = EXPR_END
-        end
-      end
-      return Token(token_c, token).set_text(token)
+            return Token(token_c, token).set_text(token)
           end
         end
 
@@ -1068,13 +1067,13 @@ module YARD
           lt = ch
           quoted = ""
           while (c = getc) && c != lt
-      quoted.concat c
+            quoted.concat c
           end
         else
           lt = '"'
           quoted = ch.dup
           while (c = getc) && c =~ /\w/
-      quoted.concat c
+            quoted.concat c
           end
           ungetc
         end
@@ -1086,9 +1085,9 @@ module YARD
           reserve << ch
           if ch == "\\"    #"
             ch = getc
-      reserve << ch
+            reserve << ch
           elsif ch == "\n"
-      break
+            break
           end
         end
 
@@ -1164,25 +1163,25 @@ module YARD
             str << ch
 
           when allow_point && "."
-      type = TkFLOAT
-      if peek(0) !~ /[0-9]/
-        ungetc
-        break
-      end
+            type = TkFLOAT
+            if peek(0) !~ /[0-9]/
+              ungetc
+              break
+            end
             str << ch
-      allow_point = false
+            allow_point = false
 
           when allow_e && "e", allow_e && "E"
             str << ch
-      type = TkFLOAT
-      if peek(0) =~ /[+-]/
-        str << getc
-      end
-      allow_e = false
-      allow_point = false
+            type = TkFLOAT
+            if peek(0) =~ /[+-]/
+              str << getc
+            end
+            allow_e = false
+            allow_point = false
           else
-      ungetc
-      break
+            ungetc
+            break
           end
         end
         Token(type).set_text(str)
@@ -1200,8 +1199,8 @@ module YARD
         nest = 0
         begin
           while ch = getc 
-      str << ch
-      if @quoted == ch 
+            str << ch
+            if @quoted == ch 
               if nest == 0
                 break
               else
@@ -1209,7 +1208,7 @@ module YARD
               end
             elsif opener == ch
               nest += 1
-      elsif @ltype != "'" && @ltype != "]" and ch == "#"
+            elsif @ltype != "'" && @ltype != "]" and ch == "#"
               ch = getc
               if ch == "{"
                 subtype = true
@@ -1217,14 +1216,14 @@ module YARD
               else
                 ungetc(ch)
               end
-      elsif ch == '\\' #'
-        str << read_escape
-      end
+            elsif ch == '\\' #'
+              str << read_escape
+            end
           end
           if @ltype == "/"
-      if peek(0) =~ /i|o|n|e|s/
-        str << getc
-      end
+            if peek(0) =~ /i|o|n|e|s/
+              str << getc
+            end
           end
           if subtype
             Token(DLtype2Token[ltype], str)
