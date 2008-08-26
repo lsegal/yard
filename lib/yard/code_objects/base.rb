@@ -83,7 +83,7 @@ module YARD
 
         @name = name.to_sym
         @tags = []
-        @docstring = Docstring.new
+        @docstring = Docstring.new('', self)
         self.namespace = namespace
         yield(self) if block_given?
       end
@@ -152,7 +152,7 @@ module YARD
       #   the comments attached to the code object to be parsed 
       #   into a docstring and meta tags.
       def docstring=(comments)
-        @docstring = Docstring === comments ? comments : Docstring.new(comments)
+        @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
       end
       
       ##

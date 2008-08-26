@@ -1,10 +1,11 @@
 module YARD
   class Docstring < String
-    attr_reader :ref_tags
+    attr_reader :object, :ref_tags
     
-    def initialize(content = '')
+    def initialize(content = '', object = nil)
       @tag_factory = Tags::Library.new
       @tags, @ref_tags = [], []
+      @object = object
       
       replace parse_comments(content)
     end
@@ -40,7 +41,7 @@ module YARD
     # Convenience method to return the first tag
     # object in the list of tag objects of that name
     #
-    # Example:
+    # @example
     #   doc = YARD::Docstring.new("@return zero when nil")
     #   doc.tag(:return).text  # => "zero when nil"
     #
@@ -99,7 +100,7 @@ module YARD
           @tags.push *@tag_factory.send(tag_method, tag_buf) 
         end
       else
-        log.warn "Unknown tag @#{tag_name} in documentation for `#{path}`"
+        log.warn "Unknown tag @#{tag_name} in documentation" + (object ? " for `#{object.path}`" : "")
       end
     end
 
