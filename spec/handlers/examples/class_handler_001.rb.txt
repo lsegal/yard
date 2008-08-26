@@ -40,3 +40,17 @@ end
 
 class ::MyRootClass
 end
+
+module Holder
+  module SomeMod
+    class Importer
+      def parse; end
+    end
+  end
+end
+
+module Holder
+  class Importer < Holder::SomeMod::Importer
+    def a; end
+  end
+end

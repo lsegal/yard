@@ -20,8 +20,8 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       classname = $1
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
-      elsif classname[0,1] =~ /[A-Z]/
-        parse_block(:namespace => P(namespace, classname), :scope => :class)
+      elsif classname[0,1] =~ /[A-Z]/ && NamespaceObject === P(namespace, classname)
+          parse_block(:namespace => P(namespace, classname), :scope => :class)
       else
         raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
       end

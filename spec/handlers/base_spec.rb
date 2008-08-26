@@ -162,4 +162,8 @@ describe YARD::Handlers::Base, "#tokval_list" do
   it "should return an empty list if no matches were found" do
     tokval_list('attr_accessor :x').should == []
   end
+  
+  it "should treat {} as a valid value" do
+    tokval_list("opts = {}", :all).should == ["opts = {}"]
+  end
 end

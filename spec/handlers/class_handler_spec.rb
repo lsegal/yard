@@ -69,4 +69,14 @@ describe YARD::Handlers::ClassHandler do
       Registry.at('A').superclass.should == P(:Object)
     end
   end
+  
+  it "should not try to document 'class << SomeConstant'" do
+    Registry.clear
+    undoc_error <<-eof
+      ConstClass = Object.new
+      class << ConstClass
+        def method; end
+      end
+    eof
+  end
 end
