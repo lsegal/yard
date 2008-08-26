@@ -18,10 +18,13 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       end
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
+      proxy = P(namespace, classname)
+      ensure_namespace_loaded!(proxy)
+      
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
-      elsif classname[0,1] =~ /[A-Z]/ && NamespaceObject === P(namespace, classname)
-          parse_block(:namespace => P(namespace, classname), :scope => :class)
+      elsif classname[0,1] =~ /[A-Z]/ && NamespaceObject === proxy
+          parse_block(:namespace => proxy, :scope => :class)
       else
         raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
       end
