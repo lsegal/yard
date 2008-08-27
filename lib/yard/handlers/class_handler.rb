@@ -19,11 +19,19 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
       proxy = Proxy.new(namespace, classname)
-      ensure_namespace_loaded!(proxy)
+      
+      # Allow constants to reference class names
+      if ConstantObject === proxy
+        if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
+          proxy = Proxy.new(namespace, proxy.value)
+        else
+          raise YARD::Handlers::UndocumentableError, "constant class reference '#{classname}'"
+        end
+      end
       
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
-      elsif classname[0,1] =~ /[A-Z]/ && NamespaceObject === proxy
+      elsif classname[0,1] =~ /[A-Z]/ 
           parse_block(:namespace => proxy, :scope => :class)
       else
         raise YARD::Handlers::UndocumentableError, "class '#{classname}'"

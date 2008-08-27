@@ -54,3 +54,8 @@ module Holder
     def a; end
   end
 end
+
+CONST = String
+class << CONST
+  def classmethod; end
+end

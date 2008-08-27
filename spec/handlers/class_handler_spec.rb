@@ -70,13 +70,19 @@ describe YARD::Handlers::ClassHandler do
     end
   end
   
-  it "should not try to document 'class << SomeConstant'" do
-    Registry.clear
-    undoc_error <<-eof
-      ConstClass = Object.new
-      class << ConstClass
-        def method; end
-      end
-    eof
+  it "should document 'class << SomeConstant' by using SomeConstant's value as a reference to the real class name" do
+    Registry.at('String::classmethod').should_not be_nil
   end
+  
+  it "should raise an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do
+    ['not.aclass', 'self', 'AnotherClass.new'].each do |klass|
+      Registry.clear
+      undoc_error <<-eof
+        CONST = #{klass}
+        class << CONST; end
+      eof
+      Registry.at(klass).should be_nil
+    end
+  end
+  
 end
