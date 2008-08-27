@@ -49,7 +49,7 @@ module YARD
       
       # @todo Refactor into own SimpleMarkup subclass
       def fix_typewriter(text)
-        text.gsub(/\+(?! )([^\+]+)(?! )\+/, '<tt>\1</tt>')
+        text.gsub(/\+(?! )([^\+]{1,900})(?! )\+/, '<tt>\1</tt>')
       end
       
       # Don't allow -- to turn into &#8212; element. The chances of this being
