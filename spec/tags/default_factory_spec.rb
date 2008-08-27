@@ -74,7 +74,7 @@ describe YARD::Tags::DefaultFactory, '#parse_tag_with_types' do
   end
   
   it "should raise an error if a name is specified before type list" do
-    lambda { parse_types('b<String> desc') }.should raise_error(ArgumentError, 'cannot specify a name before type list for \'@test\'')
+    lambda { parse_types('b<String> desc') }.should raise_error(YARD::Tags::TagFormatError, 'cannot specify a name before type list for \'@test\'')
   end
 end
 
