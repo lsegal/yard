@@ -108,6 +108,7 @@ module YARD
     autoload :RefTag,         'yard/tags/ref_tag'
     autoload :RefTagList,     'yard/tags/ref_tag_list'
     autoload :Tag,            'yard/tags/tag'
+    autoload :TagFormatError, 'yard/tags/tag_format_error'
   end
 
   autoload :Docstring, 'yard/docstring'

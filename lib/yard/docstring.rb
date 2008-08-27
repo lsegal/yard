@@ -100,8 +100,10 @@ module YARD
           @tags.push *@tag_factory.send(tag_method, tag_buf) 
         end
       else
-        log.warn "Unknown tag @#{tag_name} in documentation" + (object ? " for `#{object.path}`" : "")
+        log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
+    rescue Tags::TagFormatError
+      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
     ##

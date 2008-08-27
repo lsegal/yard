@@ -34,7 +34,7 @@ module YARD
       # @return [Tag]          a tag object with the tag_name, types and text values filled
       def parse_tag_with_types(tag_name, text)
         name, types, text = *extract_types_and_name_from_text(text)
-        raise ArgumentError, "cannot specify a name before type list for '@#{tag_name}'" if name
+        raise TagFormatError, "cannot specify a name before type list for '@#{tag_name}'" if name
         Tag.new(tag_name, text, types)
       end
       
