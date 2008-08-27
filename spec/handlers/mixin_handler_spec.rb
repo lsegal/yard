@@ -27,4 +27,8 @@ describe YARD::Handlers::MixinHandler do
     P(:Y).mixins.should include(P('B::C'))
     P(:Y).mixins.should include(P(:B))
   end
+  
+  it "should treat a mixed in Constant by taking its value as the real object name" do
+    P(:Y).mixins.should include(Registry.at('B::D'))
+  end
 end

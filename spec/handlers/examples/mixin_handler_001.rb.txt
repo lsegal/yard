@@ -1,5 +1,10 @@
 module A; end
-module B; module C; end end
+module B; 
+  module C; end 
+  module D; end
+end
+
+QQQ = B::D
 
 class X
   include A
@@ -9,4 +14,5 @@ end
 module Y
   include B::C, B if X == 2
   include A
+  include QQQ
 end

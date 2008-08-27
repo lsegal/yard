@@ -71,12 +71,12 @@ module YARD::CodeObjects
     
     def included_constants
       mixins.reverse.inject([]) do |list, mixin|
-        if mixin.is_a?(Proxy)
-          list
-        else
+        if mixin.respond_to? :constants
           list += mixin.constants.reject do |o| 
             child(:name => o.name) || list.find {|o2| o2.name == o.name }
           end
+        else
+          list
         end
       end
     end

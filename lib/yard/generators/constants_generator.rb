@@ -1,6 +1,7 @@
 module YARD
   module Generators
     class ConstantsGenerator < Base
+      before_generate :is_namespace?
       before_section :constants, :has_constants?
       before_section :inherited, :has_inherited_constants?
       before_section :included,  :has_included_constants?

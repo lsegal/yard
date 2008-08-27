@@ -73,6 +73,10 @@ module YARD
             Registry.objects[keyname] = super(namespace, name, *args, &block)
           end
         end
+        
+        def ===(other)
+          self >= other.class ? true : false
+        end
       end
           
       def initialize(namespace, name, *args)

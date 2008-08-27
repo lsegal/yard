@@ -18,7 +18,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       end
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
-      proxy = P(namespace, classname)
+      proxy = Proxy.new(namespace, classname)
       ensure_namespace_loaded!(proxy)
       
       if classname == "self"

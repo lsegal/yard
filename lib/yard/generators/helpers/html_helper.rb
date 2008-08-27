@@ -70,8 +70,9 @@ module YARD
           else
             obj = P(current_object, name)
             if obj.is_a?(CodeObjects::Proxy)
-              log.warn "In documentation for #{current_object.path}: Cannot resolve link to #{obj.path} from text:"
-              log.warn '...' + text[/(.{0,20}\{#{Regexp.quote name}.*?\}.{0,20})/, 1].gsub(/\n/,"\n\t") + '...'
+              match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
+              log.warn "In file `#{current_object.file}':#{current_object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
+              log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
             end
           
             "#{sp}<tt>" + linkify(obj, title) + "</tt>" 

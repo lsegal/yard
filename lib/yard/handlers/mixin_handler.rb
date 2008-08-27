@@ -6,7 +6,14 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
       mixin.strip!
       if mixmatch = mixin[/\A(#{NAMESPACEMATCH})\s*/, 1] 
         obj = Proxy.new(namespace, mixmatch)
-        obj.type = :module if obj.is_a?(Proxy)
+        
+        case obj
+        when Proxy
+          obj.type = :module
+        when ConstantObject # If a constant is included, use it's value as the real object
+          obj = Proxy.new(namespace, obj.value)
+        end
+
         namespace.mixins << obj
       else
         raise YARD::Handlers::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
