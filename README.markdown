@@ -5,7 +5,7 @@ YARD Release 0.2.2 (June 16th 2008)
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
 **Git**:       [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:    Loren Segal   
-**Copyright**: 2007-2008   
+**Copyright**: 2007-2009
 
 
 SYNOPSIS
