@@ -19,6 +19,7 @@ end
 desc "Install the gem locally"
 task :install => :package do 
   sh "#{SUDO} gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local"
+  sh "rm -rf pkg/yard-#{SPEC.version}" unless ENV['KEEP_FILES']
 end
 
 desc "Run all specs"
