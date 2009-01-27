@@ -85,4 +85,12 @@ describe YARD::Handlers::ClassHandler do
     end
   end
   
+  it "should document 'class Exception' without running into superclass issues" do
+    Parser::SourceParser.parse_string <<-eof
+      class Exception
+      end
+    eof
+    Registry.at(:Exception).should_not be_nil
+  end
+  
 end
