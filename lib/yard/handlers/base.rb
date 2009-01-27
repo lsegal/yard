@@ -243,16 +243,8 @@ module YARD
           # as the block for #register. We need to make sure this gets to the object.
           yield(object) if block_given? 
           
-          # Add file and line number, but for class/modules this is 
-          # only done if there is a docstring for this specific definition.
-          if (object.is_a?(NamespaceObject) && statement.comments) || !object.is_a?(NamespaceObject)
-            object.file = parser.file
-            object.line = statement.tokens.first.line_no
-          elsif object.is_a?(NamespaceObject) && !statement.comments
-            object.file ||= parser.file
-            object.line ||= statement.tokens.first.line_no
-          end
-          
+          object.add_file(parser.file, statement.tokens.first.line_no, statement.comments)
+
           # Add docstring if there is one.
           object.docstring = statement.comments if statement.comments
           

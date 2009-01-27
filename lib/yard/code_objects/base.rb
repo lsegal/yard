@@ -40,9 +40,8 @@ module YARD
     BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
     
     class Base  
-      attr_reader :name
-      attr_accessor :namespace
-      attr_accessor :source, :signature, :file, :line, :docstring, :dynamic
+      attr_reader :name, :files
+      attr_accessor :namespace, :source, :signature, :docstring, :dynamic
       
       def dynamic?; @dynamic end
       
@@ -85,11 +84,48 @@ module YARD
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end
 
+        @files = []
+        @current_file_has_comments = false
         @name = name.to_sym
         @tags = []
         @docstring = Docstring.new('', self)
         self.namespace = namespace
         yield(self) if block_given?
+      end
+      
+      # Associates a file with a code object, optionally adding the line where it was defined.
+      # By convention, '<STDIN>' should be used to associate code that comes form standard input.
+      # 
+      # @param [String] file the filename ('<STDIN>' for standard input)
+      # @param [Fixnum, nil] the line number where the object lies in the file
+      # @param [Boolean] whether or not the definition has comments associated. This
+      #   will allow {#file} to return the definition where the comments were made instead
+      #   of any empty definitions that might have been parsed before (module namespaces for instance).
+      def add_file(file, line = nil, has_comments = false)
+        raise(ArgumentError, "file cannot be nil or empty") if file.nil? || file == ''
+        obj = [file.to_s, line]
+        if has_comments && !@current_file_has_comments
+          @current_file_has_comments = true
+          @files.unshift(obj) 
+        else
+          @files << obj # back of the line
+        end
+      end
+      
+      # Returns the filename the object was first parsed at, taking
+      # definitions with docstrings first.
+      # 
+      # @return [String] a filename
+      def file
+        @files.first ? @files.first[0] : nil
+      end
+
+      # Returns the line the object was first parsed at (or nil)
+      # 
+      # @return [Fixnum] the line where the object was first defined.
+      # @return [nil] if there is no line associated with the object
+      def line
+        @files.first ? @files.first[1] : nil
       end
       
       def ==(other)

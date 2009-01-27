@@ -15,8 +15,7 @@ class YARD::Handlers::AliasHandler < YARD::Handlers::Base
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
       o.visibility = visibility
       o.scope = scope
-      o.line = statement.tokens.first.line_no
-      o.file = parser.file
+      o.add_file(parser.file, statement.tokens.first.line_no)
       o.docstring = statement.comments
 
       if old_obj

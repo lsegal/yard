@@ -153,4 +153,49 @@ describe YARD::CodeObjects::Base do
     Parser::SourceParser.parse_string "def x; 2 end"
     Registry.at('#x').source.should == "def x; 2 end"
   end
+  
+  it "should set file and line information" do
+    Parser::SourceParser.parse_string <<-eof
+      class X; end
+    eof
+    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).line.should == 1
+  end
+  
+  it "should maintain all file associations when objects are defined multiple times in one file" do
+    Parser::SourceParser.parse_string <<-eof
+      class X; end
+      class X; end
+      class X; end
+    eof
+    
+    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).line.should == 1
+    Registry.at(:X).files.should == [['<STDIN>', 1], ['<STDIN>', 2], ['<STDIN>', 3]]
+  end
+
+  it "should maintain all file associations when objects are defined multiple times in multiple files" do
+    3.times do |i|
+      p1 = Parser::SourceParser.new
+      p1.instance_variable_set("@file", "file#{i+1}.rb")
+      p1.parse StringIO.new("class X; end")
+    end
+    
+    Registry.at(:X).file.should == 'file1.rb'
+    Registry.at(:X).line.should == 1
+    Registry.at(:X).files.should == [['file1.rb', 1], ['file2.rb', 1], ['file3.rb', 1]]
+  end
+
+  it "should prioritize the definition with a docstring when returning #file" do
+    Parser::SourceParser.parse_string <<-eof
+      class X; end
+      class X; end
+      # docstring
+      class X; end
+    eof
+    
+    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).line.should == 4
+    Registry.at(:X).files.should == [['<STDIN>', 4], ['<STDIN>', 1], ['<STDIN>', 2]]
+  end
 end
