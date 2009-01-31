@@ -154,7 +154,7 @@ module YARD
       
       def method_missing(meth, *args, &block)
         if meth.to_s =~ /=$/
-          self[meth.to_s[0..-2]] = *args
+          self[meth.to_s[0..-2]] = args.first
         elsif instance_variable_get("@#{meth}")
           self[meth]
         else
