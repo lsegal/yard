@@ -1,6 +1,12 @@
 require 'cgi'
-require 'rdoc/markup/simple_markup'
-require 'rdoc/markup/simple_markup/to_html'
+
+if RUBY19
+  require 'rdoc/markup'
+  require 'rdoc/markup/to_html'
+else
+  require 'rdoc/markup/simple_markup'
+  require 'rdoc/markup/simple_markup/to_html'
+end
 
 require 'rubygems'
 begin require 'bluecloth'; rescue LoadError; end
@@ -9,8 +15,8 @@ begin require 'redcloth'; rescue LoadError; end
 module YARD
   module Generators::Helpers
     module HtmlHelper
-      SimpleMarkup = SM::SimpleMarkup.new
-      SimpleMarkupHtml = SM::ToHtml.new
+      SimpleMarkup = RUBY19 ? RDoc::Markup.new : SM::SimpleMarkup.new
+      SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
     
       def h(text)
         CGI.escapeHTML(text.to_s)

@@ -1,4 +1,5 @@
 require 'stringio'
+require 'continuation' if RUBY19
 
 module YARD
   module Parser

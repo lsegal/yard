@@ -117,14 +117,6 @@ module YARD
       def kind_of?(klass)
         self.class <= klass
       end
-
-      def object_id
-        if obj = to_obj
-          obj.object_id
-        else
-          nil
-        end
-      end
       
       def respond_to?(meth, include_private = false)
         if obj = to_obj

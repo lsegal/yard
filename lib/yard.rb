@@ -6,6 +6,9 @@ module YARD
   def self.parse(*args) Parser::SourceParser.parse(*args) end
 end
 
+# Keep track of Ruby version for compatibility code
+RUBY19, RUBY18 = *(RUBY_VERSION.index("1.9.") == 0 ? [true, false] : [false, true])
+
 $:.unshift(YARD::ROOT)
 
 files  = ['yard/logging', 'yard/autoload']
