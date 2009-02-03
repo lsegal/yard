@@ -7,7 +7,7 @@ module YARD
 end
 
 # Keep track of Ruby version for compatibility code
-RUBY19, RUBY18 = *(RUBY_VERSION.index("1.9.") == 0 ? [true, false] : [false, true])
+RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9" ? [true, false] : [false, true])
 
 $:.unshift(YARD::ROOT)
 
