@@ -41,6 +41,35 @@ class Node < Array
     's(' + typeinfo + self.map(&:inspect).join(", ") + ')'
   end
   
+  def to_s(use_source = true, indent = 0, root = nil)
+    root ||= self
+    buf = ""
+    use_nl = false
+    if use_source
+      if src = root[:source]
+        src = root[:source].gsub(/\n/, "\n\t") if indent > 0
+        buf << src
+        if buf[-1] != "\n"
+          buf << " "
+          use_nl = true
+        end
+      end
+
+      root.each do |node|
+        buf << node.to_s(use_source, indent + 1) if Node === node
+      end
+      
+      if [:def, :if, :while, :class].include? root.type
+        buf << "#{use_nl ? "\n" : ""}end#{use_nl ? "\n" : ""}"
+      end
+    else
+      traverse do |node|
+        buf << handle(node[:type])
+      end
+    end
+    buf
+  end
+
   def delete(key)
     options.delete(key)
   end
@@ -65,12 +94,13 @@ class Node < Array
     traverse do |node|
       next unless Node === node
       
-      comments.reverse.each.with_index do |c, i|
+      comments.each.with_index do |c, i|
         next if c.empty? || node[:line].nil?
         if node[:line].between?(c.last, c.last + 2)
           
-          comments.delete_at(comments.size - i - 1)
+          comments.delete_at(i)
           node[:docstring] = c.first
+          break
         end
       end
     end
@@ -82,12 +112,14 @@ class Node < Array
     traverse do |node|
       next unless Node === node
       
-      source.reverse.each.with_index do |c, i|
+      source.each.with_index do |c, i|
         next if c.empty? || node[:line].nil?
+        next if node.type[0] == "@"
         if node[:line] == c.last
           
-          source.delete_at(source.size - i - 1)
-          node[:source] = c.first
+          source.delete_at(i)
+          node[:source] = c.first unless c.first.empty?
+          break
         end
       end
     end
@@ -207,9 +239,11 @@ class RipperSexp < Ripper
     return if (@data.empty? || @data.last.first.empty?) && node =~ /\A[ \t]+\Z/
     @seen_nsp = true if node[0] != "#" && node !~ /\A[ \t]+\Z/
     add_data(node)
+    @last_token = node
   end
   
   def add_data(data)
+    return if data == "end" || data == "}"
     if @data.empty? || @data.last.empty? || @new_stmt
       @data.push ["", lineno]
       @new_stmt = false
@@ -305,8 +339,10 @@ class RipperSexp < Ripper
   
   def on_ignored_nl(token)
     @last_seen_nsp, @seen_nsp = @seen_nsp, false
+    new_stmt = true if @last_token == ";"
     visit_token(token)
     visit(:@ignored_nl, lineno)
+    @new_stmt = true if new_stmt
   end
   
   def on_semicolon(token)
@@ -333,3 +369,5 @@ p = RipperSexp.parse(<<-"eof")
 eof
 
 pp p
+
+puts p.to_s
