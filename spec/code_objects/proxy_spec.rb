@@ -83,4 +83,9 @@ describe YARD::CodeObjects::Proxy do
     P("InvalidClass").type = :class
     P("InvalidClass").type.should == :class
   end
+  
+  it "should never equal Registry.root" do
+    P("MYPROXY").should_not == Registry.root
+    P("X::A").should_not == Registry.root
+  end
 end

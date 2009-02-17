@@ -99,6 +99,10 @@ module YARD
     end
 
     def resolve(namespace, name, proxy_fallback = false)
+      if namespace.is_a?(CodeObjects::Proxy)
+        return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
+      end
+      
       namespace = root if namespace == :root || !namespace
 
       newname = name.to_s.gsub(/^#{CodeObjects::ISEP}/, '')

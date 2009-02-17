@@ -32,7 +32,7 @@ class YARD::Handlers::ClassHandler < YARD::Handlers::Base
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
       elsif classname[0,1] =~ /[A-Z]/ 
-          parse_block(:namespace => proxy, :scope => :class)
+        parse_block(:namespace => proxy, :scope => :class)
       else
         raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
       end

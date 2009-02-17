@@ -23,7 +23,7 @@ module YARD
           namespace = $`.empty? ? Registry.root : Proxy.new(namespace, $`)
           name = $1
         end 
-
+        
         @name = name.to_sym
         @namespace = namespace
         

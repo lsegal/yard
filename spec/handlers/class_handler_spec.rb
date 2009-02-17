@@ -93,4 +93,9 @@ describe YARD::Handlers::ClassHandler do
     Registry.at(:Exception).should_not be_nil
   end
   
+  it "should document 'class RT < XX::RT' with proper superclass even if XX::RT is a proxy" do
+    Registry.at(:RT).should_not be_nil
+    Registry.at(:RT).superclass.should == P('XX::RT')
+  end
+  
 end

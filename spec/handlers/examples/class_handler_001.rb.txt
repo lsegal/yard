@@ -20,6 +20,8 @@ module B
   end
 end
 
+class RT < XX::RT; end
+
 class Test1 < R "something"
 end
 

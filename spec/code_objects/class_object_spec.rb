@@ -172,5 +172,13 @@ describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
     o.superclass = o3
     o.is_exception?.should == true
   end
+  
+  it "should not raise ArgumentError if superclass is proxy in different namespace" do
+    lambda do
+      o = ClassObject.new(:root, :X) do |o|
+        o.superclass = P('OTHER::X')
+      end
+    end.should_not raise_error(ArgumentError)
+  end
 end
   
