@@ -7,6 +7,10 @@ describe YARD::Handlers::MixinHandler do
     Registry.at(:X).mixins(:instance).should include(P(:A))
     Registry.at(:Y).mixins(:instance).should include(P(:A))
   end
+
+  it "should handle includes in class << self" do
+    Registry.at(:Y).mixins(:class).should include(P(:A))
+  end
   
   it "should handle includes for complex namespaces" do
   end

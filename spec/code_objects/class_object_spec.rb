@@ -6,10 +6,12 @@ describe YARD::CodeObjects::ClassObject do
     @mixin = ModuleObject.new(:root, :SomeMixin)
     @mixin2 = ModuleObject.new(:root, :SomeMixin2)
     @mixin3 = ModuleObject.new(:root, :SomeMixin3)
+    @mixin4 = ModuleObject.new(:root, :SomeMixin4)
     @mixin2.mixins(:instance) << @mixin3
     @superyard = ClassObject.new(:root, :SuperYard)
     @superyard.superclass = P("String")
     @superyard.mixins(:instance) << @mixin2
+    @superyard.mixins(:class) << @mixin4
     @yard = ClassObject.new(:root, :YARD)
     @yard.superclass = @superyard
     @yard.mixins(:instance) << @mixin

@@ -24,25 +24,27 @@ describe YARD::CodeObjects::NamespaceObject do
   end
   
   it "should not list included methods that are already defined in the namespace using #meths" do
-    # Once we have a way of dealing with class-scoped mixins,
-    # we should test that a class-scoped foo method that's been included
-    # is in b.meths and b.included_meths
-    a = ModuleObject.new(nil, :Mod)
+    a = ModuleObject.new(nil, :Mod1)
     ameth = MethodObject.new(a, :testing)
-    b = NamespaceObject.new(nil, :YARD)
-    bmeth = MethodObject.new(b, :testing)
-    bmeth2 = MethodObject.new(b, :foo)
-    b.mixins(:instance) << a
+    b = ModuleObject.new(nil, :Mod2)
+    bmeth = MethodObject.new(b, :foo)
+    c = NamespaceObject.new(nil, :YARD)
+    cmeth = MethodObject.new(c, :testing)
+    cmeth2 = MethodObject.new(c, :foo)
+    c.mixins(:instance) << a
+    c.mixins(:class) << b
     
-    meths = b.meths
+    meths = c.meths
     meths.should include(bmeth)
-    meths.should include(bmeth2)
+    meths.should include(cmeth)
+    meths.should include(cmeth2)
     meths.should_not include(ameth)
     
-    meths = b.included_meths
+    meths = c.included_meths
+    meths.should include(bmeth)
     meths.should_not include(ameth)
-    meths.should_not include(bmeth)
-    meths.should_not include(bmeth2)
+    meths.should_not include(cmeth)
+    meths.should_not include(cmeth2)
   end
   
   it "should not list methods overridden by another included module" do
@@ -53,10 +55,16 @@ describe YARD::CodeObjects::NamespaceObject do
     c = NamespaceObject.new(nil, :YARD)
     c.mixins(:instance) << a
     c.mixins(:instance) << b
+    c.mixins(:class) << b
+    c.mixins(:class) << a
     
-    meths = c.included_meths
+    meths = c.included_meths(:scope => :instance)
     meths.should_not include(ameth)
     meths.should include(bmeth)
+
+    meths = c.included_meths(:scope => :class)
+    meths.should include(ameth)
+    meths.should_not include(bmeth)
   end
   
   it "should list class attributes using #class_attributes" do
