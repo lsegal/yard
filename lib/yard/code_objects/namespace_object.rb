@@ -51,11 +51,14 @@ module YARD::CodeObjects
     end
     
     def included_meths(opts = {})
+      # At the moment, we don't record class-scoped includes as anything special,
+      # so we assume no included methods are class-scoped.
+      return [] if opts[:scope] == [:class]
       mixins.reverse.inject([]) do |list, mixin|
         if mixin.is_a?(Proxy)
           list
         else
-          list += mixin.meths(opts).reject do |o| 
+          list += mixin.meths(opts.merge(:scope => :instance)).reject do |o| 
             child(:name => o.name, :scope => o.scope) || 
               list.find {|o2| o2.name == o.name && o2.scope == o.scope }
           end
