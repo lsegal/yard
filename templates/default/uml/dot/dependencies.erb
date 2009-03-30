@@ -1,5 +1,5 @@
 <% for obj in @objects.select {|o| CodeObjects::NamespaceObject === o } %>
-  <% for depobj in obj.mixins %>
+  <% for depobj in obj.mixins(:instance, :class) %>
     <% [obj, depobj].each do |o| %>
       <% if o != Registry.root && (!o.respond_to?(:children) || !namespaces(o).empty?) %>
         <%= format_path o %> [label="{<%= o.type %> <%= o.name %>}" rank=sink];

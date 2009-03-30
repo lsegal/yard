@@ -28,7 +28,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     MethodObject.new(@other, :xyz)
     MethodObject.new(@other, :baz, :class)
     
-    @yard.mixins << @other
+    @yard.mixins(:instance) << @other
   end
   
   it "should list all methods (including mixin methods) via #meths" do

@@ -61,7 +61,7 @@ module YARD
       # 
       def included_constants_by_module
         all_consts = current_object.included_constants
-        current_object.mixins.each do |superclass|
+        current_object.mixins(:instance).each do |superclass|
           next if superclass.is_a?(CodeObjects::Proxy)
           opts = { :included => false, :inherited => false }
           consts = superclass.constants(opts).select {|c| all_consts.include?(c) }

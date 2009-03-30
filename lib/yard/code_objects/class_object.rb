@@ -17,7 +17,7 @@ module YARD::CodeObjects
     end
     
     def inheritance_tree(include_mods = false)
-      list = [self] + (include_mods ? mixins : [])
+      list = [self] + (include_mods ? mixins(:instance) : [])
       if superclass.is_a? Proxy
         list << superclass unless superclass == P(:Object)
       elsif superclass.respond_to? :inheritance_tree

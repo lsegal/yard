@@ -14,7 +14,7 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
           obj = Proxy.new(namespace, obj.value)
         end
 
-        namespace.mixins << obj
+        namespace.mixins(scope) << obj
       else
         raise YARD::Handlers::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
       end

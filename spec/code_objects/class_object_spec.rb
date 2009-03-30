@@ -7,10 +7,10 @@ describe YARD::CodeObjects::ClassObject do
     @mixin2 = ModuleObject.new(:root, :SomeMixin2)
     @superyard = ClassObject.new(:root, :SuperYard)
     @superyard.superclass = P("String")
-    @superyard.mixins << @mixin2
+    @superyard.mixins(:instance) << @mixin2
     @yard = ClassObject.new(:root, :YARD)
     @yard.superclass = @superyard
-    @yard.mixins << @mixin
+    @yard.mixins(:instance) << @mixin
   end
   
   it "should show the proper inheritance tree" do

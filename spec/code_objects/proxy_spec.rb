@@ -28,7 +28,7 @@ describe YARD::CodeObjects::Proxy do
   it "should return the object if it's an included Module" do
     yardobj = ModuleObject.new(:root, :YARD)
     pathobj = ClassObject.new(:root, :TestClass)
-    pathobj.mixins << yardobj
+    pathobj.mixins(:instance) << yardobj
     P(P(nil, :TestClass), :YARD).should be_instance_of(ModuleObject)
   end
   

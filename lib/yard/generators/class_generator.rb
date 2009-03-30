@@ -8,7 +8,8 @@ module YARD
           :header,
           [
             G(InheritanceGenerator), 
-            G(MixinsGenerator), 
+            G(MixinsGenerator, :scope => :class),
+            G(MixinsGenerator, :scope => :instance),
             G(DocstringGenerator), 
             G(AttributesGenerator), 
             G(ConstantsGenerator),

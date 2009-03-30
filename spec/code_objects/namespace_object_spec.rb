@@ -32,7 +32,7 @@ describe YARD::CodeObjects::NamespaceObject do
     b = NamespaceObject.new(nil, :YARD)
     bmeth = MethodObject.new(b, :testing)
     bmeth2 = MethodObject.new(b, :foo)
-    b.mixins << a
+    b.mixins(:instance) << a
     
     meths = b.meths
     meths.should include(bmeth)
@@ -51,8 +51,8 @@ describe YARD::CodeObjects::NamespaceObject do
     b = ModuleObject.new(nil, :Mod2)
     bmeth = MethodObject.new(b, :testing)
     c = NamespaceObject.new(nil, :YARD)
-    c.mixins << a
-    c.mixins << b
+    c.mixins(:instance) << a
+    c.mixins(:instance) << b
     
     meths = c.included_meths
     meths.should_not include(ameth)
