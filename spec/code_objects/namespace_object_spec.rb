@@ -24,9 +24,11 @@ describe YARD::CodeObjects::NamespaceObject do
   end
   
   it "should not list included methods that are already defined in the namespace using #meths" do
+    # Once we have a way of dealing with class-scoped mixins,
+    # we should test that a class-scoped foo method that's been included
+    # is in b.meths and b.included_meths
     a = ModuleObject.new(nil, :Mod)
     ameth = MethodObject.new(a, :testing)
-    ameth2 = MethodObject.new(a, :foo, :class)
     b = NamespaceObject.new(nil, :YARD)
     bmeth = MethodObject.new(b, :testing)
     bmeth2 = MethodObject.new(b, :foo)
@@ -35,11 +37,9 @@ describe YARD::CodeObjects::NamespaceObject do
     meths = b.meths
     meths.should include(bmeth)
     meths.should include(bmeth2)
-    meths.should include(ameth2)
     meths.should_not include(ameth)
     
     meths = b.included_meths
-    meths.should include(ameth2)
     meths.should_not include(ameth)
     meths.should_not include(bmeth)
     meths.should_not include(bmeth2)

@@ -26,6 +26,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     @other = ModuleObject.new(:root, :SomeMod)
     MethodObject.new(@other, :mixmethod)
     MethodObject.new(@other, :xyz)
+    MethodObject.new(@other, :baz, :class)
     
     @yard.mixins << @other
   end
@@ -52,6 +53,8 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should_not include(P("YARD#foo"))
     meths.should_not include(P("YARD#foo2"))
     meths.should_not include(P("SomeMod#mixmethod"))
+    meths.should_not include(P("SomeMod::baz"))
+    meths.should include(P("YARD::bar"))
   end
   
   it "should allow :included to be set" do
