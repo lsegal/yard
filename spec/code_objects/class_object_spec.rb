@@ -5,6 +5,8 @@ describe YARD::CodeObjects::ClassObject do
     Registry.clear 
     @mixin = ModuleObject.new(:root, :SomeMixin)
     @mixin2 = ModuleObject.new(:root, :SomeMixin2)
+    @mixin3 = ModuleObject.new(:root, :SomeMixin3)
+    @mixin2.mixins(:instance) << @mixin3
     @superyard = ClassObject.new(:root, :SuperYard)
     @superyard.superclass = P("String")
     @superyard.mixins(:instance) << @mixin2
@@ -18,7 +20,7 @@ describe YARD::CodeObjects::ClassObject do
   end
   
   it "should show proper inheritance tree when mixins are included" do
-    @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, P(:String)]
+    @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin2, @mixin3, P(:String)]
   end
 end
 

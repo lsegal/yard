@@ -74,3 +74,26 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should include(P("SomeMod#xyz"))
   end
 end
+
+describe YARD::CodeObjects::ModuleObject, "#inheritance_tree" do
+  before do
+    Registry.clear
+
+    @mod1 = ModuleObject.new(:root, :Mod1)
+    @mod2 = ModuleObject.new(:root, :Mod2)
+    @mod3 = ModuleObject.new(:root, :Mod3)
+    @mod4 = ModuleObject.new(:root, :Mod4)
+
+    @mod1.mixins(:instance) << @mod2
+    @mod2.mixins(:instance) << @mod3
+    @mod1.mixins(:instance) << @mod4
+  end
+
+  it "should show only itself for an inheritance tree without included modules" do
+    @mod1.inheritance_tree.should == [@mod1]
+  end
+
+  it "should show proper inheritance three when modules are included" do
+    @mod1.inheritance_tree(true).should == [@mod1, @mod2, @mod3, @mod4]
+  end
+end
