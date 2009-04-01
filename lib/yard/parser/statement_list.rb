@@ -47,8 +47,6 @@ module YARD
         while tk = @tokens.shift
           break if process_token(tk)
 
-          #break if @new_statement && @level == 0
-
           @before_last_tk = @last_tk
           @last_tk = tk # Save last token
           @last_ns_tk = tk unless [TkSPACE, TkNL, TkEND_OF_SCRIPT].include? tk.class
@@ -70,15 +68,9 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not the statement has been ended by +tk+
       def process_token(tk)
-        #p tk.class
         # !!!!!!!!!!!!!!!!!!!! REMOVED TkfLPAREN, TkfLBRACK
         @open_parens += 1 if [TkLPAREN, TkLBRACK].include? tk.class
         @open_parens -= 1 if [TkRPAREN, TkRBRACK].include? tk.class
-
-        #if @open_parens < 0 || @level < 0
-        #  STDERR.puts @block.to_s + " TOKEN #{tk.inspect}"
-        #  exit
-        #end
 
         return if process_initial_comment(tk)
 
@@ -129,7 +121,6 @@ module YARD
       def process_block_opener(tk)
         return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
 
-        #p "#{tk.line_no} #{@level} #{tk} \t#{tk.text} #{tk.lex_state}"
         @stmt_number += 1
         @new_statement = true
         @level += 1
@@ -181,7 +172,6 @@ module YARD
 
         @stmt_number += 1
         @new_statement = true
-        #p "NEW STATEMENT #{@block.to_s}"
 
         # Unless the statement opened a block, we want to stay on the same level
         return true unless @open_block && @open_block.first == @level
@@ -207,8 +197,6 @@ module YARD
           return
         end
 
-        #puts "Block of #{@statement}"
-        #puts "#{@stmt_number} #{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
         @block ||= TokenList.new
         @block << tk
       end
