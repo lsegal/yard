@@ -80,21 +80,7 @@ module YARD
         #  exit
         #end
 
-        # Get the initial comments
-        if @statement.empty?
-          # Two new-lines in a row will destroy any comment blocks
-          if [TkCOMMENT].include?(tk.class)  && @last_tk.class == TkNL &&
-            (@before_last_tk && (@before_last_tk.class == TkNL || @before_last_tk.class == TkSPACE))
-            @comments = nil
-          elsif tk.class == TkCOMMENT
-            # Remove the "#" and up to 1 space before the text
-            # Since, of course, the convention is to have "# text"
-            # and not "#text", which I deem ugly (you heard it here first)
-            @comments ||= []
-            @comments << tk.text.gsub(/^#+\s{0,1}/, '')
-            @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
-          end
-        end
+        return if process_initial_comment(tk)
 
         # Ignore any initial comments or whitespace
         unless @statement.empty? && @stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
@@ -172,6 +158,30 @@ module YARD
           return true if @new_statement && @level == 0
           #raise "Unexpected end" if @level < 0
         end
+      end
+
+      ##
+      # Processes a comment token that comes before a statement
+      #
+      # @param [RubyToken::Token] tk the token to process
+      # @return [Boolean] whether or not +tk+ was processed as an initial comment
+      def process_initial_comment(tk)
+        return unless @statement.empty? && tk.class == TkCOMMENT
+
+        # Two new-lines in a row will destroy any comment blocks
+        if @last_tk.class == TkNL && @before_last_tk &&
+            (@before_last_tk.class == TkNL || @before_last_tk.class == TkSPACE)
+          @comments = nil
+          return
+        end
+
+        # Remove the "#" and up to 1 space before the text
+        # Since, of course, the convention is to have "# text"
+        # and not "#text", which I deem ugly (you heard it here first)
+        @comments ||= []
+        @comments << tk.text.gsub(/^#+\s{0,1}/, '')
+        @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
+        true
       end
     end
   end
