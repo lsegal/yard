@@ -39,10 +39,9 @@ module YARD
       # THIS IS MEANT TO BE UGLY.
       def next_statement
         @statement, @block, @comments = TokenList.new, nil, nil
-        @stmt_number, @level = 0, 0
-        @new_statement, @open_block = true, false
+        @first_statement, @new_statement, @open_block = true, true, false
         @last_tk, @last_ns_tk, @before_last_tk = nil, nil, nil
-        @open_parens = 0
+        @level, @open_parens = 0, 0
 
         while tk = @tokens.shift
           break if process_token(tk)
@@ -75,7 +74,7 @@ module YARD
         return if process_initial_comment(tk)
 
         # Ignore any other initial comments or whitespace
-        return if @statement.empty? && @stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+        return if @statement.empty? && @first_statement && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
 
         # Decrease if end or '}' is seen
         @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
@@ -121,7 +120,7 @@ module YARD
       def process_block_opener(tk)
         return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
 
-        @stmt_number += 1
+        @first_statement = false
         @new_statement = true
         @level += 1
       end
@@ -134,7 +133,7 @@ module YARD
         return unless tk.class == TkELSE
 
         @new_statement = true
-        @stmt_number += 1
+        @first_statement = false
         @open_block = false
       end
 
@@ -170,7 +169,7 @@ module YARD
         return true unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
           (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
 
-        @stmt_number += 1
+        @first_statement = false
         @new_statement = true
 
         # Unless the statement opened a block, we want to stay on the same level
@@ -192,7 +191,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def push_token(tk)
-        if @stmt_number == 0
+        if @first_statement
           @statement << tk unless [TkNL, TkSEMICOLON, TkCOMMENT].include?(tk.class)
           return
         end
