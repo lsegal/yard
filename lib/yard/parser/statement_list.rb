@@ -83,61 +83,61 @@ module YARD
         return if process_initial_comment(tk)
 
         # Ignore any other initial comments or whitespace
-        unless @statement.empty? && @stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
-          # Decrease if end or '}' is seen
-          @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
+        return if @statement.empty? && @stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
 
-          process_block_opener(tk)
+        # Decrease if end or '}' is seen
+        @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
 
-          push_token(tk)
+        process_block_opener(tk)
 
-          #puts "#{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
+        push_token(tk)
 
-          # Vouch to open a block when this statement would otherwise end
-          @open_block = [@level, tk.class] if (@new_statement ||
-            (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
-            OPEN_BLOCK_TOKENS.include?(tk.class)
+        #puts "#{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
 
-          # Check if this token creates a new statement or not
-          #puts "#{@open_parens} open brackets for: #{@statement.to_s}"
-          if @open_parens == 0 && ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
-            (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
+        # Vouch to open a block when this statement would otherwise end
+        @open_block = [@level, tk.class] if (@new_statement ||
+          (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
+          OPEN_BLOCK_TOKENS.include?(tk.class)
 
-            # Make sure we don't have any running expressions
-            # This includes things like
-            #
-            # class <
-            #   Foo
-            #
-            # if a ||
-            #    b
-            if (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
-                (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
-              @stmt_number += 1
-              @new_statement = true
-              #p "NEW STATEMENT #{@block.to_s}"
+        # Check if this token creates a new statement or not
+        #puts "#{@open_parens} open brackets for: #{@statement.to_s}"
+        if @open_parens == 0 && ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
+          (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
 
-              # The statement started with a if/while/begin, so we must go to the next level now
-              if @open_block && @open_block.first == @level
-                if tk.class == TkNL && @block.nil?
-                  @block = TokenList.new
-                  @block << tk
-                end
+          # Make sure we don't have any running expressions
+          # This includes things like
+          #
+          # class <
+          #   Foo
+          #
+          # if a ||
+          #    b
+          if (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
+              (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
+            @stmt_number += 1
+            @new_statement = true
+            #p "NEW STATEMENT #{@block.to_s}"
 
-                @open_block = false
-                @level += 1
+            # The statement started with a if/while/begin, so we must go to the next level now
+            if @open_block && @open_block.first == @level
+              if tk.class == TkNL && @block.nil?
+                @block = TokenList.new
+                @block << tk
               end
+
+              @open_block = false
+              @level += 1
             end
-          elsif tk.class != TkSPACE
-            @new_statement = false
           end
-
-          process_else(tk)
-
-          # We're done if we've ended a statement and we're at level 0
-          return true if @new_statement && @level == 0
-          #raise "Unexpected end" if @level < 0
+        elsif tk.class != TkSPACE
+          @new_statement = false
         end
+
+        process_else(tk)
+
+        # We're done if we've ended a statement and we're at level 0
+        return true if @new_statement && @level == 0
+        #raise "Unexpected end" if @level < 0
       end
 
       ##
