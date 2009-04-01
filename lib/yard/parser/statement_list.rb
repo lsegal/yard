@@ -136,6 +136,10 @@ module YARD
       ##
       # Processes a newly-opened block statement, such as +if+ or +while+
       #
+      # This differs from {process_block_opener} in that it opens block statements
+      # that have expressions attached, such as +while+ and +for+.
+      # These expressions are handled by {process_new_statement}.
+      #
       # @param [RubyToken::Token] tk the token to process
       def process_block_statement(tk)
         @open_block = [@level, tk.class] if (@new_statement ||
@@ -149,21 +153,27 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not a new statement has been opened or remains open
       def process_new_statement(tk)
+        # Whitespace means that we keep the same value of @new_statement as last token
         return true if tk.class == TkSPACE
+
+        # We never start a statement within parens...
+        # NOTE: this isn't actually true, e.g. while (if a; b; end)
         return unless @open_parens == 0 &&
+          # We might be coming after a statement-ending token...
           ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
+           # Or we might be at the beginning of an argument list
            (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
 
-        # Make sure we don't have any running expressions
-        # This includes things like
-        #
-        # class <
-        #   Foo
-        #
-        # if a ||
-        #    b
+        # Continue a possible existing new statement unless we just finished an expression...
         return true unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
-          (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
+          # Or we've opened a block and are ready to move into the body
+          (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) &&
+           # Handle the case where the block statement's expression is on the next line
+           #
+           # while
+           #     foo
+           # end
+           @last_ns_tk.class != @open_block.last)
 
         new_statement!
 
