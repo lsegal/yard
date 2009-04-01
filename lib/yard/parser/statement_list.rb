@@ -89,24 +89,13 @@ module YARD
         @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
 
         process_block_opener(tk)
-
         push_token(tk)
-
-        #puts "#{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
-
-        # Vouch to open a block when this statement would otherwise end
-        @open_block = [@level, tk.class] if (@new_statement ||
-          (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
-          OPEN_BLOCK_TOKENS.include?(tk.class)
-
-        #puts "#{@open_parens} open brackets for: #{@statement.to_s}"
+        process_block_statement(tk)
         @new_statement = false unless process_new_statement(tk)
-
         process_else(tk)
 
         # We're done if we've ended a statement and we're at level 0
         return true if @new_statement && @level == 0
-        #raise "Unexpected end" if @level < 0
       end
 
       ##
@@ -156,6 +145,16 @@ module YARD
         @new_statement = true
         @stmt_number += 1
         @open_block = false
+      end
+
+      ##
+      # Processes a newly-opened block statement, such as +if+ or +while+
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def process_block_statement(tk)
+        @open_block = [@level, tk.class] if (@new_statement ||
+          (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
+          OPEN_BLOCK_TOKENS.include?(tk.class)
       end
 
       ##
