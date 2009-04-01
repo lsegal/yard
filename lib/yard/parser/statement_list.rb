@@ -82,29 +82,14 @@ module YARD
 
         return if process_initial_comment(tk)
 
-        # Ignore any initial comments or whitespace
+        # Ignore any other initial comments or whitespace
         unless @statement.empty? && @stmt_number == 0 && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           # Decrease if end or '}' is seen
           @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
 
-          # Increase level if we have a 'do' or block opening
-          if [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
-            #p "#{tk.line_no} #{@level} #{tk} \t#{tk.text} #{tk.lex_state}"
-            @stmt_number += 1
-            @new_statement = true
-            @level += 1
-          end
+          process_block_opener(tk)
 
-          # If the level is greater than 0, add the code to the block text
-          # otherwise it's part of the statement text
-          if @stmt_number > 0
-            #puts "Block of #{@statement}"
-            #puts "#{@stmt_number} #{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
-            @block ||= TokenList.new
-            @block << tk
-          elsif @stmt_number == 0 && tk.class != TkNL && tk.class != TkSEMICOLON && tk.class != TkCOMMENT
-            @statement << tk
-          end
+          push_token(tk)
 
           #puts "#{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
 
@@ -147,12 +132,7 @@ module YARD
             @new_statement = false
           end
 
-          # Else keyword is kind of weird
-          if tk.is_a? TkELSE
-            @new_statement = true
-            @stmt_number += 1
-            @open_block = false
-          end
+          process_else(tk)
 
           # We're done if we've ended a statement and we're at level 0
           return true if @new_statement && @level == 0
@@ -182,6 +162,48 @@ module YARD
         @comments << tk.text.gsub(/^#+\s{0,1}/, '')
         @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
         true
+      end
+
+      ##
+      # Increases nesting level if we have a block-opening keyword
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def process_block_opener(tk)
+        return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
+
+        #p "#{tk.line_no} #{@level} #{tk} \t#{tk.text} #{tk.lex_state}"
+        @stmt_number += 1
+        @new_statement = true
+        @level += 1
+      end
+
+      ##
+      # Processes an +else+ token
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def process_else(tk)
+        return unless tk.class == TkELSE
+
+        @new_statement = true
+        @stmt_number += 1
+        @open_block = false
+      end
+
+      ##
+      # Adds +tk+ to the current statement, or to the current block
+      # if the nesting level is greater than 0
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def push_token(tk)
+        if @stmt_number == 0
+          @statement << tk unless [TkNL, TkSEMICOLON, TkCOMMENT].include?(tk.class)
+          return
+        end
+
+        #puts "Block of #{@statement}"
+        #puts "#{@stmt_number} #{tk.line_no} #{@level} #{@open_parens} #{tk.class.class_name} \t#{tk.text.inspect} #{tk.lex_state} #{@open_block.inspect}"
+        @block ||= TokenList.new
+        @block << tk
       end
     end
   end
