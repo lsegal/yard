@@ -99,39 +99,8 @@ module YARD
           (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
           OPEN_BLOCK_TOKENS.include?(tk.class)
 
-        # Check if this token creates a new statement or not
         #puts "#{@open_parens} open brackets for: #{@statement.to_s}"
-        if @open_parens == 0 && ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
-          (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
-
-          # Make sure we don't have any running expressions
-          # This includes things like
-          #
-          # class <
-          #   Foo
-          #
-          # if a ||
-          #    b
-          if (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
-              (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
-            @stmt_number += 1
-            @new_statement = true
-            #p "NEW STATEMENT #{@block.to_s}"
-
-            # The statement started with a if/while/begin, so we must go to the next level now
-            if @open_block && @open_block.first == @level
-              if tk.class == TkNL && @block.nil?
-                @block = TokenList.new
-                @block << tk
-              end
-
-              @open_block = false
-              @level += 1
-            end
-          end
-        elsif tk.class != TkSPACE
-          @new_statement = false
-        end
+        @new_statement = false unless process_new_statement(tk)
 
         process_else(tk)
 
@@ -187,6 +156,45 @@ module YARD
         @new_statement = true
         @stmt_number += 1
         @open_block = false
+      end
+
+      ##
+      # Checks if +tk+ opens a new statement
+      #
+      # @param [RubyToken::Token] tk the token to process
+      # @return [Boolean] whether or not a new statement has been opened or remains open
+      def process_new_statement(tk)
+        return true if tk.class == TkSPACE
+        return unless @open_parens == 0 &&
+          ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
+           (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
+
+        # Make sure we don't have any running expressions
+        # This includes things like
+        #
+        # class <
+        #   Foo
+        #
+        # if a ||
+        #    b
+        return true unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
+          (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
+
+        @stmt_number += 1
+        @new_statement = true
+        #p "NEW STATEMENT #{@block.to_s}"
+
+        # Unless the statement opened a block, we want to stay on the same level
+        return true unless @open_block && @open_block.first == @level
+
+        if tk.class == TkNL && @block.nil?
+          @block = TokenList.new
+          @block << tk
+        end
+
+        @open_block = false
+        @level += 1
+        true
       end
 
       ##
