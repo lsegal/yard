@@ -31,12 +31,10 @@ module YARD
         while stmt = next_statement do self << stmt end
       end
 
-      # MUST REFACTOR THIS CODE
-      # WARNING WARNING WARNING             WARNING
-      # MUST REFACTOR THIS CODE                |
-      # OR CHILDREN WILL DIE                   V
-      # WARNING WARNING WARNING             WARNING
-      # THIS IS MEANT TO BE UGLY.
+      ##
+      # Returns the next statement in the token stream
+      #
+      # @return [Statement] the next statement
       def next_statement
         @statement, @block, @comments = TokenList.new, nil, nil
         @first_statement, @new_statement, @open_block = true, true, false
