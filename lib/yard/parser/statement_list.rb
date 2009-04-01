@@ -120,8 +120,7 @@ module YARD
       def process_block_opener(tk)
         return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
 
-        @first_statement = false
-        @new_statement = true
+        new_statement!
         @level += 1
       end
 
@@ -132,8 +131,7 @@ module YARD
       def process_else(tk)
         return unless tk.class == TkELSE
 
-        @new_statement = true
-        @first_statement = false
+        new_statement!
         @open_block = false
       end
 
@@ -169,8 +167,7 @@ module YARD
         return true unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
           (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) && @last_ns_tk.class != @open_block.last)
 
-        @first_statement = false
-        @new_statement = true
+        new_statement!
 
         # Unless the statement opened a block, we want to stay on the same level
         return true unless @open_block && @open_block.first == @level
@@ -198,6 +195,13 @@ module YARD
 
         @block ||= TokenList.new
         @block << tk
+      end
+
+      ##
+      # Declares that a new statement is being processed
+      def new_statement!
+        @new_statement = true
+        @first_statement = false
       end
     end
   end
