@@ -7,7 +7,6 @@ module YARD
       # if used at the beginning of a statement.
       OPEN_BLOCK_TOKENS = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
                            TkIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
-      COLON_TOKENS = [TkUNTIL, TkIF, TkUNLESS, TkWHILE, TkCASE, TkWHEN]
 
       ##
       # Creates a new statement list
