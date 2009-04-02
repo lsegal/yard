@@ -146,7 +146,9 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_simple_block_opener(tk)
-        return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
+        return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class) &&
+          # Make sure hashes are parsed as hashes, not as blocks
+          (@last_ns_tk.nil? || @last_ns_tk.lex_state != EXPR_BEG)
 
         @block = TokenList.new
         @block << tk
