@@ -194,7 +194,13 @@ module YARD
            # while
            #     foo
            # end
-           @last_ns_tk.class != @current_block)
+           @last_ns_tk.class != @current_block &&
+           # And the case where part of the expression is on the next line
+           #
+           # while foo ||
+           #     bar
+           # end
+           @last_tk.lex_state != EXPR_BEG)
 
         # Continue with the statement if we've hit a comma in a def
         return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
