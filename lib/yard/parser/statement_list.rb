@@ -36,13 +36,16 @@ module YARD
       #
       # @return [Statement] the next statement
       def next_statement
+        @state = :first_statement
+        @statement_stack = []
+        @level = 0
+        @done = false
+        @current_block = nil
         @statement, @block, @comments = TokenList.new, nil, nil
-        @first_statement, @new_statement, @open_block = true, true, false
         @last_tk, @last_ns_tk, @before_last_tk = nil, nil, nil
-        @level, @open_parens = 0, 0
 
-        while tk = @tokens.shift
-          break if process_token(tk)
+        while !@done && tk = @tokens.shift
+          process_token(tk)
 
           @before_last_tk = @last_tk
           @last_tk = tk # Save last token
@@ -60,31 +63,56 @@ module YARD
       end
 
       ##
-      # Processes a single token, modifying instance variables accordingly
+      # Processes a single token
       #
       # @param [RubyToken::Token] tk the token to process
-      # @return [Boolean] whether or not the statement has been ended by +tk+
       def process_token(tk)
-        # !!!!!!!!!!!!!!!!!!!! REMOVED TkfLPAREN, TkfLBRACK
-        @open_parens += 1 if [TkLPAREN, TkLBRACK].include? tk.class
-        @open_parens -= 1 if [TkRPAREN, TkRBRACK].include? tk.class
+        case @state
+        when :first_statement
+          return if process_initial_comment(tk)
+          return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          return if process_simple_block_opener(tk)
+          push_token(tk)
+          return if process_complex_block_opener(tk)
 
-        return if process_initial_comment(tk)
+          if balances?(tk)
+            process_statement_end(tk)
+          else
+            @state = :balance
+          end
+        when :balance
+          @statement << tk
+          return unless balances?(tk)
+          @state = :first_statement
+          process_statement_end(tk)
+        when :block_statement
+          push_token(tk)
+          return unless balances?(tk)
+          process_statement_end(tk)
+        when :pre_block
+          @current_block = nil
+          process_block_token(tk) unless tk.class == TkSEMICOLON
+          @state = :block
+        when :block; process_block_token(tk)
+        when :post_block
+          if tk.class == TkSPACE
+            @statement << tk
+            return
+          end
 
-        # Ignore any other initial comments or whitespace
-        return if @statement.empty? && @first_statement && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          process_statement_end(tk)
+          @state = :block
+        end
+      end
 
-        # Decrease if end or '}' is seen
-        @level -= 1 if [TkEND, TkRBRACE].include?(tk.class)
-
-        process_block_opener(tk)
-        push_token(tk)
-        process_block_statement(tk)
-        @new_statement = false unless process_new_statement(tk)
-        process_else(tk)
-
-        # We're done if we've ended a statement and we're at level 0
-        return true if @new_statement && @level == 0
+      ##
+      # Processes a token in a block
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def process_block_token(tk)
+        @block << tk
+        return unless balances?(tk)
+        process_statement_end(tk)
       end
 
       ##
@@ -93,7 +121,7 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not +tk+ was processed as an initial comment
       def process_initial_comment(tk)
-        return unless @statement.empty? && tk.class == TkCOMMENT
+        return unless tk.class == TkCOMMENT
 
         # Two new-lines in a row will destroy any comment blocks
         if @last_tk.class == TkNL && @before_last_tk &&
@@ -112,104 +140,108 @@ module YARD
       end
 
       ##
-      # Increases nesting level if we have a block-opening keyword
+      # Processes a simple block-opening token;
+      # that is, a block opener such as +begin+ or +do+
+      # that isn't followed by an expression
       #
       # @param [RubyToken::Token] tk the token to process
-      def process_block_opener(tk)
+      def process_simple_block_opener(tk)
         return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
 
-        new_statement!
+        @block = TokenList.new
+        @block << tk
         @level += 1
+        @state = :block
+
+        true
       end
 
       ##
-      # Processes an +else+ token
+      # Processes a complex block-opening token;
+      # that is, a block opener such as +while+ or +for+
+      # that is followed by an expression
       #
       # @param [RubyToken::Token] tk the token to process
-      def process_else(tk)
-        return unless tk.class == TkELSE
+      def process_complex_block_opener(tk)
+        return unless OPEN_BLOCK_TOKENS.include?(tk.class)
 
-        new_statement!
-        @open_block = false
+        @current_block = tk.class
+        @state = :block_statement
+
+        true
       end
 
       ##
-      # Processes a newly-opened block statement, such as +if+ or +while+
-      #
-      # This differs from {process_block_opener} in that it opens block statements
-      # that have expressions attached, such as +while+ and +for+.
-      # These expressions are handled by {process_new_statement}.
+      # Processes a token that closes a statement
       #
       # @param [RubyToken::Token] tk the token to process
-      def process_block_statement(tk)
-        @open_block = [@level, tk.class] if (@new_statement ||
-          (@last_tk && @last_tk.lex_state == EXPR_BEG)) &&
-          OPEN_BLOCK_TOKENS.include?(tk.class)
-      end
-
-      ##
-      # Checks if +tk+ opens a new statement
-      #
-      # @param [RubyToken::Token] tk the token to process
-      # @return [Boolean] whether or not a new statement has been opened or remains open
-      def process_new_statement(tk)
+      def process_statement_end(tk)
         # Whitespace means that we keep the same value of @new_statement as last token
-        return true if tk.class == TkSPACE
+        return if tk.class == TkSPACE
 
-        # We never start a statement within parens...
-        # NOTE: this isn't actually true, e.g. while (if a; b; end)
-        return unless @open_parens == 0 &&
+        return unless 
           # We might be coming after a statement-ending token...
           ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
            # Or we might be at the beginning of an argument list
-           (@open_block && @open_block.last == TkDEF && tk.class == TkRPAREN))
+           (@current_block == TkDEF && tk.class == TkRPAREN))
 
         # Continue a possible existing new statement unless we just finished an expression...
-        return true unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
+        return unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
           # Or we've opened a block and are ready to move into the body
-          (@open_block && [TkNL, TkSEMICOLON].include?(tk.class) &&
+          (@current_block && [TkNL, TkSEMICOLON].include?(tk.class) &&
            # Handle the case where the block statement's expression is on the next line
            #
            # while
            #     foo
            # end
-           @last_ns_tk.class != @open_block.last)
+           @last_ns_tk.class != @current_block)
 
-        new_statement!
+        # Continue with the statement if we've hit a comma in a def
+        return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
 
-        # Unless the statement opened a block, we want to stay on the same level
-        return true unless @open_block && @open_block.first == @level
-
-        if tk.class == TkNL && @block.nil?
-          @block = TokenList.new
-          @block << tk
-        end
-
-        @open_block = false
-        @level += 1
-        true
-      end
-
-      ##
-      # Adds +tk+ to the current statement, or to the current block
-      # if the nesting level is greater than 0
-      #
-      # @param [RubyToken::Token] tk the token to process
-      def push_token(tk)
-        if @first_statement
-          @statement << tk unless [TkNL, TkSEMICOLON, TkCOMMENT].include?(tk.class)
+        unless @current_block
+          @done = true
           return
         end
 
-        @block ||= TokenList.new
-        @block << tk
+        @level += 1
+        @state = :pre_block unless @stat == :block_statement
+        @block = TokenList.new
+        @block << tk if @current_block && tk.class == TkNL
       end
 
       ##
-      # Declares that a new statement is being processed
-      def new_statement!
-        @new_statement = true
-        @first_statement = false
+      # Handles the balancing of parentheses and blocks
+      #
+      # @param [RubyToken::Token] tk the token to process
+      # @return [Boolean] whether or not the current statement's parentheses and blocks
+      #   are balanced after +tk+
+      def balances?(tk)
+        if ([TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN] + OPEN_BLOCK_TOKENS).include?(tk.class)
+          @level += 1
+        elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
+          @level -= 1
+        end
+
+        @level == 0
+      end
+
+      ##
+      # Adds a token to the current statement,
+      # unless it's a newline, semicolon, or comment
+      #
+      # @param [RubyToken::Token] tk the token to process
+      def push_token(tk)
+        @statement << tk unless @level == 0 && [TkNL, TkSEMICOLON, TkCOMMENT].include?(tk.class)
+      end
+
+      ##
+      # Returns the next token in the stream that's not a space
+      #
+      # @returns [RubyToken::Token] the next non-space token
+      def peek_no_space
+        return @tokens.first unless @tokens.first.class == TkSPACE
+        return @tokens[1]
       end
     end
   end
