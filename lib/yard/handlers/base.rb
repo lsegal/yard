@@ -253,7 +253,7 @@ module YARD
             object.source ||= statement 
           end
           
-          # Make it dynamic if it's owner is not it's namespace.
+          # Make it dynamic if its owner is not its namespace.
           # This generally means it was defined in a method (or block of some sort)
           object.dynamic = true if owner != namespace
         end
