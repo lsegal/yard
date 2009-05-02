@@ -7,4 +7,9 @@ describe YARD::Handlers::ExtendHandler do
     Registry.at(:B).mixins(:class).should include(P(:A))
     Registry.at(:B).mixins(:instance).should be_empty
   end
+
+  it "should handle a module extending itself" do
+    Registry.at(:C).mixins(:class).should include(P(:C))
+    Registry.at(:C).mixins(:instance).should be_empty
+  end
 end
