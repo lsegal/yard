@@ -1,4 +1,4 @@
 <div class="section <%= generator_name %>">
-  <h1>Included <%= "Singleton Class" if scope == :class %> Modules</h1>
+  <h1><%= scope == :instance ? "Included" : "Extended" %> Modules</h1>
   <p><%= object.mixins(scope).map {|o| linkify o }.join(", ") %></p>
 </div>
