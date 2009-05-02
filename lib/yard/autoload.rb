@@ -73,6 +73,7 @@ module YARD
     autoload :ExceptionHandler,     'yard/handlers/exception_handler'
     autoload :MethodHandler,        'yard/handlers/method_handler'
     autoload :MixinHandler,         'yard/handlers/mixin_handler'
+    autoload :ExtendHandler,        'yard/handlers/extend_handler'
     autoload :ModuleHandler,        'yard/handlers/module_handler'
     autoload :VisibilityHandler,    'yard/handlers/visibility_handler'
     autoload :UndocumentableError,  'yard/handlers/base'
