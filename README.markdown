@@ -112,7 +112,7 @@ FEATURE LIST
    This custom declaration provides dynamically generated code that is hard for a
    documentation tool to properly document without help from the developer. To 
    ease the pains of manually documenting the procedure, YARD can be extended by 
-   the developer to handled the 'define_name' construct and add the required 
+   the developer to handled the `define_name` construct and add the required 
    method to the defined methods of the class with its documentation. This makes 
    documenting external API's, especially dynamic ones, a lot more consistent for
    consumption by the users. 
