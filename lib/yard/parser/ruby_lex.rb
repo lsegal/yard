@@ -761,7 +761,7 @@ module YARD
         end
 
         @OP.def_rule(":") do 
-          if @colonblock_seen || peek(0) =~ /\s/
+          if (@colonblock_seen && @lex_state != EXPR_BEG) || peek(0) =~ /\s/
             @lex_state = EXPR_BEG
             tk = Token(TkCOLON)
           else
