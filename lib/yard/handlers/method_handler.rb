@@ -15,7 +15,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
     end
     
     # Class method if prefixed by self(::|.) or Module(::|.)
-    if meth =~ /(?:#{NSEP}|\.)([^#{NSEP}\.]+)$/
+    if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
       mscope, meth = :class, $1
       nobj = P(namespace, $`) unless $` == "self"
     end

@@ -22,11 +22,15 @@ module YARD
     autoload :BUILTIN_MODULES,      'yard/code_objects/base'
     autoload :BUILTIN_EXCEPTIONS,   'yard/code_objects/base'
     autoload :CONSTANTMATCH,        'yard/code_objects/base'
-    autoload :ISEP,                 'yard/code_objects/base'
     autoload :METHODMATCH,          'yard/code_objects/base'
     autoload :METHODNAMEMATCH,      'yard/code_objects/base'
     autoload :NAMESPACEMATCH,       'yard/code_objects/base'
     autoload :NSEP,                 'yard/code_objects/base'
+    autoload :NSEPQ,                'yard/code_objects/base'
+    autoload :ISEP,                 'yard/code_objects/base'
+    autoload :ISEPQ,                'yard/code_objects/base'
+    autoload :CSEP,                 'yard/code_objects/base'
+    autoload :CSEPQ,                'yard/code_objects/base'
   end
   
   module Generators

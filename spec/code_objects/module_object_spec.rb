@@ -10,7 +10,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     #   YARD#foo:method
     #   YARD#foo2:method
     #   YARD#xyz:method
-    #   YARD::bar:method
+    #   YARD.bar:method
     #   SomeMod#mixmethod
     #   SomeMod#xyz:method
     # 
@@ -40,17 +40,17 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths = @yard.meths
     meths.should include(P("YARD#foo"))
     meths.should include(P("YARD#foo2"))
-    meths.should include(P("YARD::bar"))
+    meths.should include(P("YARD.bar"))
     meths.should include(P("SomeMod#mixmethod"))
     meths.should include(P("AnotherMod#fizz"))
   end
   
   it "should allow :visibility to be set" do
     meths = @yard.meths(:visibility => :public)
-    meths.should_not include(P("YARD::bar"))
+    meths.should_not include(P("YARD.bar"))
     meths = @yard.meths(:visibility => [:public, :private])
     meths.should include(P("YARD#foo"))
-    meths.should include(P("YARD::bar"))
+    meths.should include(P("YARD.bar"))
     meths.should_not include(P("YARD#foo2"))
   end
   
@@ -59,9 +59,9 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should_not include(P("YARD#foo"))
     meths.should_not include(P("YARD#foo2"))
     meths.should_not include(P("SomeMod#mixmethod"))
-    meths.should_not include(P("SomeMod::baz"))
+    meths.should_not include(P("SomeMod.baz"))
     meths.should_not include(P("AnotherMod#fazz"))
-    meths.should include(P("YARD::bar"))
+    meths.should include(P("YARD.bar"))
     meths.should include(P("AnotherMod#fizz"))
   end
   
@@ -70,7 +70,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should include(P("YARD#foo"))
     meths.should include(P("YARD#foo2"))
     meths.should include(P("SomeMod#mixmethod"))
-    meths.should_not include(P("YARD::bar"))
+    meths.should_not include(P("YARD.bar"))
     meths.should_not include(P("AnotherMod#fizz"))
   end
   
@@ -80,7 +80,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should_not include(P("AnotherMod#fizz"))
     meths.should include(P("YARD#foo"))
     meths.should include(P("YARD#foo2"))
-    meths.should include(P("YARD::bar"))
+    meths.should include(P("YARD.bar"))
   end
   
   it "should choose the method defined in the class over an included module" do
@@ -88,7 +88,7 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     meths.should_not include(P("SomeMod#xyz"))
     meths.should include(P("YARD#xyz"))
     meths.should_not include(P("AnotherMod#bar"))
-    meths.should include(P("YARD::bar"))
+    meths.should include(P("YARD.bar"))
     
     meths = @other.meths
     meths.should include(P("SomeMod#xyz"))

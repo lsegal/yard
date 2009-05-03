@@ -12,12 +12,12 @@ module YARD
       def initialize(namespace, name)
         namespace = Registry.root if !namespace || namespace == :root
         
-        if name =~ /^#{NSEP}/
+        if name =~ /^#{NSEPQ}/
           namespace = Registry.root
           name = name[2..-1]
         end
         
-        if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+        if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
           namespace = $`.empty? ? Registry.root : Proxy.new(namespace, $`)
@@ -34,8 +34,8 @@ module YARD
         # If the name begins with "::" (like "::String")
         # this is definitely a root level object, so
         # remove the namespace and attach it to the root
-        if @name =~ /^#{NSEP}/
-          @name.gsub!(/^#{NSEP}/, '')
+        if @name =~ /^#{NSEPQ}/
+          @name.gsub!(/^#{NSEPQ}/, '')
           @namespace = Registry.root
         end
       end

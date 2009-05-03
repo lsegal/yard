@@ -17,12 +17,14 @@ module YARD
       alias_method :<<, :push
     end
     
-    NSEP = '::'
-    ISEP = '#'
+    NSEPQ = NSEP = '::'
+    ISEPQ = ISEP = '#'
+    CSEP = '.'
+    CSEPQ = Regexp.quote CSEP
     CONSTANTMATCH = /[A-Z]\w*/
-    NAMESPACEMATCH = /(?:(?:#{Regexp.quote NSEP})?#{CONSTANTMATCH})+/
+    NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
     METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
-    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?#{METHODNAMEMATCH}/
+    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
     
     BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
       "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError", 
@@ -51,7 +53,7 @@ module YARD
           if name.to_s[0,2] == "::"
             name = name.to_s[2..-1]
             namespace = Registry.root
-          elsif name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+          elsif name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
@@ -61,7 +63,7 @@ module YARD
           elsif keyname.empty?
             keyname = name.to_s
           elsif self == MethodObject
-            keyname += (!args.first || args.first.to_sym == :instance ? ISEP : NSEP) + name.to_s
+            keyname += (!args.first || args.first.to_sym == :instance ? ISEP : CSEP) + name.to_s
           else
             keyname += NSEP + name.to_s
           end
@@ -203,7 +205,7 @@ module YARD
       # 
       # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split(/#{NSEP}/).last.gsub(/Object$/, '').downcase.to_sym
+        self.class.name.split(/#{NSEPQ}/).last.gsub(/Object$/, '').downcase.to_sym
       end
     
       def path

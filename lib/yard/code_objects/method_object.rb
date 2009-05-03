@@ -42,11 +42,11 @@ module YARD::CodeObjects
     end
     
     def name(prefix = false)
-      prefix && sep == ISEP ? sep + super().to_s : super()
+      ((prefix ? sep : "") + super().to_s).to_sym
     end
     
     protected
     
-    def sep; scope == :class ? super : ISEP end
+    def sep; scope == :class ? CSEP : ISEP end
   end
 end

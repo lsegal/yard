@@ -17,7 +17,7 @@ describe YARD::Handlers::ClassHandler do
   end
   
   it "should interpret class << self as a class level block" do
-    P("A::classmethod1").should_not == nil
+    P("A.classmethod1").should_not == nil
   end
   
   it "should interpret class << ClassName as a class level block in ClassName's namespace" do
@@ -71,7 +71,7 @@ describe YARD::Handlers::ClassHandler do
   end
   
   it "should document 'class << SomeConstant' by using SomeConstant's value as a reference to the real class name" do
-    Registry.at('String::classmethod').should_not be_nil
+    Registry.at('String.classmethod').should_not be_nil
   end
   
   it "should raise an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do

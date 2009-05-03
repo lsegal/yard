@@ -57,7 +57,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
-    meths.should include(P("SuperYard::bar"))
+    meths.should include(P("SuperYard.bar"))
   end
   
   it "should allow :inherited to be set to false" do
@@ -65,7 +65,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should include(P("YARD#mymethod"))
     meths.should_not include(P("SuperYard#foo"))
     meths.should_not include(P("SuperYard#foo2"))
-    meths.should_not include(P("SuperYard::bar"))
+    meths.should_not include(P("SuperYard.bar"))
   end
   
   it "should not show overridden methods" do 
@@ -78,7 +78,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should_not include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
-    meths.should include(P("SuperYard::bar"))
+    meths.should include(P("SuperYard.bar"))
   end
   
   it "should not show inherited methods overridden by other subclasses" do

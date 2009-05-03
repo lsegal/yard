@@ -12,7 +12,7 @@ describe YARD::Handlers::MethodHandler do
   end
   
   it "should parse/add class methods (self.method2)" do
-    P(:Foo).meths.should include(P("Foo::method2"))
+    P(:Foo).meths.should include(P("Foo.method2"))
   end
   
   it "should parse/add class methods from other namespaces (String::hello)" do

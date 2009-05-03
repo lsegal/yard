@@ -105,14 +105,14 @@ module YARD
       
       namespace = root if namespace == :root || !namespace
 
-      newname = name.to_s.gsub(/^#{CodeObjects::ISEP}/, '')
-      if name =~ /^#{CodeObjects::NSEP}/
+      newname = name.to_s.gsub(/^#{CodeObjects::ISEPQ}/, '')
+      if name =~ /^#{CodeObjects::NSEPQ}/
         [name, newname[2..-1]].each do |n|
           return at(n) if at(n)
         end
       else
         while namespace
-          [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
+          [CodeObjects::NSEP, CodeObjects::ISEP, CodeObjects::CSEP].each do |s|
             path = newname
             if namespace != root
               path = [namespace.path, newname].join(s)
