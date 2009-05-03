@@ -29,4 +29,6 @@ Spec::Rake::SpecTask.new("specs") do |t|
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
 end
 
-YARD::Rake::YardocTask.new
+YARD::Rake::YardocTask.new do |t|
+  t.options = ["--files", "FAQ.markdown,LICENSE"]
+end

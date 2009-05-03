@@ -3,12 +3,12 @@
 <html>
   <head>
     <%= render :html_head %>
-    <title>README</title>
+    <title><%= filename %></title>
   </head>
   <body>
     <div id="content">
       <div class="section docstring readme">
-        <%= htmlify @contents, readme_markup %>
+        <%= htmlify @contents, markup_for(filename) %>
       </div>
     </div>
   </body>

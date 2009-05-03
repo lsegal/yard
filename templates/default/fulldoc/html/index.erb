@@ -6,13 +6,14 @@
     <title>YARD Documentation</title>
   </head>
   <frameset cols="20%,*">
-    <frameset rows="50%,50%">
+    <frameset rows="13%,45%,42%">
+      <frame src="all-files.html" />
       <frame src="all-namespaces.html" />
       <frame src="all-methods.html" />
     </frameset>
-    <frame name="main" src="<%= readme_file ? 'readme.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>" />
+    <frame name="main" src="<%= extra_files.first ? extra_files.first+'.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>" />
     <noframes>
-      <p><a href="<%= readme_file ? 'readme.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>">Click here to go to the title page</a>.</p>
+      <p><a href="<%= extra_files.first ? extra_files.first+'.html' : url_for(Registry.all(:module, :class).sort_by {|o| o.path }.first) %>">Click here to go to the title page</a>.</p>
     </noframes>
   </frameset>
 </html>

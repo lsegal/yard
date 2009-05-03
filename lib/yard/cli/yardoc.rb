@@ -85,6 +85,14 @@ module YARD
           options[:readme] = readme
         end
         
+        opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
+          options[:files] = []
+          files.split(",").each do |file|
+            raise Errno::ENOENT, file unless File.file?(file)
+            options[:files] << file
+          end
+        end
+
         opts.on('-m', '--markup MARKUP', 
                 'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
           options[:markup] = markup.to_sym

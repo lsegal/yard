@@ -5,7 +5,7 @@ module YARD
       before_list :setup_options
       before_list :generate_assets
       before_list :generate_index
-      before_list :generate_readme
+      before_list :generate_files
       
       def sections_for(object) 
         case object
@@ -20,12 +20,14 @@ module YARD
       
       def setup_options
         options[:readme] ||= Dir['{README,README.*}']
+        options[:files]  ||= []
       end
     
       def css_file;         'style.css'             end
       def css_syntax_file;  'syntax_highlight.css'  end
       def js_file;          'jquery.js'             end
       def js_app_file;      'app.js'                end
+      def file_list_file;   'file-list.html'        end
       
       def readme_file
         @readme_file ||= [options[:readme]].flatten.compact.find do |readme|
@@ -34,6 +36,10 @@ module YARD
       end
       
       def readme_file_exists?; not readme_file.empty?; end
+      
+      def extra_files
+        [readme_file] + options[:files]
+      end
       
       def generate_assets
         if format == :html && serializer
@@ -48,24 +54,28 @@ module YARD
       def generate_index
         if format == :html && serializer
           serializer.serialize 'index.html', render(:index)
+          serializer.serialize 'all-files.html', render(:all_files)
           serializer.serialize 'all-namespaces.html', render(:all_namespaces)
           serializer.serialize 'all-methods.html', render(:all_methods)
         end
         true
       end
       
-      def generate_readme
-        if format == :html && serializer && readme_file_exists?
-          @contents = File.read(readme_file)
-          serializer.serialize 'readme.html', render(:readme)
+      def generate_files
+        if format == :html && serializer 
+          extra_files.each do |file|
+            next unless File.exists?(file)
+            @contents = File.read(file)
+            serializer.serialize file + '.html', render(:file, :filename => file)
+          end
         end
         true
       end
       
-      def readme_markup
-        if File.extname(readme_file) =~ /^\.(?:mdown|markdown|mkdn|markdn|md)$/
+      def markup_for(filename)
+        if File.extname(filename) =~ /^\.(?:mdown|markdown|mkdn|markdn|md)$/
           :markdown
-        elsif File.extname(readme_file) == ".textile"
+        elsif File.extname(filename) == ".textile"
           :textile
         elsif @contents =~ /\A#!(\S+)\s*$/ # Shebang support
           markup = $1

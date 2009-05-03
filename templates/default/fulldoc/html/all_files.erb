@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <%= render :html_head %>
+    <title>All Files</title>
+    <base target="main" />
+  </head>
+  <body>
+    <div id="nav" class="files">
+      <h1>Files List</h1>
+      <ul>
+      <% for file in extra_files %>
+        <li nowrap><a href="<%= file %>.html"><%= file %></a></li>
+      <% end %>
+      </ul>
+    </div>
+  </body>
+</html>
