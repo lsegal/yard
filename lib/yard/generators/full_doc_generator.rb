@@ -27,7 +27,6 @@ module YARD
       def css_syntax_file;  'syntax_highlight.css'  end
       def js_file;          'jquery.js'             end
       def js_app_file;      'app.js'                end
-      def file_list_file;   'file-list.html'        end
       
       def readme_file
         @readme_file ||= [options[:readme]].flatten.compact.find do |readme|
