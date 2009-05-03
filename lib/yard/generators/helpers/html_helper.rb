@@ -6,9 +6,9 @@ if RUBY19
 else
   require 'rdoc/markup/simple_markup'
   require 'rdoc/markup/simple_markup/to_html'
+  require 'rubygems'
 end
 
-require 'rubygems'
 begin require 'bluecloth'; rescue LoadError; end
 begin require 'redcloth'; rescue LoadError; end
 
@@ -30,14 +30,14 @@ module YARD
         case markup
         when :markdown
           begin
-            html = BlueCloth.new(text).to_html
+            html = ::BlueCloth.new(text).to_html
           rescue NameError
             STDERR.puts "Missing BlueCloth gem for Markdown formatting. Install it with `gem install BlueCloth`"
             exit
           end
         when :textile
           begin
-            html = RedCloth.new(text).to_html
+            html = ::RedCloth.new(text).to_html
           rescue NameError
             STDERR.puts "Missing RedCloth gem for Textile formatting. Install it with `gem install RedCloth`"
             exit
