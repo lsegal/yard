@@ -38,7 +38,12 @@ module YARD
         # Windows disallows \ / : * ? " < > | but we will just remove any
         # non alphanumeric (plus period, underscore and dash).
         fspath.map! do |p|
-          p.gsub(/[^\w\.-]/) {|x| '_' + x[0].to_s(16).upcase }
+          p.gsub(/[^\w\.-]/) do |x|
+            encoded = '_'
+
+            x.each_byte { |b| encoded << ("%X" % b) }
+            encoded
+          end
         end
         
         File.join(fspath)
