@@ -29,7 +29,11 @@ module YARD
         end
 
         html = resolve_links(html)
-        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
+        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
+          str = $1
+          str = html_syntax_highlight(CGI.unescapeHTML(str)) unless options[:no_highlight]
+          %Q{<pre class="code">#{str}</pre>}
+        end
         html
       end
       
