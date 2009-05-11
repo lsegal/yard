@@ -45,9 +45,18 @@ module YARD
       end
 
       def resolve_links(text)
-        text.gsub(/(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/(?!pre)|$)/) do 
-          sp, name = $1, $2
-          title = $3 || $2
+        code_tags = 0
+        text.gsub(/<(\/)?(pre|code)|(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
+          tag = $2
+          closed = $1
+          if tag
+            code_tags += (closed ? -1 : 1)
+            next str
+          end
+          next str unless code_tags == 0
+
+          sp, name = $3, $4
+          title = $5 || name
 
           if name.include?("://")
             sp + link_url(name, title, :target => '_parent')
