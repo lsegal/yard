@@ -130,6 +130,7 @@ module YARD
       define_tag "Since",             :since
       define_tag "Version",           :version
       define_tag "API Visibility",    :api
+      define_tag "Overloads",         :overload,    :with_raw_title_and_text
       define_tag "Todo Item",         :todo,        :with_raw_title_and_text
       define_tag "Example",           :example,     :with_raw_title_and_text
       define_tag "Options Hash",      :option,      :with_options
