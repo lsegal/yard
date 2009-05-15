@@ -10,7 +10,7 @@ class YARD::Handlers::MixinHandler < YARD::Handlers::Base
         case obj
         when Proxy
           obj.type = :module
-        when ConstantObject # If a constant is included, use it's value as the real object
+        when ConstantObject # If a constant is included, use its value as the real object
           obj = Proxy.new(namespace, obj.value)
         end
 

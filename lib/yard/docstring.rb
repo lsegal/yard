@@ -71,6 +71,14 @@ module YARD
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
 
+    ##
+    # Returns true if the docstring has no content
+    #
+    # @return [Boolean] whether or not the docstring has content
+    def empty?
+      super && @tags.empty? && @ref_tags.empty?
+    end
+
     private
     
     def convert_ref_tags
