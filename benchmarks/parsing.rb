@@ -1,8 +1,20 @@
 require "benchmark"
 require 'lib/yard'
 
+PATH_ORDER = [
+  'lib/yard/autoload.rb',
+  'lib/yard/code_objects/base.rb',
+  'lib/yard/code_objects/namespace_object.rb',
+  'lib/yard/handlers/base.rb',
+  'lib/yard/generators/helpers/*.rb',
+  'lib/yard/generators/base.rb',
+  'lib/yard/generators/method_listing_generator.rb',
+  'lib/yard/serializers/base.rb',
+  'lib/**/*.rb'
+]
+
 Benchmark.bmbm do |x|
-  x.report("parse in order") { YARD::Registry.clear; YARD.parse YARD::PATH_ORDER, Logger::ERROR } 
+  x.report("parse in order") { YARD::Registry.clear; YARD.parse PATH_ORDER, Logger::ERROR } 
   x.report("parse") { YARD::Registry.clear; YARD.parse 'lib/**/*.rb', Logger::ERROR } 
 end
 
