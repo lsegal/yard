@@ -34,6 +34,7 @@ module YARD
       autoload :BaseHelper,             'yard/generators/helpers/base_helper'
       autoload :FilterHelper,           'yard/generators/helpers/filter_helper'
       autoload :HtmlHelper,             'yard/generators/helpers/html_helper'
+      autoload :MarkupHelper,           'yard/generators/helpers/markup_helper'
       autoload :MethodHelper,           'yard/generators/helpers/method_helper'
       autoload :UMLHelper,              'yard/generators/helpers/uml_helper'
     end

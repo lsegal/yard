@@ -1,21 +1,8 @@
 require 'cgi'
 
-if RUBY19
-  require 'rdoc/markup'
-  require 'rdoc/markup/to_html'
-else
-  require 'rdoc/markup/simple_markup'
-  require 'rdoc/markup/simple_markup/to_html'
-  require 'rubygems'
-end
-
-begin require 'bluecloth'; rescue LoadError; end
-begin require 'redcloth'; rescue LoadError; end
-
 module YARD
   module Generators::Helpers
     module HtmlHelper
-      SimpleMarkup = RUBY19 ? RDoc::Markup.new : SM::SimpleMarkup.new
       SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
     
       def h(text)
@@ -27,23 +14,14 @@ module YARD
       end
 
       def htmlify(text, markup = options[:markup])
+        load_markup_provider(markup)
+
         case markup
-        when :markdown
-          begin
-            html = ::BlueCloth.new(text).to_html
-          rescue NameError
-            STDERR.puts "Missing BlueCloth gem for Markdown formatting. Install it with `gem install BlueCloth`"
-            exit
-          end
-        when :textile
-          begin
-            html = ::RedCloth.new(text).to_html
-          rescue NameError
-            STDERR.puts "Missing RedCloth gem for Textile formatting. Install it with `gem install RedCloth`"
-            exit
-          end
-        else # this is :rdoc
-          html = SimpleMarkup.convert(text, SimpleMarkupHtml)
+        when :markdown, :textile
+          # TODO: other libraries might be more complex
+          html = markup_class(markup).new(text).to_html
+        when :rdoc
+          html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
           html = fix_dash_dash(html)
           html = fix_typewriter(html)
         end
@@ -196,5 +174,4 @@ module YARD
     end
   end
 end
-    
     

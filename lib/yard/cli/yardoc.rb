@@ -97,6 +97,11 @@ module YARD
                 'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
           options[:markup] = markup.to_sym
         end
+
+        opts.on('-M', '--markup-provider MARKUP_PROVIDER', 
+                'Overrides the library used to process markup formatting (specify the gem name)') do |markup_provider|
+          options[:markup_provider] = markup_provider.to_sym
+        end
         
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
