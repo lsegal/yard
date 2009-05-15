@@ -92,6 +92,7 @@ module YARD
       
       define_tag "Parameters",        :param,       :with_types_and_name
       define_tag "Yield Parameters",  :yieldparam,  :with_types_and_name
+      define_tag "Yield Returns",     :yieldreturn, :with_types
       define_tag "Yields",            :yield,       :with_types
       define_tag "Default Value",     :default,     :with_name
       define_tag "Returns",           :return,      :with_types
