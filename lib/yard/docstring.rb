@@ -75,7 +75,7 @@ module YARD
     # Returns true if the docstring has no content
     #
     # @return [Boolean] whether or not the docstring has content
-    def empty?
+    def blank?
       super && @tags.empty? && @ref_tags.empty?
     end
 
