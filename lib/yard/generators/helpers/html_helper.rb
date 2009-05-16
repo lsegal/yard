@@ -60,6 +60,8 @@ module YARD
 
           if name.include?("://")
             sp + link_url(name, title, :target => '_parent')
+          elsif name =~ /^file:(\S+?)(?:#(\S+))?$/
+            sp + link_file($1, title == name ? $1 : title, $2)
           else
             obj = P(current_object, name)
             if obj.is_a?(CodeObjects::Proxy)
@@ -97,6 +99,10 @@ module YARD
           "<tt>" + type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) } + "</tt>"
         end
         list.empty? ? "" : (brackets ? "[#{list.join(", ")}]" : list.join(", "))
+      end
+      
+      def link_file(filename, title = nil, anchor = nil)
+        link_url(url_for_file(filename, anchor), title)
       end
     
       def link_object(object, otitle = nil, anchor = nil)
@@ -161,6 +167,16 @@ module YARD
         end
       
         link + (anchor ? '#' + anchor_for(anchor) : '')
+      end
+      
+      def url_for_file(filename, anchor = nil)
+        fromobj = current_object
+        if CodeObjects::Base === fromobj && !fromobj.is_a?(CodeObjects::NamespaceObject)
+          fromobj = fromobj.namespace
+        end
+        from = serializer.serialized_path(fromobj)
+        link = File.relative_path(from, filename)
+        link + '.html' + (anchor ? '#' + anchor : '')
       end
 
       def html_syntax_highlight(source)

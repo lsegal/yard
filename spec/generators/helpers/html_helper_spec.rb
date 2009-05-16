@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../../spec_helper'
+
 describe YARD::Generators::Helpers::HtmlHelper, "basic HTML methods" do
   include YARD::Generators::Helpers::HtmlHelper
   
@@ -60,5 +62,51 @@ describe YARD::Generators::Helpers::HtmlHelper, '#url_for' do
     yard = CodeObjects::ModuleObject.new(:root, :YARD)
     meth = CodeObjects::MethodObject.new(yard, :meth)
     url_for(meth).should == 'YARD.html#meth-instance_method'
+  end
+end
+
+describe YARD::Generators::Helpers::HtmlHelper, '#resolve_links' do
+  include YARD::Generators::Helpers::HtmlHelper
+  
+  def parse_link(link)
+    results = {}
+    link =~ /<a (.+?)>(.+?)<\/a>/
+    params, results[:inner_text] = $1, $2
+    params.split(/\s+/).each do |match|
+      key, value = *match.split('=')
+      results[key.to_sym] = value.gsub(/^["'](.+)["']$/, '\1')
+    end
+    results
+  end
+
+  it "should link static files with file: prefix" do
+    stub!(:serializer).and_return Serializers::FileSystemSerializer.new
+    stub!(:current_object).and_return Registry.root
+
+    parse_link(resolve_links("{file:TEST.txt#abc}")).should == {
+      :inner_text => "TEST.txt",
+      :title => "TEST.txt",
+      :href => "TEST.txt.html#abc"
+    }
+    parse_link(resolve_links("{file:TEST.txt title}")).should == {
+      :inner_text => "title",
+      :title => "title",
+      :href => "TEST.txt.html"
+    }
+  end
+  
+  it "should create regular links with http:// or https:// prefixes" do
+    parse_link(resolve_links("{http://example.com}")).should == {
+      :inner_text => "http://example.com",
+      :target => "_parent",
+      :href => "http://example.com",
+      :title => "http://example.com"
+    }
+    parse_link(resolve_links("{http://example.com title}")).should == {
+      :inner_text => "title",
+      :target => "_parent",
+      :href => "http://example.com",
+      :title => "title"
+    }
   end
 end
