@@ -50,6 +50,7 @@ end
 describe YARD::CodeObjects, "BUILTIN_CLASSES" do
   it "should include all base classes" do
     YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
+      next if RUBY19 && ["MatchingData"].include?(name)
       eval(name).should be_instance_of(Class)
     end
   end
@@ -73,6 +74,7 @@ end
 describe YARD::CodeObjects, "BUILTIN_MODULES" do
   it "should include all base modules" do
     YARD::CodeObjects::BUILTIN_MODULES.each do |name|
+      next if RUBY19 && ["Precision"].include?(name)
       eval(name).should be_instance_of(Module)
     end
   end
