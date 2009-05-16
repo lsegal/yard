@@ -105,22 +105,29 @@ describe YARD::Docstring do
     tags.first.owner.should == o
   end
 
-  it "should be empty if it has no content and no tags" do
+  it "should be blank and empty if it has no content and no tags" do
+    Docstring.new.should be_blank
     Docstring.new.should be_empty
   end
 
-  it "shouldn't be empty if it has content" do
-    Docstring.new("foo bar").should_not be_empty
+  it "shouldn't be empty or blank if it has content" do
+    d = Docstring.new("foo bar")
+    d.should_not be_empty
+    d.should_not be_blank
   end
 
-  it "shouldn't be empty if it has tags" do
-    Docstring.new("@param foo").should_not be_empty
+  it "should be empty but not blank if it has tags" do
+    d = Docstring.new("@param foo")
+    d.should be_empty
+    d.should_not be_blank
   end
 
-  it "shouldn't be empty if it has ref tags" do
+  it "should be empty but not blank if it has ref tags" do
     o = CodeObjects::MethodObject.new(:root, 'Foo#bar')
     o.docstring.add_tag Tags::Tag.new('return', 'testing')
-    Docstring.new("@return (see Foo#bar)").should_not be_empty
+    d = Docstring.new("@return (see Foo#bar)")
+    d.should be_empty
+    d.should_not be_blank
   end
   
 end
