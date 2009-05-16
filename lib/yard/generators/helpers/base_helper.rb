@@ -1,7 +1,5 @@
 module YARD::Generators::Helpers
   module BaseHelper
-    include MarkupHelper
-    
     # This is used a lot by the HtmlHelper and there should
     # be some helper to "clean up" text for whatever, this is it.
     def h(text)

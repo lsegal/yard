@@ -3,6 +3,8 @@ require 'cgi'
 module YARD
   module Generators::Helpers
     module HtmlHelper
+      include MarkupHelper
+      
       SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
     
       def h(text)
