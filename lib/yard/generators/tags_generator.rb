@@ -56,7 +56,8 @@ module YARD
         end
         
         object.parameters.map do |p|
-          cache[p.first.to_s]
+          name = p.first.to_s
+          cache[name] || cache[name[/^[*&](\w+)$/, 1]]
         end.compact
       end
     end
