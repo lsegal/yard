@@ -7,7 +7,26 @@
       <table>
       <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| %>
         <tr>
-          <th class="name"><%= h name %></td>
+          <th class='signature'>
+            <span class='name'><%= h name %></span>
+            <% if rw['read'] %>
+              <% rw['read'].aliases.each do |obj| %>
+                <span class='alias'><%= h obj.name %>
+                  <% if rw['read'] && rw['write'] %>
+                    <span class="readwrite">[R]</span>
+                  <% end %>
+                </span>
+              <% end %>
+            <% end %>
+            <% if rw['write'] %>
+              <% rw['write'].aliases.each do |obj| %>
+                <span class='alias'><%= h obj.name %>
+                <% if rw['read'] && rw['write'] %>
+                  <span class="readwrite">[W]</span>
+                <% end %>
+              <% end %>
+            <% end %>
+          </td>
           <td class="readwrite">
             [<%= ['read', 'write'].map {|t| 
                 rw[t] && (rw[t].is_explicit? ? t[0,1].upcase : "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>")
