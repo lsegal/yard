@@ -84,6 +84,18 @@ module YARD
           :rdoc
         end
       end
+      
+      def methods_to_show
+        meths = YARD::Registry.all(:method)
+        if options[:verifier]
+          meths.reject! do |object|
+            # FIXME we should be using call_verifier here, but visibility
+            # is checked on the generator, not the object
+            options[:verifier].call(object, object).is_a?(FalseClass)
+          end
+        end
+        meths.sort_by {|object| object.path }
+      end
     end
   end
 end

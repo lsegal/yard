@@ -10,7 +10,7 @@
     <div id="nav" class="methods">
       <h1>Method List</h1>
       <ul>
-      <% for obj in YARD::Registry.all(:method).sort_by {|o| o.path } %>
+      <% for obj in methods_to_show %>
         <% next if obj.namespace == Registry.root %>
         <li nowrap>
           <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %> 
