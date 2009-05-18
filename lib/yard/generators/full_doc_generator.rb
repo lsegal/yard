@@ -65,6 +65,7 @@ module YARD
           extra_files.each do |file|
             next unless File.exists?(file)
             @contents = File.read(file)
+            file = File.basename(file)
             serializer.serialize file + '.html', render(:file, :filename => file)
           end
         end

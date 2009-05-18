@@ -11,7 +11,7 @@
       <h1>Files List</h1>
       <ul>
       <% for file in extra_files %>
-        <li nowrap><a href="<%= file %>.html"><%= file %></a></li>
+        <li nowrap><a href="<%= File.basename(file) %>.html"><%= File.basename(file) %></a></li>
       <% end %>
       </ul>
     </div>
