@@ -1,7 +1,7 @@
 <div class="section <%= generator_name %>">
   <h1>Attributes</h1>
 
-  <% [:class, :instance].select {|s| object.attributes[s].length > 0 }.each do |scope| %>
+  <% ['class', 'instance'].select {|s| object.attributes[s].length > 0 }.each do |scope| %>
     <div class="<%= scope %>">
       <h2><%= scope.capitalize %> Attributes</h2>
       <table>
@@ -9,7 +9,7 @@
         <tr>
           <th class="name"><%= h name %></td>
           <td class="readwrite">
-            [<%= [:read, :write].reject {|t| !rw[t] }.map {|t| 
+            [<%= ['read', 'write'].reject {|t| !rw[t] }.map {|t| 
                 rw[t].is_explicit? ? t[0,1].upcase : "<span id='#{anchor_for rw[t]}'>#{t[0,1].upcase}</span>"
               }.compact.join %>] 
           </td>
