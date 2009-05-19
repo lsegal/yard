@@ -1,4 +1,4 @@
-class YARD::Handlers::ClassVariableHandler < YARD::Handlers::Ruby::Legacy::Base
+class YARD::Handlers::Ruby::Legacy::ClassVariableHandler < YARD::Handlers::Ruby::Legacy::Base
   HANDLER_MATCH = /\A@@\S*\s*=\s*/m
   handles HANDLER_MATCH
   

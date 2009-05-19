@@ -1,4 +1,4 @@
-class YARD::Handlers::ModuleHandler < YARD::Handlers::Ruby::Legacy::Base
+class YARD::Handlers::Ruby::Legacy::ModuleHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkMODULE
   
   def process

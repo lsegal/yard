@@ -1,4 +1,4 @@
-class YARD::Handlers::AliasHandler < YARD::Handlers::Ruby::Legacy::Base
+class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aalias(_method)?(\s|\()/
   
   def process

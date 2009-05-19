@@ -64,36 +64,35 @@ module YARD
   end
   
   module Handlers
-    autoload :Base,                   'yard/handlers/base'
-    autoload :Processor,              'yard/handlers/processor'
-
-    if RUBY18
-      autoload :AliasHandler,         'yard/handlers/alias_handler'
-      autoload :AttributeHandler,     'yard/handlers/attribute_handler'
-      autoload :ClassHandler,         'yard/handlers/class_handler'
-      autoload :ClassVariableHandler, 'yard/handlers/class_variable_handler'
-      autoload :ConstantHandler,      'yard/handlers/constant_handler'
-      autoload :ExceptionHandler,     'yard/handlers/exception_handler'
-      autoload :MethodHandler,        'yard/handlers/method_handler'
-      autoload :MixinHandler,         'yard/handlers/mixin_handler'
-      autoload :ModuleHandler,        'yard/handlers/module_handler'
-      autoload :Processor,            'yard/handlers/processor'
-      autoload :VisibilityHandler,    'yard/handlers/visibility_handler'
-      autoload :UndocumentableError,  'yard/handlers/base'
-      autoload :YieldHandler,         'yard/handlers/yield_handler'
-    end
-    
     module Ruby
       if RUBY18
         module Legacy
-          autoload :Base,             'yard/handlers/ruby/legacy/base'
-          autoload :Processor,        'yard/handlers/ruby/legacy/processor'
+          autoload :Base,                 'yard/handlers/ruby/legacy/base'
+          autoload :Processor,            'yard/handlers/ruby/legacy/processor'
+
+          autoload :AliasHandler,         'yard/handlers/ruby/legacy/alias_handler'
+          autoload :AttributeHandler,     'yard/handlers/ruby/legacy/attribute_handler'
+          autoload :ClassHandler,         'yard/handlers/ruby/legacy/class_handler'
+          autoload :ClassVariableHandler, 'yard/handlers/ruby/legacy/class_variable_handler'
+          autoload :ConstantHandler,      'yard/handlers/ruby/legacy/constant_handler'
+          autoload :ExceptionHandler,     'yard/handlers/ruby/legacy/exception_handler'
+          autoload :MethodHandler,        'yard/handlers/ruby/legacy/method_handler'
+          autoload :MixinHandler,         'yard/handlers/ruby/legacy/mixin_handler'
+          autoload :ModuleHandler,        'yard/handlers/ruby/legacy/module_handler'
+          autoload :VisibilityHandler,    'yard/handlers/ruby/legacy/visibility_handler'
+          autoload :YieldHandler,         'yard/handlers/ruby/legacy/yield_handler'
         end
       else
-        autoload :Base,               'yard/handlers/ruby/base'
-        autoload :Processor,          'yard/handlers/ruby/processor'
+        autoload :Base,                   'yard/handlers/ruby/base'
+        autoload :Processor,              'yard/handlers/ruby/processor'
+
+        autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
       end
     end
+
+    autoload :Base,                       'yard/handlers/base'
+    autoload :Processor,                  'yard/handlers/processor'
+    autoload :UndocumentableError,        'yard/handlers/base'
   end
 
   module Parser
@@ -144,7 +143,8 @@ module YARD
 end
 
 # Load handlers immediately
-YARD::Handlers.constants.each {|c| YARD::Handlers.const_get(c) }
+const = RUBY18 ? YARD::Handlers::Ruby::Legacy : YARD::Handlers::Ruby
+const.constants.each {|c| const.const_get(c) }
 
 # P() needs to be loaded right away
 YARD::CodeObjects::Proxy

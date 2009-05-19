@@ -1,4 +1,4 @@
-class YARD::Handlers::VisibilityHandler < YARD::Handlers::Ruby::Legacy::Base
+class YARD::Handlers::Ruby::Legacy::VisibilityHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\A(protected|private|public)(\s|\(|$)/
   
   def process
