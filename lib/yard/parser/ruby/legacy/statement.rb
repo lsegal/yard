@@ -1,5 +1,5 @@
 module YARD
-  module Parser
+  module Parser::Ruby::Legacy
     class Statement 
       attr_reader :tokens, :comments, :block
 
@@ -10,7 +10,6 @@ module YARD
       end
       
       def inspect(lines = nil)
-        flineno = tokens.first.line_no
         buf = [""]
         tokens.each do |tk|
           if tk.is_a?(RubyToken::TkNL)
@@ -19,7 +18,11 @@ module YARD
             buf.last << tk.text
           end
         end
-        buf.map {|line| "\t#{flineno}: #{line}" }.join("\n")
+        buf.map {|text| "\t#{line}: #{text}" }.join("\n")
+      end
+      
+      def line
+        tokens.first.line_no
       end
 
       private

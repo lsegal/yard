@@ -1,5 +1,5 @@
 module YARD
-  module Parser
+  module Parser::Ruby::Legacy
     class StatementList < Array
       include RubyToken
 
@@ -23,6 +23,10 @@ module YARD
         end
 
         parse_statements
+      end
+      
+      def enumerator
+        self
       end
 
       private

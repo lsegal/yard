@@ -1,4 +1,4 @@
-class YARD::Handlers::ClassHandler < YARD::Handlers::Base
+class YARD::Handlers::ClassHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkCLASS
   
   def process

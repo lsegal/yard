@@ -1,0 +1,204 @@
+module YARD
+  module Handlers
+    module Ruby::Legacy
+      class Base < Handlers::Base
+        # For tokens like TkDEF, TkCLASS, etc.
+        include YARD::Parser::Ruby::Legacy::RubyToken
+
+        protected
+
+        def parse_block(opts = nil)
+          opts = {
+            :namespace => nil,
+            :scope => :instance,
+            :owner => nil
+          }.update(opts || {})
+
+          if opts[:namespace]
+            ns, vis, sc = namespace, visibility, scope
+            self.namespace = opts[:namespace]
+            self.visibility = :public
+            self.scope = opts[:scope]
+          end
+
+          self.owner = opts[:owner] ? opts[:owner] : namespace
+          if statement.block
+            blk = Parser::Ruby::Legacy::StatementList.new(statement.block)
+            parser.process(blk)
+          end
+
+          if opts[:namespace]
+            self.namespace = ns
+            self.owner = namespace
+            self.visibility = vis
+            self.scope = sc
+          end
+        end
+      
+        # The string value of a token. For example, the return value for the symbol :sym 
+        # would be :sym. The return value for a string "foo #{bar}" would be the literal 
+        # "foo #{bar}" without any interpolation. The return value of the identifier
+        # 'test' would be the same value: 'test'. Here is a list of common types and
+        # their return values:
+        # 
+        # @example 
+        #   tokval(TokenList.new('"foo"').first) => "foo"
+        #   tokval(TokenList.new(':foo').first) => :foo
+        #   tokval(TokenList.new('CONSTANT').first, RubyToken::TkId) => "CONSTANT"
+        #   tokval(TokenList.new('identifier').first, RubyToken::TkId) => "identifier"
+        #   tokval(TokenList.new('3.25').first) => 3.25
+        #   tokval(TokenList.new('/xyz/i').first) => /xyz/i
+        # 
+        # @param [Token] token The token of the class
+        # 
+        # @param [Array<Class<Token>>, Symbol] accepted_types
+        #   The allowed token types that this token can be. Defaults to [{TkVal}].
+        #   A list of types would be, for example, [{TkSTRING}, {TkSYMBOL}], to return
+        #   the token's value if it is either of those types. If +TkVal+ is accepted, 
+        #   +TkNode+ is also accepted.
+        # 
+        #   Certain symbol keys are allowed to specify multiple types in one fell swoop.
+        #   These symbols are:
+        #     :string       => +TkSTRING+, +TkDSTRING+, +TkDXSTRING+ and +TkXSTRING+
+        #     :attr         => +TkSYMBOL+ and +TkSTRING+
+        #     :identifier   => +TkIDENTIFIER, +TkFID+ and +TkGVAR+.
+        #     :number       => +TkFLOAT+, +TkINTEGER+
+        # 
+        # @return [Object] if the token is one of the accepted types, in its real value form.
+        #   It should be noted that identifiers and constants are kept in String form.
+        # @return [nil] if the token is not any of the specified accepted types
+        def tokval(token, *accepted_types)
+          accepted_types = [TkVal] if accepted_types.empty?
+          accepted_types.push(TkNode) if accepted_types.include? TkVal
+
+          if accepted_types.include?(:attr)
+            accepted_types.push(TkSTRING, TkSYMBOL)
+          end
+
+          if accepted_types.include?(:string)
+            accepted_types.push(TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING)
+          end
+
+          if accepted_types.include?(:identifier)
+            accepted_types.push(TkIDENTIFIER, TkFID, TkGVAR)
+          end
+
+          if accepted_types.include?(:number)
+            accepted_types.push(TkFLOAT, TkINTEGER)
+          end
+
+          return unless accepted_types.any? {|t| t === token }
+
+          case token
+          when TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING 
+            token.text[1..-2]
+          when TkSYMBOL
+            token.text[1..-1].to_sym
+          when TkFLOAT
+            token.text.to_f
+          when TkINTEGER
+            token.text.to_i
+          when TkREGEXP
+            token.text =~ /\A\/(.+)\/([^\/])\Z/
+            Regexp.new($1, $2)
+          when TkTRUE
+            true
+          when TkFALSE
+            false
+          when TkNIL
+            nil
+          else
+            token.text
+          end
+        end
+
+        # Returns a list of symbols or string values from a statement. 
+        # The list must be a valid comma delimited list, and values 
+        # will only be returned to the end of the list only.
+        # 
+        # Example:
+        #   attr_accessor :a, 'b', :c, :d => ['a', 'b', 'c', 'd']
+        #   attr_accessor 'a', UNACCEPTED_TYPE, 'c' => ['a', 'c'] 
+        # 
+        # The tokval list of a {TokenList} of the above
+        # code would be the {#tokval} value of :a, 'b',
+        # :c and :d.
+        # 
+        # It should also be noted that this function stops immediately at
+        # any ruby keyword encountered:
+        #   "attr_accessor :a, :b, :c if x == 5"  => ['a', 'b', 'c']
+        # 
+        # @param [TokenList] tokenlist The list of tokens to process.
+        # @param [Array<Class<Token>>] accepted_types passed to {#tokval}
+        # @return [Array<String>] the list of tokvalues in the list.
+        # @return [Array<EMPTY>] if there are no symbols or Strings in the list 
+        # @see #tokval
+        def tokval_list(tokenlist, *accepted_types)
+          return [] unless tokenlist
+          out = [[]]
+          parencount, beforeparen = 0, 0
+          needcomma = false
+          seen_comma = true
+          tokenlist.each do |token|
+            tokval = accepted_types == [:all] ? token.text : tokval(token, *accepted_types)
+            parencond = !out.last.empty? && tokval != nil
+            #puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
+            case token
+            when TkCOMMA
+              if parencount == 0
+                out << [] unless out.last.empty?
+                needcomma = false
+                seen_comma = true
+              else
+                out.last << token.text if parencond
+              end
+            when TkLPAREN
+              if seen_comma
+                beforeparen += 1
+              else
+                parencount += 1
+                out.last << token.text if parencond
+              end
+            when TkRPAREN
+              if beforeparen > 0
+                beforeparen -= 1
+              else
+                out.last << token.text if parencount > 0 && tokval != nil
+                parencount -= 1
+              end
+            when TkLBRACE, TkLBRACK, TkDO
+              parencount += 1 
+              out.last << token.text if tokval != nil
+            when TkRBRACE, TkRBRACK, TkEND
+              out.last << token.text if tokval != nil
+              parencount -= 1
+            else
+              break if TkKW === token && ![TkTRUE, TkFALSE, TkSUPER, TkSELF, TkNIL].include?(token.class)
+
+              seen_comma = false unless TkWhitespace === token
+              if parencount == 0
+                next if needcomma 
+                next if TkWhitespace === token
+                if tokval != nil
+                  out.last << tokval
+                else
+                  out.last.clear
+                  needcomma = true
+                end 
+              elsif parencond
+                needcomma = true
+                out.last << token.text
+              end
+            end
+
+            if beforeparen == 0 && parencount < 0
+              break
+            end
+          end
+          # Flatten any single element lists
+          out.map {|e| e.empty? ? nil : (e.size == 1 ? e.pop : e.flatten.join) }.compact
+        end
+      end
+    end
+  end
+end

@@ -1,5 +1,5 @@
 module YARD
-  module Parser
+  module Parser::Ruby::Legacy
     class TokenList < Array
       include RubyToken
       

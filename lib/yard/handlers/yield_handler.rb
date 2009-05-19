@@ -1,4 +1,4 @@
-class YARD::Handlers::YieldHandler < YARD::Handlers::Base
+class YARD::Handlers::YieldHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkYIELD
   
   def process

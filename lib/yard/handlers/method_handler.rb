@@ -1,4 +1,4 @@
-class YARD::Handlers::MethodHandler < YARD::Handlers::Base
+class YARD::Handlers::MethodHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkDEF
     
   def process
@@ -8,7 +8,7 @@ class YARD::Handlers::MethodHandler < YARD::Handlers::Base
     if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
       meth, args = $1, $2
       meth.gsub!(/\s+/,'')
-      args = tokval_list(YARD::Parser::TokenList.new(args), :all)
+      args = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(args), :all)
       args.map! {|a| k, v = *a.split('=', 2); [k.strip.to_sym, (v ? v.strip : nil)] } if args
     else
       raise YARD::Handlers::UndocumentableError, "method: invalid name"

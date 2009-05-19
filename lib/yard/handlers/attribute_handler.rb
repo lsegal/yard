@@ -1,4 +1,4 @@
-class YARD::Handlers::AttributeHandler < YARD::Handlers::Base
+class YARD::Handlers::AttributeHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/
   
   def process

@@ -2,7 +2,7 @@ require "e2mmap"
 require "irb/slex"
 
 module YARD
-  module Parser
+  module Parser::Ruby::Legacy
     module RubyToken
       EXPR_BEG   = :EXPR_BEG
       EXPR_MID   = :EXPR_MID

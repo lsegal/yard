@@ -1,5 +1,5 @@
 require 'stringio'
-require 'continuation' if RUBY19
+require 'continuation' unless RUBY18
 
 module YARD
   module Parser
@@ -43,16 +43,10 @@ module YARD
           end
         end
       end
-
-      attr_reader :file
-      attr_accessor :namespace, :visibility, :scope, :owner, :load_order_errors
+      
+      attr_reader :file, :parser_type
 
       def initialize(load_order_errors = false)
-        @file = "<STDIN>"
-        @namespace = YARD::Registry.root
-        @visibility = :public
-        @scope = :instance
-        @owner = @namespace
         @load_order_errors = load_order_errors
       end
 
@@ -60,51 +54,61 @@ module YARD
       # Creates a new SourceParser that parses a file and returns
       # analysis information about it.
       #
-      # @param [String, TokenList, StatementList, #read] content the source file to parse
-      def parse(content = __FILE__)
+      # @param [String, #read, Object] content the source file to parse
+      def parse(content = __FILE__, parser_type = :ruby)
+        @parser_type ||= parser_type
         case content
         when String
           @file = content
-          statements = StatementList.new(IO.read(content))
-        when TokenList
-          statements = StatementList.new(content)
-        when StatementList
-          statements = content
+          content = IO.read(content)
+          @parser_type = parser_type_for_filename(file)
         else
-          if content.respond_to? :read
-            statements = StatementList.new(content.read)
-          else
-            raise ArgumentError, "Invalid argument for SourceParser::parse: #{content.inspect}:#{content.class}"
-          end
+          content = content.read if content.respond_to? :read
         end
 
-        top_level_parse(statements)
+        @parser = parse_statements(content)
+        post_process
+        @parser
       end
-
+      
       private
-        def top_level_parse(statements)
-            statements.each do |stmt|
-              find_handlers(stmt).each do |handler| 
-                begin
-                  handler.new(self, stmt).process
-                rescue LoadOrderError => loaderr
-                  raise # Pass this up
-                rescue Handlers::UndocumentableError => undocerr
-                  log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
-                  log.warn "\tin file '#{file}':#{stmt.tokens.first.line_no}:\n\n" + stmt.inspect + "\n"
-                rescue => e
-                  log.error "Unhandled exception in #{handler.to_s}:"
-                  log.error "#{e.class.class_name}: #{e.message}"
-                  log.error "  in `#{file}`:#{stmt.tokens.first.line_no}:\n\n#{stmt.inspect}\n"
-                  log.error "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
-                end
-              end
-            end
-        end
 
-        def find_handlers(stmt)
-          Handlers::Base.subclasses.find_all {|sub| sub.handles? stmt.tokens }
+      def post_process
+        processor_class.new(@file, @load_order_errors).process(@parser.enumerator)
+      end
+      
+      def parser_type_for_filename(filename)
+        case File.extname(filename)[1..-1].downcase
+        when "c", "cpp", "cxx"
+          :c
+        else # when "rb", "rbx", "erb"
+          RUBY18 ? :ruby18 : :ruby
         end
+      end
+      
+      def processor_class
+        case parser_type
+        when :c
+          raise NotImplementedError
+        when :ruby18
+          Handlers::Ruby::Legacy::Processor
+        when :ruby
+          Handlers::Ruby::Processor
+        end
+      end
+      
+      def parse_statements(content)
+        case parser_type
+        when :c
+          raise NotImplementedError, "no support for C/C++ files"
+        when :ruby18
+          Ruby::Legacy::StatementList.new(content)
+        when :ruby
+          Ruby::RubyParser.parse(content, file)
+        else
+          raise ArgumentError, "invalid parser type or unrecognized file"
+        end
+      end
     end
   end
 end

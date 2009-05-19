@@ -1,4 +1,4 @@
-class YARD::Handlers::ExceptionHandler < YARD::Handlers::Base
+class YARD::Handlers::ExceptionHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Araise(\s|\()/
   
   def process

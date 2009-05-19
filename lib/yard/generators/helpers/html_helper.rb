@@ -182,15 +182,15 @@ module YARD
       end
 
       def html_syntax_highlight(source)
-        tokenlist = Parser::TokenList.new(source)
+        tokenlist = Parser::Ruby::Legacy::TokenList.new(source)
         tokenlist.map do |s| 
           prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
           prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
 
           case s
-          when Parser::RubyToken::TkWhitespace, Parser::RubyToken::TkUnknownChar
+          when Parser::Ruby::Legacy::RubyToken::TkWhitespace, Parser::Ruby::Legacy::RubyToken::TkUnknownChar
             h s.text
-          when Parser::RubyToken::TkId
+          when Parser::Ruby::Legacy::RubyToken::TkId
             prettyval = h(s.text)
             "<span class='#{prettyval} #{prettyclass} #{prettysuper}'>#{prettyval}</span>"
           else

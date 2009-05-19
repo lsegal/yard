@@ -1,4 +1,4 @@
-class YARD::Handlers::MixinHandler < YARD::Handlers::Base
+class YARD::Handlers::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Ainclude(\s|\()/
   
   def process
