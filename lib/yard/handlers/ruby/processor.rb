@@ -22,6 +22,8 @@ module YARD
               else
                 node.type =~ a_handler
               end
+            when Parser::Ruby::AstNode
+              a_handler == node
             end
           end
         end

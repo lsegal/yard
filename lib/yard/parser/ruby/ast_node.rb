@@ -57,6 +57,10 @@ module YARD
           reset_line_info(child_args)
         end
         
+        def ==(ast)
+          super && type == ast.type
+        end
+        
         def show
           text = full_source.split(/\r?\n/)[line_start - 1].strip
           "\t#{line}: #{text}"

@@ -1,7 +1,12 @@
+require File.dirname(__FILE__) + '/../../parser/ruby/ast_node'
+
 module YARD
   module Handlers
     module Ruby
       class Base < Handlers::Base
+        include Parser::Ruby
+        extend Parser::Ruby
+        
         def parse_block(inner_node, opts = nil)
           opts = {
             namespace: nil,
