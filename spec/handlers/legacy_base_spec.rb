@@ -1,57 +1,12 @@
 require File.dirname(__FILE__) + '/spec_helper'
+require File.dirname(__FILE__) + '/../../lib/yard/parser/ruby/legacy/ruby_lex'
+require File.dirname(__FILE__) + '/../../lib/yard/handlers/ruby/legacy/base'
+include Parser::Ruby::Legacy
 
-include Parser
-
-describe YARD::Handlers::Base, "#handles and inheritance" do
-  before do
-    Handlers::Base.stub!(:inherited)
-  end
-  
-  it "should keep track of subclasses" do
-    Handlers::Base.should_receive(:inherited).once
-    class TestHandler < Handlers::Base; end
-  end
-  
-  it "should handle a string input" do
-    class TestStringHandler < Handlers::Base
-      handles "hello"
-    end
-
-    TestStringHandler.handles?(TokenList.new("hello world")).should == true
-    TestStringHandler.handles?(TokenList.new("nothello world")).should == false
-  end
-  
-  it "should handle regex input" do
-    class TestRegexHandler < Handlers::Base
-      handles /^nothello$/
-    end
-
-    TestRegexHandler.handles?(TokenList.new("nothello")).should == true
-    TestRegexHandler.handles?(TokenList.new("not hello hello")).should == false
-  end
-
-  it "should handle token input" do
-    class TestTokenHandler < Handlers::Base
-      handles TkMODULE
-    end
-
-    TestTokenHandler.handles?(TokenList.new("module")).should == true
-    TestTokenHandler.handles?(TokenList.new("if")).should == false
-  end
-  
-  it "should raise NotImplementedError if process is called on a class with no #process" do
-    class TestNotImplementedHandler < Handlers::Base
-      handles TkMODULE
-    end
-    
-    lambda { TestNotImplementedHandler.new(0, 0).process }.should raise_error(NotImplementedError)
-  end
-end
-
-describe YARD::Handlers::Base, "#tokval" do 
+describe YARD::Handlers::Ruby::Legacy::Base, "#tokval" do 
   include RubyToken
   
-  before { @handler = Handlers::Base.new(nil, nil) } 
+  before { @handler = Handlers::Ruby::Legacy::Base.new(nil, nil) } 
   
   def tokval(code, *types)
     @handler.send(:tokval, TokenList.new(code).first, *types)
@@ -112,7 +67,7 @@ describe YARD::Handlers::Base, "#tokval" do
 end
 
 describe YARD::Handlers::Base, "#tokval_list" do 
-  before { @handler = Handlers::Base.new(nil, nil) } 
+  before { @handler = Handlers::Ruby::Legacy::Base.new(nil, nil) } 
   
   def tokval_list(code, *types)
     @handler.send(:tokval_list, TokenList.new(code), *types)
