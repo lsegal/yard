@@ -88,6 +88,8 @@ module YARD
         autoload :Processor,              'yard/handlers/ruby/processor'
 
         autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
+        autoload :MethodHandler,          'yard/handlers/ruby/method_handler'
+        autoload :ModuleHandler,          'yard/handlers/ruby/module_handler'
       end
     end
 
