@@ -3,9 +3,36 @@ require File.dirname(__FILE__) + '/../../parser/ruby/ast_node'
 module YARD
   module Handlers
     module Ruby
+      class MethodCallWrapper
+        def initialize(name) 
+          @name = name.to_s
+        end
+        
+        def matches?(node)
+          case node.type
+          when :var_ref
+            if !node.parent || node.parent.type == :list
+              return true if node[0].type == :ident && node[0][0] == @name
+            end
+          when :fcall, :command
+            return true if node[0][0] == @name
+          when :call, :command_call
+            return true if node[2][0] == @name
+          end
+          false
+        end
+      end
+      
       class Base < Handlers::Base
+        class << self
+          include Parser::Ruby
+          
+          def method_call(name)
+            MethodCallWrapper.new(name)
+          end
+        end
+
         include Parser::Ruby
-        extend Parser::Ruby
         
         def parse_block(inner_node, opts = nil)
           opts = {

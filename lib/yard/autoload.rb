@@ -85,6 +85,7 @@ module YARD
         end
       else
         autoload :Base,                   'yard/handlers/ruby/base'
+        autoload :MethodCallWrapper,      'yard/handlers/ruby/base'
         autoload :Processor,              'yard/handlers/ruby/processor'
 
         autoload :ClassHandler,           'yard/handlers/ruby/class_handler'

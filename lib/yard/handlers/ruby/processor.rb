@@ -24,6 +24,8 @@ module YARD
               end
             when Parser::Ruby::AstNode
               a_handler == node
+            when MethodCallWrapper
+              a_handler.matches?(node)
             end
           end
         end

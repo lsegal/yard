@@ -1,8 +1,7 @@
 class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
-  handles s(:var_ref, s(:ident, "private"))
-  handles s(:var_ref, s(:ident, "protected"))
-  handles s(:var_ref, s(:ident, "public"))
-  handles :fcall, :command
+  handles method_call(:private)
+  handles method_call(:protected)
+  handles method_call(:public)
   
   def process
     return if (ident = statement.jump(:ident)) == statement
