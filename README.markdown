@@ -87,8 +87,8 @@ following Yardoc'd method: 
      def reverse(contents) 
        contents = contents.read if respond_to? :read 
        contents.reverse 
-     end 
-                                                                             
+     end
+                                                                     
 With the above @param tag, we learn that the contents parameter can either be
 a String or any object that responds to the 'read' method, which is more 
 powerful than the textual description, which says it should be an IO object. 

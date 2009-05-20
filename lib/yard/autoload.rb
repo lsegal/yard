@@ -31,12 +31,13 @@ module YARD
   
   module Generators
     module Helpers
-      autoload :BaseHelper,             'yard/generators/helpers/base_helper'
-      autoload :FilterHelper,           'yard/generators/helpers/filter_helper'
-      autoload :HtmlHelper,             'yard/generators/helpers/html_helper'
-      autoload :MarkupHelper,           'yard/generators/helpers/markup_helper'
-      autoload :MethodHelper,           'yard/generators/helpers/method_helper'
-      autoload :UMLHelper,              'yard/generators/helpers/uml_helper'
+      autoload :BaseHelper,                 'yard/generators/helpers/base_helper'
+      autoload :FilterHelper,               'yard/generators/helpers/filter_helper'
+      autoload :HtmlHelper,                 'yard/generators/helpers/html_helper'
+      autoload :HtmlSyntaxHighlightHelper,  'yard/generators/helpers/html_syntax_highlight_helper'
+      autoload :MarkupHelper,               'yard/generators/helpers/markup_helper'
+      autoload :MethodHelper,               'yard/generators/helpers/method_helper'
+      autoload :UMLHelper,                  'yard/generators/helpers/uml_helper'
     end
     
     autoload :AttributesGenerator,      'yard/generators/attributes_generator'
@@ -109,8 +110,9 @@ module YARD
         end
       end
 
-      autoload :AstNode,          'yard/parser/ruby/ast_node'
-      autoload :RubyParser,       'yard/parser/ruby/ruby_parser'
+      autoload :AstNode,           'yard/parser/ruby/ast_node'
+      autoload :ParserSyntaxError, 'yard/parser/ruby/ruby_parser'
+      autoload :RubyParser,        'yard/parser/ruby/ruby_parser'
     end
 
     autoload :SourceParser,       'yard/parser/source_parser'

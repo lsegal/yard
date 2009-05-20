@@ -3,6 +3,8 @@ require 'ripper'
 module YARD
   module Parser
     module Ruby
+      class ParserSyntaxError < SyntaxError; end
+
       class RubyParser < Ripper
         class << self
           def no_comment(*toks)
@@ -18,25 +20,22 @@ module YARD
                     :void_stmt, :stmt_body, :var_ref, :args, :self, :string_embexpr,
                     :string_dvar, :xstring_literal, :rest_param, :blockarg
 
-        attr_reader :ast, :charno, :comments, :file
+        attr_reader :ast, :charno, :comments, :file, :tokens
 
         def initialize(source, filename, *args)
           super
           @file = filename
           @source = source
+          @tokens = []
           @comments = []
           @charno = 0
-        end
-        
-        def tokens
-          @source
         end
 
         def parse
           @ast = super
-          @ast.insert_comments(@comments)
           @ast.full_source = @source
           @ast.file = @file
+          insert_comments
           self
         end
         
@@ -86,7 +85,16 @@ module YARD
         def visit_token(token, data)
           ch = charno
           @charno += data.length 
+          add_token(token, data)
           AstNode.new(token, [data], line: lineno, char: ch, token: true)
+        end
+        
+        def add_token(token, data)
+          if @tokens.last && @tokens.last[0] == :symbeg
+            @tokens[-1] = [:symbol, ":" + data]
+          else
+            @tokens << [token, data]
+          end
         end
 
         def on_program(*args)
@@ -118,7 +126,7 @@ module YARD
           end
   
           if append_comment
-            @comments.last.first.push(comment[1..-1])
+            @comments.last.first.push(comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp)
             @comments.last[-1] = lineno
           else
             @comments << [[comment[1..-1]], lineno]
@@ -126,7 +134,21 @@ module YARD
         end
         
         def on_parse_error(msg)
-          raise SyntaxError, "in `#{@file}`:(#{lineno},#{column}): #{msg}"
+          raise ParserSyntaxError, "in `#{@file}`:(#{lineno},#{column}): #{msg}"
+        end
+        
+        def insert_comments
+          comments = @comments.dup
+          @ast.traverse do |node|
+            comments.each.with_index do |c, i|
+              next if c.empty? || node.line.nil?
+              if node.line.between?(c.last, c.last + 2)
+                comments.delete_at(i)
+                node.docstring = c.first.join("\n")
+                break
+              end
+            end
+          end
         end
       end
     end

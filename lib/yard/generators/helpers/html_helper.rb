@@ -4,6 +4,7 @@ module YARD
   module Generators::Helpers
     module HtmlHelper
       include MarkupHelper
+      include HtmlSyntaxHighlightHelper
       
       SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
     
@@ -179,24 +180,6 @@ module YARD
         from = serializer.serialized_path(fromobj)
         link = File.relative_path(from, filename)
         link + '.html' + (anchor ? '#' + anchor : '')
-      end
-
-      def html_syntax_highlight(source)
-        tokenlist = Parser::Ruby::Legacy::TokenList.new(source)
-        tokenlist.map do |s| 
-          prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
-          prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
-
-          case s
-          when Parser::Ruby::Legacy::RubyToken::TkWhitespace, Parser::Ruby::Legacy::RubyToken::TkUnknownChar
-            h s.text
-          when Parser::Ruby::Legacy::RubyToken::TkId
-            prettyval = h(s.text)
-            "<span class='#{prettyval} #{prettyclass} #{prettysuper}'>#{prettyval}</span>"
-          else
-            "<span class='#{prettyclass} #{prettysuper}'>#{h s.text}</span>"
-          end
-        end.join
       end
     end
   end
