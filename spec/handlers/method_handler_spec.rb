@@ -34,7 +34,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
   end
   
   it "should handle parameters" do
-    P('Foo#[]').parameters.should == [[:key, "'default'"]]
-    P('Foo#/').parameters.should == [[:x, "File.new('x', 'w')"], [:y, '2']]
+    P('Foo#[]').parameters.should == [['key', "'default'"]]
+    P('Foo#/').parameters.should == [['x', "File.new('x', 'w')"], ['y', '2']]
   end
 end
