@@ -4,7 +4,7 @@ module YARD
   module Parser
     module Ruby
       class ParserSyntaxError < SyntaxError; end
-
+      
       class RubyParser < Ripper
         class << self
           def no_comment(*toks)
@@ -59,12 +59,6 @@ module YARD
                 list
               end
             eof
-          elsif /_ref\z/ =~ event
-            module_eval(<<-eof, __FILE__, __LINE__ + 1)
-              def on_#{event}(*args)
-                args.first
-              end
-            eof
           else
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               def on_#{event}(*args)
@@ -107,8 +101,16 @@ module YARD
 
         def on_params(*args)
           args.map! do |arg|
-            if Array === arg
-              arg = arg.first if Array === arg.first 
+            if arg.class == Array
+              if arg.first.class == Array
+                arg.map! do |sub_arg|
+                  if sub_arg.class == Array
+                    AstNode.new(:default_arg, sub_arg, line: lineno, char: charno)
+                  else
+                    sub_arg
+                  end
+                end
+              end
               AstNode.new(:list, arg, line: lineno, char: charno)
             else
               arg

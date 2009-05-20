@@ -4,9 +4,9 @@ module YARD
       class Base < Handlers::Base
         def parse_block(inner_node, opts = nil)
           opts = {
-            :namespace => nil,
-            :scope => :instance,
-            :owner => nil
+            namespace: nil,
+            scope: :instance,
+            owner: nil
           }.update(opts || {})
 
           if opts[:namespace]

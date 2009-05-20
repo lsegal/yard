@@ -9,7 +9,7 @@ module YARD
         @comments = comments
       end
       
-      def inspect(lines = nil)
+      def inspect
         buf = [""]
         tokens.each do |tk|
           if tk.is_a?(RubyToken::TkNL)
@@ -20,6 +20,7 @@ module YARD
         end
         buf.map {|text| "\t#{line}: #{text}" }.join("\n")
       end
+      alias show inspect
       
       def line
         tokens.first.line_no

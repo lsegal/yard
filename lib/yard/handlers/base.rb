@@ -161,7 +161,7 @@ module YARD
         # the handlers, otherwise the same code will be parsed
         # multiple times and slow YARD down.
         # 
-        # @param [Parser::RubyToken, Symbol, String, Regexp] match
+        # @param [Parser::RubyToken, Symbol, String, Regexp] matches
         #   statements that match the declaration will be
         #   processed by this handler. A {String} match is 
         #   equivalent to a +/\Astring/+ regular expression 
@@ -169,8 +169,8 @@ module YARD
         #   token matches match only the first token of the
         #   statement.
         # 
-        def handles(match)
-          (@handlers ||= []).push(match)
+        def handles(*matches)
+          (@handlers ||= []).push(*matches)
         end
       end
 

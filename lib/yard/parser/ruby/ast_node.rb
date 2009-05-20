@@ -1,11 +1,42 @@
 module YARD
   module Parser
     module Ruby
+      def s(*args)
+        type = Symbol === args.first ? args.shift : :list
+        opts = Hash === args.last ? args.pop : {}
+        AstNode.new(type, args, opts)
+      end
+      
+      module ReferenceNode
+        def ref?; true end
+        
+        def path
+          Array.new flatten
+        end
+        
+        def namespace
+          Array.new flatten[0...-1]
+        end
+        
+        def source
+          super.split(/\s+/).first
+        end
+      end
+      
+      module ParameterNode
+        def required_params; self[0] end
+        def required_end_params; self[4] end
+        def optional_params; self[1] end
+        def splat_param; self[2] ? self[2][0] : nil end
+        def block_param; self[4] ? self[4][0] : nil end
+      end
+      
       class AstNode < Array
         attr_accessor :type, :parent, :docstring, :file, :full_source, :source
         attr_accessor :source_start, :source_end, :line_start, :line_end
         alias line line_start
         alias comments docstring
+        alias to_s source
 
         def initialize(type, arr, opts = {})
           super(arr)
@@ -16,6 +47,7 @@ module YARD
           @token = true if opts[:token]
 
           reset_line_info
+          mixin_type_methods
         end
 
         def push(*args)
@@ -23,6 +55,16 @@ module YARD
           child_args = args.select {|e| self.class === e }
           child_args.each {|child| child.parent = self }
           reset_line_info(child_args)
+        end
+        
+        def show
+          text = full_source.split(/\r?\n/)[line_start - 1].strip
+          "\t#{line}: #{text}"
+        end
+        
+        def jump(node_type)
+          traverse {|child| return(child) if child.type == node_type }
+          self
         end
 
         def first_child
@@ -35,6 +77,18 @@ module YARD
 
         def token?
           @token
+        end
+        
+        def ref?
+          false
+        end
+        
+        def kw?
+          [:class, :alias, :lambda, :do_block, :def, :begin, :rescue, 
+           :rescue_mod, :if, :if_mod, :else, :elsif, :case, :when, 
+           :next, :break, :retry, :redo, :return, :throw, :catch,
+           :until, :until_mod, :while, :while_mod, :yield, :yield0, :zsuper,
+           :unless, :unless_mod, :for, :super, :return0].include?(type)
         end
 
         def file
@@ -100,27 +154,23 @@ module YARD
           end
         end
 
-        def insert_comments(comments)
-          comments = comments.dup
-          traverse do |node|
-            comments.each.with_index do |c, i|
-              next if c.empty? || node.line.nil?
-              if node.line.between?(c.last, c.last + 2)
-                comments.delete_at(i)
-                node.docstring = c.first
-                break
-              end
-            end
+        private
+        
+        def mixin_type_methods
+          case type
+          when /_ref\z/
+            extend ReferenceNode
+          when :params
+            extend ParameterNode
           end
         end
 
-        private
-
         def reset_line_info(nodes = nil)
+          return if source_start.nil? || line_end.nil?
           if nodes.nil?
             nodes = children
             self.line_start = line_end
-            self.source_end = source_start + (token? ? first.length : 0)
+            self.source_end = source_start + (token? ? first.length - 1 : 0)
           end
 
           if nodes.size > 0
@@ -131,6 +181,8 @@ module YARD
               self.line_start = child.line_start if child.line_start < line_start
             end
           end
+          
+          self.source_start -= type.to_s.length + 1 if kw?
         end
       end
     end
