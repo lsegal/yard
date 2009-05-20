@@ -90,6 +90,7 @@ module YARD
         autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
         autoload :MethodHandler,          'yard/handlers/ruby/method_handler'
         autoload :ModuleHandler,          'yard/handlers/ruby/module_handler'
+        autoload :VisibilityHandler,      'yard/handlers/ruby/visibility_handler'
       end
     end
 

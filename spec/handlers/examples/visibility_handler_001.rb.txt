@@ -16,5 +16,5 @@ class Testing
 
   def pub2; end
 
-  public :notpriv, 'notpriv2', :notpriv?
+  protected :notpriv, 'notpriv2', :notpriv?
 end

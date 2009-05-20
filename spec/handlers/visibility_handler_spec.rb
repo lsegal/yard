@@ -17,8 +17,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}VisibilityHandler" do
   end
   
   it "should support parameters and only set visibility on those methods" do
-    Registry['Testing#notpriv'].visibility.should == :public
-    Registry['Testing#notpriv2'].visibility.should == :public
-    Registry['Testing#notpriv?'].visibility.should == :public
+    Registry['Testing#notpriv'].visibility.should == :protected
+    Registry['Testing#notpriv2'].visibility.should == :protected
+    Registry['Testing#notpriv?'].visibility.should == :protected
   end
 end
