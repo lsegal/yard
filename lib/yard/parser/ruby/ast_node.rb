@@ -83,12 +83,20 @@ module YARD
           false
         end
         
+        def literal?
+          type =~ /_literal$/ ? true : false
+        end
+        
         def kw?
           [:class, :alias, :lambda, :do_block, :def, :begin, :rescue, 
            :rescue_mod, :if, :if_mod, :else, :elsif, :case, :when, 
            :next, :break, :retry, :redo, :return, :throw, :catch,
            :until, :until_mod, :while, :while_mod, :yield, :yield0, :zsuper,
            :unless, :unless_mod, :for, :super, :return0].include?(type)
+        end
+        
+        def call?
+          [:call, :fcall, :command, :command_call].include?(type)
         end
 
         def file
@@ -182,7 +190,21 @@ module YARD
             end
           end
           
-          self.source_start -= type.to_s.length + 1 if kw?
+          adjust_start_and_end
+        end
+        
+        def adjust_start_and_end
+          case type
+          when :var_ref, :var_field, :const_ref, :const_path_ref
+            self.source_end = self.source_start + children.first.first.length - 1
+          else
+            self.source_start -= type.to_s.length if kw?
+            self.source_end -= 1 if call?
+            if literal?
+              self.source_start -= 1 
+              self.source_end   -= 1
+            end
+          end
         end
       end
     end
