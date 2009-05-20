@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+require File.dirname(__FILE__) + '/../../lib/yard/parser/ruby/legacy/ruby_lex'
 
 describe YARD::Parser::SourceParser do
   before do 
