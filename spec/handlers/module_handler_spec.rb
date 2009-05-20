@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::ModuleHandler do
+describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ModuleHandler" do
   before do
     Registry.clear 
     parse_file :module_handler_001, __FILE__

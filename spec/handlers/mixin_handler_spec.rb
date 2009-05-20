@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::MixinHandler do
+describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
   before { parse_file :mixin_handler_001, __FILE__ }
   
   it "should handle includes from classes or modules" do

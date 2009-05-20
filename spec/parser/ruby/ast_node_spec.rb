@@ -12,4 +12,4 @@ describe YARD::Parser::Ruby::AstNode, "#jump" do
     ast = s(:paren, s(:list, s(:list, s(s(:ident, "hi"), s(:ident, "bye")))))
     ast.jump(:params).object_id.should == ast.object_id
   end
-end
+end if RUBY19

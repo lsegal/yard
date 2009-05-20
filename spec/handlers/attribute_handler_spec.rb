@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::AttributeHandler do
+describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AttributeHandler" do
   before { parse_file :attribute_handler_001, __FILE__ }
   
   def read_write(namespace, name, read, write, scope = :instance)

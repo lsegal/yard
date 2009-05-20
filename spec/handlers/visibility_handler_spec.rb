@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::VisibilityHandler do
+describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}VisibilityHandler" do
   before { parse_file :visibility_handler_001, __FILE__ }
   
   it "should be able to set visibility to public" do

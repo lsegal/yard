@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::ClassHandler do
+describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   before { parse_file :class_handler_001, __FILE__ }
   
   it "should parse a class block with docstring" do
