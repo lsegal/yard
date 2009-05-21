@@ -135,7 +135,7 @@ module YARD
       end
     
       def anchor_for(object)
-        urlencode case object
+        case object
         when CodeObjects::MethodObject
           "#{object.name}-#{object.scope}_#{object.type}"
         when CodeObjects::Base
@@ -172,7 +172,7 @@ module YARD
           link = objpath
         end
       
-        link + (anchor ? '#' + anchor_for(anchor) : '')
+        link + (anchor ? '#' + urlencode(anchor_for(anchor)) : '')
       end
       
       def url_for_file(filename, anchor = nil)
@@ -182,7 +182,7 @@ module YARD
         end
         from = serializer.serialized_path(fromobj)
         link = File.relative_path(from, filename)
-        link + '.html' + (anchor ? '#' + anchor : '')
+        link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
 
       def html_syntax_highlight(source)

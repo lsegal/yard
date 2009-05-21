@@ -63,6 +63,24 @@ describe YARD::Generators::Helpers::HtmlHelper, '#url_for' do
     meth = CodeObjects::MethodObject.new(yard, :meth)
     url_for(meth).should == 'YARD.html#meth-instance_method'
   end
+
+  it "should properly urlencode methods with punctuation in links" do
+    obj = CodeObjects::MethodObject.new(nil, :/)
+    serializer = mock(:serializer)
+    serializer.stub!(:serialized_path).and_return("file.html")
+    stub!(:serializer).and_return(serializer)
+    stub!(:current_object).and_return(obj)
+    url_for(obj).should == "#%2F-instance_method"
+  end
+end
+
+describe YARD::Generators::Helpers::HtmlHelper, '#anchor_for' do
+  include YARD::Generators::Helpers::HtmlHelper
+  
+  it "should not urlencode data when called directly" do
+    obj = CodeObjects::MethodObject.new(nil, :/)
+    anchor_for(obj).should == "/-instance_method"
+  end
 end
 
 describe YARD::Generators::Helpers::HtmlHelper, '#resolve_links' do
