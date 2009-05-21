@@ -30,6 +30,23 @@ module YARD
           def method_call(name)
             MethodCallWrapper.new(name)
           end
+          
+          def handles?(node)
+            handlers.any? do |a_handler| 
+              case a_handler 
+              when Symbol
+                a_handler == node.type
+              when String
+                node.source == a_handler
+              when Regexp
+                node.source =~ a_handler
+              when Parser::Ruby::AstNode
+                a_handler == node
+              when MethodCallWrapper
+                a_handler.matches?(node)
+              end
+            end
+          end
         end
 
         include Parser::Ruby

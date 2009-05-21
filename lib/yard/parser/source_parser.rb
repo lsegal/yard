@@ -74,7 +74,8 @@ module YARD
       private
 
       def post_process
-        processor_class.new(@file, @load_order_errors).process(@parser.enumerator)
+        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
+        post.process(@parser.enumerator)
       end
       
       def parser_type_for_filename(filename)
@@ -83,17 +84,6 @@ module YARD
           :c
         else # when "rb", "rbx", "erb"
           RUBY18 ? :ruby18 : :ruby
-        end
-      end
-      
-      def processor_class
-        case parser_type
-        when :c
-          raise NotImplementedError
-        when :ruby18
-          Handlers::Ruby::Legacy::Processor
-        when :ruby
-          Handlers::Ruby::Processor
         end
       end
       

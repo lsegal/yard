@@ -4,6 +4,19 @@ module YARD
       class Base < Handlers::Base
         # For tokens like TkDEF, TkCLASS, etc.
         include YARD::Parser::Ruby::Legacy::RubyToken
+        
+        def self.handles?(stmt)
+          handlers.any? do |a_handler|
+            case a_handler
+            when String
+              stmt.tokens.first.text == a_handler
+            when Regexp
+              stmt.tokens.to_s =~ a_handler
+            else
+              a_handler == stmt.tokens.first.class 
+            end
+          end
+        end
 
         protected
 

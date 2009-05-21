@@ -69,7 +69,6 @@ module YARD
       if RUBY18
         module Legacy
           autoload :Base,                 'yard/handlers/ruby/legacy/base'
-          autoload :Processor,            'yard/handlers/ruby/legacy/processor'
 
           autoload :AliasHandler,         'yard/handlers/ruby/legacy/alias_handler'
           autoload :AttributeHandler,     'yard/handlers/ruby/legacy/attribute_handler'
@@ -85,8 +84,6 @@ module YARD
         end
       else
         autoload :Base,                   'yard/handlers/ruby/base'
-        autoload :MethodCallWrapper,      'yard/handlers/ruby/base'
-        autoload :Processor,              'yard/handlers/ruby/processor'
 
         autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
         autoload :MethodHandler,          'yard/handlers/ruby/method_handler'

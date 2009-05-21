@@ -172,6 +172,10 @@ module YARD
         def handles(*matches)
           (@handlers ||= []).push(*matches)
         end
+        
+        def handles?(statement)
+          raise NotImplementedError, "override #handles? in a subclass"
+        end
       end
 
       def initialize(source_parser, stmt)

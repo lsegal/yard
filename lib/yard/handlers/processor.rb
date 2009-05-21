@@ -2,16 +2,16 @@ module YARD
   module Handlers
     class Processor
       attr_accessor :file, :namespace, :visibility
-      attr_accessor :scope, :owner, :load_order_errors
+      attr_accessor :scope, :owner, :load_order_errors, :parser_type
       
-      def initialize(file = nil, load_order_errors = false)
+      def initialize(file = nil, load_order_errors = false, parser_type = :ruby)
         @file = file || "(stdin)"
         @namespace = YARD::Registry.root
         @visibility = :public
         @scope = :instance
         @owner = @namespace
         @load_order_errors = load_order_errors
-        @index = 0
+        @parser_type = parser_type
       end
       
       def process(statements)
@@ -35,15 +35,21 @@ module YARD
       end
       
       def find_handlers(statement)
-        Base.subclasses.find_all do |handler| 
-          valid_handler?(handler, statement)
+        Base.subclasses.find_all do |handler|
+          handler_base_class > handler &&
+          handler.handles?(statement)
         end
       end
       
-      protected
+      private
       
-      def valid_handler?(handler, statement)
-        raise NotImplementedError, "override #valid_handler?"
+      def handler_base_class
+        case parser_type
+        when :ruby
+          Ruby::Base
+        when :ruby18
+          Ruby::Legacy::Base
+        end
       end
     end
   end
