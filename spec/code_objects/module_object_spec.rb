@@ -32,8 +32,8 @@ describe YARD::CodeObjects::ModuleObject, "#meths" do
     MethodObject.new(@another, :bar)
     MethodObject.new(@another, :fazz, :class)
     
-    @yard.mixins(:instance) << @other
-    @yard.mixins(:class) << @another
+    @yard.instance_mixins << @other
+    @yard.class_mixins << @another
   end
   
   it "should list all methods (including mixin methods) via #meths" do
@@ -107,9 +107,9 @@ describe YARD::CodeObjects::ModuleObject, "#inheritance_tree" do
     @mod3 = ModuleObject.new(:root, :Mod3)
     @mod4 = ModuleObject.new(:root, :Mod4)
 
-    @mod1.mixins(:instance) << @mod2
-    @mod2.mixins(:instance) << @mod3
-    @mod1.mixins(:instance) << @mod4
+    @mod1.instance_mixins << @mod2
+    @mod2.instance_mixins << @mod3
+    @mod1.instance_mixins << @mod4
   end
 
   it "should show only itself for an inheritance tree without included modules" do

@@ -1,6 +1,7 @@
 module YARD::CodeObjects
   class NamespaceObject < Base
     attr_reader :children, :cvars, :meths, :constants, :attributes, :aliases
+    attr_reader :class_mixins, :instance_mixins
     
     def initialize(namespace, name, *args, &block)
       @children = CodeObjectList.new(self)
@@ -52,7 +53,8 @@ module YARD::CodeObjects
     end
     
     def included_meths(opts = {})
-      Array(opts[:scope] || [:instance, :class]).map do |scope|
+      opts = SymbolHash[:scope => [:instance, :class]].update(opts)
+      [opts[:scope]].flatten.map do |scope|
         mixins(scope).reverse.inject([]) do |list, mixin|
           next list if mixin.is_a?(Proxy)
           list + mixin.meths(opts.merge(:scope => :instance)).reject do |o|
@@ -69,7 +71,7 @@ module YARD::CodeObjects
     end
     
     def included_constants
-      mixins(:instance).reverse.inject([]) do |list, mixin|
+      instance_mixins.reverse.inject([]) do |list, mixin|
         if mixin.respond_to? :constants
           list += mixin.constants.reject do |o| 
             child(:name => o.name) || list.find {|o2| o2.name == o.name }
@@ -85,15 +87,9 @@ module YARD::CodeObjects
     end
 
     def mixins(*scopes)
-      raise ArgumentError, "Scopes must be :instance, :class, or both" if scopes.empty?
-      return @class_mixins if scopes == [:class]
-      return @instance_mixins if scopes == [:instance]
-
-      unless (scopes - [:instance, :class]).empty?
-        raise ArgumentError, "Scopes must be :instance, :class, or both"
-      end
-
-      return @class_mixins | @instance_mixins
+      return class_mixins if scopes == [:class]
+      return instance_mixins if scopes == [:instance]
+      class_mixins | instance_mixins
     end
   end
 end
