@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include YARD::Parser::Ruby; AstNode
-
 describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
+  include YARD::Parser::Ruby; AstNode
+
   before do
     Handlers::Ruby::Base.stub!(:inherited)
     @processor = Handlers::Processor.new(nil, false, :ruby)
@@ -87,4 +87,4 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     end
     invalid MethCallHandler, ast[9]
   end
-end
+end if RUBY19
