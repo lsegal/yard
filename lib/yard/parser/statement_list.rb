@@ -245,7 +245,7 @@ module YARD
       ##
       # Returns the next token in the stream that's not a space
       #
-      # @returns [RubyToken::Token] the next non-space token
+      # @return [RubyToken::Token] the next non-space token
       def peek_no_space
         return @tokens.first unless @tokens.first.class == TkSPACE
         return @tokens[1]
