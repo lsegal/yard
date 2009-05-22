@@ -50,7 +50,7 @@ module YARD
       
       class << self
         def new(namespace, name, *args, &block)
-          if name.to_s[0,2] == "::"
+          if name.to_s[0,2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root
           elsif name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/

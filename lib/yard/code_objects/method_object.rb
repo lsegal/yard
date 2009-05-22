@@ -10,7 +10,13 @@ module YARD::CodeObjects
       super
     end
     
-    def scope=(v) @scope = v.to_sym end
+    def scope=(v) 
+      reregister = @scope ? true : false
+      YARD::Registry.delete(self) if reregister
+      @scope = v.to_sym 
+      YARD::Registry.register(self) if reregister
+    end
+    
     def visibility=(v) @visibility = v.to_sym end
       
     def is_attribute?

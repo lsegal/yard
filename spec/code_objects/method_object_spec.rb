@@ -23,8 +23,18 @@ describe YARD::CodeObjects::MethodObject do
   
   it "should exist in the registry after successful creation" do
     obj = MethodObject.new(@yard, :something, :class)
-    Registry.at("YARD.something").should_not == nil
+    Registry.at("YARD.something").should_not be_nil
+    Registry.at("YARD#something").should be_nil
+    Registry.at("YARD::something").should be_nil
     obj = MethodObject.new(@yard, :somethingelse)
-    Registry.at("YARD#somethingelse").should_not == nil
+    Registry.at("YARD#somethingelse").should_not be_nil
+  end
+  
+  it "should allow #scope to be changed after creation" do
+    obj = MethodObject.new(@yard, :something, :class)
+    Registry.at("YARD.something").should_not be_nil
+    obj.scope = :instance
+    Registry.at("YARD.something").should be_nil
+    Registry.at("YARD#something").should_not be_nil
   end
 end

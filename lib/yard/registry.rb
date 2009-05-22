@@ -80,7 +80,11 @@ module YARD
     alias_method :[], :at
     
     def root; namespace[:root] end
-    def delete(object) namespace.delete(object.path) end
+    
+    def delete(object) 
+      namespace.delete(object.path)
+      self.class.objects.delete(object.path)
+    end
 
     def clear
       @namespace = SymbolHash.new
@@ -94,6 +98,7 @@ module YARD
     end
   
     def register(object)
+      self.class.objects[object.path] = object
       return if object.is_a?(CodeObjects::Proxy)
       namespace[object.path] = object
     end
