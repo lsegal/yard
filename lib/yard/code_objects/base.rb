@@ -60,15 +60,15 @@ module YARD
           keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
           if self == RootObject
             keyname = :root
+          elsif self == MethodObject
+            keyname += (args.first && args.first.to_sym == :class ? CSEP : ISEP) + name.to_s
           elsif keyname.empty?
             keyname = name.to_s
-          elsif self == MethodObject
-            keyname += (!args.first || args.first.to_sym == :instance ? ISEP : CSEP) + name.to_s
           else
             keyname += NSEP + name.to_s
           end
           
-          if self != RootObject && obj = Registry[keyname]
+          if self != RootObject && obj = Registry.objects[keyname]
             yield(obj) if block_given?
             obj
           else

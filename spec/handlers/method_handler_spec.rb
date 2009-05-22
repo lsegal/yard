@@ -15,8 +15,8 @@ describe YARD::Handlers::MethodHandler do
     P(:Foo).meths.should include(P("Foo.method2"))
   end
   
-  it "should parse/add class methods from other namespaces (String::hello)" do
-    P("String::hello").should_not be_nil
+  it "should parse/add class methods from other namespaces (String.hello)" do
+    P("String.hello").should be_instance_of(CodeObjects::MethodObject)
   end
   
   it "should allow punctuation in method names ([], ?, =~, <<, etc.)" do
