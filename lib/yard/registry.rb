@@ -108,7 +108,11 @@ module YARD
         return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
       end
       
-      namespace = root if namespace == :root || !namespace
+      if namespace == :root || !namespace
+        namespace = root
+      else
+        namespace = namespace.parent until namespace.is_a?(CodeObjects::NamespaceObject)
+      end
       orignamespace = namespace
 
       name = name.to_s
