@@ -2,6 +2,7 @@ module YARD
   module Tags
     class Tag
       attr_reader :tag_name, :text, :types, :name
+      attr_accessor :object
 
       ##
       # Creates a new tag object with a tag name and text. Optionally, formally declared types

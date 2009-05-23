@@ -28,6 +28,7 @@ module YARD
       tags.each_with_index do |tag, i|
         case tag
         when Tags::Tag
+          tag.object = object
           @tags << tag
         when Tags::RefTag
           @ref_tags << tag
