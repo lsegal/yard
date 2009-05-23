@@ -5,31 +5,42 @@ module YARD
     # a new meta tag, you can do it in one of two ways.
     #
     # == Method #1
-    # Write your own +tagname_tag+ method that takes the raw text as a parameter.
-    # Example:
-    #   def mytag_tag(text)
-    #     Tag.parse_tag("mytag", text)
-    #   end
-    #
-    # This will allow you to use @mytag TEXT to add meta data to classes through
-    # the docstring. {Tag} has a few convenience factory methods to create 
-    #
-    # == Method #2
-    # Use {Library::define_tag!} to define a new tag by passing the tag name
+    # Use {Library.define_tag} to define a new tag by passing the tag name
     # and the factory method to use when creating the tag. These definitions will
-    # be auto expanded into ruby code similar to what is shown in method #1. If you
-    # do not provide a factory method to use, it will default to {Tag::parse_tag}
+    # be auto expanded into ruby code similar to what is shown in method #2. If you
+    # do not provide a factory method to use, it will default to {DefaultFactory#parse_tag}
     # Example:
     #   define_tag :param, :with_types_and_name
     #   define_tag :author
     #
     # The first line will expand to the code:
-    #   def param_tag(text) Tag.parse_tag_with_types_and_name(text) end
+    #   def param_tag(text) tag_factory.parse_tag_with_types_and_name(text) end
     #
     # The second line will expand to:
-    #   def author_tag(text) Tag.parse_tag(text) end
+    #   def author_tag(text) tag_factory.parse_tag(text) end
+    # 
+    # Note that `tag_factory` is the factory object used to parse tags. This value
+    # defaults to the {DefaultFactory} class and can be set by changing {Library.default_factory}.
     #
-    # @see Library::define_tag
+    # == Method #2
+    # Write your own +tagname_tag+ method that takes the raw text as a parameter.
+    # Example:
+    #   def mytag_tag(text)
+    #     # parse your tag contents here
+    #   end
+    #
+    # This will allow you to use @mytag TEXT to add meta data to classes through
+    # the docstring. You can use the {Library#factory} object to help parse standard
+    # tag syntax. 
+    # 
+    # == Adding/Changing the Tag Syntax
+    # If you have specialized tag parsing needs you can substitute the {#factory} 
+    # object with your own by setting {Library.default_factory= Library.default_factory}
+    # to a new class with its own parsing methods before running YARD. This is useful
+    # if you want to change the syntax of existing tags (@see, @since, etc.)
+    #
+    # @see DefaultFactory
+    # @see Library.define_tag
     class Library
       class << self
         attr_reader :labels
@@ -39,6 +50,19 @@ module YARD
           @default_factory ||= DefaultFactory.new
         end
         
+        # Replace the factory object responsible for parsing tags by setting
+        # this to an object (or class) that responds to `parse_TAGNAME` methods
+        # where `TAGNAME` is the name of the tag.
+        # 
+        # You should set this value before performing any source parsing with
+        # YARD, otherwise your factory class will not be used.
+        # 
+        # @example
+        #   YARD::Tags::Library.default_factory = MyFactory
+        # 
+        # @param [Class, Object] factory the factory that parses all tags
+        # 
+        # @see DefaultFactory
         def default_factory=(factory)
           @default_factory = factory.is_a?(Class) ? factory.new : factory
         end
@@ -54,7 +78,7 @@ module YARD
       
         ##
         # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
-        # regular {Tag::parse_tag} factory method if none is supplied.
+        # regular {DefaultFactory#parse_tag} factory method if none is supplied.
         #
         # @param [#to_s] tag the tag name to create
         # @param meth the {Tag} factory method to call when creating the tag
@@ -86,8 +110,11 @@ module YARD
       
       public
       
+      # A factory class to handle parsing of tags, defaults to {default_factory}
+      attr_accessor :factory
+      
       def initialize(factory = Library.default_factory)
-        @factory = factory
+        self.factory = factory
       end
       
       define_tag "Parameters",        :param,       :with_types_and_name

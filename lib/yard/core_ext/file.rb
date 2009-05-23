@@ -4,7 +4,7 @@ class File
   # Turns a path +to+ into a relative path from starting
   # point +from+. The argument +from+ is assumed to be
   # a filename. To treat it as a directory, make sure it
-  # ends in {File::SEPARATOR} ('/' on UNIX filesystems).
+  # ends in `File::SEPARATOR` ('/' on UNIX filesystems).
   # 
   # @param [String] from the starting filename 
   #   (or directory with +from_isdir+ set to +true+).

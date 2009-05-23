@@ -33,7 +33,7 @@ module YARD
     # A Handler is automatically registered when it is subclassed from the
     # base class. The only other thing that needs to be done is to specify
     # which statement the handler will process. This is done with the +handles+
-    # declaration, taking either a {Parser::RubyToken}, {String} or {Regexp}.
+    # declaration, taking either a {Parser::RubyToken}, {String} or `Regexp`.
     # Here is a simple example which processes module statements.
     # 
     #   class MyModuleHandler < YARD::Handlers::Base
