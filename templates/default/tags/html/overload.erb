@@ -1,0 +1,11 @@
+<h3>Overloads:</h3>
+<div class="overload">
+  <% for overload in object.tags(:overload) %>
+    <% next if overload.tags.size == 0 %>
+    <div class="signature"><tt><%= overload.signature.gsub(/\Adef/, '') + "\n" %></tt></div>
+    <div class="details">
+      <%= yield(overload).gsub(/^/, '  ') %>
+    </div>
+  <% end %>
+</div>
+
