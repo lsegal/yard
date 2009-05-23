@@ -28,8 +28,12 @@ module YARD
         Registry.load(files, reload)
         
         if generate
-          Generators::FullDocGenerator.new(options).generate Registry.all(:module, :class)
+          Generators::FullDocGenerator.new(options).generate(all_objects)
         end
+      end
+
+      def all_objects
+        Registry.all(:module, :class)
       end
       
       private
