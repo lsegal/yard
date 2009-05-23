@@ -166,7 +166,7 @@ module YARD
       # 
       # @return [Base, nil] the registered code object or nil
       def to_obj
-        @obj ||= Registry.resolve(@namespace, @name)
+        @obj ||= Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
       end
     end
   end
@@ -176,8 +176,8 @@ end
 # via a path
 # 
 # @see YARD::CodeObjects::Proxy
-# @see YARD::Registry::resolve
+# @see YARD::Registry#resolve
 def P(namespace, name = nil)
   namespace, name = nil, namespace if name.nil?
-  YARD::Registry.resolve(namespace, name, true)
+  YARD::Registry.resolve(namespace, name, false, true)
 end

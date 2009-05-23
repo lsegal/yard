@@ -21,7 +21,7 @@ describe YARD::Registry do
     o3 = ModuleObject.new(o2, :C)
     Registry.resolve(o3, "::A").should == o1
     
-    Registry.resolve(o3, "::String", true).should == P(:String)
+    Registry.resolve(o3, "::String", false, true).should == P(:String)
   end
   
   it "should resolve instance methods with # prefix" do
@@ -37,6 +37,32 @@ describe YARD::Registry do
   it "should resolve instance methods in the root without # prefix" do
     o = MethodObject.new(:root, :methname)
     Registry.resolve(:root, 'methname').should == o
+  end
+  
+  it "should resolve superclass methods when inheritance = true" do
+    superyard = ClassObject.new(:root, :SuperYard)
+    yard = ClassObject.new(:root, :YARD)
+    yard.superclass = superyard
+    imeth = MethodObject.new(superyard, :hello)
+    cmeth = MethodObject.new(superyard, :class_hello, :class)
+
+    Registry.resolve(yard, "#hello", false).should be_nil
+    Registry.resolve(yard, "#hello", true).should == imeth
+    Registry.resolve(yard, "class_hello", false).should be_nil
+    Registry.resolve(yard, "class_hello", true).should == cmeth
+  end
+
+  it "should resolve mixin methods when inheritance = true" do
+    yard = ClassObject.new(:root, :YARD)
+    mixin = ModuleObject.new(:root, :Mixin)
+    yard.mixins(:instance) << mixin
+    imeth = MethodObject.new(mixin, :hello)
+    cmeth = MethodObject.new(mixin, :class_hello, :class)
+
+    Registry.resolve(yard, "#hello", false).should be_nil
+    Registry.resolve(yard, "#hello", true).should == imeth
+    Registry.resolve(yard, "class_hello", false).should be_nil
+    Registry.resolve(yard, "class_hello", true).should == cmeth
   end
   
   it "should allow symbols as object type in #all" do

@@ -103,43 +103,54 @@ module YARD
       namespace[object.path] = object
     end
 
-    def resolve(namespace, name, proxy_fallback = false)
+    def resolve(namespace, name, inheritance = false, proxy_fallback = false)
       if namespace.is_a?(CodeObjects::Proxy)
         return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
       end
       
       namespace = root if namespace == :root || !namespace
+      orignamespace = namespace
 
-      newname = name.to_s.gsub(/^#{CodeObjects::ISEPQ}/, '')
+      name = name.to_s
       if name =~ /^#{CodeObjects::NSEPQ}/
-        [name, newname[2..-1]].each do |n|
+        [name, name[2..-1]].each do |n|
           return at(n) if at(n)
         end
       else
         while namespace
-          [CodeObjects::NSEP, CodeObjects::ISEP, CodeObjects::CSEP].each do |s|
-            path = newname
-            if namespace != root
-              path = [namespace.path, newname].join(s)
-            end
-            found = at(path)
+          nss = inheritance ? namespace.inheritance_tree(true) : [namespace]
+          nss.each do |ns|
+            next if ns.is_a?(CodeObjects::Proxy)
+            found = partial_resolve(ns, name)
             return found if found
           end
           namespace = namespace.parent
         end
 
         # Look for ::name or #name in the root space
-        [CodeObjects::NSEP, CodeObjects::ISEP].each do |s|
-          found = at(s + newname)
+        [CodeObjects::ISEP, CodeObjects::NSEP].each do |s|
+          found = at(s + name)
           return found if found
         end
       end
-      proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
+      proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name) : nil
     end
 
     private
   
     attr_accessor :namespace
-    
+
+    def partial_resolve(namespace, name)
+      [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
+        next if s.empty? && name =~ /^\w/
+        path = name
+        if namespace != root
+          path = [namespace.path, name].join(s)
+        end
+        found = at(path)
+        return found if found
+      end
+      nil
+    end
   end
 end
