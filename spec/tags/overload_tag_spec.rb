@@ -16,13 +16,14 @@ describe YARD::Tags::OverloadTag do
   end
   
   it "should parse the rest of the text as a new Docstring" do
-    @tag.docstring.should be_instance_of(String)
-  end
-  
-  it "should convert the comments into a Docstring after #object= is called" do
-    @tag.object = mock
     @tag.docstring.should be_instance_of(Docstring)
     @tag.docstring.should == "Hello world"
+  end
+  
+  it "should set Docstring's object after #object= is called" do
+    m = mock(:object)
+    @tag.object = m
+    @tag.docstring.object.should == m
   end
   
   it "should respond to #tag, #tags and #has_tag?" do

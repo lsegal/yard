@@ -1,6 +1,7 @@
 module YARD
   class Docstring < String
-    attr_reader :object, :ref_tags
+    attr_reader :ref_tags
+    attr_accessor :object
     
     def initialize(content = '', object = nil)
       @tag_factory = Tags::Library.new
