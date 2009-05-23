@@ -19,7 +19,7 @@ module YARD
     # The second line will expand to:
     #   def author_tag(text) tag_factory.parse_tag(text) end
     # 
-    # Note that `tag_factory` is the factory object used to parse tags. This value
+    # Note that +tag_factory+ is the factory object used to parse tags. This value
     # defaults to the {DefaultFactory} class and can be set by changing {Library.default_factory}.
     #
     # == Method #2
@@ -51,8 +51,8 @@ module YARD
         end
         
         # Replace the factory object responsible for parsing tags by setting
-        # this to an object (or class) that responds to `parse_TAGNAME` methods
-        # where `TAGNAME` is the name of the tag.
+        # this to an object (or class) that responds to +parse_TAGNAME+ methods
+        # where +TAGNAME+ is the name of the tag.
         # 
         # You should set this value before performing any source parsing with
         # YARD, otherwise your factory class will not be used.
