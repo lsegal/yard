@@ -53,6 +53,12 @@ module YARD::CodeObjects
     
     protected
     
-    def sep; scope == :class ? CSEP : ISEP end
+    def sep
+      if scope == :class
+        namespace && namespace != Registry.root ? CSEP : NSEP
+      else
+        ISEP
+      end
+    end
   end
 end

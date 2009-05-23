@@ -21,6 +21,11 @@ describe YARD::CodeObjects::MethodObject do
     meth.path.should == "YARD.testing"
   end
   
+  it "should have a path of ::testing (note the ::) for a class method added to root namespace" do
+    meth = MethodObject.new(:root, :testing, :class)
+    meth.path.should == "::testing"
+  end
+  
   it "should exist in the registry after successful creation" do
     obj = MethodObject.new(@yard, :something, :class)
     Registry.at("YARD.something").should_not be_nil
