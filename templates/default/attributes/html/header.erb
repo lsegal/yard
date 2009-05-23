@@ -6,26 +6,10 @@
       <h2><%= scope.capitalize %> Attributes</h2>
       <table>
       <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| %>
-        <tr>
+        <% aliases = (rw[:read] || rw[:write]).aliases %>
+        <tr class="<%= 'hasaliases' if aliases.count > 0 %>">
           <th class='signature'>
             <span class='name'><%= h name %></span>
-            <% if rw['read'] %>
-              <% rw['read'].aliases.each do |obj| %>
-                <span class='alias'><%= h obj.name %>
-                  <% if rw['read'] && rw['write'] %>
-                    <span class="readwrite">[R]</span>
-                  <% end %>
-                </span>
-              <% end %>
-            <% end %>
-            <% if rw['write'] %>
-              <% rw['write'].aliases.each do |obj| %>
-                <span class='alias'><%= h obj.name %>
-                <% if rw['read'] && rw['write'] %>
-                  <span class="readwrite">[W]</span>
-                <% end %>
-              <% end %>
-            <% end %>
           </td>
           <td class="readwrite">
             [<%= ['read', 'write'].map {|t| 
@@ -47,6 +31,15 @@
             <% end %>
           </td>
         </tr>
+        <% if aliases.count > 0 %>
+          <tr>
+            <td colspan='4' class='aliases'><span class='text'>Also known as:</span>
+              <% aliases.each_with_index do |obj, i| %>
+                <span class='alias'><%= h obj.name.to_s.sub(/=$/, '') %></span><%= "," if i < aliases.count - 1 %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
       </table>
     </div>

@@ -27,12 +27,11 @@ h3 { font-size: 1.0em; }
 .section.source .source_code { display: none; }
 /*.section.source .source_code pre { float: left; }*/
 .section.attributes table { padding: 0; width: 100%; }
-.section.attributes th.readwrite { width: 5%; }
-.section.attributes .signature { width: 10%; font-family: monospace; }
-.section.attributes .signature .name { font-weight: bold; }
-.section.attributes .signature .alias { font-weight: normal; position: relative; }
-.section.attributes .signature .alias .readwrite { position: absolute; right: 0; font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; }
-.section.attributes .signature .name, .section.attributes .signature .alias { display: block; }
+.section.attributes .readwrite { width: 5%; }
+.section.attributes .name { font-weight: bold; width: 10%; }
+.section.attributes .aliases { padding-top: 0; padding-left: 0; }
+.section.attributes .aliases .text { font-size: 0.8em; }
+.section.attributes .aliases .alias { font-family: monospace; font-weight: bold; }
 .section.attributes .visibility { font-style: italic; color: #666; width: 5%; }
 .section.attributes td, .section.attributes th { vertical-align: top; padding: 5px; }
 .section.attributes th { padding-left: 0; text-align: left; }
@@ -40,6 +39,7 @@ h3 { font-size: 1.0em; }
 .section.attributes .docstring .return_types { font-style: normal; }
 .section.attributes .docstring { width: 80%; }
 .section.attributes .docstring * { display: inline; }
+.section.attributes tr.hasaliases td, .section.attributes tr.hasaliases th { padding-bottom: 0; }
 .section.inheritance { background: #ddd; padding: 5px; border: 1px solid #ccc; border-top: 0; }
 .section.inheritance ul { list-style: none; padding-left: 2.2em; margin: 0; }
 .section.inheritance ul li { line-height: 1.2em; }
