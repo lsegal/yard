@@ -105,9 +105,9 @@ module YARD
       tag_method = "#{tag_name}_tag"
       if tag_name && @tag_factory.respond_to?(tag_method)
         if @tag_factory.method(tag_method).arity == 2
-          @tags.push *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
+          add_tag *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
         else
-          @tags.push *@tag_factory.send(tag_method, tag_buf) 
+          add_tag *@tag_factory.send(tag_method, tag_buf) 
         end
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
