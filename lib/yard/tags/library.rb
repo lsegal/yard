@@ -81,13 +81,22 @@ module YARD
         # regular {DefaultFactory#parse_tag} factory method if none is supplied.
         #
         # @param [#to_s] tag the tag name to create
-        # @param meth the {Tag} factory method to call when creating the tag
+        # @param [#to_s, Class<Tag>] meth the {Tag} factory method to call when 
+        #   creating the tag or the name of the class to directly create a tag for
         def define_tag(label, tag, meth = "")
-          class_eval <<-eof, __FILE__, __LINE__
-            def #{tag}_tag(text, raw_text)
-              send_to_factory(#{tag.inspect}, #{meth.inspect}, text, raw_text)
-            end
-          eof
+          if meth.is_a?(Class) && Tag > meth
+            class_eval <<-eof, __FILE__, __LINE__
+              def #{tag}_tag(text, raw_text) 
+                #{meth}.new(#{tag.inspect}, text, raw_text) 
+              end
+            eof
+          else
+            class_eval <<-eof, __FILE__, __LINE__
+              def #{tag}_tag(text, raw_text)
+                send_to_factory(#{tag.inspect}, #{meth.inspect}, text, raw_text)
+              end
+            eof
+          end
 
           @labels ||= SymbolHash.new(false)
           @labels.update(tag => label)
