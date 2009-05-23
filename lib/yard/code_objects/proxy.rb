@@ -20,7 +20,7 @@ module YARD
         if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
-          namespace = $`.empty? ? Registry.root : Proxy.new(namespace, $`)
+          namespace = Proxy.new(namespace, $`) unless $`.empty?
           name = $1
         end 
         
@@ -54,8 +54,16 @@ module YARD
         else
           if @namespace == Registry.root
             (@imethod ? ISEP : "") + name.to_s
-          else
-            @origname || name.to_s
+          elsif @origname
+            if @origname =~ /^[A-Z]/
+              @origname
+            else
+              [namespace.path, @origname].join
+            end
+          elsif name.to_s =~ /^[A-Z]/ # const
+            name.to_s
+          else # class meth?
+            [namespace.path, name.to_s].join(CSEP)
           end
         end
       end
