@@ -10,6 +10,7 @@ module YARD
     autoload :ClassObject,          'yard/code_objects/class_object'
     autoload :ClassVariableObject,  'yard/code_objects/class_variable_object'
     autoload :ConstantObject,       'yard/code_objects/constant_object'
+    autoload :ExtendedMethodObject, 'yard/code_objects/extended_method_object'
     autoload :MethodObject,         'yard/code_objects/method_object'
     autoload :ModuleObject,         'yard/code_objects/module_object'
     autoload :NamespaceObject,      'yard/code_objects/namespace_object'

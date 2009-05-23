@@ -46,6 +46,18 @@ describe YARD::CodeObjects::NamespaceObject do
     meths.should_not include(cmeth)
     meths.should_not include(cmeth2)
   end
+
+  it "should list included_meths mixed into the class scope as class methods" do
+    b = ModuleObject.new(nil, :Mod2)
+    bmeth = MethodObject.new(b, :foo)
+    bmeth2 = MethodObject.new(b, :foo2)
+    c = NamespaceObject.new(nil, :YARD)
+    c.class_mixins << b
+    
+    [bmeth, bmeth2].each {|o| o.scope.should == :instance }
+    meths = c.included_meths(:scope => :class)
+    meths.each {|o| o.scope.should == :class }
+  end
   
   it "should not list methods overridden by another included module" do
     a = ModuleObject.new(nil, :Mod)

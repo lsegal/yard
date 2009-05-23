@@ -57,9 +57,11 @@ module YARD::CodeObjects
       [opts[:scope]].flatten.map do |scope|
         mixins(scope).reverse.inject([]) do |list, mixin|
           next list if mixin.is_a?(Proxy)
-          list + mixin.meths(opts.merge(:scope => :instance)).reject do |o|
+          arr = mixin.meths(opts.merge(:scope => :instance)).reject do |o|
             child(:name => o.name, :scope => scope) || list.find {|o2| o2.name == o.name }
           end
+          arr.map! {|o| ExtendedMethodObject.new(o) } if scope == :class
+          list + arr
         end
       end.flatten
     end
