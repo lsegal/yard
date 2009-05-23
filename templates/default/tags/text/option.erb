@@ -1,0 +1,5 @@
+  - Options hash <%= param %>:
+<% for tag in object.tags(:option).select {|x| x.name.to_s == param } %>
+    - <%= format_types (tag.pair.types || ['Object']) %> <%= tag.pair.name %> <%  %><%= tag.pair.defaults.map {|t| "(defaults to #{t})" }.join(", ") if tag.pair.defaults %> <%= tag.pair.text %>
+<% end %>
+
