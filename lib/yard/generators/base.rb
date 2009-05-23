@@ -23,7 +23,23 @@ module YARD
         def register_template_path(path)
           template_paths.unshift(path)
         end
-        
+
+        # Calls the +Proc+ object or method name before generating all or a specific
+        # section. The callback should return +false+ if the section is to be
+        # skipped.
+        # 
+        # @overload before_section(method_name)
+        #   @param [Symbol] method_name the name of the method to call before
+        #     running the generator.
+        # 
+        # @overload before_section(proc)
+        #   @param [Proc] proc should return +false+ if section should be skipped.
+        # 
+        # @overload before_section(section, condition)
+        #   Only calls the +Proc+ or method if it matches the passed +section+
+        #   
+        #   @param [Object] section one of the section items in {#sections_for}
+        #   @param [Symbol, Proc] condition see the first two overloads
         def before_section(*args)
           if args.size == 1
             before_section_filters.push [nil, args.first]
