@@ -48,7 +48,7 @@ module YARD::CodeObjects
     end
     
     def name(prefix = false)
-      ((prefix ? sep : "") + super().to_s).to_sym
+      ((prefix ? (sep == ISEP ? sep : "") : "") + super().to_s).to_sym
     end
     
     protected

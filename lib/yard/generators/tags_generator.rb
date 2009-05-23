@@ -3,6 +3,7 @@ module YARD
     class TagsGenerator < Base
       before_section :header,  :has_tags?
       before_section :option, :has_options?
+      before_section :param, :has_params?
       
       def sections_for(object)
         [:header, [:example, :param, :yieldparam, :yieldreturn, :return, :raise, :author, :version, :since, :see]]
@@ -37,6 +38,10 @@ module YARD
       end
       
       protected
+      
+      def has_params?(object)
+        tags_by_param(object).size > 0
+      end
       
       def has_tags?(object)
         object.tags.size > 0
