@@ -3,8 +3,11 @@ require 'optparse'
 module YARD
   module CLI
     class Yardoc
+      DEFAULT_YARDOPTS_FILE = ".yardopts"
+      
       attr_reader :options, :visibilities
       attr_accessor :files, :reload, :generate
+      attr_accessor :options_file
       
       def self.run(*args) new.run(*args) end
         
@@ -21,9 +24,12 @@ module YARD
         @reload = true
         @generate = true
         @files = ['lib/**/*.rb']
+        @options_file = DEFAULT_YARDOPTS_FILE
       end
       
       def run(*args)
+        args += support_rdoc_document_file!
+        optparse(*yardopts)
         optparse(*args)
         Registry.load(files, reload)
         
@@ -36,7 +42,19 @@ module YARD
         Registry.all(:module, :class)
       end
       
+      def yardopts
+        IO.read(options_file).split(/\s+/)
+      rescue Errno::ENOENT
+        []
+      end
+      
       private
+      
+      def support_rdoc_document_file!
+        IO.read(".document").split(/\s+/)
+      rescue Errno::ENOENT
+        []
+      end
       
       def optparse(*args)
         serialopts = SymbolHash.new
@@ -45,6 +63,10 @@ module YARD
         opts.banner = "Usage: yardoc [options] [source files]"
 
         opts.separator "(if a list of source files is omitted, lib/**/*.rb is used.)"
+        opts.separator ""
+        opts.separator "A base set of options can be specified by adding a .yardopts"
+        opts.separator "file to your base path containing all extra options separated"
+        opts.separator "by whitespace."
         opts.separator ""
         opts.separator "General Options:"
 
@@ -113,6 +135,7 @@ module YARD
         
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
+          options[:serializer] = nil
           serialopts[:basepath] = dir
         end
 
@@ -149,8 +172,8 @@ module YARD
         # Last minute modifications
         self.files = args unless args.empty?
         self.reload = false if self.files.empty?
-        visibilities.uniq!
-        options[:serializer] = Serializers::FileSystemSerializer.new(serialopts)
+        self.visibilities.uniq!
+        options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
       end
     end
   end
