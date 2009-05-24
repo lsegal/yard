@@ -17,12 +17,14 @@ module YARD
       alias_method :<<, :push
     end
     
-    NSEP = '::'
-    ISEP = '#'
+    NSEPQ = NSEP = '::'
+    ISEPQ = ISEP = '#'
+    CSEP = '.'
+    CSEPQ = Regexp.quote CSEP
     CONSTANTMATCH = /[A-Z]\w*/
-    NAMESPACEMATCH = /(?:(?:#{Regexp.quote NSEP})?#{CONSTANTMATCH})+/
-    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
-    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:\.|#{Regexp.quote NSEP})\s*)?#{METHODNAMEMATCH}/
+    NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
+    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
+    METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
     
     BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
       "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError", 
@@ -48,25 +50,25 @@ module YARD
       
       class << self
         def new(namespace, name, *args, &block)
-          if name.to_s[0,2] == "::"
+          if name.to_s[0,2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root
-          elsif name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+          elsif name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
           keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
           if self == RootObject
             keyname = :root
+          elsif self == MethodObject
+            keyname += (args.first && args.first.to_sym == :class ? CSEP : ISEP) + name.to_s
           elsif keyname.empty?
             keyname = name.to_s
-          elsif self == MethodObject
-            keyname += (!args.first || args.first.to_sym == :instance ? ISEP : NSEP) + name.to_s
           else
             keyname += NSEP + name.to_s
           end
           
-          if self != RootObject && obj = Registry[keyname]
+          if self != RootObject && obj = Registry.objects[keyname]
             yield(obj) if block_given?
             obj
           else
@@ -203,7 +205,7 @@ module YARD
       # 
       # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split(/#{NSEP}/).last.gsub(/Object$/, '').downcase.to_sym
+        self.class.name.split(/#{NSEPQ}/).last.gsub(/Object$/, '').downcase.to_sym
       end
     
       def path

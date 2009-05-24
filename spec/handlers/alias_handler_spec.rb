@@ -11,7 +11,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AliasHandler" do
   end
   
   it "should handle the Ruby 'alias' keyword syntax" do
-    ['A#c', 'A#d?', 'A#[]', 'A#[]=', 'A#@-', 'A#%', 'A#*'].each do |a|
+    ['A#c', 'A#d?', 'A#[]', 'A#[]=', 'A#-@', 'A#%', 'A#*'].each do |a|
       P(a).should be_instance_of(CodeObjects::MethodObject)
     end
   end

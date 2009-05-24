@@ -15,7 +15,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     end
     
     # Class method if prefixed by self(::|.) or Module(::|.)
-    if meth =~ /(?:#{NSEP}|\.)([^#{NSEP}\.]+)$/
+    if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
       mscope, meth = :class, $1
       nobj = P(namespace, $`) unless $` == "self"
     end

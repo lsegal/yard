@@ -5,12 +5,16 @@ describe YARD::CodeObjects::ClassObject do
     Registry.clear 
     @mixin = ModuleObject.new(:root, :SomeMixin)
     @mixin2 = ModuleObject.new(:root, :SomeMixin2)
+    @mixin3 = ModuleObject.new(:root, :SomeMixin3)
+    @mixin4 = ModuleObject.new(:root, :SomeMixin4)
+    @mixin2.instance_mixins << @mixin3
     @superyard = ClassObject.new(:root, :SuperYard)
     @superyard.superclass = P("String")
-    @superyard.mixins << @mixin2
+    @superyard.instance_mixins << @mixin2
+    @superyard.class_mixins << @mixin4
     @yard = ClassObject.new(:root, :YARD)
     @yard.superclass = @superyard
-    @yard.mixins << @mixin
+    @yard.instance_mixins << @mixin
   end
   
   it "should show the proper inheritance tree" do
@@ -18,7 +22,7 @@ describe YARD::CodeObjects::ClassObject do
   end
   
   it "should show proper inheritance tree when mixins are included" do
-    @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, P(:String)]
+    @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin2, @mixin3, P(:String)]
   end
 end
 
@@ -53,7 +57,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
-    meths.should include(P("SuperYard::bar"))
+    meths.should include(P("SuperYard.bar"))
   end
   
   it "should allow :inherited to be set to false" do
@@ -61,7 +65,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should include(P("YARD#mymethod"))
     meths.should_not include(P("SuperYard#foo"))
     meths.should_not include(P("SuperYard#foo2"))
-    meths.should_not include(P("SuperYard::bar"))
+    meths.should_not include(P("SuperYard.bar"))
   end
   
   it "should not show overridden methods" do 
@@ -74,7 +78,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
     meths.should_not include(P("YARD#mymethod"))
     meths.should include(P("SuperYard#foo"))
     meths.should include(P("SuperYard#foo2"))
-    meths.should include(P("SuperYard::bar"))
+    meths.should include(P("SuperYard.bar"))
   end
   
   it "should not show inherited methods overridden by other subclasses" do

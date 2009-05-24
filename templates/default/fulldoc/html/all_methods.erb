@@ -12,7 +12,7 @@
       <ul>
       <% for obj in methods_to_show %>
         <% next if obj.namespace == Registry.root %>
-        <li nowrap>
+        <li nowrap="nowrap">
           <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %> 
           <% if obj.namespace != Registry.root %>
             <em>(<%= obj.namespace.type %> <%= obj.namespace.name %>)</em>

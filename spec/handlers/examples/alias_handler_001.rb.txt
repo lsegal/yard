@@ -7,7 +7,7 @@ module A
   alias d? a
   alias [] a
   alias []= a
-  alias @- a
+  alias -@ a
   alias % a
   alias * a
 end

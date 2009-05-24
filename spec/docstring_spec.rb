@@ -105,6 +105,12 @@ describe YARD::Docstring do
     tags.first.owner.should == o
   end
 
+  it "should ignore invalid reference tags" do
+    doc = Docstring.new("@param *args (see INVALID::TAG#tag)")
+    tags = doc.tags('param')
+    tags.size.should == 0
+  end
+
   it "should be blank and empty if it has no content and no tags" do
     Docstring.new.should be_blank
     Docstring.new.should be_empty

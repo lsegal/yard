@@ -10,7 +10,13 @@ module YARD::CodeObjects
       super
     end
     
-    def scope=(v) @scope = v.to_sym end
+    def scope=(v) 
+      reregister = @scope ? true : false
+      YARD::Registry.delete(self) if reregister
+      @scope = v.to_sym 
+      YARD::Registry.register(self) if reregister
+    end
+    
     def visibility=(v) @visibility = v.to_sym end
       
     def is_attribute?
@@ -42,11 +48,17 @@ module YARD::CodeObjects
     end
     
     def name(prefix = false)
-      prefix && sep == ISEP ? sep + super().to_s : super()
+      ((prefix ? (sep == ISEP ? sep : "") : "") + super().to_s).to_sym
     end
     
     protected
     
-    def sep; scope == :class ? super : ISEP end
+    def sep
+      if scope == :class
+        namespace && namespace != YARD::Registry.root ? CSEP : NSEP
+      else
+        ISEP
+      end
+    end
   end
 end

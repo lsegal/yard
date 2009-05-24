@@ -158,7 +158,7 @@ describe YARD::CodeObjects::Base do
     Parser::SourceParser.parse_string <<-eof
       class X; end
     eof
-    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).file.should == '(stdin)'
     Registry.at(:X).line.should == 1
   end
   
@@ -169,16 +169,15 @@ describe YARD::CodeObjects::Base do
       class X; end
     eof
     
-    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).file.should == '(stdin)'
     Registry.at(:X).line.should == 1
-    Registry.at(:X).files.should == [['<STDIN>', 1], ['<STDIN>', 2], ['<STDIN>', 3]]
+    Registry.at(:X).files.should == [['(stdin)', 1], ['(stdin)', 2], ['(stdin)', 3]]
   end
 
   it "should maintain all file associations when objects are defined multiple times in multiple files" do
     3.times do |i|
-      p1 = Parser::SourceParser.new
-      p1.instance_variable_set("@file", "file#{i+1}.rb")
-      p1.parse StringIO.new("class X; end")
+      IO.stub!(:read).and_return("class X; end")
+      Parser::SourceParser.new.parse("file#{i+1}.rb")
     end
     
     Registry.at(:X).file.should == 'file1.rb'
@@ -194,8 +193,8 @@ describe YARD::CodeObjects::Base do
       class X; end
     eof
     
-    Registry.at(:X).file.should == '<STDIN>'
+    Registry.at(:X).file.should == '(stdin)'
     Registry.at(:X).line.should == 4
-    Registry.at(:X).files.should == [['<STDIN>', 4], ['<STDIN>', 1], ['<STDIN>', 2]]
+    Registry.at(:X).files.should == [['(stdin)', 4], ['(stdin)', 1], ['(stdin)', 2]]
   end
 end

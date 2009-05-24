@@ -1,0 +1,11 @@
+
+
+Overloads
+=========
+
+<% for overload in object.tags(:overload) %>
+<% next if overload.tags.size == 0 %>
+<%= overload.signature.gsub(/\Adef/, '') + "\n" %>
+<%= yield(overload).gsub(/^/, '  ') %>
+<% end %>
+

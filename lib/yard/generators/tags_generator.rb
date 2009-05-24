@@ -3,13 +3,25 @@ module YARD
     class TagsGenerator < Base
       before_section :header,  :has_tags?
       before_section :option, :has_options?
+      before_section :param, :has_params?
+      before_section :overload, :has_overloads?
       
       def sections_for(object)
-        [:header, [:example, :param, :yieldparam, :return, :raise, :author, :version, :since, :see]]
+        [:header, [
+            :example, :param, :yieldparam,
+            :yieldreturn, :return, :raise,
+            :overload, [G(DocstringGenerator), self],
+            :author, :version, :since, :see
+          ]
+        ]
       end
       
       def yieldparam(object)
         render_tags :yieldparam
+      end
+
+      def yieldreturn(object)
+        render_tags :yieldreturn
       end
 
       def return(object)
@@ -34,12 +46,20 @@ module YARD
       
       protected
       
+      def has_params?(object)
+        tags_by_param(object).size > 0
+      end
+      
       def has_tags?(object)
         object.tags.size > 0
       end
       
       def has_options?(object)
         object.has_tag?(:option)
+      end
+      
+      def has_overloads?(object)
+        object.has_tag?(:overload)
       end
       
       def render_tags(name, opts = {})
@@ -56,7 +76,8 @@ module YARD
         end
         
         object.parameters.map do |p|
-          cache[p.first.to_s]
+          name = p.first.to_s
+          cache[name] || cache[name[/^[*&](\w+)$/, 1]]
         end.compact
       end
     end

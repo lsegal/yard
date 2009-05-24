@@ -16,15 +16,30 @@ describe YARD::CodeObjects::MethodObject do
     meth.path.should == "YARD#testing"
   end
   
-  it "should have a path of YARD::testing for a class method in YARD" do
+  it "should have a path of YARD.testing for a class method in YARD" do
     meth = MethodObject.new(@yard, :testing, :class)
-    meth.path.should == "YARD::testing"
+    meth.path.should == "YARD.testing"
+  end
+  
+  it "should have a path of ::testing (note the ::) for a class method added to root namespace" do
+    meth = MethodObject.new(:root, :testing, :class)
+    meth.path.should == "::testing"
   end
   
   it "should exist in the registry after successful creation" do
     obj = MethodObject.new(@yard, :something, :class)
-    Registry.at("YARD::something").should_not == nil
+    Registry.at("YARD.something").should_not be_nil
+    Registry.at("YARD#something").should be_nil
+    Registry.at("YARD::something").should be_nil
     obj = MethodObject.new(@yard, :somethingelse)
-    Registry.at("YARD#somethingelse").should_not == nil
+    Registry.at("YARD#somethingelse").should_not be_nil
+  end
+  
+  it "should allow #scope to be changed after creation" do
+    obj = MethodObject.new(@yard, :something, :class)
+    Registry.at("YARD.something").should_not be_nil
+    obj.scope = :instance
+    Registry.at("YARD.something").should be_nil
+    Registry.at("YARD#something").should_not be_nil
   end
 end

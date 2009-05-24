@@ -15,4 +15,6 @@ module Y
   include B::C, B if X == 2
   include A
   include QQQ
+
+  class << self; include A; end
 end

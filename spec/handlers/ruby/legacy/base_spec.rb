@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require File.dirname(__FILE__) + '/../../../../lib/yard/parser/ruby/legacy/ruby_lex'
+require File.dirname(__FILE__) + '/../../../../lib/yard/parser/ruby/legacy/ruby_lex' unless RUBY18
 require File.dirname(__FILE__) + '/../../../../lib/yard/handlers/ruby/legacy/base'
 
 include Parser::Ruby::Legacy

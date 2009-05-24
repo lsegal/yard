@@ -69,9 +69,9 @@ module YARD
       # 
       def included_meths_by_module
         all_meths = current_object.included_meths(:scope => scope, :visibility => visibility)
-        current_object.mixins.each do |mixin|
+        current_object.mixins(scope).each do |mixin|
           next if mixin.is_a?(CodeObjects::Proxy)
-          meths = mixin.meths(meths_opts).select {|c| all_meths.include?(c) }
+          meths = mixin.meths(meths_opts.merge(:scope => :instance)).select {|c| all_meths.include?(c) }
           remove_ignored_meths!(meths)
           next if meths.empty?
           yield(mixin, meths)

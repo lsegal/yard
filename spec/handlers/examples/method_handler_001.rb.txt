@@ -32,4 +32,12 @@ end
   def &(o) end
   def %(o) end
   def ^(o) end
+
+  # @param a [Fixnum]
+  # @overload def bar(a, b = 1)
+  #   @param a [String]
+  #   @return [String]
+  # @overload def baz(b, c)
+  #   @return [Fixnum]
+  def foo(*args); end
 end

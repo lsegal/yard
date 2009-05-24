@@ -30,7 +30,11 @@ module YARD
         end
 
         html = resolve_links(html)
-        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) { '<pre class="code">' + html_syntax_highlight(CGI.unescapeHTML($1)) + '</pre>' }
+        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
+          str = $1
+          str = html_syntax_highlight(CGI.unescapeHTML(str)) unless options[:no_highlight]
+          %Q{<pre class="code">#{str}</pre>}
+        end
         html
       end
       
@@ -66,7 +70,7 @@ module YARD
           elsif name =~ /^file:(\S+?)(?:#(\S+))?$/
             sp + link_file($1, title == name ? $1 : title, $2)
           else
-            obj = P(current_object, name)
+            obj = Registry.resolve(current_object, name, true, true)
             if obj.is_a?(CodeObjects::Proxy)
               match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
               log.warn "In file `#{current_object.file}':#{current_object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
@@ -109,7 +113,7 @@ module YARD
       end
     
       def link_object(object, otitle = nil, anchor = nil)
-        object = P(current_object, object) if object.is_a?(String)
+        object = Registry.resolve(current_object, object, true, true) if object.is_a?(String)
         title = h(otitle ? otitle.to_s : object.path)
         return title unless serializer
 
@@ -132,7 +136,7 @@ module YARD
       end
     
       def anchor_for(object)
-        urlencode case object
+        case object
         when CodeObjects::MethodObject
           "#{object.name}-#{object.scope}_#{object.type}"
         when CodeObjects::Base
@@ -169,7 +173,7 @@ module YARD
           link = objpath
         end
       
-        link + (anchor ? '#' + anchor_for(anchor) : '')
+        link + (anchor ? '#' + urlencode(anchor_for(anchor)) : '')
       end
       
       def url_for_file(filename, anchor = nil)
@@ -179,7 +183,7 @@ module YARD
         end
         from = serializer.serialized_path(fromobj)
         link = File.relative_path(from, filename)
-        link + '.html' + (anchor ? '#' + anchor : '')
+        link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
     end
   end

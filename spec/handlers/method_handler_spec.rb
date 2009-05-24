@@ -12,11 +12,11 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
   end
   
   it "should parse/add class methods (self.method2)" do
-    P(:Foo).meths.should include(P("Foo::method2"))
+    P(:Foo).meths.should include(P("Foo.method2"))
   end
   
-  it "should parse/add class methods from other namespaces (String::hello)" do
-    P("String::hello").should_not be_nil
+  it "should parse/add class methods from other namespaces (String.hello)" do
+    P("String.hello").should be_instance_of(CodeObjects::MethodObject)
   end
   
   it "should allow punctuation in method names ([], ?, =~, <<, etc.)" do
@@ -36,5 +36,19 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
   it "should handle parameters" do
     P('Foo#[]').parameters.should == [['key', "'default'"]]
     P('Foo#/').parameters.should == [['x', "File.new('x', 'w')"], ['y', '2']]
+  end
+
+  it "should handle overloads" do
+    meth = P('Foo#foo')
+
+    o1 = meth.tags(:overload).first
+    o1.name.should == :bar
+    o1.parameters.should == [[:a, nil], [:b, "1"]]
+    o1.tag(:return).type.should == "String"
+
+    o2 = meth.tags(:overload)[1]
+    o2.name.should == :baz
+    o2.parameters.should == [[:b, nil], [:c, nil]]
+    o2.tag(:return).type.should == "Fixnum"
   end
 end

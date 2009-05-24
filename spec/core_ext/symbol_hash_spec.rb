@@ -55,12 +55,18 @@ describe SymbolHash do
     h['test'].should == [1,2,3]
   end
   
-  it "should support symbolization using #update or #merge" do
+  it "should support symbolization using #update or #merge!" do
     h = SymbolHash.new
     h.update('test' => 'value')
     h[:test].should == :value
-    h.merge('test' => 'value2')
+    h.merge!('test' => 'value2')
     h[:test].should == :value2
+  end
+
+  it "should support symbolization non-destructively using #merge" do
+    h = SymbolHash.new
+    h.merge('test' => 'value')[:test].should == :value
+    h.should == SymbolHash.new
   end
   
   it "should support #initializing of a hash" do

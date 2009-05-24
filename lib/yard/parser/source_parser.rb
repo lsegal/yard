@@ -56,6 +56,7 @@ module YARD
       #
       # @param [String, #read, Object] content the source file to parse
       def parse(content = __FILE__, parser_type = :ruby)
+        parser_type = :ruby18 if parser_type == :ruby && RUBY18
         @parser_type ||= parser_type
         case content
         when String

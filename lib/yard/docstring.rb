@@ -1,6 +1,7 @@
 module YARD
   class Docstring < String
-    attr_reader :object, :ref_tags
+    attr_reader :ref_tags
+    attr_accessor :object
     
     def initialize(content = '', object = nil)
       @tag_factory = Tags::Library.new
@@ -28,6 +29,7 @@ module YARD
       tags.each_with_index do |tag, i|
         case tag
         when Tags::Tag
+          tag.object = object
           @tags << tag
         when Tags::RefTag
           @ref_tags << tag
@@ -103,9 +105,9 @@ module YARD
       tag_method = "#{tag_name}_tag"
       if tag_name && @tag_factory.respond_to?(tag_method)
         if @tag_factory.method(tag_method).arity == 2
-          @tags.push *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
+          add_tag *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
         else
-          @tags.push *@tag_factory.send(tag_method, tag_buf) 
+          add_tag *@tag_factory.send(tag_method, tag_buf) 
         end
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")

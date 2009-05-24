@@ -12,15 +12,15 @@ module YARD
       def initialize(namespace, name)
         namespace = Registry.root if !namespace || namespace == :root
         
-        if name =~ /^#{NSEP}/
+        if name =~ /^#{NSEPQ}/
           namespace = Registry.root
           name = name[2..-1]
         end
         
-        if name =~ /(?:#{NSEP}|#{ISEP})([^#{NSEP}#{ISEP}]+)$/
+        if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
-          namespace = $`.empty? ? Registry.root : Proxy.new(namespace, $`)
+          namespace = Proxy.new(namespace, $`) unless $`.empty?
           name = $1
         end 
         
@@ -34,8 +34,8 @@ module YARD
         # If the name begins with "::" (like "::String")
         # this is definitely a root level object, so
         # remove the namespace and attach it to the root
-        if @name =~ /^#{NSEP}/
-          @name.gsub!(/^#{NSEP}/, '')
+        if @name =~ /^#{NSEPQ}/
+          @name.gsub!(/^#{NSEPQ}/, '')
           @namespace = Registry.root
         end
       end
@@ -54,8 +54,16 @@ module YARD
         else
           if @namespace == Registry.root
             (@imethod ? ISEP : "") + name.to_s
-          else
-            @origname || name.to_s
+          elsif @origname
+            if @origname =~ /^[A-Z]/
+              @origname
+            else
+              [namespace.path, @origname].join
+            end
+          elsif name.to_s =~ /^[A-Z]/ # const
+            name.to_s
+          else # class meth?
+            [namespace.path, name.to_s].join(CSEP)
           end
         end
       end
@@ -158,7 +166,7 @@ module YARD
       # 
       # @return [Base, nil] the registered code object or nil
       def to_obj
-        @obj ||= Registry.resolve(@namespace, @name)
+        @obj ||= Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
       end
     end
   end
@@ -168,8 +176,8 @@ end
 # via a path
 # 
 # @see YARD::CodeObjects::Proxy
-# @see YARD::Registry::resolve
+# @see YARD::Registry#resolve
 def P(namespace, name = nil)
   namespace, name = nil, namespace if name.nil?
-  YARD::Registry.resolve(namespace, name, true)
+  YARD::Registry.resolve(namespace, name, false, true)
 end

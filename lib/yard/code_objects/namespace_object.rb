@@ -1,10 +1,12 @@
 module YARD::CodeObjects
   class NamespaceObject < Base
-    attr_reader :children, :cvars, :meths, :constants, :mixins, :attributes, :aliases
+    attr_reader :children, :cvars, :meths, :constants, :attributes, :aliases
+    attr_reader :class_mixins, :instance_mixins
     
     def initialize(namespace, name, *args, &block)
       @children = CodeObjectList.new(self)
-      @mixins = CodeObjectList.new(self)
+      @class_mixins = CodeObjectList.new(self)
+      @instance_mixins = CodeObjectList.new(self)
       @attributes = SymbolHash[:class => SymbolHash.new, :instance => SymbolHash.new]
       @aliases = {}
       super
@@ -25,7 +27,7 @@ module YARD::CodeObjects
         opts = SymbolHash[opts]
         children.find do |obj| 
           opts.each do |meth, value|
-            break false if obj[meth] != value
+            break false if !(value.is_a?(Array) ? value.include?(obj[meth]) : obj[meth] == value)
           end
         end
       end
@@ -51,16 +53,17 @@ module YARD::CodeObjects
     end
     
     def included_meths(opts = {})
-      mixins.reverse.inject([]) do |list, mixin|
-        if mixin.is_a?(Proxy)
-          list
-        else
-          list += mixin.meths(opts).reject do |o| 
-            child(:name => o.name, :scope => o.scope) || 
-              list.find {|o2| o2.name == o.name && o2.scope == o.scope }
+      opts = SymbolHash[:scope => [:instance, :class]].update(opts)
+      [opts[:scope]].flatten.map do |scope|
+        mixins(scope).reverse.inject([]) do |list, mixin|
+          next list if mixin.is_a?(Proxy)
+          arr = mixin.meths(opts.merge(:scope => :instance)).reject do |o|
+            child(:name => o.name, :scope => scope) || list.find {|o2| o2.name == o.name }
           end
+          arr.map! {|o| ExtendedMethodObject.new(o) } if scope == :class
+          list + arr
         end
-      end
+      end.flatten
     end
     
     def constants(opts = {})
@@ -70,7 +73,7 @@ module YARD::CodeObjects
     end
     
     def included_constants
-      mixins.reverse.inject([]) do |list, mixin|
+      instance_mixins.reverse.inject([]) do |list, mixin|
         if mixin.respond_to? :constants
           list += mixin.constants.reject do |o| 
             child(:name => o.name) || list.find {|o2| o2.name == o.name }
@@ -83,6 +86,12 @@ module YARD::CodeObjects
     
     def cvars 
       children.select {|o| o.is_a? ClassVariableObject }
+    end
+
+    def mixins(*scopes)
+      return class_mixins if scopes == [:class]
+      return instance_mixins if scopes == [:instance]
+      class_mixins | instance_mixins
     end
   end
 end
