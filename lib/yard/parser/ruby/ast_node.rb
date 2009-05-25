@@ -103,7 +103,7 @@ module YARD
         def pretty_print(q)
           options = { docstring: docstring, source: source_range, line: line_range }
           options.delete_if {|k, v| v.nil? }
-          objs = [*self]
+          objs = [*self.dup]
           objs.unshift(type) if type && type != :list
           objs.push(options) if options.size > 0
 
