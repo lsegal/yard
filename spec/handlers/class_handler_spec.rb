@@ -61,8 +61,12 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     P('Test5').superclass.should == P(:Array)
   end
   
+  it "should handle a superclass of the same name in the form ::ClassName" do
+    P('Q::Logger').superclass.should == P(:Logger)
+  end
+  
   it "should raise an UndocumentableError if the superclass is invalid but it should create the class." do
-    ["VSD^#}}", 'not.aclass', 'self', 'AnotherClass.new'].each do |klass|
+    ['@@INVALID', 'hi', '$MYCLASS', 'AnotherClass.new'].each do |klass|
       Registry.clear
       undoc_error "class A < #{klass}; end"
       Registry.at('A').should_not be_nil

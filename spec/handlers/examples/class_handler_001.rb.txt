@@ -62,3 +62,7 @@ CONST = String
 class << CONST
   def classmethod; end
 end
+
+module Q
+  class Logger < ::Logger; end
+end
