@@ -4,7 +4,7 @@ require 'stringio'
 include Handlers
 
 def undoc_error(code)
-  lambda { StubbedSourceParser.parse_string(code) }.should raise_error(UndocumentableError)
+  lambda { StubbedSourceParser.parse_string(code) }.should raise_error(Parser::UndocumentableError)
 end
 
 class StubbedProcessor < Processor
@@ -18,6 +18,7 @@ class StubbedProcessor < Processor
 end
 
 class StubbedSourceParser < Parser::SourceParser
+  self.parser_type = :ruby
   def post_process
     post = StubbedProcessor.new(@file, @load_order_errors, @parser_type)
     post.process(@parser.enumerator)
