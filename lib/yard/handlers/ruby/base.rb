@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/../../parser/ruby/ast_node'
-
 module YARD
   module Handlers
     module Ruby

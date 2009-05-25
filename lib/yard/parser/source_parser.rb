@@ -11,6 +11,10 @@ module YARD
       class << self
         attr_accessor :parser_type
         
+        def parser_type=(value)
+          @parser_type = validated_parser_type(value)
+        end
+        
         def parse(paths = "lib/**/*.rb", level = log.level)
           log.debug("Parsing #{paths} with `#{parser_type}` parser")
           if paths.is_a?(Array)
@@ -30,6 +34,10 @@ module YARD
         
         def tokenize(content, ptype = parser_type)
           new(ptype).tokenize(content)
+        end
+        
+        def validated_parser_type(type)
+          RUBY18 && type == :ruby ? :ruby18 : type
         end
 
         private
@@ -103,12 +111,7 @@ module YARD
       end
 
       def parser_type=(value)
-        @parser_type = value
-        validate_parser_type
-      end
-
-      def validate_parser_type
-        @parser_type = :ruby18 if RUBY18 && @parser_type == :ruby
+        @parser_type = self.class.validated_parser_type(value)
       end
       
       def parser_type_for_filename(filename)
