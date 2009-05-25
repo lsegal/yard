@@ -1,12 +1,11 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require File.dirname(__FILE__) + '/../../../../lib/yard/parser/ruby/legacy/ruby_lex' unless RUBY18
-require File.dirname(__FILE__) + '/../../../../lib/yard/handlers/ruby/legacy/base'
 
 include Parser::Ruby::Legacy
 
 describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
   before do
     Handlers::Ruby::Legacy::Base.stub!(:inherited)
+    Handlers::Ruby::Legacy::MixinHandler.stub!(:inherited) # fixes a Ruby1.9 issue
     @processor = Handlers::Processor.new(nil, false, :ruby18)
   end
   
