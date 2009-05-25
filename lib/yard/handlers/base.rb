@@ -133,9 +133,9 @@ module YARD
       # instead of the full qualified namespace
       include YARD::CodeObjects
       
+      include Parser
+      
       class << self
-        attr_reader :handlers
-        
         def clear_subclasses
           @@subclasses = []
         end
@@ -173,6 +173,18 @@ module YARD
         
         def handles?(statement)
           raise NotImplementedError, "override #handles? in a subclass"
+        end
+        
+        def handlers
+          @handlers ||= []
+        end
+        
+        def namespace_only
+          @namespace_only = true
+        end
+        
+        def namespace_only?
+          @namespace_only ? true : false
         end
       end
 

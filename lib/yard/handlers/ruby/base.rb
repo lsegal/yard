@@ -3,24 +3,31 @@ require File.dirname(__FILE__) + '/../../parser/ruby/ast_node'
 module YARD
   module Handlers
     module Ruby
-      class MethodCallWrapper
-        def initialize(name) 
-          @name = name.to_s
-        end
-        
+      class HandlesExtension
+        def initialize(name) @name = name end
+        def matches?(node) raise NotImplementedError end
+        protected
+        attr_reader :name
+      end
+      
+      class MethodCallWrapper < HandlesExtension
         def matches?(node)
           case node.type
           when :var_ref
             if !node.parent || node.parent.type == :list
-              return true if node[0].type == :ident && node[0][0] == @name
+              return true if node[0].type == :ident && node[0][0] == name
             end
           when :fcall, :command
-            return true if node[0][0] == @name
+            return true if node[0][0] == name
           when :call, :command_call
-            return true if node[2][0] == @name
+            return true if node[2][0] == name
           end
           false
         end
+      end
+      
+      class TestNodeWrapper < HandlesExtension
+        def matches?(node) !node.send(name).is_a?(FalseClass) end
       end
       
       class Base < Handlers::Base
@@ -28,7 +35,11 @@ module YARD
           include Parser::Ruby
           
           def method_call(name)
-            MethodCallWrapper.new(name)
+            MethodCallWrapper.new(name.to_s)
+          end
+          
+          def meta_type(meth)
+            TestNodeWrapper.new(meth.to_s + "?")
           end
           
           def handles?(node)
@@ -42,7 +53,7 @@ module YARD
                 node.source =~ a_handler
               when Parser::Ruby::AstNode
                 a_handler == node
-              when MethodCallWrapper
+              when HandlesExtension
                 a_handler.matches?(node)
               end
             end
