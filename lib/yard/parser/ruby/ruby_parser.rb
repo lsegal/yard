@@ -135,7 +135,7 @@ module YARD
         end
         
         def on_parse_error(msg)
-          raise ParserSyntaxError, "in `#{file}`:(#{lineno},#{column}): #{msg}"
+          raise ParserSyntaxError, "syntax error in `#{file}`:(#{lineno},#{column}): #{msg}"
         end
         
         def insert_comments
