@@ -35,6 +35,7 @@ module YARD
           @ast = super
           @ast.full_source = @source
           @ast.file = @file
+          freeze_tree
           insert_comments
           self
         end
@@ -46,10 +47,23 @@ module YARD
         private
 
         PARSER_EVENT_TABLE.each do |event, arity|
+          node_class = case event
+          when /_ref\Z/
+            :ReferenceNode
+          when :params
+            :ParameterNode
+          when :call, :fcall, :command, :command_call
+            :MethodCallNode
+          when :if, :elsif, :if_mod, :unless, :unless_mod
+            :ConditionalNode
+          else
+            :AstNode
+          end
+                    
           if /_new\z/ =~ event and arity == 0
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               def on_#{event}
-                AstNode.new(:list, [], line: lineno, char: charno)
+                #{node_class}.new(:list, [], line: lineno, char: charno)
               end
             eof
           elsif /_add(_.+)?\z/ =~ event
@@ -62,7 +76,7 @@ module YARD
           else
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               def on_#{event}(*args)
-                AstNode.new(:#{event}, args, line: lineno, char: charno)
+                #{node_class}.new(:#{event}, args, line: lineno, char: charno)
               end
             eof
           end
@@ -116,7 +130,7 @@ module YARD
               arg
             end
           end
-          AstNode.new(:params, args, line: lineno, char: charno)
+          ParameterNode.new(:params, args, line: lineno, char: charno)
         end
 
         def on_comment(comment)
@@ -127,21 +141,23 @@ module YARD
             append_comment = true
           end
   
+          comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
           if append_comment
-            @comments.last.first.push(comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp)
+            @comments.last.first.push(comment)
             @comments.last[-1] = lineno
           else
-            @comments << [[comment[1..-1]], lineno]
+            @comments << [[comment], lineno]
           end
         end
         
         def on_parse_error(msg)
-          raise ParserSyntaxError, "in `#{@file}`:(#{lineno},#{column}): #{msg}"
+          raise ParserSyntaxError, "in `#{file}`:(#{lineno},#{column}): #{msg}"
         end
         
         def insert_comments
           comments = @comments.dup
-          @ast.traverse do |node|
+          ast.traverse do |node|
+            next if node.type == :list
             comments.each.with_index do |c, i|
               next if c.empty? || node.line.nil?
               if node.line.between?(c.last, c.last + 2)
@@ -151,6 +167,15 @@ module YARD
               end
             end
           end
+        end
+        
+        def freeze_tree(node = nil)
+          node ||= root
+          node.children.each do |child|
+            child.parent = node
+            freeze_tree(child)
+          end
+          node.reset_line_info
         end
       end
     end

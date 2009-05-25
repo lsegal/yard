@@ -7,54 +7,28 @@ module YARD
         AstNode.new(type, args, opts)
       end
       
-      module ReferenceNode
-        def ref?; true end
-        
-        def path
-          Array.new flatten
-        end
-        
-        def namespace
-          Array.new flatten[0...-1]
-        end
-        
-        def source
-          super.split(/\s+/).first
-        end
-      end
-      
-      module ParameterNode
-        def required_params; self[0] end
-        def required_end_params; self[4] end
-        def optional_params; self[1] end
-        def splat_param; self[2] ? self[2][0] : nil end
-        def block_param; self[4] ? self[4][0] : nil end
-      end
-      
       class AstNode < Array
         attr_accessor :type, :parent, :docstring, :file, :full_source, :source
         attr_accessor :source_start, :source_end, :line_start, :line_end
         alias line line_start
         alias comments docstring
         alias to_s source
+        
+        KEYWORDS = { :class => true, :alias => true, :lambda => true, :do_block => true,
+          :def => true, :begin => true, :rescue => true, :rescue_mod => true,
+          :if => true, :if_mod => true, :else => true, :elsif => true,
+          :case => true, :when => true, :next => true, :break => true,
+          :retry => true, :redo => true, :return => true, :throw => true,
+          :catch => true, :until => true, :until_mod => true, :while => true, :while_mod => true,
+          :yield => true, :yield0 => true, :zsuper => true, :unless => true, :unless_mod => true,
+          :for => true, :super => true, :return0 => true }
 
         def initialize(type, arr, opts = {})
           super(arr)
-          children.each {|child| child.parent = self }
           self.type = type
           self.line_end = opts[:line]
           self.source_start = opts[:char]
           @token = true if opts[:token]
-
-          reset_line_info
-          mixin_type_methods
-        end
-
-        def push(*args)
-          super(*args)
-          child_args = args.select {|e| self.class === e }
-          child_args.each {|child| child.parent = self }
-          reset_line_info(child_args)
         end
         
         def ==(ast)
@@ -62,21 +36,20 @@ module YARD
         end
         
         def show
-          text = full_source.split(/\r?\n/)[line_start - 1].strip
-          "\t#{line}: #{text}"
+          "\t#{line}: #{first_line}"
         end
         
-        def jump(node_type)
-          traverse {|child| return(child) if child.type == node_type }
+        def first_line
+          full_source.split(/\r?\n/)[line_start - 1].strip
+        end
+        
+        def jump(*node_types)
+          traverse {|child| return(child) if node_types.include?(child.type) }
           self
         end
 
-        def first_child
-          find {|e| self.class === e }
-        end
-
         def children
-          select {|e| self.class === e }
+          @children ||= select {|e| AstNode === e }
         end
 
         def token?
@@ -92,15 +65,15 @@ module YARD
         end
         
         def kw?
-          [:class, :alias, :lambda, :do_block, :def, :begin, :rescue, 
-           :rescue_mod, :if, :if_mod, :else, :elsif, :case, :when, 
-           :next, :break, :retry, :redo, :return, :throw, :catch,
-           :until, :until_mod, :while, :while_mod, :yield, :yield0, :zsuper,
-           :unless, :unless_mod, :for, :super, :return0].include?(type)
+          KEYWORDS.has_key?(type)
         end
         
         def call?
-          [:call, :fcall, :command, :command_call].include?(type)
+          false
+        end
+        
+        def condition?
+          false
         end
 
         def file
@@ -166,50 +139,111 @@ module YARD
           end
         end
 
+        def reset_line_info
+          self.line_start = line_end
+          self.source_end = source_start + (token? ? first.length - 1 : 0)
+
+          if children.size > 0
+            f, l = children.first, children.last
+            self.source_start = f.source_start if f.source_start < source_start
+            self.source_end = l.source_end if l.source_end > source_end
+            self.line_start = f.line_start if f.line_start < line_start
+            self.line_end = l.line_end if l.line_end > line_end
+
+            adjust_start_and_end(f, l)
+          end
+        end
+        
         private
         
-        def mixin_type_methods
+        def adjust_start_and_end(f, l)
           case type
-          when /_ref\z/
-            extend ReferenceNode
-          when :params
-            extend ParameterNode
-          end
-        end
-
-        def reset_line_info(nodes = nil)
-          return if source_start.nil? || line_end.nil?
-          if nodes.nil?
-            nodes = children
-            self.line_start = line_end
-            self.source_end = source_start + (token? ? first.length - 1 : 0)
-          end
-
-          if nodes.size > 0
-            nodes.each do |child|
-              self.source_end = child.source_end if child.source_end > source_end
-              self.source_start = child.source_start if child.source_start < source_start
-              self.line_end = child.line_end if child.line_end > line_end
-              self.line_start = child.line_start if child.line_start < line_start
-            end
-          end
-          
-          adjust_start_and_end
-        end
-        
-        def adjust_start_and_end
-          case type
-          when :var_ref, :var_field, :const_ref, :const_path_ref
-            self.source_end = self.source_start + children.first.first.length - 1
+          when :list
+            self.source_end = l.source_end if l
+          when :var_ref, :var_field, :const_ref
+            self.source_end = self.source_start + f.first.length - 1
+          when :top_const_ref
+            self.source_end = self.source_start + f.first.length - 1
+            self.source_start -= 2
+          when :const_path_ref
+            self.source_end = l.source_end
           else
-            self.source_start -= type.to_s.length if kw?
+            self.source_start -= type.to_s.length + 1 if kw?
             self.source_end -= 1 if call?
             if literal?
-              self.source_start -= 1 
+              self.source_start -= 1
               self.source_end   -= 1
             end
           end
         end
+      end
+      
+      class ReferenceNode < AstNode
+        def ref?; true end
+        
+        def path
+          Array.new flatten
+        end
+        
+        def namespace
+          Array.new flatten[0...-1]
+        end
+        
+        def source
+          super.split(/\s+/).first
+        end
+      end
+      
+      class ParameterNode < AstNode
+        def required_params; self[0] end
+        def required_end_params; self[4] end
+        def optional_params; self[1] end
+        def splat_param; self[2] ? self[2][0] : nil end
+        def block_param; self[4] ? self[4][0] : nil end
+      end
+      
+      class MethodCallNode < AstNode
+        def call?; true end
+        def namespace; first if index_adjust > 0 end
+
+        def method_name(name_only = false)
+          name = self[index_adjust]
+          name_only ? name.jump(:ident).first.to_sym : name
+        end
+
+        def parameters(include_block_param = true)
+          params = self[1 + index_adjust]
+          params = call_has_paren? ? params.first : params
+          include_block_param ? params : params[0...-1]
+        end
+        
+        def block_param; parameters.last end
+        
+        private
+        
+        def index_adjust
+          [:call, :command_call].include?(type) ? 2 : 0
+        end
+        
+        def call_has_paren? 
+          [:fcall, :call].include?(type)
+        end
+      end
+      
+      class ConditionalNode < AstNode
+        def condition?; true end
+        def condition; first end
+        def then_block; self[1] end
+        
+        def else_block
+          if self[2] && !cmod?
+            self[2].type == :elsif ? self[2] : self[2][0]
+          end
+        end
+        
+        private
+        
+        def cmod?; type =~ /_mod$/ end
       end
     end
   end
