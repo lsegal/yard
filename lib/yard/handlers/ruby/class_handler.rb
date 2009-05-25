@@ -14,7 +14,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       parse_block(statement[2], :namespace => klass)
        
       if undocsuper
-        raise YARD::Handlers::UndocumentableError, 'superclass (class was added without superclass)'
+        raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.type == :sclass
       classname = statement[0].source
@@ -38,7 +38,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       end
     else
       sig_end = (statement[1] ? statement[1].source_end : statement[0].source_end) - statement.source_start
-      raise YARD::Handlers::UndocumentableError, "class: #{statement.source[0..sig_end]}"
+      raise YARD::Parser::UndocumentableError, "class: #{statement.source[0..sig_end]}"
     end
   end
   

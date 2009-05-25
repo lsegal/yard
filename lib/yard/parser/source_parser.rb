@@ -3,6 +3,7 @@ require 'continuation' unless RUBY18
 
 module YARD
   module Parser
+    class UndocumentableError < Exception; end
     class LoadOrderError < Exception; end
     
     # Responsible for parsing a source file into the namespace

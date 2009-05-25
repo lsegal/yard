@@ -8,7 +8,7 @@ class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy:
     else
       names = tokval_list(statement.tokens[2..-1], :attr)
     end
-    raise YARD::Handlers::UndocumentableError, statement.tokens.first.text if names.size != 2
+    raise YARD::Parser::UndocumentableError, statement.tokens.first.text if names.size != 2
     
     new_meth, old_meth = names[0].to_sym, names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)

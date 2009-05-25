@@ -21,7 +21,7 @@ module YARD
               handler.new(self, stmt).process
             rescue Parser::LoadOrderError => loaderr
               raise # Pass this up
-            rescue UndocumentableError => undocerr
+            rescue Parser::UndocumentableError => undocerr
               log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
               log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.inspect + "\n"
             rescue => e

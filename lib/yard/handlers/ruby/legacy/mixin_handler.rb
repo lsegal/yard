@@ -11,7 +11,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
 
   def process_mixin(mixin)
     unless mixmatch = mixin[/\A(#{NAMESPACEMATCH})/, 1]
-      raise YARD::Handlers::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
+      raise YARD::Parser::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
     end
 
     obj = Proxy.new(namespace, mixmatch)

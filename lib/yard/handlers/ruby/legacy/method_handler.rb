@@ -11,7 +11,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       args = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(args), :all)
       args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
     else
-      raise YARD::Handlers::UndocumentableError, "method: invalid name"
+      raise YARD::Parser::UndocumentableError, "method: invalid name"
     end
     
     # Class method if prefixed by self(::|.) or Module(::|.)

@@ -100,7 +100,6 @@ module YARD
 
     autoload :Base,                       'yard/handlers/base'
     autoload :Processor,                  'yard/handlers/processor'
-    autoload :UndocumentableError,        'yard/handlers/base'
   end
 
   module Parser
@@ -122,7 +121,8 @@ module YARD
       autoload :RubyParser,        'yard/parser/ruby/ruby_parser'
     end
 
-    autoload :SourceParser,       'yard/parser/source_parser'
+    autoload :SourceParser,        'yard/parser/source_parser'
+    autoload :UndocumentableError, 'yard/parser/source_parser'
   end
   
   module Rake

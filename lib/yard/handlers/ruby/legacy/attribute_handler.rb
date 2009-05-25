@@ -7,7 +7,7 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
       symbols     = tokval_list statement.tokens[2..-1], :attr, TkTRUE, TkFALSE
       read, write = true, false
     rescue SyntaxError
-      raise YARD::Handlers::UndocumentableError, attr_type
+      raise YARD::Parser::UndocumentableError, attr_type
     end
     
     # Change read/write based on attr_reader/writer/accessor

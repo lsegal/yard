@@ -1,7 +1,5 @@
 module YARD
   module Handlers
-    class UndocumentableError < Exception; end
-    
     # = Handlers 
     # 
     # Handlers are pluggable semantic parsers for YARD's code generation 

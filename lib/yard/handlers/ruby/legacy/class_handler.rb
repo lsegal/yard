@@ -14,7 +14,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       parse_block(:namespace => klass)
        
       if undocsuper
-        raise YARD::Handlers::UndocumentableError, 'superclass (class was added without superclass)'
+        raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
@@ -25,7 +25,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
         if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
           proxy = Proxy.new(namespace, proxy.value)
         else
-          raise YARD::Handlers::UndocumentableError, "constant class reference '#{classname}'"
+          raise YARD::Parser::UndocumentableError, "constant class reference '#{classname}'"
         end
       end
       
@@ -34,10 +34,10 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       elsif classname[0,1] =~ /[A-Z]/ 
         parse_block(:namespace => proxy, :scope => :class)
       else
-        raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
+        raise YARD::Parser::UndocumentableError, "class '#{classname}'"
       end
     else
-      raise YARD::Handlers::UndocumentableError, "class: #{statement.tokens}"
+      raise YARD::Parser::UndocumentableError, "class: #{statement.tokens}"
     end
   end
   
