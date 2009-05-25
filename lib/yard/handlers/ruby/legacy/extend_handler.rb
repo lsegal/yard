@@ -4,12 +4,15 @@
 class YARD::Handlers::Ruby::Legacy::ExtendHandler < YARD::Handlers::Ruby::Legacy::MixinHandler
   handles /\Aextend(\s|\()/
 
-  def scope; :class; end
+  def scope; :class end
 
   private
 
   def process_mixin(mixin)
-    super unless mixin =~ /\Aself/
-    namespace.mixins(:class) << namespace
+    if mixin == "self"
+      namespace.mixins(scope) << namespace
+    else
+      super
+    end
   end
 end
