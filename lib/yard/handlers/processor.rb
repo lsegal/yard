@@ -4,7 +4,7 @@ module YARD
       attr_accessor :file, :namespace, :visibility
       attr_accessor :scope, :owner, :load_order_errors, :parser_type
       
-      def initialize(file = nil, load_order_errors = false, parser_type = :ruby)
+      def initialize(file = nil, load_order_errors = false, parser_type = Parser::SourceParser.parser_type)
         @file = file || "(stdin)"
         @namespace = YARD::Registry.root
         @visibility = :public
@@ -12,6 +12,8 @@ module YARD
         @owner = @namespace
         @load_order_errors = load_order_errors
         @parser_type = parser_type
+        @handlers_loaded = {}
+        load_handlers
       end
       
       def process(statements)
@@ -45,12 +47,20 @@ module YARD
       private
       
       def handler_base_class
+        handler_base_namespace.const_get(:Base)
+      end
+
+      def handler_base_namespace
         case parser_type
-        when :ruby
-          Ruby::Base
-        when :ruby18
-          Ruby::Legacy::Base
+        when :ruby;   Ruby
+        when :ruby18; Ruby::Legacy
         end
+      end
+      
+      def load_handlers
+        return if @handlers_loaded[parser_type]
+        handler_base_namespace.constants.each {|c| handler_base_namespace.const_get(c) }
+        @handlers_loaded[parser_type] = true
       end
     end
   end

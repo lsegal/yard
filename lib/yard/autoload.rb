@@ -152,9 +152,5 @@ module YARD
   autoload :Registry,  'yard/registry'
 end
 
-# Load handlers immediately
-const = RUBY18 ? YARD::Handlers::Ruby::Legacy : YARD::Handlers::Ruby
-const.constants.each {|c| const.const_get(c) }
-
 # P() needs to be loaded right away
 YARD::CodeObjects::Proxy
