@@ -34,18 +34,7 @@ module YARD
         private
 
         PARSER_EVENT_TABLE.each do |event, arity|
-          node_class = case event
-          when /_ref\Z/
-            :ReferenceNode
-          when :params
-            :ParameterNode
-          when :call, :fcall, :command, :command_call
-            :MethodCallNode
-          when :if, :elsif, :if_mod, :unless, :unless_mod
-            :ConditionalNode
-          else
-            :AstNode
-          end
+          node_class = AstNode.node_class_for(event)
                     
           if /_new\z/ =~ event and arity == 0
             module_eval(<<-eof, __FILE__, __LINE__ + 1)

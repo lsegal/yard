@@ -4,7 +4,7 @@ module YARD
       def s(*args)
         type = Symbol === args.first ? args.shift : :list
         opts = Hash === args.last ? args.pop : {}
-        AstNode.new(type, args, opts)
+        AstNode.node_class_for(type).new(type, args, opts)
       end
       
       class AstNode < Array
@@ -22,6 +22,21 @@ module YARD
           :catch => true, :until => true, :until_mod => true, :while => true, :while_mod => true,
           :yield => true, :yield0 => true, :zsuper => true, :unless => true, :unless_mod => true,
           :for => true, :super => true, :return0 => true }
+        
+        def self.node_class_for(type)
+          case type
+          when :params
+            ParameterNode
+          when :call, :fcall, :command, :command_call
+            MethodCallNode
+          when :if, :elsif, :if_mod, :unless, :unless_mod
+            ConditionalNode
+          when /_ref\Z/
+            ReferenceNode
+          else
+            AstNode
+          end
+        end
 
         def initialize(type, arr, opts = {})
           super(arr)
