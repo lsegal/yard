@@ -30,6 +30,6 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ExceptionHandler" do
   end
   
   it "should handle complex class names" do
-    P('Testing#mymethod5').tag(:raise).types.should == ['YARD::Handlers::UndocumentableError']
+    P('Testing#mymethod5').tag(:raise).types.should == ['YARD::Parser::UndocumentableError']
   end
 end

@@ -25,7 +25,7 @@ class Testing
   end
   
   def mymethod5
-    raise YARD::Handlers::UndocumentableError
+    raise YARD::Parser::UndocumentableError
   end
   
   def mymethod6

@@ -1,6 +1,6 @@
 class Foo
   def ==(other)
- 	'hello' 
+    'hello' 
   end
   def /(other) 'hi' end
 
