@@ -182,6 +182,10 @@ module YARD
           @source = format_source(src + blk)
           self.line = statement.tokens.first.line_no
           self.signature = src
+        elsif statement.respond_to?(:source)
+          self.line = statement.line
+          self.signature = statement.first_line
+          @source = format_source(statement.source.strip)
         else
           @source = format_source(statement.to_s)
         end
