@@ -21,4 +21,4 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
   it "should not parse conditionals inside methods" do
     Registry.at('A#i').should be_nil
   end
-end
+end if RUBY19
