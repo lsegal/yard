@@ -227,6 +227,32 @@ module YARD
       def scope; parser.scope end
       def scope=(v); parser.scope=(v) end
       
+      def push_state(opts = {}, &block)
+        opts = {
+          :namespace => nil,
+          :scope => :instance,
+          :owner => nil
+        }.update(opts)
+
+        if opts[:namespace]
+          ns, vis, sc = namespace, visibility, scope
+          self.namespace = opts[:namespace]
+          self.visibility = :public
+          self.scope = opts[:scope]
+        end
+
+        oldowner, self.owner = self.owner, opts[:owner] ? opts[:owner] : namespace
+        yield
+        self.owner = oldowner
+
+        if opts[:namespace]
+          self.namespace = ns
+          self.owner = namespace
+          self.visibility = vis
+          self.scope = sc
+        end
+      end
+      
       # Do some post processing on a list of code objects. 
       # Adds basic attributes to the list of objects like 
       # the filename, line number, {CodeObjects::Base#dynamic},
@@ -259,7 +285,7 @@ module YARD
           
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)
-            object.source ||= statement 
+            object.source ||= statement
           end
           
           # Make it dynamic if its owner is not its namespace.

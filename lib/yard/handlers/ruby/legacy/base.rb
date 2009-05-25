@@ -20,31 +20,12 @@ module YARD
 
         protected
 
-        def parse_block(opts = nil)
-          opts = {
-            :namespace => nil,
-            :scope => :instance,
-            :owner => nil
-          }.update(opts || {})
-
-          if opts[:namespace]
-            ns, vis, sc = namespace, visibility, scope
-            self.namespace = opts[:namespace]
-            self.visibility = :public
-            self.scope = opts[:scope]
-          end
-
-          self.owner = opts[:owner] ? opts[:owner] : namespace
-          if statement.block
-            blk = Parser::Ruby::Legacy::StatementList.new(statement.block)
-            parser.process(blk)
-          end
-
-          if opts[:namespace]
-            self.namespace = ns
-            self.owner = namespace
-            self.visibility = vis
-            self.scope = sc
+        def parse_block(opts = {})
+          push_state(opts) do
+            if statement.block
+              blk = Parser::Ruby::Legacy::StatementList.new(statement.block)
+              parser.process(blk)
+            end
           end
         end
       
