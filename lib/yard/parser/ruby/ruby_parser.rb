@@ -6,21 +6,8 @@ module YARD
       class ParserSyntaxError < SyntaxError; end
       
       class RubyParser < Ripper
-        class << self
-          def no_comment(*toks)
-            (@no_comments ||= []).push(*toks)
-          end
-
-          attr_reader :no_comments
-        end
-
-        no_comment  :aref, :aref_field, :arg_paren, :brace_block, :do_block,
-                    :dot2, :dot3, :excessed_comma, :params, :paren, :sclass,
-                    :args_add_block, :string_literal, :binary, :string_content,
-                    :void_stmt, :stmt_body, :var_ref, :args, :self, :string_embexpr,
-                    :string_dvar, :xstring_literal, :rest_param, :blockarg
-
         attr_reader :ast, :charno, :comments, :file, :tokens
+        alias root ast
 
         def initialize(source, filename, *args)
           super
