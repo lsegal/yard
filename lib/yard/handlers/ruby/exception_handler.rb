@@ -1,0 +1,22 @@
+class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
+  handles method_call(:raise)
+  
+  def process
+    return unless owner.is_a?(MethodObject) # Only methods yield
+    return if owner.has_tag?(:raise)
+
+    klass = nil
+    params = statement.parameters(false)
+    if params.size == 1 
+      if params.first.ref? && params.first.first.type != :ident
+        klass = params.first.source
+      elsif params.first.call? && params.first.method_name(true) == :new
+        klass = params.first.namespace.source
+      end
+    else
+      klass = params.first.source
+    end
+
+    owner.docstring.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
+  end
+end

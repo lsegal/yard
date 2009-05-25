@@ -71,31 +71,39 @@ module YARD
   
   module Handlers
     module Ruby
-      if RUBY18
-        module Legacy
-          autoload :Base,                 'yard/handlers/ruby/legacy/base'
+      module Legacy
+        autoload :Base,                 'yard/handlers/ruby/legacy/base'
 
-          autoload :AliasHandler,         'yard/handlers/ruby/legacy/alias_handler'
-          autoload :AttributeHandler,     'yard/handlers/ruby/legacy/attribute_handler'
-          autoload :ClassHandler,         'yard/handlers/ruby/legacy/class_handler'
-          autoload :ClassVariableHandler, 'yard/handlers/ruby/legacy/class_variable_handler'
-          autoload :ConstantHandler,      'yard/handlers/ruby/legacy/constant_handler'
-          autoload :ExceptionHandler,     'yard/handlers/ruby/legacy/exception_handler'
-          autoload :ExtendHandler,        'yard/handlers/ruby/legacy/extend_handler'
-          autoload :MethodHandler,        'yard/handlers/ruby/legacy/method_handler'
-          autoload :MixinHandler,         'yard/handlers/ruby/legacy/mixin_handler'
-          autoload :ModuleHandler,        'yard/handlers/ruby/legacy/module_handler'
-          autoload :VisibilityHandler,    'yard/handlers/ruby/legacy/visibility_handler'
-          autoload :YieldHandler,         'yard/handlers/ruby/legacy/yield_handler'
-        end
-      else
-        autoload :Base,                   'yard/handlers/ruby/base'
-
-        autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
-        autoload :MethodHandler,          'yard/handlers/ruby/method_handler'
-        autoload :ModuleHandler,          'yard/handlers/ruby/module_handler'
-        autoload :VisibilityHandler,      'yard/handlers/ruby/visibility_handler'
+        autoload :AliasHandler,         'yard/handlers/ruby/legacy/alias_handler'
+        autoload :AttributeHandler,     'yard/handlers/ruby/legacy/attribute_handler'
+        autoload :ClassHandler,         'yard/handlers/ruby/legacy/class_handler'
+        autoload :ClassVariableHandler, 'yard/handlers/ruby/legacy/class_variable_handler'
+        autoload :ConstantHandler,      'yard/handlers/ruby/legacy/constant_handler'
+        autoload :ExceptionHandler,     'yard/handlers/ruby/legacy/exception_handler'
+        autoload :ExtendHandler,        'yard/handlers/ruby/legacy/extend_handler'
+        autoload :MethodHandler,        'yard/handlers/ruby/legacy/method_handler'
+        autoload :MixinHandler,         'yard/handlers/ruby/legacy/mixin_handler'
+        autoload :ModuleHandler,        'yard/handlers/ruby/legacy/module_handler'
+        autoload :VisibilityHandler,    'yard/handlers/ruby/legacy/visibility_handler'
+        autoload :YieldHandler,         'yard/handlers/ruby/legacy/yield_handler'
       end
+
+      autoload :Base,                   'yard/handlers/ruby/base'
+
+      autoload :AliasHandler,           'yard/handlers/ruby/alias_handler'
+      autoload :AttributeHandler,       'yard/handlers/ruby/attribute_handler'
+      autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
+      autoload :ClassConditionHandler,  'yard/handlers/ruby/class_condition_handler'
+      autoload :ClassVariableHandler,   'yard/handlers/ruby/class_variable_handler'
+      autoload :ConstantHandler,        'yard/handlers/ruby/constant_handler'
+      autoload :ExceptionHandler,       'yard/handlers/ruby/exception_handler'
+      autoload :ExtendHandler,          'yard/handlers/ruby/extend_handler'
+      autoload :MethodHandler,          'yard/handlers/ruby/method_handler'
+      autoload :MethodConditionHandler, 'yard/handlers/ruby/method_condition_handler'
+      autoload :MixinHandler,           'yard/handlers/ruby/mixin_handler'
+      autoload :ModuleHandler,          'yard/handlers/ruby/module_handler'
+      autoload :VisibilityHandler,      'yard/handlers/ruby/visibility_handler'
+      autoload :YieldHandler,           'yard/handlers/ruby/yield_handler'
     end
 
     autoload :Base,                       'yard/handlers/base'
@@ -108,10 +116,8 @@ module YARD
         autoload :Statement,      'yard/parser/ruby/legacy/statement'
         autoload :StatementList,  'yard/parser/ruby/legacy/statement_list'
         autoload :TokenList,      'yard/parser/ruby/legacy/token_list'
-      end
 
-      module RubyToken
-        if RUBY18
+        module RubyToken
           require 'yard/parser/ruby/legacy/ruby_lex' # Too much to include manually
         end
       end

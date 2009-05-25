@@ -1,0 +1,25 @@
+class A
+  if true
+    def a; end
+  elsif 1 == 1
+    def b; end
+  else
+    def c; end
+  end
+  
+  def d; end if 50 * 2 == 101
+  
+  unless false
+    def e; end
+  else
+    def f; end
+  end
+  
+  def g; end unless 5 * 2 == 101
+
+  def h
+    if 1
+      def i; end
+    end
+  end
+end
