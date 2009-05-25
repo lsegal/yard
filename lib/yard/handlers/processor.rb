@@ -25,7 +25,7 @@ module YARD
               raise # Pass this up
             rescue Parser::UndocumentableError => undocerr
               log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
-              log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.inspect + "\n"
+              log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
               log.error "Unhandled exception in #{handler.to_s}:"
               log.error "#{e.class.class_name}: #{e.message}"
