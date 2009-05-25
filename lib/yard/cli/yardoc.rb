@@ -90,6 +90,10 @@ module YARD
             exit
           end
         end
+        
+        opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
+          YARD::Parser::SourceParser.parser_type = :ruby18
+        end
 
         opts.separator ""
         opts.separator "Output options:"
