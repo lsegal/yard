@@ -8,33 +8,36 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       undocsuper = statement[1] && superclass.nil?
 
       klass = register ClassObject.new(namespace, classname) do |o|
+        o.docstring = statement.comments
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
-      parse_block(statement[2], :namespace => klass)
+      parse_block(statement[2], namespace: klass)
        
       if undocsuper
         raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.type == :sclass
-      classname = statement[0].source
-      proxy = Proxy.new(namespace, classname)
-      
-      # Allow constants to reference class names
-      if ConstantObject === proxy
-        if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
-          proxy = Proxy.new(namespace, proxy.value)
-        else
-          raise YARD::Handlers::UndocumentableError, "constant class reference '#{classname}'"
-        end
-      end
-      
-      if classname == "self"
+      if statement[0] == s(:var_ref, s(:kw, "self"))
         parse_block(statement[1], namespace: namespace, scope: :class)
-      elsif classname[0,1] =~ /[A-Z]/ 
-        parse_block(statement[1], namespace: proxy, scope: :class)
       else
-        raise YARD::Handlers::UndocumentableError, "class '#{classname}'"
+        classname = statement[0].source
+        proxy = Proxy.new(namespace, classname)
+
+        # Allow constants to reference class names
+        if ConstantObject === proxy
+          if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
+            proxy = Proxy.new(namespace, proxy.value)
+          else
+            raise YARD::Parser::UndocumentableError, "constant class reference '#{classname}'"
+          end
+        end
+
+        if classname[0,1] =~ /[A-Z]/ 
+          parse_block(statement[1], namespace: proxy, scope: :class)
+        else
+          raise YARD::Parser::UndocumentableError, "class '#{classname}'"
+        end
       end
     else
       sig_end = (statement[1] ? statement[1].source_end : statement[0].source_end) - statement.source_start
@@ -46,18 +49,25 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   
   def parse_superclass(superclass)
     return nil unless superclass
-    return superclass.source if superclass.ref?
+    
     case superclass.type
-    when :const
-      superclass.source
-    when :call, :command
-      superclass[0].source
-    when :fcall, :command_call
-      superclass.inject("") do |final, component|
-        break if component == :"."
-        break if component.respond_to?(:type) && component.type != :const
-        final << component.to_s
+    when :var_ref
+      return superclass.source if superclass.first.type == :const
+    when :const, :const_ref, :const_path_ref, :top_const_ref
+      return superclass.source
+    when :fcall, :command
+      methname = superclass.method_name.source
+      if methname == "DelegateClass"
+        return superclass.parameters.first.source
+      elsif superclass.method_name.type == :const
+        return methname
+      end
+    when :call, :command_call
+      cname = superclass.namespace.source
+      if cname =~ /^O?Struct$/ && superclass.method_name(true) == :new
+        return cname
       end
     end
+    nil
   end
 end
