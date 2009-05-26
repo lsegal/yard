@@ -31,7 +31,7 @@ module YARD
     # A Handler is automatically registered when it is subclassed from the
     # base class. The only other thing that needs to be done is to specify
     # which statement the handler will process. This is done with the +handles+
-    # declaration, taking either a {Parser::RubyToken}, {String} or `Regexp`.
+    # declaration, taking either a {Parser::Ruby::Legacy::RubyToken}, {String} or `Regexp`.
     # Here is a simple example which processes module statements.
     # 
     #   class MyModuleHandler < YARD::Handlers::Base
@@ -51,10 +51,10 @@ module YARD
     # 
     # === +statement+ Attribute 
     # 
-    # The +statement+ attribute pertains to the {Parser::Statement} object
+    # The +statement+ attribute pertains to the {Parser::Ruby::Legacy::Statement} object
     # containing a set of tokens parsed in by the parser. This is the main set
     # of data to be analyzed and processed. The comments attached to the statement
-    # can be accessed by the {Parser::Statement#comments} method, but generally
+    # can be accessed by the {Parser::Ruby::Legacy::Statement#comments} method, but generally
     # the data to be processed will live in the +tokens+ attribute. This list
     # can be converted to a +String+ using +#to_s+ to parse the data with
     # regular expressions (or other text processing mechanisms), if needed.
@@ -211,6 +211,10 @@ module YARD
       # 
       def process
         raise NotImplementedError, "#{self} did not implement a #process method for handling."
+      end
+      
+      def parse_block(*args)
+        raise NotImplementedError, "#{self} did not implement a #parse_block method for handling"
       end
       
       protected
