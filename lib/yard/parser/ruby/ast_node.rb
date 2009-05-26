@@ -14,14 +14,13 @@ module YARD
         alias comments docstring
         alias to_s source
         
-        KEYWORDS = { :class => true, :alias => true, :lambda => true, :do_block => true,
-          :def => true, :begin => true, :rescue => true, :rescue_mod => true,
-          :if => true, :if_mod => true, :else => true, :elsif => true,
-          :case => true, :when => true, :next => true, :break => true,
-          :retry => true, :redo => true, :return => true, :throw => true,
-          :catch => true, :until => true, :until_mod => true, :while => true, :while_mod => true,
-          :yield => true, :yield0 => true, :zsuper => true, :unless => true, :unless_mod => true,
-          :for => true, :super => true, :return0 => true }
+        KEYWORDS = { class: true, alias: true, lambda: true, do_block: true,
+          def: true, defs: true, begin: true, rescue: true, rescue_mod: true,
+          if: true, if_mod: true, else: true, elsif: true, case: true,
+          when: true, next: true, break: true, retry: true, redo: true,
+          return: true, throw: true, catch: true, until: true, until_mod: true,
+          while: true, while_mod: true, yield: true, yield0: true, zsuper: true,
+          unless: true, unless_mod: true, for: true, super: true, return0: true }
         
         def self.node_class_for(type)
           case type
