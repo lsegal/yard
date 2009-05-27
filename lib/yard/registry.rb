@@ -122,11 +122,13 @@ module YARD
         end
       else
         while namespace
-          nss = inheritance ? namespace.inheritance_tree(true) : [namespace]
-          nss.each do |ns|
-            next if ns.is_a?(CodeObjects::Proxy)
-            found = partial_resolve(ns, name)
-            return found if found
+          if namespace.is_a?(CodeObjects::NamespaceObject)
+            nss = inheritance ? namespace.inheritance_tree(true) : [namespace]
+            nss.each do |ns|
+              next if ns.is_a?(CodeObjects::Proxy)
+              found = partial_resolve(ns, name)
+              return found if found
+            end
           end
           namespace = namespace.parent
         end
