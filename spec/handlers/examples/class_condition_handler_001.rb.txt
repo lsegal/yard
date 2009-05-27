@@ -1,5 +1,5 @@
 class A
-  if true
+  if some_condition
     def a; end
   elsif 1 == 1
     def b; end
@@ -12,14 +12,50 @@ class A
   unless false
     def e; end
   else
-    def f; end
+    def enot; end
   end
   
   def g; end unless 5 * 2 == 101
 
   def h
     if 1
-      def i; end
+      def hnot; end
     end
+  end
+  
+  if defined? A
+    def j; end
+  else
+    def jnot; end
+  end
+  
+  if defined? RUBY_VERSION
+    def k; end
+  else
+    def knot; end
+  end
+  
+  if 0
+    def nnot; end
+  else
+    def n; end
+  end
+  
+  if 256
+    def o; end
+  else
+    def onot; end
+  end
+  
+  if true
+    def p; end
+  else
+    def pnot; end
+  end
+  
+  if false
+    def qnot; end
+  else
+    def q; end
   end
 end
