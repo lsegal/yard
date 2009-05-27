@@ -68,7 +68,10 @@ module YARD
             keyname += NSEP + name.to_s
           end
           
-          if self != RootObject && obj = Registry.objects[keyname]
+          obj = Registry.objects[keyname]
+          obj = nil if obj && obj.class != self
+          
+          if self != RootObject && obj
             yield(obj) if block_given?
             obj
           else

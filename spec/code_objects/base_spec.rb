@@ -5,7 +5,7 @@ describe YARD::CodeObjects::Base do
   
   it "should return a unique instance of any registered object" do
     obj = ClassObject.new(:root, :Me)
-    obj2 = ModuleObject.new(:root, :Me)
+    obj2 = ClassObject.new(:root, :Me)
     obj.object_id.should == obj2.object_id
     
     obj3 = ModuleObject.new(obj, :Too)
@@ -14,6 +14,13 @@ describe YARD::CodeObjects::Base do
     
     obj5 = CodeObjects::Base.new(obj3, :hello)
     obj4.object_id.should_not == obj5.object_id
+  end
+
+  it "should create a new object if cached object is not of the same class" do
+    ConstantObject.new(:root, "MYMODULE").should be_instance_of(ConstantObject)
+    ModuleObject.new(:root, "MYMODULE").should be_instance_of(ModuleObject)
+    ClassObject.new(:root, "MYMODULE").should be_instance_of(ClassObject)
+    YARD::Registry.at("MYMODULE").should be_instance_of(ClassObject)
   end
   
   it "should recall the block if #new is called on an existing object" do
