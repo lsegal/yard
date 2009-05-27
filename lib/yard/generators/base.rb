@@ -125,7 +125,7 @@ module YARD
         serializer.before_serialize if serializer && !ignore_serializer
         
         list.each do |object|
-          next unless object
+          next unless object && !object.is_a?(CodeObjects::Proxy)
           
           objout = ""
           @current_object = object
