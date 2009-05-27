@@ -106,10 +106,14 @@ describe YARD::CodeObjects::ModuleObject, "#inheritance_tree" do
     @mod2 = ModuleObject.new(:root, :Mod2)
     @mod3 = ModuleObject.new(:root, :Mod3)
     @mod4 = ModuleObject.new(:root, :Mod4)
+    @mod5 = ModuleObject.new(:root, :Mod5)
 
     @mod1.instance_mixins << @mod2
     @mod2.instance_mixins << @mod3
     @mod1.instance_mixins << @mod4
+    
+    @proxy = P(:SomeProxyClass)
+    @mod5.instance_mixins << @proxy
   end
 
   it "should show only itself for an inheritance tree without included modules" do
@@ -118,5 +122,10 @@ describe YARD::CodeObjects::ModuleObject, "#inheritance_tree" do
 
   it "should show proper inheritance three when modules are included" do
     @mod1.inheritance_tree(true).should == [@mod1, @mod2, @mod3, @mod4]
+  end
+  
+  it "should not list inheritance tree of proxy objects in inheritance tree" do
+    @proxy.should_not_receive(:inheritance_tree)
+    @mod5.instance_mixins.should == [@proxy]
   end
 end
