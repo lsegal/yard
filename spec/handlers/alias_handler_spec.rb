@@ -16,6 +16,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AliasHandler" do
     end
   end
   
+  it "should handle keywords as the alias name" do
+    P('A#for').should be_instance_of(CodeObjects::MethodObject)
+  end
+  
   it "should create a new method object for the alias" do
     P("A#b").should be_instance_of(CodeObjects::MethodObject)
   end

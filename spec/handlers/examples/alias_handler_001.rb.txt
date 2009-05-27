@@ -10,6 +10,7 @@ module A
   alias -@ a
   alias % a
   alias * a
+  alias for a
 end
 
 class C
