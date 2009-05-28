@@ -9,7 +9,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
       statement.parameters(false).each do |obj|
         case obj.type
         when :symbol_literal
-          names << obj.jump(:ident).source
+          names << obj.jump(:ident, :op, :kw).source
         when :string_literal
           names << obj.jump(:string_content).source
         end

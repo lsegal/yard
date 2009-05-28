@@ -58,7 +58,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
     params.map do |obj|
       case obj.type
       when :symbol_literal
-        obj.jump(:ident).source
+        obj.jump(:ident, :op, :kw).source
       when :string_literal
         obj.jump(:string_content).source
       else
