@@ -130,7 +130,7 @@ module YARD
         SCANNER_EVENTS.each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             def on_#{event}(tok)
-              visit_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok)
             end
           eof
         end
@@ -139,7 +139,7 @@ module YARD
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             def on_#{event}(tok)
               (@map[:#{event}] ||= []) << [lineno, charno]
-              visit_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok)
             end
           eof
         end
@@ -150,7 +150,16 @@ module YARD
               unless @tokens.last && @tokens.last[0] == :symbeg
                 (@map[tok] ||= []) << [lineno, charno]
               end
-              visit_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok)
+            end
+          eof
+        end
+
+        [:sp, :nl, :ignored_nl].each do |event|
+          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            def on_#{event}(tok)
+              add_token(:#{event}, tok)
+              @charno += tok.length
             end
           eof
         end
@@ -170,11 +179,11 @@ module YARD
           node
         end
 
-        def visit_token(token, data)
+        def visit_ns_token(token, data)
           add_token(token, data)
           ch = charno
           @charno += data.length
-          @ns_charno = charno unless [:sp, :nl, :ignored_nl].include? token
+          @ns_charno = charno
           AstNode.new(token, [data], line: lineno..lineno, char: ch..charno-1, token: true)
         end
         
@@ -247,7 +256,7 @@ module YARD
         end
 
         def on_comment(comment)
-          visit_token(:comment, comment)
+          visit_ns_token(:comment, comment)
           
           comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
