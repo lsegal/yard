@@ -169,6 +169,7 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       def process_complex_block_opener(tk)
         return unless OPEN_BLOCK_TOKENS.include?(tk.class)
+        return if @last_ns_tk.class == TkALIAS
 
         @current_block = tk.class
         @state = :block_statement
@@ -228,8 +229,10 @@ module YARD
       # @return [Boolean] whether or not the current statement's parentheses and blocks
       #   are balanced after +tk+
       def balances?(tk)
-        if ([TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN] + OPEN_BLOCK_TOKENS).include?(tk.class)
+        if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
           @level += 1
+        elsif OPEN_BLOCK_TOKENS.include?(tk.class)
+          @level += 1 unless @last_ns_tk.class == TkALIAS
         elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
           @level -= 1
         end
