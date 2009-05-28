@@ -94,11 +94,11 @@ module YARD
         end
         
         def literal?
-          type =~ /_literal$/ ? true : false
+          @literal ||= type =~ /_literal$/ ? true : false
         end
         
         def kw?
-          KEYWORDS.has_key?(type)
+          @kw ||= KEYWORDS.has_key?(type)
         end
         
         def call?
