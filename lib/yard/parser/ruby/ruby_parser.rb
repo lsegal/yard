@@ -87,6 +87,9 @@ module YARD
           :zsuper => "super"
         }
         REV_MAPPINGS = {}
+        
+        AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, 
+          :ident, :int, :ivar, :period, :regexp_end, :tstring_content, :backtick]
 
         MAPPINGS.each do |k, v|
           if Array === v
@@ -128,18 +131,20 @@ module YARD
         end
 
         SCANNER_EVENTS.each do |event|
+          ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             def on_#{event}(tok)
-              visit_ns_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok, #{ast_token.inspect})
             end
           eof
         end
         
         REV_MAPPINGS.select {|k| k.is_a?(Symbol) }.each do |event, value|
+          ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             def on_#{event}(tok)
               (@map[:#{event}] ||= []) << [lineno, charno]
-              visit_ns_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok, #{ast_token.inspect})
             end
           eof
         end
@@ -150,7 +155,7 @@ module YARD
               unless @tokens.last && @tokens.last[0] == :symbeg
                 (@map[tok] ||= []) << [lineno, charno]
               end
-              visit_ns_token(:#{event}, tok)
+              visit_ns_token(:#{event}, tok, true)
             end
           eof
         end
@@ -179,12 +184,14 @@ module YARD
           node
         end
 
-        def visit_ns_token(token, data)
+        def visit_ns_token(token, data, ast_token = false)
           add_token(token, data)
           ch = charno
           @charno += data.length
           @ns_charno = charno
-          AstNode.new(token, [data], line: lineno..lineno, char: ch..charno-1, token: true)
+          if ast_token
+            AstNode.new(token, [data], line: lineno..lineno, char: ch..charno-1, token: true)
+          end
         end
         
         def add_token(token, data)
