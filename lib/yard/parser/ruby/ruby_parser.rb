@@ -88,8 +88,8 @@ module YARD
         }
         REV_MAPPINGS = {}
         
-        AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, 
-          :ident, :int, :ivar, :period, :regexp_end, :tstring_content, :backtick]
+        AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
+          :int, :float, :ivar, :period, :regexp_end, :tstring_content, :backtick]
 
         MAPPINGS.each do |k, v|
           if Array === v
