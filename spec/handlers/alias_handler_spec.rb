@@ -20,6 +20,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AliasHandler" do
     P('A#for').should be_instance_of(CodeObjects::MethodObject)
   end
   
+  it "should allow ConstantNames to be specified as aliases" do
+    P('A#ConstantName').should be_instance_of(CodeObjects::MethodObject)
+  end
+  
   it "should create a new method object for the alias" do
     P("A#b").should be_instance_of(CodeObjects::MethodObject)
   end

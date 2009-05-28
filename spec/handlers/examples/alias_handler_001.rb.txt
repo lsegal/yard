@@ -11,6 +11,7 @@ module A
   alias % a
   alias * a
   alias for a
+  alias ConstantName a
 end
 
 class C
