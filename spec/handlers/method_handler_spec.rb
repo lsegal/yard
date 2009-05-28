@@ -37,6 +37,14 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     P('Foo#[]').parameters.should == [['key', "'default'"]]
     P('Foo#/').parameters.should == [['x', "File.new('x', 'w')"], ['y', '2']]
   end
+  
+  it "should handle opts = {} as parameter" do
+    P('Foo#optsmeth').parameters.should == [['x', nil], ['opts', '{}']]
+  end
+
+  it "should handle &block as parameter" do
+    P('Foo#blockmeth').parameters.should == [['x', nil], ['&block', nil]]
+  end
 
   it "should handle overloads" do
     meth = P('Foo#foo')

@@ -19,7 +19,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     obj = register MethodObject.new(nobj, meth, mscope) do |o| 
       o.visibility = visibility 
       o.source = statement.source
-      o.signature = method_signature
+      o.signature = method_signature(meth)
       o.explicit = true
       o.parameters = args
     end
@@ -38,10 +38,11 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     params
   end
   
-  def method_signature
-    start_node = statement.type == :defs ? statement[2] : statement[0]
-    sstart = start_node.source_start - statement.source_start
-    send = statement.jump(:params).source_end - statement.source_start
-    "def " + statement.source[sstart..send].strip
+  def method_signature(method_name)
+    if statement[1]
+      "def #{method_name}(#{statement[1].jump(:params).source})"
+    else
+      "def #{method_name}"
+    end
   end
 end
