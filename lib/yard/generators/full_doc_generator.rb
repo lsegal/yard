@@ -82,16 +82,26 @@ module YARD
       end
       
       def markup_for(filename)
-        if File.extname(filename) =~ /^\.(?:mdown|markdown|mkdn|markdn|md)$/
+        case File.extname(filename).downcase
+        when /^\.(?:mdown|markdown|mkdn|markdn|md)$/
           :markdown
-        elsif File.extname(filename) == ".textile"
+        when ".textile"
           :textile
-        elsif @contents =~ /\A#!(\S+)\s*$/ # Shebang support
-          markup = $1
-          @contents.gsub!(/\A.+?\r?\n/, '')
-          markup.to_sym
+        when /^\.html?$/
+          if format == :html
+            nil # no markup, use raw data
+          else
+            # TODO implement some html->plaintext markup
+            :rdoc
+          end
         else
-          :rdoc
+          if @contents =~ /\A#!(\S+)\s*$/ # Shebang support
+            markup = $1
+            @contents.gsub!(/\A.+?\r?\n/, '')
+            markup.to_sym
+          else
+            :rdoc
+          end
         end
       end
       
