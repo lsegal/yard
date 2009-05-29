@@ -62,14 +62,14 @@ module YARD
     def all(*types)
       namespace.values.select do |obj| 
         if types.empty?
-          obj != Registry.root
+          obj != root
         else
-          obj != Registry.root &&
+          obj != root &&
             types.any? do |type| 
               type.is_a?(Symbol) ? obj.type == type : obj.is_a?(type)
             end
         end
-      end
+      end + (types.include?(:root) ? [root] : [])
     end
     
     def paths
