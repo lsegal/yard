@@ -10,7 +10,10 @@
     <div id="nav" class="namespaces">
       <h1>All Modules / Classes</h1>
       <ul>
-      <% for obj in YARD::Registry.all(:module, :class).sort_by {|o| o.path } %>
+      <% if root %>
+        <li><%= linkify(root, "Top Level Namespace", nil, false) %></li>
+      <% end %>
+      <% for obj in objects %>
         <li><%= linkify(obj) %> <em>(<%= obj.type %>)</em></li>
       <% end %>
       </ul>

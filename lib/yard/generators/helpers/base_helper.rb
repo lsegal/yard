@@ -48,5 +48,14 @@ module YARD::Generators::Helpers
         object.type.to_s.capitalize
       end
     end
+    
+    def format_object_title(object)
+      case object
+      when YARD::CodeObjects::RootObject
+        "Top Level Namespace"
+      else
+        format_object_type(object) + ": " + object.path
+      end
+    end
   end
 end

@@ -3,18 +3,19 @@
 <html>
   <head>
     <%= render :html_head %>
-    <title>All Modules / Classes</title>
+    <title>All Methods</title>
     <base target="main" />
   </head>
   <body>
     <div id="nav" class="methods">
       <h1>Method List</h1>
       <ul>
-      <% for obj in methods_to_show %>
-        <% next if obj.namespace == Registry.root %>
+      <% for obj in objects %>
         <li nowrap="nowrap">
-          <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s) %> 
-          <% if obj.namespace != Registry.root %>
+          <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s, nil, false) %> 
+          <% if obj.namespace == Registry.root %>
+            <em>(Global method)</em>
+          <% else %>
             <em>(<%= obj.namespace.type %> <%= obj.namespace.name %>)</em>
           <% end %>
         </li>

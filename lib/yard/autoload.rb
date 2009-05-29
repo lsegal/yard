@@ -63,6 +63,7 @@ module YARD
     autoload :MixinsGenerator,          'yard/generators/mixins_generator'
     autoload :ModuleGenerator,          'yard/generators/module_generator'
     autoload :QuickDocGenerator,        'yard/generators/quick_doc_generator'
+    autoload :RootGenerator,            'yard/generators/root_generator'
     autoload :SourceGenerator,          'yard/generators/source_generator'
     autoload :TagsGenerator,            'yard/generators/tags_generator'
     autoload :UMLGenerator,             'yard/generators/uml_generator'

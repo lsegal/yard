@@ -9,6 +9,8 @@ module YARD
       
       def sections_for(object) 
         case object
+        when CodeObjects::RootObject
+          [:header, [G(RootGenerator)]]
         when CodeObjects::ClassObject
           [:header, [G(ClassGenerator)]]
         when CodeObjects::ModuleObject
@@ -50,12 +52,19 @@ module YARD
         true
       end
       
-      def generate_index
+      def generate_index(all_objects)
         if format == :html && serializer
+          ns = all_objects.select {|o| o.type == :module || o.type == :class }
+          all_namespaces = { 
+            :objects => ns.sort_by {|o| o.path },
+            :root => all_objects.find {|o| o.type == :root && (!o.meths.empty? || !o.constants.empty?) }
+          }
+          all_methods = { :objects => methods_to_show(all_objects) }
+          
           serializer.serialize 'index.html', render(:index)
           serializer.serialize 'all-files.html', render(:all_files)
-          serializer.serialize 'all-namespaces.html', render(:all_namespaces)
-          serializer.serialize 'all-methods.html', render(:all_methods)
+          serializer.serialize 'all-namespaces.html', render(:all_namespaces, all_namespaces)
+          serializer.serialize 'all-methods.html', render(:all_methods, all_methods)
         end
         true
       end
@@ -86,8 +95,11 @@ module YARD
         end
       end
       
-      def methods_to_show
-        meths = YARD::Registry.all(:method)
+      def methods_to_show(namespaces)
+        meths = namespaces.inject([]) do |arr, namespace|
+          next(arr) unless namespace.is_a?(CodeObjects::NamespaceObject)
+          arr += namespace.meths(:included => false, :inherited => false)
+        end
         if options[:verifier]
           meths.reject! do |object|
             # FIXME we should be using call_verifier here, but visibility

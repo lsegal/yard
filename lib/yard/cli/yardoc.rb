@@ -39,7 +39,7 @@ module YARD
       end
 
       def all_objects
-        Registry.all(:module, :class)
+        Registry.all(:root, :module, :class)
       end
       
       def yardopts
