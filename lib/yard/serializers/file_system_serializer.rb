@@ -20,6 +20,7 @@ module YARD
       
       def serialized_path(object)
         return object if object.is_a?(String)
+        return "top-level-namespace.#{extension}" if object.is_a?(CodeObjects::RootObject)
 
         objname = object.name.to_s
         objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
