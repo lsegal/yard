@@ -108,7 +108,9 @@ module YARD
       def methods_to_show(namespaces)
         meths = namespaces.inject([]) do |arr, namespace|
           next(arr) unless namespace.is_a?(CodeObjects::NamespaceObject)
-          arr += namespace.meths(:included => false, :inherited => false)
+          more_meths = namespace.meths(:included => false, :inherited => false)
+          more_meths = more_meths.select {|object| object.is_explicit? }
+          arr += more_meths
         end
         if options[:verifier]
           meths.reject! do |object|
