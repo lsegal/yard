@@ -20,7 +20,13 @@ describe YARD::Serializers::FileSystemSerializer do
   
   it "should allow no extension to be used" do
     obj = Serializers::FileSystemSerializer.new :extension => nil
-    obj.serialized_path(Registry.root).should == 'root'
+    yard = CodeObjects::ClassObject.new(nil, :FooBar)
+    obj.serialized_path(yard).should == 'FooBar'
+  end
+  
+  it "should serialize to top-level-namespace for root" do
+    obj = Serializers::FileSystemSerializer.new :extension => nil
+    obj.serialized_path(Registry.root).should == "top-level-namespace"
   end
   
   it "should serialize to the correct path" do
