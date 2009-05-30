@@ -5,7 +5,7 @@ $(document).ready(function() {
     }
     
     // Setup the view source links
-    $(".section.source a.source_link").toggle(
+    $("a.source_link").toggle(
         function() {
             $(this).text('Hide source');
             $(this).parent().next().show();

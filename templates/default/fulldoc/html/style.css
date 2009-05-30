@@ -14,6 +14,7 @@ h3 { font-size: 1.0em; }
 .methodsignature .visibility { display: none; }
 .methodsignature .name { font-weight: bold; }
 .methoddetails .method_header h3 { display: none; }
+.section h3 { margin-left: 20px; }
 .section.method { background: #eee; margin-bottom: 0.8em; }
 .section.tags,.section.docstring,.section.source { padding: 5px 12px; }
 .section.method .details_title { font-size: 1.1em; background: #dde; padding: 7px; }
@@ -23,8 +24,8 @@ h3 { font-size: 1.0em; }
 .section.constants dt { font-weight: bold; font-size: 1.1em; }
 .section.constants dt:after { content: " = "; }
 .section.constants dd { margin-bottom: 1em; }
-.section.source .source_link { font-size: 0.9em; }
-.section.source .source_code { display: none; }
+.section .source_link { font-size: 0.9em; }
+.section .source_code { display: none; }
 /*.section.source .source_code pre { float: left; }*/
 .section.attributes table { padding: 0; width: 100%; }
 .section.attributes .readwrite { width: 5%; }
