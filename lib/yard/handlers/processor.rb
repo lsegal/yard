@@ -23,6 +23,11 @@ module YARD
               handler.new(self, stmt).process
             rescue Parser::LoadOrderError => loaderr
               raise # Pass this up
+            rescue NamespaceMissingError => missingerr
+              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized." 
+              log.warn "If this class/method is part of your source tree, this will affect your documentation results." 
+              log.warn "You can correct this issue by loading the source file for this object before `#{file}'"
+              log.warn 
             rescue Parser::UndocumentableError => undocerr
               log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
               log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"

@@ -1,5 +1,10 @@
 module YARD
   module Handlers
+    class NamespaceMissingError < Parser::UndocumentableError
+      attr_accessor :object
+      def initialize(object) @object = object end
+    end
+    
     # = Handlers 
     # 
     # Handlers are pluggable semantic parsers for YARD's code generation 
@@ -273,7 +278,11 @@ module YARD
         objects.flatten.each do |object|
           next unless object.is_a?(CodeObjects::Base)
           
-          ensure_namespace_loaded!(object)
+          begin
+            ensure_loaded!(object.namespace)
+            object.namespace.children << object
+          rescue NamespaceMissingError
+          end
           
           # Yield the object to the calling block because ruby will parse the syntax
           #   
@@ -299,43 +308,36 @@ module YARD
         objects.size == 1 ? objects.first : objects
       end
 
-      def ensure_namespace_loaded!(object, max_retries = 1)
+      def ensure_loaded!(object, max_retries = 1)
         unless parser.load_order_errors
-          return object.parent.is_a?(Proxy) ? load_order_warn(object.parent) : nil
+          if object.is_a?(Proxy)
+            raise NamespaceMissingError, object
+          else
+            nil
+          end
         end
         
-        raise NotImplementedError if RUBY_PLATFORM =~ /java/ 
-        return unless object.parent.is_a?(Proxy)
+        if RUBY_PLATFORM =~ /java/ 
+          log.warn "JRuby does not implement Kernel#callcc and cannot load files in order. You must specify the correct order manually."
+          raise NamespaceMissingError, object
+        end
         
         retries, context = 0, nil
         callcc {|c| context = c }
 
         retries += 1 
         
-        if object.parent.is_a?(Proxy)
+        if object.is_a?(Proxy)
           if retries <= max_retries
             log.debug "Missing object #{object.parent} in file `#{parser.file}', moving it to the back of the line."
             raise Parser::LoadOrderError, context
-          end
-
-          if retries > max_retries && !object.parent.is_a?(Proxy) && !BUILTIN_ALL.include?(object.path)
-            load_order_warn(object.parent)
+          else
+            raise NamespaceMissingError, object
           end
         else
           log.debug "Object #{object} successfully resolved. Adding item to #{object.parent}'s children"
-          object.namespace.children << object 
         end
-
-      rescue NotImplementedError
-        log.warn "JRuby does not implement Kernel#callcc and cannot load files in order. You must specify the correct order manually."
-        load_order_warn(object.parent)
-      end
-      
-      def load_order_warn(object)
-        log.warn "The #{object.type} #{object.path} has not yet been recognized." 
-        log.warn "If this class/method is part of your source tree, this will affect your documentation results." 
-        log.warn "You can correct this issue by loading the source file for this object before `#{parser.file}'"
-        log.warn 
+        object
       end
     end
   end
