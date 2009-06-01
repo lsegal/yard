@@ -24,11 +24,6 @@ module YARD
         end
       end
       
-      # The @overload signature can be pretty much used word for word
-      def format_overload(overload)
-        h overload.signature.gsub(/\A\s*(def\s+)?[^ \(]+/, '')
-      end
-      
       def format_lines(object)
         i = -1
         object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
