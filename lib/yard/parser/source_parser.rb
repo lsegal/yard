@@ -115,7 +115,7 @@ module YARD
       end
       
       def parser_type_for_filename(filename)
-        case File.extname(filename)[1..-1].downcase
+        case (File.extname(filename)[1..-1] || "").downcase
         when "c", "cpp", "cxx"
           :c
         else # when "rb", "rbx", "erb"
