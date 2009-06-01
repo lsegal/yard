@@ -4,16 +4,9 @@ module YARD
       before_section :header,  :has_tags?
       before_section :option, :has_options?
       before_section :param, :has_params?
-      before_section :overload, :has_overloads?
       
       def sections_for(object)
-        [:header, [
-            :example, :param, :yieldparam,
-            :yieldreturn, :return, :raise,
-            :overload, [G(DocstringGenerator), self],
-            :author, :version, :since, :see
-          ]
-        ]
+        [:header, [:example, :param, :yieldparam, :yieldreturn, :return, :raise, :author, :version, :since, :see]]
       end
       
       def yieldparam(object)
@@ -56,10 +49,6 @@ module YARD
       
       def has_options?(object)
         object.has_tag?(:option)
-      end
-      
-      def has_overloads?(object)
-        object.has_tag?(:overload)
       end
       
       def render_tags(name, opts = {})

@@ -6,11 +6,3 @@
     <span class='block'><%= format_block object %></span>
   </tt>
 </div>
-<% for overload in object.tags(:overload) %>
-<div class='section <%=generator_name %>'>
-  <tt class='def overload'>
-    <span class='return_types'><%= format_return_types overload %></span>
-    <span class='name'><%= overload.name %></span><span class='signature'><%= format_overload overload %></span>
-  </tt>
-</div>
-<% end %>
