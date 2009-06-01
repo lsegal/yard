@@ -1,3 +1,6 @@
-<% method_list.sort_by {|m| "#{m.scope}#{m.name}" }.each do |meth| %><%= meth.visibility == :class ? '+' : '-' %> <%= meth.name(true) %><%= format_args meth %> <%= format_block meth %>
+<% method_list.sort_by {|m| "#{m.scope}#{m.name}" }.each do |meth| %>
+<% overloads(meth).each do |overload| %>
+<%= overload.visibility == :class ? '+' : '-' %> <%= overload.name(true) %><%= format_args overload %> <%= format_block overload %>
 
+<% end %>
 <% end %>

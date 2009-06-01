@@ -17,6 +17,18 @@ module YARD
         super(value)
         docstring.object = value
       end
+
+      def type
+        object.type
+      end
+
+      def name(prefix = false)
+        ((prefix ? sep : "") + @name.to_s).to_sym
+      end
+
+      def inspect
+        "#<yardoc overload #{path}>"
+      end
       
       def method_missing(sym, *args, &block)
         object ? object.send(sym, *args, &block) : super
@@ -29,7 +41,7 @@ module YARD
         text ||= ""
         @signature.strip!
         numspaces = text[/\A(\s*)/, 1].length
-        text.gsub!(/^\s{#{numspaces}}/, '').strip!
+        text.gsub!(/^[ \t]{#{numspaces}}/, '').strip!
         @docstring = Docstring.new(text, nil)
       end
       

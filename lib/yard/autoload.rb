@@ -68,6 +68,7 @@ module YARD
     autoload :TagsGenerator,            'yard/generators/tags_generator'
     autoload :UMLGenerator,             'yard/generators/uml_generator'
     autoload :VisibilityGroupGenerator, 'yard/generators/visibility_group_generator'
+    autoload :OverloadsGenerator,       'yard/generators/overloads_generator'
   end
   
   module Handlers

@@ -3,8 +3,12 @@
   <% method_list.each do |meth| %>
     <tr>
       <th class="signature">
-        <span class='name'><%= linkify(meth, meth.name(true)) %></span><span class='args'><%= format_args meth %></span>
-        <span class='block'><%= format_block meth %></span>
+        <% overloads(meth).each do |overload| %>
+          <span class='overload'>
+            <span class='name'><%= linkify(meth, overload.name(true)) %></span><span class='args'><%= format_args overload %></span>
+            <span class='block'><%= format_block overload %></span>
+          </span>
+        <% end %>
         <% meth.aliases.each do |obj| %>
           <span class='alias'><%= h obj.name(true) %></span>
         <% end %>

@@ -2,7 +2,7 @@ module YARD
   module Generators::Helpers
     module FilterHelper
       def is_method?(object)
-        object.is_a?(CodeObjects::MethodObject)
+        object.type == :method
       end
 
       def is_namespace?(object)

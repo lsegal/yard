@@ -57,5 +57,13 @@ module YARD::Generators::Helpers
         format_object_type(object) + ": " + object.path
       end
     end
+
+    def overloads(method)
+      if method.has_tag?(:overload)
+        method.tags(:overload)
+      else
+        [method]
+      end
+    end
   end
 end

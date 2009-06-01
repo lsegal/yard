@@ -16,8 +16,10 @@ h3 { font-size: 1.0em; }
 .methoddetails .method_header h3 { display: none; }
 .section h3 { margin-left: 20px; }
 .section.method { background: #eee; margin-bottom: 0.8em; }
+.overload .section.method { background: #f5f5f5; margin-left: 2em; margin-right: 2em; }
 .section.tags,.section.docstring,.section.source { padding: 5px 12px; }
 .section.method .details_title { font-size: 1.1em; background: #dde; padding: 7px; }
+.overload .section.method .details_title { background: #e2e2ea; }
 .section.method .details_title p.aliases { padding: 0; margin: 0; font-style: italic; font-size: 0.9em; }
 .section.method .details_title p.aliases tt { font-weight: bold; font-style: normal; font-size: 1.1em; }
 .section.constants dl { font-family: monospace; }
@@ -53,7 +55,7 @@ h3 { font-size: 1.0em; }
 .section.methodsummary th { background: #dde; text-align: left; white-space: nowrap; padding-right: 12px; }
 .section.methodsummary .signature { font-family: monospace; font-weight: normal; }
 .section.methodsummary .signature .name { font-weight: bold; }
-.section.methodsummary .signature .alias { display: block; }
+.section.methodsummary .signature .alias, .section.methodsummary .signature .overload { display: block; }
 .section.methodsummary .docstring { width: 80%; }
 .section.methodsummary .docstring * { display: inline; }
 .section.methodsummary .docstring p.returns { color: #555; font-style: italic; }
