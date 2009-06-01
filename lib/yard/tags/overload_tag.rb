@@ -26,6 +26,7 @@ module YARD
       
       def parse_tag(raw_text)
         @signature, text = raw_text.split(/\r?\n/, 2)
+        text ||= ""
         @signature.strip!
         numspaces = text[/\A(\s*)/, 1].length
         text.gsub!(/^\s{#{numspaces}}/, '').strip!

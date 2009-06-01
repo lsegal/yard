@@ -42,5 +42,6 @@ end
   #   @return [String]
   # @overload def baz(b, c)
   #   @return [Fixnum]
+  # @overload bang(d, e)
   def foo(*args); end
 end
