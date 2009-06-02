@@ -42,4 +42,17 @@ describe YARD::CodeObjects::MethodObject do
     Registry.at("YARD.something").should be_nil
     Registry.at("YARD#something").should_not be_nil
   end
+  
+  describe '#name' do
+    it "should show a prefix for an instance method when prefix=true" do
+      obj = MethodObject.new(nil, :something)
+      obj.name(true).should == :"#something"
+    end
+    
+    it "should never show a prefix for a class method" do
+      obj = MethodObject.new(nil, :something, :class)
+      obj.name.should == :"something"
+      obj.name(true).should == :"something"
+    end
+  end
 end

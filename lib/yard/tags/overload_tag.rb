@@ -23,7 +23,7 @@ module YARD
       end
 
       def name(prefix = false)
-        ((prefix ? sep : "") + @name.to_s).to_sym
+        object.name(prefix)
       end
 
       def inspect
