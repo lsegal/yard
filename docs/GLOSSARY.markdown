@@ -9,3 +9,5 @@ Glossary
 * **Domain Specific Language (DSL)**: In the context of Ruby, a DSL is a languge
   optimized for a specific domain (problem) but represented using Ruby syntax.
 
+* **Docstring (Documentation String)**: Comments associated with a code object
+  used for documentation purposes.
