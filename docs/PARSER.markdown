@@ -33,24 +33,24 @@ The `SourceParser` class API is optimized for parsing globs of files. As such,
 the main method to use the class is the `parse` class method, which takes an
 array of file globs or a single file glob.
 
-    YARD::SourceParser.parse('spec_*.rb')
-    YARD::SourceParser.parse(['spec_*.rb', '*_helper.rb'])
+    YARD::Parser::SourceParser.parse('spec_*.rb')
+    YARD::Parser::SourceParser.parse(['spec_*.rb', '*_helper.rb'])
     
 This is equivalent to the convenience method {YARD.parse}:
 
     YARD.parse('lib/**/*.rb')
     
 In some cases (ie. for testing), it may be more helpful to parse a string of input
-directly. In such a case, the method {YARD::SourceParser.parse_string} should be
+directly. In such a case, the method {YARD::Parser::SourceParser.parse_string} should be
 used:
 
-    YARD::SourceParser.parse_string("def method(a, b) end")
+    YARD::Parser::SourceParser.parse_string("def method(a, b) end")
     
 Because no filename information is given, this method allows the setting of the
 parser type as an argument:
 
     # Parses a string of C (not implemented)
-    YARD::SourceParser.parse_string("int main() { }", :c)
+    YARD::Parser::SourceParser.parse_string("int main() { }", :c)
 
 The Two Ruby Parser Types
 -------------------------
