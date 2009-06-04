@@ -25,6 +25,7 @@ which was added to stdlib. The ripper parser is Ruby's official answer to
 projects like ParseTree and ruby2ruby. Ripper allows access to the AST as it 
 is parsed by the Ruby compiler. This has some large benefits over alternative 
 projects: 
+
   1. It is officially supported and maintained by the Ruby core team.
   2. The AST is generated directly from the exact same code that drives the
      compiler, meaning anything that compiles is guaranteed to generate the
