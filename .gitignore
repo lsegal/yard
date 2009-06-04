@@ -3,6 +3,5 @@ _Yardoc
 .DS_Store
 pkg
 *.dot
-*.png
 *.pdf
 .yardoc
