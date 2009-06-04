@@ -33,7 +33,7 @@ end
 
 YARD::Rake::YardocTask.new do |t|
   extra_files = %w(docs/WHATSNEW.markdown docs/OVERVIEW.markdown
-    docs/CODE_OBJECTS.markdown docs/FAQ.markdown 
+    docs/CODE_OBJECTS.markdown docs/PARSER.markdown docs/FAQ.markdown 
     docs/GLOSSARY.markdown LICENSE)
   t.options = ["--files", extra_files.join(",")]
   t.after = lambda { `cp -R docs/images/ doc/images/` }
