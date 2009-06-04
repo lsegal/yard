@@ -1,7 +1,8 @@
-doc
 _Yardoc
 .DS_Store
-pkg
 *.dot
 *.pdf
 .yardoc
+/pkg
+/doc
+/coverage
