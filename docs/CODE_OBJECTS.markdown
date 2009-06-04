@@ -21,7 +21,7 @@ Methods that accept a namespace object as a parameter should also accept the sym
 
 The following is an overview of the classes within the `CodeObjects` namespace:
 
-![CodeObjects Class Diagram](design/images/code-objects-class-diagram.png)
+![CodeObjects Class Diagram](images/code-objects-class-diagram.png)
 
 Unique Path Representation
 --------------------------
