@@ -8,6 +8,7 @@ module YARD
       attr_accessor :name
       attr_accessor :options
       attr_accessor :files
+      attr_accessor :before, :after
 
       def initialize(name = :yardoc)
         @name = name
@@ -23,7 +24,11 @@ module YARD
       
       def define
         desc "Generate YARD Documentation"
-        task(name) { YARD::CLI::Yardoc.run *(options + files) }
+        task(name) do
+          before.call if before.is_a?(Proc)
+          YARD::CLI::Yardoc.run *(options + files) 
+          after.call if after.is_a?(Proc)
+        end
       end
     end
   end
