@@ -66,15 +66,25 @@ module YARD
         namespaces(object).each {|o| process_objects(o) }
       end
       
-      def method_list(object)
+      def method_list(object, attributes = false)
         vissort = lambda {|vis| vis == :public ? 'a' : (vis == :protected ? 'b' : 'c') }
         
-        object.meths(:inherited => false, :included => false, :visibility => options[:visibility]).reject do |o|
-          o.is_attribute?
-        end.sort_by {|o| "#{o.scope}#{vissort.call(o.visibility)}#{o.name}" }
+        meths = object.meths(:inherited => false, :included => false, :visibility => options[:visibility])
+        meths = remove_overriden_meths(object, meths)
+        meths = meths.select {|o| attributes ? o.is_attribute? : !o.is_attribute? }
+        meths = meths.reject {|o| o.is_alias? }
+        meths = meths.sort_by {|o| "#{o.scope}#{vissort.call(o.visibility)}#{o.name}" }
       end
       
       private
+      
+      def remove_overriden_meths(object, meth_list)
+        object.inheritance_tree(true)[1..-1].each do |sclass|
+          next if CodeObjects::Proxy === sclass
+          meth_list.reject! {|o| sclass.child(:scope => o.scope, :name => o.name) }
+        end
+        meth_list
+      end
       
       def tidy(data)
         indent = 0

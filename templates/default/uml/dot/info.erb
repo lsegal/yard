@@ -1,7 +1,7 @@
 <%= object.type %> <%= h object.name %>
 <% if show_full_info? %>
 |
-<% object.namespace.attributes.each do |scope, list| %>
+<% object.attributes.each do |scope, list| %>
 <% list.each do |name, rw| %>
 <%= uml_visibility(rw.values.compact.first) %> <%= h rw.values.compact.first.name(true) %> [<%= 'R' if rw[:read] %><%= 'W' if rw[:write] %>]\l
 <% end %>
