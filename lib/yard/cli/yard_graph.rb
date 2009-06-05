@@ -4,6 +4,7 @@ module YARD
   module CLI
     class YardGraph
       attr_reader :options, :visibilities
+      attr_reader :objects
       
       def self.run(*args) new.run(*args) end
         
@@ -17,9 +18,9 @@ module YARD
       end
       
       def run(*args)
-        optparse(*args)
         Registry.load
-        Generators::UMLGenerator.new(options).generate Registry.root
+        optparse(*args)
+        Generators::UMLGenerator.new(options).generate(*objects)
       end
       
       private
@@ -75,6 +76,11 @@ module YARD
 
         begin
           opts.parse!(args)
+          if args.first
+            @objects = args.map {|o| Registry.at(o) }.compact
+          else
+            @objects = [Registry.root]
+          end
         rescue => e
           STDERR.puts e.message
           STDERR << "\n" << opts
