@@ -56,6 +56,11 @@ Recognizing a tag is one part of the process. Parsing the tag contents is the
 second step. YARD has a tag architecture that allows developers to add or completely
 change the way tags contents can be parsed.
 
+The separation of registration and tag creation can be seen in the following
+class diagram:
+
+![Tags Architecture Class Diagram](images/tags-class-diagram.png)
+
 DefaultFactory
 --------------
 
@@ -135,3 +140,41 @@ To change the factory, set the {YARD::Tags::Library.default_factory} attribute:
 
 This must be done before any parsing is done, or the factory will not be used.
 
+Reference Tags
+--------------
+
+Although attempt is made in YARD to leave as much of the syntax details to the
+factory provider, there is a special tag syntax that allows for the referencing
+of tags created in other objects to be reused again. This is common when an
+object describes a return type or parameters that are passed through to other
+methods. In such a case, it is more manageable to use the refetence tag syntax.
+Consider the following example:
+
+    class User
+      # @param [String] username the nam of the user to add
+      # @param [Number] uid the user ID
+      # @param [Number] gid the group ID
+      def initialize(username, uid, gid)
+      end
+    end
+
+    module UserHelper
+      # @param (see User#initialize)
+      def add_user(username, uid, gid)
+        User.new(username, uid, gid)
+      end
+      
+      # @param username (see User#initialize)
+      def add_root_user(username)
+        User.new(username, 0, 0)
+      end
+    end
+    
+Because the UserHelper module methods delegate directly to `User.new`, copying
+the documentation details would be unmaintainable. In this case, the (see METHODNAME)
+syntax is used to reference the tags from the User constructor to the helper methods.
+For the first method, all `@param` tags are referenced in one shot, but the second
+method only references one of the tags by adding `username` before the reference.
+
+Reference tags are represented by the {YARD::Tags::RefTag} class and are created
+directly during parsing by {YARD::Docstring}.
