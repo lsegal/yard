@@ -102,7 +102,7 @@ Handling an Inner Block
 By default, the parser gives the processor class a list of all the top level
 statements and the processor parses only those top level statements. If an inner
 block of a module, class, method declaration or even a block passed to a method call
-needs to be handled, the `{YARD::Handlers::Base#parse_block parse_block}` method must be called on the list of statements
+needs to be handled, the {YARD::Handlers::Base#parse_block parse_block} method must be called on the list of statements
 to parse. This will send the list to the processor to continue processing on that
 statement list. The source tree can be selectively parsed in this manner by parsing
 only the inner blocks that are relevant to documentation.
