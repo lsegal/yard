@@ -143,12 +143,12 @@ This must be done before any parsing is done, or the factory will not be used.
 Reference Tags
 --------------
 
-Although attempt is made in YARD to leave as much of the syntax details to the
-factory provider, there is a special tag syntax that allows for the referencing
-of tags created in other objects to be reused again. This is common when an
-object describes a return type or parameters that are passed through to other
-methods. In such a case, it is more manageable to use the refetence tag syntax.
-Consider the following example:
+Although attempt is made in YARD to leave as many of the syntax details as
+possible to the factory provider, there is a special tag syntax for referencing
+tags created in other objects so that they can be reused again. This is common
+when an object describes a return type or parameters that are passed through to
+other methods. In such a case, it is more manageable to use the reference tag
+syntax. Consider the following example:
 
     class User
       # @param [String] username the nam of the user to add
