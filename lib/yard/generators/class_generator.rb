@@ -11,6 +11,7 @@ module YARD
             G(MixinsGenerator, :scope => :class),
             G(MixinsGenerator, :scope => :instance),
             G(DocstringGenerator), 
+            G(TagsGenerator),
             G(AttributesGenerator), 
             G(ConstantsGenerator),
             G(ConstructorGenerator),
