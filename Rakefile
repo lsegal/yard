@@ -30,6 +30,7 @@ Spec::Rake::SpecTask.new("specs") do |t|
   # t.rcov = true
   t.rcov_opts = ['-x', '_spec\.rb$,spec_helper\.rb$']
 end
+task :spec => :specs
 
 YARD::Rake::YardocTask.new do |t|
   t.after = lambda { `cp -R docs/images/ doc/images/` }
