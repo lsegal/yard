@@ -33,7 +33,8 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
           end
         end
 
-        if classname[0,1] =~ /[A-Z]/ 
+        if classname[0,1] =~ /[A-Z]/
+          register ClassObject.new(namespace, classname) if Proxy === proxy
           parse_block(statement[1], namespace: proxy, scope: :class)
         else
           raise YARD::Parser::UndocumentableError, "class '#{classname}'"

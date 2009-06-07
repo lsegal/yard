@@ -78,6 +78,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     Registry.at('String.classmethod').should_not be_nil
   end
   
+  it "should allow class << SomeRubyClass to create the class if it does not exist" do
+    Registry.at('Symbol.toString').should_not be_nil
+  end
+  
   it "should raise an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do
     ['not.aclass', 'self', 'AnotherClass.new'].each do |klass|
       Registry.clear

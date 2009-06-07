@@ -32,6 +32,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
       elsif classname[0,1] =~ /[A-Z]/ 
+        register ClassObject.new(namespace, classname) if Proxy === proxy
         parse_block(:namespace => proxy, :scope => :class)
       else
         raise YARD::Parser::UndocumentableError, "class '#{classname}'"

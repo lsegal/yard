@@ -66,3 +66,7 @@ end
 module Q
   class Logger < ::Logger; end
 end
+
+class << Symbol
+  alias toString to_s
+end
