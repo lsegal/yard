@@ -6,7 +6,7 @@ module YARD
       before_section :param, :has_params?
       
       def sections_for(object)
-        [:header, [:example, :param, :yield, :yieldparam, :yieldreturn, :return, :raise, :author, :version, :since, :see]]
+        [:header, [:example, :param, :yield, :yieldparam, :yieldreturn, :return, :raise, :todo, :author, :version, :since, :see]]
       end
       
       def yield(object)
