@@ -27,7 +27,7 @@ Unique Path Representation
 --------------------------
 
 All CodeObjects are uniquely defined by their implementation of {YARD::CodeObjects::Base#path}.
-This path is used to locate or store a code object in the `YARD::Registry`. It is therefore
+This path is used to locate or store a code object in the {YARD::Registry}. It is therefore
 essential that any Base subclass return a unique String value for #path so that the 
 object may co-exist with other objects in the Registry.
 
@@ -57,7 +57,7 @@ Identity Map
 Code objects are instantiated using an identity-map like implementation that guarantees
 only one unique Ruby object exists for an object described by a specific path. This
 allows developers to create a code object without checking if it already exists in
-the {Registry}. The following example will only create one object:
+the {YARD::Registry}. The following example will only create one object:
 
     id = ClassObject.new(:root, "MyClass").object_id #=> 13352
     ClassObject.new(:root, "MyClass").object_id #=> 13352 

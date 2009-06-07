@@ -232,7 +232,7 @@ to generate documentation for a variety of formats, most commonly HTML. The
 documentation to HTML document files. In addition to this, YARD ships with
 two more tools allowing you to quickly view `ri`-style documentation for
 a specific class or method as well as an extra tool to generate UML diagrams
-for your code using [Graphviz](graphviz). An overview of these tools can
+for your code using [Graphviz][graphviz]. An overview of these tools can
 be found in the {file:README.markdown README} under the Usage section.
 
 <a name="extending" />
