@@ -6,9 +6,9 @@ extended for a separate purpose. The split also emphasizes YARD's design choice
 to explicitly separate data gathering from HTML document generation, something
 that tools like RDoc do not do. These components are:
 
-* Code Parsing & Processing Component
-* Data Storage Component
-* Post Processing & Output Generation Component
+* [Code Parsing & Processing Component](#parsing)
+* [Data Storage Component](#storage)
+* [Post Processing & Output Generation Component](#generators)
 
 This separation is a major goal of the project, and means that YARD is not *just* 
 a tool to generate HTML output. The expectation is that any subset of YARD's 
@@ -22,6 +22,7 @@ following class diagram:
 
 ![Overview Class Diagram](images/overview-class-diagram.png)
 
+<a name="parsing" />
 Code Parsing & Processing Component
 -----------------------------------
 
@@ -39,6 +40,7 @@ which the handlers then process, creating code objects which in turn create tags
 (meta-data) attached to the objects. These objects are all added to the {YARD::Registry},
 the data store component.
 
+<a name="storage" />
 Data Storage Component
 ----------------------
 
@@ -48,6 +50,7 @@ is the centralized repository for all data being parsed, stored and accessed. Th
 are future plans to improve this storage mechanism to be backend agnostic and allow
 for more robust storage.
 
+<a name="generators" />
 Post Processing & Output Generation Component
 ---------------------------------------------
 
