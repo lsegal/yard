@@ -22,7 +22,7 @@ following class diagram:
 
 ![Overview Class Diagram](images/overview-class-diagram.png)
 
-<a name="parsing" />
+<a name="parsing"></a>
 Code Parsing & Processing Component
 -----------------------------------
 
@@ -40,7 +40,7 @@ which the handlers then process, creating code objects which in turn create tags
 (meta-data) attached to the objects. These objects are all added to the {YARD::Registry},
 the data store component.
 
-<a name="storage" />
+<a name="storage"></a>
 Data Storage Component
 ----------------------
 
@@ -50,7 +50,7 @@ is the centralized repository for all data being parsed, stored and accessed. Th
 are future plans to improve this storage mechanism to be backend agnostic and allow
 for more robust storage.
 
-<a name="generators" />
+<a name="generators"></a>
 Post Processing & Output Generation Component
 ---------------------------------------------
 

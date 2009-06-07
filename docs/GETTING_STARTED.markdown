@@ -9,7 +9,7 @@ document will cover the most common ways to use YARD:
 * [Extending YARD](#extending)
 * [Templating YARD](#templating)
 
-<a name="docing" />
+<a name="docing"></a>
 Documenting Code with YARD
 ==========================
 
@@ -108,7 +108,7 @@ Symbols:
   
     # @param [Array<String, Symbol>] list the list of strings and symbols.
 
-<a name="taglist" />
+<a name="taglist"></a>
 List of Tags
 ------------
     
@@ -222,7 +222,7 @@ The syntax is `{ObjectName#method OPTIONAL_TITLE}`. This syntax is acceptable
 anywhere in documentation with the exception of the @see tag, which 
 automatically links its data.
 
-<a name="using" />
+<a name="using"></a>
 Using YARD to Generate Documentation
 ====================================
 
@@ -235,7 +235,7 @@ a specific class or method as well as an extra tool to generate UML diagrams
 for your code using [Graphviz][graphviz]. An overview of these tools can
 be found in the {file:README.markdown README} under the Usage section.
 
-<a name="extending" />
+<a name="extending"></a>
 Extending YARD
 ==============
 
@@ -252,7 +252,7 @@ For information on adding extra tags, see {file:TAGS.markdown}.
 For information on accessing the data YARD stores about your documentation,
 look at the {file:CODE_OBJECTS.markdown} architecture document.
 
-<a name="templating" />
+<a name="templating"></a>
 Templating YARD
 ===============
 

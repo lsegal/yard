@@ -140,7 +140,7 @@ To change the factory, set the {YARD::Tags::Library.default_factory} attribute:
 
 This must be done before any parsing is done, or the factory will not be used.
 
-<a name="reftags" />
+<a name="reftags"></a>
 Reference Tags
 --------------
 
