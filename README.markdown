@@ -34,45 +34,10 @@ documentation, but provide a much more consistent and usable way to describe 
 important information about objects, such as what parameters they take and what types
 they are expected to be, what type a method should return, what exceptions it can 
 raise, if it is deprecated, etc.. It also allows information to be better (and more 
-consistently) organized during the output generation phase. Some of the main tags 
-are listed below: 
-                                                                              
-#### Table 1. Meta-tags and their descriptions
-                                                                              
-##### `@param [Types] name Description`
-Allows for the definition of a method parameter with optional type information.
-                                                                              
-##### `@yieldparam [Types] name Description`
-Allows for the definition of a method parameter to a yield block with optional
-type information.
-   
-##### `@yield [paramnames] Description`
-Allows the developer to document the purpose of a yield block in a method.
-   
-##### `@return [Types] Description`
-Describes what the method returns with optional type information.
+consistently) organized during the output generation phase. You can find a list
+of tags in the {file:GETTING_STARTED.markdown#taglist GETTING_STARTED.markdown} file.
 
-##### `@deprecated Description`
-Informs the developer that a method is deprecated and should no 
-longer be used. The description offers the developer an alternative 
-solution or method for the problem.
-                                                 
-##### `@raise [Class] Description`
-Tells the developer that the method may raise an exception and of what type. 
-   
-##### `@see name`
-References another object, URL, or other for extra information. 
-
-##### `@since number`
-Lists the version number in which the object first appeared. 
-
-##### `@version number`
-Lists the current version of the documentation for the object. 
-
-##### `@author name`
-The authors responsible for the module
-
-You might have noticed the optional "types" declarations for certain tags. 
+YARD also supports an optional "types" declarations for certain tags. 
 This allows the developer to document type signatures for ruby methods and 
 parameters in a non intrusive but helpful and consistent manner. Instead of 
 describing this data in the body of the description, a developer may formally 
@@ -99,17 +64,17 @@ descriptive. 
                                                                               
 **3. Custom Constructs and Extensibility of YARD**: Take for instance the example: 
    
-     class A 
-       class << self 
-         def define_name(name, value) 
-           class_eval "def #{name}; #{value.inspect} end" 
-         end 
-       end 
-       
-       # Documentation string for this name 
-       define_name :publisher, "O'Reilly"
-     end
-                                                                              
+    class A 
+      class << self 
+        def define_name(name, value) 
+          class_eval "def #{name}; #{value.inspect} end" 
+        end 
+      end 
+ 
+      # Documentation string for this name 
+      define_name :publisher, "O'Reilly"
+    end
+                                                                        
 This custom declaration provides dynamically generated code that is hard for a
 documentation tool to properly document without help from the developer. To 
 ease the pains of manually documenting the procedure, YARD can be extended by 
@@ -147,7 +112,7 @@ simply type `yardoc` in your project root. This will assume your files are
 located in the `lib/` directory. If they are located elsewhere, you can specify
 paths and globs from the commandline via:
 
-      $ yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
+    $ yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
 
 The tool will generate a `.yardoc` file which will store the cached database
 of your source code and documentation. If you want to re-generate your docs
@@ -158,15 +123,26 @@ YARD will by default only document code in your public visibility. You can
 document your protected and private code by adding `--protected` or
 `--private` to the option switches.
 
+You can also add extra informative files with the `--files` switch,
+for example:
+
+    $ yardoc --files FAQ,LICENSE
+
+Note that the README file is specified with its own `--readme` switch.
+
+You can also add a `.yardopts` file to your project directory which lists
+the switches separated by whitespace (newlines or space) to pass to yardoc 
+whenever it is run.
+
 **2. Rake Task**
 
 The second most obvious is to generate docs via a Rake task. You can do this by 
 adding the following to your `Rakefile`:
 
-      YARD::Rake::YardocTask.new do |t|
-        t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
-        t.options = ['--any', '--extra', '--opts'] # optional
-      end
+    YARD::Rake::YardocTask.new do |t|
+      t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
+      t.options = ['--any', '--extra', '--opts'] # optional
+    end
 
 both the `files` and `options` settings are optional. `files` will default to
 `lib/**/*.rb` and `options` will represents any options you might want
@@ -174,7 +150,7 @@ to add. Again, a full list of options is available by typing `yardoc --help`
 in a shell. You can also override the options at the Rake command-line with the
 OPTS environment variable:
 
-      $ rake yardoc OPTS='--any --extra --opts'
+    $ rake yardoc OPTS='--any --extra --opts'
                                                                               
 **3. `yri` RI Implementation**
 
@@ -182,8 +158,8 @@ The yri binary will use the cached .yardoc database to give you quick ri-style
 access to your documentation. It's way faster than ri but currently does not
 work with the stdlib or core Ruby libraries, only the active project. Example:
 
-      $ yri YARD::Handlers::Base#register
-      $ yri File::relative_path
+    $ yri YARD::Handlers::Base#register
+    $ yri File::relative_path
 
 **4. `yard-graph` Graphviz Generator**
 
@@ -196,11 +172,14 @@ option to show mixin inclusions. You can output to stdout or a file, or pipe dir
 to `dot`. The same public, protected and private visibility rules apply to yard-graph.
 More options can be seen by typing `yard-graph --help`, but here is an example:
 
-      $ yard-graph --protected --full --dependencies
+    $ yard-graph --protected --full --dependencies
 
 
 CHANGELOG
 ---------
+
+- **Jun.07.09**: 0.2.3 release. See the {file:WHATSNEW.markdown} file for a 
+  list of important new features.
 
 - **Jun.16.08**: 0.2.2 release. This is the largest changset since yard's 
   conception and involves a complete overhaul of the parser and API to make it

@@ -27,7 +27,7 @@ Unique Path Representation
 --------------------------
 
 All CodeObjects are uniquely defined by their implementation of {YARD::CodeObjects::Base#path}.
-This path is used to locate or store a code object in the {YARD::Registry}. It is therefore
+This path is used to locate or store a code object in the `YARD::Registry`. It is therefore
 essential that any Base subclass return a unique String value for #path so that the 
 object may co-exist with other objects in the Registry.
 
