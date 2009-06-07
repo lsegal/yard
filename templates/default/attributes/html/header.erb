@@ -7,7 +7,7 @@
       <table>
       <% object.attributes[scope].sort_by {|o| o.to_s.downcase }.each do |name, rw| %>
         <% aliases = (rw[:read] || rw[:write]).aliases %>
-        <tr class="<%= 'hasaliases' if aliases.count > 0 %>">
+        <tr class="<%= 'hasaliases' if aliases.length > 0 %>">
           <th class='signature'>
             <span class='name'><%= h name %></span>
           </td>
@@ -31,11 +31,11 @@
             <% end %>
           </td>
         </tr>
-        <% if aliases.count > 0 %>
+        <% if aliases.length > 0 %>
           <tr>
             <td colspan='4' class='aliases'><span class='text'>Also known as:</span>
               <% aliases.each_with_index do |obj, i| %>
-                <span class='alias'><%= h obj.name.to_s.sub(/=$/, '') %></span><%= "," if i < aliases.count - 1 %>
+                <span class='alias'><%= h obj.name.to_s.sub(/=$/, '') %></span><%= "," if i < aliases.length - 1 %>
               <% end %>
             </td>
           </tr>
