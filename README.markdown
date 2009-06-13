@@ -1,5 +1,5 @@
-YARD Release 0.2.3 (June 7th 2009) 
-===================================
+YARD Release 0.2.3.1 (June 13th 2009)
+=====================================
 
 **Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
@@ -177,6 +177,10 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 CHANGELOG
 ---------
+
+- **Jun.13.09**: 0.2.3.1 release.
+    - Add a RubyGems 1.3.2+ plugin to generate YARD documentation instead of
+      RDoc.
 
 - **Jun.07.09**: 0.2.3 release. See the {file:WHATSNEW.markdown} file for a 
   list of important new features.
