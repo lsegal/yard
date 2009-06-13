@@ -180,7 +180,8 @@ CHANGELOG
 
 - **Jun.13.09**: 0.2.3.1 release.
     - Add a RubyGems 1.3.2+ plugin to generate YARD documentation instead of
-      RDoc.
+      RDoc. To take advantage of this plugin, set `has_rdoc = 'yard'` in your
+      .gemspec file.
 
 - **Jun.07.09**: 0.2.3 release. See the {file:WHATSNEW.markdown} file for a 
   list of important new features.
