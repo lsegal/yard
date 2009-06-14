@@ -1,6 +1,5 @@
 require 'rubygems/specification'
 require 'rubygems/doc_manager'
-require File.dirname(__FILE__) + '/yard' unless defined?(YARD)
 
 class Gem::Specification
   # has_rdoc should not be ignored!
@@ -23,6 +22,10 @@ class Gem::Specification
 end
 
 class Gem::DocManager
+  def self.load_yardoc
+    require File.dirname(__FILE__) + '/yard'
+  end
+  
   def run_yardoc(*args)
     args << @spec.rdoc_options
     args << '--quiet'
@@ -58,6 +61,7 @@ class Gem::DocManager
     FileUtils.mkdir_p @doc_dir unless File.exist?(@doc_dir)
 
     self.class.load_rdoc if @spec.has_rdoc?
+    self.class.load_yardoc if @spec.has_yardoc?
   end
 
   def install_yardoc
