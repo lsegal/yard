@@ -171,21 +171,11 @@ module YARD
       ##
       # Attaches source code to a code object with an optional file location
       #
-      # @param [Parser::Statement, String] statement 
+      # @param [#source, String] statement 
       #   the +Parser::Statement+ holding the source code or the raw source 
       #   as a +String+ for the definition of the code object only (not the block)
       def source=(statement)
-        if statement.is_a? Parser::Ruby::Legacy::Statement
-          src = statement.tokens.to_s
-          blk = statement.block ? statement.block.to_s : ""
-          if src =~ /^def\s.*[^\)]$/ && blk[0,1] !~ /\r|\n/
-            blk = ";" + blk
-          end
-          
-          @source = format_source(src + blk)
-          self.line = statement.tokens.first.line_no
-          self.signature = src
-        elsif statement.respond_to?(:source)
+        if statement.respond_to?(:source)
           self.line = statement.line
           self.signature = statement.first_line
           @source = format_source(statement.source.strip)
