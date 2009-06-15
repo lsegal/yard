@@ -42,6 +42,7 @@ module YARD
         @state = :first_statement
         @statement_stack = []
         @level = 0
+        @block_num = 0
         @done = false
         @current_block = nil
         @statement, @block, @comments = TokenList.new, nil, nil
@@ -59,9 +60,43 @@ module YARD
         # If there is no code in the block, return nil
         @comments = @comments.compact if @comments
         if @block || !@statement.empty?
+          sanitize_statement_end
+          sanitize_block
+          @statement.pop if [TkNL, TkSPACE, TkSEMICOLON].include?(@statement.last.class)
           Statement.new(@statement, @block, @comments)
         else
           nil
+        end
+      end
+      
+      def sanitize_statement_end
+        extra = []
+        (@statement.size - 1).downto(0) do |index|
+          token = @statement[index]
+          if TkStatementEnd === token
+            while [TkNL, TkSPACE, TkSEMICOLON].include?(@statement[index - 1].class)
+              extra.unshift(@statement.delete_at(index - 1))
+              index -= 1
+            end
+            @statement.insert(index + 1, *extra)
+            return
+          end
+        end
+      end
+
+      def sanitize_block
+        return unless @block
+        extra = []
+        while [TkSPACE, TkNL, TkSEMICOLON].include?(@block.last.class)
+          next(@block.pop) if TkSEMICOLON === @block.last
+          extra.unshift(@block.pop)
+        end
+
+        @statement.each_with_index do |token, index|
+          if TkBlockContents === token
+            @statement[index, 1] = [token, *extra]
+            return
+          end
         end
       end
 
@@ -70,6 +105,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_token(tk)
+        #p tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
           return if process_initial_comment(tk)
@@ -96,7 +132,8 @@ module YARD
           @current_block = nil
           process_block_token(tk) unless tk.class == TkSEMICOLON
           @state = :block
-        when :block; process_block_token(tk)
+        when :block
+          process_block_token(tk)
         when :post_block
           if tk.class == TkSPACE
             @statement << tk
@@ -113,9 +150,18 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_block_token(tk)
-        @block << tk
-        return unless balances?(tk)
-        process_statement_end(tk)
+        if balances?(tk)
+          @statement << tk
+          @state = :first_statement
+          process_statement_end(tk)
+        elsif @block_num > 1 || (@block.empty? && [TkSPACE, TkNL].include?(tk.class))
+          @statement << tk
+        else
+          if @block.empty?
+            @statement << TkBlockContents.new(tk.line_no, tk.char_no)
+          end
+          @block << tk
+        end
       end
 
       ##
@@ -153,10 +199,17 @@ module YARD
           # Make sure hashes are parsed as hashes, not as blocks
           (@last_ns_tk.nil? || @last_ns_tk.lex_state != EXPR_BEG)
 
-        @block = TokenList.new
-        @block << tk
         @level += 1
         @state = :block
+        @block_num += 1
+        unless @block
+          @block = TokenList.new
+          tokens = [tk, TkStatementEnd.new(tk.line_no, tk.char_no)]
+          tokens = tokens.reverse if TkBEGIN === tk.class
+          @statement.push(*tokens)
+        else
+          @statement << tk
+        end
 
         true
       end
@@ -210,16 +263,25 @@ module YARD
 
         # Continue with the statement if we've hit a comma in a def
         return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
-
+        
+        
+        if [TkEND_OF_SCRIPT, TkNL, TkSEMICOLON].include?(tk.class) && @state == :block_statement &&
+            [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
+          @current_block = nil
+        end
+        
         unless @current_block
           @done = true
           return
         end
 
+        @state = :pre_block
         @level += 1
-        @state = :pre_block unless @stat == :block_statement
-        @block = TokenList.new
-        @block << tk if @current_block && tk.class == TkNL
+        @block_num += 1
+        unless @block
+          @block = TokenList.new
+          @statement << TkStatementEnd.new(tk.line_no, tk.char_no)
+        end
       end
 
       ##
@@ -236,7 +298,7 @@ module YARD
         elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
           @level -= 1
         end
-
+        
         @level == 0
       end
 
@@ -246,7 +308,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def push_token(tk)
-        @statement << tk unless @level == 0 && [TkNL, TkSEMICOLON, TkCOMMENT].include?(tk.class)
+        @statement << tk unless @level == 0 && [TkCOMMENT].include?(tk.class)
       end
 
       ##
