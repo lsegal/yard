@@ -67,10 +67,12 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
     end
     
     Handlers::Base.stub!(:subclasses).and_return [MyBlockHandler, MyBlockInnerHandler]
+    Parser::SourceParser.parser_type = :ruby18
     Parser::SourceParser.parse_string "myMethod do inner end"
     MyBlockInnerHandler.should be_reached
     MyBlockInnerHandler.reset
     Parser::SourceParser.parse_string "myMethod { inner }"
     MyBlockInnerHandler.should be_reached
+    Parser::SourceParser.parser_type = :ruby
   end
 end
