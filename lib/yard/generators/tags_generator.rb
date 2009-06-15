@@ -4,6 +4,7 @@ module YARD
       before_section :header,  :has_tags?
       before_section :option, :has_options?
       before_section :param, :has_params?
+      before_section :todo, :has_todo?
       
       def sections_for(object)
         [:header, [:example, :param, :yield, :yieldparam, :yieldreturn, :return, :raise, :todo, :author, :version, :since, :see]]
@@ -49,6 +50,10 @@ module YARD
       
       def has_tags?(object)
         object.tags.size > 0
+      end
+      
+      def has_todo?(object)
+        object.has_tag?(:todo)
       end
       
       def has_options?(object)
