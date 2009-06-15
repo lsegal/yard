@@ -9,16 +9,22 @@ module YARD
         @comments = comments
       end
       
+      def first_line
+        to_s(false)
+      end
+      
+      def to_s(include_block = true)
+        tokens.map do |token|
+          RubyToken::TkBlockContents === token ? block.to_s : token.text
+        end.join
+      end
+      alias source to_s
+      
       def inspect
-        buf = [""]
-        tokens.each do |tk|
-          if tk.is_a?(RubyToken::TkNL)
-            buf.push ""
-          else
-            buf.last << tk.text
-          end
-        end
-        buf.map {|text| "\t#{line}: #{text}" }.join("\n")
+        l = line - 1
+        to_s.split(/\n/).map do |text|
+          "\t#{l += 1}:  #{text}"
+        end.join("\n")
       end
       alias show inspect
       
@@ -27,14 +33,15 @@ module YARD
       end
 
       private
-        def clean_tokens(tokens)
-          last_tk = nil
-          tokens.reject do |tk| 
-            tk.is_a?(RubyToken::TkNL) || 
-            (last_tk.is_a?(RubyToken::TkSPACE) && 
-            last_tk.class == tk.class) && last_tk = tk 
-          end
+
+      def clean_tokens(tokens)
+        last_tk = nil
+        tokens.reject do |tk| 
+          tk.is_a?(RubyToken::TkNL) || 
+          (last_tk.is_a?(RubyToken::TkSPACE) && 
+          last_tk.class == tk.class) && last_tk = tk 
         end
+      end
     end
   end
 end
