@@ -11,7 +11,7 @@ module YARD
       EXPR_FNAME = :EXPR_FNAME
       EXPR_DOT   = :EXPR_DOT
       EXPR_CLASS = :EXPR_CLASS
-  
+      
       class Token
         NO_TEXT = "??".freeze
         attr :text
@@ -31,6 +31,14 @@ module YARD
 
         attr_reader :line_no, :char_no, :text
         attr_accessor :lex_state
+      end
+      
+      class TkBlockContents < Token
+        def text; '...' end
+      end
+      
+      class TkStatementEnd < Token
+        def text; '' end
       end
 
       class TkNode < Token

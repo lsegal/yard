@@ -7,8 +7,16 @@ module YARD
         self << content if content
       end
       
-      def to_s
-        collect {|t| t.text }.join
+      def to_s(full_statement = false, show_block = true)
+        inject([]) do |acc, token|
+          break acc if !full_statement && TkStatementEnd === token
+          if !show_block && TkBlockContents === token
+            acc << ""
+          else
+            acc << token.text
+          end
+          acc
+        end.join
       end
       
       # @param [TokenList, Token, String] tokens
