@@ -11,7 +11,7 @@
       <h1>Method List</h1>
       <ul>
       <% for obj in objects %>
-        <li nowrap="nowrap">
+        <li nowrap="nowrap" class="<%= 'deprecated' if obj.has_tag?(:deprecated) %>">
           <%= linkify(obj, (obj.scope == :class ? '' : '#') + obj.name.to_s, nil, false) %> 
           <% if obj.namespace == Registry.root %>
             <em>(Global method)</em>
