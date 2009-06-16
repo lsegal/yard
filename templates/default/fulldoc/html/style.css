@@ -1,6 +1,7 @@
 body { font-family: Myriad, Helvetica, Arial, Verdana, sans-serif; font-size: 10pt; }
 #nav ul { list-style: none; padding: 0; margin: 0; }
 #nav ul li { white-space: nowrap; }
+#nav ul li.deprecated a { text-decoration: line-through; font-style: italic; }
 #nav li em { font-size: 0.9em; color: #999; }
 #nav h1 { font-size: 1.2em; }
 h1 { font-size: 1.5em; background: #eee; color: #000; padding: 3px; text-decoration: none; }
@@ -43,6 +44,7 @@ h3 { font-size: 1.0em; }
 .section.attributes .docstring { width: 80%; }
 .section.attributes .docstring * { display: inline; }
 .section.attributes tr.hasaliases td, .section.attributes tr.hasaliases th { padding-bottom: 0; }
+.section.deprecated { margin-left: 15px; }
 .section.inheritance { background: #ddd; padding: 5px; border: 1px solid #ccc; border-top: 0; }
 .section.inheritance ul { list-style: none; padding-left: 2.2em; margin: 0; }
 .section.inheritance ul li { line-height: 1.2em; }
