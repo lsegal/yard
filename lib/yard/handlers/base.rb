@@ -310,6 +310,7 @@ module YARD
       end
 
       def ensure_loaded!(object, max_retries = 1)
+        return if object == Registry.root
         unless parser.load_order_errors
           if object.is_a?(Proxy)
             raise NamespaceMissingError, object
@@ -323,20 +324,19 @@ module YARD
           raise NamespaceMissingError, object
         end
         
-        retries, context = 0, nil
-        callcc {|c| context = c }
-
+        retries = 0
+        context = callcc {|c| c }
         retries += 1 
         
         if object.is_a?(Proxy)
           if retries <= max_retries
-            log.debug "Missing object #{object.parent} in file `#{parser.file}', moving it to the back of the line."
+            log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
             raise Parser::LoadOrderError, context
           else
             raise NamespaceMissingError, object
           end
         else
-          log.debug "Object #{object} successfully resolved. Adding item to #{object.parent}'s children"
+          log.debug "Object #{object} successfully resolved. Adding children."
         end
         object
       end
