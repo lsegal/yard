@@ -27,4 +27,21 @@ describe YARD::Parser::SourceParser do
     Registry.at("Hello::Hi#me").should_not == nil
     Registry.at("Hello::Hi#me").docstring.should == "Docstring"
   end
+  
+  it "should parse a set of file globs" do
+    Dir.should_receive(:[]).with('lib/**/*.rb')
+    YARD.parse('lib/**/*.rb')
+  end
+  
+  it "should parse a set of absolute paths" do
+    Dir.should_not_receive(:[])
+    IO.stub!(:read).and_return("")
+    YARD.parse('/path/to/file')
+  end
+
+  it "should parse files with '*' in them as globs and others as absolute paths" do
+    Dir.should_receive(:[]).with('*.rb')
+    IO.stub!(:read).and_return("")
+    YARD.parse ['/path/to/file', '*.rb']
+  end
 end
