@@ -1,14 +1,24 @@
 module YARD
   class Docstring < String
     attr_reader :ref_tags
-    attr_accessor :object
+    attr_accessor :object, :line_range, :all
     
     def initialize(content = '', object = nil)
       @tag_factory = Tags::Library.new
       @tags, @ref_tags = [], []
       @object = object
       
-      replace parse_comments(content)
+      self.all = content
+    end
+    
+    def replace(content)
+      super parse_comments(content)
+      @all = content
+    end
+    alias all= replace
+    
+    def line
+      line_range.first
     end
     
     ##

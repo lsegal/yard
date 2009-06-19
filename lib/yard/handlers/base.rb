@@ -295,6 +295,7 @@ module YARD
 
           # Add docstring if there is one.
           object.docstring = statement.comments if statement.comments
+          object.docstring.line_range = statement.comments_range
           
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)

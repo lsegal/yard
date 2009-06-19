@@ -178,4 +178,46 @@ eof
     eof
     s[1].to_s.should == "def method1\n        def dynamic; end\n      end"
   end
+  
+  it "should get comment line numbers" do
+    s = stmt <<-eof
+      # comment
+      # comment
+      # comment
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment", "comment"]
+    s.comments_range.should == (1..3)
+
+    s = stmt <<-eof
+
+      # comment
+      # comment
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment"]
+    s.comments_range.should == (2..3)
+
+    s = stmt <<-eof
+      # comment
+      # comment
+
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment"]
+    s.comments_range.should == (1..2)
+
+    s = stmt <<-eof
+      # comment
+      def method; end
+    eof
+    s.comments.should == ["comment"]
+    s.comments_range.should == (1..1)
+
+    s = stmt <<-eof
+      def method; end # comment
+    eof
+    s.comments.should == ["comment"]
+    s.comments_range.should == (1..1)
+  end
 end

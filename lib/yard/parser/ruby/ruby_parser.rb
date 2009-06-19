@@ -287,6 +287,7 @@ module YARD
               comment = @comments[line]
               if comment && !comment.empty?
                 node.docstring = comment
+                node.docstring_range = ((line - comment.count("\n"))..line)
                 comments.delete(line)
                 break
               end

@@ -10,13 +10,15 @@ describe YARD::Parser::SourceParser do
       module Hello
         class Hi
           # Docstring
+          # Docstring2
           def me; "VALUE" end
         end
       end
     eof
     Registry.at(:Hello).should_not == nil
     Registry.at("Hello::Hi#me").should_not == nil
-    Registry.at("Hello::Hi#me").docstring.should == "Docstring"
+    Registry.at("Hello::Hi#me").docstring.should == "Docstring\nDocstring2"
+    Registry.at("Hello::Hi#me").docstring.line_range.should == (3..4)
   end
   
   it "should parse a basic Ruby file" do

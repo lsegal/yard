@@ -9,8 +9,9 @@ module YARD
       
       class AstNode < Array
         attr_accessor :type, :parent, :docstring, :file, :full_source, :source
-        attr_accessor :source_range, :line_range
+        attr_accessor :source_range, :line_range, :docstring_range
         alias comments docstring
+        alias comments_range docstring_range
         alias to_s source
         
         KEYWORDS = { class: true, alias: true, lambda: true, do_block: true,

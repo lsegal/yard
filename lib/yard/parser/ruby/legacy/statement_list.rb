@@ -45,6 +45,7 @@ module YARD
         @block_num = 0
         @done = false
         @current_block = nil
+        @comments_line = nil
         @statement, @block, @comments = TokenList.new, nil, nil
         @last_tk, @last_ns_tk, @before_last_tk = nil, nil, nil
 
@@ -63,7 +64,11 @@ module YARD
           sanitize_statement_end
           sanitize_block
           @statement.pop if [TkNL, TkSPACE, TkSEMICOLON].include?(@statement.last.class)
-          Statement.new(@statement, @block, @comments)
+          stmt = Statement.new(@statement, @block, @comments)
+          if @comments && @comments_line
+            stmt.comments_range = (@comments_line..(@comments_line + @comments.size - 1))
+          end
+          stmt
         else
           nil
         end
@@ -178,6 +183,8 @@ module YARD
           @comments = nil
           return
         end
+        
+        @comments_line = tk.line_no unless @comments
 
         # Remove the "#" and up to 1 space before the text
         # Since, of course, the convention is to have "# text"
