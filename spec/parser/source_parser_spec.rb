@@ -35,13 +35,15 @@ describe YARD::Parser::SourceParser do
   
   it "should parse a set of absolute paths" do
     Dir.should_not_receive(:[])
-    IO.stub!(:read).and_return("")
+    IO.should_receive(:read).with('/path/to/file').and_return("")
     YARD.parse('/path/to/file')
   end
 
   it "should parse files with '*' in them as globs and others as absolute paths" do
-    Dir.should_receive(:[]).with('*.rb')
-    IO.stub!(:read).and_return("")
+    Dir.should_receive(:[]).with('*.rb').and_return(['a.rb', 'b.rb'])
+    IO.should_receive(:read).with('/path/to/file').and_return("")
+    IO.should_receive(:read).with('a.rb').and_return("")
+    IO.should_receive(:read).with('b.rb').and_return("")
     YARD.parse ['/path/to/file', '*.rb']
   end
 end

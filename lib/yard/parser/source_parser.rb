@@ -17,7 +17,7 @@ module YARD
         
         def parse(paths = "lib/**/*.rb", level = log.level)
           log.debug("Parsing #{paths} with `#{parser_type}` parser")
-          files = [paths].flatten.map {|p| p.include?("*") ? Dir[p] : p }
+          files = [paths].flatten.map {|p| p.include?("*") ? Dir[p] : p }.flatten
 
           log.enter_level(level) do
             parse_in_order(*files.uniq)
