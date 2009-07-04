@@ -64,6 +64,26 @@ describe YARD::Docstring do
     eof
     doc.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
   end
+
+  it "should only parse tags with charset [A-Za-z_]" do
+    doc = Docstring.new
+    valid = %w( @testing @valid @is_a @is_A @__ )
+    invalid = %w( @ @return@ @param, @x.y @x-y )
+
+    log.enter_level(Logger::FATAL) do
+      {valid => 1, invalid => 0}.each do |tags, size|
+        tags.each do |tag|
+          class << doc
+            def create_tag(tag_name, *args)
+              add_tag Tags::Tag.new(tag_name, *args)
+            end
+          end
+          doc.all = tag
+          doc.tags(tag[1..-1]).size.should == size
+        end
+      end
+    end
+  end
   
   it "should parse reference tag into ref_tags" do
     doc = Docstring.new("@return (see Foo#bar)")

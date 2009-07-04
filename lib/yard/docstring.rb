@@ -2,18 +2,20 @@ module YARD
   class Docstring < String
     attr_reader :ref_tags
     attr_accessor :object, :line_range, :all
+
+    META_MATCH = /^@([a-z_]+)(?:\s+(.*))?$/i
     
     def initialize(content = '', object = nil)
       @tag_factory = Tags::Library.new
-      @tags, @ref_tags = [], []
       @object = object
       
       self.all = content
     end
     
     def replace(content)
-      super parse_comments(content)
+      @tags, @ref_tags = [], []
       @all = content
+      super parse_comments(content)
     end
     alias all= replace
     
@@ -138,7 +140,6 @@ module YARD
     def parse_comments(comments)
       comments = comments.split(/\r?\n/) if comments.is_a?(String)
       return '' if !comments || comments.empty?
-      meta_match = /^@(\S+)\s*(.*)/
       docstring = ""
 
       indent, last_indent = comments.first[/^\s*/].length, 0
@@ -152,16 +153,16 @@ module YARD
         done = comments.size == index
 
         if tag_name && (((indent < orig_indent && !empty) || done) || 
-            (indent <= last_indent && line =~ meta_match))
+            (indent <= last_indent && line =~ META_MATCH))
           create_tag(tag_name, tag_buf, raw_buf)
           tag_name, tag_buf, raw_buf = nil, '', []
           orig_indent = 0
         end
 
         # Found a meta tag
-        if line =~ meta_match
+        if line =~ META_MATCH
           orig_indent = indent
-          tag_name, tag_buf = $1, $2 
+          tag_name, tag_buf = $1, ($2 || '')
           raw_buf = [tag_buf.dup]
         elsif tag_name && indent >= orig_indent && !empty
           # Extra data added to the tag on the next line
