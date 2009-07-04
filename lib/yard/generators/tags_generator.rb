@@ -45,7 +45,7 @@ module YARD
       protected
       
       def has_params?(object)
-        object.is_a?(CodeObjects::MethodObject) && tags_by_param(object).size > 0
+        tags_by_param(object).size > 0
       end
       
       def has_tags?(object)
