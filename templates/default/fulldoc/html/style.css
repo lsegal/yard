@@ -21,6 +21,7 @@ h3 { font-size: 1.0em; }
 .section.tags,.section.docstring,.section.source { padding: 5px 12px; }
 .section.method .details_title { font-size: 1.1em; background: #dde; padding: 7px; }
 .overload .section.method .details_title { background: #e2e2ea; }
+.overload .section.source { display: none; }
 .section.method .details_title p.aliases { padding: 0; margin: 0; font-style: italic; font-size: 0.9em; }
 .section.method .details_title p.aliases tt { font-weight: bold; font-style: normal; font-size: 1.1em; }
 .section.constants dl { font-family: monospace; }
