@@ -25,6 +25,10 @@ describe YARD::Docstring do
     end
   end
   
+  it "should handle docstrings with empty newlines" do
+    Docstring.new("\n\n").should == ""
+  end
+  
   it "should handle empty docstrings with #summary" do
     o1 = Docstring.new
     o1.summary.should == ""

@@ -136,9 +136,9 @@ module YARD
     # @return [String] the non-metadata portion of the comments to
     #   be used as a docstring
     def parse_comments(comments)
+      comments = comments.split(/\r?\n/) if comments.is_a?(String)
       return '' if !comments || comments.empty?
       meta_match = /^@(\S+)\s*(.*)/
-      comments = comments.split(/\r?\n/) if comments.is_a? String
       docstring = ""
 
       indent, last_indent = comments.first[/^\s*/].length, 0
