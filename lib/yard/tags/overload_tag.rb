@@ -2,7 +2,7 @@ module YARD
   module Tags
     class OverloadTag < Tag
       attr_reader :signature, :parameters, :docstring
-      undef_method :is_a?, :kind_of?, :==, :===, :to_s, :inspect
+      undef_method :to_s, :inspect
       
       def initialize(tag_name, text, raw_text)
         super(tag_name, nil)

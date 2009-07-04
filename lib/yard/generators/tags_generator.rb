@@ -7,7 +7,21 @@ module YARD
       before_section :todo, :has_todo?
       
       def sections_for(object)
-        [:header, [:example, :param, :yield, :yieldparam, :yieldreturn, :return, :raise, :todo, :author, :version, :since, :see]]
+        sections = [
+          :header, [ :example, :param, :yield, :yieldparam, :yieldreturn, 
+            :return, :raise, :todo, :author, :version, :since, :see ]
+        ]
+        if object.tags(:overload).size == 1
+          size = sections.last.size
+          sections.last.reverse.each_with_index do |item, index|
+            sections.last[size - index - 1, 1] = [:with_overload, [item]]
+          end
+        end
+        sections
+      end
+      
+      def with_overload(object)
+        yield(object.tag(:overload)) + yield(object)
       end
       
       def yield(object)
@@ -45,7 +59,9 @@ module YARD
       protected
       
       def has_params?(object)
-        object.is_a?(CodeObjects::MethodObject) && tags_by_param(object).size > 0
+        (object.is_a?(Tags::OverloadTag) || 
+        object.is_a?(CodeObjects::MethodObject)) && 
+        tags_by_param(object).size > 0
       end
       
       def has_tags?(object)
