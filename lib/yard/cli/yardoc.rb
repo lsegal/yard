@@ -16,6 +16,7 @@ module YARD
           :format => :html, 
           :template => :default, 
           :serializer => YARD::Serializers::FileSystemSerializer.new, 
+          :files => [],
           :verifier => lambda do |gen, obj| 
             return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
           end
@@ -23,7 +24,6 @@ module YARD
         @visibilities = [:public]
         @reload = true
         @generate = true
-        @files = ['lib/**/*.rb']
         @options_file = DEFAULT_YARDOPTS_FILE
       end
       
@@ -56,13 +56,46 @@ module YARD
         []
       end
       
+      def add_extra_files(*files)
+        files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
+        files.each do |file|
+          raise Errno::ENOENT, "Could not find extra file: #{file}" unless File.file?(file)
+          options[:files] << file
+        end
+      end
+      
+      def parse_files(*files)
+        self.files = []
+        seen_extra_files_marker = false
+        
+        files.each do |file|
+          if file == "-"
+            seen_extra_files_marker = true
+            next
+          end
+          
+          if seen_extra_files_marker
+            add_extra_files(file)
+          else
+            self.files << file
+          end
+        end
+        
+        self.files = ['lib/**/*.rb'] if self.files.empty?
+      end
+      
       def optparse(*args)
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
-        opts.banner = "Usage: yardoc [options] [source files]"
+        opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
 
         opts.separator "(if a list of source files is omitted, lib/**/*.rb is used.)"
+        opts.separator ""
+        opts.separator "Example: yardoc -o documentation/ - FAQ LICENSE"
+        opts.separator "  The above example outputs documentation for files in"
+        opts.separator "  lib/**/*.rb to documentation/ including the extra files"
+        opts.separator "  FAQ and LICENSE."
         opts.separator ""
         opts.separator "A base set of options can be specified by adding a .yardopts"
         opts.separator "file to your base path containing all extra options separated"
@@ -120,11 +153,7 @@ module YARD
         end
         
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
-          options[:files] = []
-          files.split(",").each do |file|
-            raise Errno::ENOENT, file unless File.file?(file)
-            options[:files] << file
-          end
+          add_extra_files *files.split(",")
         end
 
         opts.on('-m', '--markup MARKUP', 
@@ -174,8 +203,7 @@ module YARD
         end
         
         # Last minute modifications
-        self.files = args unless args.empty?
-        self.reload = false if self.files.empty?
+        parse_files(*args) unless args.empty?
         self.visibilities.uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
       end

@@ -40,4 +40,27 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:serializer].options[:basepath].should == :MYPATH
     @yardoc.files.should == ["FILE1", "FILE2", "FILE3"]
   end
+  
+  it "should accept extra files if specified after '-' with source files" do
+    File.should_receive(:file?).with('extra_file1').and_return(true)
+    File.should_receive(:file?).with('extra_file2').and_return(true)
+    @yardoc.optparse *%w( file1 file2 - extra_file1 extra_file2 )
+    @yardoc.files.should == %w( file1 file2 )
+    @yardoc.options[:files].should == %w( extra_file1 extra_file2 )
+  end
+  
+  it "should accept files section only containing extra files" do
+    @yardoc.optparse *%w( - LICENSE )
+    @yardoc.files.should == %w( lib/**/*.rb )
+    @yardoc.options[:files].should == %w( LICENSE )
+  end
+
+  it "should accept globs as extra files" do
+    Dir.should_receive(:glob).with('*.txt').and_return ['a.txt', 'b.txt']
+    File.should_receive(:file?).with('a.txt').and_return(true)
+    File.should_receive(:file?).with('b.txt').and_return(true)
+    @yardoc.optparse *%w( file1 file2 - *.txt )
+    @yardoc.files.should == %w( file1 file2 )
+    @yardoc.options[:files].should == %w( a.txt b.txt )
+  end
 end
