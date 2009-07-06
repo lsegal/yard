@@ -4,6 +4,7 @@ module YARD
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
   
   def self.parse(*args) Parser::SourceParser.parse(*args) end
+  def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
 end
 
 # Keep track of Ruby version for compatibility code

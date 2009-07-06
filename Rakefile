@@ -27,7 +27,7 @@ Spec::Rake::SpecTask.new("specs") do |t|
   $DEBUG = true if ENV['DEBUG']
   t.spec_opts = ["--format", "specdoc", "--colour"]
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
-  # t.rcov = true
+  t.rcov = true if ENV['RCOV']
   t.rcov_opts = ['-x', '_spec\.rb$,spec_helper\.rb$']
 end
 task :spec => :specs
