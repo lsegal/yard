@@ -9,6 +9,11 @@ describe YARD::CLI::Yardoc do
     Registry.instance.stub!(:load)
   end
   
+  it "should accept --title" do
+    @yardoc.optparse('--title', 'hello world')
+    @yardoc.options[:title].should == :'hello world'
+  end
+  
   it "should select a markup provider when --markup-provider or -mp is set" do
     @yardoc.optparse("-M", "test")
     @yardoc.options[:markup_provider].should == :test

@@ -146,6 +146,10 @@ module YARD
         opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
           options[:no_highlight] = true
         end
+        
+        opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
+          options[:title] = title
+        end
 
         opts.on('-r', '--readme FILE', 'The readme file used as the title page of documentation.') do |readme|
           raise Errno::ENOENT, readme unless File.file?(readme)
