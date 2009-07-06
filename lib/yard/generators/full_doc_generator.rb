@@ -26,6 +26,7 @@ module YARD
       end
     
       def css_file;         'style.css'             end
+      def css_custom_file;  'custom.css'            end
       def css_syntax_file;  'syntax_highlight.css'  end
       def js_file;          'jquery.js'             end
       def js_app_file;      'app.js'                end
@@ -44,7 +45,7 @@ module YARD
       
       def generate_assets
         if format == :html && serializer
-          [css_file, css_syntax_file, js_file, js_app_file].each do |filename|
+          [css_file, css_custom_file, css_syntax_file, js_file, js_app_file].each do |filename|
             template_file = find_template template_path(filename)
             serializer.serialize(filename, File.read(template_file))
           end
