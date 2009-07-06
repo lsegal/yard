@@ -20,10 +20,14 @@ module YARD
         return text unless markup
         load_markup_provider(markup)
 
+        # TODO: other libraries might be more complex
         case markup
-        when :markdown, :textile
-          # TODO: other libraries might be more complex
+        when :markdown
           html = markup_class(markup).new(text).to_html
+        when :textile
+          doc = markup_class(markup).new(text)
+          doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
+          html = doc.to_html
         when :rdoc
           html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
           html = fix_dash_dash(html)

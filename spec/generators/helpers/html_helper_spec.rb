@@ -18,6 +18,12 @@ describe YARD::Generators::Helpers::HtmlHelper do
       fix_typewriter("Math + stuff +is ok+").should == "Math + stuff <tt>is ok</tt>"
     end
   end
+  
+  describe '#htmlify' do
+    it "should not use hard breaks for textile markup (RedCloth specific)" do
+      htmlify("A\nB", :textile).should_not include("<br")
+    end
+  end
 
   describe "#link_object" do
     it "should return the object path if there's no serializer and no title" do
