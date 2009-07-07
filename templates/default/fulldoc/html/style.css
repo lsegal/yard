@@ -76,3 +76,6 @@ h3 { font-size: 1.0em; }
 .included div, .inherited div { color: #444; margin: 1.5em 0; width: 47%; border: 1px solid #ccc; float: left; margin-right: 12px; }
 .included p .name, .inherited p .name { font-family: monospace; }
 .included p, .inherited p { margin: 5px; }
+#yard_info a:link, #yard_info a:visited { color: #333; }
+#yard_info { margin-top: 12px; margin-bottom: 7px; text-align: center; color: #444; background: #ddd; padding: 8px; border: 1px solid #ccc; font-size: 0.8em; }
+#yard_info .yard { font-weight: bold; }
