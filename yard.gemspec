@@ -7,8 +7,8 @@ SPEC = Gem::Specification.new do |s|
     exported to a number of formats very easily, and also supports extending for
     custom Ruby constructs such as custom class level definitions.
   eof
-  s.version       = "0.2.3.1"
-  s.date          = "2009-06-13"
+  s.version       = "0.2.3.2"
+  s.date          = "2009-07-06"
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yard.soen.ca"

@@ -1,4 +1,4 @@
-YARD Release 0.2.3.1 (June 13th 2009)
+YARD Release 0.2.3.2 (July 6th 2009)
 =====================================
 
 **Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
@@ -177,6 +177,19 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 CHANGELOG
 ---------
+
+- **July.06.09**: 0.2.3.2 release
+    - Fix Textile hard-break issues
+    - Add description for @see tag to use as link title in HTML docs.
+    - Add --title CLI option to specify a title for HTML doc files.
+    - Add custom.css file that can be overridden with various custom
+      styelsheet declarations. To use this, simply add `default/fulldoc/html/custom.css`
+      inside your code directory and use the `-t` template directory yardoc CLI
+      option to point to that template directory (the dir holding 'default').
+    - Add support in `yardoc` CLI to specify extra files (formerly --files)
+      by appending "- extra files here" after regular source files. Example:
+
+            yardoc --private lib/**/*.rb - FAQ LICENSE
 
 - **Jun.13.09**: 0.2.3.1 release.
     - Add a RubyGems 1.3.2+ plugin to generate YARD documentation instead of
