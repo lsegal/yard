@@ -21,6 +21,7 @@ module YARD
             return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
           end
         ]
+        @files = []
         @visibilities = [:public]
         @reload = true
         @generate = true
@@ -80,8 +81,6 @@ module YARD
             self.files << file
           end
         end
-        
-        self.files = ['lib/**/*.rb'] if self.files.empty?
       end
       
       def optparse(*args)
@@ -208,6 +207,7 @@ module YARD
         
         # Last minute modifications
         parse_files(*args) unless args.empty?
+        self.files = ['lib/**/*.rb'] if self.files.empty?
         self.visibilities.uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
       end

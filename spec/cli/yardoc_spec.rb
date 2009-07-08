@@ -68,4 +68,9 @@ describe YARD::CLI::Yardoc do
     @yardoc.files.should == %w( file1 file2 )
     @yardoc.options[:files].should == %w( a.txt b.txt )
   end
+  
+  it "should accept no params and parse lib/**/*.rb" do
+    @yardoc.optparse
+    @yardoc.files.should == %w( lib/**/*.rb )
+  end
 end
