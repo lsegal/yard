@@ -5,6 +5,7 @@ module YARD
     def initialize(*args)
       super
       self.level = INFO
+      self.formatter = method(:format_log)
     end
     
     def debug(*args)
@@ -16,6 +17,10 @@ module YARD
       old_level, self.level = level, new_level
       yield
       self.level = old_level
+    end
+    
+    def format_log(sev, time, prog, msg)
+      "[#{sev.downcase}]: #{msg}\n"
     end
   end
   
