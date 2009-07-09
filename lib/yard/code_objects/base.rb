@@ -214,6 +214,13 @@ module YARD
       end
       alias_method :to_s, :path
       
+      def format(options = {})
+        options[:format] ||= :text
+        options[:template] ||= type
+        options[:object] = self
+        Tadpole(options[:template], options[:format]).run(options)
+      end
+      
       def inspect
         "#<yardoc #{type} #{path}>"
       end

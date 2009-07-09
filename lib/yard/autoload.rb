@@ -160,5 +160,7 @@ module YARD
   autoload :Registry,  'yard/registry'
 end
 
+autoload :Tadpole, 'tadpole'
+
 # P() needs to be loaded right away
 YARD::CodeObjects::Proxy

@@ -204,4 +204,39 @@ describe YARD::CodeObjects::Base do
     Registry.at(:X).line.should == 4
     Registry.at(:X).files.should == [['(stdin)', 4], ['(stdin)', 1], ['(stdin)', 2]]
   end
+  
+  describe '#format' do
+    def loads_template(*args)
+      Tadpole.should_receive(:template).with(*args).and_return(@template)
+    end
+    
+    before do 
+      @template = mock(:template)
+      @object = MethodObject.new(:root, :method)
+    end
+    
+    it "should accept method call with no parameters" do
+      loads_template(:method, :text)
+      @template.should_receive(:run).with :template => :method,
+                                          :format => :text,
+                                          :object => @object
+      @object.format
+    end
+    
+    it "should allow template key to be changed" do
+      loads_template(:fulldoc, :text)
+      @template.should_receive(:run).with :template => :fulldoc,
+                                          :format => :text,
+                                          :object => @object
+      @object.format(:template => :fulldoc)
+    end
+    
+    it "should allow format key to be changed" do
+      loads_template(:method, :html)
+      @template.should_receive(:run).with :template => :method,
+                                          :format => :html,
+                                          :object => @object
+      @object.format(:format => :html)
+    end
+  end
 end
