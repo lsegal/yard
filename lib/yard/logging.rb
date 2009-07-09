@@ -1,7 +1,11 @@
-require "logger"
+require 'logger'
 
 module YARD
   class Logger < ::Logger
+    def self.instance(pipe = STDERR)
+      @logger ||= new(pipe)
+    end
+    
     def initialize(*args)
       super
       self.level = INFO
@@ -23,10 +27,6 @@ module YARD
       "[#{sev.downcase}]: #{msg}\n"
     end
   end
-  
-  def self.logger
-    @logger ||= YARD::Logger.new(STDERR)
-  end
 end
 
-def log; YARD.logger end
+def log; YARD::Logger.instance end
