@@ -10,8 +10,6 @@ end
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9" ? [true, false] : [false, true])
 
-$:.unshift(YARD::ROOT)
-
-files  = ['yard/logging', 'yard/autoload']
-files += Dir.glob File.join(YARD::ROOT, 'yard/core_ext/*')
+files  = [YARD::ROOT + '/yard/logging', YARD::ROOT + '/yard/autoload']
+files += Dir.glob File.join(YARD::ROOT, 'yard', 'core_ext', '*')
 files.each {|file| require file.gsub(/\.rb$/, '') }

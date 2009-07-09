@@ -1,164 +1,168 @@
+def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
+
 module YARD
   module CLI
-    autoload :YardGraph,  'yard/cli/yard_graph.rb'
-    autoload :Yardoc,     'yard/cli/yardoc.rb'
+    autoload :YardGraph,  __p('cli/yard_graph')
+    autoload :Yardoc,     __p('cli/yardoc')
   end
   
   module CodeObjects
-    autoload :Base,                 'yard/code_objects/base'
-    autoload :CodeObjectList,       'yard/code_objects/base'
-    autoload :ClassObject,          'yard/code_objects/class_object'
-    autoload :ClassVariableObject,  'yard/code_objects/class_variable_object'
-    autoload :ConstantObject,       'yard/code_objects/constant_object'
-    autoload :ExtendedMethodObject, 'yard/code_objects/extended_method_object'
-    autoload :MethodObject,         'yard/code_objects/method_object'
-    autoload :ModuleObject,         'yard/code_objects/module_object'
-    autoload :NamespaceObject,      'yard/code_objects/namespace_object'
-    autoload :Proxy,                'yard/code_objects/proxy'
-    autoload :ProxyMethodError,     'yard/code_objects/proxy'
-    autoload :RootObject,           'yard/code_objects/root_object'
+    autoload :Base,                 __p('code_objects/base')
+    autoload :CodeObjectList,       __p('code_objects/base')
+    autoload :ClassObject,          __p('code_objects/class_object')
+    autoload :ClassVariableObject,  __p('code_objects/class_variable_object')
+    autoload :ConstantObject,       __p('code_objects/constant_object')
+    autoload :ExtendedMethodObject, __p('code_objects/extended_method_object')
+    autoload :MethodObject,         __p('code_objects/method_object')
+    autoload :ModuleObject,         __p('code_objects/module_object')
+    autoload :NamespaceObject,      __p('code_objects/namespace_object')
+    autoload :Proxy,                __p('code_objects/proxy')
+    autoload :ProxyMethodError,     __p('code_objects/proxy')
+    autoload :RootObject,           __p('code_objects/root_object')
     
-    autoload :BUILTIN_ALL,          'yard/code_objects/base'
-    autoload :BUILTIN_CLASSES,      'yard/code_objects/base'
-    autoload :BUILTIN_MODULES,      'yard/code_objects/base'
-    autoload :BUILTIN_EXCEPTIONS,   'yard/code_objects/base'
-    autoload :CONSTANTMATCH,        'yard/code_objects/base'
-    autoload :METHODMATCH,          'yard/code_objects/base'
-    autoload :METHODNAMEMATCH,      'yard/code_objects/base'
-    autoload :NAMESPACEMATCH,       'yard/code_objects/base'
-    autoload :NSEP,                 'yard/code_objects/base'
-    autoload :NSEPQ,                'yard/code_objects/base'
-    autoload :ISEP,                 'yard/code_objects/base'
-    autoload :ISEPQ,                'yard/code_objects/base'
-    autoload :CSEP,                 'yard/code_objects/base'
-    autoload :CSEPQ,                'yard/code_objects/base'
+    autoload :BUILTIN_ALL,          __p('code_objects/base')
+    autoload :BUILTIN_CLASSES,      __p('code_objects/base')
+    autoload :BUILTIN_MODULES,      __p('code_objects/base')
+    autoload :BUILTIN_EXCEPTIONS,   __p('code_objects/base')
+    autoload :CONSTANTMATCH,        __p('code_objects/base')
+    autoload :METHODMATCH,          __p('code_objects/base')
+    autoload :METHODNAMEMATCH,      __p('code_objects/base')
+    autoload :NAMESPACEMATCH,       __p('code_objects/base')
+    autoload :NSEP,                 __p('code_objects/base')
+    autoload :NSEPQ,                __p('code_objects/base')
+    autoload :ISEP,                 __p('code_objects/base')
+    autoload :ISEPQ,                __p('code_objects/base')
+    autoload :CSEP,                 __p('code_objects/base')
+    autoload :CSEPQ,                __p('code_objects/base')
   end
   
   module Generators
     module Helpers
-      autoload :BaseHelper,                 'yard/generators/helpers/base_helper'
-      autoload :FilterHelper,               'yard/generators/helpers/filter_helper'
-      autoload :HtmlHelper,                 'yard/generators/helpers/html_helper'
-      autoload :HtmlSyntaxHighlightHelper,  'yard/generators/helpers/html_syntax_highlight_helper'
-      autoload :MarkupHelper,               'yard/generators/helpers/markup_helper'
-      autoload :MethodHelper,               'yard/generators/helpers/method_helper'
-      autoload :UMLHelper,                  'yard/generators/helpers/uml_helper'
+      autoload :BaseHelper,                 __p('generators/helpers/base_helper')
+      autoload :FilterHelper,               __p('generators/helpers/filter_helper')
+      autoload :HtmlHelper,                 __p('generators/helpers/html_helper')
+      autoload :HtmlSyntaxHighlightHelper,  __p('generators/helpers/html_syntax_highlight_helper')
+      autoload :MarkupHelper,               __p('generators/helpers/markup_helper')
+      autoload :MethodHelper,               __p('generators/helpers/method_helper')
+      autoload :UMLHelper,                  __p('generators/helpers/uml_helper')
     end
     
-    autoload :AttributesGenerator,      'yard/generators/attributes_generator'
-    autoload :Base,                     'yard/generators/base'
-    autoload :ClassGenerator,           'yard/generators/class_generator'
-    autoload :ConstantsGenerator,       'yard/generators/constants_generator'
-    autoload :ConstructorGenerator,     'yard/generators/constructor_generator'
-    autoload :DeprecatedGenerator,      'yard/generators/deprecated_generator'
-    autoload :DocstringGenerator,       'yard/generators/docstring_generator'
-    autoload :FullDocGenerator,         'yard/generators/full_doc_generator'
-    autoload :InheritanceGenerator,     'yard/generators/inheritance_generator'
-    autoload :MethodGenerator,          'yard/generators/method_generator'
-    autoload :MethodDetailsGenerator,   'yard/generators/method_details_generator'
-    autoload :MethodListingGenerator,   'yard/generators/method_listing_generator'
-    autoload :MethodMissingGenerator,   'yard/generators/method_missing_generator'
-    autoload :MethodSignatureGenerator, 'yard/generators/method_signature_generator'
-    autoload :MethodSummaryGenerator,   'yard/generators/method_summary_generator'
-    autoload :MixinsGenerator,          'yard/generators/mixins_generator'
-    autoload :ModuleGenerator,          'yard/generators/module_generator'
-    autoload :QuickDocGenerator,        'yard/generators/quick_doc_generator'
-    autoload :RootGenerator,            'yard/generators/root_generator'
-    autoload :SourceGenerator,          'yard/generators/source_generator'
-    autoload :TagsGenerator,            'yard/generators/tags_generator'
-    autoload :UMLGenerator,             'yard/generators/uml_generator'
-    autoload :VisibilityGroupGenerator, 'yard/generators/visibility_group_generator'
-    autoload :OverloadsGenerator,       'yard/generators/overloads_generator'
+    autoload :AttributesGenerator,      __p('generators/attributes_generator')
+    autoload :Base,                     __p('generators/base')
+    autoload :ClassGenerator,           __p('generators/class_generator')
+    autoload :ConstantsGenerator,       __p('generators/constants_generator')
+    autoload :ConstructorGenerator,     __p('generators/constructor_generator')
+    autoload :DeprecatedGenerator,      __p('generators/deprecated_generator')
+    autoload :DocstringGenerator,       __p('generators/docstring_generator')
+    autoload :FullDocGenerator,         __p('generators/full_doc_generator')
+    autoload :InheritanceGenerator,     __p('generators/inheritance_generator')
+    autoload :MethodGenerator,          __p('generators/method_generator')
+    autoload :MethodDetailsGenerator,   __p('generators/method_details_generator')
+    autoload :MethodListingGenerator,   __p('generators/method_listing_generator')
+    autoload :MethodMissingGenerator,   __p('generators/method_missing_generator')
+    autoload :MethodSignatureGenerator, __p('generators/method_signature_generator')
+    autoload :MethodSummaryGenerator,   __p('generators/method_summary_generator')
+    autoload :MixinsGenerator,          __p('generators/mixins_generator')
+    autoload :ModuleGenerator,          __p('generators/module_generator')
+    autoload :QuickDocGenerator,        __p('generators/quick_doc_generator')
+    autoload :RootGenerator,            __p('generators/root_generator')
+    autoload :SourceGenerator,          __p('generators/source_generator')
+    autoload :TagsGenerator,            __p('generators/tags_generator')
+    autoload :UMLGenerator,             __p('generators/uml_generator')
+    autoload :VisibilityGroupGenerator, __p('generators/visibility_group_generator')
+    autoload :OverloadsGenerator,       __p('generators/overloads_generator')
   end
   
   module Handlers
     module Ruby
       module Legacy
-        autoload :Base,                 'yard/handlers/ruby/legacy/base'
+        autoload :Base,                 __p('handlers/ruby/legacy/base')
 
-        autoload :AliasHandler,         'yard/handlers/ruby/legacy/alias_handler'
-        autoload :AttributeHandler,     'yard/handlers/ruby/legacy/attribute_handler'
-        autoload :ClassHandler,         'yard/handlers/ruby/legacy/class_handler'
-        autoload :ClassVariableHandler, 'yard/handlers/ruby/legacy/class_variable_handler'
-        autoload :ConstantHandler,      'yard/handlers/ruby/legacy/constant_handler'
-        autoload :ExceptionHandler,     'yard/handlers/ruby/legacy/exception_handler'
-        autoload :ExtendHandler,        'yard/handlers/ruby/legacy/extend_handler'
-        autoload :MethodHandler,        'yard/handlers/ruby/legacy/method_handler'
-        autoload :MixinHandler,         'yard/handlers/ruby/legacy/mixin_handler'
-        autoload :ModuleHandler,        'yard/handlers/ruby/legacy/module_handler'
-        autoload :VisibilityHandler,    'yard/handlers/ruby/legacy/visibility_handler'
-        autoload :YieldHandler,         'yard/handlers/ruby/legacy/yield_handler'
+        autoload :AliasHandler,         __p('handlers/ruby/legacy/alias_handler')
+        autoload :AttributeHandler,     __p('handlers/ruby/legacy/attribute_handler')
+        autoload :ClassHandler,         __p('handlers/ruby/legacy/class_handler')
+        autoload :ClassVariableHandler, __p('handlers/ruby/legacy/class_variable_handler')
+        autoload :ConstantHandler,      __p('handlers/ruby/legacy/constant_handler')
+        autoload :ExceptionHandler,     __p('handlers/ruby/legacy/exception_handler')
+        autoload :ExtendHandler,        __p('handlers/ruby/legacy/extend_handler')
+        autoload :MethodHandler,        __p('handlers/ruby/legacy/method_handler')
+        autoload :MixinHandler,         __p('handlers/ruby/legacy/mixin_handler')
+        autoload :ModuleHandler,        __p('handlers/ruby/legacy/module_handler')
+        autoload :VisibilityHandler,    __p('handlers/ruby/legacy/visibility_handler')
+        autoload :YieldHandler,         __p('handlers/ruby/legacy/yield_handler')
       end
 
-      autoload :Base,                   'yard/handlers/ruby/base'
+      autoload :Base,                   __p('handlers/ruby/base')
 
-      autoload :AliasHandler,           'yard/handlers/ruby/alias_handler'
-      autoload :AttributeHandler,       'yard/handlers/ruby/attribute_handler'
-      autoload :ClassHandler,           'yard/handlers/ruby/class_handler'
-      autoload :ClassConditionHandler,  'yard/handlers/ruby/class_condition_handler'
-      autoload :ClassVariableHandler,   'yard/handlers/ruby/class_variable_handler'
-      autoload :ConstantHandler,        'yard/handlers/ruby/constant_handler'
-      autoload :ExceptionHandler,       'yard/handlers/ruby/exception_handler'
-      autoload :ExtendHandler,          'yard/handlers/ruby/extend_handler'
-      autoload :MethodHandler,          'yard/handlers/ruby/method_handler'
-      autoload :MethodConditionHandler, 'yard/handlers/ruby/method_condition_handler'
-      autoload :MixinHandler,           'yard/handlers/ruby/mixin_handler'
-      autoload :ModuleHandler,          'yard/handlers/ruby/module_handler'
-      autoload :VisibilityHandler,      'yard/handlers/ruby/visibility_handler'
-      autoload :YieldHandler,           'yard/handlers/ruby/yield_handler'
+      autoload :AliasHandler,           __p('handlers/ruby/alias_handler')
+      autoload :AttributeHandler,       __p('handlers/ruby/attribute_handler')
+      autoload :ClassHandler,           __p('handlers/ruby/class_handler')
+      autoload :ClassConditionHandler,  __p('handlers/ruby/class_condition_handler')
+      autoload :ClassVariableHandler,   __p('handlers/ruby/class_variable_handler')
+      autoload :ConstantHandler,        __p('handlers/ruby/constant_handler')
+      autoload :ExceptionHandler,       __p('handlers/ruby/exception_handler')
+      autoload :ExtendHandler,          __p('handlers/ruby/extend_handler')
+      autoload :MethodHandler,          __p('handlers/ruby/method_handler')
+      autoload :MethodConditionHandler, __p('handlers/ruby/method_condition_handler')
+      autoload :MixinHandler,           __p('handlers/ruby/mixin_handler')
+      autoload :ModuleHandler,          __p('handlers/ruby/module_handler')
+      autoload :VisibilityHandler,      __p('handlers/ruby/visibility_handler')
+      autoload :YieldHandler,           __p('handlers/ruby/yield_handler')
     end
 
-    autoload :Base,                       'yard/handlers/base'
-    autoload :Processor,                  'yard/handlers/processor'
+    autoload :Base,                     __p('handlers/base')
+    autoload :Processor,                __p('handlers/processor')
   end
 
   module Parser
     module Ruby
       module Legacy
-        autoload :Statement,      'yard/parser/ruby/legacy/statement'
-        autoload :StatementList,  'yard/parser/ruby/legacy/statement_list'
-        autoload :TokenList,      'yard/parser/ruby/legacy/token_list'
+        autoload :Statement,      __p('parser/ruby/legacy/statement')
+        autoload :StatementList,  __p('parser/ruby/legacy/statement_list')
+        autoload :TokenList,      __p('parser/ruby/legacy/token_list')
 
         module RubyToken
-          require 'yard/parser/ruby/legacy/ruby_lex' # Too much to include manually
+          require __p('parser/ruby/legacy/ruby_lex') # Too much to include manually
         end
       end
 
-      autoload :AstNode,           'yard/parser/ruby/ast_node'
-      autoload :ParserSyntaxError, 'yard/parser/ruby/ruby_parser'
-      autoload :RubyParser,        'yard/parser/ruby/ruby_parser'
+      autoload :AstNode,           __p('parser/ruby/ast_node')
+      autoload :ParserSyntaxError, __p('parser/ruby/ruby_parser')
+      autoload :RubyParser,        __p('parser/ruby/ruby_parser')
     end
 
-    autoload :SourceParser,        'yard/parser/source_parser'
-    autoload :UndocumentableError, 'yard/parser/source_parser'
+    autoload :SourceParser,        __p('parser/source_parser')
+    autoload :UndocumentableError, __p('parser/source_parser')
   end
   
   module Rake
-    autoload :YardocTask, 'yard/rake/yardoc_task'
+    autoload :YardocTask, __p('rake/yardoc_task')
   end
   
   module Serializers
-    autoload :Base,                 'yard/serializers/base'
-    autoload :FileSystemSerializer, 'yard/serializers/file_system_serializer'
-    autoload :ProcessSerializer,    'yard/serializers/process_serializer'
-    autoload :StdoutSerializer,     'yard/serializers/stdout_serializer'
+    autoload :Base,                 __p('serializers/base')
+    autoload :FileSystemSerializer, __p('serializers/file_system_serializer')
+    autoload :ProcessSerializer,    __p('serializers/process_serializer')
+    autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
   end
   
   module Tags
-    autoload :DefaultFactory, 'yard/tags/default_factory'
-    autoload :DefaultTag,     'yard/tags/default_tag'
-    autoload :Library,        'yard/tags/library'
-    autoload :OptionTag,      'yard/tags/option_tag'
-    autoload :OverloadTag,    'yard/tags/overload_tag'
-    autoload :RefTag,         'yard/tags/ref_tag'
-    autoload :RefTagList,     'yard/tags/ref_tag_list'
-    autoload :Tag,            'yard/tags/tag'
-    autoload :TagFormatError, 'yard/tags/tag_format_error'
+    autoload :DefaultFactory, __p('tags/default_factory')
+    autoload :DefaultTag,     __p('tags/default_tag')
+    autoload :Library,        __p('tags/library')
+    autoload :OptionTag,      __p('tags/option_tag')
+    autoload :OverloadTag,    __p('tags/overload_tag')
+    autoload :RefTag,         __p('tags/ref_tag')
+    autoload :RefTagList,     __p('tags/ref_tag_list')
+    autoload :Tag,            __p('tags/tag')
+    autoload :TagFormatError, __p('tags/tag_format_error')
   end
 
-  autoload :Docstring, 'yard/docstring'
-  autoload :Registry,  'yard/registry'
+  autoload :Docstring, __p('docstring')
+  autoload :Registry,  __p('registry')
 end
 
 # P() needs to be loaded right away
 YARD::CodeObjects::Proxy
+
+undef __p
