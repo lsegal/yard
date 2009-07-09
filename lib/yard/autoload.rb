@@ -117,13 +117,10 @@ module YARD
   module Parser
     module Ruby
       module Legacy
+        autoload :RubyToken,      __p('parser/ruby/legacy/ruby_lex')
         autoload :Statement,      __p('parser/ruby/legacy/statement')
         autoload :StatementList,  __p('parser/ruby/legacy/statement_list')
         autoload :TokenList,      __p('parser/ruby/legacy/token_list')
-
-        module RubyToken
-          require __p('parser/ruby/legacy/ruby_lex') # Too much to include manually
-        end
       end
 
       autoload :AstNode,           __p('parser/ruby/ast_node')
@@ -159,10 +156,8 @@ module YARD
   end
 
   autoload :Docstring, __p('docstring')
+  autoload :Logger,    __p('logging')
   autoload :Registry,  __p('registry')
 end
-
-# P() needs to be loaded right away
-YARD::CodeObjects::Proxy
 
 undef __p

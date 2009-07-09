@@ -28,5 +28,3 @@ module YARD
     end
   end
 end
-
-def log; YARD::Logger.instance end
