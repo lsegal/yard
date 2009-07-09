@@ -10,8 +10,11 @@ end
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9" ? [true, false] : [false, true])
 
-$:.unshift(YARD::ROOT)
+# Load Ruby core extension classes
+Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*')).each do |file|
+  require file.gsub(/\.rb$/, '')
+end
 
-files  = ['yard/logging', 'yard/autoload']
-files += Dir.glob File.join(YARD::ROOT, 'yard/core_ext/*')
-files.each {|file| require file.gsub(/\.rb$/, '') }
+['autoload', 'globals'].each do |file| 
+  require File.join(YARD::ROOT, 'yard', file)
+end

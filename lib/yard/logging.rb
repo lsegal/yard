@@ -1,10 +1,15 @@
-require "logger"
+require 'logger'
 
 module YARD
   class Logger < ::Logger
+    def self.instance(pipe = STDERR)
+      @logger ||= new(pipe)
+    end
+    
     def initialize(*args)
       super
       self.level = INFO
+      self.formatter = method(:format_log)
     end
     
     def debug(*args)
@@ -17,11 +22,9 @@ module YARD
       yield
       self.level = old_level
     end
-  end
-  
-  def self.logger
-    @logger ||= YARD::Logger.new(STDERR)
+    
+    def format_log(sev, time, prog, msg)
+      "[#{sev.downcase}]: #{msg}\n"
+    end
   end
 end
-
-def log; YARD.logger end
