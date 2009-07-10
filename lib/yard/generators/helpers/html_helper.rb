@@ -75,10 +75,10 @@ module YARD
           elsif name =~ /^file:(\S+?)(?:#(\S+))?$/
             sp + link_file($1, title == name ? $1 : title, $2)
           else
-            obj = Registry.resolve(current_object, name, true, true)
+            obj = Registry.resolve(object, name, true, true)
             if obj.is_a?(CodeObjects::Proxy)
               match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
-              log.warn "In file `#{current_object.file}':#{current_object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
+              log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
               log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
             end
           
@@ -117,14 +117,14 @@ module YARD
         link_url(url_for_file(filename, anchor), title)
       end
     
-      def link_object(object, otitle = nil, anchor = nil, relative = true)
-        object = Registry.resolve(current_object, object, true, true) if object.is_a?(String)
-        title = h(otitle ? otitle.to_s : object.path)
+      def link_object(obj, otitle = nil, anchor = nil, relative = true)
+        obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
+        title = h(otitle ? otitle.to_s : obj.path)
         return title unless serializer
 
-        return title if object.is_a?(CodeObjects::Proxy)
+        return title if obj.is_a?(CodeObjects::Proxy)
       
-        link = url_for(object, anchor, relative)
+        link = url_for(obj, anchor, relative)
         link ? link_url(link, title) : title
       end
       
@@ -153,22 +153,22 @@ module YARD
         end
       end
     
-      def url_for(object, anchor = nil, relative = true)
+      def url_for(obj, anchor = nil, relative = true)
         link = nil
         return link unless serializer
         
-        if object.is_a?(CodeObjects::Base) && !object.is_a?(CodeObjects::NamespaceObject)
-          # If the object is not a namespace object make it the anchor.
-          anchor, object = object, object.namespace
+        if obj.is_a?(CodeObjects::Base) && !obj.is_a?(CodeObjects::NamespaceObject)
+          # If the obj is not a namespace obj make it the anchor.
+          anchor, obj = obj, obj.namespace
         end
         
-        objpath = serializer.serialized_path(object)
+        objpath = serializer.serialized_path(obj)
         return link unless objpath
       
         if relative
-          fromobj = current_object
-          if current_object.is_a?(CodeObjects::Base) && 
-              !current_object.is_a?(CodeObjects::NamespaceObject)
+          fromobj = object
+          if object.is_a?(CodeObjects::Base) && 
+              !object.is_a?(CodeObjects::NamespaceObject)
             fromobj = fromobj.namespace
           end
 
@@ -182,7 +182,7 @@ module YARD
       end
       
       def url_for_file(filename, anchor = nil)
-        fromobj = current_object
+        fromobj = object
         if CodeObjects::Base === fromobj && !fromobj.is_a?(CodeObjects::NamespaceObject)
           fromobj = fromobj.namespace
         end

@@ -42,19 +42,19 @@ describe YARD::Generators::Helpers::HtmlHelper do
   
     it "should return nil if serializer is nil" do
       stub!(:serializer).and_return nil
-      stub!(:current_object).and_return Registry.root
+      stub!(:object).and_return Registry.root
       url_for(P("Mod::Class#meth")).should be_nil
     end
   
     it "should return nil if serializer does not implement #serialized_path" do
       stub!(:serializer).and_return Serializers::Base.new
-      stub!(:current_object).and_return Registry.root
+      stub!(:object).and_return Registry.root
       url_for(P("Mod::Class#meth")).should be_nil
     end
   
     it "should link to a path/file for a namespace object" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
-      stub!(:current_object).and_return Registry.root
+      stub!(:object).and_return Registry.root
     
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
       url_for(yard).should == 'YARD.html'
@@ -62,7 +62,7 @@ describe YARD::Generators::Helpers::HtmlHelper do
   
     it "should link to the object's namespace path/file and use the object as the anchor" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
-      stub!(:current_object).and_return Registry.root
+      stub!(:object).and_return Registry.root
     
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
       meth = CodeObjects::MethodObject.new(yard, :meth)
@@ -74,7 +74,7 @@ describe YARD::Generators::Helpers::HtmlHelper do
       serializer = mock(:serializer)
       serializer.stub!(:serialized_path).and_return("file.html")
       stub!(:serializer).and_return(serializer)
-      stub!(:current_object).and_return(obj)
+      stub!(:object).and_return(obj)
       url_for(obj).should == "#%2F-instance_method"
     end
   end
@@ -100,7 +100,7 @@ describe YARD::Generators::Helpers::HtmlHelper do
 
     it "should link static files with file: prefix" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
-      stub!(:current_object).and_return Registry.root
+      stub!(:object).and_return Registry.root
 
       parse_link(resolve_links("{file:TEST.txt#abc}")).should == {
         :inner_text => "TEST.txt",
