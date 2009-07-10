@@ -8,17 +8,19 @@ def html_equals(result, expected)
   expected.should == result
 end
 
-YARD.parse_string <<-eof
-  private
-  # Comments
-  # @param [String] x the x argument
-  # @return [String] the result
-  # @deprecated for great justice
-  def m(x) end
-  alias x m
-eof
-
 describe Tadpole.template(:default, :method, :html) do
+  before do
+    YARD.parse_string <<-eof
+      private
+      # Comments
+      # @param [String] x the x argument
+      # @return [String] the result
+      # @deprecated for great justice
+      def m(x) end
+      alias x m
+    eof
+  end
+  
   it "should render correctly" do
     html_equals(Registry.at('#m').format(:format => :html), <<-'eof')
       <div id="m-instance_method" class="section method">

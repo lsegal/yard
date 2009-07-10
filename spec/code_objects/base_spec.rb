@@ -220,7 +220,8 @@ describe YARD::CodeObjects::Base do
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :text,
-                                          :object => @object
+                                          :object => @object,
+                                          :serializer => nil
       @object.format
     end
     
@@ -229,7 +230,8 @@ describe YARD::CodeObjects::Base do
       @template.should_receive(:run).with :type => :method,
                                           :template => :javadoc,
                                           :format => :text,
-                                          :object => @object
+                                          :object => @object,
+                                          :serializer => nil
       @object.format(:template => :javadoc)
     end
 
@@ -238,7 +240,8 @@ describe YARD::CodeObjects::Base do
       @template.should_receive(:run).with :type => :fulldoc,
                                           :template => :default,
                                           :format => :text,
-                                          :object => @object
+                                          :object => @object,
+                                          :serializer => nil
       @object.format(:type => :fulldoc)
     end
     
@@ -247,7 +250,8 @@ describe YARD::CodeObjects::Base do
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :html,
-                                          :object => @object
+                                          :object => @object,
+                                          :serializer => nil
       @object.format(:format => :html)
     end
   end
