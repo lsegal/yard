@@ -215,12 +215,7 @@ module YARD
       alias_method :to_s, :path
       
       def format(options = {})
-        options[:format] ||= :text
-        options[:type] ||= type
-        options[:template] ||= :default
-        options[:object] = self
-        options[:serializer] = nil
-        Tadpole.template(options[:template], options[:format], options[:type]).run(options)
+        Templates.render(self, options)
       end
       
       def inspect

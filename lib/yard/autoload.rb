@@ -158,8 +158,8 @@ module YARD
   autoload :Docstring, __p('docstring')
   autoload :Logger,    __p('logging')
   autoload :Registry,  __p('registry')
+  autoload :Template,  __p('templating')
+  autoload :Templates, __p('templating')
 end
-
-autoload :Tadpole, __p('templating')
 
 undef __p

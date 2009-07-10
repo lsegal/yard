@@ -8,7 +8,7 @@ def html_equals(result, expected)
   expected.should == result
 end
 
-describe Tadpole.template(:default, :method, :html) do
+describe Template.template(:default, :html, :method) do
   before do
     YARD.parse_string <<-eof
       private
