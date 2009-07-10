@@ -216,9 +216,11 @@ module YARD
       
       def format(options = {})
         options[:format] ||= :text
-        options[:template] ||= type
+        options[:type] ||= type
+        options[:template] ||= :default
         options[:object] = self
-        Tadpole(options[:template], options[:format]).run(options)
+        options[:serializer] = nil
+        Tadpole.template(options[:template], options[:format], options[:type]).run(options)
       end
       
       def inspect
