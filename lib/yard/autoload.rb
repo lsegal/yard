@@ -160,6 +160,6 @@ module YARD
   autoload :Registry,  __p('registry')
 end
 
-autoload :Tadpole, 'tadpole'
+autoload :Tadpole, __p('templating')
 
 undef __p
