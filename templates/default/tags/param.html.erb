@@ -1,0 +1,21 @@
+<div class="param">
+  <h3><%= YARD::Tags::Library.labels[:param] %>:</h3>
+  <dl>
+  <% for tag in tags_by_param %>
+    <% if tag.is_a?(YARD::Tags::OptionTag) %>
+      <%= render object, 'option', :param => tag.name.to_s %>
+    <% else %>
+      <dt>
+        <span class='type'><%= format_types (tag.types || ['Object']) %></span>
+        <span class='name'><%= h tag.name %></span>
+        <% if (o=object.parameters.assoc(tag.name.to_sym)) && o[1] %>
+          <em class="default">(defaults to: <tt><%= h o[1] %></tt>)</em>
+        <% end %>
+      </dt>
+      <dd>
+        <span class='desc'><%= htmlify tag.text if tag.text %></span>
+      </dd>
+    <% end %>
+  <% end %>
+  </dl>
+</div>

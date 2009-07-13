@@ -215,7 +215,8 @@ module YARD
       alias_method :to_s, :path
       
       def format(options = {})
-        Templates.render(self, options)
+        options.merge!(:object => self)
+        Templates.render(options)
       end
       
       def inspect

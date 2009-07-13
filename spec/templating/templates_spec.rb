@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Templates do
   describe '.render' do
@@ -13,7 +13,7 @@ describe YARD::Templates do
     end
   
     it "should accept method call with no parameters" do
-      loads_template(:default, :text, :method)
+      loads_template(:default, :method)
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :text,
@@ -23,7 +23,7 @@ describe YARD::Templates do
     end
   
     it "should allow template key to be changed" do
-      loads_template(:javadoc, :text, :method)
+      loads_template(:javadoc, :method)
       @template.should_receive(:run).with :type => :method,
                                           :template => :javadoc,
                                           :format => :text,
@@ -33,7 +33,7 @@ describe YARD::Templates do
     end
 
     it "should allow type key to be changed" do
-      loads_template(:default, :text, :fulldoc)
+      loads_template(:default, :fulldoc)
       @template.should_receive(:run).with :type => :fulldoc,
                                           :template => :default,
                                           :format => :text,
@@ -43,7 +43,7 @@ describe YARD::Templates do
     end
   
     it "should allow format key to be changed" do
-      loads_template(:default, :html, :method)
+      loads_template(:default, :method)
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :html,

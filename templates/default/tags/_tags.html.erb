@@ -1,0 +1,21 @@
+<div class="<%= name %>">
+  <h3><%= defined?(label) ? label : YARD::Tags::Library.labels[name] %>:</h3>
+  <dl>
+  <% for tag in object.tags(name) %>
+    <dt>
+      <% unless options.respond_to? :no_types %>
+        <span class='type'><%= format_types (tag.types || ['Object']) %></span>
+      <% end %>
+      <% unless options.respond_to? :no_names %>
+        <span class='name'><%= h tag.name %></span>
+      <% end %>
+      <% if name == :param && (o=object.parameters.assoc(tag.name.to_sym)) && o[1] %>
+        <em class="default">(defaults to: <tt><%= h o[1] %></tt>)</em>
+      <% end %>
+    </dt>
+    <dd>
+      <span class='desc'><%= htmlify tag.text %></span>
+    </dd>
+  <% end %>
+  </dl>
+</div>

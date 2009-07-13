@@ -6,8 +6,8 @@ before_section :aliases, :has_aliases?
 
 def init
   super
-  sections :title, [:signature, :aliases], *sections
-  sections :header, [*sections]
+  sections[1].unshift :title, [:signature, :aliases]
+  sections[1].push :source
 end
 
 def has_aliases?

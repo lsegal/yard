@@ -1,0 +1,15 @@
+<div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines"><%= "\n\n\n" %><%= h format_lines(object) %></pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File '<%= h object.file %>', line <%= object.line %></span><%= "\n\n" %><%= html_syntax_highlight object.source %></pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
