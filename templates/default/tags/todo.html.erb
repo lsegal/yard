@@ -1,7 +1,7 @@
 <div class="todo">
   <h3><%= YARD::Tags::Library.labels[:todo] %>:</h3>
   <ul>
-  <% for tag in object.tags(:todo) %>
+  <% for tag in docstring.tags(:todo) %>
     <li><strong><%= tag.name %></strong> <%= tag.text %></li>
   <% end %>
   </ul>

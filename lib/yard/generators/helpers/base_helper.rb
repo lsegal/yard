@@ -59,7 +59,7 @@ module YARD::Generators::Helpers
     end
 
     def overloads(method)
-      if method.has_tag?(:overload)
+      if method.tags(:overload).size == 1
         method.tags(:overload)
       else
         [method]

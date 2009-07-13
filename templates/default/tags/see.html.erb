@@ -4,7 +4,7 @@
     <dt></dt>
     <dd>
       <span class='desc'>
-        <%= object.tags(:see).map {|t| "<tt>" + linkify(t.name, t.text || t.name) + "</tt>" }.join(", ") %>
+        <%= docstring.tags(:see).map {|t| "<tt>" + linkify(t.name, t.text || t.name) + "</tt>" }.join(", ") %>
       </span>
     </dd>
   </dl>

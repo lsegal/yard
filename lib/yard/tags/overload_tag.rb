@@ -2,7 +2,6 @@ module YARD
   module Tags
     class OverloadTag < Tag
       attr_reader :signature, :parameters, :docstring
-      undef_method :to_s, :inspect
       
       def initialize(tag_name, text, raw_text)
         super(tag_name, nil)
@@ -19,22 +18,10 @@ module YARD
         docstring.object = value
       end
 
-      def type
-        object.type
-      end
-
       def name(prefix = false)
         object.name(prefix)
       end
 
-      def inspect
-        "#<yardoc overload #{path}>"
-      end
-      
-      def method_missing(sym, *args, &block)
-        object ? object.send(sym, *args, &block) : super
-      end
-        
       private
       
       def parse_tag(raw_text)
