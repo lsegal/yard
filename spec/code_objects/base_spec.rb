@@ -208,7 +208,7 @@ describe YARD::CodeObjects::Base do
   describe '#format' do
     it "should send to Templates.render" do
       object = MethodObject.new(:root, :method)
-      Templates.should_receive(:render).with(object, :x => 1)
+      Templates.should_receive(:render).with(:x => 1, :object => object)
       object.format :x => 1
     end
   end
