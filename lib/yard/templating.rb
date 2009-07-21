@@ -9,7 +9,7 @@ module YARD
       options[:format] ||= :text
       options[:type] ||= options[:object].type if options[:object]
       options[:template] ||= :default
-      options[:serializer] = nil
+      options[:serializer] ||= nil
 
       mod = Template.template(options[:template], options[:type])
       mod.run(options)
