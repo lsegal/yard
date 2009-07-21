@@ -25,8 +25,8 @@ module Tadpole
           extra = self == TemplateProvider ? "" : ".#{object.format.to_s}"
           path = basename + extra + ext
           if path_suitable?(path) 
-            object.extend(Generators::Helpers::BaseHelper)
-            object.extend(Generators::Helpers::HtmlHelper) if object.format == :html
+            object.extend(YARD::Generators::Helpers::BaseHelper)
+            object.extend(YARD::Generators::Helpers::HtmlHelper) if object.format == :html
             return path
           end
         end
