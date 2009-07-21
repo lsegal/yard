@@ -1,5 +1,3 @@
-inherits '../object'
-
 include YARD::Generators::Helpers::MethodHelper
 
 before_section :aliases, :has_aliases?
@@ -7,8 +5,7 @@ before_section :overload, :has_overloads?
 
 def init
   super
-  sections[1].unshift :title, [:signature, :aliases]
-  sections[1].push :overload, :source
+  sections :header, [:title, [:signature, :aliases], :docstring, :overload, :source]
 end
 
 protected

@@ -1,0 +1,12 @@
+<div class="section methodmissing">
+  <h2>Dynamic Method Handling</h2>
+
+  <p class="note">
+    This class handles dynamic methods through the <tt>method_missing</tt> method
+    <% if method_missing_method_inherited? %>
+      in the class <%= linkify method_missing_method.namespace.path %>
+    <% end %>
+  </p>
+
+  <%= T('../method', :object => method_missing_method).run %>
+</div>

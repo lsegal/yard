@@ -71,7 +71,7 @@ describe Template.template(:default, :method) do
           </div>
           <div class="section source"> 
             <span>[<a class="source_link" href="#">View source</a>]</span> 
-            <div class="source_code"> 
+            <div class="source_code" style="display: none"> 
               <table> 
                 <tr> 
                   <td><pre class="lines">6</pre></td> 
@@ -131,7 +131,7 @@ describe Template.template(:default, :method) do
           </div>
           <div class="section source"> 
             <span>[<a class="source_link" href="#">View source</a>]</span> 
-            <div class="source_code"> 
+            <div class="source_code" style="display: none"> 
               <table> 
                 <tr> 
                   <td><pre class="lines">6</pre></td> 
@@ -243,7 +243,7 @@ describe Template.template(:default, :method) do
           </div>
           <div class="section source"> 
             <span>[<a class="source_link" href="#">View source</a>]</span> 
-            <div class="source_code"> 
+            <div class="source_code" style="display: none"> 
               <table> 
                 <tr> 
                   <td><pre class="lines">11</pre></td> 
