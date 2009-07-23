@@ -3,32 +3,45 @@ require 'dbm'
 
 MARSHAL_FILE = "marshal_test.db"
 DBM_FILE = "dbm_test"
-WRITE_TIMES = 50
+WRITE_TIMES = 1
 READ_TIMES = 100
-INDICES = ['33', '857', '5022', '98555']
+NUM_INDICES = 10000
+INDICES = ['33', '857', '5022', '8555']
 
-def access_indices(db)
+def generate_index
+  '0' * (rand * 4096).floor
+end
+
+def write_dbm
+  File.unlink(DBM_FILE + ".db") if File.exist?(DBM_FILE + ".db")
+  handle = DBM.new(DBM_FILE)
+  NUM_INDICES.times {|t| handle[t.to_s] = Marshal.dump(generate_index) }
+  handle.close
+end
+
+def read_dbm
+  db = DBM.open(DBM_FILE)
+  INDICES.each {|index| Marshal.load(db[index]) }
+  db.close
+end
+
+def write_marshal
+  File.unlink(MARSHAL_FILE) if File.exist?(MARSHAL_FILE)
+  handle = {}
+  NUM_INDICES.times {|t| handle[t.to_s] = generate_index }
+  File.open(MARSHAL_FILE, "w") {|f| f.write(Marshal.dump(handle)) }
+end
+
+def read_marshal
+  db = Marshal.load(File.read(MARSHAL_FILE))
   INDICES.each {|index| db[index] }
 end
 
-def setup_dbs(handle, file)
-  File.unlink(file + (file == DBM_FILE ? ".db" : '')) if File.exist?(file)
-  handles = [{}, ]
-  handles.each do |handle|
-    10000.times {|t| handle[t.to_s] = '0' * (rand * 1024).floor }
-    if handle.is_a?(Hash)
-      File.open(MARSHAL_FILE, "w") {|f| f.write(Marshal.dump(handle)) }
-    else
-      handle.close
-    end
-  end
-end
-
 Benchmark.bmbm do |x|
-  x.report("marshal-write") { WRITE_TIMES.times { setup_dbs({}, MARSHAL_FILE) } }
-  x.report("dbm-write") { WRITE_TIMES.times { setup_dbs(DBM.new(DBM_FILE), DBM_FILE) } }
-  x.report("marshal-read ") { READ_TIMES.times { access_indices(Marshal.load(File.read(MARSHAL_FILE))) } }
-  x.report("dbm-read ") { READ_TIMES.times { DBM.open(DBM_FILE) {|db| access_indices(db) } } }
+  x.report("marshal-write") { WRITE_TIMES.times { write_marshal } }
+  x.report("dbm-write") { WRITE_TIMES.times { write_dbm } }
+  x.report("marshal-read ") { READ_TIMES.times { read_marshal } }
+  x.report("dbm-read ") { READ_TIMES.times { read_dbm } }
 end
 
 File.unlink(MARSHAL_FILE)
@@ -37,14 +50,14 @@ File.unlink(DBM_FILE + ".db")
 __END__
 
 Rehearsal -------------------------------------------------
-marshal-write   3.020000   0.830000   3.850000 (  7.166425)
-dbm-write       3.030000   0.790000   3.820000 (  5.569607)
-marshal-read    3.680000   0.860000   4.540000 (  4.592529)
-dbm-read        0.010000   0.020000   0.030000 (  0.056891)
---------------------------------------- total: 12.240000sec
+marshal-write   0.090000   0.070000   0.160000 (  0.465820)
+dbm-write       0.560000   0.570000   1.130000 (  3.045556)
+marshal-read    4.640000   3.180000   7.820000 (  7.821978)
+dbm-read        0.020000   0.020000   0.040000 (  0.070920)
+---------------------------------------- total: 9.150000sec
 
                     user     system      total        real
-marshal-write   3.020000   0.800000   3.820000 (  7.067850)
-dbm-write       2.960000   0.780000   3.740000 (  5.761866)
-marshal-read    3.490000   0.850000   4.340000 (  4.386992)
-dbm-read        0.010000   0.020000   0.030000 (  0.059572)
+marshal-write   0.080000   0.050000   0.130000 (  0.436561)
+dbm-write       0.560000   0.550000   1.110000 (  2.030530)
+marshal-read    4.670000   3.180000   7.850000 (  7.842232)
+dbm-read        0.010000   0.020000   0.030000 (  0.053928)
