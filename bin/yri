@@ -3,11 +3,18 @@ require File.dirname(__FILE__) + '/../lib/yard'
 
 YARD::Registry.load
 
+if ARGV[0] == '-T' || ARGV[0] == '--no-pager'
+  output = YARD::Serializers::StdoutSerializer.new
+  ARGV.shift
+else
+  output = YARD::Serializers::ProcessSerializer.new('less')
+end
+
 object = YARD::Registry.at(ARGV[0])
 options = {
   :format => :text, 
   :template => :default, 
-  :serializer => YARD::Serializers::ProcessSerializer.new('less')
+  :serializer => output
 }
 
 YARD::Generators::QuickDocGenerator.new(options).generate(object)
