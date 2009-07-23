@@ -33,6 +33,11 @@ describe YARD::Docstring do
     o1 = Docstring.new
     o1.summary.should == ""
   end
+  
+  it "should handle multiple calls to #summary" do
+    o1 = Docstring.new("Hello. world")
+    5.times { o1.summary.should == "Hello." }
+  end
 
   it "should return the first sentence with #summary" do
     o = Docstring.new("DOCSTRING. Another sentence")
