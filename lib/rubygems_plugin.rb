@@ -74,18 +74,19 @@ class Gem::DocManager
   end
 
   def install_ri_yard
-    install_ri_yard_orig if @spec.has_rdoc?
+    @@install_ri_yard_orig.bind(self).call if @spec.has_rdoc?
   end
-  alias install_ri_yard_orig install_ri
+  @@install_ri_yard_orig = instance_method(:install_ri)
   alias install_ri install_ri_yard
+  
   
   def install_rdoc_yard
     if @spec.has_rdoc?
-      install_rdoc_yard_orig
+      @@install_rdoc_yard_orig.bind(self).call
     elsif @spec.has_yardoc?
       install_yardoc
     end
   end
-  alias install_rdoc_yard_orig install_rdoc
+  @@install_rdoc_yard_orig = instance_method(:install_rdoc)
   alias install_rdoc install_rdoc_yard
 end
