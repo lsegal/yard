@@ -1,0 +1,3950 @@
+2009-07-26  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.markdown, lib/yard.rb, yard.gemspec: Bump version to
+  0.2.3.3
+
+  * lib/rubygems_plugin.rb: Fix bug in RubyGems plugin where 'gem install'
+  would cause a stackoverflow in 1.9 for other gems
+
+2009-07-23  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/marshal_vs_dbm.rb: Update dbm benchmarks to reflect how data
+  would be stored in YARD
+
+  * benchmarks/marshal_vs_dbm.rb, benchmarks/ri_vs_yri.rb: Add benchmarks for
+  ri/yri and marshal/dbm
+
+  * bin/yri: Add -T/--no-pager option to yri
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Fix bug where extra '.'s
+  were appended to Docstring#summary
+
+2009-07-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard.rb, lib/yard/autoload.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/globals.rb, lib/yard/logging.rb: Add globals.rb for global methods
+  and clean up autoload to load as little of the codebase as possible when YARD
+  is required
+
+  * lib/yard/logging.rb: Move YARD.logger into Logger class (make it a proper
+  Singleton)
+
+  * lib/yard.rb, lib/yard/autoload.rb: No longer modify $LOAD_PATH
+
+  * lib/yard/core_ext/logger.rb, lib/yard/logging.rb: Remove Logger changes
+  from core_ext (so that logging format is not modified globally)
+
+2009-07-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Fix yardoc source file
+  parsing bug when no arguments are specified
+
+2009-07-06  Loren Segal <lsegal@soen.ca>
+
+  * README.markdown, lib/yard.rb, yard.gemspec: Bump version to 0.2.3.2
+
+  * templates/default/fulldoc/html/file.erb,
+  templates/default/fulldoc/html/footer.erb,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/fulldoc/html/style.css: Add footer file to show when
+  documentation was generated and with which version of Ruby/YARD
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb,
+  templates/default/fulldoc/html/index.erb: Add --title option to set HTML
+  document titles
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/custom.css,
+  templates/default/fulldoc/html/html_head.erb: Add overridable custom.css for
+  extra stylesheet declarations
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Don't use hard line-breaks with
+  Textile markup (RedCloth specific)
+
+  * spec/generators/helpers/html_helper_spec.rb: Refactor tests in
+  html_helper_spec.rb
+
+  * .yardopts, lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Update yardoc
+  CLI to accept extra files after source files with '-' separator  Example:
+  yardoc lib/**/*.rb - FAQ LICENSE
+
+2009-07-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/library.rb, spec/tags/library_spec.rb,
+  templates/default/tags/html/see.erb: Add support for optional description
+  text in @see tag (use desc. for link name in HTML docs)
+
+  * lib/yard/generators/tags_generator.rb, lib/yard/tags/overload_tag.rb: If
+  there's only one overload, try to merge tags with regular object tags
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Only parse @tags that match
+  the correct charset ([A-Za-z_])
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Accept docstrings with empty
+  newlines
+
+  * templates/default/fulldoc/html/style.css: Hide view source link for
+  overloads
+
+  * lib/yard/tags/overload_tag.rb: Treat OverloadTag more like MethodObject
+
+  * lib/yard/generators/tags_generator.rb: Allow overloads to render
+  param/option tags
+
+2009-06-19  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile: Perform RCov coverage if RCOV is set (rake specs)
+
+  * lib/yard/handlers/base.rb, spec/parser/examples/parse_in_order_001.rb.txt,
+  spec/parser/examples/parse_in_order_002.rb.txt,
+  spec/parser/source_parser_spec.rb, spec/spec_helper.rb: Add specs for in
+  order parsing
+
+  * lib/yard.rb, lib/yard/parser/source_parser.rb,
+  spec/parser/source_parser_spec.rb: Only glob files if they have '*' in the
+  path name
+
+2009-06-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/docstring.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/legacy/statement.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ast_node_spec.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb,
+  spec/parser/ruby/ruby_parser_spec.rb, spec/parser/source_parser_spec.rb: Add
+  Docstring#line_range to get/set the position of the docstring in a file. Also
+  add #all to get/set full raw comments data
+
+2009-06-16  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/deprecated/html/main.erb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/fulldoc/html/style.css: Make deprecated formatting a little
+  nicer and strikeout any deprecated methods/classes in the method/class list
+
+2009-06-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/tags_generator.rb: Don't generate todo items if there
+  are none
+
+  * spec/handlers/ruby/legacy/base_spec.rb: Fix handler tests in Ruby1.9
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/handlers/ruby/legacy/base_spec.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Update parser to show
+  beginning and end of a block in the statement part of a statement object
+  rather than inside the block. This fixes a bug where do/end blocks cannot be
+  parsed with the #parse_block handler (specs added)
+
+  * lib/yard/code_objects/base.rb, lib/yard/parser/ruby/legacy/statement.rb:
+  Update Statement#to_s and to behave more like AstNode class and refactor
+  behaviour in CodeObjects::Base#source=
+
+  * lib/yard/parser/ruby/legacy/ruby_lex.rb,
+  lib/yard/parser/ruby/legacy/token_list.rb,
+  spec/parser/ruby/legacy/token_list_spec.rb: TokenList#to_s can now return the
+  beginning and end of a block with the addition of a TkBlockContents token to
+  represent the inner block itself in the token list
+
+2009-06-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/rubygems_plugin.rb: Don't immediately load all of YARD when RubyGems
+  requires the plugin.
+
+2009-06-13  Loren Segal <lsegal@soen.ca>
+
+  * README.markdown: Update changelog
+
+  * README.markdown, lib/rubygems_plugin.rb, yard.gemspec: Add a RubyGems
+  1.3.2+ plugin to generate YARD documentation instead of RDoc. Also re-enable
+  support for `has_rdoc = false` in a gemspec.  To use YARD instead of RDoc,
+  set `has_rdoc = 'yard'` in the gemspec
+
+2009-06-07  Nathan Weizenbaum <nex342@gmail.com>
+
+  * Rakefile: Add spec as an alias for the specs Rake task.  spec is the
+  standard name for RSpec Rake tasks, so this will eliminate some confusion.
+
+2009-06-07  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/attributes/html/header.erb: Use Array#length instead of
+  Array#count (Ruby 1.8.6 compatibility)
+
+  * yard.gemspec: Update gemspec for 0.2.3 release
+
+  * lib/yard/generators/tags_generator.rb,
+  templates/default/tags/html/todo.erb: Add @todo to output generation
+
+  * lib/yard/generators/tags_generator.rb: Add @yield to output generation. 
+  Closes gh-15
+
+  * lib/yard/generators/class_generator.rb,
+  lib/yard/generators/tags_generator.rb: Generate tags for classes/modules
+
+  * spec/handlers/legacy_base_spec.rb: No longer show opts={} spec failure, the
+  current behaviour should be expected using the legacy parser
+
+  * Rakefile: Don't automatically use RCov in specs
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Acknowledge reopening of
+  Ruby core classes with 'class << X'
+
+  * README.markdown: Update README for release
+
+  * docs/GETTING_STARTED.markdown, docs/OVERVIEW.markdown, docs/TAGS.markdown:
+  Fix link location markup
+
+  * docs/OVERVIEW.markdown: Add section links to OVERVIEW
+
+  * docs/CODE_OBJECTS.markdown, docs/GETTING_STARTED.markdown: Fix link typos
+
+2009-06-06  Loren Segal <lsegal@soen.ca>
+
+  * .yardopts, README.markdown, docs/CODE_OBJECTS.markdown,
+  docs/GETTING_STARTED.markdown, docs/TAGS.markdown: Add getting started guide
+
+2009-06-05  Nathan Weizenbaum <nex342@gmail.com>
+
+  * docs/TAGS.markdown: Fix a few grammatical errors and typos in the reference
+  tag docs.
+
+2009-06-05  Loren Segal <lsegal@soen.ca>
+
+  * .yardopts, docs/GENERATORS.markdown, docs/HANDLERS.markdown: Add Generators
+  Architecture documentation
+
+  * .yardopts, docs/HANDLERS.markdown, docs/images/handlers-class-diagram.png:
+  Add Handlers architecture documentation
+
+2009-06-04  Loren Segal <lsegal@soen.ca>
+
+  * docs/TAGS.markdown, docs/images/tags-class-diagram.png: Add docs about
+  RefTag and update class diagram for Tags
+
+  * .yardopts, Rakefile: Move files option out of Rakefile to .yardopts file
+
+  * docs/GLOSSARY.markdown, docs/TAGS.markdown,
+  docs/images/tags-class-diagram.png: Add Tags Architecture and update glossary
+
+2009-06-04  Nathan Weizenbaum <nex342@gmail.com>
+
+  * .gitignore: Add /coverage to .gitignore.
+
+2009-06-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yard_graph.rb: Allow yard-graph to document only certain
+  namespaces
+
+  * yard.gemspec: Fix broken file link in yard.gemspec
+
+  * docs/FAQ.markdown: Update FAQ (mostly formatting)
+
+  * docs/WHATSNEW.markdown: Fix typo in WHATSNEW
+
+  * docs/PARSER.markdown: Fix class reference warnings
+
+  * Rakefile, docs/PARSER.markdown, docs/images/parser-class-diagram.png: Add
+  parser architecture docs
+
+2009-06-03  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile, docs/OVERVIEW.markdown: Add Architecture Overview document
+
+  * .gitignore, docs/images/code-objects-class-diagram.png,
+  docs/images/overview-class-diagram.png: Add class diagrams
+
+  * docs/CODE_OBJECTS.markdown: Fix image typo
+
+  * FAQ.markdown, Rakefile, docs/CODE_OBJECTS.markdown, docs/FAQ.markdown,
+  docs/GLOSSARY.markdown, docs/WHATSNEW.markdown: Add some overview docs
+
+  * lib/yard/rake/yardoc_task.rb, spec/rake/yardoc_task_spec.rb: Add
+  before/after filters for Yardoc Rake task (and specs)
+
+  * lib/yard/generators/uml_generator.rb, templates/default/uml/dot/info.erb:
+  Fix generation of attributes in Graphviz template and hide overridden methods
+  and aliases
+
+2009-06-02  Loren Segal <lsegal@soen.ca>
+
+  * spec/handlers/method_handler_spec.rb: Fix incorrect spec, OverloadTag
+  should ignore the method name used in the tag and use the owner object's
+  method name instead
+
+  * lib/yard/tags/overload_tag.rb, spec/code_objects/method_object_spec.rb:
+  OverloadTag#name should delegate to MethodObject and add specs to ensure
+  class method name never shows prefix
+
+2009-06-01  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/autoload.rb, lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/filter_helper.rb,
+  lib/yard/generators/method_generator.rb,
+  lib/yard/generators/overloads_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb, lib/yard/tags/overload_tag.rb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/method/text/header.erb,
+  templates/default/method/text/title.erb,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/methodsummary/html/summary.erb,
+  templates/default/methodsummary/text/summary.erb,
+  templates/default/overloads/html/header.erb,
+  templates/default/overloads/text/header.erb: Overhaul the overload
+  documentation generation.
+
+2009-05-31  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/tags/overload_tag.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: OverloadTag shouldn't choke on an empty
+  docstring.
+
+  * lib/yard/parser/source_parser.rb: Don't choke when trying to parse files
+  without extensions.
+
+2009-05-30  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/app.js,
+  templates/default/fulldoc/html/style.css: Make some minor css and js
+  modifications for better template support
+
+  * lib/yard/generators/helpers/method_helper.rb,
+  lib/yard/generators/method_generator.rb,
+  lib/yard/generators/source_generator.rb: Move #format_code and #format_lines
+  into MethodHelper for other generators to use
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb: Redo
+  LoadOrderError semantics and clean up logic issues. ensure_loaded! should run
+  on object, not namespace
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Fix broken serializer spec
+  and add one for new root serialization behaviour
+
+2009-05-29  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/full_doc_generator.rb: Don't show aliases or
+  non-explicit methods in method list
+
+  * lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/html_helper.rb: Add support for .html extra files
+  (--readme or --files) and bypass markup in #htmlify helper when markup=nil
+
+  * lib/yard/autoload.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/root_generator.rb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/root/html/header.erb: Add documentation output
+  (generator/templates) for global methods
+
+  * lib/yard/serializers/file_system_serializer.rb: FileSystemSerializer:
+  Serialize root object to top-level-namespace.html
+
+  * lib/yard/generators/helpers/html_helper.rb: Allow #link_object helper to
+  turn off relative path linking
+
+  * lib/yard/registry.rb: Add support for YARD::Registry.all(:root)
+
+2009-05-28  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Add missing float token to AST
+
+  * lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/attribute_handler.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Allow Constants to be used
+  in alias keyword
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Another RubyParser optimization to
+  avoid creation of tokens that don't get added to the AST
+
+2009-05-27  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb: StatementList: Fix bug in
+  parser where keywords are not properly parsed as arguments to alias.  When a
+  block opener keyword is passed as the first parameter to 'alias', it should
+  be treated as an identifier instead of a block. The following syntax is
+  valid:  alias for bar  But not:  alias bar for
+
+  * lib/yard/parser/ruby/ast_node.rb: YARD::Parser::Ruby::AstNode: Cache
+  results of #kw? and #literal?
+
+  * lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add specs to make sure parameters are
+  parsed correctly in MethodHandler
+
+  * lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/attribute_handler.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Add better handler support
+  for aliases/attributes on keywords/operator names
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Minor Parser::RubyParser refactoring
+  that improves tokenization performance by 25%
+
+  * lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb: Add
+  new RubyParser implementation to properly handle source ranges for nodes
+
+2009-05-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: If a cached
+  object is not of the same class as a new CodeObject, return the new object
+  instead of the cache
+
+  * spec/code_objects/module_object_spec.rb: Add spec for Proxy objects in
+  ModuleObject#inheritance_tree
+
+  * lib/yard/code_objects/module_object.rb, lib/yard/registry.rb: Never send
+  #inheritance_tree to Proxy objects
+
+  * lib/yard/generators/base.rb: Always ignore Proxy objects from generation
+
+  * lib/yard/handlers/ruby/class_condition_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb,
+  .../examples/class_condition_handler_001.rb.txt: Add support for if
+  true/false/0 conditionals in class scope, also if defined? CONST, which Rails
+  uses a lot
+
+  * yard.gemspec: Add FAQ to gem package
+
+  * lib/yard/handlers/ruby/alias_handler.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Fix issue where an alias to
+  a method name that is also a keyword name did not get recognized
+
+2009-05-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/base.rb: Fix some warnings in documentation markup for
+  Handlers::Base
+
+  * lib/yard/parser/ruby/ast_node.rb: Add defs as keyword and clean up
+  Parser::AstNode::KEYWORDS to use new hash syntax
+
+  * lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb:
+  Refactor AstNode subclass selection to AstNode.node_class_for(type) so that
+  the sexp s() syntax can make use of the logic
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Make syntax error exception message a
+  little more obvious
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Optimize insertion of comments into
+  nodes using hash instead of array
+
+  * spec/handlers/class_condition_handler_spec.rb: ClassConditionHandler is
+  currently only implemented for Ruby 1.9, ignore specs under 1.8
+
+  * lib/yard/handlers/ruby/base.rb, lib/yard/parser/source_parser.rb: Make sure
+  new-style parser is never set globally under Ruby 1.8. Fixes specs
+
+  * spec/handlers/legacy_base_spec.rb, spec/handlers/ruby/legacy/base_spec.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb,
+  spec/parser/ruby/legacy/token_list_spec.rb,
+  spec/parser/source_parser_spec.rb: Remove unneeded require's and fix some
+  name resolution issues in specs
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/attribute_handler.rb,
+  lib/yard/handlers/ruby/class_condition_handler.rb,
+  lib/yard/handlers/ruby/class_variable_handler.rb,
+  lib/yard/handlers/ruby/constant_handler.rb,
+  lib/yard/handlers/ruby/exception_handler.rb,
+  lib/yard/handlers/ruby/extend_handler.rb,
+  lib/yard/handlers/ruby/method_condition_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb,
+  lib/yard/handlers/ruby/yield_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb,
+  .../examples/class_condition_handler_001.rb.txt,
+  .../examples/method_condition_handler_001.rb.txt,
+  spec/handlers/method_condition_handler_spec.rb: Add implementation of new
+  handlers using the Ripper AST parser
+
+  * spec/handlers/spec_helper.rb: Make undoc_error work with new SourceParser
+
+  * lib/yard/handlers/ruby/class_handler.rb: Various fixes to new ClassHandler
+  to get old specs passing
+
+  * lib/yard/handlers/ruby/legacy/exception_handler.rb: Minor aesthetic
+  formatting change
+
+  * lib/yard/handlers/ruby/legacy/extend_handler.rb,
+  spec/handlers/extend_handler_spec.rb: Fix bug in ExtendHandler; extend self
+  behaviour was always being applied
+
+  * spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Class handler tests code
+  that would not be legal in a valid Ruby file, the new parser can't support
+  syntax errors as nicely, so drop support for this. Also add a minor spec
+  regarding superclasses referenced by the ::TopLevelClassName
+
+  * spec/handlers/examples/alias_handler_001.rb.txt,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Fix technical syntax error in
+  alias_handler_001.rb.txt and make some minor formatting adjustments in other
+  example files
+
+  * lib/yard/handlers/processor.rb: Show statement line with #show instead of
+  #inspect when a warning is emitted
+
+  * lib/yard/cli/yardoc.rb: Add --legacy command line option to force Legacy
+  handlers under Ruby1.9
+
+  * lib/yard/autoload.rb, lib/yard/handlers/processor.rb: Load handlers during
+  post processing instead of in autoload so that both legacy and new handlers
+  can be loaded side by side and/or legacy handlers can be swapped in via
+  command line (after loading of YARD)
+
+  * lib/yard/code_objects/base.rb: Add support for setting
+  CodeObjects::Base#source to an AstNode object instead of Statement
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/ruby/base.rb,
+  lib/yard/handlers/ruby/legacy/base.rb: Refactor #parse_block code to use
+  #push_state in order to lower code duplication across handlers
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb,
+  lib/yard/handlers/ruby/base.rb: Add in_namespace to verify that the owner is
+  a namespace object and meta_type to test things like node.condition?
+  (meta_type :condition). Refactor MethodCallWrapper into HandlerExtension
+  which meta_type uses too.
+
+  * lib/yard/autoload.rb, lib/yard/handlers/base.rb,
+  lib/yard/handlers/processor.rb, lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb: Move
+  UndocumentableError into Parser namespace and make ParserSyntaxError a
+  subclass (for error reporting)
+
+  * lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb: Add
+  SourceParser.parser_type attribute to set parser type globally (for legacy
+  support)
+
+  * lib/yard/parser/ruby/ast_node.rb: Fix bug where pp would destructively
+  modify the AST
+
+  * lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb:
+  Optimizations of the parser and add some extra node classes for convenience
+
+  * benchmarks/rdoc_vs_yardoc.rb, benchmarks/ripper_parser.rb: Fix up
+  benchmarks
+
+2009-05-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add reading of .yardopts
+  file when using yardoc CLI/Rake task to specify batch options in a file
+  rather than on the command line. Also support RDoc .document file to load
+  globs of files.  In each case the options/files should be separated by
+  whitespace (newlines are permitted). An example .yardopts file would be: -c
+  -fhtml --markup maruku --private lib/**/*.rb spec/**/*.rb
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/fulldoc/html/style.css: Show the attribute aliases more
+  compact on one line
+
+2009-05-16  Nathan Weizenbaum <nex342@gmail.com>
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/fulldoc/html/style.css: Display aliases of attributes. 
+  Closes gh-2
+
+2009-05-23  Loren Segal <lsegal@soen.ca>
+
+  * FAQ.markdown: Update formatting in FAQ
+
+  * lib/yard/generators/base.rb: Document YARD::Generators::Base#before_section
+  with new @overload tag
+
+  * lib/yard/generators/base.rb, lib/yard/generators/tags_generator.rb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/tags/html/overload.erb,
+  templates/default/tags/text/overload.erb: Add support for overloads in
+  generated documentation, based on nex3's implementation (51a5ce76c)
+
+  * lib/yard/tags/overload_tag.rb: Delegate all other methods in an overload
+  tag to its owning object so we can pass it around as a proper method during
+  output generation (an itty bitty hack for #linkify to work)
+
+  * templates/default/tags/text/header.erb: Remove 'Meta Tags' header in yri
+  docs
+
+  * lib/yard/generators/helpers/method_helper.rb,
+  spec/generators/helpers/method_helper_spec.rb: Add #format_overload to
+  properly format an overload method signature
+
+  * lib/yard/tags/library.rb: Fix typewriter text formatting in
+  YARD::Tags::Library documentation
+
+  * lib/yard/docstring.rb: Make sure all tags go through #add_tag to set their
+  +object+ properties
+
+  * templates/default/tags/text/example.erb,
+  templates/default/tags/text/option.erb,
+  templates/default/tags/text/param.erb: Add missing @example and
+  @param/@option templates from yri
+
+  * lib/yard/docstring.rb, lib/yard/tags/overload_tag.rb,
+  spec/tags/overload_tag_spec.rb: Overload tag should set docstring object
+  immediately and add object later
+
+  * lib/yard/code_objects/method_object.rb,
+  lib/yard/generators/tags_generator.rb: Don't show parameters section if there
+  are no @param or @option tags  Closes gh-12
+
+  * lib/yard/autoload.rb, lib/yard/docstring.rb, lib/yard/tags/library.rb,
+  lib/yard/tags/overload_tag.rb, lib/yard/tags/tag.rb,
+  spec/tags/overload_tag_spec.rb: Add @overload tag based on nex3's original
+  implementation (09d1be25) but without modifying code object or handler code
+
+  * lib/yard/tags/library.rb: Allow Tag class as parameter to  to bypass tag
+  factory and directly instantiate tag
+
+2009-05-11  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/tags/library.rb, spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Some specs and basic definition of
+  @overload tag for defining method overloads. 
+
+2009-05-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/core_ext/file.rb, lib/yard/handlers/base.rb,
+  lib/yard/tags/library.rb: Update documentation and remove all link resolution
+  warnings
+
+  * lib/yard/registry.rb: YARD::Registry#resolve: Make sure namespace is a
+  NamespaceObject before performing lookup.
+
+  * lib/yard/code_objects/method_object.rb: Fix minor NameError in MethodObject
+
+  * lib/yard/code_objects/proxy.rb, lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/registry.rb, spec/registry_spec.rb: Add inherited=true optional
+  argument in YARD::Registry#resolve to search inherited and included methods
+  when resolving a path in a namespace
+
+  * lib/yard/code_objects/proxy.rb: Fix Proxy#path behaviour to print proper
+  paths and more intelligently detect class methods
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb: A class method in the root namespace
+  should be defined by '::methname' so as to differentiate from a constant in
+  the root namespace with the same name
+
+2009-05-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Add #all_objects to return the objects to document.
+  This allows easy overriding if a non-standard set of code objects need to be
+  documented
+
+  * spec/docstring_spec.rb: Add spec for reftags on invalid objects
+
+  * lib/yard/code_objects/base.rb, spec/handlers/method_handler_spec.rb: Fix
+  lookups on methods and fix an invalid spec
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  lib/yard/registry.rb, spec/code_objects/method_object_spec.rb: Allow
+  MethodObject#scope to be modified after creation
+
+2009-05-03  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  lib/yard/code_objects/method_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/handlers/method_handler.rb, lib/yard/registry.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/method_object_spec.rb,
+  spec/code_objects/module_object_spec.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/method_handler_spec.rb: Add a CSEP separator for class methods
+  (Foo.meth instead of Foo::meth). 
+
+  * lib/yard/code_objects/base.rb: Parse setter methods (e.g. #foo=).
+
+2009-05-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Properly encode URLs for methods
+  with punctuation. Based on nex3's patch but modified slightly and specs
+  added.  Closes gh-4
+
+  * lib/yard/code_objects/namespace_object.rb,
+  lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/uml_generator.rb, spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb, spec/code_objects/proxy_spec.rb,
+  spec/handlers/extend_handler_spec.rb, spec/handlers/mixin_handler_spec.rb,
+  templates/default/uml/dot/dependencies.erb: Add #class_mixins and
+  #instance_mixins attributes and make #mixins return both class and instance
+  mixins by default
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Fix @return tag
+  typo
+
+2009-04-02  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Get rid of unused
+  COLON_TOKENS.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Parse hashes as
+  hashes.
+
+2009-04-03  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Properly parse
+  dangling expressions.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Major
+  refactoring.
+
+2009-04-01  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Add explanatory
+  comments about #process_new_statement.
+
+2009-03-31  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Get rid of the
+  big, scary needs-refactoring warning.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Encapsulate
+  new-statement declaration in a method.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: @stmt_number
+  doesn't need to be a number.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Get rid of a
+  bunch of debugging/leftover comments.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Factor out
+  block-statement processing.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Factor out a
+  method for processing new statements.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Flatten out
+  #process_token a little more.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Factor out a
+  bunch of methods.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Factor out
+  initial-comment processing.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Move some code to
+  a method.
+
+  * lib/yard/parser/statement_list.rb: Parser::StatementList: Convert to
+  instance vars.
+
+2009-04-02  Nathan Weizenbaum <nex342@gmail.com>
+
+  * spec/parser/statement_list_spec.rb: Add a bunch of mostly-failing tests for
+  Parser::StatementList.
+
+2009-05-14  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/generators/tags_generator.rb, lib/yard/tags/library.rb: Add a
+  @yieldreturn tag for documenting the return values of blocks.
+
+2009-05-16  Nathan Weizenbaum <nex342@gmail.com>
+
+  * templates/default/fulldoc/html/all_methods.erb: Get rid of a
+  non-XHTML-compliant standalone attribute.
+
+  * lib/yard/generators/tags_generator.rb: Allow parameters like &block and
+  *args do be documented as block and args.  Closes gh-9
+
+2009-05-14  Nathan Weizenbaum <nex342@gmail.com>
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/attributes/text/header.erb: Bring the html and text
+  templates' renderings of attributes more in line with one another.  Closes
+  gh-1
+
+2009-05-10  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/generators/helpers/html_helper.rb: Add a
+  --no-highlight option to work around issues with the Ruby highlighter.
+
+2009-05-02  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/handlers/extend_handler.rb, lib/yard/handlers/mixin_handler.rb,
+  spec/handlers/examples/extend_handler_001.rb.txt,
+  spec/handlers/extend_handler_spec.rb: Handle "extend self" properly. 
+
+2009-05-21  Loren Segal <lsegal@soen.ca>
+
+  * spec/handlers/ruby/base_spec.rb: Only load Handlers::Ruby::Base spec under
+  Ruby1.9
+
+2009-05-03  Nathan Weizenbaum <nex342@gmail.com>
+
+  * spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Fix an invalid method name
+  in alias_handler_spec.
+
+2009-05-02  Nathan Weizenbaum <nex342@gmail.com>
+
+  * templates/default/mixins/html/header.erb,
+  templates/javadoc/mixins/html/header.erb: Call "Included Singleton Class
+  Modules" "Extended Modules" instead.
+
+2009-03-30  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/generators/uml_generator.rb: Fix one last Namespace#mixins call.
+
+  * spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb,
+  spec/handlers/examples/mixin_handler_001.rb.txt,
+  spec/handlers/mixin_handler_spec.rb: Add further specs for the mixin
+  class/instance distinction.
+
+2009-03-29  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/module_object.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb: Class inheritance trees should
+  include modules included in superclasses.
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/generators/class_generator.rb,
+  lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/method_listing_generator.rb,
+  lib/yard/generators/mixins_generator.rb,
+  lib/yard/generators/module_generator.rb, lib/yard/handlers/mixin_handler.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb, spec/code_objects/proxy_spec.rb,
+  spec/handlers/mixin_handler_spec.rb,
+  templates/default/mixins/html/header.erb,
+  templates/default/uml/dot/dependencies.erb,
+  templates/javadoc/mixins/html/header.erb: Keep track of singleton-class
+  mixins separately from normal mixins.  This needs some specs. All I've done
+  so far is update existing specs so they don't break.
+
+2009-03-30  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/core_ext/symbol_hash.rb, spec/core_ext/symbol_hash_spec.rb: Make
+  SymbolHash#merge nondestructive. #update and #merge! are still destructive.
+
+2009-03-29  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/code_objects/namespace_object.rb: Fix the failing spec mentioned
+  in 0bb4363
+
+  * spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb: Add a failing spec for modules
+  not listing class methods of included modules. Also fix another that assumes
+  they are listed.  For example, with  module Foo def self.baz; end end  module
+  Bar include Foo end  Bar::baz is invalid.
+
+2009-05-02  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/autoload.rb, lib/yard/handlers/extend_handler.rb,
+  spec/handlers/examples/extend_handler_001.rb.txt,
+  spec/handlers/extend_handler_spec.rb: Add a handler for extend.
+
+2009-05-20  Loren Segal <lsegal@soen.ca>
+
+  * spec/handlers/base_spec.rb, spec/handlers/ruby/base_spec.rb,
+  spec/handlers/ruby/legacy/base_spec.rb: Add new handler specs (also tests
+  behaviour from Processor)
+
+  * lib/yard/autoload.rb, lib/yard/handlers/base.rb,
+  lib/yard/handlers/processor.rb, lib/yard/handlers/ruby/base.rb,
+  lib/yard/handlers/ruby/legacy/base.rb,
+  lib/yard/handlers/ruby/legacy/processor.rb,
+  lib/yard/handlers/ruby/processor.rb, lib/yard/parser/source_parser.rb: Remove
+  unneeded Processor subclasses and re-add Handlers::Base#handles?
+  implementation instead
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/base.rb,
+  lib/yard/handlers/ruby/processor.rb,
+  lib/yard/handlers/ruby/visibility_handler.rb: Add method_call() convenience
+  method to match an sexp denoting a method call on a specific method
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/visibility_handler.rb,
+  .../examples/visibility_handler_001.rb.txt,
+  spec/handlers/visibility_handler_spec.rb: Add new-style visibility handler
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  spec/handlers/method_handler_spec.rb: Change legacy method handler behaviour
+  to keep parameters as Strings, otherwise it would not be possible to specify
+  *splat or &block args (conveniently)
+
+  * spec/handlers/alias_handler_spec.rb,
+  spec/handlers/attribute_handler_spec.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/class_variable_handler_spec.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/exception_handler_spec.rb,
+  spec/handlers/method_handler_spec.rb, spec/handlers/mixin_handler_spec.rb,
+  spec/handlers/module_handler_spec.rb,
+  spec/handlers/visibility_handler_spec.rb,
+  spec/handlers/yield_handler_spec.rb, spec/parser/ruby/ast_node_spec.rb: Fix
+  namespace changes in remaining handler specs to at least run the specs if not
+  pass them
+
+  * lib/yard/handlers/ruby/base.rb, lib/yard/handlers/ruby/processor.rb,
+  lib/yard/parser/ruby/ast_node.rb: Add handler support for full sexp in
+  Handler::Base.handles method
+
+  * lib/yard/parser/ruby/ast_node.rb: Add code to adjust source ranges of
+  certain nodes
+
+  * spec/handlers/base_spec.rb, spec/handlers/legacy_base_spec.rb: Move legacy
+  Handlers::Base tests into new file
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  lib/yard/handlers/ruby/module_handler.rb: Add new-style Ruby class, module
+  and method handlers
+
+  * spec/parser/source_parser_spec.rb, spec/parser/statement_list_spec.rb,
+  spec/parser/token_list_spec.rb: Fix references to RubyToken in Legacy parser
+  specs
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb,
+  lib/yard/handlers/ruby/base.rb, lib/yard/parser/ruby/ast_node.rb,
+  lib/yard/parser/ruby/legacy/statement.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ast_node_spec.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb,
+  spec/parser/ruby/legacy/token_list_spec.rb: Update parser and handler code
+  for new RubyParser and handlers and add specs for AstNode
+
+  * README.markdown, lib/yard/autoload.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  lib/yard/parser/ruby/ruby_parser.rb,
+  .../default/fulldoc/html/syntax_highlight.css: Add support for syntax
+  highlighting with new RubyParser AST
+
+2009-05-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/handlers/alias_handler.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb,
+  lib/yard/handlers/exception_handler.rb, lib/yard/handlers/method_handler.rb,
+  lib/yard/handlers/mixin_handler.rb, lib/yard/handlers/module_handler.rb,
+  lib/yard/handlers/ruby/legacy/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  .../handlers/ruby/legacy/class_variable_handler.rb,
+  lib/yard/handlers/ruby/legacy/constant_handler.rb,
+  lib/yard/handlers/ruby/legacy/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/handlers/ruby/legacy/module_handler.rb,
+  .../handlers/ruby/legacy/visibility_handler.rb,
+  lib/yard/handlers/ruby/legacy/yield_handler.rb,
+  lib/yard/handlers/visibility_handler.rb, lib/yard/handlers/yield_handler.rb:
+  Move Legacy handlers into Legacy namespace
+
+  * benchmarks/ripper_parser.rb, lib/yard/autoload.rb,
+  lib/yard/code_objects/base.rb, lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/handlers/alias_handler.rb, lib/yard/handlers/attribute_handler.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb,
+  lib/yard/handlers/exception_handler.rb, lib/yard/handlers/method_handler.rb,
+  lib/yard/handlers/mixin_handler.rb, lib/yard/handlers/module_handler.rb,
+  lib/yard/handlers/processor.rb, lib/yard/handlers/ruby/base.rb,
+  lib/yard/handlers/ruby/legacy/base.rb,
+  lib/yard/handlers/ruby/legacy/processor.rb,
+  lib/yard/handlers/ruby/processor.rb, lib/yard/handlers/visibility_handler.rb,
+  lib/yard/handlers/yield_handler.rb, lib/yard/parser/ripper/parser.rb,
+  lib/yard/parser/ripper/ripper_parser.rb, lib/yard/parser/ripper/tokens.rb,
+  lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/legacy/ruby_lex.rb,
+  lib/yard/parser/ruby/legacy/statement.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/legacy/token_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/ruby_lex.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/parser/statement.rb,
+  lib/yard/parser/statement_list.rb, lib/yard/parser/token_list.rb: Move Ripper
+  parser code into SourceParser and hook up handlers. Move old parser into
+  Legacy namespace. Still need to move handlers and rewrite handlers for new
+  ripper AST
+
+2009-02-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ripper/parser.rb: Start #to_s implementation for Node
+
+2009-02-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ripper/parser.rb, lib/yard/parser/ripper/ripper_parser.rb,
+  lib/yard/parser/ripper/tokens.rb: Add initial ripper parser code
+
+2009-05-18  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/index.erb: Remove path component from
+  initially loaded readme/extra file in the index page
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/all_files.erb: Remove path components from
+  README and extra --files when displaying and linking their filenames
+
+  * templates/default/attributes/html/header.erb: Fix Ruby1.8 regression in
+  attributes template (symbols cannot be capitalized)
+
+  * templates/default/attributes/html/header.erb: Fix issue #1: Template no
+  longer shows non-writable/non-readable attributes as RW
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/all_methods.erb: Fix issue #10: Methods only
+  show up in method list if they show up in generated documentation
+
+2009-05-16  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/constants_spec.rb: Fix failing specs under Ruby1.9 due to
+  missing (removed) constants
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: YARD::Docstring: fix broken
+  #blank? implementation and failing specs
+
+  * lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb: Move inclusion of MarkupHelper
+  into HtmlHelper (fixes specs and generally makes more sense)
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Add support to for file links
+  (e.g. linking to README) in markup processing. Syntax is {file:FILENAME
+  TITLE} where TITLE is optional.
+
+  * README.markdown: Fix broken formatting in README.markdown
+
+  * lib/yard/docstring.rb: YARD::Docstring: rename #empty? to #blank?
+
+2009-05-10  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/generators/helpers/html_helper.rb: Ignore things that look like
+  links if they're within <pre> or <code>.
+
+2009-05-15  Loren Segal <lsegal@soen.ca>
+
+  * spec/generators/full_doc_generator_spec.rb: Fix broken spec in
+  YARD::Generators::FullDocGenerator
+
+  * lib/yard/autoload.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/helpers/markup_helper.rb, spec/cli/yardoc_spec.rb,
+  spec/generators/helpers/markup_helper_spec.rb: Add --markup-provider option
+  to override library used for markup formatting
+
+2009-05-14  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/parsing.rb: Fix broken in order parsing benchmark due to removed
+  PATH_ORDER constant
+
+2009-05-03  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/parser/ruby_lex.rb: Fix a Ruby lexing bug where symbol-beginning
+  colons were sometimes read as statement-delimiting colons.  For example:  def
+  foo if :/ return 12 end end 
+
+  * README.markdown: Make README Maruku-compatible. 
+
+2009-04-26  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Add a method to Docstring
+  for determining if it's empty. 
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/mixin_handler.rb: Fix some
+  minor grammar errors. 
+
+2009-05-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb: Specify MatchData in BUILTIN_CLASSES in
+  addition to MatchingData for Ruby 1.9.1 comptibility. (original author:
+  postmodern)
+
+2009-04-01  postmodern <postmodern.mod3@gmail.com>
+
+  * lib/yard/serializers/file_system_serializer.rb: Refactored serialize_path
+  to be Ruby 1.9.1 compatible. 
+
+2009-05-07  jeffrafter <jeff@baobabhealth.org>
+
+  * lib/yard/cli/yardoc.rb: Cli options for alternate template paths had a
+  typo; corrected 
+
+2009-05-03  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/full_doc_generator.rb: Remove unneeded method:
+  file_list_file
+
+  * templates/default/tags/html/example.erb: Fix bug when only one @example is
+  specified
+
+  * Rakefile, lib/yard/cli/yardoc.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/all_files.erb,
+  templates/default/fulldoc/html/file.erb,
+  templates/default/fulldoc/html/index.erb,
+  templates/default/fulldoc/html/readme.erb: Add support for --files switch to
+  specify extra static files to include in documentation
+
+2009-05-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/tags_generator.rb,
+  templates/default/tags/html/example.erb: Add template for @example tag
+
+2009-02-17  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/proxy.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/registry.rb, spec/code_objects/class_object_spec.rb,
+  spec/code_objects/proxy_spec.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Fix Registry#resolve lookup
+  on proxy namespaces
+
+2009-02-03  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard.rb: Little more accurate Ruby 1.9 checking
+
+  * LICENSE: Update copyright year
+
+2009-01-31  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/rdoc_vs_yardoc.rb: Add RDoc vs YARD benchmark
+
+  * lib/yard.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/generators/helpers/html_helper.rb, lib/yard/parser/source_parser.rb:
+  Various fixes for 1.9 compatibility
+
+  * lib/yard/code_objects/base.rb: Don't use splat on assignment (not compat
+  with 1.9)
+
+2009-01-26  Loren Segal <lsegal@soen.ca>
+
+  * README.markdown: Update copyright
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/alias_handler.rb,
+  lib/yard/handlers/base.rb, spec/code_objects/base_spec.rb: Maintain list of
+  all files/lines a code object was defined in
+
+  * lib/yard/code_objects/class_object.rb, spec/handlers/class_handler_spec.rb:
+  Fix bug when redeclaring Exception class
+
+  * Rakefile: Don't leave ruby files hanging around in the pkg directory
+
+2008-06-22  elliottcable <git@elliottcable.name>
+
+  * lib/yard/generators/full_doc_generator.rb: Added .mkdn support 
+
+2008-08-29  lsegal <lsegal@soen.ca>
+
+  * yard.gemspec: Spam protection.
+
+2008-08-26  Loren Segal <lsegal@soen.ca>
+
+  * spec/handlers/examples/class_handler_001.rb.txt,
+  spec/tags/default_factory_spec.rb: Change ArgumentError to TagFormatError and
+  silence warning about missing String class in specs
+
+  * lib/yard/generators/helpers/html_helper.rb: Limit how much text the
+  typewriter fix regex can grab, stops stackoverflow error
+
+  * lib/yard/handlers/class_handler.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Add support for class <<
+  CONST where CONST is a reference to a real class object
+
+  * lib/yard/autoload.rb, lib/yard/docstring.rb,
+  lib/yard/tags/default_factory.rb, lib/yard/tags/tag_format_error.rb: Add
+  TagFormatError to improve log warnings
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/constant_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/handlers/class_handler.rb, lib/yard/handlers/constant_handler.rb,
+  lib/yard/handlers/mixin_handler.rb,
+  spec/handlers/examples/mixin_handler_001.rb.txt,
+  spec/handlers/mixin_handler_spec.rb: Add support for mixing in constants
+  pointing to modules
+
+  * lib/yard/handlers/class_handler.rb: Verify that ClassName in 'class <<
+  ClassName' has been loaded before parsing
+
+  * lib/yard/code_objects/base.rb, lib/yard/docstring.rb: Add object reference
+  to Docstring for error reporting
+
+  * lib/yard.rb: Update yard version number to match gemspec
+
+  * lib/yard/handlers/class_handler.rb, spec/handlers/base_spec.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt,
+  spec/handlers/spec_helper.rb: Don't document class << Constant
+
+2008-07-03  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/generators/base.rb,
+  lib/yard/generators/tags_generator.rb, lib/yard/tags/default_factory.rb,
+  lib/yard/tags/library.rb, lib/yard/tags/merbdoc_factory.rb,
+  lib/yard/tags/option_tag.rb, spec/tags/default_factory_spec.rb,
+  templates/default/tags/html/option.erb,
+  templates/default/tags/html/param.erb: Change new @option tag formatting
+
+2008-08-09  Duane Johnson <duane.johnson@gmail.com>
+
+  * spec/spec_helper.rb: Added File.expand_path around spec_helper's 'require'.
+  - relative files map to the same absolute file - constants are not reloaded
+  during execution of autotest
+
+  * lib/yard/parser/ruby_lex.rb: Corrected spacing in ruby lex code
+
+  * lib/yard/parser/ruby_lex.rb: Converted tabs to spaces in ruby lex code
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Fixed regexp for fix_typewriter
+  and added unit test.
+
+2008-08-08  Duane Johnson <duane.johnson@gmail.com>
+
+  * lib/yard/generators/helpers/html_helper.rb: Fix that 'fix_typewriter'
+  regexp could go on indefinitely in the case of a string such as "+abcdef
+  abcdabcdabcdabcdabcdabcdabcdabcdabcd\n".
+
+2008-07-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Add more specs for reftags
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Add @tag (see PATH) and @tag
+  name (see PATH) reftag syntax
+
+  * lib/yard/autoload.rb, lib/yard/tags/ref_tag.rb,
+  lib/yard/tags/ref_tag_list.rb, spec/docstring_spec.rb,
+  spec/tags/ref_tag_list_spec.rb, spec/tags/ref_tag_spec.rb: Move RefTag into
+  RefTagList and add Docstring specs
+
+  * lib/yard/autoload.rb, lib/yard/docstring.rb, lib/yard/tags/ref_tag.rb,
+  spec/tags/ref_tag_spec.rb: Add RefTag object
+
+  * lib/yard/docstring.rb, lib/yard/handlers/exception_handler.rb,
+  lib/yard/handlers/yield_handler.rb: Add ref_tags attribute to docstring
+
+  * lib/yard/docstring.rb: Refactor create_tag out of parse_comments
+
+2008-06-30  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb, lib/yard/docstring.rb,
+  spec/code_objects/base_spec.rb, spec/docstring_spec.rb,
+  templates/default/attributes/html/header.erb,
+  templates/default/methodsummary/html/summary.erb,
+  templates/javadoc/methodsummary/html/summary.erb: Move .docstring and .tags
+  from CodeObject into new YARD::Docstring class
+
+  * lib/yard/parser/statement_list.rb, spec/parser/statement_list_spec.rb:
+  Block parsing bug fixes and specs based on patch by Aman Gupta
+
+2008-06-29  Aman Gupta <aman@tmm1.net>
+
+  * lib/yard/generators/uml_generator.rb,
+  templates/default/uml/dot/superclasses.erb: Fix minor parsing bugs in
+  yard-graph
+
+2008-06-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/helpers/method_helper.rb: Update format_args to use
+  object.parameters instead of object.signature parsing
+
+  * benchmarks/format_args.rb: Log results
+
+  * benchmarks/format_args.rb: Add benchmark for argument formatting
+
+  * lib/yard/generators/helpers/html_helper.rb: RedCloth and BlueCloth have to
+  be required as lowercase
+
+  * lib/yard/generators/helpers/method_helper.rb: Fix NoMethodError exception
+  when method has no @return tags
+
+2008-06-23  Duane Johnson <duane.johnson@gmail.com>
+
+  * FAQ.markdown: Added FAQ from conversation with argv
+
+2008-06-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/tags_generator.rb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/tags/html/option.erb: Add option info to template
+
+  * lib/yard/tags/default_tag.rb, spec/tags/default_tag_spec.rb: Fix typo in
+  DefaultTag with spec
+
+  * spec/tags/default_factory_spec.rb: More specs
+
+  * lib/yard/autoload.rb, lib/yard/generators/base.rb,
+  lib/yard/tags/default_factory.rb, lib/yard/tags/default_tag.rb,
+  lib/yard/tags/library.rb, spec/tags/default_factory_spec.rb: Add @option tag
+  with format @option key [Types] (default) description
+
+  * lib/yard/code_objects/base.rb: DTrace is not part of core/stdlib
+
+  * lib/yard/tags/default_factory.rb, spec/tags/default_factory_spec.rb: Allow
+  name to be specified before type list: b[String] or b<String>
+
+2008-06-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Make sure a specified readme file exists.
+
+  * README.markdown: Update formatting
+
+  * .../default/fulldoc/html/syntax_highlight.css: Fix padding in code blocks
+
+  * README, README.markdown, lib/yard/cli/yardoc.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/html_helper.rb, yard.gemspec: Fix recognition of
+  markdown in readme's, move default :readme option out of CLI into
+  FullDocGenerator and convert README to markdown.
+
+  * yard.gemspec: Make new changes part of 0.2.3 release
+
+  * lib/yard/generators/full_doc_generator.rb: Add support for multiple
+  markdown file extension types.
+
+  * lib/yard/code_objects/base.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt,
+  spec/handlers/examples/module_handler_001.rb.txt,
+  spec/handlers/module_handler_spec.rb: Fix parsing/handling of ::Modname or
+  ::ClassName
+
+2008-06-20  Leonid Borisenko <leo.borisenko@gmail.com>
+
+  * spec/code_objects/proxy_spec.rb: Refine spec of Proxy#respond_to?
+
+  * lib/yard/generators/full_doc_generator.rb,
+  spec/generators/full_doc_generator_spec.rb: Fix checking for existence of
+  'readme' file
+
+2008-06-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/method_object.rb, lib/yard/core_ext/string.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/method_handler.rb,
+  spec/core_ext/string_spec.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb, templates/default/tags/html/tags.erb:
+  Add method parameter retrieval from signature with default value info
+
+  * spec/tags/default_factory_spec.rb: Add spec for => behaviour
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  templates/default/fulldoc/html/readme.erb,
+  templates/default/tags/html/tags.erb: Various fixes for type formatting and
+  readme markup
+
+  * spec/tags/default_factory_spec.rb: Add specs for parse_types
+
+  * lib/yard/tags/default_factory.rb: Hook in support for tag parsing
+
+  * lib/yard/tags/default_factory.rb: Add parse_types, currently unused by code
+
+  * lib/yard/tags/library.rb: Add raw title / text for todo items
+
+2008-06-19  Leonid Borisenko <leo.borisenko@gmail.com>
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb: Add
+  handling of second parameter in Proxy#respond_to? (like in
+  Object#respond_to?)
+
+2008-06-17  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/generators/base.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/html_helper.rb: Add support for different markup
+  styles via --markup as well as #!shebang line for readme file
+
+  * lib/yard/cli/yardoc.rb: Change -d to -o
+
+  * README: Revert <tt></tt> back to new improved ++ syntax
+
+  * lib/yard/generators/helpers/html_helper.rb: Fix {} support for urls
+
+  * lib/yard/generators/helpers/html_helper.rb: Add better support for ++
+  formatting in RDoc. (Don't stop at non-alpha char)
+
+  * lib/yard/generators/helpers/html_helper.rb: Add link_url for {} syntax
+
+  * lib/yard/generators/base.rb: Remove empty method
+
+  * lib/yard/generators/base.rb: Show filename in erb eval'ing for backtraces
+
+  * README: More minor formatting
+
+  * README: Minor formatting changes in README
+
+2008-06-16  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/docstring/text/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/methodsummary/text/summary.erb,
+  templates/default/quickdoc/text/header.erb: Minor yri formatting issues
+
+  * bin/yri: No more PATH_ORDER
+
+  * README: Remove newline
+
+  * README: Various editing changes for RDco formatting compatibility
+
+  * README: Remove newline
+
+  * help.pdf, yard.gemspec: Remove pdf help, add Rakefile to gem package
+
+  * README, README.rdoc: Github doesnt care about .rdoc ext
+
+  * README: Delete readme
+
+  * README.rdoc, Rakefile, lib/yard/cli/yard_graph.rb,
+  lib/yard/rake/yardoc_task.rb, yard.gemspec: Make documentation changes in
+  preparation for gem
+
+  * quarantine/code_object.rb, quarantine/formatter.rb,
+  quarantine/handlers/all_handlers.rb,
+  quarantine/handlers/attribute_handler.rb,
+  quarantine/handlers/class_handler.rb,
+  quarantine/handlers/class_variable_handler.rb,
+  quarantine/handlers/code_object_handler.rb,
+  quarantine/handlers/constant_handler.rb,
+  quarantine/handlers/exception_handler.rb,
+  quarantine/handlers/method_handler.rb, quarantine/handlers/mixin_handler.rb,
+  quarantine/handlers/module_handler.rb,
+  quarantine/handlers/visibility_handler.rb,
+  quarantine/handlers/yield_handler.rb, quarantine/logger.rb,
+  quarantine/namespace.rb, quarantine/quick_doc.rb,
+  quarantine/source_parser.rb, quarantine/templates/html/_fulldoc.erb,
+  quarantine/templates/html/class.erb, quarantine/templates/html/method.erb,
+  quarantine/templates/html/module.erb: Remove quarantine
+
+  * lib/yard/handlers/mixin_handler.rb: mixins should be added as proxies
+
+  * templates/javadoc/attributes/html/header.erb,
+  templates/javadoc/class/html/header.erb,
+  templates/javadoc/constants/html/constants.erb,
+  templates/javadoc/constants/html/header.erb,
+  templates/javadoc/constants/html/included.erb,
+  templates/javadoc/constants/html/inherited.erb,
+  templates/javadoc/constructor/html/header.erb,
+  templates/javadoc/docstring/html/main.erb,
+  templates/javadoc/fulldoc/html/all_methods.erb,
+  templates/javadoc/fulldoc/html/all_namespaces.erb,
+  templates/javadoc/fulldoc/html/app.js,
+  templates/javadoc/fulldoc/html/header.erb,
+  templates/javadoc/fulldoc/html/html_head.erb,
+  templates/javadoc/fulldoc/html/index.erb,
+  templates/javadoc/fulldoc/html/jquery.js,
+  templates/javadoc/fulldoc/html/readme.erb,
+  templates/javadoc/fulldoc/html/style.css,
+  .../javadoc/fulldoc/html/syntax_highlight.css,
+  templates/javadoc/inheritance/html/header.erb,
+  templates/javadoc/method/html/aliases.erb,
+  templates/javadoc/method/html/header.erb,
+  templates/javadoc/method/html/title.erb,
+  templates/javadoc/methoddetails/html/header.erb,
+  templates/javadoc/methodmissing/html/header.erb,
+  templates/javadoc/methodsignature/html/main.erb,
+  templates/javadoc/methodsummary/html/header.erb,
+  templates/javadoc/methodsummary/html/included.erb,
+  templates/javadoc/methodsummary/html/inherited.erb,
+  templates/javadoc/methodsummary/html/summary.erb,
+  templates/javadoc/mixins/html/header.erb,
+  templates/javadoc/module/html/header.erb,
+  templates/javadoc/source/html/main.erb,
+  templates/javadoc/tags/html/header.erb, templates/javadoc/tags/html/see.erb,
+  templates/javadoc/tags/html/tags.erb,
+  templates/javadoc/visibilitygroup/html/header.erb: Add javadoc template
+
+2008-06-15  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile, bin/view_generator, lib/yard/autoload.rb: Remove LOAD_PATH load
+  order const
+
+2008-06-13  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/erb_vs_erubis.rb: Bench tiny and fast erubis as well
+
+  * LICENSE, LICENSE.txt, README, README.txt, benchmarks/builtins_vs_eval.rb,
+  benchmarks/erb_vs_erubis.rb, benchmarks/generation.rb, benchmarks/parsing.rb,
+  simple_benches/builtins_vs_eval.rb, simple_benches/erb_vs_erubis.rb,
+  simple_benches/generation.rb, simple_benches/parsing.rb, yard.gemspec: Clean
+  up path names
+
+  * lib/yard/generators/base.rb, lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/full_doc_generator.rb, simple_benches/erb_vs_erubis.rb,
+  simple_benches/generation.rb, templates/default/attributes/html/header.erb,
+  templates/default/attributes/text/header.erb,
+  templates/default/constants/html/constants.erb,
+  templates/default/constants/html/included.erb,
+  templates/default/constants/html/inherited.erb,
+  templates/default/constructor/html/header.erb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/inheritance/html/header.erb,
+  templates/default/inheritance/text/header.erb,
+  templates/default/method/html/aliases.erb,
+  templates/default/methoddetails/html/header.erb,
+  templates/default/methodmissing/html/header.erb,
+  templates/default/methodsummary/html/header.erb,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb,
+  templates/default/methodsummary/html/summary.erb,
+  templates/default/methodsummary/text/summary.erb,
+  templates/default/quickdoc/html/header.erb,
+  templates/default/quickdoc/text/header.erb,
+  templates/default/tags/html/see.erb, templates/default/tags/html/tags.erb,
+  templates/default/tags/text/see.erb, templates/default/tags/text/tags.erb,
+  templates/default/uml/dot/dependencies.erb,
+  templates/default/uml/dot/info.erb, templates/default/uml/dot/subgraph.erb,
+  templates/default/uml/dot/superclasses.erb,
+  templates/default/visibilitygroup/html/header.erb, yard.gemspec: Revert back
+  to ERB.
+
+2008-06-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/proxy.rb, simple_benches/generation.rb: Optimization:
+  Lock down proxies to object when they resolve. Benchmarks show 20% speed
+  gain.
+
+  * lib/yard/registry.rb: Update proxy types in registry, don't replace
+
+  * simple_benches/parsing.rb: Update details
+
+  * lib/yard/tags/library.rb: Switch back to class_eval (faster)
+
+  * simple_benches/parsing.rb: Log results from load_order changes
+
+  * lib/yard/handlers/base.rb: Remove debugging message
+
+  * lib/yard/handlers/base.rb, lib/yard/parser/source_parser.rb: Fix load order
+  handling
+
+  * lib/yard/code_objects/class_object.rb: Force superclasses to be proxies
+
+  * spec/code_objects/proxy_spec.rb, spec/handlers/method_handler_spec.rb: Add
+  specs for proxy behaviour
+
+  * lib/yard/code_objects/proxy.rb: Improve Proxy behaviour
+
+  * lib/yard/logging.rb: Default logging level should be current level
+
+  * lib/yard.rb, lib/yard/autoload.rb: Move YARD::ROOT to 'lib' not 'lib/yard'
+
+  * lib/yard/registry.rb: Refactor #load into #load and #load_yardoc
+
+2008-06-06  Loren Segal <lsegal@soen.ca>
+
+  * simple_benches/parsing.rb: Add parsing benchmark
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/handlers/base.rb,
+  spec/handlers/spec_helper.rb: Fix load_order! raising bug
+
+  * lib/yard/handlers/base.rb, lib/yard/parser/source_parser.rb: Merge master
+  with load_order
+
+  * lib/yard/code_objects/base.rb: Add BUILTIN_EXCEPTIONS_HASH
+
+  * simple_benches/builtins_vs_eval.rb: Add some benchmarks
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/handlers/class_handler.rb:
+  Fix superclass handling in class object
+
+  * lib/yard/handlers/class_handler.rb, lib/yard/handlers/exception_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Add support for multiple superclass
+  notations (DelegateClass(...), Struct.new(..), R /regex/) and support for
+  ExceptionClass.new() style exception raising
+
+  * lib/yard/handlers/base.rb: Move methods to protected visibility
+
+  * lib/yard.rb, lib/yard/parser/source_parser.rb: Move YARD.parse into
+  source_parser.rb
+
+  * lib/yard/logging.rb: Update log to default to info log level
+
+  * bin/view_generator, lib/yard/core_ext/logger.rb, lib/yard/logging.rb: Move
+  logger
+
+  * lib/yard/code_objects/class_object.rb: Update class object to use builtins
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  spec/code_objects/constants_spec.rb: Add BUILTIN_* constants and autoload
+  constant names in CodeObjects
+
+  * lib/yard/parser/ruby_lex.rb: Try to gracefully parse bad content
+
+  * lib/yard/code_objects/proxy.rb: Alias to_s to path in Proxy
+
+  * lib/yard/generators/helpers/method_helper.rb: Handle missing signature
+
+2008-06-05  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Add support for different yardoc files
+
+  * lib/yard/parser/ruby_lex.rb: Do not error out on invalid string, just eat
+  it up
+
+  * lib/yard/generators/source_generator.rb,
+  templates/default/source/text/main.erb: Fix format_code for text views
+
+  * lib/yard/handlers/method_handler.rb: Improve error handling / message for
+  invalid methods
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/handlers/class_handler.rb:
+  Better handling of superclass
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/parser/ruby_lex.rb, spec/code_objects/class_object_spec.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Various class fixes with
+  superclass handling and exception class checking
+
+  * spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: More method name specs
+
+  * lib/yard/handlers/alias_handler.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Fix handling of aliases with
+  non identifier method names
+
+  * lib/yard/parser/statement_list.rb: Typo
+
+  * lib/yard/parser/ruby_lex.rb, lib/yard/parser/statement_list.rb: Remove
+  RDCOMMENT token
+
+  * lib/yard/handlers/alias_handler.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Support use of identifiers
+  in 'alias'
+
+  * lib/yard/parser/statement_list.rb: Fix invalid handling of a comment line
+  with a comment inside it
+
+  * lib/yard/generators/base.rb: template paths should be class variable
+  otherwise each generator would forget the paths
+
+  * .../default/fulldoc/html/syntax_highlight.css: Fix scrollbar issue in
+  safari
+
+  * lib/yard/cli/yardoc.rb: Fix typo
+
+  * lib/yard/rake/yardoc_task.rb: Remove default files from rake task because
+  they're specified in the CLI
+
+  * lib/yard/cli/yardoc.rb: Add template path, load file options for yardoc cli
+  and default file loading to lib/**/*.rb
+
+  * lib/yard/parser/statement_list.rb, spec/code_objects/base_spec.rb: Fix
+  parsing bug that added extra newlines to deep blocks
+
+  * .../default/fulldoc/html/syntax_highlight.css,
+  templates/default/source/html/main.erb: More source highlighting changes
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  templates/default/fulldoc/html/style.css,
+  .../default/fulldoc/html/syntax_highlight.css,
+  templates/default/source/html/main.erb: Update code stylesheets and add
+  styling for <pre> tags in docstrings
+
+  * lib/yard/generators/full_doc_generator.rb: Remove dup definition
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/base_helper.rb,
+  spec/code_objects/class_object_spec.rb,
+  templates/default/class/html/header.erb,
+  templates/default/fulldoc/html/header.erb: Add #is_exception? to denote if
+  class derives from an exception class and show this in the page title of
+  generated docs
+
+  * lib/yard/handlers/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Adjust regex for matching the class
+  name of a raised exception
+
+  * lib/yard/handlers/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Fix handling of complex namespaces
+  in exception handler
+
+  * lib/yard/generators/tags_generator.rb: @raise tag should list type in
+  generated output
+
+  * lib/yard/handlers/mixin_handler.rb,
+  lib/yard/handlers/visibility_handler.rb, lib/yard/handlers/yield_handler.rb:
+  Better support for various handlers
+
+  * lib/yard/handlers/alias_handler.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Add 'alias' keyword support
+  for alias handler
+
+  * lib/yard/autoload.rb, lib/yard/handlers/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Add exception handler
+
+  * lib/yard/parser/ruby_lex.rb, lib/yard/parser/statement_list.rb: Fix bug in
+  RubyLex that incorrectly identifies the COLON token
+
+  * lib/yard/tags/library.rb: @raise tag should take [types] instead of name
+
+  * spec/handlers/base_spec.rb: Don't use the docspec method for now (it's
+  slow)
+
+  * lib/yard/handlers/alias_handler.rb, lib/yard/handlers/attribute_handler.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/method_handler.rb, lib/yard/handlers/module_handler.rb,
+  lib/yard/handlers/visibility_handler.rb: Update handlers to use explicit
+  #register and add Yield handler
+
+  * lib/yard/code_objects/base.rb: Docstring should be reset during
+  parse_comments
+
+  * lib/yard/parser/source_parser.rb: Don't store results from process
+
+  * spec/parser/source_parser_spec.rb: Remove debugging message in spec
+
+  * Rakefile, lib/yard/logging.rb: Allow proper debugging if
+
+  * lib/yard/logging.rb: Debug logging on if $DEBUG
+
+2008-06-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb, lib/yard/handlers/method_handler.rb,
+  lib/yard/handlers/module_handler.rb, lib/yard/handlers/yield_handler.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/tags/tag.rb,
+  spec/handlers/examples/yield_handler_001.rb.txt,
+  spec/handlers/yield_handler_spec.rb: Various changes needed to add yield
+  handler
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb: Handle certain
+  keyword values
+
+  * lib/yard/tags/library.rb: Refactor factory methods and add @default tag
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb: Fix handling of
+  ending parenthesis
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb: Handle tokens
+  beginning with []
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb: Fix parsing of
+  list_tokval with parentheses
+
+  * spec/handlers/base_spec.rb: Make sure TkId will ignore anything but an
+  exact Id match
+
+  * lib/yard/tags/library.rb: Add TODO tag
+
+  * templates/default/constants/html/included.erb,
+  templates/default/constants/html/inherited.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb: Minor table styling
+  changes
+
+  * templates/default/attributes/html/header.erb: Fix invalid ending tag
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/html_head.erb,
+  .../default/fulldoc/html/syntax_highlight.css: Update syntax highlighting
+
+  * lib/yard/parser/ruby_lex.rb: Create Whitespace token type for grouping
+
+  * spec/handlers/base_spec.rb, spec/parser/source_parser_spec.rb,
+  spec/parser/tag_parsing_spec.rb: Update specs
+
+  * templates/default/source/html/main.erb,
+  templates/default/source/text/main.erb: Update source code templates
+
+  * lib/yard/handlers/alias_handler.rb, lib/yard/handlers/attribute_handler.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/visibility_handler.rb: Use new
+  tokval in list handling
+
+  * lib/yard/generators/base.rb, lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/source_generator.rb: Add syntax highlighting for source
+  code
+
+  * lib/yard/code_objects/base.rb: Fix bug where raw_text was ignoring
+  duplicating description text in title line
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb: Add #tokval and
+  #tokval_list for better list parsing in handlers
+
+  * spec/spec_helper.rb: Add some @tag based rspec helpers to test code in
+  documentation
+
+  * lib/yard.rb, lib/yard/core_ext/file.rb, lib/yard/core_ext/module.rb,
+  lib/yard/core_ext/string.rb, lib/yard/core_ext/symbol_hash.rb,
+  lib/yard/extra.rb, lib/yard/symbol_hash.rb, spec/core_ext/file_spec.rb,
+  spec/core_ext/string_spec.rb, spec/core_ext/symbol_hash_spec.rb,
+  spec/extra/file_spec.rb, spec/extra/symbol_hash_spec.rb: Move extra into
+  core_ext and add module/string override methods
+
+  * lib/yard/parser/token_list.rb: Use sym ending's lex state for symbol token
+
+  * lib/yard/parser/source_parser.rb: log an error for stacktrace (because it
+  doesn't show up in logs with warn?)
+
+  * lib/yard/parser/ruby_lex.rb, lib/yard/parser/statement_list.rb: Remove
+  unneeded TkfLBRACE/TkfLBRACKET/TkfLPAREN
+
+  * lib/yard/tags/default_factory.rb, lib/yard/tags/library.rb: Add raw_text
+  factory parser methods
+
+  * lib/yard/code_objects/base.rb: Fix tag handling and parsing of raw text
+
+2008-06-03  Loren Segal <lsegal@soen.ca>
+
+  * spec/parser/token_list_spec.rb: Update token list spec
+
+  * spec/parser/source_parser_spec.rb: Hack no longer used
+
+  * spec/parser/token_list_spec.rb: Make sure string data is not parsed out
+
+  * lib/yard/parser/ruby_lex.rb, lib/yard/parser/token_list.rb,
+  spec/parser/token_list_spec.rb: Fix #parse_content bug
+
+  * lib/yard/parser/statement.rb, lib/yard/parser/statement_list.rb,
+  lib/yard/parser/token_list.rb: Move parsing of tokens into tokenlist class
+
+2008-06-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/class_handler.rb: Don't need //m
+
+  * templates/default/fulldoc/html/app.js: Change index frame title to main
+  page frame's title. Doesn't work in FF2
+
+  * lib/yard/code_objects/base.rb, lib/yard/parser/statement_list.rb,
+  spec/code_objects/base_spec.rb: Fix formatting of source lines
+
+  * lib/yard/generators/base.rb, templates/default/fulldoc/html/app.js,
+  templates/default/fulldoc/html/style.css,
+  templates/default/source/html/main.erb: Add source code view toggling
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/fulldoc/html/app.js,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/fulldoc/html/html_head.erb,
+  templates/default/fulldoc/html/jquery.js,
+  templates/default/fulldoc/html/readme.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/source/html/main.erb,
+  templates/default/visibilitygroup/html/header.erb: Update stylesheet, add JS
+  assets and change doctypes
+
+  * lib/yard/generators/method_listing_generator.rb: Always remove explicit
+  attrs from included/inherited class method lists
+
+  * lib/yard/handlers/class_handler.rb: Fix typo in name
+
+  * lib/yard/handlers/class_handler.rb: Fix whitespace matching issue, clean up
+  error message.
+
+  * lib/yard/handlers/class_handler.rb: Fix whitespace issue
+
+  * lib/yard/handlers/class_handler.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/spec_helper.rb: Add class even if superclass is undocumentable
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Improve specs for special methods
+
+  * lib/yard/parser/statement_list.rb: Add RDoc comment support and improve def
+  handling
+
+  * lib/yard/parser/statement_list.rb: Better def x; end handling
+
+  * lib/yard/code_objects/base.rb: Add method names
+
+  * lib/yard/handlers/mixin_handler.rb,
+  spec/handlers/examples/mixin_handler_001.rb.txt,
+  spec/handlers/mixin_handler_spec.rb: Fix handling of mixins with complex
+  statements
+
+  * templates/default/class/html/header.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/module/html/header.erb,
+  templates/default/visibilitygroup/html/header.erb: Update templates to show
+  better class inheritance
+
+  * templates/default/fulldoc/html/style.css: Make header sizes smaller
+
+  * lib/yard/generators/method_listing_generator.rb: has_*_methods should use
+  same method call that the templates use
+
+  * templates/default/uml/dot/dependencies.erb,
+  templates/default/uml/dot/superclasses.erb: Allow any non namespace object to
+  be listed as a node
+
+  * spec/code_objects/class_object_spec.rb, spec/code_objects/proxy_spec.rb:
+  Beef up specs for Object superclass handling
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/code_objects/proxy.rb:
+  Don't set Object's superclass to itself
+
+  * lib/yard/registry.rb, spec/code_objects/proxy_spec.rb: Move
+  Registry::resolve to instance scope
+
+  * spec/code_objects/proxy_spec.rb: Add specs for #respond_to? in proxy
+
+  * lib/yard/code_objects/proxy.rb: Respond to respond_to?
+
+  * lib/yard/cli/yard_graph.rb, lib/yard/generators/uml_generator.rb:
+  --empty-nodes switch no longer used (the behaviour is required).
+
+  * templates/default/fulldoc/html/readme.erb,
+  templates/default/fulldoc/html/style.css: Add styling for README page
+
+  * templates/default/uml/dot/dependencies.erb,
+  templates/default/uml/dot/superclasses.erb: Update graphviz templates to link
+  up any missing paths
+
+  * lib/yard/logging.rb: Log to stderr!
+
+  * README.txt: Use RDoc formatting in README
+
+2008-06-01  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/style.css,
+  templates/default/methodsummary/html/summary.erb: Update summary styling
+
+  * templates/default/methodsummary/html/summary.erb: Correct template typo
+
+  * lib/yard/generators/helpers/method_helper.rb,
+  templates/default/methodsummary/html/summary.erb: Remove format_method_name
+  in favour of o.name(true)
+
+  * templates/default/methodsummary/html/summary.erb: Show aliases on next line
+
+  * templates/default/attributes/html/header.erb: Don't anchor link the
+  attribute if it isn't explicitly defined (a detailed method description will
+  follow)
+
+  * lib/yard/generators/attributes_generator.rb,
+  templates/default/attributes/text/header.erb: Update attributes generator to
+  use uml in text mode
+
+  * templates/default/attributes/text/header.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/methodsummary/text/summary.erb: Update text templates to
+  use format_args instead of old format_def
+
+  * templates/default/uml/dot/info.erb: Update graphviz templates to use proper
+  UML2 notation
+
+  * lib/yard/generators/helpers/method_helper.rb: Move methods to public
+  visibility and use new prefix-name methodobject helper
+
+  * lib/yard/autoload.rb, lib/yard/generators/helpers/uml_helper.rb,
+  lib/yard/generators/uml_generator.rb: Add UMLHelper for certain class
+  notation items (visibility marker)
+
+  * lib/yard/cli/yard_graph.rb: Add visibility selection options to YardGraph
+  CLI
+
+  * lib/yard/code_objects/method_object.rb: Add name method to show # prefix on
+  instance methods
+
+  * templates/default/fulldoc/html/style.css: Update stylesheet
+
+  * lib/yard/generators/method_listing_generator.rb,
+  templates/default/methodsummary/html/summary.erb: Method summary layout
+  should be table based
+
+  * lib/yard/generators/attributes_generator.rb,
+  templates/default/attributes/html/header.erb: Move to table layout for
+  attributes
+
+  * spec/code_objects/base_spec.rb: Add even more short_docstring tests
+
+  * spec/code_objects/base_spec.rb: Add more short_docstring specs
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Correct
+  short_docstring bug
+
+  * lib/yard/code_objects/method_object.rb,
+  lib/yard/handlers/method_handler.rb, spec/handlers/attribute_handler_spec.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add #explicit and #is_explicit? methods
+  to document if an object has been explicitly overridden by an implicit
+  definition (attr_accessor :x followed by def x; end is an attribute but is
+  explicitly defined)
+
+  * spec/code_objects/base_spec.rb: Add specs for short_docstring
+
+  * lib/yard/code_objects/base.rb: Add short_docstring to show first
+  line/paragraph of docstring
+
+  * lib/yard/code_objects/root_object.rb: Add inspect for root object to not
+  show path (since it's empty)
+
+  * lib/yard/generators/base.rb, lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/fulldoc/html/index.erb,
+  templates/default/fulldoc/html/readme.erb,
+  templates/default/fulldoc/html/style.css: Change index to frameset version
+
+  * lib/yard/cli/yard_graph.rb, lib/yard/cli/yardoc.rb: Add readme option to
+  yardoc CLI and --verbose and --quiet to both CLI's
+
+  * lib/yard/generators/full_doc_generator.rb,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/fulldoc/html/index.erb,
+  templates/default/fulldoc/html/style.css: Attempt index
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  templates/default/constants/html/included.erb,
+  templates/default/constants/html/inherited.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb: Update templates #2
+
+  * lib/yard/generators/method_generator.rb,
+  templates/default/class/html/header.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/method/html/aliases.erb,
+  templates/default/method/html/title.erb,
+  .../default/methoddetails/html/method_header.erb,
+  templates/default/module/html/header.erb,
+  templates/default/source/html/main.erb: Update templates, stylesheets
+
+  * lib/yard/handlers/module_handler.rb: Parse modules using NAMESPACEMATCH
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb, lib/yard/handlers/mixin_handler.rb:
+  Streamline matching of classes/modules
+
+  * lib/yard/cli/yardoc.rb, lib/yard/code_objects/base.rb,
+  lib/yard/handlers/method_handler.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb,
+  spec/serializers/file_system_serializer_spec.rb: Streamline handling of
+  special method characters
+
+  * lib/yard/generators/helpers/method_helper.rb,
+  lib/yard/generators/method_listing_generator.rb,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsummary/html/summary.erb: Update method signature
+  templates
+
+  * lib/yard/autoload.rb: Move comments so it isn't confused as a docstring
+
+2008-05-31  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Fix visibility options being treated backwards
+  (--no-public shows public)
+
+  * bin/yard-graph, lib/yard/autoload.rb, lib/yard/generators/uml_generator.rb,
+  templates/default/uml/dot/child.erb,
+  templates/default/uml/dot/dependencies.erb,
+  templates/default/uml/dot/header.erb, templates/default/uml/dot/info.erb,
+  templates/default/uml/dot/subgraph.erb,
+  templates/default/uml/dot/superclasses.erb,
+  templates/default/uml/dot/unknown.erb,
+  templates/default/uml/dot/unknown_child.erb: Add GraphViz generator,
+  YardGraph CLI and update ./bin/yard-graph to use it
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/registry.rb: Update Proxy object to treat ::Proxyname as root
+  namespace
+
+  * lib/yard/cli/yard_graph.rb: Remove unneeded instance variables
+
+  * lib/yard/cli/yard_graph.rb: Typo in CLI
+
+  * lib/yard/cli/yard_graph.rb: Add YardGraph client interface
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Allow fs serializer to have
+  no file extension
+
+  * lib/yard/rake/yardoc_task.rb: Sensible default glob of files to parse
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/method_handler.rb: Remove some
+  things that Handler::Base#register does because it potentially disables
+  handlers from doing their job
+
+2008-05-30  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/mixin_handler.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/mixin_handler_spec.rb: Set #type on proxies when it is known
+  they are a class (superclass) or a module (mixin)
+
+  * lib/yard/code_objects/proxy.rb: Symbolize type
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb: Persist
+  proxy type changes between proxy instances of same object
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb: Allow type
+  to be set on a proxy object
+
+  * lib/yard/code_objects/class_object.rb: P(:Object) is P("::Object")
+
+  * lib/yard/handlers/class_handler.rb: Only set superclass when there is one.
+
+  * lib/yard/handlers/method_handler.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb,
+  spec/serializers/file_system_serializer_spec.rb: Add backtick as valid method
+  character
+
+  * lib/yard/generators/base.rb: Don't need to re-extend at each section as it
+  has no effect.
+
+  * lib/yard/cli/yardoc.rb: Add --no-output switch to bypass output generation
+
+  * lib/yard/rake/yardoc_task.rb: Allow comma delimitation in OPTS and space
+  delimitation in FILES
+
+  * lib/yard/rake/yardoc_task.rb: Allow command line parameters to extend rake
+  task
+
+  * lib/yard/generators/quick_doc_generator.rb,
+  templates/default/quickdoc/text/header.erb,
+  templates/default/tags/text/params.erb,
+  templates/default/tags/text/returns.erb: Update QuickDocGenerator to show
+  method and attribute list at bottom
+
+  * templates/default/methodsummary/text/header.erb,
+  templates/default/methodsummary/text/summary.erb: Update method summary
+  templates and add text version
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/attributes/text/header.erb: Update Attributes templates
+
+  * lib/yard/handlers/base.rb: Fix nil bug
+
+  * lib/yard/generators/tags_generator.rb,
+  templates/default/tags/text/header.erb, templates/default/tags/text/see.erb,
+  templates/default/tags/text/tags.erb: Update TagsGenerator templates
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/handlers/attribute_handler_spec.rb: Fix is_attribute for methods ending
+  in =
+
+  * lib/yard/handlers/base.rb: Always overwrite file/source line and docstring
+  to last parsed data (since ruby overwrites this in the same manner)
+
+  * lib/yard/generators/method_listing_generator.rb: Use objects scope to test
+  if should be ignored, not generator scope
+
+  * Rakefile, lib/yard/autoload.rb, lib/yard/rake/yardoc_task.rb: Add
+  YardocTask Rake task
+
+  * lib/yard/cli/yardoc.rb: Use cache if no files are specified
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/handlers/attribute_handler_spec.rb: Add is_attribute? method
+
+  * bin/yardoc, lib/yard/autoload.rb, lib/yard/cli/yardoc.rb: Add CLI module
+  for Yardoc CLI frontend. Add option parsing for various switches
+
+2008-05-29  Loren Segal <lsegal@soen.ca>
+
+  * bin/view_generator: Show debugging info for view_generator binary
+
+  * bin/yardoc: Update yardoc binary to generate docs using FullDocGenerator
+
+  * bin/yri, lib/yard/generators/quick_doc_generator.rb: Update yri binary to
+  use QuickDocGenerator
+
+  * lib/yard/generators/helpers/base_helper.rb: Add formatting helpers from
+  HtmlHelper
+
+  * lib/yard/autoload.rb, lib/yard/serializers/process_serializer.rb: Add
+  ProcessSerializer to open a pipe to a commandline and write outputs there
+  (like 'less')
+
+  * lib/yard/registry.rb: Update Registry.load method to take in a list of
+  files to parse
+
+  * lib/yard/generators/base.rb: Fix typo in variable name
+
+  * templates/default/methodsummary/text/header.erb,
+  templates/default/methodsummary/text/summary.erb,
+  templates/default/quickdoc/text/header.erb: Add text versions of various
+  templates for quickdoc
+
+  * bin/view_generator: Update file list to correct load order issues.
+
+  * lib/yard.rb: Make sure the file list has no redundant files.
+
+  * bin/view_generator, lib/yard/generators/base.rb: Pass generator object to
+  verifier and show example of verifier in action
+
+  * templates/default/fulldoc/html/style.css: Update fulldoc stylesheet to hide
+  some unnecessary information
+
+  * templates/default/tags/html/see.erb: Update @see links to use title as
+  described in docs
+
+  * lib/yard/generators/helpers/html_helper.rb: Wrap type list inside <tt>'s
+
+  * lib/yard/tags/tag.rb: Update yardoc formatting
+
+  * lib/yard/autoload.rb, lib/yard/generators/class_generator.rb,
+  lib/yard/generators/method_missing_generator.rb,
+  templates/default/methodmissing/html/header.erb: Add MethodMissingGenerator
+
+  * templates/default/methodsignature/html/main.erb: Fix class name typo
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/helpers/method_helper.rb,
+  lib/yard/generators/tags_generator.rb, lib/yard/handlers/base.rb,
+  templates/default/tags/html/tags.erb: Merge format_return_types and
+  format_tag_types into one method and fix parsing of <>
+
+  * lib/yard/handlers/base.rb: Update rdoc formatting
+
+  * lib/yard/handlers/alias_handler.rb: Be a little more lenient about
+  alias_method handling
+
+  * lib/yard/handlers/alias_handler.rb, lib/yard/handlers/attribute_handler.rb,
+  lib/yard/handlers/base.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb, lib/yard/handlers/method_handler.rb,
+  lib/yard/handlers/module_handler.rb, lib/yard/handlers/visibility_handler.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/parser/statement_list.rb: Add
+  #register method and update handlers to use the method to add simple
+  attributes and simplify handler processing
+
+  * lib/yard/handlers/base.rb: Lots of docs for Handlers::Base
+
+  * lib/yard/handlers/alias_handler.rb: Only handle the alias if it has 2 valid
+  parameters
+
+  * spec/handlers/spec_helper.rb: Mock the parser
+
+  * spec/handlers/alias_handler_spec.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/spec_helper.rb: Add undoc_error helper and alias specs
+  (failing)
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/code_objects/proxy.rb:
+  Turning P() into Proxy.new seems to be bad Karma in certain cases. Seems
+  Proxy has some underlying issues. Take care of these later.
+
+  * lib/yard/generators/helpers/html_helper.rb: Tweak resolve_links to only
+  match {object} links if they're surrounded by spaces (or ended with
+  punctuation).
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb: Try
+  not to use P() inside code_objects/ because it attempts to hard-link to an
+  object. We generally don't want to do during code generation this because it
+  will make documentation more order-dependent (an object will resolve to the
+  closest namespace match regardless if a better one is parsed later down the
+  line).
+
+  * lib/yard/generators/helpers/html_helper.rb: Update resolve_links to ignore
+  { } inside code blocks. Will need improving when rdoc formatting changes.
+  Should probably write specs for this.
+
+  * lib/yard/handlers/class_handler.rb, spec/handlers/class_handler_spec.rb:
+  Add first of many parsability/robustness specs for handlers
+
+  * lib/yard/handlers/alias_handler.rb,
+  lib/yard/handlers/visibility_handler.rb: Update alias/visibility handlers
+
+  * spec/handlers/base_spec.rb: Update handler specs
+
+  * spec/handlers/base_spec.rb: Stub handler tests instead of actually
+  registering classes
+
+  * lib/yard/handlers/base.rb: Raise an error if process is not defined in the
+  class
+
+  * lib/yard/handlers/alias_handler.rb,
+  lib/yard/handlers/visibility_handler.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt,
+  .../examples/visibility_handler_001.rb.txt,
+  spec/handlers/visibility_handler_spec.rb: Fix parsing routine for visibility
+  and alias handlers
+
+  * lib/yard/code_objects/base.rb: Only allow meta tags from the beginning of
+  the line (to avoid confusion with @instance_variables)
+
+  * lib/yard/handlers/attribute_handler.rb: raise UndocumentableError instead
+  of logging it manually
+
+  * lib/yard/handlers/constant_handler.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/examples/constant_handler_001.rb.txt: Don't make regular
+  variable assignment into constants.
+
+2008-05-28  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/helpers/html_helper.rb: Make sure relative link starts
+  from a namespace object
+
+  * spec/extra/file_spec.rb: More File.relative_path specs
+
+  * lib/yard/extra.rb: Update relative_path and add documentation
+
+  * lib/yard/generators/helpers/html_helper.rb: Use title when resolving
+  "{object}" links
+
+  * lib/yard/code_objects/method_object.rb, lib/yard/registry.rb,
+  spec/code_objects/base_spec.rb, spec/code_objects/method_object_spec.rb,
+  spec/code_objects/proxy_spec.rb, spec/registry_spec.rb: Fix registry
+  resolving of methods when prefixed with #
+
+  * lib/yard/generators/helpers/html_helper.rb: Only show warnings in
+  resolve_links for now
+
+  * lib/yard/autoload.rb, lib/yard/generators/class_generator.rb,
+  lib/yard/generators/module_generator.rb,
+  templates/default/methodsummary/html/header.erb,
+  templates/default/visibilitygroup/html/header.erb: Add
+  VisibilityGroupGenerator for public/protected/private views
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/method_listing_generator.rb, lib/yard/tags/library.rb,
+  templates/default/attributes/html/header.erb,
+  templates/default/constants/html/constants.erb,
+  templates/default/constants/html/included.erb,
+  templates/default/constants/html/inherited.erb,
+  templates/default/fulldoc/html/style.css,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb: When using sort_by on
+  method names make sure it does a case insensitive sort
+
+  * templates/default/methodsummary/html/summary.erb: Short docstring should
+  end at first paragraph or first period.
+
+  * templates/default/methodsummary/html/summary.erb: Move h1 outside ul
+
+  * templates/default/fulldoc/html/style.css: Hide source by default
+
+  * lib/yard/generators/method_details_generator.rb,
+  templates/default/methodsummary/html/header.erb,
+  templates/default/methodsummary/html/summary.erb: Hide sections if no data is
+  present for them
+
+  * templates/default/fulldoc/html/header.erb: Add fulldoc templates and
+  stylesheet
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Allow serialization on
+  strings as file paths
+
+  * lib/yard/generators/class_generator.rb,
+  lib/yard/generators/constructor_generator.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/method_details_generator.rb,
+  lib/yard/generators/method_generator.rb,
+  lib/yard/generators/module_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb: Optimization: initialize
+  instances of generators only once instead of for each object.
+
+  * lib/yard/generators/base.rb: Don't allow locals to override __f
+
+  * lib/yard/serializers/file_system_serializer.rb: Use #log shorthand
+
+  * bin/view_generator: Update bin/view_generator to generate code for
+  CodeObjects and Generators classes to show off FullDocGenerator. Use with
+  ./bin/view_generator FullDocGenerator FileSystemSerializer all html
+
+  * lib/yard/generators/class_generator.rb: Add visibility grouping generators
+  to class generator
+
+  * lib/yard/generators/method_generator.rb: Remove is_method? filter
+  definition in favour of FilterHelper is_method? filter
+
+  * templates/default/methodsummary/html/header.erb: Add scope and visibility
+  to method summary's div class name for better styling
+
+  * templates/default/methodsignature/html/main.erb: Remove Method Signature
+  heading
+
+  * templates/default/class/html/header.erb: Add 'Class' to heading
+
+  * templates/default/source/html/main.erb: Make View Source into a link so it
+  can be hidden/shown for later. This may change
+
+  * lib/yard/generators/base.rb, lib/yard/generators/helpers/filter_helper.rb:
+  Add G() convenience method to create a new generator instance with extra
+  opts, add some basic filter helpers like #is_method? #is_namespace?
+  #is_class? for basic before_* checks
+
+  * lib/yard/generators/full_doc_generator.rb: Add FullDocGenerator
+
+  * lib/yard/generators/module_generator.rb,
+  templates/default/module/html/header.erb: Add ModuleGenerator
+
+  * lib/yard/generators/visibility_group_generator.rb,
+  templates/default/visibilitygroup/html/header.erb: Add
+  VisibilityGroupGenerator
+
+  * lib/yard/generators/method_details_generator.rb,
+  templates/default/methoddetails/html/header.erb,
+  .../default/methoddetails/html/method_header.erb: Add MethodDetailsGenerator
+  and templates
+
+  * lib/yard/generators/method_listing_generator.rb,
+  lib/yard/generators/method_summary_generator.rb: Move method summary methods
+  to MethodListingGenerator to be shared by MethodDetailsGeneraor
+
+  * lib/yard/autoload.rb: Add various classes to autoload
+
+2008-05-27  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/constants_generator.rb: Don't try to print constants
+  from Proxy class
+
+  * lib/yard/generators/class_generator.rb: Add public instance method summary
+  view to class generator
+
+  * lib/yard/generators/method_signature_generator.rb: Move method formatting
+  helpers into MethodHelper
+
+  * lib/yard/generators/helpers/html_helper.rb: Run #to_s on escaped HTML input
+  and urlencoded input.
+
+  * lib/yard/generators/helpers/method_helper.rb: Create MethodHelper for
+  specific method formatting helper methods
+
+  * lib/yard/handlers/attribute_handler.rb: Add signature to attributes as well
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/class/html/header.erb,
+  templates/default/constants/html/constants.erb,
+  templates/default/inheritance/html/header.erb,
+  templates/default/quickdoc/html/header.erb,
+  templates/default/source/html/main.erb, templates/default/tags/html/tags.erb:
+  run escapeHTML routine on various outputted strings
+
+  * templates/default/methodsignature/html/main.erb: Add 'section' to div class
+  name
+
+  * lib/yard/generators/base.rb: Update debug logging format
+
+  * lib/yard/autoload.rb, lib/yard/generators/method_summary_generator.rb,
+  templates/default/methodsummary/html/header.erb,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb,
+  templates/default/methodsummary/html/summary.erb: Add MethodSummaryGenerator
+
+  * lib/yard.rb: Allow multiple path globs for YARD.parse
+
+  * lib/yard/code_objects/method_object.rb: Add #aliases which returns all
+  aliases for the method object
+
+  * lib/yard/generators/base.rb: Add extra_opts to initialize so generators can
+  be initialized without updating the options hash that's passed in: 
+  MethodGenerator.new(options, :other => :options)
+
+  * lib/yard/generators/constants_generator.rb: Update documentation
+
+  * lib/yard/generators/constants_generator.rb,
+  templates/default/constants/html/included.erb: Rename
+  #included_constants_by_class to #included_constants_by_module
+
+2008-05-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/inheritance_generator.rb: Make sure object is a class
+  before using this generator/section
+
+  * lib/yard/generators/tags_generator.rb: Only render tag templates if object
+  has tags
+
+  * lib/yard/generators/constants_generator.rb,
+  templates/default/constants/html/constants.erb,
+  templates/default/constants/html/included.erb,
+  templates/default/constructor/html/header.erb: Update constants generator for
+  included constants
+
+  * templates/default/method/html/header.erb: Add id to MethodGenerator div so
+  anchor links work on methods
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/base_helper_spec.rb,
+  spec/generators/helpers/html_helper_spec.rb: Add specs for
+  linkify/link_object
+
+  * spec/code_objects/class_object_spec.rb: Change spec names in
+  class_object_spec.rb
+
+  * spec/code_objects/namespace_object_spec.rb: Add specs for #constants /
+  #included_constants
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb: Add included_constants and rename
+  the mixin_meths to included_meths. :mixins and :inheritance options are now
+  renamed to :included and :inherited respectively.
+
+  * Rakefile, yard.gemspec: Add yard.gemspec and move Gem specific stuff out of
+  Rakefile
+
+  * Rakefile: Change default rake task to run specs
+
+  * spec/code_objects/class_object_spec.rb: Add specs to test inherited
+  meths/constants behaviour when methods/constants are overridden by a
+  superclass in the inheritance tree
+
+  * templates/default/constants/html/inherited.erb: Sort inherited constants
+  list by alphabetical order
+
+  * lib/yard/autoload.rb, lib/yard/generators/class_generator.rb,
+  lib/yard/generators/constants_generator.rb,
+  templates/default/constants/html/constants.erb,
+  templates/default/constants/html/header.erb,
+  templates/default/constants/html/inherited.erb: Add ConstantsGenerator.
+  Missing constants included from mixins, depending on a new #constants method
+  in NamespaceObject which would include mixed in constants by using
+  #mixin_constants
+
+  * lib/yard/generators/helpers/base_helper.rb: Return title if there is one in
+  BaseHelper's #link_object
+
+  * lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb: Move #linkify to BaseHelper and
+  modify #link_object to only make file links out of namespace objects, every
+  other object will be an anchor.
+
+  * lib/yard/generators/method_generator.rb,
+  lib/yard/generators/method_signature_generator.rb,
+  templates/default/method/html/header.erb,
+  templates/default/methodsignature/html/main.erb: Update and refactor
+  method/method_signature generator / templates
+
+  * lib/yard/generators/helpers/html_helper.rb: Convert a bunch of the
+  parameters to strings because symbols will often be passed in.
+
+  * lib/yard/generators/base.rb: Run main #before_section (method) filter
+  before class defined pluggable filters so they can include extra modules.
+
+  * lib/yard/code_objects/class_object.rb: Fix inherited_meths and
+  inherited_consts to also ignore methods/constants overriden by superclasses
+
+  * spec/serializers/file_system_serializer_spec.rb: Add another serialization
+  test for special chars
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Treat <> as special chars in
+  serialization as well
+
+  * lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/namespace_object_spec.rb: If a mixin overrides a method
+  from another mixin, only return one method in #mixin_meths
+
+2008-05-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/tags_generator.rb, templates/default/tags/html/see.erb,
+  templates/default/tags/html/tags.erb: Complete tags generator to show most
+  known tags
+
+  * templates/default/deprecated/html/main.erb: Use old javadoc style
+  deprecated message
+
+  * templates/default/attributes/html/header.erb: Change [read][write] output
+  to [R, W] style
+
+  * lib/yard/generators/base.rb: If generator method does not have object
+  argument, don't send object to it. Add locals hash to #render. Also remove
+  all custom stacktrace printing because it was messy
+
+  * lib/yard/tags/library.rb: Rename Block Parameters tag library label to
+  Yield Parameters
+
+  * lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb: Refactor #linkify into #link_url
+  and #link_object. #linkify decides which one to use by analyzing the input
+  (and data if input is a string)
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Remove special chars from
+  serialized paths and make sure instance and class methods serialize to
+  different paths
+
+  * lib/yard/generators/attributes_generator.rb,
+  lib/yard/generators/class_generator.rb,
+  lib/yard/generators/constructor_generator.rb,
+  lib/yard/generators/deprecated_generator.rb,
+  lib/yard/generators/docstring_generator.rb,
+  lib/yard/generators/inheritance_generator.rb,
+  lib/yard/generators/method_generator.rb,
+  lib/yard/generators/mixins_generator.rb,
+  templates/default/class/html/header.erb: Add ClassGeneator header. Setup
+  before_generate filters for various classes
+
+  * lib/yard/generators/base.rb: Add #before_section and #before_generate class
+  methods to filter generator/section calling without having to override the
+  before_section method
+
+2008-05-24  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/method_signature_generator.rb,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsignature/text/main.erb: Show yield block in method
+  signature
+
+  * lib/yard/generators/helpers/base_helper.rb: Handle #linkify() on string or
+  symbol (Proxy object)
+
+  * lib/yard/generators/attributes_generator.rb: Only show attributes section
+  if there are attributes in the class
+
+  * lib/yard/generators/constructor_generator.rb: Only show constructor section
+  if #initialize method exists
+
+  * lib/yard/generators/class_generator.rb: Add attributes view to class
+  generator
+
+  * lib/yard/autoload.rb, lib/yard/generators/attributes_generator.rb,
+  lib/yard/generators/class_generator.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/inheritance_generator.rb,
+  lib/yard/generators/mixins_generator.rb,
+  templates/default/attributes/html/header.erb,
+  templates/default/constructor/html/header.erb,
+  templates/default/deprecated/html/main.erb,
+  templates/default/docstring/html/main.erb,
+  templates/default/inheritance/html/header.erb,
+  templates/default/inheritance/text/header.erb,
+  templates/default/mixins/html/header.erb,
+  templates/default/source/html/main.erb,
+  templates/default/tags/html/header.erb: Add Attributes, Class, Mixins,
+  Inheritance, Method generators. Make minor template adjustments
+
+  * lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/attribute_handler.rb,
+  spec/code_objects/namespace_object_spec.rb,
+  spec/handlers/attribute_handler_spec.rb,
+  .../handlers/examples/attribute_handler_001.rb.txt: Change organization of
+  attributes method to separate class from instance attributes
+
+  * lib/yard/code_objects/base.rb: Change CodeObjects::Base#inspect again.
+
+  * quarantine/templates/html/_fulldoc.erb,
+  quarantine/templates/html/class.erb, quarantine/templates/html/method.erb,
+  quarantine/templates/html/module.erb, templates/default/html/_fulldoc.erb,
+  templates/default/html/class.erb, templates/default/html/method.erb,
+  templates/default/html/module.erb: Move old HTML templates into quarantine
+
+  * lib/yard/code_objects/base.rb: Override #to_s (as #path) and make #inspect
+  a little more inspect-y
+
+  * lib/yard/autoload.rb, lib/yard/generators/base.rb,
+  lib/yard/generators/constructor_generator.rb,
+  lib/yard/generators/method_generator.rb,
+  templates/default/constructor/html/header.erb,
+  templates/default/method/html/header.erb: Get basic constructor generator
+  working
+
+  * bin/view_generator: Allow 'all' parameter in view_generator to export all
+  docs
+
+  * lib/yard/generators/tags_generator.rb,
+  templates/default/tags/html/footer.erb,
+  templates/default/tags/html/header.erb: Update tags generator to use new
+  sub-generator yield functionality
+
+  * lib/yard/generators/base.rb, spec/generators/base_spec.rb: Set
+  current_object in yield block and make sure block is passed to #render()
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Add basic specs and error
+  checking for #url_for HTML helper
+
+2008-05-23  Loren Segal <lsegal@soen.ca>
+
+  * spec/generators/base_spec.rb: Expand specs on section handling
+
+  * lib/yard/generators/base.rb, spec/generators/base_spec.rb: Add specs for
+  sections handling in generators
+
+2008-05-22  Loren Segal <lsegal@soen.ca>
+
+  * spec/generators/base_spec.rb: More specs for rendering
+
+  * lib/yard/generators/base.rb, spec/generators/base_spec.rb: Add specs to
+  test basic template handling
+
+  * lib/yard/generators/base.rb, spec/generators/base_spec.rb: Add
+  render_sections method to support upcoming [section, [subsection, ...]]
+  section listing format to allow encapsulation of sub-generators
+
+  * spec/generators/helpers/html_helper_spec.rb: Pend the failing urlencode
+  spec until a better urlencode is made
+
+  * lib/yard/generators/base.rb: Allow before_section() to stop section from
+  executing
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/registry.rb, spec/code_objects/class_object_spec.rb,
+  spec/code_objects/code_object_list_spec.rb,
+  spec/code_objects/namespace_object_spec.rb: Beef up #meths/#constants.
+  Introduce #mixin_meths, #inherited_meths, #inherited_constants.
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/alias_handler.rb, spec/code_objects/base_spec.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb: Fix #meths behaviour with
+  inheritance, same for #inheritance_tree
+
+2008-05-20  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/alias_handler.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb, lib/yard/handlers/method_handler.rb,
+  lib/yard/handlers/mixin_handler.rb, lib/yard/handlers/module_handler.rb,
+  lib/yard/handlers/visibility_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add #dynamic attribute which returns
+  true if an object was defined inside a method (or potentially some other
+  dynamic fashion in the future)
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/handlers/alias_handler_spec.rb: Add #is_alias? method to tell if a
+  method is an alias
+
+  * lib/yard/code_objects/proxy.rb: Add warning message if ProxMethodError is
+  raised-- usually caused by out of order parsing
+
+  * lib/yard/autoload.rb, lib/yard/generators/base.rb,
+  lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/method_signature_generator.rb,
+  lib/yard/generators/tags_generator.rb,
+  spec/generators/helpers/html_helper_spec.rb,
+  templates/default/docstring/html/main.erb,
+  templates/default/tags/html/footer.erb,
+  templates/default/tags/html/header.erb, templates/default/tags/html/tags.erb:
+  Add HtmlHelper and update templates to use htmlify/linkify methods (to be
+  refactored)
+
+  * lib/yard/generators/helpers/html_helper.rb, lib/yard/tags/library.rb: Fix
+  yardoc formatting
+
+2008-05-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/base.rb: Add :ignore_serializer option so that
+  serializer is not deleted and helpers that rely on serialization data can
+  still work
+
+  * lib/yard/code_objects/base.rb: Refactor format_source
+
+  * lib/yard/serializers/file_system_serializer.rb: Refactor FS serializer code
+
+  * lib/yard.rb, lib/yard/extra.rb, spec/extra/file_spec.rb: Add
+  File.relative_path for relative pathname resolution
+
+  * lib/yard/tags/library.rb: #default_factory setter should know to
+  instantiate Factory object
+
+  * lib/yard/generators/base.rb, lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb: Fix serialization output for
+  #generate and add basic helpers
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  lib/yard/tags/default_factory.rb, lib/yard/tags/library.rb,
+  lib/yard/tags/merbdoc_factory.rb, lib/yard/tags/tag.rb: Revamp tags by adding
+  TagFactory concept so that yardoc style formatting can be re-added and
+  merbdoc moved to its own class
+
+  * lib/yard/serializers/base.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Change fs serializer to
+  default in doc/. Add consistent #serialized_path api for returning the
+  serialize location of the object. Will be used by Helpers to do things like
+  resolve inter-file links (for FS Serialization)
+
+  * lib/yard/symbol_hash.rb, spec/extra/symbol_hash_spec.rb: Update SymbolHash
+  to support non symbolized values
+
+2008-05-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/base.rb,
+  lib/yard/generators/method_signature_generator.rb,
+  lib/yard/generators/source_generator.rb,
+  lib/yard/generators/tags_generator.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb,
+  templates/default/deprecated/html/main.erb,
+  templates/default/docstring/html/main.erb,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/quickdoc/html/header.erb,
+  templates/default/source/html/main.erb,
+  templates/default/tags/html/header.erb, templates/default/tags/html/tags.erb:
+  Add HTML templates for (most) existing generators
+
+  * lib/yard/tags/library.rb: Use symbol hash for labels
+
+  * lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/namespace_object_spec.rb: Fix bug for #meths called above a
+  Proxy parent
+
+  * lib/yard/logging.rb, lib/yard/parser/source_parser.rb: Fix log formatting
+
+  * lib/yard/autoload.rb: Load P() right away
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Fix source
+  formatting for statements parsed by SourceParser
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Format
+  source code upon setting
+
+  * lib/yard/autoload.rb: Autoload P() method
+
+  * lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/alias_handler.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: the key for
+  NamespaceObject#aliases should be the new object, not the old one, to support
+  multiple aliases from an old object
+
+  * lib/yard/autoload.rb: Load handlers automatically
+
+2008-05-18  Yehuda Katz <wycats@gmail.com>
+
+  * lib/yard.rb, lib/yard/tags/library.rb: Add YARD.parse and @example
+
+2008-05-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/class_handler.rb, lib/yard/handlers/mixin_handler.rb,
+  .../examples/visibility_handler_001.rb.txt: Add UndocumentableError exception
+  to simplify error reporting
+
+  * lib/yard/handlers/visibility_handler.rb,
+  spec/handlers/visibility_handler_spec.rb: Add support for private :methname
+  to visibility handler
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/alias_handler.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/parser/statement.rb,
+  lib/yard/parser/token_list.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Add alias_method handler
+
+  * lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb,
+  spec/serializers/spec_helper.rb: Add specs for file system serializer
+
+  * lib/yard/generators/base.rb: Update new naming of YARD_TEMPLATE_ROOT to
+  YARD::TEMPLATE_ROOT
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: A new
+  codeobject should still yield the object in a block if it returns the
+  existing object from the registry. Ideally this should allow the object to be
+  overridden
+
+  * lib/yard/handlers/method_handler.rb: Use P() instead of Registry.resolve
+
+  * lib/yard/handlers/class_handler.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Allow class << ClassName
+
+  * spec/extra/spec_helper.rb, spec/extra/symbol_hash_spec.rb,
+  spec/handlers/base_spec.rb: Fix up spec file structure
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Make paths strings and add []
+  alias to #at method
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/attribute_handler.rb,
+  spec/handlers/attribute_handler_spec.rb,
+  .../handlers/examples/attribute_handler_001.rb.txt: Move attribute support to
+  NamespaceObject because modules *CAN* use attr's
+
+  * lib/yard/logging.rb, lib/yard/yard_logger.rb: Rename yard_logger.rb to
+  logging.rb
+
+  * lib/yard.rb, lib/yard/autoload.rb: Add autoloading code, finally
+
+  * bin/view_generator, lib/yard/serializers/base.rb,
+  lib/yard/serializers/file_system_serializer.rb: Allow options hash in
+  serializer initialization
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb,
+  spec/handlers/examples/tag_handler_001.rb.txt,
+  spec/handlers/tag_handler_spec.rb,
+  spec/parser/examples/tag_handler_001.rb.txt, spec/parser/tag_parsing_spec.rb:
+  Update tag parser to allow \n\n in indented tag blocks and optionally provide
+  the raw data format to a tag parser
+
+  * lib/yard/parser/source_parser.rb: Require 'stringio' for parse_string
+
+  * lib/yard/parser/statement_list.rb: Add first newline to source of method
+  definitions
+
+2008-05-17  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/methodsignature/text/main.erb: Update method signature
+  template
+
+  * lib/yard/parser/statement_list.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Fix parser bug that throws off bracket
+  count on method definitions, write specs for method_handler to test this new
+  behaviour
+
+  * lib/yard/code_objects/proxy.rb: Add #inspect view of proxy class
+
+2008-05-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/method_signature_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb: Add method signature generator to
+  quickdoc
+
+  * lib/yard/parser/source_parser.rb: Update docs to reflect accepted types for
+  parameter
+
+  * bin/view_generator, lib/yard/code_objects/base.rb,
+  lib/yard/generators/base.rb, lib/yard/generators/deprecated_generator.rb,
+  lib/yard/generators/docstring_generator.rb,
+  lib/yard/generators/method_signature_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb,
+  lib/yard/generators/source_generator.rb,
+  lib/yard/generators/tags_generator.rb,
+  lib/yard/serializers/stdout_serializer.rb,
+  templates/default/deprecated/text/main.erb,
+  templates/default/docstring/text/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/quickdoc/text/header.erb,
+  templates/default/source/text/main.erb,
+  templates/default/tags/text/params.erb,
+  templates/default/tags/text/returns.erb: Add a multitude of base generators,
+  make QuickdocGenerator work for methods
+
+2008-05-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/namespace_object.rb: Use CodeObjectList again for
+  @children and @mixins (specs work again)
+
+  * lib/yard/code_objects/base.rb: Revert back to Array code object list
+  because of 'no block error' RSpec exceptions
+
+  * lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/namespace_object_spec.rb, spec/registry_spec.rb: Fix spec
+  errors
+
+  * lib/yard/code_objects/namespace_object.rb: Add #child() to get child object
+  by name
+
+  * lib/yard/handlers/mixin_handler.rb: Mixins should only be added if they
+  follow valid Constant Case Naming
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add support for resolving
+  objects paths with :: prefix
+
+  * bin/view_generator, lib/yard/generators/base.rb: Show debugging warnings in
+  view_generator
+
+  * bin/view_generator, lib/yard/code_objects/namespace_object.rb,
+  lib/yard/generators/base.rb: Add view_generator example binary to test
+  generators
+
+  * spec/code_objects/module_object_spec.rb: Add specs to test in-class method
+  priority against included methods via mixin
+
+  * lib/yard/code_objects/class_object.rb,
+  spec/code_objects/class_object_spec.rb: Subclass #meths to look at
+  inheritance tree for a class object
+
+  * lib/yard/code_objects/class_variable_object.rb,
+  lib/yard/code_objects/constant_object.rb,
+  lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/module_object_spec.rb: No longer add child objects to
+  #meths, #constants and #cvars lists. Instead dynamically select objects from
+  children list. Add specs for #meths
+
+  * lib/yard/registry.rb: Don't #save during marshal #load
+
+  * lib/yard/symbol_hash.rb, spec/extra/symbol_hash_spec.rb: Add SymbolHash[]
+  syntax and fix reverse merge behaviour
+
+  * lib/yard/symbol_hash.rb, spec/extra/symbol_hash_spec.rb: Add support for
+  SymbolHash#merge
+
+  * lib/yard/parser/statement_list.rb: Fix parsing bug that threw off bracket
+  count for expressions that used calls to the #[] method
+
+  * lib/yard/code_objects/method_object.rb,
+  lib/yard/handlers/method_handler.rb: #initialize method should hook up object
+  in the parent's method list
+
+  * lib/yard/code_objects/class_variable_object.rb,
+  lib/yard/code_objects/constant_object.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb: #initialize method should hook up the
+  object in the parent's attributes, not the handler
+
+  * lib/yard/code_objects/base.rb, lib/yard/registry.rb: Fix marshalling
+
+  * lib/yard/generators/base.rb, lib/yard/generators/deprecated_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb,
+  lib/yard/generators/tags_generator.rb,
+  lib/yard/serializers/stdout_serializer.rb,
+  templates/default/deprecated/text/main.erb,
+  templates/default/tags/text/header.erb,
+  templates/default/tags/text/params.erb: Add some tag generators
+
+  * lib/yard.rb, lib/yard/yard_logger.rb, spec/spec_helper.rb: Set default log
+  level to INFO
+
+2008-05-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/handlers/method_handler.rb, spec/code_objects/base_spec.rb,
+  spec/generators/quick_doc_generator_spec.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add method handler specs
+
+  * lib/yard/parser/source_parser.rb, lib/yard/yard_logger.rb: Update logger to
+  ignore timestamp
+
+  * lib/yard.rb: Update load paths
+
+2008-05-14  Yehuda Katz <wycats@gmail.com>
+
+  * lib/yard/code_objects/base.rb: Delegate to a singleton Array
+
+2008-05-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/base.rb, lib/yard/generators/quick_doc_generator.rb,
+  spec/generators/quick_doc_generator_spec.rb: Generator class starting to take
+  shape, add basic spec skeleton
+
+2008-05-14  Yehuda Katz <wycats@gmail.com>
+
+  * lib/yard/code_objects/base.rb: Specs pass again
+
+  * lib/yard.rb, lib/yard/generators/base.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/handlers/class_handler.rb,
+  lib/yard/logger.rb, lib/yard/parser/source_parser.rb,
+  lib/yard/yard_logger.rb, spec/handlers/examples/tag_handler_001.rb.txt,
+  spec/handlers/spec_helper.rb, spec/handlers/tag_handler_spec.rb,
+  spec/spec_helper.rb: Updated YARD logger to be namespaced and know how to
+  handle different level requirements; Added tag specs.
+
+2008-05-14  Loren Segal <lsegal@soen.ca>
+
+  * .gitignore: Ignore new yardoc file (.yardoc)
+
+  * lib/yard/handlers/attribute_handler.rb: Add line number for attributes
+
+  * lib/yard/code_objects/root_object.rb, lib/yard/registry.rb: Add RootObject
+  for Registry.root so that we don't need to create an anonymous class for
+  @namespace[:root]
+
+  * lib/yard/code_objects/base.rb: #inspect should not return whole object,
+  otherwise it goes into a recursive loop
+
+  * lib/yard/generators/base.rb, lib/yard/generators/quick_doc_generator.rb,
+  lib/yard/serializers/base.rb, lib/yard/serializers/stdout_serializer.rb:
+  First round of the generators/serializer api
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add temporary #load/#save
+  marshalling (will be moved later) and #paths for namespace keys
+
+  * lib/yard/handlers/method_handler.rb: Fix NameError resolution
+
+  * lib/yard/handlers/method_handler.rb: Add extra punctuation chars to method
+  name
+
+  * lib/yard/code_objects/proxy.rb: Fixed NameError in P()
+
+  * spec/registry_spec.rb: Fix registry spec, cannot use should == [array]
+
+  * spec/registry_spec.rb: More specs for Registry.all
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Registry.all should only
+  return values, not keys
+
+  * lib/yard.rb: Add YARD_ROOT and YARD_TEMPLATE_ROOT constants for later
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Rewrite #all method to support
+  a list of object types that all should return (convenience for #select'ing
+  the resulting set)
+
+2008-05-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/library.rb: Add @api tag for API visibility when generating
+  docs
+
+  * lib/yard.rb, lib/yard/code_objects/base.rb, lib/yard/tag_library.rb,
+  lib/yard/tags/library.rb, lib/yard/tags/tag.rb: Move tag library and tag
+  class into Tags namespace
+
+  * lib/logger.rb, quarantine/logger.rb: Move pre-api_changes files into
+  quarantine to keep a clean slate for generators (forgot logger)
+
+  * lib/code_object.rb, lib/formatter.rb, lib/handlers/all_handlers.rb,
+  lib/handlers/attribute_handler.rb, lib/handlers/class_handler.rb,
+  lib/handlers/class_variable_handler.rb, lib/handlers/code_object_handler.rb,
+  lib/handlers/constant_handler.rb, lib/handlers/exception_handler.rb,
+  lib/handlers/method_handler.rb, lib/handlers/mixin_handler.rb,
+  lib/handlers/module_handler.rb, lib/handlers/visibility_handler.rb,
+  lib/handlers/yield_handler.rb, lib/namespace.rb, lib/quick_doc.rb,
+  lib/source_parser.rb, quarantine/code_object.rb, quarantine/formatter.rb,
+  quarantine/handlers/all_handlers.rb,
+  quarantine/handlers/attribute_handler.rb,
+  quarantine/handlers/class_handler.rb,
+  quarantine/handlers/class_variable_handler.rb,
+  quarantine/handlers/code_object_handler.rb,
+  quarantine/handlers/constant_handler.rb,
+  quarantine/handlers/exception_handler.rb,
+  quarantine/handlers/method_handler.rb, quarantine/handlers/mixin_handler.rb,
+  quarantine/handlers/module_handler.rb,
+  quarantine/handlers/visibility_handler.rb,
+  quarantine/handlers/yield_handler.rb, quarantine/namespace.rb,
+  quarantine/quick_doc.rb, quarantine/source_parser.rb: Move pre-api_changes
+  files into quarantine to keep a clean slate for generators
+
+  * test/fixtures/docstring.txt, test/fixtures/docstring2.txt,
+  test/test_code_object.rb, test/test_namespace.rb: Remove test/ from
+  api_changes branch since we use specs only
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/mixin_handler.rb,
+  spec/handlers/examples/mixin_handler_001.rb.txt,
+  spec/handlers/mixin_handler_spec.rb: Add mixin handler and specs
+
+  * lib/yard/handlers/method_handler.rb: Add support for non-alphanum methods..
+  specs to come
+
+  * lib/yard/handlers/attribute_handler.rb,
+  spec/handlers/attribute_handler_spec.rb,
+  .../handlers/examples/attribute_handler_001.rb.txt: Add attribute handler and
+  specs
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/handlers/constant_handler.rb, spec/spec_helper.rb: Fix up some
+  existing code
+
+2008-05-12  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/symbol_hash.rb, spec/extra/symbol_hash_spec.rb: Fix symbol hash to
+  only convert a String (not subclasses) value to_sym
+
+  * lib/yard/logger.rb, lib/yard/parser/source_parser.rb: Fix exception raised
+  when 'log.X' is called without paparameters
+
+  * lib/yard/code_objects/proxy.rb, lib/yard/registry.rb: Change P() behaviour
+  to do Registry.resolve and bind directly to object if it exists
+
+  * lib/yard/symbol_hash.rb, spec/extra/symbol_hash_spec.rb: Add support for
+  #update
+
+  * lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/constant_handler.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/examples/constant_handler_001.rb.txt: Add constant handler
+
+  * lib/yard/code_objects/proxy.rb: Proxy no longer removes all methods,
+  hopefully no secret methods were forgotten that give away the object's
+  identity
+
+  * lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/handlers/class_variable_handler.rb,
+  lib/yard/parser/source_parser.rb,
+  spec/handlers/class_variable_handler_spec.rb,
+  .../examples/class_variable_handler_001.rb.txt: Add class variable handler
+
+  * lib/yard/handlers/class_handler.rb, lib/yard/handlers/module_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Add class handler specs
+
+  * spec/handlers/visibility_handler_spec.rb: Implement visibility specs
+
+  * lib/yard/code_objects/method_object.rb,
+  lib/yard/handlers/method_handler.rb, lib/yard/parser/source_parser.rb,
+  spec/code_objects/method_object_spec.rb,
+  spec/parser/examples/example1.rb.txt: Update source parser and add method
+  handler
+
+  * lib/yard/code_objects/base.rb: Add *args to initialize method for
+  subclasses
+
+  * lib/yard/handlers/base.rb, spec/handlers/base_spec.rb,
+  spec/parser/source_parser_spec.rb: Add #owner method to source parser and
+  base handler
+
+  * lib/yard/handlers/base.rb, lib/yard/registry.rb, spec/registry_spec.rb: Add
+  spec for #resolve
+
+2008-05-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/handlers/class_handler.rb, lib/yard/handlers/module_handler.rb: Add
+  class handler (no specs)
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/method_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/handlers/module_handler.rb, lib/yard/registry.rb,
+  spec/code_objects/base_spec.rb, spec/code_objects/proxy_spec.rb,
+  spec/handlers/examples/module_handler_001.rb.txt,
+  spec/handlers/module_handler_spec.rb, spec/parser/source_parser_spec.rb,
+  spec/registry_spec.rb: Rewrite proxy/base namespace/name splitter to add
+  namespace part of a complex name to the original namespace
+
+2008-05-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/class_variable_object.rb,
+  lib/yard/code_objects/constant_object.rb,
+  lib/yard/handlers/module_handler.rb, spec/code_objects/method_object_spec.rb,
+  spec/handlers/base_spec.rb, spec/handlers/examples/module_handler_001.rb.txt,
+  spec/handlers/module_handler_spec.rb, spec/handlers/spec_helper.rb,
+  spec/parser/source_parser_spec.rb: Add some empty handlers, module handler
+  and specs
+
+  * lib/yard/handlers/base.rb: Add #parse_block to parse the sub block of a
+  statement. Guarantees visibility/scope return to old value
+
+  * lib/yard/registry.rb: If #at() receives empty string, it belongs to root
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb: Add #path
+  method as a way to compare two proxies
+
+  * lib/yard/parser/ruby_lex.rb, lib/yard/parser/statement.rb,
+  lib/yard/parser/token_list.rb: Move Parser classes into the YARD::Parser
+  namespace
+
+  * lib/yard/code_objects/base.rb: Replace '::' with NAMESPACE_SEPARATOR
+
+  * lib/yard/code_objects/base.rb: Change #path to return string, #type to
+  return symbol
+
+  * lib/yard.rb, spec/code_objects/namespace_object_spec.rb,
+  .../examples/visibility_handler.001.rb.txt,
+  .../examples/visibility_handler_001.rb.txt, spec/parser/spec_helper.rb,
+  spec/spec_helper.rb: Clean up files/spec helpers
+
+  * lib/yard/code_objects/base.rb: Add tag and docstring methods to
+  CodeObjects::Base for later
+
+  * lib/yard/handlers/visibility_handler.rb,
+  .../examples/visibility_handler.001.rb.txt, spec/handlers/spec_helper.rb,
+  spec/handlers/visibility_handler_spec.rb, spec/parser/source_parser_spec.rb,
+  spec/parser/spec_helper.rb: Add more specs for source parser and others. Add
+  visibility handler
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/registry.rb,
+  spec/code_objects/code_object_list_spec.rb, spec/registry_spec.rb: Make
+  CodeObjectList a unique list of objects (required fixes to proxy). Add
+  registry specs and basic handler
+
+  * lib/yard.rb, lib/yard/code_objects/base.rb,
+  lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/namespace_object.rb,
+  lib/yard/handlers/attribute_handler.rb, lib/yard/handlers/base.rb,
+  spec/code_objects/code_object_list_spec.rb, spec/code_objects/proxy_spec.rb:
+  Add CodeObjectList class to obsolete the add_ATTRNAME api calls and allow #<<
+  to be called directly instead
+
+  * spec/parser/examples/example1.rb.txt, spec/parser/source_parser_spec.rb:
+  Add file parsing spec
+
+2008-05-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/base.rb, lib/yard/parser/source_parser.rb,
+  spec/parser/source_parser_spec.rb: Hook up source parser and add basic spec
+
+  * lib/yard.rb, lib/yard/code_objects/base.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/source_parser.rb, spec/code_objects/base_spec.rb,
+  spec/handlers/base_spec.rb, spec/handlers/spec_helper.rb: Add Base handler
+  and some specs, clean up ambiguity in specs for 'Base' classes
+
+  * LICENSE.txt, README.txt: Update copyright year (I was bored)
+
+  * lib/code_object.rb, lib/ruby_lex.rb, lib/tag_library.rb, lib/yard.rb,
+  lib/yard/code_objects/base.rb, lib/yard/parser/ruby_lex.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/parser/statement.rb,
+  lib/yard/parser/statement_list.rb, lib/yard/parser/token_list.rb,
+  lib/yard/tag_library.rb, spec/code_objects/base_spec.rb: Move some parser
+  objects into new directory and add some accessor specs to Base code object
+
+  * lib/yard/code_objects/namespace_object.rb,
+  spec/code_objects/module_object_spec.rb,
+  spec/code_objects/namespace_object_spec.rb: Add NamespaceObject specs for
+  #add_mixin
+
+  * spec/code_objects/proxy_spec.rb: Add proxy specs for complex proxy
+  namespaces
+
+  * spec/extra/spec_helper.rb: Remove unneeded YARD include
+
+2008-05-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/namespace_object.rb,
+  lib/yard/code_objects/proxy.rb, lib/yard/registry.rb,
+  spec/code_objects/base_spec.rb, spec/code_objects/proxy_spec.rb: Add proxy
+  and namespace specs
+
+2008-03-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/method_object.rb: Symbolize scope and visibility
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/module_object.rb, spec/code_objects/base_spec.rb,
+  spec/code_objects/method_object_spec.rb: Refactor initialization by moving
+  type to class implementation and making visibility/scope specific to
+  MethodObject
+
+  * lib/yard/symbol_hash.rb, spec/extra/spec_helper.rb,
+  spec/extra/symbol_hash_spec.rb: Symbolize value if string and add SymbolHash
+  specs
+
+  * lib/yard/symbol_hash.rb: Symbolize any strings as well
+
+2008-03-03  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/base_spec.rb: Add more spec implementations
+
+  * spec/code_objects/proxy_spec.rb: Modify proxy spec
+
+  * lib/yard.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/module_object.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/registry.rb, spec/code_objects/base_spec.rb,
+  spec/code_objects/method_object_spec.rb, spec/code_objects/proxy_spec.rb,
+  spec/code_objects/spec_helper.rb: Add module/class objects, add proxy/base
+  specs
+
+2008-03-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/method_object.rb, lib/yard/code_objects/proxy.rb,
+  spec/code_objects/method_object_spec.rb: Add method object specs
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/path.rb, lib/yard/registry.rb, spec/code_objects/proxy_spec.rb,
+  spec/path_spec.rb, spec/spec_helper.rb: Remove horrible path idea, replace
+  with proxy & working proxy spec
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/namespace.rb, lib/yard/path.rb, lib/yard/registry.rb,
+  lib/yard/symbol_hash.rb, spec/code_objects/proxy_spec.rb, spec/path_spec.rb:
+  Initial API changes and specs
+
+2008-03-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard.rb, lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/logger.rb, lib/yard/namespace.rb, lib/yard/symbol_hash.rb,
+  spec/code_objects/proxy_spec.rb, spec/code_objects/spec_helper.rb,
+  spec/spec_helper.rb: Reorganize YARD loading and write basic specs
+
+  * Rakefile, yard.gemspec: Consolidate gemspec into Rakefile and add specs
+  task
+
+2008-02-29  Loren Segal <lsegal@soen.ca>
+
+  * .gitignore: Ignore generates images/dot files because they're probably
+  graphs we don't care about
+
+  * bin/yard-graph: Show modules as modules if they're unresolved but have been
+  included
+
+  * bin/yard-graph: Parenthesize is_a? call
+
+  * bin/yard-graph: Formatting fix
+
+  * bin/yard-graph: Only show public methods in diagram
+
+2008-02-27  Loren Segal <lsegal@soen.ca>
+
+  * bin/yard-graph: Add options for dependencies (--dependencies), empty
+  modules (--empty-mixins), full class info (--full)
+
+  * bin/yard-graph: Polish look
+
+  * bin/yard-graph: Merge master
+
+  * bin/yard-graph: Merge master
+
+2008-02-26  Loren Segal <lsegal@soen.ca>
+
+  * bin/yard-graph: Fix a few namespace resolving issues
+
+  * yard.gemspec: Add yard-graph as gem binary
+
+  * bin/yard-graph: Add Graphviz diagram tool for visualization
+
+2008-02-27  Loren Segal <lsegal@soen.ca>
+
+  * lib/handlers/mixin_handler.rb: Deal with a list of includes in one line
+
+  * bin/yard-graph: Generate full class diagram with methods
+
+2008-02-26  Loren Segal <lsegal@soen.ca>
+
+  * bin/yard-graph: Fix a few namespace resolving issues
+
+  * yard.gemspec: Add yard-graph as gem binary
+
+  * bin/yard-graph: Add Graphviz diagram tool for visualization
+
+  * lib/handlers/mixin_handler.rb: Gracefully handle invalid dynamic includes
+
+  * lib/handlers/class_handler.rb: Handle class << format better
+
+2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * .gitignore: Add pkg/ to gitignore  
+
+2008-02-26  Loren Segal <lsegal@soen.ca>
+
+  * bin/yard-graph: Fix a few namespace resolving issues
+
+  * yard.gemspec: Add yard-graph as gem binary
+
+  * bin/yard-graph: Add Graphviz diagram tool for visualization
+
+  * bin/yardoc, lib/handlers/class_handler.rb, lib/namespace.rb: Do not render
+  root node and add warning messages for undocumentable classes
+
+  * bin/yardoc: Update dependency
+
+  * .gitignore: Add pkg/ to gitignore
+
+2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * .gitignore: Add DS_Store to gitignore  
+
+  * yard.gemspec: Update gemspec to deal with new README files  
+
+2008-02-26  Loren Segal <lsegal@soen.ca>
+
+  * .gitignore: Add DS_Store to gitignore
+
+  * yard.gemspec: Update gemspec to deal with new README files
+
+2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * README.txt: Missed tab  
+
+2008-02-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/handlers/exception_handler.rb, lib/namespace.rb, lib/source_parser.rb,
+  lib/yard.rb: Improve parser and namespace identitymap issues
+
+  * .gitignore: Ignore Yardoc file
+
+  * .gitignore: Add gitignore file
+
+  * bin/yardoc, lib/code_object.rb, lib/handlers/attribute_handler.rb,
+  lib/handlers/class_handler.rb, lib/handlers/class_variable_handler.rb,
+  lib/handlers/constant_handler.rb, lib/handlers/method_handler.rb,
+  lib/handlers/module_handler.rb, lib/namespace.rb, test/test_code_object.rb:
+  Try to keep unique copies of every code object in the namespace
+
+2008-02-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/code_object.rb: Add child node to parent when setting new parent
+
+  * README.txt: Missed tab
+
+2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * README.pdf, help.pdf: Rename README so it doesn't break github  
+
+2008-02-25  Loren Segal <lsegal@soen.ca>
+
+  * README.pdf, help.pdf: Rename README so it doesn't break github
+
+2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * README.txt: Add text version of old reamde just for github  
+
+2008-02-25  Loren Segal <lsegal@soen.ca>
+
+  * README.txt: Add text version of old reamde just for github
+
+2008-02-25  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/handlers/attribute_handler.rb, lib/logger.rb, lib/source_parser.rb,
+  lib/tag_library.rb, templates/default/html/_fulldoc.erb,
+  templates/default/html/class.erb: Added wycats' formatting changes for future
+  Merb support. Yard can now run through activerecord,activesupport,actionpack
+  with minimal errors 
+
+  * lib/tag_type.rb: Removing obsolete class 
+
+2008-02-24  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/ruby_lex.rb: Oops, turns out I can't remove those dependencies from
+  RubyLex 
+
+2008-02-23  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/ruby_lex.rb: Remove some lame dependencies from RubyLex 
+
+  * bin/yardoc, doc/Logger.html, doc/RubyLex.html,
+  doc/RubyLex_BufferedReader.html, doc/RubyToken_TkError.html,
+  doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html, doc/RubyToken_TkNode.html,
+  doc/RubyToken_TkOPASGN.html, doc/RubyToken_TkOp.html,
+  doc/RubyToken_TkUnknownChar.html, doc/RubyToken_TkVal.html,
+  doc/RubyToken_Token.html, doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_ClassVariableObject.html, doc/YARD_CodeObject.html,
+  doc/YARD_CodeObjectHandler.html, doc/YARD_CodeObjectWithMethods.html,
+  doc/YARD_ConstantHandler.html, doc/YARD_ConstantObject.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ExceptionHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_MethodHandler.html,
+  doc/YARD_MethodObject.html, doc/YARD_MixinHandler.html,
+  doc/YARD_ModuleHandler.html, doc/YARD_ModuleObject.html,
+  doc/YARD_NameStruct.html, doc/YARD_Namespace.html, doc/YARD_ParamTag.html,
+  doc/YARD_QuickDoc.html, doc/YARD_ReturnTag.html, doc/YARD_RubyLex.html,
+  doc/YARD_RubyLex_BufferedReader.html, doc/YARD_RubyToken_TkError.html,
+  doc/YARD_RubyToken_TkId.html, doc/YARD_RubyToken_TkKW.html,
+  doc/YARD_RubyToken_TkNode.html, doc/YARD_RubyToken_TkOPASGN.html,
+  doc/YARD_RubyToken_TkOp.html, doc/YARD_RubyToken_TkUnknownChar.html,
+  doc/YARD_RubyToken_TkVal.html, doc/YARD_RubyToken_Token.html,
+  doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/all-methods.html, doc/index.html,
+  lib/code_object.rb, lib/formatter.rb, lib/handlers/constant_handler.rb,
+  lib/handlers/mixin_handler.rb, lib/source_parser.rb, lib/yard.rb,
+  templates/default/html/class.erb, templates/default/html/module.erb: No more
+  need for docs in project - update to 0.2.1 
+
+2008-02-21  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * yard.gemspec: Add erubis as gem dep 
+
+  * doc/Logger.html, doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_ClassVariableObject.html, doc/YARD_CodeObject.html,
+  doc/YARD_CodeObjectHandler.html, doc/YARD_CodeObjectWithMethods.html,
+  doc/YARD_ConstantHandler.html, doc/YARD_ConstantObject.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ExceptionHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_MethodHandler.html,
+  doc/YARD_MethodObject.html, doc/YARD_MixinHandler.html,
+  doc/YARD_ModuleHandler.html, doc/YARD_ModuleObject.html,
+  doc/YARD_NameStruct.html, doc/YARD_Namespace.html, doc/YARD_ParamTag.html,
+  doc/YARD_QuickDoc.html, doc/YARD_ReturnTag.html, doc/YARD_RubyLex.html,
+  doc/YARD_RubyLex_BufferedReader.html, doc/YARD_RubyToken_TkError.html,
+  doc/YARD_RubyToken_TkId.html, doc/YARD_RubyToken_TkKW.html,
+  doc/YARD_RubyToken_TkNode.html, doc/YARD_RubyToken_TkOPASGN.html,
+  doc/YARD_RubyToken_TkOp.html, doc/YARD_RubyToken_TkUnknownChar.html,
+  doc/YARD_RubyToken_TkVal.html, doc/YARD_RubyToken_Token.html,
+  doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html: New docs 
+
+  * lib/code_object.rb, lib/formatter.rb: Do not list superclasses if object
+  doest not respond to the method 
+
+  * bin/yardoc, lib/code_object.rb, lib/formatter.rb,
+  templates/default/html/class.erb: Fix formatting for Erubius, print basic
+  output info for yardoc file generation 
+
+  * Rakefile: Print rake install message before doing task 
+
+  * doc/Logger.html, doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_ClassVariableObject.html, doc/YARD_CodeObject.html,
+  doc/YARD_CodeObjectHandler.html, doc/YARD_CodeObjectWithMethods.html,
+  doc/YARD_ConstantHandler.html, doc/YARD_ConstantObject.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ExceptionHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_MethodHandler.html,
+  doc/YARD_MethodObject.html, doc/YARD_MixinHandler.html,
+  doc/YARD_ModuleHandler.html, doc/YARD_ModuleObject.html,
+  doc/YARD_NameStruct.html, doc/YARD_Namespace.html, doc/YARD_ParamTag.html,
+  doc/YARD_QuickDoc.html, doc/YARD_ReturnTag.html, doc/YARD_RubyLex.html,
+  doc/YARD_RubyLex_BufferedReader.html, doc/YARD_RubyToken_TkError.html,
+  doc/YARD_RubyToken_TkId.html, doc/YARD_RubyToken_TkKW.html,
+  doc/YARD_RubyToken_TkNode.html, doc/YARD_RubyToken_TkOPASGN.html,
+  doc/YARD_RubyToken_TkOp.html, doc/YARD_RubyToken_TkUnknownChar.html,
+  doc/YARD_RubyToken_TkVal.html, doc/YARD_RubyToken_Token.html,
+  doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  lib/formatter.rb: Use Erubis from now on 
+
+  * Rakefile, bin/yardoc, doc/YARD_RubyLex_BufferedReader.html,
+  lib/handlers/attribute_handler.rb, lib/handlers/exception_handler.rb,
+  yard.gemspec: Add better exception handling, add 'rake install' task 
+
+2007-04-28  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * doc/Logger.html, doc/YARD_RubyLex.html,
+  doc/YARD_RubyLex_BufferedReader.html, doc/YARD_RubyToken_TkError.html,
+  doc/YARD_RubyToken_TkId.html, doc/YARD_RubyToken_TkKW.html,
+  doc/YARD_RubyToken_TkNode.html, doc/YARD_RubyToken_TkOPASGN.html,
+  doc/YARD_RubyToken_TkOp.html, doc/YARD_RubyToken_TkUnknownChar.html,
+  doc/YARD_RubyToken_TkVal.html, doc/YARD_RubyToken_Token.html,
+  doc/all-classes.html, doc/all-methods.html, doc/index.html,
+  lib/handlers/attribute_handler.rb, lib/handlers/method_handler.rb,
+  lib/handlers/mixin_handler.rb, lib/logger.rb, lib/ruby_lex.rb,
+  lib/source_parser.rb, lib/yard.rb: Better source error handling. Parser
+  displays warnings when code is undocumentable (for attributes). This revision
+  can parse activerecord-1.15.3 
+
+2007-03-08  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * bin/yardoc, doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_ClassVariableObject.html, doc/YARD_CodeObject.html,
+  doc/YARD_CodeObjectHandler.html, doc/YARD_CodeObjectWithMethods.html,
+  doc/YARD_ConstantHandler.html, doc/YARD_ConstantObject.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ExceptionHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_MethodHandler.html,
+  doc/YARD_MethodObject.html, doc/YARD_MixinHandler.html,
+  doc/YARD_ModuleHandler.html, doc/YARD_ModuleObject.html,
+  doc/YARD_NameStruct.html, doc/YARD_Namespace.html, doc/YARD_ParamTag.html,
+  doc/YARD_QuickDoc.html, doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html,
+  doc/YARD_Statement.html, doc/YARD_StatementList.html, doc/YARD_Tag.html,
+  doc/YARD_TokenList.html, doc/YARD_VisibilityHandler.html,
+  doc/YARD_YieldHandler.html, doc/all-classes.html, doc/all-methods.html,
+  doc/index.html, lib/code_object.rb, lib/formatter.rb,
+  lib/handlers/attribute_handler.rb, lib/handlers/class_handler.rb,
+  lib/handlers/method_handler.rb, lib/handlers/module_handler.rb,
+  lib/handlers/yield_handler.rb, lib/ruby_lex.rb, lib/tag_library.rb,
+  lib/yard.rb, templates/default/html/_fulldoc.erb,
+  templates/default/html/class.erb, templates/default/html/method.erb,
+  templates/html_formatter.erb: Refactored templates, added support for attr_*
+  in a (class of) a module 
+
+2007-03-02  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/namespace.rb: Fixed default yardoc raw output filename 
+
+  * doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/TestCodeObject.html,
+  doc/TestNamespace.html, doc/YARD_AttributeHandler.html,
+  doc/YARD_AuthorTag.html, doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html,
+  doc/YARD_ClassHandler.html, doc/YARD_ClassObject.html,
+  doc/YARD_ClassVariableHandler.html, doc/YARD_ClassVariableObject.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/all-methods.html, doc/index.html: Added
+  documentation 
+
+  * doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/TestCodeObject.html,
+  doc/TestNamespace.html, doc/YARD_AttributeHandler.html,
+  doc/YARD_AuthorTag.html, doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html,
+  doc/YARD_ClassHandler.html, doc/YARD_ClassObject.html,
+  doc/YARD_ClassVariableHandler.html, doc/YARD_ClassVariableObject.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/all-methods.html, doc/index.html: Removing
+  documentation 
+
+  * bin/yardoc, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/TestCodeObject.html,
+  doc/TestNamespace.html, doc/YARD_AttributeHandler.html,
+  doc/YARD_AuthorTag.html, doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html,
+  doc/YARD_ClassHandler.html, doc/YARD_ClassObject.html,
+  doc/YARD_ClassVariableHandler.html, doc/YARD_ClassVariableObject.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/all-methods.html, doc/index.html, lib/namespace.rb,
+  lib/yard.rb: Added documentation, fixed links for scripts 
+
+  * bin/yardoc, bin/yri, lib/yard.rb, yard.gemspec: Corrected gemspec 
+
+  * Rakefile, bin/yardoc, bin/yri, doc/NilClass.html, doc/RubyLex.html,
+  doc/RubyLex_BufferedReader.html, doc/RubyToken_TkError.html,
+  doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html, doc/RubyToken_TkNode.html,
+  doc/RubyToken_TkOPASGN.html, doc/RubyToken_TkOp.html,
+  doc/RubyToken_TkUnknownChar.html, doc/RubyToken_TkVal.html,
+  doc/RubyToken_Token.html, doc/String.html, doc/TestCodeObject.html,
+  doc/TestNamespace.html, doc/WikiHtml.html, doc/YARD_AttributeHandler.html,
+  doc/YARD_AuthorTag.html, doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html,
+  doc/YARD_ClassHandler.html, doc/YARD_ClassObject.html,
+  doc/YARD_ClassVariableHandler.html, doc/YARD_ClassVariableObject.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/all-methods.html, doc/domain_model.jpg,
+  doc/index.html, lib/formatter.rb, lib/handlers/class_variable_handler.rb,
+  lib/quick_doc.rb, lib/yard.rb, templates/html_formatter.erb,
+  test_generate_html.rb, yard.gemspec, yard.rb, yri: Added gemspec 
+
+2007-03-01  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * doc/RubyLex.html, doc/RubyLex_BufferedReader.html, doc/YARD_AuthorTag.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ReturnTag.html,
+  doc/YARD_StatementList.html, lib/code_object.rb,
+  lib/handlers/constant_handler.rb, lib/source_parser.rb,
+  templates/html_formatter.erb: Fixed parsing of end statements 
+
+  * doc/RubyLex.html, doc/RubyToken_Token.html, doc/TestCodeObject.html,
+  doc/TestNamespace.html, doc/YARD_ClassObject.html,
+  doc/YARD_ClassVariableHandler.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_StatementList.html,
+  doc/YARD_TokenList.html, doc/all-methods.html, doc/index.html,
+  lib/code_object.rb, lib/handlers/constant_handler.rb,
+  templates/html_formatter.erb, test_generate_html.rb, yard.rb: Fixed constant
+  listing and definitions of global variables 
+
+  * doc/all-methods.html: All methods index 
+
+  * doc/all-classes.html, doc/index.html, test_generate_html.rb: List all
+  methods 
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_ClassVariableObject.html, doc/YARD_CodeObject.html,
+  doc/YARD_CodeObjectHandler.html, doc/YARD_CodeObjectWithMethods.html,
+  doc/YARD_ConstantHandler.html, doc/YARD_ConstantObject.html,
+  doc/YARD_DeprecatedTag.html, doc/YARD_ExceptionHandler.html,
+  doc/YARD_Formatter.html, doc/YARD_MethodHandler.html,
+  doc/YARD_MethodObject.html, doc/YARD_MixinHandler.html,
+  doc/YARD_ModuleHandler.html, doc/YARD_ModuleObject.html,
+  doc/YARD_NameStruct.html, doc/YARD_Namespace.html, doc/YARD_ParamTag.html,
+  doc/YARD_QuickDoc.html, doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html,
+  doc/YARD_Statement.html, doc/YARD_StatementList.html, doc/YARD_Tag.html,
+  doc/YARD_TokenList.html, doc/YARD_VisibilityHandler.html,
+  doc/YARD_YieldHandler.html, doc/all-classes.html, lib/code_object.rb,
+  lib/formatter.rb, lib/handlers/class_variable_handler.rb,
+  templates/html_formatter.erb: Added class variables 
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  lib/code_object.rb, lib/handlers/attribute_handler.rb,
+  lib/handlers/class_handler.rb, lib/handlers/code_object_handler.rb,
+  lib/handlers/constant_handler.rb, lib/handlers/method_handler.rb,
+  lib/namespace.rb, templates/html_formatter.erb: Added dynamic method summary
+  and better inheritance chain information 
+
+2007-02-28  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html, doc/index.html,
+  lib/formatter.rb, lib/handlers/attribute_handler.rb, lib/namespace.rb,
+  templates/html_formatter.erb: Added documentation of dynamic method handling,
+  fixed link resolution for methods, added docstring to class and constructor 
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_ReturnTag.html,
+  doc/YARD_SourceParser.html, doc/YARD_Statement.html, doc/YARD_Tag.html,
+  doc/YARD_TokenList.html, doc/YARD_VisibilityHandler.html,
+  doc/YARD_YieldHandler.html, lib/formatter.rb, lib/handlers/method_handler.rb,
+  templates/html_formatter.erb: Updated formatting, fixed method handler bug
+  with Constant as method name 
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  templates/html_formatter.erb: Updated formatting 
+
+  * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
+  doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
+  doc/RubyToken_TkNode.html, doc/RubyToken_TkOPASGN.html,
+  doc/RubyToken_TkOp.html, doc/RubyToken_TkUnknownChar.html,
+  doc/RubyToken_TkVal.html, doc/RubyToken_Token.html, doc/String.html,
+  doc/TestCodeObject.html, doc/TestNamespace.html, doc/WikiHtml.html,
+  doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
+  doc/YARD_BaseTag.html, doc/YARD_BaseTypeTag.html, doc/YARD_ClassHandler.html,
+  doc/YARD_ClassObject.html, doc/YARD_ClassVariableHandler.html,
+  doc/YARD_CodeObject.html, doc/YARD_CodeObjectHandler.html,
+  doc/YARD_CodeObjectWithMethods.html, doc/YARD_ConstantHandler.html,
+  doc/YARD_ConstantObject.html, doc/YARD_DeprecatedTag.html,
+  doc/YARD_ExceptionHandler.html, doc/YARD_Formatter.html,
+  doc/YARD_MethodHandler.html, doc/YARD_MethodObject.html,
+  doc/YARD_MixinHandler.html, doc/YARD_ModuleHandler.html,
+  doc/YARD_ModuleObject.html, doc/YARD_NameStruct.html,
+  doc/YARD_Namespace.html, doc/YARD_ParamTag.html, doc/YARD_QuickDoc.html,
+  doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
+  doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
+  doc/all-classes.html, doc/index.html, lib/code_object.rb, lib/formatter.rb,
+  lib/handlers/attribute_handler.rb, lib/handlers/constant_handler.rb,
+  lib/hash_struct.rb, lib/namespace.rb, templates/html_formatter.erb,
+  test_generate_html.rb, yard.rb: Added prototype of html generation, use
+  test_generate_html.rb to test. Template uses javadoc style for now, just as a
+  base 
+
+2007-02-27  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/code_object.rb, lib/formatter.rb, lib/source_parser.rb, yard.rb: Add
+  basic output formatter class 
+
+  * lib/source_parser.rb: Comments on end of a line are now ignored from an
+  ongoing statement 
+
+2007-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/handlers/method_handler.rb, lib/namespace.rb, lib/source_parser.rb,
+  yard.rb: Added support for 'def Class.method_name' and a relative name
+  resolution method for the Namespace 
+
+2007-02-25  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * lib/code_object.rb, lib/handlers/attribute_handler.rb,
+  lib/handlers/mixin_handler.rb, lib/ruby_lex.rb, lib/source_parser.rb: Added
+  support for include statements at class or module level 
+
+2007-02-24  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
+
+  * README.pdf: Updated PDF formatting 
+
+  * LICENSE.txt, README.pdf, lib/code_object.rb, yri, yri.rb: Added readme and
+  license information, renamed yri.rb to yri for convenience 
+
+  * doc/domain_model.jpg, lib/code_object.rb, lib/handlers/all_handlers.rb,
+  lib/handlers/attribute_handler.rb, lib/handlers/class_handler.rb,
+  lib/handlers/class_variable_handler.rb, lib/handlers/code_object_handler.rb,
+  lib/handlers/constant_handler.rb, lib/handlers/exception_handler.rb,
+  lib/handlers/method_handler.rb, lib/handlers/module_handler.rb,
+  lib/handlers/visibility_handler.rb, lib/handlers/yield_handler.rb,
+  lib/hash_struct.rb, lib/namespace.rb, lib/quick_doc.rb, lib/ruby_lex.rb,
+  lib/source_parser.rb, lib/tag_library.rb, lib/tag_type.rb,
+  test/fixtures/docstring.txt, test/fixtures/docstring2.txt,
+  test/test_code_object.rb, test/test_namespace.rb, yri.rb: Creating
+  trunk/branches/tags 
