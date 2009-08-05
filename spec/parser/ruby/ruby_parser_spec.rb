@@ -48,6 +48,21 @@ if RUBY19
         s.comments.should == "comment"
         s.comments_range.should == (1..1)
       end
+      
+      it "should handle 1.9 lambda syntax with args" do
+        src = "->(a,b,c=1,*args,&block) { hello_world }"
+        stmt(src).source.should == src
+      end
+      
+      it "should handle 1.9 lambda syntax" do
+        src = "-> { hello_world }"
+        stmt(src).source.should == src
+      end
+          
+      it "should handle standard lambda syntax" do
+        src = "lambda { hello_world }"
+        stmt(src).source.should == src
+      end
     end
   end
 end

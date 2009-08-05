@@ -59,7 +59,7 @@ module YARD
           :for => "for",
           :hash => :lbrace,
           :if => "if",
-          :lambda => "lambda",
+          :lambda => [:tlambda, "lambda"],
           :module => "module",
           :next => "next",
           :paren => :lparen,
@@ -232,6 +232,10 @@ module YARD
         
         def on_string_literal(*args)
           visit_event_arr AstNode.new(:string_literal, args)
+        end
+        
+        def on_lambda(*args)
+          visit_event_arr AstNode.new(:lambda, args)
         end
         
         def on_string_content(*args)
