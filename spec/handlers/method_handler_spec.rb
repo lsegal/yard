@@ -19,8 +19,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     P("String.hello").should be_instance_of(CodeObjects::MethodObject)
   end
   
-  it "should allow punctuation in method names ([], ?, =~, <<, etc.)" do
-    [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^', :-@, :+@, :'~@'].each do |name|
+  [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^', :-@, :+@, :'~@'].each do |name|
+    it "should allow valid method #{name}" do
       Registry.at("Foo##{name}").should_not be_nil
     end
   end

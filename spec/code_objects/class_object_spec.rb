@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::CodeObjects::ClassObject do
-  before do 
+  before(:all) do 
     Registry.clear 
     @mixin = ModuleObject.new(:root, :SomeMixin)
     @mixin2 = ModuleObject.new(:root, :SomeMixin2)
@@ -27,7 +27,7 @@ describe YARD::CodeObjects::ClassObject do
 end
 
 describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
-  before do 
+  before(:all) do 
     Registry.clear 
     
     Parser::SourceParser.parse_string <<-eof
@@ -89,7 +89,7 @@ describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
 end
 
 describe YARD::CodeObjects::ClassObject, "#constants / #inherited_constants" do
-  before do 
+  before(:all) do 
     Registry.clear 
     
     Parser::SourceParser.parse_string <<-eof
