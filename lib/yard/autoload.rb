@@ -124,10 +124,10 @@ module YARD
       end
 
       autoload :AstNode,           __p('parser/ruby/ast_node')
-      autoload :ParserSyntaxError, __p('parser/ruby/ruby_parser')
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
     end
 
+    autoload :ParserSyntaxError,   __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
   end

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
-  before { parse_file :class_handler_001, __FILE__ }
+  before(:all) { parse_file :class_handler_001, __FILE__ }
   
   it "should parse a class block with docstring" do
     P("A").docstring.should == "Docstring"
@@ -36,12 +36,6 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     P('B::A').superclass.should == P('A')
   end
 
-  it "should raise an UndocumentableError if the class is invalid" do
-    ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
-      undoc_error "class #{klass}; end"
-    end
-  end
-  
   it "should handle class definitions in the form ::ClassName" do
     Registry.at("MyRootClass").should_not be_nil
   end
@@ -65,32 +59,38 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     P('Q::Logger').superclass.should == P(:Logger)
   end
   
-  it "should raise an UndocumentableError if the superclass is invalid but it should create the class." do
-    ['@@INVALID', 'hi', '$MYCLASS', 'AnotherClass.new'].each do |klass|
-      Registry.clear
-      undoc_error "class A < #{klass}; end"
-      Registry.at('A').should_not be_nil
+  ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
+    it "should raise an UndocumentableError for invalid class '#{klass}'" do
+      with_parser(:ruby18) { undoc_error "class #{klass}; end" }
+    end
+  end
+  
+  ['@@INVALID', 'hi', '$MYCLASS', 'AnotherClass.new'].each do |klass|
+    it "should raise an UndocumentableError for invalid superclass '#{klass}' but it should create the class." do
+      YARD::CodeObjects::ClassObject.should_receive(:new).with(Registry.root, 'A')
+      with_parser(:ruby18) { undoc_error "class A < #{klass}; end" }
       Registry.at('A').superclass.should == P(:Object)
     end
   end
   
+  ['not.aclass', 'self', 'AnotherClass.new'].each do |klass|
+    it "should raise an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do
+      with_parser(:ruby18) do
+        undoc_error <<-eof
+          CONST = #{klass}
+          class << CONST; end
+        eof
+      end
+      Registry.at(klass).should be_nil
+    end
+  end
+
   it "should document 'class << SomeConstant' by using SomeConstant's value as a reference to the real class name" do
     Registry.at('String.classmethod').should_not be_nil
   end
   
   it "should allow class << SomeRubyClass to create the class if it does not exist" do
     Registry.at('Symbol.toString').should_not be_nil
-  end
-  
-  it "should raise an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do
-    ['not.aclass', 'self', 'AnotherClass.new'].each do |klass|
-      Registry.clear
-      undoc_error <<-eof
-        CONST = #{klass}
-        class << CONST; end
-      eof
-      Registry.at(klass).should be_nil
-    end
   end
   
   it "should document 'class Exception' without running into superclass issues" do

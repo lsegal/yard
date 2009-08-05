@@ -3,8 +3,6 @@ require 'ripper'
 module YARD
   module Parser
     module Ruby
-      class ParserSyntaxError < UndocumentableError; end
-      
       class RubyParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
         alias root ast

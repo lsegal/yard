@@ -65,7 +65,7 @@ if RUBY19
       end
       
       it "should throw a ParserSyntaxError on invalid code" do
-        lambda { stmt("Foo, bar.") }.should raise_error(YARD::Parser::Ruby::ParserSyntaxError)
+        lambda { stmt("Foo, bar.") }.should raise_error(YARD::Parser::ParserSyntaxError)
       end
     end
   end
