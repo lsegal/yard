@@ -28,6 +28,8 @@ module YARD
             end
           end
         end
+        
+        private
       
         # The string value of a token. For example, the return value for the symbol :sym 
         # would be :sym. The return value for a string "foo #{bar}" would be the literal 
