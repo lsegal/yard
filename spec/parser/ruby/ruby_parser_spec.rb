@@ -63,6 +63,10 @@ if RUBY19
         src = "lambda { hello_world }"
         stmt(src).source.should == src
       end
+      
+      it "should throw a ParserSyntaxError on invalid code" do
+        lambda { stmt("Foo, bar.") }.should raise_error(YARD::Parser::Ruby::ParserSyntaxError)
+      end
     end
   end
 end
