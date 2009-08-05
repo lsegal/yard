@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
-  before { parse_file :mixin_handler_001, __FILE__ }
+  before(:all) { parse_file :mixin_handler_001, __FILE__ }
   
   it "should handle includes from classes or modules" do
     Registry.at(:X).instance_mixins.should include(P(:A))
@@ -24,7 +24,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
   end
   
   it "should handle includes with multiple parameters" do
-    Registry.at(:X)
+    Registry.at(:X).should_not be_nil
   end
   
   it "should handle complex include statements" do
