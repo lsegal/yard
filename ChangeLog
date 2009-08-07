@@ -1,3 +1,47 @@
+2009-08-07  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.markdown, lib/yard.rb, yard.gemspec: Bump version to
+  0.2.3.4
+
+  * lib/rubygems_plugin.rb: Undefine RubyGems methods before redefining to
+  avoid 'ruby -w' warnings
+
+2009-08-05  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/class_object_spec.rb,
+  spec/handlers/alias_handler_spec.rb, spec/handlers/method_handler_spec.rb:
+  Refactoring and optimizations
+
+  * spec/handlers/alias_handler_spec.rb,
+  spec/handlers/attribute_handler_spec.rb,
+  spec/handlers/class_condition_handler_spec.rb,
+  spec/handlers/class_variable_handler_spec.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/exception_handler_spec.rb,
+  spec/handlers/extend_handler_spec.rb,
+  spec/handlers/method_condition_handler_spec.rb,
+  spec/handlers/method_handler_spec.rb, spec/handlers/mixin_handler_spec.rb,
+  spec/handlers/module_handler_spec.rb,
+  spec/handlers/visibility_handler_spec.rb,
+  spec/handlers/yield_handler_spec.rb: Only parse once for each spec file (to
+  improve test running time)
+
+  * lib/yard/autoload.rb, lib/yard/parser/ruby/ruby_parser.rb,
+  lib/yard/parser/source_parser.rb, spec/handlers/class_handler_spec.rb,
+  spec/handlers/spec_helper.rb, spec/parser/ruby/ruby_parser_spec.rb,
+  spec/parser/source_parser_spec.rb: Move ParserSyntaxError into Parser
+  namespace and display a warning for a syntax error with 1.9 parser
+
+  * spec/parser/ruby/ruby_parser_spec.rb: Test for raising of ParserSyntaxError
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix support for new 1.9 lambda syntax ->() { }
+
+  * lib/yard/handlers/ruby/legacy/base.rb: 1.9.2 cannot send() to protected
+  methods, make tokval_list private
+
+  * Rakefile, lib/yard.rb: Temporary fixes for LOAD_PATH changes in 1.9.2
+
 2009-07-26  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.markdown, lib/yard.rb, yard.gemspec: Bump version to

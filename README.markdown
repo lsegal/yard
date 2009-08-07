@@ -1,4 +1,4 @@
-YARD Release 0.2.3.3 (July 26th 2009)
+YARD Release 0.2.3.4 (August 7th 2009)
 =====================================
 
 **Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
