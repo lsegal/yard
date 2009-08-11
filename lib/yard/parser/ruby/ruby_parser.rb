@@ -213,7 +213,7 @@ module YARD
         end
 
         def on_hash(*args)
-          visit_event AstNode.new(:hash, args.first, listline: lineno..lineno, listchar: charno...charno)
+          visit_event AstNode.new(:hash, args.first || [])
         end
         
         def on_bare_assoc_hash(*args)

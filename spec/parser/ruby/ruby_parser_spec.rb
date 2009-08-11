@@ -81,6 +81,10 @@ if RUBY19
         stmt(src).jump(:hash).source.should == "{ :a => 1, :b => 2, :c => 3 }"
       end
       
+      it "should handle an empty hash" do
+        stmt("{}").jump(:hash).source.should == "{}"
+      end
+      
       it "new hash label syntax should show label without colon" do
         ast = stmt("{ a: 1 }").jump(:label)
         ast[0].should == "a"
