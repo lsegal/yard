@@ -67,6 +67,25 @@ if RUBY19
       it "should throw a ParserSyntaxError on invalid code" do
         lambda { stmt("Foo, bar.") }.should raise_error(YARD::Parser::ParserSyntaxError)
       end
+      
+      it "should handle bare hashes as method parameters" do
+        src = "command :a => 1, :b => 2, :c => 3"
+        stmt(src).jump(:command)[1].source.should == ":a => 1, :b => 2, :c => 3"
+        
+        src = "command a: 1, b: 2, c: 3"
+        stmt(src).jump(:command)[1].source.should == "a: 1, b: 2, c: 3"
+      end
+      
+      it "should handle source for hash syntax" do
+        src = "{ :a => 1, :b => 2, :c => 3 }"
+        stmt(src).jump(:hash).source.should == "{ :a => 1, :b => 2, :c => 3 }"
+      end
+      
+      it "new hash label syntax should show label without colon" do
+        ast = stmt("{ a: 1 }").jump(:label)
+        ast[0].should == "a"
+        ast.source.should == "a:"
+      end
     end
   end
 end

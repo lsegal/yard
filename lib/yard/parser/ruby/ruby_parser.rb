@@ -87,7 +87,7 @@ module YARD
         REV_MAPPINGS = {}
         
         AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
-          :int, :float, :ivar, :period, :regexp_end, :tstring_content, :backtick]
+          :int, :float, :ivar, :label, :period, :regexp_end, :tstring_content, :backtick]
 
         MAPPINGS.each do |k, v|
           if Array === v
@@ -208,20 +208,20 @@ module YARD
           args.first
         end
         
-        def on_hash(*args)
-          visit_event AstNode.new(:hash, [args.first], listline: lineno..lineno, listchar: charno...charno)
-        end
-        
         def on_assoc_new(*args)
           AstNode.new(:assoc, args)
         end
+
+        def on_hash(*args)
+          visit_event AstNode.new(:hash, args.first, listline: lineno..lineno, listchar: charno...charno)
+        end
         
         def on_bare_assoc_hash(*args)
-          args.first
+          AstNode.new(:list, args.first)
         end
         
         def on_assoclist_from_args(*args)
-         args.first
+          args.first
         end
         
         def on_qwords_new
@@ -262,6 +262,14 @@ module YARD
             end
           end
           ParameterNode.new(:params, args, listline: lineno..lineno, listchar: charno..charno)
+        end
+        
+        def on_label(data)
+          add_token(:label, data)
+          ch = charno
+          @charno += data.length
+          @ns_charno = charno
+          AstNode.new(:label, [data[0...-1]], line: lineno..lineno, char: ch..charno-1, token: true)
         end
 
         def on_comment(comment)
