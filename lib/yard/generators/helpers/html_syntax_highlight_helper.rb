@@ -18,7 +18,7 @@ module YARD
             output << "</span>" if [:tstring_end, :regexp_end].include?(s[0])
           end
           output
-        rescue Parser::Ruby::ParserSyntaxError
+        rescue Parser::ParserSyntaxError
           source
         end
 
