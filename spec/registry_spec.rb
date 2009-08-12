@@ -3,6 +3,7 @@ include CodeObjects
 
 describe YARD::Registry do
   before { Registry.clear }
+  
   it "should have an empty path for root" do
     Registry.root.path.should == ""
   end
