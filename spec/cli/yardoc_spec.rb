@@ -13,6 +13,13 @@ describe YARD::CLI::Yardoc do
     @yardoc.optparse('--title', 'hello world')
     @yardoc.options[:title].should == :'hello world'
   end
+
+  it "should alias --main to the --readme flag" do
+    readme = File.join(File.dirname(__FILE__),'..','..','README.markdown')
+
+    @yardoc.optparse('--main', readme)
+    @yardoc.options[:readme].should == readme.to_sym
+  end
   
   it "should select a markup provider when --markup-provider or -mp is set" do
     @yardoc.optparse("-M", "test")
