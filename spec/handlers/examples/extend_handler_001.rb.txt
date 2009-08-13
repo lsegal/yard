@@ -6,3 +6,11 @@ end
 module C
   extend self
 end
+
+module Q
+  module R
+    module S
+      extend A
+    end
+  end
+end
