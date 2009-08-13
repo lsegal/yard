@@ -1,3 +1,33 @@
+2009-08-13  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, lib/yard.rb, yard.gemspec: Bump version to 0.2.3.5
+
+  * spec/handlers/examples/extend_handler_001.rb.txt,
+  spec/handlers/extend_handler_spec.rb: Add specs for extends across namespaces
+
+2009-08-12  postmodern <postmodern.mod3@gmail.com>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Added a yardoc option
+  alias from --main to --readme.  * This is for compatibility with Hoe and how
+  Hoe invokes documentation generation.
+
+2009-08-12  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Explicitly define all of
+  Registry's instance methods as singleton methods delegated to instance. 
+  Closes gh-26
+
+2009-08-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Handle empty hash
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix AstNode#source for hash syntax
+
+  * .../helpers/html_syntax_highlight_helper.rb: Rename Ruby::ParserSyntaxError
+  to ParserSyntaxError (missed during refactoring)
+
 2009-08-07  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.markdown, lib/yard.rb, yard.gemspec: Bump version to

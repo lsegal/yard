@@ -1,5 +1,5 @@
 module YARD
-  VERSION = "0.2.3.4"
+  VERSION = "0.2.3.5"
   ROOT = File.dirname(__FILE__)
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
   
