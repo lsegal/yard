@@ -16,6 +16,7 @@ module YARD
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
+          content.gsub!("\r", "")
           @tokens = TokenList.new(content)
         else 
           raise ArgumentError, "Invalid content for StatementList: #{content.inspect}:#{content.class}"
