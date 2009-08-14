@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodConditionHandler" do
-  before { parse_file :method_condition_handler_001, __FILE__ }
+  before(:all) { parse_file :method_condition_handler_001, __FILE__ }
   
   it "should not parse regular if blocks in methods" do
     Registry.at('#b').should be_nil

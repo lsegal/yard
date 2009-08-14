@@ -150,7 +150,7 @@ module YARD
           options[:title] = title
         end
 
-        opts.on('-r', '--readme FILE', 'The readme file used as the title page of documentation.') do |readme|
+        opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page of documentation.') do |readme|
           raise Errno::ENOENT, readme unless File.file?(readme)
           options[:readme] = readme
         end

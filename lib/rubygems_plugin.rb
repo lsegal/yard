@@ -14,6 +14,7 @@ class Gem::Specification
     @has_rdoc == 'yard'
   end
   
+  undef has_rdoc? # redefining
   def has_rdoc?
     @has_rdoc && @has_rdoc != 'yard'
   end
@@ -53,6 +54,7 @@ class Gem::DocManager
     Dir.chdir(old_pwd)
   end
 
+  undef setup_rdoc # redefining
   def setup_rdoc
     if File.exist?(@doc_dir) && !File.writable?(@doc_dir) then
       raise Gem::FilePermissionError.new(@doc_dir)
@@ -74,18 +76,20 @@ class Gem::DocManager
   end
 
   def install_ri_yard
-    install_ri_yard_orig if @spec.has_rdoc?
+    @@install_ri_yard_orig.bind(self).call if @spec.has_rdoc?
   end
-  alias install_ri_yard_orig install_ri
+  @@install_ri_yard_orig = instance_method(:install_ri)
+  undef install_ri # redefining
   alias install_ri install_ri_yard
   
   def install_rdoc_yard
     if @spec.has_rdoc?
-      install_rdoc_yard_orig
+      @@install_rdoc_yard_orig.bind(self).call
     elsif @spec.has_yardoc?
       install_yardoc
     end
   end
-  alias install_rdoc_yard_orig install_rdoc
+  @@install_rdoc_yard_orig = instance_method(:install_rdoc)
+  undef install_rdoc # redefining
   alias install_rdoc install_rdoc_yard
 end

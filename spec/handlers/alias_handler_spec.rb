@@ -1,18 +1,15 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AliasHandler" do
-  before do
-    Registry.clear 
-    parse_file :alias_handler_001, __FILE__
-  end
+  before(:all) { parse_file :alias_handler_001, __FILE__ }
 
   it "should throw alias into namespace object list" do
     P(:A).aliases[P("A#b")].should == :a
   end
   
-  it "should handle the Ruby 'alias' keyword syntax" do
-    ['A#c', 'A#d?', 'A#[]', 'A#[]=', 'A#-@', 'A#%', 'A#*'].each do |a|
-      P(a).should be_instance_of(CodeObjects::MethodObject)
+  ['c', 'd?', '[]', '[]=', '-@', '%', '*'].each do |a|
+    it "should handle the Ruby 'alias' keyword syntax for method ##{a}" do
+      P('A#' + a).should be_instance_of(CodeObjects::MethodObject)
     end
   end
   

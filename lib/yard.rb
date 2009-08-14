@@ -1,11 +1,14 @@
 module YARD
-  VERSION = "0.2.3.2"
+  VERSION = "0.2.3.5"
   ROOT = File.dirname(__FILE__)
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
   
   def self.parse(*args) Parser::SourceParser.parse(*args) end
   def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
 end
+
+# Ruby 1.9.2 removes '.' which is not exactly a good idea
+$LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
 
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9" ? [true, false] : [false, true])

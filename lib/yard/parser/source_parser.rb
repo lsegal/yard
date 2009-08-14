@@ -4,6 +4,7 @@ require 'continuation' unless RUBY18
 module YARD
   module Parser
     class UndocumentableError < Exception; end
+    class ParserSyntaxError < UndocumentableError; end
     class LoadOrderError < Exception; end
     
     # Responsible for parsing a source file into the namespace
@@ -84,6 +85,10 @@ module YARD
         @parser = parse_statements(content)
         post_process
         @parser
+      rescue ArgumentError, NotImplementedError => e
+        log.warn("Cannot parse `#{file}': #{e.message}")
+      rescue ParserSyntaxError => e
+        log.warn(e.message.capitalize)
       end
       
       def tokenize(content)

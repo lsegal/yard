@@ -3,8 +3,6 @@ require 'ripper'
 module YARD
   module Parser
     module Ruby
-      class ParserSyntaxError < UndocumentableError; end
-      
       class RubyParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
         alias root ast
@@ -59,7 +57,7 @@ module YARD
           :for => "for",
           :hash => :lbrace,
           :if => "if",
-          :lambda => "lambda",
+          :lambda => [:tlambda, "lambda"],
           :module => "module",
           :next => "next",
           :paren => :lparen,
@@ -89,7 +87,7 @@ module YARD
         REV_MAPPINGS = {}
         
         AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
-          :int, :float, :ivar, :period, :regexp_end, :tstring_content, :backtick]
+          :int, :float, :ivar, :label, :period, :regexp_end, :tstring_content, :backtick]
 
         MAPPINGS.each do |k, v|
           if Array === v
@@ -210,20 +208,20 @@ module YARD
           args.first
         end
         
-        def on_hash(*args)
-          visit_event AstNode.new(:hash, [args.first], listline: lineno..lineno, listchar: charno...charno)
-        end
-        
         def on_assoc_new(*args)
           AstNode.new(:assoc, args)
         end
+
+        def on_hash(*args)
+          visit_event AstNode.new(:hash, args.first || [])
+        end
         
         def on_bare_assoc_hash(*args)
-          args.first
+          AstNode.new(:list, args.first)
         end
         
         def on_assoclist_from_args(*args)
-         args.first
+          args.first
         end
         
         def on_qwords_new
@@ -232,6 +230,10 @@ module YARD
         
         def on_string_literal(*args)
           visit_event_arr AstNode.new(:string_literal, args)
+        end
+        
+        def on_lambda(*args)
+          visit_event_arr AstNode.new(:lambda, args)
         end
         
         def on_string_content(*args)
@@ -260,6 +262,14 @@ module YARD
             end
           end
           ParameterNode.new(:params, args, listline: lineno..lineno, listchar: charno..charno)
+        end
+        
+        def on_label(data)
+          add_token(:label, data)
+          ch = charno
+          @charno += data.length
+          @ns_charno = charno
+          AstNode.new(:label, [data[0...-1]], line: lineno..lineno, char: ch..charno-1, token: true)
         end
 
         def on_comment(comment)

@@ -1,10 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ModuleHandler" do
-  before do
-    Registry.clear 
-    parse_file :module_handler_001, __FILE__
-  end
+  before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "should parse a module block" do
     Registry.at(:ModName).should_not == nil

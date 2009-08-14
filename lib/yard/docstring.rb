@@ -28,9 +28,10 @@ module YARD
     # 
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
-      @summmary ||= (split(/\.|\r?\n\r?\n/).first || '')
-      @summmary += '.' unless @summmary.empty?
-      @summmary
+      return @summary if @summary
+      summary = split(/\.|\r?\n\r?\n/).first || ''
+      summary += '.' unless summary.empty?
+      @summary = summary
     end
     
     ##

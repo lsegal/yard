@@ -11,14 +11,6 @@ module YARD
 
     class << self
       attr_reader :objects
-
-      def method_missing(meth, *args, &block)
-        if instance.respond_to? meth
-          instance.send(meth, *args, &block)
-        else
-          super
-        end
-      end
       
       def clear
         instance.clear 
@@ -140,6 +132,13 @@ module YARD
         end
       end
       proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name) : nil
+    end
+    
+    # Define all instance methods as singleton methods on instance
+    (public_instance_methods(false) - public_methods(false)).each do |meth|
+      module_eval(<<-eof, __FILE__, __LINE__ + 1) 
+        def self.#{meth}(*args, &block) instance.send(:#{meth}, *args, &block) end
+      eof
     end
 
     private

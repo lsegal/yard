@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ExceptionHandler" do
-  before { parse_file :exception_handler_001, __FILE__ }
+  before(:all) { parse_file :exception_handler_001, __FILE__ }
   
   it "should not document an exception outside of a method" do
     P('Testing').has_tag?(:raise).should == false
