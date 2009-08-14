@@ -92,6 +92,15 @@ describe YARD::Docstring do
       eof
       doc.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
     end
+    
+    it "should handle references embedded in summary" do
+      Docstring.new("Aliasing {Test.test}. Done.").summary.should == "Aliasing {Test.test}."
+    end
+    
+    it "should only end first sentence when outside parentheses" do
+      Docstring.new("Hello (the best.) world. Foo bar.").summary.should == "Hello (the best.) world."
+      Docstring.new("A[b.]c.").summary.should == "A[b.]c."
+    end
   end
 
   describe '#ref_tags' do
