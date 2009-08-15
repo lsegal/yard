@@ -6,7 +6,7 @@ before_section(:constructor) { !constructor_method.nil? }
 def init
   super
   sections[1].place(:inheritance).before(:mixins)
-  sections[1].place([:methodmissing, :constructor]).after(:docstring)
+  sections[1].place([:methodmissing, ['../method'], :constructor, ['../method']]).after(:docstring)
 end
 
 protected

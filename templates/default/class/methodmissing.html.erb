@@ -8,5 +8,5 @@
     <% end %>
   </p>
 
-  <%= T('../method', :object => method_missing_method).run %>
+  <%= yield :object => method_missing_method %>
 </div>

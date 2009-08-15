@@ -15,5 +15,5 @@ def signature
 end
 
 def docstring
-  T('../../docstring', :docstring => tag.docstring).run
+  T('../../docstring').run(:docstring => tag.docstring)
 end

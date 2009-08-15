@@ -5,6 +5,6 @@
     This class inherits a constructor from <%= linkify constructor_method, constructor_method.namespace.path %>.
   </p>
 <% else %>
-  <%= T('../method', :object => constructor_method).run %>
+  <%= yield :object => constructor_method %>
 <% end %>
 </div>
