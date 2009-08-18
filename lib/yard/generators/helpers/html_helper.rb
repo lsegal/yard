@@ -70,9 +70,10 @@ module YARD
           sp, name = $3, $4
           title = $5 || name
 
-          if name.include?("://")
+          case name
+          when %r{://}, /^mailto:/
             sp + link_url(name, title, :target => '_parent')
-          elsif name =~ /^file:(\S+?)(?:#(\S+))?$/
+          when /^file:(\S+?)(?:#(\S+))?$/
             sp + link_file($1, title == name ? $1 : title, $2)
           else
             obj = Registry.resolve(current_object, name, true, true)
