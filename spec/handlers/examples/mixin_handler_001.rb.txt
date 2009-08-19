@@ -18,3 +18,16 @@ module Y
 
   class << self; include A; end
 end
+
+module ABC
+  module FOO; end
+  module DEF
+    module FOO
+      include ABC::FOO
+    end
+    
+    module BAR
+      include ABC::BAR
+    end
+  end
+end  

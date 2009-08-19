@@ -12,9 +12,6 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
     Registry.at(:Y).class_mixins.should include(P(:A))
   end
   
-  it "should handle includes for complex namespaces" do
-  end
-  
   it "should handle includes for modules that don't yet exist" do
     Registry.at(:X).instance_mixins.should include(P(nil, :NOTEXIST))
   end
@@ -34,5 +31,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
   
   it "should treat a mixed in Constant by taking its value as the real object name" do
     P(:Y).instance_mixins.should include(Registry.at('B::D'))
+  end
+  
+  it "should avoid including self for unresolved mixins of the same name" do
+    P("ABC::DEF::FOO").mixins.should == [P("ABC::FOO")]
+    P("ABC::DEF::BAR").mixins.should == [P("ABC::BAR")]
   end
 end

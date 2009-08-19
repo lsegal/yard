@@ -166,7 +166,12 @@ module YARD
       # 
       # @return [Base, nil] the registered code object or nil
       def to_obj
-        @obj ||= Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
+        return @obj if @obj
+        if @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
+          @namespace = @obj.namespace
+          @name = @obj.name
+        end
+        @obj
       end
     end
   end
