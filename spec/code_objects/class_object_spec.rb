@@ -24,6 +24,15 @@ describe YARD::CodeObjects::ClassObject do
   it "should show proper inheritance tree when mixins are included" do
     @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin2, @mixin3, P(:String)]
   end
+  
+  it "should not modify the object's mixin list when mixins are included" do
+    @class1 = ClassObject.new(:root, :A)
+    @class2 = ClassObject.new(:root, :B)
+    @class2.superclass = @class1
+    
+    @class2.inheritance_tree(true)
+    @class2.mixins.should == []
+  end
 end
 
 describe YARD::CodeObjects::ClassObject, "#meths / #inherited_meths" do
