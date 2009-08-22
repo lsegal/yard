@@ -9,7 +9,7 @@
     <h3>Examples</h3>
     <% object.tags(:example).each do |tag| %>
     <dl>
-      <dt><%= tag.name %></dt>
+      <dt><%= htmlify tag.name %></dt>
       <dd class="docstring">
         <pre class="code"><%= html_syntax_highlight tag.text %></pre>
       </dd>
