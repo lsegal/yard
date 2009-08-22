@@ -19,7 +19,7 @@ module YARD
           end
           output
         rescue Parser::ParserSyntaxError
-          source
+          h(source)
         end
 
         def html_syntax_highlight_legacy(source)
