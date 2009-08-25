@@ -6,7 +6,7 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
       
-      SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
+      SimpleMarkupHtml = RDoc::Markup::ToHtml.new rescue SM::ToHtml.new
     
       def h(text)
         CGI.escapeHTML(text.to_s)
