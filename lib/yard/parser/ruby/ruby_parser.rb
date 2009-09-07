@@ -205,7 +205,7 @@ module YARD
         end
 
         def on_body_stmt(*args)
-          AstNode.new(:list, args)
+          args.compact.size == 1 ? args.first : AstNode.new(:list, args)
         end
         
         def on_assoc_new(*args)
