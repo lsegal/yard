@@ -90,6 +90,23 @@ if RUBY19
         ast[0].should == "a"
         ast.source.should == "a:"
       end
+      
+      it "should handle begin/rescue blocks" do
+        ast = stmt("begin; X; rescue => e; Y end").jump(:rescue)
+        ast.source.should == "rescue => e; Y end"
+
+        ast = stmt("begin; X; rescue A => e; Y end").jump(:rescue)
+        ast.source.should == "rescue A => e; Y end"
+
+        ast = stmt("begin; X; rescue A, B => e; Y end").jump(:rescue)
+        ast.source.should == "rescue A, B => e; Y end"
+      end
+      
+      it "should handle method rescue blocks" do
+        ast = stmt("def x; A; rescue Y; B end")
+        ast.source.should == "def x; A; rescue Y; B end"
+        ast.jump(:rescue).source.should == "rescue Y; B end"
+      end
     end
   end
 end

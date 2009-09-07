@@ -205,7 +205,7 @@ module YARD
         end
 
         def on_body_stmt(*args)
-          args.first
+          AstNode.new(:list, args)
         end
         
         def on_assoc_new(*args)
@@ -238,6 +238,11 @@ module YARD
         
         def on_string_content(*args)
           AstNode.new(:string_content, args, listline: lineno..lineno, listchar: charno..charno)
+        end
+        
+        def on_rescue(exc, *args)
+          exc = AstNode.new(:list, exc) if exc
+          visit_event AstNode.new(:rescue, [exc, *args])
         end
 
         def on_void_stmt
