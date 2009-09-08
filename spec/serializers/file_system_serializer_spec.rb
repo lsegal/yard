@@ -38,7 +38,7 @@ describe YARD::Serializers::FileSystemSerializer do
       'foo/FooBar/baz_i.txt' => meth2,
       'foo/FooBar.txt' => yard }.each do |path, obj|
       io = StringIO.new
-      File.should_receive(:open).with(path, 'w').and_yield(io)
+      File.should_receive(:open).with(path, 'wb').and_yield(io)
       io.should_receive(:write).with("data")
     
       s = Serializers::FileSystemSerializer.new(:basepath => 'foo', :extension => 'txt')
