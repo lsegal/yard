@@ -128,5 +128,20 @@ describe YARD::Generators::Helpers::HtmlHelper do
         :title => "title"
       }
     end
+    
+    it "should create mailto links with mailto: prefixes" do
+      parse_link(resolve_links('{mailto:joanna@example.com}')).should == {
+        :inner_text => 'mailto:joanna@example.com',
+        :target => '_parent',
+        :href => 'mailto:joanna@example.com',
+        :title => 'mailto:joanna@example.com'
+      }
+      parse_link(resolve_links('{mailto:steve@example.com Steve}')).should == {
+        :inner_text => 'Steve',
+        :target => '_parent',
+        :href => 'mailto:steve@example.com',
+        :title => 'Steve'
+      }
+    end
   end
 end

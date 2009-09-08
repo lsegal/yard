@@ -29,7 +29,7 @@ def write_marshal
   File.unlink(MARSHAL_FILE) if File.exist?(MARSHAL_FILE)
   handle = {}
   NUM_INDICES.times {|t| handle[t.to_s] = generate_index }
-  File.open(MARSHAL_FILE, "w") {|f| f.write(Marshal.dump(handle)) }
+  File.open(MARSHAL_FILE, "wb") {|f| f.write(Marshal.dump(handle)) }
 end
 
 def read_marshal

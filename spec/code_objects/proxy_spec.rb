@@ -88,4 +88,13 @@ describe YARD::CodeObjects::Proxy do
     P("MYPROXY").should_not == Registry.root
     P("X::A").should_not == Registry.root
   end
+  
+  it "should reset namespace and name when object is resolved" do
+    obj1 = ModuleObject.new(:root, :YARD)
+    obj2 = ModuleObject.new(:root, :NOTYARD)
+    resolved = Proxy.new(obj2, :YARD)
+    resolved.should == obj1
+    resolved.namespace.should == Registry.root
+    resolved.name.should == :YARD
+  end
 end

@@ -47,7 +47,7 @@ module YARD
     end
     
     def save(file = yardoc_file)
-      File.open(file, "w") {|f| Marshal.dump([@namespace, @proxy_types], f) }
+      File.open(file, "wb") {|f| Marshal.dump([@namespace, @proxy_types], f) }
       true
     end
 

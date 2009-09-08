@@ -1,12 +1,3 @@
-if RUBY19
-  require 'rdoc/markup'
-  require 'rdoc/markup/to_html'
-else
-  require 'rdoc/markup/simple_markup'
-  require 'rdoc/markup/simple_markup/to_html'
-  require 'rubygems'
-end
-
 module YARD
   module Generators::Helpers
     module MarkupHelper
@@ -21,8 +12,19 @@ module YARD
           {:lib => :redcloth, :const => 'RedCloth'}
         ]
       }
-      
-      SimpleMarkup = RUBY19 ? RDoc::Markup.new : SM::SimpleMarkup.new
+
+      begin
+        require 'rdoc/markup'
+        require 'rdoc/markup/to_html'
+        SimpleMarkup = RDoc::Markup.new
+      rescue Gem::LoadError
+        raise
+      rescue LoadError
+        require 'rubygems'
+        require 'rdoc/markup/simple_markup'
+        require 'rdoc/markup/simple_markup/to_html'
+        SimpleMarkup = SM::SimpleMarkup.new
+      end
 
       private
       

@@ -103,8 +103,8 @@ module YARD
       # By convention, '<STDIN>' should be used to associate code that comes form standard input.
       # 
       # @param [String] file the filename ('<STDIN>' for standard input)
-      # @param [Fixnum, nil] the line number where the object lies in the file
-      # @param [Boolean] whether or not the definition has comments associated. This
+      # @param [Fixnum, nil] line the line number where the object lies in the file
+      # @param [Boolean] has_comments whether or not the definition has comments associated. This
       #   will allow {#file} to return the definition where the comments were made instead
       #   of any empty definitions that might have been parsed before (module namespaces for instance).
       def add_file(file, line = nil, has_comments = false)

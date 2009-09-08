@@ -6,7 +6,7 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
       
-      SimpleMarkupHtml = RUBY19 ? RDoc::Markup::ToHtml.new : SM::ToHtml.new
+      SimpleMarkupHtml = RDoc::Markup::ToHtml.new rescue SM::ToHtml.new
     
       def h(text)
         CGI.escapeHTML(text.to_s)
@@ -70,9 +70,10 @@ module YARD
           sp, name = $3, $4
           title = $5 || name
 
-          if name.include?("://")
+          case name
+          when %r{://}, /^mailto:/
             sp + link_url(name, title, :target => '_parent')
-          elsif name =~ /^file:(\S+?)(?:#(\S+))?$/
+          when /^file:(\S+?)(?:#(\S+))?$/
             sp + link_file($1, title == name ? $1 : title, $2)
           else
             obj = Registry.resolve(object, name, true, true)
