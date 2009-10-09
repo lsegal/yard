@@ -1,0 +1,10 @@
+<div class="section <%= generator_name %>">
+<h1>Allocator Summary</h1>
+<% if allocator_method_inherited? %>
+  <p class="inherited_msg">
+    This class inherits an allocator from <%= linkify allocator_method, allocator_method.namespace.path %>.
+  </p>
+<% else %>
+  <%= yield allocator_method %>
+<% end %>
+</div>

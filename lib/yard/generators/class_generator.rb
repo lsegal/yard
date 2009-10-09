@@ -14,6 +14,7 @@ module YARD
             G(TagsGenerator),
             G(AttributesGenerator), 
             G(ConstantsGenerator),
+            G(AllocatorGenerator),
             G(ConstructorGenerator),
             G(MethodMissingGenerator),
             G(VisibilityGroupGenerator, :visibility => :public),

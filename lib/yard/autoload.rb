@@ -47,6 +47,7 @@ module YARD
       autoload :UMLHelper,                  __p('generators/helpers/uml_helper')
     end
     
+    autoload :AllocatorGenerator,       __p('generators/allocator_generator')
     autoload :AttributesGenerator,      __p('generators/attributes_generator')
     autoload :Base,                     __p('generators/base')
     autoload :ClassGenerator,           __p('generators/class_generator')
