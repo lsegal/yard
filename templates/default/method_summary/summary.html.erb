@@ -1,9 +1,0 @@
-<ul>
-<% sorted_method_list.each do |meth| %>
-  <li>
-    <%= linkify meth, meth.name(true) %>
-    <%= "-> #{format_return_types(meth)}" if meth.has_tag?(:return) %>
-    <%= "(#{meth.visibility})" if meth.visibility != :public %>
-  </li>
-<% end %>
-</ul>

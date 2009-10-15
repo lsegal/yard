@@ -35,44 +35,7 @@ module YARD
     autoload :CSEP,                 __p('code_objects/base')
     autoload :CSEPQ,                __p('code_objects/base')
   end
-  
-  module Generators
-    module Helpers
-      autoload :BaseHelper,                 __p('generators/helpers/base_helper')
-      autoload :FilterHelper,               __p('generators/helpers/filter_helper')
-      autoload :HtmlHelper,                 __p('generators/helpers/html_helper')
-      autoload :HtmlSyntaxHighlightHelper,  __p('generators/helpers/html_syntax_highlight_helper')
-      autoload :MarkupHelper,               __p('generators/helpers/markup_helper')
-      autoload :MethodHelper,               __p('generators/helpers/method_helper')
-      autoload :UMLHelper,                  __p('generators/helpers/uml_helper')
-    end
-    
-    autoload :AttributesGenerator,      __p('generators/attributes_generator')
-    autoload :Base,                     __p('generators/base')
-    autoload :ClassGenerator,           __p('generators/class_generator')
-    autoload :ConstantsGenerator,       __p('generators/constants_generator')
-    autoload :ConstructorGenerator,     __p('generators/constructor_generator')
-    autoload :DeprecatedGenerator,      __p('generators/deprecated_generator')
-    autoload :DocstringGenerator,       __p('generators/docstring_generator')
-    autoload :FullDocGenerator,         __p('generators/full_doc_generator')
-    autoload :InheritanceGenerator,     __p('generators/inheritance_generator')
-    autoload :MethodGenerator,          __p('generators/method_generator')
-    autoload :MethodDetailsGenerator,   __p('generators/method_details_generator')
-    autoload :MethodListingGenerator,   __p('generators/method_listing_generator')
-    autoload :MethodMissingGenerator,   __p('generators/method_missing_generator')
-    autoload :MethodSignatureGenerator, __p('generators/method_signature_generator')
-    autoload :MethodSummaryGenerator,   __p('generators/method_summary_generator')
-    autoload :MixinsGenerator,          __p('generators/mixins_generator')
-    autoload :ModuleGenerator,          __p('generators/module_generator')
-    autoload :QuickDocGenerator,        __p('generators/quick_doc_generator')
-    autoload :RootGenerator,            __p('generators/root_generator')
-    autoload :SourceGenerator,          __p('generators/source_generator')
-    autoload :TagsGenerator,            __p('generators/tags_generator')
-    autoload :UMLGenerator,             __p('generators/uml_generator')
-    autoload :VisibilityGroupGenerator, __p('generators/visibility_group_generator')
-    autoload :OverloadsGenerator,       __p('generators/overloads_generator')
-  end
-  
+
   module Handlers
     module Ruby
       module Legacy
@@ -154,12 +117,25 @@ module YARD
     autoload :Tag,            __p('tags/tag')
     autoload :TagFormatError, __p('tags/tag_format_error')
   end
+  
+  module Templates
+    module Helpers
+      autoload :BaseHelper,                 __p('templates/helpers/base_helper')
+      autoload :FilterHelper,               __p('templates/helpers/filter_helper')
+      autoload :HtmlHelper,                 __p('templates/helpers/html_helper')
+      autoload :HtmlSyntaxHighlightHelper,  __p('templates/helpers/html_syntax_highlight_helper')
+      autoload :MarkupHelper,               __p('templates/helpers/markup_helper')
+      autoload :MethodHelper,               __p('templates/helpers/method_helper')
+      autoload :UMLHelper,                  __p('templates/helpers/uml_helper')
+    end
+
+    autoload :Engine,   __p('templates/engine')
+    autoload :Template, __p('templates/template')
+  end
 
   autoload :Docstring, __p('docstring')
   autoload :Logger,    __p('logging')
   autoload :Registry,  __p('registry')
-  autoload :Template,  __p('templating')
-  autoload :Templates, __p('templating')
 end
 
 undef __p

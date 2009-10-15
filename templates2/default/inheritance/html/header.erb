@@ -1,8 +1,0 @@
-<div class="section <%= generator_name %>">
-  <ul>
-  <%= 
-    object.inheritance_tree.reverse.map {|o| 
-      "<li>" + (o == object ? h(o.path) : linkify(o)) + "</li>" }.join("<ul>") 
-  %>
-  <%= "</ul>" * object.inheritance_tree.length %>
-</div>

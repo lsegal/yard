@@ -1,6 +1,0 @@
-<pre class="section <%= generator_name %>">
-<% object.inheritance_tree.reverse.each_with_index do |superclass, spaces| %>
-
-<%= ["|", "+--"].map {|s| " " * (spaces * 2) + s }.join("\n") if spaces > 0 %><%= (superclass == object ? superclass.path : linkify(superclass)) %>
-<% end %>
-</pre>

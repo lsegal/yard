@@ -1,0 +1,17 @@
+<h3><%= @label ? @label : YARD::Tags::Library.labels[@name] %>:</h3>
+<ul class="<%= @name %>">
+  <% object.tags(@name).each do |tag| %>
+    <li>
+      <% unless @no_types %>
+        <span class='type'><%= format_types(tag.types) %></span>
+      <% end %>
+      <% unless @no_names %>
+        <span class='name'><%= h tag.name %></span>
+      <% end %>
+      <% if @name == :param && (o=object.parameters.assoc(tag.name.to_sym)) && o[1] %>
+        <em class="default">(defaults to: <tt><%= h o[1] %></tt>)</em>
+      <% end %>
+      <%= "&mdash;" + htmlify_line(tag.text) if tag.text %>
+    </li>
+  <% end %>
+</ul>

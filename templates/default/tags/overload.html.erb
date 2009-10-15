@@ -1,0 +1,11 @@
+<% if object.has_tag?(:overload) %>
+  <h3>Overloads:</h3>
+  <ul class="overload">
+    <% object.tags(:overload).each do |overload| %>
+      <li class="overload_item">
+        <span class="signature"><%= signature(overload, false) %></span>
+        <%= yieldall :object => overload %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

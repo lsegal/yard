@@ -1,0 +1,226 @@
+body { 
+  padding: 0 20px;
+  font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; 
+  font-size: 13px;
+}
+h1 { font-size: 30px; }
+h2 { 
+  padding: 0;
+  padding-bottom: 3px;
+  border-bottom: 1px #aaa solid;
+  text-transform: capitalize;
+  font-size: 22px;
+  margin: 2em 0 0.5em;
+}
+.clear { clear: both; }
+.docstring h1,
+.docstring h2,
+.docstring h3,
+.docstring h4 {
+  border: 0;
+  font-size: 1.3em;
+  padding: 0;
+}
+ul.summary {
+  list-style: none;
+  font-family: monospace;
+  font-size: 1.0em;
+  line-height: 1.5em;
+}
+ul.summary a:link, ul.summary a:visited { text-decoration: none; }
+h3.inherited {
+  font-style: italic;
+  font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif;
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+  margin-top: 12px;
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+p.inherited {
+  padding: 0;
+  margin: 0;
+  margin-left: 25px;
+}
+
+dl.box {
+  width: 520px;
+  font-size: 1.1em;
+}
+dl.box dt {
+  float: left;
+  display: block;
+  width: 100px;
+  margin: 0;
+  text-align: right;
+  font-weight: bold;
+  border: 1px solid #aaa;
+  border-width: 1px 0px 0px 1px;
+  padding: 6px 0;
+  padding-right: 10px;
+}
+dl.box dd {
+  float: left;
+  display: block;
+  width: 380px;
+  margin: 0;
+  padding: 6px 0;
+  padding-right: 20px;
+  border: 1px solid #aaa;
+  border-width: 1px 1px 0 0;
+}
+dl.box .last {
+  border-bottom: 1px solid #aaa;
+}
+dl.box .r1 { background: rgb(238, 238, 238); }
+
+ul.toplevel { padding-left: 15px; font-size: 1.2em; }
+
+dl.constants { margin-left: 40px; }
+dl.constants dt { font-weight: bold; font-size: 1.2em; margin-bottom: 5px; }
+dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-bottom: 18px; }
+
+.summary_desc { margin-left: 20px; display: block; font-family: sans-serif; }
+dl.constants .summary_desc { font-size: 0.9em; font-weight: normal; }
+
+p.signature { font-size: 1.2em; font-weight: bold; font-family: monospace; border-top: 1px solid #aaa; padding-top: 12px; }
+p.signature a:link, p.signature a:visited { text-decoration: none; }
+p.signature .overload { display: block; }
+p.signature.first { border: 0; padding-top: 0; }
+p.signature .extras { font-weight: normal; font-style: italic; }
+p.signature .aliases { display: block; font-weight: normal; font-size: 0.8em; font-family: sans-serif; margin-top: 5px; color: #555; }
+p.signature .aliases .names { font-family: monospace; font-weight: bold; color: #000; font-size: 1.2em; }
+
+.tags h3 { font-size: 1em; margin-bottom: 0; }
+.tags ul { margin-top: 5px; padding-left: 30px; list-style: square; }
+.tags ul li { margin-bottom: 3px; }
+.tags ul .name { font-family: monospace; font-weight: bold; }
+.tags ul p { display: inline; margin-bottom: 5px; }
+.tags .example { margin-top: 5px; margin-left: 15px; border-left: 8px solid #ddd; }
+.tags { margin-bottom: 12px; }
+
+.tags .examples h3 { margin-bottom: 10px; }
+.tags .examples h4 { padding: 0; margin: 0; margin-left: 15px; font-weight: normal; }
+
+.tags .overload .overload_item { list-style: none; }
+.tags .overload .signature { margin-left: -15px; font-family: monospace; font-weight: bold; display: block; font-size: 1.1em; }
+.tags .overload .docstring { margin-top: 15px; }
+
+.defines { display: none; }
+
+#footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
+.showSource { font-size: 0.9em; }
+.showSource a:link, .showSource a:visited { text-decoration: none; color: #666; }
+
+#content a:link, #content a:visited { text-decoration: none; }
+.docstring { margin-right: 5em; }
+.docstring a:link, .docstring a:visited { text-decoration: underline; }
+
+p.inherited a { font-family: monospace; font-size: 0.9em; }
+p.inherited { word-spacing: 5px; font-size: 1.2em; }
+
+p.children { font-size: 1.2em; }
+p.children a { font-size: 0.9em; }
+p.children strong { font-size: 0.8em; }
+p.children strong.modules { padding-left: 5px; }
+
+ul.fullTree { display: none; padding-left: 0; list-style: none; margin-left: 0; margin-bottom: 10px; }
+ul.fullTree ul { margin-left: 0; padding-left: 0; list-style: none; }
+ul.fullTree li { text-align: center; }
+ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; display: block; margin-top: 3px; }
+
+#search { position: absolute; right: 20px; top: 8px; }
+#search input { font-size: 0.9em; }
+.inheritanceTree, .toggleDefines { float: right; }
+
+#projects { font-size: 1.4em; list-style: circle; }
+
+#search_results h1 { margin-bottom: 0; }
+#search_results p { margin-top: 0; margin-bottom: 25px; }
+#projects, #search_results ul { list-style-position: inside; padding-left: 0; list-style: none; }
+#projects li, #search_results ul li { padding: 7px 15px; font-size: 1.1em; }
+#projects .r1, #search_results ul .r1 { background: #f0f0f0; }
+#projects .r2, #search_results ul .r2 { background: #fafafa; }
+
+#listing ul.alpha { font-size: 1.2em; }
+#listing ul.alpha { margin: 0; padding: 0; padding-bottom: 10px; list-style: none; }
+#listing ul.alpha li.letter { font-size: 1.4em; padding-bottom: 10px; }
+#listing ul.alpha ul { margin: 0; padding: 0; }
+#listing ul small { color: #666; font-size: 0.7em; }
+
+/* syntax highlighting */
+.docstring pre.code, .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
+.docstring pre.code, .source_code pre { font-family: Monaco, Courier, monospace; }
+.docstring pre.code { display: block; }
+.source_code .lines { padding-right: 12px; color: #555; }
+pre.code { color: #000; }
+pre.code .info.file { color: #555; }
+pre.code .val { color: #036A07; }
+pre.code .tstring, pre.code .dstring { color: #036A07; }
+pre.code .fid, pre.code .id.new, pre.code .id.to_s, 
+pre.code .id.to_sym, pre.code .id.to_f, 
+pre.code .dot + pre.code .id,
+pre.code .id.to_i pre.code .id.each { color: #0085FF; }
+pre.code .comment { color: #0066FF; }
+pre.code .const { color: #585CF6; }
+pre.code .constant, pre.code .symbol { color: #C5060B; }
+pre.code .kw, 
+pre.code .id.require, 
+pre.code .id.extend,
+pre.code .id.include { color: #0000FF; }
+pre.code .ivar { color: #318495; }
+pre.code .gvar, 
+pre.code .id.backref, 
+pre.code .id.nth_ref { color: #6D79DE; }
+pre.code .regexp, .dregexp { color: #036A07; }
+
+/* autocomplete */
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font: menu;
+	font-size: 12px;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	line-height: 16px;
+	overflow: hidden;
+}
+
+.ac_loading {
+	background: white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+	background-color: #eee;
+}
+
+.ac_over {
+	background-color: #0A246A;
+	color: white;
+}

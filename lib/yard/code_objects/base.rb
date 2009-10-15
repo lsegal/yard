@@ -216,7 +216,7 @@ module YARD
       
       def format(options = {})
         options.merge!(:object => self)
-        Templates.render(options)
+        Templates::Engine.render(options)
       end
       
       def inspect

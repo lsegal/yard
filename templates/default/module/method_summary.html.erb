@@ -1,0 +1,16 @@
+<% if method_listing.size > 0 %>
+  <h2>Method Summary</h2>
+  <ul class="summary">
+    <% method_listing.each do |meth| %>
+      <li class="<%= meth.visibility %>">
+        <%= signature(meth) %>
+        <% if meth.aliases.size > 0 %>
+        (also: <%= meth.aliases.map {|o| h(o.name(true)) }.join(", ") %>)
+        <% end %>
+        <% unless meth.docstring.empty? %>
+          <span class="summary_desc"><%= htmlify_line meth.docstring.summary %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

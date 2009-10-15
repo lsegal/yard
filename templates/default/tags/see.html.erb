@@ -1,11 +1,11 @@
-<div class="see">
+<% if object.has_tag?(:see) %>
   <h3>See Also:</h3>
-  <dl>
-    <dt></dt>
-    <dd>
-      <span class='desc'>
-        <%= docstring.tags(:see).map {|t| "<tt>" + linkify(t.name, t.text || t.name) + "</tt>" }.join(", ") %>
-      </span>
-    </dd>
-  </dl>
-</div>
+  <ul class="see">
+    <% for tag in object.tags(:see) %>
+      <li>
+        <tt><%= linkify(tag.name, tag.text || tag.name) %></tt>
+        <%= "&mdash;" + htmlify_line(tag.text) if tag.text %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

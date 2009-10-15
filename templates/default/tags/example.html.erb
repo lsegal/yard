@@ -1,18 +1,15 @@
-<div class="examples">
-  <% if docstring.tags(:example).size == 1 %>
-    <h3>Example: <small><%= docstring.tag(:example).name %></small></h3>
-    <div class="docstring">
-      <pre class="code"><%= html_syntax_highlight docstring.tag(:example).text %></pre>
-    </div>
+<% if object.has_tag?(:example) %>
+  <% if object.tags(:example).size == 1 %>
+    <% tag = object.tag(:example) %>
+    <h3>Example<%= tag.name ? " " + htmlify_line(tag.name) : "" %>:</h3>
+    <pre class="example code"><%= html_syntax_highlight(tag.text) %></pre>
   <% else %>
-    <h3>Examples</h3>
-    <% docstring.tags(:example).each do |tag| %>
-    <dl>
-      <dt><%= tag.name %></dt>
-      <dd class="docstring">
-        <pre class="code"><%= html_syntax_highlight tag.text %></pre>
-      </dd>
-    </dl>
-    <% end %>
+    <div class="examples">
+      <h3>Examples:</h3>
+      <% object.tags(:example).each do |tag| %>
+        <h4><%= htmlify_line(tag.name) %></h4>
+        <pre class="example code"><%= html_syntax_highlight(tag.text) %></pre>
+      <% end %>
+    </div>
   <% end %>
-</div>
+<% end %>

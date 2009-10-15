@@ -1,9 +1,0 @@
-> <%= YARD::Tags::Library.labels[:param] %>:
-<% for tag in tags_by_param(object) %>
-<% if tag.is_a?(YARD::Tags::OptionTag) %>
-<%= render object, 'option', :param => tag.name.to_s %>
-<% else %>
-  - <%= format_types (tag.types || ['Object']) %> <%= h tag.name %> <% if (o=object.parameters.assoc(tag.name.to_sym)) && o[1] %>(defaults to: <%= h o[1] %>)<% end %>
-<%= "    " + tag.text if tag.text %>
-<% end %>
-<% end %>

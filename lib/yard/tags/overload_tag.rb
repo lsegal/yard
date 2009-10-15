@@ -21,6 +21,10 @@ module YARD
       def name(prefix = false)
         object.name(prefix)
       end
+      
+      def method_missing(*args, &block)
+        object.send(*args, &block)
+      end
 
       private
       

@@ -1,9 +1,0 @@
-<div class="thisclass">
-  <h1>Constants</h1>
-  <dl>
-    <% object.constants(:included => false, :inherited => false).sort_by {|c| c.name.to_s.downcase }.each do |const| %>
-      <dt id="<%= anchor_for(const) %>"><pre><%= h const.source %></pre></dt>
-      <dd><%= htmlify const.docstring %></dd>
-    <% end %>
-  </dl>
-</div>

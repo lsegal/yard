@@ -1,0 +1,13 @@
+<% if constant_listing.size > 0 %>
+  <h2>Constant Summary</h2>
+  <dl class="constants">
+    <% constant_listing.each do |cnst| %>
+      <dt id="<%= anchor_for(cnst) %>"><%= cnst.name %> =
+        <% unless cnst.docstring.empty? %>
+          <span class="summary_desc"><%= htmlify_line cnst.docstring.summary %></span>
+        <% end %>
+      </dt>
+      <dd><pre class="code"><%= format_constant cnst.value %></pre></dd>
+    <% end %>
+  </dl>
+<% end %>

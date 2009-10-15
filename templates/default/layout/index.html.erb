@@ -1,0 +1,44 @@
+<div id="listing">
+  
+  <% if @files && @files.size > 0 %>
+    <h1>File Listing</h1>
+    <ul id="files">
+    <% @files.each do |file| %>
+      <li><%= link_url(File.basename(file) + '.html', File.basename(file)) %></li>
+    <% end %>
+    </ul>
+  <% end %>
+
+  <h1>Class/Module Listing A-Z</h1>
+  
+  <% if Registry.root.meths(:included => false).size > 0 %>
+    <ul class="toplevel"><li><%= linkify(Registry.root, "Top Level Namespace") %></li></ul>
+  <% end %>
+
+  <% i = 0 %>
+  <table>
+    <tr>
+      <td valign='top' width="33%">
+        <% @objects_by_letter.each do |letter, objects| %>
+          <% if (i += 1) % 8 == 0 %>
+            </td><td valign='top' width="33%">
+            <% i = 0 %>
+          <% end %>
+          <ul id="alpha_<%= letter %>" class="alpha">
+            <li class="letter"><%= letter %></li>
+            <ul>
+              <% objects.each do |obj| %>
+                <li>
+                  <%= linkify obj, obj.name %> 
+                  <% if obj.namespace != Registry.root %>
+                    <small>(<%= obj.namespace.path %>)</small>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </ul>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+</div>

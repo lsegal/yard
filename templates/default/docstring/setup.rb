@@ -1,12 +1,9 @@
-before_section :deprecated, :is_deprecated?
-
 def init
-  options.docstring ||= object.docstring
-  sections :deprecated, :text, :tags
+  return if object.docstring.blank?
+  sections :index, [:deprecated, :text], T('../tags')
 end
 
-protected
-
-def is_deprecated?
-  docstring.has_tag?(:deprecated)
+def deprecated
+  return unless object.has_tag?(:deprecated)
+  erb(:deprecated)
 end

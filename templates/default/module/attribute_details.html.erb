@@ -1,0 +1,11 @@
+<% if attr_listing.size > 0 %>
+  <div id="attr_details">
+    <h2>Attribute Details</h2>
+    <% attr_listing.each_with_index do |meth, i| %>
+      <% rw = meth.namespace.attributes[meth.scope][meth.name] %>
+      <span id="<%= anchor_for(rw[:write]) %>"></span>
+      <span id="<%= anchor_for(rw[:read]) %>"></span>
+      <%= yieldall :object => meth, :index => i %>
+    <% end %>
+  </div>
+<% end %>

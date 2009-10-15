@@ -1,8 +1,0 @@
-<% if object.has_tag?(:see) %>
-  <dt>See Also</dt>
-  <dd>
-    <span class='desc'>
-      <%= object.tags(:see).map {|t| "<tt>" + linkify(t.text, t.text) + "</tt>" }.join(", ") %>
-    </span>
-  </dd>
-<% end %>

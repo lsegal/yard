@@ -15,14 +15,13 @@ module YARD
         @options = SymbolHash[
           :format => :html, 
           :template => :default, 
+          :markup => :rdoc,
           :serializer => YARD::Serializers::FileSystemSerializer.new, 
           :files => [],
-          :verifier => lambda do |gen, obj| 
-            return false if gen.respond_to?(:visibility) && !visibilities.include?(gen.visibility) 
-          end
+          :visibilities => [:public],
+          :verifier => nil
         ]
         @files = []
-        @visibilities = [:public]
         @reload = true
         @generate = true
         @options_file = DEFAULT_YARDOPTS_FILE
@@ -35,8 +34,10 @@ module YARD
         Registry.load(files, reload)
         
         if generate
-          Generators::FullDocGenerator.new(options).generate(all_objects)
+          Templates::Engine.generate(all_objects, options)
         end
+        
+        true
       end
 
       def all_objects
@@ -131,15 +132,15 @@ module YARD
         opts.separator "Output options:"
   
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          visibilities.delete(:public)
+          options[:visibilities].delete(:public)
         end
 
         opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          visibilities.push(:protected)
+          options[:visibilities].push(:protected)
         end
 
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          visibilities.push(:private) 
+          options[:visibilities].push(:private) 
         end
 
         opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
@@ -208,7 +209,7 @@ module YARD
         # Last minute modifications
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb'] if self.files.empty?
-        self.visibilities.uniq!
+        options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
       end
     end
