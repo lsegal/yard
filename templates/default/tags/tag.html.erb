@@ -11,7 +11,10 @@
       <% if @name == :param && (o=object.parameters.assoc(tag.name.to_sym)) && o[1] %>
         <em class="default">(defaults to: <tt><%= h o[1] %></tt>)</em>
       <% end %>
-      <%= "&mdash;" + htmlify_line(tag.text) if tag.text %>
+      <% if tag.text %>
+        <% unless @no_types && @no_types %>&mdash;<% end %>
+        <%= htmlify_line(tag.text) %>
+      <% end %>
     </li>
   <% end %>
 </ul>

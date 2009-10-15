@@ -62,4 +62,5 @@ def constant_listing
   return @constants if @constants
   @constants = object.constants(:included => false, :inherited => false)
   @constants = @constants.reject {|o| options[:verifier].call(o).is_a?(FalseClass) } if options[:verifier]
+  @constants
 end

@@ -34,6 +34,13 @@ describe YARD::Templates::Engine do
       lambda { Engine.template(:a, :b, :c) }.should raise_error(ArgumentError)
     end
     
+    it "should create a module including Template" do
+      mock = mock(:template)
+      Engine.should_receive(:find_template_path).with(nil, 'template/name').and_return(['/full/path/template/name'])
+      Engine.should_receive(:template!).with('template/name', '/full/path/template/name').and_return(mock)
+      Engine.template('template/name').should == mock
+    end
+    
     it "should create a Template from a relative Template path" do
       Engine.should_receive(:template_paths).and_return([])
       FileTest.should_receive(:directory?).with("/full/path/template/notname").and_return(true)
@@ -45,13 +52,6 @@ describe YARD::Templates::Engine do
       mod.full_path.to_s.should == "/full/path/template/notname"
     end
 
-    it "should create a module including Template" do
-      mock = mock(:template)
-      Engine.should_receive(:find_template_path).with(nil, 'template/name').and_return(['/full/path/template/name'])
-      Engine.should_receive(:template!).with('template/name', '/full/path/template/name').and_return(mock)
-      Engine.template('template/name').should == mock
-    end
-    
     it "should create a Template including other matching templates in path" do
       mock1, mock2 = mock(:template1), mock(:template2)
       paths = ['/full/path/template/name', '/full/path2/template/name']

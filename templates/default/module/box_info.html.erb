@@ -28,7 +28,7 @@
   <% end %>
   <% unless object == Registry.root %>
     <dt class="r<%=n%> last">Defined in:</dt>
-    <dd class="r<%=n%> last"><%= erb :defines %></dd>
+    <dd class="r<%=n%> last"><%= erb(:defines) %></dd>
   <% end %>
 </dl>
 <div class="clear"></div>

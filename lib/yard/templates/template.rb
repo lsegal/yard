@@ -40,7 +40,7 @@ module YARD
         end
       
         def T(*path)
-          Engine.create(self, *path)
+          Engine.template(self, *path)
         end
       
         def is_a?(klass)
@@ -63,7 +63,7 @@ module YARD
       end
     
       def initialize(opts = {})
-        @cache = {}
+        @cache, @cache_filename = {}, {}
         self.options = {}
         self.sections = []
         add_options(opts)
@@ -144,8 +144,9 @@ module YARD
       end
     
       def erb(section, &block)
-        log.debug "Rendering #{self.class.path}/#{section}"
-        ERB.new(cache(section), nil, '<>').result(binding, &block)
+        erb = ERB.new(cache(section), nil, '<>')
+        erb.filename = cache_filename(section).to_s
+        erb.result(binding, &block)
       end
       
       def file(basename)
@@ -176,8 +177,13 @@ module YARD
         return content if content
       
         file = self.class.find_file(erb_file_for(section))
+        @cache_filename[section.to_sym] = file
         raise ArgumentError, "no template for section '#{section}' in #{self.class.path}" unless file
         @cache[section.to_sym] = file.read
+      end
+      
+      def cache_filename(section)
+        @cache_filename[section.to_sym]
       end
       
       def set_ivars

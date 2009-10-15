@@ -17,3 +17,9 @@ end
 def example(filename)
   File.read(File.join(File.dirname(__FILE__), 'examples', "#{filename}.html"))
 end
+
+module YARD::Templates::Engine
+  class << self
+    public :find_template_path
+  end
+end
