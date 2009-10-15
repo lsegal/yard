@@ -63,6 +63,15 @@ describe YARD::Templates::Engine do
     end
   end
   
+  describe '.generate' do
+    it "should generate with fulldoc template" do
+      mod = mock(:template)
+      mod.should_receive(:run).with(:format => :text, :template => :default, :objects => [:a, :b, :c])
+      Engine.should_receive(:template).with(:default, :fulldoc).and_return(mod)
+      Engine.generate([:a, :b, :c])
+    end
+  end
+  
   describe '.render' do
     def loads_template(*args)
       Engine.should_receive(:template).with(*args).and_return(@template)
@@ -79,8 +88,7 @@ describe YARD::Templates::Engine do
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :text,
-                                          :object => @object,
-                                          :serializer => nil
+                                          :object => @object
       @object.format
     end
   
@@ -89,8 +97,7 @@ describe YARD::Templates::Engine do
       @template.should_receive(:run).with :type => :method,
                                           :template => :javadoc,
                                           :format => :text,
-                                          :object => @object,
-                                          :serializer => nil
+                                          :object => @object
       @object.format(:template => :javadoc)
     end
 
@@ -99,8 +106,7 @@ describe YARD::Templates::Engine do
       @template.should_receive(:run).with :type => :fulldoc,
                                           :template => :default,
                                           :format => :text,
-                                          :object => @object,
-                                          :serializer => nil
+                                          :object => @object
       @object.format(:type => :fulldoc)
     end
   
@@ -109,8 +115,7 @@ describe YARD::Templates::Engine do
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :html,
-                                          :object => @object,
-                                          :serializer => nil
+                                          :object => @object
       @object.format(:format => :html)
     end
   end

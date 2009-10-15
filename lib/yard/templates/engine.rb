@@ -38,16 +38,13 @@ module YARD
         end
 
         def render(options = {})
-          options[:format] ||= :text
-          options[:type] ||= options[:object].type if options[:object]
-          options[:template] ||= :default
-          options[:serializer] ||= nil
-          
+          set_default_options(options)
           mod = template(options[:template], options[:type])
           with_serializer(options[:object], options[:serializer]) { mod.run(options) }
         end
         
         def generate(objects, options = {})
+          set_default_options(options)
           options[:objects] = objects
           template(options[:template], :fulldoc).run(options)
         end
@@ -63,6 +60,12 @@ module YARD
         end
         
         private
+        
+        def set_default_options(options = {})
+          options[:format] ||= :text
+          options[:type] ||= options[:object].type if options[:object]
+          options[:template] ||= :default
+        end
 
         def find_template_path(from_template, path)
           paths = template_paths.dup
