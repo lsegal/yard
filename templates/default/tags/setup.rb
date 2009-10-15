@@ -1,15 +1,40 @@
 attr_accessor :object
 
 def init
-  sections :index, [:overload, :example, :param, :option, :return, :see]
+  sections :index, [:overload, :example, :param, :option, 
+    :yields, :yieldparam, :yieldreturn, :return, :see, :author, :since, :version]
 end
 
 def param
   tag :param
 end
 
+def yields
+  tag :yields
+end
+
+def yieldparam
+  tag :yieldparam
+end
+
+def yieldreturn
+  tag :yieldreturn, :no_names => true
+end
+
 def return
   tag :return, :no_names => true
+end
+
+def author
+  tag :author, :no_types => true, :no_names => true
+end
+
+def since
+  tag :since, :no_types => true, :no_names => true
+end
+
+def version
+  tag :version, :no_types => true, :no_names => true
 end
 
 def tag(name, opts = {})
