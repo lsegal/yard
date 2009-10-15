@@ -29,7 +29,7 @@ end
 
 def index
   @objects_by_letter = {}
-  @page_title = "Project Documentation (yard #{YARD::VERSION})"
+  @page_title = options[:title] || "Project Documentation (yard #{YARD::VERSION})"
   objects = @objects.reject {|o| o == Registry.root }.sort_by {|o| o.name.to_s }
   objects.each {|o| (@objects_by_letter[o.name[0].upcase] ||= []) << o }
   erb(:index)

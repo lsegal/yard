@@ -147,6 +147,10 @@ module YARD
           options[:no_highlight] = true
         end
         
+        opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
+          options[:verifier] = instance_eval("lambda {|object| #{query.taint} }")
+        end
+        
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
           options[:title] = title
         end
