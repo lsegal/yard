@@ -6,23 +6,27 @@ module YARD
       class << self
         attr_accessor :template_paths
 
-        def create(*path)
+        def register_template_path(path)
+          template_paths.push Pathname.new(path)
+        end
+        
+        def template(*path)
           from_template = nil
           from_template = path.shift if path.first.is_a?(Template)
           path = path.join('/')
           full_paths = find_template_path(from_template, path)
           
-          raise "No such template for #{path}" if full_paths.empty?
           path = path.gsub('../', '')
-          mod = create!(path, full_paths.shift)
+          raise ArgumentError, "No such template for #{path}" if full_paths.empty?
+          mod = template!(path, full_paths.shift)
           full_paths.each do |full_path|
-            mod.send(:include, create!(path, full_path))
+            mod.send(:include, template!(path, full_path))
           end
           
           mod
         end
         
-        def create!(path, full_path = nil)
+        def template!(path, full_path = nil)
           full_path ||= path
           name = template_module_name(full_path)
           return const_get(name) rescue NameError 
@@ -33,23 +37,19 @@ module YARD
           mod
         end
 
-        def register_template_path(path)
-          template_paths.push Pathname.new(path)
-        end
-
         def render(options = {})
           options[:format] ||= :text
           options[:type] ||= options[:object].type if options[:object]
           options[:template] ||= :default
           options[:serializer] ||= nil
           
-          mod = create(options[:template], options[:type])
+          mod = template(options[:template], options[:type])
           with_serializer(options[:object], options[:serializer]) { mod.run(options) }
         end
         
         def generate(objects, options = {})
           options[:objects] = objects
-          create(options[:template], :fulldoc).run(options)
+          template(options[:template], :fulldoc).run(options)
         end
 
         def with_serializer(object, serializer, &block)
