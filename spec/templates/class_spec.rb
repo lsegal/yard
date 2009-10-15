@@ -14,6 +14,9 @@ describe Engine.template(:default, :docstring) do
         def method_missing(*args) end
         def a; end
         def b; end
+        
+        # constructor method!
+        def initialize(test) end
       end
     eof
   end

@@ -3,6 +3,6 @@
   <% if @ctor.namespace != object %>
     <p class="notice">This class inherits a constructor from <%= linkify @ctor, @ctor.namespace.path %></p>
   <% else %>
-    <% yieldall :object => @ctor, :index => 0 %>
+    <%= yieldall :object => @ctor, :index => 0 %>
   <% end %>
 </div>
