@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Templates::Engine.template(:default, :method) do
+describe Engine.template(:default, :method) do
   before { Registry.clear }
   
   describe 'regular (deprecated) method' do
