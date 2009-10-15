@@ -143,6 +143,7 @@ module YARD
       define_tag "Example",           :example,     :with_raw_title_and_text
       define_tag "Options Hash",      :option,      :with_options
       define_tag "Overloads",         :overload,    OverloadTag
+      define_tag "Private",           :private
     end
   end
 end
