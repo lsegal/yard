@@ -2,7 +2,7 @@ attr_accessor :object
 
 def init
   sections :index, [:overload, :example, :param, :option, 
-    :yields, :yieldparam, :yieldreturn, :return, :see, :author, :since, :version]
+    :yields, :yieldparam, :yieldreturn, :return, :raises, :see, :author, :since, :version]
 end
 
 def param
@@ -23,6 +23,10 @@ end
 
 def return
   tag :return, :no_names => true
+end
+
+def raises
+  tag :raise, :no_names => true
 end
 
 def author

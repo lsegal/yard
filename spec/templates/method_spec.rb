@@ -10,6 +10,7 @@ describe Engine.template(:default, :method) do
         # Comments
         # @param [String] x the x argument
         # @return [String] the result
+        # @raise [Exception] hi!
         # @deprecated for great justice
         def m(x) end
         alias x m
