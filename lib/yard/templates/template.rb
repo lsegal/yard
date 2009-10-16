@@ -5,12 +5,18 @@ module YARD
     module Template
       attr_accessor :class, :options, :sections, :section
       
+      class << self
+        attr_accessor :extra_includes
+
+        def included(klass)
+          klass.extend(ClassMethods)
+        end
+      end
+      
+      self.extra_includes = []
+      
       include Helpers::BaseHelper
       include Helpers::MethodHelper
-    
-      def self.included(klass)
-        klass.extend(ClassMethods)
-      end
 
       module ClassMethods
         attr_accessor :path, :full_path
@@ -70,7 +76,10 @@ module YARD
         self.options = {}
         self.sections = []
         add_options(opts)
+        
         extend(Helpers::HtmlHelper) if options[:format] == :html
+        extend(*Template.extra_includes) unless Template.extra_includes.empty?
+
         init
       end
     
