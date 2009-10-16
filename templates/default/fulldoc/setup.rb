@@ -44,7 +44,7 @@ end
 
 def generate_assets
   %w( js/jquery.js js/autocomplete.js js/app.js 
-      js/full_list.js css/style.css css/full_list.css ).each do |file|
+      js/full_list.js css/style.css css/full_list.css css/common.css ).each do |file|
     asset(file, file(file))
   end
   
