@@ -1,6 +1,6 @@
 def init
   objects = options[:objects]
-  options[:files] = ([options[:readme].to_s] + options[:files]).compact
+  options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
   options[:readme] = options[:files].first
   
   generate_assets
