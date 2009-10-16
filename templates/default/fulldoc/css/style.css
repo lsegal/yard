@@ -28,6 +28,7 @@ ul.summary {
   line-height: 1.5em;
 }
 li.deprecated { text-decoration: line-through; }
+li.deprecated .summary_desc { text-decoration: none; }
 ul.summary a:link, ul.summary a:visited { text-decoration: none; }
 h3.inherited {
   font-style: italic;
