@@ -1,12 +1,12 @@
 <% n = 1 %>
 <dl class="box">
-  <% if CodeObjects::ClassObject === object %>
+  <% if CodeObjects::ClassObject === object && object.superclass %>
     <dt class="r<%=n%>">Inherits:</dt>
     <dd class="r<%=n%>">
       <span class="inheritName"><%= linkify object.superclass %></span>
       <% if object.superclass.name != :Object %>
         <ul class="fullTree">
-          <li>Object</li>
+          <li><%= linkify P(:Object) %></li>
           <ul>
             <% object.inheritance_tree.reverse.each do |obj| %>
               <li><%= obj == object ? obj.path : linkify(obj) %></li><ul>
