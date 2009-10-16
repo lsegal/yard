@@ -52,7 +52,7 @@ def attr_listing
 end
 
 def prune_listing(list)
-  list = list.reject {|o| options[:verifier].call(o).is_a?(FalseClass) } if options[:verifier]
+  list = run_verifier(list)
   list = list.reject {|o| !options[:visibilities].include? o.visibility } if options[:visibilities]
   list = list.reject(&:is_alias?)
   list.sort_by {|o| [o.scope, (options[:visibilities]||[]).index(o.visibility), o.name].join(":") }
@@ -61,6 +61,8 @@ end
 def constant_listing
   return @constants if @constants
   @constants = object.constants(:included => false, :inherited => false)
-  @constants = @constants.reject {|o| options[:verifier].call(o).is_a?(FalseClass) } if options[:verifier]
+  @constants = run_verifier(@constants)
   @constants
 end
+
+
