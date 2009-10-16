@@ -27,8 +27,6 @@ ul.summary {
   font-size: 1.0em;
   line-height: 1.5em;
 }
-li.deprecated { text-decoration: line-through; }
-li.deprecated .summary_desc { text-decoration: none; }
 ul.summary a:link, ul.summary a:visited { text-decoration: none; }
 h3.inherited {
   font-style: italic;
@@ -166,6 +164,9 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
   border: 1px solid #999;
   border-collapse: collapse;
 }
+
+#content ul.summary li.deprecated a:link, 
+#content ul.summary li.deprecated a:visited { text-decoration: line-through; font-style: italic; }
 
 /* syntax highlighting */
 .docstring pre.code, .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
