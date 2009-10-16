@@ -28,8 +28,14 @@ Spec::Rake::SpecTask.new("specs") do |t|
   t.spec_opts = ["--format", "specdoc", "--colour"]
   t.spec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
   t.spec_files = Dir["spec/**/*_spec.rb"].sort
-  t.rcov = true if ENV['RCOV']
-  t.rcov_opts = ['-x', '_spec\.rb$,spec_helper\.rb$']
+  
+  if ENV['RCOV']
+    hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
+    hide += ',legacy\/.+_handler' if RUBY19
+    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$' if RUBY18
+    t.rcov = true 
+    t.rcov_opts = ['-x', hide]
+  end
 end
 task :spec => :specs
 
