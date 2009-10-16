@@ -128,6 +128,7 @@ module YARD
       def link_object(obj, otitle = nil, anchor = nil, relative = true)
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
         title = otitle ? otitle.to_s : h(obj.path)
+        title = "Top Level Namespace" if title == "" && obj == Registry.root
         return title unless serializer
 
         return title if obj.is_a?(CodeObjects::Proxy)
@@ -180,8 +181,8 @@ module YARD
             fromobj = fromobj.namespace
           end
 
-          from  = serializer.serialized_path(fromobj)
-          link  = File.relative_path(from, objpath)
+          from = serializer.serialized_path(fromobj)
+          link = File.relative_path(from, objpath)
         else
           link = objpath
         end
