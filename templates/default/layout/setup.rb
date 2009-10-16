@@ -7,7 +7,7 @@ def init
     @fname = @file.gsub(/\..+$/, '')
     @breadcrumb_title = "File: " + @fname
     sections :header, [:diskfile]
-  else
+  elsif object
     case object
     when 'glossary.html'
       sections :header, [:glossary]
@@ -24,7 +24,13 @@ def init
       type = object == Registry.root ? :module : object.type
       sections :header, [T("../#{type}")]
     end
+  else
+    sections :header, [:contents]
   end
+end
+
+def contents
+  @contents
 end
 
 def glossary
