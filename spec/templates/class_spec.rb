@@ -12,6 +12,7 @@ describe Engine.template(:default, :docstring) do
       class A < B
         # HI
         def method_missing(*args) end
+        # @deprecated
         def a; end
         def b; end
         

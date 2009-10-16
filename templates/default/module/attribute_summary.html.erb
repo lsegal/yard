@@ -2,7 +2,7 @@
   <h2>Attribute Summary</h2>
   <ul class="summary">
     <% attr_listing.each do |meth| %>
-      <li class="<%= meth.visibility %>"><%= signature(meth) %>
+      <li class="<%= meth.visibility %> <%= meth.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= signature(meth) %>
         <% unless meth.docstring.empty? %>
           <span class="summary_desc"><%= htmlify_line meth.docstring.summary %></span>
         <% end %>

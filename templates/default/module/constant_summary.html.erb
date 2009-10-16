@@ -2,7 +2,7 @@
   <h2>Constant Summary</h2>
   <dl class="constants">
     <% constant_listing.each do |cnst| %>
-      <dt id="<%= anchor_for(cnst) %>"><%= cnst.name %> =
+      <dt id="<%= anchor_for(cnst) %> <%= cnst.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= cnst.name %> =
         <% unless cnst.docstring.empty? %>
           <span class="summary_desc"><%= htmlify_line cnst.docstring.summary %></span>
         <% end %>

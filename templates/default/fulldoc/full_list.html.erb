@@ -15,7 +15,7 @@
     <ul id="full_list">
       <% n = 1 %>
       <% @items.each do |item| %>
-        <li class="r<%= n %>">
+        <li class="r<%= n %> <%= item.is_a?(CodeObjects::Base) && item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
           <% if @file_list %>
             <%= link_file item, File.basename(item).gsub(/\.[^.]+$/, '') %>
           <% elsif item == Registry.root %>

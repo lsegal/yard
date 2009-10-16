@@ -14,8 +14,8 @@ function fullListSearch() {
         }
       });
     }
-    $('#full_list li:even:visible').attr('class', 'r1');
-    $('#full_list li:odd:visible').attr('class', 'r2');
+    $('#full_list li:even:visible').removeClass('r2').addClass('r1');
+    $('#full_list li:odd:visible').removeClass('r1').addClass('r2');
     
     if ($('#full_list li:visible').size() == 0) {
       $('#noresults').fadeIn();

@@ -27,6 +27,7 @@ ul.summary {
   font-size: 1.0em;
   line-height: 1.5em;
 }
+li.deprecated { text-decoration: line-through; }
 ul.summary a:link, ul.summary a:visited { text-decoration: none; }
 h3.inherited {
   font-style: italic;
