@@ -17,6 +17,7 @@ module YARD
       end
 
       def htmlify(text, markup = options[:markup])
+        return "" unless text
         return text unless markup
         load_markup_provider(markup)
 
