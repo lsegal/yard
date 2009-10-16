@@ -131,6 +131,7 @@ module YARD
       end
     
       def link_object(obj, otitle = nil, anchor = nil, relative = true)
+        return otitle if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
         title = otitle ? otitle.to_s : h(obj.path)
         title = "Top Level Namespace" if title == "" && obj == Registry.root
