@@ -2,6 +2,11 @@ module YARD::Templates::Helpers
   module BaseHelper
     attr_accessor :object, :serializer
     
+    def run_verifier(list)
+      return list unless options[:verifier]
+      list.reject {|item| options[:verifier].call(item).is_a?(FalseClass) }
+    end
+    
     # This is used a lot by the HtmlHelper and there should
     # be some helper to "clean up" text for whatever, this is it.
     def h(text)
