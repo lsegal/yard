@@ -37,11 +37,11 @@ module YARD
           mod
         end
 
-        def render(options = {}, serialize = true)
+        def render(options = {})
           set_default_options(options)
           mod = template(options[:template], options[:type])
           
-          if serialize
+          if options[:serialize] != false
             with_serializer(options[:object], options[:serializer]) { mod.run(options) }
           else
             mod.run(options)
