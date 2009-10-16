@@ -14,7 +14,7 @@ module YARD
           from_template = nil
           from_template = path.shift if path.first.is_a?(Template)
           path = path.join('/')
-          full_paths = find_template_path(from_template, path)
+          full_paths = find_template_paths(from_template, path)
           
           path = path.gsub('../', '')
           raise ArgumentError, "No such template for #{path}" if full_paths.empty?
@@ -72,14 +72,15 @@ module YARD
           options[:template] ||= :default
         end
 
-        def find_template_path(from_template, path)
+        def find_template_paths(from_template, path)
           paths = template_paths.dup
-          paths.unshift(from_template.full_path) if from_template
+          paths = from_template.full_paths + paths if from_template
+          
           paths.inject([]) do |acc, tp|
             full_path = tp.join(path).cleanpath
             acc.unshift(full_path) if full_path.directory?
             acc
-          end
+          end.uniq
         end
 
         def template_module_name(path)

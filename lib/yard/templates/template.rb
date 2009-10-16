@@ -14,6 +14,13 @@ module YARD
 
       module ClassMethods
         attr_accessor :path, :full_path
+        
+        def full_paths
+          included_modules.inject([full_path]) do |paths, mod|
+            paths |= mod.full_paths if mod.respond_to?(:full_paths)
+            paths
+          end
+        end
     
         def initialize(path, full_path)
           self.path = path
@@ -49,13 +56,9 @@ module YARD
         end
 
         def find_file(basename)
-          first = full_path.join(basename)
-          return first if first.file?
-
-          included_modules.each do |mod|
-            next unless mod.respond_to?(:find_file)
-            file = mod.find_file(basename)
-            return file if file
+          full_paths.each do |path|
+            file = path.join(basename)
+            return file if file.file?
           end
 
           nil

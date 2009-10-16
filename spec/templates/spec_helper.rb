@@ -20,6 +20,6 @@ end
 
 module YARD::Templates::Engine
   class << self
-    public :find_template_path
+    public :find_template_paths
   end
 end
