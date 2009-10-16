@@ -68,6 +68,7 @@ describe YARD::CLI::Yardoc do
   end
 
   it "should accept globs as extra files" do
+    Dir.should_receive(:glob).with('README*').and_return []
     Dir.should_receive(:glob).with('*.txt').and_return ['a.txt', 'b.txt']
     File.should_receive(:file?).with('a.txt').and_return(true)
     File.should_receive(:file?).with('b.txt').and_return(true)
