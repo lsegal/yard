@@ -1,3 +1,5 @@
+include Helpers::ModuleHelper
+
 def init
   objects = options[:objects]
   options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
@@ -55,7 +57,7 @@ def generate_assets
 end
 
 def generate_method_list
-  @items = run_verifier(Registry.all(:method)).sort_by {|m| m.name.to_s }
+  @items = prune_method_listing(Registry.all(:method)).sort_by {|m| m.name.to_s }
   @list_title = "Method List"
   asset('method_list.html', erb(:full_list))
 end

@@ -1,3 +1,5 @@
+include Helpers::ModuleHelper
+
 def init
   sections :header, :box_info, :pre_docstring, T('../docstring'), :children, 
     :constant_summary, :attribute_summary, :method_summary, :inherited_methods,
@@ -31,8 +33,7 @@ def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_methods.include? o.name(true).to_s } unless include_specials
   return @meths if @meths
   @meths = object.meths(inherited: false, included: false)
-  @meths = prune_listing(@meths)
-  @meths.reject!(&:is_attribute?)
+  @meths = sort_listing(prune_method_listing(@meths))
   @meths
 end
 
@@ -48,14 +49,7 @@ def attr_listing
       @attrs << (rw[:read] || rw[:write])
     end
   end
-  @attrs = prune_listing(@attrs)
-end
-
-def prune_listing(list)
-  list = run_verifier(list)
-  list = list.reject {|o| !options[:visibilities].include? o.visibility } if options[:visibilities]
-  list = list.reject(&:is_alias?)
-  list.sort_by {|o| [o.scope, (options[:visibilities]||[]).index(o.visibility), o.name].join(":") }
+  @attrs = sort_listing(prune_method_listing(@attrs, false))
 end
 
 def constant_listing
@@ -65,4 +59,6 @@ def constant_listing
   @constants
 end
 
-
+def sort_listing(list)
+  list.sort_by {|o| [o.scope, (options[:visibilities]||[]).index(o.visibility), o.name].join(":") }
+end

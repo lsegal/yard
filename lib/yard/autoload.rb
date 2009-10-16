@@ -126,6 +126,7 @@ module YARD
       autoload :HtmlSyntaxHighlightHelper,  __p('templates/helpers/html_syntax_highlight_helper')
       autoload :MarkupHelper,               __p('templates/helpers/markup_helper')
       autoload :MethodHelper,               __p('templates/helpers/method_helper')
+      autoload :ModuleHelper,               __p('templates/helpers/module_helper')
       autoload :UMLHelper,                  __p('templates/helpers/uml_helper')
     end
 
