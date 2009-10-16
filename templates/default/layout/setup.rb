@@ -36,6 +36,7 @@ def glossary
 end
 
 def diskfile
+  "<div id='filecontents'>" +
   case (File.extname(@file)[1..-1] || '').downcase
   when 'textile', 'txtile'
     htmlify(@contents, :textile)
@@ -45,5 +46,6 @@ def diskfile
     htmlify(@contents, :rdoc)
   else
     "<pre>#{@contents}</pre>"
-  end
+  end +
+  "</div>"
 end

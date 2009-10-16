@@ -169,13 +169,16 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
 #content ul.summary li.deprecated a:visited { text-decoration: line-through; font-style: italic; }
 
 /* syntax highlighting */
+#filecontents pre.code, 
 .docstring pre.code, .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
-.docstring pre.code, .source_code pre { font-family: Monaco, Courier, monospace; }
-.docstring pre.code { display: block; }
+#filecontents pre.code, .docstring pre.code, .source_code pre { font-family: monospace; }
+#filecontents pre.code, .docstring pre.code { display: block; }
 .source_code .lines { padding-right: 12px; color: #555; }
 pre.code { color: #000; }
 pre.code .info.file { color: #555; }
 pre.code .val { color: #036A07; }
+pre.code .tstring_content,
+pre.code .heredoc_beg, pre.code .heredoc_end,
 pre.code .tstring, pre.code .dstring { color: #036A07; }
 pre.code .fid, pre.code .id.new, pre.code .id.to_s, 
 pre.code .id.to_sym, pre.code .id.to_f, 
@@ -185,6 +188,7 @@ pre.code .comment { color: #0066FF; }
 pre.code .const { color: #585CF6; }
 pre.code .constant, pre.code .symbol { color: #C5060B; }
 pre.code .kw, 
+pre.code .label,
 pre.code .id.require, 
 pre.code .id.extend,
 pre.code .id.include { color: #0000FF; }
