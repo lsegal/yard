@@ -215,6 +215,7 @@ module YARD
         self.files = ['lib/**/*.rb'] if self.files.empty?
         options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
+        options[:readme] ||= Dir.glob('README*').first
       end
     end
   end
