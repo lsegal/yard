@@ -22,7 +22,6 @@ describe Engine.template(:default, :docstring) do
   end
   
   it "should render correctly" do
-    puts Registry.at('A').format(:format => :html)
     html_equals(Registry.at('A').format(:format => :html), :class001)
   end
 end
