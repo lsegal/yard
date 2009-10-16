@@ -11,5 +11,6 @@ h1 { padding: 0; margin: 5px; margin-left: 10px; margin-bottom: 0; }
 #search { position: absolute; right: 5px; top: 9px; }
 #full_list { padding: 0; list-style: none; }
 #full_list li { padding: 7px 15px; font-size: 1.1em; }
+#noresults { display: none; padding: 7px 15px; }
 li.r1 { background: #f0f0f0; }
 li.r2 { background: #fafafa; }

@@ -16,7 +16,17 @@ function fullListSearch() {
     }
     $('#full_list li:even:visible').attr('class', 'r1');
     $('#full_list li:odd:visible').attr('class', 'r2');
+    
+    if ($('#full_list li:visible').size() == 0) {
+      $('#noresults').fadeIn();
+    }
+    else {
+      $('#noresults').hide();
+    }
   });
+  
+  $('#search input').focus();
+  $('#full_list').after("<div id='noresults'>No results were found.</div>")
 }
 
 $(fullListSearch);
