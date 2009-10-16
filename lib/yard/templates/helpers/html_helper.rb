@@ -196,6 +196,11 @@ module YARD
           fromobj = fromobj.namespace
         end
         from = serializer.serialized_path(fromobj)
+        if filename == options[:readme]
+          filename = 'index'
+        else
+          filename = 'file.' + File.basename(filename).gsub(/\..+$/, '')
+        end
         link = File.relative_path(from, filename)
         link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
