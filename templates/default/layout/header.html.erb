@@ -8,6 +8,10 @@
     <% if @extra_css %>
       <link rel="stylesheet" href="<%= url_for @extra_css %>" type="text/css" media="screen" charset="utf-8" />
     <% end %>
+    <script type="text/javascript" charset="utf-8">
+      relpath = '<%= url_for('') %>';
+      if (relpath != '') relpath += '/';
+    </script>
     <script type="text/javascript" charset="utf-8" src="<%= url_for("js/jquery.js") %>"></script>
     <script type="text/javascript" charset="utf-8" src="<%= url_for("js/autocomplete.js") %>"></script>
     <script type="text/javascript" charset="utf-8" src="<%= url_for("js/app.js") %>"></script>
@@ -15,16 +19,15 @@
   <body>
     <div id="header">
       <%= erb(:breadcrumb) %>
-      <form id="search" method="get">
-        Search:
-        <input id="searchBox" name="q" type="text" size="30" value="" />
-        <input type="submit" value="Go" />
-      </form>
+      <div id="search">
+        <a id="class_list_link" href="#">Namespace List</a> |
+        <a id="method_list_link" href="#">Method List</a> |
+        <a id ="file_list_link" href="#">File List</a>
+      </div>
       <div class="clear"></div>
-      <script type="text/javascript" charset="utf-8">
-        $(function() { $('#searchBox').autocomplete('objects.json'); });
-      </script>
     </div>
+    
+    <iframe id="search_frame"></iframe>
     
     <div id="content"><%= yieldall %></div>
     

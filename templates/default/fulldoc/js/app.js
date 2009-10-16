@@ -50,7 +50,28 @@ function fixBoxInfoHeights() {
     });
 }
 
+function searchFrameLinks() {
+  $('#method_list_link').click(function() {
+    toggleSearchFrame(relpath + 'method_list.html');
+  });
+
+  $('#class_list_link').click(function() {
+    toggleSearchFrame(relpath + 'class_list.html');
+  });
+
+  $('#file_list_link').click(function() {
+    toggleSearchFrame(relpath + 'file_list.html');
+  });
+}
+
+function toggleSearchFrame(link) {
+  var frame = $('#search_frame');
+  if (frame.attr('src') == link && frame.css('display') != "none") frame.slideUp(100);
+  else frame.attr('src', link).slideDown(100);
+}
+
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);
 $(fixBoxInfoHeights);
+$(searchFrameLinks);

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta name="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/full_list.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/full_list.js"></script>
+    <base target="_parent" />
+  </head>
+  <body>
+    <h1 id="full_list_header"><%= @list_title %></h1>
+    <div id="search">Search: <input type="text" /></div>
+    <div class="clear"></div>
+    <ul id="full_list">
+      <% n = 1 %>
+      <% @items.each do |item| %>
+        <li class="r<%= n %>">
+          <% if @file_list %>
+            <%= link_file item, File.basename(item).gsub(/\.[^.]+$/, '') %>
+          <% elsif item == Registry.root %>
+            <a href="top-level-namespace.html">Top Level Namespace</a>
+          <% else %>
+            <% name = item.is_a?(CodeObjects::MethodObject) ? item.name(true) : item.name %>
+            <%= linkify item, name %> 
+            <% if item.namespace && item.namespace != Registry.root %>
+              <small>(<%= item.namespace %>)</small>
+            <% end %>
+          <% end %>
+          <% n = n == 2 ? 1 : 2 %>
+        </li>
+      <% end %>
+    </ul>
+  </body>
+</html>
+

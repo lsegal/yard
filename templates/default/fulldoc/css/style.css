@@ -75,7 +75,10 @@ dl.box .last {
 }
 dl.box .r1 { background: rgb(238, 238, 238); }
 
-ul.toplevel { padding-left: 15px; font-size: 1.2em; }
+ul.toplevel, #files { padding-left: 15px; font-size: 1.2em; }
+
+#files { padding: 0; }
+#files li { list-style: none; display: inline; padding: 7px 12px; line-height: 35px; }
 
 dl.constants { margin-left: 40px; }
 dl.constants dt { font-weight: bold; font-size: 1.2em; margin-bottom: 5px; }
@@ -140,14 +143,27 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
 #search_results p { margin-top: 0; margin-bottom: 25px; }
 #projects, #search_results ul { list-style-position: inside; padding-left: 0; list-style: none; }
 #projects li, #search_results ul li { padding: 7px 15px; font-size: 1.1em; }
-#projects .r1, #search_results ul .r1 { background: #f0f0f0; }
-#projects .r2, #search_results ul .r2 { background: #fafafa; }
+#projects .r1, #search_results ul .r1, li.r1 { background: #f0f0f0; }
+#projects .r2, #search_results ul .r2, li.r2 { background: #fafafa; }
 
 #listing ul.alpha { font-size: 1.2em; }
 #listing ul.alpha { margin: 0; padding: 0; padding-bottom: 10px; list-style: none; }
 #listing ul.alpha li.letter { font-size: 1.4em; padding-bottom: 10px; }
 #listing ul.alpha ul { margin: 0; padding: 0; }
 #listing ul small { color: #666; font-size: 0.7em; }
+
+#search_frame {
+  background: #fff;
+  display: none;
+  position: absolute; 
+  top: 32px; 
+  right: 18px;
+  width: 500px;
+  height: 80%;
+  overflow-y: scroll;
+  border: 1px solid #999;
+  border-collapse: collapse;
+}
 
 /* syntax highlighting */
 .docstring pre.code, .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
