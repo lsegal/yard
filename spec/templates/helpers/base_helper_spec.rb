@@ -2,6 +2,116 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Templates::Helpers::BaseHelper do
   include YARD::Templates::Helpers::BaseHelper
+  
+  describe '#run_verifier' do
+    it "should run verifier proc against list if provided" do
+      mock = mock(:verifier)
+      mock.should_receive(:call).with(1)
+      mock.should_receive(:call).with(2)
+      mock.should_receive(:call).with(3)
+      should_receive(:options).at_least(1).times.and_return(:verifier => mock)
+      run_verifier [1, 2, 3]      
+    end
+    
+    it "should prune list if lambda returns false and only false" do
+      mock = mock(:verifier)
+      should_receive(:options).at_least(1).times.and_return(:verifier => mock)
+      mock.should_receive(:call).with(1).and_return(false)
+      mock.should_receive(:call).with(2).and_return(true)
+      mock.should_receive(:call).with(3).and_return(nil)
+      mock.should_receive(:call).with(4).and_return("value")
+      run_verifier([1, 2, 3, 4]).should == [2, 3, 4]
+    end
+    
+    it "should return list if no verifier exists" do
+      should_receive(:options).at_least(1).times.and_return({})
+      run_verifier([1, 2, 3]).should == [1, 2, 3]
+    end
+  end
+  
+  describe '#h' do
+    it "should return just the text" do
+      h("hello world").should == "hello world"
+      h(nil).should == nil
+    end
+  end
+  
+  describe '#link_object' do
+    it "should return the title if provided" do
+      link_object(1, "title").should == "title"
+      link_object(Registry.root, "title").should == "title"
+    end
+    
+    it "should return a path if argument is a Proxy or object" do
+      link_object(Registry.root).should == ""
+      link_object(P("Array")).should == "Array"
+    end
+    
+    it "should should return path of Proxified object if argument is a String or Symbol" do
+      link_object("Array").should == "Array"
+      link_object(:"A::B").should == "A::B"
+    end
+    
+    it "should return the argument if not an object, proxy, String or Symbol" do
+      link_object(1).should == 1
+    end
+  end
+  
+  describe '#link_url' do
+    it "should return the URL" do
+      link_url("http://url").should == "http://url"
+    end
+  end
+  
+  describe '#format_types' do
+    it "should return the list of types separated by commas surrounded by brackets" do
+      format_types(['a', 'b', 'c']).should == '(a, b, c)'
+    end
+    
+    it "should return the list of types without brackets if brackets=false" do
+      format_types(['a', 'b', 'c'], false).should == 'a, b, c'
+    end
+    
+    it "should should return an empty string if list is empty or nil" do
+      format_types(nil).should == ""
+      format_types([]).should == ""
+    end
+  end
+  
+  describe '#format_object_type' do
+    it "should return Exception if type is Exception" do
+      obj = mock(:object)
+      obj.stub!(:class).and_return(YARD::CodeObjects::ClassObject)
+      obj.stub!(:is_exception?).and_return(true)
+      format_object_type(obj).should == "Exception"
+    end
+    
+    it "should return Class if type is Class" do
+      obj = mock(:object)
+      obj.stub!(:class).and_return(YARD::CodeObjects::ClassObject)
+      obj.stub!(:is_exception?).and_return(false)
+      format_object_type(obj).should == "Class"
+    end
+    
+    it "should return object type in other cases" do
+      obj = mock(:object)
+      obj.stub!(:type).and_return("value")
+      format_object_type(obj).should == "Value"
+    end
+  end
+  
+  describe '#format_object_title' do
+    it "should return Top Level Namespace for root object" do
+      format_object_title(Registry.root).should == "Top Level Namespace"
+    end
+    
+    it "should return 'type: path' in other cases" do
+      obj = mock(:object)
+      obj.stub!(:type).and_return(:class)
+      obj.stub!(:path).and_return("A::B::C")
+      format_object_title(obj).should == "Class: A::B::C"
+    end
+  end
 
   describe "#linkify" do
     it "should pass off to #link_object if argument is an object" do
