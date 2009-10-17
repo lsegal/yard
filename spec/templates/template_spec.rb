@@ -46,4 +46,18 @@ describe YARD::Templates::Template do
       mod.T('../other')
     end
   end
+  
+  describe '.find_file' do
+    it "should find file in module's full_path" do
+      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(false)
+      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      template(:a).find_file('basename').should == Pathname.new('/full/path/b/basename')
+    end
+    
+    it "should return nil if no file is found" do
+      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(false)
+      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(false)
+      template(:a).find_file('basename').should be_nil
+    end
+  end
 end
