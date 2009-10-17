@@ -30,4 +30,12 @@ describe YARD::Templates::Template do
       mod.full_paths.should == [Pathname.new('/full/path/d')]
     end
   end
+  
+  describe '.load_setup_rb' do
+    it "should load setup.rb file for module" do
+      File.should_receive(:file?).with('/full/path/e/setup.rb').and_return(true)
+      File.should_receive(:read).with('/full/path/e/setup.rb').and_return('def success; end')
+      template(:e).new.should respond_to(:success)
+    end
+  end
 end
