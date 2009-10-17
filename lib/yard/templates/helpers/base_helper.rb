@@ -39,12 +39,8 @@ module YARD::Templates::Helpers
       url
     end
     
-    def format_object_name_list(objects)
-      objects.sort_by {|o| o.name.to_s.downcase }.join(", ")
-    end
-    
     def format_types(list, brackets = true)
-      list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
+      list.nil? || list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
     end
 
     def format_object_type(object)
