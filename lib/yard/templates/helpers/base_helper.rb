@@ -64,33 +64,5 @@ module YARD::Templates::Helpers
         format_object_type(object) + ": " + object.path
       end
     end
-
-    def overloads(method)
-      if method.tags(:overload).size == 1
-        method.tags(:overload)
-      else
-        [method]
-      end
-    end
-    
-    def signature(meth, link = true)
-      type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
-      type = linkify(P(object.namespace, type), type) unless link
-      scope = meth.scope == :class ? "+" : "-"
-      name = meth.name
-      blk = format_block(meth)
-      args = format_args(meth)
-      extras = []
-      extras_text = ''
-      if rw = meth.namespace.attributes[meth.scope][meth.name]
-        attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
-        attname = attname.size == 1 ? attname.join('') + 'only' : nil
-        extras << attname if attname
-      end
-      extras << meth.visibility if meth.visibility != :public
-      extras_text = ' (' + extras.join(", ") + ')' unless extras.empty?
-      title = "%s (%s) %s%s %s" % [scope, type, name, args, blk]
-      (link ? linkify(meth, title) : title) + extras_text
-    end
   end
 end
