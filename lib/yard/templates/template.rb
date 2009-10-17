@@ -105,11 +105,12 @@ module YARD
           subsection_index = 0
           @section_index = index
           self.section = s
-          out << render_section(section) do |*args|
+          value = render_section(section) do |*args|
             text = yieldnext(args.first, subsection_index, &block)
             subsection_index += 1
             text
           end
+          out << (value || "")
         end
         out
       end
