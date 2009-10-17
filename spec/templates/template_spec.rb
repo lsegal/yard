@@ -199,6 +199,17 @@ describe YARD::Templates::Template do
     end
   end 
   
+  describe '#subsections' do
+    it "should set subsections when they are available" do
+      mod = template(:e).new
+      mod.sections :a, [:b, :c]
+      mod.should_receive(:render_section).with(:a) do
+        mod.subsections.should == [:b, :c]
+      end
+      mod.run
+    end
+  end
+  
   describe '#yield' do
     it "should yield a subsection" do
       mod = template(:e).new
