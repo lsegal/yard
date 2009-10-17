@@ -60,4 +60,17 @@ describe YARD::Templates::Template do
       template(:a).find_file('basename').should be_nil
     end
   end
+  
+  describe '#file' do
+    it "should read the file if it exists" do
+      FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(true)
+      IO.should_receive(:read).with('/full/path/e/abc').and_return('hello world')
+      template(:e).new.file('abc').should == 'hello world'
+    end
+    
+    it "should raise ArgumentError if the file does not exist" do
+      FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(false)
+      lambda { template(:e).new.file('abc') }.should raise_error(ArgumentError)
+    end
+  end
 end
