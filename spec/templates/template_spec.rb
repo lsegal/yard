@@ -61,6 +61,30 @@ describe YARD::Templates::Template do
     end
   end
   
+  describe '.extra_includes' do
+    it "should be included when a module is initialized" do
+      module MyModule; end
+      Template.extra_includes << MyModule
+      template(:e).new.should be_kind_of(MyModule)
+    end
+  end
+  
+  describe '#T' do
+    it "should delegate to class method" do
+      template(:e).should_receive(:T).with('test')
+      template(:e).new.T('test')
+    end
+  end
+  
+  describe '#init' do
+    it "should be called during initialization" do
+      module YARD::Templates::Engine::Template__full_path_e
+        def init; sections 1, 2, 3 end 
+      end
+      template(:e).new.sections.should == [1, 2, 3]
+    end
+  end
+  
   describe '#file' do
     it "should read the file if it exists" do
       FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(true)
