@@ -38,4 +38,12 @@ describe YARD::Templates::Template do
       template(:e).new.should respond_to(:success)
     end
   end
+  
+  describe '.T' do
+    it "should load template from relative path" do
+      mod = template(:a)
+      Engine.should_receive(:template).with(mod, '../other')
+      mod.T('../other')
+    end
+  end
 end
