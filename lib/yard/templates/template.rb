@@ -114,19 +114,6 @@ module YARD
         out
       end
     
-      def render_section(section, &block)
-        case section
-        when String, Symbol
-          if respond_to?(section)
-            send(section, &block) 
-          else
-            erb(section, &block)
-          end
-        when Module, Template
-          section.run(options, &block) if section.is_a?(Template)
-        end || ""
-      end
-    
       def subsections
         subsections = sections[@section_index + 1]
         subsections = nil unless Array === subsections
@@ -184,6 +171,19 @@ module YARD
     
       private
     
+      def render_section(section, &block)
+        case section
+        when String, Symbol
+          if respond_to?(section)
+            send(section, &block) 
+          else
+            erb(section, &block)
+          end
+        when Module, Template
+          section.run(options, &block) if section.is_a?(Template)
+        end || ""
+      end
+
       def cache(section)
         content = @cache[section.to_sym]
         return content if content
