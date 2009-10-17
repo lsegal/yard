@@ -69,6 +69,12 @@ describe YARD::Templates::Template do
     end
   end
   
+  describe '.is_a?' do
+    it "should be kind of Template" do
+      template(:e).is_a?(Template).should == true
+    end
+  end
+  
   describe '#T' do
     it "should delegate to class method" do
       template(:e).should_receive(:T).with('test')
@@ -97,4 +103,99 @@ describe YARD::Templates::Template do
       lambda { template(:e).new.file('abc') }.should raise_error(ArgumentError)
     end
   end
+  
+  describe '#sections' do
+    it "should allow sections to be set if arguments are provided" do
+      mod = template(:e).new
+      mod.sections 1, 2, [3]
+      mod.sections.should == [1, 2, [3]]
+    end
+  end
+  
+  describe '#run' do
+    it "should render all sections" do
+      mod = template(:e).new
+      mod.should_receive(:render_section).with(:a).and_return('a')
+      mod.should_receive(:render_section).with(:b).and_return('b')
+      mod.should_receive(:render_section).with(:c).and_return('c')
+      mod.sections :a, :b, :c
+      mod.run.should == 'abc'
+    end
+    
+    it "should render all sections with options" do
+      mod = template(:e).new
+      mod.should_receive(:render_section).with(:a).and_return('a')
+      mod.should_receive(:add_options).with(:a => 1)
+      mod.sections :a
+      mod.run(:a => 1).should == 'a'
+    end
+    
+    it "should run section list if provided" do
+      mod = template(:e).new
+      mod.should_receive(:render_section).with(:q)
+      mod.should_receive(:render_section).with(:x)
+      mod.run({}, [:q, :x])
+    end
+    
+    it "should accept a nil section as empty string" do
+      mod = template(:e).new
+      mod.should_receive(:render_section).with(:a)
+      mod.sections :a
+      mod.run.should == ""
+    end
+  end
+  
+  describe '#add_options' do
+    it "should set instance variables in addition to options" do
+      mod = template(:f).new
+      mod.send(:add_options, {:a => 1, :b => 2})
+      mod.options.should == {:a => 1, :b => 2}
+      mod.instance_variable_get("@a").should == 1
+      mod.instance_variable_get("@b").should == 2
+    end
+    
+    it "should set instance variables and options only for the block" do
+      mod = template(:f).new
+      mod.send(:add_options, {:a => 100, :b => 200}) do
+        mod.options.should == {:a => 100, :b => 200}
+      end
+      mod.options.should_not == {:a => 100, :b => 200}
+    end
+  end
+  
+  describe '#render_section' do
+    it "should call method if method exists by section name as Symbol" do
+      mod = template(:f).new
+      mod.should_receive(:respond_to?).with(:a).and_return(true)
+      mod.should_receive(:respond_to?).with('a').and_return(true)
+      mod.should_receive(:send).with(:a).and_return('a')
+      mod.should_receive(:send).with('a').and_return('a')
+      mod.run({}, [:a, 'a']).should == 'aa'
+    end
+    
+    it "should call erb if no method exists by section name" do
+      mod = template(:f).new
+      mod.should_receive(:respond_to?).with(:a).and_return(false)
+      mod.should_receive(:respond_to?).with('a').and_return(false)
+      mod.should_receive(:erb).with(:a).and_return('a')
+      mod.should_receive(:erb).with('a').and_return('a')
+      mod.run({}, [:a, 'a']).should == 'aa'
+    end
+    
+    it "should run a template if section is one" do
+      mod2 = template(:g)
+      mod2.should_receive(:run)
+      mod = template(:f).new
+      mod.sections mod2
+      mod.run
+    end
+    
+    it "should run a template instance if section is one" do
+      mod2 = template(:g).new
+      mod2.should_receive(:run)
+      mod = template(:f).new
+      mod.sections mod2
+      mod.run
+    end
+  end 
 end
