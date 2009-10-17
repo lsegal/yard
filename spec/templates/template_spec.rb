@@ -198,4 +198,55 @@ describe YARD::Templates::Template do
       mod.run
     end
   end 
+  
+  describe '#yield' do
+    it "should yield a subsection" do
+      mod = template(:e).new
+      mod.sections :a, [:b, :c]
+      class << mod
+        def a; "(" + yield + ")" end
+        def b; "b" end
+        def c; "c" end
+      end
+
+      mod.run.should == "(b)"
+    end
+    
+    it "should yield a subsection within a yielded subsection" do
+      mod = template(:e).new
+      mod.sections :a, [:b, [:c]]
+      class << mod
+        def a; "(" + yield + ")" end
+        def b; yield end
+        def c; "c" end
+      end
+
+      mod.run.should == "(c)"
+    end
+    
+    it "should allow extra options passed via yield" do
+      mod = template(:e).new
+      mod.sections :a, [:b]
+      class << mod
+        def a; "(" + yield(:x => "a") + ")" end
+        def b; options[:x] + @x end
+      end
+
+      mod.run.should == "(aa)"
+    end
+  end
+  
+  describe '#yieldall' do
+    it "should yield all subsections" do
+      mod = template(:e).new
+      mod.sections :a, [:b, :c]
+      class << mod
+        def a; "(" + yieldall + ")" end
+        def b; "b" end
+        def c; "c" end
+      end
+
+      mod.run.should == "(bc)"
+    end
+  end
 end
