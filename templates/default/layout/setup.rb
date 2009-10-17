@@ -44,14 +44,14 @@ end
 def diskfile
   "<div id='filecontents'>" +
   case (File.extname(@file)[1..-1] || '').downcase
+  when 'txt'
+    "<pre>#{@contents}</pre>"
   when 'textile', 'txtile'
     htmlify(@contents, :textile)
   when 'markdown', 'md', 'mdown'
     htmlify(@contents, :markdown)
-  when 'rdoc'
-    htmlify(@contents, :rdoc)
   else
-    "<pre>#{@contents}</pre>"
+    htmlify(@contents, :rdoc)
   end +
   "</div>"
 end
