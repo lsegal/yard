@@ -31,6 +31,7 @@ module YARD
         def initialize(path, full_path)
           self.path = path
           self.full_path = Pathname.new(full_path)
+          include_parent
           load_setup_rb
         end
     
@@ -38,6 +39,13 @@ module YARD
           setup_file = File.join(full_path, 'setup.rb')
           if File.file? setup_file
             module_eval(File.read(setup_file).taint, setup_file, 1)
+          end
+        end
+        
+        def include_parent
+          pc = path.to_s.split('/')
+          if pc.size > 1
+            include Engine.template!(pc.pop, full_path.join('..').cleanpath)
           end
         end
       

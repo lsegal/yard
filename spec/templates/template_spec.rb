@@ -5,6 +5,19 @@ describe YARD::Templates::Template do
     YARD::Templates::Engine.template!(path, '/full/path/' + path.to_s)
   end
   
+  describe '#initialize' do
+    it "should not include parent directory if parent directory is a template root path" do
+      mod = template('q')
+      mod.should_not include(template(''))
+    end
+    
+    it "should include parent directory template if exists" do
+      mod1 = template('x')
+      mod2 = template('x/y')
+      mod2.should include(mod1)
+    end
+  end
+  
   describe '.full_paths' do
     it "should list full_path" do
       mod = template(:a)
