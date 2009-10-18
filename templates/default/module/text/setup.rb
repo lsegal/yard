@@ -1,5 +1,5 @@
 def init
-  sections :header, [T('../docstring')], :includes, :extends, 
+  sections :header, [T('../docstring')], :children, :includes, :extends, 
     :class_meths_list, :instance_meths_list
 end
 

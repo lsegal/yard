@@ -10,11 +10,20 @@ else
   output = YARD::Serializers::ProcessSerializer.new('less')
 end
 
-object = YARD::Registry.at(ARGV[0])
-options = {
-  :format => :text, 
-  :template => :default, 
-  :serializer => output
-}
+if ARGV[0].nil? || ARGV[0].empty?
+  puts "Missing object argument"
+  exit(1)
+end
 
-YARD::Generators::QuickDocGenerator.new(options).generate(object)
+obj = YARD::Registry.at(ARGV[0])
+if obj.nil?
+  puts "No documentation for #{ARGV[0]}"
+  exit(1)
+end
+
+if obj.type == :method && obj.is_alias?
+  tmp = P(obj.namespace, (obj.scope == :instance ? "#" : "") + 
+    obj.namespace.aliases[obj].to_s) 
+  obj = tmp unless YARD::CodeObjects::Proxy === tmp
+end
+obj.format(:serializer => output)

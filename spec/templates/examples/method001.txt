@@ -1,0 +1,28 @@
+------------------------------------------------------------- Method: #m
+                                                   (Defined in: (stdin))
+                                                     (Also known as: #x)
+
+    root.m(x) -> String (private)
+------------------------------------------------------------------------
+
+    Deprecated. for great justice
+
+    Comments 
+
+
+Parameters:
+-----------
+
+    (String) x - the x argument
+
+Returns:
+--------
+
+    (String) - the result
+
+Raises:
+-------
+
+    (Exception) - hi!
+
+

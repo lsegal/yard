@@ -1,6 +1,8 @@
 <% if object.tags(:example).size == 1 %>
 <% tag = object.tag(:example) %>
-  - Example<%= tag.name ? " " + tag.name : "" %>:
+<% title = "Example#{tag.name ? " " + tag.name : ""}" %>
+<%= title %>:
+<%= hr(title.length) %>-
 
       <%= format_source tag.text %>
 <% elsif object.has_tag?(:example) %>

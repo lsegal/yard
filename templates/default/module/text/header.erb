@@ -1,8 +1,7 @@
-<% str = format_object_title(object) %>
-<%= "-" * (70 - str.length) %> <%= str %>
+<%= title_align_right format_object_title(object) %>
 
 <%= yieldall %>
 
-------------------------------------------------------------------------
+<%= hr %>
 
 
