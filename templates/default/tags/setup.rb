@@ -1,7 +1,7 @@
 attr_accessor :object
 
 def init
-  sections :index, [:overload, :example, :param, :option, 
+  sections :index, [:example, :overload, :param, :option, 
     :yields, :yieldparam, :yieldreturn, :return, :raises, :see, :author, :since, :version]
 end
 
