@@ -14,12 +14,12 @@ def pre_docstring
 end
 
 def children
-  @inner = {:modules => [], :classes => []}
+  @inner = [[:modules, []], [:classes, []]]
   object.children.each do |child|
-    @inner[:modules] << child if child.type == :module
-    @inner[:classes] << child if child.type == :class
+    @inner[0][1] << child if child.type == :module
+    @inner[1][1] << child if child.type == :class
   end
-  return if (@inner[:modules].size + @inner[:classes].size) == 0
+  return if (@inner[0][1].size + @inner[1][1].size) == 0
   erb(:children)
 end
 
