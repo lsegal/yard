@@ -1,7 +1,5 @@
-attr_accessor :object
-
 def init
-  sections :index, [:example, :overload, :param, :option, 
+  sections :index, [:example, :overload, [T('../docstring')], :param, :option, 
     :yields, :yieldparam, :yieldreturn, :return, :raises, :see, :author, :since, :version]
 end
 
