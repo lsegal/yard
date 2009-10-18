@@ -31,8 +31,8 @@ Spec::Rake::SpecTask.new("specs") do |t|
   
   if ENV['RCOV']
     hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
-    hide += ',legacy\/.+_handler' if RUBY19
-    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$' if RUBY18
+    hide += ',legacy\/.+_handler,html_syntax_highlight_helper18\.rb$' if RUBY19
+    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$,html_syntax_highlight_helper\.rb$' if RUBY18
     t.rcov = true 
     t.rcov_opts = ['-x', hide]
   end
