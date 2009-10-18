@@ -3,6 +3,7 @@ module YARD
     module Helpers
       module HtmlSyntaxHighlightHelper
         def html_syntax_highlight(source)
+          return source if options[:no_highlight]
           tokenlist = Parser::Ruby::RubyParser.parse(source, "(syntax_highlight)").tokens
           output = ""
           tokenlist.each do |s|
@@ -23,6 +24,7 @@ module YARD
         end
 
         def html_syntax_highlight_legacy(source)
+          return source if options[:no_highlight]
           tokenlist = Parser::Ruby::Legacy::TokenList.new(source)
           tokenlist.map do |s| 
             prettyclass = s.class.class_name.sub(/^Tk/, '').downcase

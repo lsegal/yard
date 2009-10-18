@@ -16,7 +16,7 @@ describe Engine.template(:default, :method) do
         alias x m
       eof
 
-      html_equals(Registry.at('#m').format(:format => :html), :method001)
+      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method001)
     end
   end
   
@@ -31,7 +31,7 @@ describe Engine.template(:default, :method) do
         def m(x) end
       eof
 
-      html_equals(Registry.at('#m').format(:format => :html), :method002)
+      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method002)
     end
   end
   
@@ -51,7 +51,7 @@ describe Engine.template(:default, :method) do
         def m(*args) end
       eof
 
-      html_equals(Registry.at('#m').format(:format => :html), :method003)
+      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method003)
     end
   end
 end

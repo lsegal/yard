@@ -29,6 +29,6 @@ describe Engine.template(:default, :method) do
   end
 
   it "should render correctly" do
-    html_equals(Registry.at('A').format(:format => :html), :module001)
+    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module001)
   end
 end
