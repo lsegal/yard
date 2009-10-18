@@ -2,6 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 include YARD::Templates
 
+def text_equals(result, expected_example)
+  text_equals_string(result, example(expected_example, :txt))
+end
+
+def text_equals_string(result, expected)
+  result.should == expected
+end
+
 def html_equals(result, expected_example)
   html_equals_string(result, example(expected_example))
 end
@@ -14,8 +22,8 @@ def html_equals_string(result, expected)
   result.should == expected
 end
 
-def example(filename)
-  File.read(File.join(File.dirname(__FILE__), 'examples', "#{filename}.html"))
+def example(filename, ext = 'html')
+  File.read(File.join(File.dirname(__FILE__), 'examples', "#{filename}.#{ext}"))
 end
 
 module YARD::Templates::Engine

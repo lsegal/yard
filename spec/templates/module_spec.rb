@@ -28,7 +28,17 @@ describe Engine.template(:default, :method) do
     eof
   end
 
-  it "should render correctly" do
+  it "should render html format correctly" do
     html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module001)
+  end
+
+  it "should render text format correctly" do
+    YARD.parse_string <<-'eof'
+      module A
+        include D, E, F, A::B::C
+      end
+    eof
+
+    text_equals(Registry.at('A').format, :module001)
   end
 end

@@ -85,6 +85,7 @@ module YARD
         add_options(opts)
         
         extend(Helpers::HtmlHelper) if options[:format] == :html
+        extend(Helpers::TextHelper) if options[:format] == :text
         extend(*Template.extra_includes) unless Template.extra_includes.empty?
 
         init

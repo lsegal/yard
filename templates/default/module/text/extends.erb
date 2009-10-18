@@ -1,0 +1,8 @@
+<% if object.mixins(:class).size > 0 %>
+Extends:
+--------
+
+<%= indent wrap(object.mixins(:class).join(", "), 68) %>
+
+
+<% end %>

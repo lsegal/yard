@@ -1,0 +1,5 @@
+<%= @label ? @label : YARD::Tags::Library.labels[@name] %>:
+<% object.tags(@name).each do |tag| %>
+    <%= format_types(tag.types) unless @no_types %> <%= tag.name unless @no_names %> <%= tag.text %>
+
+<% end %>
