@@ -20,10 +20,15 @@ if RUBY19
     
     describe '#pretty_print' do
       it "should show a list of nodes" do
+        obj = YARD::Parser::Ruby::RubyParser.parse("# x\nbye", "x").ast
         out = StringIO.new
-        PP.pp(s(:paren, s(:list, s(:ident, "bye"), line: 1)), out)
+        PP.pp(obj, out)
         out.rewind
-        out.read.should == "s(:paren,\n   s(s(:ident, \"bye\", line: 0...0, source: 0...0), line: 1, source: 0..0))\n"
+        out.read.should == "s(s(:var_ref,\n" +
+          "      s(:ident, \"bye\", line: 2..2, source: 4..6),\n" +
+          "      docstring: \"x\",\n" +
+          "      line: 2..2,\n" +
+          "      source: 4..6))\n"
       end
     end
   end
