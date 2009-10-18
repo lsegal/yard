@@ -125,7 +125,7 @@ describe YARD::Templates::Template do
     it "should render all sections with options" do
       mod = template(:e).new
       mod.should_receive(:render_section).with(:a).and_return('a')
-      mod.should_receive(:add_options).with(:a => 1)
+      mod.should_receive(:add_options).with(:a => 1).and_yield
       mod.sections :a
       mod.run(:a => 1).should == 'a'
     end
@@ -235,6 +235,44 @@ describe YARD::Templates::Template do
       mod.run.should == "(c)"
     end
     
+    it "should support arbitrary nesting" do
+      mod = template(:e).new
+      mod.sections :a, [:b, [:c, [:d, [:e]]]]
+      class << mod
+        def a; "(" + yield + ")" end
+        def b; yield end
+        def c; yield end
+        def d; yield end
+        def e; "e" end
+      end
+
+      mod.run.should == "(e)"
+    end
+    
+    it "should yield first two elements if yield is called twice" do
+      mod = template(:e).new
+      mod.sections :a, [:b, :c, :d]
+      class << mod
+        def a; "(" + yield + yield + ")" end
+        def b; 'b' end
+        def c; "c" end
+      end
+
+      mod.run.should == "(bc)"
+    end
+    
+    it "should ignore any subsections inside subsection yields" do
+      mod = template(:e).new
+      mod.sections :a, [:b, [:c], :d]
+      class << mod
+        def a; "(" + yield + yield + ")" end
+        def b; 'b' end
+        def d; "d" end
+      end
+
+      mod.run.should == "(bd)"
+    end
+    
     it "should allow extra options passed via yield" do
       mod = template(:e).new
       mod.sections :a, [:b]
@@ -250,14 +288,38 @@ describe YARD::Templates::Template do
   describe '#yieldall' do
     it "should yield all subsections" do
       mod = template(:e).new
-      mod.sections :a, [:b, :c]
+      mod.sections :a, [:b, [:d, [:e]], :c]
       class << mod
         def a; "(" + yieldall + ")" end
-        def b; "b" end
+        def b; "b" + yieldall end
         def c; "c" end
+        def d; 'd' + yieldall end
+        def e; 'e' end
       end
 
-      mod.run.should == "(bc)"
+      mod.run.should == "(bdec)"
+    end
+    
+    it "should yield options to all subsections" do
+      mod = template(:e).new
+      mod.sections :a, [:b, :c]
+      class << mod
+        def a; "(" + yieldall(:x => "2") + ")" end
+        def b; @x end
+        def c; @x end
+      end
+      mod.run.should == "(22)"
+    end
+    
+    it "should yield all subsections more than once" do
+      mod = template(:e).new
+      mod.sections :a, [:b]
+      class << mod
+        def a; "(" + yieldall + yieldall + ")" end
+        def b; "b" end
+      end
+
+      mod.run.should == "(bb)"
     end
   end
 end

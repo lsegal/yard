@@ -3,7 +3,7 @@ require 'erb'
 module YARD
   module Templates
     module Template
-      attr_accessor :class, :options, :sections, :section
+      attr_accessor :class, :options, :subsections, :section
       
       class << self
         attr_accessor :extra_includes
@@ -73,8 +73,7 @@ module YARD
     
       def initialize(opts = {})
         @cache, @cache_filename = {}, {}
-        self.options = {}
-        self.sections = []
+        @sections, @options = [], {}
         add_options(opts)
         
         extend(Helpers::HtmlHelper) if options[:format] == :html
@@ -91,56 +90,42 @@ module YARD
         @sections.replace(args) if args.size > 0
         @sections
       end
+      
+      def subsections=(value)
+        @subsections = Array === value ? value : nil
+      end
     
       def init
       end
     
-      def run(opts = nil, sects = sections, &block)
-        return "" if sects.nil?
-      
-        add_options(opts) if opts
+      def run(opts = nil, sects = sections, start_at = 0, break_first = false, &block)
         out = ""
-        sects.each_with_index do |s, index|
-          next if Array === s
-          subsection_index = 0
-          @section_index = index
-          self.section = s
-          value = render_section(section) do |*args|
-            text = yieldnext(args.first, subsection_index, &block)
-            subsection_index += 1
-            text
-          end
-          out << (value || "")
-        end
-        out
-      end
-    
-      def subsections
-        subsections = sections[@section_index + 1]
-        subsections = nil unless Array === subsections
-        subsections
-      end
-    
-      def yieldnext(opts = nil, index = 0, &block)
-        sub = subsections
-        raise "No subsections" unless sub
-        out = ""
+        return out if sects.nil?
+        sects = sects[start_at..-1] if start_at > 0
         add_options(opts) do
-          t = @section_index
-          out = render_section(sub[index], &block)
-          @section_index = t
+          sects.each_with_index do |s, index|
+            next if Array === s
+            self.section = s
+            self.subsections = sects[index + 1]
+            subsection_index = 0
+            value = render_section(section) do |*args|
+              value = with_section do
+                run(args.first, subsections, subsection_index, true, &block)
+              end
+              subsection_index += 1 
+              subsection_index += 1 until !subsections[subsection_index].is_a?(Array)
+              value
+            end
+            out << (value || "")
+            break if break_first
+          end
         end
         out
       end
           
       def yieldall(opts = nil, &block)
-        sub = subsections
-        raise "No subsections" unless sub
-        out = ""
-        sub.count.times do |i|
-          out << yieldnext(opts, i, &block)
-        end
-        out
+        log.debug "Templates: yielding from #{inspect}"
+        with_section { run(opts, subsections, &block) }
       end
     
       def erb(section, &block)
@@ -173,6 +158,7 @@ module YARD
       private
     
       def render_section(section, &block)
+        log.debug "Templates: inside #{self.inspect}"
         case section
         when String, Symbol
           if respond_to?(section)
@@ -205,19 +191,24 @@ module YARD
         end
       end
     
-      def add_options(opts = {}, &block)
-        if opts.nil?
-          yield if block_given?
-          return
-        end
-      
+      def add_options(opts = nil)
+        return(yield) if opts.nil? && block_given?
         cur_opts = options if block_given?
+        
         self.options = options.merge(opts)
       
         if block_given?
-          yield
+          value = yield
           self.options = cur_opts 
+          value
         end
+      end
+      
+      def with_section(&block)
+        s1, s2 = section, subsections
+        value = yield
+        self.section, self.subsections = s1, s2
+        value
       end
     end
   end
