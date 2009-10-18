@@ -91,6 +91,7 @@ module YARD
       end
     
       def T(*path)
+        path.push(options[:format]) if options[:format]
         self.class.T(*path)
       end
     
@@ -160,7 +161,7 @@ module YARD
       protected
     
       def erb_file_for(section)
-        "#{section}.#{options[:format]}.erb"
+        "#{section}.erb"
       end
     
       private

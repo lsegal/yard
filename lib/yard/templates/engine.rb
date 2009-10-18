@@ -39,7 +39,7 @@ module YARD
 
         def render(options = {})
           set_default_options(options)
-          mod = template(options[:template], options[:type])
+          mod = template(options[:template], options[:type], options[:format])
           
           if options[:serialize] != false
             with_serializer(options[:object], options[:serializer]) { mod.run(options) }
@@ -51,7 +51,7 @@ module YARD
         def generate(objects, options = {})
           set_default_options(options)
           options[:objects] = objects
-          template(options[:template], :fulldoc).run(options)
+          template(options[:template], :fulldoc, options[:format]).run(options)
         end
 
         def with_serializer(object, serializer, &block)

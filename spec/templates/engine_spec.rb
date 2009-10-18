@@ -68,7 +68,7 @@ describe Engine do
     it "should generate with fulldoc template" do
       mod = mock(:template)
       mod.should_receive(:run).with(:format => :text, :template => :default, :objects => [:a, :b, :c])
-      Engine.should_receive(:template).with(:default, :fulldoc).and_return(mod)
+      Engine.should_receive(:template).with(:default, :fulldoc, :text).and_return(mod)
       Engine.generate([:a, :b, :c])
     end
   end
@@ -85,7 +85,7 @@ describe Engine do
     end
   
     it "should accept method call with no parameters" do
-      loads_template(:default, :method)
+      loads_template(:default, :method, :text)
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :text,
@@ -94,7 +94,7 @@ describe Engine do
     end
   
     it "should allow template key to be changed" do
-      loads_template(:javadoc, :method)
+      loads_template(:javadoc, :method, :text)
       @template.should_receive(:run).with :type => :method,
                                           :template => :javadoc,
                                           :format => :text,
@@ -103,7 +103,7 @@ describe Engine do
     end
 
     it "should allow type key to be changed" do
-      loads_template(:default, :fulldoc)
+      loads_template(:default, :fulldoc, :text)
       @template.should_receive(:run).with :type => :fulldoc,
                                           :template => :default,
                                           :format => :text,
@@ -112,7 +112,7 @@ describe Engine do
     end
   
     it "should allow format key to be changed" do
-      loads_template(:default, :method)
+      loads_template(:default, :method, :html)
       @template.should_receive(:run).with :type => :method,
                                           :template => :default,
                                           :format => :html,

@@ -334,5 +334,16 @@ describe YARD::Templates::Template do
 
       mod.run.should == "(bb)"
     end
+    
+    it "should not yield if no yieldall is called" do
+      mod = template(:e).new
+      mod.sections :a, [:b]
+      class << mod
+        def a; "()" end
+        def b; "b" end
+      end
+
+      mod.run.should == "()"
+    end
   end
 end
