@@ -7,5 +7,39 @@
 
     Method comments 
 
+Overloads:
+----------
+
+------------------------------------------------------------------------
+    root.m(x, y) -> Object (private)
+------------------------------------------------------------------------
+    
+        Overload docstring 
+    
+    Parameters:
+    -----------
+    
+        (String) x - parameter x
+    
+        (Boolean) y - parameter y
+    
+    
+
+------------------------------------------------------------------------
+    root.m(x, y, z) -> Object (private)
+------------------------------------------------------------------------
+    
+        
+    Parameters:
+    -----------
+    
+        (String) x - parameter x
+    
+        (Boolean) y - parameter y
+    
+        (Boolean) z - parameter z
+    
+    
+
 
 

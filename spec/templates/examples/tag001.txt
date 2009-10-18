@@ -1,0 +1,63 @@
+------------------------------------------------------------- Method: #m
+                                                   (Defined in: (stdin))
+
+    root.m(opts = {}) {|a| ... } -> String 
+------------------------------------------------------------------------
+
+    Deprecated. for great justice
+
+    Comments 
+
+Yields:
+-------
+
+     - a block
+
+Parameters:
+-----------
+
+    (Hash) opts - the options
+
+Returns:
+--------
+
+    (String) - the result
+
+Yield Parameters:
+-----------------
+
+    (String) - a value
+
+Yield Returns:
+--------------
+
+    (Hash) - a hash
+
+Raises:
+-------
+
+    (Exception) - Exception class
+
+See Also:
+---------
+
+    - A
+    - http://url.com
+    - http://url.com - Example
+
+Author:
+-------
+
+    Name
+
+Since:
+------
+
+    1.0
+
+Version:
+--------
+
+    1.0
+
+

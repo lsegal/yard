@@ -6,7 +6,8 @@
 <% text = "" %>
 <% text += format_types(tag.types) + " " unless @no_types || tag.types.nil? %>
 <% text += tag.name.to_s + " " unless @no_names %>
-<% text += "- " + tag.text if tag.text && !tag.text.empty? %>
+<% text += "- " unless @no_names && @no_types %>
+<% text += tag.text if tag.text && !tag.text.empty? %>
 <%= indent wrap(text) %>
 
 <% end %>
