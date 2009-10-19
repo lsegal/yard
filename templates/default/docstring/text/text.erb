@@ -1,6 +1,5 @@
 <% if object.tags(:overload).size == 1 && object.docstring.empty? %>
-<%= indent wrap(h(object.tag(:overload).docstring), 68) %>
+<%= indent wrap(h(object.tag(:overload).docstring.strip), 68) %>
 <% else %>
-<%= indent wrap(h(object.docstring), 68) %>
+<%= indent wrap(h(object.docstring.strip), 68) %>
 <% end %>
-

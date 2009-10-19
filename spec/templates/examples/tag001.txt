@@ -8,6 +8,16 @@
 
     Comments 
 
+Examples:
+---------
+
+    # Wash your car
+    car.wash
+
+    # To kill a mockingbird
+    a = String.new
+    flip(a.reverse)
+
 Yields:
 -------
 

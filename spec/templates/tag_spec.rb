@@ -22,6 +22,11 @@ describe Engine.template(:default, :tags) do
         # @yield a block
         # @yieldparam [String] a a value
         # @yieldreturn [Hash] a hash
+        # @example Wash your car
+        #   car.wash
+        # @example To kill a mockingbird
+        #   a = String.new
+        #   flip(a.reverse)
         def m(opts = {}) end
       eof
     end
