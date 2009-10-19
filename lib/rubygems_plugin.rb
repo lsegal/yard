@@ -43,12 +43,11 @@ class Gem::DocManager
   rescue Errno::EACCES => e
     dirname = File.dirname e.message.split("-")[1].strip
     raise Gem::FilePermissionError.new(dirname)
-  rescue RuntimeError => ex
+  rescue => ex
     alert_error "While generating documentation for #{@spec.full_name}"
     ui.errs.puts "... MESSAGE:   #{ex}"
     ui.errs.puts "... YARDDOC args: #{args.join(' ')}"
-    ui.errs.puts "\t#{ex.backtrace.join "\n\t"}" if
-    Gem.configuration.backtrace
+    ui.errs.puts "\t#{ex.backtrace.join("\n\t")}" if Gem.configuration.backtrace
     ui.errs.puts "(continuing with the rest of the installation)"
   ensure
     Dir.chdir(old_pwd)
