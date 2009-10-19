@@ -28,6 +28,13 @@ Parameters:
 
     (Hash) opts - the options
 
+Options Hash (opts):
+--------------------
+
+    (Object) :key - default: '' - hello
+
+    (Object) :key2 - default: X - hello
+
 Returns:
 --------
 
