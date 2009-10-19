@@ -123,7 +123,9 @@ module YARD
                 run(args.first, subsections, subsection_index, true, &block)
               end
               subsection_index += 1 
-              subsection_index += 1 until !subsections[subsection_index].is_a?(Array)
+              subsection_index += 1 until subsections.nil? ||
+                subsections[subsection_index].nil? || 
+                !subsections[subsection_index].is_a?(Array)
               value
             end
             out << (value || "")
