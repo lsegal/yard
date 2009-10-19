@@ -9,10 +9,9 @@ module YARD
       def self.run(*args) new.run(*args) end
         
       def initialize
+        @serializer = YARD::Serializers::StdoutSerializer.new
         @options = SymbolHash[
-          :format => :dot, 
-          :template => :default, 
-          :serializer => YARD::Serializers::StdoutSerializer.new,
+          :format => :dot,
           :visibility => [:public]
         ]
       end
@@ -20,7 +19,10 @@ module YARD
       def run(*args)
         Registry.load
         optparse(*args)
-        Generators::UMLGenerator.new(options).generate(*objects)
+        
+        contents = objects.map {|o| o.format(options) }.join("\n")
+        Templates::Engine.render(:format => :dot, :type => :layout, 
+          :serializer => @serializer, :contents => contents) 
       end
       
       private
@@ -59,12 +61,12 @@ module YARD
         opts.separator "Output options:"
 
         opts.on('--dot [OPTIONS]', 'Send the results direclty to `dot` with optional arguments.') do |dotopts|
-          options[:serializer] = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
+          @serializer = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
         end
         
         opts.on('-f', '--file [FILE]', 'Writes output to a file instead of stdout.') do |file|
-          options[:serializer] = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
-          options[:serializer].instance_eval "def serialized_path(object) #{file.inspect} end"
+          @serializer = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
+          @serializer.instance_eval "def serialized_path(object) #{file.inspect} end"
         end
         
         opts.separator ""

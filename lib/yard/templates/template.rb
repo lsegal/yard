@@ -86,6 +86,7 @@ module YARD
         
         extend(Helpers::HtmlHelper) if options[:format] == :html
         extend(Helpers::TextHelper) if options[:format] == :text
+        extend(Helpers::UMLHelper) if options[:format] == :dot
         extend(*Template.extra_includes) unless Template.extra_includes.empty?
 
         init

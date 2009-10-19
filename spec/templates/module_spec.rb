@@ -41,4 +41,8 @@ describe Engine.template(:default, :method) do
 
     text_equals(Registry.at('A').format, :module001)
   end
+  
+  it "should render dot format correctly" do
+    Registry.at('A').format(:format => :dot, :full => true).should == example(:module001, 'dot')
+  end
 end
