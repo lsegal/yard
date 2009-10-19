@@ -187,7 +187,7 @@ module YARD
 
         opts.on('-p', '--template-path PATH', 
                 'The template path to look for templates in. (used with -t).') do |path|
-          YARD::Generators::Base.register_template_path(path)
+          YARD::Templates::Engine.register_template_path(path)
         end
         
         opts.on('-f', '--format FORMAT', 
