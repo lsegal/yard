@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Engine.template(:default, :docstring) do
+describe YARD::Templates::Engine.template(:default, :docstring) do
   before do
     YARD.parse_string <<-'eof'
       private

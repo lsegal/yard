@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Engine do
+describe YARD::Templates::Engine do
   describe '.register_template_path' do
     it "should register a String path" do
       Engine.register_template_path('.')

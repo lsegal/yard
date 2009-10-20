@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Engine.template(:default, :tags) do
+describe YARD::Templates::Engine.template(:default, :tags) do
   before { Registry.clear }
   
   describe 'all known tags' do
