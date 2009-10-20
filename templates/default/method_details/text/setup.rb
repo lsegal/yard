@@ -1,5 +1,6 @@
 def init
-  sections :header, [:method_signature, T('docstring')]
+  super
+  sections.last.pop
 end
 
 def format_object_title(object)
