@@ -1,3 +1,3 @@
 def init
-  sections :header, [T('../method_details')]
+  sections :header, [T('method_details')]
 end

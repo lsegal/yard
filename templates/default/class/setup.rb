@@ -1,9 +1,9 @@
-include T('../module')
+include T('default/module')
 
 def init
   super
   sections.delete(:children)
-  sections.place([:constructor_details, [T('../method_details')]]).before(:methodmissing)
+  sections.place([:constructor_details, [T('method_details')]]).before(:methodmissing)
 end
 
 def constructor_details

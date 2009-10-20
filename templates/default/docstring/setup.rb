@@ -1,6 +1,6 @@
 def init
   return if object.docstring.blank?
-  sections :index, [:deprecated, :text], T('../tags')
+  sections :index, [:deprecated, :text], T('tags')
 end
 
 def deprecated

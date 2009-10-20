@@ -1,5 +1,5 @@
 def init
-  sections :index, [:example, :overload, [T('../docstring')], :yields, :param, :option, 
+  sections :index, [:example, :overload, [T('docstring')], :yields, :param, :option, 
     :return, :yieldparam, :yieldreturn, :raises, :see, :author, :since, :version]
 end
 

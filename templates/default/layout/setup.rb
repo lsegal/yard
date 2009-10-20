@@ -22,7 +22,7 @@ def init
     
       @page_title = format_object_title(object)
       type = object == Registry.root ? :module : object.type
-      sections :header, [T("../#{type}")]
+      sections :header, [T(type)]
     end
   else
     sections :header, [:contents]

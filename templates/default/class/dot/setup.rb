@@ -1,4 +1,4 @@
-include T('../../module/dot')
+include T('default/module/dot')
 
 def init
   super

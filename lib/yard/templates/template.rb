@@ -45,7 +45,8 @@ module YARD
         def include_parent
           pc = path.to_s.split('/')
           if pc.size > 1
-            include Engine.template!(pc.pop, full_path.join('..').cleanpath)
+            pc.pop
+            include Engine.template!(pc.join('/'), full_path.join('..').cleanpath)
           end
         end
       
@@ -61,7 +62,7 @@ module YARD
         end
       
         def T(*path)
-          Engine.template(self, *path)
+          Engine.template(*path)
         end
       
         def is_a?(klass)
@@ -93,6 +94,7 @@ module YARD
       end
     
       def T(*path)
+        path.unshift(options[:template]) if options[:template]
         path.push(options[:format]) if options[:format]
         self.class.T(*path)
       end

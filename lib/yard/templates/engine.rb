@@ -7,7 +7,7 @@ module YARD
         attr_accessor :template_paths
 
         def register_template_path(path)
-          template_paths.push Pathname.new(path)
+          template_paths.unshift Pathname.new(path)
         end
         
         def template(*path)

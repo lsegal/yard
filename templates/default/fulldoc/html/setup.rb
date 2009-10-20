@@ -20,7 +20,7 @@ end
 def serialize(object)
   options[:object] = object
   Templates::Engine.with_serializer(object, options[:serializer]) do
-    T('../layout').run(options)
+    T('layout').run(options)
   end
 end
 
@@ -34,7 +34,7 @@ def serialize_file(file)
   end
   
   Templates::Engine.with_serializer(options[:serialized_path], options[:serializer]) do
-    T('../layout').run(options)
+    T('layout').run(options)
   end
   options.delete(:file)
   options.delete(:serialized_path)

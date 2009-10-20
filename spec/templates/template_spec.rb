@@ -53,10 +53,10 @@ describe YARD::Templates::Template do
   end
   
   describe '.T' do
-    it "should load template from relative path" do
+    it "should load template from absolute path" do
       mod = template(:a)
-      Engine.should_receive(:template).with(mod, '../other')
-      mod.T('../other')
+      Engine.should_receive(:template).with('other')
+      mod.T('other')
     end
   end
   
