@@ -2,20 +2,39 @@ require 'optparse'
 
 module YARD
   module CLI
+    # A command-line utility to generate Graphviz graphs from
+    # a set of objects
+    # 
+    # @see YardGraph#run
     class YardGraph
-      attr_reader :options, :visibilities
-      attr_reader :objects
+      # The options parsed out of the commandline.
+      # Default options are:
+      #   :format => :dot,
+      #   :visibilities => [:public]
+      attr_reader :options
       
+      # The set of objects to include in the graph.
+      attr_reader :objects
+
+      # Helper method to run the utility on an instance.
+      # @see #run
       def self.run(*args) new.run(*args) end
         
+      # Creates a new instance of the command-line utility
       def initialize
         @serializer = YARD::Serializers::StdoutSerializer.new
         @options = SymbolHash[
           :format => :dot,
-          :visibility => [:public]
+          :visibilities => [:public]
         ]
       end
       
+      # Runs the command-line utility.
+      # 
+      # @example
+      #   grapher = YardGraph.new
+      #   grapher.run('--private')
+      # @param [Array<String>] args each tokenized argument
       def run(*args)
         Registry.load
         optparse(*args)
@@ -27,6 +46,8 @@ module YARD
       
       private
       
+      # Parses commandline options.
+      # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         opts = OptionParser.new
 
@@ -46,15 +67,15 @@ module YARD
         end
         
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          options[:visibility].delete(:public)
+          options[:visibilities].delete(:public)
         end
 
         opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          options[:visibility].push(:protected)
+          options[:visibilities].push(:protected)
         end
 
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          options[:visibility].push(:private) 
+          options[:visibilities].push(:private) 
         end
 
         opts.separator ""
