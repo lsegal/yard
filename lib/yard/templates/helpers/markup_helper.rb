@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module YARD
   module Templates::Helpers
     module MarkupHelper
