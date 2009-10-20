@@ -1,12 +1,16 @@
 def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
 
 module YARD
-  module CLI
+  module CLI # Namespace for command-line interface components
     autoload :YardGraph,  __p('cli/yard_graph')
     autoload :Yardoc,     __p('cli/yardoc')
   end
   
-  module CodeObjects
+  # A "code object" is defined as any entity in the Ruby language.
+  # Classes, modules, methods, class variables and constants are the
+  # major objects, but DSL languages can create their own by inheriting
+  # from {CodeObjects::Base}.
+  module CodeObjects 
     autoload :Base,                 __p('code_objects/base')
     autoload :CodeObjectList,       __p('code_objects/base')
     autoload :ClassObject,          __p('code_objects/class_object')
@@ -36,9 +40,12 @@ module YARD
     autoload :CSEPQ,                __p('code_objects/base')
   end
 
+  # Handlers are called during the data processing part of YARD's
+  # parsing phase. This allows YARD as well as any custom extension to
+  # analyze source and generate {CodeObjects} to be stored for later use.
   module Handlers
-    module Ruby
-      module Legacy
+    module Ruby # All Ruby handlers
+      module Legacy # Handlers for old Ruby 1.8 parser
         autoload :Base,                 __p('handlers/ruby/legacy/base')
 
         autoload :AliasHandler,         __p('handlers/ruby/legacy/alias_handler')
@@ -77,9 +84,11 @@ module YARD
     autoload :Processor,                __p('handlers/processor')
   end
 
+  # The parser namespace holds all parsing engines used by YARD. 
+  # Currently only Ruby parsers are implemented with support planned for C.
   module Parser
-    module Ruby
-      module Legacy
+    module Ruby # Ruby parsing components.
+      module Legacy # Handles Ruby parsing in Ruby 1.8.
         autoload :RubyToken,      __p('parser/ruby/legacy/ruby_lex')
         autoload :Statement,      __p('parser/ruby/legacy/statement')
         autoload :StatementList,  __p('parser/ruby/legacy/statement_list')
@@ -95,18 +104,18 @@ module YARD
     autoload :UndocumentableError, __p('parser/source_parser')
   end
   
-  module Rake
+  module Rake # Holds Rake tasks used by YARD
     autoload :YardocTask, __p('rake/yardoc_task')
   end
   
-  module Serializers
+  module Serializers # Namespace for components that serialize to various endpoints
     autoload :Base,                 __p('serializers/base')
     autoload :FileSystemSerializer, __p('serializers/file_system_serializer')
     autoload :ProcessSerializer,    __p('serializers/process_serializer')
     autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
   end
   
-  module Tags
+  module Tags # Namespace for Tag components
     autoload :DefaultFactory, __p('tags/default_factory')
     autoload :DefaultTag,     __p('tags/default_tag')
     autoload :Library,        __p('tags/library')
@@ -118,8 +127,8 @@ module YARD
     autoload :TagFormatError, __p('tags/tag_format_error')
   end
   
-  module Templates
-    module Helpers
+  module Templates # Namespace for templating system
+    module Helpers # Namespace for template helpers
       autoload :BaseHelper,                 __p('templates/helpers/base_helper')
       autoload :FilterHelper,               __p('templates/helpers/filter_helper')
       autoload :HtmlHelper,                 __p('templates/helpers/html_helper')
