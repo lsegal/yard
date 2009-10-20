@@ -60,5 +60,11 @@ module YARD::Templates::Helpers
         format_object_type(object) + ": " + object.path
       end
     end
+    
+    def format_source(value)
+      sp = value.split("\n").last[/^(\s+)/, 1]
+      num = sp ? sp.size : 0
+      value.gsub(/^\s{#{num}}/, '')
+    end
   end
 end
