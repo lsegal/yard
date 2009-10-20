@@ -10,7 +10,7 @@ module YARD
       attr_accessor :files
       attr_accessor :before, :after
 
-      def initialize(name = :yardoc)
+      def initialize(name = :yard)
         @name = name
         @options = []
         @files = []
