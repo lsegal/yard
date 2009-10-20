@@ -1,6 +1,5 @@
 _Yardoc
 .DS_Store
-*.dot
 *.pdf
 .yardoc
 /pkg

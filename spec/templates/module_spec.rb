@@ -43,6 +43,6 @@ describe YARD::Templates::Engine.template(:default, :method) do
   end
   
   it "should render dot format correctly" do
-    Registry.at('A').format(:format => :dot, :full => true).should == example(:module001, 'dot')
+    Registry.at('A').format(:format => :dot, :dependencies => true, :full => true).should == example(:module001, 'dot')
   end
 end

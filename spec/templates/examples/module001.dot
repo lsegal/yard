@@ -1,0 +1,30 @@
+A [label="{module A|+ \#attr1 [RW]\l+ \#attr2 [R]\l|+ a\l+ \#a\l}" rank=sink];
+A_Q [label="{class Q||}" rank=sink];
+subgraph cluster_A_Q {
+  label = "Q"; labelloc=b;
+  
+}
+
+A_X [label="{class X||}" rank=sink];
+subgraph cluster_A_X {
+  label = "X"; labelloc=b;
+  
+}
+
+A_Y [label="{class Y||}" rank=sink];
+subgraph cluster_A_Y {
+  label = "Y"; labelloc=b;
+  
+}
+subgraph cluster_A {
+  label = "A"; labelloc=b;
+  
+    A_Z [label="{module Z||}" rank=sink];
+subgraph cluster_A_Z {
+  label = "Z"; labelloc=b;
+  
+}
+
+  
+}
+  A -> B [style=dotted arrowType=none];
