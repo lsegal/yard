@@ -1,6 +1,6 @@
 <div id="menu">
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
-    <a href="<%= url_for('glossary.html') %>"><% if Registry.root == object || object.type == :method %>Glossary<% else %>Glossary (<%= object.name[0] %>)<% end %></a> :: 
+    <a href="<%= url_for('glossary.html') %>"><% if Registry.root == object || object.type == :method %>Glossary<% else %>Glossary (<%= object.name.to_s[0,1] %>)<% end %></a> :: 
     <%= @breadcrumb.map {|obj| linkify obj, obj.name }.join(" :: ") %>
     <%= @breadcrumb.size > 0 ? " :: " : "" %>
     <%= Registry.root == object ? "Top Level Namespace" : object.name %>
