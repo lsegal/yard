@@ -212,8 +212,15 @@ module YARD
       end
       
       def signature(meth, link = true)
-        type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
-        type = linkify(P(object.namespace, type), type) unless link
+        if link
+          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
+          type = h(type)
+        else
+          arr = meth.tag(:return) ? [(meth.tag(:return).types || []).first].compact : []
+          arr << "Object" if arr.empty?
+          type = format_types(arr, false)
+        end
+        
         scope = meth.scope == :class ? "+" : "-"
         name = meth.name
         blk = format_block(meth)
