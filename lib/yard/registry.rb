@@ -2,6 +2,18 @@ require 'singleton'
 require 'find'
 
 module YARD
+  # The +Registry+ is the centralized data store for all {CodeObjects} created
+  # during parsing. The storage is a key value store with the object's path
+  # (see {CodeObjects::Base#path}) as the key and the object itself as the value.
+  # Object paths must be unique to be stored in the Registry. All lookups for 
+  # objects are done on the singleton Registry instance using the {Registry#at} 
+  # or {Registry#find} methods.
+  # 
+  # The registry is saved to a "yardoc" file, which can be loaded back to 
+  # perform any lookups.
+  # 
+  # This class is a singleton class. Any method called on the class will be
+  # delegated to the instance {Registry.instance}.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
     
@@ -10,17 +22,43 @@ module YARD
     @objects = {}
 
     class << self
+      # Holds the objects cache. This attribute should never be accessed
+      # directly.
+      # @return [Array<CodeObjects::Base>] the objects cache
       attr_reader :objects
       
+      # Clears the registry and cache
+      # @return [nil] 
       def clear
         instance.clear 
         objects.clear
       end
     end
 
+    # Gets/sets the yardoc filename
+    # @return [String] the yardoc filename
+    # @see DEFAULT_YARDOC_FILE
     attr_accessor :yardoc_file
+    
+    # The assumed types of a list of paths
+    # @return [{String => Symbol}] a set of unresolved paths and their assumed type
     attr_reader :proxy_types
     
+    # Loads the registry and/or parses a list of files
+    # 
+    # @example Loads the yardoc file or parses files 'a', 'b' and 'c' (but not both)
+    #   Registry.load(['a', 'b', 'c'])
+    # @example Reparses files 'a' and 'b' regardless if yardoc file exists
+    #   Registry.load(['a', 'b'], true)
+    # @param [String, Array] files if +files+ is an Array, it should represent
+    #   a list of files that YARD should parse into the registry. If reload is
+    #   set to false and the yardoc file already exists, these files are skipped.
+    #   If files is a String, it should represent the yardoc file to load
+    #   into the registry.
+    # @param [Boolean] reload if reload is false and a yardoc file already
+    #   exists, any files passed in will be ignored.
+    # @return [Boolean] true if the registry was successfully loaded 
+    # @raise [ArgumentError] if files is not a String or Array
     def load(files = [], reload = false)
       if files.is_a?(Array)
         if File.exists?(yardoc_file) && !reload
@@ -39,6 +77,10 @@ module YARD
       end
     end
     
+    # Loads a yardoc file directly
+    # 
+    # @param [String] file the yardoc file to load.
+    # @return [nil] 
     def load_yardoc(file = yardoc_file)
       return false unless File.exists?(file)
       ns, pt = *Marshal.load(IO.read(file))
@@ -46,11 +88,27 @@ module YARD
       proxy_types.update(pt)
     end
     
+    # Saves the registry to +file+
+    # 
+    # @param [String] file the yardoc file to save to
+    # @return [Boolean] true if the file was saved
     def save(file = yardoc_file)
       File.open(file, "wb") {|f| Marshal.dump([@namespace, @proxy_types], f) }
       true
     end
 
+    # Returns all objects in the registry that match one of the types provided
+    # in the +types+ list (if +types+ is provided).
+    # 
+    # @example Returns all objects
+    #   Registry.all
+    # @example Returns all classes and modules
+    #   Registry.all(:class, :module)
+    # @param [Array<Symbol>] types an optional list of types to narrow the
+    #   objects down by. Equivalent to performing a select: 
+    #     +Registry.all.select {|o| types.include(o.type) }+
+    # @return [Array<CodeObjects::Base>] the list of objects found
+    # @see CodeObjects::Base#type
     def all(*types)
       namespace.values.select do |obj| 
         if types.empty?
@@ -64,37 +122,83 @@ module YARD
       end + (types.include?(:root) ? [root] : [])
     end
     
+    # Returns the paths of all of the objects in the registry.
+    # @return [Array<String>] all of the paths in the registry.
     def paths
       namespace.keys.map {|k| k.to_s }
     end
-      
+    
+    # Returns the object at a specific path.
+    # @param [String, :root] path the pathname to look for. If +path+ is +root+,
+    #   returns the {#root} object.
+    # @return [CodeObjects::Base] the object at path
+    # @return [nil] if no object is found
     def at(path) path.to_s.empty? ? root : namespace[path] end
     alias_method :[], :at
     
+    # The root namespace object.
+    # @return [CodeObjects::RootObject] the root object in the namespace
     def root; namespace[:root] end
     
+    # Deletes an object from the registry
+    # @param [CodeObjects::Base] object the object to remove
+    # @return [nil] 
     def delete(object) 
       namespace.delete(object.path)
       self.class.objects.delete(object.path)
     end
 
+    # Clears the registry
+    # @return [nil] 
     def clear
       @namespace = SymbolHash.new
       @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
       @proxy_types = {}
     end
 
+    # Creates the Registry
+    # @return [Registry]
     def initialize
       @yardoc_file = DEFAULT_YARDOC_FILE
       clear
     end
   
+    # Registers a new object with the registry
+    # 
+    # @param [CodeObjects::Base] object the object to register
+    # @return [CodeObjects::Base] the registered object
     def register(object)
       self.class.objects[object.path] = object
       return if object.is_a?(CodeObjects::Proxy)
       namespace[object.path] = object
     end
 
+    # Attempts to find an object by name starting at +namespace+, performing
+    # a lookup similar to Ruby's method of resolving a constant in a namespace.
+    # 
+    # @example Looks for instance method #reverse starting from A::B::C
+    #   Registry.resolve(P("A::B::C"), "#reverse")
+    # @example Looks for a constant in the root namespace
+    #   Registry.resolve(nil, 'CONSTANT')
+    # @example Looks for a class method respecting the inheritance tree
+    #   Registry.resolve(myclass, 'mymethod', true)
+    # @example Looks for a constant but returns a proxy if not found
+    #   Registry.resolve(P('A::B::C'), 'D', false, true) # => #<yardoc proxy A::B::C::D>
+    # @example Looks for a complex path from a namespace
+    #   Registry.resolve(P('A::B'), 'B::D') # => #<yardoc class A::B::D>
+    # @param [CodeObjects::NamespaceObject, nil] namespace the starting namespace
+    #   (module or class). If +nil+ or +:root+, starts from the {#root} object.
+    # @param [String, Symbol] name the name (or complex path) to look for from
+    #   +namespace+.
+    # @param [Boolean] inheritance Follows inheritance chain (mixins, superclass)
+    #   when performing name resolution if set to +true+.
+    # @param [Boolean] proxy_fallback If +true+, returns a proxy representing
+    #   the unresolved path (namespace + name) if no object is found.
+    # @return [CodeObjects::Base] the object if it is found
+    # @return [CodeObjects::Proxy] a Proxy representing the object if 
+    #   +proxy_fallback+ is +true+.
+    # @return [nil] if +proxy_fallback+ is +false+ and no object was found.
+    # @see P
     def resolve(namespace, name, inheritance = false, proxy_fallback = false)
       if namespace.is_a?(CodeObjects::Proxy)
         return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
@@ -143,8 +247,14 @@ module YARD
 
     private
   
+    # The internal namespace hash
+    # @return [Hash{String => CodeObjects::Base}] the path/object hash
     attr_accessor :namespace
 
+    # Attempts to resolve a name in a namespace
+    # 
+    # @param [CodeObjects::NamespaceObject] namespace the starting namespace
+    # @param [String] name the name to look for
     def partial_resolve(namespace, name)
       [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
         next if s.empty? && name =~ /^\w/
