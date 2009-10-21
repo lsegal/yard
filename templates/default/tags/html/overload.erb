@@ -1,4 +1,6 @@
-<% if object.has_tag?(:overload) %>
+<% if object.tags(:overload).size == 1 %>
+  <%= yieldall :object => object.tag(:overload) %>
+<% elsif object.has_tag?(:overload) %>
   <h3>Overloads:</h3>
   <ul class="overload">
     <% object.tags(:overload).each do |overload| %>
