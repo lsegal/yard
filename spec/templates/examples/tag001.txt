@@ -21,12 +21,12 @@ Examples:
 Yields:
 -------
 
-     - a block
+    a block
 
 Parameters:
 -----------
 
-    (Hash) opts - the options
+    the options
 
 Options Hash (opts):
 --------------------
@@ -38,22 +38,22 @@ Options Hash (opts):
 Returns:
 --------
 
-    (String) - the result
+    the result
 
 Yield Parameters:
 -----------------
 
-    (String) - a value
+    a value
 
 Yield Returns:
 --------------
 
-    (Hash) - a hash
+    a hash
 
 Raises:
 -------
 
-    (Exception) - Exception class
+    Exception class
 
 See Also:
 ---------
