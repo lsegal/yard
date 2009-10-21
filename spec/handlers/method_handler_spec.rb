@@ -25,6 +25,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     end
   end
   
+  it "should allow self.methname" do
+    Registry.at("Foo.new").should_not be_nil
+  end
+  
   it "should mark dynamic methods as such" do
     P('Foo#dynamic').dynamic?.should == true
   end
