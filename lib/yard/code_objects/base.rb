@@ -330,11 +330,17 @@ module YARD
       
       # Renders the object using the {Templates::Engine templating system}.
       # 
+      # @example Formats a class in plaintext
+      #   puts P('MyClass').format
+      # @example Formats a method in html with rdoc markup
+      #   puts P('MyClass#meth').format(:format => :html, :markup => :rdoc)
       # @param [Hash] options a set of options to pass to the template
       # @option options :format (:text) :html, :text or another output format
       # @option options :template (:default) a specific template to use
+      # @option options :markup (nil) the markup type (:rdoc, :markdown, :textile)
       # @option options :serializer (nil) see Serializers::Base
       # @return [String] the rendered template
+      # @see Templates::Engine#render
       def format(options = {})
         options.merge!(:object => self)
         Templates::Engine.render(options)
