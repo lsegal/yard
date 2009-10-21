@@ -8,7 +8,7 @@ def param
 end
 
 def yields
-  tag :yield
+  tag :yield, :no_names => true, :no_types => true
 end
 
 def yieldparam
