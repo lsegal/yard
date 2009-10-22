@@ -1,14 +1,30 @@
 module YARD
   module CodeObjects
+    # A special type of +NoMethodError+ when raised from a {Proxy}
     class ProxyMethodError < NoMethodError; end
 
-    class Proxy    
+    # The Proxy class is a way to lazily resolve code objects in
+    # cases where the object may not yet exist. A proxy simply stores
+    # an unresolved path until a method is called on the object, at which
+    # point it does a lookup using {Registry#resolve}. If the object is
+    # not found, a warning is raised and {ProxyMethodError} might be raised.
+    # 
+    # @example Creates a Proxy to the String class from a module
+    #   # When the String class is parsed this method will
+    #   # begin to act like the String ClassObject.
+    #   Proxy.new(mymoduleobj, "String")
+    # @see Registry#resolve
+    # @see ProxyMethodError
+    class Proxy
       def self.===(other) other.is_a?(self) end
 
       attr_reader :namespace, :name
       alias_method :parent, :namespace
 
-      # @raise ArgumentError if namespace is not a NamespaceObject
+      # Creates a new Proxy
+      # 
+      # @raise [ArgumentError] if namespace is not a NamespaceObject
+      # @return [Proxy] self
       def initialize(namespace, name)
         namespace = Registry.root if !namespace || namespace == :root
         
@@ -39,7 +55,9 @@ module YARD
           @namespace = Registry.root
         end
       end
-      
+
+      # Returns a text representation of the Proxy
+      # @return [String] the object's #inspect method or P(OBJECTPATH)
       def inspect
         if obj = to_obj
           obj.inspect
@@ -48,6 +66,11 @@ module YARD
         end
       end
       
+      # If the proxy resolves to an object, returns its path, otherwise
+      # guesses at the correct path using the original namespace and name.
+      # 
+      # @return [String] the assumed path of the proxy (or the real path
+      #   of the resolved object)
       def path
         if obj = to_obj
           obj.path
@@ -69,6 +92,7 @@ module YARD
       end
       alias to_s path
     
+      # @return [Boolean] 
       def is_a?(klass)
         if obj = to_obj
           obj.is_a?(klass)
@@ -77,6 +101,7 @@ module YARD
         end
       end
       
+      # @return [Boolean] 
       def ===(other)
         if obj = to_obj
           obj === other
@@ -85,6 +110,7 @@ module YARD
         end
       end
       
+      # @return [Boolean] 
       def <=>(other)
         if other.respond_to? :path
           path <=> other.path
@@ -93,6 +119,7 @@ module YARD
         end
       end
       
+      # @return [Boolean] 
       def ==(other)
         if other.respond_to? :path
           path == other.path
@@ -101,6 +128,9 @@ module YARD
         end
       end
       
+      # Returns the class name of the object the proxy is mimicking, if
+      # resolved. Otherwise returns +Proxy+. 
+      # @return [Class] the resolved object's class or +Proxy+
       def class
         if obj = to_obj
           obj.class
@@ -109,6 +139,11 @@ module YARD
         end
       end
       
+      # Returns the type of the proxy. If it cannot be resolved at the
+      # time of the call, it will either return the inferred proxy type
+      # (see {#type=}) or +:proxy+
+      # @return [Symbol] the Proxy's type
+      # @see #type=
       def type
         if obj = to_obj
           obj.type
@@ -116,16 +151,23 @@ module YARD
           Registry.proxy_types[path] || :proxy
         end
       end
+      
+      # Allows a parser to infer the type of the proxy by its path.
+      # @param [#to_sym] type the proxy's inferred type
+      # @return [nil] 
       def type=(type) Registry.proxy_types[path] = type.to_sym end
       
+      # @return [Boolean] 
       def instance_of?(klass)
         self.class == klass
       end
       
+      # @return [Boolean] 
       def kind_of?(klass)
         self.class <= klass
       end
       
+      # @return [Boolean] 
       def respond_to?(meth, include_private = false)
         if obj = to_obj
           obj.respond_to?(meth, include_private)
@@ -134,9 +176,9 @@ module YARD
         end
       end
 
-      # Dispatches the method to the resolved object
+      # Dispatches the method to the resolved object.
       # 
-      # @raise NoMethodError if the proxy cannot find the real object
+      # @raise [ProxyMethodError] if the proxy cannot find the real object
       def method_missing(meth, *args, &block)
         if obj = to_obj
           obj.__send__(meth, *args, &block)
