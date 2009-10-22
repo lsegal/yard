@@ -18,15 +18,10 @@ Examples:
     a = String.new
     flip(a.reverse)
 
-Yields:
--------
-
-    a block
-
 Parameters:
 -----------
 
-    the options
+    (Hash) opts - the options
 
 Options Hash (opts):
 --------------------
@@ -35,10 +30,10 @@ Options Hash (opts):
 
     (Object) :key2 - default: X - hello
 
-Returns:
---------
+Yields:
+-------
 
-    the result
+    a block
 
 Yield Parameters:
 -----------------
@@ -49,6 +44,11 @@ Yield Returns:
 --------------
 
     a hash
+
+Returns:
+--------
+
+    the result
 
 Raises:
 -------
