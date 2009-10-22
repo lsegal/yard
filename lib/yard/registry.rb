@@ -7,13 +7,13 @@ module YARD
   # (see {CodeObjects::Base#path}) as the key and the object itself as the value.
   # Object paths must be unique to be stored in the Registry. All lookups for 
   # objects are done on the singleton Registry instance using the {Registry#at} 
-  # or {Registry#find} methods.
+  # or {Registry#resolve} methods.
   # 
   # The registry is saved to a "yardoc" file, which can be loaded back to 
   # perform any lookups.
   # 
   # This class is a singleton class. Any method called on the class will be
-  # delegated to the instance {Registry.instance}.
+  # delegated to the instance.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
     

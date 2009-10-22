@@ -253,8 +253,8 @@ module YARD
         [:TkDOLLAR,     TkUnknownChar,  "\$"], #"
       ]
 
-      # {reading => token_class}
-      # {reading => [token_class, *opt]}
+      # { reading => token_class }
+      # { reading => [token_class, *opt] }
       TkReading2Token = {}
       TkSymbol2Token = {}
 

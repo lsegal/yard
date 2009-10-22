@@ -12,7 +12,7 @@ module YARD::CodeObjects
     attr_reader :children
 
     # A hash containing two keys, class and instance, each containing
-    # the attribute name with a {:read, :write} hash for the read and
+    # the attribute name with a { :read, :write } hash for the read and
     # write objects respectively.
     # 
     # @example The attributes of an object
