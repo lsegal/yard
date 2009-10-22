@@ -26,6 +26,13 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       o.explicit = true
       o.parameters = args
     end
+    if mscope == :instance && meth == "initialize"
+      unless obj.has_tag?(:return)
+        obj.docstring.add_tag(YARD::Tags::Tag.new(:return, 
+          "a new instance of +#{namespace.name}+", namespace.name.to_s))
+      end
+    end
+
     parse_block(:owner => obj) # mainly for yield/exceptions
   end
 end

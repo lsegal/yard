@@ -69,4 +69,12 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     o3.docstring.should be_empty
     o3.docstring.should be_blank
   end
+  
+  it "should set a return tag if not set on #initialize" do
+    meth = P('Foo#initialize')
+    
+    meth.should have_tag(:return)
+    meth.tag(:return).types.should == ["Foo"]
+    meth.tag(:return).text.should == "a new instance of +Foo+"
+  end
 end

@@ -1,4 +1,7 @@
 class Foo
+  # A docstring but no return type
+  def initialize; end
+
   def ==(other)
     'hello' 
   end
