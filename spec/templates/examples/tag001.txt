@@ -38,22 +38,22 @@ Yields:
 Yield Parameters:
 -----------------
 
-    a value
+    (String) a - a value
 
 Yield Returns:
 --------------
 
-    a hash
+    (Hash) - a hash
 
 Returns:
 --------
 
-    the result
+    (String) - the result
 
 Raises:
 -------
 
-    Exception class
+    (Exception) - Exception class
 
 See Also:
 ---------
