@@ -107,6 +107,12 @@ if RUBY19
         ast.source.should == "def x; A; rescue Y; B end"
         ast.jump(:rescue).source.should == "rescue Y; B end"
       end
+      
+      it "should handle defs with keywords as method name" do
+        ast = stmt("# docstring\nclass A;\ndef class; end\nend")
+        ast.jump(:class).docstring.should == "docstring"
+        ast.jump(:class).line_range.should == (2..4)
+      end
     end
   end
 end

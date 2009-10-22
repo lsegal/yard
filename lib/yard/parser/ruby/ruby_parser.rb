@@ -150,7 +150,8 @@ module YARD
         [:kw, :op].each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             def on_#{event}(tok)
-              unless @tokens.last && @tokens.last[0] == :symbeg
+              unless @last_ns_token == [:kw, "def"] ||
+                  (@tokens.last && @tokens.last[0] == :symbeg)
                 (@map[tok] ||= []) << [lineno, charno]
               end
               visit_ns_token(:#{event}, tok, true)
@@ -185,6 +186,7 @@ module YARD
         def visit_ns_token(token, data, ast_token = false)
           add_token(token, data)
           ch = charno
+          @last_ns_token = [token, data]
           @charno += data.length
           @ns_charno = charno
           if ast_token
