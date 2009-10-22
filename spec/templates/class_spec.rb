@@ -5,6 +5,7 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
     YARD.parse_string <<-'eof'
       private
       # Comments
+      # @abstract override this class
       # @author Test
       # @version 1.0
       # @see A

@@ -1,5 +1,7 @@
 ----------------------------------------------------------- Class: A < B
 
+    Abstract. override this class
+
     Comments 
 
 See Also:

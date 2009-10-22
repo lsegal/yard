@@ -6,6 +6,8 @@
 
     Deprecated. for great justice
 
+    Abstract. override me
+
     Comments 
 
 Examples:

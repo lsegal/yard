@@ -144,6 +144,7 @@ module YARD
       define_tag "Options Hash",      :option,      :with_options
       define_tag "Overloads",         :overload,    OverloadTag
       define_tag "Private",           :private
+      define_tag "Abstract",          :abstract
     end
   end
 end

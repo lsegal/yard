@@ -7,6 +7,7 @@ describe YARD::Templates::Engine.template(:default, :tags) do
     before do
       YARD.parse_string <<-'eof'
         # Comments
+        # @abstract override me
         # @param [Hash] opts the options
         # @option opts :key ('') hello
         # @option opts :key2 (X) hello
