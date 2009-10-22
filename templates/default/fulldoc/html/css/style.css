@@ -181,6 +181,7 @@ pre.code .info.file { color: #555; }
 pre.code .val { color: #036A07; }
 pre.code .tstring_content,
 pre.code .heredoc_beg, pre.code .heredoc_end,
+pre.code .qwords_beg, pre.code .qwords_end,
 pre.code .tstring, pre.code .dstring { color: #036A07; }
 pre.code .fid, pre.code .id.new, pre.code .id.to_s, 
 pre.code .id.to_sym, pre.code .id.to_f, 
