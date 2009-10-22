@@ -3,14 +3,36 @@ require 'optparse'
 module YARD
   module CLI
     class Yardoc
+      # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"
       
-      attr_reader :options, :visibilities
-      attr_accessor :files, :reload, :generate
+      # The hash of options passed to the template.
+      # @return Hash
+      # @see Templates::Engine#render
+      attr_reader :options
+      
+      # The list of Ruby source files to process
+      # @return [Array<String>] list of Ruby source files to process
+      attr_accessor :files
+      
+      # Whether to reparse the source files even if the .yardoc already
+      # exists.
+      # @return [Boolean] whether to reload the source
+      attr_accessor :reload
+      
+      # Whether to generate output
+      # @return [Boolean] whether to generate output
+      attr_accessor :generate
+      
+      # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
+      # @return [String] the filename to load extra options from
       attr_accessor :options_file
       
+      # Helper method to create an instance and run the utility
+      # @see #run
       def self.run(*args) new.run(*args) end
         
+      # Creates a new instance of the commandline utility
       def initialize
         @options = SymbolHash[
           :format => :html, 
@@ -27,6 +49,11 @@ module YARD
         @options_file = DEFAULT_YARDOPTS_FILE
       end
       
+      # Runs the commandline utility, parsing arguments and generating
+      # output if set.
+      # 
+      # @param [Array<String>] args the list of arguments
+      # @return [nil] 
       def run(*args)
         args += support_rdoc_document_file!
         optparse(*yardopts)
@@ -40,10 +67,16 @@ module YARD
         true
       end
 
+      # The list of all objects to process. Override this method to change
+      # which objects YARD should generate documentation for.
+      # 
+      # @return [Array<CodeObjects::Base>] a list of code objects to process
       def all_objects
         Registry.all(:root, :module, :class)
       end
       
+      # Parses the .yardopts file for default yard options
+      # @return [nil] 
       def yardopts
         IO.read(options_file).split(/\s+/)
       rescue Errno::ENOENT
@@ -52,12 +85,16 @@ module YARD
       
       private
       
+      # Reads a .document file in the directory to get source file globs
+      # @return [nil] 
       def support_rdoc_document_file!
         IO.read(".document").split(/\s+/)
       rescue Errno::ENOENT
         []
       end
       
+      # Adds a set of extra documentation files to be processed
+      # @param [Array<String>] files the set of documentation files
       def add_extra_files(*files)
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
@@ -66,6 +103,15 @@ module YARD
         end
       end
       
+      # Parses the file arguments into Ruby files and extra files, which are
+      # separated by a '-' element.
+      # 
+      # @example Parses a set of Ruby source files
+      #   parse_files %w(file1 file2 file3)
+      # @example Parses a set of Ruby files with a separator and extra files
+      #   parse_files %w(file1 file2 - extrafile1 extrafile2)
+      # @param [Array<String>] files the list of files to parse
+      # @return [nil] 
       def parse_files(*files)
         self.files = []
         seen_extra_files_marker = false
@@ -84,6 +130,8 @@ module YARD
         end
       end
       
+      # Parses commandline options.
+      # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         serialopts = SymbolHash.new
         
