@@ -45,9 +45,9 @@ module YARD::CodeObjects
     # all methods if hash is empty.
     # 
     # @param [Hash] opts the options hash to match
-    # @option opts :inherited (true) whether inherited methods should be
+    # @option opts [Boolean] :inherited (true) whether inherited methods should be
     #   included in the list
-    # @option opts :included (true) whether mixed in methods should be
+    # @option opts [Boolean] :included (true) whether mixed in methods should be
     #   included in the list
     # @return [Array<MethodObject>] the list of methods that matched
     def meths(opts = {})
@@ -74,9 +74,9 @@ module YARD::CodeObjects
     # Returns the list of constants matching the options hash.
     # 
     # @param [Hash] opts the options hash to match
-    # @option opts :inherited (true) whether inherited constant should be
+    # @option opts [Boolean] :inherited (true) whether inherited constant should be
     #   included in the list
-    # @option opts :included (true) whether mixed in constant should be
+    # @option opts [Boolean] :included (true) whether mixed in constant should be
     #   included in the list
     # @return [Array<ConstantObject>] the list of constant that matched
     def constants(opts = {})

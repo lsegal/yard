@@ -335,10 +335,10 @@ module YARD
       # @example Formats a method in html with rdoc markup
       #   puts P('MyClass#meth').format(:format => :html, :markup => :rdoc)
       # @param [Hash] options a set of options to pass to the template
-      # @option options :format (:text) :html, :text or another output format
-      # @option options :template (:default) a specific template to use
-      # @option options :markup (nil) the markup type (:rdoc, :markdown, :textile)
-      # @option options :serializer (nil) see Serializers::Base
+      # @option options [Symbol] :format (:text) :html, :text or another output format
+      # @option options [Symbol] :template (:default) a specific template to use
+      # @option options [Symbol] :markup (nil) the markup type (:rdoc, :markdown, :textile)
+      # @option options [Serializers::Base] :serializer (nil) see Serializers
       # @return [String] the rendered template
       # @see Templates::Engine#render
       def format(options = {})
