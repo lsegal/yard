@@ -3,14 +3,29 @@ require 'fileutils'
 module YARD
   module Serializers
     class FileSystemSerializer < Base
-      attr_reader :basepath, :extension
+      # The base path to write data to.
+      # @return [String] a base path
+      attr_reader :basepath
       
+      # The extension of the filename (defaults to +html+)
+      # 
+      # @return [String] the extension of the file. Empty string for no extension.
+      attr_reader :extension
+      
+      # Creates a new FileSystemSerializer with options
+      # 
+      # @option opts [String] :basepath ('doc') the base path to write data to
+      # @option opts [String] :extension ('html') the extension of the serialized
+      #   path filename. If this is set to the empty string, no extension is used.
       def initialize(opts = {})
         super
         @basepath = (options[:basepath] || 'doc').to_s
         @extension = (options.has_key?(:extension) ? options[:extension] : 'html').to_s
       end
       
+      # Serializes object with data to its serialized path (prefixed by the {#basepath}).
+      # 
+      # @return [String] the written data (for chaining)
       def serialize(object, data)
         path = File.join(basepath, *serialized_path(object))
         FileUtils.mkdir_p File.dirname(path)
@@ -18,6 +33,12 @@ module YARD
         File.open(path, "wb") {|f| f.write data }
       end
       
+      # Implements the serialized path of a code object.
+      # 
+      # @param [CodeObjects::Base, String] object the object to get a path for.
+      #   The path of a string is the string itself.
+      # @return [String] if object is a String, returns
+      #   object, otherwise the path on disk (without the basepath).
       def serialized_path(object)
         return object if object.is_a?(String)
 
