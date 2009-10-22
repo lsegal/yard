@@ -1,6 +1,6 @@
 def init
-  sections :index, [:example, :overload, [T('docstring')], :yields, :param, :option, 
-    :return, :yieldparam, :yieldreturn, :raises, :see, :author, :since, :version]
+  sections :index, [:example, :overload, [T('docstring')], :param, :option, :yields, 
+    :yieldparam, :yieldreturn, :return, :raises, :see, :author, :since, :version]
 end
 
 def param
