@@ -44,5 +44,7 @@ def tag(name, opts = {})
   @no_names = true if opts[:no_names]
   @no_types = true if opts[:no_types]
   @name = name
-  erb('tag')
+  out = erb('tag')
+  @no_names, @no_types = nil, nil
+  out
 end
