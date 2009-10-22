@@ -112,6 +112,8 @@ p.signature .aliases .names { font-family: monospace; font-weight: bold; color: 
 
 .defines { display: none; }
 
+#method_missing_details .notice.this { position: relative; top: -8px; color: #888; padding: 0; margin: 0; }
+
 #footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
 .showSource { font-size: 0.9em; }
 .showSource a:link, .showSource a:visited { text-decoration: none; color: #666; }
