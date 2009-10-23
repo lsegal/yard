@@ -1,7 +1,29 @@
 module YARD::CodeObjects
   # Represents a Ruby method in source
   class MethodObject < Base
-    attr_accessor :visibility, :scope, :explicit, :parameters
+    # The visibility of the method (+:public:+, +:protected+, +:private+)
+    # 
+    # @return [Symbol] the method visibility
+    attr_accessor :visibility
+    
+    # The scope of the method (+:class+ or +:instance+)
+    # 
+    # @return [Symbol] the scope
+    attr_accessor :scope
+    
+    # Whether the object is explicitly defined in source or whether it was
+    # inferred by a handler. For instance, attribute methods are generally
+    # inferred and therefore not explicitly defined in source. 
+    # 
+    # @return [Boolean] whether the object is explicitly defined in source.
+    attr_accessor :explicit
+    
+    # Returns the list of parameters parsed out of the method signature
+    # with their default values.
+    # 
+    # @return [Array<Array(String, String)>] a list of parameter names followed
+    #   by their default values (or nil)
+    attr_accessor :parameters
     
     # Creates a new method object in +namespace+ with +name+ and an instance
     # or class +scope+
@@ -42,11 +64,9 @@ module YARD::CodeObjects
       namespace.aliases.has_key? self
     end
     
-    # Tests if the object is explicitly defined in source or whether it was
-    # inferred by a handler. For instance, attribute methods are generally
-    # inferred and therefore not explicitly defined in source. 
+    # Tests boolean {#explicit} value.
     # 
-    # @return [Boolean] whether the object is explicitly defined in source.
+    # @return [Boolean] whether the method is explicitly defined in source
     def is_explicit?
       explicit ? true : false
     end
