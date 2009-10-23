@@ -2,7 +2,8 @@ include Helpers::ModuleHelper
 
 def init
   sections :header, :box_info, :pre_docstring, T('docstring'), :children, 
-    :constant_summary, :attribute_summary, :method_summary, :inherited_methods,
+    :constant_summary, :inherited_constants, :attribute_summary, 
+    :method_summary, :inherited_methods,
     :methodmissing, [T('method_details')],
     :attribute_details, [T('method_details')], 
     :method_details_list, [T('method_details')]
