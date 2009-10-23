@@ -19,6 +19,8 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
         # constructor method!
         def initialize(test) end
       end
+      
+      class C < A; end
     eof
   end
   
