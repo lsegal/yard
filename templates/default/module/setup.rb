@@ -76,5 +76,5 @@ def docstring_summary(obj)
     docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }.strip)
   end
 
-  docstring
+  docstring.summary
 end
