@@ -63,3 +63,18 @@ end
 def sort_listing(list)
   list.sort_by {|o| [o.scope, (options[:visibilities]||[]).index(o.visibility), o.name].join(":") }
 end
+
+def docstring_summary(obj)
+  docstring = ""
+  if obj.tags(:overload).size == 1 && obj.docstring.empty?
+    docstring = obj.tag(:overload).docstring
+  else
+    docstring = obj.docstring
+  end
+
+  if docstring.summary.empty? && obj.tags(:return).size == 1 && obj.tag(:return).text
+    docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }.strip)
+  end
+
+  docstring
+end

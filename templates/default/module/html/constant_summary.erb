@@ -3,9 +3,7 @@
   <dl class="constants">
     <% constant_listing.each do |cnst| %>
       <dt id="<%= anchor_for(cnst) %> <%= cnst.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= cnst.name %> =
-        <% unless cnst.docstring.empty? %>
-          <span class="summary_desc"><%= htmlify_line cnst.docstring.summary %></span>
-        <% end %>
+          <span class="summary_desc"><%= htmlify_line docstring_summary(cnst) %></span>
       </dt>
       <dd><pre class="code"><%= format_constant cnst.value %></pre></dd>
     <% end %>

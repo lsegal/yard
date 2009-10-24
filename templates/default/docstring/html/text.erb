@@ -1,5 +1,1 @@
-<% if object.tags(:overload).size == 1 && object.docstring.empty? %>
-  <%= htmlify object.tag(:overload).docstring %>
-<% else %>
-  <%= htmlify object.docstring %>
-<% end %>
+<%= htmlify(docstring_text) %>

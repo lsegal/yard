@@ -9,9 +9,9 @@
         <% end %>
         
         <% if meth.has_tag?(:deprecated) %>
-          <span class="summary_desc"><strong>Deprecated.</strong> <%= meth.tag(:deprecated).text %></span>
-        <% elsif !meth.docstring.empty? %>
-          <span class="summary_desc"><%= htmlify_line meth.docstring.summary %></span>
+          <span class="summary_desc"><strong>Deprecated.</strong> <%= htmlify_line meth.tag(:deprecated).text %></span>
+        <% else %>
+          <span class="summary_desc"><%= htmlify_line docstring_summary(meth) %></span>
         <% end %>
       </li>
     <% end %>
