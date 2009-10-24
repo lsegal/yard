@@ -1,9 +1,52 @@
 module YARD
   module Handlers
+    # Iterates over all statements in a file and delegates them to the 
+    # {Handlers::Base} objects that are registered to handle the statement.
+    # 
+    # This class is passed to each handler and keeps overall processing state.
+    # For example, if the {#visibility} is set in a handler, all following
+    # statements will have access to this state. This allows "public", 
+    # "protected" and "private" statements to be handled in classes and modules.
+    # In addition, the {#namespace} can be set during parsing to control
+    # where objects are being created from.
+    # 
+    # @see Handlers::Base
     class Processor
-      attr_accessor :file, :namespace, :visibility
-      attr_accessor :scope, :owner, :load_order_errors, :parser_type
+      # @return [String] the filename
+      attr_accessor :file
+
+      # @return [CodeObjects::NamespaceObject] the current namespace
+      attr_accessor :namespace
       
+      # @return [Symbol] the current visibility
+      attr_accessor :visibility
+      
+      # @return [Symbol] the current scope
+      attr_accessor :scope
+      
+      # @return [CodeObjects::Base, nil] unlike the namespace, the owner
+      #   is a non-namespace object that should be stored between statements.
+      #   For instance, when parsing a method body, the {CodeObjects::MethodObject}
+      #   is set as the owner, in case any extra method information is processed.
+      attr_accessor :owner
+      
+      # @return [Boolean] whether or not {Parser::LoadOrderError} is raised
+      attr_accessor :load_order_errors
+      
+      # @return [Symbol] the parser type (:ruby, :ruby18 or :c)
+      attr_accessor :parser_type
+      
+      # Creates a new Processor for a +file+.
+      # 
+      # @param [String] file the name of the file that is being processed.
+      #   uses '(stdin)' if file is nil. 
+      # @param [Boolean] load_order_error whether or not to raise {Parser::LoadOrderError}
+      #   when a file has unresolved references that need to be parsed first.
+      #   If these errors are raised, the processor will attempt to load all 
+      #   other files before continuing to parse the file.
+      # @param [Symbol] parser_type the parser type (:ruby, :ruby18, :c) from
+      #   the parser. Used to select the handler (since handlers are specific
+      #   to a parser type).
       def initialize(file = nil, load_order_errors = false, parser_type = Parser::SourceParser.parser_type)
         @file = file || "(stdin)"
         @namespace = YARD::Registry.root
@@ -16,6 +59,11 @@ module YARD
         load_handlers
       end
       
+      # Processes a list of statements by finding handlers to process each
+      # one.
+      # 
+      # @param [Array] statements a list of statements
+      # @return [nil] 
       def process(statements)
         statements.each_with_index do |stmt, index|
           find_handlers(stmt).each do |handler| 
@@ -41,6 +89,10 @@ module YARD
         end
       end
       
+      # Searches for all handlers in {Base.subclasses} that match the +statement+
+      # 
+      # @param statement the statement object to match.
+      # @return [Array<Base>] a list of handlers to process the statement with.
       def find_handlers(statement)
         Base.subclasses.find_all do |handler|
           handler_base_class > handler &&
@@ -51,10 +103,16 @@ module YARD
       
       private
       
+      # Returns the handler base class
+      # @return [Base] the base class
       def handler_base_class
         handler_base_namespace.const_get(:Base)
       end
 
+      # The module holding the handlers to be loaded
+      # 
+      # @return [Module] the module containing the handlers depending on
+      #   {#parser_type}.
       def handler_base_namespace
         case parser_type
         when :ruby;   Ruby
@@ -62,6 +120,10 @@ module YARD
         end
       end
       
+      # Loads handlers from {#handler_base_namespace}. This ensures that
+      # Ruby1.9 handlers are never loaded into 1.8; also lowers the amount
+      # of modules that are loaded
+      # @return [nil]
       def load_handlers
         return if @handlers_loaded[parser_type]
         handler_base_namespace.constants.each {|c| handler_base_namespace.const_get(c) }
