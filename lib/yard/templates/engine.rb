@@ -63,6 +63,10 @@ module YARD
         # false, the rendered contents will be serialized through the {Serializers::Base}
         # object. See {#with_serializer}.
         # 
+        # @example Renders an object with html formatting
+        #   Engine.render(:format => :html, :object => obj)
+        # @example Renders without an object
+        #   Engine.render(:type => :fulldoc, :otheropts => somevalue)
         # @param [Hash] options the options hash
         # @option options [Symbol] :format (:text) the default format
         # @option options [Symbol] :type (nil) the :object's type.
