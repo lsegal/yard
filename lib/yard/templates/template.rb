@@ -6,8 +6,11 @@ module YARD
       attr_accessor :class, :options, :subsections, :section
       
       class << self
+        # @return [Array<Module>] a list of modules to be automatically included
+        #   into any new template module
         attr_accessor :extra_includes
 
+        # @private
         def included(klass)
           klass.extend(ClassMethods)
         end
