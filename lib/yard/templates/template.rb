@@ -34,22 +34,28 @@ module YARD
           include_parent
           load_setup_rb
         end
-    
-        def load_setup_rb
-          setup_file = File.join(full_path, 'setup.rb')
-          if File.file? setup_file
-            module_eval(File.read(setup_file).taint, setup_file, 1)
-          end
-        end
-        
-        def include_parent
-          pc = path.to_s.split('/')
-          if pc.size > 1
-            pc.pop
-            include Engine.template!(pc.join('/'), full_path.join('..').cleanpath)
-          end
-        end
       
+        # Searches for a file identified by +basename+ in the template's
+        # path as well as any mixed in template paths. 
+        # 
+        # @param [String] basename the filename to search for
+        # @return [String] the full path of a file on disk with filename
+        #   +basename+ in one of the template's paths.
+        def find_file(basename)
+          full_paths.each do |path|
+            file = path.join(basename)
+            return file if file.file?
+          end
+
+          nil
+        end
+
+        def is_a?(klass)
+          return true if klass == Template
+          super(klass)
+        end
+
+        # Creates a new template object to be rendered with {Template#run}
         def new(*args)
           obj = Object.new.extend(self)
           obj.class = self
@@ -65,18 +71,21 @@ module YARD
           Engine.template(*path)
         end
       
-        def is_a?(klass)
-          return true if klass == Template
-          super(klass)
+        private
+
+        def include_parent
+          pc = path.to_s.split('/')
+          if pc.size > 1
+            pc.pop
+            include Engine.template!(pc.join('/'), full_path.join('..').cleanpath)
+          end
         end
 
-        def find_file(basename)
-          full_paths.each do |path|
-            file = path.join(basename)
-            return file if file.file?
+        def load_setup_rb
+          setup_file = File.join(full_path, 'setup.rb')
+          if File.file? setup_file
+            module_eval(File.read(setup_file).taint, setup_file, 1)
           end
-
-          nil
         end
       end
     
@@ -93,24 +102,59 @@ module YARD
         init
       end
     
+      # Loads a template specified by path. If +:template+ or +:format+ is
+      # specified in the {#options} hash, they are prependend and appended
+      # to the path respectively.
+      # 
+      # @param [Array<String, Symbol>] path the path of the template
+      # @return [Template] the loaded template module
       def T(*path)
         path.unshift(options[:template]) if options[:template]
         path.push(options[:format]) if options[:format]
         self.class.T(*path)
       end
     
+      # Sets the sections (and subsections) to be rendered for the template
+      # 
+      # @example Sets a set of erb sections
+      #   sections :a, :b, :c # searches for a.erb, b.erb, c.erb
+      # @example Sets a set of method and erb sections
+      #   sections :a, :b, :c # a is a method, the rest are erb files
+      # @example Sections with subsections
+      #   sections :header, [:name, :children]
+      #   # the above will call header.erb and only renders the subsections
+      #   # if they are yielded by the template (see #yieldall)
+      # @param [Array<Symbol, String, Template, Array>] args the sections
+      #   to use to render the template. For symbols and strings, the
+      #   section will be executed as a method (if one exists), or rendered 
+      #   from the file "name.erb" where name is the section name. For 
+      #   templates, they will have {Template.run} called on them. Any
+      #   subsections can be yielded to using yield or {#yieldall}
       def sections(*args)
         @sections.replace(args) if args.size > 0
         @sections
       end
       
-      def subsections=(value)
-        @subsections = Array === value ? value : nil
-      end
-    
+      # Initialization called on the template. Override this in a 'setup.rb'
+      # file in the template's path to implement a template
+      # 
+      # @example A default set of sections
+      #   def init
+      #     sections :section1, :section2, [:subsection1, :etc]
+      #   end
       def init
       end
     
+      # Runs a template on +sects+ using extra options. This method should
+      # not be called directly. Instead, call the class method {ClassMethods#run}
+      # 
+      # @param [Hash, nil] opts any extra options to apply to sections
+      # @param [Array] sects a list of sections to render
+      # @param [Fixnum] start_at the index in the section list to start from
+      # @param [Boolean] break_first if true, renders only the first section
+      # @yield [opts] calls for the subsections to be rendered
+      # @yieldparam [Hash] opts any extra options to yield
+      # @return [String] the rendered sections joined together
       def run(opts = nil, sects = sections, start_at = 0, break_first = false, &block)
         out = ""
         return out if sects.nil?
@@ -137,18 +181,29 @@ module YARD
         end
         out
       end
-          
+         
+      # Yields all subsections with any extra options
+      # 
+      # @param [Hash] opts extra options to be applied to subsections
       def yieldall(opts = nil, &block)
         log.debug "Templates: yielding from #{inspect}"
         with_section { run(opts, subsections, &block) }
       end
     
+      # @param [String, Symbol] section the section name
+      # @yield calls subsections to be rendered
+      # @return [String] the contents of the ERB rendered section
       def erb(section, &block)
         erb = ERB.new(cache(section), nil, '<>')
         erb.filename = cache_filename(section).to_s
         erb.result(binding, &block)
       end
       
+      # @param [String] basename the name of the file
+      # @return [String] the contents of a file identified by +basename+. All
+      #   template paths (including any mixed in templates) are searched for
+      #   the file
+      # @see ClassMethods#find_file 
       def file(basename)
         file = self.class.find_file(basename)
         raise ArgumentError, "no file for '#{basename}' in #{self.class.path}" unless file
@@ -171,6 +226,10 @@ module YARD
       end
     
       private
+    
+      def subsections=(value)
+        @subsections = Array === value ? value : nil
+      end
     
       def render_section(section, &block)
         log.debug "Templates: inside #{self.inspect}"
