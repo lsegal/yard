@@ -1,7 +1,13 @@
 module YARD
   module Handlers
+    # Raised during processing phase when a handler needs to perform
+    # an operation on an object's namespace but the namespace could
+    # not be resolved.
     class NamespaceMissingError < Parser::UndocumentableError
+      # The object the error occured on
+      # @return [CodeObjects::Base] a code object
       attr_accessor :object
+      
       def initialize(object) @object = object end
     end
     
@@ -125,6 +131,9 @@ module YARD
     # even if statements. For this reason, the block parsing method must be 
     # invoked explicitly out of efficiency sake.
     # 
+    # @abstract Subclass this class to provide a handler for YARD to use
+    #   during the processing phase.
+    # 
     # @see CodeObjects::Base
     # @see CodeObjects::NamespaceObject
     # @see handles
@@ -132,7 +141,6 @@ module YARD
     # @see #owner
     # @see #register
     # @see #parse_block
-    #
     class Base 
       # For accessing convenience, eg. "MethodObject" 
       # instead of the full qualified namespace
@@ -141,10 +149,14 @@ module YARD
       include Parser
       
       class << self
+        # Clear all registered subclasses. Testing purposes only
+        # @return [nil] 
         def clear_subclasses
           @@subclasses = []
         end
         
+        # Returns all registered handler subclasses.
+        # @return [Array<Base>] a list of handlers
         def subclasses
           @@subclasses ||= []
         end
