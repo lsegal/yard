@@ -4,12 +4,12 @@ describe YARD::Templates::Engine do
   describe '.register_template_path' do
     it "should register a String path" do
       Engine.register_template_path('.')
-      Engine.template_paths.shift.should == Pathname.new('.')
+      Engine.template_paths.pop.should == Pathname.new('.')
     end
     
     it "should register a Pathname path" do
       Engine.register_template_path(Pathname.new('.'))
-      Engine.template_paths.shift.should == Pathname.new('.')
+      Engine.template_paths.pop.should == Pathname.new('.')
     end
   end
   
