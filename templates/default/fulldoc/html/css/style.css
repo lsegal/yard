@@ -118,7 +118,8 @@ p.signature .aliases .names { font-family: monospace; font-weight: bold; color: 
 .showSource { font-size: 0.9em; }
 .showSource a:link, .showSource a:visited { text-decoration: none; color: #666; }
 
-#content a:link, #content a:visited { text-decoration: none; }
+#content a:link, #content a:visited { text-decoration: none; color: #00e; }
+#content a:hover { background: #ffffa5; }
 .docstring { margin-right: 5em; }
 .docstring a:link, .docstring a:visited { text-decoration: underline; }
 
@@ -171,8 +172,8 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
 #content ul.summary li.deprecated a:visited { text-decoration: line-through; font-style: italic; }
 
 /* syntax highlighting */
-#filecontents pre.code, 
-.docstring pre.code, .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
+#filecontents pre.code, .docstring pre.code { padding: 5px 3px; border: 1px solid #eef; background: #f5f5ff; }
+.source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
 #filecontents pre.code, .docstring pre.code, .source_code pre { font-family: monospace; }
 #filecontents pre.code, .docstring pre.code { display: block; }
 .source_code .lines { padding-right: 12px; color: #555; }
@@ -201,52 +202,3 @@ pre.code .id.backref,
 pre.code .id.nth_ref { color: #6D79DE; }
 pre.code .regexp, .dregexp { color: #036A07; }
 
-/* autocomplete */
-.ac_results {
-	padding: 0px;
-	border: 1px solid black;
-	background-color: white;
-	overflow: hidden;
-	z-index: 99999;
-}
-
-.ac_results ul {
-	width: 100%;
-	list-style-position: outside;
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.ac_results li {
-	margin: 0px;
-	padding: 2px 5px;
-	cursor: default;
-	display: block;
-	/* 
-	if width will be 100% horizontal scrollbar will apear 
-	when scroll mode will be used
-	*/
-	/*width: 100%;*/
-	font: menu;
-	font-size: 12px;
-	/* 
-	it is very important, if line-height not setted or setted 
-	in relative units scroll will be broken in firefox
-	*/
-	line-height: 16px;
-	overflow: hidden;
-}
-
-.ac_loading {
-	background: white url('indicator.gif') right center no-repeat;
-}
-
-.ac_odd {
-	background-color: #eee;
-}
-
-.ac_over {
-	background-color: #0A246A;
-	color: white;
-}
