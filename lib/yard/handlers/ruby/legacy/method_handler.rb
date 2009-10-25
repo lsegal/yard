@@ -31,6 +31,9 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, 
           "a new instance of +#{namespace.name}+", namespace.name.to_s))
       end
+    elsif mscope == :class && obj.docstring.blank? && %w(included extended 
+        method_added method_removed method_undefined).include?(meth)
+      obj.docstring.add_tag(YARD::Tags::Tag.new(:private, nil))
     end
 
     parse_block(:owner => obj) # mainly for yield/exceptions

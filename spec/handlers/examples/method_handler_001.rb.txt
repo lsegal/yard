@@ -1,4 +1,13 @@
 class Foo
+  class << self
+    def included; end
+    # docstring
+    def extended; end
+    def method_added; end
+    def method_removed; end
+    def method_undefined; end
+  end
+
   # A docstring but no return type
   def initialize; end
 
