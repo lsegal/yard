@@ -193,6 +193,10 @@ module YARD
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
           options[:visibilities].push(:private) 
         end
+        
+        opts.on('--no-private', "Hide objects with @private tag") do
+          query_expressions << '!@private'
+        end
 
         opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
           options[:no_highlight] = true

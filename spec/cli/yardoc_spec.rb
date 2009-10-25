@@ -95,4 +95,11 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:verifier].should be_a(Verifier)
     @yardoc.options[:verifier].call(obj).should == false
   end
+  
+  it "should accept --no-private" do
+    obj = mock(:object)
+    obj.should_receive(:tag).ordered.with('private').and_return(true)
+    @yardoc.optparse *%w( --no-private )
+    @yardoc.options[:verifier].call(obj).should == false
+  end
 end
