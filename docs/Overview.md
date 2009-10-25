@@ -8,7 +8,7 @@ that tools like RDoc do not do. These components are:
 
 * [Code Parsing & Processing Component](#parsing)
 * [Data Storage Component](#storage)
-* [Post Processing & Output Generation Component](#generators)
+* [Post Processing & Templating System](#templates)
 
 This separation is a major goal of the project, and means that YARD is not *just* 
 a tool to generate HTML output. The expectation is that any subset of YARD's 
@@ -30,10 +30,10 @@ This component is made up of four sub-components, each of which have separate
 tasks during the data gathering process (*note: the tag architecture is not*
 *shown in the class diagram*). These sub-components are:
 
-  * {file:PARSER.markdown Parser Architecture}
-  * {file:HANDLERS.markdown Handler Architecture}
-  * {file:CODE_OBJECTS.markdown Code Object Architecture}
-  * {file:TAGS.markdown Tag Architecture}
+  * {file:Parser.md Parser Architecture}
+  * {file:Handlers.md Handler Architecture}
+  * {file:CodeObjects.md Code Object Architecture}
+  * {file:Tags.md Tag Architecture}
 
 The parser component reads source files and converts it into a set of statements
 which the handlers then process, creating code objects which in turn create tags 
@@ -50,15 +50,11 @@ is the centralized repository for all data being parsed, stored and accessed. Th
 are future plans to improve this storage mechanism to be backend agnostic and allow
 for more robust storage.
 
-<a name="generators"></a>
-Post Processing & Output Generation Component
----------------------------------------------
+<a name="templates"></a>
+Post Processing & Templating System
+-----------------------------------
 
 This component handles processing of objects from the registry through a templating
 engine that allows output to a variety of formats. Practically speaking, this is
 where templates can be implemented to change the design, output or structure of
-the data. The next release, 0.2.4, will see a significant change in the design of 
-this component, so documentation might be sparse for now.
-
-The current design is documented in the {file:GENERATORS.markdown Generators Architecture} 
-document.
+the data. See {file:Templates.md Templates Architecture} for a complete overview.

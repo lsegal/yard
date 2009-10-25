@@ -3,7 +3,7 @@ Parser Architecture
 
 The parser component of YARD is the first component in the data processing pipeline
 that runs before any handling is done on the source. The parser is meant to translate
-the source into a set of statements that can be understood by the {file:HANDLERS.markdown Handlers}
+the source into a set of statements that can be understood by the {file:Handlers.md Handlers}
 that run immediately afterwards.
 
 The important classes are described in the class diagram of the entire parser 

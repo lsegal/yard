@@ -4,14 +4,14 @@ Handlers Architecture
 Handlers allow the processing of parsed source code. Handling is done after
 parsing to abstract away the implementation details of lexical and semantic
 analysis on source and to only deal with the logic regarding recognizing
-source statements as {file:CODE_OBJECTS.markdown code objects}.
+source statements as {file:CodeObjects.md code objects}.
 
 ![Handlers Architecture Class Diagram](images/handlers-class-diagram.png)
 
 The Pipeline
 ------------
 
-After the {file:PARSER.markdown parser component} finishes analyzing the
+After the {file:Parser.md parser component} finishes analyzing the
 source, it is handed off for post-processing to the {YARD::Handlers::Processor}
 class, which is responsible for traversing the set of statements given by
 the parser and delegating them to matching handlers. Handlers match when the
@@ -51,7 +51,7 @@ class method. A very simple handler that handles a module definition would be:
     end
     
 For details on what nodes are, and what node types are, see the 
-{file:PARSER.markdown parser architecture document}.
+{file:Parser.md parser architecture document}.
 
 In this case the node type being handled is the `:module` type. More than one
 node type or `handles` declarations may describe a single handler, for instance,
@@ -89,7 +89,7 @@ Creating a new Code Object
 --------------------------
 
 Usually (but not always) handling is performed to create new code objects to add
-to the registry (for information about code objects, see {file:CODE_OBJECTS.markdown this document}).
+to the registry (for information about code objects, see {file:CodeObjects.md this document}).
 Code objects should simply be created and added to the existing `namespace`. This
 will be enough to add them to the registry. There is also a convenience 
 {YARD::Handlers::Base#register register} method which quickly sets standard attributed
@@ -132,7 +132,7 @@ Because the legacy handler uses the legacy parser and therefore a different kind
 of AST, there are subtle differences in the handler API. Most importantly, the
 `handles` method usually deals with either lexical tokens or source code as a string
 or RegExp object. The statement object, similarly, is made up of lexical tokens instead
-of semantically parsed nodes (this is described in the {file:PARSER.markdown parser document}). 
+of semantically parsed nodes (this is described in the {file:Parser.md parser document}). 
 
 The module example above can be rewritten as a legacy handler as follows:
 

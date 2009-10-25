@@ -213,7 +213,7 @@ Other Extended Syntax
 To minimize rewriting of documentation and to ease maintenance, a special
 tag syntax is allowed to reference tags from other objects. Doing this allows
 a tag to be added as meta-data for multiple objects. A full example of this
-syntax is found in the {file:TAGS.markdown#reftags TAGS.markdown} file.
+syntax is found in the {file:Tags.md#reftags Tags} file.
 
 **Inter-Document Links**
 
@@ -242,22 +242,22 @@ Extending YARD
 There are many ways to extend YARD to support non-standard Ruby syntax (DSLs), 
 add new meta-data tags or programmatically access the intermediate metadata
 and documentation from code. An overview of YARD's full architecture can be
-found in the {file:OVERVIEW.markdown} document.
+found in the {file:Overview.md} document.
 
-For information on adding support for Ruby DSLs, see the {file:HANDLERS.markdown}
-and {file:PARSER.markdown} architecture documents.
+For information on adding support for Ruby DSLs, see the {file:Handlers.md}
+and {file:Parser.md} architecture documents.
 
-For information on adding extra tags, see {file:TAGS.markdown}.
+For information on adding extra tags, see {file:Tags.md}.
 
 For information on accessing the data YARD stores about your documentation,
-look at the {file:CODE_OBJECTS.markdown} architecture document.
+look at the {file:CodeObjects.md} architecture document.
 
 <a name="templating"></a>
 Templating YARD
 ===============
 
 In many cases you may want to change the style of YARD's templates or add extra
-information after extending it. The {file:GENERATORS.markdown} architecture
+information after extending it. The {file:Templates.md} architecture
 document covers the basics of how YARD's templating system works.
 
 [graphviz]:http://www.graphviz.org

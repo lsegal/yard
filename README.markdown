@@ -35,7 +35,7 @@ important information about objects, such as what parameters they take and what 
 they are expected to be, what type a method should return, what exceptions it can 
 raise, if it is deprecated, etc.. It also allows information to be better (and more 
 consistently) organized during the output generation phase. You can find a list
-of tags in the {file:GETTING_STARTED.markdown#taglist GETTING_STARTED.markdown} file.
+of tags in the {file:GettingStarted.md#taglist GettingStarted.md} file.
 
 YARD also supports an optional "types" declarations for certain tags. 
 This allows the developer to document type signatures for ruby methods and 
@@ -196,7 +196,7 @@ CHANGELOG
       RDoc. To take advantage of this plugin, set `has_rdoc = 'yard'` in your
       .gemspec file.
 
-- **Jun.07.09**: 0.2.3 release. See the {file:WHATSNEW.markdown} file for a 
+- **Jun.07.09**: 0.2.3 release. See the {file:WhatsNew.md} file for a 
   list of important new features.
 
 - **Jun.16.08**: 0.2.2 release. This is the largest changset since yard's 
