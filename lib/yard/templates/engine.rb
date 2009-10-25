@@ -61,7 +61,7 @@ module YARD
         # 
         # If a +:serializer+ key is provided and +:serialize+ is not set to
         # false, the rendered contents will be serialized through the {Serializers::Base}
-        # object. See {#with_serializer}.
+        # object. See {with_serializer}.
         # 
         # @example Renders an object with html formatting
         #   Engine.render(:format => :html, :object => obj)
@@ -89,7 +89,7 @@ module YARD
         # 
         # @param [Array<CodeObjects::Base>] objects a list of {CodeObjects::Base}
         #   objects to pass to the template
-        # @param [Hash] options (see {#render})
+        # @param [Hash] options (see {render})
         # @return [nil]
         def generate(objects, options = {})
           set_default_options(options)

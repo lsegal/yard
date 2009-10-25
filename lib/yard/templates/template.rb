@@ -131,8 +131,8 @@ module YARD
       #   to use to render the template. For symbols and strings, the
       #   section will be executed as a method (if one exists), or rendered 
       #   from the file "name.erb" where name is the section name. For 
-      #   templates, they will have {Template.run} called on them. Any
-      #   subsections can be yielded to using yield or {#yieldall}
+      #   templates, they will have {Template::ClassMethods#run} called on them. 
+      #   Any subsections can be yielded to using yield or {#yieldall}
       def sections(*args)
         @sections.replace(args) if args.size > 0
         @sections

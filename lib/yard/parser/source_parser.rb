@@ -12,7 +12,7 @@ module YARD
     class ParserSyntaxError < UndocumentableError; end
     
     # A LoadOrderError occurs when a handler needs to modify a 
-    # {CodObjects::NamespaceObject} (usually by adding a child to it)
+    # {CodeObjects::NamespaceObject} (usually by adding a child to it)
     # that has not yet been resolved. 
     # 
     # @see Handers::Base#ensure_loaded!
