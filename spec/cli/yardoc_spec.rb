@@ -81,4 +81,18 @@ describe YARD::CLI::Yardoc do
     @yardoc.optparse
     @yardoc.files.should == %w( lib/**/*.rb )
   end
+  
+  it "should accept a --query" do
+    @yardoc.optparse *%w( --query @return )
+    @yardoc.options[:verifier].should be_a(Verifier)
+  end
+  
+  it "should accept multiple --query arguments" do
+    obj = mock(:object)
+    obj.should_receive(:tag).ordered.with('return').and_return(true)
+    obj.should_receive(:tag).ordered.with('tag').and_return(false)
+    @yardoc.optparse *%w( --query @return --query @tag )
+    @yardoc.options[:verifier].should be_a(Verifier)
+    @yardoc.options[:verifier].call(obj).should == false
+  end
 end

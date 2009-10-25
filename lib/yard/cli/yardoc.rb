@@ -6,21 +6,17 @@ module YARD
       # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"
       
-      # The hash of options passed to the template.
-      # @return Hash
+      # @return [Hash] the hash of options passed to the template.
       # @see Templates::Engine#render
       attr_reader :options
       
-      # The list of Ruby source files to process
       # @return [Array<String>] list of Ruby source files to process
       attr_accessor :files
       
-      # Whether to reparse the source files even if the .yardoc already
-      # exists.
-      # @return [Boolean] whether to reload the source
+      # @return [Boolean] whether to reparse the source files even if the 
+      #   .yardoc already exists.
       attr_accessor :reload
       
-      # Whether to generate output
       # @return [Boolean] whether to generate output
       attr_accessor :generate
       
@@ -130,9 +126,16 @@ module YARD
         end
       end
       
+      # @param [Array<String>] expressions a list of query expressions to
+      #   turn into a proc
+      def add_verifier(*expressions)
+        
+      end
+      
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
+        query_expressions = []
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
@@ -196,7 +199,7 @@ module YARD
         end
         
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
-          options[:verifier] = instance_eval("lambda {|object| #{query.taint} }")
+          query_expressions << query.taint
         end
         
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
@@ -261,6 +264,7 @@ module YARD
         # Last minute modifications
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb'] if self.files.empty?
+        options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
         options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
         options[:readme] ||= Dir.glob('README*').first

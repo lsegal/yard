@@ -147,6 +147,7 @@ module YARD
   autoload :Docstring, __p('docstring')
   autoload :Logger,    __p('logging')
   autoload :Registry,  __p('registry')
+  autoload :Verifier,  __p('verifier')
 end
 
 undef __p

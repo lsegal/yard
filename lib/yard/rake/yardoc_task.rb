@@ -26,6 +26,12 @@ module YARD
       # Runs a +Proc+ after the task
       # @return [Proc] a proc to call after running the task
       attr_accessor :after
+      
+      # @return [Proc] an optional lambda to run against all objects being
+      #   generated. Any object that the lambda returns false for will be
+      #   excluded from documentation. 
+      # @see Verifier
+      attr_accessor :verifier
 
       # Creates a new task with name +name+.
       # 
@@ -53,7 +59,9 @@ module YARD
         desc "Generate YARD Documentation"
         task(name) do
           before.call if before.is_a?(Proc)
-          YARD::CLI::Yardoc.run *(options + files) 
+          yardoc = YARD::CLI::Yardoc.new
+          yardoc.options[:verifier] = verifier if verifier
+          yardoc.run *(options + files) 
           after.call if after.is_a?(Proc)
         end
       end
