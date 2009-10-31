@@ -40,7 +40,7 @@ module YARD
       
         # Searches for a file identified by +basename+ in the template's
         # path as well as any mixed in template paths. Equivalent to calling
-        # {find_nth_file} with index of 1.
+        # {ClassMethods#find_nth_file} with index of 1.
         # 
         # @param [String] basename the filename to search for
         # @return [Pathname] the full path of a file on disk with filename
