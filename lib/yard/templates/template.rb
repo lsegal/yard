@@ -39,17 +39,34 @@ module YARD
         end
       
         # Searches for a file identified by +basename+ in the template's
-        # path as well as any mixed in template paths. 
+        # path as well as any mixed in template paths. Equivalent to calling
+        # {find_nth_file} with index of 1.
         # 
         # @param [String] basename the filename to search for
-        # @return [String] the full path of a file on disk with filename
+        # @return [Pathname] the full path of a file on disk with filename
         #   +basename+ in one of the template's paths.
+        # @see find_nth_file
         def find_file(basename)
+          find_nth_file(basename)
+        end
+        
+        # Searches for the nth file (where n = +index+) identified
+        # by basename in the template's path and any mixed in template paths.
+        # 
+        # @param [String] basename the filename to search for
+        # @param [Fixnum] index the nth existing file to return
+        # @return [Pathname] the full path of the nth file on disk with
+        #   filename +basename+ in one of the template paths
+        def find_nth_file(basename, index = 1)
+          n = 1
           full_paths.each do |path|
             file = path.join(basename)
-            return file if file.file?
+            if file.file?
+              return file if index == n
+              n += 1
+            end
           end
-
+          
           nil
         end
 
@@ -202,15 +219,47 @@ module YARD
         erb.result(binding, &block)
       end
       
+      # Returns the contents of a file. If +allow_inherited+ is set to +true+,
+      # use +{{{__super__}}}+ inside the file contents to insert the contents
+      # of the file from an inherited template. For instance, if +templates/b+
+      # inherits from +templates/a+ and file "test.css" exists in both directories,
+      # both file contents can be retrieved by having +templates/b/test.css+ look
+      # like:
+      # 
+      #   body { css styles here }
+      #   p.class { other styles }
+      #   ...
+      #   {{{__super__}}}
+      # 
       # @param [String] basename the name of the file
+      # @param [Boolean] allow_inherited whether inherited templates can
+      #   be inserted with +{{{__super__}}}+
       # @return [String] the contents of a file identified by +basename+. All
       #   template paths (including any mixed in templates) are searched for
       #   the file
       # @see ClassMethods#find_file 
-      def file(basename)
+      # @see ClassMethods#find_nth_file
+      def file(basename, allow_inherited = false)
         file = self.class.find_file(basename)
         raise ArgumentError, "no file for '#{basename}' in #{self.class.path}" unless file
-        file.read
+
+        data = file.read
+        if allow_inherited
+          superfile = self.class.find_nth_file(basename, 2)
+          data.gsub!('{{{__super__}}}', superfile ? superfile.read : "")
+        end
+
+        data
+      end
+      
+      # @return [String] the erb file in any of the inherited template
+      #   paths.
+      def superb(&block)
+        filename = self.class.find_nth_file(erb_file_for(section), 2)
+        return "" unless filename
+        erb = ERB.new(filename.read, nil, '<>')
+        erb.filename = filename.to_s
+        erb.result(binding, &block)
       end
       
       def options=(value)

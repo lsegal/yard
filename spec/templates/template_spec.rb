@@ -74,6 +74,20 @@ describe YARD::Templates::Template do
     end
   end
   
+  describe '.find_nth_file' do
+    it "should find 2nd existing file in template paths" do
+      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(true)
+      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      template(:a).find_nth_file('basename', 2).should == Pathname.new('/full/path/b/basename')
+    end
+    
+    it "should return nil if no file is found" do
+      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(true)
+      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      template(:a).find_nth_file('basename', 3).should be_nil
+    end
+  end
+  
   describe '.extra_includes' do
     it "should be included when a module is initialized" do
       module MyModule; end
@@ -114,6 +128,31 @@ describe YARD::Templates::Template do
     it "should raise ArgumentError if the file does not exist" do
       FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(false)
       lambda { template(:e).new.file('abc') }.should raise_error(ArgumentError)
+    end
+    
+    it "should replace {{{__super__}}} with inherited template contents if allow_inherited=true" do
+      FileTest.should_receive(:file?).with('/full/path/a/abc').twice.and_return(true)
+      FileTest.should_receive(:file?).with('/full/path/b/abc').and_return(true)
+      IO.should_receive(:read).with('/full/path/a/abc').and_return('foo {{{__super__}}}')
+      IO.should_receive(:read).with('/full/path/b/abc').and_return('bar')
+      template(:a).new.file('abc', true).should == "foo bar"
+    end
+
+    it "should not replace {{{__super__}}} with inherited template contents if allow_inherited=false" do
+      FileTest.should_receive(:file?).with('/full/path/a/abc').and_return(true)
+      IO.should_receive(:read).with('/full/path/a/abc').and_return('foo {{{__super__}}}')
+      template(:a).new.file('abc').should == "foo {{{__super__}}}"
+    end
+  end
+  
+  describe '#superb' do
+    it "should return the inherited erb template contents" do
+      FileTest.should_receive(:file?).with('/full/path/a/test.erb').and_return(true)
+      FileTest.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
+      IO.should_receive(:read).with('/full/path/b/test.erb').and_return('bar')
+      template = template(:a).new
+      template.section = :test
+      template.superb.should == "bar"
     end
   end
   
