@@ -252,7 +252,9 @@ module YARD
         data
       end
       
-      # @return [String] the erb file in any of the inherited template
+      # Calls the ERB file from the last inherited template with {#section}.erb
+      # 
+      # @return [String] the rendered ERB file in any of the inherited template
       #   paths.
       def superb(&block)
         filename = self.class.find_nth_file(erb_file_for(section), 2)
