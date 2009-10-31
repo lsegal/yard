@@ -144,6 +144,29 @@ You can also add a `.yardopts` file to your project directory which lists
 the switches separated by whitespace (newlines or space) to pass to yardoc 
 whenever it is run.
 
+<h4>Queries</h4>
+
+The `yardoc` tool also supports a `--query` argument to only include objects
+that match a certain data or meta-data query. The query syntax is Ruby, though
+a few shortcuts are available. For instance, to document only objects that have
+an "@api" tag with the value "public", all of the following syntaxes would give
+the same result:
+
+    --query '@api.text == "public"'
+    --query 'object.has_tag?(:api) && object.tag(:api).text == "public"'
+    --query 'has_tag?(:api) && tag(:api).text == "public"'
+
+Note that the "@tag" syntax returns the first tag named "tag" on the object. 
+To return the array of all tags named "tag", use "@@tag".
+    
+Multiple `--query` arguments are allowed in the command line parameters. The
+following two lines both check for the existence of a return and param tag:
+
+    --query '@return' --query '@param'
+    --query '@rturn && @param'
+    
+For more information about the query syntax, see the {YARD::Verifier} class.
+
 **2. Rake Task**
 
 The second most obvious is to generate docs via a Rake task. You can do this by 
@@ -169,7 +192,10 @@ access to your documentation. It's way faster than ri but currently does not
 work with the stdlib or core Ruby libraries, only the active project. Example:
 
     $ yri YARD::Handlers::Base#register
-    $ yri File::relative_path
+    $ yri File.relative_path
+    
+Note that class methods must not be referred to with the "::" namespace 
+separator. Only modules, classes and constants should use "::".
 
 **4. `yard-graph` Graphviz Generator**
 
