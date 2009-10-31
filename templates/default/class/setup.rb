@@ -14,7 +14,7 @@ def constructor_details
 end
 
 def subclasses
-  @subclasses = run_verifier Registry.all(:class).select {|o| o.superclass.path == object.path }
+  @subclasses = run_verifier Registry.all(:class).select {|o| o.superclass && o.superclass.path == object.path }
   return if @subclasses.empty?
   erb(:subclasses)
 end
