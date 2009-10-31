@@ -1,5 +1,43 @@
-YARD: What's New in 0.2.3?
-==========================
+What's New in 0.4.x?
+====================
+
+1. **New templating engine and templates**
+2. **yardoc `--query` argument**
+3. **Greatly expanded API documentation**
+
+New templating engine and templates
+-----------------------------------
+
+The templates were redesigned, most notably removing the ugly frameset and
+making things a little prettier. The templating engine was also completely
+redone (based on the tadpole templating library) to allow for much more
+user customization. You can read about it in {file:Templates.md}.
+
+yardoc `--query` argument
+-------------------------
+
+The yardoc command-line tool now supports queries to select which classes,
+modules or methods to include in documentation based on their data or meta-data.
+For instance, you can now generate documentation for your "public" API only by
+adding "@api public" to each of your public API methods/classes and using
+the following argument:
+
+    --query '@api.text == "public"'
+    
+More information on queries is in the {file:README.markdown}.
+
+Greatly expanded API documentation
+----------------------------------
+
+Last release focused on many how-to and architecture documents to explain
+the design of YARD, but many of the actual API classes/methods were still
+left undocumented. This release marks a focus on getting YARD's own documentation
+up to par so that it can serve as an official reference on the recommended
+conventions to use when documenting code.
+
+
+What's New in 0.2.3.x?
+======================
 
 1. **Full Ruby 1.9 support**
 2. **New parser code and handler API for 1.9**
