@@ -8,14 +8,28 @@ module YARD
       
       SimpleMarkupHtml = RDoc::Markup::ToHtml.new rescue SM::ToHtml.new
     
+      # Escapes HTML entities
+      # 
+      # @param [String] text the text to escape
+      # @return [String] the HTML with escaped entities
       def h(text)
         CGI.escapeHTML(text.to_s)
       end
     
+      # Escapes a URL
+      # 
+      # @param [String] text the URL
+      # @return [String] the escaped URL
       def urlencode(text)
         CGI.escape(text.to_s)
       end
 
+      # Turns text into HTML using +markup+ style formatting.
+      # 
+      # @param [String] text the text to format
+      # @param [Symbol] markup examples are +:markdown+, +:textile+, +:rdoc+.
+      #   To add a custom markup type, see {MarkupHelper}
+      # @return [String] the HTML
       def htmlify(text, markup = options[:markup])
         return "" unless text
         return text unless markup
@@ -30,13 +44,14 @@ module YARD
           doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
           html = doc.to_html
         when :rdoc
+          html = fix_typewriter(text)
+
           begin
             SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
-            html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
+            html = MarkupHelper::SimpleMarkup.convert(html, SimpleMarkupHtml)
           end
 
           html = fix_dash_dash(html)
-          html = fix_typewriter(html)
         end
 
         html = resolve_links(html)
@@ -48,13 +63,18 @@ module YARD
         html
       end
       
+      # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
         htmlify(*args).gsub(/<\/?p>/, '')
       end
       
+      # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
+      # 
       # @todo Refactor into own SimpleMarkup subclass
       def fix_typewriter(text)
-        text.gsub(/\+(?! )([^\+]{1,900})(?! )\+/, '<tt>\1</tt>')
+        text.gsub(/\+(?! )([^\+]{1,900})(?! )\+/) do
+          '<tt>' + $1.gsub(/(.)/, "\\1\004") + '</tt>'
+        end
       end
       
       # Don't allow -- to turn into &#8212; element. The chances of this being
@@ -65,9 +85,18 @@ module YARD
         text.gsub(/&#8212;(?=\S)/, '--')
       end
 
+      # Resolves any text in the form of +{Name}+ to the object specified by
+      # Name. Also supports link titles in the form {Name title}.
+      # 
+      # @example Linking to an instance method
+      #   resolve_links("{MyClass#method}") # => "<a href='...'>MyClass#method</a>"
+      # @example Linking to a class with a title
+      #   resolve_links("{A::B::C the C class}") # => "<a href='...'>the c class</a>"
+      # @param [String] text the text to resolve links in
+      # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(/<(\/)?(pre|code)|(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
+        text.gsub(/<(\/)?(pre|code|tt)|(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
           tag = $2
           closed = $1
           if tag
