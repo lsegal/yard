@@ -154,6 +154,16 @@ describe YARD::Templates::Template do
       template.section = :test
       template.superb.should == "bar"
     end
+    
+    it "should work inside an erb template" do
+      FileTest.should_receive(:file?).with('/full/path/a/test.erb').twice.and_return(true)
+      FileTest.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
+      IO.should_receive(:read).with('/full/path/a/test.erb').and_return('foo<%= superb %>!')
+      IO.should_receive(:read).with('/full/path/b/test.erb').and_return('bar')
+      template = template(:a).new
+      template.section = :test
+      template.erb(:test).should == "foobar!"
+    end
   end
   
   describe '#sections' do
