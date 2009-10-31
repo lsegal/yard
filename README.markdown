@@ -1,5 +1,5 @@
-YARD Release 0.2.3.4 (August 7th 2009)
-=====================================
+YARD Release 0.4.0 (November 15th 2009)
+=======================================
 
 **Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
@@ -121,14 +121,24 @@ option to speed up the generation process by skipping source parsing.
 
 YARD will by default only document code in your public visibility. You can
 document your protected and private code by adding `--protected` or
-`--private` to the option switches.
+`--private` to the option switches. In addition, you can add `--no-private`
+to also ignore any object that has the `@private` meta-tag. This is similar
+to RDoc's ":nodoc:" behaviour, though the distinction is important. RDoc
+implies that the object with :nodoc: would not be documented, whereas
+YARD still recommends documenting private objects for the private API (for
+maintainer/developer consumption).
 
-You can also add extra informative files with the `--files` switch,
-for example:
+You can also add extra informative files (README, LICENSE) by separating
+the globs and the filenames with '-'.
 
-    $ yardoc --files FAQ,LICENSE
+    $ yardoc 'app/**/*.rb' - README LICENSE FAQ
+    
+If no globs preceed the '-' argument, the default glob (lib/**/*.rb) is
+used:
 
-Note that the README file is specified with its own `--readme` switch.
+    $ yardoc - README LICENSE FAQ
+
+Note that the README file can be specified with its own `--readme` switch.
 
 You can also add a `.yardopts` file to your project directory which lists
 the switches separated by whitespace (newlines or space) to pass to yardoc 
@@ -150,7 +160,7 @@ to add. Again, a full list of options is available by typing `yardoc --help`
 in a shell. You can also override the options at the Rake command-line with the
 OPTS environment variable:
 
-    $ rake yardoc OPTS='--any --extra --opts'
+    $ rake yard OPTS='--any --extra --opts'
                                                                               
 **3. `yri` RI Implementation**
 

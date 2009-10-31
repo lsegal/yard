@@ -161,6 +161,15 @@ A list of common tags and example usage is below:
   * `@param`: Defines method parameters
 
         @param [optional, types, ...] argname description
+        
+  * `@private`: Defines an object as private. This exists for classes,
+    modules and constants that do not obey Ruby's visibility rules. For
+    instance, an inner class might be considered "private", though Ruby
+    would make no such distinction. By declaring the @private tag, the
+    class can be hidden from documentation by using the `--no-private`
+    command-line switch to yardoc (see {file:README.markdown}).
+    
+        @private
 
   * `@raise`: Describes an Exception that a method may throw
 
