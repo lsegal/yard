@@ -1,3 +1,4 @@
+# @private
 def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
 
 module YARD
