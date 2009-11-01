@@ -86,7 +86,7 @@ module YARD
       end
 
       # Resolves any text in the form of +{Name}+ to the object specified by
-      # Name. Also supports link titles in the form {Name title}.
+      # Name. Also supports link titles in the form +{Name title}+.
       # 
       # @example Linking to an instance method
       #   resolve_links("{MyClass#method}") # => "<a href='...'>MyClass#method</a>"
@@ -104,7 +104,7 @@ module YARD
             next str
           end
           next str unless code_tags == 0
-
+          
           sp, name = $3, $4
           title = $5 || name
 
