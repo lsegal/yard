@@ -35,7 +35,7 @@ Options Hash (opts):
 Yields:
 -------
 
-    a block
+    - a block
 
 Yield Parameters:
 -----------------

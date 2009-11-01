@@ -1,4 +1,7 @@
-<h1>Class: A</h1>
+<h1>Class: A 
+  <span class="abstract note title">Abstract</span>
+  
+</h1>
 <dl class="box">
   
     <dt class="r1">Inherits:</dt>
@@ -7,14 +10,11 @@
       
         <ul class="fullTree">
           <li>Object</li>
-          <ul>
-            
-              <li>B</li><ul>
-            
-              <li>A</li><ul>
-            
-            </ul></ul>
-          </ul>
+          
+            <li class="next">B</li>
+          
+            <li class="next">A</li>
+          
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
       
@@ -35,7 +35,10 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p><strong>Abstract.</strong> override this class</p>
+    <p class="note abstract">
+  <strong>This class is abstract.</strong> 
+  override this class
+</p>
 Comments
   </div>
 </div>
@@ -85,40 +88,58 @@ Comments
   <ul class="summary">
     
       <li class="public deprecated">
-        - (Object) a 
-        
-        
-        
-          <span class="summary_desc"><strong>Deprecated.</strong> </span>
-        
-      </li>
+  <span class="summary_signature">- (Object) <strong>a</strong> 
+  
+  </span>
+  
+  
+  
+  <span class="deprecated note title">Deprecated</span>
+
+  
+    <span class="summary_desc"><strong>Deprecated.</strong> </span>
+  
+</li>
+
     
       <li class="public ">
-        - (A) initialize(test) 
-        
-        
-        
-          <span class="summary_desc">constructor method!</span>
-        
-      </li>
+  <span class="summary_signature">- (A) <strong>initialize</strong>(test) 
+  
+  </span>
+  
+  
+  
+  
+
+  
+    <span class="summary_desc">constructor method!.</span>
+  
+</li>
+
     
       <li class="public ">
-        - (Object) method_missing(*args) 
-        
-        
-        
-          <span class="summary_desc">HI</span>
-        
-      </li>
+  <span class="summary_signature">- (Object) <strong>method_missing</strong>(*args) 
+  
+  </span>
+  
+  
+  
+  
+
+  
+    <span class="summary_desc">HI.</span>
+  
+</li>
+
     
   </ul>
   <div id="constructor_details">
   <h2>Constructor Details</h2>
   
-    <div class="method_details">
+    <div class="method_details first">
   <p class="signature first" id="initialize-instance_method">
   
-    - (<tt>A</tt>) initialize(test) 
+    - (<tt>A</tt>) <strong>initialize</strong>(test) 
   
 
   
@@ -170,10 +191,10 @@ def initialize(test) end</pre>
     
   </p>
   
-    <div class="method_details">
+    <div class="method_details first">
   <p class="signature first" id="method_missing-instance_method">
   
-    - (<tt>Object</tt>) method_missing(*args) 
+    - (<tt>Object</tt>) <strong>method_missing</strong>(*args) 
   
 
   
@@ -205,16 +226,16 @@ def method_missing(*args) end</pre>
   <div id="method_details">
     <h2>Method Details</h2>
     
-      <div class="method_details">
+      <div class="method_details first">
   <p class="signature first" id="a-instance_method">
   
-    - (<tt>Object</tt>) a 
+    - (<tt>Object</tt>) <strong>a</strong> 
   
 
   
 </p><div class="docstring">
   <div class="discussion">
-    <p><strong>Deprecated.</strong> </p>
+    <p class="note deprecated"><strong>Deprecated.</strong> </p>
 
   </div>
 </div>

@@ -11,11 +11,18 @@ describe YARD::Templates::Helpers::HtmlHelper do
   
   describe '#fix_typewriter' do
     it "should use #fix_typewriter to convert +text+ to <tt>text</tt>" do
-      fix_typewriter("Some +typewriter text+.").should == "Some <tt>typewriter text</tt>."
-      fix_typewriter("Not +typewriter text.").should == "Not +typewriter text."
-      fix_typewriter("Alternating +type writer+ text +here+.").should == "Alternating <tt>type writer</tt> text <tt>here</tt>."
-      fix_typewriter("No ++problem.").should == "No ++problem."
-      fix_typewriter("Math + stuff +is ok+").should == "Math + stuff <tt>is ok</tt>"
+      fix_typewriter("Some +typewriter text+.").should == 
+        "Some <tt>t\x04y\x04p\x04e\x04w\x04r\x04i\x04t\x04e\x04r\x04" +
+        " \x04t\x04e\x04x\x04t\x04</tt>."
+      fix_typewriter("Not +typewriter text.").should == 
+        "Not +typewriter text."
+      fix_typewriter("Alternating +type writer+ text +here+.").should == 
+        "Alternating <tt>t\x04y\x04p\x04e\x04 \x04w\x04r\x04i\x04t\x04e\x04r" +
+        "\x04</tt> text <tt>h\x04e\x04r\x04e\x04</tt>."
+      fix_typewriter("No ++problem.").should == 
+        "No ++problem."
+      fix_typewriter("Math + stuff +is ok+").should == 
+        "Math + stuff <tt>i\x04s\x04 \x04o\x04k\x04</tt>"
     end
   end
   
