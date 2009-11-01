@@ -104,8 +104,8 @@ p.signature {
 p.signature tt { font-family: Monaco, Consolas, Courier, monospace; }
 p.signature .overload { display: block; }
 p.signature .extras { font-weight: normal; font-family: sans-serif; color: #444; font-size: 1em; }
-p.signature .aliases { display: block; font-weight: normal; font-size: 0.8em; font-family: sans-serif; margin-top: 5px; color: #555; }
-p.signature .aliases .names { font-family: monospace; font-weight: bold; color: #000; font-size: 1.2em; }
+p.signature .aliases { display: block; font-weight: normal; font-size: 0.9em; font-family: sans-serif; margin-top: 0px; color: #555; }
+p.signature .aliases .names { font-family: monospace; font-weight: bold; color: #000; font-size: 1.3em; }
 
 .tags h3 { font-size: 1em; margin-bottom: 0; }
 .tags ul { margin-top: 5px; padding-left: 30px; list-style: square; }
