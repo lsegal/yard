@@ -77,8 +77,15 @@ function toggleSearchFrame(id, link) {
   }
 }
 
+function linkSummaries() {
+  $('.summary_signature').click(function() {
+    window.parent.location = $(this).find('a').attr('href');
+  });
+}
+
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);
 $(fixBoxInfoHeights);
 $(searchFrameLinks);
+$(linkSummaries);

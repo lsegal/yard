@@ -14,8 +14,9 @@ h1 { padding: 0; margin: 5px; margin-top: 12px; margin-left: 10px; margin-bottom
 #noresults { display: none; padding: 7px 15px; }
 li { color: #555; }
 li.deprecated { text-decoration: line-through; font-style: italic; }
-li.r1 { background: #f0f0f0; }
-li.r2 { background: #fafafa; }
-li:hover { background: #ffffa5; cursor: pointer; }
+li.r1 { background: #f0f0f0; border: 1px dotted #f0f0f0; border-left-width: 0; border-right-width: 0; }
+li.r2 { background: #fafafa; border: 1px dotted #fafafa; border-left-width: 0; border-right-width: 0; }
+li:hover { background: #ffffa5; cursor: pointer; border: 1px dotted #ddddc4; border-left-width: 0; border-right-width: 0; }
+li:hover * { position: relative; left: -3px; }
 a:link, a:visited { text-decoration: none; color: #05a; }
 a:hover { background: #ffffa5; }

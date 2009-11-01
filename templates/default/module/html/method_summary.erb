@@ -3,10 +3,11 @@
   <ul class="summary">
     <% method_listing.each do |meth| %>
       <li class="<%= meth.visibility %> <%= meth.has_tag?(:deprecated) ? 'deprecated' : '' %>">
-        <%= signature(meth) %>
+        <span class="summary_signature"><%= signature(meth) %>
         <% if meth.aliases.size > 0 %>
         (also: <%= meth.aliases.map {|o| h(o.name(true)) }.join(", ") %>)
         <% end %>
+        </span>
         
         <% if meth.has_tag?(:deprecated) %>
           <span class="summary_desc"><strong>Deprecated.</strong> <%= htmlify_line meth.tag(:deprecated).text %></span>
