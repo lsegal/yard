@@ -84,6 +84,7 @@ dl.constants dt { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
 dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-bottom: 18px; }
 
 .summary_desc { margin-left: 32px; display: block; font-family: sans-serif; }
+.summary_desc tt { font-size: 0.9em; }
 dl.constants .summary_desc { font-size: 0.9em; font-weight: normal; }
 
 .method_details { border-top: 1px dotted #aaa; margin-top: 15px; padding-top: 0; }
