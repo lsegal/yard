@@ -240,7 +240,7 @@ module YARD
         link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
       
-      def signature(meth, link = true)
+      def signature(meth, link = true, show_extras = true)
         if link
           type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
           type = h(type)
@@ -256,14 +256,16 @@ module YARD
         args = format_args(meth)
         extras = []
         extras_text = ''
-        if rw = meth.namespace.attributes[meth.scope][meth.name]
-          attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
-          attname = attname.size == 1 ? attname.join('') + 'only' : nil
-          extras << attname if attname
+        if show_extras
+          if rw = meth.namespace.attributes[meth.scope][meth.name]
+            attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
+            attname = attname.size == 1 ? attname.join('') + 'only' : nil
+            extras << attname if attname
+          end
+          extras << meth.visibility if meth.visibility != :public
+          extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
         end
-        extras << meth.visibility if meth.visibility != :public
-        extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
-        title = "%s (%s) %s%s %s" % [scope, type, name, args, blk]
+        title = "%s (%s) <strong>%s</strong>%s %s" % [scope, type, name, args, blk]
         (link ? linkify(meth, title) : title) + extras_text
       end
     end

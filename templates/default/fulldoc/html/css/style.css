@@ -29,6 +29,9 @@ h2 {
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
 .note.title { text-transform: lowercase; padding: 1px 5px; margin-left: 5px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; }
 h1 .note.title { font-size: 0.5em; font-weight: normal; padding: 3px 5px; position: relative; top: -3px; text-transform: capitalize; }
+.note.title.writeonly { color: #fff; background: #45a638; border-color: #2da31d; } 
+.note.title.readonly { color: #fff; background: #6a98d6; border-color: #6689d6; } 
+.note.title.private { background: #d5d5d5; border-color: #c5c5c5; }
 
 h3.inherited {
   font-style: italic;
@@ -100,7 +103,7 @@ p.signature {
 }
 p.signature tt { font-family: Monaco, Consolas, Courier, monospace; }
 p.signature .overload { display: block; }
-p.signature .extras { font-weight: normal; font-style: italic; }
+p.signature .extras { font-weight: normal; font-family: sans-serif; color: #444; font-size: 1em; }
 p.signature .aliases { display: block; font-weight: normal; font-size: 0.8em; font-family: sans-serif; margin-top: 5px; color: #555; }
 p.signature .aliases .names { font-family: monospace; font-weight: bold; color: #000; font-size: 1.2em; }
 
