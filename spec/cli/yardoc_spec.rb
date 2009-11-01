@@ -15,7 +15,7 @@ describe YARD::CLI::Yardoc do
   end
 
   it "should alias --main to the --readme flag" do
-    readme = File.join(File.dirname(__FILE__),'..','..','README.markdown')
+    readme = File.join(File.dirname(__FILE__),'..','..','README.md')
 
     @yardoc.optparse('--main', readme)
     @yardoc.options[:readme].should == readme.to_sym
