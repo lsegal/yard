@@ -7,12 +7,9 @@
       <% if object.superclass.name != :Object %>
         <ul class="fullTree">
           <li><%= linkify P(:Object) %></li>
-          <ul>
-            <% object.inheritance_tree.reverse.each do |obj| %>
-              <li><%= obj == object ? obj.path : linkify(obj) %></li><ul>
-            <% end %>
-            <%= "</ul>" * object.inheritance_tree.size %>
-          </ul>
+          <% object.inheritance_tree.reverse.each_with_index do |obj, i| %>
+            <li class="next"><%= obj == object ? obj.path : linkify(obj) %></li>
+          <% end %>
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
       <% end %>

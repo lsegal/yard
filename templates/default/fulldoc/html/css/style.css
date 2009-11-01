@@ -132,15 +132,18 @@ p.children strong.modules { padding-left: 5px; }
 ul.fullTree { display: none; padding-left: 0; list-style: none; margin-left: 0; margin-bottom: 10px; }
 ul.fullTree ul { margin-left: 0; padding-left: 0; list-style: none; }
 ul.fullTree li { text-align: center; }
-ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; display: block; margin-top: 3px; }
+ul.fullTree li.next:before { font-size: 1.2em; content: '⬆'; color: #bbb; display: block; margin-top: 3px; }
 
 #search { position: absolute; right: 18px; top: 8px; }
-#search a:link, #search a:visited { padding: 8px 10px; text-decoration: none; color: #05a; background: #e0e0e0; 
+#search a:link, #search a:visited { 
+  padding: 8px 10px; text-decoration: none; color: #05a; background: #e0e0e0; 
+  border: 1px solid #d8d8d8;
   -moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px; 
   -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px;
 }
 #search a:hover { background: #e8e8e8; color: #06b; }
-#search a.active { background: #568; padding-bottom: 20px; color: #fff; 
+#search a.active { 
+  background: #568; padding-bottom: 20px; color: #fff; border: 1px solid #457; 
   -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px;
   -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;
 }
