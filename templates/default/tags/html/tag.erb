@@ -12,7 +12,7 @@
         <em class="default">(defaults to: <tt><%= h o[1] %></tt>)</em>
       <% end %>
       <% if tag.text && !tag.text.empty? %>
-        <% unless @no_types && @no_names %>&mdash;<% end %>
+        <% unless (@no_types || tag.types.nil? || tag.types.empty?) && @no_names %>&mdash;<% end %>
         <%= htmlify_line(tag.text) %>
       <% end %>
     </li>

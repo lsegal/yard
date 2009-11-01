@@ -7,7 +7,6 @@ class YARD::Handlers::Ruby::YieldHandler < YARD::Handlers::Ruby::Base
     return if owner.has_tag? :yieldparam    # Same thing.
 
     yieldtag = YARD::Tags::Tag.new(:yield, "", [])
-    owner.docstring.add_tag(yieldtag)
     
     if statement.type == :yield
       statement.jump(:list).children.each do |item|
@@ -24,5 +23,7 @@ class YARD::Handlers::Ruby::YieldHandler < YARD::Handlers::Ruby::Base
         end
       end
     end
+    
+    owner.docstring.add_tag(yieldtag) unless yieldtag.types.empty?
   end
 end

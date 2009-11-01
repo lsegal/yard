@@ -9,7 +9,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}YieldHandler" do
   end
   
   it "should handle an empty yield statement" do
-    P('Testing#mymethod').tag(:yield).should_not be_nil
+    P('Testing#mymethod').tag(:yield).should be_nil
     P('Testing#mymethod').tag(:yieldparam).should be_nil
   end
   

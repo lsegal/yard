@@ -7,7 +7,6 @@ class YARD::Handlers::Ruby::Legacy::YieldHandler < YARD::Handlers::Ruby::Legacy:
     return if owner.has_tag? :yieldparam    # Same thing.
 
     yieldtag = YARD::Tags::Tag.new(:yield, "", [])
-    owner.docstring.add_tag(yieldtag)
     tokval_list(statement.tokens[2..-1], Token).each do |item|
       item = item.inspect unless item.is_a?(String)
       if item == "self"
@@ -22,5 +21,7 @@ class YARD::Handlers::Ruby::Legacy::YieldHandler < YARD::Handlers::Ruby::Legacy:
         yieldtag.types << item
       end
     end
+
+    owner.docstring.add_tag(yieldtag) unless yieldtag.types.empty?
   end
 end
