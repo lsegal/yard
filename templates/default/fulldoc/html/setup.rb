@@ -4,10 +4,13 @@ def init
   objects = options[:objects]
   options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
   options[:readme] = options[:files].first
+  options[:title] ||= "Project Documentation (yard #{YARD::VERSION})"
   
   generate_assets
   serialize('_index.html')
-  options[:files].each {|file| serialize_file(file) }
+  options[:files].each_with_index do |file, i| 
+    serialize_file(file, i == 0 ? options[:title] : nil) 
+  end
 
   options.delete(:objects)
   options.delete(:files)
@@ -19,14 +22,22 @@ end
 
 def serialize(object)
   options[:object] = object
+
+  if object == '_index.html' && options[:files].empty?
+    Templates::Engine.with_serializer('index.html', options[:serializer]) do
+      T('layout').run(options)
+    end
+  end
+
   Templates::Engine.with_serializer(object, options[:serializer]) do
     T('layout').run(options)
   end
 end
 
-def serialize_file(file)
+def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
+  options[:page_title] = title
   if file == options[:readme]
     options[:serialized_path] = 'index.html'
   else
@@ -38,6 +49,7 @@ def serialize_file(file)
   end
   options.delete(:file)
   options.delete(:serialized_path)
+  options.delete(:page_title)
 end
 
 def asset(path, content)
