@@ -178,18 +178,18 @@ The above example nests `section_a` and `section_b` within the `header` section.
 Practically speaking, these sections can be placed in the result by `yield`ing
 to them. A sample header.erb template might contain:
 
-    &lt;h2&gt;Header&lt;/h2&gt;
-    &lt;div id=&quot;contents&quot;&gt;
-      &lt;%= yield %&gt;
-    &lt;/div&gt;
+    <h2>Header</h2>
+    <div id="contents">
+      <%= yield %>
+    </div>
     
 This template code would place the output of `section_a` and `section_b` within
 the above div element. Using yield, we can also change the object that is being
 rendered. For example, we may want to yield the first method of the class.
 We can do this like so:
 
-    &lt;h2&gt;First method&lt;/h2&gt;
-    &lt;%= yield(current_object.meths.first) %&gt;
+    <h2>First method</h2>
+    <%= yield(current_object.meths.first) %>
 
 This would run the nested sections for the method object instead of the class.
 
