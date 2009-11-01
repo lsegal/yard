@@ -29,4 +29,11 @@ function fullListSearch() {
   $('#full_list').after("<div id='noresults'>No results were found.</div>")
 }
 
+function linkList() {
+  $('#full_list li').click(function() {
+    window.parent.location = $(this).find('a').attr('href');
+  });
+}
+
 $(fullListSearch);
+$(linkList);

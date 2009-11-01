@@ -52,22 +52,29 @@ function fixBoxInfoHeights() {
 
 function searchFrameLinks() {
   $('#method_list_link').click(function() {
-    toggleSearchFrame(relpath + 'method_list.html');
+    toggleSearchFrame(this, relpath + 'method_list.html');
   });
 
   $('#class_list_link').click(function() {
-    toggleSearchFrame(relpath + 'class_list.html');
+    toggleSearchFrame(this, relpath + 'class_list.html');
   });
 
   $('#file_list_link').click(function() {
-    toggleSearchFrame(relpath + 'file_list.html');
+    toggleSearchFrame(this, relpath + 'file_list.html');
   });
 }
 
-function toggleSearchFrame(link) {
+function toggleSearchFrame(id, link) {
   var frame = $('#search_frame');
-  if (frame.attr('src') == link && frame.css('display') != "none") frame.slideUp(100);
-  else frame.attr('src', link).slideDown(100);
+  $('#search a').removeClass('active').addClass('inactive');
+  if (frame.attr('src') == link && frame.css('display') != "none") {
+    frame.slideUp(100);
+    $('#search a').removeClass('active inactive');
+  }
+  else {
+    $(id).addClass('active').removeClass('inactive');
+    frame.attr('src', link).slideDown(100);
+  }
 }
 
 $(createSourceLinks);
