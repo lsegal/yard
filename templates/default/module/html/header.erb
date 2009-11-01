@@ -1,1 +1,4 @@
-<h1><%= format_object_title(object) %></h1>
+<h1><%= format_object_title(object) %> 
+  <% if object.has_tag?(:abstract) %><span class="abstract note title">Abstract</span><% end %>
+  <% if object.has_tag?(:deprecated) %><span class="deprecated note title">Deprecated</span><% end %>
+</h1>

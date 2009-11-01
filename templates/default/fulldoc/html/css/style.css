@@ -20,11 +20,15 @@ h2 {
 .docstring h1 { font-size: 1.2em; }
 .docstring h2 { font-size: 1.1em; }
 .docstring h3, .docstring h4 { font-size: 1em; border-bottom: 0; padding-top: 10px; }
-.docstring .note { 
+
+.note { 
+  color: #222;
   -moz-border-radius: 3px; -webkit-border-radius: 3px; 
   background: #e3e4e3; border: 1px solid #d5d5d5; padding: 7px 10px;
 }
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
+.note.title { text-transform: lowercase; padding: 1px 5px; margin-left: 5px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; }
+h1 .note.title { font-size: 0.5em; font-weight: normal; padding: 3px 5px; position: relative; top: -3px; text-transform: capitalize; }
 
 h3.inherited {
   font-style: italic;
@@ -110,23 +114,24 @@ p.signature .aliases .names { font-family: monospace; font-weight: bold; color: 
 .tags .examples h3 { margin-bottom: 10px; }
 .tags .examples h4 { padding: 0; margin: 0; margin-left: 15px; font-weight: bold; font-size: 0.9em; }
 
-.tags .overload .overload_item { list-style: none; }
-.tags .overload .overload_item .signature { border-bottom: 1px dotted #bbb; padding-bottom: 5px; }
-.tags .overload .signature { margin-left: -15px; font-family: monospace; font-weight: bold; display: block; font-size: 1.1em; }
+.tags .overload .overload_item { list-style: none; margin-bottom: 25px; }
+.tags .overload .overload_item .signature { 
+  padding: 2px 8px;
+  background: #e5e8ff; border: 1px solid #d8d8e5; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+}
+.tags .overload .signature { margin-left: -15px; font-family: monospace; display: block; font-size: 1.1em; }
 .tags .overload .docstring { margin-top: 15px; }
 
 .defines { display: none; }
 
 #method_missing_details .notice.this { position: relative; top: -8px; color: #888; padding: 0; margin: 0; }
 
-#footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
 .showSource { font-size: 0.9em; }
 .showSource a:link, .showSource a:visited { text-decoration: none; color: #666; }
 
 #content a:link, #content a:visited { text-decoration: none; color: #05a; }
 #content a:hover { background: #ffffa5; }
-.docstring { margin-right: 5em; }
-.docstring a:link, .docstring a:visited { text-decoration: underline; }
+.docstring { margin-right: 6em; }
 
 ul.summary {
   list-style: none;
@@ -184,6 +189,10 @@ ul.fullTree li.next:before { font-size: 1.2em; content: '⬆'; color: #bbb; disp
 #menu .title { color: #555; }
 #menu a:link, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #menu a:hover { color: #05a; }
+
+#footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
+#footer a:link, #footer a:visited { color: #444; text-decoration: none; border-bottom: 1px dotted #bbd; }
+#footer a:hover { color: #05a; }
 
 #listing ul.alpha { font-size: 1.1em; }
 #listing ul.alpha { margin: 0; padding: 0; padding-bottom: 10px; list-style: none; }

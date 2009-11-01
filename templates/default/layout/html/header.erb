@@ -31,6 +31,10 @@
     
     <div id="content"><%= yieldall %></div>
     
-    <div id="footer">Powered by yard <%= YARD::VERSION %> (ruby-<%= RUBY_VERSION %>)</div>
+    <div id="footer">
+      Generated on <%= Time.now.strftime("%c") %> by 
+      <a href="http://yard.soen.ca" title="Yay! A Ruby Documentation Tool">yard</a>
+      <%= YARD::VERSION %> (ruby-<%= RUBY_VERSION %>).
+    </div>
   </body>
 </html>
