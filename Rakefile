@@ -40,6 +40,6 @@ end
 task :spec => :specs
 
 YARD::Rake::YardocTask.new do |t|
-  t.options += ['--no-private', '--title', "YARD #{YARD::VERSION} Documentation"]
+  t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
   t.after = lambda { `cp -R docs/images/ doc/images/` }
 end
