@@ -1,1 +1,4 @@
-<p><strong>Abstract.</strong> <%= htmlify_line object.tag(:abstract).text %></p>
+<p class="note abstract">
+  <strong>This <%= object.type %> is abstract.</strong> 
+  <%= htmlify_line object.tag(:abstract).text %>
+</p>

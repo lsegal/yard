@@ -16,10 +16,16 @@ h2 {
   margin: 1.8em 0 0.5em;
 }
 .clear { clear: both; }
-.docstring h1, .docstring h2, .docstring h3, .docstring h4 { padding: 0; border-bottom-style: dotted; }
+.docstring h1, .docstring h2, .docstring h3, .docstring h4 { padding: 0; border: 0; border-bottom: 1px dotted #bbb; }
 .docstring h1 { font-size: 1.2em; }
 .docstring h2 { font-size: 1.1em; }
 .docstring h3, .docstring h4 { font-size: 1em; border-bottom: 0; padding-top: 10px; }
+.docstring .note { 
+  -moz-border-radius: 3px; -webkit-border-radius: 3px; 
+  background: #e3e4e3; border: 1px solid #d5d5d5; padding: 7px 10px;
+}
+.note.deprecated { background: #ffe5e5; border-color: #e9dada; }
+
 ul.summary {
   list-style: none;
   font-family: monospace;
@@ -72,7 +78,7 @@ dl.box dd {
 dl.box .last {
   border-bottom: 1px solid #aaa;
 }
-dl.box .r1 { background: rgb(238, 238, 238); }
+dl.box .r1 { background: #eee; }
 
 ul.toplevel { list-style: none; padding-left: 0; font-size: 1.1em; }
 #files { padding-left: 15px; font-size: 1.1em; }
@@ -87,11 +93,15 @@ dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-b
 .summary_desc { margin-left: 20px; display: block; font-family: sans-serif; }
 dl.constants .summary_desc { font-size: 0.9em; font-weight: normal; }
 
-p.signature { font-size: 1.1em; font-weight: bold; font-family: Monaco, Consolas, Courier, monospace; border-top: 1px dotted #aaa; padding-top: 12px; margin-top: 20px; }
+.method_details { border-top: 1px dotted #aaa; margin-top: 15px; padding-top: 0; }
+.method_details.first { border: 0; }
+p.signature { 
+  font-size: 1.1em; font-weight: normal; font-family: Monaco, Consolas, Courier, monospace; 
+  padding: 6px 10px; margin-top: 18px; 
+  background: #e5e5ff; border: 1px solid #d8d8e5; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+}
 p.signature tt { font-family: Monaco, Consolas, Courier, monospace; }
-p.signature a:link, p.signature a:visited { text-decoration: none; }
 p.signature .overload { display: block; }
-p.signature.first { border: 0; padding-top: 0; margin-top: 15px; }
 p.signature .extras { font-weight: normal; font-style: italic; }
 p.signature .aliases { display: block; font-weight: normal; font-size: 0.8em; font-family: sans-serif; margin-top: 5px; color: #555; }
 p.signature .aliases .names { font-family: monospace; font-weight: bold; color: #000; font-size: 1.2em; }
@@ -141,8 +151,8 @@ ul.fullTree li.next:before { font-size: 1.2em; content: '⬆'; color: #bbb; disp
 #search a:link, #search a:visited { 
   padding: 8px 10px; text-decoration: none; color: #05a; background: #e0e0e0; 
   border: 1px solid #d8d8d8;
-  -moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px; 
-  -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomleft: 3px; -moz-border-radius-bottomright: 3px; 
+  -webkit-border-bottom-left-radius: 3px; -webkit-border-bottom-right-radius: 3px;
 }
 #search a:hover { background: #e8e8e8; color: #06b; }
 #search a.active { 
