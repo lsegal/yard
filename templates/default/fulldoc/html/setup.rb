@@ -6,7 +6,7 @@ def init
   options[:readme] = options[:files].first
   
   generate_assets
-  serialize('glossary.html')
+  serialize('_index.html')
   options[:files].each {|file| serialize_file(file) }
 
   options.delete(:objects)

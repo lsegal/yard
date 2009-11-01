@@ -9,8 +9,8 @@ def init
     sections :header, [:diskfile]
   elsif object
     case object
-    when 'glossary.html'
-      sections :header, [:glossary]
+    when '_index.html'
+      sections :header, [:index]
     when CodeObjects::Base
       if object != Registry.root
         cur = object.namespace
@@ -33,12 +33,13 @@ def contents
   @contents
 end
 
-def glossary
+def index
   @objects_by_letter = {}
-  @page_title = options[:title] || "Project Documentation (yard #{YARD::VERSION})"
+  @page_title = options[:title] || ""
+  @page_title = "Project Documentation (yard #{YARD::VERSION})" if @page_title.empty?
   objects = @objects.reject {|o| o == Registry.root }.sort_by {|o| o.name.to_s }
   objects.each {|o| (@objects_by_letter[o.name.to_s[0,1].upcase] ||= []) << o }
-  erb(:glossary)
+  erb(:index)
 end
 
 def diskfile

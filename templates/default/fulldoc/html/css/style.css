@@ -3,14 +3,14 @@ body {
   font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; 
   font-size: 13px;
 }
-h1 { font-size: 30px; }
+h1 { font-size: 1.5em; }
 h2 { 
   padding: 0;
   padding-bottom: 3px;
   border-bottom: 1px #aaa solid;
   text-transform: capitalize;
-  font-size: 22px;
-  margin: 2em 0 0.5em;
+  font-size: 1.4em;
+  margin: 1em 0 0.5em;
 }
 .clear { clear: both; }
 .docstring h1,
@@ -46,7 +46,7 @@ p.inherited {
 
 dl.box {
   width: 520px;
-  font-size: 1.1em;
+  font-size: 1em;
 }
 dl.box dt {
   float: left;
@@ -75,7 +75,7 @@ dl.box .last {
 }
 dl.box .r1 { background: rgb(238, 238, 238); }
 
-ul.toplevel, #files { padding-left: 15px; font-size: 1.2em; }
+ul.toplevel, #files { padding-left: 15px; font-size: 1.1em; }
 
 #files { padding: 0; }
 #files li { list-style: none; display: inline; padding: 7px 12px; line-height: 35px; }
@@ -87,7 +87,7 @@ dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-b
 .summary_desc { margin-left: 20px; display: block; font-family: sans-serif; }
 dl.constants .summary_desc { font-size: 0.9em; font-weight: normal; }
 
-p.signature { font-size: 1.2em; font-weight: bold; font-family: monospace; border-top: 1px solid #aaa; padding-top: 12px; }
+p.signature { font-size: 1.1em; font-weight: bold; font-family: monospace; border-top: 1px solid #aaa; padding-top: 12px; }
 p.signature a:link, p.signature a:visited { text-decoration: none; }
 p.signature .overload { display: block; }
 p.signature.first { border: 0; padding-top: 0; }
@@ -103,9 +103,11 @@ p.signature .aliases .names { font-family: monospace; font-weight: bold; color: 
 .tags { margin-bottom: 12px; }
 
 .tags .examples h3 { margin-bottom: 10px; }
-.tags .examples h4 { padding: 0; margin: 0; margin-left: 15px; font-weight: normal; }
+.tags .examples h4 { padding: 0; margin: 0; margin-left: 15px; font-weight: bold; font-size: 0.9em; }
+.tags .examples .example { padding: 0; }
 
 .tags .overload .overload_item { list-style: none; }
+.tags .overload .overload_item .signature { border-bottom: 1px dotted #bbb; padding-bottom: 5px; }
 .tags .overload .signature { margin-left: -15px; font-family: monospace; font-weight: bold; display: block; font-size: 1.1em; }
 .tags .overload .docstring { margin-top: 15px; }
 
@@ -139,16 +141,14 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
 #search input { font-size: 0.9em; }
 .inheritanceTree, .toggleDefines { float: right; }
 
-#projects { font-size: 1.4em; list-style: circle; }
-
 #search_results h1 { margin-bottom: 0; }
 #search_results p { margin-top: 0; margin-bottom: 25px; }
-#projects, #search_results ul { list-style-position: inside; padding-left: 0; list-style: none; }
-#projects li, #search_results ul li { padding: 7px 15px; font-size: 1.1em; }
-#projects .r1, #search_results ul .r1, li.r1 { background: #f0f0f0; }
-#projects .r2, #search_results ul .r2, li.r2 { background: #fafafa; }
+#search_results ul { list-style-position: inside; padding-left: 0; list-style: none; }
+#search_results ul li { padding: 7px 15px; font-size: 1.1em; }
+#search_results ul .r1, li.r1 { background: #f0f0f0; }
+#search_results ul .r2, li.r2 { background: #fafafa; }
 
-#listing ul.alpha { font-size: 1.2em; }
+#listing ul.alpha { font-size: 1.1em; }
 #listing ul.alpha { margin: 0; padding: 0; padding-bottom: 10px; list-style: none; }
 #listing ul.alpha li.letter { font-size: 1.4em; padding-bottom: 10px; }
 #listing ul.alpha ul { margin: 0; padding: 0; }
@@ -172,11 +172,11 @@ ul.fullTree ul li:before { font-size: 1.2em; content: '⬆'; color: #bbb; displa
 
 /* syntax highlighting */
 #filecontents pre.code, .docstring pre.code, 
-.tags .example { padding: 5px 12px; border: 1px solid #eef; background: #f5f5ff; }
 .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
 #filecontents pre.code, .docstring pre.code, .source_code pre { font-family: monospace; }
 #filecontents pre.code, .docstring pre.code { display: block; }
 .source_code .lines { padding-right: 12px; color: #555; }
+.tags .example { padding: 5px 12px; margin-top: 4px; border: 1px solid #eef; background: #f5f5ff; }
 pre.code { color: #000; }
 pre.code .info.file { color: #555; }
 pre.code .val { color: #036A07; }
