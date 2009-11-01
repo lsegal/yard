@@ -146,12 +146,12 @@ module YARD
       list.map {|t| t.tags }.flatten
     end
     
-    # Creates a {RefTag}
+    # Creates a {Tags::RefTag}
     def create_ref_tag(tag_name, name, object)
       @ref_tags << Tags::RefTagList.new(tag_name, object, name)
     end
     
-    # Creates a tag from the {Tags::TagFactory}.
+    # Creates a tag from the {Tags::DefaultFactory tag factory}.
     # 
     # @param [String] tag_name the tag name
     # @param [String] tag_buf the text attached to the tag with newlines removed.

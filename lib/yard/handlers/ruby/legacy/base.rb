@@ -49,7 +49,7 @@ module YARD
         # 
         # @param [Array<Class<Token>>, Symbol] accepted_types
         #   The allowed token types that this token can be. Defaults to [{TkVal}].
-        #   A list of types would be, for example, [{TkSTRING}, {TkSYMBOL}], to return
+        #   A list of types would be, for example, [+TkSTRING+, +TkSYMBOL+], to return
         #   the token's value if it is either of those types. If +TkVal+ is accepted, 
         #   +TkNode+ is also accepted.
         # 
@@ -116,7 +116,7 @@ module YARD
         #   attr_accessor :a, 'b', :c, :d => ['a', 'b', 'c', 'd']
         #   attr_accessor 'a', UNACCEPTED_TYPE, 'c' => ['a', 'c'] 
         # 
-        # The tokval list of a {TokenList} of the above
+        # The tokval list of a {Parser::Ruby::Legacy::TokenList} of the above
         # code would be the {#tokval} value of :a, 'b',
         # :c and :d.
         # 

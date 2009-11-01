@@ -28,8 +28,10 @@ module YARD
     end
     
     
-    NSEPQ = NSEP = '::'
-    ISEPQ = ISEP = '#'
+    NSEP = '::'
+    NSEPQ = NSEP
+    ISEP = '#'
+    ISEPQ = ISEP
     CSEP = '.'
     CSEPQ = Regexp.quote CSEP
     CONSTANTMATCH = /[A-Z]\w*/
