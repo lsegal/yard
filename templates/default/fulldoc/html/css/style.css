@@ -189,7 +189,7 @@ li.r2 { background: #fafafa; }
 .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
 #filecontents pre.code, .docstring pre.code, .source_code pre { font-family: monospace; }
 #filecontents pre.code, .docstring pre.code { display: block; }
-.source_code .lines { padding-right: 12px; color: #555; }
+.source_code .lines { padding-right: 12px; color: #555; text-align: right; }
 #filecontents pre.code, .docstring pre.code, 
 .tags .example { padding: 5px 12px; margin-top: 4px; border: 1px solid #eef; background: #f5f5ff; }
 pre.code { color: #000; }
