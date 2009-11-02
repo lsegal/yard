@@ -3,7 +3,18 @@ module YARD
   ROOT = File.dirname(__FILE__)
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
   
+  # An alias to {Parser::SourceParser}'s parsing method
+  # 
+  # @example Parse a glob of files
+  #   YARD.parse('lib/**/*.rb')
+  # @see Parser::SourceParser.parse
   def self.parse(*args) Parser::SourceParser.parse(*args) end
+
+  # An alias to {Parser::SourceParser}'s parsing method
+  # 
+  # @example Parse a string of input
+  #   YARD.parse_string('class Foo; end')
+  # @see Parser::SourceParser.parse_string
   def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
   
   # Loads gems that match the name 'yard-*' (recommended) or 'yard_*'.
