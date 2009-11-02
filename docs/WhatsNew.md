@@ -45,6 +45,9 @@ YARD now supports loading of plugins via RubyGems. Any gem named `yard-*` or
 `yard_*` will now be loaded when YARD starts up. Note that the '-' separator 
 is the recommended naming scheme.
 
+To ignore plugins, add the gem names to `~/.yard/ignored_plugins` on separate
+lines (or separated by whitespace).
+
 New tags (@abstract, @private)
 ------------------------------
 
