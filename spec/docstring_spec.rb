@@ -101,6 +101,12 @@ describe YARD::Docstring do
       Docstring.new("Hello (the best.) world. Foo bar.").summary.should == "Hello (the best.) world."
       Docstring.new("A[b.]c.").summary.should == "A[b.]c."
     end
+    
+    it "should only see '.' as period if whitespace (or eof) follows" do
+      Docstring.new("hello 1.5 times.").summary.should == "hello 1.5 times."
+      Docstring.new("hello... me").summary.should == "hello..."
+      Docstring.new("hello.").summary.should == "hello."
+    end
   end
 
   describe '#ref_tags' do

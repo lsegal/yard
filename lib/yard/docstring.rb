@@ -69,7 +69,10 @@ module YARD
       idx = length.times do |index|
         case self[index, 1]
         when ".", "\r", "\n"
-          break index - 1 if num_parens == 0
+          next_char = self[index + 1, 1].to_s
+          if num_parens == 0 && next_char =~ /^\s*$/
+            break index - 1
+          end
         when "{", "(", "["
           num_parens += 1
         when "}", ")", "]"
