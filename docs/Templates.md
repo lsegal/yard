@@ -149,9 +149,9 @@ on a newly created template.
 
 A standard setup.rb file looks like:
 
-  def init
-    sections :section1, :section2, :section3
-  end
+    def init
+      sections :section1, :section2, :section3
+    end
 
 Sections
 --------
@@ -170,8 +170,8 @@ Sections often require the ability to encapsulate a set of sub-sections in marku
 lightweight solution is to nest a set of sub-sections as a list that follows
 a section, for example:
 
-    def sections_for(object) 
-      [:header, [:section_a, :section_b]]
+    def init
+      sections :header, [:section_a, :section_b]
     end
     
 The above example nests `section_a` and `section_b` within the `header` section.
@@ -180,18 +180,23 @@ to them. A sample header.erb template might contain:
 
     <h2>Header</h2>
     <div id="contents">
-      <%= yield %>
+      <%= yieldall %>
     </div>
     
 This template code would place the output of `section_a` and `section_b` within
-the above div element. Using yield, we can also change the object that is being
+the above div element. Using `yieldall`, we can also change the object that is being
 rendered. For example, we may want to yield the first method of the class.
 We can do this like so:
 
     <h2>First method</h2>
-    <%= yield(current_object.meths.first) %>
+    <%= yieldall :object => object.meths.first %>
 
 This would run the nested sections for the method object instead of the class.
+
+Note that `yieldall` yields to all subsections, whereas `yield` will yield
+to each individually (in order) until there are no more left to yield to.
+In the vast majority of cases, you'd want to use `yieldall`, since `yield`
+makes it hard for users to override your template.
 
 Inheriting Templates
 --------------------

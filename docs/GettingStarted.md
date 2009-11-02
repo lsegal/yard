@@ -32,10 +32,10 @@ and easier to read. Consider the RDoc documentation for a method reverse:
     #
     # == Returns:
     # A string representing the object in a specified
-    #
     # format.
+    #
     def to_format(format = :html)
-      # reverse the string
+      # format the object
     end
     
 While this may seem easy enough to read and understand, it's hard for a machine
@@ -51,6 +51,7 @@ In YARD, we would simply define our method as:
     # @param [Symbol] format the format type, `:text` or `:html`
     # @return [String] the object converted into the expected format.
     def to_format(format = :html)
+      # format the object
     end
     
 Using tags we can add semantic metadata to our code without worrying about
@@ -113,6 +114,11 @@ List of Tags
 ------------
     
 A list of common tags and example usage is below:
+
+  * `@abstract`: Marks a class/module/method as abstract with optional
+    implementor information.
+    
+        @abstract Subclass and override {#run} to implement a custom Threadable class.
 
   * `@author`: List the author(s) of a class/method
 

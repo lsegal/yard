@@ -4,6 +4,8 @@ What's New in 0.4.x?
 1. **New templating engine and templates**
 2. **yardoc `--query` argument**
 3. **Greatly expanded API documentation**
+4. **New tags (@abstract, @private)**
+5. **Default rake task is now `rake yard`**
 
 New templating engine and templates
 -----------------------------------
@@ -34,6 +36,30 @@ the design of YARD, but many of the actual API classes/methods were still
 left undocumented. This release marks a focus on getting YARD's own documentation
 up to par so that it can serve as an official reference on the recommended
 conventions to use when documenting code.
+
+New tags (@abstract, @private)
+------------------------------
+
+Two new tags were added to the list of builtin meta-tags in YARD. `@abstract`
+marks a class/module/method as abstract while `@private` marks an object
+as "private". The latter tag is unsed in situations where an object is public
+due to Ruby's own visibility limitations (constants, classes and modules
+can never be private) but not actually part of your public API. You should
+use this tag sparingly, as it is not meant to be an equivalent to RDoc's
+`:nodoc:` tag. Remember, YARD recommends documenting private objects too.
+This tag exists so that you can create a query (`--query !@private`) to
+ignore all of these private objects in your documentation. You can also
+use the new `--no-private` switch, which is a shortcut to the afformentioned
+query. You can read more about the new tags in the {file:GettingStarted.md} 
+guide.
+
+Default rake task is now `rake yard`
+------------------------------------
+
+Not a big change, but anyone using the default "rake yardoc" task should
+update their scripts: 
+
+[http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
 
 
 What's New in 0.2.3.x?
