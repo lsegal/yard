@@ -78,6 +78,8 @@ module YARD
     # though a DSL might create a custom {NamespaceObject} to describe a 
     # specific set of objects.
     # 
+    # @abstract This class should not be used directly. Instead, create a
+    #   subclass that implements {#path}, {#sep} or {#type}.
     # @see Registry
     # @see #path
     # @see #[]=
