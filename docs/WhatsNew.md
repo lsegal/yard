@@ -4,8 +4,9 @@ What's New in 0.4.x?
 1. **New templating engine and templates**
 2. **yardoc `--query` argument**
 3. **Greatly expanded API documentation**
-4. **New tags (@abstract, @private)**
-5. **Default rake task is now `rake yard`**
+4. **New plugin support**
+5. **New tags (@abstract, @private)**
+6. **Default rake task is now `rake yard`**
 
 New templating engine and templates
 -----------------------------------
@@ -36,6 +37,13 @@ the design of YARD, but many of the actual API classes/methods were still
 left undocumented. This release marks a focus on getting YARD's own documentation
 up to par so that it can serve as an official reference on the recommended
 conventions to use when documenting code.
+
+New plugin support
+------------------
+
+YARD now supports loading of plugins via RubyGems. Any gem named `yard-*` or
+`yard_*` will now be loaded when YARD starts up. Note that the '-' separator 
+is the recommended naming scheme.
 
 New tags (@abstract, @private)
 ------------------------------
