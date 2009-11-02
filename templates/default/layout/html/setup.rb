@@ -7,12 +7,12 @@ def init
     @fname = @file.gsub(/\..+$/, '')
     @breadcrumb_title = "File: " + @fname
     @page_title ||= @breadcrumb_title
-    sections :header, [:diskfile]
+    sections :layout, [:diskfile]
   elsif object
     case object
     when '_index.html'
       @page_title = options[:title]
-      sections :header, [:index]
+      sections :layout, [:index]
     when CodeObjects::Base
       if object != Registry.root
         cur = object.namespace
@@ -24,10 +24,10 @@ def init
     
       @page_title = format_object_title(object)
       type = object == Registry.root ? :module : object.type
-      sections :header, [T(type)]
+      sections :layout, [T(type)]
     end
   else
-    sections :header, [:contents]
+    sections :layout, [:contents]
   end
 end
 
