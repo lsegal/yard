@@ -6,7 +6,7 @@ module YARD::CodeObjects
     
     # Creates a new class object in +namespace+ with +name+
     # 
-    # @see Base#new
+    # @see Base.new
     def initialize(namespace, name, *args, &block)
       super
 
