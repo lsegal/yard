@@ -14,7 +14,15 @@ def constructor_details
 end
 
 def subclasses
-  @subclasses = run_verifier Registry.all(:class).select {|o| o.superclass && o.superclass.path == object.path }
-  return if @subclasses.empty?
+  if !defined? @@subclasses
+    @@subclasses = {}
+    list = run_verifier Registry.all(:class)
+    list.each do |o| 
+      (@@subclasses[o.superclass] ||= []) << o if o.superclass
+    end
+  end
+  
+  @subclasses = @@subclasses[object]
+  return if @subclasses.nil? || @subclasses.empty?
   erb(:subclasses)
 end
