@@ -78,7 +78,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     meth.tag(:return).text.should == "a new instance of +Foo+"
   end
   
-  %w(included method_added method_removed method_undefined).each do |meth|
+  %w(inherited included method_added method_removed method_undefined).each do |meth|
     it "should set @private tag on #{meth} callback method if no docstring is set" do
       P('Foo.' + meth).should have_tag(:private)
     end

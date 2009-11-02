@@ -1,5 +1,6 @@
 class Foo
   class << self
+    def inherited; end
     def included; end
     # docstring
     def extended; end
