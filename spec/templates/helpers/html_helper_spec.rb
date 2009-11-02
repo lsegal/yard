@@ -26,6 +26,39 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
   end
   
+  describe '#format_types' do
+    it "should include brackets by default" do
+      text = ["String"]
+      should_receive(:linkify).at_least(1).times.with("String", "String").and_return("String")
+      format_types(text).should == format_types(text, true)
+      format_types(text).should == "(<tt>String</tt>)"
+    end
+
+    it "should avoid brackets if brackets=false" do
+      should_receive(:linkify).with("String", "String").and_return("String")
+      should_receive(:linkify).with("Symbol", "Symbol").and_return("Symbol")
+      format_types(["String", "Symbol"], false).should == "<tt>String</tt>, <tt>Symbol</tt>"
+    end
+    
+    { "String" => [["String"], 
+        "<tt><a href=''>String</a></tt>"], 
+      "Array<String>" => [["Array", "String"], 
+        "<tt><a href=''>Array</a>&lt;<a href=''>String</a>&gt;</tt>"], 
+      "Array<String, Symbol>" => [["Array", "String", "Symbol"], 
+        "<tt><a href=''>Array</a>&lt;<a href=''>String</a>, <a href=''>Symbol</a>&gt;</tt>"],
+      "Array<{String => Array<Symbol>}>" => [["Array", "String", "Array", "Symbol"], 
+        "<tt><a href=''>Array</a>&lt;{<a href=''>String</a> =&gt; " +
+        "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]
+    }.each do |text, values|
+      it "should link all classes in #{text}" do
+        should_receive(:h).with('<').at_least(text.count('<')).times.and_return("&lt;")
+        should_receive(:h).with('>').at_least(text.count('>')).times.and_return("&gt;")
+        values[0].each {|v| should_receive(:linkify).with(v, v).and_return("<a href=''>#{v}</a>") }
+        format_types([text], false).should == values[1]
+      end
+    end
+  end
+  
   describe '#htmlify' do
     it "should not use hard breaks for textile markup (RedCloth specific)" do
       htmlify("A\nB", :textile).should_not include("<br")

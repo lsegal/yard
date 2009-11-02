@@ -150,7 +150,9 @@ module YARD
       def format_types(typelist, brackets = true)
         return unless typelist.is_a?(Array)
         list = typelist.map do |type| 
-          "<tt>" + type.gsub(/(^|[<>])\s*([^<>#]+)\s*(?=[<>]|$)/) {|m| h($1) + linkify($2, $2) } + "</tt>"
+          type = type.gsub(/([<>])/) { h($1) }
+          type = type.gsub(/(\w+)/) { $1 == "lt" || $1 == "gt" ? $1 : linkify($1, $1) }
+          "<tt>" + type + "</tt>"
         end
         list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
       end
