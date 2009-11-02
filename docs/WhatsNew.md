@@ -11,10 +11,15 @@ What's New in 0.4.x?
 New templating engine and templates
 -----------------------------------
 
-The templates were redesigned, most notably removing the ugly frameset and
-making things a little prettier. The templating engine was also completely
-redone (based on the tadpole templating library) to allow for much more
-user customization. You can read about it in {file:Templates.md}.
+The templates were redesigned, most notably removing the ugly frameset, adding
+search to the class/method lists, simplifying the layout and making things 
+generally prettier. You should also notice that more tags are now visible in
+the templates such as @todo, the new @abstract and @note tags and some others
+that existed but were previously omitted from the generated documentation.
+
+There is also a new templating engine (based on the tadpole templating library) 
+to allow for much more user customization. You can read about it in 
+{file:Templates.md}.
 
 yardoc `--query` argument
 -------------------------
