@@ -6,5 +6,10 @@ module A
     def method
       SOMECONSTANT = "don't document this"
     end
+
+    MYCONSTANT = A +
+      B +
+      C +
+      D
   end
 end

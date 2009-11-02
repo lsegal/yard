@@ -7,7 +7,7 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
     # they're not "static" when executed from a method
     return unless owner.is_a? NamespaceObject
     
-    name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
+    name, value = *statement.tokens.to_s.split(/\s*=\s*/, 2)
     register ConstantObject.new(namespace, name) {|o| o.source = statement; o.value = value.strip }
   end
 end

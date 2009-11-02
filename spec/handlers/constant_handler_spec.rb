@@ -10,4 +10,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ConstantHandler" do
   it "should only parse valid constants" do
     Registry.at("A::B::notaconstant").should be_nil
   end
+  
+  it "should maintain newlines" do
+    Registry.at("A::B::MYCONSTANT").value.should == "A +\nB +\nC +\nD"
+  end
 end
