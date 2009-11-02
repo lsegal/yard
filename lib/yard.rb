@@ -5,6 +5,24 @@ module YARD
   
   def self.parse(*args) Parser::SourceParser.parse(*args) end
   def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
+  
+  # Loads gems that match the name 'yard-*' (recommended) or 'yard_*'.
+  # This is called immediately after YARD is loaded to allow plugin support.
+  # 
+  # @return [true] always returns true
+  def self.load_plugins
+    Gem.source_index.all_gems.values.each do |gem|
+      begin
+        if gem.name =~ /^yard[-_]/
+          log.debug "Loading plugin '#{gem.name}'..."
+          require gem.name 
+        end
+      rescue Gem::LoadError, LoadError
+        log.warn "Error loading plugin '#{gem.name}'"
+      end
+    end
+    true
+  end
 end
 
 # Ruby 1.9.2 removes '.' which is not exactly a good idea
@@ -20,4 +38,12 @@ end
 
 ['autoload', 'globals'].each do |file| 
   require File.join(YARD::ROOT, 'yard', file)
+end
+
+# Load any plugins
+begin
+  require 'rubygems'
+  YARD.load_plugins
+rescue LoadError
+  log.debug "RubyGems is not present, skipping plugin loading"
 end
