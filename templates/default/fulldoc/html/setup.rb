@@ -22,14 +22,14 @@ end
 
 def serialize(object)
   options[:object] = object
-
-  if object == '_index.html' && options[:files].empty?
-    Templates::Engine.with_serializer('index.html', options[:serializer]) do
-      T('layout').run(options)
-    end
-  end
-
+  serialize_index(options) if object == '_index.html' && options[:files].empty?
   Templates::Engine.with_serializer(object, options[:serializer]) do
+    T('layout').run(options)
+  end
+end
+
+def serialize_index(options)
+  Templates::Engine.with_serializer('index.html', options[:serializer]) do
     T('layout').run(options)
   end
 end
@@ -38,12 +38,9 @@ def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
   options[:page_title] = title
-  if file == options[:readme]
-    options[:serialized_path] = 'index.html'
-  else
-    options[:serialized_path] = 'file.' + File.basename(file.gsub(/\..+$/, '')) + '.html'
-  end
-  
+  options[:serialized_path] = 'file.' + File.basename(file.gsub(/\..+$/, '')) + '.html'
+
+  serialize_index(options) if file == options[:readme]
   Templates::Engine.with_serializer(options[:serialized_path], options[:serializer]) do
     T('layout').run(options)
   end
