@@ -34,9 +34,7 @@ module YARD
     Gem.source_index.all_gems.values.each do |gem|
       begin
         if gem.name =~ /^yard[-_]/ && !ignored_plugins.include?(gem.name)
-          $DEBUG = true
           log.debug "Loading plugin '#{gem.name}'..."
-          $DEBUG = false
           require gem.name 
         end
       rescue Gem::LoadError, LoadError
