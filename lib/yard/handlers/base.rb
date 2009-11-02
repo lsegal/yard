@@ -347,8 +347,6 @@ module YARD
           else
             raise NamespaceMissingError, object
           end
-        else
-          log.debug "Object #{object} successfully resolved. Adding children."
         end
         object
       end

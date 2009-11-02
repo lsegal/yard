@@ -214,7 +214,6 @@ module YARD
       # 
       # @param [Hash] opts extra options to be applied to subsections
       def yieldall(opts = nil, &block)
-        log.debug "Templates: yielding from #{inspect}"
         with_section { run(opts, subsections, &block) }
       end
     
@@ -294,7 +293,6 @@ module YARD
       end
     
       def render_section(section, &block)
-        log.debug "Templates: inside #{self.inspect}"
         case section
         when String, Symbol
           if respond_to?(section)
