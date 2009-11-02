@@ -89,8 +89,9 @@ module YARD
       # @return [Symbol] the symbolized name
       attr_reader :name
       
-      # The files the object was defined in
+      # The files the object was defined in. To add a file, use {#add_file}.
       # @return [Array<String>] a list of files
+      # @see #add_file
       attr_reader :files
       
       # The namespace the object is defined in. If the object is in the
