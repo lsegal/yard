@@ -31,27 +31,25 @@ module YARD
           
           path = path.gsub('../', '')
           raise ArgumentError, "No such template for #{path}" if full_paths.empty?
-          mod = template!(path, full_paths.shift)
-          full_paths.each do |full_path|
-            mod.send(:include, template!(path, full_path))
-          end
-          
+          mod = template!(path, full_paths)
+
           mod
         end
         
         # Forces creation of a template at +path+ within a +full_path+.
         # 
         # @param [String] path the path name of the template
-        # @param [String, Pathname] full_path the full path on disk of the template
+        # @param [Array<String, Pathname>] full_paths the full path on disk of the template
         # @return [Template] the template module representing the +path+
-        def template!(path, full_path = nil)
-          full_path ||= path
-          name = template_module_name(full_path)
+        def template!(path, full_paths = nil)
+          full_paths ||= [path]
+          full_paths = [full_paths] unless full_paths.is_a?(Array)
+          name = template_module_name(full_paths.first)
           return const_get(name) rescue NameError 
 
           mod = const_set(name, Module.new)
           mod.send(:include, Template)
-          mod.send(:initialize, path, full_path)
+          mod.send(:initialize, path, full_paths)
           mod
         end
 

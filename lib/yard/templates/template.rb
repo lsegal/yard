@@ -31,9 +31,11 @@ module YARD
           end
         end
     
-        def initialize(path, full_path)
+        def initialize(path, full_paths)
+          full_path = full_paths.shift
           self.path = path
           self.full_path = Pathname.new(full_path)
+          include_inherited(full_paths)
           include_parent
           load_setup_rb
         end
@@ -98,6 +100,12 @@ module YARD
           if pc.size > 1
             pc.pop
             include Engine.template!(pc.join('/'), full_path.join('..').cleanpath)
+          end
+        end
+        
+        def include_inherited(full_paths)
+          full_paths.each do |full_path|
+            include Engine.template!(path, full_path)
           end
         end
 

@@ -35,7 +35,7 @@ describe YARD::Templates::Engine do
     it "should create a module including Template" do
       mock = mock(:template)
       Engine.should_receive(:find_template_paths).with(nil, 'template/name').and_return(['/full/path/template/name'])
-      Engine.should_receive(:template!).with('template/name', '/full/path/template/name').and_return(mock)
+      Engine.should_receive(:template!).with('template/name', ['/full/path/template/name']).and_return(mock)
       Engine.template('template/name').should == mock
     end
     
@@ -52,13 +52,18 @@ describe YARD::Templates::Engine do
     end
 
     it "should create a Template including other matching templates in path" do
-      mock1, mock2 = mock(:template1), mock(:template2)
       paths = ['/full/path/template/name', '/full/path2/template/name']
       Engine.should_receive(:find_template_paths).with(nil, 'template/name').and_return(paths)
-      Engine.should_receive(:template!).with('template/name', '/full/path/template/name').and_return(mock1)
-      Engine.should_receive(:template!).with('template/name', '/full/path2/template/name').and_return(mock2)
-      mock1.should_receive(:include).with(mock2)
-      Engine.template('template/name').should == mock1
+      ancestors = Engine.template('template/name').ancestors.map {|m| m.class_name }
+      ancestors.should include("Template__full_path2_template_name")
+    end
+    
+    it "should include parent directories before other template paths" do
+      paths = ['/full/path/template/name', '/full/path2/template/name']
+      Engine.should_receive(:find_template_paths).with(nil, 'template/name').and_return(paths)
+      ancestors = Engine.template('template/name').ancestors.map {|m| m.class_name }
+      ancestors[0, 4].should == ["Template__full_path_template_name", "Template__full_path_template", 
+        "Template__full_path2_template_name", "Template__full_path2_template"]
     end
   end
   
