@@ -1,6 +1,6 @@
 def init
   return if object.docstring.blank?
-  sections :index, [:deprecated, :abstract, :text], T('tags')
+  sections :index, [:deprecated, :abstract, :todo, :note, :text], T('tags')
 end
 
 def abstract
@@ -11,6 +11,16 @@ end
 def deprecated
   return unless object.has_tag?(:deprecated)
   erb(:deprecated)
+end
+
+def todo
+  return unless object.has_tag?(:todo)
+  erb(:todo)
+end
+
+def note
+  return unless object.has_tag?(:note)
+  erb(:note)
 end
 
 def docstring_text
