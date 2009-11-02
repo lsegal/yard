@@ -2,6 +2,7 @@ module YARD
   VERSION = "0.2.3.5"
   ROOT = File.dirname(__FILE__)
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
+  CONFIG_DIR = File.expand_path('~/.yard')
   
   # An alias to {Parser::SourceParser}'s parsing method
   # 
@@ -17,14 +18,22 @@ module YARD
   # @see Parser::SourceParser.parse_string
   def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
   
-  # Loads gems that match the name 'yard-*' (recommended) or 'yard_*'.
-  # This is called immediately after YARD is loaded to allow plugin support.
+  # Loads gems that match the name 'yard-*' (recommended) or 'yard_*' except
+  # those listed in +~/.yard/ignored_plugins+. This is called immediately 
+  # after YARD is loaded to allow plugin support.
   # 
   # @return [true] always returns true
   def self.load_plugins
+    ignored_plugins_file = File.join(CONFIG_DIR, "ignored_plugins")
+    if File.file?(ignored_plugins_file)
+      ignored_plugins = IO.read(ignored_plugins_file).split(/\s+/)
+    else
+      ignored_plugins = []
+    end
+    
     Gem.source_index.all_gems.values.each do |gem|
       begin
-        if gem.name =~ /^yard[-_]/
+        if gem.name =~ /^yard[-_]/ && !ignored_plugins.include?(gem.name)
           $DEBUG = true
           log.debug "Loading plugin '#{gem.name}'..."
           $DEBUG = false
