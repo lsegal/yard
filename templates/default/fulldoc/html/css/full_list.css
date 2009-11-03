@@ -20,3 +20,4 @@ li:hover { background: #ffffa5; cursor: pointer; border: 1px dotted #ddddc4; bor
 li:hover * { position: relative; left: -3px; }
 a:link, a:visited { text-decoration: none; color: #05a; }
 a:hover { background: #ffffa5; }
+#search input { border: 1px solid #bbb; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
