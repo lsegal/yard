@@ -42,6 +42,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     { "String" => [["String"], 
         "<tt><a href=''>String</a></tt>"], 
+      "A::B::C" => [["A::B::C"], 
+        "<tt><a href=''>A::B::C</a></tt>"],
       "Array<String>" => [["Array", "String"], 
         "<tt><a href=''>Array</a>&lt;<a href=''>String</a>&gt;</tt>"], 
       "Array<String, Symbol>" => [["Array", "String", "Symbol"], 
