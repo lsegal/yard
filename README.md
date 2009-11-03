@@ -1,5 +1,5 @@
-YARD Release 0.4.0 (November 15th 2009)
-=======================================
+YARD Release 0.4.0 "The Whole Nine" (Nov 15th 2009)
+===================================================
 
 **Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
