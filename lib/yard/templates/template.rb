@@ -221,8 +221,7 @@ module YARD
       # @yield calls subsections to be rendered
       # @return [String] the contents of the ERB rendered section
       def erb(section, &block)
-        erb = ERB.new(cache(section), nil, '<>')
-        erb.filename = cache_filename(section).to_s
+        erb = erb_with(cache(section), cache_filename(section))
         erb.result(binding, &block)
       end
       
@@ -266,8 +265,7 @@ module YARD
       def superb(&block)
         filename = self.class.find_nth_file(erb_file_for(section), 2)
         return "" unless filename
-        erb = ERB.new(filename.read, nil, '<>')
-        erb.filename = filename.to_s
+        erb = erb_with(IO.read(filename), filename)
         erb.result(binding, &block)
       end
       
@@ -284,6 +282,12 @@ module YARD
     
       def erb_file_for(section)
         "#{section}.erb"
+      end
+      
+      def erb_with(content, filename = nil)
+        erb = ERB.new(content, nil, options[:format] == :text ? '<>' : nil)
+        erb.filename = filename if filename
+        erb
       end
     
       private
