@@ -232,10 +232,10 @@ module YARD
       # both file contents can be retrieved by having +templates/b/test.css+ look
       # like:
       # 
+      #   {{{__super__}}}
+      #   ...
       #   body { css styles here }
       #   p.class { other styles }
-      #   ...
-      #   {{{__super__}}}
       # 
       # @param [String] basename the name of the file
       # @param [Boolean] allow_inherited whether inherited templates can
