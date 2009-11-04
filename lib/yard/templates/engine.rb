@@ -1,18 +1,16 @@
-require 'pathname'
-
 module YARD
   module Templates
     module Engine
       class << self
-        # @return [Array<Pathname>] the list of registered template paths
+        # @return [Array<String>] the list of registered template paths
         attr_accessor :template_paths
 
         # Registers a new template path in {template_paths}
         # 
-        # @param [Pathname, String] path a new template path
+        # @param [String] path a new template path
         # @return [nil] 
         def register_template_path(path)
-          template_paths.push Pathname.new(path)
+          template_paths.push path
         end
         
         # Creates a template module representing the path. Searches on disk 
@@ -29,7 +27,7 @@ module YARD
           path = path.join('/')
           full_paths = find_template_paths(from_template, path)
           
-          path = path.gsub('../', '')
+          path = File.cleanpath(path).gsub('../', '')
           raise ArgumentError, "No such template for #{path}" if full_paths.empty?
           mod = template!(path, full_paths)
 
@@ -39,7 +37,7 @@ module YARD
         # Forces creation of a template at +path+ within a +full_path+.
         # 
         # @param [String] path the path name of the template
-        # @param [Array<String, Pathname>] full_paths the full path on disk of the template
+        # @param [Array<String>] full_paths the full path on disk of the template
         # @return [Template] the template module representing the +path+
         def template!(path, full_paths = nil)
           full_paths ||= [path]
@@ -134,22 +132,22 @@ module YARD
         #   path to be specified from this template's full path.
         # @param [String] path the path component to search for in the
         #   {template_paths}
-        # @return [Array<Pathname>] a list of full paths that are existing
+        # @return [Array<String>] a list of full paths that are existing
         #   candidates for a template module
         def find_template_paths(from_template, path)
           paths = template_paths.dup
           paths = from_template.full_paths + paths if from_template
           
           paths.inject([]) do |acc, tp|
-            full_path = tp.join(path).cleanpath
-            acc.unshift(full_path) if full_path.directory?
+            full_path = File.cleanpath(File.join(tp, path))
+            acc.unshift(full_path) if File.directory?(full_path)
             acc
           end.uniq
         end
 
         # The name of the module that represents a +path+
         # 
-        # @param [String, Pathname] the path toe generate a module name for
+        # @param [String] the path toe generate a module name for
         # @return [String] the module name
         def template_module_name(path)
           'Template_' + path.to_s.gsub(/[^a-z0-9]/i, '_')
@@ -159,6 +157,6 @@ module YARD
       self.template_paths = []
     end
     
-    Engine.register_template_path(Pathname.new(YARD::ROOT).join('..', 'templates'))
+    Engine.register_template_path(File.join(YARD::ROOT, '..', 'templates'))
   end
 end

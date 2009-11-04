@@ -21,26 +21,26 @@ describe YARD::Templates::Template do
   describe '.full_paths' do
     it "should list full_path" do
       mod = template(:a)
-      mod.full_paths.should == [Pathname.new('/full/path/a')]
+      mod.full_paths.should == ['/full/path/a']
     end
     
     it "should list paths of included modules" do
       mod = template(:a)
       mod.send(:include, template(:b))
-      mod.full_paths.should == [Pathname.new('/full/path/a'), Pathname.new('/full/path/b')]
+      mod.full_paths.should == ['/full/path/a', '/full/path/b']
     end
     
     it "should list paths from modules of included modules" do
       mod = template(:c)
       mod.send(:include, template(:d))
       mod.send(:include, template(:a))
-      mod.full_paths.should == ['c', 'a', 'b', 'd'].map {|o| Pathname.new('/full/path/' + o) }
+      mod.full_paths.should == ['c', 'a', 'b', 'd'].map {|o| '/full/path/' + o }
     end
     
     it "should only list full paths of modules that respond to full_paths" do
       mod = template(:d)
       mod.send(:include, Enumerable)
-      mod.full_paths.should == [Pathname.new('/full/path/d')]
+      mod.full_paths.should == ['/full/path/d']
     end
   end
   
@@ -62,28 +62,28 @@ describe YARD::Templates::Template do
   
   describe '.find_file' do
     it "should find file in module's full_path" do
-      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(false)
-      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
-      template(:a).find_file('basename').should == Pathname.new('/full/path/b/basename')
+      File.should_receive(:file?).with('/full/path/a/basename').and_return(false)
+      File.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      template(:a).find_file('basename').should == '/full/path/b/basename'
     end
     
     it "should return nil if no file is found" do
-      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(false)
-      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(false)
+      File.should_receive(:file?).with('/full/path/a/basename').and_return(false)
+      File.should_receive(:file?).with('/full/path/b/basename').and_return(false)
       template(:a).find_file('basename').should be_nil
     end
   end
   
   describe '.find_nth_file' do
     it "should find 2nd existing file in template paths" do
-      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(true)
-      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
-      template(:a).find_nth_file('basename', 2).should == Pathname.new('/full/path/b/basename')
+      File.should_receive(:file?).with('/full/path/a/basename').and_return(true)
+      File.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      template(:a).find_nth_file('basename', 2).should == '/full/path/b/basename'
     end
     
     it "should return nil if no file is found" do
-      FileTest.should_receive(:file?).with('/full/path/a/basename').and_return(true)
-      FileTest.should_receive(:file?).with('/full/path/b/basename').and_return(true)
+      File.should_receive(:file?).with('/full/path/a/basename').and_return(true)
+      File.should_receive(:file?).with('/full/path/b/basename').and_return(true)
       template(:a).find_nth_file('basename', 3).should be_nil
     end
   end
@@ -120,26 +120,26 @@ describe YARD::Templates::Template do
   
   describe '#file' do
     it "should read the file if it exists" do
-      FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(true)
+      File.should_receive(:file?).with('/full/path/e/abc').and_return(true)
       IO.should_receive(:read).with('/full/path/e/abc').and_return('hello world')
       template(:e).new.file('abc').should == 'hello world'
     end
     
     it "should raise ArgumentError if the file does not exist" do
-      FileTest.should_receive(:file?).with('/full/path/e/abc').and_return(false)
+      File.should_receive(:file?).with('/full/path/e/abc').and_return(false)
       lambda { template(:e).new.file('abc') }.should raise_error(ArgumentError)
     end
     
     it "should replace {{{__super__}}} with inherited template contents if allow_inherited=true" do
-      FileTest.should_receive(:file?).with('/full/path/a/abc').twice.and_return(true)
-      FileTest.should_receive(:file?).with('/full/path/b/abc').and_return(true)
+      File.should_receive(:file?).with('/full/path/a/abc').twice.and_return(true)
+      File.should_receive(:file?).with('/full/path/b/abc').and_return(true)
       IO.should_receive(:read).with('/full/path/a/abc').and_return('foo {{{__super__}}}')
       IO.should_receive(:read).with('/full/path/b/abc').and_return('bar')
       template(:a).new.file('abc', true).should == "foo bar"
     end
 
     it "should not replace {{{__super__}}} with inherited template contents if allow_inherited=false" do
-      FileTest.should_receive(:file?).with('/full/path/a/abc').and_return(true)
+      File.should_receive(:file?).with('/full/path/a/abc').and_return(true)
       IO.should_receive(:read).with('/full/path/a/abc').and_return('foo {{{__super__}}}')
       template(:a).new.file('abc').should == "foo {{{__super__}}}"
     end
@@ -147,8 +147,8 @@ describe YARD::Templates::Template do
   
   describe '#superb' do
     it "should return the inherited erb template contents" do
-      FileTest.should_receive(:file?).with('/full/path/a/test.erb').and_return(true)
-      FileTest.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
+      File.should_receive(:file?).with('/full/path/a/test.erb').and_return(true)
+      File.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
       IO.should_receive(:read).with('/full/path/b/test.erb').and_return('bar')
       template = template(:a).new
       template.section = :test
@@ -156,8 +156,8 @@ describe YARD::Templates::Template do
     end
     
     it "should work inside an erb template" do
-      FileTest.should_receive(:file?).with('/full/path/a/test.erb').twice.and_return(true)
-      FileTest.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
+      File.should_receive(:file?).with('/full/path/a/test.erb').twice.and_return(true)
+      File.should_receive(:file?).with('/full/path/b/test.erb').and_return(true)
       IO.should_receive(:read).with('/full/path/a/test.erb').and_return('foo<%= superb %>!')
       IO.should_receive(:read).with('/full/path/b/test.erb').and_return('bar')
       template = template(:a).new

@@ -1,5 +1,6 @@
 class File
   RELATIVE_PARENTDIR = '..'
+  RELATIVE_SAMEDIR = '.'
   
   # Turns a path +to+ into a relative path from starting
   # point +from+. The argument +from+ is assumed to be
@@ -19,5 +20,24 @@ class File
     end
     fname = from.pop
     join *(from.map { RELATIVE_PARENTDIR } + to)
+  end
+  
+  # Cleans a path by removing extraneous '..', '.' and '/' characters
+  # 
+  # @example Clean a path
+  #   File.cleanpath('a/b//./c/../e') # => "a/b/e"
+  # @param [String] path the path to clean
+  # @return [String] the sanitized path
+  def self.cleanpath(path)
+    path = path.split(SEPARATOR)
+    path = path.inject([]) do |acc, comp|
+      next acc if comp == RELATIVE_SAMEDIR
+      if comp == RELATIVE_PARENTDIR && acc.size > 0
+        acc.pop
+        next acc
+      end
+      acc << comp
+    end
+    File.join(*path)
   end
 end

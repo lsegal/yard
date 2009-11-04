@@ -4,12 +4,7 @@ describe YARD::Templates::Engine do
   describe '.register_template_path' do
     it "should register a String path" do
       Engine.register_template_path('.')
-      Engine.template_paths.pop.should == Pathname.new('.')
-    end
-    
-    it "should register a Pathname path" do
-      Engine.register_template_path(Pathname.new('.'))
-      Engine.template_paths.pop.should == Pathname.new('.')
+      Engine.template_paths.pop.should == '.'
     end
   end
   
@@ -41,10 +36,10 @@ describe YARD::Templates::Engine do
     
     it "should create a Template from a relative Template path" do
       Engine.should_receive(:template_paths).and_return([])
-      FileTest.should_receive(:directory?).with("/full/path/template/notname").and_return(true)
+      File.should_receive(:directory?).with("/full/path/template/notname").and_return(true)
       start_template = mock(:start_template)
-      start_template.stub!(:full_path).and_return(Pathname.new('/full/path/template/name'))
-      start_template.stub!(:full_paths).and_return([Pathname.new('/full/path/template/name')])
+      start_template.stub!(:full_path).and_return('/full/path/template/name')
+      start_template.stub!(:full_paths).and_return(['/full/path/template/name'])
       start_template.should_receive(:is_a?).with(Template).and_return(true)
       mod = Engine.template(start_template, '..', 'notname')
       mod.should include(Template)

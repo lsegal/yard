@@ -34,7 +34,7 @@ module YARD
         def initialize(path, full_paths)
           full_path = full_paths.shift
           self.path = path
-          self.full_path = Pathname.new(full_path)
+          self.full_path = full_path
           include_inherited(full_paths)
           include_parent
           load_setup_rb
@@ -45,7 +45,7 @@ module YARD
         # {ClassMethods#find_nth_file} with index of 1.
         # 
         # @param [String] basename the filename to search for
-        # @return [Pathname] the full path of a file on disk with filename
+        # @return [String] the full path of a file on disk with filename
         #   +basename+ in one of the template's paths.
         # @see find_nth_file
         def find_file(basename)
@@ -57,13 +57,13 @@ module YARD
         # 
         # @param [String] basename the filename to search for
         # @param [Fixnum] index the nth existing file to return
-        # @return [Pathname] the full path of the nth file on disk with
+        # @return [String] the full path of the nth file on disk with
         #   filename +basename+ in one of the template paths
         def find_nth_file(basename, index = 1)
           n = 1
           full_paths.each do |path|
-            file = path.join(basename)
-            if file.file?
+            file = File.join(path, basename)
+            if File.file?(file)
               return file if index == n
               n += 1
             end
@@ -99,7 +99,7 @@ module YARD
           pc = path.to_s.split('/')
           if pc.size > 1
             pc.pop
-            include Engine.template!(pc.join('/'), full_path.join('..').cleanpath)
+            include Engine.template!(pc.join('/'), full_path.gsub(%r{/[^/]+$}, ''))
           end
         end
         
@@ -249,10 +249,10 @@ module YARD
         file = self.class.find_file(basename)
         raise ArgumentError, "no file for '#{basename}' in #{self.class.path}" unless file
 
-        data = file.read
+        data = IO.read(file)
         if allow_inherited
           superfile = self.class.find_nth_file(basename, 2)
-          data.gsub!('{{{__super__}}}', superfile ? superfile.read : "")
+          data.gsub!('{{{__super__}}}', superfile ? IO.read(superfile) : "")
         end
 
         data
@@ -316,7 +316,7 @@ module YARD
         file = self.class.find_file(erb_file_for(section))
         @cache_filename[section.to_sym] = file
         raise ArgumentError, "no template for section '#{section}' in #{self.class.path}" unless file
-        @cache[section.to_sym] = file.read
+        @cache[section.to_sym] = IO.read(file)
       end
       
       def cache_filename(section)
