@@ -245,8 +245,8 @@ pre.code .id.to_sym, pre.code .id.to_f,
 pre.code .dot + pre.code .id,
 pre.code .id.to_i pre.code .id.each { color: #0085FF; }
 pre.code .comment { color: #0066FF; }
-pre.code .const { color: #585CF6; }
-pre.code .constant, pre.code .symbol { color: #C5060B; }
+pre.code .const, pre.code .constant { color: #585CF6; }
+pre.code .symbol { color: #C5060B; }
 pre.code .kw, 
 pre.code .label,
 pre.code .id.require, 
