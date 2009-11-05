@@ -4,6 +4,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassVariableHandler"
   before(:all) { parse_file :class_variable_handler_001, __FILE__ }
   
   it "should not parse class variables inside methods" do
-    Registry.at("A::B::@@somevar").source.should == "@@somevar = \"hello\""
+    obj = Registry.at("A::B::@@somevar")
+    obj.source.should == "@@somevar = \"hello\""
+    obj.value.should == '"hello"'
   end
 end

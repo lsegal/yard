@@ -20,10 +20,12 @@ describe YARD::Templates::Engine.template(:default, :method) do
         
         include B
         
+        class Y; end
         class Q; end
         class X; end
-        class Y; end
         module Z; end
+        CONSTANT = 'value'
+        @@cvar = 'value'
       end
     eof
   end

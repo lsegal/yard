@@ -7,7 +7,10 @@ class YARD::Handlers::Ruby::Legacy::ClassVariableHandler < YARD::Handlers::Ruby:
     # they're not "static" when executed from a method
     return unless owner.is_a? NamespaceObject
     
-    name, value = *statement.tokens.to_s.gsub(/\r?\n/, '').split(/\s*=\s*/, 2)
-    register ClassVariableObject.new(namespace, name) {|o| o.source = statement }
+    name, value = *statement.tokens.to_s.split(/\s*=\s*/, 2)
+    register ClassVariableObject.new(namespace, name) do |o| 
+      o.source = statement
+      o.value = value.strip
+    end
   end
 end

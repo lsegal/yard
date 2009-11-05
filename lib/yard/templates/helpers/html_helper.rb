@@ -190,6 +190,8 @@ module YARD
         case object
         when CodeObjects::MethodObject
           "#{object.name}-#{object.scope}_#{object.type}"
+        when CodeObjects::ClassVariableObject
+          "#{object.name.to_s.gsub('@@', '')}-#{object.type}"
         when CodeObjects::Base
           "#{object.name}-#{object.type}"
         when CodeObjects::Proxy
