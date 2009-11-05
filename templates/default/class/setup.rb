@@ -24,5 +24,6 @@ def subclasses
   
   @subclasses = @@subclasses[object]
   return if @subclasses.nil? || @subclasses.empty?
+  @subclasses = @subclasses.sort_by {|o| o.path }
   erb(:subclasses)
 end

@@ -22,6 +22,7 @@ def children
     @inner[1][1] << child if child.type == :class
   end
   return if (@inner[0][1].size + @inner[1][1].size) == 0
+  @inner.map! {|v| [v[0], v[1].sort_by {|o| o.name.to_s }] }
   erb(:children)
 end
 

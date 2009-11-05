@@ -5,5 +5,5 @@
   <% meths.reject! {|m| m.is_alias? || m.is_attribute? } %>
   <% next if meths.size == 0 %>
   <h3 class="inherited">Methods <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify superclass %></h3>
-  <p class="inherited"><%= meths.map {|m| linkify(m, m.name(true)) }.join(", ") %></p>
+  <p class="inherited"><%= meths.sort_by {|o| o.name.to_s }.map {|m| linkify(m, m.name(true)) }.join(", ") %></p>
 <% end %>
