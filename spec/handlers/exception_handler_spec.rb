@@ -32,4 +32,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ExceptionHandler" do
   it "should handle complex class names" do
     P('Testing#mymethod5').tag(:raise).types.should == ['YARD::Parser::UndocumentableError']
   end
+  
+  it "should ignore any raise calls on a receiver" do
+    P('Testing#mymethod9').tag(:raise).should be_nil
+  end
 end

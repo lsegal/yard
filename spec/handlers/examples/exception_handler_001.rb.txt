@@ -39,4 +39,9 @@ class Testing
   def mymethod8
     raise ExceptionClass.new('blah')
   end
+
+  def mymethod9
+    obj.raise IgnoreMe
+	obj.raise(IgnoreMe)
+  end
 end
