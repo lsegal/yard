@@ -85,10 +85,6 @@ module YARD
     # @see #[]=
     # @see NamespaceObject
     class Base  
-      # The name of the object
-      # @return [Symbol] the symbolized name
-      attr_reader :name
-      
       # The files the object was defined in. To add a file, use {#add_file}.
       # @return [Array<String>] a list of files
       # @see #add_file
@@ -192,6 +188,16 @@ module YARD
         @docstring = Docstring.new('', self)
         self.namespace = namespace
         yield(self) if block_given?
+      end
+      
+      # The name of the object
+      # @param [Boolean] prefix whether to show a prefix. Implement
+      #   this in a subclass to define how the prefix is showed.
+      # @return [Symbol] if prefix is false, the symbolized name
+      # @return [String] if prefix is true, prefix + the name as a String. 
+      #   This must be implemented by the subclass.
+      def name(prefix = false)
+        prefix ? @name.to_s : @name
       end
       
       # Associates a file with a code object, optionally adding the line where it was defined.

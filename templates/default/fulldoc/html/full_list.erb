@@ -22,8 +22,7 @@
           <% elsif item == Registry.root %>
             <a href="top-level-namespace.html">Top Level Namespace</a>
           <% else %>
-            <% name = item.is_a?(CodeObjects::MethodObject) ? item.name(true) : item.name %>
-            <%= linkify item, name %> 
+            <%= linkify item, item.name(true) %> 
             <% if item.namespace && item.namespace != Registry.root %>
               <small>(<%= item.namespace %>)</small>
             <% end %>

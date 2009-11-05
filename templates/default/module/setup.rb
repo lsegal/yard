@@ -33,7 +33,7 @@ def methodmissing
 end
 
 def method_listing(include_specials = true)
-  return @smeths ||= method_listing.reject {|o| special_methods.include? o.name(true).to_s } unless include_specials
+  return @smeths ||= method_listing.reject {|o| special_methods.include? o.name(true) } unless include_specials
   return @meths if @meths
   @meths = object.meths(:inherited => false, :included => false)
   @meths = sort_listing(prune_method_listing(@meths))

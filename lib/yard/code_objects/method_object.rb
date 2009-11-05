@@ -98,10 +98,12 @@ module YARD::CodeObjects
     #   an_instance_method.name(true) # => "#mymethod"
     # @example The name of a class method (with prefix)
     #   a_class_method.name(true) # => "mymethod"
-    # @param [Boolean] prefix if prefix is true, returns {#sep} + +name+ for
-    #   an instance method.
+    # @param [Boolean] prefix whether or not to show the prefix
+    # @return [String] returns {#sep} + +name+ for an instance method if 
+    #   prefix is true
+    # @return [Symbol] the name without {#sep} if prefix is set to false
     def name(prefix = false)
-      ((prefix ? (sep == ISEP ? sep : "") : "") + super().to_s).to_sym
+      prefix ? (sep == ISEP ? "#{sep}#{super}" : super.to_s) : super
     end
     
     protected
