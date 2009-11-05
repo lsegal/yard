@@ -270,7 +270,16 @@ module YARD
           extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
         end
         title = "%s (%s) <strong>%s</strong>%s %s" % [scope, type, name, args, blk]
-        (link ? linkify(meth, title) : title) + extras_text
+        if link
+          if meth.is_a?(YARD::CodeObjects::MethodObject)
+            link_title = "#{meth.name(true)} (#{meth.scope} #{meth.type})"
+          else
+            link_title = "#{name} (#{meth.type})"
+          end
+          link_url(url_for(meth), title, :title => link_title) + extras_text
+        else
+          title + extras_text
+        end
       end
     end
   end
