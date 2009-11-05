@@ -4,7 +4,7 @@ def init
   objects = options[:objects]
   options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
   options[:readme] = options[:files].first
-  options[:title] ||= "Project Documentation (yard #{YARD::VERSION})"
+  options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
   
   generate_assets
   serialize('_index.html')
