@@ -1,5 +1,5 @@
 class YARD::Handlers::Ruby::Legacy::ClassVariableHandler < YARD::Handlers::Ruby::Legacy::Base
-  HANDLER_MATCH = /\A@@\S*\s*=\s*/m
+  HANDLER_MATCH = /\A@@\w+\s*=\s*/m
   handles HANDLER_MATCH
   
   def process
