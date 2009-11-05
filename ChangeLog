@@ -1,3 +1,1217 @@
+2009-11-04  Loren Segal <lsegal@soen.ca>
+
+  * docs/GettingStarted.md, docs/WhatsNew.md: Fix some broken links to old
+  README.markdown
+
+2009-11-03  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/template_profile.rb: Don't use perftools
+
+  * lib/yard/templates/template.rb: Make example more realistic
+
+  * benchmarks/concat_vs_join.rb, benchmarks/erb_vs_erubis.rb,
+  benchmarks/pathname_vs_string.rb, benchmarks/template_erb.rb,
+  benchmarks/template_format.rb, benchmarks/template_profile.rb: Add/update
+  benchmarks for templates
+
+  * lib/yard/core_ext/file.rb, lib/yard/templates/engine.rb,
+  lib/yard/templates/template.rb, spec/core_ext/file_spec.rb,
+  spec/templates/engine_spec.rb, spec/templates/template_spec.rb: Remove
+  Pathname from code, it is too slow.
+
+  * lib/yard/templates/template.rb: Refactor erb to use erb_with and only trim
+  newlines if format == text (performance)
+
+  * templates/default/fulldoc/html/css/style.css: Fix constant colour in syntax
+  highlighting
+
+  * templates/default/fulldoc/html/css/full_list.css: Make search box in
+  namespace list rounded, collapse border
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: format_types should work for
+  composite paths (A::B)
+
+2009-11-02  Loren Segal <lsegal@soen.ca>
+
+  * README.md: Update readme
+
+  * lib/yard/code_objects/class_object.rb: Fix broken @see reference
+
+  * docs/WhatsNew.md: Add more info on updated templates
+
+  * lib/yard/tags/library.rb, templates/default/docstring/html/note.erb,
+  templates/default/docstring/html/todo.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text/note.erb,
+  templates/default/docstring/text/todo.erb,
+  templates/default/fulldoc/html/css/style.css: Add @note, add @note and @todo
+  into templates
+
+  * lib/yard/code_objects/base.rb: Explain how to modify
+  CodeObjects::Base#files
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Don't end summary in the
+  middle of a decimal (like 1.5)
+
+  * templates/default/layout/html/footer.erb,
+  templates/default/layout/html/header.erb,
+  templates/default/layout/html/headers.erb,
+  templates/default/layout/html/layout.erb,
+  templates/default/layout/html/search.erb,
+  templates/default/layout/html/setup.rb: Split layout template into sections
+
+  * lib/yard.rb: Remove  modification
+
+  * docs/WhatsNew.md: Document new plugin ignore behaviour
+
+  * lib/yard.rb, spec/yard_spec.rb: Add mechanism to ignore plugins by name
+  (add names to ~/.yard/ignored_plugins)
+
+  * lib/yard.rb: Debug needs to be modified or debugging message does not show
+
+  * lib/yard.rb: Documentation for a few helper methods
+
+  * docs/WhatsNew.md: Document the plugin behaviour
+
+  * lib/yard.rb, spec/yard_spec.rb: Add plugin support. Name your gems
+  'yard-myplugin' or 'yard_myplugin'.  Plugins are loaded automatically when
+  YARD loads. The '-' separator is the recommended naming scheme.
+
+  * lib/yard/handlers/base.rb, lib/yard/templates/template.rb: Remove a few
+  debugging messages (too much info)
+
+  * lib/yard/code_objects/constant_object.rb,
+  lib/yard/handlers/ruby/legacy/constant_handler.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/examples/constant_handler_001.rb.txt: Fix constants removing
+  newlines from value in 1.8
+
+2009-11-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix format_types to link all
+  words
+
+  * templates/default/class/setup.rb: Improve rendering speed of subclasses
+  section
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add Class.inherited to privatized
+  method list
+
+  * templates/default/fulldoc/html/setup.rb: Refactor logic to generate
+  index.html file, do so for readme or table of contents
+
+  * lib/yard/code_objects/base.rb: Document CodeObjects::Base as abstract
+
+  * docs/GettingStarted.md, docs/Templates.md, docs/WhatsNew.md,
+  templates/default/fulldoc/html/css/style.css: Update documentation, discuss
+  new features
+
+  * templates/default/fulldoc/html/css/style.css: Use the same font family as
+  signature
+
+  * templates/default/fulldoc/html/css/style.css: Alias name should be smaller
+  in signature
+
+  * lib/yard/templates/engine.rb, lib/yard/templates/template.rb,
+  spec/templates/engine_spec.rb: Fix inclusion order of overriden templates
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html,
+  spec/templates/examples/module001.html, spec/templates/examples/tag001.txt,
+  spec/templates/helpers/html_helper_spec.rb: Update specs
+
+  * spec/cli/yardoc_spec.rb: Fix broken spec due to README being renamed
+
+  * lib/yard/handlers/ruby/legacy/yield_handler.rb,
+  lib/yard/handlers/ruby/yield_handler.rb, spec/handlers/yield_handler_spec.rb,
+  templates/default/tags/html/tag.erb, templates/default/tags/setup.rb: Show
+  yield types iff there are types present
+
+  * templates/default/fulldoc/html/css/style.css: Update css
+
+  * lib/yard/code_objects/base.rb, lib/yard/docstring.rb,
+  lib/yard/handlers/ruby/legacy/base.rb: Fix broken reference links
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/module/html/item_summary.erb: Add info bubbles to summaries
+
+  * .yardopts, Rakefile: Move some options to yardopts
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/layout/html/header.erb,
+  .../default/module/html/attribute_summary.erb,
+  templates/default/module/html/header.erb,
+  templates/default/module/html/item_summary.erb,
+  templates/default/module/html/method_summary.erb,
+  templates/default/module/setup.rb: Add abstract/deprecated info bubbles
+
+  * templates/default/fulldoc/html/css/style.css: Links in summary descriptions
+  should be smaller
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/js/app.js,
+  .../default/module/html/attribute_summary.erb,
+  templates/default/module/html/method_summary.erb: Update css, make
+  method/attr summaries more apparent
+
+  * templates/default/docstring/html/abstract.erb,
+  templates/default/docstring/html/deprecated.erb,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/method_details/html/header.erb: Prettify method headers
+
+  * templates/default/fulldoc/html/css/style.css: h3,h4 font sizes are too
+  small for dotted border. Use whitespace instead
+
+  * templates/default/fulldoc/html/css/style.css: Update css for page title /
+  index page
+
+  * templates/default/fulldoc/html/setup.rb,
+  templates/default/layout/html/index.erb,
+  templates/default/layout/html/setup.rb: Update page title and index page
+  behaviour
+
+  * Rakefile: Add title to rake yard
+
+  * Rakefile, lib/yard/autoload.rb: Add @private tags and use --no-private
+
+  * yard.gemspec: Update gemspec (renamed readme)
+
+  * templates/default/fulldoc/html/css/style.css: Align source code line
+  numbers to right
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/module/html/box_info.erb,
+  templates/default/module/html/constant_summary.erb: Make HTML valid, update
+  css
+
+  * templates/default/layout/html/header.erb,
+  templates/default/module/html/defines.erb: Fix html errors
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/js/app.js,
+  templates/default/fulldoc/html/js/full_list.js,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/header.erb,
+  templates/default/layout/html/index.erb: Update css, js
+
+2009-10-31  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/setup.rb,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/glossary.erb,
+  templates/default/layout/html/index.erb,
+  templates/default/layout/html/setup.rb: Rename glossary as Alphabetic Index
+  page
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix broken formatting
+
+  * docs/Templates.md: Fix code block
+
+  * .yardopts, README.markdown, README.md, docs/FAQ.md: Rename README, remove
+  FAQ
+
+  * docs/WhatsNew.md: Update what's new for next release
+
+  * README.markdown: Document new --query parameter
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix problem with fix_typewriter
+  and document some methods
+
+  * lib/yard/templates/template.rb: Fix invalid reference
+
+  * README.markdown, docs/GettingStarted.md: Update docs to reflect new YARD
+  behaviours
+
+  * lib/yard/templates/template.rb: Update documentation
+
+  * spec/templates/template_spec.rb: Test superb from erb
+
+2009-10-30  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/setup.rb: Allow overriding of assets with
+  {{{__super__}}} inside subclassed template assets
+
+  * lib/yard/templates/template.rb, spec/templates/template_spec.rb: Add
+  Template#superb and modify Template#file to allow insertion of inherited
+  template/files
+
+  * templates/default/class/setup.rb: Make sure superclass exists
+
+2009-10-25  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/style.css: Update style.css
+
+  * templates/default/fulldoc/html/css/style.css: Update style.css
+
+  * README.markdown, docs/GettingStarted.md, docs/Handlers.md,
+  docs/Overview.md, docs/Parser.md, docs/Tags.md: Fix file: links
+
+  * lib/yard/parser/source_parser.rb, lib/yard/templates/engine.rb,
+  lib/yard/templates/template.rb: Fix broken links
+
+  * .yardopts, docs/Generators.md, docs/Templates.md: Rewrite generators doc as
+  Template arch
+
+2009-10-24  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add @private tags to builtin Ruby
+  callback methods if no docstring is specified
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add --no-private to ignore
+  @private tags
+
+  * lib/yard/autoload.rb, lib/yard/cli/yardoc.rb, lib/yard/rake/yardoc_task.rb,
+  lib/yard/verifier.rb, spec/cli/yardoc_spec.rb, spec/rake/yardoc_task_spec.rb,
+  spec/verifier_spec.rb: Add Verifier class
+
+  * lib/yard/templates/template.rb: Extra documentation for Template
+
+  * lib/yard/templates/template.rb: Documentation for Template
+
+  * lib/yard/templates/engine.rb: Add examples for Engine docs
+
+  * lib/yard/templates/engine.rb: Documentation for Templates::Engine
+
+  * templates/default/module/setup.rb: Should be a summary
+
+2009-10-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/engine.rb, spec/templates/engine_spec.rb: template paths
+  should be pushed, not unshifted
+
+  * lib/yard/handlers/processor.rb: Documentation for Handlers::Processor
+
+  * lib/yard/handlers/base.rb: Documentation for Handlers::Base
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/module001.html,
+  templates/default/docstring/html/text.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text/text.erb,
+  .../default/module/html/attribute_summary.erb,
+  templates/default/module/html/constant_summary.erb,
+  .../default/module/html/inherited_constants.erb,
+  templates/default/module/html/method_summary.erb,
+  templates/default/module/setup.rb: Use @return tag as docstring and summary
+  if no docstring is provided but there is 1 return tag
+
+  * lib/yard/parser/ruby/ast_node.rb: Basic documentation for AstNode
+
+  * lib/yard/parser/source_parser.rb: Documentation for SourceParser
+
+  * templates/default/module/html/constant_summary.erb,
+  templates/default/module/setup.rb: Show inherited constants in summary
+
+2009-10-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/method_object.rb: Update MethodObject documentation
+
+  * spec/templates/class_spec.rb, spec/templates/examples/class001.html,
+  spec/templates/examples/class001.txt,
+  templates/default/class/html/subclasses.erb,
+  templates/default/class/setup.rb, templates/default/class/text/setup.rb,
+  templates/default/class/text/subclasses.erb: Add subclasses to templates
+
+  * lib/yard/code_objects/namespace_object.rb,
+  lib/yard/parser/ruby/legacy/ruby_lex.rb, lib/yard/registry.rb: Fix invalid
+  object references
+
+  * .yardopts, docs/CODE_OBJECTS.markdown, docs/CodeObjects.md,
+  docs/FAQ.markdown, docs/FAQ.md, docs/GENERATORS.markdown,
+  docs/GETTING_STARTED.markdown, docs/GLOSSARY.markdown, docs/Generators.md,
+  docs/GettingStarted.md, docs/Glossary.md, docs/HANDLERS.markdown,
+  docs/Handlers.md, docs/OVERVIEW.markdown, docs/Overview.md,
+  docs/PARSER.markdown, docs/Parser.md, docs/TAGS.markdown, docs/Tags.md,
+  docs/WHATSNEW.markdown, docs/WhatsNew.md: Rename extra files
+
+  * lib/yard/serializers/stdout_serializer.rb: Documentation for
+  StdoutSerializer
+
+  * lib/yard/serializers/process_serializer.rb: Documentation for
+  ProcessSerializer
+
+  * lib/yard/serializers/file_system_serializer.rb: Documentation for
+  FileSystemSerializer
+
+  * lib/yard/serializers/base.rb: Documentation for Serializers::Base
+
+  * templates/default/docstring/html/abstract.erb,
+  templates/default/docstring/html/deprecated.erb: Make sure
+  abstract/deprecated templates are htmlified
+
+  * lib/yard/tags/library.rb, spec/templates/class_spec.rb,
+  spec/templates/examples/class001.html, spec/templates/examples/class001.txt,
+  spec/templates/examples/tag001.txt, spec/templates/tag_spec.rb,
+  templates/default/docstring/html/abstract.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text/abstract.erb,
+  templates/default/docstring/text/deprecated.erb: Add @abstract tag
+
+  * lib/yard/rake/yardoc_task.rb: Documentation for YardocTask
+
+  * spec/templates/examples/class001.html, spec/templates/examples/tag001.txt:
+  Fix template specs
+
+  * templates/default/tags/setup.rb: Fix showing of yieldparam type/name info
+
+  * templates/default/tags/html/tag.erb: Fix showing of default arguments for
+  param tag
+
+  * lib/yard/cli/yardoc.rb: Documentation for Yardoc
+
+  * templates/default/fulldoc/html/css/style.css: Update highlight style
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/module/html/methodmissing.erb: Update style for method
+  missing notification
+
+  * lib/yard/code_objects/method_object.rb: Documentation for MethodObject
+
+  * lib/yard/code_objects/extended_method_object.rb: Documentation for
+  ExtendedMethodObject
+
+  * lib/yard/code_objects/namespace_object.rb: Documentation for
+  NamespaceObject
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add return tag for #initialize if not
+  specified
+
+  * templates/default/module/setup.rb: Move method missing section above
+  attribute details
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb: Fix
+  @option tags in various files
+
+  * lib/yard/code_objects/class_object.rb: Documentation for ClassObject
+
+  * lib/yard/code_objects/proxy.rb: Documentation for Proxy
+
+  * spec/templates/examples/tag001.txt: Correct tag spec
+
+  * templates/default/tags/setup.rb: Reorder tags
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix parsing bug where 'def class' would screw up parsing of class
+
+2009-10-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/root_object.rb: Documentation for RootObject
+
+  * lib/yard/code_objects/module_object.rb: Documentation for ModuleObject
+
+  * lib/yard/code_objects/constant_object.rb: Documentation for ConstantObject
+
+  * lib/yard/code_objects/class_variable_object.rb: Documentation for
+  ClassVariableObject
+
+  * lib/yard/code_objects/base.rb: Improve CodeObjects::Base documentation
+
+  * lib/yard/code_objects/base.rb: Documentation for CodeObjects::Base
+
+  * spec/templates/examples/tag001.txt: Fix broken tag test
+
+  * lib/yard/registry.rb: Documentation for Registry
+
+  * lib/yard/logging.rb: Documentation for Logger
+
+  * Rakefile: Don't generate rdocs for rake install
+
+  * templates/default/tags/setup.rb: @yield tag shouldn't show types or names
+
+2009-10-20  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html,
+  spec/templates/examples/module001.html: Fix specs
+
+  * lib/yard/templates/helpers/html_helper.rb: Change signature to properly
+  encode type value inside a link
+
+  * lib/yard/core_ext/file.rb: Documentation for File
+
+  * templates/default/tags/html/overload.erb,
+  templates/default/tags/text/overload.erb: One overload should not show
+  overloads header
+
+  * templates/default/tags/html/example.erb: Multiple examples should look the
+  same as one
+
+  * lib/yard/core_ext/symbol_hash.rb: Documentation for SymbolHash
+
+  * lib/yard/core_ext/string.rb: Document String class
+
+  * lib/yard/core_ext/module.rb: Documentation for Module
+
+  * lib/yard/core_ext/array.rb: Documentation for Array
+
+  * lib/yard/globals.rb: Documentation for globals
+
+  * lib/yard/docstring.rb: Documentation for Docstring
+
+  * lib/yard/cli/yard_graph.rb: Documentation for YardGraph
+
+  * lib/yard/autoload.rb: Basic documentation for modules
+
+  * lib/yard/rake/yardoc_task.rb: Change default task name to yard. You know,
+  "rake the yard"
+
+  * .gitignore, spec/templates/examples/module001.dot,
+  spec/templates/module_spec.rb: Add dot format template spec
+
+  * templates/default/method/text/header.erb,
+  templates/default/method/text/method_signature.erb,
+  templates/default/method/text/setup.rb,
+  templates/default/method_details/text/header.erb,
+  .../method_details/text/method_signature.erb,
+  templates/default/method_details/text/setup.rb: Move text method templates to
+  method_details
+
+2009-10-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/base_helper.rb: Add format_source to base helper
+
+  * templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/setup.rb, templates/default/layout/setup.rb,
+  templates/default/tags/text/setup.rb: Ruby18 compatibility
+
+  * lib/yard/templates/helpers/markup_helper.rb: 1.8 requires rubygems require
+
+  * spec/templates/class_spec.rb, spec/templates/engine_spec.rb,
+  spec/templates/module_spec.rb, spec/templates/tag_spec.rb: Add full path to
+  spec names (documentability)
+
+  * lib/yard/templates/engine.rb, lib/yard/templates/template.rb,
+  spec/templates/engine_spec.rb, spec/templates/method_spec.rb,
+  spec/templates/template_spec.rb, templates/default/class/dot/setup.rb,
+  templates/default/class/html/setup.rb, templates/default/class/setup.rb,
+  templates/default/class/text/setup.rb, templates/default/docstring/setup.rb,
+  templates/default/fulldoc/html/setup.rb,
+  templates/default/layout/dot/setup.rb,
+  templates/default/layout/html/setup.rb, templates/default/layout/setup.rb,
+  templates/default/method/setup.rb, templates/default/method/text/setup.rb,
+  templates/default/method_details/setup.rb,
+  templates/default/module/dot/setup.rb, templates/default/module/setup.rb,
+  templates/default/module/text/setup.rb, templates/default/root/dot/setup.rb,
+  templates/default/tags/setup.rb: Disable relative template path inclusion via
+  T() (relative paths don't work well with overriden template paths)
+
+  * lib/yard/cli/yardoc.rb: Fix -p switch
+
+  * lib/yard/cli/yard_graph.rb, lib/yard/templates/helpers/uml_helper.rb,
+  lib/yard/templates/template.rb, spec/templates/module_spec.rb,
+  templates/default/class/dot/setup.rb,
+  templates/default/class/dot/superklass.erb,
+  templates/default/layout/dot/header.erb,
+  templates/default/layout/dot/setup.rb,
+  templates/default/module/dot/child.erb,
+  templates/default/module/dot/dependencies.erb,
+  templates/default/module/dot/header.erb,
+  templates/default/module/dot/info.erb, templates/default/module/dot/setup.rb,
+  templates/default/root/dot/child.erb, templates/default/root/dot/setup.rb:
+  Add yard-graph templates
+
+2009-10-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/rubygems_plugin.rb: Safely load gem plugin. Avoid stackoverflow if
+  other versions of YARD are present.
+
+  * lib/yard/templates/template.rb: Fix nil exception
+
+  * lib/rubygems_plugin.rb: Fix error handling for gem plugin
+
+  * spec/templates/examples/tag001.txt, templates/default/tags/text/option.erb:
+  Add option tag to text format template
+
+  * spec/templates/examples/tag001.txt, spec/templates/tag_spec.rb,
+  templates/default/docstring/text/text.erb,
+  templates/default/tags/text/example.erb,
+  templates/default/tags/text/setup.rb: Fix example tags for text format
+  templates
+
+  * lib/yard/templates/helpers/text_helper.rb,
+  spec/templates/examples/class001.txt, spec/templates/examples/method001.txt,
+  spec/templates/examples/method002.txt, spec/templates/examples/method003.txt,
+  spec/templates/examples/tag001.txt, spec/templates/tag_spec.rb,
+  templates/default/docstring/text/index.erb,
+  templates/default/method/text/setup.rb, templates/default/tags/setup.rb,
+  templates/default/tags/text/overload.erb,
+  templates/default/tags/text/see.erb, templates/default/tags/text/tag.erb: Add
+  text templates for tags
+
+  * bin/yri, lib/yard/templates/helpers/text_helper.rb,
+  spec/templates/examples/class001.txt, spec/templates/examples/method001.txt,
+  spec/templates/examples/method002.txt, spec/templates/examples/method003.txt,
+  spec/templates/examples/module001.txt, templates/default/class/text/setup.rb,
+  templates/default/docstring/text/deprecated.erb,
+  templates/default/docstring/text/text.erb,
+  templates/default/layout/html/setup.rb,
+  templates/default/method/text/header.erb,
+  templates/default/method/text/method_signature.erb,
+  templates/default/method/text/setup.rb,
+  templates/default/module/text/children.erb,
+  templates/default/module/text/header.erb,
+  templates/default/module/text/setup.rb,
+  templates/default/tags/text/example.erb, templates/default/tags/text/tag.erb:
+  Finalize first version of templates in text format
+
+  * lib/yard/autoload.rb, lib/yard/templates/helpers/text_helper.rb,
+  lib/yard/templates/template.rb, spec/templates/class_spec.rb,
+  spec/templates/method_spec.rb, spec/templates/module_spec.rb,
+  spec/templates/spec_helper.rb, templates/default/class/text/setup.rb,
+  templates/default/docstring/text/deprecated.erb,
+  templates/default/docstring/text/index.erb,
+  templates/default/docstring/text/text.erb,
+  templates/default/method/text/header.erb,
+  templates/default/module/text/class_meths_list.erb,
+  templates/default/module/text/extends.erb,
+  templates/default/module/text/header.erb,
+  templates/default/module/text/includes.erb,
+  .../default/module/text/instance_meths_list.erb,
+  templates/default/module/text/setup.rb,
+  templates/default/tags/text/example.erb,
+  templates/default/tags/text/index.erb, templates/default/tags/text/tag.erb:
+  Add text templates
+
+  * lib/yard/templates/engine.rb, lib/yard/templates/template.rb,
+  spec/templates/engine_spec.rb, spec/templates/template_spec.rb,
+  .../default/class/constructor_details.html.erb,
+  .../default/class/html/constructor_details.erb,
+  templates/default/class/html/setup.rb,
+  templates/default/docstring/deprecated.html.erb,
+  templates/default/docstring/html/deprecated.erb,
+  templates/default/docstring/html/index.erb,
+  templates/default/docstring/html/text.erb,
+  templates/default/docstring/index.html.erb,
+  templates/default/docstring/text.html.erb,
+  templates/default/fulldoc/css/common.css,
+  templates/default/fulldoc/css/full_list.css,
+  templates/default/fulldoc/css/style.css,
+  templates/default/fulldoc/full_list.html.erb,
+  templates/default/fulldoc/html/css/common.css,
+  templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/fulldoc/html/js/app.js,
+  templates/default/fulldoc/html/js/full_list.js,
+  templates/default/fulldoc/html/js/jquery.js,
+  templates/default/fulldoc/html/setup.rb, templates/default/fulldoc/js/app.js,
+  templates/default/fulldoc/js/full_list.js,
+  templates/default/fulldoc/js/jquery.js, templates/default/fulldoc/setup.rb,
+  templates/default/layout/breadcrumb.html.erb,
+  templates/default/layout/glossary.html.erb,
+  templates/default/layout/header.html.erb,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/glossary.erb,
+  templates/default/layout/html/header.erb,
+  templates/default/method/header.html.erb,
+  templates/default/method/html/header.erb,
+  templates/default/method_details/header.html.erb,
+  templates/default/method_details/html/header.erb,
+  .../method_details/html/method_signature.erb,
+  templates/default/method_details/html/source.erb,
+  .../method_details/method_signature.html.erb,
+  templates/default/method_details/source.html.erb,
+  .../default/module/attribute_details.html.erb,
+  .../default/module/attribute_summary.html.erb,
+  templates/default/module/box_info.html.erb,
+  templates/default/module/children.html.erb,
+  templates/default/module/constant_summary.html.erb,
+  templates/default/module/defines.html.erb,
+  templates/default/module/header.html.erb,
+  .../default/module/html/attribute_details.erb,
+  .../default/module/html/attribute_summary.erb,
+  templates/default/module/html/box_info.erb,
+  templates/default/module/html/children.erb,
+  templates/default/module/html/constant_summary.erb,
+  templates/default/module/html/defines.erb,
+  templates/default/module/html/header.erb,
+  .../default/module/html/inherited_methods.erb,
+  .../default/module/html/method_details_list.erb,
+  templates/default/module/html/method_summary.erb,
+  templates/default/module/html/methodmissing.erb,
+  templates/default/module/html/pre_docstring.erb,
+  .../default/module/inherited_methods.html.erb,
+  .../default/module/method_details_list.html.erb,
+  templates/default/module/method_summary.html.erb,
+  templates/default/module/methodmissing.html.erb,
+  templates/default/module/pre_docstring.html.erb,
+  templates/default/tags/example.html.erb,
+  templates/default/tags/html/example.erb,
+  templates/default/tags/html/index.erb,
+  templates/default/tags/html/option.erb,
+  templates/default/tags/html/overload.erb,
+  templates/default/tags/html/see.erb, templates/default/tags/html/tag.erb,
+  templates/default/tags/index.html.erb,
+  templates/default/tags/option.html.erb,
+  templates/default/tags/overload.html.erb,
+  templates/default/tags/see.html.erb, templates/default/tags/tag.html.erb:
+  Move files into subdirectory using format as overridable template
+
+  * lib/yard/templates/template.rb, spec/templates/template_spec.rb: Always
+  include parent directory as template
+
+2009-10-17  Loren Segal <lsegal@soen.ca>
+
+  * spec/parser/ruby/ast_node_spec.rb: Update pretty print to test docstring
+
+  * spec/parser/ruby/ast_node_spec.rb: Test pretty print
+
+  * Rakefile, lib/yard/autoload.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb,
+  .../helpers/html_syntax_highlight_helper_spec.rb: Separate Ruby1.8
+  HtmlSyntaxHighlightHelper from 1.9 and add specs
+
+  * spec/templates/examples/module001.html,
+  templates/default/module/box_info.html.erb,
+  templates/default/module/setup.rb: Convert hashes to associative arrays (1.8
+  does not support ordered hashes)
+
+  * .../helpers/html_syntax_highlight_helper.rb, spec/templates/class_spec.rb,
+  spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/module001.html, spec/templates/method_spec.rb,
+  spec/templates/module_spec.rb: Add no-highlight option to highlight helper
+  and disable highlighting in specs (implementation differs per ruby version,
+  too hard to test in templates)
+
+  * templates/default/module/children.html.erb,
+  .../default/module/inherited_methods.html.erb,
+  templates/default/module/setup.rb: Backport some code for Ruby 1.8 support
+
+  * spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html, templates/default/tags/setup.rb: Fix
+  method overloads to show docstring (use proper subsection yielding)
+
+  * lib/yard/templates/template.rb, spec/templates/template_spec.rb: Add
+  support for arbitrary subsection yielding
+
+  * templates/default/tags/setup.rb: Move overloads below examples
+
+  * spec/templates/template_spec.rb: Add specs for subsection
+
+  * spec/templates/template_spec.rb: Add specs for #yield, #yieldall
+
+  * templates/default/layout/setup.rb: Use rdoc if no extension is specified
+
+  * lib/yard/templates/helpers/base_helper.rb: Remove unused methods from
+  BaseHelper
+
+  * lib/yard/templates/template.rb: Make sure run never appends nil value
+
+  * spec/core_ext/array_spec.rb: Add Array specs
+
+  * spec/templates/helpers/base_helper_spec.rb: Add specs for BaseHelper
+
+  * lib/yard/templates/helpers/base_helper.rb: Remove unused methods
+
+  * spec/core_ext/module_spec.rb: Add module specs
+
+  * spec/templates/template_spec.rb: Tests for .is_a?, #add_options,
+  #render_section, #run
+
+  * spec/templates/template_spec.rb: Add tests for extra_includes, #T and #init
+
+  * lib/yard/templates/template.rb: Move render_section to private
+
+  * spec/templates/template_spec.rb: Add tests for Template#file
+
+  * spec/templates/template_spec.rb: Add tests for Template.find_file
+
+  * spec/templates/template_spec.rb: Add test for Template.T
+
+  * spec/templates/template_spec.rb: Add test for Template.load_setup_rb
+
+  * spec/templates/template_spec.rb: Add tests for
+  YARD::Templates::Template.full_paths
+
+  * spec/templates/helpers/base_helper_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Re-add removed generator helper
+  specs as template helpers
+
+2009-10-16  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/layout/setup.rb: If string is passed to layout template,
+  just yield that
+
+  * lib/yard/templates/template.rb: Add extension point to include extra
+  modules for each new template
+
+  * lib/yard/templates/helpers/module_helper.rb: Add module helper file
+
+  * spec/templates/class_spec.rb: Fix verbose test
+
+  * lib/yard/templates/engine.rb, lib/yard/templates/template.rb,
+  spec/templates/engine_spec.rb, spec/templates/spec_helper.rb: Add full_paths
+  to Template and rename find_template_path to find_template_paths
+
+  * lib/yard/autoload.rb, templates/default/fulldoc/setup.rb,
+  templates/default/module/setup.rb: Move prune_listing to MethodHelper as
+  prune_method_listing
+
+  * templates/default/fulldoc/js/autocomplete.js,
+  templates/default/fulldoc/setup.rb, templates/default/layout/header.html.erb:
+  Remove autocomplete.js
+
+  * lib/yard/templates/engine.rb: Add serialize to options so it can be called
+  from object.format
+
+  * lib/yard/templates/engine.rb: Only serialize if serialize is marked true
+
+  * templates/default/tags/tag.html.erb: Don't show dash in tags if there's no
+  text
+
+  * templates/default/module/box_info.html.erb: Don't show inheritance box if
+  there is no superclass, also link Object
+
+  * lib/yard/templates/helpers/html_helper.rb: Don't link nil objects
+
+  * lib/yard/templates/helpers/html_helper.rb: Support RDoc's link markup
+
+  * lib/yard/templates/helpers/html_helper.rb: Don't htmlify nil data
+
+  * .../default/module/attribute_details.html.erb: Fix issue with writeonly
+  attributes
+
+  * templates/default/fulldoc/setup.rb: Allow options[:readme] to be nil
+
+  * templates/default/fulldoc/css/common.css,
+  templates/default/fulldoc/full_list.html.erb,
+  templates/default/fulldoc/setup.rb, templates/default/layout/header.html.erb:
+  Re-add common.css
+
+  * templates/default/fulldoc/css/style.css, templates/default/layout/setup.rb:
+  Update ruby code css
+
+  * templates/default/fulldoc/css/full_list.css,
+  templates/default/fulldoc/css/style.css: Fix deprecated css
+
+  * spec/templates/class_spec.rb, spec/templates/examples/class001.html,
+  templates/default/fulldoc/css/style.css,
+  .../default/module/attribute_summary.html.erb,
+  templates/default/module/method_summary.html.erb: Show deprecated message in
+  summary list
+
+  * templates/default/layout/index.html.erb: Remove index template
+
+  * spec/templates/class_spec.rb, spec/templates/examples/method001.html,
+  spec/templates/method_spec.rb, templates/default/tags/setup.rb: Add missing
+  raise tag info
+
+  * spec/templates/class_spec.rb, spec/templates/examples/class001.html,
+  spec/templates/examples/module001.html,
+  templates/default/fulldoc/css/full_list.css,
+  templates/default/fulldoc/css/style.css,
+  templates/default/fulldoc/full_list.html.erb,
+  templates/default/fulldoc/js/app.js,
+  templates/default/fulldoc/js/full_list.js,
+  .../default/module/attribute_summary.html.erb,
+  templates/default/module/constant_summary.html.erb,
+  templates/default/module/method_summary.html.erb: Add css for deprecated
+  methods in method listings
+
+  * spec/cli/yardoc_spec.rb: Fix broken spec due to api change
+
+  * templates/default/fulldoc/css/full_list.css,
+  templates/default/fulldoc/js/full_list.js: Inform user if no results were
+  found in list search, and gain focus immediately when search frame loads
+
+  * templates/default/layout/breadcrumb.html.erb,
+  templates/default/layout/glossary.html.erb: Rename index to glossary in
+  templates
+
+  * templates/default/fulldoc/css/full_list.css,
+  templates/default/fulldoc/css/style.css,
+  templates/default/fulldoc/full_list.html.erb,
+  templates/default/fulldoc/js/app.js,
+  templates/default/fulldoc/js/full_list.js,
+  templates/default/fulldoc/setup.rb,
+  templates/default/layout/breadcrumb.html.erb,
+  templates/default/layout/glossary.html.erb,
+  templates/default/layout/header.html.erb, templates/default/layout/setup.rb:
+  Add method/namespace listing, files and move index to glossary
+
+  * templates/default/module/setup.rb: Use run_verifier helper in template
+
+  * lib/yard/templates/helpers/html_helper.rb: Change file links to prefix name
+  with file.
+
+  * lib/yard/templates/helpers/base_helper.rb: Add helper to prune list using
+  verifier query
+
+  * lib/yard/cli/yardoc.rb: Add README.* as readme if not specified and it
+  exists
+
+  * lib/yard/templates/helpers/html_helper.rb: Registry.root should use 'Top
+  Level Namespace' as default linkify title
+
+  * Rakefile: Ignore files from RCov stats
+
+2009-10-15  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/class_spec.rb, spec/templates/examples/class001.html,
+  .../default/class/constructor_details.html.erb: Fix missing constructor
+  section
+
+  * templates/default/layout/header.html.erb: Fix erb formatting issue
+
+  * spec/templates/class_spec.rb, spec/templates/engine_spec.rb,
+  spec/templates/examples/module001.html, spec/templates/method_spec.rb,
+  spec/templates/module_spec.rb: Add specs for module template
+
+  * lib/yard/templates/template.rb, spec/code_objects/base_spec.rb,
+  spec/templates/engine_spec.rb, spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html, spec/templates/spec_helper.rb,
+  templates/default/module/box_info.html.erb,
+  templates/default/module/setup.rb, templates/default/tags/see.html.erb,
+  templates/default/tags/tag.html.erb: Fix broken tests
+
+  * lib/yard/templates/engine.rb, spec/templates/engine_spec.rb: Add specs for
+  Templates::Engine.generate
+
+  * lib/yard/templates/engine.rb, spec/templates/class_spec.rb,
+  spec/templates/engine_spec.rb, spec/templates/method_spec.rb: Add specs for
+  Templates::Engine
+
+  * templates/default/tags/setup.rb: Add other tags
+
+  * lib/yard/tags/library.rb: Add @private tag to ignore objects via queries
+
+  * lib/yard/cli/yardoc.rb, templates/default/layout/setup.rb,
+  templates/default/module/setup.rb: Add --query option to narrow down objects
+  by custom Ruby based queries
+
+  * lib/yard/autoload.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/code_objects/base.rb, lib/yard/core_ext/array.rb,
+  lib/yard/generators/attributes_generator.rb, lib/yard/generators/base.rb,
+  lib/yard/generators/class_generator.rb,
+  lib/yard/generators/constants_generator.rb,
+  lib/yard/generators/constructor_generator.rb,
+  lib/yard/generators/deprecated_generator.rb,
+  lib/yard/generators/docstring_generator.rb,
+  lib/yard/generators/full_doc_generator.rb,
+  lib/yard/generators/helpers/base_helper.rb,
+  lib/yard/generators/helpers/filter_helper.rb,
+  lib/yard/generators/helpers/html_helper.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  lib/yard/generators/helpers/markup_helper.rb,
+  lib/yard/generators/helpers/method_helper.rb,
+  lib/yard/generators/helpers/uml_helper.rb,
+  lib/yard/generators/inheritance_generator.rb,
+  lib/yard/generators/method_details_generator.rb,
+  lib/yard/generators/method_generator.rb,
+  lib/yard/generators/method_listing_generator.rb,
+  lib/yard/generators/method_missing_generator.rb,
+  lib/yard/generators/method_signature_generator.rb,
+  lib/yard/generators/method_summary_generator.rb,
+  lib/yard/generators/mixins_generator.rb,
+  lib/yard/generators/module_generator.rb,
+  lib/yard/generators/overloads_generator.rb,
+  lib/yard/generators/quick_doc_generator.rb,
+  lib/yard/generators/root_generator.rb,
+  lib/yard/generators/source_generator.rb,
+  lib/yard/generators/tags_generator.rb, lib/yard/generators/uml_generator.rb,
+  lib/yard/generators/visibility_group_generator.rb,
+  lib/yard/tags/overload_tag.rb, lib/yard/templates/engine.rb,
+  lib/yard/templates/helpers/base_helper.rb,
+  lib/yard/templates/helpers/filter_helper.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb,
+  lib/yard/templates/helpers/method_helper.rb,
+  lib/yard/templates/helpers/uml_helper.rb, lib/yard/templates/template.rb,
+  lib/yard/templating.rb, spec/generators/base_spec.rb,
+  spec/generators/full_doc_generator_spec.rb,
+  spec/generators/helpers/base_helper_spec.rb,
+  spec/generators/helpers/html_helper_spec.rb,
+  spec/generators/helpers/markup_helper_spec.rb,
+  spec/generators/quick_doc_generator_spec.rb, spec/templates/class_spec.rb,
+  spec/templates/engine_spec.rb, spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html, spec/templates/method_spec.rb,
+  spec/templates/spec_helper.rb, spec/templating/class_spec.rb,
+  spec/templating/examples/class001.html,
+  spec/templating/examples/method001.html,
+  spec/templating/examples/method002.html,
+  spec/templating/examples/method003.html, spec/templating/method_spec.rb,
+  spec/templating/spec_helper.rb, spec/templating/templates_spec.rb,
+  templates/default/class/constructor.html.erb,
+  .../default/class/constructor_details.html.erb,
+  templates/default/class/inheritance.html.erb,
+  templates/default/class/methodmissing.html.erb,
+  templates/default/class/setup.rb,
+  templates/default/docstring/deprecated.html.erb,
+  templates/default/docstring/index.html.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text.html.erb,
+  templates/default/fulldoc/css/style.css, templates/default/fulldoc/js/app.js,
+  templates/default/fulldoc/js/autocomplete.js,
+  templates/default/fulldoc/js/jquery.js, templates/default/fulldoc/setup.rb,
+  templates/default/layout/breadcrumb.html.erb,
+  templates/default/layout/header.html.erb,
+  templates/default/layout/index.html.erb, templates/default/layout/setup.rb,
+  templates/default/method/aliases.html.erb,
+  templates/default/method/header.html.erb,
+  templates/default/method/overload/header.html.erb,
+  templates/default/method/overload/setup.rb,
+  .../default/method/overload/signature.html.erb,
+  templates/default/method/setup.rb,
+  templates/default/method/signature.html.erb,
+  templates/default/method/source.html.erb,
+  templates/default/method/title.html.erb,
+  templates/default/method_details/details.html.erb,
+  templates/default/method_details/header.html.erb,
+  .../method_details/method_signature.html.erb,
+  templates/default/method_details/setup.rb,
+  templates/default/method_details/source.html.erb,
+  templates/default/method_summary/header.html.erb,
+  templates/default/method_summary/setup.rb,
+  templates/default/method_summary/summary.html.erb,
+  .../default/module/attribute_details.html.erb,
+  .../default/module/attribute_summary.html.erb,
+  templates/default/module/box_info.html.erb,
+  templates/default/module/children.html.erb,
+  templates/default/module/constant_summary.html.erb,
+  templates/default/module/defines.html.erb,
+  templates/default/module/files.html.erb,
+  templates/default/module/header.html.erb,
+  .../default/module/inherited_methods.html.erb,
+  .../default/module/method_details_list.html.erb,
+  templates/default/module/method_summary.html.erb,
+  templates/default/module/methodmissing.html.erb,
+  templates/default/module/mixins.html.erb,
+  templates/default/module/pre_docstring.html.erb,
+  templates/default/module/setup.rb, templates/default/module/title.html.erb,
+  templates/default/setup.rb, templates/default/tags/_tags.html.erb,
+  templates/default/tags/example.html.erb,
+  templates/default/tags/header.html.erb,
+  templates/default/tags/index.html.erb,
+  templates/default/tags/option.html.erb,
+  templates/default/tags/overload.html.erb,
+  templates/default/tags/param.html.erb, templates/default/tags/see.html.erb,
+  templates/default/tags/setup.rb, templates/default/tags/tag.html.erb,
+  templates/default/tags/todo.html.erb,
+  templates2/default/attributes/html/header.erb,
+  templates2/default/attributes/text/header.erb,
+  templates2/default/class/html/header.erb,
+  templates2/default/constants/html/constants.erb,
+  templates2/default/constants/html/header.erb,
+  templates2/default/constants/html/included.erb,
+  templates2/default/constants/html/inherited.erb,
+  templates2/default/constructor/html/header.erb,
+  templates2/default/deprecated/html/main.erb,
+  templates2/default/deprecated/text/main.erb,
+  templates2/default/docstring/html/main.erb,
+  templates2/default/docstring/text/main.erb,
+  templates2/default/fulldoc/html/all_files.erb,
+  templates2/default/fulldoc/html/all_methods.erb,
+  templates2/default/fulldoc/html/all_namespaces.erb,
+  templates2/default/fulldoc/html/app.js,
+  templates2/default/fulldoc/html/custom.css,
+  templates2/default/fulldoc/html/file.erb,
+  templates2/default/fulldoc/html/footer.erb,
+  templates2/default/fulldoc/html/header.erb,
+  templates2/default/fulldoc/html/html_head.erb,
+  templates2/default/fulldoc/html/index.erb,
+  templates2/default/fulldoc/html/jquery.js,
+  templates2/default/fulldoc/html/style.css,
+  .../default/fulldoc/html/syntax_highlight.css,
+  templates2/default/inheritance/html/header.erb,
+  templates2/default/inheritance/text/header.erb,
+  templates2/default/method/html/aliases.erb,
+  templates2/default/method/html/header.erb,
+  templates2/default/method/html/title.erb,
+  templates2/default/method/text/header.erb,
+  templates2/default/method/text/title.erb,
+  templates2/default/methoddetails/html/header.erb,
+  .../default/methoddetails/html/method_header.erb,
+  templates2/default/methodmissing/html/header.erb,
+  templates2/default/methodsignature/html/main.erb,
+  templates2/default/methodsignature/text/main.erb,
+  templates2/default/methodsummary/html/header.erb,
+  templates2/default/methodsummary/html/included.erb,
+  .../default/methodsummary/html/inherited.erb,
+  templates2/default/methodsummary/html/summary.erb,
+  templates2/default/methodsummary/text/header.erb,
+  templates2/default/methodsummary/text/summary.erb,
+  templates2/default/mixins/html/header.erb,
+  templates2/default/module/html/header.erb,
+  templates2/default/overloads/html/header.erb,
+  templates2/default/overloads/text/header.erb,
+  templates2/default/quickdoc/html/header.erb,
+  templates2/default/quickdoc/text/header.erb,
+  templates2/default/root/html/header.erb,
+  templates2/default/source/html/main.erb,
+  templates2/default/source/text/main.erb,
+  templates2/default/tags/html/example.erb,
+  templates2/default/tags/html/header.erb,
+  templates2/default/tags/html/option.erb,
+  templates2/default/tags/html/param.erb, templates2/default/tags/html/see.erb,
+  templates2/default/tags/html/tags.erb, templates2/default/tags/html/todo.erb,
+  templates2/default/tags/text/example.erb,
+  templates2/default/tags/text/header.erb,
+  templates2/default/tags/text/option.erb,
+  templates2/default/tags/text/param.erb, templates2/default/tags/text/see.erb,
+  templates2/default/tags/text/tags.erb, templates2/default/uml/dot/child.erb,
+  templates2/default/uml/dot/dependencies.erb,
+  templates2/default/uml/dot/header.erb, templates2/default/uml/dot/info.erb,
+  templates2/default/uml/dot/subgraph.erb,
+  templates2/default/uml/dot/superclasses.erb,
+  templates2/default/uml/dot/unknown.erb,
+  templates2/default/uml/dot/unknown_child.erb,
+  templates2/default/visibilitygroup/html/header.erb,
+  templates2/javadoc/attributes/html/header.erb,
+  templates2/javadoc/class/html/header.erb,
+  templates2/javadoc/constants/html/constants.erb,
+  templates2/javadoc/constants/html/header.erb,
+  templates2/javadoc/constants/html/included.erb,
+  templates2/javadoc/constants/html/inherited.erb,
+  templates2/javadoc/constructor/html/header.erb,
+  templates2/javadoc/docstring/html/main.erb,
+  templates2/javadoc/fulldoc/html/all_methods.erb,
+  templates2/javadoc/fulldoc/html/all_namespaces.erb,
+  templates2/javadoc/fulldoc/html/app.js,
+  templates2/javadoc/fulldoc/html/header.erb,
+  templates2/javadoc/fulldoc/html/html_head.erb,
+  templates2/javadoc/fulldoc/html/index.erb,
+  templates2/javadoc/fulldoc/html/jquery.js,
+  templates2/javadoc/fulldoc/html/readme.erb,
+  templates2/javadoc/fulldoc/html/style.css,
+  .../javadoc/fulldoc/html/syntax_highlight.css,
+  templates2/javadoc/inheritance/html/header.erb,
+  templates2/javadoc/method/html/aliases.erb,
+  templates2/javadoc/method/html/header.erb,
+  templates2/javadoc/method/html/title.erb,
+  templates2/javadoc/methoddetails/html/header.erb,
+  templates2/javadoc/methodmissing/html/header.erb,
+  templates2/javadoc/methodsignature/html/main.erb,
+  templates2/javadoc/methodsummary/html/header.erb,
+  templates2/javadoc/methodsummary/html/included.erb,
+  .../javadoc/methodsummary/html/inherited.erb,
+  templates2/javadoc/methodsummary/html/summary.erb,
+  templates2/javadoc/mixins/html/header.erb,
+  templates2/javadoc/module/html/header.erb,
+  templates2/javadoc/source/html/main.erb,
+  templates2/javadoc/tags/html/header.erb,
+  templates2/javadoc/tags/html/see.erb, templates2/javadoc/tags/html/tags.erb,
+  templates2/javadoc/visibilitygroup/html/header.erb: Update tadpole templates
+
+2009-10-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/generators/allocator_generator.rb,
+  lib/yard/generators/class_generator.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb,
+  templates/default/allocator/html/header.erb: Add templates for Klass.new
+  method
+
+2009-09-08  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/marshal_vs_dbm.rb, lib/yard/registry.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  spec/serializers/file_system_serializer_spec.rb: Write binary files in a
+  Windows friendly way
+
+2009-09-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Fix AST for methods without rescue
+  block
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix support for rescue blocks in Ruby 1.9
+
+2009-08-24  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  lib/yard/generators/helpers/markup_helper.rb: Better compatibility support
+  for various version of RDoc and Ruby environments.
+
+2009-08-22  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/tags/html/example.erb: Oops, markup titles for multiple
+  examples as well.
+
+  * templates/default/tags/html/example.erb: Markup example titles
+
+  * .../helpers/html_syntax_highlight_helper.rb: Syntax highlighting should
+  escape raw source if highlighting fails.
+
+2009-08-20  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb: Fix documentation for
+  CodeObjects::Base#add_file
+
+2009-08-19  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/class_object_spec.rb: Refactor class_object_spec.rb
+
+  * lib/yard/code_objects/class_object.rb,
+  spec/code_objects/class_object_spec.rb: Fix bug in
+  ClassObject#inheritance_tree where calling with include_mods=true would
+  destructively modify mixin list
+
+  * spec/code_objects/module_object_spec.rb: Refactor module_object_spec.rb
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb,
+  spec/handlers/examples/mixin_handler_001.rb.txt,
+  spec/handlers/mixin_handler_spec.rb: Reset parent (@namespace) value on Proxy
+  if it resolves to an object successfully.  Closes gh-29
+
+2009-08-18  James Rosen <jrosen@mitre.org>
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: added support for mailto: links 
+
+2009-08-14  Loren Segal <lsegal@soen.ca>
+
+  * spec/templating/class_spec.rb, spec/templating/examples/class001.html,
+  templates/default/class/constructor.html.erb,
+  templates/default/class/methodmissing.html.erb,
+  templates/default/class/setup.rb, templates/default/method/overload/setup.rb,
+  templates/default/method/setup.rb, templates/default/method_summary/setup.rb:
+  Update class templates and fix up specs
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb: Legacy parser: remove \r in
+  less destructive manner.
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Ignore Windows newlines
+  (CRLF) in legacy parser
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Docstring#summary should
+  only stop at the first period outside of any parentheses or braces.
+
+  * spec/docstring_spec.rb: Refactor Docstring specs
+
+  * spec/templating/examples/method001.html,
+  spec/templating/examples/method002.html,
+  spec/templating/examples/method003.html, spec/templating/method_spec.rb,
+  spec/templating/spec_helper.rb: Refactor specs into separate example files
+
 2009-08-13  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, lib/yard.rb, yard.gemspec: Bump version to 0.2.3.5
@@ -93,6 +1307,319 @@
   * lib/yard/docstring.rb, spec/docstring_spec.rb: Fix bug where extra '.'s
   were appended to Docstring#summary
 
+2009-07-21  Loren Segal <lsegal@soen.ca>
+
+  * spec/templating/class_spec.rb, spec/templating/method_spec.rb,
+  templates/default/class/constructor.html.erb,
+  templates/default/class/inheritance.html.erb,
+  templates/default/class/methodmissing.html.erb,
+  templates/default/class/setup.rb, templates/default/docstring/setup.rb,
+  templates/default/method/header.html.erb, templates/default/method/setup.rb,
+  templates/default/method/source.html.erb,
+  templates/default/method_details/details.html.erb,
+  templates/default/method_details/header.html.erb,
+  templates/default/method_details/setup.rb,
+  templates/default/method_summary/header.html.erb,
+  templates/default/method_summary/setup.rb,
+  templates/default/method_summary/summary.html.erb,
+  templates/default/module/files.html.erb,
+  templates/default/module/header.html.erb,
+  templates/default/module/mixins.html.erb, templates/default/module/setup.rb,
+  templates/default/module/title.html.erb,
+  templates/default/object/header.html.erb, templates/default/object/setup.rb,
+  templates/default/setup.rb: Add templates and update specs
+
+  * lib/yard/templating.rb: Include generator helpers properly
+
+  * lib/yard/templating.rb: Don't override existing serializer
+
+2009-07-13  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/base_spec.rb: Fix broken spec in CodeObjects::Base#format
+
+  * lib/yard/generators/helpers/base_helper.rb, lib/yard/tags/overload_tag.rb,
+  spec/templating/method_spec.rb,
+  templates/default/docstring/deprecated.html.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text.html.erb,
+  templates/default/method/overload/header.html.erb,
+  templates/default/method/overload/setup.rb,
+  .../default/method/overload/signature.html.erb,
+  templates/default/method/setup.rb,
+  templates/default/method/signature.html.erb,
+  templates/default/tags/_tags.html.erb,
+  templates/default/tags/example.html.erb,
+  templates/default/tags/param.html.erb, templates/default/tags/see.html.erb,
+  templates/default/tags/setup.rb, templates/default/tags/todo.html.erb: Spec
+  method template with 1 and 2 overloads, get overloads working
+
+  * lib/yard/code_objects/base.rb, lib/yard/templating.rb,
+  spec/templating/class_spec.rb, spec/templating/method_spec.rb,
+  spec/templating/spec_helper.rb, spec/templating/templates_spec.rb,
+  templates/default/class/setup.rb,
+  templates/default/docstring/deprecated.html.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text.html.erb,
+  templates/default/html/method/aliases.erb,
+  templates/default/html/method/header.erb,
+  templates/default/html/method/setup.rb,
+  templates/default/html/method/signature.erb,
+  templates/default/html/method/title.erb,
+  templates/default/html/object/deprecated.erb,
+  templates/default/html/object/docstring.erb,
+  templates/default/html/object/setup.rb,
+  templates/default/method/aliases.html.erb, templates/default/method/setup.rb,
+  templates/default/method/signature.html.erb,
+  templates/default/method/source.html.erb,
+  templates/default/method/title.html.erb,
+  templates/default/object/header.html.erb, templates/default/object/setup.rb,
+  templates/default/tags/_tags.html.erb,
+  templates/default/tags/example.html.erb,
+  templates/default/tags/header.html.erb,
+  templates/default/tags/param.html.erb, templates/default/tags/see.html.erb,
+  templates/default/tags/setup.rb, templates/default/tags/todo.html.erb: Spec
+  class and method templates
+
+2009-07-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  lib/yard/templating.rb, spec/code_objects/base_spec.rb,
+  spec/templating/method_spec.rb, spec/templating/templates_spec.rb,
+  templates/default/html/setup.rb, templates2/default/setup.rb: Add Templates
+  module and move CodeObjects::Base#format logic to Templates.render, which
+  auto includes common helpers
+
+  * templates/default/attributes/html/header.erb,
+  templates/default/attributes/text/header.erb,
+  templates/default/class/html/header.erb,
+  templates/default/constants/html/constants.erb,
+  templates/default/constants/html/header.erb,
+  templates/default/constants/html/included.erb,
+  templates/default/constants/html/inherited.erb,
+  templates/default/constructor/html/header.erb,
+  templates/default/deprecated/html/main.erb,
+  templates/default/deprecated/text/main.erb,
+  templates/default/docstring/html/main.erb,
+  templates/default/docstring/text/main.erb,
+  templates/default/fulldoc/html/all_files.erb,
+  templates/default/fulldoc/html/all_methods.erb,
+  templates/default/fulldoc/html/all_namespaces.erb,
+  templates/default/fulldoc/html/app.js,
+  templates/default/fulldoc/html/custom.css,
+  templates/default/fulldoc/html/file.erb,
+  templates/default/fulldoc/html/footer.erb,
+  templates/default/fulldoc/html/header.erb,
+  templates/default/fulldoc/html/html_head.erb,
+  templates/default/fulldoc/html/index.erb,
+  templates/default/fulldoc/html/jquery.js,
+  templates/default/fulldoc/html/style.css,
+  .../default/fulldoc/html/syntax_highlight.css,
+  templates/default/inheritance/html/header.erb,
+  templates/default/inheritance/text/header.erb,
+  templates/default/method/html/aliases.erb,
+  templates/default/method/html/header.erb,
+  templates/default/method/html/title.erb,
+  templates/default/method/text/header.erb,
+  templates/default/method/text/title.erb,
+  templates/default/methoddetails/html/header.erb,
+  .../default/methoddetails/html/method_header.erb,
+  templates/default/methodmissing/html/header.erb,
+  templates/default/methodsignature/html/main.erb,
+  templates/default/methodsignature/text/main.erb,
+  templates/default/methodsummary/html/header.erb,
+  templates/default/methodsummary/html/included.erb,
+  templates/default/methodsummary/html/inherited.erb,
+  templates/default/methodsummary/html/summary.erb,
+  templates/default/methodsummary/text/header.erb,
+  templates/default/methodsummary/text/summary.erb,
+  templates/default/mixins/html/header.erb,
+  templates/default/module/html/header.erb,
+  templates/default/overloads/html/header.erb,
+  templates/default/overloads/text/header.erb,
+  templates/default/quickdoc/html/header.erb,
+  templates/default/quickdoc/text/header.erb,
+  templates/default/root/html/header.erb, templates/default/setup.rb,
+  templates/default/source/html/main.erb,
+  templates/default/source/text/main.erb,
+  templates/default/tags/html/example.erb,
+  templates/default/tags/html/header.erb,
+  templates/default/tags/html/option.erb,
+  templates/default/tags/html/param.erb, templates/default/tags/html/see.erb,
+  templates/default/tags/html/tags.erb, templates/default/tags/html/todo.erb,
+  templates/default/tags/text/example.erb,
+  templates/default/tags/text/header.erb,
+  templates/default/tags/text/option.erb,
+  templates/default/tags/text/param.erb, templates/default/tags/text/see.erb,
+  templates/default/tags/text/tags.erb, templates/default/uml/dot/child.erb,
+  templates/default/uml/dot/dependencies.erb,
+  templates/default/uml/dot/header.erb, templates/default/uml/dot/info.erb,
+  templates/default/uml/dot/subgraph.erb,
+  templates/default/uml/dot/superclasses.erb,
+  templates/default/uml/dot/unknown.erb,
+  templates/default/uml/dot/unknown_child.erb,
+  templates/default/visibilitygroup/html/header.erb,
+  templates/javadoc/attributes/html/header.erb,
+  templates/javadoc/class/html/header.erb,
+  templates/javadoc/constants/html/constants.erb,
+  templates/javadoc/constants/html/header.erb,
+  templates/javadoc/constants/html/included.erb,
+  templates/javadoc/constants/html/inherited.erb,
+  templates/javadoc/constructor/html/header.erb,
+  templates/javadoc/docstring/html/main.erb,
+  templates/javadoc/fulldoc/html/all_methods.erb,
+  templates/javadoc/fulldoc/html/all_namespaces.erb,
+  templates/javadoc/fulldoc/html/app.js,
+  templates/javadoc/fulldoc/html/header.erb,
+  templates/javadoc/fulldoc/html/html_head.erb,
+  templates/javadoc/fulldoc/html/index.erb,
+  templates/javadoc/fulldoc/html/jquery.js,
+  templates/javadoc/fulldoc/html/readme.erb,
+  templates/javadoc/fulldoc/html/style.css,
+  .../javadoc/fulldoc/html/syntax_highlight.css,
+  templates/javadoc/inheritance/html/header.erb,
+  templates/javadoc/method/html/aliases.erb,
+  templates/javadoc/method/html/header.erb,
+  templates/javadoc/method/html/title.erb,
+  templates/javadoc/methoddetails/html/header.erb,
+  templates/javadoc/methodmissing/html/header.erb,
+  templates/javadoc/methodsignature/html/main.erb,
+  templates/javadoc/methodsummary/html/header.erb,
+  templates/javadoc/methodsummary/html/included.erb,
+  templates/javadoc/methodsummary/html/inherited.erb,
+  templates/javadoc/methodsummary/html/summary.erb,
+  templates/javadoc/mixins/html/header.erb,
+  templates/javadoc/module/html/header.erb,
+  templates/javadoc/source/html/main.erb,
+  templates/javadoc/tags/html/header.erb, templates/javadoc/tags/html/see.erb,
+  templates/javadoc/tags/html/tags.erb,
+  templates/javadoc/visibilitygroup/html/header.erb,
+  templates2/default/attributes/html/header.erb,
+  templates2/default/attributes/text/header.erb,
+  templates2/default/class/html/header.erb,
+  templates2/default/constants/html/constants.erb,
+  templates2/default/constants/html/header.erb,
+  templates2/default/constants/html/included.erb,
+  templates2/default/constants/html/inherited.erb,
+  templates2/default/constructor/html/header.erb,
+  templates2/default/deprecated/html/main.erb,
+  templates2/default/deprecated/text/main.erb,
+  templates2/default/docstring/html/main.erb,
+  templates2/default/docstring/text/main.erb,
+  templates2/default/fulldoc/html/all_files.erb,
+  templates2/default/fulldoc/html/all_methods.erb,
+  templates2/default/fulldoc/html/all_namespaces.erb,
+  templates2/default/fulldoc/html/app.js,
+  templates2/default/fulldoc/html/custom.css,
+  templates2/default/fulldoc/html/file.erb,
+  templates2/default/fulldoc/html/footer.erb,
+  templates2/default/fulldoc/html/header.erb,
+  templates2/default/fulldoc/html/html_head.erb,
+  templates2/default/fulldoc/html/index.erb,
+  templates2/default/fulldoc/html/jquery.js,
+  templates2/default/fulldoc/html/style.css,
+  .../default/fulldoc/html/syntax_highlight.css,
+  templates2/default/inheritance/html/header.erb,
+  templates2/default/inheritance/text/header.erb,
+  templates2/default/method/html/aliases.erb,
+  templates2/default/method/html/header.erb,
+  templates2/default/method/html/title.erb,
+  templates2/default/method/text/header.erb,
+  templates2/default/method/text/title.erb,
+  templates2/default/methoddetails/html/header.erb,
+  .../default/methoddetails/html/method_header.erb,
+  templates2/default/methodmissing/html/header.erb,
+  templates2/default/methodsignature/html/main.erb,
+  templates2/default/methodsignature/text/main.erb,
+  templates2/default/methodsummary/html/header.erb,
+  templates2/default/methodsummary/html/included.erb,
+  .../default/methodsummary/html/inherited.erb,
+  templates2/default/methodsummary/html/summary.erb,
+  templates2/default/methodsummary/text/header.erb,
+  templates2/default/methodsummary/text/summary.erb,
+  templates2/default/mixins/html/header.erb,
+  templates2/default/module/html/header.erb,
+  templates2/default/overloads/html/header.erb,
+  templates2/default/overloads/text/header.erb,
+  templates2/default/quickdoc/html/header.erb,
+  templates2/default/quickdoc/text/header.erb,
+  templates2/default/root/html/header.erb, templates2/default/setup.rb,
+  templates2/default/source/html/main.erb,
+  templates2/default/source/text/main.erb,
+  templates2/default/tags/html/example.erb,
+  templates2/default/tags/html/header.erb,
+  templates2/default/tags/html/option.erb,
+  templates2/default/tags/html/param.erb, templates2/default/tags/html/see.erb,
+  templates2/default/tags/html/tags.erb, templates2/default/tags/html/todo.erb,
+  templates2/default/tags/text/example.erb,
+  templates2/default/tags/text/header.erb,
+  templates2/default/tags/text/option.erb,
+  templates2/default/tags/text/param.erb, templates2/default/tags/text/see.erb,
+  templates2/default/tags/text/tags.erb, templates2/default/uml/dot/child.erb,
+  templates2/default/uml/dot/dependencies.erb,
+  templates2/default/uml/dot/header.erb, templates2/default/uml/dot/info.erb,
+  templates2/default/uml/dot/subgraph.erb,
+  templates2/default/uml/dot/superclasses.erb,
+  templates2/default/uml/dot/unknown.erb,
+  templates2/default/uml/dot/unknown_child.erb,
+  templates2/default/visibilitygroup/html/header.erb,
+  templates2/javadoc/attributes/html/header.erb,
+  templates2/javadoc/class/html/header.erb,
+  templates2/javadoc/constants/html/constants.erb,
+  templates2/javadoc/constants/html/header.erb,
+  templates2/javadoc/constants/html/included.erb,
+  templates2/javadoc/constants/html/inherited.erb,
+  templates2/javadoc/constructor/html/header.erb,
+  templates2/javadoc/docstring/html/main.erb,
+  templates2/javadoc/fulldoc/html/all_methods.erb,
+  templates2/javadoc/fulldoc/html/all_namespaces.erb,
+  templates2/javadoc/fulldoc/html/app.js,
+  templates2/javadoc/fulldoc/html/header.erb,
+  templates2/javadoc/fulldoc/html/html_head.erb,
+  templates2/javadoc/fulldoc/html/index.erb,
+  templates2/javadoc/fulldoc/html/jquery.js,
+  templates2/javadoc/fulldoc/html/readme.erb,
+  templates2/javadoc/fulldoc/html/style.css,
+  .../javadoc/fulldoc/html/syntax_highlight.css,
+  templates2/javadoc/inheritance/html/header.erb,
+  templates2/javadoc/method/html/aliases.erb,
+  templates2/javadoc/method/html/header.erb,
+  templates2/javadoc/method/html/title.erb,
+  templates2/javadoc/methoddetails/html/header.erb,
+  templates2/javadoc/methodmissing/html/header.erb,
+  templates2/javadoc/methodsignature/html/main.erb,
+  templates2/javadoc/methodsummary/html/header.erb,
+  templates2/javadoc/methodsummary/html/included.erb,
+  .../javadoc/methodsummary/html/inherited.erb,
+  templates2/javadoc/methodsummary/html/summary.erb,
+  templates2/javadoc/mixins/html/header.erb,
+  templates2/javadoc/module/html/header.erb,
+  templates2/javadoc/source/html/main.erb,
+  templates2/javadoc/tags/html/header.erb,
+  templates2/javadoc/tags/html/see.erb, templates2/javadoc/tags/html/tags.erb,
+  templates2/javadoc/visibilitygroup/html/header.erb: Move generator templates
+  to temporary directory
+
+  * spec/code_objects/base_spec.rb, spec/templating/method_spec.rb: Fix some
+  specs
+
+  * lib/yard/generators/helpers/html_helper.rb,
+  spec/generators/helpers/html_helper_spec.rb: Remove occurrences of  from
+  helpers
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Add template
+  option to CodeObjects::Base#format (rename old 'template' option to 'type')
+
+  * lib/yard/autoload.rb, lib/yard/templating.rb,
+  spec/templating/method_spec.rb, templates/default/html/method/aliases.erb,
+  templates/default/html/method/header.erb,
+  templates/default/html/method/setup.rb,
+  templates/default/html/method/signature.erb,
+  templates/default/html/method/title.erb,
+  templates/default/html/object/deprecated.erb,
+  templates/default/html/object/docstring.erb,
+  templates/default/html/object/setup.rb, templates/default/html/setup.rb,
+  templates/default/setup.rb: Add initial method templates
+
 2009-07-09  Loren Segal <lsegal@soen.ca>
 
   * lib/yard.rb, lib/yard/autoload.rb, lib/yard/code_objects/proxy.rb,
@@ -107,6 +1634,9 @@
 
   * lib/yard/core_ext/logger.rb, lib/yard/logging.rb: Remove Logger changes
   from core_ext (so that logging format is not modified globally)
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  spec/code_objects/base_spec.rb: Add #format method to use tadpole templates
 
 2009-07-08  Loren Segal <lsegal@soen.ca>
 
