@@ -93,6 +93,7 @@ module YARD
         # @param [Array<String>] files a list of files to queue for parsing
         # @return [nil]
         def parse_in_order(*files)
+          files = files.sort_by {|x| x.length if x }
           while file = files.shift
             begin
               if file.is_a?(Array) && file.last.is_a?(Continuation)

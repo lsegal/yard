@@ -65,7 +65,13 @@ describe YARD::Parser::SourceParser do
       msgs[2].should =~ /Missing object MyModule/
       msgs[3].should =~ /Processing .+parse_in_order_002.+/
       msgs[4].should =~ /Re-processing .+parse_in_order_001.+/
-      msgs[5].should =~ /Object MyModule successfully resolved/
+    end
+    
+    it "should attempt to order files by length (process toplevel files first)" do
+      %w(a a/b a/b/c).each do |file|
+        IO.should_receive(:read).with(file).ordered.and_return('')
+      end
+      YARD.parse %w(a/b/c a/b a)
     end
   end
   
