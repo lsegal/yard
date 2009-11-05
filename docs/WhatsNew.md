@@ -32,7 +32,7 @@ the following argument:
 
     --query '@api.text == "public"'
     
-More information on queries is in the {file:README.markdown}.
+More information on queries is in the {file:README.md}.
 
 Greatly expanded API documentation
 ----------------------------------

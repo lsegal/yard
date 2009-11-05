@@ -173,7 +173,7 @@ A list of common tags and example usage is below:
     instance, an inner class might be considered "private", though Ruby
     would make no such distinction. By declaring the @private tag, the
     class can be hidden from documentation by using the `--no-private`
-    command-line switch to yardoc (see {file:README.markdown}).
+    command-line switch to yardoc (see {file:README.md}).
     
         @private
 
@@ -248,7 +248,7 @@ documentation to HTML document files. In addition to this, YARD ships with
 two more tools allowing you to quickly view `ri`-style documentation for
 a specific class or method as well as an extra tool to generate UML diagrams
 for your code using [Graphviz][graphviz]. An overview of these tools can
-be found in the {file:README.markdown README} under the Usage section.
+be found in the {file:README.md README} under the Usage section.
 
 <a name="extending"></a>
 Extending YARD
