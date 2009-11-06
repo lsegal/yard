@@ -110,7 +110,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_token(tk)
-        #p tk.text, @state, @level, @current_block, "<br/>"
+        # p tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
           return if process_initial_comment(tk)
@@ -175,15 +175,11 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not +tk+ was processed as an initial comment
       def process_initial_comment(tk)
-        return unless tk.class == TkCOMMENT
-
-        # Two new-lines in a row will destroy any comment blocks
-        if @last_tk.class == TkNL && @before_last_tk &&
-            (@before_last_tk.class == TkNL || @before_last_tk.class == TkSPACE)
-          @comments = nil
-          return
-        end
+        @comments = nil if (@comments_last_line || 0) < tk.line_no - 2
         
+        return unless tk.class == TkCOMMENT
+        
+        @comments = nil if (@comments_last_line || 0) < tk.line_no - 1
         @comments_line = tk.line_no unless @comments
 
         # Remove the "#" and up to 1 space before the text
@@ -192,6 +188,7 @@ module YARD
         @comments ||= []
         @comments << tk.text.gsub(/^#+\s{0,1}/, '')
         @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
+        @comments_last_line = tk.line_no
         true
       end
 

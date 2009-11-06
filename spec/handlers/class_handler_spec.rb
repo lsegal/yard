@@ -106,4 +106,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     Registry.at(:RT).superclass.should == P('XX::RT')
   end
   
+  it "should not overwrite docstring with an empty one" do
+    Registry.at(:Zebra).docstring.should == "Docstring 2"
+  end
 end

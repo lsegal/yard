@@ -70,3 +70,15 @@ end
 class << Symbol
   alias toString to_s
 end
+
+# Docstring
+class Zebra
+end
+
+# Docstring 2
+
+class Zebra
+end
+
+class Zebra
+end

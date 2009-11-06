@@ -221,6 +221,25 @@ eof
     s.comments_range.should == (1..1)
   end
   
+  it "should only look up to two lines back for comments" do
+    s = stmt <<-eof
+      # comments
+      
+      # comments
+      
+      def method; end
+    eof
+    s.comments.should == ["comments"]
+    
+    s = stmt <<-eof
+      # comments
+      
+      
+      def method; end
+    eof
+    s.comments.should == nil
+  end
+  
   it "should handle CRLF (Windows) newlines" do
     s = stmts("require 'foo'\r\n\r\n# Test Test\r\n# \r\n# Example:\r\n#   example code\r\ndef test\r\nend\r\n")
     s[1].comments.should == ['Test Test', '', 'Example:', '  example code']
