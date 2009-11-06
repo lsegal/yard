@@ -8,7 +8,6 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       undocsuper = statement[1] && superclass.nil?
 
       klass = register ClassObject.new(namespace, classname) do |o|
-        o.docstring = statement.comments
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
