@@ -8,6 +8,7 @@ document will cover the most common ways to use YARD:
 * [Using YARD to Generate Documentation](#using)
 * [Extending YARD](#extending)
 * [Templating YARD](#templating)
+* [Plugin Support](#plugins)
 
 <a name="docing"></a>
 Documenting Code with YARD
@@ -275,4 +276,26 @@ In many cases you may want to change the style of YARD's templates or add extra
 information after extending it. The {file:Templates.md} architecture
 document covers the basics of how YARD's templating system works.
 
+<a name="plugins"></a>
+Plugin Support
+==============
+
+As of 0.4, YARD will automatically load any gem named with the prefix of
+`yard-` or `yard_`. You can use this to load a custom plugin that 
+[extend](#extending) YARD's functionality. A good example of this
+is the [yard-rspec][yard-rspec] plugin, which adds [RSpec][rspec] specifications
+to your documentation (`yardoc` and `yri`). You can try it out by installing
+the gem or cloning the project and trying the example:
+
+    $ gem install yard-rspec -s http://gemcutter.org
+    or
+    $ git clone git://github.com/lsegal/yard-spec-plugin
+
+YARD also provides a way to temporarily disable plugins on a per-user basis.
+To disable a plugin create the file `~/.yard/ignored_plugins` with a list
+of plugin names separated by newlines. Note that the `.yard` directory might
+not exist, so you may need to create it.
+
 [graphviz]:http://www.graphviz.org
+[yard-rspec]:http://github.com/lsegal/yard-spec-plugin
+[rspec]:http://rspec.info
