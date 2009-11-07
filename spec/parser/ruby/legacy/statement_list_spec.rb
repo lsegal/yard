@@ -238,6 +238,18 @@ eof
       def method; end
     eof
     s.comments.should == nil
+
+    ss = stmts <<-eof
+      # comments
+      
+      
+      def method; end
+      
+      # hello
+      def method2; end
+    eof
+    ss[0].comments.should == nil
+    ss[1].comments.should == ['hello']
   end
   
   it "should handle CRLF (Windows) newlines" do
