@@ -6,6 +6,10 @@ if RUBY19
       YARD::Parser::Ruby::RubyParser.new(stmt, nil).parse.root.first
     end
     
+    def stmts(stmts)
+      YARD::Parser::Ruby::RubyParser.new(stmts, nil).parse.root
+    end
+    
     describe '#parse' do
       it "should get comment line numbers" do
         s = stmt <<-eof
@@ -47,6 +51,37 @@ if RUBY19
         eof
         s.comments.should == "comment"
         s.comments_range.should == (1..1)
+      end
+      
+      it "should only look up to two lines back for comments" do
+        s = stmt <<-eof
+          # comments
+
+          # comments
+
+          def method; end
+        eof
+        s.comments.should == "comments"
+
+        s = stmt <<-eof
+          # comments
+
+
+          def method; end
+        eof
+        s.comments.should == nil
+
+        ss = stmts <<-eof
+          # comments
+
+
+          def method; end
+
+          # hello
+          def method2; end
+        eof
+        ss[0].comments.should == nil
+        ss[1].comments.should == 'hello'
       end
       
       it "should handle 1.9 lambda syntax with args" do
@@ -112,6 +147,24 @@ if RUBY19
         ast = stmt("# docstring\nclass A;\ndef class; end\nend")
         ast.jump(:class).docstring.should == "docstring"
         ast.jump(:class).line_range.should == (2..4)
+      end
+      
+      it "should end source properly on array reference" do
+        ast = stmt("AS[0, 1 ]   ")
+        ast.source.should == 'AS[0, 1 ]'
+
+        ast = stmt("def x(a = S[1]) end").jump(:default_arg)
+        ast.source.should == 'a = S[1]'
+      end
+      
+      it "should end source properly on if/unless mod" do
+        %w(if unless while).each do |mod|
+          stmt("A=1 #{mod} true").source.should == "A=1 #{mod} true"
+        end
+      end
+      
+      it "should show proper source for assignment" do
+        stmt("A=1").jump(:assign).source.should == "A=1"
       end
     end
   end

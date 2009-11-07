@@ -39,7 +39,6 @@ module YARD
           :END => "END",
           :alias => "alias",
           :array => :lbracket,
-          :aref => :lbracket,
           :arg_paren => :lparen,
           :begin => "begin",
           :blockarg => "&",
@@ -224,6 +223,29 @@ module YARD
         
         def on_assoclist_from_args(*args)
           args.first
+        end
+        
+        def on_aref(*args)
+          ll, lc = *@map[:aref].pop
+          sr = args.first.source_range.first..lc
+          lr = args.first.line_range.first..ll
+          AstNode.new(:aref, args, char: sr, line: lr)
+        end
+        
+        def on_rbracket(tok)
+          (@map[:aref] ||= []) << [lineno, charno]
+          visit_ns_token(:rbracket, tok, false)
+        end
+        
+        [:if_mod, :unless_mod, :while_mod].each do |kw|
+          node_class = AstNode.node_class_for(kw)
+          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            def on_#{kw}(*args)
+              sr = args.last.source_range.first..args.first.source_range.last
+              lr = args.last.line_range.first..args.first.line_range.last
+              #{node_class}.new(:#{kw}, args, line: lr, char: sr)
+            end
+          eof
         end
         
         def on_qwords_new
