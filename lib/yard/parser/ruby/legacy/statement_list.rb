@@ -175,7 +175,9 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not +tk+ was processed as an initial comment
       def process_initial_comment(tk)
-        @comments = nil if (@comments_last_line || 0) < tk.line_no - 2
+        if @statement.empty? && (@comments_last_line || 0) < tk.line_no - 2
+          @comments = nil 
+        end
         
         return unless tk.class == TkCOMMENT
         
