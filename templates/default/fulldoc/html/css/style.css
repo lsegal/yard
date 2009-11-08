@@ -171,8 +171,9 @@ ul.fullTree ul { margin-left: 0; padding-left: 0; list-style: none; }
 ul.fullTree li { text-align: center; }
 ul.fullTree li.next:before { font-size: 1.2em; content: '⬆'; color: #bbb; display: block; margin-top: 3px; }
 
-#search { position: absolute; right: 18px; top: 8px; }
+#search { position: absolute; right: 14px; top: 0px; }
 #search a:link, #search a:visited { 
+  display: block; float: left; margin-right: 4px;
   padding: 8px 10px; text-decoration: none; color: #05a; background: #eaeaff;
   border: 1px solid #d8d8e5;
   -moz-border-radius-bottomleft: 3px; -moz-border-radius-bottomright: 3px; 
