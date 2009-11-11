@@ -327,6 +327,7 @@ module YARD
 
         def parameters(include_block_param = true)
           params = self[1 + index_adjust]
+          return nil unless params
           params = call_has_paren? ? params.first : params
           include_block_param ? params : params[0...-1]
         end

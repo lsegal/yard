@@ -166,6 +166,10 @@ if RUBY19
       it "should show proper source for assignment" do
         stmt("A=1").jump(:assign).source.should == "A=1"
       end
+      
+      it "should sho" do
+        p stmt("A = Struct.new :a, :b")[1].parameters
+      end
     end
   end
 end

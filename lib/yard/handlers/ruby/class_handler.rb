@@ -1,4 +1,5 @@
 class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
+  namespace_only
   handles :class, :sclass
   
   def process

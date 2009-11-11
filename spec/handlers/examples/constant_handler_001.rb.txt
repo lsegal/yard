@@ -13,3 +13,7 @@ module A
       D
   end
 end
+
+MyClass = Struct.new(:a, :b, :c)
+NotMyClass = Struct.new("NotMyClass2", :b, :c)
+MyEmptyStruct = Struct.new
