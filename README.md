@@ -214,6 +214,24 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 CHANGELOG
 ---------
 
+- **November.15.09**: 0.4.0 release
+    - Added new templating engine based on [tadpole](http://github.com/lsegal/tadpole)
+    - Added YARD queries (`--query` CLI argument to yardoc)
+    - Greatly expanded YARD documentation
+    - Added plugin support
+    - New `@abstract` and `@private` tags
+    - Changed default rake task to `rake yard`
+    - Read about changes in {file:WhatsNew.md}
+
+- **August.13.09**: 0.2.3.5 release
+    - Minor bug fixes.
+
+- **August.07.09**: 0.2.3.4 release
+    - Minor bug fixes.
+
+- **July.26.09**: 0.2.3.3 release
+    - Minor bug fixes.
+
 - **July.06.09**: 0.2.3.2 release
     - Fix Textile hard-break issues
     - Add description for @see tag to use as link title in HTML docs.
