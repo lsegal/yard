@@ -14,7 +14,7 @@ describe YARD do
         v.should_receive(:name).at_least(1).times.and_return(k)
       end
       source_mock = mock(:source_index)
-      source_mock.should_receive(:all_gems).and_return(plugins)
+      source_mock.should_receive(:entries).and_return(plugins)
       Gem.should_receive(:source_index).and_return(source_mock)
       YARD.should_receive(:require).with('yard_plugin').and_return(true)
       YARD.should_receive(:require).with('yard-plugin').and_return(true)
@@ -34,7 +34,7 @@ describe YARD do
         v.should_receive(:name).at_least(1).times.and_return(k)
       end
       source_mock = mock(:source_index)
-      source_mock.should_receive(:all_gems).and_return(plugins)
+      source_mock.should_receive(:entries).and_return(plugins)
       File.should_receive(:file?).with(path).and_return(true)
       IO.should_receive(:read).with(path).and_return('yard-plugin yard-plugin2')
       Gem.should_receive(:source_index).and_return(source_mock)

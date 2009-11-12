@@ -6,7 +6,7 @@ class String
   #   "FooBar".underscore # => "foo_bar"
   # @return [String] the underscored lower case string
   def underscore
-    gsub(/([a-z])([A-Z])/, '\1_\2').downcase 
+    gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
   end
   
   # Camel cases any underscored text.
@@ -15,6 +15,6 @@ class String
   #   "foo_bar_baz".camelcase # => "FooBarBaz"
   # @return [String] the camel cased text
   def camelcase
-    gsub(/([a-z])_([a-z])/i) { $1 + $2.upcase }.sub(/^(.)/) { $1.upcase } 
+    gsub(/([a-z])_([a-z])/i) { $1 + $2.upcase }.sub(/^(.)/) { $1.upcase }.gsub('/', '::') 
   end
 end

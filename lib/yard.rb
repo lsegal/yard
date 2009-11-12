@@ -31,7 +31,7 @@ module YARD
       ignored_plugins = []
     end
     
-    Gem.source_index.all_gems.values.each do |gem|
+    Gem.source_index.entries.each do |pkgname, gem|
       begin
         if gem.name =~ /^yard[-_]/ && !ignored_plugins.include?(gem.name)
           log.debug "Loading plugin '#{gem.name}'..."
