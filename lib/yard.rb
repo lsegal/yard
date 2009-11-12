@@ -11,7 +11,7 @@ module YARD
   # 
   # @return [true] always returns true
   def self.load_plugins
-    Gem.source_index.all_gems.values.each do |gem|
+    Gem.source_index.entries.each do |pkgname, gem|
       begin
         if gem.name =~ /^yard[-_]/
           log.debug "Loading plugin '#{gem.name}'..."
