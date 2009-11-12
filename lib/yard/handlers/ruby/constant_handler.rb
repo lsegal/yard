@@ -16,7 +16,6 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   def process_constant(statement)
     name = statement[0][0][0]
     value = statement[1].source
-    return if Registry.at("#{namespace.path}::#{name}".gsub(/^::/, ''))
     register ConstantObject.new(namespace, name) {|o| o.source = statement; o.value = value.strip }
   end
   
