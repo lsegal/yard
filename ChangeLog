@@ -1,4 +1,128 @@
+2009-11-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/constant_handler.rb: Fix constant missing
+  error
+
+  * lib/yard/templates/helpers/module_helper.rb: Fix prune_method_listing to
+  work more gracefully with methods in proxy namespaces
+
+  * spec/templates/helpers/base_helper_spec.rb,
+  templates/default/layout/html/footer.erb, yard.gemspec: Change URL to
+  yardoc.org
+
+2009-11-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/template.rb: Allow superb to specify a section name
+
+2009-11-13  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile: Only build .gem for install
+
+  * Rakefile: Allow rake to function without RSpec
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/class001.txt, spec/templates/examples/module001.dot,
+  spec/templates/examples/module001.html: Update template specs
+
+2009-11-12  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/constant_handler.rb: Remove unneeded Registry check
+  in constant handler
+
+  * README.md: Document new features in changelog section
+
+  * lib/yard.rb, spec/yard_spec.rb: Use Gem.source_index.entries instead of
+  all_gems (Rails compatibility)  Closes gh-36
+
+  * lib/yard/core_ext/string.rb, spec/core_ext/string_spec.rb: Make
+  String#underscore behave like activesupport's (Rails compatibility)  Closes
+  gh-35
+
+2009-11-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/constant_handler.rb,
+  lib/yard/handlers/ruby/legacy/constant_handler.rb,
+  lib/yard/parser/ruby/ast_node.rb, spec/handlers/constant_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt,
+  spec/handlers/examples/constant_handler_001.rb.txt,
+  spec/parser/ruby/ruby_parser_spec.rb: Add support for X =
+  Struct.new(:attrname, ...) class declaration syntax
+
+2009-11-07  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css: IE7 compatibility fixes
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix AstNode handling for source of array references and if/unless/while
+  statements
+
+  * bin/view_generator: Remove old view_generator test binary
+
+2009-11-06  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Another fix for comments not
+  registering as docstrings in 1.8 parser
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Fix behaviour in legacy
+  parser for which comments should be associated with a statement
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Fix docstring being
+  destroyed in 1.9 parser when a class is redefined without comments
+
+2009-11-05  Loren Segal <lsegal@soen.ca>
+
+  * docs/GettingStarted.md: Add plugin info to getting started guide
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/module/setup.rb: Add name(prefix=false) to
+  CodeObjects::Base to simplify API for calling methobj.name(true)
+
+  * lib/yard/templates/helpers/html_helper.rb: Add special title for link in
+  signature
+
+  * yard.gemspec: Add changelog to gemspec
+
+  * lib/yard/code_objects/class_variable_object.rb,
+  lib/yard/handlers/ruby/class_variable_handler.rb,
+  .../handlers/ruby/legacy/class_variable_handler.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  spec/handlers/class_variable_handler_spec.rb, spec/templates/module_spec.rb,
+  templates/default/module/setup.rb: Add class variables to templates along
+  with constants
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb: Try to
+  parse toplevel files first
+
+  * templates/default/fulldoc/html/setup.rb: Make title more obvious that it's
+  YARD parsing the docs, not YARD's docs.
+
+  * .../handlers/ruby/legacy/class_variable_handler.rb,
+  .../examples/class_variable_handler_001.rb.txt: Parse class variable name
+  properly in 1.8 parser
+
+  * lib/yard/handlers/ruby/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Ignore 'raise' called on target
+  receivers in 1.9 parser
+
 2009-11-04  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/class/setup.rb,
+  templates/default/module/html/box_info.erb,
+  .../default/module/html/inherited_constants.erb,
+  .../default/module/html/inherited_methods.erb,
+  templates/default/module/setup.rb: Sort various method/child/subclass lists
+
+  * .yardopts, ChangeLog: Update changelog, put it in docs
 
   * docs/GettingStarted.md, docs/WhatsNew.md: Fix some broken links to old
   README.markdown
@@ -71,6 +195,10 @@
   * lib/yard.rb: Debug needs to be modified or debugging message does not show
 
   * lib/yard.rb: Documentation for a few helper methods
+
+  * lib/yard.rb, spec/yard_spec.rb: Add plugin support. Name your gems
+  'yard-myplugin' or 'yard_myplugin'.  Plugins are loaded automatically when
+  YARD loads. The '-' separator is the recommended naming scheme.
 
   * docs/WhatsNew.md: Document the plugin behaviour
 
