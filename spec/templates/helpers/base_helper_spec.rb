@@ -121,7 +121,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
   
     it "should pass off to #link_url if argument is recognized as a URL" do
-      url = "http://yard.soen.ca/"
+      url = "http://yardoc.org/"
       should_receive(:link_url).with(url)
       linkify url
     end
