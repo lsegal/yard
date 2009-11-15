@@ -22,7 +22,7 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
     klass = register ClassObject.new(namespace, classname)
     klass.superclass = P(:Struct)
 
-    tokval_list(Parser::Ruby::Legacy::TokenList.new(parameters), TkSYMBOL).each do |name|
+    tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(parameters), TkSYMBOL).each do |name|
       klass.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
       {:read => name, :write => "#{name}="}.each do |type, meth|
         klass.attributes[scope][name][type] = MethodObject.new(klass, meth, scope)
