@@ -25,6 +25,7 @@ module YARD
       end
       
       def format_lines(object)
+        return "" unless object.source
         i = -1
         object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
       end
