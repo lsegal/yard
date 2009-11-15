@@ -1,5 +1,9 @@
 2009-11-15  Loren Segal <lsegal@soen.ca>
 
+  * lib/yard.rb, yard.gemspec: Bump version to 0.4.0
+
+  * ChangeLog: Update changelog
+
   * lib/yard/handlers/ruby/legacy/constant_handler.rb: Fix constant missing
   error
 
