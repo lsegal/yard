@@ -24,7 +24,7 @@
   <table>
     <tr>
       <td valign='top' width="33%">
-        <% @objects_by_letter.each do |letter, objects| %>
+        <% @objects_by_letter.sort_by {|l,o| l.to_s }.each do |letter, objects| %>
           <% if (i += 1) % 8 == 0 %>
             </td><td valign='top' width="33%">
             <% i = 0 %>
