@@ -2,8 +2,8 @@
 <% if options[:full] %>
 |
 <% object.attributes.each do |scope, list| %>
-<% list.each do |name, rw| %>
-<%= uml_visibility(rw.values.compact.first) %> <%= h rw.values.compact.first.name(true) %> [<%= 'R' if rw[:read] %><%= 'W' if rw[:write] %>]\l
+<% list.sort_by {|name, rw| name.to_s }.each do |name, rw| %>
+<%= uml_visibility(rw.values.compact.first) %> <%= h (rw[:read]||rw[:write]).name(true) %> [<%= 'R' if rw[:read] %><%= 'W' if rw[:write] %>]\l
 <% end %>
 <% end %>
 |
