@@ -7,7 +7,7 @@ describe YARD::Parser::SourceParser do
   
   describe '#parse_string' do
     it "should parse basic Ruby code" do
-      Parser::SourceParser.parse_string(<<-eof)
+      YARD.parse_string(<<-eof)
         module Hello
           class Hi
             # Docstring
@@ -20,6 +20,46 @@ describe YARD::Parser::SourceParser do
       Registry.at("Hello::Hi#me").should_not == nil
       Registry.at("Hello::Hi#me").docstring.should == "Docstring\nDocstring2"
       Registry.at("Hello::Hi#me").docstring.line_range.should == (3..4)
+    end
+    
+    it "should only use prepended comments for an object" do
+      YARD.parse_string(<<-eof)
+        # Test
+        
+        # PASS
+        module Hello
+        end # FAIL
+      eof
+      Registry.at(:Hello).docstring.should == "PASS"
+    end
+    
+    it "should add comments appended to an object's first line" do
+      YARD.parse_string <<-eof
+        module Hello # PASS
+          HELLO
+        end
+        module Hello2
+        end # FAIL
+
+
+        module Hello3 # PASS
+          # CANNOT DIFFERENTIATE
+          def x; end
+        end
+      eof
+
+      # TODO: unify behaviour
+      if RUBY18
+        Registry.at(:Hello).docstring.should == ""
+        Registry.at(:Hello2).docstring.should == "FAIL"
+        Registry.at(:Hello3).docstring.should == ""
+        Registry.at('Hello3#x').docstring.should == "CANNOT DIFFERENTIATE"
+      else
+        Registry.at(:Hello).docstring.should == "PASS"
+        Registry.at(:Hello2).docstring.should == ""
+        Registry.at(:Hello3).docstring.should == ""
+        Registry.at('Hello3#x').docstring.should == "PASS\nCANNOT DIFFERENTIATE"
+      end
     end
   end
 

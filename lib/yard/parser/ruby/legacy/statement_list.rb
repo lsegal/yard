@@ -115,6 +115,7 @@ module YARD
         when :first_statement
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          @comments_last_line = nil
           return if process_simple_block_opener(tk)
           push_token(tk)
           return if process_complex_block_opener(tk)
@@ -180,8 +181,9 @@ module YARD
         end
         
         return unless tk.class == TkCOMMENT
+        return if !@statement.empty? && @comments
         
-        @comments = nil if (@comments_last_line || 0) < tk.line_no - 1
+        @comments = nil if @comments_last_line && @comments_last_line < tk.line_no - 1
         @comments_line = tk.line_no unless @comments
 
         # Remove the "#" and up to 1 space before the text
