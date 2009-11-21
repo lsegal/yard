@@ -9,7 +9,7 @@ describe Module do
   
   describe '#namespace' do
     it "should return everything before the class name" do
-      YARD::CodeObjects::Base.namespace.should == "YARD::CodeObjects"
+      YARD::CodeObjects::Base.namespace_name.should == "YARD::CodeObjects"
     end
   end
 end

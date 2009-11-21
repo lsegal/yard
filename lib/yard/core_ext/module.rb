@@ -11,9 +11,9 @@ class Module
   # Returns the module namespace path minus the class/module name
   # 
   # @example
-  #   module A::B::C; namespace end # => "A::B"
+  #   module A::B::C; namespace_name end # => "A::B"
   # @return [String] the namespace minus the class/module name
-  def namespace
+  def namespace_name
     name.split("::")[0..-2].join("::")
   end
 end
