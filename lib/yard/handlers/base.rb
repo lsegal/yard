@@ -331,8 +331,12 @@ module YARD
           end
         end
         
-        if RUBY_PLATFORM =~ /java/ 
-          log.warn "JRuby does not implement Kernel#callcc and cannot load files in order. You must specify the correct order manually."
+        if RUBY_PLATFORM =~ /java/ || defined?(::Rubinius)
+          unless $NO_CONTINUATION_WARNING
+            $NO_CONTINUATION_WARNING = true
+            log.warn "JRuby/Rubinius do not implement Kernel#callcc and cannot " +
+              "load files in order. You must specify the correct order manually."
+          end
           raise NamespaceMissingError, object
         end
         
