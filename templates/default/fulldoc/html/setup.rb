@@ -1,7 +1,7 @@
 include Helpers::ModuleHelper
 
 def init
-  objects = options[:objects]
+  options[:objects] = objects = run_verifier(options[:objects])
   options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
   options[:readme] = options[:files].first
   options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
@@ -14,10 +14,7 @@ def init
 
   options.delete(:objects)
   options.delete(:files)
-  objects.each do |object|
-    next if options[:verifier] && options[:verifier].call(object).is_a?(FalseClass)
-    serialize(object)
-  end
+  objects.each {|object| serialize(object) }
 end
 
 def serialize(object)
