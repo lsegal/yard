@@ -7,6 +7,8 @@ describe YARD::Templates::Engine.template(:default, :method) do
       module B
         def c; end
         def d; end
+        private
+        def e; end
       end
 
       # Comments
@@ -31,7 +33,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
   end
 
   it "should render html format correctly" do
-    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module001)
+    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true, :visibilities => [:public]), :module001)
   end
 
   it "should render text format correctly" do

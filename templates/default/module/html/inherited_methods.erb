@@ -1,6 +1,6 @@
 <% object.inheritance_tree(true)[1..-1].each do |superclass| %>
   <% next if superclass.is_a?(YARD::CodeObjects::Proxy) %>
-  <% meths = superclass.meths(:included => false, :inherited => false) %>
+  <% meths = prune_method_listing(superclass.meths(:included => false, :inherited => false)) %>
   <% meths.reject! {|m| object.child(:scope => m.scope, :name => m.name) != nil } %>
   <% meths.reject! {|m| m.is_alias? || m.is_attribute? } %>
   <% next if meths.size == 0 %>
