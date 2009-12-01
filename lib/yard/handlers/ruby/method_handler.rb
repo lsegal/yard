@@ -27,7 +27,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, 
-          "a new instance of +#{namespace.name}+", namespace.name.to_s))
+          "a new instance of #{namespace.name}", namespace.name.to_s))
       end
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included 
         extended method_added method_removed method_undefined).include?(meth)

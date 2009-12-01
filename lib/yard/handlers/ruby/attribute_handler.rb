@@ -35,11 +35,11 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
           if type == :write
             src = "def #{meth}(value)"
             full_src = "#{src}\n  @#{name} = value\nend"
-            doc = "Sets the attribute +#{name}+\n@param value the value to set the attribute +#{name}+ to."
+            doc = "Sets the attribute #{name}\n@param value the value to set the attribute #{name} to."
           else
             src = "def #{meth}"
             full_src = "#{src}\n  @#{name}\nend"
-            doc = "Returns the value of attribute +#{name}+"
+            doc = "Returns the value of attribute #{name}"
           end
           o.source ||= full_src
           o.signature ||= src

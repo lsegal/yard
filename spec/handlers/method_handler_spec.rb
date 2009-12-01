@@ -75,7 +75,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     
     meth.should have_tag(:return)
     meth.tag(:return).types.should == ["Foo"]
-    meth.tag(:return).text.should == "a new instance of +Foo+"
+    meth.tag(:return).text.should == "a new instance of Foo"
   end
   
   %w(inherited included method_added method_removed method_undefined).each do |meth|
