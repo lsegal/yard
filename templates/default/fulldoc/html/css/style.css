@@ -169,7 +169,7 @@ p.children strong.modules { padding-left: 5px; }
 ul.fullTree { display: none; padding-left: 0; list-style: none; margin-left: 0; margin-bottom: 10px; }
 ul.fullTree ul { margin-left: 0; padding-left: 0; list-style: none; }
 ul.fullTree li { text-align: center; }
-ul.fullTree li.next:before { font-size: 1.2em; content: '⬆'; color: #bbb; display: block; margin-top: 3px; }
+ul.fullTree li.next:before { font-size: 1.2em; content: '\2B06'; color: #bbb; display: block; margin-top: 3px; }
 
 #search { position: absolute; right: 14px; top: 0px; }
 #search a:link, #search a:visited { 
