@@ -3,7 +3,7 @@
   <dt class="r1 last">Defined in:</dt>
   <dd class="r1 last">
     <%= object.file %><% if object.files.size > 1 %><span class="defines">,<br />
-      <%= object.files[1..-1].map(&:first).join(",<br /> ") %></div>
+      <%= object.files[1..-1].map {|f| f.first }.join(",<br /> ") %></div>
     <% end %>
   </dd>
 </dl>
