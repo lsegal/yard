@@ -183,7 +183,7 @@ module YARD
       end
       
       def tag_attrs(opts = {})
-        opts.map {|k,v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
+        opts.sort_by {|k, v| k.to_s }.map {|k,v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
       end
     
       def anchor_for(object)
