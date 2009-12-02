@@ -45,9 +45,6 @@ module YARD
   end
 end
 
-# Change encoding to UTF-8 for templates
-Encoding.default_external = 'utf-8'
-
 # Ruby 1.9.2 removes '.' which is not exactly a good idea
 $LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
 
