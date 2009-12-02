@@ -25,9 +25,7 @@ end
 
 def docstring_text
   text = ""
-  if object.tags(:overload).size == 1 && object.docstring.empty?
-    text = object.tag(:overload).docstring
-  else
+  unless object.tags(:overload).size == 1 && object.docstring.empty?
     text = object.docstring
   end
   

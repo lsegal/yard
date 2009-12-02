@@ -25,6 +25,10 @@ module YARD
       def method_missing(*args, &block)
         object.send(*args, &block)
       end
+      
+      def type
+        object.type
+      end
 
       private
       

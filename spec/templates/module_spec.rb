@@ -19,6 +19,11 @@ describe YARD::Templates::Engine.template(:default, :method) do
         def self.a; end
         def a; end
         alias b a
+
+        # @overload test_overload(a)
+        #   hello2
+        #   @param [String] a hi
+        def test_overload(*args) end
         
         include B
         
