@@ -55,4 +55,13 @@ describe YARD::CodeObjects::MethodObject do
       obj.name(true).should == "something"
     end
   end
+  
+  describe '#is_attribute?' do
+    it "should only return true if attribute is set in namespace for read/write" do
+      obj = MethodObject.new(@yard, :foo)
+      @yard.attributes[:instance][:foo] = {:read => obj, :write => nil}
+      obj.is_attribute?.should be_true
+      MethodObject.new(@yard, :foo=).is_attribute?.should be_false
+    end
+  end
 end

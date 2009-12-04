@@ -55,7 +55,9 @@ module YARD::CodeObjects
     # Tests if the object is defined as an attribute in the namespace
     # @return [Boolean] whether the object is an attribute
     def is_attribute?
-      namespace.attributes[scope].has_key? name.to_s.gsub(/=$/, '')
+      attr_obj = namespace.attributes[scope][name.to_s.gsub(/=$/, '')]
+      return false unless attr_obj
+      attr_obj[name.to_s =~ /=$/ ? :write : :read] ? true : false
     end
       
     # Tests if the object is defined as an alias of another method
