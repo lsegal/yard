@@ -81,3 +81,10 @@ def docstring_summary(obj)
 
   docstring.summary
 end
+
+def scopes(list)
+  [:class, :instance].each do |scope|
+    items = list.select {|m| m.scope == scope }
+    yield(items, scope) unless items.empty?
+  end
+end

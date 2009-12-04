@@ -1,7 +1,7 @@
-<% if attr_listing.size > 0 %>
-  <div id="attr_details">
-    <h2>Attribute Details</h2>
-    <% attr_listing.each_with_index do |meth, i| %>
+<% scopes(attr_listing) do |list, scope| %>
+  <div id="<%= scope %>_attr_details" class="attr_details">
+    <h2><%= scope.to_s.capitalize %> Attribute Details</h2>
+    <% list.each_with_index do |meth, i| %>
       <% rw = meth.namespace.attributes[meth.scope][meth.name.to_s.gsub(/=$/, '').to_sym] %>
       <span id="<%= anchor_for(rw[:write]) %>"></span>
       <span id="<%= anchor_for(rw[:read]) %>"></span>
