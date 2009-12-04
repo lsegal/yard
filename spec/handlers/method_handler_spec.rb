@@ -54,17 +54,17 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     meth = P('Foo#foo')
 
     o1 = meth.tags(:overload).first
-    o1.name.should == :foo
+    o1.name.should == :bar
     o1.parameters.should == [[:a, nil], [:b, "1"]]
     o1.tag(:return).type.should == "String"
 
     o2 = meth.tags(:overload)[1]
-    o2.name.should == :foo
+    o2.name.should == :baz
     o2.parameters.should == [[:b, nil], [:c, nil]]
     o2.tag(:return).type.should == "Fixnum"
 
     o3 = meth.tags(:overload)[2]
-    o3.name.should == :foo
+    o3.name.should == :bang
     o3.parameters.should == [[:d, nil], [:e, nil]]
     o3.docstring.should be_empty
     o3.docstring.should be_blank
