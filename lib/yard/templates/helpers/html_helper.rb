@@ -245,6 +245,11 @@ module YARD
       end
       
       def signature(meth, link = true, show_extras = true)
+        # use first overload tag if it has a return type and method itself does not
+        if !meth.tag(:return) && meth.tag(:overload) && meth.tag(:overload).tag(:return)
+          meth = meth.tag(:overload)
+        end
+        
         if link
           type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
           type = h(type)
