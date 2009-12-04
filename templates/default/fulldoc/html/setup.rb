@@ -63,7 +63,9 @@ def generate_assets
 end
 
 def generate_method_list
-  @items = prune_method_listing(Registry.all(:method)).sort_by {|m| m.name.to_s }
+  @items = prune_method_listing(Registry.all(:method), false)
+  @items = @items.reject {|m| m.name.to_s =~ /=$/ && m.is_attribute? }
+  @items = @items.sort_by {|m| m.name.to_s }
   @list_title = "Method List"
   asset('method_list.html', erb(:full_list))
 end
