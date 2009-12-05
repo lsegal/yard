@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::HtmlHelper
+  include YARD::Templates::Helpers::MethodHelper
 
   describe '#h' do
     it "should use #h to escape HTML" do
@@ -184,6 +185,96 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :href => 'mailto:steve@example.com',
         :title => 'Steve'
       }
+    end
+  end
+
+  describe '#signature' do
+    before { YARD::Registry.clear }
+    
+    def format_types(types, brackets = false) types.join(", ") end
+
+    it "should show signature for regular instance method" do
+      YARD.parse_string "def foo; end"
+      signature(Registry.at('#foo'), false).should == "- <strong>foo</strong> "
+    end
+
+    it "should show signature for private class method" do
+      YARD.parse_string "class A; private; def self.foo; end end"
+      signature(Registry.at('A.foo'), false).should == 
+        "+ <strong>foo</strong>  <span class=\"extras\">(private)</span>"
+    end
+    
+    it "should show return type for single type" do
+      YARD.parse_string <<-'eof'
+        # @return [String]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (String) <strong>foo</strong> "
+    end
+
+    it "should show return type for 2 types" do
+      YARD.parse_string <<-'eof'
+        # @return [String, Symbol]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (String, Symbol) <strong>foo</strong> "
+    end
+
+    it "should show return type for 2 types over multiple tags" do
+      YARD.parse_string <<-'eof'
+        # @return [String]
+        # @return [Symbol]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (String, Symbol) <strong>foo</strong> "
+    end
+    
+    it "should show 'Type?' if return types are [Type, nil]" do
+      YARD.parse_string <<-'eof'
+        # @return [Type, nil]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (Type<sup>?</sup>) <strong>foo</strong> "
+    end
+
+    it "should show 'Type+' if return types are [Type, Array<Type>]" do
+      YARD.parse_string <<-'eof'
+        # @return [Type, <Type>]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (Type<sup>+</sup>) <strong>foo</strong> "
+    end
+
+    it "should (Type, ...) for more than 2 return types" do
+      YARD.parse_string <<-'eof'
+        # @return [Type, <Type>]
+        # @return [AnotherType]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- (Type, ...) <strong>foo</strong> "
+    end
+
+    it "should not show return for @return [void]" do
+      YARD.parse_string <<-'eof'
+        # @return [void]
+        def foo; end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- <strong>foo</strong> "
+    end
+    
+    it "should show block for method with yield" do
+      YARD.parse_string <<-'eof'
+        def foo; yield(a, b, c) end
+      eof
+      signature(Registry.at('#foo'), false).should == 
+        "- <strong>foo</strong> {|a, b, c| ... }"
     end
   end
 end

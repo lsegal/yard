@@ -17,11 +17,15 @@ module YARD
       end
       
       def format_block(object)
-        if object.has_tag?(:yieldparam)
-          h "{|" + object.tags(:yieldparam).map {|t| t.name }.join(", ") + "| ... }"
+        if object.has_tag?(:yield) && object.tag(:yield).types
+          params = object.tag(:yield).types
+        elsif object.has_tag?(:yieldparam)
+          params = object.tags(:yieldparam).map {|t| t.name }
         else
-          ""
+          params = nil
         end
+
+        params ? h("{|" + params.join(", ") + "| ... }") : ""
       end
       
       def format_lines(object)

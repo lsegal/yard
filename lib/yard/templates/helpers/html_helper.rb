@@ -250,16 +250,22 @@ module YARD
           meth = meth.tag(:overload)
         end
         
-        if link
-          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || ""
-          type = h(type)
-        else
-          arr = meth.tag(:return) ? [(meth.tag(:return).types || []).first].compact : []
-          type = arr == ['void'] ? "" : format_types(arr, false) 
+        type = ""
+        if meth.tag(:return) && meth.tag(:return).types
+          types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
+          first = link ? h(types.first) : format_types([types.first], false)
+          if types.size == 2 && types.last == 'nil'
+            type = first + '<sup>?</sup>'
+          elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
+            type = first + '<sup>+</sup>'
+          elsif types.size > 2
+            type = [first, '...'].join(', ')
+          elsif types != ['void']
+            type = link ? h(types.join(", ")) : format_types(types, false)
+          end
         end
         
         scope = meth.scope == :class ? "+" : "-"
-        type = "" if type == "void"
         type = "(#{type}) " unless type.empty?
         name = meth.name
         blk = format_block(meth)
