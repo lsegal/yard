@@ -10,7 +10,7 @@
       (also: <%= @item.aliases.map {|o| h(o.name(true)) }.join(", ") %>)
     <% end %>
   </span>
-  <% if @item.name == :initialize && @item.scope == :instance %>
+  <% if @item.constructor? %>
     <span class="note title constructor">constructor</span>
   <% end %>
   <% if rw = @item.namespace.attributes[@item.scope][@item.name] %>
