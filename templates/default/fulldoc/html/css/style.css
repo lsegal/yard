@@ -30,6 +30,7 @@ h2 {
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
 .note.title { text-transform: lowercase; padding: 1px 5px; margin-left: 5px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; }
 h1 .note.title { font-size: 0.5em; font-weight: normal; padding: 3px 5px; position: relative; top: -3px; text-transform: capitalize; }
+.note.title.constructor { color: #fff; background: #6a98d6; border-color: #6689d6; } 
 .note.title.writeonly { color: #fff; background: #45a638; border-color: #2da31d; } 
 .note.title.readonly { color: #fff; background: #6a98d6; border-color: #6689d6; } 
 .note.title.private { background: #d5d5d5; border-color: #c5c5c5; }
