@@ -5,7 +5,7 @@
   <ul class="overload">
     <% object.tags(:overload).each do |overload| %>
       <li class="overload_item">
-        <span class="signature"><%= signature(overload, false) %></span>
+        <span class="signature"><%= signature(overload, false, false) %></span>
         <%= yieldall :object => overload %>
       </li>
     <% end %>
