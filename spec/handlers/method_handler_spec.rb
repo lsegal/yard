@@ -87,4 +87,22 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
   it "should not set @private tag on extended callback method since docstring is set" do
     P('Foo.extended').should_not have_tag(:private)
   end
+  
+  it "should add @return [Boolean] tag to methods ending in ? without return types" do
+    meth = P('Foo#boolean?')
+    meth.should have_tag(:return)
+    meth.tag(:return).types.should == ['Boolean']
+  end
+  
+  it "should add Boolean type to return tag without types" do
+    meth = P('Foo#boolean2?')
+    meth.should have_tag(:return)
+    meth.tag(:return).types.should == ['Boolean']
+  end
+  
+  it "should not change return type for method ending in ? with return types set" do
+    meth = P('Foo#boolean3?')
+    meth.should have_tag(:return)
+    meth.tag(:return).types.should == ['NotBoolean', 'nil']
+  end
 end

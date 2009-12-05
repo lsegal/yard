@@ -33,6 +33,12 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included 
         extended method_added method_removed method_undefined).include?(meth)
       obj.docstring.add_tag(YARD::Tags::Tag.new(:private, nil))
+    elsif meth.to_s =~ /\?$/
+      if obj.tag(:return) && (obj.tag(:return).types || []).empty?
+        obj.tag(:return).types = ['Boolean']
+      elsif obj.tag(:return).nil?
+        obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+      end
     end
 
     parse_block(:owner => obj) # mainly for yield/exceptions

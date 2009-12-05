@@ -59,4 +59,13 @@ end
   #   @return [Fixnum]
   # @overload bang(d, e)
   def foo(*args); end
+
+  # No return tag
+  def boolean?; end
+
+  # @return without type
+  def boolean2?; end
+
+  # @return [NotBoolean, nil]
+  def boolean3?; end
 end
