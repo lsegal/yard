@@ -1,6 +1,6 @@
 def init
   return if object.docstring.blank?
-  sections :index, [:deprecated, :abstract, :todo, :note, :text], T('tags')
+  sections :index, [:deprecated, :abstract, :todo, :note, :returns_void, :text], T('tags')
 end
 
 def abstract
@@ -21,6 +21,13 @@ end
 def note
   return unless object.has_tag?(:note)
   erb(:note)
+end
+
+def returns_void
+  return unless object.type == :method
+  return if object.name == :initialize && object.scope == :instance
+  return unless object.tags(:return).size == 1 && object.tag(:return).types == ['void']
+  erb(:returns_void)
 end
 
 def docstring_text

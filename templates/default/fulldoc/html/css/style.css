@@ -26,6 +26,7 @@ h2 {
   background: #e3e4e3; border: 1px solid #d5d5d5; padding: 7px 10px;
 }
 .note.todo { background: #ffffc5; border-color: #ececaa; }
+.note.returns_void { background: #efefef; }
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
 .note.title { text-transform: lowercase; padding: 1px 5px; margin-left: 5px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; }
 h1 .note.title { font-size: 0.5em; font-weight: normal; padding: 3px 5px; position: relative; top: -3px; text-transform: capitalize; }
