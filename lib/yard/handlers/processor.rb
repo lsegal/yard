@@ -63,7 +63,7 @@ module YARD
       # one.
       # 
       # @param [Array] statements a list of statements
-      # @return [nil] 
+      # @return [void] 
       def process(statements)
         statements.each_with_index do |stmt, index|
           find_handlers(stmt).each do |handler| 
@@ -123,7 +123,7 @@ module YARD
       # Loads handlers from {#handler_base_namespace}. This ensures that
       # Ruby1.9 handlers are never loaded into 1.8; also lowers the amount
       # of modules that are loaded
-      # @return [nil]
+      # @return [void]
       def load_handlers
         return if @handlers_loaded[parser_type]
         handler_base_namespace.constants.each {|c| handler_base_namespace.const_get(c) }

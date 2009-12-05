@@ -262,7 +262,7 @@ module YARD
       # Sets a custom attribute on the object
       # @param [#to_s] key the name of the custom attribute
       # @param [Object] value the value to associate
-      # @return [nil] 
+      # @return [void] 
       # @see #[]
       def []=(key, value)
         if respond_to?("#{key}=")

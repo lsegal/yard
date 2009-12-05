@@ -154,7 +154,7 @@ module YARD
       
       # Allows a parser to infer the type of the proxy by its path.
       # @param [#to_sym] type the proxy's inferred type
-      # @return [nil] 
+      # @return [void] 
       def type=(type) Registry.proxy_types[path] = type.to_sym end
       
       # @return [Boolean] 

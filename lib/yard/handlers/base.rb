@@ -150,7 +150,7 @@ module YARD
       
       class << self
         # Clear all registered subclasses. Testing purposes only
-        # @return [nil] 
+        # @return [void] 
         def clear_subclasses
           @@subclasses = []
         end

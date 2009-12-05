@@ -49,7 +49,7 @@ module YARD
       # output if set.
       # 
       # @param [Array<String>] args the list of arguments
-      # @return [nil] 
+      # @return [void] 
       def run(*args)
         args += support_rdoc_document_file!
         optparse(*yardopts)
@@ -72,7 +72,7 @@ module YARD
       end
       
       # Parses the .yardopts file for default yard options
-      # @return [nil] 
+      # @return [void] 
       def yardopts
         IO.read(options_file).split(/\s+/)
       rescue Errno::ENOENT
@@ -82,7 +82,7 @@ module YARD
       private
       
       # Reads a .document file in the directory to get source file globs
-      # @return [nil] 
+      # @return [void] 
       def support_rdoc_document_file!
         IO.read(".document").split(/\s+/)
       rescue Errno::ENOENT
@@ -107,7 +107,7 @@ module YARD
       # @example Parses a set of Ruby files with a separator and extra files
       #   parse_files %w(file1 file2 - extrafile1 extrafile2)
       # @param [Array<String>] files the list of files to parse
-      # @return [nil] 
+      # @return [void] 
       def parse_files(*files)
         self.files = []
         seen_extra_files_marker = false

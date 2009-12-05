@@ -102,7 +102,7 @@ module YARD::CodeObjects
     # Sets the superclass of the object
     # 
     # @param [Base, Proxy, String, Symbol, nil] object the superclass value
-    # @return [nil] 
+    # @return [void] 
     def superclass=(object)
       case object
       when Base, Proxy, NilClass

@@ -73,20 +73,20 @@ module YARD
     # call returns nil, which means users don't need to perform
     # stringent nil checking
     # 
-    # @return [nil] 
+    # @return [void] 
     def modify_nilclass
       NilClass.send(:define_method, :method_missing) {|*args| }
     end
     
     # Returns the state of NilClass back to normal
-    # @return [nil] 
+    # @return [void] 
     def unmodify_nilclass
       NilClass.send(:undef_method, :method_missing)
     end
     
     # Creates the +__execute+ method by evaluating the expressions
     # as Ruby code
-    # @return [nil] 
+    # @return [void] 
     def create_method_from_expressions(exprs)
       expr = exprs.flatten.map {|e| "(#{parse_expression(e)})" }.join(" && ")
       

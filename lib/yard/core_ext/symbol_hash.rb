@@ -49,7 +49,7 @@ class SymbolHash < Hash
     
   # Deleted a key and value associated with it
   # @param [#to_sym] key the key to delete
-  # @return [nil]
+  # @return [void]
   def delete(key) super(key.to_sym) end
     
   # Tests if a symbolized key exists

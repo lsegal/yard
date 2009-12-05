@@ -8,7 +8,7 @@ module YARD
         # Registers a new template path in {template_paths}
         # 
         # @param [String] path a new template path
-        # @return [nil] 
+        # @return [void] 
         def register_template_path(path)
           template_paths.push path
         end
@@ -86,7 +86,7 @@ module YARD
         # @param [Array<CodeObjects::Base>] objects a list of {CodeObjects::Base}
         #   objects to pass to the template
         # @param [Hash] options (see {render})
-        # @return [nil]
+        # @return [void]
         def generate(objects, options = {})
           set_default_options(options)
           options[:objects] = objects
@@ -118,7 +118,7 @@ module YARD
         # @option options [Symbol] :format (:text) the default format
         # @option options [Symbol] :type (nil) the :object's type, if provided
         # @option options [Symbol] :template (:default) the default template
-        # @return [nil]
+        # @return [void]
         def set_default_options(options = {})
           options[:format] ||= :text
           options[:type] ||= options[:object].type if options[:object]

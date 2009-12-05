@@ -36,7 +36,7 @@ module YARD
         # Sets the parser and makes sure it's a valid type
         # 
         # @param [Symbol] value the new parser type
-        # @return [nil] 
+        # @return [void] 
         def parser_type=(value)
           @parser_type = validated_parser_type(value)
         end
@@ -91,7 +91,7 @@ module YARD
         # that can continue processing the file.
         # 
         # @param [Array<String>] files a list of files to queue for parsing
-        # @return [nil]
+        # @return [void]
         def parse_in_order(*files)
           files = files.sort_by {|x| x.length if x }
           while file = files.shift
@@ -174,7 +174,7 @@ module YARD
       private
 
       # Runs a {Handlers::Processor} object to post process the parsed statements.
-      # @return [nil] 
+      # @return [void] 
       def post_process
         post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
         post.process(@parser.enumerator)

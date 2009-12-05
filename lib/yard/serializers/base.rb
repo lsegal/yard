@@ -37,7 +37,7 @@ module YARD
       # 
       # @abstract Should run code after serialization.
       # @param [String] data the data that was serialized.
-      # @return [nil]
+      # @return [void]
       def after_serialize(data); end
       
       # Serializes an object.

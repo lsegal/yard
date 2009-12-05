@@ -54,7 +54,7 @@ module YARD
       protected
       
       # Defines the rake task
-      # @return [nil] 
+      # @return [void] 
       def define
         desc "Generate YARD Documentation"
         task(name) do

@@ -261,7 +261,7 @@ module YARD
         # 
         # @yield each descendent node in order
         # @yieldparam [AstNode] self, or a child/descendent node
-        # @return [nil] 
+        # @return [void] 
         def traverse
           nodes = [self]
           nodes.each.with_index do |node, index|
@@ -273,7 +273,7 @@ module YARD
         private
 
         # Resets line information
-        # @return [nil] 
+        # @return [void] 
         def reset_line_info
           if size == 0
             self.line_range = @fallback_line

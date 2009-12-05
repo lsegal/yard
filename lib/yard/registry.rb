@@ -28,7 +28,7 @@ module YARD
       attr_reader :objects
       
       # Clears the registry and cache
-      # @return [nil] 
+      # @return [void] 
       def clear
         instance.clear 
         objects.clear
@@ -80,7 +80,7 @@ module YARD
     # Loads a yardoc file directly
     # 
     # @param [String] file the yardoc file to load.
-    # @return [nil] 
+    # @return [void] 
     def load_yardoc(file = yardoc_file)
       return false unless File.exists?(file)
       ns, pt = *Marshal.load(IO.read(file))
@@ -142,14 +142,14 @@ module YARD
     
     # Deletes an object from the registry
     # @param [CodeObjects::Base] object the object to remove
-    # @return [nil] 
+    # @return [void] 
     def delete(object) 
       namespace.delete(object.path)
       self.class.objects.delete(object.path)
     end
 
     # Clears the registry
-    # @return [nil] 
+    # @return [void] 
     def clear
       @namespace = SymbolHash.new
       @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
