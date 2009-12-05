@@ -33,15 +33,17 @@ def methodmissing
 end
 
 def method_listing(include_specials = true)
-  return @smeths ||= method_listing.reject {|o| special_methods.include? o.name(true) } unless include_specials
+  return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
   return @meths if @meths
   @meths = object.meths(:inherited => false, :included => false)
   @meths = sort_listing(prune_method_listing(@meths))
   @meths
 end
 
-def special_methods
-  ["#initialize", "#method_missing"]
+def special_method?(meth)
+  return true if meth.name(true) == '#method_missing'
+  return true if meth.constructor?
+  false
 end
 
 def attr_listing
