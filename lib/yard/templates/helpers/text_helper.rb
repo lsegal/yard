@@ -37,7 +37,14 @@ module YARD
         end
         
         def signature(meth)
-          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
+          # use first overload tag if it has a return type and method itself does not
+          if !meth.tag(:return) && meth.tag(:overload) && meth.tag(:overload).tag(:return)
+            meth = meth.tag(:overload)
+          end
+
+          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || ""
+          type = "" if type == "void"
+          type = " -> #{type} " unless type.empty?
           scope = meth.scope == :class ? "#{meth.namespace.name}." : "#{meth.namespace.name.to_s.downcase}."
           name = meth.name
           blk = format_block(meth)
@@ -51,7 +58,7 @@ module YARD
           end
           extras << meth.visibility if meth.visibility != :public
           extras_text = '(' + extras.join(", ") + ')' unless extras.empty?
-          title = "%s%s%s %s -> %s %s" % [scope, name, args, blk, type, extras_text]
+          title = "%s%s%s %s%s%s" % [scope, name, args, blk, type, extras_text]
           title.gsub(/\s+/, ' ')
         end
       end
