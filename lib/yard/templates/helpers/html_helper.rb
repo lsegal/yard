@@ -251,15 +251,16 @@ module YARD
         end
         
         if link
-          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || "Object"
+          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || ""
           type = h(type)
         else
           arr = meth.tag(:return) ? [(meth.tag(:return).types || []).first].compact : []
-          arr << "Object" if arr.empty?
-          type = format_types(arr, false)
+          type = arr == ['void'] ? "" : format_types(arr, false) 
         end
         
         scope = meth.scope == :class ? "+" : "-"
+        type = "" if type == "void"
+        type = "(#{type}) " unless type.empty?
         name = meth.name
         blk = format_block(meth)
         args = format_args(meth)
@@ -274,7 +275,7 @@ module YARD
           extras << meth.visibility if meth.visibility != :public
           extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
         end
-        title = "%s (%s) <strong>%s</strong>%s %s" % [scope, type, name, args, blk]
+        title = "%s %s<strong>%s</strong>%s %s" % [scope, type, name, args, blk]
         if link
           if meth.is_a?(YARD::CodeObjects::MethodObject)
             link_title = "#{meth.name(true)} (#{meth.scope} #{meth.type})"
