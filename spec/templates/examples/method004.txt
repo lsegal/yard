@@ -1,20 +1,10 @@
 ------------------------------------------------------------- Method: #m
                                                    (Defined in: (stdin))
 
-    root.m(x, y) (private)
+    root.m(*args) 
 ------------------------------------------------------------------------
 
-    Comments 
-
-
+    This method returns an undefined value.
     
-Parameters:
------------
-
-    (String) x - parameter x
-
-    (Boolean) y - parameter y
-
-
 
 

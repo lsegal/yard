@@ -16,6 +16,13 @@ describe YARD::Templates::Engine.template(:default, :method) do
         attr_accessor :attr1
         attr_reader :attr2
         
+        # @overload attr3
+        #   @return [String] a string
+        # @overload attr3=(value)
+        #   @param [String] value sets the string
+        #   @return [void]
+        attr_accessor :attr3
+        
         def self.a; end
         def a; end
         alias b a
@@ -24,6 +31,9 @@ describe YARD::Templates::Engine.template(:default, :method) do
         #   hello2
         #   @param [String] a hi
         def test_overload(*args) end
+          
+        # @return [void]
+        def void_meth; end
         
         include B
         

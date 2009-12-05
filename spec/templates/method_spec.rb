@@ -1,10 +1,24 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
+# $COPY = :method001
+# $COPYT = :html
+
 describe YARD::Templates::Engine.template(:default, :method) do
   before { Registry.clear }
   
+  shared_examples_for "all formats" do
+    it "should render html format correctly" do
+      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), @template)
+    end
+    
+    it "should render text format correctly" do
+      text_equals(Registry.at('#m').format, @template)
+    end
+  end
+  
   describe 'regular (deprecated) method' do
     before do
+      @template = :method001
       YARD.parse_string <<-'eof'
         private
         # Comments
@@ -17,17 +31,12 @@ describe YARD::Templates::Engine.template(:default, :method) do
       eof
     end
     
-    it "should render html format correctly" do
-      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method001)
-    end
-    
-    it "should render text format correctly" do
-      text_equals(Registry.at('#m').format, :method001)
-    end
+    it_should_behave_like "all formats"
   end
   
   describe 'method with 1 overload' do
     before do
+      @template = :method002
       YARD.parse_string <<-'eof'
         private
         # Comments
@@ -38,17 +47,12 @@ describe YARD::Templates::Engine.template(:default, :method) do
       eof
     end
     
-    it "should render html format correctly" do
-      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method002)
-    end
-
-    it "should render text format correctly" do
-      text_equals(Registry.at('#m').format, :method002)
-    end
+    it_should_behave_like "all formats"
   end
   
   describe 'method with 2 overloads' do
     before do
+      @template = :method003
       YARD.parse_string <<-'eof'
         private
         # Method comments
@@ -64,12 +68,33 @@ describe YARD::Templates::Engine.template(:default, :method) do
       eof
     end
     
-    it "should render html format correctly" do
-      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), :method003)
+    it_should_behave_like "all formats"
+  end
+  
+  describe 'method void return' do
+    before do
+      @template = :method004
+      YARD.parse_string <<-'eof'
+        # @return [void]
+        def m(*args) end
+      eof
     end
 
-    it "should render text format correctly" do
-      text_equals(Registry.at('#m').format, :method003)
+    it_should_behave_like "all formats"
+  end
+  
+  describe 'method void return in an overload' do
+    before do
+      @template = :method005
+      YARD.parse_string <<-'eof'
+        # @overload m(a)
+        #   @return [void]
+        # @overload m(b)
+        #   @param [String] b hi
+        def m(*args) end
+      eof
     end
+    
+    it_should_behave_like "all formats"
   end
 end

@@ -1,43 +1,31 @@
 ------------------------------------------------------------- Method: #m
                                                    (Defined in: (stdin))
 
-    root.m(x, y) (private)
-    root.m(x, y, z) (private)
+    root.m(a) 
+    root.m(b) 
 ------------------------------------------------------------------------
 
-    Method comments 
-
+    
 Overloads:
 ----------
 
 ------------------------------------------------------------------------
-    root.m(x, y) (private)
+    root.m(a) 
 ------------------------------------------------------------------------
     
-        Overload docstring 
-    
-    Parameters:
-    -----------
-    
-        (String) x - parameter x
-    
-        (Boolean) y - parameter y
-    
+        This method returns an undefined value.
+        
     
 
 ------------------------------------------------------------------------
-    root.m(x, y, z) (private)
+    root.m(b) 
 ------------------------------------------------------------------------
     
         
     Parameters:
     -----------
     
-        (String) x - parameter x
-    
-        (Boolean) y - parameter y
-    
-        (Boolean) z - parameter z
+        (String) b - hi
     
     
 
