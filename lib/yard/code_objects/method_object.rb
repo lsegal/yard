@@ -52,6 +52,11 @@ module YARD::CodeObjects
     # @param [Symbol] v the new visibility (:public, :private, or :protected)
     def visibility=(v) @visibility = v.to_sym end
       
+    # @return whether or not the method is the #initialize constructor method
+    def constructor?
+      name == :initialize && scope == :instance
+    end
+      
     # Tests if the object is defined as an attribute in the namespace
     # @return [Boolean] whether the object is an attribute
     def is_attribute?

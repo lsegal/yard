@@ -64,4 +64,11 @@ describe YARD::CodeObjects::MethodObject do
       MethodObject.new(@yard, :foo=).is_attribute?.should be_false
     end
   end
+  
+  describe '#constructor?' do
+    it "should mark the #initialize method as constructor" do
+      MethodObject.new(@yard, :initialize).constructor?.should be_true
+      MethodObject.new(@yard, :initialize, :class).constructor?.should be_false
+    end
+  end
 end
