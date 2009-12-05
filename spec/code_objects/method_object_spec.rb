@@ -66,9 +66,18 @@ describe YARD::CodeObjects::MethodObject do
   end
   
   describe '#constructor?' do
+    before { @class = ClassObject.new(:root, :MyClass) }
+
     it "should mark the #initialize method as constructor" do
-      MethodObject.new(@yard, :initialize).constructor?.should be_true
-      MethodObject.new(@yard, :initialize, :class).constructor?.should be_false
+      MethodObject.new(@class, :initialize)
+    end
+    
+    it "should not mark Klass.initialize as constructor" do
+      MethodObject.new(@class, :initialize, :class).constructor?.should be_false
+    end
+    
+    it "should not mark module method #initialize as constructor" do
+      MethodObject.new(@yard, :initialize).constructor?.should be_false
     end
   end
 end

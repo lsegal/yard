@@ -54,7 +54,7 @@ module YARD::CodeObjects
       
     # @return whether or not the method is the #initialize constructor method
     def constructor?
-      name == :initialize && scope == :instance
+      name == :initialize && scope == :instance && namespace.is_a?(ClassObject)
     end
       
     # Tests if the object is defined as an attribute in the namespace
