@@ -66,7 +66,7 @@ def constant_listing
 end
 
 def sort_listing(list)
-  list.sort_by {|o| [o.scope, o.name.to_s.downcase] }
+  list.sort_by {|o| [o.scope.to_s, o.name.to_s.downcase] }
 end
 
 def docstring_summary(obj)
