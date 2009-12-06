@@ -20,7 +20,7 @@ module YARD
 
       def name(prefix = false)
         return @name unless prefix
-        object.scope == :class ? @name.to_s : "#{object.sep}#{@name}"
+        object.scope == :class ? @name.to_s : "#{object.send(:sep)}#{@name}"
       end
       
       def method_missing(*args, &block)
