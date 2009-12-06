@@ -81,14 +81,14 @@ describe YARD::Templates::Helpers::BaseHelper do
   describe '#format_object_type' do
     it "should return Exception if type is Exception" do
       obj = mock(:object)
-      obj.stub!(:class).and_return(YARD::CodeObjects::ClassObject)
+      obj.stub!(:is_a?).with(YARD::CodeObjects::ClassObject).and_return(true)
       obj.stub!(:is_exception?).and_return(true)
       format_object_type(obj).should == "Exception"
     end
     
     it "should return Class if type is Class" do
       obj = mock(:object)
-      obj.stub!(:class).and_return(YARD::CodeObjects::ClassObject)
+      obj.stub!(:is_a?).with(YARD::CodeObjects::ClassObject).and_return(true)
       obj.stub!(:is_exception?).and_return(false)
       format_object_type(obj).should == "Class"
     end

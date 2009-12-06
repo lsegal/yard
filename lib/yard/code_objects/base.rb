@@ -157,7 +157,7 @@ module YARD
         # @param [Object] other the other object to compare classes with
         # @return [Boolean] true if other is a subclass of self
         def ===(other)
-          self >= other.class ? true : false
+          other.is_a?(self)
         end
       end
           
