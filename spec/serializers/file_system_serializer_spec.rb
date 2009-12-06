@@ -70,6 +70,19 @@ describe YARD::Serializers::FileSystemSerializer do
       m2 = CodeObjects::MethodObject.new(nil, 'meth', :class)
       s.serialized_path(m1).should_not == s.serialized_path(m2)
     end
+    
+    it "should serialize path from overload tag" do
+      YARD.parse_string <<-'eof'
+        class Foo
+          # @overload bar
+          def bar; end
+        end
+      eof
+      
+      serializer = Serializers::FileSystemSerializer.new
+      object = Registry.at('Foo#bar').tag(:overload)
+      serializer.serialized_path(object).should == "Foo/bar_i.html"
+    end
   end
   
   describe '#serialize' do

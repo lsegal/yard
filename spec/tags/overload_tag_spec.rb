@@ -32,4 +32,17 @@ describe YARD::Tags::OverloadTag do
     @tag.tag(:param).name.should == "a"
     @tag.has_tag?(:return).should == true
   end
+  
+  it "should not be a CodeObjects::Base when not hooked up to an object" do
+    @tag.object = nil
+    @tag.is_a?(CodeObjects::Base).should == false
+  end
+  
+  it "should be a CodeObjects::Base when hooked up to an object" do
+    @tag.object = mock(:object)
+    @tag.object.should_receive(:is_a?).at_least(3).times.with(CodeObjects::Base).and_return(true)
+    @tag.is_a?(CodeObjects::Base).should == true
+    @tag.kind_of?(CodeObjects::Base).should == true
+    (CodeObjects::Base === @tag).should == true
+  end
 end

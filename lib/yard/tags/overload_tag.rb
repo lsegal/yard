@@ -30,6 +30,11 @@ module YARD
       def type
         object.type
       end
+      
+      def is_a?(other)
+        object.is_a?(other) || self.class >= other.class || false
+      end
+      alias kind_of? is_a?
 
       private
       

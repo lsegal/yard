@@ -78,6 +78,25 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:serializer).and_return nil
       link_object(CodeObjects::NamespaceObject.new(nil, :YARD), 'title').should == "title"
     end
+
+    it "should link objects from overload tag" do
+      YARD.parse_string <<-'eof'
+        module Foo
+          class Bar; def a; end end
+          class Baz
+            # @overload a
+            def a; end
+          end
+        end
+      eof
+      obj = Registry.at('Foo::Baz#a').tag(:overload)
+      foobar = Registry.at('Foo::Bar')
+      foobaz = Registry.at('Foo::Baz')
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      stub!(:object).and_return(obj)
+      link_object("Bar#a").should =~ %r{href="Bar.html#a-instance_method"}
+    end
   end
 
   describe '#url_for' do
