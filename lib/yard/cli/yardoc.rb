@@ -30,15 +30,19 @@ module YARD
         
       # Creates a new instance of the commandline utility
       def initialize
-        @options = SymbolHash[
+        @options = SymbolHash.new(false)
+        @options.update(
           :format => :html, 
           :template => :default, 
           :markup => :rdoc,
-          :serializer => YARD::Serializers::FileSystemSerializer.new, 
+          :serializer => YARD::Serializers::FileSystemSerializer.new,
+          :default_return => "Object",
+          :hide_void_return => false,
+          :no_highlight => false, 
           :files => [],
           :visibilities => [:public],
           :verifier => nil
-        ]
+        )
         @files = []
         @reload = true
         @generate = true
@@ -202,6 +206,14 @@ module YARD
           options[:no_highlight] = true
         end
         
+        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
+          options[:default_return] = type
+        end
+        
+        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
+          options[:hide_void_return] = true
+        end
+        
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
           query_expressions << query.taint
         end
@@ -247,7 +259,7 @@ module YARD
         
         opts.on('-f', '--format FORMAT', 
                 'The output format for the template. (defaults to html)') do |format|
-          options[:format] = format
+          options[:format] = format.to_sym
         end
 
         opts.separator ""

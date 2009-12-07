@@ -11,14 +11,14 @@ describe YARD::CLI::Yardoc do
   
   it "should accept --title" do
     @yardoc.optparse('--title', 'hello world')
-    @yardoc.options[:title].should == :'hello world'
+    @yardoc.options[:title].should == 'hello world'
   end
 
   it "should alias --main to the --readme flag" do
     readme = File.join(File.dirname(__FILE__),'..','..','README.md')
 
     @yardoc.optparse('--main', readme)
-    @yardoc.options[:readme].should == readme.to_sym
+    @yardoc.options[:readme].should == readme
   end
   
   it "should select a markup provider when --markup-provider or -mp is set" do
@@ -101,5 +101,15 @@ describe YARD::CLI::Yardoc do
     obj.should_receive(:tag).ordered.with('private').and_return(true)
     @yardoc.optparse *%w( --no-private )
     @yardoc.options[:verifier].call(obj).should == false
+  end
+  
+  it "should accept --default-return" do
+    @yardoc.optparse *%w( --default-return XYZ )
+    @yardoc.options[:default_return].should == "XYZ"
+  end
+  
+  it "should allow --hide-void-return to be set" do
+    @yardoc.optparse *%w( --hide-void-return )
+    @yardoc.options[:hide_void_return].should be_true
   end
 end

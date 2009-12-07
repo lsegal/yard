@@ -250,7 +250,7 @@ module YARD
           meth = meth.tag(:overload)
         end
         
-        type = ""
+        type = options[:default_return] || ""
         if meth.tag(:return) && meth.tag(:return).types
           types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
           first = link ? h(types.first) : format_types([types.first], false)
@@ -260,7 +260,9 @@ module YARD
             type = first + '<sup>+</sup>'
           elsif types.size > 2
             type = [first, '...'].join(', ')
-          elsif types != ['void']
+          elsif types == ['void'] && options[:hide_void_return]
+            type = ""
+          else
             type = link ? h(types.join(", ")) : format_types(types, false)
           end
         end

@@ -42,8 +42,23 @@ module YARD
             meth = meth.tag(:overload)
           end
 
-          type = (meth.tag(:return) && meth.tag(:return).types ? meth.tag(:return).types.first : nil) || ""
-          type = "" if type == "void"
+          type = options[:default_return] || ""
+          if meth.tag(:return) && meth.tag(:return).types
+            types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
+            first = types.first
+            if types.size == 2 && types.last == 'nil'
+              type = first + '?'
+            elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
+              type = first + '+'
+            elsif types.size > 2
+              type = [first, '...'].join(', ')
+            elsif types == ['void'] && options[:hide_void_return]
+              type = ""
+            else
+              type = types.join(", ")
+            end
+          end
+          type = "(#{type})" if type.include?(',')
           type = " -> #{type} " unless type.empty?
           scope = meth.scope == :class ? "#{meth.namespace.name}." : "#{meth.namespace.name.to_s.downcase}."
           name = meth.name
