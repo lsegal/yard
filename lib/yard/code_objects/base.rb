@@ -36,7 +36,7 @@ module YARD
     CSEPQ = Regexp.quote CSEP
     CONSTANTMATCH = /[A-Z]\w*/
     NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
-    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
+    METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|<=>|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
     
     BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
