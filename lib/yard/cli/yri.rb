@@ -44,7 +44,9 @@ module YARD
       end
       
       def find_object(name)
+        log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
+          log.debug "Searching for #{name} in #{path}..."
           Registry.clear
           Registry.load(path)
           obj = Registry.at(name)
