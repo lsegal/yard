@@ -88,7 +88,7 @@ module YARD
       # Reads a .document file in the directory to get source file globs
       # @return [void] 
       def support_rdoc_document_file!
-        IO.read(".document").split(/\s+/)
+        IO.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
       rescue Errno::ENOENT
         []
       end
