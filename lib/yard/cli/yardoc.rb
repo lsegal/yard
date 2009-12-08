@@ -130,10 +130,18 @@ module YARD
         end
       end
       
-      # @param [Array<String>] expressions a list of query expressions to
-      #   turn into a proc
-      def add_verifier(*expressions)
-        
+      # Builds .yardoc files for all non-existing gems
+      def build_gems
+        require 'rubygems'
+        Gem.source_index.find_name('').each do |spec|
+          path = spec.full_bin_path
+          if File.directory?(path)
+            Dir.chdir(path)
+            log.info "Building YARD index for gem: #{gem}"
+            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+            Yardoc.run('--merge', '-n', '-b', yfile)
+          end
+        end
       end
       
       # Parses commandline options.
@@ -181,6 +189,10 @@ module YARD
         
         opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
           YARD::Parser::SourceParser.parser_type = :ruby18
+        end
+        
+        opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
+          build_gems
         end
 
         opts.separator ""
