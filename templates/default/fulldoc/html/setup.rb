@@ -14,7 +14,17 @@ def init
 
   options.delete(:objects)
   options.delete(:files)
-  objects.each {|object| serialize(object) }
+  
+  objects.each do |object| 
+    begin
+      serialize(object)
+    rescue => e
+      path = options[:serializer].serialized_path(object)
+      log.error "Exception occurred while generating '#{path}':"
+      log.error "Message: #{e.message}"
+      log.error e.backtrace[0, 5].map {|l| "  #{l}" }.join("\n")
+    end
+  end
 end
 
 def serialize(object)
