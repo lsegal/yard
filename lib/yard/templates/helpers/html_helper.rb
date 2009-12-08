@@ -246,7 +246,7 @@ module YARD
       
       def signature(meth, link = true, show_extras = true)
         # use first overload tag if it has a return type and method itself does not
-        if !meth.tag(:return) && meth.tag(:overload) && meth.tag(:overload).tag(:return)
+        if !meth.tag(:return) && meth.tags(:overload).size == 1 && meth.tag(:overload).tag(:return)
           meth = meth.tag(:overload)
         end
         
@@ -275,7 +275,7 @@ module YARD
         extras = []
         extras_text = ''
         if show_extras
-          if rw = meth.namespace.attributes[meth.scope][meth.name]
+          if meth.is_attribute? && rw = meth.namespace.attributes[meth.scope][meth.name]
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
             attname = attname.size == 1 ? attname.join('') + 'only' : nil
             extras << attname if attname
