@@ -1,4 +1,4 @@
-A [label="{module A|+ \#attr1 [RW]\l+ \#attr2 [R]\l+ \#attr3 [RW]\l|+ a\l+ \#a\l+ \#test_overload\l+ \#void_meth\ \:\ void\l}" rank=sink];
+A [label="{module A|+ \#attr1 [RW]\l+ \#attr2 [R]\l+ \#attr3 [RW]\l|+ a\l+ \#a\l+ \#test_multi_overload\l+ \#test_overload\l+ \#void_meth\ \:\ void\l}" rank=sink];
 A_Y [label="{class Y||}" rank=sink];
 subgraph cluster_A_Y {
   label = "Y"; labelloc=b;

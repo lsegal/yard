@@ -32,6 +32,10 @@ describe YARD::Templates::Engine.template(:default, :method) do
         #   @param [String] a hi
         def test_overload(*args) end
           
+        # @overload test_multi_overload(a)
+        # @overload test_multi_overload(a, b)
+        def test_multi_overload(*args) end
+          
         # @return [void]
         def void_meth; end
         
@@ -48,7 +52,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
   end
 
   it "should render html format correctly" do
-    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true, :visibilities => [:public]), :module001)
+    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true, :hide_void_return => true, :visibilities => [:public]), :module001)
   end
 
   it "should render text format correctly" do

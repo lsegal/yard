@@ -28,6 +28,6 @@ Class methods:
 Instance methods:
 -----------------
 
-    a, test_overload, void_meth
+    a, test_multi_overload, test_overload, void_meth
 
 

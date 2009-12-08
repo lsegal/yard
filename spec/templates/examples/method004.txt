@@ -1,7 +1,7 @@
 ------------------------------------------------------------- Method: #m
                                                    (Defined in: (stdin))
 
-    root.m(*args) 
+    root.m(*args) -> void 
 ------------------------------------------------------------------------
 
     This method returns an undefined value.
