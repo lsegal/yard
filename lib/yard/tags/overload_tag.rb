@@ -39,11 +39,12 @@ module YARD
       private
       
       def parse_tag(raw_text)
-        @signature, text = raw_text.split(/\r?\n/, 2)
-        text ||= ""
+        @signature, text = *raw_text.split(/\r?\n/, 2)
         @signature.strip!
+        text ||= ""
         numspaces = text[/\A(\s*)/, 1].length
-        text.gsub!(/^[ \t]{#{numspaces}}/, '').strip!
+        text.gsub!(/^[ \t]{#{numspaces}}/, '')
+        text.strip!
         @docstring = Docstring.new(text, nil)
       end
       
