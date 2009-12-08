@@ -421,7 +421,8 @@ module YARD
       # @return [String] formatted source
       def format_source(source)
         source.chomp!
-        indent = source.split(/\r?\n/).last[/^([ \t]*)/, 1].length
+        last = source.split(/\r?\n/).last
+        indent = last ? last[/^([ \t]*)/, 1].length : 0
         source.gsub(/^[ \t]{#{indent}}/, '')
       end
     end
