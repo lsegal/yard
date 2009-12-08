@@ -179,6 +179,7 @@ module YARD
       # Runs a {Handlers::Processor} object to post process the parsed statements.
       # @return [void] 
       def post_process
+        return unless @parser.respond_to? :enumerator
         post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
         post.process(@parser.enumerator)
       end
@@ -207,7 +208,7 @@ module YARD
       def parse_statements(content)
         case parser_type
         when :c
-          raise NotImplementedError, "no support for C/C++ files"
+          CParser.new(content, file).parse
         when :ruby18
           Ruby::Legacy::StatementList.new(content)
         when :ruby
