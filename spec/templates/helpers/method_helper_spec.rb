@@ -27,8 +27,12 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yield blah
         # @yieldparam a
         def foo; end
+        
+        # @yield blah
+        def foo2; end
       eof
       format_block(Registry.at('#foo')).should == "{|a| ... }"
+      format_block(Registry.at('#foo2')).should == "{ ... }"
     end
     
     it "should show block for method with @yield and types" do
