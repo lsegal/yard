@@ -36,6 +36,23 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:serializer].options[:basepath].should == :MYPATH
     @yardoc.files.should == ["FILE1", "FILE2"]
   end
+
+  it "should use String#shell_split to split .yardopts tokens" do
+    optsdata = "foo bar"
+    optsdata.should_receive(:shell_split)
+    IO.should_receive(:read).with("test").and_return(optsdata)
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.options_file = "test"
+    @yardoc.run
+  end
+  
+  it "should allow --title to have multiple spaces in .yardopts" do
+    IO.should_receive(:read).with("test").and_return("--title \"Foo Bar\"")
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.options_file = "test"
+    @yardoc.run
+    @yardoc.options[:title].should == "Foo Bar"
+  end
   
   it "should allow opts specified in command line to override yardopts file" do
     IO.should_receive(:read).with(".yardopts").and_return("-o NOTMYPATH")

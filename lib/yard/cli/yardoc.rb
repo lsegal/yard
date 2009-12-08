@@ -78,7 +78,7 @@ module YARD
       # Parses the .yardopts file for default yard options
       # @return [void] 
       def yardopts
-        IO.read(options_file).split(/\s+/)
+        IO.read(options_file).shell_split
       rescue Errno::ENOENT
         []
       end
