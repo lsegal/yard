@@ -12,5 +12,11 @@ describe YARD::Parser::CParser do
       obj.should_not be_nil
       obj.docstring.should_not be_blank
     end
+    
+    it "should parse method" do
+      obj = YARD::Registry.at('Array#initialize')
+      obj.docstring.should_not be_blank
+      obj.tags(:overload).size.should > 1
+    end
   end
 end

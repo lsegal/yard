@@ -193,7 +193,7 @@ module YARD
       end
       
       def parse_callseq(comments)
-        return comments unless comments[0] =~ /^call-seq:\s*(\S.+)/
+        return comments unless comments[0] =~ /\Acall-seq:\s*(\S.+)?/
         if $1
           comments[0] = " #{$1}"
         else
