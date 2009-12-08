@@ -80,7 +80,7 @@ describe YARD::CLI::Yardoc do
   
   it "should accept files section only containing extra files" do
     @yardoc.optparse *%w( - LICENSE )
-    @yardoc.files.should == %w( lib/**/*.rb )
+    @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
     @yardoc.options[:files].should == %w( LICENSE )
   end
 
@@ -94,9 +94,9 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:files].should == %w( a.txt b.txt )
   end
   
-  it "should accept no params and parse lib/**/*.rb" do
+  it "should accept no params and parse lib/**/*.rb ext/**/*.c" do
     @yardoc.optparse
-    @yardoc.files.should == %w( lib/**/*.rb )
+    @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
   end
   
   it "should accept a --query" do
