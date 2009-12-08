@@ -57,10 +57,9 @@ module YARD
       
       def add_gem_paths
         require 'rubygems'
-        Gem.path.each do |gpath|
-          Gem.source_index.entries.each do |gem, spec|
-            path = File.join(gpath, 'gems', gem, '.yardoc')
-            @search_paths << path if File.exist?(path)
+        Gem.source_index.find_name('').each do |spec|
+          if yfile = Registry.yardoc_file_for_gem(spec.name)
+            @search_paths << yfile
           end
         end
       rescue LoadError
