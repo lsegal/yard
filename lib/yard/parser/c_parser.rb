@@ -192,8 +192,12 @@ module YARD
       end
       
       def parse_callseq(comments)
-        return comments unless comments[0] == "call-seq:"
-        comments.shift
+        return comments unless comments[0] =~ /^call-seq:\s*(\S.+)/
+        if $1
+          comments[0] = " #{$1}"
+        else
+          comments.shift
+        end
         overloads = []
         while comments.first =~ /^\s+(\S.+)/ || comments.first =~ /^\s*$/
           line = comments.shift.strip
