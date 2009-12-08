@@ -212,4 +212,11 @@ describe YARD::CodeObjects::Base do
       object.format :x => 1
     end
   end
+  
+  describe '#source_type' do
+    it "should default source_type to :ruby" do
+      object = MethodObject.new(:root, :method)
+      object.source_type.should == :ruby
+    end
+  end
 end
