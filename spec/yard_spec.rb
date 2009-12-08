@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 describe YARD do
   describe '.load_plugins' do
     it "should load any plugin starting with 'yard_' or 'yard-'" do
-      plugins = { 
+      plugins = {
         'yard' => mock('yard'), 
         'yard_plugin' => mock('yard_plugin'), 
         'yard-plugin' => mock('yard-plugin'),
@@ -13,8 +13,9 @@ describe YARD do
       plugins.each do |k, v|
         v.should_receive(:name).at_least(1).times.and_return(k)
       end
+      
       source_mock = mock(:source_index)
-      source_mock.should_receive(:entries).and_return(plugins)
+      source_mock.should_receive(:find_name).with('').and_return(plugins.values)
       Gem.should_receive(:source_index).and_return(source_mock)
       YARD.should_receive(:require).with('yard_plugin').and_return(true)
       YARD.should_receive(:require).with('yard-plugin').and_return(true)
@@ -34,7 +35,7 @@ describe YARD do
         v.should_receive(:name).at_least(1).times.and_return(k)
       end
       source_mock = mock(:source_index)
-      source_mock.should_receive(:entries).and_return(plugins)
+      source_mock.should_receive(:find_name).with('').and_return(plugins.values)
       File.should_receive(:file?).with(path).and_return(true)
       IO.should_receive(:read).with(path).and_return('yard-plugin yard-plugin2')
       Gem.should_receive(:source_index).and_return(source_mock)
