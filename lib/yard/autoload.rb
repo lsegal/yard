@@ -100,6 +100,7 @@ module YARD
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
     end
 
+    autoload :CParser,             __p('parser/c_parser')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
