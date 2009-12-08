@@ -116,11 +116,6 @@ describe YARD::Parser::SourceParser do
   end
   
   describe '#parse_statements' do
-    it "should display a warning for C/C++ files" do
-      log.should_receive(:warn).with(/no support/)
-      YARD::Parser::SourceParser.parse_string("int main() { }", :c)
-    end
-    
     it "should display a warning for invalid parser type" do
       log.should_receive(:warn).with(/unrecognized file/)
       YARD::Parser::SourceParser.parse_string("int main() { }", :d)
