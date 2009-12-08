@@ -76,6 +76,7 @@ module YARD
         obj.add_file(@file)
         obj.parameters = []
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
+        obj.source_type = :c
         find_method_body(obj, func_name)
       end
       

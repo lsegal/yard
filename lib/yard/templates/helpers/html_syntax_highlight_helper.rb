@@ -2,8 +2,9 @@ module YARD
   module Templates
     module Helpers
       module HtmlSyntaxHighlightHelper
-        def html_syntax_highlight(source)
+        def html_syntax_highlight(source, type = :ruby)
           return "" unless source
+          return source unless type == :ruby
           return source if options[:no_highlight]
           tokenlist = Parser::Ruby::RubyParser.parse(source, "(syntax_highlight)").tokens
           output = ""

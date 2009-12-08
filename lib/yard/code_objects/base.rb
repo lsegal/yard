@@ -99,6 +99,12 @@ module YARD
       # @return [String, nil] source, if present, or nil
       attr_accessor :source
       
+      # Language of the source code associated with the object. Defaults to
+      # +:ruby+.
+      # 
+      # @return [Symbol] the language type
+      attr_accessor :source_type
+      
       # The one line signature representing an object. For a method, this will
       # be of the form "def meth(arguments...)". This is usually the first
       # source line.
@@ -184,6 +190,7 @@ module YARD
         @files = []
         @current_file_has_comments = false
         @name = name.to_sym
+        @source_type = :ruby
         @tags = []
         @docstring = Docstring.new('', self)
         self.namespace = namespace
