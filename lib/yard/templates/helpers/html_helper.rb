@@ -177,7 +177,7 @@ module YARD
       def link_url(url, title = nil, params = {})
         params = SymbolHash.new(false).update(
           :href => url,
-          :title  => title || url
+          :title  => h(title || url)
         ).update(params)
         "<a #{tag_attrs(params)}>#{title}</a>"
       end
@@ -283,12 +283,12 @@ module YARD
           extras << meth.visibility if meth.visibility != :public
           extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
         end
-        title = "%s %s<strong>%s</strong>%s %s" % [scope, type, name, args, blk]
+        title = "%s %s<strong>%s</strong>%s %s" % [scope, type, h(name), args, blk]
         if link
           if meth.is_a?(YARD::CodeObjects::MethodObject)
-            link_title = "#{meth.name(true)} (#{meth.scope} #{meth.type})"
+            link_title = "#{h meth.name(true)} (#{meth.scope} #{meth.type})"
           else
-            link_title = "#{name} (#{meth.type})"
+            link_title = "#{h name} (#{meth.type})"
           end
           link_url(url_for(meth), title, :title => link_title) + extras_text
         else
