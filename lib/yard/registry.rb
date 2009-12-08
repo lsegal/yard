@@ -1,5 +1,5 @@
 require 'singleton'
-require 'find'
+require 'fileutils'
 
 module YARD
   # The +Registry+ is the centralized data store for all {CodeObjects} created
@@ -16,6 +16,7 @@ module YARD
   # delegated to the instance.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
+    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
     
     include Singleton
   
@@ -32,6 +33,37 @@ module YARD
       def clear
         instance.clear 
         objects.clear
+      end
+
+      # Returns the .yardoc file associated with a gem.
+      # 
+      # @param [String] gem the name of the gem to search for
+      # @param [String] ver_require an optional Gem version requirement
+      # @param [Boolean] for_writing whether or not the method should search
+      #   for writable locations
+      # @return [String] if +for_writing+ is set to +true+, returns the best 
+      #   location suitable to write the .yardoc file. Otherwise, the first 
+      #   existing location associated with the gem's .yardoc file.
+      # @return [nil] if +for_writing+ is set to false and no yardoc file
+      #   is found, returns nil.
+      def yardoc_file_for_gem(gem, ver_require = ">= 0", for_writing = false)
+        spec = Gem.source_index.find_name(gem, ver_require).first
+        path = spec.full_gem_path
+        yfile = File.join(path, DEFAULT_YARDOC_FILE)
+        if for_writing && File.writable?(path)
+          return yfile
+        elsif !for_writing && File.exist?(yfile)
+          return yfile
+        end
+
+        path = LOCAL_YARDOC_INDEX
+        FileUtils.mkdir_p(path) if for_writing
+        path = File.join(path, "#{spec.full_name}.yardoc")
+        if for_writing
+          path
+        else
+          File.exist?(path) ? path : nil
+        end
       end
     end
 
