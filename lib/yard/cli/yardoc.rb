@@ -145,7 +145,7 @@ module YARD
         opts = OptionParser.new
         opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
 
-        opts.separator "(if a list of source files is omitted, lib/**/*.rb is used.)"
+        opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
         opts.separator ""
         opts.separator "Example: yardoc -o documentation/ - FAQ LICENSE"
         opts.separator "  The above example outputs documentation for files in"
@@ -279,7 +279,7 @@ module YARD
         
         # Last minute modifications
         parse_files(*args) unless args.empty?
-        self.files = ['lib/**/*.rb'] if self.files.empty?
+        self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
         options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)

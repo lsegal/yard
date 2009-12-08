@@ -48,7 +48,7 @@ module YARD
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
         # @return the parser object that was used to parse the source. 
-        def parse(paths = "lib/**/*.rb", level = log.level)
+        def parse(paths = ["lib/**/*.rb", "ext/**/*.c"], level = log.level)
           log.debug("Parsing #{paths} with `#{parser_type}` parser")
           files = [paths].flatten.
             map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c}" : p }.
