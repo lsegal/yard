@@ -148,6 +148,7 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         query_expressions = []
+        merge = false
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
@@ -174,6 +175,10 @@ module YARD
         
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
+        end
+        
+        opts.on('--merge', 'Merged the output of .yardoc with parsed contents') do
+          merge = true
         end
         
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
@@ -290,6 +295,7 @@ module YARD
         end
         
         # Last minute modifications
+        Registry.load_yardoc if merge
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
