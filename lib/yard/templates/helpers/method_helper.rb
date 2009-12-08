@@ -2,6 +2,7 @@ module YARD
   module Templates::Helpers
     module MethodHelper
       def format_args(object)
+        return if object.parameters.nil?
         unless object.parameters.empty?
           args = object.parameters.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
           h("(#{args})")
@@ -29,7 +30,7 @@ module YARD
       end
       
       def format_lines(object)
-        return "" unless object.source
+        return "" if object.source.nil? || object.line.nil?
         i = -1
         object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
       end

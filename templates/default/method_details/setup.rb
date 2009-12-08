@@ -4,5 +4,6 @@ end
 
 def source
   return if object.tags(:overload).size > 1
+  return if object.source.nil?
   erb(:source)
 end
