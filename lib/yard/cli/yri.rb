@@ -44,13 +44,27 @@ module YARD
       end
       
       def find_object(name)
+        if name.include? '#'
+          searches = ['_i']
+        elsif name.include? '.'
+          searches = ['_c', '']
+        else
+          searches = ['']
+        end
+        
         log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
           log.debug "Searching for #{name} in #{path}..."
-          Registry.clear
-          Registry.load(path)
-          obj = Registry.at(name)
-          return obj if obj
+          index_path = File.join(File.dirname(path), '.yardoc_index')
+          path_name = name.gsub(/::|#|\./, '/')
+          searches.each do |search|
+            if File.file?(File.join(index_path, path_name + search + '.cache'))
+              Registry.clear
+              Registry.load(path)
+              obj = Registry.at(name)
+              return obj if obj
+            end
+          end
         end
         nil
       end
