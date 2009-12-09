@@ -72,22 +72,36 @@ describe YARD::Parser::SourceParser do
     end
   
     it "should parse a set of file globs" do
-      Dir.should_receive(:[]).with('lib/**/*.rb')
+      Dir.should_receive(:[]).with('lib/**/*.rb').and_return([])
       YARD.parse('lib/**/*.rb')
     end
   
     it "should parse a set of absolute paths" do
-      Dir.should_not_receive(:[])
+      Dir.should_not_receive(:[]).and_return([])
+      File.should_receive(:file?).with('/path/to/file').and_return(true)
       IO.should_receive(:read).with('/path/to/file').and_return("")
       YARD.parse('/path/to/file')
     end
 
     it "should parse files with '*' in them as globs and others as absolute paths" do
       Dir.should_receive(:[]).with('*.rb').and_return(['a.rb', 'b.rb'])
+      File.should_receive(:file?).with('/path/to/file').and_return(true)
+      File.should_receive(:file?).with('a.rb').and_return(true)
+      File.should_receive(:file?).with('b.rb').and_return(true)
       IO.should_receive(:read).with('/path/to/file').and_return("")
       IO.should_receive(:read).with('a.rb').and_return("")
       IO.should_receive(:read).with('b.rb').and_return("")
       YARD.parse ['/path/to/file', '*.rb']
+    end
+    
+    it "should convert directories into globs" do
+      Dir.should_receive(:[]).with('foo/**/*.{rb,c}').and_return(['foo/a.rb', 'foo/bar/b.rb'])
+      File.should_receive(:directory?).with('foo').and_return(true)
+      File.should_receive(:file?).with('foo/a.rb').and_return(true)
+      File.should_receive(:file?).with('foo/bar/b.rb').and_return(true)
+      IO.should_receive(:read).with('foo/a.rb').and_return("")
+      IO.should_receive(:read).with('foo/bar/b.rb').and_return("")
+      YARD.parse ['foo']
     end
   end
   
@@ -109,6 +123,7 @@ describe YARD::Parser::SourceParser do
     
     it "should attempt to order files by length (process toplevel files first)" do
       %w(a a/b a/b/c).each do |file|
+        File.should_receive(:file?).with(file).and_return(true)
         IO.should_receive(:read).with(file).ordered.and_return('')
       end
       YARD.parse %w(a/b/c a/b a)
