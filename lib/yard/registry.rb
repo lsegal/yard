@@ -16,7 +16,7 @@ module YARD
   # delegated to the instance.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
-    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
+    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index/yardoc')
     
     include Singleton
   
