@@ -50,7 +50,10 @@ module YARD
         # @return the parser object that was used to parse the source. 
         def parse(paths = "lib/**/*.rb", level = log.level)
           log.debug("Parsing #{paths} with `#{parser_type}` parser")
-          files = [paths].flatten.map {|p| p.include?("*") ? Dir[p] : p }.flatten
+          files = [paths].flatten.
+            map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c}" : p }.
+            map {|p| p.include?("*") ? Dir[p] : p }.flatten.
+            reject {|p| !File.file?(p) }
 
           log.enter_level(level) do
             parse_in_order(*files.uniq)
