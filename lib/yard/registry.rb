@@ -16,7 +16,6 @@ module YARD
   # delegated to the instance.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
-    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index/yardoc')
     
     include Singleton
   
@@ -74,7 +73,9 @@ module YARD
     
     # The assumed types of a list of paths
     # @return [{String => Symbol}] a set of unresolved paths and their assumed type
-    attr_reader :proxy_types
+    def proxy_types
+      @store.proxy_types
+    end
     
     # Loads the registry and/or parses a list of files
     # 
@@ -96,9 +97,9 @@ module YARD
         if File.exists?(yardoc_file) && !reload
           load_yardoc
         else
-          size = namespace.size
+          size = @store.keys.size
           YARD.parse(files)
-          save if namespace.size > size
+          save if @store.keys.size > size
         end
         true
       elsif files.is_a?(String)
@@ -114,10 +115,7 @@ module YARD
     # @param [String] file the yardoc file to load.
     # @return [void] 
     def load_yardoc(file = yardoc_file)
-      return false unless File.exists?(file)
-      ns, pt = *Marshal.load(IO.read(file))
-      namespace.update(ns)
-      proxy_types.update(pt)
+      @store.load(file)
     end
     
     # Saves the registry to +file+
@@ -125,8 +123,7 @@ module YARD
     # @param [String] file the yardoc file to save to
     # @return [Boolean] true if the file was saved
     def save(file = yardoc_file)
-      File.open(file, "wb") {|f| Marshal.dump([@namespace, @proxy_types], f) }
-      true
+      @store.save(file)
     end
 
     # Returns all objects in the registry that match one of the types provided
@@ -142,7 +139,7 @@ module YARD
     # @return [Array<CodeObjects::Base>] the list of objects found
     # @see CodeObjects::Base#type
     def all(*types)
-      namespace.values.select do |obj| 
+      @store.values.select do |obj| 
         if types.empty?
           obj != root
         else
@@ -157,7 +154,7 @@ module YARD
     # Returns the paths of all of the objects in the registry.
     # @return [Array<String>] all of the paths in the registry.
     def paths
-      namespace.keys.map {|k| k.to_s }
+      @store.keys.map {|k| k.to_s }
     end
     
     # Returns the object at a specific path.
@@ -165,27 +162,25 @@ module YARD
     #   returns the {#root} object.
     # @return [CodeObjects::Base] the object at path
     # @return [nil] if no object is found
-    def at(path) path.to_s.empty? ? root : namespace[path] end
+    def at(path) path.to_s.empty? ? root : @store[path] end
     alias_method :[], :at
     
     # The root namespace object.
     # @return [CodeObjects::RootObject] the root object in the namespace
-    def root; namespace[:root] end
+    def root; @store[:root] end
     
     # Deletes an object from the registry
     # @param [CodeObjects::Base] object the object to remove
     # @return [void] 
     def delete(object) 
-      namespace.delete(object.path)
+      @store.delete(object.path)
       self.class.objects.delete(object.path)
     end
 
     # Clears the registry
     # @return [void] 
     def clear
-      @namespace = SymbolHash.new
-      @namespace[:root] = CodeObjects::RootObject.new(nil, :root)
-      @proxy_types = {}
+      @store = RegistryStore.new
     end
 
     # Creates the Registry
@@ -202,7 +197,7 @@ module YARD
     def register(object)
       self.class.objects[object.path] = object
       return if object.is_a?(CodeObjects::Proxy)
-      namespace[object.path] = object
+      @store[object.path] = object
     end
 
     # Attempts to find an object by name starting at +namespace+, performing
@@ -278,10 +273,6 @@ module YARD
     end
 
     private
-  
-    # The internal namespace hash
-    # @return [Hash{String => CodeObjects::Base}] the path/object hash
-    attr_accessor :namespace
 
     # Attempts to resolve a name in a namespace
     # 

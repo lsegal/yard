@@ -116,6 +116,7 @@ module YARD
     autoload :FileSystemSerializer, __p('serializers/file_system_serializer')
     autoload :ProcessSerializer,    __p('serializers/process_serializer')
     autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
+    autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
   end
   
   module Tags # Namespace for Tag components
@@ -147,10 +148,11 @@ module YARD
     autoload :Template, __p('templates/template')
   end
 
-  autoload :Docstring, __p('docstring')
-  autoload :Logger,    __p('logging')
-  autoload :Registry,  __p('registry')
-  autoload :Verifier,  __p('verifier')
+  autoload :Docstring,      __p('docstring')
+  autoload :Logger,         __p('logging')
+  autoload :Registry,       __p('registry')
+  autoload :RegistryStore,  __p('registry_store')
+  autoload :Verifier,       __p('verifier')
 end
 
 undef __p
