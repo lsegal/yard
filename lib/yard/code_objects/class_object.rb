@@ -113,7 +113,7 @@ module YARD::CodeObjects
         raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
       end
 
-      if name == @superclass.name && namespace != YARD::Registry.root
+      if name == @superclass.name && namespace != YARD::Registry.root && object.is_a?(String)
         @superclass = Proxy.new(namespace.namespace, object)
       end
       
