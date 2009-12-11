@@ -1,10 +1,20 @@
 module YARD
   class StubProxy
     instance_methods.each {|m| undef_method(m) unless m.to_s =~ /^__|^object_id$/ }
-    def initialize(path) @path = path end
-    def method_missing(meth, *args, &block)
-      Registry.at(@path).send(meth, *args, &block)
+    
+    def initialize(path, transient = false) 
+      @path = path
+      @transient = transient
     end
+    
+    def method_missing(meth, *args, &block)
+      return Registry.at(@path).send(meth, *args, &block) if @transient
+      @object ||= Registry.at(@path)
+      @object.send(meth, *args, &block)
+    end
+    
+    def _dump(depth) @path end
+    def _load(str) StubProxy.new(str) end
   end
 
   module Serializers
@@ -64,7 +74,7 @@ module YARD
       
       def internal_dump(object, first_object = false)
         if !first_object && object.is_a?(CodeObjects::Base)
-          return StubProxy.new(object.path)
+          return StubProxy.new(object.path, true)
         end
         
         object_track = {}
