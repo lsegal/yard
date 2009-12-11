@@ -116,6 +116,7 @@ module YARD
     # @param [String] file the yardoc file to load.
     # @return [void] 
     def load_yardoc(file = yardoc_file)
+      clear
       @store.load(file)
     end
     
