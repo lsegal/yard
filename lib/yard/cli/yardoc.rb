@@ -139,30 +139,11 @@ module YARD
           Registry.clear
           reload = true
           yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
-          if !File.file?(yfile)
+          if !File.directory?(yfile)
             Dir.chdir(spec.full_gem_path)
             log.info "Parsing source code for gem: #{spec.full_name}"
             Yardoc.run('-n', '-b', yfile)
             reload = false
-          end
-          
-          index_path = File.join(File.dirname(yfile), '.yardoc_index')
-          checksum = File.join(index_path, '.checksum')
-          
-          if File.file?(yfile)
-            Registry.load_yardoc(yfile) if reload
-            contents = File.read(yfile)
-            digest = Digest::SHA1.hexdigest(contents)
-            if !File.file?(checksum) || File.read(checksum) != digest
-              log.info "Building index for gem: #{spec.full_name}"
-              serializer = Serializers::FileSystemSerializer.new(:extension => 'cache')
-              Registry.all.each do |obj|
-                path = File.join(index_path, serializer.serialized_path(obj))
-                FileUtils.mkdir_p(File.dirname(path))
-                File.open(path, 'w') {|f| f.write(yfile) }
-              end
-              File.open(checksum, 'w') {|f| f.write(Digest::SHA1.hexdigest(contents)) }
-            end
           end
         end
         exit(0)

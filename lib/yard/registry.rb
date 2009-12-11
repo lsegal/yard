@@ -16,6 +16,7 @@ module YARD
   # delegated to the instance.
   class Registry 
     DEFAULT_YARDOC_FILE = ".yardoc"
+    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
     
     include Singleton
   
@@ -55,7 +56,7 @@ module YARD
           return yfile
         end
 
-        path = LOCAL_YARDOC_INDEX
+        path = Registry::LOCAL_YARDOC_INDEX
         FileUtils.mkdir_p(path) if for_writing
         path = File.join(path, "#{spec.full_name}.yardoc")
         if for_writing
