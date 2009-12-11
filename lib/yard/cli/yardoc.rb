@@ -88,7 +88,7 @@ module YARD
       # Reads a .document file in the directory to get source file globs
       # @return [void] 
       def support_rdoc_document_file!
-        IO.read(".document").split(/\s+/)
+        IO.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
       rescue Errno::ENOENT
         []
       end
@@ -130,22 +130,31 @@ module YARD
         end
       end
       
-      # @param [Array<String>] expressions a list of query expressions to
-      #   turn into a proc
-      def add_verifier(*expressions)
-        
+      # Builds .yardoc files for all non-existing gems
+      def build_gems
+        require 'rubygems'
+        Gem.source_index.find_name('').each do |spec|
+          path = spec.full_bin_path
+          if File.directory?(path)
+            Dir.chdir(path)
+            log.info "Building YARD index for gem: #{gem}"
+            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+            Yardoc.run('--merge', '-n', '-b', yfile)
+          end
+        end
       end
       
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         query_expressions = []
+        merge = false
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
         opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
 
-        opts.separator "(if a list of source files is omitted, lib/**/*.rb is used.)"
+        opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
         opts.separator ""
         opts.separator "Example: yardoc -o documentation/ - FAQ LICENSE"
         opts.separator "  The above example outputs documentation for files in"
@@ -168,6 +177,10 @@ module YARD
           YARD::Registry.yardoc_file = yfile
         end
         
+        opts.on('--merge', 'Merged the output of .yardoc with parsed contents') do
+          merge = true
+        end
+        
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
           self.generate = false
         end
@@ -181,6 +194,10 @@ module YARD
         
         opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
           YARD::Parser::SourceParser.parser_type = :ruby18
+        end
+        
+        opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
+          build_gems
         end
 
         opts.separator ""
@@ -278,8 +295,9 @@ module YARD
         end
         
         # Last minute modifications
+        Registry.load_yardoc if merge
         parse_files(*args) unless args.empty?
-        self.files = ['lib/**/*.rb'] if self.files.empty?
+        self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
         options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)

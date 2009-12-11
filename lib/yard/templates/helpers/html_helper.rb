@@ -296,25 +296,22 @@ module YARD
         end
       end
       
-      def html_syntax_highlight(source)
+      def html_syntax_highlight(source, type = :ruby)
         return "" unless source
         return source if options[:no_highlight]
+        
+        # handle !!!LANG prefix to send to html_syntax_highlight_LANG
         if source =~ /\A[ \t]*!!!(\w+)[ \t]*\r?\n/
-          meth = "html_syntax_highlight_#{$1}"
+          type, source = $1, $'
           source = $'
-          if respond_to?(meth)
-            send(meth, source)
-          else
-            source
-          end
-        else
-          # use ruby highlighting by default
-          html_syntax_highlight_ruby(source)
         end
+        
+        meth = "html_syntax_highlight_#{type}"
+        respond_to?(meth) ? send(meth, source) : h(source)
       end
       
       def html_syntax_highlight_plain(source)
-        source
+        h(source)
       end
     end
   end

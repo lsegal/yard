@@ -48,7 +48,7 @@ module YARD
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
         # @return the parser object that was used to parse the source. 
-        def parse(paths = "lib/**/*.rb", level = log.level)
+        def parse(paths = ["lib/**/*.rb", "ext/**/*.c"], level = log.level)
           log.debug("Parsing #{paths} with `#{parser_type}` parser")
           files = [paths].flatten.
             map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c}" : p }.
@@ -179,6 +179,7 @@ module YARD
       # Runs a {Handlers::Processor} object to post process the parsed statements.
       # @return [void] 
       def post_process
+        return unless @parser.respond_to? :enumerator
         post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
         post.process(@parser.enumerator)
       end
@@ -207,7 +208,7 @@ module YARD
       def parse_statements(content)
         case parser_type
         when :c
-          raise NotImplementedError, "no support for C/C++ files"
+          CParser.new(content, file).parse
         when :ruby18
           Ruby::Legacy::StatementList.new(content)
         when :ruby

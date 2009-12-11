@@ -5,6 +5,7 @@ module YARD
   module CLI # Namespace for command-line interface components
     autoload :YardGraph,  __p('cli/yard_graph')
     autoload :Yardoc,     __p('cli/yardoc')
+    autoload :YRI,        __p('cli/yri')
   end
   
   # A "code object" is defined as any entity in the Ruby language.
@@ -100,6 +101,7 @@ module YARD
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
     end
 
+    autoload :CParser,             __p('parser/c_parser')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
