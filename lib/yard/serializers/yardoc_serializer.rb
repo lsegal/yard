@@ -1,9 +1,8 @@
 module YARD
-  class StubProxy < Object
+  class StubProxy
     instance_methods.each {|m| undef_method(m) unless m.to_s =~ /^__|^object_id$/ }
     def initialize(path) @path = path end
     def method_missing(meth, *args, &block)
-      return if meth == :respond_to? && (args.first == :_dump || args.first == :marshal_dump)
       Registry.at(@path).send(meth, *args, &block)
     end
   end
