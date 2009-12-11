@@ -75,4 +75,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AttributeHandler" do
       meth.is_explicit?.should == false
     end
   end
+  
+  it "should handle attr call with no arguments" do
+    lambda { StubbedSourceParser.parse_string "attr" }.should_not raise_error
+  end
 end
