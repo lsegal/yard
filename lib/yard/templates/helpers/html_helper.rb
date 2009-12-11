@@ -295,6 +295,27 @@ module YARD
           title + extras_text
         end
       end
+      
+      def html_syntax_highlight(source)
+        return "" unless source
+        return source if options[:no_highlight]
+        if source =~ /\A[ \t]*!!!(\w+)[ \t]*\r?\n/
+          meth = "html_syntax_highlight_#{$1}"
+          source = $'
+          if respond_to?(meth)
+            send(meth, source)
+          else
+            source
+          end
+        else
+          # use ruby highlighting by default
+          html_syntax_highlight_ruby(source)
+        end
+      end
+      
+      def html_syntax_highlight_plain(source)
+        source
+      end
     end
   end
 end

@@ -2,9 +2,7 @@ module YARD
   module Templates
     module Helpers
       module HtmlSyntaxHighlightHelper
-        def html_syntax_highlight(source)
-          return "" unless source
-          return source if options[:no_highlight]
+        def html_syntax_highlight_ruby(source)
           tokenlist = Parser::Ruby::Legacy::TokenList.new(source)
           tokenlist.map do |s| 
             prettyclass = s.class.class_name.sub(/^Tk/, '').downcase

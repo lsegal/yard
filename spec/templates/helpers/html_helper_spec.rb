@@ -232,4 +232,41 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it_should_behave_like "signature"
   end
+  
+  describe '#html_syntax_highlight' do
+    before do
+      stub!(:options).and_return(:no_highlight => false)
+    end
+    
+    it "should return empty string on nil input" do
+      html_syntax_highlight(nil).should == ''
+    end
+    
+    it "should call #html_syntax_highlight_ruby by default" do
+      should_receive(:html_syntax_highlight_ruby).with('def x; end')
+      html_syntax_highlight('def x; end')
+    end
+    
+    it "should call html_syntax_highlight_NAME if source starts with !!!NAME" do
+      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
+      should_receive(:html_syntax_highlight_NAME).and_return("foobar")
+      html_syntax_highlight(<<-eof
+        !!!NAME
+        def x; end
+      eof
+      ).should == "foobar"
+    end
+    
+    it "should not highlight if :no_highlight option is true" do
+      stub!(:options).and_return(:no_highlight => true)
+      should_not_receive(:html_syntax_highlight_ruby)
+      html_syntax_highlight('def x; end').should == 'def x; end'
+    end
+    
+    it "should not highlight if there is no highlight method specified by !!!NAME" do
+      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
+      should_not_receive(:html_syntax_highlight_NAME)
+      html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
+    end
+  end
 end
