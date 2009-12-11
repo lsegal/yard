@@ -141,7 +141,7 @@ module YARD
           yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
           if !File.directory?(yfile)
             Dir.chdir(spec.full_gem_path)
-            log.info "Parsing source code for gem: #{spec.full_name}"
+            log.info "Building yardoc index for gem: #{spec.full_name}"
             Yardoc.run('-n', '-b', yfile)
             reload = false
           end
