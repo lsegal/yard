@@ -4,13 +4,17 @@ module YARD
   module CLI
     # A tool to view documentation in the console like `ri`
     class YRI
+      CACHE_FILE = File.expand_path('~/.yard/yri_cache')
+      
       # Helper method to run the utility on an instance.
       # @see #run
       def self.run(*args) new.run(*args) end
         
       def initialize
+        @cache = {}
         @search_paths = [YARD::ROOT + '/../.yardoc']
         add_gem_paths
+        load_cache
         @search_paths.uniq!
       end
         
@@ -34,6 +38,16 @@ module YARD
       
       protected
       
+      def cache_object(name, path)
+        @cache[name] = path
+        
+        File.open(CACHE_FILE, 'w') do |file|
+          @cache.each do |key, value|
+            file.puts("#{key} #{value}")
+          end
+        end
+      end
+      
       def print_object(object)
         if object.type == :method && object.is_alias?
           tmp = P(object.namespace, (object.scope == :instance ? "#" : "") + 
@@ -44,18 +58,30 @@ module YARD
       end
       
       def find_object(name)
+        @search_paths.unshift(@cache[name]) if @cache[name]
+        
         log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
           log.debug "Searching for #{name} in #{path}..."
-          Registry.clear
           Registry.load(path)
           obj = Registry.at(name)
-          return obj if obj
+          if obj
+            cache_object(name, path)
+            return obj
+          end
         end
         nil
       end
       
       private
+      
+      def load_cache
+        return unless File.file?(CACHE_FILE)
+        File.readlines(CACHE_FILE).each do |line|
+          line = line.strip.split(/\s+/)
+          @cache[line[0]] = line[1]
+        end
+      end
       
       def add_gem_paths
         require 'rubygems'

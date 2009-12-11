@@ -1,4 +1,6 @@
 require 'optparse'
+require 'digest/sha1'
+require 'fileutils'
 
 module YARD
   module CLI
@@ -134,14 +136,17 @@ module YARD
       def build_gems
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
-          path = spec.full_bin_path
-          if File.directory?(path)
-            Dir.chdir(path)
-            log.info "Building YARD index for gem: #{gem}"
-            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
-            Yardoc.run('--merge', '-n', '-b', yfile)
+          Registry.clear
+          reload = true
+          yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+          if !File.directory?(yfile)
+            Dir.chdir(spec.full_gem_path)
+            log.info "Building yardoc index for gem: #{spec.full_name}"
+            Yardoc.run('-n', '-b', yfile)
+            reload = false
           end
         end
+        exit(0)
       end
       
       # Parses commandline options.
