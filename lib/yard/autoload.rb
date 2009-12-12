@@ -3,6 +3,7 @@ def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
 
 module YARD
   module CLI # Namespace for command-line interface components
+    autoload :Base,       __p('cli/base')
     autoload :YardGraph,  __p('cli/yard_graph')
     autoload :Yardoc,     __p('cli/yardoc')
     autoload :YRI,        __p('cli/yri')

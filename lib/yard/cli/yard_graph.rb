@@ -1,12 +1,10 @@
-require 'optparse'
-
 module YARD
   module CLI
     # A command-line utility to generate Graphviz graphs from
     # a set of objects
     # 
     # @see YardGraph#run
-    class YardGraph
+    class YardGraph < Base
       # The options parsed out of the commandline.
       # Default options are:
       #   :format => :dot,
@@ -90,12 +88,7 @@ module YARD
           @serializer.instance_eval "def serialized_path(object) #{file.inspect} end"
         end
         
-        opts.separator ""
-        opts.separator "Other options:"
-        opts.on_tail('-q', '--quiet', 'Show no warnings') { log.level = Logger::ERROR }
-        opts.on_tail('--verbose', 'Show debugging information') { log.level = Logger::DEBUG }
-        opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
-        opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
+        common_options(opts)
 
         begin
           opts.parse!(args)

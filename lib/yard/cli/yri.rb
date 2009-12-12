@@ -1,9 +1,7 @@
-require 'optparse'
-
 module YARD
   module CLI
     # A tool to view documentation in the console like `ri`
-    class YRI
+    class YRI < Base
       CACHE_FILE = File.expand_path('~/.yard/yri_cache')
       
       # Helper method to run the utility on an instance.
@@ -113,12 +111,7 @@ module YARD
           @serializer = YARD::Serializers::ProcessSerializer.new(pager)
         end
         
-        opts.separator ""
-        opts.separator "Other options:"
-        opts.on_tail('-q', '--quiet', 'Show no warnings') { log.level = Logger::ERROR }
-        opts.on_tail('--verbose', 'Show debugging information') { log.level = Logger::DEBUG }
-        opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
-        opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
+        common_options(opts)
 
         begin
           opts.parse!(args)

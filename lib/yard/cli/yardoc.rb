@@ -1,10 +1,9 @@
-require 'optparse'
 require 'digest/sha1'
 require 'fileutils'
 
 module YARD
   module CLI
-    class Yardoc
+    class Yardoc < Base
       # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"
       
@@ -284,12 +283,7 @@ module YARD
           options[:format] = format.to_sym
         end
 
-        opts.separator ""
-        opts.separator "Other options:"
-        opts.on_tail('-q', '--quiet', 'Show no warnings.') { log.level = Logger::ERROR }
-        opts.on_tail('--verbose', 'Show debugging information.') { log.level = Logger::DEBUG }
-        opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
-        opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
+        common_options(opts)
         
         begin
           opts.parse!(args)
