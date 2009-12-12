@@ -37,8 +37,8 @@ module YARD
     def [](key) get(key) end
     def []=(key, value) put(key, value) end
       
-    def keys; @store.keys end
-    def values; @store.values end
+    def keys; load_all; @store.keys end
+    def values; load_all; @store.values end
     
     def root; @store[:root] end
       
@@ -51,6 +51,7 @@ module YARD
     end
     
     def save(file = nil)
+      load_all
       if file && file != @file
         @file = file
         @serializer = Serializers::YardocSerializer.new(@file)
@@ -89,9 +90,8 @@ module YARD
       return unless @file
       if File.directory?(@file) # new format
         Registry.objects.replace({})
-        path = File.join(objects_path, '**/*')
         @loaded_objects = 0
-        @available_objects = Dir.glob(path).select {|f| File.file?(f) }.size
+        @available_objects = all_disk_objects.size
         if File.file?(proxy_types_path)
           @proxy_types = Marshal.load(File.read(proxy_types_path))
         end
@@ -104,6 +104,27 @@ module YARD
     
     def load_yardoc_old
       @store, @proxy_types = *Marshal.load(File.read(@file))
+    end
+    
+    private
+    
+    def load_all
+      return unless @file
+      return if @loaded_objects >= @available_objects
+      log.debug "Loading entire database: #{@file} ..."
+      num_objects = 0
+      all_disk_objects.each do |path|
+        if obj = @serializer.deserialize(path, true)
+          put(obj.path, obj)
+          num_objects += 1
+        end
+      end
+      @loaded_objects += num_objects
+      log.debug "Loaded database (file='#{@file}' count=#{num_objects} total=#{@available_objects})"
+    end
+
+    def all_disk_objects
+      Dir.glob(File.join(objects_path, '**/*')).select {|f| File.file?(f) }
     end
   end
 end

@@ -55,8 +55,8 @@ module YARD
         super(object, dump(object))
       end
       
-      def deserialize(path)
-        path = File.join(basepath, serialized_path(path))
+      def deserialize(path, is_path = false)
+        path = File.join(basepath, serialized_path(path)) unless is_path
         if File.file?(path)
           log.debug "Deserializing #{path}..."
           Marshal.load(File.read(path))
