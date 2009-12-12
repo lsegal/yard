@@ -82,8 +82,6 @@ module YARD
           return StubProxy.new(object.path, true)
         end
         
-        object_track = {}
-        
         if object.is_a?(Hash) || object.is_a?(Array) || 
             object.is_a?(CodeObjects::Base) ||
             object.instance_variables.size > 0
@@ -99,23 +97,11 @@ module YARD
         case object
         when Hash
           list = object.map do |k, v|
-            [k, v].map do |item| 
-              if item.is_a?(CodeObjects::Base)
-                object_track[item.path] ||= internal_dump(item)
-              else
-                internal_dump(item)
-              end
-            end
+            [k, v].map {|item| internal_dump(item) }
           end
           object.replace(Hash[list])
         when Array
-          list = object.map do |item| 
-            if item.is_a?(CodeObjects::Base)
-              object_track[item.path] ||= internal_dump(item)
-            else
-              internal_dump(item)
-            end
-          end
+          list = object.map {|item| internal_dump(item) }
           object.replace(list)
         end
         
