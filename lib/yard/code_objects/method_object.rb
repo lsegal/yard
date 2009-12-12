@@ -60,7 +60,7 @@ module YARD::CodeObjects
     # Tests if the object is defined as an attribute in the namespace
     # @return [Boolean] whether the object is an attribute
     def is_attribute?
-      return false if namespace.is_a?(Proxy)
+      return false unless namespace.is_a?(NamespaceObject)
       attr_obj = namespace.attributes[scope][name.to_s.gsub(/=$/, '')]
       return false unless attr_obj
       attr_obj[name.to_s =~ /=$/ ? :write : :read] ? true : false
@@ -69,6 +69,7 @@ module YARD::CodeObjects
     # Tests if the object is defined as an alias of another method
     # @return [Boolean] whether the object is an alias
     def is_alias?
+      return false unless namespace.is_a?(NamespaceObject)
       namespace.aliases.has_key? self
     end
     
@@ -83,7 +84,7 @@ module YARD::CodeObjects
     # @return [Array<Symbol>] the alias names
     def aliases
       list = []
-      return list if namespace.is_a?(Proxy)
+      return list unless namespace.is_a?(NamespaceObject)
       namespace.aliases.each do |o, aname| 
         list << o if aname == name && o.scope == scope 
       end
