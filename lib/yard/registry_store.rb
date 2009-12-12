@@ -98,10 +98,13 @@ module YARD
         if root = @serializer.deserialize('root')
           @store[:root] = root
         end
+        true
       elsif File.file?(@file) # old format
         load_yardoc_old
+        true
+      else
+        false
       end
-      true
     end
     
     def load_yardoc_old

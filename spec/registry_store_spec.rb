@@ -16,7 +16,29 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
 
-      RegistryStore.new.load('foo')
+      RegistryStore.new.load('foo').should == true
+    end
+    
+    it "should return true if .yardoc is loaded (file)" do
+      File.should_receive(:directory?).with('myyardoc').and_return(false)
+      File.should_receive(:file?).with('myyardoc').and_return(true)
+      File.should_receive(:read).with('myyardoc').and_return(Marshal.dump(''))
+      RegistryStore.new.load('myyardoc').should == true
+    end
+
+    it "should return true if .yardoc is loaded (directory)" do
+      File.should_receive(:directory?).with('myyardoc').and_return(true)
+      File.should_receive(:file?).with('myyardoc/objects/root.dat').and_return(false)
+      File.should_receive(:file?).with('myyardoc/proxy_types').and_return(false)
+      RegistryStore.new.load('myyardoc').should == true
+    end
+
+    it "should return false if .yardoc does not exist" do
+      RegistryStore.new.load('NONEXIST').should == false
+    end
+    
+    it "should return false if there is no file to load" do
+      RegistryStore.new.load(nil).should == false
     end
   end
   
