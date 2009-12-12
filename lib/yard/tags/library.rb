@@ -46,6 +46,10 @@ module YARD
         attr_reader :labels
         attr_accessor :default_factory
         
+        def instance
+          @instance ||= new
+        end
+        
         def default_factory
           @default_factory ||= DefaultFactory.new
         end

@@ -39,7 +39,6 @@ module YARD
     # @param [CodeObjects::Base] object an object to associate the docstring
     #   with.
     def initialize(content = '', object = nil)
-      @tag_factory = Tags::Library.new
       @object = object
       
       self.all = content
@@ -165,12 +164,13 @@ module YARD
         return create_ref_tag(tag_name, $1, $2)
       end
         
+      tag_factory = Tags::Library.instance
       tag_method = "#{tag_name}_tag"
-      if tag_name && @tag_factory.respond_to?(tag_method)
-        if @tag_factory.method(tag_method).arity == 2
-          add_tag *@tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
+      if tag_name && tag_factory.respond_to?(tag_method)
+        if tag_factory.method(tag_method).arity == 2
+          add_tag *tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
         else
-          add_tag *@tag_factory.send(tag_method, tag_buf) 
+          add_tag *tag_factory.send(tag_method, tag_buf) 
         end
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
