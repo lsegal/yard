@@ -20,9 +20,8 @@ def init
       serialize(object)
     rescue => e
       path = options[:serializer].serialized_path(object)
-      log.error "Exception occurred while generating '#{path}':"
-      log.error "Message: #{e.message}"
-      log.error e.backtrace[0, 5].map {|l| "  #{l}" }.join("\n")
+      log.error "Exception occurred while generating '#{path}'"
+      log.backtrace(e)
     end
   end
 end

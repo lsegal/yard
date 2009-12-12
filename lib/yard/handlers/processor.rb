@@ -81,9 +81,8 @@ module YARD
               log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
               log.error "Unhandled exception in #{handler.to_s}:"
-              log.error "#{e.class.class_name}: #{e.message}"
               log.error "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
-              log.error "Stack trace:" + e.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
+              log.backtrace(e)
             end
           end
         end
