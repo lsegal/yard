@@ -1,6 +1,9 @@
 module YARD
   class StubProxy
     instance_methods.each {|m| undef_method(m) unless m.to_s =~ /^__|^object_id$/ }
+
+    def _dump(depth) @path end
+    def self._load(str) new(str) end
     
     def initialize(path, transient = false) 
       @path = path
@@ -8,13 +11,14 @@ module YARD
     end
     
     def method_missing(meth, *args, &block)
+      return true if meth == :respond_to? && args.first == :_dump
       return Registry.at(@path).send(meth, *args, &block) if @transient
       @object ||= Registry.at(@path)
       @object.send(meth, *args, &block)
+    rescue NoMethodError => e
+      e.backtrace.delete_if {|l| l[0, __FILE__.size] == __FILE__ }
+      raise
     end
-    
-    def _dump(depth) @path end
-    def _load(str) StubProxy.new(str) end
   end
 
   module Serializers
@@ -73,7 +77,8 @@ module YARD
       end
       
       def internal_dump(object, first_object = false)
-        if !first_object && object.is_a?(CodeObjects::Base)
+        if !first_object && object.is_a?(CodeObjects::Base) && 
+            !(Tags::OverloadTag === object)
           return StubProxy.new(object.path, true)
         end
         
@@ -87,12 +92,7 @@ module YARD
         
         object.instance_variables.each do |ivar|
           ivar_obj = object.instance_variable_get(ivar)
-          if ivar_obj.is_a?(CodeObjects::Base)
-            object_track[ivar_obj.path] ||= internal_dump(ivar_obj)
-            ivar_obj_dump = object_track[ivar_obj.path]
-          else
-            ivar_obj_dump = internal_dump(ivar_obj)
-          end
+          ivar_obj_dump = internal_dump(ivar_obj)
           object.instance_variable_set(ivar, ivar_obj_dump)
         end
         
