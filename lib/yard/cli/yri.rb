@@ -10,7 +10,7 @@ module YARD
         
       def initialize
         @cache = {}
-        @search_paths = [YARD::ROOT + '/../.yardoc']
+        @search_paths = ['.yardoc', YARD::ROOT + '/../.yardoc']
         add_gem_paths
         load_cache
         @search_paths.uniq!
