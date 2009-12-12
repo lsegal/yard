@@ -87,7 +87,7 @@ module YARD
     end
     
     def load_yardoc
-      return unless @file
+      return false unless @file
       if File.directory?(@file) # new format
         Registry.objects.replace({})
         @loaded_objects = 0
@@ -98,11 +98,10 @@ module YARD
         if root = @serializer.deserialize('root')
           @store[:root] = root
         end
-        true
       elsif File.file?(@file) # old format
         load_yardoc_old
       end
-      false
+      true
     end
     
     def load_yardoc_old
