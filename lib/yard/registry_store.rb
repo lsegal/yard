@@ -13,7 +13,7 @@ module YARD
     end
     
     def get(key)
-      return root if key == '' || key == :root
+      key = :root if key == ''
       key = key.to_sym
       return @store[key] if @store[key]
       return nil if @loaded_objects >= @available_objects
