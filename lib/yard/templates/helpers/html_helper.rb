@@ -165,7 +165,7 @@ module YARD
         return otitle if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
         title = otitle ? otitle.to_s : h(obj.path)
-        title = "Top Level Namespace" if title == "" && obj == Registry.root
+        title = "Top Level Namespace" if title == "" && obj.root?
         return title unless serializer
 
         return title if obj.is_a?(CodeObjects::Proxy)

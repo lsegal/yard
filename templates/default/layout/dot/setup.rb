@@ -2,7 +2,7 @@ attr_reader :contents
 
 def init
   if object
-    type = object == Registry.root ? :module : object.type
+    type = object.root? ? :module : object.type
     sections :header, [T(type)]
   else
     sections :header, [:contents]

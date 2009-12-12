@@ -338,7 +338,7 @@ module YARD
       # @return [String] the unique path of the object
       # @see #sep
       def path
-        if parent && parent != Registry.root
+        if parent && !parent.root?
           [parent.path, name.to_s].join(sep)
         else
           name.to_s
@@ -403,6 +403,9 @@ module YARD
       # Tests if the {#docstring} has a tag
       # @see Docstring#has_tag?
       def has_tag?(name); @docstring.has_tag?(name) end
+      
+      # @return whether or not this object is a RootObject
+      def root?; false end
 
       protected
     

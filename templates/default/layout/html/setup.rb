@@ -14,16 +14,16 @@ def init
       @page_title = options[:title]
       sections :layout, [:index]
     when CodeObjects::Base
-      if object != Registry.root
+      unless object.root?
         cur = object.namespace
-        while cur != Registry.root
+        while !cur.root?
           @breadcrumb.unshift(cur)
           cur = cur.namespace
         end
       end
     
       @page_title = format_object_title(object)
-      type = object == Registry.root ? :module : object.type
+      type = object.root? ? :module : object.type
       sections :layout, [T(type)]
     end
   else
@@ -37,7 +37,7 @@ end
 
 def index
   @objects_by_letter = {}
-  objects = @objects.reject {|o| o == Registry.root }.sort_by {|o| o.name.to_s }
+  objects = @objects.reject {|o| o.root? }.sort_by {|o| o.name.to_s }
   objects.each {|o| (@objects_by_letter[o.name.to_s[0,1].upcase] ||= []) << o }
   erb(:index)
 end

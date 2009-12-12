@@ -75,7 +75,7 @@ module YARD
         if obj = to_obj
           obj.path
         else
-          if @namespace == Registry.root
+          if @namespace.root?
             (@imethod ? ISEP : "") + name.to_s
           elsif @origname
             if @origname =~ /^[A-Z]/
@@ -199,6 +199,9 @@ module YARD
           end
         end
       end
+      
+      # This class is never a root object
+      def root?; false end
     
       private
     

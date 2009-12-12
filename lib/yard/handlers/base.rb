@@ -322,7 +322,7 @@ module YARD
       end
 
       def ensure_loaded!(object, max_retries = 1)
-        return if object == Registry.root
+        return if object.root?
         unless parser.load_order_errors
           if object.is_a?(Proxy)
             raise NamespaceMissingError, object

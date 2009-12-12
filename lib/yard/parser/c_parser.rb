@@ -21,7 +21,7 @@ module YARD
       protected
       
       def ensure_loaded!(object, max_retries = 1)
-        return if object == Registry.root
+        return if object.is_a?(CodeObjects::RootObject)
         if RUBY_PLATFORM =~ /java/ || defined?(::Rubinius)
           unless $NO_CONTINUATION_WARNING
             $NO_CONTINUATION_WARNING = true

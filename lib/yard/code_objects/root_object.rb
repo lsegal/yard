@@ -5,6 +5,7 @@ module YARD
     class RootObject < ModuleObject
       def path; "" end
       def inspect; "#<yardoc root>" end
+      def root?; true end
     end
   end
 end

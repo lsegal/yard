@@ -23,7 +23,7 @@
       <% n = n == 2 ? 1 : 2 %>
     <% end %>
   <% end %>
-  <% unless object == Registry.root %>
+  <% unless object.root? %>
     <dt class="r<%=n%> last">Defined in:</dt>
     <dd class="r<%=n%> last"><%= erb(:defines) %></dd>
   <% end %>

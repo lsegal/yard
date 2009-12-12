@@ -35,7 +35,7 @@
               <% objects.each do |obj| %>
                 <li>
                   <%= linkify obj, obj.name %> 
-                  <% if obj.namespace != Registry.root %>
+                  <% if !obj.namespace.root? %>
                     <small>(<%= obj.namespace.path %>)</small>
                   <% end %>
                 </li>
