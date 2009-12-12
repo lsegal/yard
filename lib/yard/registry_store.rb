@@ -12,7 +12,8 @@ module YARD
       @available_objects = 0
     end
     
-    def get(key) 
+    def get(key)
+      return root if key == '' || key == :root
       key = key.to_sym
       return @store[key] if @store[key]
       return nil if @loaded_objects >= @available_objects
@@ -20,11 +21,18 @@ module YARD
       # check disk
       if obj = @serializer.deserialize(key)
         @loaded_objects += 1
-        @store[key] = obj
+        put(key, obj)
       end
     end
     
-    def put(key, value) @store[key.to_sym] = value end
+    def put(key, value)
+      if key == ''
+        @store[:root] = value
+      else
+        @store[key.to_sym] = value 
+      end
+    end
+    
     def delete(key) @store.delete(key.to_sym) end
     def [](key) get(key) end
     def []=(key, value) put(key, value) end
