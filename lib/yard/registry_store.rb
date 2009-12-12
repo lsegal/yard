@@ -95,6 +95,9 @@ module YARD
         if File.file?(proxy_types_path)
           @proxy_types = Marshal.load(File.read(proxy_types_path))
         end
+        if root = @serializer.deserialize('root')
+          @store[:root] = root
+        end
         true
       elsif File.file?(@file) # old format
         load_yardoc_old
@@ -112,15 +115,18 @@ module YARD
       return unless @file
       return if @loaded_objects >= @available_objects
       log.debug "Loading entire database: #{@file} ..."
-      num_objects = 0
-      all_disk_objects.each do |path|
+      objects = []
+      
+      all_disk_objects.sort_by {|x| x.size }.each do |path|
         if obj = @serializer.deserialize(path, true)
-          put(obj.path, obj)
-          num_objects += 1
+          objects << obj
         end
       end
-      @loaded_objects += num_objects
-      log.debug "Loaded database (file='#{@file}' count=#{num_objects} total=#{@available_objects})"
+      objects.each do |obj|
+        put(obj.path, obj)
+      end
+      @loaded_objects += objects.size
+      log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
     end
 
     def all_disk_objects

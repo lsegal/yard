@@ -13,6 +13,7 @@ describe YARD::RegistryStore do
     
     it "should load new yardoc format if .yardoc is a directory" do
       File.should_receive(:directory?).with('foo').and_return(true)
+      File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
 
       RegistryStore.new.load('foo')
