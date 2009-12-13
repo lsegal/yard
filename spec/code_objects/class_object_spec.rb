@@ -150,8 +150,13 @@ describe YARD::CodeObjects::ClassObject do
       consts.should_not include(P("YARD::CONST4"))
     end
   
-    it "should not set a superclass on Object class" do
+    it "should not set a superclass on BasicObject class" do
       o = ClassObject.new(:root, :Object)
+      o.superclass.should == P(:BasicObject)
+    end
+    
+    it "should set superclass of Object to BasicObject" do
+      o = ClassObject.new(:root, :BasicObject)
       o.superclass.should be_nil
     end
   

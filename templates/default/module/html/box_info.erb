@@ -4,7 +4,7 @@
     <dt class="r<%=n%>">Inherits:</dt>
     <dd class="r<%=n%>">
       <span class="inheritName"><%= linkify object.superclass %></span>
-      <% if object.superclass.name != :Object %>
+      <% if object.superclass.name != :BasicObject %>
         <ul class="fullTree">
           <li><%= linkify P(:Object) %></li>
           <% object.inheritance_tree.reverse.each_with_index do |obj, i| %>

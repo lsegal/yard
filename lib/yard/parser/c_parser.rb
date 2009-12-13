@@ -54,10 +54,11 @@ module YARD
       end
 
       def handle_class(var_name, class_name, parent, in_module = nil)
+        parent = nil if parent == "0"
         namespace = @namespaces[in_module] || (in_module ? P(in_module.gsub(/^rb_[mc]/, '')) : :root)
         ensure_loaded!(namespace)
         obj = CodeObjects::ClassObject.new(namespace, class_name)
-        obj.superclass = @namespaces[parent] || parent.gsub(/^rb_[mc]/, '')
+        obj.superclass = @namespaces[parent] || parent.gsub(/^rb_[mc]/, '') if parent
         obj.add_file(@file)
         find_namespace_docstring(obj)      
         @namespaces[var_name] = obj
@@ -248,10 +249,10 @@ module YARD
       
       def parse_classes
         # The '.' lets us handle SWIG-generated files
-        @content.scan(/([\w\.]+)\s* = \s*rb_define_class\s*
+        @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_class|boot_defclass)\s*
                   \(
                      \s*"(\w+)",
-                     \s*(\w+)\s*
+                     \s*(\w+|0)\s*
                   \)/mx) do |var_name, class_name, parent|
           handle_class(var_name, class_name, parent)
         end

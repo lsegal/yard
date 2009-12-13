@@ -13,7 +13,14 @@ module YARD::CodeObjects
       if is_exception?
         self.superclass ||= :Exception unless P(namespace, name) == P(:Exception)
       else
-        self.superclass ||= :Object unless P(namespace, name) == P(:Object)
+        case P(namespace, name).path
+        when "BasicObject"
+          nil
+        when "Object"
+          self.superclass ||= :BasicObject
+        else
+          self.superclass ||= :Object
+        end
       end
     end
     
@@ -33,7 +40,7 @@ module YARD::CodeObjects
     def inheritance_tree(include_mods = false)
       list = (include_mods ? mixins(:instance) : [])
       if superclass.is_a?(Proxy) || superclass.respond_to?(:inheritance_tree)
-        list += [superclass] unless superclass == P(:Object)
+        list += [superclass] unless superclass == P(:Object) || superclass == P(:BasicObject)
       end
       [self] + list.map do |m|
         next m unless m.respond_to?(:inheritance_tree)
