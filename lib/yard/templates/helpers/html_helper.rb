@@ -251,6 +251,7 @@ module YARD
         end
         
         type = options[:default_return] || ""
+        type = link ? h(type) : format_types([type], false)
         if meth.tag(:return) && meth.tag(:return).types
           types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
           first = link ? h(types.first) : format_types([types.first], false)
