@@ -29,6 +29,7 @@ module YARD
       
       def objects_path; File.join(basepath, 'objects') end
       def proxy_types_path; File.join(basepath, 'proxy_types') end
+      def checksums_path; File.join(basepath, 'checksums') end
       
       def serialized_path(object)
         path = case object

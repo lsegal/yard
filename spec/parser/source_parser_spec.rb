@@ -103,6 +103,18 @@ describe YARD::Parser::SourceParser do
       IO.should_receive(:read).with('foo/bar/b.rb').and_return("")
       YARD.parse ['foo']
     end
+    
+    it "should use Registry.checksums cache if file is cached" do
+      data = 'DATA'
+      hash = Registry.checksum_for(data)
+      cmock = mock(:cmock)
+      cmock.should_receive(:[]).with('foo/bar').and_return(hash)
+      log.should_receive(:info)
+      Registry.should_receive(:checksums).and_return(cmock)
+      File.should_receive(:file?).with('foo/bar').and_return(true)
+      IO.should_receive(:read).with('foo/bar').and_return(data)
+      YARD.parse('foo/bar')
+    end
   end
   
   describe '#parse_in_order' do

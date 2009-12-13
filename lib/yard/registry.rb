@@ -1,5 +1,6 @@
 require 'singleton'
 require 'fileutils'
+require 'digest/sha1'
 
 module YARD
   # The +Registry+ is the centralized data store for all {CodeObjects} created
@@ -124,8 +125,20 @@ module YARD
     # 
     # @param [String] file the yardoc file to save to
     # @return [Boolean] true if the file was saved
-    def save(file = yardoc_file)
-      @store.save(file)
+    def save(merge = false, file = yardoc_file)
+      @store.save(merge, file)
+    end
+    
+    def checksums
+      @store.checksums
+    end
+    
+    def checksum_for(data)
+      Digest::SHA1.hexdigest(data)
+    end
+    
+    def delete_from_disk
+      @store.destroy
     end
 
     # Returns all objects in the registry that match one of the types provided
