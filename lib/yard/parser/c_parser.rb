@@ -124,7 +124,7 @@ module YARD
             end
           end
         end
-        object.docstring = parse_comments(comment) if comment
+        object.docstring = parse_comments(object, comment) if comment
       end
       
       def find_constant_docstring(type, const_name)
@@ -136,7 +136,7 @@ module YARD
         else
           ''
         end
-        parse_comments(comments)
+        parse_comments(object, comments)
       end
       
       def find_method_body(object, func_name, content = @content)
@@ -162,7 +162,7 @@ module YARD
           # override_comment = find_override_comment(object)
           # comment = override_comment if override_comment
 
-          object.docstring = parse_comments(comment) if comment
+          object.docstring = parse_comments(object, comment) if comment
           object.source = body_text
         when %r{((?>/\*.*?\*/\s*))^\s*\#\s*define\s+#{func_name}\s+(\w+)}m
           comment = $1
@@ -171,11 +171,11 @@ module YARD
           # No body, but might still have an override comment
           # comment = find_override_comment(object)
           comment = nil
-          object.docstring = parse_comments(comment) if comment
+          object.docstring = parse_comments(object, comment) if comment
         end
       end
       
-      def parse_comments(comments)
+      def parse_comments(object, comments)
         spaces = nil
         comments = remove_private_comments(comments)
         comments = comments.split(/\r?\n/).map do |line|
@@ -188,12 +188,13 @@ module YARD
           spaces = (line[/^(\s+)/, 1] || "").size if spaces.nil?
           line.gsub(/^\s{0,#{spaces}}/, '').rstrip
         end.compact
-        
-        comments = parse_callseq(comments)
+
+        comments.shift if comments.first =~ /^\s*Document-method:/
+        comments = parse_callseq(object, comments)
         comments.join("\n")
       end
       
-      def parse_callseq(comments)
+      def parse_callseq(object, comments)
         return comments unless comments[0] =~ /\Acall-seq:\s*(\S.+)?/
         if $1
           comments[0] = " #{$1}"
@@ -206,14 +207,7 @@ module YARD
           next if line.empty?
           line.sub!(/^\w+[\.#]/, '')
           signature, types = *line.split(/ [-=]> /)
-          types = (types||"").split(/,| or /).map {|t| t.strip }.map do |t|
-            {"obj"    => "Object",
-             "arr"    => "Array",
-             "array"  => "Array",
-             "str"    => "String",
-             "string" => "String",
-             "enum" => "Enumerator"}[t]
-          end.compact
+          types = parse_types(object, types)
           if signature.sub!(/\[?\s*(\{(?:\s*\|(.+?)\|)?.*\})\s*\]?\s*$/, '') && $1
             blk, blkparams = $1, $2
           else
@@ -238,6 +232,43 @@ module YARD
         end
         
         comments + [""] + overloads
+      end
+      
+      def parse_types(object, types)
+        if types =~ /true or false/
+          ["Boolean"]
+        else
+          (types||"").split(/,| or /).map do |t|
+            case t.strip.gsub(/^an?_/, '')
+            when "obj", "object", "anObject"; "Object"
+            when "arr", "array", "anArray"; "Array"
+            when "str", "string", "new_str"; "String"
+            when "enum", "anEnumerator"; "Enumerator"
+            when "exc", "exception"; "Exception"
+            when "proc", "proc_obj", "prc"; "Proc"
+            when "binding"; "Binding"
+            when "hsh", "hash", "aHash"; "Hash"
+            when "ios", "io"; "IO"
+            when "file"; "File"
+            when "float"; "Float"
+            when "time", "new_time"; "Time"
+            when "dir", "aDir"; "Dir"
+            when "regexp", "new_regexp"; "Regexp"
+            when "matchdata"; "MatchData"
+            when "encoding"; "Encoding"
+            when "fixnum", "fix"; "Fixnum"
+            when "int", "integer", "Integer"; "Integer"
+            when "num", "numeric", "Numeric", "number"; "Numeric"
+            when "aBignum"; "Bignum"
+            when "nil"; "nil"
+            when "true"; "true"
+            when "false"; "false"
+            when "boolean", "Boolean"; "Boolean"
+            when "self"; object.namespace.name.to_s
+            when /^[-+]?\d/; t
+            end
+          end.compact
+        end
       end
       
       def parse_modules
