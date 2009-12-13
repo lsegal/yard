@@ -241,7 +241,7 @@ module YARD
           (types||"").split(/,| or /).map do |t|
             case t.strip.gsub(/^an?_/, '')
             when "obj", "object", "anObject"; "Object"
-            when "arr", "array", "anArray"; "Array"
+            when "arr", "array", "anArray", /^\[/; "Array"
             when "str", "string", "new_str"; "String"
             when "enum", "anEnumerator"; "Enumerator"
             when "exc", "exception"; "Exception"
