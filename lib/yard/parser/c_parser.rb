@@ -207,9 +207,11 @@ module YARD
           line.sub!(/^\w+[\.#]/, '')
           signature, types = *line.split(/ [-=]> /)
           types = (types||"").split(/,| or /).map {|t| t.strip }.map do |t|
-            {"obj" => "Object",
-             "arr" => "Array",
-             "str" => "String",
+            {"obj"    => "Object",
+             "arr"    => "Array",
+             "array"  => "Array",
+             "str"    => "String",
+             "string" => "String",
              "enum" => "Enumerator"}[t]
           end.compact
           if signature.sub!(/\[?\s*(\{(?:\s*\|(.+?)\|)?.*\})\s*\]?\s*$/, '') && $1
@@ -217,12 +219,18 @@ module YARD
           else
             blk, blkparams = nil, nil
           end
-          if signature =~ /^\w+\s+\S/
+          case signature
+          when /^(\w+)\s*=\s+(\w+)/
+            signature = "#{$1}=(#{$2})"
+          when /^\w+\s+\S/
             signature = signature.split(/\s+/)
             signature = "#{signature[1]}#{signature[2] ? '(' + signature[2..-1].join(' ') + ')' : ''}"
-          elsif signature =~ /^\w+\[(.+?)\]\s*(=)?/
+          when /^\w+\[(.+?)\]\s*(=)?/
             signature = "[]#{$2}(#{$1})"
+          when /^\w+\s+(#{CodeObjects::METHODMATCH})\s+(\w+)/
+            signature = "#{$1}(#{$2})"
           end
+          next unless signature =~ /^#{CodeObjects::METHODNAMEMATCH}/
           signature = signature.rstrip
           overloads << "@overload #{signature}"
           overloads << "  @yield [#{blkparams}]" if blk
