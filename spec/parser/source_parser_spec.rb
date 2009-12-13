@@ -106,7 +106,7 @@ describe YARD::Parser::SourceParser do
     
     it "should use Registry.checksums cache if file is cached" do
       data = 'DATA'
-      hash = Digest::SHA1.hexdigest(data)
+      hash = Registry.checksum_for(data)
       cmock = mock(:cmock)
       cmock.should_receive(:[]).with('foo/bar').and_return(hash)
       log.should_receive(:info)

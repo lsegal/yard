@@ -1,5 +1,6 @@
 require 'singleton'
 require 'fileutils'
+require 'digest/sha1'
 
 module YARD
   # The +Registry+ is the centralized data store for all {CodeObjects} created
@@ -130,6 +131,10 @@ module YARD
     
     def checksums
       @store.checksums
+    end
+    
+    def checksum_for(data)
+      Digest::SHA1.hexdigest(data)
     end
     
     def delete_from_disk

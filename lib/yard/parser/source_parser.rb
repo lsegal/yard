@@ -1,6 +1,5 @@
 require 'stringio'
 require 'continuation' unless RUBY18
-require 'digest/sha1'
 
 module YARD
   module Parser
@@ -144,7 +143,7 @@ module YARD
         when String
           @file = content
           content = IO.read(content)
-          checksum = Digest::SHA1.hexdigest(content)
+          checksum = Registry.checksum_for(content)
           if Registry.checksums[file] == checksum
             log.info "File '#{file}' hasn't changed, skipping..."
             return
