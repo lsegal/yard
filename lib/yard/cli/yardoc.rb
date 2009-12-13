@@ -14,9 +14,10 @@ module YARD
       # @return [Array<String>] list of Ruby source files to process
       attr_accessor :files
       
-      # @return [Boolean] whether to reparse the source files even if the 
-      #   .yardoc already exists.
-      attr_accessor :reload
+      # @return [Boolean] whether to use the existing yardoc db if the 
+      #   .yardoc already exists. Also makes use of file checksums to
+      #   parse only changed files.
+      attr_accessor :use_cache
       
       # @return [Boolean] whether to generate output
       attr_accessor :generate
@@ -45,7 +46,7 @@ module YARD
           :verifier => nil
         )
         @files = []
-        @reload = true
+        @use_cache = false
         @generate = true
         @options_file = DEFAULT_YARDOPTS_FILE
       end
@@ -59,7 +60,10 @@ module YARD
         args += support_rdoc_document_file!
         optparse(*yardopts)
         optparse(*args)
-        Registry.load(files, reload)
+        
+        Registry.load if use_cache
+        YARD.parse(files)
+        Registry.save(use_cache)
         
         if generate
           Templates::Engine.generate(all_objects, options)
@@ -152,7 +156,6 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         query_expressions = []
-        merge = false
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
@@ -172,17 +175,13 @@ module YARD
         opts.separator "General Options:"
 
         opts.on('-c', '--use-cache [FILE]', 
-                'Use the cached .yardoc db to generate documentation. (defaults to no cache)') do |file|
+                "Use the cached .yardoc db to generate documentation. (defaults to no cache)") do |file|
           YARD::Registry.yardoc_file = file if file
-          self.reload = false
+          self.use_cache = true
         end
         
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
-        end
-        
-        opts.on('--merge', 'Merged the output of .yardoc with parsed contents') do
-          merge = true
         end
         
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
@@ -294,7 +293,6 @@ module YARD
         end
         
         # Last minute modifications
-        Registry.load_yardoc if merge
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?

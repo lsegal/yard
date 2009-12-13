@@ -6,7 +6,7 @@ describe YARD::CLI::Yardoc do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.stub!(:generate).and_return(false)
-    Registry.instance.stub!(:load)
+    YARD.stub!(:parse)
   end
   
   it "should accept --title" do
