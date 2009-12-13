@@ -13,8 +13,9 @@ describe YARD::RegistryStore do
     
     it "should load new yardoc format if .yardoc is a directory" do
       File.should_receive(:directory?).with('foo').and_return(true)
-      File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
+      File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
 
       RegistryStore.new.load('foo').should == true
     end
@@ -27,10 +28,11 @@ describe YARD::RegistryStore do
     end
 
     it "should return true if .yardoc is loaded (directory)" do
-      File.should_receive(:directory?).with('myyardoc').and_return(true)
-      File.should_receive(:file?).with('myyardoc/objects/root.dat').and_return(false)
-      File.should_receive(:file?).with('myyardoc/proxy_types').and_return(false)
-      RegistryStore.new.load('myyardoc').should == true
+      File.should_receive(:directory?).with('foo').and_return(true)
+      File.should_receive(:file?).with('foo/checksums').and_return(false)
+      File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
+      RegistryStore.new.load('foo').should == true
     end
 
     it "should return false if .yardoc does not exist" do

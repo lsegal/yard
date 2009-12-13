@@ -124,8 +124,16 @@ module YARD
     # 
     # @param [String] file the yardoc file to save to
     # @return [Boolean] true if the file was saved
-    def save(file = yardoc_file)
-      @store.save(file)
+    def save(merge = false, file = yardoc_file)
+      @store.save(merge, file)
+    end
+    
+    def checksums
+      @store.checksums
+    end
+    
+    def delete_from_disk
+      @store.destroy
     end
 
     # Returns all objects in the registry that match one of the types provided
