@@ -10,7 +10,7 @@ module YARD
         
       def initialize
         @cache = {}
-        @search_paths = ['.yardoc', YARD::ROOT + '/../.yardoc']
+        @search_paths = [Registry.yardoc_file, YARD::ROOT + '/../.yardoc']
         add_gem_paths
         load_cache
         @search_paths.uniq!
@@ -37,6 +37,7 @@ module YARD
       protected
       
       def cache_object(name, path)
+        return if path == Registry.yardoc_file
         @cache[name] = path
         
         File.open(CACHE_FILE, 'w') do |file|
