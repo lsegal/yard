@@ -45,4 +45,9 @@ describe YARD::Tags::OverloadTag do
     @tag.kind_of?(CodeObjects::Base).should == true
     (CodeObjects::Base === @tag).should == true
   end
+
+  it "should not parse 'def' out of method name" do
+    tag = Tags::OverloadTag.new(:overload, nil, "default")
+    tag.signature.should == "default"
+  end
 end
