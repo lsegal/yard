@@ -1,5 +1,6 @@
 require 'stringio'
 require 'continuation' unless RUBY18
+require 'digest/sha1'
 
 module YARD
   module Parser
@@ -137,12 +138,18 @@ module YARD
       # use the class methods {parse} and {parse_string}.
       #
       # @param [String, #read, Object] content the source file to parse
-      # @return the parser object used to parse the source
+      # @return [Object, nil] the parser object used to parse the source
       def parse(content = __FILE__)
         case content
         when String
           @file = content
           content = IO.read(content)
+          checksum = Digest::SHA1.hexdigest(content)
+          if Registry.checksums[file] == checksum
+            log.info "File '#{file}' hasn't changed, skipping..."
+            return
+          end
+          Registry.checksums[@file] = checksum
           self.parser_type = parser_type_for_filename(file)
         else
           content = content.read if content.respond_to? :read
