@@ -3,7 +3,7 @@ def init
 end
 
 def source
-  return if object.tags(:overload).size > 1
+  return if Tags::OverloadTag === object
   return if object.source.nil?
   erb(:source)
 end
