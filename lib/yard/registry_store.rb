@@ -38,7 +38,7 @@ module YARD
     def [](key) get(key) end
     def []=(key, value) put(key, value) end
       
-    def keys; load_all; @store.keys end
+    def keys(reload = true) load_all if reload; @store.keys end
     def values(reload = true) load_all if reload; @store.values end
     
     def root; @store[:root] end
@@ -67,13 +67,13 @@ module YARD
     
     # Deletes the .yardoc database on disk
     # 
-    # @param [Boolean] safe if safe is set to true, the file/directory
+    # @param [Boolean] force if force is not set to true, the file/directory
     #   will only be removed if it ends with .yardoc. This helps with
     #   cases where the directory might have been named incorrectly.
     # @return [Boolean] true if the .yardoc database was deleted, false
     #   otherwise.
-    def destroy(safe = true)
-      if (safe && file =~ /\.yardoc$/) || !safe
+    def destroy(force = false)
+      if (!force && file =~ /\.yardoc$/) || force
         if File.file?(@file) 
           # Handle silent upgrade of old .yardoc format
           File.unlink(@file) 
@@ -87,10 +87,6 @@ module YARD
     end
     
     protected
-    
-    def path_for(key)
-      @serializer.serialized_path(key)
-    end
     
     def objects_path
       @serializer.objects_path
