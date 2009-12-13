@@ -44,7 +44,7 @@ def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
   options[:page_title] = title
-  options[:serialized_path] = 'file.' + File.basename(file.gsub(/\..+$/, '')) + '.html'
+  options[:serialized_path] = 'file.' + File.basename(file.gsub(/\.[^.]+$/, '')) + '.html'
 
   serialize_index(options) if file == options[:readme]
   Templates::Engine.with_serializer(options[:serialized_path], options[:serializer]) do

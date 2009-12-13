@@ -4,7 +4,7 @@ def init
   if @file
     @contents = IO.read(@file)
     @file = File.basename(@file)
-    @fname = @file.gsub(/\..+$/, '')
+    @fname = @file.gsub(/\.[^.]+$/, '')
     @breadcrumb_title = "File: " + @fname
     @page_title ||= @breadcrumb_title
     sections :layout, [:diskfile]

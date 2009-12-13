@@ -238,7 +238,7 @@ module YARD
         if filename == options[:readme]
           filename = 'index'
         else
-          filename = 'file.' + File.basename(filename).gsub(/\..+$/, '')
+          filename = 'file.' + File.basename(filename).gsub(/\.[^.]+$/, '')
         end
         link = File.relative_path(from, filename)
         link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
