@@ -19,7 +19,7 @@ class File
       from.shift; to.shift
     end
     fname = from.pop
-    join *(from.map { RELATIVE_PARENTDIR } + to)
+    join(*(from.map { RELATIVE_PARENTDIR } + to))
   end
   
   # Cleans a path by removing extraneous '..', '.' and '/' characters

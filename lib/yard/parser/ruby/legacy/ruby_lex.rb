@@ -14,7 +14,6 @@ module YARD
       
       class Token
         NO_TEXT = "??".freeze
-        attr :text
 
         def initialize(line_no, char_no)
           @line_no = line_no
@@ -457,9 +456,9 @@ module YARD
         @exception_on_syntax_error = true
       end
 
-      attr :skip_space, true
-      attr :read_auto_clean_up, true
-      attr :exception_on_syntax_error, true
+      attr_accessor :skip_space
+      attr_accessor :read_auto_clean_up
+      attr_accessor :exception_on_syntax_error
 
       attr :indent
 

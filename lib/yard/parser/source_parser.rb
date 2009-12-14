@@ -32,6 +32,7 @@ module YARD
         # 
         # @return [Symbol] the parser type
         attr_accessor :parser_type
+        undef parser_type=
         
         # Sets the parser and makes sure it's a valid type
         # 

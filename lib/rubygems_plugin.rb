@@ -14,6 +14,7 @@ class Gem::Specification
     @has_rdoc == 'yard'
   end
   
+  undef has_rdoc?
   def has_rdoc?
     @has_rdoc && @has_rdoc != 'yard'
   end
@@ -52,6 +53,7 @@ class Gem::DocManager
     Dir.chdir(old_pwd)
   end
 
+  undef setup_rdoc
   def setup_rdoc
     if File.exist?(@doc_dir) && !File.writable?(@doc_dir) then
       raise Gem::FilePermissionError.new(@doc_dir)

@@ -238,6 +238,8 @@ module YARD
       
       attr_reader :parser, :statement
       attr_accessor :owner, :namespace, :visibility, :scope
+      undef owner, owner=, namespace, namespace=
+      undef visibility, visibility=, scope, scope=
       
       def owner; parser.owner end
       def owner=(v) parser.owner=(v) end
