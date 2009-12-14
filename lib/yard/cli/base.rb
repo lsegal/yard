@@ -2,7 +2,15 @@ require 'optparse'
 
 module YARD
   module CLI
+    # Abstract base class for CLI utilities. Provides some helper methods for
+    # the option parser
+    # 
+    # @abstract
     class Base
+      # Adds a set of common options to the tail of the OptionParser
+      # 
+      # @param [OptionParser] opts the option parser object
+      # @return [void]
       def common_options(opts)
         opts.separator ""
         opts.separator "Other options:"
