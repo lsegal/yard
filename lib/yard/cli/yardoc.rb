@@ -66,7 +66,16 @@ module YARD
         Registry.save(use_cache)
         
         if generate
-          Templates::Engine.generate(all_objects, options)
+          if use_cache
+            objects = all_objects
+            Registry.all # load all
+            objects.each do |object|
+              opts = options.merge(:object => object, :type => :layout)
+              Templates::Engine.render(opts)
+            end
+          else
+            Templates::Engine.generate(all_objects, options)
+          end
         end
         
         true
@@ -77,7 +86,19 @@ module YARD
       # 
       # @return [Array<CodeObjects::Base>] a list of code objects to process
       def all_objects
-        Registry.all(:root, :module, :class)
+        types = [:root, :module, :class]
+        if use_cache
+          Registry.paths(false).map do |path|
+            obj = Registry.at(path)
+            if types.include?(obj.type)
+              obj
+            else
+              nil
+            end
+          end.compact
+        else
+          Registry.all(*types)
+        end
       end
       
       # Parses the .yardopts file for default yard options

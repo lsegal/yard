@@ -182,9 +182,10 @@ module YARD
     end
     
     # Returns the paths of all of the objects in the registry.
+    # @param [Boolean] reload whether to load entire database
     # @return [Array<String>] all of the paths in the registry.
-    def paths
-      @store.keys.map {|k| k.to_s }
+    def paths(reload = true)
+      @store.keys(reload).map {|k| k.to_s }
     end
     
     # Returns the object at a specific path.

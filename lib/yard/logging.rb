@@ -16,7 +16,7 @@ module YARD
     def initialize(*args)
       super
       self.show_backtraces = false
-      self.level = INFO
+      self.level = WARN
       self.formatter = method(:format_log)
     end
     
