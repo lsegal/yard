@@ -49,6 +49,19 @@ module YARD
       #   is found, returns nil.
       def yardoc_file_for_gem(gem, ver_require = ">= 0", for_writing = false)
         spec = Gem.source_index.find_name(gem, ver_require).first
+        
+        if for_writing
+          global_yardoc_file(spec, for_writing) ||
+            local_yardoc_file(spec, for_writing)
+        else
+          local_yardoc_file(spec, for_writing) ||
+            global_yardoc_file(spec, for_writing)
+        end
+      end
+      
+      private
+      
+      def global_yardoc_file(spec, for_writing = false)
         path = spec.full_gem_path
         yfile = File.join(path, DEFAULT_YARDOC_FILE)
         if for_writing && File.writable?(path)
@@ -56,7 +69,9 @@ module YARD
         elsif !for_writing && File.exist?(yfile)
           return yfile
         end
-
+      end
+      
+      def local_yardoc_file(spec, for_writing = false)
         path = Registry::LOCAL_YARDOC_INDEX
         FileUtils.mkdir_p(path) if for_writing
         path = File.join(path, "#{spec.full_name}.yardoc")

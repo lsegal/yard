@@ -136,15 +136,20 @@ module YARD
       end
       
       # Builds .yardoc files for all non-existing gems
-      def build_gems
+      # @param [Boolean] rebuild Forces rebuild of all gems
+      def build_gems(rebuild = false)
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
-          Registry.clear
           reload = true
-          yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
-          if !File.directory?(yfile)
+          dir = Registry.yardoc_file_for_gem(spec.name)
+          next unless dir
+          if File.directory?(dir) && !rebuild
+            log.debug "#{spec.name} index already exists at '#{dir}'"
+          else
             Dir.chdir(spec.full_gem_path)
             log.info "Building yardoc index for gem: #{spec.full_name}"
+            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+            Registry.clear
             Yardoc.run('-n', '-b', yfile)
             reload = false
           end
@@ -156,6 +161,7 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         query_expressions = []
+        do_build_gems, do_rebuild_gems = false, false
         serialopts = SymbolHash.new
         
         opts = OptionParser.new
@@ -200,7 +206,12 @@ module YARD
         end
         
         opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
-          build_gems
+          do_build_gems = true
+        end
+
+        opts.on('--re-build-gems', 'Forces building .yardoc files for all gems (implies -n)') do
+          do_build_gems = true
+          do_rebuild_gems = true
         end
 
         opts.separator ""
@@ -293,6 +304,7 @@ module YARD
         end
         
         # Last minute modifications
+        build_gems(do_rebuild_gems) if do_build_gems
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
