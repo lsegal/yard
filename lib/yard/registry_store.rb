@@ -1,6 +1,10 @@
 require 'fileutils'
 
 module YARD
+  # The data store for the {Registry}.
+  # 
+  # @see Registry
+  # @see Serializers::YardocSerializer
   class RegistryStore
     attr_reader :proxy_types, :file, :checksums
     
@@ -13,6 +17,11 @@ module YARD
       @available_objects = 0
     end
     
+    # Gets a {CodeObjects::Base} from the store
+    # 
+    # @param [String, Symbol] key the path name of the object to look for.
+    #   If it is empty or :root, returns the {#root} object.
+    # @return [CodeObjects::Base, nil] a code object or nil if none is found
     def get(key)
       key = :root if key == ''
       key = key.to_sym
@@ -26,6 +35,10 @@ module YARD
       end
     end
     
+    # Associates an object with a path
+    # @param [String, Symbol] key the path name (:root or '' for root object)
+    # @param [CodeObjects::Base] value the object to store
+    # @return [CodeObjects::Base] returns +value+
     def put(key, value)
       if key == ''
         @store[:root] = value
@@ -34,15 +47,32 @@ module YARD
       end
     end
     
+    alias [] get
+    alias []= put
+    
     def delete(key) @store.delete(key.to_sym) end
-    def [](key) get(key) end
-    def []=(key, value) put(key, value) end
-      
+    
+    # Gets all path names from the store. Loads the entire database
+    # if +reload+ is +true+
+    # 
+    # @param [Boolean] reload if false, does not load the entire database
+    #   before a lookup.
+    # @return [Array<Symbol>] the path names of all the code objects
     def keys(reload = true) load_all if reload; @store.keys end
+    
+    # Gets all code objects from the store. Loads the entire database
+    # if +reload+ is +true+
+    # 
+    # @param [Boolean] reload if false, does not load the entire database
+    #   before a lookup.
+    # @return [Array<CodeObjects::Base>] all the code objects
     def values(reload = true) load_all if reload; @store.values end
     
+    # @return [CodeObjects::RootObject] the root object
     def root; @store[:root] end
-      
+    
+    # @param [String, nil] file the name of the yardoc db to load
+    # @return [Boolean] whether the database was loaded
     def load(file = nil)
       @file = file
       @store = {}
@@ -51,6 +81,11 @@ module YARD
       load_yardoc
     end
     
+    # Saves the database to disk
+    # @param [Boolean] merge if true, merges the data in memory with the
+    #   data on disk, otherwise the data on disk is deleted.
+    # @param [String, nil] file if supplied, the name of the file to save to
+    # @return [Boolean] whether the database was saved
     def save(merge = true, file = nil)
       if file && file != @file
         @file = file
