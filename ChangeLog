@@ -1,6 +1,590 @@
+2009-12-14  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec: Bump
+  version to 0.5.0
+
+  * lib/yard/parser/c_parser.rb: Add auto-type support for Class in native code
+
+2009-12-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/logging.rb, lib/yard/registry.rb: When
+  yardoc --use-cache is specified, generate only the objects parsed from
+  changed files
+
+  * lib/yard/cli/yardoc.rb, lib/yard/registry.rb: Update behaviour for
+  --build-gems, Registry.yardoc_file_for_gem, add --re-build-gems to force
+  building of all gems
+
+  * lib/yard/registry_store.rb: Document RegistryStore
+
+  * lib/yard/cli/base.rb: Document CLI::Base
+
+  * lib/rubygems_plugin.rb, lib/yard/core_ext/file.rb,
+  lib/yard/handlers/base.rb, lib/yard/parser/ruby/legacy/ruby_lex.rb,
+  lib/yard/parser/source_parser.rb: Fix various warnings in ruby -w  Closes
+  gh-55
+
+  * lib/yard/core_ext/hash.rb, spec/core_ext/hash_spec.rb: Backport Hash[arr]
+  1.8.7+ behaviour to 1.8.6
+
+  * lib/yard/registry_store.rb, spec/registry_store_spec.rb: Add more specs to
+  RegistryStore
+
+  * lib/yard/parser/source_parser.rb, lib/yard/registry.rb,
+  spec/parser/source_parser_spec.rb: Move checksum code into
+  Registry#checksum_for
+
+  * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Don't cache Registry.yardoc_file
+  in yri lookups
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb: Add
+  checking of checksum cache when parsing files
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Streamline merge/cache
+  options into -c (--use-cache) to reload existing yardoc db and merge the
+  results.  Adding -c will also do incremental parsing on files using against a
+  SHA1 checksum of the file contents to speed up parse time. TODO: incremental
+  generation of HTML files.
+
+  * lib/yard/registry.rb, lib/yard/registry_store.rb,
+  lib/yard/serializers/yardoc_serializer.rb, spec/registry_store_spec.rb: Add
+  loading/saving of RegistryStore#checksums
+
+  * lib/yard/parser/c_parser.rb: Add extra types recognition for Array
+
+  * lib/yard/parser/c_parser.rb: Improve types recognition for C call-seqs
+
+  * spec/templates/examples/method003.html,
+  spec/templates/examples/method005.html,
+  spec/templates/examples/module001.html,
+  templates/default/method_details/setup.rb: Fix source not showing for
+  overloaded methods
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix linking of default return
+  type in signature
+
+  * lib/yard/templates/helpers/html_helper.rb: Properly linkify default return
+  type
+
+  * lib/yard/tags/overload_tag.rb, spec/tags/overload_tag_spec.rb: Fix
+  OverloadTag when parsing signature starting with 'def'
+
+  * lib/yard/parser/c_parser.rb: Improve parsing of native call-seq
+
+2009-12-12  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html,
+  spec/templates/examples/method004.html,
+  spec/templates/examples/method005.html,
+  templates/default/method/html/header.erb: Fix view source link not showing
+  for individual method page
+
+  * lib/yard/code_objects/class_object.rb, lib/yard/parser/c_parser.rb,
+  spec/code_objects/class_object_spec.rb,
+  templates/default/module/html/box_info.erb: Add support for BasicObject class
+  as parent of Object
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  templates/default/fulldoc/html/setup.rb,
+  templates/default/layout/html/index.erb,
+  templates/default/layout/html/setup.rb: Fix displaying of README filenames in
+  the form README.lang.ext
+
+  * lib/yard/serializers/yardoc_serializer.rb: Remove unique object
+  serialization tricks in YardocSerializer (marshal handles this)
+
+  * lib/yard/registry_store.rb, spec/registry_store_spec.rb: Add specs for
+  RegistryStore#load returning true/false
+
+  * lib/yard/registry_store.rb: Registry.load_yardoc should return true if
+  .yardoc loads
+
+  * lib/yard/registry_store.rb, spec/registry_store_spec.rb: Always load root
+  object first when loading .yardoc
+
+  * lib/yard/registry_store.rb: Treat :root and empty string as equivalent in
+  RegistryStore#get
+
+  * lib/yard/handlers/processor.rb, lib/yard/logging.rb,
+  templates/default/fulldoc/html/setup.rb: Add Logger#backtrace to show
+  backtraces only if Logger#show_backtraces is set.  Enables --backtrace in CLI
+  classes.
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/code_objects/root_object.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/c_parser.rb, lib/yard/templates/helpers/html_helper.rb,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/layout/dot/setup.rb,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/index.erb,
+  templates/default/layout/html/setup.rb,
+  templates/default/method_details/text/setup.rb,
+  templates/default/module/html/box_info.erb: Don't test against actual
+  Registry.root, instead check if object is a RootObject (through #root?)
+
+  * lib/yard/code_objects/method_object.rb: Make sure parent of method is a
+  namespace
+
+  * lib/yard/cli/yri.rb: Current path's .yardoc should be first in the search
+  path for yri
+
+  * lib/yard/autoload.rb, lib/yard/cli/base.rb, lib/yard/cli/yard_graph.rb,
+  lib/yard/cli/yardoc.rb, lib/yard/cli/yri.rb: Refactor CLI classes into
+  subclass of CLI::Base to get common options
+
+2009-12-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/docstring.rb, lib/yard/tags/library.rb: Docstring object should
+  not keep tag factory instance in an instance variable
+
+  * lib/yard/serializers/yardoc_serializer.rb: Better dumping on a
+  StubProxy/CodeObject
+
+  * lib/yard/registry_store.rb, lib/yard/serializers/yardoc_serializer.rb: Load
+  entire yardoc db before calling keys/values
+
+  * lib/yard/registry.rb, lib/yard/registry_store.rb: get('') and get(:root)
+  should both get root object
+
+  * lib/yard/serializers/yardoc_serializer.rb: Cache object that StubProxy is
+  pointing to (saves a lookup) but don't serialize cached object.
+
+  * lib/yard/serializers/yardoc_serializer.rb: Minor refactoring
+
+  * benchmarks/yri_cache.rb, lib/yard/cli/yri.rb: Add caching to yri with a
+  benchmark to illustrate speedup results
+
+  * lib/yard/registry.rb, spec/registry_spec.rb, spec/registry_store_spec.rb:
+  Add specs for RegistryStore
+
+  * spec/registry_spec.rb: Refactor Registry specs
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb,
+  spec/templates/helpers/html_helper_spec.rb: Can now opt out of syntax
+  highlighting on an indented block by putting "!!!plain" alone on the first
+  line of the block.  For example:  !!!plain non-ruby code here  Also allows
+  adding support for highlighting multiple languages. The prefix !!!NAME will
+  call the method "html_syntax_highlight_NAME" with the source. This is how
+  "!!!ruby" works, for instance.  Thanks lriesterer for the initial patch.
+
+2009-12-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/attribute_handler.rb,
+  spec/handlers/attribute_handler_spec.rb: Handle attr* call with no arguments
+
+  * lib/yard/code_objects/class_object.rb: Fix handling of
+  ClassObject#superclass
+
+  * lib/yard/code_objects/class_object.rb: Fix handling of
+  ClassObject#superclass
+
+  * lib/yard/handlers/ruby/attribute_handler.rb,
+  spec/handlers/attribute_handler_spec.rb: Handle attr* call with no arguments
+
+  * lib/yard/cli/yardoc.rb: Change message for --build-gems
+
+  * lib/yard/cli/yri.rb: yri can now use the new .yardoc format for index
+
+  * lib/yard/cli/yardoc.rb, lib/yard/registry.rb: Fix --build-gem to use new
+  .yardoc format for index
+
+2009-12-09  Loren Segal <lsegal@soen.ca>
+
+  * spec/parser/source_parser_spec.rb: Fix specs for YARD.parse and directories
+
+  * spec/parser/source_parser_spec.rb: Fix specs for YARD.parse and directories
+
+2009-12-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/cli/yri.rb, lib/yard/registry.rb: Add
+  implementation to write index for YRI. Should be merged into .yardoc /
+  Registry
+
+  * lib/yard.rb, spec/yard_spec.rb: Only load latest version of any Gem plugin
+
+  * lib/yard/cli/yri.rb: Add debugging messages to YRI
+
+  * lib/yard/cli/yardoc.rb: Add --merge to merge parsed data into existing
+  .yardoc file (specified with -b)
+
+  * lib/yard/cli/yardoc.rb: Add --build-gems to build .yardoc file for gems
+
+  * lib/yard/cli/yri.rb, lib/yard/registry.rb: Add Registry.yardoc_file_for_gem
+
+  * bin/yri, lib/yard/autoload.rb, lib/yard/cli/yri.rb: Refactor yri bin into
+  CLI::YRI
+
+  * templates/default/fulldoc/html/setup.rb: Handle errors during HTML
+  generation
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Fix call-seq
+  handling
+
+  * lib/yard/code_objects/base.rb: Fix exception being thrown for source with
+  no spaces
+
+  * lib/yard/cli/yardoc.rb: Ignore comments in .document file
+
+  * lib/yard/code_objects/base.rb, lib/yard/parser/c_parser.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb,
+  spec/code_objects/base_spec.rb,
+  templates/default/method_details/html/source.erb: Add
+  CodeObjects::Base#source_type to set source type (:ruby or :c), only
+  highlight for Ruby code
+
+2009-12-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/c_parser.rb: Add support for one-line call-seq:
+
+  * lib/yard/cli/yardoc.rb, lib/yard/parser/source_parser.rb,
+  spec/cli/yardoc_spec.rb: Add ext/**/*.c to default parse glob
+
+  * spec/parser/source_parser_spec.rb: Remove warning spec for C/C++ files
+
+  * lib/yard/autoload.rb, lib/yard/parser/c_parser.rb,
+  lib/yard/parser/source_parser.rb, spec/parser/c_parser_spec.rb,
+  spec/parser/examples/array.c.txt, spec/spec_helper.rb: Initial C parser
+  implementation
+
+2009-12-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/cli/yri.rb, lib/yard/registry.rb: Add
+  implementation to write index for YRI. Should be merged into .yardoc /
+  Registry
+
+  * lib/yard.rb, spec/yard_spec.rb: Only load latest version of any Gem plugin
+
+  * lib/yard/cli/yri.rb: Add debugging messages to YRI
+
+  * lib/yard/cli/yardoc.rb: Add --merge to merge parsed data into existing
+  .yardoc file (specified with -b)
+
+  * lib/yard/cli/yardoc.rb: Add --build-gems to build .yardoc file for gems
+
+  * lib/yard/cli/yri.rb, lib/yard/registry.rb: Add Registry.yardoc_file_for_gem
+
+  * bin/yri, lib/yard/autoload.rb, lib/yard/cli/yri.rb: Refactor yri bin into
+  CLI::YRI
+
+  * templates/default/fulldoc/html/setup.rb: Handle errors during HTML
+  generation
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Fix call-seq
+  handling
+
+  * lib/yard/code_objects/base.rb: Fix exception being thrown for source with
+  no spaces
+
+  * lib/yard/cli/yardoc.rb: Ignore comments in .document file
+
+  * lib/yard/code_objects/base.rb, lib/yard/parser/c_parser.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb,
+  spec/code_objects/base_spec.rb,
+  templates/default/method_details/html/source.erb: Add
+  CodeObjects::Base#source_type to set source type (:ruby or :c), only
+  highlight for Ruby code
+
+2009-12-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/c_parser.rb: Add support for one-line call-seq:
+
+  * lib/yard/cli/yardoc.rb, lib/yard/parser/source_parser.rb,
+  spec/cli/yardoc_spec.rb: Add ext/**/*.c to default parse glob
+
+  * spec/parser/source_parser_spec.rb: Remove warning spec for C/C++ files
+
+  * lib/yard/autoload.rb, lib/yard/parser/c_parser.rb,
+  lib/yard/parser/source_parser.rb, spec/parser/c_parser_spec.rb,
+  spec/parser/examples/array.c.txt, spec/spec_helper.rb: Initial C parser
+  implementation
+
+2009-12-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb: If a directory is given to YARD.parse,
+  make it a file glob instead.
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add better tokenization
+  support in .yardoc file (support quoted multi-space tokens)  You should now
+  be able to set a long title with:  --title "Foo Bar"
+
+  * lib/yard/core_ext/string.rb, spec/core_ext/string_spec.rb: Add
+  String#shell_split to split text into tokens like a shell does (respecting
+  quoted tokens)
+
+  * spec/core_ext/string_spec.rb: Refactor string specifications
+
+2009-12-07  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/method004.html,
+  spec/templates/examples/method004.txt,
+  spec/templates/examples/method005.html,
+  spec/templates/examples/method005.txt, spec/templates/examples/module001.dot,
+  spec/templates/examples/module001.html,
+  spec/templates/examples/module001.txt, spec/templates/module_spec.rb: Correct
+  all template specs
+
+  * lib/yard/templates/helpers/html_helper.rb: Only show overload as signature
+  if there is one overload
+
+  * lib/yard/tags/overload_tag.rb: Improve robustness of OverloadTag signature
+  parsing
+
+  * templates/default/tags/html/overload.erb: Don't show empty overload
+  sections
+
+  * lib/yard/templates/helpers/method_helper.rb,
+  spec/templates/helpers/method_helper_spec.rb: Show yield block in signature
+  for method with no params
+
+  * lib/yard/templates/helpers/method_helper.rb,
+  templates/default/method_details/setup.rb: Add extra robustness for method
+  with no source attached
+
+  * lib/yard/templates/helpers/html_helper.rb: htmlify method names in
+  signature
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix typewriter text for
+  unmatched ++
+
+  * lib/yard/cli/yardoc.rb, lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/text_helper.rb, spec/cli/yardoc_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  .../templates/helpers/shared_signature_examples.rb,
+  spec/templates/helpers/text_helper_spec.rb: Revert hiding of (Object) and
+  (void) return types in signature by default, but add switches to re-enable
+  the behaviour.  New switches are --default-return and --hide-void-return.
+  --default-return can take the empty string to show no return type.  Also port
+  behaviour over to text_helper.rb and refactor specs to test both helpers at
+  the same time.
+
+  * lib/yard/code_objects/method_object.rb: Better handling of methods in proxy
+  namespaces.
+
+  * lib/yard/code_objects/base.rb: Fix method match for #<=>
+
+2009-12-06  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/overload_tag.rb: Fix OverloadTag#name for instance methods
+
+  * lib/yard/tags/overload_tag.rb,
+  spec/serializers/file_system_serializer_spec.rb,
+  spec/tags/overload_tag_spec.rb, spec/templates/examples/module001.html,
+  spec/templates/helpers/html_helper_spec.rb: Fix the way object lookups are
+  done inside overload tags.  Closes gh-51
+
+  * lib/yard/code_objects/base.rb, spec/templates/helpers/base_helper_spec.rb:
+  Change the way Base#=== tests equality (call #is_a? on other)
+
+  * spec/serializers/file_system_serializer_spec.rb: Refactor
+  FileSystemSerializer specs
+
+2009-12-05  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/module/setup.rb: Fix sort_listing for Ruby1.8
+
+  * templates/default/module/setup.rb: Refactor method listing behaviour for
+  special methods
+
+  * templates/default/module/html/item_summary.erb: Only show constructor note
+  inside a class
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb: Only show #initialize as constructor
+  if defined in a class
+
+  * templates/default/module/setup.rb: Only sort method summary by scope/name,
+  not visibility
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb: Add MethodObject#constructor? to
+  return if method is #initialize
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/method_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  spec/templates/helpers/method_helper_spec.rb: Show multiple types in
+  signature return types and add heuristics for nullable/splat returns  Summary
+  of the new heuristics are as follows: * Single return type: (Type) * Two
+  return types: (TypeA, TypeB) * More than two: (TypeA, ...) * @return [Type,
+  nil]: (Type?) [? is superscripted] * @return [Type, Array<Type>]: (Type+) [+
+  is superscripted] * @return [void]: no return type shown  Closes gh-49
+
+  * spec/templates/examples/method003.html,
+  templates/default/tags/html/overload.erb: Don't show extra text in overload
+  signatures
+
+  * templates/default/fulldoc/html/css/style.css: Display paragraphs as block
+  elements in overload tags  Closes gh-50
+
+2009-12-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb, lib/yard/tags/tag.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Add @return [Boolean] to methods ending
+  in '?' unless they have a return type set
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method002.txt,
+  spec/templates/examples/method003.html,
+  spec/templates/examples/method003.txt,
+  spec/templates/examples/method004.html,
+  spec/templates/examples/method004.txt,
+  spec/templates/examples/method005.html,
+  spec/templates/examples/method005.txt, spec/templates/examples/module001.dot,
+  spec/templates/examples/module001.html,
+  spec/templates/examples/module001.txt, spec/templates/method_spec.rb,
+  spec/templates/module_spec.rb, spec/templates/spec_helper.rb: Add tests for
+  void return types and overloaded attributes
+
+  * lib/yard/templates/helpers/text_helper.rb: Fix signature for text helper
+  (don't show return for void/undocumented meths)
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/module/html/item_summary.erb: Add constructor button next
+  to #initialize method in summary
+
+  * templates/default/docstring/html/returns_void.erb,
+  templates/default/docstring/setup.rb,
+  templates/default/docstring/text/returns_void.erb,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/tags/setup.rb: Don't show @return for void, but show note
+  in a void method
+
+  * lib/yard/cli/yardoc.rb, lib/yard/code_objects/base.rb,
+  lib/yard/code_objects/class_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/core_ext/symbol_hash.rb, lib/yard/handlers/base.rb,
+  lib/yard/handlers/processor.rb, lib/yard/parser/ruby/ast_node.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/rake/yardoc_task.rb,
+  lib/yard/registry.rb, lib/yard/serializers/base.rb,
+  lib/yard/templates/engine.rb, lib/yard/verifier.rb: Documentation: change to
+  @return [void] instead of [nil]
+
+  * lib/yard/templates/helpers/html_helper.rb: Don't show return type if none
+  specified or void
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/method_handler_spec.rb: #initialize should return [void]
+
+  * lib/yard/templates/helpers/html_helper.rb: Use first @overload tag for
+  return type in signature if no other return tag is present
+
+  * templates/default/fulldoc/html/setup.rb: Add attributes to method listing
+
+  * lib/yard/tags/overload_tag.rb, spec/handlers/method_handler_spec.rb: Allow
+  @overload to change name in signature
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb: Fix MethodObject#is_attribute? when
+  attr exists but not for both read/write  Closes gh-48
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/module001.html,
+  .../default/class/html/constructor_details.erb,
+  templates/default/fulldoc/html/js/app.js,
+  .../default/module/html/attribute_details.erb,
+  .../default/module/html/attribute_summary.erb,
+  .../default/module/html/method_details_list.erb,
+  templates/default/module/html/method_summary.erb,
+  templates/default/module/html/methodmissing.erb,
+  templates/default/module/setup.rb: Split attr/method summary/details by into
+  separate class/instance sections
+
+2009-12-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Sort tag attributes so tests can
+  pass across 1.8/1.9 without modification
+
+  * lib/yard.rb: Remove Encoding declaration (breaks in 1.9 and isn't
+  necessary)
+
+  * lib/yard/tags/overload_tag.rb, spec/templates/examples/module001.dot,
+  spec/templates/examples/module001.html,
+  spec/templates/examples/module001.txt, spec/templates/module_spec.rb,
+  templates/default/docstring/setup.rb,
+  templates/default/module/html/item_summary.erb: Fix duplicate docstring for
+  single @overload tag. Also add overloaded signature to method summary listing
+  in this case.  Closes gh-39
+
+2009-12-01  postmodern <postmodern.mod3@gmail.com>
+
+  * templates/default/fulldoc/html/css/style.css: Used a unicode hex-escape
+  sequence in the CSS instead.
+
+2009-12-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard.rb: Force UTF-8 encoding for templates and files.  Closes gh-47
+
+  * templates/default/method/html/header.erb,
+  templates/default/module/html/defines.erb: Fix 1.8.6 incompatibility issue
+  (missing Symbol#to_proc)
+
+  * spec/templates/examples/method001.html,
+  spec/templates/examples/module001.html,
+  .../method_details/html/method_signature.erb: Permalink aliases  Closes gh-44
+
+  * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
+  .../default/module/html/inherited_constants.erb,
+  .../default/module/html/inherited_methods.erb: Hide private inherited
+  methods/constants.  Closes gh-43
+
+  * lib/yard/handlers/ruby/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/method_handler_spec.rb, spec/templates/examples/class001.html,
+  spec/templates/examples/module001.html: Remove RDoc specific markup for
+  auto-generated meta-tags.  Closes gh-45
+
+2009-11-29  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/setup.rb, templates/default/module/setup.rb:
+  Ignore @private classes/modules.  Closes gh-46
+
+2009-11-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/base.rb: Add no-continuation warning for Rubinius and
+  only warn once
+
+2009-11-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/core_ext/module.rb, spec/core_ext/module_spec.rb: Resolve
+  collision with Module#namespace and Rake, renamed to #namespace_name  Closes
+  gh-42
+
+2009-11-17  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/layout/html/index.erb: Sort index listing in 1.8
+
+2009-11-16  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/module/dot/info.erb: Fix broken dot template in Ruby1.8
+  (due to hash ordering)
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/source_parser_spec.rb: Legacy parser should prioritize prepended
+  comments over appended ones.  Closes gh-38
+
 2009-11-15  Loren Segal <lsegal@soen.ca>
 
-  * lib/yard.rb, yard.gemspec: Bump version to 0.4.0
+  * .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb: Add sanity checks for methods
+  with no source
+
+  * lib/yard/templates/helpers/method_helper.rb: Sanity check for methods with
+  no source
+
+  * ChangeLog, lib/yard.rb, yard.gemspec: Bump version to 0.4.0
 
   * ChangeLog: Update changelog
 

@@ -1,5 +1,5 @@
 module YARD
-  VERSION = "0.4.0"
+  VERSION = "0.5.0"
   ROOT = File.dirname(__FILE__)
   TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
   CONFIG_DIR = File.expand_path('~/.yard')

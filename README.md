@@ -1,7 +1,7 @@
-YARD Release 0.4.0 "The Whole Nine" (Nov 15th 2009)
+YARD Release 0.5.0 "The Longest" (Dec 14th 2009)
 ===================================================
 
-**Homepage**:  [http://yard.rubyforge.org](http://yard.rubyforge.org)   
+**Homepage**:  [http://yardoc.org](http://yardoc.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
 **Git**:       [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:    Loren Segal   
@@ -196,6 +196,14 @@ work with the stdlib or core Ruby libraries, only the active project. Example:
     
 Note that class methods must not be referred to with the "::" namespace 
 separator. Only modules, classes and constants should use "::".
+
+You can also do lookups on any installed gems. Just make sure to build the
+.yardoc databases for installed gems with:
+
+    $ sudo yardoc --build-gems
+    
+If you don't have sudo access, it will write these files to your `~/.yard`
+directory. `yri` will also cache lookups there.
 
 **4. `yard-graph` Graphviz Generator**
 
