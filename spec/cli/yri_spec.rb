@@ -27,4 +27,17 @@ describe YARD::CLI::Yardoc do
       @yri.cache_object('Foo', Registry.yardoc_file)
     end
   end
+  
+  describe '#initialize' do
+    it "should load search paths" do
+      path = %r{/\.yard/yri_search_paths$}
+      File.should_receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      File.should_receive(:file?).with(path).and_return(true)
+      File.should_receive(:readlines).with(path).and_return(%w(line1 line2))
+      @yri = YARD::CLI::YRI.new
+      spaths = @yri.instance_variable_get("@search_paths")
+      spaths.should include('line1')
+      spaths.should include('line2')
+    end
+  end
 end

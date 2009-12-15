@@ -3,6 +3,7 @@ module YARD
     # A tool to view documentation in the console like `ri`
     class YRI < Base
       CACHE_FILE = File.expand_path('~/.yard/yri_cache')
+      SEARCH_PATHS_FILE = File.expand_path('~/.yard/yri_search_paths')
       
       # Helper method to run the utility on an instance.
       # @see #run
@@ -10,8 +11,10 @@ module YARD
         
       def initialize
         @cache = {}
-        @search_paths = [Registry.yardoc_file, YARD::ROOT + '/../.yardoc']
+        @search_paths = []
+        add_default_paths
         add_gem_paths
+        @search_paths.unshift(Registry.yardoc_file)
         load_cache
         @search_paths.uniq!
       end
@@ -94,6 +97,13 @@ module YARD
           end
         end
       rescue LoadError
+      end
+      
+      # Adds paths in {SEARCH_PATHS_FILE}
+      def add_default_paths
+        return unless File.file?(SEARCH_PATHS_FILE)
+        paths = File.readlines(SEARCH_PATHS_FILE).map {|l| l.strip }
+        @search_paths.push(*paths)
       end
       
       # Parses commandline options.
