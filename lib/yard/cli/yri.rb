@@ -14,7 +14,6 @@ module YARD
         @search_paths = []
         add_default_paths
         add_gem_paths
-        @search_paths.unshift(Registry.yardoc_file)
         load_cache
         @search_paths.uniq!
       end
@@ -61,9 +60,11 @@ module YARD
       
       def find_object(name)
         @search_paths.unshift(@cache[name]) if @cache[name]
+        @search_paths.unshift(Registry.yardoc_file)
         
         log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
+          next unless File.exist?(path)
           log.debug "Searching for #{name} in #{path}..."
           Registry.load(path)
           obj = Registry.at(name)

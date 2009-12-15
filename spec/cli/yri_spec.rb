@@ -13,11 +13,22 @@ describe YARD::CLI::Yardoc do
   describe '#find_object' do
     it "should use cache if available" do
       @yri.stub!(:cache_object)
+      File.should_receive(:exist?).with('.yardoc').and_return(false)
+      File.should_receive(:exist?).with('bar.yardoc').and_return(true)
       Registry.should_receive(:load).with('bar.yardoc')
       Registry.should_receive(:at).with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
       @yri.find_object('Foo').should == 'OBJ'
-      @yri.instance_variable_get("@search_paths")[0].should == 'bar.yardoc'
+    end
+    
+    it "should never use cache ahead of current directory's .yardoc" do
+      @yri.stub!(:cache_object)
+      File.should_receive(:exist?).with('.yardoc').and_return(true)
+      Registry.should_receive(:load).with('.yardoc')
+      Registry.should_receive(:at).with('Foo').and_return('OBJ')
+      @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
+      @yri.find_object('Foo').should == 'OBJ'
+      @yri.instance_variable_get("@search_paths")[0].should == '.yardoc'
     end
   end
   
