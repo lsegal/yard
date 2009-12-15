@@ -1,15 +1,17 @@
 What's New in 0.5.x?
 ====================
 
-1. **Support for documenting native Ruby C code**
-2. **Incremental parsing and output generation with `yardoc -c`**
-2. **Improved `yri` support to perform lookups on installed Gems**
-3. **Added `yardoc --default-return` and `yardoc --hide-void-return`**
-4. **Multiple syntax highlighting language support**
-5. **New .yardoc format**
+1. **Support for documenting native Ruby C code** (0.5.0)
+2. **Incremental parsing and output generation with `yardoc -c`** (0.5.0)
+2. **Improved `yri` support to perform lookups on installed Gems** (0.5.0)
+3. **Added `yardoc --default-return` and `yardoc --hide-void-return`** (0.5.0)
+4. **Multiple syntax highlighting language support** (0.5.0)
+5. **New .yardoc format** (0.5.0)
+6. **Support for yard-doc-* gem packages as hosted .yardoc dbs** (0.5.1)
+7. **Support for extra search paths in `yri`** (0.5.1)
 
-Support for documenting native Ruby C code
-------------------------------------------
+Support for documenting native Ruby C code (0.5.0)
+--------------------------------------------------
 
 It is now possible to document native Ruby extensions with YARD with a new
 C parser mostly borrowed from RDoc. This enables the ability to document
@@ -17,8 +19,8 @@ Ruby's core and stdlibs which will be hosted on http://yardoc.org/docs. In
 addition, the .yardoc dump for the Ruby-core classes will become available
 as an installable gem for yri support (see #3).
 
-Incremental parsing and output generation with `yardoc -c`
-----------------------------------------------------------
+Incremental parsing and output generation with `yardoc -c` (0.5.0)
+------------------------------------------------------------------
 
 YARD now compares file checksums before parsing when using `yardoc -c` 
 (aka `yardoc --use-cache`) to do incremental parsing of only the files that
@@ -29,8 +31,8 @@ remember that when using incremental output generation, the index will not
 be rebuilt and inter-file links might not hook up right, so it is best to
 perform a full rebuild at the end of such previews.
 
-Improved `yri` support to perform lookups on installed Gems
------------------------------------------------------------
+Improved `yri` support to perform lookups on installed Gems (0.5.0)
+-------------------------------------------------------------------
 
 The `yri` executable can now perform lookups on gems that have been parsed
 by yard. Therefore, to use this command you must first parse all gems with
@@ -51,8 +53,8 @@ You can now do lookups with yri:
 All lookups are cached to `~/.yard/yri_cache` for quicker lookups the second
 time onward.
 
-Added `yardoc --default-return` and `yardoc --hide-void-return`
----------------------------------------------------------------
+Added `yardoc --default-return` and `yardoc --hide-void-return` (0.5.0)
+-----------------------------------------------------------------------
 
 YARD defaults to displaying (Object) as the default return type of any
 method that has not declared a @return tag. To customize the default
@@ -65,8 +67,8 @@ You can also use the empty string to list no return type.
 In addition, you can use --hide-void-return to ignore any method that
 defines itself as a void type by: `@return [void]`
 
-Multiple syntax highlighting language support
----------------------------------------------
+Multiple syntax highlighting language support (0.5.0)
+-----------------------------------------------------
 
 YARD now supports the ability to specify a language type for code blocks in 
 docstrings. Although no actual highlighting support is added for any language
@@ -87,14 +89,40 @@ To use this language in code blocks, prefix the block with `!!!LANGNAME`:
 By the same token. you can now use `!!!plain` to ignore highlighting for
 a specific code block.
 
-New .yardoc format
-------------------
+New .yardoc format (0.5.0)
+--------------------------
 
 To make the above yri support possible, the .yardoc format was redesigned
 to be a directory instead of a file. YARD can still load old .yardoc files,
 but they will be automatically upgraded if re-saved. The new .yardoc format
 does have a larger memory footprint, but this will hopefully be optimized
 downward.
+
+Support for yard-doc-* gem packages as hosted .yardoc dbs
+---------------------------------------------------------
+
+You can now install special YARD plugin gems titled yard-doc-NAME to get
+packaged a .yardoc database. This will enable yri lookups or building docs
+for the gem without the code. 
+
+One main use for this is the `yard-doc-core` package, which enabled yri 
+support for Ruby core classes (stdlib coming soon as `yard-doc-stdlib`).
+To install it, simply:
+
+    $ sudo gem install yard-doc-core
+    # now you can use:
+    $ yri String
+
+This will by default install the 1.9.1 core library. To install a library
+for a specific version of Ruby, use the `--version` switch on gem:
+
+    $ sudo gem install --version '= 1.8.6' yard-doc-core
+
+Support for extra search paths in `yri`
+---------------------------------------
+
+You can now add custom paths to non-gem .yardoc files 
+by adding them as newline separated paths in `~/.yard/yri_search_paths`.
 
 
 What's New in 0.4.x?
