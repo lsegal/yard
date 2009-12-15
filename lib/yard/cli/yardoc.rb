@@ -61,18 +61,16 @@ module YARD
         optparse(*yardopts)
         optparse(*args)
         
-        Registry.load if use_cache
+        if use_cache
+          Registry.load
+          checksums = Registry.checksums.dup
+        end
         YARD.parse(files)
         Registry.save(use_cache)
         
         if generate
           if use_cache
-            objects = all_objects
-            Registry.all # load all
-            objects.each do |object|
-              opts = options.merge(:object => object, :type => :layout)
-              Templates::Engine.render(opts)
-            end
+            generate_with_cache(checksums)
           else
             Templates::Engine.generate(all_objects, options)
           end
@@ -80,25 +78,13 @@ module YARD
         
         true
       end
-
+      
       # The list of all objects to process. Override this method to change
       # which objects YARD should generate documentation for.
       # 
       # @return [Array<CodeObjects::Base>] a list of code objects to process
       def all_objects
-        types = [:root, :module, :class]
-        if use_cache
-          Registry.paths(false).map do |path|
-            obj = Registry.at(path)
-            if types.include?(obj.type)
-              obj
-            else
-              nil
-            end
-          end.compact
-        else
-          Registry.all(*types)
-        end
+        Registry.all(:root, :module, :class)
       end
       
       # Parses the .yardopts file for default yard options
@@ -111,6 +97,23 @@ module YARD
       
       private
       
+      # Generates output for changed objects in cache
+      # @return [void]
+      def generate_with_cache(checksums)
+        changed_files = []
+        Registry.checksums.each do |file, hash|
+          changed_files << file if checksums[file] != hash
+        end
+        Registry.load_all
+        all_objects.each do |object|
+          if object.files.any? {|f, line| changed_files.include?(f) }
+            log.info "Re-generating object #{object.path}..."
+            opts = options.merge(:object => object, :type => :layout)
+            Templates::Engine.render(opts)
+          end
+        end
+      end
+
       # Reads a .document file in the directory to get source file globs
       # @return [void] 
       def support_rdoc_document_file!
