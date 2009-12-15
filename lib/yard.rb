@@ -33,7 +33,7 @@ module YARD
     
     Gem.source_index.find_name('').each do |gem|
       begin
-        if gem.name =~ /^yard[-_]/ && !ignored_plugins.include?(gem.name)
+        if gem.name =~ /^yard[-_](?!doc-)/ && !ignored_plugins.include?(gem.name)
           log.debug "Loading plugin '#{gem.name}'..."
           require gem.name 
         end

@@ -43,5 +43,13 @@ describe YARD do
       log.should_receive(:debug).with(/Loading plugin 'yard-plugin3'/).once
       YARD.load_plugins.should == true
     end
+    
+    it "should not load plugins starting with yard-doc-" do
+      mock = mock('yard-doc-core')
+      mock.should_receive(:name).at_least(1).times.and_return('yard-doc-core')
+      Gem.source_index.should_receive(:find_name).with('').and_return([mock])
+      YARD.should_not_receive(:require)
+      YARD.load_plugins.should == true
+    end
   end
 end
