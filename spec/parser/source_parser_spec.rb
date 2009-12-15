@@ -109,7 +109,6 @@ describe YARD::Parser::SourceParser do
       hash = Registry.checksum_for(data)
       cmock = mock(:cmock)
       cmock.should_receive(:[]).with('foo/bar').and_return(hash)
-      log.should_receive(:info)
       Registry.should_receive(:checksums).and_return(cmock)
       File.should_receive(:file?).with('foo/bar').and_return(true)
       IO.should_receive(:read).with('foo/bar').and_return(data)

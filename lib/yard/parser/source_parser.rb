@@ -145,9 +145,10 @@ module YARD
           @file = content
           content = IO.read(content)
           checksum = Registry.checksum_for(content)
-          if Registry.checksums[file] == checksum
-            log.info "File '#{file}' hasn't changed, skipping..."
-            return
+          return if Registry.checksums[file] == checksum
+
+          if Registry.checksums.has_key?(file)
+            log.info "File '#{file}' was modified, re-processing..."
           end
           Registry.checksums[@file] = checksum
           self.parser_type = parser_type_for_filename(file)
