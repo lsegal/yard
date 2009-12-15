@@ -143,6 +143,15 @@ module YARD
       @store.load(file)
     end
     
+    def load!(file = yardoc_file)
+      clear
+      @store.load!(file)
+    end
+    
+    def load_all
+      @store.load_all
+    end
+
     # Saves the registry to +file+
     # 
     # @param [String] file the yardoc file to save to
@@ -191,7 +200,7 @@ module YARD
     # Returns the paths of all of the objects in the registry.
     # @param [Boolean] reload whether to load entire database
     # @return [Array<String>] all of the paths in the registry.
-    def paths(reload = true)
+    def paths(reload = false)
       @store.keys(reload).map {|k| k.to_s }
     end
     

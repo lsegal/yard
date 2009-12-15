@@ -63,7 +63,7 @@ module YARD
     # @param [Boolean] reload if false, does not load the entire database
     #   before a lookup.
     # @return [Array<Symbol>] the path names of all the code objects
-    def keys(reload = true) load_all if reload; @store.keys end
+    def keys(reload = false) load_all if reload; @store.keys end
     
     # Gets all code objects from the store. Loads the entire database
     # if +reload+ is +true+
@@ -71,7 +71,7 @@ module YARD
     # @param [Boolean] reload if false, does not load the entire database
     #   before a lookup.
     # @return [Array<CodeObjects::Base>] all the code objects
-    def values(reload = true) load_all if reload; @store.values end
+    def values(reload = false) load_all if reload; @store.values end
     
     # @return [CodeObjects::RootObject] the root object
     def root; @store[:root] end
@@ -85,6 +85,37 @@ module YARD
       @notfound = {}
       @serializer = Serializers::YardocSerializer.new(@file)
       load_yardoc
+    end
+
+    # Loads the .yardoc file and loads all cached objects into memory
+    # automatically.
+    # 
+    # @param [String, nil] file the name of the yardoc db to load
+    # @return [Boolean] whether the database was loaded
+    # @see #load_all
+    def load!(file = nil)
+      load(file)
+      load_all
+    end
+    
+    # Loads all cached objects into memory
+    # @return [void]
+    def load_all
+      return unless @file
+      return if @loaded_objects >= @available_objects
+      log.debug "Loading entire database: #{@file} ..."
+      objects = []
+      
+      all_disk_objects.sort_by {|x| x.size }.each do |path|
+        if obj = @serializer.deserialize(path, true)
+          objects << obj
+        end
+      end
+      objects.each do |obj|
+        put(obj.path, obj)
+      end
+      @loaded_objects += objects.size
+      log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
     end
     
     # Saves the database to disk
@@ -182,24 +213,6 @@ module YARD
       if root = @serializer.deserialize('root')
         @store[:root] = root
       end
-    end
-    
-    def load_all
-      return unless @file
-      return if @loaded_objects >= @available_objects
-      log.debug "Loading entire database: #{@file} ..."
-      objects = []
-      
-      all_disk_objects.sort_by {|x| x.size }.each do |path|
-        if obj = @serializer.deserialize(path, true)
-          objects << obj
-        end
-      end
-      objects.each do |obj|
-        put(obj.path, obj)
-      end
-      @loaded_objects += objects.size
-      log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
     end
 
     def all_disk_objects

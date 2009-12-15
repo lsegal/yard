@@ -115,7 +115,7 @@ describe YARD::RegistryStore do
         File.should_receive(:directory?).with('foo').and_return(true)
         @store.load('foo')
         @store.should_receive(:load_all)
-        @store.send(item)
+        @store.send(item, true)
       end
     
       it "should not load entire database if reload=false" do
