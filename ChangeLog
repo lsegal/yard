@@ -1,3 +1,41 @@
+2009-12-15  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump version to 0.5.1
+
+  * docs/WhatsNew.md: Update What's New document
+
+  * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Always put local directory's
+  .yardoc ahead of cache
+
+  * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Allow user to specify
+  ~/.yard/yri_search_paths file listing extra yardoc dbs to search.  File
+  format should just be newline separated .yardoc files/directories: 
+  /path/to/.yardoc /path/to/other.yardoc ...
+
+  * lib/yard/cli/yardoc.rb: Improve behaviour of re-generating changed objects
+  during incremental parsing
+
+  * lib/yard/registry.rb, lib/yard/registry_store.rb,
+  spec/registry_store_spec.rb: Change behaviour of RegistryStore loading cache.
+  Does not load cache on #keys/#values by default. Instead use #load! or
+  #load_all to load all contents explicitly
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb: Change
+  behaviour of SourceParser logging
+
+  * lib/yard/registry_store.rb: Add cache for failed lookups
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix RubyParser in 1.9.1p376 (ripper lib was changed)
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add specs for
+  Registry.yardoc_file_for_gem
+
+  * lib/yard.rb, lib/yard/cli/yri.rb, lib/yard/registry.rb, spec/yard_spec.rb:
+  Add support for packages named yard-doc-* to be loaded by yri
+
+  * Rakefile: Should use RUBY_PLATFORM
+
 2009-12-14  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec: Bump

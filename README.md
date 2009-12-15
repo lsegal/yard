@@ -1,4 +1,4 @@
-YARD Release 0.5.0 "The Longest" (Dec 14th 2009)
+YARD Release 0.5.1 "The Longest" (Dec 15th 2009)
 ===================================================
 
 **Homepage**:  [http://yardoc.org](http://yardoc.org)   
