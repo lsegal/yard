@@ -86,7 +86,11 @@ module YARD
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
           if yfile = Registry.yardoc_file_for_gem(spec.name)
-            @search_paths << yfile
+            if spec.name =~ /^yard-doc-/
+              @search_paths.unshift(yfile)
+            else
+              @search_paths.push(yfile)
+            end
           end
         end
       rescue LoadError

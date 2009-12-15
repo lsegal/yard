@@ -50,6 +50,11 @@ module YARD
       def yardoc_file_for_gem(gem, ver_require = ">= 0", for_writing = false)
         spec = Gem.source_index.find_name(gem, ver_require).first
         
+        if gem =~ /^yard-doc-/
+          path = File.join(spec.full_gem_path, DEFAULT_YARDOC_FILE)
+          return File.exist?(path) && !for_writing ? path : nil
+        end
+        
         if for_writing
           global_yardoc_file(spec, for_writing) ||
             local_yardoc_file(spec, for_writing)
