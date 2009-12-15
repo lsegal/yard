@@ -98,8 +98,8 @@ but they will be automatically upgraded if re-saved. The new .yardoc format
 does have a larger memory footprint, but this will hopefully be optimized
 downward.
 
-Support for yard-doc-* gem packages as hosted .yardoc dbs
----------------------------------------------------------
+Support for yard-doc-* gem packages as hosted .yardoc dbs (0.5.1)
+-----------------------------------------------------------------
 
 You can now install special YARD plugin gems titled yard-doc-NAME to get
 packaged a .yardoc database. This will enable yri lookups or building docs
@@ -118,8 +118,8 @@ for a specific version of Ruby, use the `--version` switch on gem:
 
     $ sudo gem install --version '= 1.8.6' yard-doc-core
 
-Support for extra search paths in `yri`
----------------------------------------
+Support for extra search paths in `yri` (0.5.1)
+-----------------------------------------------
 
 You can now add custom paths to non-gem .yardoc files 
 by adding them as newline separated paths in `~/.yard/yri_search_paths`.
