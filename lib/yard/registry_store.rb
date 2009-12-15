@@ -13,6 +13,7 @@ module YARD
       @checksums = {}
       @store = { :root => CodeObjects::RootObject.new(nil, :root) }
       @proxy_types = {}
+      @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
     end
@@ -26,12 +27,16 @@ module YARD
       key = :root if key == ''
       key = key.to_sym
       return @store[key] if @store[key]
-      return nil if @loaded_objects >= @available_objects
+      return if @loaded_objects >= @available_objects
 
       # check disk
+      return if @notfound[key]
       if obj = @serializer.deserialize(key)
         @loaded_objects += 1
         put(key, obj)
+      else
+        @notfound[key] = true
+        nil
       end
     end
     
@@ -77,6 +82,7 @@ module YARD
       @file = file
       @store = {}
       @proxy_types = {}
+      @notfound = {}
       @serializer = Serializers::YardocSerializer.new(@file)
       load_yardoc
     end
