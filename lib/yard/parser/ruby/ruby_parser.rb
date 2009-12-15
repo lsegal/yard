@@ -208,6 +208,7 @@ module YARD
         def on_body_stmt(*args)
           args.compact.size == 1 ? args.first : AstNode.new(:list, args)
         end
+        alias on_bodystmt on_body_stmt
         
         def on_assoc_new(*args)
           AstNode.new(:assoc, args)
