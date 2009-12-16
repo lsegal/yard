@@ -94,8 +94,12 @@ module YARD
     # @return [Boolean] whether the database was loaded
     # @see #load_all
     def load!(file = nil)
-      load(file)
-      load_all
+      if load(file)
+        load_all
+        true
+      else
+        false
+      end
     end
     
     # Loads all cached objects into memory
