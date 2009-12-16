@@ -1,3 +1,5 @@
+require 'fileutils'
+
 class File
   RELATIVE_PARENTDIR = '..'
   RELATIVE_SAMEDIR = '.'
@@ -39,5 +41,12 @@ class File
       acc << comp
     end
     File.join(*path)
+  end
+  
+  # Forces opening a file (for writing) by first creating the file's directory
+  def self.open!(file, *args, &block)
+    dir = dirname(file)
+    FileUtils.mkdir_p(dir) unless directory?(dir)
+    open(file, *args, &block)
   end
 end

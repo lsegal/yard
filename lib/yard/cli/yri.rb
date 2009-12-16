@@ -42,7 +42,7 @@ module YARD
         return if path == Registry.yardoc_file
         @cache[name] = path
         
-        File.open(CACHE_FILE, 'w') do |file|
+        File.open!(CACHE_FILE, 'w') do |file|
           @cache.each do |key, value|
             file.puts("#{key} #{value}")
           end

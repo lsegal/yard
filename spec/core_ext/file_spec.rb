@@ -45,4 +45,20 @@ describe File do
       File.cleanpath('C/../../D').should == "../D"
     end
   end
+  
+  describe '.open!' do
+    it "should create the path before opening" do
+      File.should_receive(:directory?).with('/path/to').and_return(false)
+      FileUtils.should_receive(:mkdir_p).with('/path/to')
+      File.should_receive(:open).with('/path/to/file', 'w')
+      File.open!('/path/to/file', 'w')
+    end
+
+    it "should just open the file if the path exists" do
+      File.should_receive(:directory?).with('/path/to').and_return(true)
+      FileUtils.should_not_receive(:mkdir_p)
+      File.should_receive(:open).with('/path/to/file', 'w')
+      File.open!('/path/to/file', 'w')
+    end
+  end
 end

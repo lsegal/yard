@@ -224,11 +224,11 @@ module YARD
     end
     
     def write_proxy_types
-      File.open(proxy_types_path, 'wb') {|f| f.write(Marshal.dump(@proxy_types)) }
+      File.open!(proxy_types_path, 'wb') {|f| f.write(Marshal.dump(@proxy_types)) }
     end
     
     def write_checksums
-      File.open(checksums_path, 'w') do |f|
+      File.open!(checksums_path, 'w') do |f|
         @checksums.each {|k, v| f.puts("#{k} #{v}") }
       end
     end

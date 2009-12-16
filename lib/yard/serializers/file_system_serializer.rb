@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module YARD
   module Serializers
     class FileSystemSerializer < Base
@@ -28,9 +26,8 @@ module YARD
       # @return [String] the written data (for chaining)
       def serialize(object, data)
         path = File.join(basepath, *serialized_path(object))
-        FileUtils.mkdir_p File.dirname(path)
         log.debug "Serializing to #{path}"
-        File.open(path, "wb") {|f| f.write data }
+        File.open!(path, "wb") {|f| f.write data }
       end
       
       # Implements the serialized path of a code object.
