@@ -1,4 +1,17 @@
+2009-12-16  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, lib/yard.rb, yard.gemspec: Bump version to 0.5.2
+
+  * lib/yard/cli/yri.rb, lib/yard/core_ext/file.rb, lib/yard/registry_store.rb,
+  lib/yard/serializers/file_system_serializer.rb, spec/core_ext/file_spec.rb:
+  Ensure '~/.yard' path is created before writing certain config files.  - Adds
+  File.open! to ensure path exists before writing file  Closes gh-57
+
+  * lib/yard/registry_store.rb: Return true/false in RegistryStore#load!
+
 2009-12-15  Loren Segal <lsegal@soen.ca>
+
+  * docs/WhatsNew.md: Forgot to add version number for changes
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump version to 0.5.1
 
