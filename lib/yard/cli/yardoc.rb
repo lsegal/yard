@@ -173,6 +173,7 @@ module YARD
             Dir.chdir(spec.full_gem_path)
             log.info "Building yardoc index for gem: #{spec.full_name}"
             yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+            next unless yfile
             Registry.clear
             Yardoc.run('-n', '-b', yfile)
             reload = false
