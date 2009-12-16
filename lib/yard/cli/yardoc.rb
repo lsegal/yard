@@ -166,15 +166,14 @@ module YARD
         Gem.source_index.find_name('').each do |spec|
           reload = true
           dir = Registry.yardoc_file_for_gem(spec.name)
-          next unless dir
-          if File.directory?(dir) && !rebuild
+          if dir && File.directory?(dir) && !rebuild
             log.debug "#{spec.name} index already exists at '#{dir}'"
           else
-            Dir.chdir(spec.full_gem_path)
-            log.info "Building yardoc index for gem: #{spec.full_name}"
             yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
             next unless yfile
             Registry.clear
+            Dir.chdir(spec.full_gem_path)
+            log.info "Building yardoc index for gem: #{spec.full_name}"
             Yardoc.run('-n', '-b', yfile)
             reload = false
           end
