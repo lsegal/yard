@@ -42,7 +42,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       end
     end
     
-    if info = meth.attr_info
+    if info = obj.attr_info
       if meth.to_s =~ /=$/ # writer
         info[:write] = obj if info[:read]
       else
