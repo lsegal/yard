@@ -32,6 +32,7 @@ module YARD
         
       # Creates a new instance of the commandline utility
       def initialize
+        super
         @options = SymbolHash.new(false)
         @options.update(
           :format => :html, 

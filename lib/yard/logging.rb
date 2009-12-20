@@ -15,7 +15,7 @@ module YARD
     # Creates a new logger
     def initialize(*args)
       super
-      self.show_backtraces = false
+      self.show_backtraces = true
       self.level = WARN
       self.formatter = method(:format_log)
     end

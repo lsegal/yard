@@ -7,6 +7,10 @@ module YARD
     # 
     # @abstract
     class Base
+      def initialize
+        log.show_backtraces = false
+      end
+      
       # Adds a set of common options to the tail of the OptionParser
       # 
       # @param [OptionParser] opts the option parser object

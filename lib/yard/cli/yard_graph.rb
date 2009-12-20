@@ -20,6 +20,7 @@ module YARD
         
       # Creates a new instance of the command-line utility
       def initialize
+        super
         @serializer = YARD::Serializers::StdoutSerializer.new
         @options = SymbolHash[
           :format => :dot,

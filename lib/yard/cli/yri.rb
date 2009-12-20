@@ -10,6 +10,7 @@ module YARD
       def self.run(*args) new.run(*args) end
         
       def initialize
+        super
         @cache = {}
         @search_paths = []
         add_default_paths
