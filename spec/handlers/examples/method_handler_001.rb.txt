@@ -68,4 +68,10 @@ end
 
   # @return [NotBoolean, nil]
   def boolean3?; end
+
+  attr_writer :attr_name
+  def attr_name; end
+
+  attr_reader :attr_name2
+  def attr_name2=; end
 end

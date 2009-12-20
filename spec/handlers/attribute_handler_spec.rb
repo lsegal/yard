@@ -71,12 +71,20 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AttributeHandler" do
   end
   
   it "should not return true for #is_explicit? in created methods" do
-    Registry.all(:method).each do |meth|
+    Registry.at(:B).meths.each do |meth|
       meth.is_explicit?.should == false
     end
   end
   
   it "should handle attr call with no arguments" do
     lambda { StubbedSourceParser.parse_string "attr" }.should_not raise_error
+  end
+  
+  it "should add existing reader method as part of attr_writer combo" do
+    Registry.at('C#foo=').attr_info[:read].should == Registry.at('C#foo')
+  end
+
+  it "should add existing writer method as part of attr_reader combo" do
+    Registry.at('C#foo').attr_info[:write].should == Registry.at('C#foo=')
   end
 end

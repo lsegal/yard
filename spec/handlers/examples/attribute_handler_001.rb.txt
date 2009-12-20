@@ -17,3 +17,11 @@ class B
 
   attr_accessor :z
 end
+
+class C
+  def foo; end
+  attr_writer :foo
+
+  def bar=(value); end
+  attr_reader :bar
+end

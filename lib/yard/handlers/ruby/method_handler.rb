@@ -22,7 +22,6 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       o.signature = method_signature(meth)
       o.explicit = true
       o.parameters = args
-      
     end
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
@@ -37,6 +36,14 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
         obj.tag(:return).types = ['Boolean']
       elsif obj.tag(:return).nil?
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+      end
+    end
+    
+    if info = obj.attr_info
+      if meth.to_s =~ /=$/ # writer
+        info[:write] = obj if info[:read]
+      else
+        info[:read] = obj if info[:write]
       end
     end
     

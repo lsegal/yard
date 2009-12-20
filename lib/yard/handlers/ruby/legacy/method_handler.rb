@@ -41,6 +41,14 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
       end
     end
+    
+    if info = meth.attr_info
+      if meth.to_s =~ /=$/ # writer
+        info[:write] = obj if info[:read]
+      else
+        info[:read] = obj if info[:write]
+      end
+    end
 
     parse_block(:owner => obj) # mainly for yield/exceptions
   end

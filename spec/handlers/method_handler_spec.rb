@@ -105,4 +105,14 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     meth.should have_tag(:return)
     meth.tag(:return).types.should == ['NotBoolean', 'nil']
   end
+  
+  it "should add method writer to existing attribute" do
+    Registry.at('Foo#attr_name').should be_reader
+    Registry.at('Foo#attr_name=').should be_writer
+  end
+  
+  it "should add method reader to existing attribute" do
+    Registry.at('Foo#attr_name2').should be_reader
+    Registry.at('Foo#attr_name2=').should be_writer
+  end
 end

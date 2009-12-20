@@ -269,14 +269,14 @@ module YARD
         type
       end
       
-      def signature(meth, link = true, show_extras = true)
+      def signature(meth, link = true, show_extras = true, full_attr_name = true)
         meth = convert_method_to_overload(meth)
         
         type = signature_types(meth, link)
         scope = meth.scope == :class ? "+" : "-"
-        name = meth.name
+        name = full_attr_name ? meth.name : meth.name.to_s.gsub(/=$/, '')
         blk = format_block(meth)
-        args = format_args(meth)
+        args = !full_attr_name && meth.writer? ? "" : format_args(meth)
         extras = []
         extras_text = ''
         if show_extras
