@@ -49,4 +49,10 @@ class File
     FileUtils.mkdir_p(dir) unless directory?(dir)
     open(file, *args, &block)
   end
+  
+  # Reads a file with binary encoding
+  # @return [String] the ascii-8bit encoded data
+  def self.read_binary(file)
+    File.open(file, 'rb') {|f| f.read }
+  end
 end

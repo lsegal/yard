@@ -183,7 +183,7 @@ describe YARD::CodeObjects::Base do
 
   it "should maintain all file associations when objects are defined multiple times in multiple files" do
     3.times do |i|
-      IO.stub!(:read).and_return("class X; end")
+      File.stub!(:read_binary).and_return("class X; end")
       Parser::SourceParser.new.parse("file#{i+1}.rb")
     end
     

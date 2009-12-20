@@ -143,7 +143,7 @@ module YARD
         case content
         when String
           @file = content
-          content = File.open(content, "rb") {|f| f.read }
+          content = File.read_binary(content)
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 
