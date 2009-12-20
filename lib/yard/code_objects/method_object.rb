@@ -56,14 +56,30 @@ module YARD::CodeObjects
     def constructor?
       name == :initialize && scope == :instance && namespace.is_a?(ClassObject)
     end
+    
+    # Returns the read/writer info for the attribute if it is one
+    # @return [SymbolHash] if there is information about the attribute
+    # @return [nil] if the method is not an attribute
+    def attr_info
+      return nil unless namespace.is_a?(NamespaceObject)
+      namespace.attributes[scope][name.to_s.gsub(/=$/, '')]
+    end
+    
+    # @return [Boolean] whether the method is a writer attribute
+    def writer?
+      !!((info = attr_info) && info[:write] == self)
+    end
+
+    # @return [Boolean] whether the method is a reader attribute
+    def reader?
+      !!((info = attr_info) && info[:read] == self)
+    end
       
     # Tests if the object is defined as an attribute in the namespace
     # @return [Boolean] whether the object is an attribute
     def is_attribute?
-      return false unless namespace.is_a?(NamespaceObject)
-      attr_obj = namespace.attributes[scope][name.to_s.gsub(/=$/, '')]
-      return false unless attr_obj
-      attr_obj[name.to_s =~ /=$/ ? :write : :read] ? true : false
+      return false unless info = attr_info
+      info[name.to_s =~ /=$/ ? :write : :read] ? true : false
     end
       
     # Tests if the object is defined as an alias of another method

@@ -2,7 +2,7 @@
   <div id="<%= scope %>_attr_details" class="attr_details">
     <h2><%= scope.to_s.capitalize %> Attribute Details</h2>
     <% list.each_with_index do |meth, i| %>
-      <% rw = meth.namespace.attributes[meth.scope][meth.name.to_s.gsub(/=$/, '').to_sym] %>
+      <% rw = meth.attr_info %>
       <span id="<%= anchor_for(rw[:write]) %>"></span>
       <span id="<%= anchor_for(rw[:read]) %>"></span>
       <%= yieldall :object => meth, :index => i %>

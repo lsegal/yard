@@ -23,6 +23,8 @@ describe YARD::Templates::Engine.template(:default, :method) do
         #   @return [void]
         attr_accessor :attr3
         
+        attr_writer :attr4
+        
         def self.a; end
         def a; end
         alias b a

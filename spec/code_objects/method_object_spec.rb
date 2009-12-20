@@ -65,6 +65,41 @@ describe YARD::CodeObjects::MethodObject do
     end
   end
   
+  describe '#attr_info' do
+    it "should return attribute info if namespace is available" do
+      obj = MethodObject.new(@yard, :foo)
+      @yard.attributes[:instance][:foo] = {:read => obj, :write => nil}
+      obj.attr_info.should == @yard.attributes[:instance][:foo]
+    end
+    
+    it "should return nil if namespace is proxy" do
+      obj = MethodObject.new(P(:ProxyClass), :foo)
+      MethodObject.new(@yard, :foo).attr_info.should == nil
+    end
+    
+    it "should return nil if meth is not an attribute" do
+      MethodObject.new(@yard, :notanattribute).attr_info.should == nil
+    end
+  end
+  
+  describe '#writer?' do
+    it "should return true if method is a writer attribute" do
+      obj = MethodObject.new(@yard, :foo=)
+      @yard.attributes[:instance][:foo] = {:read => nil, :write => obj}
+      obj.writer?.should == true
+      MethodObject.new(@yard, :NOTfoo=).writer?.should == false
+    end
+  end
+
+  describe '#reader?' do
+    it "should return true if method is a reader attribute" do
+      obj = MethodObject.new(@yard, :foo)
+      @yard.attributes[:instance][:foo] = {:read => obj, :write => nil}
+      obj.reader?.should == true
+      MethodObject.new(@yard, :NOTfoo).reader?.should == false
+    end
+  end
+  
   describe '#constructor?' do
     before { @class = ClassObject.new(:root, :MyClass) }
 

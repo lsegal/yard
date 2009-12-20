@@ -244,12 +244,9 @@ module YARD
         link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
       
-      def signature(meth, link = true, show_extras = true)
-        # use first overload tag if it has a return type and method itself does not
-        if !meth.tag(:return) && meth.tags(:overload).size == 1 && meth.tag(:overload).tag(:return)
-          meth = meth.tag(:overload)
-        end
-        
+      def signature_types(meth, link = true)
+        meth = convert_method_to_overload(meth)
+
         type = options[:default_return] || ""
         if meth.tag(:return) && meth.tag(:return).types
           types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
@@ -268,16 +265,22 @@ module YARD
         elsif !type.empty?
           type = link ? h(type) : format_types([type], false)
         end
-        
-        scope = meth.scope == :class ? "+" : "-"
         type = "(#{type}) " unless type.empty?
+        type
+      end
+      
+      def signature(meth, link = true, show_extras = true)
+        meth = convert_method_to_overload(meth)
+        
+        type = signature_types(meth, link)
+        scope = meth.scope == :class ? "+" : "-"
         name = meth.name
         blk = format_block(meth)
         args = format_args(meth)
         extras = []
         extras_text = ''
         if show_extras
-          if meth.is_attribute? && rw = meth.namespace.attributes[meth.scope][meth.name]
+          if rw = meth.attr_info
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
             attname = attname.size == 1 ? attname.join('') + 'only' : nil
             extras << attname if attname
@@ -314,6 +317,16 @@ module YARD
       
       def html_syntax_highlight_plain(source)
         h(source)
+      end
+      
+      private
+      
+      def convert_method_to_overload(meth)
+        # use first overload tag if it has a return type and method itself does not
+        if !meth.tag(:return) && meth.tags(:overload).size == 1 && meth.tag(:overload).tag(:return)
+          return meth.tag(:overload)
+        end
+        meth
       end
     end
   end

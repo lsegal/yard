@@ -2,6 +2,8 @@
   <span class="summary_signature">
     <% if @item.tags(:overload).size == 1 %>
       <%= signature(@item.tag(:overload), true, false) %>
+    <% elsif @item.writer? %>
+      <%= signature(@item, true, false).gsub(@item.name.to_s, @item.name.to_s.gsub(/=$/, '')) %>
     <% else %>
       <%= signature(@item, true, false) %>
     <% end %>
@@ -13,7 +15,7 @@
   <% if @item.constructor? %>
     <span class="note title constructor">constructor</span>
   <% end %>
-  <% if rw = @item.namespace.attributes[@item.scope][@item.name] %>
+  <% if rw = @item.attr_info %>
     <% if rw[:read] && !rw[:write] %><span class="note title readonly">readonly</span><% end %>
     <% if rw[:write] && !rw[:read] %><span class="note title writeonly">writeonly</span><% end %>
   <% end %>
