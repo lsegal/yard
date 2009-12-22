@@ -79,7 +79,7 @@ function toggleSearchFrame(id, link) {
 
 function linkSummaries() {
   $('.summary_signature').click(function() {
-    window.parent.location = $(this).find('a').attr('href');
+    document.location = $(this).find('a').attr('href');
   });
 }
 
