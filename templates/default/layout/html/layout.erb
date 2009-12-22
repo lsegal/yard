@@ -5,6 +5,10 @@
     <%= erb(:headers) %>
   </head>
   <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
     <div id="header">
       <%= erb(:breadcrumb) %>
       <%= erb(:search) %>
