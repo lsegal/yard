@@ -83,6 +83,14 @@ function linkSummaries() {
   });
 }
 
+function framesInit() {
+  if (window.top.frames.main) {
+    document.body.className = 'frames';
+    $('#menu .noframes a').attr('href', document.location);
+  }
+}
+
+$(framesInit);
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);

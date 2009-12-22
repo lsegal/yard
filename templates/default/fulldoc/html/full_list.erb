@@ -7,30 +7,39 @@
     <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/full_list.js"></script>
-    <base target="_parent" />
+    <base id="base_target" target="_parent" />
   </head>
   <body>
-    <h1 id="full_list_header"><%= @list_title %></h1>
-    <div id="search">Search: <input type="text" /></div>
-    <div class="clear"></div>
-    <ul id="full_list">
-      <% n = 1 %>
-      <% @items.each do |item| %>
-        <li class="r<%= n %> <%= item.is_a?(CodeObjects::Base) && item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
-          <% if @file_list %>
-            <%= link_file item, File.basename(item).gsub(/\.[^.]+$/, '') %>
-          <% elsif item.root? %>
-            <a href="top-level-namespace.html">Top Level Namespace</a>
-          <% else %>
-            <%= linkify item, item.name(true) %> 
-            <% if item.namespace && !item.namespace.root? %>
-              <small>(<%= item.namespace %>)</small>
+    <div id="nav">
+      <a target="_self" href="class_list.html">Classes</a> | 
+      <a target="_self" href="method_list.html">Methods</a> |
+      <a target="_self" href="file_list.html">Files</a>
+    </div>
+    <div id="content">
+      <h1 id="full_list_header"><%= @list_title %></h1>
+      <div id="search">Search: <input type="text" /></div>
+      <div class="clear"></div>
+      <ul id="full_list" class="<%= @file_list ? 'file_list' : '' %>">
+        <% n = 1 %>
+        <% @items.each do |item| %>
+          <li class="r<%= n %> <%= item.is_a?(CodeObjects::Base) && item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
+            <% if @file_list %>
+              <%= link_file item, File.basename(item).gsub(/\.[^.]+$/, '') %>
+            <% elsif item.root? %>
+              <a href="top-level-namespace.html">Top Level Namespace</a>
+            <% else %>
+              <%= linkify item, item.name(true) %> 
+              <% if item.namespace && !item.namespace.root? %>
+                <small>(<%= item.namespace %>)</small>
+              <% else %>
+                <small>Top Level Namespace</small>
+              <% end %>
             <% end %>
-          <% end %>
-          <% n = n == 2 ? 1 : 2 %>
-        </li>
-      <% end %>
-    </ul>
+            <% n = n == 2 ? 1 : 2 %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </body>
 </html>
 

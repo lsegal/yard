@@ -69,6 +69,7 @@ def generate_assets
   generate_method_list
   generate_class_list
   generate_file_list
+  generate_frameset
 end
 
 def generate_method_list
@@ -81,7 +82,7 @@ end
 
 def generate_class_list
   @items = [Registry.root] + options[:objects].reject {|o| o.type == :root }.sort_by {|m| m.name.to_s }
-  @list_title = "Namespace List"
+  @list_title = "Class List"
   asset('class_list.html', erb(:full_list))
 end
 
@@ -91,4 +92,8 @@ def generate_file_list
   @list_title = "File List"
   asset('file_list.html', erb(:full_list))
   @file_list = nil
+end
+
+def generate_frameset
+  asset('frames.html', erb(:frames))
 end
