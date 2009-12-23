@@ -48,7 +48,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
         class X; end
         module Z; end
         CONSTANT = 'value'
-        @@cvar = 'value'
+        @@cvar = 'value' # @deprecated
       end
     eof
   end
