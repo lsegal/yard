@@ -1,5 +1,5 @@
 Direct Known Subclasses:
 ------------------------
 
-<%= indent(wrap(@subclasses.map {|child| linkify(child) }.join(", "))) %>
+<%= indent(wrap(@subclasses.map {|name, child| name }.join(", "))) %>
 
