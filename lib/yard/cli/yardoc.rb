@@ -14,6 +14,9 @@ module YARD
       # @return [Array<String>] list of Ruby source files to process
       attr_accessor :files
       
+      # @return [Array<String>] list of excluded paths (regexp matches)
+      attr_accessor :excluded
+      
       # @return [Boolean] whether to use the existing yardoc db if the 
       #   .yardoc already exists. Also makes use of file checksums to
       #   parse only changed files.
@@ -46,6 +49,7 @@ module YARD
           :visibilities => [:public],
           :verifier => nil
         )
+        @excluded = []
         @files = []
         @use_cache = false
         @generate = true
@@ -66,7 +70,7 @@ module YARD
           Registry.load
           checksums = Registry.checksums.dup
         end
-        YARD.parse(files)
+        YARD.parse(files, excluded)
         Registry.save(use_cache)
         
         if generate
@@ -185,6 +189,7 @@ module YARD
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
+        excluded = []
         query_expressions = []
         do_build_gems, do_rebuild_gems = false, false
         serialopts = SymbolHash.new
@@ -224,6 +229,10 @@ module YARD
             log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
             exit
           end
+        end
+        
+        opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
+          self.excluded << path
         end
         
         opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do

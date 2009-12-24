@@ -6,7 +6,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 def parse_file(file, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
   Registry.clear
   path = File.join(File.dirname(thisfile), 'examples', file.to_s + ext)
-  YARD::Parser::SourceParser.parse(path, log_level)
+  YARD::Parser::SourceParser.parse(path, [], log_level)
 end
 
 def described_in_docs(klass, meth, file = nil)

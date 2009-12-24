@@ -114,12 +114,19 @@ describe YARD::Parser::SourceParser do
       File.should_receive(:read_binary).with('foo/bar').and_return(data)
       YARD.parse('foo/bar')
     end
+    
+    it "should support excluded paths" do
+      File.should_receive(:file?).with('foo/bar').and_return(true)
+      File.should_receive(:file?).with('foo/baz').and_return(true)
+      File.should_not_receive(:read_binary)
+      YARD.parse(["foo/bar", "foo/baz"], ["foo", /baz$/])
+    end
   end
   
   describe '#parse_in_order' do
     def in_order_parse(*files)
       paths = files.map {|f| File.join(File.dirname(__FILE__), 'examples', f.to_s + '.rb.txt') }
-      YARD::Parser::SourceParser.parse(paths, Logger::DEBUG)
+      YARD::Parser::SourceParser.parse(paths, [], Logger::DEBUG)
     end
     
     it "should attempt to parse files in order" do
