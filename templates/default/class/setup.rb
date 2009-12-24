@@ -14,6 +14,7 @@ def constructor_details
 end
 
 def subclasses
+  return if object.path == "Object" # don't show subclasses for Object
   if !defined? @@subclasses
     @@subclasses = {}
     list = run_verifier Registry.all(:class)
@@ -27,7 +28,7 @@ def subclasses
   @subclasses = @subclasses.sort_by {|o| o.path }.map do |child|
     name = child.path
     if object.namespace
-      name = child.path.gsub(/^#{Regexp.quote object.namespace.path}::/, '')
+      name = object.relative_path(child)
     end
     [name, child]
   end
