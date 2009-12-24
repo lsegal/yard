@@ -308,12 +308,13 @@ module YARD
           comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
           
-          if append_comment
+          if append_comment && @comments_last_column == column
             @comments.delete(lineno - 1)
             comment = append_comment + "\n" + comment
           end
           
           @comments[lineno] = comment
+          @comments_last_column = column
         end
         
         def on_parse_error(msg)

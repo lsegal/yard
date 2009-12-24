@@ -33,33 +33,29 @@ describe YARD::Parser::SourceParser do
       Registry.at(:Hello).docstring.should == "PASS"
     end
     
+    it "should not add comments appended to last line of block" do
+      YARD.parse_string <<-eof
+        module Hello2
+        end # FAIL
+      eof
+      Registry.at(:Hello2).docstring.should be_blank
+    end
+    
     it "should add comments appended to an object's first line" do
       YARD.parse_string <<-eof
         module Hello # PASS
           HELLO
         end
-        module Hello2
-        end # FAIL
 
-
-        module Hello3 # PASS
-          # CANNOT DIFFERENTIATE
+        module Hello2 # PASS
+          # ANOTHER PASS
           def x; end
         end
       eof
 
-      # TODO: unify behaviour
-      if RUBY18
-        Registry.at(:Hello).docstring.should == ""
-        Registry.at(:Hello2).docstring.should == "FAIL"
-        Registry.at(:Hello3).docstring.should == ""
-        Registry.at('Hello3#x').docstring.should == "CANNOT DIFFERENTIATE"
-      else
-        Registry.at(:Hello).docstring.should == "PASS"
-        Registry.at(:Hello2).docstring.should == ""
-        Registry.at(:Hello3).docstring.should == ""
-        Registry.at('Hello3#x').docstring.should == "PASS\nCANNOT DIFFERENTIATE"
-      end
+      Registry.at(:Hello).docstring.should == "PASS"
+      Registry.at(:Hello2).docstring.should == "PASS"
+      Registry.at('Hello2#x').docstring.should == "ANOTHER PASS"
     end
   end
 

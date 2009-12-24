@@ -48,6 +48,7 @@ module YARD
         @comments_line = nil
         @statement, @block, @comments = TokenList.new, nil, nil
         @last_tk, @last_ns_tk, @before_last_tk = nil, nil, nil
+        @first_line = nil
 
         while !@done && tk = @tokens.shift
           process_token(tk)
@@ -149,6 +150,10 @@ module YARD
           process_statement_end(tk)
           @state = :block
         end
+        
+        if @first_line == tk.line_no && !@statement.empty? && TkCOMMENT === tk
+          process_initial_comment(tk)
+        end
       end
 
       ##
@@ -182,6 +187,7 @@ module YARD
         
         return unless tk.class == TkCOMMENT
         return if !@statement.empty? && @comments
+        return if @first_line && tk.line_no > @first_line
         
         @comments = nil if @comments_last_line && @comments_last_line < tk.line_no - 1
         @comments_line = tk.line_no unless @comments
@@ -316,6 +322,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def push_token(tk)
+        @first_line = tk.line_no if @statement.empty?
         @statement << tk unless @level == 0 && [TkCOMMENT].include?(tk.class)
       end
 
