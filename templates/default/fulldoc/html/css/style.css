@@ -264,4 +264,5 @@ pre.code .gvar,
 pre.code .id.backref, 
 pre.code .id.nth_ref { color: #6D79DE; }
 pre.code .regexp, .dregexp { color: #036A07; }
+pre.code a { border-bottom: 1px dotted #bbf; }
 

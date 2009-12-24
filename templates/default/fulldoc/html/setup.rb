@@ -77,12 +77,14 @@ def generate_method_list
   @items = @items.reject {|m| m.name.to_s =~ /=$/ && m.is_attribute? }
   @items = @items.sort_by {|m| m.name.to_s }
   @list_title = "Method List"
+  @list_type = "methods"
   asset('method_list.html', erb(:full_list))
 end
 
 def generate_class_list
   @items = [Registry.root] + options[:objects].reject {|o| o.type == :root }.sort_by {|m| m.name.to_s }
   @list_title = "Class List"
+  @list_type = "class"
   asset('class_list.html', erb(:full_list))
 end
 
@@ -90,10 +92,34 @@ def generate_file_list
   @file_list = true
   @items = options[:files]
   @list_title = "File List"
+  @list_type = "files"
   asset('file_list.html', erb(:full_list))
   @file_list = nil
 end
 
 def generate_frameset
   asset('frames.html', erb(:frames))
+end
+
+def class_list(root = Registry.root)
+  out = ""
+  run_verifier(root.children).sort_by {|child| child.name ? child.name.to_s : '' }.map do |child|
+    if child.is_a?(CodeObjects::NamespaceObject)
+      has_children = child.children.any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
+      out << "<li>"
+      out << "<a class='toggle'></a> " if has_children
+      out << linkify(child, child.name)
+      out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
+      out << "<small class='search_info'>"
+      if !child.namespace || child.namespace.root?
+        out << "Top Level Namespace"
+      else
+        out << child.namespace.path
+      end
+      out << "</small>"
+      out << "</li>"
+      out << "<ul>#{class_list(child)}</ul>" if has_children
+    end
+  end
+  out
 end
