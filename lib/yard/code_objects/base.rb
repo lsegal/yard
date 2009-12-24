@@ -129,6 +129,7 @@ module YARD
         # @return [Base] 
         # @see #initialize
         def new(namespace, name, *args, &block)
+          raise ArgumentError, "invalid empty object name" if name.to_s.empty?
           if name.to_s[0,2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root
