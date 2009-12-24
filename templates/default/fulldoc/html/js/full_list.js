@@ -47,8 +47,15 @@ function fullListSearch() {
 
 clicked = null;
 function linkList() {
-  $('#full_list li, #full_list li a:last').click(function() {
+  $('#full_list li, #full_list li a:last').click(function(evt) {
     if ($(this).hasClass('toggle')) return true;
+    if (this.tagName.toLowerCase() == "li") {
+      var toggle = $(this).children('a.toggle');
+      if (toggle.size() > 0 && evt.pageX < toggle.offset().left) {
+        toggle.click();
+        return false;
+      }
+    }
     if (clicked) clicked.removeClass('clicked');
     var win = window.parent;
     if (window.top.frames.main) {
