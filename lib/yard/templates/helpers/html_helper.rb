@@ -164,14 +164,21 @@ module YARD
       def link_object(obj, otitle = nil, anchor = nil, relative = true)
         return otitle if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
-        title = otitle ? otitle.to_s : h(obj.path)
-        title = "Top Level Namespace" if title == "" && obj.root?
+        if !otitle && obj.root?
+          title = "Top Level Namespace"
+        elsif otitle
+          title = otitle.to_s
+        elsif object.is_a?(CodeObjects::Base)
+          title = h(object.relative_path(obj))
+        else
+          title = h(obj.to_s)
+        end
         return title unless serializer
 
         return title if obj.is_a?(CodeObjects::Proxy)
       
         link = url_for(obj, anchor, relative)
-        link ? link_url(link, title) : title
+        link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
       end
       
       def link_url(url, title = nil, params = {})
