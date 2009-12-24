@@ -70,6 +70,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
   end
 
   describe "#link_object" do
+    before do
+      stub!(:object).and_return(CodeObjects::NamespaceObject.new(nil, :YARD))
+    end
+    
     it "should return the object path if there's no serializer and no title" do
       stub!(:serializer).and_return nil
       link_object(CodeObjects::NamespaceObject.new(nil, :YARD)).should == "YARD"
