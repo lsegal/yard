@@ -150,7 +150,7 @@ module YARD
         case content
         when String
           @file = content
-          content = File.read_binary(content)
+          content = convert_encoding(File.read_binary(content))
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 
@@ -190,6 +190,16 @@ module YARD
       end
       
       private
+      
+      # Searches for encoding line and forces encoding
+      def convert_encoding(content)
+        return content if RUBY18
+        if content =~ /\A\s*#.*coding:\s*(\S+)\s*$/
+          content.force_encoding($1)
+        else
+          content
+        end
+      end
 
       # Runs a {Handlers::Processor} object to post process the parsed statements.
       # @return [void] 
