@@ -269,4 +269,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
       html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
     end
   end
+  
+  describe '#resolve_links' do
+    it "should resolve {Name}" do
+      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      resolve_links("{file:TEST}")
+    end
+
+    it "should resolve ({Name})" do
+      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      resolve_links("({file:TEST})")
+    end
+  end
 end

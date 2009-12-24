@@ -96,7 +96,7 @@ module YARD
       # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(/<(\/)?(pre|code|tt)|(\s|>|^)\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
+        text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
           tag = $2
           closed = $1
           if tag
@@ -105,14 +105,14 @@ module YARD
           end
           next str unless code_tags == 0
           
-          sp, name = $3, $4
-          title = $5 || name
+          name = $3
+          title = $4 || name
 
           case name
           when %r{://}, /^mailto:/
-            sp + link_url(name, title, :target => '_parent')
+            link_url(name, title, :target => '_parent')
           when /^file:(\S+?)(?:#(\S+))?$/
-            sp + link_file($1, title == name ? $1 : title, $2)
+            link_file($1, title == name ? $1 : title, $2)
           else
             if object.is_a?(String)
               obj = name
@@ -123,7 +123,7 @@ module YARD
                 log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
                 log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
               end
-              "#{sp}<tt>" + linkify(obj, title) + "</tt>" 
+              "<tt>" + linkify(obj, title) + "</tt>" 
             end
           end
         end
