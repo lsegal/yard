@@ -223,4 +223,32 @@ describe YARD::CodeObjects::Base do
       object.source_type.should == :ruby
     end
   end
+  
+  describe '#relative_path' do
+    it "should accept a string" do
+      YARD.parse_string "module A; class B; end; class C; end; end"
+      Registry.at('A::B').relative_path(Registry.at('A::C')).should == 
+        Registry.at('A::B').relative_path('A::C')
+    end
+    
+    it "should return the relative path when they share a common namespace" do
+      YARD.parse_string "module A; class B; end; class C; end; end"
+      Registry.at('A::B').relative_path(Registry.at('A::C')).should == 'C'
+    end
+    
+    it "should return the full path if they don't have a common namespace" do
+      YARD.parse_string "module A; class B; end; end; module D; class C; end; end"
+      Registry.at('A::B').relative_path('D::C').should == 'D::C'
+    end
+    
+    it "should return a relative path for class methods" do
+      YARD.parse_string "module A; def self.b; end; def self.c; end; end"
+      Registry.at('A.b').relative_path('A.c').should == 'c'
+    end
+
+    it "should return a relative path for instance methods" do
+      YARD.parse_string "module A; def b; end; def c; end; end"
+      Registry.at('A#b').relative_path('A#c').should == '#c'
+    end
+  end
 end

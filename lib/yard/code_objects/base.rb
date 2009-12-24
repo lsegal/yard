@@ -347,6 +347,14 @@ module YARD
       end
       alias_method :to_s, :path
       
+      # @param [Base, String] other another code object (or object path)
+      # @return [String] the shortest relative path from this object to +other+
+      def relative_path(other)
+        other = other.path if other.respond_to?(:path)
+        return other unless namespace
+        other.gsub(/^#{Regexp.quote namespace.path}(::|\.)?/, '')
+      end
+      
       # Renders the object using the {Templates::Engine templating system}.
       # 
       # @example Formats a class in plaintext
