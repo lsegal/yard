@@ -103,12 +103,17 @@ end
 
 def class_list(root = Registry.root)
   out = ""
-  run_verifier(root.children).sort_by {|child| child.name ? child.name.to_s : '' }.map do |child|
+  children = run_verifier(root.children)
+  if root == Registry.root
+    children += Registry.all(:class, :module).select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
+  end
+  children.sort_by {|child| child.path }.map do |child|
     if child.is_a?(CodeObjects::NamespaceObject)
+      name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
       has_children = child.children.any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
       out << "<li>"
       out << "<a class='toggle'></a> " if has_children
-      out << linkify(child, child.name)
+      out << linkify(child, name)
       out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
       out << "<small class='search_info'>"
       if !child.namespace || child.namespace.root?
