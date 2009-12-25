@@ -28,14 +28,13 @@ class Gem::DocManager
   end
   
   def run_yardoc(*args)
-    args << @spec.rdoc_options
     args << '--quiet'
+    args << @spec.require_paths
     if @spec.extra_rdoc_files.size > 0
-      args << '--files'
-      args << @spec.extra_rdoc_files.join(",")
+      args << '-'
+      args += @spec.extra_rdoc_files
     end
-    args << @spec.require_paths.map {|p| p + "/**/*.rb" }
-    args = args.flatten.map do |arg| arg.to_s end
+    args = args.flatten.map {|arg| arg.to_s }
 
     old_pwd = Dir.pwd
     Dir.chdir(@spec.full_gem_path)
@@ -77,6 +76,10 @@ class Gem::DocManager
   unless instance_methods.include?(:install_ri_yard)
     def install_ri_yard
       install_ri_yard_orig if @spec.has_rdoc?
+      
+      self.class.load_yardoc
+      say "Building YARD (yri) index for #{@spec.full_name}..."
+      run_yardoc '-c', '-n'
     end
     alias install_ri_yard_orig install_ri
     alias install_ri install_ri_yard
