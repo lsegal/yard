@@ -22,6 +22,10 @@ module YARD
       #   parse only changed files.
       attr_accessor :use_cache
       
+      # @return [Boolean] whether to generate output incrementally (
+      #   implies use_cache and generate)
+      attr_accessor :incremental
+      
       # @return [Boolean] whether to generate output
       attr_accessor :generate
       
@@ -53,6 +57,7 @@ module YARD
         @files = []
         @use_cache = false
         @generate = true
+        @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
       end
       
@@ -74,9 +79,10 @@ module YARD
         Registry.save(use_cache)
         
         if generate
-          if use_cache
+          if incremental
             generate_with_cache(checksums)
           else
+            Registry.load_all if use_cache
             Templates::Engine.generate(all_objects, options)
           end
         end
@@ -229,6 +235,12 @@ module YARD
             log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
             exit
           end
+        end
+        
+        opts.on('--incremental', 'Generates output for changed files only (implies -c)') do
+          self.incremental = true
+          self.generate = true
+          self.use_cache = true
         end
         
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|

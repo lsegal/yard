@@ -6,6 +6,8 @@ describe YARD::CLI::Yardoc do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.stub!(:generate).and_return(false)
+    Templates::Engine.stub!(:render)
+    Templates::Engine.stub!(:generate)
     YARD.stub!(:parse)
   end
   
@@ -128,5 +130,25 @@ describe YARD::CLI::Yardoc do
   it "should allow --hide-void-return to be set" do
     @yardoc.optparse *%w( --hide-void-return )
     @yardoc.options[:hide_void_return].should be_true
+  end
+  
+  it "should generate all objects with --use-cache" do
+    YARD.should_receive(:parse)
+    Registry.should_receive(:load)
+    Registry.should_receive(:load_all)
+    @yardoc.stub!(:generate).and_return(true)
+    @yardoc.run *%w( --use-cache )
+  end
+  
+  it "should only generate changed objects with --incremental" do
+    YARD.should_receive(:parse)
+    Registry.should_receive(:load)
+    Registry.should_not_receive(:load_all)
+    @yardoc.stub!(:generate).and_return(true)
+    @yardoc.should_receive(:generate_with_cache)
+    @yardoc.run *%w( --incremental )
+    @yardoc.incremental.should == true
+    @yardoc.use_cache.should == true
+    @yardoc.generate.should == true
   end
 end
