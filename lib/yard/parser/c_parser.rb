@@ -116,17 +116,6 @@ module YARD
           comment = $1
         elsif @content =~ %r{Document-(?:class|module):\s#{object.path}\s*?(?:<\s+[:,\w]+)?\n((?>.*?\*/))}m
           comment = $1
-        else
-          if @content =~ /rb_define_(class|module)/m then
-            comments = []
-            @content.split(/(\/\*.*?\*\/)\s*?\n/m).each_with_index do |chunk, index|
-              comments[index] = chunk
-              if chunk =~ /rb_define_(class|module).*?"(#{object.name})"/m then
-                comment = comments[index-1]
-                break
-              end
-            end
-          end
         end
         object.docstring = parse_comments(object, comment) if comment
       end
