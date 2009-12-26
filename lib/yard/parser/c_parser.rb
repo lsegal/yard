@@ -18,7 +18,11 @@ module YARD
         parse_includes
       end
       
-      protected
+      private
+      
+      def remove_var_prefix(var)
+        var.gsub(/^rb_[mc]|^[a-z_]+/, '')
+      end
       
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
@@ -45,7 +49,7 @@ module YARD
       end
 
       def handle_module(var_name, mod_name, in_module = nil)
-        namespace = @namespaces[in_module] || (in_module ? P(in_module.gsub(/^rb_[mc]/, '')) : :root)
+        namespace = @namespaces[in_module] || (in_module ? P(remove_var_prefix(in_module)) : :root)
         ensure_loaded!(namespace)
         obj = CodeObjects::ModuleObject.new(namespace, mod_name)
         obj.add_file(@file)
@@ -55,10 +59,10 @@ module YARD
 
       def handle_class(var_name, class_name, parent, in_module = nil)
         parent = nil if parent == "0"
-        namespace = @namespaces[in_module] || (in_module ? P(in_module.gsub(/^rb_[mc]/, '')) : :root)
+        namespace = @namespaces[in_module] || (in_module ? P(remove_var_prefix(in_module)) : :root)
         ensure_loaded!(namespace)
         obj = CodeObjects::ClassObject.new(namespace, class_name)
-        obj.superclass = @namespaces[parent] || parent.gsub(/^rb_[mc]/, '') if parent
+        obj.superclass = @namespaces[parent] || remove_var_prefix(parent) if parent
         obj.add_file(@file)
         find_namespace_docstring(obj)      
         @namespaces[var_name] = obj
@@ -71,7 +75,7 @@ module YARD
         else; scope = :instance
         end
         
-        namespace = @namespaces[var_name] || P(var_name.gsub(/^rb_[mc]/, ''))
+        namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
         ensure_loaded!(namespace)
         obj = CodeObjects::MethodObject.new(namespace, name, scope)
         obj.add_file(@file)
@@ -344,7 +348,7 @@ module YARD
       def parse_includes
         @content.scan(/rb_include_module\s*\(\s*(\w+?),\s*(\w+?)\s*\)/) do |klass, mod|
           if klass = @namespaces[klass]
-            mod = @namespaces[mod] || P(mod.gsub(/^rb_[mc]/, ''))
+            mod = @namespaces[mod] || P(remove_var_prefix(mod))
             klass.mixins(:instance) << mod
           end
         end
