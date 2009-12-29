@@ -100,7 +100,6 @@ module YARD
           if pc.size > 1
             pc.pop
             pc = pc.join('/')
-            paths = Engine.send(:find_template_paths, nil, pc)
             begin
               include Engine.template(pc)
             rescue ArgumentError
