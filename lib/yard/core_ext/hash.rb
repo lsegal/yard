@@ -1,7 +1,7 @@
 class Hash
   class << self
     def create(*args)
-      if args.is_a?(Array)
+      if args.first.is_a?(Array)
         obj = new
         args.first.each {|k, v| obj[k] = v }
         obj
