@@ -82,7 +82,6 @@ def generate_method_list
 end
 
 def generate_class_list
-  @items = [Registry.root] + options[:objects].reject {|o| o.type == :root }.sort_by {|m| m.name.to_s }
   @list_title = "Class List"
   @list_type = "class"
   asset('class_list.html', erb(:full_list))
