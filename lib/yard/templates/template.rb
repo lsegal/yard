@@ -99,7 +99,13 @@ module YARD
           pc = path.to_s.split('/')
           if pc.size > 1
             pc.pop
-            include Engine.template!(pc.join('/'), full_path.gsub(%r{/[^/]+$}, ''))
+            pc = pc.join('/')
+            paths = Engine.send(:find_template_paths, nil, pc)
+            begin
+              include Engine.template(pc)
+            rescue ArgumentError
+              include Engine.template!(pc, full_path.gsub(%r{/[^/]+$}, ''))
+            end
           end
         end
         

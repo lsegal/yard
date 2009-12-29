@@ -48,6 +48,7 @@ describe YARD::Templates::Engine do
 
     it "should create a Template including other matching templates in path" do
       paths = ['/full/path/template/name', '/full/path2/template/name']
+      Engine.should_receive(:find_template_paths).with(nil, 'template').at_least(1).times.and_return([])
       Engine.should_receive(:find_template_paths).with(nil, 'template/name').and_return(paths)
       ancestors = Engine.template('template/name').ancestors.map {|m| m.class_name }
       ancestors.should include("Template__full_path2_template_name")

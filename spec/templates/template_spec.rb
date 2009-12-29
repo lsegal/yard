@@ -5,10 +5,20 @@ describe YARD::Templates::Template do
     YARD::Templates::Engine.template!(path, '/full/path/' + path.to_s)
   end
   
-  describe '#initialize' do
+  describe '.include_parent' do
     it "should not include parent directory if parent directory is a template root path" do
       mod = template('q')
       mod.should_not include(template(''))
+    end
+    
+    it "should include overridden parent directory" do
+      Engine.stub!(:template_paths).and_return(['/foo', '/bar'])
+      File.should_receive(:directory?).with('/foo/a/b').and_return(true)
+      File.should_receive(:directory?).with('/bar/a/b').and_return(false)
+      File.should_receive(:directory?).with('/foo/a').at_least(1).times.and_return(true)
+      File.should_receive(:directory?).with('/bar/a').at_least(1).times.and_return(true)
+      ancestors = Engine.template('a/b').ancestors.map {|c| c.class_name }
+      ancestors[0, 3].should == %w( Template__foo_a_b Template__bar_a Template__foo_a )
     end
     
     it "should include parent directory template if exists" do
