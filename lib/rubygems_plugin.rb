@@ -6,7 +6,7 @@ class Gem::Specification
   overwrite_accessor(:has_rdoc) { @has_rdoc }
   overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   
-  def self.has_yardoc=(value)
+  def has_yardoc=(value)
     @has_rdoc = 'yard'
   end
   
