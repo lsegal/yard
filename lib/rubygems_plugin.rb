@@ -76,6 +76,7 @@ class Gem::DocManager
   unless instance_methods.include?(:install_ri_yard)
     def install_ri_yard
       install_ri_yard_orig if @spec.has_rdoc?
+      return if @spec.has_yardoc?
       
       self.class.load_yardoc
       say "Building YARD (yri) index for #{@spec.full_name}..."
