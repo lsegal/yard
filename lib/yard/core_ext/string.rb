@@ -4,6 +4,7 @@ class String
   # 
   # @example
   #   "FooBar".underscore # => "foo_bar"
+  #   "Foo::Bar".underscore # => "foo/bar"
   # @return [String] the underscored lower case string
   def underscore
     gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
@@ -13,9 +14,10 @@ class String
   # 
   # @example
   #   "foo_bar_baz".camelcase # => "FooBarBaz"
+  #   "foo/bar".camelcase # => "Foo::Bar"
   # @return [String] the camel cased text
   def camelcase
-    gsub(/([a-z])_([a-z])/i) { $1 + $2.upcase }.sub(/^(.)/) { $1.upcase }.gsub('/', '::') 
+    gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(?:^|_)(.)/) { $1.upcase }
   end
   
   # Splits text into tokens the way a shell would, handling quoted
