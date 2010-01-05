@@ -20,7 +20,11 @@ describe String do
     end
 
     it "should turn hello/world into Hello::World" do
-      "Hello::World".underscore.should == "hello/world"
+      "hello/world".camelcase.should == "Hello::World"
+    end
+    
+    it "should not camelcase _foo" do
+      "_foo".camelcase.should == "_foo"
     end
   end
   
