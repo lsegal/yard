@@ -45,6 +45,8 @@ end
 def diskfile
   "<div id='filecontents'>" +
   case (File.extname(@file)[1..-1] || '').downcase
+  when 'htm', 'html'
+    @contents
   when 'txt'
     "<pre>#{@contents}</pre>"
   when 'textile', 'txtile'
