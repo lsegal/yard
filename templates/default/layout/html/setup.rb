@@ -54,7 +54,16 @@ def diskfile
   when 'markdown', 'md', 'mdown'
     htmlify(@contents, :markdown)
   else
-    htmlify(@contents, :rdoc)
+    htmlify(@contents, diskfile_shebang_or_default)
   end +
   "</div>"
+end
+
+def diskfile_shebang_or_default
+  if @contents =~ /\A#!(\S+)\s*$/ # Shebang support
+    @contents = $'
+    $1.to_sym
+  else
+    options[:markup]
+  end
 end
