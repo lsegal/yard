@@ -26,6 +26,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
       fix_typewriter("Math + stuff +is ok+").should == 
         "Math + stuff <tt>i\x04s\x04 \x04o\x04k\x04</tt>"
     end
+    
+    it "should not apply to code blocks" do
+      fix_typewriter("<code>+hello+</code>").should == "<code>+hello+</code>"
+    end
   end
   
   describe '#format_types' do
