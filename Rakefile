@@ -1,23 +1,18 @@
 require File.dirname(__FILE__) + '/lib/yard'
-require 'rubygems'
-require 'rake/gempackagetask'
 
 WINDOWS = (RUBY_PLATFORM =~ /win32|cygwin/ ? true : false) rescue false
 SUDO = WINDOWS ? '' : 'sudo'
 
 task :default => :specs
 
-load 'yard.gemspec'
-Rake::GemPackageTask.new(SPEC) do |pkg|
-  pkg.gem_spec = SPEC
-  pkg.need_zip = true
-  pkg.need_tar = true
+desc "Builds the gem"
+task :gem do
+  sh "gem build yard.gemspec"
 end
 
-desc "Install the gem locally"
+desc "Installs the gem"
 task :install => :gem do 
-  sh "#{SUDO} gem install pkg/#{SPEC.name}-#{SPEC.version}.gem --local --no-rdoc --no-ri"
-  sh "rm -rf pkg/yard-#{SPEC.version}" unless ENV['KEEP_FILES']
+  sh "#{SUDO} gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
 end
 
 begin
