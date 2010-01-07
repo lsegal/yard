@@ -44,13 +44,13 @@ module YARD
           doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
           html = doc.to_html
         when :rdoc
-          html = fix_typewriter(text)
 
           begin
             SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
-            html = MarkupHelper::SimpleMarkup.convert(html, SimpleMarkupHtml)
+            html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
           end
 
+          html = fix_typewriter(html)
           html = fix_dash_dash(html)
         end
 
