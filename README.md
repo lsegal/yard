@@ -1,5 +1,5 @@
-YARD Release 0.5.1 "The Longest" (Dec 15th 2009)
-===================================================
+YARD Release 0.5.3 "The Longest" (Jan 11th 2010)
+================================================
 
 **Homepage**:  [http://yardoc.org](http://yardoc.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
