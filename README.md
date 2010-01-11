@@ -222,6 +222,18 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 CHANGELOG
 ---------
 
+- **January.11.10**: 0.5.3 release
+    - See {file:WhatsNew.md what's new document} for changes
+
+- **December.16.09**: 0.5.2 release
+    - See {file:WhatsNew.md what's new document} for changes
+
+- **December.15.09**: 0.5.1 release
+    - See {file:WhatsNew.md what's new document} for changes
+
+- **December.13.09**: 0.5.0 release
+    - See {file:WhatsNew.md what's new document} for changes
+
 - **November.15.09**: 0.4.0 release
     - Added new templating engine based on [tadpole](http://github.com/lsegal/tadpole)
     - Added YARD queries (`--query` CLI argument to yardoc)
