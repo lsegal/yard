@@ -50,8 +50,8 @@ module YARD
             html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
           end
 
-          html = fix_typewriter(html)
           html = fix_dash_dash(html)
+          html = fix_typewriter(html)
         end
 
         html = resolve_links(html)
@@ -76,7 +76,7 @@ module YARD
           type_text, pre_text, no_match = $1, $`, $&
           pre_match = pre_text.scan(%r(</?(?:pre|tt|code).*?>))
           if pre_match.last.nil? || pre_match.last.include?('/')
-            '<tt>' + type_text.gsub(/(.)/, "\\1\004") + '</tt>'
+            '<tt>' + type_text + '</tt>'
           else
             no_match
           end
