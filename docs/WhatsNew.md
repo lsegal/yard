@@ -2,13 +2,16 @@ What's New in 0.5.x?
 ====================
 
 1. **Support for documenting native Ruby C code** (0.5.0)
-2. **Incremental parsing and output generation with `yardoc -c`** (0.5.0)
+2. **Incremental parsing and output generation with `yardoc -c`** (0.5.0, 0.5.3)
 2. **Improved `yri` support to perform lookups on installed Gems** (0.5.0)
 3. **Added `yardoc --default-return` and `yardoc --hide-void-return`** (0.5.0)
 4. **Multiple syntax highlighting language support** (0.5.0)
 5. **New .yardoc format** (0.5.0)
 6. **Support for yard-doc-* gem packages as hosted .yardoc dbs** (0.5.1)
 7. **Support for extra search paths in `yri`** (0.5.1)
+8. **Generating HTML docs now adds frames view** (0.5.3)
+9. **Tree view for class list** (0.5.3)
+10. **Ability to specify markup format of extra files** (0.5.3)
 
 Support for documenting native Ruby C code (0.5.0)
 --------------------------------------------------
@@ -19,17 +22,25 @@ Ruby's core and stdlibs which will be hosted on http://yardoc.org/docs. In
 addition, the .yardoc dump for the Ruby-core classes will become available
 as an installable gem for yri support (see #3).
 
-Incremental parsing and output generation with `yardoc -c` (0.5.0)
-------------------------------------------------------------------
+Incremental parsing and output generation with `yardoc -c` (0.5.0, 0.5.3)
+-------------------------------------------------------------------------
 
-YARD now compares file checksums before parsing when using `yardoc -c` 
+<p class="note">Note: in 0.5.3 and above you must use <tt>--incremental</tt> 
+  to incrementally generate HTML, otherwise only parsing will be done 
+  incrementally but HTML will be generated with all objects. <tt>--incremental</tt>
+  implies <tt>-c</tt>, so no need to specify them both.</p>
+
+YARD now compares file checksums before parsing when using `yardoc -c`
 (aka `yardoc --use-cache`) to do incremental parsing of only the files that
 have changed. HTML (or other output format) generation will also only be
-done on the objects that were parsed from changed files. This makes doing
+done on the objects that were parsed from changed files (*). This makes doing
 a documentation development cycle much faster for quick HTML previews. Just
 remember that when using incremental output generation, the index will not
 be rebuilt and inter-file links might not hook up right, so it is best to
 perform a full rebuild at the end of such previews.
+
+(*) Only for versions prior to 0.5.3. For 0.5.3+, use `--incremental` for
+incremental HTML output.
 
 Improved `yri` support to perform lookups on installed Gems (0.5.0)
 -------------------------------------------------------------------
@@ -123,6 +134,33 @@ Support for extra search paths in `yri` (0.5.1)
 
 You can now add custom paths to non-gem .yardoc files 
 by adding them as newline separated paths in `~/.yard/yri_search_paths`.
+
+Generating HTML docs now adds frames view (0.5.3)
+-------------------------------------------------
+
+`yardoc` will now create a `frames.html` file when generating HTML documents
+which allows the user to view documentation inside frames, for those users who
+still find frames beneficial.
+
+Tree view for class list (0.5.3)
+--------------------------------
+
+The class list now displays as an expandable tree view to better organized an 
+otherwise cluttered namespace. If you properly namespace your less important
+classes (like Rails timezone classes), they will not take up space in the
+class list unless the user looks for them.
+
+Ability to specify markup format of extra files (0.5.3)
+-------------------------------------------------------
+
+You can now specify the markup format of an extra file (like README) at the
+top of the file with a shebang-like line:
+
+    #!textile
+    contents here
+    
+The above file contents will be rendered with a textile markup engine 
+(eg. RedCloth).
 
 
 What's New in 0.4.x?
