@@ -147,6 +147,7 @@ module YARD
 
     autoload :Engine,   __p('templates/engine')
     autoload :Template, __p('templates/template')
+    autoload :ErbCache, __p('templates/erb_cache')
   end
 
   autoload :Docstring,      __p('docstring')
