@@ -4,6 +4,10 @@ describe YARD::Templates::Template do
   def template(path)
     YARD::Templates::Engine.template!(path, '/full/path/' + path.to_s)
   end
+
+  before :each do
+    YARD::Templates::ErbCache.clear!
+  end
   
   describe '.include_parent' do
     it "should not include parent directory if parent directory is a template root path" do

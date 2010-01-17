@@ -18,6 +18,7 @@ module YARD
       
       self.extra_includes = []
       
+      include ErbCache
       include Helpers::BaseHelper
       include Helpers::MethodHelper
 
@@ -226,8 +227,10 @@ module YARD
       # @yield calls subsections to be rendered
       # @return [String] the contents of the ERB rendered section
       def erb(section, &block)
-        erb = erb_with(cache(section), cache_filename(section))
-        erb.result(binding, &block)
+        method_name = ErbCache.method_for(cache_filename(section)) do
+          erb_with(cache(section), cache_filename(section))
+        end
+        send(method_name, &block)
       end
       
       # Returns the contents of a file. If +allow_inherited+ is set to +true+,
@@ -271,8 +274,8 @@ module YARD
       def superb(section = section, &block)
         filename = self.class.find_nth_file(erb_file_for(section), 2)
         return "" unless filename
-        erb = erb_with(IO.read(filename), filename)
-        erb.result(binding, &block)
+        method_name = ErbCache.method_for(filename) { erb_with(IO.read(filename), filename) }
+        send(method_name, &block)
       end
       
       def options=(value)
@@ -319,14 +322,15 @@ module YARD
         content = @cache[section.to_sym]
         return content if content
       
-        file = self.class.find_file(erb_file_for(section))
+        file = cache_filename(section)
         @cache_filename[section.to_sym] = file
         raise ArgumentError, "no template for section '#{section}' in #{self.class.path}" unless file
         @cache[section.to_sym] = IO.read(file)
       end
       
       def cache_filename(section)
-        @cache_filename[section.to_sym]
+        @cache_filename[section.to_sym] ||=
+          self.class.find_file(erb_file_for(section))
       end
       
       def set_ivars
