@@ -316,7 +316,7 @@ module YARD
       
       def html_syntax_highlight(source, type = :ruby)
         return "" unless source
-        return source if options[:no_highlight]
+        return h(source) if options[:no_highlight]
         
         # handle !!!LANG prefix to send to html_syntax_highlight_LANG
         if source =~ /\A[ \t]*!!!(\w+)[ \t]*\r?\n/
