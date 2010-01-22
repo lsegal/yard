@@ -319,7 +319,7 @@ module YARD
         return h(source) if options[:no_highlight]
         
         # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-        if source =~ /\A[ \t]*!!!(\w+)[ \t]*\r?\n/
+        if source =~ /\A[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
           type, source = $1, $'
           source = $'
         end
