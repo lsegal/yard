@@ -110,7 +110,7 @@ module YARD
         end
         
         def include_inherited(full_paths)
-          full_paths.each do |full_path|
+          full_paths.reverse.each do |full_path|
             include Engine.template!(path, full_path)
           end
         end
