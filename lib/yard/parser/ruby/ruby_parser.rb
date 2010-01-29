@@ -317,6 +317,22 @@ module YARD
           @comments_last_column = column
         end
         
+        def on_embdoc_beg(text)
+          visit_ns_token(:embdoc_beg, text)
+          @embdoc = ""
+        end
+        
+        def on_embdoc(text)
+          visit_ns_token(:embdoc, text)
+          @embdoc << text
+        end
+        
+        def on_embdoc_end(text)
+          visit_ns_token(:embdoc_end, text)
+          @comments[lineno] = @embdoc
+          @embdoc = nil
+        end
+        
         def on_parse_error(msg)
           raise ParserSyntaxError, "syntax error in `#{file}`:(#{lineno},#{column}): #{msg}"
         end

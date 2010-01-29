@@ -111,7 +111,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_token(tk)
-        # p tk.text, @state, @level, @current_block, "<br/>"
+        # p tk.class, tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
           return if process_initial_comment(tk)
@@ -196,9 +196,15 @@ module YARD
         # Since, of course, the convention is to have "# text"
         # and not "#text", which I deem ugly (you heard it here first)
         @comments ||= []
-        @comments << tk.text.gsub(/^#+\s{0,1}/, '')
+        if tk.text =~ /\A=begin/
+          lines = tk.text.count("\n")
+          @comments << tk.text.gsub(/\A=begin.*\r?\n|\r?\n=end.*\r?\n?\Z/, '')
+          @comments_last_line = tk.line_no + lines
+        else
+          @comments << tk.text.gsub(/^#+\s{0,1}/, '')
+          @comments_last_line = tk.line_no
+        end
         @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
-        @comments_last_line = tk.line_no
         true
       end
 
