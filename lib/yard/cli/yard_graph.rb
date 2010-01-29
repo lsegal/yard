@@ -90,18 +90,12 @@ module YARD
         end
         
         common_options(opts)
+        parse_options(opts, args)
 
-        begin
-          opts.parse!(args)
-          if args.first
-            @objects = args.map {|o| Registry.at(o) }.compact
-          else
-            @objects = [Registry.root]
-          end
-        rescue => e
-          STDERR.puts e.message
-          STDERR << "\n" << opts
-          exit
+        if args.first
+          @objects = args.map {|o| Registry.at(o) }.compact
+        else
+          @objects = [Registry.root]
         end
       end
     end

@@ -129,15 +129,8 @@ module YARD
         end
         
         common_options(opts)
-
-        begin
-          opts.parse!(args)
-          @name = args.first
-        rescue => e
-          STDERR.puts e.message
-          STDERR << "\n" << opts
-          exit
-        end
+        parse_options(opts, args)
+        @name = args.first
       end
     end
   end

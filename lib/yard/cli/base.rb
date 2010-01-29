@@ -11,6 +11,8 @@ module YARD
         log.show_backtraces = false
       end
       
+      protected
+
       # Adds a set of common options to the tail of the OptionParser
       # 
       # @param [OptionParser] opts the option parser object
@@ -24,6 +26,18 @@ module YARD
         opts.on_tail('--backtrace', 'Show stack traces') { log.show_backtraces = true }
         opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
         opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
+      end
+      
+      # Parses the option and gracefully handles invalid switches
+      # 
+      # @param [OptionParser] opts the option parser object
+      # @param [Array<String>] args the arguments passed from input. This
+      #   array will be modified.
+      # @return [void]
+      def parse_options(opts, args)
+        opts.parse!(args)
+      rescue OptionParser::InvalidOption => e
+        log.warn "Unrecognized/#{e.message}"
       end
     end
   end

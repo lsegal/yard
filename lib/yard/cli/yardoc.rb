@@ -340,14 +340,7 @@ module YARD
         end
 
         common_options(opts)
-        
-        begin
-          opts.parse!(args)
-        rescue OptionParser::InvalidOption => e
-          STDERR.puts e.message
-          STDERR << "\n" << opts
-          exit
-        end
+        parse_options(opts, args)
         
         # Last minute modifications
         build_gems(do_rebuild_gems) if do_build_gems
