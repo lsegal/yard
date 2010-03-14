@@ -287,7 +287,7 @@ module YARD
         
         type = signature_types(meth, link)
         scope = meth.scope == :class ? "+" : "-"
-        name = full_attr_name ? meth.name : meth.name.to_s.gsub(/=$/, '')
+        name = full_attr_name ? meth.name : meth.name.to_s.gsub(/^(\w+)=$/, '\1')
         blk = format_block(meth)
         args = !full_attr_name && meth.writer? ? "" : format_args(meth)
         extras = []
