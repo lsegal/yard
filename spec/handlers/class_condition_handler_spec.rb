@@ -8,10 +8,6 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
     names.each {|name| Registry.at("A##{name}not").should be_nil }
   end
   
-  it "should parse all if/elsif blocks for complex conditions" do
-    verify_method :a, :b, :c, :d
-  end
-  
   it "should parse all unless blocks for complex conditions" do
     verify_method :g
   end
@@ -24,16 +20,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
     verify_method :p
   end
   
-  it "should only parse else block if condition is literal value `false`" do
-    verify_method :q
-  end
-
   it "should only parse then block if condition is literal integer != 0" do
     verify_method :o
-  end
-
-  it "should only parse else block if condition is literal integer == 0" do
-    verify_method :n
   end
   
   it "should invert block to parse for literal condition if it's an unless block" do
@@ -43,4 +31,18 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
   it "should handle conditions such as 'defined? VALUE'" do
     verify_method :j, :k
   end
-end if RUBY19
+  
+  if RUBY19
+    it "should parse all if/elsif blocks for complex conditions" do
+      verify_method :a, :b, :c, :d
+    end
+
+    it "should only parse else block if condition is literal value `false`" do
+      verify_method :q
+    end
+
+    it "should only parse else block if condition is literal integer == 0" do
+      verify_method :n
+    end
+  end
+end
