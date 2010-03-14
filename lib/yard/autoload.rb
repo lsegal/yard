@@ -62,6 +62,7 @@ module YARD
         autoload :MethodHandler,         __p('handlers/ruby/legacy/method_handler')
         autoload :MixinHandler,          __p('handlers/ruby/legacy/mixin_handler')
         autoload :ModuleHandler,         __p('handlers/ruby/legacy/module_handler')
+        autoload :ProcessHandler,        __p('handlers/ruby/legacy/process_handler')
         autoload :VisibilityHandler,     __p('handlers/ruby/legacy/visibility_handler')
         autoload :YieldHandler,          __p('handlers/ruby/legacy/yield_handler')
       end
@@ -80,6 +81,7 @@ module YARD
       autoload :MethodConditionHandler,  __p('handlers/ruby/method_condition_handler')
       autoload :MixinHandler,            __p('handlers/ruby/mixin_handler')
       autoload :ModuleHandler,           __p('handlers/ruby/module_handler')
+      autoload :ProcessHandler,          __p('handlers/ruby/process_handler')
       autoload :VisibilityHandler,       __p('handlers/ruby/visibility_handler')
       autoload :YieldHandler,            __p('handlers/ruby/yield_handler')
     end
