@@ -1,9 +1,13 @@
-<% scopes(method_listing) do |list, scope| %>
-  <h2><%= scope.to_s.capitalize %> Method Summary</h2>
+<% if method_listing.size > 0 %>
+  <% scopes(method_listing) do |list, scope| %>
+    <h2><%= scope.to_s.capitalize %> Method Summary</h2>
 
-  <ul class="summary">
-    <% list.each do |meth| %>
-      <%= yieldall :item => meth %>
-    <% end %>
-  </ul>
+    <ul class="summary">
+      <% list.each do |meth| %>
+        <%= yieldall :item => meth %>
+      <% end %>
+    </ul>
+  <% end %>
+<% else %>
+  <h2>Method Summary</h2>
 <% end %>
