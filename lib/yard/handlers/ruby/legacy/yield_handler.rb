@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::YieldHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkYIELD
   
-  def process
+  process do
     return unless owner.is_a?(MethodObject) # Only methods yield
     return if owner.has_tag? :yield         # Don't override yield tags
     return if owner.has_tag? :yieldparam    # Same thing.

@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/
   
-  def process
+  process do
     begin
       attr_type   = statement.tokens.first.text.to_sym
       symbols     = tokval_list statement.tokens[2..-1], :attr, TkTRUE, TkFALSE

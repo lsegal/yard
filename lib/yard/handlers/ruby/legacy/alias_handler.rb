@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aalias(_method)?(\s|\()/
   
-  def process
+  process do
     if TkALIAS === statement.tokens.first 
       tokens = statement.tokens[2..-1].to_s.split(/\s+/)
       names = [tokens[0], tokens[1]].map {|t| t.gsub(/^:/, '') }

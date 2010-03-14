@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkCLASS
   
-  def process
+  process do
     if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/m
       classname = $1
       superclass = parse_superclass($2)

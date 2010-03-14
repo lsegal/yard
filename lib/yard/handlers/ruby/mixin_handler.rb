@@ -2,7 +2,7 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles method_call(:include)
   
-  def process
+  process do
     statement.parameters(false).each {|mixin| process_mixin(mixin) }
   end
 

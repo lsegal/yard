@@ -2,7 +2,7 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles meta_type(:condition)
   
-  def process
+  process do
     condition = parse_condition
     if condition == nil
       # Parse both blocks if we're unsure of the condition

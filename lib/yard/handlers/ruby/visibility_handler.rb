@@ -3,7 +3,7 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
   handles method_call(:protected)
   handles method_call(:public)
   
-  def process
+  process do
     return if (ident = statement.jump(:ident)) == statement
     case statement.type
     when :var_ref
