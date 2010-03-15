@@ -90,6 +90,16 @@ function framesInit() {
   }
 }
 
+function keyboardShortcuts() {
+  $(document.body).keypress(function(evt) {
+    switch (evt.charCode) {
+      case 67: case 99:  $('#class_list_link').click(); break;  // 'c'
+      case 77: case 109: $('#method_list_link').click(); break; // 'm'
+      case 70: case 102: $('#file_list_link').click(); break;   // 'f'
+    }
+  });
+}
+
 $(framesInit);
 $(createSourceLinks);
 $(createDefineLinks);
@@ -97,3 +107,4 @@ $(createFullTreeLinks);
 $(fixBoxInfoHeights);
 $(searchFrameLinks);
 $(linkSummaries);
+$(keyboardShortcuts);
