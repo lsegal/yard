@@ -23,6 +23,25 @@ module YARD
       def urlencode(text)
         CGI.escape(text.to_s)
       end
+      
+      # Returns the current character set. The default value can be overridden
+      # by setting the +LANG+ environment variable or by overriding this
+      # method. In Ruby 1.9 you can also modify this value by setting
+      # +Encoding.default_external+.
+      # 
+      # @return [String] the current character set
+      def charset
+        return 'utf-8' unless RUBY19 || lang = ENV['LANG']
+        if RUBY19
+          lang = Encoding.default_external.name.downcase
+        else
+          lang = lang.downcase.split('.').last
+        end
+        case lang
+        when "ascii-8bit", "us-ascii", "ascii-7bit"; 'iso-8859-1'
+        else; lang
+        end
+      end
 
       # Turns text into HTML using +markup+ style formatting.
       # 

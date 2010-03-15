@@ -323,6 +323,14 @@ module YARD
           options[:serializer] = nil
           serialopts[:basepath] = dir
         end
+        
+        opts.on('--charset ENC', 'Character set to use for HTML output (default is utf-8)') do |encoding|
+          begin
+            Encoding.default_external = encoding
+          rescue ArgumentError => e
+            raise OptionParser::InvalidOption, e
+          end
+        end
 
         opts.on('-t', '--template TEMPLATE', 
                 'The template to use. (defaults to "default")') do |template|

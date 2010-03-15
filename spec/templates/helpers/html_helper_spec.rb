@@ -32,6 +32,34 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
   end
   
+  describe '#charset' do
+    it "should return foo if LANG=foo" do
+      ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if RUBY18
+      Encoding.default_external.should_receive(:name).and_return('shift_jis') if RUBY19
+      charset.should == 'shift_jis'
+    end
+    
+    ['US-ASCII', 'ASCII-7BIT', 'ASCII-8BIT'].each do |type|
+      it "should convert #{type} to iso-8859-1" do
+        ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
+        Encoding.default_external.should_receive(:name).and_return(type) if RUBY19
+        charset.should == 'iso-8859-1'
+      end
+    end
+    
+    if RUBY18
+      it "should return utf-8 if no LANG env is set" do
+        ENV.should_receive(:[]).with('LANG').and_return(nil)
+        charset.should == 'utf-8'
+      end
+
+      it "should only return charset part of lang" do
+        ENV.should_receive(:[]).with('LANG').and_return('en_US.UTF-8')
+        charset.should == 'utf-8'
+      end
+    end
+  end
+  
   describe '#format_types' do
     it "should include brackets by default" do
       text = ["String"]
