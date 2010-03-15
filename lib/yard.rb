@@ -49,7 +49,7 @@ end
 $LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
 
 # Keep track of Ruby version for compatibility code
-RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9" ? [true, false] : [false, true])
+RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9.1" ? [true, false] : [false, true])
 
 # Load Ruby core extension classes
 Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*')).each do |file|
