@@ -198,7 +198,7 @@ module YARD
         @comments ||= []
         if tk.text =~ /\A=begin/
           lines = tk.text.count("\n")
-          @comments << tk.text.gsub(/\A=begin.*\r?\n|\r?\n=end.*\r?\n?\Z/, '')
+          @comments += tk.text.gsub(/\A=begin.*\r?\n|\r?\n=end.*\r?\n?\Z/, '').split(/\r?\n/)
           @comments_last_line = tk.line_no + lines
         else
           @comments << tk.text.gsub(/^#+\s{0,1}/, '')

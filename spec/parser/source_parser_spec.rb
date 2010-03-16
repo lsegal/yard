@@ -61,6 +61,12 @@ describe YARD::Parser::SourceParser do
     it "should handle =begin/=end style comments" do
       YARD.parse_string "=begin\nfoo\nbar\n=end\nclass Foo; end\n"
       Registry.at(:Foo).docstring.should == "foo\nbar"
+
+      YARD.parse_string "=begin\n\nfoo\nbar\n=end\nclass Foo; end\n"
+      Registry.at(:Foo).docstring.should == "foo\nbar"
+
+      YARD.parse_string "=begin\nfoo\n\nbar\n=end\nclass Foo; end\n"
+      Registry.at(:Foo).docstring.should == "foo\n\nbar"
     end
   end
 
