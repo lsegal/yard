@@ -95,7 +95,7 @@ module YARD
           type_text, pre_text, no_match = $1, $`, $&
           pre_match = pre_text.scan(%r(</?(?:pre|tt|code).*?>))
           if pre_match.last.nil? || pre_match.last.include?('/')
-            '<tt>' + type_text + '</tt>'
+            '<tt>' + h(type_text) + '</tt>'
           else
             no_match
           end
