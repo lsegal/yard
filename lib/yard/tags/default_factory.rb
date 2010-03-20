@@ -51,12 +51,8 @@ module YARD
         Tag.new(tag_name, text, types, name)
       end
       
-      def parse_tag_with_raw_text(tag_name, text, raw_text)
-        Tag.new(tag_name, raw_text)
-      end
-      
-      def parse_tag_with_raw_title_and_text(tag_name, text, raw_text)
-        title, desc = *extract_title_and_desc_from_raw_text(raw_text)
+      def parse_tag_with_title_and_text(tag_name, text)
+        title, desc = *extract_title_and_desc_from_text(text)
         Tag.new(tag_name, desc, nil, title)
       end
       
@@ -87,7 +83,7 @@ module YARD
       # @return [Array] an array holding the name as the first element and the 
       #                 value as the second element
       def extract_name_from_text(text)
-        text.strip.split(" ", 2)
+        text.strip.split(/\s+/, 2)
       end
       
       ##
@@ -102,14 +98,14 @@ module YARD
         [name, types, (range ? text[(range.end+1)..-1].strip : text)]
       end
       
-      def extract_title_and_desc_from_raw_text(raw_text)
+      def extract_title_and_desc_from_text(text)
         title, desc = nil, nil
-        if raw_text =~ /\A[ \t]\n/
-          desc = raw_text
+        if text =~ /\A[ \t]\n/
+          desc = text
         else
-          raw_text = raw_text.split(/\r?\n/)
-          title = raw_text.shift.squeeze(' ').strip
-          desc = raw_text.join("\n")
+          text = text.split(/\r?\n/)
+          title = text.shift.squeeze(' ').strip
+          desc = text.join("\n")
         end
         [title, desc]
       end

@@ -182,11 +182,11 @@ describe YARD::Docstring do
       eof
       tags = doc.tags(:param)
       tags[0].name.should == "name"
-      tags[0].text.should == "Hello world how are you?"
+      tags[0].text.should == "Hello world\nhow are you?"
       tags[1].name.should == "name2"
       tags[1].text.should == "this is a new line"
       tags[2].name.should == "name3"
-      tags[2].text.should == "and this is a new paragraph:\n\nright here."
+      tags[2].text.should == "and this\nis a new paragraph:\n\nright here."
     end
 
     it "should end parsing a tag on de-dent" do
@@ -195,7 +195,7 @@ describe YARD::Docstring do
   one two three
 rest of docstring
       eof
-      doc.tag(:note).text.should == "test one two three"
+      doc.tag(:note).text.should == "test\none two three"
       doc.should == "rest of docstring"
     end
     

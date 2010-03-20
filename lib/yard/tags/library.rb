@@ -90,14 +90,14 @@ module YARD
         def define_tag(label, tag, meth = "")
           if meth.is_a?(Class) && Tag > meth
             class_eval <<-eof, __FILE__, __LINE__
-              def #{tag}_tag(text, raw_text) 
-                #{meth}.new(#{tag.inspect}, text, raw_text) 
+              def #{tag}_tag(text) 
+                #{meth}.new(#{tag.inspect}, text) 
               end
             eof
           else
             class_eval <<-eof, __FILE__, __LINE__
-              def #{tag}_tag(text, raw_text)
-                send_to_factory(#{tag.inspect}, #{meth.inspect}, text, raw_text)
+              def #{tag}_tag(text)
+                send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
               end
             eof
           end
@@ -110,12 +110,12 @@ module YARD
       
       private
       
-      def send_to_factory(tag_name, meth, text, raw_text)
+      def send_to_factory(tag_name, meth, text)
         meth = meth.to_s
         send_name = "parse_tag" + (meth.empty? ? "" : "_" + meth)
         if @factory.respond_to?(send_name)
           arity = @factory.method(send_name).arity
-          @factory.send send_name, tag_name, text, *(arity == 3 ? [raw_text] : [])
+          @factory.send(send_name, tag_name, text)
         else
           raise NoMethodError, "Factory #{@factory.class_name} does not implement factory method :#{meth}."
         end
@@ -145,7 +145,7 @@ module YARD
       define_tag "API Visibility",    :api
       define_tag "Note",              :note
       define_tag "Todo Item",         :todo
-      define_tag "Example",           :example,     :with_raw_title_and_text
+      define_tag "Example",           :example,     :with_title_and_text
       define_tag "Options Hash",      :option,      :with_options
       define_tag "Overloads",         :overload,    OverloadTag
       define_tag "Private",           :private

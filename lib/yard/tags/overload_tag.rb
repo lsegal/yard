@@ -3,9 +3,9 @@ module YARD
     class OverloadTag < Tag
       attr_reader :signature, :parameters, :docstring
       
-      def initialize(tag_name, text, raw_text)
+      def initialize(tag_name, text)
         super(tag_name, nil)
-        parse_tag(raw_text)
+        parse_tag(text)
         parse_signature
       end
       
@@ -38,8 +38,8 @@ module YARD
 
       private
       
-      def parse_tag(raw_text)
-        @signature, text = *raw_text.split(/\r?\n/, 2)
+      def parse_tag(text)
+        @signature, text = *text.split(/\r?\n/, 2)
         @signature.strip!
         text ||= ""
         numspaces = text[/\A(\s*)/, 1].length
