@@ -3,8 +3,16 @@ module YARD
     module MethodHelper
       def format_args(object)
         return if object.parameters.nil?
-        unless object.parameters.empty?
-          args = object.parameters.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
+        params = object.parameters
+        if object.has_tag?(:yield) || object.has_tag?(:yieldparam)
+          params.reject! do |param|
+            param[0][0,1] == "&" && 
+              !object.tags(:param).any? {|t| t.name == param[0][1..-1] }
+          end
+        end
+        
+        unless params.empty?
+          args = params.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
           h("(#{args})")
         else
           ""
