@@ -47,6 +47,8 @@ describe YARD::Templates::Engine.template(:default, :method) do
         class Q; end
         class X; end
         module Z; end
+        # A long docstring for the constant. With extra text
+        # and newlines.
         CONSTANT = 'value'
         @@cvar = 'value' # @deprecated
       end
