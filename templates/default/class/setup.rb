@@ -9,6 +9,7 @@ end
 def constructor_details
   ctors = object.meths(:inherited => true, :included => true)
   return unless @ctor = ctors.find {|o| o.name == :initialize }
+  return if prune_method_listing([@ctor]).empty?
   erb(:constructor_details)
 end
 
