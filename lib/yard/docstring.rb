@@ -211,10 +211,10 @@ module YARD
 
         # Found a meta tag
         if line =~ META_MATCH
-          orig_indent = indent
           tag_name, tag_buf = $1, ($2 || '')
           raw_buf = [tag_buf.dup]
         elsif tag_name && indent >= orig_indent && !empty
+          orig_indent = indent if orig_indent == 0
           # Extra data added to the tag on the next line
           last_empty = last_line =~ /^[ \t]*$/ ? true : false
           

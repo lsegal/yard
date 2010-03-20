@@ -188,5 +188,31 @@ describe YARD::Docstring do
       tags[2].name.should == "name3"
       tags[2].text.should == "and this is a new paragraph:\n\nright here."
     end
+
+    it "should end parsing a tag on de-dent" do
+      doc = Docstring.new(<<-eof)
+@note test
+  one two three
+rest of docstring
+      eof
+      doc.tag(:note).text.should == "test one two three"
+      doc.should == "rest of docstring"
+    end
+    
+    it "should parse examples embedded in doc" do
+      doc = Docstring.new(<<-eof)
+test string here
+@example code
+  
+  def foo(x, y, z)
+  end
+  
+  class A; end
+
+more stuff
+eof
+      doc.should == "test string here\nmore stuff"
+      doc.tag(:example).text.should == "\ndef foo(x, y, z)\nend\n\nclass A; end"
+    end
   end
 end
