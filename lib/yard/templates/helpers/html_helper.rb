@@ -84,7 +84,7 @@ module YARD
       
       # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
-        htmlify(*args).gsub(/<\/?p>/, '')
+        "<div class='inline'>" + htmlify(*args) + "</div>"
       end
       
       # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
