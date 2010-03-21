@@ -102,10 +102,11 @@ function highlight(no_padding) {
 }
 
 function escapeShortcut() {
-  $(document.body).keydown(function(evt) {
+  $(document).keydown(function(evt) {
     if (evt.which == 27) {
       $('#search_frame', window.top.document).slideUp(100);
       $('#search a', window.top.document).removeClass('active inactive')
+      $(window.top).focus();
     }
   });
 }

@@ -91,7 +91,7 @@ function framesInit() {
 }
 
 function keyboardShortcuts() {
-  $(document.body).keypress(function(evt) {
+  $(document).keypress(function(evt) {
     if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
     switch (evt.charCode) {
       case 67: case 99:  $('#class_list_link').click(); break;  // 'c'
