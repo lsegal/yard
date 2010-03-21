@@ -17,7 +17,7 @@ h2 {
 }
 .clear { clear: both; }
 .inline { display: inline; }
-.inline *:first-child { display: inline; }
+.inline p:first-child { display: inline; }
 .docstring h1, .docstring h2, .docstring h3, .docstring h4 { padding: 0; border: 0; border-bottom: 1px dotted #bbb; }
 .docstring h1 { font-size: 1.2em; }
 .docstring h2 { font-size: 1.1em; }
