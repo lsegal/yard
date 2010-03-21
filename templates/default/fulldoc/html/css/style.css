@@ -198,6 +198,7 @@ ul.fullTree li.next:before { font-size: 1.2em; content: '\2B06'; color: #bbb; di
 
 #menu { font-size: 1.3em; color: #bbb; top: -5px; position: relative; }
 #menu .title, #menu a { font-size: 0.7em; }
+#menu .title a { font-size: 1em; }
 #menu .title { color: #555; }
 #menu a:link, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #menu a:hover { color: #05a; }
