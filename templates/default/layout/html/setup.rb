@@ -51,7 +51,7 @@ def diskfile
     "<pre>#{@contents}</pre>"
   when 'textile', 'txtile'
     htmlify(@contents, :textile)
-  when 'markdown', 'md', 'mdown'
+  when 'markdown', 'md', 'mdown', 'mkd'
     htmlify(@contents, :markdown)
   else
     htmlify(@contents, diskfile_shebang_or_default)
