@@ -1,7 +1,7 @@
 module YARD
   VERSION = "0.5.3"
-  ROOT = File.dirname(__FILE__)
-  TEMPLATE_ROOT = File.join(File.dirname(__FILE__), '..', 'templates')
+  ROOT = File.expand_path(File.dirname(__FILE__))
+  TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
   CONFIG_DIR = File.expand_path('~/.yard')
   
   # An alias to {Parser::SourceParser}'s parsing method
