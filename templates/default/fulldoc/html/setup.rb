@@ -104,7 +104,7 @@ def class_list(root = Registry.root)
   out = ""
   children = run_verifier(root.children)
   if root == Registry.root
-    children += Registry.all(:class, :module).select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
+    children += options[:objects].select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
   end
   children.sort_by {|child| child.path }.map do |child|
     if child.is_a?(CodeObjects::NamespaceObject)
