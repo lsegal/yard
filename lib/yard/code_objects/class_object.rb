@@ -11,15 +11,15 @@ module YARD::CodeObjects
       super
 
       if is_exception?
-        self.superclass ||= :Exception unless P(namespace, name) == P(:Exception)
+        self.superclass ||= "::Exception" unless P(namespace, name) == P(:Exception)
       else
         case P(namespace, name).path
         when "BasicObject"
           nil
         when "Object"
-          self.superclass ||= :BasicObject
+          self.superclass ||= "::BasicObject"
         else
-          self.superclass ||= :Object
+          self.superclass ||= "::Object"
         end
       end
     end
@@ -126,7 +126,7 @@ module YARD::CodeObjects
       
       if @superclass == self
         msg = "superclass #{@superclass.inspect} cannot be the same as the declared class #{self.inspect}"
-        @superclass = P(:Object)
+        @superclass = P("::Object")
         raise ArgumentError, msg
       end
     end
