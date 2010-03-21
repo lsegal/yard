@@ -38,7 +38,7 @@ module YARD::CodeObjects
     # @return [Array<NamespaceObject>] the list of code objects that make up
     #   the inheritance tree.
     def inheritance_tree(include_mods = false)
-      list = (include_mods ? mixins(:instance) : [])
+      list = (include_mods ? mixins(:instance, :class) : [])
       if superclass.is_a?(Proxy) || superclass.respond_to?(:inheritance_tree)
         list += [superclass] unless superclass == P(:Object) || superclass == P(:BasicObject)
       end
