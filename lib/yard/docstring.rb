@@ -213,7 +213,7 @@ module YARD
           last_empty = last_line =~ /^[ \t]*$/ ? true : false
           
           tag_buf << '' if last_empty
-          tag_buf << line.gsub(/^[ \t]{#{indent}}/, '')
+          tag_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
         elsif !tag_name
           # Regular docstring text
           docstring << line << "\n" 

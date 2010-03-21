@@ -214,5 +214,15 @@ eof
       doc.should == "test string here\nmore stuff"
       doc.tag(:example).text.should == "\ndef foo(x, y, z)\nend\n\nclass A; end"
     end
+    
+    it "should remove only original indentation from beginning of line in tags" do
+      doc = Docstring.new(<<-eof)
+@param name
+  some value
+  foo bar
+   baz
+eof
+      doc.tag(:param).text.should == "some value\nfoo bar\n baz"
+    end
   end
 end
