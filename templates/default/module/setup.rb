@@ -94,3 +94,17 @@ def scopes(list)
     yield(items, scope) unless items.empty?
   end
 end
+
+def mixed_into(object, scope)
+  if !defined? @@mixed_into
+    @@mixed_into = {:class => {}, :instance => {}}
+    @@mixed_into.keys.each do |scope|
+      list = run_verifier Registry.all(:class, :module)
+      list.each do |o|
+        o.mixins(scope).each { |mi| (@@mixed_into[scope][mi.path] ||= []) << o }
+      end
+    end
+  end
+  
+  @@mixed_into[scope][object.path] || []
+end
