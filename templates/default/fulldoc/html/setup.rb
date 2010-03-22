@@ -82,6 +82,7 @@ def generate_method_list
 end
 
 def generate_class_list
+  @items = options[:objects]
   @list_title = "Class List"
   @list_type = "class"
   asset('class_list.html', erb(:full_list))
@@ -104,7 +105,7 @@ def class_list(root = Registry.root)
   out = ""
   children = run_verifier(root.children)
   if root == Registry.root
-    children += options[:objects].select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
+    children += @items.select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
   end
   children.sort_by {|child| child.path }.map do |child|
     if child.is_a?(CodeObjects::NamespaceObject)
