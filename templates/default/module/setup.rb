@@ -95,16 +95,12 @@ def scopes(list)
   end
 end
 
-def mixed_into(object, scope)
-  if !defined? @@mixed_into
-    @@mixed_into = {:class => {}, :instance => {}}
-    @@mixed_into.keys.each do |scope|
-      list = run_verifier Registry.all(:class, :module)
-      list.each do |o|
-        o.mixins(scope).each { |mi| (@@mixed_into[scope][mi.path] ||= []) << o }
-      end
-    end
+def mixed_into(object)
+  unless defined? @@mixed_into
+    @@mixed_into = {}
+    list = run_verifier Registry.all(:class, :module)
+    list.each {|o| o.mixins.each {|m| (@@mixed_into[m.path] ||= []) << o } }
   end
   
-  @@mixed_into[scope][object.path] || []
+  @@mixed_into[object.path] || []
 end

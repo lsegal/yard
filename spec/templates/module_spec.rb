@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Engine.template(:default, :method) do
+describe YARD::Templates::Engine.template(:default, :module) do
   before do 
     Registry.clear
     YARD.parse_string <<-'eof'
@@ -52,7 +52,14 @@ describe YARD::Templates::Engine.template(:default, :method) do
         CONSTANT = 'value'
         @@cvar = 'value' # @deprecated
       end
+      
+      module TMP; include A end
+      class TMP2; extend A end
     eof
+    
+    # Hack to clear mixin list
+    mod = YARD::Templates::Engine.template(:default, :module)
+    mod.remove_class_variable("@@mixed_into") if mod.class_variable_defined?("@@mixed_into")
   end
 
   it "should render html format correctly" do
