@@ -96,7 +96,7 @@ def scopes(list)
 end
 
 def mixed_into(object)
-  unless defined? @@mixed_into
+  unless defined?(@@mixed_into) && @@mixed_into
     @@mixed_into = {}
     list = run_verifier Registry.all(:class, :module)
     list.each {|o| o.mixins.each {|m| (@@mixed_into[m.path] ||= []) << o } }
