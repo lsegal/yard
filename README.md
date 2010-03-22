@@ -1,11 +1,11 @@
-YARD Release 0.5.3 "The Longest" (Jan 11th 2010)
+YARD Release 0.5.4 "The Longest" (Mar 22nd 2010)
 ================================================
 
 **Homepage**:  [http://yardoc.org](http://yardoc.org)   
 **IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
 **Git**:       [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:    Loren Segal   
-**Copyright**: 2007-2009    
+**Copyright**: 2007-2010
 **License**:   MIT License
 
 
@@ -221,6 +221,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 CHANGELOG
 ---------
+
+- **March.22.10**: 0.5.4 release
+    - See {file:docs/WhatsNew.md what's new document} for changes
 
 - **January.11.10**: 0.5.3 release
     - See {file:docs/WhatsNew.md what's new document} for changes
