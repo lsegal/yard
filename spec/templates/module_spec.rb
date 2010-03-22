@@ -58,7 +58,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
     eof
     
     # Hack to clear mixin list
-    YARD::Templates::Engine.template(:default, :module).class_variable_set("@@mixed_into", nil)
+    mod = YARD::Templates::Engine.template(:default, :module)
+    mod.send(:class_variable_set, "@@mixed_into", nil)
   end
 
   it "should render html format correctly" do
