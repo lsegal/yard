@@ -107,7 +107,7 @@ def class_list(root = Registry.root)
   if root == Registry.root
     children += @items.select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
   end
-  children.sort_by {|child| child.path }.map do |child|
+  children.reject {|c| c.nil? }.sort_by {|child| child.path }.map do |child|
     if child.is_a?(CodeObjects::NamespaceObject)
       name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
       has_children = child.children.any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
