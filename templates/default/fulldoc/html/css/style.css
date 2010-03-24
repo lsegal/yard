@@ -229,8 +229,8 @@ li.r2 { background: #fafafa; }
   overflow-y: scroll;
   border: 1px solid #999;
   border-collapse: collapse;
-  -webkit-box-shadow: -2px 5px 25px #aaa;
-  -moz-box-shadow: -2px 5px 25px #aaa;
+  -webkit-box-shadow: -7px 5px 25px #aaa;
+  -moz-box-shadow: -7px 5px 25px #aaa;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
 }
