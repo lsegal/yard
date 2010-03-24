@@ -91,6 +91,7 @@ function framesInit() {
 }
 
 function keyboardShortcuts() {
+  if (window.top.frames.main) return;
   $(document).keypress(function(evt) {
     if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
     if (evt.originalTarget.nodeName == "INPUT" || 
