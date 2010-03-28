@@ -104,6 +104,29 @@ function keyboardShortcuts() {
   });
 }
 
+function summaryToggle() {
+  $('.summary_toggle').click(function() {
+    $(this).text($(this).text() == "collapse" ? "expand" : "collapse");
+    var next = $(this).parent().parent().next();
+    if (next.hasClass('compact')) {
+      next.toggle();
+      next.next().toggle();
+    } 
+    else if (next.hasClass('summary')) {
+      var list = $('<ul class="summary compact" />');
+      list.html(next.html());
+      list.find('.summary_desc, .note').remove();
+      list.find('a').each(function() {
+        $(this).html($(this).find('strong').html());
+        $(this).parent().html($(this)[0].outerHTML);
+      });
+      next.before(list);
+      next.toggle();
+    }
+    return false;
+  })
+}
+
 $(framesInit);
 $(createSourceLinks);
 $(createDefineLinks);
@@ -112,3 +135,4 @@ $(fixBoxInfoHeights);
 $(searchFrameLinks);
 $(linkSummaries);
 $(keyboardShortcuts);
+$(summaryToggle);

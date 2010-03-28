@@ -1,5 +1,5 @@
 <% scopes(attr_listing) do |list, scope| %>
-  <h2><%= scope.to_s.capitalize %> Attribute Summary</h2>
+  <h2><%= scope.to_s.capitalize %> Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
   <ul class="summary">
     <% list.each do |meth| %>
       <%= yieldall :item => meth %>
