@@ -119,7 +119,7 @@ p.signature .aliases .names { font-family: Monaco, Consolas, Courier, monospace;
 .tags ul { margin-top: 5px; padding-left: 30px; list-style: square; }
 .tags ul li { margin-bottom: 3px; }
 .tags ul .name { font-family: monospace; font-weight: bold; }
-.tags ul p.note { padding: 3px 6px; }
+.tags ul .note { padding: 3px 6px; }
 .tags { margin-bottom: 12px; }
 
 .tags .examples h3 { margin-bottom: 10px; }
