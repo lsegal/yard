@@ -39,7 +39,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
       name = node.jump(:ident).source
       klass.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
       {read: name, write: "#{name}="}.each do |type, meth|
-        klass.attributes[scope][name][type] = MethodObject.new(klass, meth, scope)
+        klass.attributes[scope][name][type] = register MethodObject.new(klass, meth, scope)
       end
     end
   end
