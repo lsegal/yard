@@ -28,7 +28,10 @@ module YARD
       
       # @return [Boolean] whether to generate output
       attr_accessor :generate
-      
+
+      # @return [Boolean] whether to print a list of objects
+      attr_accessor :list
+
       # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
@@ -85,6 +88,8 @@ module YARD
             Registry.load_all if use_cache
             Templates::Engine.generate(all_objects, options)
           end
+        elsif list
+          print_list
         end
         
         true
@@ -122,6 +127,17 @@ module YARD
             opts = options.merge(:object => object, :type => :layout)
             Templates::Engine.render(opts)
           end
+        end
+      end
+
+      # Prints a list of all objects
+      # @return [void]
+      def print_list
+        Registry.load_all
+        Registry.all.
+          reject {|item| options[:verifier].call(item).is_a?(FalseClass) }.
+          sort_by {|item| [item.file, item.line]}.each do |item|
+          puts "#{item.file}:#{item.line}: #{item}"
         end
       end
 
@@ -294,7 +310,12 @@ module YARD
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
           query_expressions << query.taint
         end
-        
+
+        opts.on('--list', 'List objects to standard out (implies -n)') do |format|
+          self.generate = false
+          self.list = true
+        end
+
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
           options[:title] = title
         end
