@@ -6,7 +6,7 @@ module YARD
         params = object.parameters
         if object.has_tag?(:yield) || object.has_tag?(:yieldparam)
           params.reject! do |param|
-            param[0][0,1] == "&" && 
+            param[0].to_s[0,1] == "&" &&
               !object.tags(:param).any? {|t| t.name == param[0][1..-1] }
           end
         end
