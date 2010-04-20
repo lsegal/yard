@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
   handles :alias, method_call(:alias_method)
   
-  def process
+  process do
     names = []
     if statement.type == :alias
       names = statement.map {|o| o.jump(:ident, :op, :kw, :const).first }

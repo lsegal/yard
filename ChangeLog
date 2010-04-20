@@ -1,4 +1,447 @@
+2010-03-22  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec: Bump
+  version 0.5.4
+
+  * templates/default/fulldoc/html/setup.rb: Fix hiding of @private classes in
+  unresolved namespaces to use @items instead of objects directly
+
+  * spec/templates/module_spec.rb: Fix failing spec in 1.8.6
+
+  * spec/templates/module_spec.rb, templates/default/module/setup.rb: Fix
+  testability of mixin list
+
+  * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
+  templates/default/module/html/box_info.erb,
+  templates/default/module/setup.rb: Simplify listing of class/modules used by
+  a module
+
+2010-03-21  Benjamin Bock <bb--github.com@bock.be>
+
+  * templates/default/module/html/box_info.erb,
+  templates/default/module/setup.rb: add sections "Included in" and "Extending"
+  for Modules
+
+2010-03-21  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/layout/html/setup.rb: Add .mkd file extension for
+  Markdown
+
+  * lib/yard/core_ext/file.rb, spec/core_ext/file_spec.rb: Fix handling of
+  relative paths that go outside the "initial" directory
+
+  * lib/yard.rb: YARD::ROOT should be absolute in 1.8
+
+  * templates/default/fulldoc/html/css/style.css: Inline only the first
+  paragraph of inlined docstrings.
+
+  * lib/yard/code_objects/module_object.rb: Avoid listing self as mixin in
+  inheritance tree
+
+  * templates/default/fulldoc/html/js/app.js,
+  templates/default/fulldoc/html/js/full_list.js: Make keyboard shortcuts more
+  reliable
+
+  * templates/default/fulldoc/html/setup.rb: Ignore @private classes defined in
+  unresolved namespaces in class list.  Closes gh-103
+
+  * templates/default/fulldoc/html/css/style.css: Fix breadcrumb link text size
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/method001.html,
+  spec/templates/examples/method002.html,
+  spec/templates/examples/method003.html,
+  spec/templates/examples/method004.html,
+  spec/templates/examples/method005.html,
+  spec/templates/examples/module001.html: Fix spec expectations for
+  htmlify_line changes
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  templates/default/fulldoc/html/css/style.css: Change how #htmlify_inline does
+  inlining
+
+  * lib/yard/code_objects/class_object.rb: Ensure default "Object" superclass
+  is "::Object" (same for BasicObject, Exception)  Closes gh-72
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Remove only original
+  indentation from indented @tag text
+
+  * lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/module_object.rb,
+  spec/code_objects/class_object_spec.rb,
+  spec/code_objects/module_object_spec.rb,
+  .../default/module/html/inherited_methods.erb: Show extended modules in
+  inherited methods list as class methods  Closes gh-88
+
+2010-03-20  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/js/app.js: Don't activate shortcuts if a
+  modifier key is down
+
+  * lib/yard/docstring.rb, lib/yard/tags/default_factory.rb,
+  lib/yard/tags/library.rb, lib/yard/tags/overload_tag.rb,
+  spec/docstring_spec.rb, spec/tags/overload_tag_spec.rb: Remove distinction
+  between regular and "raw" tag text in the tags API.  All tag text is now
+  delivered as a raw buffer with newlines intact. The API for creating factory
+  methods is now just `def parse_tag_NAME(tag_name, text)`.  This change might
+  break existing plugins/extensions that add custom tags.
+
+  * spec/templates/class_spec.rb, spec/templates/examples/class002.html,
+  templates/default/class/setup.rb,
+  .../default/module/html/inherited_methods.erb,
+  templates/default/module/html/method_summary.erb: Respect @private for
+  constructors  Closes gh-81
+
+  * lib/yard/parser/ruby/legacy/ruby_lex.rb: Graceful failure when multibyte
+  chars are tokenized  Closes gh-94
+
+  * lib/yard/templates/helpers/method_helper.rb,
+  spec/templates/helpers/method_helper_spec.rb: Hide &block from argument list
+  for methods that yield.  If a @param tag is specified for the block argument,
+  the argument will show.  Closes gh-77
+
+  * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/module/html/constant_summary.erb,
+  templates/default/module/setup.rb: Show full docstrings for constants. 
+  Closes gh-89 Closes gh-90
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Finish parsing @tag when
+  next line is de-dented.  Closes gh-78
+
+  * spec/docstring_spec.rb: Refactor docstring specs
+
+2010-03-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Escape HTML inside <tt>/++
+  typewriter blocks
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/source_parser_spec.rb: Fix parsing of =begin/=end comments with
+  multiple consecutive newlines in 1.8
+
+2010-03-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard.rb: Don't treat 1.9.0 as a true "1.9"  Closes gh-97
+
+  * templates/default/class/setup.rb: Show child namespaces in class
+  documentation.  Closes gh-98
+
+  * templates/default/fulldoc/html/js/app.js,
+  templates/default/fulldoc/html/js/full_list.js: Add "C", "M" and "F" keyboard
+  shorcuts to bring up class/method/file menus in non-frame mode. Also can
+  press escape to close menu.  Closes gh-69
+
+  * lib/yard/cli/yardoc.rb, lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  templates/default/fulldoc/html/frames.erb,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/layout/html/headers.erb: Add --charset commandline option
+  for yardoc to generate HTML docs for a specific charset  Closes gh-96
+
+  * lib/yard/code_objects/base.rb: Fix documentation for
+  CodeObjects::Base#method_missing
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix method summary listing for
+  methods ending in =
+
+  * templates/default/module/html/method_summary.erb: Show method summary
+  heading when methods are inherited but none are defined in the class
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/legacy/process_handler.rb,
+  lib/yard/handlers/ruby/process_handler.rb,
+  spec/handlers/examples/process_handler_001.rb.txt,
+  spec/handlers/process_handler_spec.rb: Add handler for YARD process blocks
+
+  * lib/yard/autoload.rb, .../ruby/legacy/class_condition_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb: Add class condition handler
+  for Ruby 1.8
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/attribute_handler.rb,
+  lib/yard/handlers/ruby/class_condition_handler.rb,
+  lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/class_variable_handler.rb,
+  lib/yard/handlers/ruby/constant_handler.rb,
+  lib/yard/handlers/ruby/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  .../handlers/ruby/legacy/class_variable_handler.rb,
+  lib/yard/handlers/ruby/legacy/constant_handler.rb,
+  lib/yard/handlers/ruby/legacy/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/handlers/ruby/legacy/module_handler.rb,
+  .../handlers/ruby/legacy/visibility_handler.rb,
+  lib/yard/handlers/ruby/legacy/yield_handler.rb,
+  lib/yard/handlers/ruby/method_condition_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb,
+  lib/yard/handlers/ruby/module_handler.rb,
+  lib/yard/handlers/ruby/visibility_handler.rb,
+  lib/yard/handlers/ruby/yield_handler.rb: Add `process` directive to handlers
+  which defines the `process` method on the class inside an anonymous module to
+  make it easier to extend an existing handler with mixins.
+
+  * lib/yard/parser/ruby/legacy/statement.rb: Add line_range method
+
+2010-01-29  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/base.rb, lib/yard/cli/yard_graph.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/cli/yri.rb: Gracefully handle invalid CLI options passed to
+  yardoc/yri/yard-graph  Closes gh-74
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Add
+  support for =begin/=end comment strings
+
+2010-01-25  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/templates/template.rb: When dealing with many overloaded
+  templates, include them in reverse order.  This is necessary due to the way
+  Ruby's module inclusion works with inheritance.  Including a module puts it
+  at the base of the inheritance chain.  For example, if a class hierarchy
+  looks like A->B->C, and C includes D, then it looks like A->B->D->C. This
+  means that the base template, which is last in the full_paths list, should
+  actually be included first, so that it ends up farthest back in the
+  inheritance chain.
+
+2010-01-18  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/autoload.rb, lib/yard/templates/erb_cache.rb,
+  lib/yard/templates/template.rb, spec/templates/template_spec.rb: Cache the
+  compiled ERB methods to speed up rendering time.
+
+2010-01-22  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/templates/helpers/html_helper.rb: Allow a broader variety of names
+  for syntax highlighting.  This is necessary to support some names for
+  Pygments.
+
+2010-01-18  Nathan Weizenbaum <nex342@gmail.com>
+
+  * lib/yard/templates/helpers/html_helper.rb: HTML-escape text that isn't
+  syntax highlighted due to --no-highlight.
+
+2010-01-11  Loren Segal <lsegal@soen.ca>
+
+  * README.md: Fix links in README
+
+  * templates/default/layout/html/setup.rb: Fix encoding issues when reading
+  extra files
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix typewrite issues
+
+  * README.md: Add info to changelog
+
+  * docs/WhatsNew.md: Update what's new
+
+  * README.md, lib/yard.rb, yard.gemspec: Bump version to 0.5.3
+
+2010-01-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix typewriter text after RDoc
+  markup is generated
+
+  * .gitignore, Rakefile: Remove gem package Rake tasks and use simplified gem
+  build functionality
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix +text+ RDoc markup showing
+  \004 characters inside code blocks
+
+2010-01-05  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/layout/html/setup.rb: Use default markup provider for
+  extra files. Also add ability to override markup provider for files with no
+  extension. Add #!MARKUP shebang to first line of file.  Closes gh-64
+
+  * templates/default/layout/html/setup.rb: Use raw HTML for .html extra files
+
+  * lib/yard/core_ext/string.rb: Fix camelcase bug  Closes gh-65
+
+2009-12-31  Loren Segal <lsegal@soen.ca>
+
+  * lib/rubygems_plugin.rb: Fix yard gem plugin in 1.8.x with multiple versions
+  of yard installed  Closes gh-62
+
+  * lib/rubygems_plugin.rb: Fix has_yardoc accessor
+
+  * lib/rubygems_plugin.rb: Don't build yard index if yardoc will run
+
+2009-12-29  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/core_ext/hash.rb, spec/core_ext/hash_spec.rb: Fix another Hash.[]
+  related issue to make sure array can be passed in as a key
+
+  * lib/yard/core_ext/hash.rb: Fix improper Hash.[] implementation  Closes
+  gh-61
+
+2009-12-28  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/template.rb: Remove unused private method call
+
+  * lib/yard/templates/template.rb, spec/templates/engine_spec.rb,
+  spec/templates/template_spec.rb: Fix inclusion of overridden template paths
+  above format directory.  Closes gh-60
+
+  * templates/default/fulldoc/html/setup.rb: Remove unecessary line
+
+2009-12-25  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/full_list.css: Fix css for arrows
+
+  * lib/yard/parser/c_parser.rb: Fix showing entire source file as comment for
+  class/module
+
+  * lib/yard/parser/c_parser.rb: Better linking of variable names to
+  class/modules
+
+  * templates/default/layout/html/breadcrumb.erb: Show proxies namespaces in
+  small in breadcrumb
+
+  * templates/default/fulldoc/html/setup.rb: Show objects from proxies
+  namespaces
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add --incremental to
+  generate only new objects parsed in changed files. Using yardoc -c alone will
+  now use the cached yardoc but will generate all objects
+
+  * yard.gemspec: Fix reloading of yard in Rakefile (1.8)
+
+2009-12-24  Loren Segal <lsegal@soen.ca>
+
+  * lib/rubygems_plugin.rb: Improve Rubygems plugin behaviour and generate
+  .yardoc db for yri
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Unify
+  comment parsing behaviour between 1.8/1.9
+
+  * templates/default/fulldoc/html/js/full_list.js: Make any click to the left
+  of an arrow expand the tree rather than select the item
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/fulldoc/html/full_list_class.erb,
+  templates/default/fulldoc/html/full_list_files.erb,
+  .../default/fulldoc/html/full_list_methods.erb,
+  templates/default/fulldoc/html/js/full_list.js,
+  templates/default/fulldoc/html/setup.rb: Add tree view implementation for
+  class list
+
+  * spec/code_objects/base_spec.rb, spec/templates/helpers/html_helper_spec.rb:
+  Fix specs (disable a broken one temporarily)
+
+  * templates/default/class/setup.rb: Don't show subclasses for Object
+
+  * lib/yard/templates/helpers/html_helper.rb: Use relative path for link
+  title. Also add more appropriate title tag
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Update #resolve_links to work
+  with ({Name}) syntax. Add specs
+
+  * lib/yard/code_objects/class_object.rb: Fix behaviour of
+  ClassObject#superclass=
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Add
+  Base#relative_path to return relative namespace path of two objects
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Add check
+  for creating objects with empty name
+
+  * lib/yard/parser/source_parser.rb: Force encoding to source file's encoding
+  (using # coding shebang line) to properly parse source
+
+  * benchmarks/parsing.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb,
+  spec/spec_helper.rb: Add --exclude REGEXP to yardoc to ignore paths with a
+  regexp match.  yardoc --exclude '_spec\.rb$' will ignore any file ending in
+  _spec.rb
+
+2009-12-23  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
+  templates/default/module/html/constant_summary.erb: Fix anchor for constants
+
+  * spec/templates/examples/class001.html,
+  spec/templates/examples/class001.txt,
+  templates/default/class/html/subclasses.erb,
+  templates/default/class/setup.rb,
+  templates/default/class/text/subclasses.erb: Fix subclasses not showing in
+  documentation
+
+2009-12-22  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/full_list.erb: Move links below header
+
+  * templates/default/fulldoc/html/js/app.js: Make summary links work within
+  frames
+
+  * templates/default/fulldoc/html/full_list.erb,
+  templates/default/layout/html/layout.erb: Add frames class name immediately
+  (improves UI responsiveness)
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/frames.erb,
+  templates/default/fulldoc/html/full_list.erb,
+  templates/default/fulldoc/html/js/app.js,
+  templates/default/fulldoc/html/js/full_list.js,
+  templates/default/fulldoc/html/setup.rb,
+  templates/default/layout/html/breadcrumb.erb,
+  templates/default/layout/html/search.erb: Add classical frameset view to docs
+  as frames.html
+
+2009-12-20  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb: Fix bug in 1.8 handler
+
+  * lib/yard/core_ext/file.rb, lib/yard/parser/source_parser.rb,
+  spec/code_objects/base_spec.rb, spec/parser/source_parser_spec.rb: Add
+  File.read_binary to fix specs
+
+  * lib/yard/handlers/ruby/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/attribute_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  spec/handlers/attribute_handler_spec.rb,
+  .../handlers/examples/attribute_handler_001.rb.txt,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb, spec/templates/examples/module001.html,
+  templates/default/module/html/item_summary.erb: When a reader/writer method
+  is defined alongside an attribute, mark it as part of attribute
+
+  * lib/yard/cli/base.rb, lib/yard/cli/yard_graph.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/cli/yri.rb, lib/yard/logging.rb: Show backtraces by default outside
+  of CLI classes
+
+  * lib/yard/code_objects/method_object.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  spec/code_objects/method_object_spec.rb,
+  spec/templates/examples/module001.dot,
+  spec/templates/examples/module001.html, spec/templates/module_spec.rb,
+  templates/default/module/dot/info.erb,
+  .../default/module/html/attribute_details.erb,
+  templates/default/module/html/item_summary.erb: Add MethodObject#attr_info
+  and do not show '=' in attribute's method summary signature
+
+2009-12-17  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb: Read source in binary mode to be encoding
+  safe
+
 2009-12-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Fix behaviour for --build-gems  Closes gh-56
+
+  * lib/yard/cli/yardoc.rb: Don't build a gem if there is no yardoc path for
+  gem
 
   * ChangeLog, lib/yard.rb, yard.gemspec: Bump version to 0.5.2
 

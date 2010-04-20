@@ -11,15 +11,15 @@ module YARD::CodeObjects
       super
 
       if is_exception?
-        self.superclass ||= :Exception unless P(namespace, name) == P(:Exception)
+        self.superclass ||= "::Exception" unless P(namespace, name) == P(:Exception)
       else
         case P(namespace, name).path
         when "BasicObject"
           nil
         when "Object"
-          self.superclass ||= :BasicObject
+          self.superclass ||= "::BasicObject"
         else
-          self.superclass ||= :Object
+          self.superclass ||= "::Object"
         end
       end
     end
@@ -38,7 +38,7 @@ module YARD::CodeObjects
     # @return [Array<NamespaceObject>] the list of code objects that make up
     #   the inheritance tree.
     def inheritance_tree(include_mods = false)
-      list = (include_mods ? mixins(:instance) : [])
+      list = (include_mods ? mixins(:instance, :class) : [])
       if superclass.is_a?(Proxy) || superclass.respond_to?(:inheritance_tree)
         list += [superclass] unless superclass == P(:Object) || superclass == P(:BasicObject)
       end
@@ -126,7 +126,7 @@ module YARD::CodeObjects
       
       if @superclass == self
         msg = "superclass #{@superclass.inspect} cannot be the same as the declared class #{self.inspect}"
-        @superclass = P(:Object)
+        @superclass = P("::Object")
         raise ArgumentError, msg
       end
     end

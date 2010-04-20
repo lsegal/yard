@@ -34,7 +34,7 @@ class File
     path = path.split(SEPARATOR)
     path = path.inject([]) do |acc, comp|
       next acc if comp == RELATIVE_SAMEDIR
-      if comp == RELATIVE_PARENTDIR && acc.size > 0
+      if comp == RELATIVE_PARENTDIR && acc.size > 0 && acc.last != RELATIVE_PARENTDIR
         acc.pop
         next acc
       end

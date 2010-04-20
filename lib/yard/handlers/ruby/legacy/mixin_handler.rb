@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Ainclude(\s|\()/
   
-  def process
+  process do
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
       process_mixin(mixin.strip)
     end

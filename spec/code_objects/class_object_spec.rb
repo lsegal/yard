@@ -23,7 +23,7 @@ describe YARD::CodeObjects::ClassObject do
     end
 
     it "should show proper inheritance tree when mixins are included" do
-      @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin2, @mixin3, P(:String)]
+      @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin4, @mixin2, @mixin3, P(:String)]
     end
 
     it "should not modify the object's mixin list when mixins are included" do
@@ -33,6 +33,13 @@ describe YARD::CodeObjects::ClassObject do
 
       @class2.inheritance_tree(true)
       @class2.mixins.should == []
+    end
+    
+    it "should list class mixins in inheritance tree" do
+      mod = ModuleObject.new(:root, :ClassMethods)
+      klass = ClassObject.new(:root, :ReceivingClass)
+      klass.class_mixins << mod
+      klass.inheritance_tree(true).should == [klass, mod]
     end
   end
 

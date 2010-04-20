@@ -83,7 +83,7 @@ module YARD
       class TkUnknownChar < Token
         def initialize(line_no, char_no, id)
           super(line_no, char_no)
-          @name = char_no.chr
+          @name = char_no > 255 ? '?' : char_no.chr
         end
         attr :name
       end

@@ -4,50 +4,8 @@ describe YARD::Docstring do
   before { YARD::Registry.clear }
   
   describe '#initialize' do
-    it "should parse comments into tags" do
-      doc = Docstring.new(<<-eof)
-        @param name Hello world
-          how are you?
-        @param name2 
-          this is a new line
-        @param name3 and this
-          is a new paragraph:
-
-          right here.
-      eof
-      doc.tags("param").each do |tag|
-        if tag.name == "name"
-          tag.text.should == "Hello world how are you?"
-        elsif tag.name == "name2"
-          tag.text.should == "this is a new line"
-        elsif tag.name == "name3"
-          tag.text.should == "and this is a new paragraph:\n\nright here."
-        end
-      end
-    end
-  
     it "should handle docstrings with empty newlines" do
       Docstring.new("\n\n").should == ""
-    end
-
-    it "should only parse tags with charset [A-Za-z_]" do
-      doc = Docstring.new
-      valid = %w( @testing @valid @is_a @is_A @__ )
-      invalid = %w( @ @return@ @param, @x.y @x-y )
-
-      log.enter_level(Logger::FATAL) do
-        {valid => 1, invalid => 0}.each do |tags, size|
-          tags.each do |tag|
-            class << doc
-              def create_tag(tag_name, *args)
-                add_tag Tags::Tag.new(tag_name, *args)
-              end
-            end
-            doc.all = tag
-            doc.tags(tag[1..-1]).size.should == size
-          end
-        end
-      end
     end
   end
   
@@ -185,6 +143,86 @@ describe YARD::Docstring do
       d = Docstring.new("@return (see Foo#bar)")
       d.should be_empty
       d.should_not be_blank
+    end
+  end
+  
+  describe '#add_tag' do
+    it "should only parse tags with charset [A-Za-z_]" do
+      doc = Docstring.new
+      valid = %w( @testing @valid @is_a @is_A @__ )
+      invalid = %w( @ @return@ @param, @x.y @x-y )
+
+      log.enter_level(Logger::FATAL) do
+        {valid => 1, invalid => 0}.each do |tags, size|
+          tags.each do |tag|
+            class << doc
+              def create_tag(tag_name, *args)
+                add_tag Tags::Tag.new(tag_name, *args)
+              end
+            end
+            doc.all = tag
+            doc.tags(tag[1..-1]).size.should == size
+          end
+        end
+      end
+    end
+  end
+  
+  describe '#parse_comments' do
+    it "should parse comments into tags" do
+      doc = Docstring.new(<<-eof)
+@param name Hello world
+  how are you?
+@param name2 
+  this is a new line
+@param name3 and this
+  is a new paragraph:
+
+  right here.
+      eof
+      tags = doc.tags(:param)
+      tags[0].name.should == "name"
+      tags[0].text.should == "Hello world\nhow are you?"
+      tags[1].name.should == "name2"
+      tags[1].text.should == "this is a new line"
+      tags[2].name.should == "name3"
+      tags[2].text.should == "and this\nis a new paragraph:\n\nright here."
+    end
+
+    it "should end parsing a tag on de-dent" do
+      doc = Docstring.new(<<-eof)
+@note test
+  one two three
+rest of docstring
+      eof
+      doc.tag(:note).text.should == "test\none two three"
+      doc.should == "rest of docstring"
+    end
+    
+    it "should parse examples embedded in doc" do
+      doc = Docstring.new(<<-eof)
+test string here
+@example code
+  
+  def foo(x, y, z)
+  end
+  
+  class A; end
+
+more stuff
+eof
+      doc.should == "test string here\nmore stuff"
+      doc.tag(:example).text.should == "\ndef foo(x, y, z)\nend\n\nclass A; end"
+    end
+    
+    it "should remove only original indentation from beginning of line in tags" do
+      doc = Docstring.new(<<-eof)
+@param name
+  some value
+  foo bar
+   baz
+eof
+      doc.tag(:param).text.should == "some value\nfoo bar\n baz"
     end
   end
 end

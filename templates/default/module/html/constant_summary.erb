@@ -4,7 +4,7 @@
     <dl class="constants">
       <% constant_listing.each do |cnst| %>
         <dt id="<%= anchor_for(cnst) %>" class="<%= cnst.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= cnst.name %> =
-            <span class="summary_desc"><%= htmlify_line docstring_summary(cnst) %></span>
+          <%= yieldall :object => cnst %>
         </dt>
         <dd><pre class="code"><%= format_constant cnst.value %></pre></dd>
       <% end %>

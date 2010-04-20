@@ -2,7 +2,7 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
   HANDLER_MATCH = /\A[A-Z]\w*\s*=[^=]\s*/m
   handles HANDLER_MATCH
   
-  def process
+  process do
     # Don't document CONSTANTS if they're set in second class objects (methods) because
     # they're not "static" when executed from a method
     return unless owner.is_a? NamespaceObject

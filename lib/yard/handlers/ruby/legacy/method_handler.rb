@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkDEF
     
-  def process
+  process do
     nobj = namespace
     mscope = scope
 

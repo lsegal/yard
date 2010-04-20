@@ -29,8 +29,14 @@ module YARD
       end
       alias show inspect
       
+      # @return [Fixnum] the first line of Ruby source
       def line
         tokens.first.line_no
+      end
+      
+      # @return [Range<Fixnum>] the first to last lines of Ruby source
+      def line_range
+        tokens.first.line_no..tokens.last.line_no
       end
 
       private

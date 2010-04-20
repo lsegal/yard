@@ -12,6 +12,7 @@ What's New in 0.5.x?
 8. **Generating HTML docs now adds frames view** (0.5.3)
 9. **Tree view for class list** (0.5.3)
 10. **Ability to specify markup format of extra files** (0.5.3)
+11. **Keyboard shortcuts for default HTML template** (0.5.4)
 
 Support for documenting native Ruby C code (0.5.0)
 --------------------------------------------------
@@ -161,6 +162,13 @@ top of the file with a shebang-like line:
     
 The above file contents will be rendered with a textile markup engine 
 (eg. RedCloth).
+
+Keyboard shortcuts for default HTML template (0.5.4)
+----------------------------------------------------
+
+You can now access the "Class List", "Method List" and "File List" with the
+'c', 'm' and 'f' keyboard shortcuts in the default HTML template, allowing
+for keyboard-only navigation around YARD documentation.
 
 
 What's New in 0.4.x?

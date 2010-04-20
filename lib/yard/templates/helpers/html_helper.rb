@@ -23,6 +23,25 @@ module YARD
       def urlencode(text)
         CGI.escape(text.to_s)
       end
+      
+      # Returns the current character set. The default value can be overridden
+      # by setting the +LANG+ environment variable or by overriding this
+      # method. In Ruby 1.9 you can also modify this value by setting
+      # +Encoding.default_external+.
+      # 
+      # @return [String] the current character set
+      def charset
+        return 'utf-8' unless RUBY19 || lang = ENV['LANG']
+        if RUBY19
+          lang = Encoding.default_external.name.downcase
+        else
+          lang = lang.downcase.split('.').last
+        end
+        case lang
+        when "ascii-8bit", "us-ascii", "ascii-7bit"; 'iso-8859-1'
+        else; lang
+        end
+      end
 
       # Turns text into HTML using +markup+ style formatting.
       # 
@@ -65,7 +84,7 @@ module YARD
       
       # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
-        htmlify(*args).gsub(/<\/?p>/, '')
+        "<div class='inline'>" + htmlify(*args) + "</div>"
       end
       
       # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
@@ -76,7 +95,7 @@ module YARD
           type_text, pre_text, no_match = $1, $`, $&
           pre_match = pre_text.scan(%r(</?(?:pre|tt|code).*?>))
           if pre_match.last.nil? || pre_match.last.include?('/')
-            '<tt>' + type_text + '</tt>'
+            '<tt>' + h(type_text) + '</tt>'
           else
             no_match
           end
@@ -287,7 +306,7 @@ module YARD
         
         type = signature_types(meth, link)
         scope = meth.scope == :class ? "+" : "-"
-        name = full_attr_name ? meth.name : meth.name.to_s.gsub(/=$/, '')
+        name = full_attr_name ? meth.name : meth.name.to_s.gsub(/^(\w+)=$/, '\1')
         blk = format_block(meth)
         args = !full_attr_name && meth.writer? ? "" : format_args(meth)
         extras = []

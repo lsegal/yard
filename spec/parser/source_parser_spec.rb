@@ -57,6 +57,17 @@ describe YARD::Parser::SourceParser do
       Registry.at(:Hello2).docstring.should == "PASS"
       Registry.at('Hello2#x').docstring.should == "ANOTHER PASS"
     end
+    
+    it "should handle =begin/=end style comments" do
+      YARD.parse_string "=begin\nfoo\nbar\n=end\nclass Foo; end\n"
+      Registry.at(:Foo).docstring.should == "foo\nbar"
+
+      YARD.parse_string "=begin\n\nfoo\nbar\n=end\nclass Foo; end\n"
+      Registry.at(:Foo).docstring.should == "foo\nbar"
+
+      YARD.parse_string "=begin\nfoo\n\nbar\n=end\nclass Foo; end\n"
+      Registry.at(:Foo).docstring.should == "foo\n\nbar"
+    end
   end
 
   describe '#parse' do

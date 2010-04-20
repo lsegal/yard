@@ -8,10 +8,11 @@ module YARD::CodeObjects
     # @return [Array<NamespaceObject>] a list of namespace objects
     def inheritance_tree(include_mods = false)
       return [self] unless include_mods
-      [self] + mixins(:instance).map do |m|
+      [self] + mixins(:instance, :class).map do |m|
+        next if m == self
         next m unless m.respond_to?(:inheritance_tree)
         m.inheritance_tree(true)
-      end.flatten
+      end.compact.flatten
     end
   end
 end

@@ -4,7 +4,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   handles method_call(:attr_writer)
   handles method_call(:attr_accessor)
   
-  def process
+  process do
     return if statement.type == :var_ref
     read, write = true, false
     params = statement.parameters(false).dup

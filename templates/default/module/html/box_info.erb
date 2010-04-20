@@ -23,6 +23,11 @@
       <% n = n == 2 ? 1 : 2 %>
     <% end %>
   <% end %>
+  <% if (mixed_into = mixed_into(object)).size > 0 %>
+    <dt class="r<%=n%>">Included in:</dt>
+    <dd class="r<%=n%>"><%= mixed_into.sort_by {|o| o.path }.map {|o| linkify(o) }.join(", ") %></dd>
+    <% n = n == 2 ? 1 : 2 %>
+  <% end %>
   <% unless object.root? %>
     <dt class="r<%=n%> last">Defined in:</dt>
     <dd class="r<%=n%> last"><%= erb(:defines) %></dd>

@@ -128,6 +128,13 @@ describe YARD::CodeObjects::ModuleObject do
     it "should not list inheritance tree of proxy objects in inheritance tree" do
       @proxy.should_not_receive(:inheritance_tree)
       @mod5.instance_mixins.should == [@proxy]
-    end  
+    end
+    
+    it "should list class mixins in inheritance tree" do
+      mod = ModuleObject.new(:root, :ClassMethods)
+      recvmod = ModuleObject.new(:root, :ReceivingModule)
+      recvmod.class_mixins << mod
+      recvmod.inheritance_tree(true).should == [recvmod, mod]
+    end
   end
 end

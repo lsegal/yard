@@ -4,6 +4,34 @@ describe YARD::Templates::Helpers::MethodHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::MethodHelper
   
+  describe '#format_args' do
+    it "should not show &blockarg if no @param tag and has @yield" do
+      YARD.parse_string <<-'eof'
+        # @yield blah
+        def foo(&block); end
+      eof
+      format_args(Registry.at('#foo')).should == ''
+    end
+
+    it "should not show &blockarg if no @param tag and has @yieldparam" do
+      YARD.parse_string <<-'eof'
+        # @yieldparam blah test
+        def foo(&block); end
+      eof
+      format_args(Registry.at('#foo')).should == ''
+    end
+    
+    it "should show &blockarg if @param block is documented (even with @yield)" do
+      YARD.parse_string <<-'eof'
+        # @yield [a,b]
+        # @yieldparam a test
+        # @param block test
+        def foo(&block) end
+      eof
+      format_args(Registry.at('#foo')).should == '(&block)'
+    end
+  end
+  
   describe '#format_block' do
     before { YARD::Registry.clear }
     

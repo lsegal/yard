@@ -203,6 +203,19 @@ module YARD
         def namespace_only?
           @namespace_only ? true : false
         end
+        
+        # Generates a +process+ method, equivalent to +def process; ... end+.
+        # Blocks defined with this syntax will be wrapped inside an anonymous
+        # module so that the handler class can be extended with mixins that
+        # override the +process+ method without alias chaining.
+        # 
+        # @see #process
+        # @return [void]
+        def process(&block)
+          mod = Module.new
+          mod.send(:define_method, :process, &block)
+          include mod
+        end
       end
 
       def initialize(source_parser, stmt)

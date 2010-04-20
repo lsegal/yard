@@ -41,8 +41,12 @@ describe File do
       File.cleanpath('A/B/C/D/..').should == "A/B/C"
     end
     
-    it "should not pass the initial directory" do
+    it "should pass the initial directory" do
       File.cleanpath('C/../../D').should == "../D"
+    end
+    
+    it "should not remove multiple '../' at the beginning" do
+      File.cleanpath('../../A/B').should == '../../A/B'
     end
   end
   

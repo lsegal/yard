@@ -157,9 +157,8 @@ module YARD
     # 
     # @param [String] tag_name the tag name
     # @param [String] tag_buf the text attached to the tag with newlines removed.
-    # @param [String] raw_buf the raw buffer of text without removed newlines.
     # @return [Tags::Tag, Tags::RefTag] a tag
-    def create_tag(tag_name, tag_buf, raw_buf)
+    def create_tag(tag_name, tag_buf)
       if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
         return create_ref_tag(tag_name, $1, $2)
       end
@@ -167,11 +166,7 @@ module YARD
       tag_factory = Tags::Library.instance
       tag_method = "#{tag_name}_tag"
       if tag_name && tag_factory.respond_to?(tag_method)
-        if tag_factory.method(tag_method).arity == 2
-          add_tag *tag_factory.send(tag_method, tag_buf, raw_buf.join("\n"))
-        else
-          add_tag *tag_factory.send(tag_method, tag_buf) 
-        end
+        add_tag *tag_factory.send(tag_method, tag_buf)
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
@@ -195,7 +190,7 @@ module YARD
       indent, last_indent = comments.first[/^\s*/].length, 0
       orig_indent = 0
       last_line = ""
-      tag_name, tag_klass, tag_buf, raw_buf = nil, nil, "", []
+      tag_name, tag_klass, tag_buf = nil, nil, []
 
       (comments+['']).each_with_index do |line, index|
         indent = line[/^\s*/].length 
@@ -204,27 +199,21 @@ module YARD
 
         if tag_name && (((indent < orig_indent && !empty) || done) || 
             (indent <= last_indent && line =~ META_MATCH))
-          create_tag(tag_name, tag_buf, raw_buf)
-          tag_name, tag_buf, raw_buf = nil, '', []
+          create_tag(tag_name, tag_buf.join("\n"))
+          tag_name, tag_buf, = nil, []
           orig_indent = 0
         end
 
         # Found a meta tag
         if line =~ META_MATCH
-          orig_indent = indent
-          tag_name, tag_buf = $1, ($2 || '')
-          raw_buf = [tag_buf.dup]
+          tag_name, tag_buf = $1, [($2 || '')]
         elsif tag_name && indent >= orig_indent && !empty
+          orig_indent = indent if orig_indent == 0
           # Extra data added to the tag on the next line
           last_empty = last_line =~ /^[ \t]*$/ ? true : false
           
-          if last_empty
-            tag_buf << "\n\n" 
-            raw_buf << ''
-          end
-          
-          tag_buf << line.gsub(/^[ \t]{#{indent}}/, last_empty ? '' : ' ')
-          raw_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
+          tag_buf << '' if last_empty
+          tag_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
         elsif !tag_name
           # Regular docstring text
           docstring << line << "\n" 

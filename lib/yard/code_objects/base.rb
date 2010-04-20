@@ -280,12 +280,15 @@ module YARD
         end
       end
       
-      # Checks if the method matches the name of an existing custom
-      # attribute.
-      # 
-      # @param [Symbol] meth the name of the method/attribute
-      # @raise [NoMethodError] if no method or custom attribute exists by
-      #   the name +meth+
+      # @overload dynamic_attr_name
+      #   @return the value of attribute named by the method attribute name
+      #   @raise [NoMethodError] if no method or custom attribute exists by
+      #     the attribute name
+      #   @see #[]
+      # @overload dynamic_attr_name=(value)
+      #   @param value a value to set
+      #   @return +value+
+      #   @see #[]=
       def method_missing(meth, *args, &block)
         if meth.to_s =~ /=$/
           self[meth.to_s[0..-2]] = args.first

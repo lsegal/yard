@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Engine.template(:default, :method) do
+describe YARD::Templates::Engine.template(:default, :module) do
   before do 
     Registry.clear
     YARD.parse_string <<-'eof'
@@ -47,10 +47,19 @@ describe YARD::Templates::Engine.template(:default, :method) do
         class Q; end
         class X; end
         module Z; end
+        # A long docstring for the constant. With extra text
+        # and newlines.
         CONSTANT = 'value'
         @@cvar = 'value' # @deprecated
       end
+      
+      module TMP; include A end
+      class TMP2; extend A end
     eof
+    
+    # Hack to clear mixin list
+    mod = YARD::Templates::Engine.template(:default, :module)
+    mod.send(:class_variable_set, "@@mixed_into", nil)
   end
 
   it "should render html format correctly" do

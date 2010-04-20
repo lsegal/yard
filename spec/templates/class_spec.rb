@@ -21,6 +21,11 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
       end
       
       class C < A; end
+      
+      class D
+        # @private
+        def initialize; end
+      end
     eof
   end
   
@@ -30,5 +35,9 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
   
   it "should render text format correctly" do
     text_equals(Registry.at('A').format, :class001)
+  end
+
+  it "should hide private constructors" do
+    html_equals(Registry.at('D').format(:format => :html, :no_highlight => true, :verifier => Verifier.new("!@private")), :class002)
   end
 end

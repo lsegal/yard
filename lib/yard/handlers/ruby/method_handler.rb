@@ -1,7 +1,7 @@
 class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   handles :def, :defs
   
-  def process
+  process do
     nobj = namespace
     mscope = scope
     if statement.type == :defs

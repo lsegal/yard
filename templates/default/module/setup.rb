@@ -2,7 +2,7 @@ include Helpers::ModuleHelper
 
 def init
   sections :header, :box_info, :pre_docstring, T('docstring'), :children, 
-    :constant_summary, :inherited_constants, 
+    :constant_summary, [T('docstring')], :inherited_constants, 
     :attribute_summary, [:item_summary], 
     :method_summary, [:item_summary], :inherited_methods,
     :methodmissing, [T('method_details')],
@@ -69,7 +69,7 @@ def sort_listing(list)
   list.sort_by {|o| [o.scope.to_s, o.name.to_s.downcase] }
 end
 
-def docstring_summary(obj)
+def docstring_full(obj)
   docstring = ""
   if obj.tags(:overload).size == 1 && obj.docstring.empty?
     docstring = obj.tag(:overload).docstring
@@ -80,8 +80,12 @@ def docstring_summary(obj)
   if docstring.summary.empty? && obj.tags(:return).size == 1 && obj.tag(:return).text
     docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }.strip)
   end
+  
+  docstring
+end
 
-  docstring.summary
+def docstring_summary(obj)
+  docstring_full(obj).summary
 end
 
 def scopes(list)
@@ -89,4 +93,14 @@ def scopes(list)
     items = list.select {|m| m.scope == scope }
     yield(items, scope) unless items.empty?
   end
+end
+
+def mixed_into(object)
+  unless defined?(@@mixed_into) && @@mixed_into
+    @@mixed_into = {}
+    list = run_verifier Registry.all(:class, :module)
+    list.each {|o| o.mixins.each {|m| (@@mixed_into[m.path] ||= []) << o } }
+  end
+  
+  @@mixed_into[object.path] || []
 end

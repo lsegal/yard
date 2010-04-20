@@ -2,7 +2,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles :assign
   
-  def process
+  process do
     if statement[1].call? && statement[1][0][0] == s(:const, "Struct") && 
         statement[1][2] == s(:ident, "new")
       process_structclass(statement)
