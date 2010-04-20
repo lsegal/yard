@@ -53,7 +53,6 @@ module YARD
           :hide_void_return => false,
           :no_highlight => false, 
           :files => [],
-          :visibilities => [:public],
           :verifier => nil
         )
         @excluded = []
@@ -212,6 +211,7 @@ module YARD
       def optparse(*args)
         excluded = []
         query_expressions = []
+        visibilities = [:public]
         do_build_gems, do_rebuild_gems = false, false
         serialopts = SymbolHash.new
         
@@ -279,15 +279,15 @@ module YARD
         opts.separator "Output options:"
   
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          options[:visibilities].delete(:public)
+          visibilities.delete(:public)
         end
 
         opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          options[:visibilities].push(:protected)
+          visibilities.push(:protected)
         end
 
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          options[:visibilities].push(:private) 
+          visibilities.push(:private)
         end
         
         opts.on('--no-private', "Hide objects with @private tag") do
@@ -374,8 +374,8 @@ module YARD
         build_gems(do_rebuild_gems) if do_build_gems
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        query_expressions << "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
-        options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
         options[:readme] ||= Dir.glob('README*').first
       end

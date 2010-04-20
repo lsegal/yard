@@ -22,10 +22,7 @@ module YARD
       def initialize
         super
         @serializer = YARD::Serializers::StdoutSerializer.new
-        @options = SymbolHash[
-          :format => :dot,
-          :visibilities => [:public]
-        ]
+        @options = SymbolHash[:format => :dot]
       end
       
       # Runs the command-line utility.
@@ -39,8 +36,9 @@ module YARD
         optparse(*args)
         
         contents = objects.map {|o| o.format(options) }.join("\n")
-        Templates::Engine.render(:format => :dot, :type => :layout, 
-          :serializer => @serializer, :contents => contents) 
+        Templates::Engine.render(:format => :dot, :type => :layout,
+          :verifier => @verifier, :serializer => @serializer,
+          :contents => contents)
       end
       
       private
@@ -48,6 +46,7 @@ module YARD
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
+        visibilities = []
         opts = OptionParser.new
 
         opts.separator ""
@@ -66,15 +65,15 @@ module YARD
         end
         
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          options[:visibilities].delete(:public)
+          visibilities.delete(:public)
         end
 
         opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          options[:visibilities].push(:protected)
+          visibilities.push(:protected)
         end
 
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          options[:visibilities].push(:private) 
+          visibilities.push(:private)
         end
 
         opts.separator ""
@@ -92,6 +91,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
 
+        @verifier = Verfier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
         if args.first
           @objects = args.map {|o| Registry.at(o) }.compact
         else
