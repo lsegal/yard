@@ -71,8 +71,7 @@ module YARD
       # @return [void] 
       def run(*args)
         args += support_rdoc_document_file!
-        optparse(*yardopts)
-        optparse(*args)
+        optparse(*(yardopts + args))
         
         if use_cache
           Registry.load
