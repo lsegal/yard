@@ -291,5 +291,7 @@ CHANGELOG
 COPYRIGHT
 ---------
 
-YARD &copy; 2007-2009 by [Loren Segal](mailto:lsegal@soen.ca). Licensed under the MIT 
-license. Please see the {file:LICENSE} for more information.
+YARD &copy; 2007-2010 by [Loren Segal](mailto:lsegal@soen.ca). YARD is 
+licensed under the MIT license except for some files which come from the
+RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL} 
+documents for more information.
