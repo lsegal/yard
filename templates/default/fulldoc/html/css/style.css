@@ -32,6 +32,7 @@ h2 small { font-weight: normal; font-size: 0.7em; display: block; float: right; 
 .note.todo { background: #ffffc5; border-color: #ececaa; }
 .note.returns_void { background: #efefef; }
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
+.note.private { background: #ffffc5; border-color: #ececaa; }
 .note.title { text-transform: lowercase; padding: 1px 5px; margin-left: 5px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; }
 h1 .note.title { font-size: 0.5em; font-weight: normal; padding: 3px 5px; position: relative; top: -3px; text-transform: capitalize; }
 .note.title.constructor { color: #fff; background: #6a98d6; border-color: #6689d6; } 
