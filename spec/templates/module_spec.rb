@@ -63,7 +63,10 @@ describe YARD::Templates::Engine.template(:default, :module) do
   end
 
   it "should render html format correctly" do
-    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true, :hide_void_return => true, :visibilities => [:public]), :module001)
+    html_equals(Registry.at('A').format(
+          :format => :html, :no_highlight => true, :hide_void_return => true,
+          :verifier => Verifier.new('object.type != :method || object.visibility == :public')),
+        :module001)
   end
 
   it "should render text format correctly" do

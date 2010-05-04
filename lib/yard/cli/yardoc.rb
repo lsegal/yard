@@ -28,7 +28,10 @@ module YARD
       
       # @return [Boolean] whether to generate output
       attr_accessor :generate
-      
+
+      # @return [Boolean] whether to print a list of objects
+      attr_accessor :list
+
       # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
@@ -50,7 +53,6 @@ module YARD
           :hide_void_return => false,
           :no_highlight => false, 
           :files => [],
-          :visibilities => [:public],
           :verifier => nil
         )
         @excluded = []
@@ -68,8 +70,7 @@ module YARD
       # @return [void] 
       def run(*args)
         args += support_rdoc_document_file!
-        optparse(*yardopts)
-        optparse(*args)
+        optparse(*(yardopts + args))
         
         if use_cache
           Registry.load
@@ -85,6 +86,8 @@ module YARD
             Registry.load_all if use_cache
             Templates::Engine.generate(all_objects, options)
           end
+        elsif list
+          print_list
         end
         
         true
@@ -122,6 +125,17 @@ module YARD
             opts = options.merge(:object => object, :type => :layout)
             Templates::Engine.render(opts)
           end
+        end
+      end
+
+      # Prints a list of all objects
+      # @return [void]
+      def print_list
+        Registry.load_all
+        Registry.all.
+          reject {|item| options[:verifier].call(item).is_a?(FalseClass) }.
+          sort_by {|item| [item.file, item.line]}.each do |item|
+          puts "#{item.file}:#{item.line}: #{item}"
         end
       end
 
@@ -197,6 +211,7 @@ module YARD
       def optparse(*args)
         excluded = []
         query_expressions = []
+        visibilities = [:public]
         do_build_gems, do_rebuild_gems = false, false
         serialopts = SymbolHash.new
         
@@ -264,15 +279,15 @@ module YARD
         opts.separator "Output options:"
   
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          options[:visibilities].delete(:public)
+          visibilities.delete(:public)
         end
 
         opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          options[:visibilities].push(:protected)
+          visibilities.push(:protected)
         end
 
         opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          options[:visibilities].push(:private) 
+          visibilities.push(:private)
         end
         
         opts.on('--no-private', "Hide objects with @private tag") do
@@ -294,7 +309,12 @@ module YARD
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
           query_expressions << query.taint
         end
-        
+
+        opts.on('--list', 'List objects to standard out (implies -n)') do |format|
+          self.generate = false
+          self.list = true
+        end
+
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
           options[:title] = title
         end
@@ -354,8 +374,8 @@ module YARD
         build_gems(do_rebuild_gems) if do_build_gems
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        query_expressions << "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
-        options[:visibilities].uniq!
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
         options[:readme] ||= Dir.glob('README*').first
       end

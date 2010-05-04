@@ -41,7 +41,7 @@ describe YARD::CLI::Yardoc do
 
   it "should use String#shell_split to split .yardopts tokens" do
     optsdata = "foo bar"
-    optsdata.should_receive(:shell_split)
+    optsdata.should_receive(:shell_split).and_return([optsdata])
     IO.should_receive(:read).with("test").and_return(optsdata)
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.options_file = "test"
