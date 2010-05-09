@@ -88,3 +88,10 @@ end
 
 class AnotherPoint < Struct.new('XPoint', :a, :b, :c, :description)
 end
+
+
+# @attr [IO] input the input stream
+# @attr mode the mode to read
+# @attr [Proc, #call] someproc the proc to run
+class DoccedStruct < Struct.new(:input, :mode, :someproc)
+end

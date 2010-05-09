@@ -9,7 +9,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @param [String] member the name of the struct member we need
   # @return [YARD::Tags::Tag, nil] the tag matching the request, or nil if not found
   def member_tag_for_member(klass, member)
-    klass.tags(:member).find {|tag| tag.name == member}
+    klass.tags(:attr).find {|tag| tag.name == member}
   end
   
   ##
@@ -22,7 +22,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   #   the user did not define a type for this member.
   def return_type_for_member(klass, member)
     member_tag = member_tag_for_member(klass, member)
-    return_type = member_tag ? "[#{member_tag.types.join(', ')}]" : "[Object]"
+    (member_tag && member_tag.types) ? "[#{member_tag.types.join(', ')}]" : "[Object]"
   end
   
   ##

@@ -133,4 +133,29 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
 
     Registry.at("XPoint").should be_nil
   end
+  
+  it "should use @attr to set attribute descriptions on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#input")
+    obj.docstring.should == "the input stream"
+  end
+  
+  it "should use @attr to set attribute types on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#someproc")
+    obj.should_not be_nil
+    obj.tag(:return).should_not be_nil
+    obj.tag(:return).types.should == ["Proc", "#call"]
+  end
+  
+  it "should default types unspecified by @attr to Object on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#mode")
+    obj.should_not be_nil
+    obj.tag(:return).should_not be_nil
+    obj.tag(:return).types.should == ["Object"]
+  end
+  
+  it "should create parameters for writers of Struct subclass's attributes" do
+    obj = Registry.at("DoccedStruct#input=")
+    obj.tags(:param).size.should == 1
+    obj.tag(:param).types.should == ["IO"]
+  end
 end
