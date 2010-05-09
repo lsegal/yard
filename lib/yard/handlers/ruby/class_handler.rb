@@ -63,6 +63,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   end
   
   def parse_struct_superclass(klass, superclass)
+    return unless superclass.parameters
     members = extract_parameters(superclass)
     create_attributes(klass, members)
   end
