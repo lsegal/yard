@@ -84,6 +84,7 @@ module YARD
       autoload :ProcessHandler,          __p('handlers/ruby/process_handler')
       autoload :VisibilityHandler,       __p('handlers/ruby/visibility_handler')
       autoload :YieldHandler,            __p('handlers/ruby/yield_handler')
+      autoload :StructHandlerMethods,    __p('handlers/ruby/struct_handler_methods')
     end
 
     autoload :Base,                      __p('handlers/base')
