@@ -7,9 +7,29 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   #
   # @param [ClassObject] klass the class whose tags we're searching
   # @param [String] member the name of the struct member we need
+  # @param [Symbol] type (:read) reader method, or writer method?
   # @return [YARD::Tags::Tag, nil] the tag matching the request, or nil if not found
-  def member_tag_for_member(klass, member)
-    klass.tags(:attr).find {|tag| tag.name == member}
+  def member_tag_for_member(klass, member, type = :read)
+    specific_tag = type == :read ? :attr_reader : :attr_writer
+    (klass.tags(specific_tag) + klass.tags(:attr)).find {|tag| tag.name == member}
+  end
+  
+  ##
+  # Determines whether to create an attribute method based on the class's
+  # tags.
+  #
+  # @param [ClassObject] klass the class whose tags we're searching
+  # @param [String] member the name of the struct member we need
+  # @param [Symbol] type (:read) reader method, or writer method?
+  # @return [Boolean] should the attribute be created?
+  def create_member_method?(klass, member, type = :read)
+    return true if (klass.tags(:attr) + klass.tags(:attr_reader) + klass.tags(:attr_writer)).empty?
+    return true if member_tag_for_member(klass, member, type)
+    if type == :read
+      return !member_tag_for_member(klass, member, :write)
+    else
+      return !member_tag_for_member(klass, member, :read)
+    end
   end
   
   ##
@@ -114,8 +134,8 @@ module YARD::Handlers::Ruby::StructHandlerMethods
       # Ripped off from YARD's attribute handling source
       klass.attributes[:instance][member] = SymbolHash[:read => nil, :write => nil]
       
-      create_writer klass, member
-      create_reader klass, member
+      create_writer klass, member if create_member_method?(klass, member, :write)
+      create_reader klass, member if create_member_method?(klass, member, :read)
     end
   end
 end
