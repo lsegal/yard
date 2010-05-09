@@ -7,13 +7,18 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       classname = $1
       superclass_def = $2
       superclass = parse_superclass($2)
+      if superclass == "Struct"
+        is_a_struct = true
+        superclass = struct_superclass_name(superclass_def)
+        create_struct_superclass(superclass, superclass_def)
+      end
       undocsuper = $2 && superclass.nil?
 
       klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
-      parse_struct_subclass(klass, superclass_def) if superclass =~ /^O?Struct$/
+      parse_struct_subclass(klass, superclass_def) if is_a_struct
       parse_block(:namespace => klass)
        
       if undocsuper
@@ -59,10 +64,30 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     paramstring.split(",").select {|x| x.strip[0,1] == ":"}.map {|x| x.strip[1..-1] } # the 1..-1 chops the leading :
   end
   
+  def create_struct_superclass(superclass, superclass_def)
+    return if superclass == "Struct"
+    the_super = register ClassObject.new(P("Struct"), superclass[8..-1]) do |o|
+      o.superclass = "Struct"
+    end
+    parse_struct_subclass(the_super, superclass_def)
+    the_super
+  end
+  
+  def struct_superclass_name(superclass)
+    paramstring = superclass.match(/\A(Struct)\.new\((.*?)\)/)[2].split(",")
+    first = paramstring.first.strip
+    if first[0,1] =~ /['"]/ && first[-1,1] =~ /['"]/ && first !~ /\#\{/
+      return "Struct::#{first[1..-2]}"
+    end
+    "Struct"
+  end
+  
   def parse_struct_subclass(klass, superclass_def)
     # Bounce if there's no parens
+
     return unless superclass_def =~ /O?Struct\.new\((.*?)\)/
     members = extract_parameters(superclass_def)
+    p members
     create_attributes(klass, members)
   end
   
