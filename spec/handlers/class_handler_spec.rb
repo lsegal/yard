@@ -134,6 +134,21 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     Registry.at("XPoint").should be_nil
   end
   
+  it "should create a Struct::Name class when class Const < Struct.new('Name', :sym) is found" do
+    obj = Registry.at("Struct::XPoint")
+    obj.should_not be_nil
+  end
+  
+  it "should attach attribtues to the generated Struct::Name class when Struct.new('Name') is used" do
+    obj = Registry.at("Struct::XPoint")
+    attrs = obj.attributes[:instance]
+    [:a, :b, :c].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+  end
+  
   it "should use @attr to set attribute descriptions on Struct subclasses" do
     obj = Registry.at("DoccedStruct#input")
     obj.docstring.should == "the input stream"
