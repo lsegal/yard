@@ -1,4 +1,5 @@
 class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
+  include YARD::Handlers::Ruby::StructHandlerMethods
   namespace_only
   handles :class, :sclass
   
@@ -12,6 +13,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
+      parse_struct_superclass(klass, statement[1]) if superclass =~ /^O?Struct$/
       parse_block(statement[2], namespace: klass)
        
       if undocsuper
@@ -47,6 +49,23 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   end
   
   private
+  
+  ##
+  # Extract the parameters from the Struct.new AST node, returning them as a list
+  # of strings
+  #
+  # @param [MethodCallNode] superclass the AST node for the Struct.new call
+  # @return [Array<String>] the member names to generate methods for
+  def extract_parameters(superclass)
+    members = superclass.parameters.select {|x| x && x.type == :symbol_literal}
+    members.map! {|x| x.source.strip[1..-1]}
+    members
+  end
+  
+  def parse_struct_superclass(klass, superclass)
+    members = extract_parameters(superclass)
+    create_attributes(klass, members)
+  end
   
   def parse_superclass(superclass)
     return nil unless superclass
