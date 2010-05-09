@@ -83,3 +83,8 @@ end
 class Zebra
 end
 
+class Point < Struct.new(:x, :y, :z)
+end
+
+class AnotherPoint < Struct.new('XPoint', :a, :b, :c, :description)
+end

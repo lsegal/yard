@@ -109,4 +109,28 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   it "should not overwrite docstring with an empty one" do
     Registry.at(:Zebra).docstring.should == "Docstring 2"
   end
+  
+  it "should turn 'class Const < Struct.new(:sym)' into class Const with attr :sym" do
+    obj = Registry.at("Point")
+    obj.should be_kind_of(CodeObjects::ClassObject)
+    attrs = obj.attributes[:instance]
+    [:x, :y, :z].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+  end
+
+  it "should turn 'class Const < Struct.new('Name', :sym)' into class Const with attr :sym" do
+    obj = Registry.at("AnotherPoint")
+    obj.should be_kind_of(CodeObjects::ClassObject)
+    attrs = obj.attributes[:instance]
+    [:a, :b, :c].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+
+    Registry.at("XPoint").should be_nil
+  end
 end
