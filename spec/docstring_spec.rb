@@ -117,6 +117,20 @@ describe YARD::Docstring do
       tags = doc.tags('param')
       tags.size.should == 0
     end
+    
+    it "resolves references to methods in the same class with #methname" do
+      klass = CodeObjects::ClassObject.new(:root, "Foo")
+      o = CodeObjects::MethodObject.new(klass, "bar")
+      ref = CodeObjects::MethodObject.new(klass, "baz")
+      o.docstring.add_tag Tags::Tag.new('param', 'testing', nil, 'arg1')
+      ref.docstring = "@param (see #bar)"
+      
+      tags = ref.docstring.tags("param")
+      tags.size.should == 1
+      tags.first.text.should == "testing"
+      tags.first.should be_kind_of(Tags::RefTag)
+      tags.first.owner.should == o
+    end
   end
   
   describe '#empty?/#blank?' do

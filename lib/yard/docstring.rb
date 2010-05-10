@@ -149,8 +149,8 @@ module YARD
     end
     
     # Creates a {Tags::RefTag}
-    def create_ref_tag(tag_name, name, object)
-      @ref_tags << Tags::RefTagList.new(tag_name, object, name)
+    def create_ref_tag(tag_name, name, object_name)
+      @ref_tags << Tags::RefTagList.new(tag_name, P(object, object_name), name)
     end
     
     # Creates a tag from the {Tags::DefaultFactory tag factory}.
