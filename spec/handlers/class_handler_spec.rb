@@ -204,4 +204,30 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     obj = Registry.at("SemiDoccedStruct#third=")
     obj.tag(:param).types.should == ["Array"]
   end
+  
+  it "defines a reader and a writer when both @attr_reader and @attr_writer are used" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:fourth][:read].should_not be_nil
+    attrs[:fourth][:write].should_not be_nil
+  end
+  
+  it "uses @attr_reader for the getter when both @attr_reader and @attr_writer are given" do
+    obj = Registry.at("SemiDoccedStruct#fourth")
+    obj.tag(:return).types.should == ["#read"]
+  end
+  
+  it "uses @attr_writer for the setter when both @attr_reader and @attr_writer are given" do
+    obj = Registry.at("SemiDoccedStruct#fourth=")
+    obj.tag(:param).types.should == ["IO"]
+  end
+  
+  it "extracts text from @attr_reader" do
+    Registry.at("SemiDoccedStruct#fourth").docstring.should == "returns a proc that reads"
+  end
+  
+  it "extracts text from @attr_writer" do
+    Registry.at("SemiDoccedStruct#fourth=").docstring.should == "sets the proc that writes stuff"
+  end
+    
 end

@@ -84,10 +84,8 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   
   def parse_struct_subclass(klass, superclass_def)
     # Bounce if there's no parens
-
     return unless superclass_def =~ /O?Struct\.new\((.*?)\)/
     members = extract_parameters(superclass_def)
-    p members
     create_attributes(klass, members)
   end
   
