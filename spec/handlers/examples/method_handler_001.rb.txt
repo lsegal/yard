@@ -74,4 +74,8 @@ end
 
   attr_reader :attr_name2
   def attr_name2=; end
+
+  # @option opts :bar [String] It's bar!
+  def auto_opts(opts)
+  end
 end

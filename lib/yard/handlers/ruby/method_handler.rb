@@ -39,6 +39,17 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       end
     end
     
+    if obj.has_tag?(:option)
+      # create the options parameter if its missing
+      obj.tags(:option).each do |option|
+        expected_param = option.name
+        unless obj.tags(:param).find {|x| x.name == expected_param }
+          new_tag = YARD::Tags::Tag.new(:param, "a customizable set of options", "Hash", expected_param)
+          obj.docstring.add_tag(new_tag)
+        end
+      end
+    end
+    
     if info = obj.attr_info
       if meth.to_s =~ /=$/ # writer
         info[:write] = obj if info[:read]

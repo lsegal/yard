@@ -115,4 +115,11 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     Registry.at('Foo#attr_name2').should be_reader
     Registry.at('Foo#attr_name2=').should be_writer
   end
+  
+  it "should generate an options parameter if @option refers to an undocumented parameter" do
+    meth = P('Foo#auto_opts')
+    meth.should have_tag(:param)
+    meth.tag(:param).name.should == "opts"
+    meth.tag(:param).types.should == ["Hash"]
+  end
 end
