@@ -173,4 +173,35 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     obj.tags(:param).size.should == 1
     obj.tag(:param).types.should == ["IO"]
   end
+  
+  it "defines both readers and writers when @attr is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:first][:read].should_not be_nil
+    attrs[:first][:write].should_not be_nil
+  end
+  
+  it "defines only a reader when only @attr_reader is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:second][:read].should_not be_nil
+    attrs[:second][:write].should be_nil
+  end
+  
+  it "defines only a writer when only @attr_writer is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:third][:read].should be_nil
+    attrs[:third][:write].should_not be_nil
+  end
+  
+  it "defines a reader with correct return types when @attr_reader is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct#second")
+    obj.tag(:return).types.should == ["Fixnum"]
+  end
+  
+  it "defines a writer with correct parameter types when @attr_writer is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct#third=")
+    obj.tag(:param).types.should == ["Array"]
+  end
 end
