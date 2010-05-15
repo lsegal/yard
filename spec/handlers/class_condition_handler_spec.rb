@@ -32,17 +32,15 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
     verify_method :j, :k
   end
   
-  if RUBY19
-    it "should parse all if/elsif blocks for complex conditions" do
-      verify_method :a, :b, :c, :d
-    end
+  it "should parse all if/elsif blocks for complex conditions" do
+    verify_method :a, :b, :c, :d
+  end
 
-    it "should only parse else block if condition is literal value `false`" do
-      verify_method :q
-    end
+  it "should only parse else block if condition is literal value `false`" do
+    verify_method :q
+  end
 
-    it "should only parse else block if condition is literal integer == 0" do
-      verify_method :n
-    end
+  it "should only parse else block if condition is literal integer == 0" do
+    verify_method :n
   end
 end
