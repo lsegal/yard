@@ -256,4 +256,18 @@ eof
     s = stmts("require 'foo'\r\n\r\n# Test Test\r\n# \r\n# Example:\r\n#   example code\r\ndef test\r\nend\r\n")
     s[1].comments.should == ['Test Test', '', 'Example:', '  example code']
   end
+  
+  it "should handle elsif blocks" do
+    s = stmts(stmt("if 0\n  foo\nelsif 2\n  bar\nend\nbaz").block)
+    s.size.should == 2
+    s[1].tokens.to_s.should == "elsif 2"
+    s[1].block.to_s.should == "bar"
+  end
+  
+  it "should handle else blocks" do
+    s = stmts(stmt("if 0\n  foo\nelse\n  bar\nend\nbaz").block)
+    s.size.should == 2
+    s[1].tokens.to_s.should == "else"
+    s[1].block.to_s.should == "bar"
+  end
 end

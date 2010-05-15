@@ -6,7 +6,7 @@ module YARD
       # The following list of tokens will require a block to be opened 
       # if used at the beginning of a statement.
       OPEN_BLOCK_TOKENS = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
-                           TkIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
+                           TkIF, TkELSIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
 
       ##
       # Creates a new statement list
@@ -215,7 +215,7 @@ module YARD
       #
       # @param [RubyToken::Token] tk the token to process
       def process_simple_block_opener(tk)
-        return unless [TkLBRACE, TkDO, TkBEGIN].include?(tk.class) &&
+        return unless [TkLBRACE, TkDO, TkBEGIN, TkELSE].include?(tk.class) &&
           # Make sure hashes are parsed as hashes, not as blocks
           (@last_ns_tk.nil? || @last_ns_tk.lex_state != EXPR_BEG)
 
@@ -314,7 +314,7 @@ module YARD
         if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
           @level += 1
         elsif OPEN_BLOCK_TOKENS.include?(tk.class)
-          @level += 1 unless @last_ns_tk.class == TkALIAS
+          @level += 1 unless @last_ns_tk.class == TkALIAS || tk.class == TkELSIF
         elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
           @level -= 1
         end
