@@ -41,7 +41,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @return [String] the user-declared type of the struct member, or [Object] if
   #   the user did not define a type for this member.
   def return_type_from_tag(member_tag)
-    (member_tag && member_tag.types) ? "[#{member_tag.types.join(', ')}]" : "[Object]"
+    (member_tag && member_tag.types) ? member_tag.types : "Object"
   end
   
   ##
@@ -52,10 +52,12 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @param [ClassObject] klass the class whose members we're working with
   # @param [String] member the name of the member we're generating documentation for
   # @return [String] a docstring to be attached to the getter method for this member
-  def getter_docstring(klass, member)
+  def add_reader_tags(klass, new_method, member)
     member_tag = member_tag_for_member(klass, member, :read)
+    return_type = return_type_from_tag(member_tag)
     getter_doc_text = member_tag ? member_tag.text : "Returns the value of attribute #{member}"
-    getter_doc_text += "\n@return #{return_type_from_tag(member_tag)} the current value of #{member}"
+    new_method.docstring.replace(getter_doc_text)
+    new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the current value of #{member}", return_type)
   end
   
   ##
@@ -66,12 +68,13 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @param [ClassObject] klass the class whose members we're working with
   # @param [String] member the name of the member we're generating documentation for
   # @return [String] a docstring to be attached to the setter method for this member
-  def setter_docstring(klass, member)
+  def add_writer_tags(klass, new_method, member)
     member_tag = member_tag_for_member(klass, member, :write)
     return_type = return_type_from_tag(member_tag)
     setter_doc_text = member_tag ? member_tag.text : "Sets the attribute #{member}"
-    setter_doc_text += "\n@param #{return_type} value the value to set the attribute #{member} to."
-    setter_doc_text += "\n@return #{return_type} the newly set value"
+    new_method.docstring.replace(setter_doc_text)
+    new_method.docstring.add_tag YARD::Tags::Tag.new(:param, "the value to set the attribute #{member} to.", return_type, "value")
+    new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the newly set value", return_type)
   end
   
   ##
@@ -102,7 +105,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
       o.signature ||= "def #{member}=(value)"
       o.source ||= "#{o.signature}\n  @#{member} = value\nend"
     end
-    new_meth.docstring.replace setter_docstring(klass, member)
+    add_writer_tags(klass, new_meth, member)
     klass.attributes[:instance][member][:write] = new_meth
   end
   
@@ -118,7 +121,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
       o.signature ||= "def #{member}"
       o.source ||= "#{o.signature}\n  @#{member}\nend"
     end
-    new_meth.docstring.replace getter_docstring(klass, member)
+    add_reader_tags(klass, new_meth, member)
     klass.attributes[:instance][member][:read] = new_meth
   end
   
