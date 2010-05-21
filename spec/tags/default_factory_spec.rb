@@ -17,6 +17,7 @@ describe YARD::Tags::DefaultFactory, "extract_types_and_name_from_text" do
   
   it "should return the text before and after the type list" do
     parse_types(' b <String> description').should == ['b', ['String'], 'description']
+    parse_types('b c <String> description (test)').should == [nil, nil, 'b c <String> description (test)']
   end
   
   it "should handle a complex list of types" do

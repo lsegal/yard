@@ -110,20 +110,20 @@ module YARD
         [title, desc]
       end
       
-      # Parses a [], <>, {} or () block at the beginning of a line of text into a list of
-      # comma delimited values. Returns the text be
+      # Parses a [], <>, {} or () block at the beginning of a line of text 
+      # into a list of comma delimited values.
       # 
       # @example
       #   obj.parse_types('[String, Array<Hash, String>, nil]') # => [nil, ['String', 'Array<Hash, String>', 'nil'], ""]
       #   obj.parse_types('b<String> A string') # => ['b', ['String'], 'A string']
       # 
-      # @return [String, Array<String>] the text before the type list (or nil), followed by the type list parsed
-      #   into an array of strings, followed by the text following the type list.
-      # @return [nil] if no type list is present.
+      # @return [Array(String, Array<String>, String)] the text before the type 
+      #   list (or nil), followed by the type list parsed into an array of 
+      #   strings, followed by the text following the type list.
       def extract_types_and_name_from_text(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
         s, e = 0, 0
         before = ''
-        list, level = [''], 0
+        list, level, seen_space = [''], 0, false
         text.split(//).each_with_index do |c, i|
           if opening_types.include?(c)
             list.last << c if level > 0
@@ -136,7 +136,10 @@ module YARD
           elsif c == ',' && level == 1
             list.push ''
           elsif c =~ /\S/ && level == 0
+            break e = i if seen_space && list == ['']
             before << c
+          elsif c =~ /\s/ && level == 0 && !before.empty?
+            seen_space = true
           elsif level >= 1
             list.last << c
           end
