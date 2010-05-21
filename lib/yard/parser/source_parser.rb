@@ -149,8 +149,8 @@ module YARD
       def parse(content = __FILE__)
         case content
         when String
-          @file = content
-          content = convert_encoding(File.read_binary(content))
+          @file = File.cleanpath(content)
+          content = convert_encoding(File.read_binary(file))
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 

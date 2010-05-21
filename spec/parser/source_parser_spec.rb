@@ -89,6 +89,13 @@ describe YARD::Parser::SourceParser do
       File.should_receive(:read_binary).with('/path/to/file').and_return("")
       YARD.parse('/path/to/file')
     end
+    
+    it "should clean paths before parsing" do
+      File.should_receive(:open).and_return("")
+      parser = Parser::SourceParser.new(:ruby, true)
+      parser.parse('a//b//c')
+      parser.file.should == 'a/b/c'
+    end
 
     it "should parse files with '*' in them as globs and others as absolute paths" do
       Dir.should_receive(:[]).with('*.rb').and_return(['a.rb', 'b.rb'])
