@@ -111,6 +111,7 @@ describe YARD::CodeObjects::ModuleObject do
 
       @mod1.instance_mixins << @mod2
       @mod2.instance_mixins << @mod3
+      @mod3.instance_mixins << @mod4
       @mod1.instance_mixins << @mod4
     
       @proxy = P(:SomeProxyClass)

@@ -12,7 +12,7 @@ module YARD::CodeObjects
         next if m == self
         next m unless m.respond_to?(:inheritance_tree)
         m.inheritance_tree(true)
-      end.compact.flatten
+      end.compact.flatten.uniq
     end
   end
 end
