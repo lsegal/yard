@@ -255,11 +255,6 @@ module YARD
         end
       end
 
-      # @return [Integer]
-      def hash
-        path.hash
-      end
-      
       # Accesses a custom attribute on the object
       # @param [#to_s] key the name of the custom attribute
       # @return [Object, nil] the custom attribute or nil if not found.

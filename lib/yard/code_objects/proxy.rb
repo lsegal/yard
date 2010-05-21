@@ -127,11 +127,6 @@ module YARD
           false
         end
       end
-      
-      # @return [Integer]
-      def hash
-        path.hash
-      end
 
       # Returns the class name of the object the proxy is mimicking, if
       # resolved. Otherwise returns +Proxy+. 
