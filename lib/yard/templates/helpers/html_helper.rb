@@ -132,13 +132,18 @@ module YARD
           if object.is_a?(String)
             object
           else
-            value = linkify(name, title)
-            if value == name || value == title
+            link = linkify(name, title)
+            if link == name || link == title
               match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
               log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
               log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
             end
-            value
+            
+            if name =~ %r{://} || name =~ /^(mailto|file):/
+              link
+            else
+              "<tt>" + link + "</tt>"
+            end
           end
         end
       end
@@ -191,8 +196,7 @@ module YARD
         return title if obj.is_a?(CodeObjects::Proxy)
               
         link = url_for(obj, anchor, relative)
-        link = link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
-        "<tt>" + link + "</tt>"
+        link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
       end
       
       def link_url(url, title = nil, params = {})
