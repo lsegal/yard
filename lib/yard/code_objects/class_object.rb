@@ -45,7 +45,7 @@ module YARD::CodeObjects
       [self] + list.map do |m|
         next m unless m.respond_to?(:inheritance_tree)
         m.inheritance_tree(include_mods)
-      end.flatten
+      end.flatten.uniq
     end
     
     # Returns the list of methods matching the options hash. Returns

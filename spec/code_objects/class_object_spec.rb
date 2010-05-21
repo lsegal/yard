@@ -6,6 +6,7 @@ describe YARD::CodeObjects::ClassObject do
       Registry.clear
       @mixin = ModuleObject.new(:root, :SomeMixin)
       @mixin2 = ModuleObject.new(:root, :SomeMixin2)
+      @mixin2.instance_mixins << @mixin
       @mixin3 = ModuleObject.new(:root, :SomeMixin3)
       @mixin4 = ModuleObject.new(:root, :SomeMixin4)
       @mixin2.instance_mixins << @mixin3

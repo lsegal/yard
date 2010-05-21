@@ -254,6 +254,11 @@ module YARD
           super
         end
       end
+
+      # @return [Integer]
+      def hash
+        path.hash
+      end
       
       # Accesses a custom attribute on the object
       # @param [#to_s] key the name of the custom attribute
