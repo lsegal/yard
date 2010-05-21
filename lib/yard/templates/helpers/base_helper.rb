@@ -14,9 +14,15 @@ module YARD::Templates::Helpers
     end
     
     def linkify(*args) 
-      # The :// character sequence exists in no valid object path but just about every URL scheme.
-      if args.first.is_a?(String) && args.first.include?("://")
-        link_url(*args)
+      if args.first.is_a?(String)
+        case args.first
+        when %r{://}, /^mailto:/
+          link_url(args[0], args[1], {:target => '_parent'}.merge(args[2]||{}))
+        when /^file:(\S+?)(?:#(\S+))?$/
+          link_file($1, args[1] ? args[1] : $1, $2)
+        else
+          link_object(*args)
+        end
       else
         link_object(*args)
       end
@@ -35,8 +41,12 @@ module YARD::Templates::Helpers
       end
     end
     
-    def link_url(url)
+    def link_url(url, title = nil, params = nil)
       url
+    end
+    
+    def link_file(filename, title = nil, anchor = nil)
+      filename
     end
     
     def format_types(list, brackets = true)

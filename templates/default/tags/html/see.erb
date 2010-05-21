@@ -2,7 +2,7 @@
   <h3>See Also:</h3>
   <ul class="see">
     <% for tag in object.tags(:see) %>
-      <li><%= linkify(tag.name, tag.text || tag.name) %></li>
+      <li><%= linkify(tag.name, tag.text) %></li>
     <% end %>
   </ul>
 <% end %>

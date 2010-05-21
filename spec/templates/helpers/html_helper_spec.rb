@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
 
 describe YARD::Templates::Helpers::HtmlHelper do
+  include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper
 
@@ -100,7 +101,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify("A\nB", :textile).should_not include("<br")
     end
   end
-
+  
   describe "#link_object" do
     before do
       stub!(:object).and_return(CodeObjects::NamespaceObject.new(nil, :YARD))

@@ -122,34 +122,23 @@ module YARD
       def resolve_links(text)
         code_tags = 0
         text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
-          tag = $2
-          closed = $1
+          closed, tag, name, title = $1, $2, $3, $4
           if tag
             code_tags += (closed ? -1 : 1)
             next str
           end
           next str unless code_tags == 0
           
-          name = $3
-          title = $4 || name
-
-          case name
-          when %r{://}, /^mailto:/
-            link_url(name, title, :target => '_parent')
-          when /^file:(\S+?)(?:#(\S+))?$/
-            link_file($1, title == name ? $1 : title, $2)
+          if object.is_a?(String)
+            object
           else
-            if object.is_a?(String)
-              obj = name
-            else
-              obj = Registry.resolve(object, name, true, true)
-              if obj.is_a?(CodeObjects::Proxy)
-                match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
-                log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{obj.path} from text" + (match ? ":" : ".")
-                log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
-              end
-              "<tt>" + linkify(obj, title) + "</tt>" 
+            value = linkify(name, title)
+            if value == name || value == title
+              match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
+              log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
+              log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
             end
+            value
           end
         end
       end
@@ -199,17 +188,18 @@ module YARD
           title = h(obj.to_s)
         end
         return title unless serializer
-
         return title if obj.is_a?(CodeObjects::Proxy)
-      
+              
         link = url_for(obj, anchor, relative)
-        link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
+        link = link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
+        "<tt>" + link + "</tt>"
       end
       
       def link_url(url, title = nil, params = {})
+        title ||= url
         params = SymbolHash.new(false).update(
           :href => url,
-          :title  => h(title || url)
+          :title  => h(title)
         ).update(params)
         "<a #{tag_attrs(params)}>#{title}</a>"
       end

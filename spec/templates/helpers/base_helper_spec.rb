@@ -63,6 +63,23 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
   end
   
+  describe '#linkify' do
+    it "should call #link_url for mailto: links" do
+      should_receive(:link_url)
+      linkify("mailto:steve@example.com")
+    end
+    
+    it "should call #link_url for URL schemes (http://)" do
+      should_receive(:link_url)
+      linkify("http://example.com")
+    end
+    
+    it "should call #link_file for file: links" do
+      should_receive(:link_file).with('Filename', 'Filename', 'anchor')
+      linkify("file:Filename#anchor")
+    end
+  end
+  
   describe '#format_types' do
     it "should return the list of types separated by commas surrounded by brackets" do
       format_types(['a', 'b', 'c']).should == '(a, b, c)'
@@ -122,7 +139,7 @@ describe YARD::Templates::Helpers::BaseHelper do
   
     it "should pass off to #link_url if argument is recognized as a URL" do
       url = "http://yardoc.org/"
-      should_receive(:link_url).with(url)
+      should_receive(:link_url).with(url, nil, {:target => '_parent'})
       linkify url
     end
   end
