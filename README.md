@@ -6,7 +6,7 @@ YARD Release 0.5.4 "The Longest" (Mar 22nd 2010)
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: Nathan Weizenbaum, Yehuda Katz, Denis Defreyne, Postmodern, 
-                  Michael Edgar    
+Michael Edgar    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
 
