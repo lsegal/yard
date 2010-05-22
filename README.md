@@ -1,12 +1,14 @@
 YARD Release 0.5.4 "The Longest" (Mar 22nd 2010)
 ================================================
 
-**Homepage**:  [http://yardoc.org](http://yardoc.org)   
-**IRC**:       **Join us on IRC in #yard on irc.freenode.net!**   
-**Git**:       [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
-**Author**:    Loren Segal   
-**Copyright**: 2007-2010
-**License**:   MIT License
+**Homepage**:     [http://yardoc.org](http://yardoc.org)   
+**IRC**:          **Join us on IRC in #yard on irc.freenode.net!**   
+**Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
+**Author**:       Loren Segal  
+**Contributors**: Nathan Weizenbaum, Yehuda Katz, Denis Defreyne, Postmodern, 
+                  Michael Edgar    
+**Copyright**:    2007-2010    
+**License**:      MIT License    
 
 
 SYNOPSIS
@@ -221,6 +223,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 CHANGELOG
 ---------
+
+- **May.22.10**: 0.5.5 release
+    - Various bug fixes
 
 - **March.22.10**: 0.5.4 release
     - See {file:docs/WhatsNew.md what's new document} for changes
