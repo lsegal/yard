@@ -150,6 +150,9 @@ module YARD
       define_tag "Overloads",         :overload,    OverloadTag
       define_tag "Private",           :private
       define_tag "Abstract",          :abstract
+      define_tag "Attribute",         :attr,         :with_types_and_name
+      define_tag "Attribute Getter",  :attr_reader,  :with_types_and_name
+      define_tag "Attribute Setter",  :attr_writer,  :with_types_and_name
     end
   end
 end

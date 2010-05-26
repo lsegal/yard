@@ -109,4 +109,125 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   it "should not overwrite docstring with an empty one" do
     Registry.at(:Zebra).docstring.should == "Docstring 2"
   end
+  
+  it "should turn 'class Const < Struct.new(:sym)' into class Const with attr :sym" do
+    obj = Registry.at("Point")
+    obj.should be_kind_of(CodeObjects::ClassObject)
+    attrs = obj.attributes[:instance]
+    [:x, :y, :z].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+  end
+
+  it "should turn 'class Const < Struct.new('Name', :sym)' into class Const with attr :sym" do
+    obj = Registry.at("AnotherPoint")
+    obj.should be_kind_of(CodeObjects::ClassObject)
+    attrs = obj.attributes[:instance]
+    [:a, :b, :c].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+
+    Registry.at("XPoint").should be_nil
+  end
+  
+  it "should create a Struct::Name class when class Const < Struct.new('Name', :sym) is found" do
+    obj = Registry.at("Struct::XPoint")
+    obj.should_not be_nil
+  end
+  
+  it "should attach attribtues to the generated Struct::Name class when Struct.new('Name') is used" do
+    obj = Registry.at("Struct::XPoint")
+    attrs = obj.attributes[:instance]
+    [:a, :b, :c].each do |key|
+      attrs.should have_key(key)
+      attrs[key][:read].should_not be_nil
+      attrs[key][:write].should_not be_nil
+    end
+  end
+  
+  it "should use @attr to set attribute descriptions on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#input")
+    obj.docstring.should == "the input stream"
+  end
+  
+  it "should use @attr to set attribute types on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#someproc")
+    obj.should_not be_nil
+    obj.tag(:return).should_not be_nil
+    obj.tag(:return).types.should == ["Proc", "#call"]
+  end
+  
+  it "should default types unspecified by @attr to Object on Struct subclasses" do
+    obj = Registry.at("DoccedStruct#mode")
+    obj.should_not be_nil
+    obj.tag(:return).should_not be_nil
+    obj.tag(:return).types.should == ["Object"]
+  end
+  
+  it "should create parameters for writers of Struct subclass's attributes" do
+    obj = Registry.at("DoccedStruct#input=")
+    obj.tags(:param).size.should == 1
+    obj.tag(:param).types.should == ["IO"]
+  end
+  
+  it "defines both readers and writers when @attr is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:first][:read].should_not be_nil
+    attrs[:first][:write].should_not be_nil
+  end
+  
+  it "defines only a reader when only @attr_reader is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:second][:read].should_not be_nil
+    attrs[:second][:write].should be_nil
+  end
+  
+  it "defines only a writer when only @attr_writer is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:third][:read].should be_nil
+    attrs[:third][:write].should_not be_nil
+  end
+  
+  it "defines a reader with correct return types when @attr_reader is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct#second")
+    obj.tag(:return).types.should == ["Fixnum"]
+  end
+  
+  it "defines a writer with correct parameter types when @attr_writer is used on Structs" do
+    obj = Registry.at("SemiDoccedStruct#third=")
+    obj.tag(:param).types.should == ["Array"]
+  end
+  
+  it "defines a reader and a writer when both @attr_reader and @attr_writer are used" do
+    obj = Registry.at("SemiDoccedStruct")
+    attrs = obj.attributes[:instance]
+    attrs[:fourth][:read].should_not be_nil
+    attrs[:fourth][:write].should_not be_nil
+  end
+  
+  it "uses @attr_reader for the getter when both @attr_reader and @attr_writer are given" do
+    obj = Registry.at("SemiDoccedStruct#fourth")
+    obj.tag(:return).types.should == ["#read"]
+  end
+  
+  it "uses @attr_writer for the setter when both @attr_reader and @attr_writer are given" do
+    obj = Registry.at("SemiDoccedStruct#fourth=")
+    obj.tag(:param).types.should == ["IO"]
+  end
+  
+  it "extracts text from @attr_reader" do
+    Registry.at("SemiDoccedStruct#fourth").docstring.should == "returns a proc that reads"
+  end
+  
+  it "extracts text from @attr_writer" do
+    Registry.at("SemiDoccedStruct#fourth=").docstring.should == "sets the proc that writes stuff"
+  end
+    
 end

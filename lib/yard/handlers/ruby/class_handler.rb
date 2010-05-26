@@ -1,4 +1,5 @@
 class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
+  include YARD::Handlers::Ruby::StructHandlerMethods
   namespace_only
   handles :class, :sclass
   
@@ -6,12 +7,17 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     if statement.type == :class
       classname = statement[0].source
       superclass = parse_superclass(statement[1])
+      if superclass == "Struct"
+        is_a_struct = true
+        superclass = struct_superclass_name(statement[1]) # refine the superclass if possible
+        create_struct_superclass(superclass, statement[1])
+      end
       undocsuper = statement[1] && superclass.nil?
-
       klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
+      parse_struct_superclass(klass, statement[1]) if is_a_struct
       parse_block(statement[2], namespace: klass)
        
       if undocsuper
@@ -47,6 +53,40 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   end
   
   private
+  
+  # Extract the parameters from the Struct.new AST node, returning them as a list
+  # of strings
+  #
+  # @param [MethodCallNode] superclass the AST node for the Struct.new call
+  # @return [Array<String>] the member names to generate methods for
+  def extract_parameters(superclass)
+    members = superclass.parameters.select {|x| x && x.type == :symbol_literal}
+    members.map! {|x| x.source.strip[1..-1]}
+    members
+  end
+  
+  def create_struct_superclass(superclass, superclass_def)
+    return if superclass == "Struct"
+    the_super = register ClassObject.new(P("Struct"), superclass[8..-1]) do |o|
+      o.superclass = "Struct"
+    end
+    parse_struct_superclass(the_super, superclass_def)
+    the_super
+  end
+  
+  def struct_superclass_name(superclass)
+    first = superclass.parameters.first
+    if first.type == :string_literal && first[0].type == :string_content && first[0].size == 1
+      return "Struct::#{first[0][0][0]}"
+    end
+    "Struct"
+  end
+  
+  def parse_struct_superclass(klass, superclass)
+    return unless superclass.parameters
+    members = extract_parameters(superclass)
+    create_attributes(klass, members)
+  end
   
   def parse_superclass(superclass)
     return nil unless superclass

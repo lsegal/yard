@@ -120,6 +120,21 @@ A list of common tags and example usage is below:
     implementor information.
     
         @abstract Subclass and override {#run} to implement a custom Threadable class.
+        
+  * `@attr`: Declares an attribute from the docstring of a class. Meant to be
+    used on Struct classes (classes that inherit Struct).
+    
+        @attr [Types] attribute_name a full description of the attribute
+        
+  * `@attr_reader`: Declares a readonly attribute from the docstring of a class.
+    Meant to be used on Struct classes (classes that inherit Struct). See `@attr`.
+    
+        @attr_reader [Types] name description of a readonly attribute
+        
+  * `@attr_writer`: Declares a writeonly attribute from the docstring of class.
+    Meant to be used on Struct classes (classes that inherit Struct). See `@attr`.
+    
+        @attr_writer [Types] name description of writeonly attribute
 
   * `@author`: List the author(s) of a class/method
 
