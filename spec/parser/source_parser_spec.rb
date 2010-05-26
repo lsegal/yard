@@ -58,6 +58,17 @@ describe YARD::Parser::SourceParser do
       Registry.at('Hello2#x').docstring.should == "ANOTHER PASS"
     end
     
+    it "should take preceeding comments only if they exist" do
+      YARD.parse_string <<-eof
+        # PASS
+        module Hello # FAIL
+          HELLO
+        end
+      eof
+
+      Registry.at(:Hello).docstring.should == "PASS"
+    end
+    
     it "should handle =begin/=end style comments" do
       YARD.parse_string "=begin\nfoo\nbar\n=end\nclass Foo; end\n"
       Registry.at(:Foo).docstring.should == "foo\nbar"

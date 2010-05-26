@@ -340,7 +340,7 @@ module YARD
         def insert_comments
           root.traverse do |node|
             next if node.type == :list || node.parent.type != :list
-            node.line.downto(node.line - 2) do |line|
+            (node.line - 2).upto(node.line) do |line|
               comment = @comments[line]
               if comment && !comment.empty?
                 node.docstring = comment
