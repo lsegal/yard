@@ -1,17 +1,18 @@
-YARD Release 0.5.5 "The Longest" (May 22nd 2010)
-================================================
+YARD: Yay! A Ruby Documentation Tool
+====================================
 
 **Homepage**:     [http://yardoc.org](http://yardoc.org)   
-**IRC**:          **Join us on IRC in #yard on irc.freenode.net!**   
+**IRC**:          [irc://irc.freenode.net/yard](irc.freenode.net / #yard)    
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: Nathan Weizenbaum, Yehuda Katz, Denis Defreyne, Postmodern, 
 Michael Edgar    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
+**Latest Version**: 0.5.5 (codename "The Longest")    
+**Release Date**: May 22nd 2010    
 
-
-SYNOPSIS
+Synopsis
 --------
 
 YARD is a documentation generation tool for the Ruby programming language. 
@@ -21,7 +22,7 @@ custom Ruby constructs such as custom class level definitions. Below is a 
 summary of some of YARD's notable features.
 
 
-FEATURE LIST
+Feature List
 ------------
                                                                               
 **1. RDoc/SimpleMarkup Formatting Compatibility**: YARD is made to be compatible 
@@ -46,7 +47,6 @@ describing this data in the body of the description, a developer may formally 
 declare the parameter or return type(s) in a single line. Consider the 
 following Yardoc'd method: 
 
-     ## 
      # Reverses the contents of a String or IO object. 
      # 
      # @param [String, #read] contents the contents to reverse 
@@ -97,7 +97,7 @@ exploiting this raw data format would be to write tools that can auto generate
 test cases, for example, or show possible unhandled exceptions in code. 
                                                                               
 
-USAGE
+Usage
 -----
 
 There are a couple of ways to use YARD. The first is via command-line, and the
@@ -221,7 +221,7 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
     $ yard-graph --protected --full --dependencies
 
 
-CHANGELOG
+Changelog
 ---------
 
 - **May.22.10**: 0.5.5 release
@@ -293,7 +293,7 @@ CHANGELOG
   power of YARD and what to expect from the syntax (Yardoc style meta tags).    
                                                           
 
-COPYRIGHT
+Copyright
 ---------
 
 YARD &copy; 2007-2010 by [Loren Segal](mailto:lsegal@soen.ca). YARD is 
