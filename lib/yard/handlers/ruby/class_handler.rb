@@ -9,7 +9,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       superclass = parse_superclass(statement[1])
       if superclass == "Struct"
         is_a_struct = true
-        superclass = struct_superclass_name(statement[1]) #refine the superclass if possible
+        superclass = struct_superclass_name(statement[1]) # refine the superclass if possible
         create_struct_superclass(superclass, statement[1])
       end
       undocsuper = statement[1] && superclass.nil?
@@ -54,7 +54,6 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   
   private
   
-  ##
   # Extract the parameters from the Struct.new AST node, returning them as a list
   # of strings
   #

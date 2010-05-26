@@ -1,20 +1,18 @@
 module YARD::Handlers::Ruby::StructHandlerMethods
   include YARD::CodeObjects
   
-  ##
   # Extracts the user's defined @member tag for a given class and its member. Returns
   # nil if the user did not define a @member tag for this struct entry.
   #
   # @param [ClassObject] klass the class whose tags we're searching
   # @param [String] member the name of the struct member we need
-  # @param [Symbol] type (:read) reader method, or writer method?
-  # @return [YARD::Tags::Tag, nil] the tag matching the request, or nil if not found
+  # @param [Symbol] type reader method, or writer method?
+  # @return [Tags::Tag, nil] the tag matching the request, or nil if not found
   def member_tag_for_member(klass, member, type = :read)
     specific_tag = type == :read ? :attr_reader : :attr_writer
     (klass.tags(specific_tag) + klass.tags(:attr)).find {|tag| tag.name == member}
   end
   
-  ##
   # Determines whether to create an attribute method based on the class's
   # tags.
   #
@@ -25,14 +23,10 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   def create_member_method?(klass, member, type = :read)
     return true if (klass.tags(:attr) + klass.tags(:attr_reader) + klass.tags(:attr_writer)).empty?
     return true if member_tag_for_member(klass, member, type)
-    if type == :read
-      return !member_tag_for_member(klass, member, :write)
-    else
-      return !member_tag_for_member(klass, member, :read)
-    end
+    return !member_tag_for_member(klass, member, :write) if type == :read
+    return !member_tag_for_member(klass, member, :read)
   end
   
-  ##
   # Gets the return type for the member in a nicely formatted string. Used
   # to be injected into auto-generated docstrings.
   #
@@ -44,7 +38,6 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     (member_tag && member_tag.types) ? member_tag.types : "Object"
   end
   
-  ##
   # Creates the auto-generated docstring for the getter method of a struct's
   # member. This is used so the generated documentation will look just like that
   # of an attribute defined using attr_accessor.
@@ -60,7 +53,6 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the current value of #{member}", return_type)
   end
   
-  ##
   # Creates the auto-generated docstring for the setter method of a struct's
   # member. This is used so the generated documentation will look just like that
   # of an attribute defined using attr_accessor.
@@ -77,7 +69,6 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the newly set value", return_type)
   end
   
-  ##
   # Creates and registers a class object with the given name and superclass name.
   # Returns it for further use.
   #
@@ -91,7 +82,6 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     end
   end
   
-  ##
   # Creates the setter (writer) method and attaches it to the class as an attribute.
   # Also sets up the docstring to prettify the documentation output.
   #
@@ -109,14 +99,12 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     klass.attributes[:instance][member][:write] = new_meth
   end
   
-  ##
   # Creates the getter (reader) method and attaches it to the class as an attribute.
   # Also sets up the docstring to prettify the documentation output.
   #
   # @param [ClassObject] klass the class to attach the method to
   # @param [String] member the name of the member we're generating a method for
   def create_reader(klass, member)
-    # Do the getter
     new_meth = register MethodObject.new(klass, member, :instance) do |o|
       o.signature ||= "def #{member}"
       o.source ||= "#{o.signature}\n  @#{member}\nend"
@@ -125,7 +113,6 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     klass.attributes[:instance][member][:read] = new_meth
   end
   
-  ##
   # Creates the given member methods and attaches them to the given ClassObject.
   #
   # @param [ClassObject] klass the class to generate attributes for
@@ -133,9 +120,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   def create_attributes(klass, members)
     # For each parameter, add reader and writers
     members.each do |member|
-      # Ripped off from YARD's attribute handling source
       klass.attributes[:instance][member] = SymbolHash[:read => nil, :write => nil]
-      
       create_writer klass, member if create_member_method?(klass, member, :write)
       create_reader klass, member if create_member_method?(klass, member, :read)
     end

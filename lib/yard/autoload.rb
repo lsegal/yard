@@ -82,9 +82,9 @@ module YARD
       autoload :MixinHandler,            __p('handlers/ruby/mixin_handler')
       autoload :ModuleHandler,           __p('handlers/ruby/module_handler')
       autoload :ProcessHandler,          __p('handlers/ruby/process_handler')
+      autoload :StructHandlerMethods,    __p('handlers/ruby/struct_handler_methods')
       autoload :VisibilityHandler,       __p('handlers/ruby/visibility_handler')
       autoload :YieldHandler,            __p('handlers/ruby/yield_handler')
-      autoload :StructHandlerMethods,    __p('handlers/ruby/struct_handler_methods')
     end
 
     autoload :Base,                      __p('handlers/base')

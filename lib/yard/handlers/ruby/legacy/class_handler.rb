@@ -52,7 +52,6 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   
   private
   
-  ##
   # Extracts the parameter list from the Struct.new declaration and returns it
   # formatted as a list of member names. Expects the user will have used symbols
   # to define the struct member names
