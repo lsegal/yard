@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/lib/yard'
+require 'rbconfig'
 
-WINDOWS = (RUBY_PLATFORM =~ /win32|cygwin/ ? true : false) rescue false
+WINDOWS = (Config::CONFIG['host_os'] =~ /mingw|win32|cygwin/ ? true : false) rescue false
 SUDO = WINDOWS ? '' : 'sudo'
 
 task :default => :specs
