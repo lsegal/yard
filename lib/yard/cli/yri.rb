@@ -29,7 +29,10 @@ module YARD
         
         @serializer ||= YARD::Serializers::ProcessSerializer.new('less')
         
-        if object = find_object(@name)
+        if @name.nil? || @name.strip.empty?
+          print_usage
+          exit(1)
+        elsif object = find_object(@name)
           print_object(object)
         else
           STDERR.puts "No documentation for `#{@name}'"
@@ -38,6 +41,11 @@ module YARD
       end
       
       protected
+      
+      def print_usage
+        puts "Usage: yri [options] <Path to object>"
+        puts "See yri --help for more options."
+      end
       
       def cache_object(name, path)
         return if path == Registry.yardoc_file
@@ -112,7 +120,8 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         opts = OptionParser.new
-
+        opts.banner = "Usage: yri [options] <Path to object>"
+        opts.separator "Example: yri String#gsub"
         opts.separator ""
         opts.separator "General Options:"
 
