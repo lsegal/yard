@@ -1,3 +1,5 @@
+require 'rbconfig'
+
 module YARD
   module CLI
     # A tool to view documentation in the console like `ri`
@@ -27,7 +29,11 @@ module YARD
       def run(*args)
         optparse(*args)
         
-        @serializer ||= YARD::Serializers::ProcessSerializer.new('less')
+        if Config::CONFIG['host_os'] =~ /mingw|win32/
+          @serializer ||= YARD::Serializers::StdoutSerializer.new
+        else
+          @serializer ||= YARD::Serializers::ProcessSerializer.new('less')
+        end
         
         if @name.nil? || @name.strip.empty?
           print_usage
