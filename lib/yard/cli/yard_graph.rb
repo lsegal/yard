@@ -13,11 +13,7 @@ module YARD
       
       # The set of objects to include in the graph.
       attr_reader :objects
-
-      # Helper method to run the utility on an instance.
-      # @see #run
-      def self.run(*args) new.run(*args) end
-        
+              
       # Creates a new instance of the command-line utility
       def initialize
         super

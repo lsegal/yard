@@ -7,6 +7,10 @@ module YARD
     # 
     # @abstract
     class Base
+      # Helper method to run the utility on an instance.
+      # @see #run
+      def self.run(*args) new.run(*args) end
+      
       def initialize
         log.show_backtraces = false
       end

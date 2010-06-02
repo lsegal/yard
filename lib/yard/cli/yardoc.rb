@@ -36,10 +36,6 @@ module YARD
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
       
-      # Helper method to create an instance and run the utility
-      # @see #run
-      def self.run(*args) new.run(*args) end
-        
       # Creates a new instance of the commandline utility
       def initialize
         super

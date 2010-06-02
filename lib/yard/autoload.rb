@@ -4,6 +4,7 @@ def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
 module YARD
   module CLI # Namespace for command-line interface components
     autoload :Base,       __p('cli/base')
+    autoload :Server,     __p('cli/server')
     autoload :YardGraph,  __p('cli/yard_graph')
     autoload :Yardoc,     __p('cli/yardoc')
     autoload :YRI,        __p('cli/yri')
@@ -122,6 +123,13 @@ module YARD
     autoload :ProcessSerializer,    __p('serializers/process_serializer')
     autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
     autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
+  end
+  
+  module Server
+    autoload :DocServer,            __p('server/doc_server')
+    autoload :DocServerSerializer,  __p('server/doc_server_serializer')
+    autoload :DocServerUrlHelper,   __p('server/doc_server_url_helper')
+    autoload :WebrickAdapter,       __p('server/webrick_adapter')
   end
   
   module Tags # Namespace for Tag components
