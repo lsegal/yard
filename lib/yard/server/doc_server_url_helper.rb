@@ -7,7 +7,7 @@ module YARD
       end
 
       def url_for_file(filename, anchor = nil)
-        "/docs/#{@project}/file:" + filename.gsub(@project_path.to_s + '/', '') + 
+        "/docs/#{@project}/file:" + filename.sub(%r{^#{@project_path.to_s}/}, '') + 
           (anchor ? "##{anchor}" : "")
       end
     end

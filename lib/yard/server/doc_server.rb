@@ -9,6 +9,26 @@ module YARD
       include Templates::Helpers::ModuleHelper
       include DocServerUrlHelper
       
+      class << self
+        attr_accessor :static_paths
+        attr_accessor :mime_types
+      end
+      
+      self.static_paths = [
+        File.join(YARD::TEMPLATE_ROOT, 'default', 'fulldoc', 'html'),
+        File.join(File.dirname(__FILE__), 'templates', 'default', 'fulldoc', 'html')
+      ]
+      
+      self.mime_types = {
+        :js => 'text/javascript',
+        :css => 'text/css',
+        :png => 'image/png',
+        :jpeg => 'image/jpeg',
+        :jpg => 'image/jpg',
+        :gif => 'image/gif',
+        :bmp => 'image/bmp'
+      }
+      
       # @return [Request] request object
       attr_accessor :request
       
@@ -84,15 +104,29 @@ module YARD
 
         ppath = project_path
         filename = File.cleanpath(File.join(project_path, file))
-        #p filename
-        #raise FileLoadError if !File.file?(filename) || filename.index(project_path) != 0
+        raise FileLoadError if !File.file?(filename)
         if filename =~ /\.(jpe?g|gif|png|bmp)$/i
-          headers['Content-Type'] = "image/#{$1}"
+          headers['Content-Type'] = self.class.mime_types[$1.downcase.to_sym] || 'text/html'
           cache IO.read(filename)
         else
           options.update(:object => Registry.root, :type => :layout, :file => filename)
           cache YARD::Templates::Engine.render(options)
         end
+      end
+      
+      def display_index
+        setup_project(true)
+
+        title = "Documentation for Project #{project || File.basename(Dir.pwd)}"
+        title = options[:title] || title
+        options.update(
+          :object => '_index.html',
+          :objects => Registry.all(:module, :class),
+          :title => title,
+          :type => :layout
+        )
+
+        cache Templates::Engine.render(options)
       end
       
       def display_list(type)
@@ -130,7 +164,6 @@ module YARD
         end
         
         options.update(
-          :project => project,
           :page_title => page_title,
           :main_url => main_url,
           :template => :doc_server,
@@ -147,8 +180,10 @@ module YARD
           display_frame(components.join('/'))
         elsif components.first =~ /^file:/
           display_file(components.join('/').sub(/^file:/, ''))
-        else
+        elsif components.first && !components.first.empty?
           display_object(components.join('/').sub(':', '#').gsub('/', '::'))
+        else
+          display_index
         end
       end
       
@@ -161,13 +196,16 @@ module YARD
 
       def handle_static
         path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
-        path = File.join(YARD::TEMPLATE_ROOT, "default", "fulldoc", "html", path)
-        if File.exist?(path)
-          headers['Content-Type'] = 'text/' + request.path.split('.').last
-          self.body = File.read(path)
-        else
-          self.status = 404
+        self.class.static_paths.each do |path_prefix|
+          file = File.join(path_prefix, path)
+          if File.exist?(file)
+            ext = request.path.split('.').last
+            headers['Content-Type'] = self.class.mime_types[ext.downcase.to_sym] || 'text/html'
+            self.body = File.read(file)
+            return
+          end
         end
+        self.status = 404
       end
       
       def cache(data)
