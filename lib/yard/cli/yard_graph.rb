@@ -91,7 +91,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
 
-        @verifier = Verfier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
+        @verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
         if args.first
           @objects = args.map {|o| Registry.at(o) }.compact
         else
