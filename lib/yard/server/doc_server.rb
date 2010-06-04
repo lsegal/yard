@@ -96,7 +96,7 @@ module YARD
 
         object = Registry.at(path =~ /^toplevel(?:::|#|$)/ ? "" : path)
         options.update(:type => :layout)
-        cache object.format(options)
+        render(object)
       end
       
       def display_file(file)
@@ -107,10 +107,10 @@ module YARD
         raise FileLoadError if !File.file?(filename)
         if filename =~ /\.(jpe?g|gif|png|bmp)$/i
           headers['Content-Type'] = self.class.mime_types[$1.downcase.to_sym] || 'text/html'
-          cache IO.read(filename)
+          render IO.read(filename)
         else
           options.update(:object => Registry.root, :type => :layout, :file => filename)
-          cache YARD::Templates::Engine.render(options)
+          render
         end
       end
       
@@ -125,8 +125,7 @@ module YARD
           :title => title,
           :type => :layout
         )
-
-        cache Templates::Engine.render(options)
+        render
       end
       
       def display_list(type)
@@ -146,7 +145,7 @@ module YARD
 
         options.update(:items => items, :template => :doc_server, 
                        :list_type => type, :type => :full_list)
-        cache Templates::Engine.render(options)
+        render
       end
       
       def display_frame(path)
@@ -169,7 +168,7 @@ module YARD
           :template => :doc_server,
           :type => :frames,
         )
-        cache Templates::Engine.render(options)
+        render
       end
       
       def handle_docs(components)
@@ -212,6 +211,16 @@ module YARD
         self.body = data
       end
       
+      def render(object = nil)
+        case object
+        when CodeObjects::Base
+          cache object.format(options)
+        when nil
+          cache Templates::Engine.render(options)
+        else
+          cache object
+        end
+      end
       private
       
       def setup_yardopts
