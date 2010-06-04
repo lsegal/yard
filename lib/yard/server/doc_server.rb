@@ -250,6 +250,7 @@ module YARD
       private
       
       def setup_yardopts
+        return unless @project_changed || !@first_load
         yardopts_file = File.join(project_path, CLI::Yardoc::DEFAULT_YARDOPTS_FILE)
         yardoc = CLI::Yardoc.new
         yardoc.options_file = yardopts_file
