@@ -3,6 +3,7 @@ module YARD
     class ProjectLoadError < RuntimeError; end
     class FileLoadError < RuntimeError; end
     class ObjectLoadError < RuntimeError; end
+    class FinishRequest < RuntimeError; end
     
     class DocServer
       include Templates::Helpers::BaseHelper
@@ -81,7 +82,12 @@ module YARD
         self.headers = {'Content-Type' => 'text/html'}
         self.body = ''
         self.status = 200
-        parse_uri
+        
+        begin
+          parse_uri
+        rescue FinishRequest
+        end
+        
         [status, headers, body]
       end
       
@@ -171,6 +177,22 @@ module YARD
         render
       end
       
+      def display_project_list
+        if single_project
+          self.project = projects.first.first
+          self.yardoc_file = projects.first.last
+          return(display_index)
+        end
+        
+        
+        options.update(
+          :projects => projects,
+          :template => :doc_server,
+          :type => :project_list,
+        )
+        render
+      end
+      
       def handle_docs(components)
         setup_yardopts
 
@@ -256,11 +278,14 @@ module YARD
       
       def parse_uri
         components = request.path.gsub(%r{/+}, '/').split('/')[1..-1]
+        return display_project_list if components.nil? || components.empty?
+        
         command = components.shift
         last_project = project
         if single_project
-          self.project = nil
+          self.project = projects.first.first
           self.yardoc_file = projects.first.last
+          components.shift if components.first == project
         else
           self.project = components.shift
           self.yardoc_file = projects.assoc(project)
