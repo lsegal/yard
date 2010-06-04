@@ -214,6 +214,10 @@ module YARD
         type = components.first
         display_list(components.first.to_sym)
       end
+      
+      def handle_search
+        # search
+      end
 
       def handle_static
         path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
@@ -300,6 +304,8 @@ module YARD
           handle_docs(components)
         when 'list'
           handle_list(components) if components.first
+        when 'search'
+          handle_search
         else
           handle_static
         end
