@@ -247,6 +247,13 @@ module YARD
           cache object
         end
       end
+
+      def redirect(url)
+        headers['Location'] = url
+        self.status = 302
+        raise FinishRequest
+      end
+      
       private
       
       def setup_yardopts
