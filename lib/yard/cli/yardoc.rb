@@ -104,7 +104,7 @@ module YARD
       # Parses the .yardopts file for default yard options
       # @return [void] 
       def yardopts
-        IO.read(options_file).shell_split
+        File.read_binary(options_file).shell_split
       rescue Errno::ENOENT
         []
       end
@@ -344,7 +344,7 @@ module YARD
           serialopts[:basepath] = dir
         end
         
-        opts.on('--charset ENC', 'Character set to use for HTML output (default is utf-8)') do |encoding|
+        opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
           begin
             Encoding.default_external = encoding
           rescue ArgumentError => e

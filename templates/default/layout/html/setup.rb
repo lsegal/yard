@@ -2,7 +2,7 @@ def init
   @breadcrumb = []
 
   if @file
-    @contents = File.read_binary(@file)
+    @contents = File.read(@file)
     @file = File.basename(@file)
     @fname = @file.gsub(/\.[^.]+$/, '')
     @breadcrumb_title = "File: " + @fname

@@ -73,6 +73,7 @@ module YARD
           html = fix_typewriter(html)
         end
 
+        html.force_encoding(Encoding.default_external) if RUBY19
         html = resolve_links(html)
         html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           str = $1

@@ -1,11 +1,14 @@
 module YARD
   module Templates
     module ErbCache
-      def self.method_for(filename)
+      def self.method_for(filename, &block)
         @methods ||= {}
         return @methods[filename] if @methods[filename]
         @methods[filename] = name = "_erb_cache_#{@methods.size}"
-        module_eval "def #{name}; #{yield.src.gsub(/\A#coding:.*$/, '')}; end", filename
+        erb = yield.src
+        encoding = erb[/\A(#coding:.*\r?\n)/, 1] || ''
+        module_eval "#{encoding}def #{name}; #{erb}; end", filename
+        
         name
       end
 
