@@ -219,7 +219,7 @@ module YARD
       # @return [Symbol] a parser type that matches the filename
       def parser_type_for_filename(filename)
         case (File.extname(filename)[1..-1] || "").downcase
-        when "c", "cpp", "cxx"
+        when "c", "cc", "cpp", "cxx"
           :c
         else # when "rb", "rbx", "erb"
           parser_type == :ruby18 ? :ruby18 : :ruby
