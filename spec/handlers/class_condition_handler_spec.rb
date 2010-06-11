@@ -43,4 +43,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
   it "should only parse else block if condition is literal integer == 0" do
     verify_method :n
   end
+  
+  it "should not fail on complex conditions" do
+    lambda { YARD.parse_string("if defined?(A) && defined?(B); puts 'hi' end") }.should_not raise_error
+  end
 end

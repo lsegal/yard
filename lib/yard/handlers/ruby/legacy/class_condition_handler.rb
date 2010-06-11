@@ -43,7 +43,11 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
       # *too* dangerous here since code is not actually executed.
       name = $1
       obj = YARD::Registry.resolve(namespace, name, true)
-      condition = true if obj || Object.instance_eval("defined? #{name}")
+      begin
+        condition = true if obj || Object.instance_eval("defined? #{name}")
+      rescue SyntaxError, NameError
+        condition = false
+      end
     when "true"
       condition = true
     when "false"
