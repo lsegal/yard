@@ -1,8 +1,60 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
+shared_examples_for "parser type registration" do
+  before do
+    class MyParser < Parser::Base; end
+  end
+  
+  after do
+    Parser::SourceParser.parser_types.delete(:my_parser)
+    Parser::SourceParser.parser_type_extensions.delete(:my_parser)
+  end
+end
+
 describe YARD::Parser::SourceParser do
   before do 
     Registry.clear
+  end
+  
+  describe '.register_parser_type' do
+    it_should_behave_like "parser type registration"
+    
+    it "should register a subclass of Parser::Base" do
+      parser = mock(:parser)
+      parser.should_receive(:parse)
+      MyParser.should_receive(:new).with('content', '(stdin)').and_return(parser)
+      Parser::SourceParser.register_parser_type(:my_parser, MyParser, 'myparser')
+      Parser::SourceParser.parse_string('content', :my_parser)
+    end
+    
+    it "should require class to be a subclass of Parser::Base" do
+      lambda { Parser::SourceParser.register_parser_type(:my_parser, String) }.should raise_error(ArgumentError)
+      lambda { Parser::SourceParser.register_parser_type(:my_parser, Parser::Base) }.should raise_error(ArgumentError)
+    end
+  end
+  
+  describe '.parser_type_for_extension' do 
+    it_should_behave_like "parser type registration"
+
+    it "should find an extension in a registered array of extensions" do
+      Parser::SourceParser.register_parser_type(:my_parser, MyParser, ['a', 'b', 'd'])
+      Parser::SourceParser.parser_type_for_extension('a').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('b').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('d').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('c').should_not == :my_parser
+    end
+    
+    it "should find an extension in a Regexp" do
+      Parser::SourceParser.register_parser_type(:my_parser, MyParser, /abc$/)
+      Parser::SourceParser.parser_type_for_extension('dabc').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('dabcd').should_not == :my_parser
+    end
+    
+    it "should find an extension in a String" do
+      Parser::SourceParser.register_parser_type(:my_parser, MyParser, "abc")
+      Parser::SourceParser.parser_type_for_extension('abc').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('abcd').should_not == :my_parser
+    end
   end
   
   describe '#parse_string' do

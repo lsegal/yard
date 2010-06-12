@@ -3,7 +3,19 @@ require 'ripper'
 module YARD
   module Parser
     module Ruby
-      class RubyParser < Ripper
+      # Ruby 1.9 parser
+      class RubyParser < Parser::Base
+        def initialize(source, filename)
+          @parser = RipperParser.new(source, filename)
+        end
+        
+        def parse; @parser.parse end
+        def tokenize; @parser.tokens end
+        def enumerator; @parser.enumerator end
+      end
+      
+      # Internal parser class
+      class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
         alias root ast
 

@@ -22,22 +22,19 @@ module YARD
     # also invokes handlers to process the parsed statements and generate
     # any code objects that may be recognized.
     # 
+    # == Custom Parsers
+    # SourceParser allows custom parsers to be registered and called when
+    # a certain filetype is recognized. To register a parser and hook it
+    # up to a set of file extensions, call {register_parser_type}
+    # 
+    # @see register_parser_type
     # @see Handlers::Base
     # @see CodeObjects::Base
     class SourceParser 
       class << self
-        # The default parser type to use for blocks of code. Change this
-        # attribute to apply a new parser type for all newly parsed
-        # blocks of code.
-        # 
-        # @return [Symbol] the parser type
-        attr_accessor :parser_type
-        undef parser_type=
+        # @return [Symbol] the default parser type (defaults to :ruby)
+        attr_reader :parser_type
         
-        # Sets the parser and makes sure it's a valid type
-        # 
-        # @param [Symbol] value the new parser type
-        # @return [void] 
         def parser_type=(value)
           @parser_type = validated_parser_type(value)
         end
@@ -86,6 +83,49 @@ module YARD
           new(ptype).tokenize(content)
         end
         
+        # Registers a new parser type.
+        # 
+        # @example Registering a parser for "java" files
+        #   SourceParser.register_parser_type :java, JavaParser, 'java'
+        # @param [Symbol] type a symbolic name for the parser type
+        # @param [Base] parser_klass a class that implements parsing and tokenization
+        # @param [Array<String>, String, Regexp] extensions a list of extensions or a
+        #   regex to match against the file extension
+        # @return [void]
+        # @see Parser::Base
+        def register_parser_type(type, parser_klass, extensions = nil)
+          unless Base > parser_klass
+            raise ArgumentError, "expecting parser_klass to be a subclass of YARD::Parser::Base"
+          end
+          parser_type_extensions[type.to_sym] = extensions if extensions
+          parser_types[type.to_sym] = parser_klass
+        end
+        
+        # @return [Hash{Symbol=>Object}] a list of registered parser types
+        def parser_types; @@parser_types ||= {} end
+        def parser_types=(value) @@parser_types = value end
+        
+        # @return [Hash] a list of registered parser type extensions
+        def parser_type_extensions; @@parser_type_extensions ||= {} end
+        def parser_type_extensions=(value) @@parser_type_extensions = value end
+
+        # Finds a parser type that is registered for the extension. If no
+        # type is found, the default Ruby type is returned.
+        # 
+        # @return [Symbol] the parser type to be used for the extension
+        def parser_type_for_extension(extension)
+          type = parser_type_extensions.find do |t, exts|
+            if exts.is_a?(Array)
+              exts.include?(extension)
+            elsif exts.is_a?(String)
+              exts == extension
+            elsif exts.is_a?(Regexp)
+              extension =~ exts
+            end
+          end
+          validated_parser_type(type ? type.first : :ruby)
+        end
+        
         # Returns the validated parser type. Basically, enforces that :ruby
         # type is never set from Ruby 1.8
         # 
@@ -94,7 +134,7 @@ module YARD
         def validated_parser_type(type)
           RUBY18 && type == :ruby ? :ruby18 : type
         end
-
+        
         private
         
         # Parses a list of files in a queue. If a {LoadOrderError} is caught,
@@ -123,6 +163,10 @@ module YARD
       end
 
       self.parser_type = :ruby
+      
+      register_parser_type :ruby,   Ruby::RubyParser if RUBY19
+      register_parser_type :ruby18, Ruby::Legacy::RubyParser
+      register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
       
       # The filename being parsed by the parser.
       attr_reader :file
@@ -163,7 +207,8 @@ module YARD
           content = content.read if content.respond_to? :read
         end
         
-        @parser = parse_statements(content)
+        @parser = parser_class.new(content, file)
+        @parser.parse
         post_process
         @parser
       rescue ArgumentError, NotImplementedError => e
@@ -177,16 +222,8 @@ module YARD
       # @param [String] content the block of code to tokenize
       # @return [Array] a list of tokens
       def tokenize(content)
-        case parser_type
-        when :c
-          raise NotImplementedError, "no support for C/C++ files"
-        when :ruby18
-          Ruby::Legacy::TokenList.new(content)
-        when :ruby
-          Ruby::RubyParser.parse(content).tokens
-        else
-          raise ArgumentError, "invalid parser type or unrecognized file"
-        end
+        @parser = parser_class.new(content, file)
+        @parser.tokenize
       end
       
       private
@@ -205,8 +242,9 @@ module YARD
       # @return [void] 
       def post_process
         return unless @parser.respond_to? :enumerator
+        return unless enumerator = @parser.enumerator
         post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
-        post.process(@parser.enumerator)
+        post.process(enumerator)
       end
 
       def parser_type=(value)
@@ -218,29 +256,15 @@ module YARD
       # @param [String] filename the filename to use to guess the parser type
       # @return [Symbol] a parser type that matches the filename
       def parser_type_for_filename(filename)
-        case (File.extname(filename)[1..-1] || "").downcase
-        when "c", "cc", "cpp", "cxx"
-          :c
-        else # when "rb", "rbx", "erb"
-          parser_type == :ruby18 ? :ruby18 : :ruby
-        end
+        ext = (File.extname(filename)[1..-1] || "").downcase
+        type = self.class.parser_type_for_extension(ext)
+        parser_type == :ruby18 && type == :ruby ? :ruby18 : type
       end
       
-      # Selects a parser to use to parse +content+.
-      # 
-      # @param [String] content the block of code to parse
-      # @return the resulting parser object
-      def parse_statements(content)
-        case parser_type
-        when :c
-          CParser.new(content, file).parse
-        when :ruby18
-          Ruby::Legacy::StatementList.new(content)
-        when :ruby
-          Ruby::RubyParser.parse(content, file)
-        else
-          raise ArgumentError, "invalid parser type or unrecognized file"
-        end
+      def parser_class
+        klass = self.class.parser_types[parser_type]
+        raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1] if !klass
+        klass
       end
     end
   end

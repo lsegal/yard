@@ -96,6 +96,8 @@ module YARD
   module Parser
     module Ruby # Ruby parsing components.
       module Legacy # Handles Ruby parsing in Ruby 1.8.
+        autoload :RipperParser,   __p('parser/ruby/legacy/ruby_parser')
+        autoload :RubyParser,     __p('parser/ruby/legacy/ruby_parser')
         autoload :RubyToken,      __p('parser/ruby/legacy/ruby_lex')
         autoload :Statement,      __p('parser/ruby/legacy/statement')
         autoload :StatementList,  __p('parser/ruby/legacy/statement_list')
@@ -106,6 +108,7 @@ module YARD
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
     end
 
+    autoload :Base,                __p('parser/base')
     autoload :CParser,             __p('parser/c_parser')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')

@@ -24,10 +24,6 @@ module YARD
         parse_statements
       end
       
-      def enumerator
-        self
-      end
-
       private
 
       def parse_statements

@@ -4,7 +4,7 @@
 
 module YARD
   module Parser
-    class CParser
+    class CParser < Base
       def initialize(source, file = '(stdin)')
         @file = file
         @namespaces = {}
@@ -16,6 +16,10 @@ module YARD
         parse_classes
         parse_methods
         parse_includes
+      end
+      
+      def tokenize
+        raise NotImplementedError, "no tokenization support for C/C++ files"
       end
       
       private
