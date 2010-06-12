@@ -6,6 +6,7 @@ class Gem::Specification
   overwrite_accessor(:has_rdoc) { @has_rdoc }
   overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   
+  undef has_yardoc=
   def has_yardoc=(value)
     @has_rdoc = 'yard'
   end
@@ -19,6 +20,7 @@ class Gem::Specification
     @has_rdoc && @has_rdoc != 'yard'
   end
   
+  undef has_yardoc?
   alias has_yardoc? has_yardoc
 end
 
