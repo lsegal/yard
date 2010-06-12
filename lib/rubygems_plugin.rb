@@ -76,6 +76,7 @@ unless defined? Gem::DocManager.load_yardoc
 
     def install_ri_yard
       install_ri_yard_orig if @spec.has_rdoc?
+      return if @spec.has_rdoc? == false
       return if @spec.has_yardoc?
       
       self.class.load_yardoc
