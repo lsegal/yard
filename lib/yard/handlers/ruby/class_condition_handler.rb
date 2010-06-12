@@ -43,7 +43,11 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
       # *too* dangerous here since code is not actually executed.
       name = statement.condition[0].source
       obj = YARD::Registry.resolve(namespace, name, true)
-      condition = true if obj || Object.instance_eval("defined? #{name}")
+      begin
+        condition = true if obj || Object.instance_eval("defined? #{name}")
+      rescue SyntaxError, NameError
+        condition = false
+      end
     when :var_ref
       var = statement.condition[0]
       if var == s(:kw, "true")

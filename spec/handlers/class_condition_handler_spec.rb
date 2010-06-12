@@ -46,5 +46,12 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
   
   it "should not fail on complex conditions" do
     lambda { YARD.parse_string("if defined?(A) && defined?(B); puts 'hi' end") }.should_not raise_error
+    lambda do 
+      YARD.parse_string(<<-eof)
+        (<<-TEST) unless defined?(ABCD_MODEL_TEST)
+          'String'
+        TEST
+      eof
+    end.should_not raise_error
   end
 end
