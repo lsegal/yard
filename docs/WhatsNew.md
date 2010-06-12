@@ -170,6 +170,19 @@ You can now access the "Class List", "Method List" and "File List" with the
 'c', 'm' and 'f' keyboard shortcuts in the default HTML template, allowing
 for keyboard-only navigation around YARD documentation.
 
+API for registering custom parsers (0.5.6)
+------------------------------------------
+
+You can now register parsers for custom source languages by calling the
+following method:
+
+    SourceParser.register_parser_type(:java, MyJavaParser, 'java')
+    
+The parser class MyJavaParser should be a subclass of {YARD::Parser::Base},
+and the last argument is a set of extensions (string, array or regexp). You
+can read more about registering parsers at the {YARD::Parser::SourceParser}
+class documentation.
+
 
 What's New in 0.4.x?
 ====================

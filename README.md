@@ -9,7 +9,7 @@ YARD: Yay! A Ruby Documentation Tool
 Michael Edgar    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.5.5 (codename "The Longest")    
+**Latest Version**: 0.5.6 (codename "The Longest")    
 **Release Date**: May 22nd 2010    
 
 Synopsis
@@ -223,6 +223,10 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **June.12.10**: 0.5.6 release
+    - Bug fixes for RubyGems plugin, `has_rdoc=false` should now work
+    - New API for registering custom parsers. See {file:WhatsNew.md}
 
 - **May.22.10**: 0.5.5 release
     - Various bug fixes

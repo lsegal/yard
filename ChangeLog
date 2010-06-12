@@ -1,4 +1,84 @@
+2010-06-12  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec: Release
+  0.5.6
+
+  * lib/rubygems_plugin.rb: Don't generate yri index if has_rdoc == false
+
+  * lib/yard/handlers/ruby/class_condition_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb: Fix failing class condition
+  handling case in 1.9
+
+  * lib/rubygems_plugin.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/code_objects/base.rb, lib/yard/code_objects/class_object.rb,
+  lib/yard/code_objects/constant_object.rb,
+  lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/namespace_object.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/docstring.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb,
+  lib/yard/serializers/file_system_serializer.rb,
+  lib/yard/tags/default_factory.rb, lib/yard/tags/library.rb,
+  lib/yard/templates/template.rb, templates/default/tags/html/option.erb: Fix a
+  boatload of Ruby warnings
+
+  * lib/rubygems_plugin.rb: Fix warnings in RubyGems plugin  Closes gh-108
+
+  * spec/cli/yardoc_spec.rb: Fix Yardoc CLI specs for new read_binary encoding
+  fixes
+
+  * lib/yard/autoload.rb, lib/yard/parser/base.rb, lib/yard/parser/c_parser.rb,
+  lib/yard/parser/ruby/legacy/ruby_parser.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb,
+  spec/parser/base_spec.rb, spec/parser/source_parser_spec.rb: Refactor
+  SourceParser and create API to extend YARD with custom source parsers using
+  YARD::Parser::SourceParser.register_parser_type  Closes gh-101
+
+2010-06-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb: Add .cc as C source filename extension
+
+  * .../ruby/legacy/class_condition_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb: Fixes handling of class
+  conditionals in the form "defined?(A) && defined?(B)"
+
+2010-06-05  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/templates/erb_cache.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  templates/default/layout/html/setup.rb: Various encoding related template
+  fixes.  Closes gh-131
+
+2010-05-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yri.rb: Don't use less on Windows (non-cygwin)
+
+  * lib/yard/cli/yri.rb: yri should fail gracefully when no arguments are
+  supplied
+
+  * Rakefile: Better rake support for windows
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Fix
+  handling of docstrings in 1.9 parser when there are comments before and on
+  the same line of a code object
+
+  * README.md, docs/GettingStarted.md, docs/Tags.md: Move tag list from
+  GettingStarted to Tags and document syntax
+
+  * README.md: Update README formatting
+
+2010-05-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  lib/yard/handlers/ruby/struct_handler_methods.rb: Various documentation and
+  style refactorings
+
 2010-05-22  Loren Segal <lsegal@soen.ca>
+
+  * README.md: Fix release date/version in readme
+
+  * README.md: Fix contributors formatting in readme for github
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump version to 0.5.5
 
@@ -53,6 +133,11 @@
   lib/yard/code_objects/proxy.rb, spec/code_objects/class_object_spec.rb: Fixes
   an issue where mixins could appear twice in the class hierarchy
 
+2010-05-18  Michael Edgar <michael.j.edgar@dartmouth.edu>
+
+  * lib/yard/handlers/ruby/struct_handler_methods.rb: Made struct handler
+  directly add tags. Technical faux pas.
+
 2010-05-15  postmodern <postmodern.mod3@gmail.com>
 
   * lib/yard.rb: Only glob .rb files from yard/core_ext and do not strip the
@@ -70,6 +155,52 @@
   * lib/yard/parser/ruby/legacy/statement_list.rb,
   spec/parser/ruby/legacy/statement_list_spec.rb: Fill .block for 'else' and
   'elsif' statements in legacy parser.
+
+2010-05-09  Michael Edgar <michael.j.edgar@dartmouth.edu>
+
+  * lib/yard/handlers/ruby/legacy/class_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Added more specs for
+  attr_reader and attr_writer combinations.
+
+  * lib/yard/handlers/ruby/struct_handler_methods.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Added some specs for the use
+  of attr_reader and attr_writer. Made them pass.
+
+  * lib/yard/handlers/ruby/struct_handler_methods.rb, lib/yard/tags/library.rb:
+  Added basic logic for the separation of reader/writer attributes. Specs pass,
+  but no new specs have been added.
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb: Added support on the handler
+  side for defining constants for non-anonymous structs
+
+  * spec/handlers/class_handler_spec.rb: Added a spec to ensure that when a
+  non-anonymous struct is used, the appropriate constant is defined in
+  Struct::.
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb: Added Ruby 1.8.x
+  compatibility, and fixed an error caused by OStruct.new (without parens).
+
+  * lib/yard/handlers/ruby/struct_handler_methods.rb, lib/yard/tags/library.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Specifications added for the
+  @attr tag.
+
+  * lib/yard/handlers/ruby/class_handler.rb: Added basic support for
+  subclass-syntax with Structs. The newly-added specs pass.
+
+  * lib/yard/autoload.rb, lib/yard/handlers/ruby/struct_handler_methods.rb:
+  Added my struct_handler_methods.rb file from yard-struct, which will provide
+  shortcuts for adding attributes. This is a module (and not dropped into the
+  ClassHandler) because I want to reuse this code for the Constant-assignment
+  syntax as well.
+
+  * spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Added specs for the
+  superclass syntax for Struct usage.
 
 2010-05-04  Denis Defreyne <denis.defreyne@stoneship.org>
 
