@@ -44,7 +44,6 @@ module YARD
     class Library
       class << self
         attr_reader :labels
-        attr_accessor :default_factory
         
         def instance
           @instance ||= new

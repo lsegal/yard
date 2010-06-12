@@ -43,7 +43,7 @@ module YARD
         objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
         fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
         if object.namespace && object.namespace.path != ""
-          fspath.unshift *object.namespace.path.split(CodeObjects::NSEP)
+          fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
         end
         
         # Don't change the filenames, it just makes it more complicated

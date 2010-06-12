@@ -9,6 +9,7 @@ module YARD
 
         def initialize(source, filename, *args)
           super
+          @last_ns_token = nil
           @file = filename
           @source = source
           @tokens = []
@@ -107,6 +108,7 @@ module YARD
             eof
           elsif /_add(_.+)?\z/ =~ event
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
+              undef on_#{event} if instance_method(:on_#{event})
               def on_#{event}(list, item)
                 list.push(item)
                 list
@@ -114,12 +116,14 @@ module YARD
             eof
           elsif MAPPINGS.has_key?(event)
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
+              undef on_#{event} if instance_method(:on_#{event})
               def on_#{event}(*args)
                 visit_event #{node_class}.new(:#{event}, args)
               end
             eof
           else
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
+              undef on_#{event} if instance_method(:on_#{event})
               def on_#{event}(*args)
                 #{node_class}.new(:#{event}, args, listline: lineno..lineno, listchar: charno...charno)
               end
@@ -130,6 +134,7 @@ module YARD
         SCANNER_EVENTS.each do |event|
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            undef on_#{event} if instance_method(:on_#{event})
             def on_#{event}(tok)
               visit_ns_token(:#{event}, tok, #{ast_token.inspect})
             end
@@ -139,6 +144,7 @@ module YARD
         REV_MAPPINGS.select {|k| k.is_a?(Symbol) }.each do |event, value|
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            undef on_#{event} if instance_method(:on_#{event})
             def on_#{event}(tok)
               (@map[:#{event}] ||= []) << [lineno, charno]
               visit_ns_token(:#{event}, tok, #{ast_token.inspect})
@@ -148,6 +154,7 @@ module YARD
         
         [:kw, :op].each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            undef on_#{event} if instance_method(:on_#{event})
             def on_#{event}(tok)
               unless @last_ns_token == [:kw, "def"] ||
                   (@tokens.last && @tokens.last[0] == :symbeg)
@@ -160,6 +167,7 @@ module YARD
 
         [:sp, :nl, :ignored_nl].each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            undef on_#{event} if instance_method(:on_#{event})
             def on_#{event}(tok)
               add_token(:#{event}, tok)
               @charno += tok.length
@@ -201,6 +209,28 @@ module YARD
           end
         end
 
+        undef on_program
+        undef on_bodystmt
+        undef on_assoc_new
+        undef on_hash
+        undef on_bare_assoc_hash
+        undef on_assoclist_from_args
+        undef on_aref
+        undef on_rbracket
+        undef on_qwords_new
+        undef on_string_literal
+        undef on_lambda
+        undef on_string_content
+        undef on_rescue
+        undef on_void_stmt
+        undef on_params
+        undef on_label
+        undef on_comment
+        undef on_embdoc_beg
+        undef on_embdoc
+        undef on_embdoc_end
+        undef on_parse_error
+
         def on_program(*args)
           args.first
         end
@@ -241,6 +271,7 @@ module YARD
         [:if_mod, :unless_mod, :while_mod].each do |kw|
           node_class = AstNode.node_class_for(kw)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            undef on_#{kw} if instance_method(:on_#{kw})
             def on_#{kw}(*args)
               sr = args.last.source_range.first..args.first.source_range.last
               lr = args.last.line_range.first..args.first.line_range.last

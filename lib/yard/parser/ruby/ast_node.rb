@@ -38,8 +38,8 @@ module YARD
       # list, like Strings or Symbols representing names. To return only 
       # the AstNode children of the node, use {#children}.
       class AstNode < Array
-        attr_accessor :type, :parent, :docstring, :file, :full_source, :source
-        attr_accessor :source_range, :line_range, :docstring_range
+        attr_accessor :type, :parent, :docstring, :docstring_range, :source
+        attr_writer :source_range, :line_range, :file, :full_source
         alias comments docstring
         alias comments_range docstring_range
         alias to_s source
@@ -235,12 +235,12 @@ module YARD
           q.group(3, 's(', ')') do
             q.seplist(objs, nil, :each) do |v| 
               if v == :__last__
-                q.seplist(options, nil, :each) do |k, v| 
+                q.seplist(options, nil, :each) do |k, v2| 
                   q.group(3) do 
                     q.text k
                     q.group(3) do 
                       q.text ': '
-                      q.pp v 
+                      q.pp v2 
                     end
                   end
                 end

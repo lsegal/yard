@@ -93,11 +93,11 @@ module YARD
       # The namespace the object is defined in. If the object is in the
       # top level namespace, this is {Registry#root}
       # @return [NamespaceObject] the namespace object
-      attr_accessor :namespace
+      attr_reader :namespace
       
       # The source code associated with the object
       # @return [String, nil] source, if present, or nil
-      attr_accessor :source
+      attr_reader :source
       
       # Language of the source code associated with the object. Defaults to
       # +:ruby+.
@@ -114,7 +114,7 @@ module YARD
       
       # The documentation string associated with the object
       # @return [Docstring] the documentation string
-      attr_accessor :docstring
+      attr_reader :docstring
       
       # Marks whether or not the method is conditionally defined at runtime
       # @return [Boolean] true if the method is conditionally defined at runtime
@@ -194,6 +194,7 @@ module YARD
         @source_type = :ruby
         @tags = []
         @docstring = Docstring.new('', self)
+        @namespace = nil
         self.namespace = namespace
         yield(self) if block_given?
       end
@@ -262,7 +263,7 @@ module YARD
       def [](key)
         if respond_to?(key)
           send(key)
-        else
+        elsif instance_variable_defined?("@#{key}")
           instance_variable_get("@#{key}")
         end
       end

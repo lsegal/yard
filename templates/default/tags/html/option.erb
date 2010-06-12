@@ -6,7 +6,7 @@
     <ul class="option">
       <% for tag in tags %>
         <li>
-          <span class="type"><%= format_types (tag.pair.types || ['Object']) %></span>
+          <span class="type"><%= format_types(tag.pair.types || ['Object']) %></span>
           <span class="name"><%= tag.pair.name %></span>
           <span class="default">
             <% if tag.pair.defaults %>

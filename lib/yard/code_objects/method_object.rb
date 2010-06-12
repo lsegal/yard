@@ -4,12 +4,12 @@ module YARD::CodeObjects
     # The visibility of the method (+:public:+, +:protected+, +:private+)
     # 
     # @return [Symbol] the method visibility
-    attr_accessor :visibility
+    attr_reader :visibility
     
     # The scope of the method (+:class+ or +:instance+)
     # 
     # @return [Symbol] the scope
-    attr_accessor :scope
+    attr_reader :scope
     
     # Whether the object is explicitly defined in source or whether it was
     # inferred by a handler. For instance, attribute methods are generally
@@ -32,6 +32,7 @@ module YARD::CodeObjects
     # @param [String, Symbol] name the method name
     # @param [Symbol] scope +:instance+ or +:class+
     def initialize(namespace, name, scope = :instance) 
+      @scope = nil
       self.visibility = :public
       self.scope = scope
       self.parameters = []

@@ -2,7 +2,7 @@ module YARD::CodeObjects
   class ClassObject < NamespaceObject
     # The {ClassObject} that this class object inherits from in Ruby source.
     # @return [ClassObject] a class object that is the superclass of this one
-    attr_accessor :superclass
+    attr_reader :superclass
     
     # Creates a new class object in +namespace+ with +name+
     # 

@@ -23,7 +23,7 @@ module YARD
     attr_accessor :line_range
     
     # @return [String] the raw documentation (including raw tag text)
-    attr_accessor :all
+    attr_reader :all
 
     # Matches a tag at the start of a comment line
     META_MATCH = /^@([a-z_]+)(?:\s+(.*))?$/i
@@ -40,6 +40,7 @@ module YARD
     #   with.
     def initialize(content = '', object = nil)
       @object = object
+      @summary = nil
       
       self.all = content
     end
@@ -166,7 +167,7 @@ module YARD
       tag_factory = Tags::Library.instance
       tag_method = "#{tag_name}_tag"
       if tag_name && tag_factory.respond_to?(tag_method)
-        add_tag *tag_factory.send(tag_method, tag_buf)
+        add_tag(*tag_factory.send(tag_method, tag_buf))
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end

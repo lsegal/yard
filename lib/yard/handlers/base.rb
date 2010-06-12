@@ -201,7 +201,7 @@ module YARD
         end
         
         def namespace_only?
-          @namespace_only ? true : false
+          (@namespace_only ||= false) ? true : false
         end
         
         # Generates a +process+ method, equivalent to +def process; ... end+.

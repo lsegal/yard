@@ -38,10 +38,14 @@ module YARD
           @imethod = true if name.include? ISEP
           namespace = Proxy.new(namespace, $`) unless $`.empty?
           name = $1
+        else
+          @orignamespace, @origname, @imethod = nil, nil, nil
         end 
         
         @name = name.to_sym
         @namespace = namespace
+        @obj = nil
+        @imethod ||= nil
         
         unless @namespace.is_a?(NamespaceObject) or @namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"

@@ -326,7 +326,7 @@ module YARD
         end
         
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
-          add_extra_files *files.split(",")
+          add_extra_files(*files.split(","))
         end
 
         opts.on('-m', '--markup MARKUP', 

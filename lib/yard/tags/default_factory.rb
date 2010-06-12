@@ -85,19 +85,7 @@ module YARD
       def extract_name_from_text(text)
         text.strip.split(/\s+/, 2)
       end
-      
-      ##
-      # Extracts the type signatures and optional name from the raw tag text
-      #
-      # @param [String] text the raw tag text
-      # @return [Array] an array holding the value as the first element and
-      #                 the array of types as the second element
-      def extract_types_and_name_from_text(text)
-        text = text.strip
-        types, range, name = *parse_types(text)
-        [name, types, (range ? text[(range.end+1)..-1].strip : text)]
-      end
-      
+            
       def extract_title_and_desc_from_text(text)
         title, desc = nil, nil
         if text =~ /\A[ \t]\n/

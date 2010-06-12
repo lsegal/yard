@@ -3,7 +3,8 @@ require 'erb'
 module YARD
   module Templates
     module Template
-      attr_accessor :class, :options, :subsections, :section
+      attr_accessor :class, :section
+      attr_reader :options, :subsections
       
       class << self
         # @return [Array<Module>] a list of modules to be automatically included
