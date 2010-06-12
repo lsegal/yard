@@ -31,7 +31,7 @@ describe YARD::CLI::Yardoc do
   end
   
   it "should search for and use yardopts file specified by #options_file" do
-    IO.should_receive(:read).with("test").and_return("-o \n\nMYPATH\nFILE1 FILE2")
+    File.should_receive(:read_binary).with("test").and_return("-o \n\nMYPATH\nFILE1 FILE2")
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.options_file = "test"
     @yardoc.run
@@ -42,14 +42,14 @@ describe YARD::CLI::Yardoc do
   it "should use String#shell_split to split .yardopts tokens" do
     optsdata = "foo bar"
     optsdata.should_receive(:shell_split)
-    IO.should_receive(:read).with("test").and_return(optsdata)
+    File.should_receive(:read_binary).with("test").and_return(optsdata)
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.options_file = "test"
     @yardoc.run
   end
   
   it "should allow --title to have multiple spaces in .yardopts" do
-    IO.should_receive(:read).with("test").and_return("--title \"Foo Bar\"")
+    File.should_receive(:read_binary).with("test").and_return("--title \"Foo Bar\"")
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.options_file = "test"
     @yardoc.run
@@ -57,7 +57,7 @@ describe YARD::CLI::Yardoc do
   end
   
   it "should allow opts specified in command line to override yardopts file" do
-    IO.should_receive(:read).with(".yardopts").and_return("-o NOTMYPATH")
+    File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.run("-o", "MYPATH", "FILE")
     @yardoc.options[:serializer].options[:basepath].should == :MYPATH
@@ -65,7 +65,7 @@ describe YARD::CLI::Yardoc do
   end
   
   it "should load the RDoc .document file if found" do
-    IO.should_receive(:read).with(".yardopts").and_return("-o NOTMYPATH")
+    File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
     @yardoc.stub!(:support_rdoc_document_file!).and_return(["FILE2", "FILE3"])
     @yardoc.run("-o", "MYPATH", "FILE1")
     @yardoc.options[:serializer].options[:basepath].should == :MYPATH
