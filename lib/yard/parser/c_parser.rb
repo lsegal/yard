@@ -199,9 +199,12 @@ module YARD
           comments.shift
         end
         overloads = []
+        seen_data = false
         while comments.first =~ /^\s+(\S.+)/ || comments.first =~ /^\s*$/
           line = comments.shift.strip
+          break if line.empty? && seen_data
           next if line.empty?
+          seen_data = true
           line.sub!(/^\w+[\.#]/, '')
           signature, types = *line.split(/ [-=]> /)
           types = parse_types(object, types)
@@ -221,7 +224,7 @@ module YARD
           when /^\w+\s+(#{CodeObjects::METHODMATCH})\s+(\w+)/
             signature = "#{$1}(#{$2})"
           end
-          next unless signature =~ /^#{CodeObjects::METHODNAMEMATCH}/
+          break unless signature =~ /^#{CodeObjects::METHODNAMEMATCH}/
           signature = signature.rstrip
           overloads << "@overload #{signature}"
           overloads << "  @yield [#{blkparams}]" if blk
