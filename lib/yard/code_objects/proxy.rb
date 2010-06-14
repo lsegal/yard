@@ -186,10 +186,12 @@ module YARD
       def method_missing(meth, *args, &block)
         if obj = to_obj
           obj.__send__(meth, *args, &block)
+        elsif meth == :to_ary # fixes bug in 1.9.2: http://gist.github.com/437136
+          nil
         else
           log.warn "Load Order / Name Resolution Problem on #{path}:"
           log.warn "-"
-          log.warn "Something is trying to access the object #{path} before it has been recognized."
+          log.warn "Something is trying to call #{meth} on object #{path} before it has been recognized."
           log.warn "This error usually means that you need to modify the order in which you parse files"
           log.warn "so that #{path} is parsed before methods or other objects attempt to access it."
           log.warn "-"
