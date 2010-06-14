@@ -35,8 +35,11 @@ module YARD
         object.is_a?(other) || self.class >= other.class || false
       end
       alias kind_of? is_a?
-
+      
       private
+
+      def to_a; nil end
+      def to_ary; nil end
       
       def parse_tag(text)
         @signature, text = *text.split(/\r?\n/, 2)
