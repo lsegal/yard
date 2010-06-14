@@ -17,11 +17,11 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
     class IgnoredHandler < Handlers::Base
       handles "hello"
     end
-    class NotIgnoredHandler < Handlers::Ruby::Legacy::Base
+    class NotIgnoredHandlerLegacy < Handlers::Ruby::Legacy::Base
       handles "hello"
     end
-    Handlers::Base.stub!(:subclasses).and_return [IgnoredHandler, NotIgnoredHandler]
-    @processor.find_handlers(stmt("hello world")).should == [NotIgnoredHandler]
+    Handlers::Base.stub!(:subclasses).and_return [IgnoredHandler, NotIgnoredHandlerLegacy]
+    @processor.find_handlers(stmt("hello world")).should == [NotIgnoredHandlerLegacy]
   end
 
   it "should handle a string input" do
