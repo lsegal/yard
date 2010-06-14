@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+require 'continuation' unless RUBY18
 
 describe YARD::Parser::CParser do
   before(:all) do
