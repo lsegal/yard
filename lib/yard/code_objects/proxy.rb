@@ -180,15 +180,13 @@ module YARD
           super
         end
       end
-
+      
       # Dispatches the method to the resolved object.
       # 
       # @raise [ProxyMethodError] if the proxy cannot find the real object
       def method_missing(meth, *args, &block)
         if obj = to_obj
           obj.__send__(meth, *args, &block)
-        elsif meth == :to_ary # fixes bug in 1.9.2: http://gist.github.com/437136
-          nil
         else
           log.warn "Load Order / Name Resolution Problem on #{path}:"
           log.warn "-"
@@ -211,6 +209,9 @@ module YARD
       def root?; false end
     
       private
+
+      # @note this method fixes a bug in 1.9.2: http://gist.github.com/437136
+      def to_ary; nil end
     
       # Attempts to find the object that this unresolved object
       # references by checking if any objects by this name are
