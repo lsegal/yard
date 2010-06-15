@@ -125,13 +125,17 @@ module YARD
       end
       
       # @return [Boolean] 
-      def ==(other)
+      def equal?(other)
         if other.respond_to? :path
           path == other.path
         else
           false
         end
       end
+      alias == equal?
+      
+      # @return [Integer] the object's hash value (for equality checking)
+      def hash; path.hash end
 
       # Returns the class name of the object the proxy is mimicking, if
       # resolved. Otherwise returns +Proxy+. 

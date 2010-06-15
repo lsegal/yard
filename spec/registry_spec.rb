@@ -184,15 +184,20 @@ describe YARD::Registry do
   end
   
   describe '#load_yardoc' do
-    before do
-      @store = RegistryStore.new
-      RegistryStore.should_receive(:new).and_return(@store)
-    end
-    
     it "should delegate load to RegistryStore" do
-      @store.should_receive(:load).with('foo')
+      store = RegistryStore.new
+      store.should_receive(:load).with('foo')
+      RegistryStore.should_receive(:new).and_return(store)
       Registry.yardoc_file = 'foo'
       Registry.load_yardoc
+    end
+    
+    it "should maintain hash key equality on loaded objects" do
+      Registry.clear
+      Registry.load!(File.dirname(__FILE__) + '/serializers/data/serialized_yardoc')
+      baz = Registry.at('Foo#baz')
+      Registry.at('Foo').aliases.keys.should include(baz)
+      Registry.at('Foo').aliases.has_key?(baz).should == true
     end
   end
 end

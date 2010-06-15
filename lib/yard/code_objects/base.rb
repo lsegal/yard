@@ -248,13 +248,18 @@ module YARD
       # @param [Base, Proxy] other if other is a {Proxy}, tests if
       #   the paths are equal
       # @return [Boolean] whether or not the objects are considered the same
-      def ==(other)
-        if other.is_a?(Proxy)
+      def equal?(other)
+        if other.is_a?(Base) || other.is_a?(Proxy)
           path == other.path
         else
           super
         end
       end
+      alias == equal?
+      alias eql? equal?
+      
+      # @return [Integer] the object's hash value (for equality checking)
+      def hash; path.hash end
 
       # Accesses a custom attribute on the object
       # @param [#to_s] key the name of the custom attribute

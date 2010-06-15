@@ -6,6 +6,11 @@ module YARD
       def path; "" end
       def inspect; "#<yardoc root>" end
       def root?; true end
+      def equal?(other)
+        other == :root ? true : super(other)
+      end
+      
+      def hash; :root.hash end
     end
   end
 end
