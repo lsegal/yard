@@ -7,8 +7,7 @@ module YARD
     class YardGraph < Base
       # The options parsed out of the commandline.
       # Default options are:
-      #   :format => :dot,
-      #   :visibilities => [:public]
+      #   :format => :dot
       attr_reader :options
       
       # The set of objects to include in the graph.
