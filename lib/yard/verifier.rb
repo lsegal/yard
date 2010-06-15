@@ -31,12 +31,29 @@ module YARD
   #   # Equivalent to:
   #   Verifier.new('@return && @param && @yield')
   class Verifier
+    # @return [Array<String>] a list of all expressions the verifier checks for
+    attr_reader :expressions
+    
+    def expressions=(value)
+      @expressions = value
+      create_method_from_expressions
+    end
+    
     # Creates a verifier from a set of expressions
     # 
     # @param [Array<String>] expressions a list of Ruby expressions to
     #   parse.
     def initialize(*expressions)
-      create_method_from_expressions(expressions.flatten)
+      @expressions = []
+      add_expressions(*expressions)
+    end
+    
+    # Adds a set of expressions and recompiles the verifier
+    # 
+    # @param [Array<String>] expressions a list of expressions
+    # @return [void]
+    def add_expressions(*expressions)
+      self.expressions += expressions.flatten unless expressions.empty?
     end
     
     # Passes any method calls to the object from the {#call}
@@ -87,8 +104,8 @@ module YARD
     # Creates the +__execute+ method by evaluating the expressions
     # as Ruby code
     # @return [void] 
-    def create_method_from_expressions(exprs)
-      expr = exprs.flatten.map {|e| "(#{parse_expression(e)})" }.join(" && ")
+    def create_method_from_expressions
+      expr = expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
       
       instance_eval(<<-eof, __FILE__, __LINE__ + 1)
         def __execute; #{expr}; end

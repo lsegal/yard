@@ -36,6 +36,10 @@ module YARD
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
       
+      # Keep track of which visibilities are to be shown
+      # @return [Array<Symbol>] a list of visibilities
+      attr_accessor :visibilities
+      
       # Helper method to create an instance and run the utility
       # @see #run
       def self.run(*args) new.run(*args) end
@@ -53,8 +57,9 @@ module YARD
           :hide_void_return => false,
           :no_highlight => false, 
           :files => [],
-          :verifier => nil
+          :verifier => Verifier.new
         )
+        @visibilities = [:public]
         @excluded = []
         @files = []
         @use_cache = false
@@ -72,6 +77,7 @@ module YARD
         args += support_rdoc_document_file!
         optparse(*yardopts)
         optparse(*args)
+        add_visibility_verifier
         
         if use_cache
           Registry.load
@@ -207,12 +213,18 @@ module YARD
         exit(0)
       end
       
+      # Adds verifier rule for visibilities
+      # @return [void]
+      def add_visibility_verifier
+        vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
+        options[:verifier].add_expressions(vis_expr)
+      end
+      
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         excluded = []
         query_expressions = []
-        visibilities = [:public]
         do_build_gems, do_rebuild_gems = false, false
         serialopts = SymbolHash.new
         
@@ -375,8 +387,7 @@ module YARD
         build_gems(do_rebuild_gems) if do_build_gems
         parse_files(*args) unless args.empty?
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
-        query_expressions << "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
-        options[:verifier] = Verifier.new(*query_expressions) unless query_expressions.empty?
+        options[:verifier].expressions += query_expressions unless query_expressions.empty?
         options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
         options[:readme] ||= Dir.glob('README*').first
       end

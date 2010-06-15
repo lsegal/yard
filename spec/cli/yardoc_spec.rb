@@ -38,6 +38,15 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:serializer].options[:basepath].should == :MYPATH
     @yardoc.files.should == ["FILE1", "FILE2"]
   end
+  
+  it "should setup visibility rules as verifier" do
+    methobj = CodeObjects::MethodObject.new(:root, :test) {|o| o.visibility = :private }
+    File.should_receive(:read_binary).with("test").and_return("--private")
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.options_file = "test"
+    @yardoc.run
+    @yardoc.options[:verifier].call(methobj).should be_true
+  end
 
   it "should use String#shell_split to split .yardopts tokens" do
     optsdata = "foo bar"
