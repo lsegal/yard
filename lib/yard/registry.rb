@@ -302,12 +302,6 @@ module YARD
           end
           namespace = namespace.parent
         end
-
-        # Look for ::name or #name in the root space
-        [CodeObjects::ISEP, CodeObjects::NSEP].each do |s|
-          found = at(s + name)
-          return found if found
-        end
       end
       proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name) : nil
     end
@@ -326,6 +320,7 @@ module YARD
     # @param [CodeObjects::NamespaceObject] namespace the starting namespace
     # @param [String] name the name to look for
     def partial_resolve(namespace, name)
+      return at(name) || at('#' + name) if namespace.root?
       [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
         next if s.empty? && name =~ /^\w/
         path = name

@@ -137,6 +137,17 @@ describe YARD::Registry do
       Registry.resolve(yard, "class_hello", false).should be_nil
       Registry.resolve(yard, "class_hello", true).should == cmeth
     end
+    
+    it "should only check 'Path' in lookup on root namespace" do
+      Registry.instance.should_receive(:at).once.with('Test').and_return(true)
+      Registry.resolve(Registry.root, "Test")
+    end
+    
+    it "should not perform lookup by joining namespace and name without separator" do
+      yard = ClassObject.new(:root, :YARD)
+      Registry.instance.should_not_receive(:at).with('YARDB')
+      Registry.resolve(yard, 'B')
+    end
   end
   
   describe '#all' do
