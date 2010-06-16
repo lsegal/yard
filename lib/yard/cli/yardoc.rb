@@ -74,10 +74,7 @@ module YARD
       # @param [Array<String>] args the list of arguments
       # @return [void] 
       def run(*args)
-        args += support_rdoc_document_file!
-        optparse(*yardopts)
-        optparse(*args)
-        add_visibility_verifier
+        parse_arguments(*args)
         
         if use_cache
           Registry.load
@@ -98,6 +95,16 @@ module YARD
         end
         
         true
+      end
+      
+      # Parses commandline arguments
+      # @param [Array<String>] args the list of arguments
+      # @return [void]
+      def parse_arguments(*args)
+        args += support_rdoc_document_file!
+        optparse(*yardopts)
+        optparse(*args)
+        add_visibility_verifier
       end
       
       # The list of all objects to process. Override this method to change
