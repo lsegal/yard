@@ -1,9 +1,13 @@
 module YARD
+  # Stubs marshal dumps and acts a delegate class for an object by path
+  # 
+  # @private
   class StubProxy
     instance_methods.each {|m| undef_method(m) unless m.to_s =~ /^__|^object_id$/ }
 
     def _dump(depth) @path end
     def self._load(str) new(str) end
+    def hash; @path.hash end
     
     def initialize(path, transient = false) 
       @path = path

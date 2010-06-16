@@ -1,24 +1,6 @@
 require 'fileutils'
 
 module YARD
-  # A TemporaryObject class is temporarily created during deserialization of
-  # an object from disk. An instance of this class is inserted into the 
-  # {RegistryStore} until the object is resolved and helps the object resolve 
-  # any references it might have to itself.
-  # 
-  # @note This class should never be used directly.
-  # @private
-  class TemporaryObject < CodeObjects::Base
-    def self.__setup__(path) 
-      object = allocate
-      object.path = path
-      object
-    end
-    
-    attr_accessor :path
-    def hash; path.hash end
-  end
-  
   # The data store for the {Registry}.
   # 
   # @see Registry
@@ -49,13 +31,11 @@ module YARD
 
       # check disk
       return if @notfound[key]
-      put(key, TemporaryObject.__setup__(key))
       if obj = @serializer.deserialize(key)
         @loaded_objects += 1
         put(key, obj)
       else
         @notfound[key] = true
-        delete(key)
         nil
       end
     end
