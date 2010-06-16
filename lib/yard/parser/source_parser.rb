@@ -118,13 +118,7 @@ module YARD
         # @return [Symbol] the parser type to be used for the extension
         def parser_type_for_extension(extension)
           type = parser_type_extensions.find do |t, exts|
-            if exts.is_a?(Array)
-              exts.include?(extension)
-            elsif exts.is_a?(String)
-              exts == extension
-            elsif exts.is_a?(Regexp)
-              extension =~ exts
-            end
+            [exts].flatten.any? {|ext| ext === extension }
           end
           validated_parser_type(type ? type.first : :ruby)
         end

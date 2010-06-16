@@ -50,6 +50,12 @@ describe YARD::Parser::SourceParser do
       Parser::SourceParser.parser_type_for_extension('dabcd').should_not == :my_parser
     end
     
+    it "should find an extension in a list of Regexps" do
+      Parser::SourceParser.register_parser_type(:my_parser, MyParser, [/ab$/, /abc$/])
+      Parser::SourceParser.parser_type_for_extension('dabc').should == :my_parser
+      Parser::SourceParser.parser_type_for_extension('dabcd').should_not == :my_parser
+    end
+    
     it "should find an extension in a String" do
       Parser::SourceParser.register_parser_type(:my_parser, MyParser, "abc")
       Parser::SourceParser.parser_type_for_extension('abc').should == :my_parser
