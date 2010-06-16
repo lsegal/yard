@@ -17,9 +17,11 @@ SourceParser
 ------------
 
 The main class {YARD::Parser::SourceParser} acts as a factory class, instantiating
-the correct parser class given the source type being parsed. This usually involves
-a file extension check, though this can be overriden. Currently, only a Ruby source
-parser is implemented, though future plans include a C parser for Ruby extensions.
+the correct parser class, an implementation of {YARD::Parser::Base}. The selected parser
+is chosen based on either the file extension or by selecting it explicitly (as an argument
+to parsing methods). YARD supports Ruby and C source files, but custom parsers can
+be implemented and registered for various other languages by subclassing `Parser::Base`
+and registering the parser with {YARD::Parser::SourceParser.register_parser_type}.
 
 This factory class should always be used when parsing source files rather than 
 the individual parser classes since it initiates the pipeline that runs the
@@ -46,11 +48,29 @@ used:
 
     YARD::Parser::SourceParser.parse_string("def method(a, b) end")
     
-Because no filename information is given, this method allows the setting of the
-parser type as an argument:
+You can also provide the parser type explicitly as the second argument:
 
-    # Parses a string of C (not implemented)
+    # Parses a string of C
     YARD::Parser::SourceParser.parse_string("int main() { }", :c)
+    
+Note that these two methods are aliased as {YARD.parse} and {YARD.parse_string} for 
+convenience.
+    
+Implementing and Registering a Custom Parser
+--------------------------------------------
+
+To implement a custom parser, subclass {YARD::Parser::Base}. Documentation on which
+abstract methods should be implemented are documented in that class. After the class
+is implemented, it is registered with the {YARD::Parser::SourceParser} factory class
+to be called when a file of the right extension needs to be parsed, or when a user
+selects that parser type explicitly. To register your new parser class, call the 
+method {YARD::Parser::SourceParser.register_parser_type}:
+
+    SourceParser.register_parser_type(:my_parser, MyParser, 'my_parser_ext')
+    
+The last argument can be a single extension, a list of extensions (Array), a single Regexp, or a
+list of Regexps. Do not include the '.' in the extension.
+
 
 The Two Ruby Parser Types
 -------------------------
