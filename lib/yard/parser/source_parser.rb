@@ -102,6 +102,9 @@ module YARD
         end
         
         # @return [Hash{Symbol=>Object}] a list of registered parser types
+        # @private
+        attr_reader :parser_types
+        undef parser_types
         def parser_types; @@parser_types ||= {} end
         def parser_types=(value) @@parser_types = value end
         
