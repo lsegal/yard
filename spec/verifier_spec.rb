@@ -47,6 +47,10 @@ describe YARD::Verifier do
       obj.should_receive(:tag).and_return(nil)
       Verifier.new('@return.text').call(obj).should == false
     end
+    
+    it "should not fail if no expressions were added" do
+      lambda { Verifier.new.call(nil) }.should_not raise_error
+    end
   end
   
   describe '#expressions' do
