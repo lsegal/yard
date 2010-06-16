@@ -143,11 +143,26 @@ module YARD
       @store.load(file)
     end
     
+    # Loads a yardoc file and forces all objects cached on disk into
+    # memory. Equivalent to calling {#load_yardoc} followed by {#load_all}
+    # 
+    # @param [String] file the yardoc file to load
+    # @return [void]
+    # @see #load_yardoc
+    # @see #load_all
     def load!(file = yardoc_file)
       clear
       @store.load!(file)
     end
     
+    # Forces all objects cached on disk into memory
+    # 
+    # @example Loads all objects from disk
+    #   Registry.load
+    #   Registry.all.count #=> 0
+    #   Registry.load_all
+    #   Registry.all.count #=> 17
+    # @return [void]
     def load_all
       @store.load_all
     end
@@ -160,14 +175,19 @@ module YARD
       @store.save(merge, file)
     end
     
+    # @return [Hash{String => String}] a set of checksums for files
     def checksums
       @store.checksums
     end
     
+    # @param [String] data data to checksum
+    # @return [String] the SHA1 checksum for data
     def checksum_for(data)
       Digest::SHA1.hexdigest(data)
     end
     
+    # Deletes the yardoc file from disk
+    # @return [void]
     def delete_from_disk
       @store.destroy
     end
