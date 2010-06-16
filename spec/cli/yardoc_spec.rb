@@ -126,9 +126,22 @@ describe YARD::CLI::Yardoc do
   
   it "should accept --no-private" do
     obj = mock(:object)
-    obj.should_receive(:tag).ordered.with('private').and_return(true)
+    obj.should_receive(:tag).ordered.with(:private).and_return(true)
     @yardoc.optparse *%w( --no-private )
     @yardoc.options[:verifier].call(obj).should == false
+  end
+  
+  it "should hide methods inside a 'private' class/module with --no-private" do
+    Registry.clear
+    YARD.parse_string <<-eof
+      # @private
+      class A
+        def foo; end
+      end
+    eof
+    @yardoc.optparse *%w( --no-private )
+    @yardoc.options[:verifier].call(Registry.at('A')).should be_false
+    @yardoc.options[:verifier].call(Registry.at('A#foo')).should be_false
   end
   
   it "should accept --default-return" do
