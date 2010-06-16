@@ -53,7 +53,7 @@ module YARD
     # @param [Array<String>] expressions a list of expressions
     # @return [void]
     def add_expressions(*expressions)
-      self.expressions += expressions.flatten unless expressions.empty?
+      self.expressions += expressions.flatten
     end
     
     # Passes any method calls to the object from the {#call}
