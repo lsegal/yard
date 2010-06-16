@@ -222,7 +222,6 @@ module YARD
         end
 
         undef on_program
-        undef on_bodystmt
         undef on_assoc_new
         undef on_hash
         undef on_bare_assoc_hash
