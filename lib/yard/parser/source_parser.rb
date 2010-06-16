@@ -106,6 +106,9 @@ module YARD
         def parser_types=(value) @@parser_types = value end
         
         # @return [Hash] a list of registered parser type extensions
+        # @private
+        attr_reader :parser_type_extensions
+        undef parser_type_extensions
         def parser_type_extensions; @@parser_type_extensions ||= {} end
         def parser_type_extensions=(value) @@parser_type_extensions = value end
 
@@ -131,6 +134,7 @@ module YARD
         # 
         # @param [Symbol] type the parser type to set
         # @return [Symbol] the validated parser type
+        # @private
         def validated_parser_type(type)
           RUBY18 && type == :ruby ? :ruby18 : type
         end
