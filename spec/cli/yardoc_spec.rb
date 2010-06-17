@@ -35,7 +35,7 @@ describe YARD::CLI::Yardoc do
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.options_file = "test"
     @yardoc.run
-    @yardoc.options[:serializer].options[:basepath].should == :MYPATH
+    @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
     @yardoc.files.should == ["FILE1", "FILE2"]
   end
   
@@ -69,7 +69,7 @@ describe YARD::CLI::Yardoc do
     File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
     @yardoc.stub!(:support_rdoc_document_file!).and_return([])
     @yardoc.run("-o", "MYPATH", "FILE")
-    @yardoc.options[:serializer].options[:basepath].should == :MYPATH
+    @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
     @yardoc.files.should == ["FILE"]
   end
   
@@ -77,8 +77,8 @@ describe YARD::CLI::Yardoc do
     File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
     @yardoc.stub!(:support_rdoc_document_file!).and_return(["FILE2", "FILE3"])
     @yardoc.run("-o", "MYPATH", "FILE1")
-    @yardoc.options[:serializer].options[:basepath].should == :MYPATH
-    @yardoc.files.should == ["FILE1", "FILE2", "FILE3"]
+    @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
+    @yardoc.files.should == ["FILE2", "FILE3", "FILE1"]
   end
   
   it "should accept extra files if specified after '-' with source files" do
@@ -90,23 +90,29 @@ describe YARD::CLI::Yardoc do
   end
   
   it "should accept files section only containing extra files" do
-    @yardoc.optparse *%w( - LICENSE )
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.stub!(:yardopts).and_return([])
+    @yardoc.parse_arguments *%w( - LICENSE )
     @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
     @yardoc.options[:files].should == %w( LICENSE )
   end
 
   it "should accept globs as extra files" do
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.stub!(:yardopts).and_return([])
     Dir.should_receive(:glob).with('README*').and_return []
     Dir.should_receive(:glob).with('*.txt').and_return ['a.txt', 'b.txt']
     File.should_receive(:file?).with('a.txt').and_return(true)
     File.should_receive(:file?).with('b.txt').and_return(true)
-    @yardoc.optparse *%w( file1 file2 - *.txt )
+    @yardoc.parse_arguments *%w( file1 file2 - *.txt )
     @yardoc.files.should == %w( file1 file2 )
     @yardoc.options[:files].should == %w( a.txt b.txt )
   end
   
   it "should accept no params and parse lib/**/*.rb ext/**/*.c" do
-    @yardoc.optparse
+    @yardoc.stub!(:support_rdoc_document_file!).and_return([])
+    @yardoc.stub!(:yardopts).and_return([])
+    @yardoc.parse_arguments
     @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
   end
   
@@ -172,5 +178,15 @@ describe YARD::CLI::Yardoc do
     @yardoc.incremental.should == true
     @yardoc.use_cache.should == true
     @yardoc.generate.should == true
+  end
+  
+  it "should warn if extra file is not found" do
+    log.should_receive(:warn).with(/Could not find extra file: UNKNOWN/)
+    @yardoc.optparse *%w( - UNKNOWN )
+  end
+  
+  it "should warn if readme file is not found" do
+    log.should_receive(:warn).with(/Could not find readme file: UNKNOWN/)
+    @yardoc.optparse *%w( -r UNKNOWN )
   end
 end

@@ -40,6 +40,9 @@ module YARD
       # @return [Array<Symbol>] a list of visibilities
       attr_accessor :visibilities
       
+      # @return [Boolean] whether to build or rebuild gems
+      attr_accessor :build_gems, :rebuild_gems
+      
       # Helper method to create an instance and run the utility
       # @see #run
       def self.run(*args) new.run(*args) end
@@ -63,6 +66,8 @@ module YARD
         @excluded = []
         @files = []
         @use_cache = false
+        @build_gems = false
+        @rebuild_gems = false
         @generate = true
         @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
@@ -83,7 +88,10 @@ module YARD
         YARD.parse(files, excluded)
         Registry.save(use_cache)
         
-        if generate
+        
+        if build_gems
+          do_build_gems(rebuild_gems)
+        elsif generate
           if incremental
             generate_with_cache(checksums)
           else
@@ -101,9 +109,13 @@ module YARD
       # @param [Array<String>] args the list of arguments
       # @return [void]
       def parse_arguments(*args)
-        args += support_rdoc_document_file!
+        optparse(*support_rdoc_document_file!)
         optparse(*yardopts)
         optparse(*args)
+
+        # Last minute modifications
+        self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        options[:readme] ||= Dir.glob('README*').first
         add_visibility_verifier
       end
       
@@ -166,8 +178,11 @@ module YARD
       def add_extra_files(*files)
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
-          raise Errno::ENOENT, "Could not find extra file: #{file}" unless File.file?(file)
-          options[:files] << file
+          if File.file?(file)
+            options[:files] << file
+          else
+            log.warn "Could not find extra file: #{file}"
+          end
         end
       end
       
@@ -181,7 +196,6 @@ module YARD
       # @param [Array<String>] files the list of files to parse
       # @return [void] 
       def parse_files(*files)
-        self.files = []
         seen_extra_files_marker = false
         
         files.each do |file|
@@ -200,7 +214,7 @@ module YARD
       
       # Builds .yardoc files for all non-existing gems
       # @param [Boolean] rebuild Forces rebuild of all gems
-      def build_gems(rebuild = false)
+      def do_build_gems(rebuild = false)
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
           reload = true
@@ -230,11 +244,6 @@ module YARD
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
-        excluded = []
-        query_expressions = []
-        do_build_gems, do_rebuild_gems = false, false
-        serialopts = SymbolHash.new
-        
         opts = OptionParser.new
         opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
 
@@ -287,12 +296,12 @@ module YARD
         end
         
         opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
-          do_build_gems = true
+          self.build_gems = true
         end
 
         opts.on('--re-build-gems', 'Forces building .yardoc files for all gems (implies -n)') do
-          do_build_gems = true
-          do_rebuild_gems = true
+          self.build_gems = true
+          self.rebuild_gems = true
         end
 
         opts.separator ""
@@ -311,7 +320,7 @@ module YARD
         end
         
         opts.on('--no-private', "Hide objects with @private tag") do
-          query_expressions << '!object.tag(:private) && !object.namespace.tag(:private)'
+          options[:verifier].add_expressions '!object.tag(:private) && !object.namespace.tag(:private)'
         end
 
         opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
@@ -327,7 +336,7 @@ module YARD
         end
         
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
-          query_expressions << query.taint
+          options[:verifier].add_expressions(query.taint)
         end
 
         opts.on('--list', 'List objects to standard out (implies -n)') do |format|
@@ -340,8 +349,11 @@ module YARD
         end
 
         opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page of documentation.') do |readme|
-          raise Errno::ENOENT, readme unless File.file?(readme)
-          options[:readme] = readme
+          if File.file?(readme)
+            options[:readme] = readme
+          else 
+            log.warn "Could not find readme file: #{readme}"
+          end
         end
         
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
@@ -360,8 +372,7 @@ module YARD
         
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
-          options[:serializer] = nil
-          serialopts[:basepath] = dir
+          options[:serializer].basepath = dir
         end
         
         opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
@@ -389,14 +400,7 @@ module YARD
 
         common_options(opts)
         parse_options(opts, args)
-        
-        # Last minute modifications
-        build_gems(do_rebuild_gems) if do_build_gems
         parse_files(*args) unless args.empty?
-        self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
-        options[:verifier].expressions += query_expressions unless query_expressions.empty?
-        options[:serializer] ||= Serializers::FileSystemSerializer.new(serialopts)
-        options[:readme] ||= Dir.glob('README*').first
       end
     end
   end

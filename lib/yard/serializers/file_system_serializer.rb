@@ -5,10 +5,18 @@ module YARD
       # @return [String] a base path
       attr_reader :basepath
       
+      def basepath=(value)
+        @basepath = options[:basepath] = value
+      end
+      
       # The extension of the filename (defaults to +html+)
       # 
       # @return [String] the extension of the file. Empty string for no extension.
       attr_reader :extension
+      
+      def extension=(value)
+        @extension = options[:extension] = value
+      end
       
       # Creates a new FileSystemSerializer with options
       # 
