@@ -262,11 +262,11 @@ describe YARD::Parser::SourceParser do
         end
       eof
       
-      Registry.at('A').tag(:groups).types.should == ['Group Name', 'Group 2']
-      Registry.at('A#bar').should_not have_tag(:group)
-      Registry.at('A#foo').tag(:group).text.should == "Group Name"
-      Registry.at('A#foo2').tag(:group).text.should == "Group Name"
-      Registry.at('A#baz').tag(:group).text.should == "Group 2"
+      Registry.at('A').groups.should == ['Group Name', 'Group 2']
+      Registry.at('A#bar').group.should be_nil
+      Registry.at('A#foo').group.should == "Group Name"
+      Registry.at('A#foo2').group.should == "Group Name"
+      Registry.at('A#baz').group.should == "Group 2"
     end
   end
 end

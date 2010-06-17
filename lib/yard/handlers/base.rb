@@ -324,12 +324,10 @@ module YARD
           object.docstring = statement.comments if statement.comments
           object.docstring.line_range = statement.comments_range
           
+          # Add group information
           if statement.group
-            unless object.namespace.has_tag?(:groups)
-              object.namespace.docstring.add_tag(Tags::Tag.new(:groups, '', []))
-            end
-            object.namespace.tag(:groups).types |= [statement.group]
-            object.docstring.add_tag(Tags::Tag.new(:group, statement.group))
+            object.namespace.groups |= [statement.group]
+            object.group = statement.group
           end
           
           # Add source only to non-class non-module objects

@@ -6,6 +6,9 @@ module YARD::CodeObjects
     attr_writer :constants, :cvars, :mixins, :child, :meths
     attr_writer :class_attributes, :instance_attributes
     attr_writer :included_constants, :included_meths
+    
+    # @return [Array<String>] a list of ordered group names inside the namespace
+    attr_accessor :groups
 
     # The list of objects defined in this namespace
     # @return [Array<Base>] a list of objects
@@ -55,6 +58,7 @@ module YARD::CodeObjects
       @instance_mixins = CodeObjectList.new(self)
       @attributes = SymbolHash[:class => SymbolHash.new, :instance => SymbolHash.new]
       @aliases = {}
+      @groups = []
       super
     end
     

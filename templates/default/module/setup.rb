@@ -89,18 +89,18 @@ def docstring_summary(obj)
 end
 
 def groups(list, type = "Method")
-  if object && groups_tag = object.tag(:groups)
-    others = list.select {|m| !m.has_tag?(:group) }
-    groups_tag.types.each do |name|
-      items = list.select {|m| m.has_tag?(:group) && m.tag(:group).text == name }
+  if groups_data = object.groups
+    others = list.select {|m| !m.group }
+    groups_data.each do |name|
+      items = list.select {|m| m.group == name }
       yield(items, name) unless items.empty?
     end
   else
     others = []
     group_data = {}
     list.each do |meth|
-      if meth.has_tag?(:group)
-        (group_data[meth.tag(:group).text] ||= []) << meth
+      if meth.group
+        (group_data[meth.group] ||= []) << meth
       else
         others << meth
       end
