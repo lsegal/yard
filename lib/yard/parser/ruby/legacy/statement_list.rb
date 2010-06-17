@@ -13,6 +13,7 @@ module YARD
       #
       # @param [TokenList, String] content the tokens to create the list from
       def initialize(content)
+        @group = nil
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
@@ -62,6 +63,7 @@ module YARD
           sanitize_block
           @statement.pop if [TkNL, TkSPACE, TkSEMICOLON].include?(@statement.last.class)
           stmt = Statement.new(@statement, @block, @comments)
+          stmt.group = @group
           if @comments && @comments_line
             stmt.comments_range = (@comments_line..(@comments_line + @comments.size - 1))
           end
@@ -101,6 +103,23 @@ module YARD
           end
         end
       end
+      
+      def preprocess_token(tk)
+        if tk.is_a?(TkCOMMENT)
+          case tk.text
+          when /\A# @group\s+(.+)\s*\Z/
+            @group = $1
+            true
+          when /\A# @endgroup\s*\Z/
+            @group = nil
+            true
+          else
+            false
+          end
+        else
+          false
+        end
+      end
 
       ##
       # Processes a single token
@@ -110,6 +129,7 @@ module YARD
         # p tk.class, tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
+          return if preprocess_token(tk)
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           @comments_last_line = nil

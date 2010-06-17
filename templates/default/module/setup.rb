@@ -88,6 +88,29 @@ def docstring_summary(obj)
   docstring_full(obj).summary
 end
 
+def groups(list, type = "Method")
+  if groups_data = object.groups
+    others = list.select {|m| !m.group }
+    groups_data.each do |name|
+      items = list.select {|m| m.group == name }
+      yield(items, name) unless items.empty?
+    end
+  else
+    others = []
+    group_data = {}
+    list.each do |meth|
+      if meth.group
+        (group_data[meth.group] ||= []) << meth
+      else
+        others << meth
+      end
+    end
+    group_data.each {|group, items| yield(items, group) unless items.empty? }
+  end
+  
+  scopes(others) {|items, scope| yield(items, "#{scope.to_s.capitalize} #{type} Summary") }
+end
+
 def scopes(list)
   [:class, :instance].each do |scope|
     items = list.select {|m| m.scope == scope }

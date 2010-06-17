@@ -324,6 +324,12 @@ module YARD
           object.docstring = statement.comments if statement.comments
           object.docstring.line_range = statement.comments_range
           
+          # Add group information
+          if statement.group
+            object.namespace.groups |= [statement.group]
+            object.group = statement.group
+          end
+          
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)
             object.source ||= statement

@@ -120,6 +120,9 @@ module YARD
       # @return [Boolean] true if the method is conditionally defined at runtime
       attr_accessor :dynamic
       
+      # @return [String] the group this object is associated with
+      attr_accessor :group
+      
       # Is the object defined conditionally at runtime?
       # @see #dynamic
       def dynamic?; @dynamic end
