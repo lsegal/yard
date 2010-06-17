@@ -5,6 +5,7 @@ module YARD
   module CLI # Namespace for command-line interface components
     autoload :Command,        __p('cli/command')
     autoload :CommandParser,  __p('cli/command_parser')
+    autoload :Gems,           __p('cli/gems')
     autoload :Graph,          __p('cli/graph')
     autoload :Server,         __p('cli/server')
     autoload :Yardoc,         __p('cli/yardoc')
