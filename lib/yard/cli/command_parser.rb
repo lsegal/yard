@@ -3,6 +3,7 @@ module YARD
     class CommandParser
       class << self
         attr_accessor :commands
+        attr_accessor :default_command
       end
       
       self.commands = SymbolHash[
@@ -12,6 +13,8 @@ module YARD
         :server => Server
       ]
       
+      self.default_command = :doc
+      
       def self.run(*args) new.run(*args) end
         
       def initialize
@@ -19,10 +22,15 @@ module YARD
       end
             
       def run(*args)
-        if args.size > 0
-          command_name = args.first.to_sym
+        unless args == ['--help']
+          if args.size == 0 || args.first =~ /^-/
+            command_name = self.class.default_command
+          else
+            command_name = args.first.to_sym
+            args.shift
+          end
           if commands.has_key?(command_name)
-            return commands[command_name].run(*args[1..-1])
+            return commands[command_name].run(*args)
           end
         end
         list_commands
