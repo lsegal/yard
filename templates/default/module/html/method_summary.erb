@@ -1,7 +1,7 @@
 <% if method_listing.size > 0 %>
-  <% scopes(method_listing) do |list, scope| %>
+  <% groups(method_listing) do |list, name| %>
     <h2>
-      <%= scope.to_s.capitalize %> Method Summary
+      <%= name %>
       <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
     </h2>
 
