@@ -95,6 +95,25 @@ who would like to reap the benefits of YARD's processing in other forms, such 
 as throwing all the documentation into a database. Another useful way of 
 exploiting this raw data format would be to write tools that can auto generate
 test cases, for example, or show possible unhandled exceptions in code. 
+
+
+Installing
+----------
+
+To install YARD, use the following command:
+
+    $ gem install yard
+    
+(Add `sudo` if you're installing under a POSIX system as root)
+    
+Alternatively, if you've checked the source out directly, you can call 
+`rake install` from the root project directory.
+
+**Important Note for Debian/Ubuntu users:** there's a possible chance your Ruby
+install lacks RDoc, which is occasionally used by YARD to convert markup to HTML. 
+If running `which rdoc` turns up empty, install RDoc by issuing:
+
+    $ sudo apt-get install rdoc
                                                                               
 
 Usage
