@@ -152,6 +152,8 @@ module YARD
       define_tag "Attribute",         :attr,         :with_types_and_name
       define_tag "Attribute Getter",  :attr_reader,  :with_types_and_name
       define_tag "Attribute Setter",  :attr_writer,  :with_types_and_name
+      define_tag "Grouping",          :group
+      define_tag "End Grouping",      :endgroup
     end
   end
 end
