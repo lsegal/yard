@@ -48,9 +48,7 @@ module YARD
         @first_line = nil
 
         while !@done && tk = @tokens.shift
-          if preprocess_token(tk)
-            process_token(tk)
-          end
+          process_token(tk)
 
           @before_last_tk = @last_tk
           @last_tk = tk # Save last token
@@ -111,15 +109,15 @@ module YARD
           case tk.text
           when /\A# @group\s+(.+)\s*\Z/
             @group = $1
-            false
+            true
           when /\A# @endgroup\s*\Z/
             @group = nil
-            false
-          else
             true
+          else
+            false
           end
         else
-          true
+          false
         end
       end
 
@@ -131,6 +129,7 @@ module YARD
         # p tk.class, tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
+          return if preprocess_token(tk)
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           @comments_last_line = nil
