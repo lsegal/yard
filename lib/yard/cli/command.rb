@@ -6,11 +6,13 @@ module YARD
     # the option parser
     # 
     # @abstract
-    class Base
-      def initialize
-        log.show_backtraces = false
-      end
-      
+    class Command
+      # Helper method to run the utility on an instance.
+      # @see #run
+      def self.run(*args) new.run(*args) end
+        
+      def description; '' end
+          
       protected
 
       # Adds a set of common options to the tail of the OptionParser
@@ -27,7 +29,7 @@ module YARD
         opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
         opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
       end
-      
+    
       # Parses the option and gracefully handles invalid switches
       # 
       # @param [OptionParser] opts the option parser object

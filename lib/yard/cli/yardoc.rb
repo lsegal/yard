@@ -3,7 +3,7 @@ require 'fileutils'
 
 module YARD
   module CLI
-    class Yardoc < Base
+    class Yardoc < Command
       # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"
       
@@ -73,6 +73,10 @@ module YARD
         @options_file = DEFAULT_YARDOPTS_FILE
       end
       
+      def description
+        "Generates documentation"
+      end
+    
       # Runs the commandline utility, parsing arguments and generating
       # output if set.
       # 
