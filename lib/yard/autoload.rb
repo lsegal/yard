@@ -3,10 +3,12 @@ def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
 
 module YARD
   module CLI # Namespace for command-line interface components
-    autoload :Base,       __p('cli/base')
-    autoload :YardGraph,  __p('cli/yard_graph')
-    autoload :Yardoc,     __p('cli/yardoc')
-    autoload :YRI,        __p('cli/yri')
+    autoload :Command,        __p('cli/command')
+    autoload :CommandParser,  __p('cli/command_parser')
+    autoload :Graph,          __p('cli/graph')
+    autoload :Server,         __p('cli/server')
+    autoload :Yardoc,         __p('cli/yardoc')
+    autoload :YRI,            __p('cli/yri')
   end
   
   # A "code object" is defined as any entity in the Ruby language.

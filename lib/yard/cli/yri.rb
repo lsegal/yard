@@ -3,7 +3,7 @@ require 'rbconfig'
 module YARD
   module CLI
     # A tool to view documentation in the console like `ri`
-    class YRI < Base
+    class YRI < Command
       CACHE_FILE = File.expand_path('~/.yard/yri_cache')
       SEARCH_PATHS_FILE = File.expand_path('~/.yard/yri_search_paths')
       
@@ -20,7 +20,11 @@ module YARD
         load_cache
         @search_paths.uniq!
       end
-        
+      
+      def description
+        "A tool to view documentation in the console like `ri`"
+      end
+      
       # Runs the command-line utility.
       # 
       # @example
