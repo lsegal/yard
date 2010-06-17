@@ -248,18 +248,25 @@ describe YARD::Parser::SourceParser do
     it "should handle groups" do
       Registry.clear
       YARD.parse_string <<-eof
-        # @group Group Name
-        def foo; end
-        def foo2; end
+        class A
+          # @group Group Name
+          def foo; end
+          def foo2; end
         
-        # @endgroup
+          # @endgroup
         
-        def bar; end
+          def bar; end
+          
+          # @group Group 2
+          def baz; end
+        end
       eof
       
-      Registry.at('#bar').should_not have_tag(:group)
-      Registry.at('#foo').tag(:group).text.should == "Group Name"
-      Registry.at('#foo2').tag(:group).text.should == "Group Name"
+      Registry.at('A').tag(:groups).types.should == ['Group Name', 'Group 2']
+      Registry.at('A#bar').should_not have_tag(:group)
+      Registry.at('A#foo').tag(:group).text.should == "Group Name"
+      Registry.at('A#foo2').tag(:group).text.should == "Group Name"
+      Registry.at('A#baz').tag(:group).text.should == "Group 2"
     end
   end
 end
