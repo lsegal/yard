@@ -30,6 +30,7 @@ module YARD
           @ns_charno = 0
           @list = []
           @charno = 0
+          @group = nil
         end
 
         def parse
@@ -241,9 +242,23 @@ module YARD
         undef on_embdoc
         undef on_embdoc_end
         undef on_parse_error
+        undef on_def
+        undef on_defs
 
         def on_program(*args)
           args.first
+        end
+        
+        def on_def(*args)
+          node = AstNode.new(:def, args)
+          node.group = @group
+          visit_event(node)
+        end
+        
+        def on_defs(*args)
+          node = AstNode.new(:defs, args)
+          node.group = @group
+          visit_event(node)
         end
 
         def on_body_stmt(*args)
@@ -346,6 +361,15 @@ module YARD
 
         def on_comment(comment)
           visit_ns_token(:comment, comment)
+          
+          case comment
+          when /\A# @group\s+(.+)\s*\Z/
+            @group = $1
+            return
+          when /\A# @endgroup\s*\Z/
+            @group = nil
+            return
+          end
           
           comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]

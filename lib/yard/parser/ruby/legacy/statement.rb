@@ -2,7 +2,7 @@ module YARD
   module Parser::Ruby::Legacy
     class Statement 
       attr_reader :tokens, :comments, :block
-      attr_accessor :comments_range
+      attr_accessor :comments_range, :group
 
       def initialize(tokens, block = nil, comments = nil)
         @tokens = tokens

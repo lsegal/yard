@@ -244,5 +244,22 @@ describe YARD::Parser::SourceParser do
         YARD::Parser::SourceParser.parse_string("$$$", :ruby)
       end
     end
+    
+    it "should handle groups" do
+      Registry.clear
+      YARD.parse_string <<-eof
+        # @group Group Name
+        def foo; end
+        def foo2; end
+        
+        # @endgroup
+        
+        def bar; end
+      eof
+      
+      Registry.at('#bar').should_not have_tag(:group)
+      Registry.at('#foo').tag(:group).text.should == "Group Name"
+      Registry.at('#foo2').tag(:group).text.should == "Group Name"
+    end
   end
 end
