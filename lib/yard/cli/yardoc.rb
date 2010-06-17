@@ -119,7 +119,12 @@ module YARD
 
         # Last minute modifications
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         options[:readme] ||= Dir.glob('README*').first
+        if options[:onefile]
+          options[:files] << options[:readme] if options[:readme]
+          options[:readme] = Dir.glob(files.first).first 
+        end
         add_visibility_verifier
       end
       
@@ -283,6 +288,10 @@ module YARD
             log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
             exit
           end
+        end
+        
+        opts.on('--one-file', 'Generates output as a single file') do
+          options[:onefile] = true
         end
         
         opts.on('--incremental', 'Generates output for changed files only (implies -c)') do

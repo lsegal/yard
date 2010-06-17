@@ -1,7 +1,10 @@
 def init
   @breadcrumb = []
 
-  if @file
+  if @onefile
+    p options[:readme]
+    sections :layout
+  elsif @file
     @contents = File.read(@file)
     @file = File.basename(@file)
     @fname = @file.gsub(/\.[^.]+$/, '')
