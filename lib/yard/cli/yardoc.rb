@@ -36,16 +36,8 @@ module YARD
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
       
-      # Keep track of which visibilities are to be shown
-      # @return [Array<Symbol>] a list of visibilities
-      attr_accessor :visibilities
-      
       # @return [Boolean] whether to build or rebuild gems
       attr_accessor :build_gems, :rebuild_gems
-      
-      # Helper method to create an instance and run the utility
-      # @see #run
-      def self.run(*args) new.run(*args) end
         
       # Creates a new instance of the commandline utility
       def initialize
