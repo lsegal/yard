@@ -36,8 +36,9 @@ module YARD
       # @return [String] the filename to load extra options from
       attr_accessor :options_file
       
-      # @return [Boolean] whether to build or rebuild gems
-      attr_accessor :build_gems, :rebuild_gems
+      # Keep track of which visibilities are to be shown
+      # @return [Array<Symbol>] a list of visibilities
+      attr_accessor :visibilities
         
       # Creates a new instance of the commandline utility
       def initialize
@@ -58,8 +59,6 @@ module YARD
         @excluded = []
         @files = []
         @use_cache = false
-        @build_gems = false
-        @rebuild_gems = false
         @generate = true
         @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
@@ -85,9 +84,7 @@ module YARD
         Registry.save(use_cache)
         
         
-        if build_gems
-          do_build_gems(rebuild_gems)
-        elsif generate
+        if generate
           if incremental
             generate_with_cache(checksums)
           else
@@ -213,28 +210,6 @@ module YARD
         end
       end
       
-      # Builds .yardoc files for all non-existing gems
-      # @param [Boolean] rebuild Forces rebuild of all gems
-      def do_build_gems(rebuild = false)
-        require 'rubygems'
-        Gem.source_index.find_name('').each do |spec|
-          reload = true
-          dir = Registry.yardoc_file_for_gem(spec.name)
-          if dir && File.directory?(dir) && !rebuild
-            log.debug "#{spec.name} index already exists at '#{dir}'"
-          else
-            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
-            next unless yfile
-            Registry.clear
-            Dir.chdir(spec.full_gem_path)
-            log.info "Building yardoc index for gem: #{spec.full_name}"
-            Yardoc.run('-n', '-b', yfile)
-            reload = false
-          end
-        end
-        exit(0)
-      end
-      
       # Adds verifier rule for visibilities
       # @return [void]
       def add_visibility_verifier
@@ -300,15 +275,6 @@ module YARD
           YARD::Parser::SourceParser.parser_type = :ruby18
         end
         
-        opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
-          self.build_gems = true
-        end
-
-        opts.on('--re-build-gems', 'Forces building .yardoc files for all gems (implies -n)') do
-          self.build_gems = true
-          self.rebuild_gems = true
-        end
-
         opts.separator ""
         opts.separator "Output options:"
   
