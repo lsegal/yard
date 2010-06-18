@@ -50,29 +50,12 @@ module YARD
       #   To add a custom markup type, see {MarkupHelper}
       # @return [String] the HTML
       def htmlify(text, markup = options[:markup])
+        markup_meth = "html_markup_#{markup}"
+        return text unless respond_to?(markup_meth)
         return "" unless text
         return text unless markup
         load_markup_provider(markup)
-
-        # TODO: other libraries might be more complex
-        case markup
-        when :markdown
-          html = markup_class(markup).new(text).to_html
-        when :textile
-          doc = markup_class(markup).new(text)
-          doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
-          html = doc.to_html
-        when :rdoc
-
-          begin
-            SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
-            html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
-          end
-
-          html = fix_dash_dash(html)
-          html = fix_typewriter(html)
-        end
-
+        html = send("html_markup_#{markup}", text)
         html.force_encoding(Encoding.default_external) if RUBY19
         html = resolve_links(html)
         html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
@@ -81,6 +64,35 @@ module YARD
           %Q{<pre class="code">#{str}</pre>}
         end
         html
+      end
+      
+      def html_markup_markdown(text)
+        # TODO: other libraries might be more complex
+        markup_class(:markdown).new(text).to_html
+      end
+      
+      def html_markup_textile(text)
+        doc = markup_class(:textile).new(text)
+        doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
+        doc.to_html
+      end
+      
+      def html_markup_rdoc(text)
+        begin
+          SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
+          html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
+        end
+
+        html = fix_dash_dash(html)
+        html = fix_typewriter(html)
+      end
+      
+      def html_markup_text(text)
+        "<pre>" + text + "</pre>"
+      end
+      
+      def html_markup_html(text)
+        text
       end
       
       # @return [String] HTMLified text as a single line (paragraphs removed)
