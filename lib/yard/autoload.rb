@@ -131,6 +131,13 @@ module YARD
     autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
   end
   
+  module Server
+    autoload :DocServer,            __p('server/doc_server')
+    autoload :DocServerSerializer,  __p('server/doc_server_serializer')
+    autoload :DocServerUrlHelper,   __p('server/doc_server_url_helper')
+    autoload :WebrickAdapter,       __p('server/webrick_adapter')
+  end
+  
   module Tags # Namespace for Tag components
     autoload :DefaultFactory, __p('tags/default_factory')
     autoload :DefaultTag,     __p('tags/default_tag')

@@ -1,0 +1,44 @@
+<form class="search" method="get" action="/search/<%= @project %>">
+  Search: <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= @query %>" />
+</form>
+<script type="text/javascript" charset="utf-8">
+  $('#search_box').autocomplete('/search/<%= @project %>', {
+    width: 340,
+    formatItem: function(item) {
+      var values = item[0].split(",");
+      return values[0] + (values[1] == '' ? "" : " <small>(" + values[1] + ")</small>");
+    }
+  }).result(function(event, item) {
+    var values = item[0].split(",")
+    $('#search_box').val(values[1]);
+    location.href = values[3];
+    return false;
+  });
+</script>
+<style>
+  .frames form.search { position: absolute; right: 14px; top: -6px; padding-top: 10px; }
+  .frames #menu .noframes { float: none; }
+  .frames #menu { float: left; }
+  .frames #content h1 { margin-top: 15px; }
+</style>
+
+<div id="menu">
+  <% if @project %>
+    <a href="/docs" target="_top">Projects</a> &raquo;
+    <span class="title"><%= @project %></span>
+  <% end %>
+  <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
+    <% if @project %>&raquo;<% end %>
+    <a href="/docs/<%= @project %>"><% if object.root? || object.type == :method %>Index<% else %>Index (<%= object.name[0] %>)<% end %></a> &raquo; 
+    <%= @breadcrumb.map {|obj| "<span class='title'>" + linkify(obj, obj.name) + "</span>" }.join(" &raquo; ") %>
+    <%= @breadcrumb.size > 0 ? " &raquo; " : "" %>
+    <span class='title'><%= object.root? ? "Top Level Namespace" : object.name(true) %></span>
+  <% else %>
+    <% if @breadcrumb_title || object != '_index.html' %>&raquo; <% end %>
+    <% if object != '_index.html' %><a href="/docs/<%= @project %>">Index</a> &raquo; <% end %>
+    <span class='title'><%= @breadcrumb_title %></span>
+  <% end %>
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
