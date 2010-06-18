@@ -7,6 +7,7 @@ module YARD
     autoload :CommandParser,  __p('cli/command_parser')
     autoload :Gems,           __p('cli/gems')
     autoload :Graph,          __p('cli/graph')
+    autoload :Help,           __p('cli/help')
     autoload :Server,         __p('cli/server')
     autoload :Yardoc,         __p('cli/yardoc')
     autoload :YRI,            __p('cli/yri')

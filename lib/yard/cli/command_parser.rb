@@ -10,6 +10,7 @@ module YARD
         :doc    => Yardoc,
         :gems   => Gems,
         :graph  => Graph,
+        :help   => Help,
         :ri     => YRI,
         :server => Server
       ]
