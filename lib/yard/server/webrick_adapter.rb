@@ -14,7 +14,9 @@ module YARD
       }
       
       ROOT_COMMANDS = {
-        "/" => Commands::RootCommand
+        "/css" => Commands::StaticFileCommand,
+        "/js" => Commands::StaticFileCommand,
+        "/images" => Commands::StaticFileCommand,
       }
       
       def self.start(projects, options = {}, server_options = {})
@@ -23,19 +25,33 @@ module YARD
         projects.each do |name, yardoc|
           PROJECT_COMMANDS.each do |uri, command|
             uri = uri.gsub('/:project', options[:single_project] ? '' : "/#{name}")
-            options = options.merge(
+            opts = options.merge(
               :project => name,
               :yardoc_file => yardoc,
               :base_uri => uri
             )
-            server.mount(uri, self, command, options)
+            server.mount(uri, self, command, opts)
           end
         end
         
         ROOT_COMMANDS.each do |uri, command|
-          options = options.merge(:base_uri => uri, :projects => projects)
-          server.mount(uri, self, command, options)
+          opts = options.merge(:base_uri => uri)
+          server.mount(uri, self, command, opts)
         end
+        
+        opts, command = {}, nil
+        if options[:single_project]
+          opts = options.merge(
+            :project => projects.keys.first,
+            :yardoc_file => projects.values.first,
+            :base_uri => '/'
+          )
+          command = Commands::DisplayObjectCommand
+        else
+          opts = options.merge(:base_uri => '/', :projects => projects)
+          command = Commands::RootCommand
+        end
+        server.mount('/', self, command, opts)
         
         server.start
       end
