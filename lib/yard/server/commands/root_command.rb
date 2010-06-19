@@ -3,21 +3,19 @@ module YARD
     module Commands
       class RootCommand < StaticFileCommand
         attr_accessor :projects
+        attr_accessor :options
         
         def run
           return super unless path.empty?
           
-          if single_project
-            self.status, self.headers, self.body = 
-              *DisplayObjectCommand.new(command_options).call(request)
-          else
-            options.update(
-              :projects => projects,
-              :template => :doc_server,
-              :type => :project_list
-            )
-            render
-          end
+          self.options = SymbolHash.new(false).update(
+            :markup => :rdoc,
+            :format => :html,
+            :projects => projects,
+            :template => :doc_server,
+            :type => :project_list
+          )
+          render
         end
       end
     end
