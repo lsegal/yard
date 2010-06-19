@@ -141,6 +141,7 @@ module YARD
       autoload :ListClassesCommand,   __p('server/commands/list_command')
       autoload :ListFilesCommand,     __p('server/commands/list_command')
       autoload :ListMethodsCommand,   __p('server/commands/list_command')
+      autoload :ProjectCommand,       __p('server/commands/project_command')
       autoload :RootCommand,          __p('server/commands/root_command')
       autoload :SearchCommand,        __p('server/commands/search_command')
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')

@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class DisplayObjectCommand < Base
+      class DisplayObjectCommand < ProjectCommand
         def run
           return index if path.empty?
           
@@ -13,8 +13,10 @@ module YARD
         def index
           Registry.load_all
 
-          title = "Documentation for Project #{project || File.basename(Dir.pwd)}"
-          title = options[:title] || title
+          title = options[:title]
+          unless title
+            title = "Documentation for Project #{project || File.basename(Dir.pwd)}"
+          end
           options.update(
             :object => '_index.html',
             :objects => Registry.all(:module, :class),

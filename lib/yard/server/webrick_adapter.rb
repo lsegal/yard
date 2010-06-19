@@ -3,7 +3,7 @@ require 'webrick'
 module YARD
   module Server
     class WebrickAdapter < WEBrick::HTTPServlet::AbstractServlet
-      COMMANDS = {
+      PROJECT_COMMANDS = {
         "/docs/:project/frames" => Commands::FramesCommand,
         "/docs/:project/file" => Commands::DisplayFileCommand,
         "/docs/:project" => Commands::DisplayObjectCommand,
@@ -13,18 +13,30 @@ module YARD
         "/list/:project/files" => Commands::ListFilesCommand
       }
       
+      ROOT_COMMANDS = {
+        "/" => Commands::RootCommand
+      }
+      
       def self.start(projects, options = {}, server_options = {})
         server = WEBrick::HTTPServer.new(server_options)
         trap("INT") { server.shutdown }
         projects.each do |name, yardoc|
-          COMMANDS.each do |uri, command|
-            uri = uri.gsub('/:project', '') if options[:single_project]
-            uri = uri.gsub('/:project', "/#{name}")
-            server.mount(uri, self, command, name, yardoc, uri, options)
+          PROJECT_COMMANDS.each do |uri, command|
+            uri = uri.gsub('/:project', options[:single_project] ? '' : "/#{name}")
+            options = options.merge(
+              :project => name,
+              :yardoc_file => yardoc,
+              :base_uri => uri
+            )
+            server.mount(uri, self, command, options)
           end
         end
         
-        server.mount('/', self, Commands::RootCommand, projects, '/', options)
+        ROOT_COMMANDS.each do |uri, command|
+          options = options.merge(:base_uri => uri, :projects => projects)
+          server.mount(uri, self, command, options)
+        end
+        
         server.start
       end
       

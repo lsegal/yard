@@ -4,18 +4,12 @@ module YARD
       class RootCommand < StaticFileCommand
         attr_accessor :projects
         
-        def initialize(projects, base_uri, single)
-          super(nil, nil, base_uri, single)
-          self.projects = projects
-        end
-        
         def run
           return super unless path.empty?
           
           if single_project
             self.status, self.headers, self.body = 
-              *DisplayObjectCommand.new(projects.keys.first, 
-                projects.values.first, base_uri, single_project).call(request)
+              *DisplayObjectCommand.new(command_options).call(request)
           else
             options.update(
               :projects => projects,

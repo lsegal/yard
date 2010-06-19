@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class SearchCommand < Base
+      class SearchCommand < ProjectCommand
         attr_accessor :results, :query
         
         def run
