@@ -24,7 +24,7 @@
 
 <div id="menu">
   <% unless @single_project %>
-    <a href="/docs" target="_top">Projects</a> &raquo;
+    <a href="/" target="_top">Projects</a> &raquo;
     <span class="title"><%= @project %></span>
   <% end %>
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
