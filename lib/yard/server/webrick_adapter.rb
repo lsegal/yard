@@ -49,7 +49,7 @@ module YARD
           command = Commands::DisplayObjectCommand
         else
           opts = options.merge(:base_uri => '/', :projects => projects)
-          command = Commands::RootCommand
+          command = Commands::ProjectIndexCommand
         end
         server.mount('/', self, command, opts)
         

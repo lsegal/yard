@@ -142,12 +142,11 @@ module YARD
       autoload :ListFilesCommand,     __p('server/commands/list_command')
       autoload :ListMethodsCommand,   __p('server/commands/list_command')
       autoload :ProjectCommand,       __p('server/commands/project_command')
-      autoload :RootCommand,          __p('server/commands/root_command')
+      autoload :ProjectIndexCommand,  __p('server/commands/project_index_command')
       autoload :SearchCommand,        __p('server/commands/search_command')
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')
     end
     
-#    autoload :DocServer,              __p('server/doc_server')
     autoload :DocServerSerializer,    __p('server/doc_server_serializer')
     autoload :DocServerHelper,        __p('server/doc_server_helper')
     autoload :WebrickAdapter,         __p('server/webrick_adapter')

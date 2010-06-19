@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class RootCommand < StaticFileCommand
+      class ProjectIndexCommand < StaticFileCommand
         attr_accessor :projects
         attr_accessor :options
         
