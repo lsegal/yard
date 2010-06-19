@@ -172,7 +172,7 @@ module YARD
           :page_title => page_title,
           :main_url => main_url,
           :template => :doc_server,
-          :type => :frames,
+          :type => :frames
         )
         render
       end
@@ -188,7 +188,7 @@ module YARD
         options.update(
           :projects => projects,
           :template => :doc_server,
-          :type => :project_list,
+          :type => :project_list
         )
         render
       end
@@ -216,7 +216,51 @@ module YARD
       end
       
       def handle_search
-        # search
+        setup_yardopts
+        setup_project(true)
+        search = request.query['q']
+        redirect("/docs/#{project}") if search =~ /\A\s*\Z/
+        if found = Registry.at(search)
+          redirect(serializer.serialized_path(found))
+        end
+
+        splitquery = search.split(/\s+/).map {|c| c.downcase }.reject {|m| m.empty? }
+        results = Registry.all.select {|o|
+            o.path.downcase.include?(search.downcase)
+          }.reject {|o|
+            name = (o.type == :method ? o.name(true) : o.name).to_s.downcase
+            !name.include?(search.downcase) ||
+            case o.type
+            when :method
+              !(search =~ /[#.]/) && search.include?("::")
+            when :class, :module, :constant, :class_variable
+              search =~ /[#.]/
+            end 
+          }.sort_by {|o|
+            name = (o.type == :method ? o.name(true) : o.name).to_s
+            name.length.to_f / search.length.to_f
+          }
+        visible_results = results[0, 10]
+
+        if request.header['X-Requested-With'] == 'XmlHttpRequest'
+          self.headers['Content-Type'] = 'text/plain'
+          self.body = visible_results.map {|o| 
+            [(o.type == :method ? o.name(true) : o.name).to_s,
+             o.path,
+             o.namespace.root? ? '' : o.namespace.path,
+             serializer.serialized_path(o)
+            ].join(",")
+          }.join("\n")
+        else
+          options.update(
+            :visible_results => visible_results,
+            :query => search,
+            :results => results,
+            :template => :doc_server,
+            :type => :search
+          )
+          self.body = Templates::Engine.render(options)
+        end
       end
 
       def handle_static
@@ -261,8 +305,7 @@ module YARD
         yardopts_file = File.join(project_path, CLI::Yardoc::DEFAULT_YARDOPTS_FILE)
         yardoc = CLI::Yardoc.new
         yardoc.options_file = yardopts_file
-        yardoc.send(:optparse, *yardoc.yardopts)
-        yardoc.send(:optparse, *yardoc.send(:support_rdoc_document_file!))
+        yardoc.parse_arguments
         yardoc.options.delete(:serializer)
         yardoc.options[:files].unshift(*Dir.glob(project_path + '/README*'))
         options.update(yardoc.options.to_hash)

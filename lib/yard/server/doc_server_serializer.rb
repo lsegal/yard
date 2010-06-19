@@ -6,7 +6,14 @@ module YARD
       end
   
       def serialized_path(object)
-        path = object.root? ? "toplevel" : super(object)
+        path = case object
+        when CodeObjects::RootObject
+          "toplevel"
+        when CodeObjects::MethodObject
+          super(object.namespace) + (object.scope == :instance ? ":" : ".") + object.name.to_s
+        else
+          super(object)
+        end
         project_path = options[:project] ? '/' + options[:project] : ''
         return File.join('/docs' + project_path, path)
       end
