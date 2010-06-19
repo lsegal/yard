@@ -14,19 +14,17 @@ module YARD
       }
       
       def self.start(projects, options = {}, server_options = {})
-        Templates::Template.extra_includes << DocServerHelper
-        Templates::Engine.template_paths.push(File.dirname(__FILE__) + '/templates')
         server = WEBrick::HTTPServer.new(server_options)
         trap("INT") { server.shutdown }
         projects.each do |name, yardoc|
           COMMANDS.each do |uri, command|
             uri = uri.gsub('/:project', '') if options[:single_project]
             uri = uri.gsub('/:project', "/#{name}")
-            server.mount(uri, self, command, name, yardoc, uri, options[:single_project])
+            server.mount(uri, self, command, name, yardoc, uri, options)
           end
         end
         
-        server.mount('/', self, Commands::RootCommand, projects, '/', options[:single_project])
+        server.mount('/', self, Commands::RootCommand, projects, '/', options)
         server.start
       end
       

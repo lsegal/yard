@@ -42,12 +42,20 @@ module YARD
         
         # @return [String] the base URI for the command
         attr_accessor :base_uri
+        
+        # @return [Boolean] whether to cache
+        attr_accessor :caching
+        
+        # @return [Boolean] whether to reparse data 
+        attr_accessor :incremental
 
-        def initialize(project, yardoc, base_uri, single = false)
+        def initialize(project, yardoc, base_uri, command_options)
           self.project = project
           self.yardoc_file = yardoc
           self.base_uri = base_uri
-          self.single_project = single
+          self.single_project = command_options[:single_project]
+          self.caching = command_options[:caching]
+          self.incremental = command_options[:incremental]
           self.serializer = DocServerSerializer.new(self)
         end
 
@@ -124,10 +132,13 @@ module YARD
 
         def setup_yardopts
           return unless @project_changed || !@first_load
-          yardopts_file = File.join(project_path, CLI::Yardoc::DEFAULT_YARDOPTS_FILE)
+          Dir.chdir(project_path)
           yardoc = CLI::Yardoc.new
-          yardoc.options_file = yardopts_file
-          yardoc.parse_arguments
+          if incremental
+            yardoc.run('--incremental', '-n')
+          else
+            yardoc.parse_arguments
+          end
           yardoc.options.delete(:serializer)
           yardoc.options[:files].unshift(*Dir.glob(project_path + '/README*'))
           options.update(yardoc.options.to_hash)

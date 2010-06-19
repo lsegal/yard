@@ -221,7 +221,7 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         opts = OptionParser.new
-        opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
+        opts.banner = "Usage: yard doc [options] [source_files [- extra_files]]"
 
         opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
         opts.separator ""
