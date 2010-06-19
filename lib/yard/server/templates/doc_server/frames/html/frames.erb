@@ -7,7 +7,7 @@
 	<title><%= @page_title %></title>
 </head>
 <frameset cols="20%,*">
-  <frame name="list" src="/list/<%= @project %>/class" />
+  <frame name="list" src="/<%= base_path('list') %>/class" />
   <frame name="main" src="<%= @main_url %>" />
 </frameset>
 </html>

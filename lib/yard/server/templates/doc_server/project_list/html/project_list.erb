@@ -1,5 +1,5 @@
 <ul>
-<% @projects.each do |project_name| %>
+<% @projects.keys.each do |project_name| %>
   <li><a href="/docs/<%= project_name %>"><%= project_name %></a> (<a href="/docs/<%= project_name %>/frames">frames</a>)</li>
 <% end %>
 </ul>

@@ -19,9 +19,9 @@
     <div id="content">
       <h1 id="full_list_header"><%= @list_title %></h1>
       <div id="nav">
-        <a target="_self" href="/list/<%= @project %>/class">Classes</a> | 
-        <a target="_self" href="/list/<%= @project %>/methods">Methods</a> |
-        <a target="_self" href="/list/<%= @project %>/files">Files</a>
+        <a target="_self" href="/<%= base_path('list') %>/class">Classes</a> | 
+        <a target="_self" href="/<%= base_path('list') %>/methods">Methods</a> |
+        <a target="_self" href="/<%= base_path('list') %>/files">Files</a>
       </div>
       <div id="search">Search: <input type="text" /></div>
 

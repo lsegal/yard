@@ -3,18 +3,36 @@ require 'webrick'
 module YARD
   module Server
     class WebrickAdapter < WEBrick::HTTPServlet::AbstractServlet
-      def self.start(opts = {})
-        YARD::Templates::Template.extra_includes << DocServerUrlHelper
-        YARD::Templates::Engine.template_paths.push(File.dirname(__FILE__) + '/templates')
-        server = WEBrick::HTTPServer.new(opts)
+      COMMANDS = {
+        "/docs/:project/frames" => Commands::FramesCommand,
+        "/docs/:project/file" => Commands::DisplayFileCommand,
+        "/docs/:project" => Commands::DisplayObjectCommand,
+        "/search/:project" => Commands::SearchCommand,
+        "/list/:project/class" => Commands::ListClassesCommand,
+        "/list/:project/methods" => Commands::ListMethodsCommand,
+        "/list/:project/files" => Commands::ListFilesCommand
+      }
+      
+      def self.start(projects, options = {}, server_options = {})
+        Templates::Template.extra_includes << DocServerHelper
+        Templates::Engine.template_paths.push(File.dirname(__FILE__) + '/templates')
+        server = WEBrick::HTTPServer.new(server_options)
         trap("INT") { server.shutdown }
-        server.mount("/", self)
+        projects.each do |name, yardoc|
+          COMMANDS.each do |uri, command|
+            uri = uri.gsub('/:project', '') if options[:single_project]
+            uri = uri.gsub('/:project', "/#{name}")
+            server.mount(uri, self, command, name, yardoc, uri, options[:single_project])
+          end
+        end
+        
+        server.mount('/', self, Commands::RootCommand, projects, '/', options[:single_project])
         server.start
       end
       
-      def initialize(*args)
+      def initialize(server, klass, *args)
         super
-        @base = DocServer.new({'yard' => '.yardoc'}, true)
+        @base = klass.new(*args)
       end
       
       def do_GET(request, response)

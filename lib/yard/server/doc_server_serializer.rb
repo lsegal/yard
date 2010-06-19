@@ -1,10 +1,10 @@
 module YARD
   module Server
     class DocServerSerializer < Serializers::FileSystemSerializer
-      def initialize(project)
-        super(:project => project, :extension => '')
+      def initialize(command)
+        super(:command => command, :extension => '')
       end
-  
+
       def serialized_path(object)
         path = case object
         when CodeObjects::RootObject
@@ -14,7 +14,8 @@ module YARD
         else
           super(object)
         end
-        project_path = options[:project] ? '/' + options[:project] : ''
+        command = options[:command]
+        project_path = command.single_project ? '' : '/' + command.project.to_s
         return File.join('/docs' + project_path, path)
       end
     end

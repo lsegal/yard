@@ -132,10 +132,24 @@ module YARD
   end
   
   module Server
-    autoload :DocServer,            __p('server/doc_server')
-    autoload :DocServerSerializer,  __p('server/doc_server_serializer')
-    autoload :DocServerUrlHelper,   __p('server/doc_server_url_helper')
-    autoload :WebrickAdapter,       __p('server/webrick_adapter')
+    module Commands
+      autoload :Base,                 __p('server/commands/base')
+      autoload :DisplayFileCommand,   __p('server/commands/display_file_command')
+      autoload :DisplayObjectCommand, __p('server/commands/display_object_command')
+      autoload :FramesCommand,        __p('server/commands/frames_command')
+      autoload :ListCommand,          __p('server/commands/list_command')
+      autoload :ListClassesCommand,   __p('server/commands/list_command')
+      autoload :ListFilesCommand,     __p('server/commands/list_command')
+      autoload :ListMethodsCommand,   __p('server/commands/list_command')
+      autoload :RootCommand,          __p('server/commands/root_command')
+      autoload :SearchCommand,        __p('server/commands/search_command')
+      autoload :StaticFileCommand,    __p('server/commands/static_file_command')
+    end
+    
+#    autoload :DocServer,              __p('server/doc_server')
+    autoload :DocServerSerializer,    __p('server/doc_server_serializer')
+    autoload :DocServerHelper,        __p('server/doc_server_helper')
+    autoload :WebrickAdapter,         __p('server/webrick_adapter')
   end
   
   module Tags # Namespace for Tag components
