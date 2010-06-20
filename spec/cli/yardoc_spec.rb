@@ -141,13 +141,13 @@ describe YARD::CLI::Yardoc do
     Registry.clear
     YARD.parse_string <<-eof
       # @private
-      class A
+      class ABC
         def foo; end
       end
     eof
     @yardoc.optparse *%w( --no-private )
-    @yardoc.options[:verifier].call(Registry.at('A')).should be_false
-    @yardoc.options[:verifier].call(Registry.at('A#foo')).should be_false
+    @yardoc.options[:verifier].call(Registry.at('ABC')).should be_false
+    @yardoc.options[:verifier].call(Registry.at('ABC#foo')).should be_false
   end
   
   it "should accept --default-return" do

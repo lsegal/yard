@@ -7,9 +7,11 @@ describe YARD::CLI::CommandParser do
     end
     
     it "should show help if --help is provided" do
-      @cmd.should_receive(:puts).ordered.with(/^Usage:/)
-      @cmd.should_receive(:puts).at_least(1).times
-      @cmd.run *%w( --help )
+      command = mock(:command)
+      command.should_receive(:run).with('--help')
+      @cmd.commands[:foo] = command
+      @cmd.class.default_command = :foo
+      @cmd.run *%w( foo --help )
     end
     
     it "should use default command if first argument is a switch" do
@@ -31,6 +33,11 @@ describe YARD::CLI::CommandParser do
     it "should list commands if command is not found" do
       @cmd.should_receive(:list_commands)
       @cmd.run *%w( unknown_command --args )
+    end
+
+    it "should list commands if --help is provided as sole argument" do
+      @cmd.should_receive(:list_commands)
+      @cmd.run *%w( --help )
     end
   end
 end
