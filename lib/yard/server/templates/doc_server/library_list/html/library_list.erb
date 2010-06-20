@@ -1,5 +1,26 @@
-<ul>
-<% @libraries.keys.each do |library_name| %>
-  <li><a href="/docs/<%= library_name %>"><%= library_name %></a> (<a href="/docs/<%= library_name %>/frames">frames</a>)</li>
-<% end %>
-</ul>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=UTF-8" />
+    <title>YARD Documentation Server <%= YARD::VERSION %> - Library Listing</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="/css/custom.css" type="text/css" media="screen" charset="utf-8" />
+    <style>
+      ul { list-style: circle inside none; padding: 0; }
+      li { font-size: 1.2em; line-height: 1.4em; padding: 3px 5px; }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <h1>YARD Documentation Server <%= YARD::VERSION %></h1>
+      <h2>Library Listing</h2>
+      <ul>
+        <% @libraries.sort_by {|name, y| name.downcase }.each do |library_name, yardoc| %>
+          <li class="r<%= @row = @row == 1 ? 2 : 1 %>"><a href="/docs/<%= library_name %>/frames"><%= library_name %></a> 
+            <small>(<a href="/docs/<%= library_name %>">no frames</a>)</small></li>
+        <% end %>
+      </ul>
+    </div>
+  </body>
+</html>
