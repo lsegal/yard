@@ -60,8 +60,9 @@ module YARD
       end
       
       def add_gems
+        require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
-          libraries[spec.name] = :gem
+          libraries[spec.full_name] = spec
         end
       end
       

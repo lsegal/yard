@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module YARD
   module Server
     module Commands
@@ -30,7 +32,7 @@ module YARD
           super
           @gem = false
           self.serializer = DocServerSerializer.new(self)
-          if yardoc_file == :gem
+          if yardoc_file.is_a?(Gem::Specification)
             initialize_gem
           else
             self.library_path = File.dirname(yardoc_file) 
@@ -59,14 +61,16 @@ module YARD
         
         def initialize_gem
           @gem = true
-          self.yardoc_file = Registry.yardoc_file_for_gem(library)
+          spec = yardoc_file
+          ver = "= #{spec.version}"
+          self.yardoc_file = Registry.yardoc_file_for_gem(spec.name, ver)
           unless yardoc_file && File.directory?(yardoc_file)
             # Build gem docs on demand
-            log.debug "Building gem docs for #{library}"
-            CLI::Gems.run(library)
-            self.yardoc_file = Registry.yardoc_file_for_gem(library)
+            log.debug "Building gem docs for #{spec.full_name}"
+            CLI::Gems.run(library, ver)
+            self.yardoc_file = Registry.yardoc_file_for_gem(spec.name, ver)
           end
-          spec = Gem.source_index.find_name(library).first
+          spec = Gem.source_index.find_name(spec.name, ver).first
           self.library_path = spec.full_gem_path
         end
 
