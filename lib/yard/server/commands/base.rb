@@ -27,6 +27,9 @@ module YARD
 
         # @return [String] the response body
         attr_accessor :body
+        
+        # @return [Adapter] the server adapter
+        attr_accessor :server
 
         def initialize(opts = {})
           opts.each do |key, value|
