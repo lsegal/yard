@@ -67,8 +67,8 @@ module YARD
         end
         opts.separator ''
         opts.separator "Web Server Options:"
-        opts.on('-d', '--daemon', 'Daemonizes the server process') do 
-          server_options[:ServerType] = WEBrick::Daemon
+        opts.on('-d', '--daemon', 'Daemonizes the server process') do
+          server_options[:daemonize] = true
         end
         opts.on('-p PORT', '--port', 'Serves documentation on PORT') do |port|
           server_options[:Port] = port.to_i
