@@ -6,7 +6,7 @@ module YARD
         attr_accessor :project
 
         # @return [String] the path containing the yardoc file
-        attr_reader :project_path
+        attr_accessor :project_path
 
         # @return [String] the yardoc to use for lookups
         attr_accessor :yardoc_file
@@ -28,7 +28,13 @@ module YARD
         
         def initialize(opts = {})
           super
+          @gem = false
           self.serializer = DocServerSerializer.new(self)
+          if yardoc_file == :gem
+            initialize_gem
+          else
+            self.project_path = File.dirname(yardoc_file) 
+          end
         end
 
         def call(request)
@@ -45,13 +51,21 @@ module YARD
           super
         end
         
-        undef project_path
-        def project_path
-          return '' unless yardoc_file
-          File.dirname(yardoc_file)
+        def gem?
+          @gem
         end
 
         private
+        
+        def initialize_gem
+          @gem = true
+          self.yardoc_file = Registry.yardoc_file_for_gem(project)
+          return unless yardoc_file
+          # Build gem docs on demand
+          CLI::Gems.run(project) unless File.directory?(yardoc_file)
+          spec = Gem.source_index.find_name(project).first
+          self.project_path = spec.full_gem_path
+        end
 
         def setup_project
           return unless yardoc_file

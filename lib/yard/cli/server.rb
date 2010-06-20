@@ -59,6 +59,12 @@ module YARD
         end
       end
       
+      def add_gems
+        Gem.source_index.find_name('').each do |spec|
+          projects[spec.name] = :gem
+        end
+      end
+      
       def optparse(*args)
         opts = OptionParser.new
         opts.banner = 'Usage: yard server [options] [[project yardoc_file] ...]'
@@ -84,6 +90,9 @@ module YARD
         end
         opts.on('-r', '--reload', 'Reparses the project code on each request') do
           options[:incremental] = true
+        end
+        opts.on('-g', '--gems', 'Serves documentation for installed gems') do
+          add_gems
         end
         opts.separator ''
         opts.separator "Web Server Options:"
@@ -111,7 +120,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
         
-        if args.empty?
+        if args.empty? && projects.empty?
           add_projects([File.basename(Dir.pwd), '.yardoc'])
         else
           add_projects(args)

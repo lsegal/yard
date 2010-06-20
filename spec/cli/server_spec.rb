@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::CLI::Server do
   before do
+    @no_verify_projects = false
     @projects = {}
     @options = {:single_project => true, :caching => false}
     @server_options = {:Port => 8808}
@@ -12,7 +13,9 @@ describe YARD::CLI::Server do
   
   def run(*args)
     @projects = {File.basename(Dir.pwd) => '.yardoc'} if @projects.empty?
-    @projects.values.each {|dir| File.should_receive(:exist?).with(dir).and_return(true) }
+    unless @no_verify_projects
+      @projects.values.each {|dir| File.should_receive(:exist?).with(dir).and_return(true) }
+    end
     @adapter.should_receive(:new).with(@projects, @options, @server_options).and_return(@adapter)
     @adapter.should_receive(:start)
     @cli.run(*args.flatten)
@@ -101,5 +104,21 @@ describe YARD::CLI::Server do
     @server_options[:server] = 'thin'
     run '-s', 'thin'
     run '--server', 'thin'
+  end
+  
+  it "should accept -g, --gems" do
+    @no_verify_projects = true
+    @options[:single_project] = false
+    @projects['gem1'] = :gem
+    @projects['gem2'] = :gem
+    gem1 = mock(:gem1)
+    gem1.stub!(:name).and_return('gem1')
+    gem2 = mock(:gem2)
+    gem2.stub!(:name).and_return('gem2')
+    source = mock(:source_index)
+    source.stub!(:find_name).and_return([gem1, gem2])
+    Gem.stub!(:source_index).and_return(source)
+    run '-g'
+    run '--gems'
   end
 end
