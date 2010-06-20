@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class DisplayObjectCommand < ProjectCommand
+      class DisplayObjectCommand < LibraryCommand
         def run
           return index if path.empty?
           
@@ -15,7 +15,7 @@ module YARD
 
           title = options[:title]
           unless title
-            title = "Documentation for Project #{project || File.basename(Dir.pwd)}"
+            title = "Documentation for Library #{library || File.basename(Dir.pwd)}"
           end
           options.update(
             :object => '_index.html',

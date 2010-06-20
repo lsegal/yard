@@ -7,12 +7,12 @@ module YARD
       end
 
       def url_for_file(filename, anchor = nil)
-        "/#{base_path('docs')}/file/" + filename.sub(%r{^#{@project_path.to_s}/}, '') + 
+        "/#{base_path('docs')}/file/" + filename.sub(%r{^#{@library_path.to_s}/}, '') + 
           (anchor ? "##{anchor}" : "")
       end
       
       def base_path(path)
-        path + (@single_project ? '' : "/#{@project}")
+        path + (@single_library ? '' : "/#{@library}")
       end
     end
   end

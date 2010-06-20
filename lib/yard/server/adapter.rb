@@ -2,13 +2,13 @@ module YARD
   module Server
     class Adapter
       PROJECT_COMMANDS = {
-        "/docs/:project/frames" => Commands::FramesCommand,
-        "/docs/:project/file" => Commands::DisplayFileCommand,
-        "/docs/:project" => Commands::DisplayObjectCommand,
-        "/search/:project" => Commands::SearchCommand,
-        "/list/:project/class" => Commands::ListClassesCommand,
-        "/list/:project/methods" => Commands::ListMethodsCommand,
-        "/list/:project/files" => Commands::ListFilesCommand
+        "/docs/:library/frames" => Commands::FramesCommand,
+        "/docs/:library/file" => Commands::DisplayFileCommand,
+        "/docs/:library" => Commands::DisplayObjectCommand,
+        "/search/:library" => Commands::SearchCommand,
+        "/list/:library/class" => Commands::ListClassesCommand,
+        "/list/:library/methods" => Commands::ListMethodsCommand,
+        "/list/:library/files" => Commands::ListFilesCommand
       }
       
       ROOT_COMMANDS = {
@@ -17,10 +17,10 @@ module YARD
         "/images" => Commands::StaticFileCommand,
       }
       
-      def initialize(projects, options = {}, server_options = {})
+      def initialize(libraries, options = {}, server_options = {})
         options[:server] = self
-        mount_project_commands(projects, options)
-        mount_root_commands(projects, options)
+        mount_library_commands(libraries, options)
+        mount_root_commands(libraries, options)
       end
       
       def start
@@ -37,12 +37,12 @@ module YARD
       
       private
       
-      def mount_project_commands(projects, options)
-        projects.each do |name, yardoc|
+      def mount_library_commands(libraries, options)
+        libraries.each do |name, yardoc|
           PROJECT_COMMANDS.each do |uri, command|
-            uri = uri.gsub('/:project', options[:single_project] ? '' : "/#{name}")
+            uri = uri.gsub('/:library', options[:single_library] ? '' : "/#{name}")
             opts = options.merge(
-              :project => name,
+              :library => name,
               :yardoc_file => yardoc,
               :base_uri => uri
             )
@@ -51,23 +51,23 @@ module YARD
         end
       end
       
-      def mount_root_commands(projects, options)
+      def mount_root_commands(libraries, options)
         ROOT_COMMANDS.each do |uri, command|
           opts = options.merge(:base_uri => uri)
           mount_command(uri, command, opts)
         end
         
         opts, command = {}, nil
-        if options[:single_project]
+        if options[:single_library]
           opts = options.merge(
-            :project => projects.keys.first,
-            :yardoc_file => projects.values.first,
+            :library => libraries.keys.first,
+            :yardoc_file => libraries.values.first,
             :base_uri => '/'
           )
           command = Commands::DisplayObjectCommand
         else
-          opts = options.merge(:base_uri => '/', :projects => projects)
-          command = Commands::ProjectIndexCommand
+          opts = options.merge(:base_uri => '/', :libraries => libraries)
+          command = Commands::LibraryIndexCommand
         end
         mount_command('/', command, opts)
       end

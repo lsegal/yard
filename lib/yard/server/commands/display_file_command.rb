@@ -1,10 +1,10 @@
 module YARD
   module Server
     module Commands
-      class DisplayFileCommand < ProjectCommand
+      class DisplayFileCommand < LibraryCommand
         def run
-          ppath = project_path
-          filename = File.cleanpath(File.join(project_path, path))
+          ppath = library_path
+          filename = File.cleanpath(File.join(library_path, path))
           raise FileLoadError if !File.file?(filename)
           if filename =~ /\.(jpe?g|gif|png|bmp)$/i
             headers['Content-Type'] = StaticFileCommand::MIME_TYPES[$1.downcase.to_sym] || 'text/html'

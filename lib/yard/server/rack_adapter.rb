@@ -6,7 +6,7 @@ module YARD
       attr_accessor :server
       attr_accessor :url_map
       
-      def initialize(projects, options = {}, server_options = {})
+      def initialize(libraries, options = {}, server_options = {})
         self.url_map = Rack::Builder.new
         self.server = Rack::Server.new(server_options)
         server.instance_variable_set("@app", url_map)

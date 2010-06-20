@@ -1,27 +1,27 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Server::Adapter do
-  describe '#mount_project_commands' do
-    it "should mount all project commands" do
+  describe '#mount_library_commands' do
+    it "should mount all library commands" do
       adapter = Server::Adapter.allocate
       Server::Adapter::PROJECT_COMMANDS.each do |path, command|
-        path = path.gsub(/:project/, 'yard')
+        path = path.gsub(/:library/, 'yard')
         adapter.should_receive(:mount_command) do |p, c, o| 
           p.should == path; c.should == command
         end
       end
-      adapter.send(:mount_project_commands, {'yard' => '.yardoc'}, {})
+      adapter.send(:mount_library_commands, {'yard' => '.yardoc'}, {})
     end
     
-    it "should not include project name if :single_project = true" do
+    it "should not include library name if :single_library = true" do
       adapter = Server::Adapter.allocate
       Server::Adapter::PROJECT_COMMANDS.each do |path, command|
-        path = path.gsub('/:project', '')
+        path = path.gsub('/:library', '')
         adapter.should_receive(:mount_command) do |p, c, o| 
           p.should == path; c.should == command
         end
       end
-      adapter.send(:mount_project_commands, {'yard' => '.yardoc'}, {:single_project => true})
+      adapter.send(:mount_library_commands, {'yard' => '.yardoc'}, {:single_library => true})
     end
   end
   
@@ -29,7 +29,7 @@ describe YARD::Server::Adapter do
     it "should mount all root commands" do
       adapter = Server::Adapter.allocate
       Server::Adapter::ROOT_COMMANDS.each do |path, command|
-        path = path.gsub(/:project/, 'yard')
+        path = path.gsub(/:library/, 'yard')
         adapter.should_receive(:mount_command) do |p, c| 
           p.should == path; c.should == command
         end

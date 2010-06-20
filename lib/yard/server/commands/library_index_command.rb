@@ -1,8 +1,8 @@
 module YARD
   module Server
     module Commands
-      class ProjectIndexCommand < StaticFileCommand
-        attr_accessor :projects
+      class LibraryIndexCommand < StaticFileCommand
+        attr_accessor :libraries
         attr_accessor :options
         
         def run
@@ -11,9 +11,9 @@ module YARD
           self.options = SymbolHash.new(false).update(
             :markup => :rdoc,
             :format => :html,
-            :projects => projects,
+            :libraries => libraries,
             :template => :doc_server,
-            :type => :project_list
+            :type => :library_list
           )
           render
         end

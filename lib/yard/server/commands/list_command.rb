@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class ListCommand < ProjectCommand
+      class ListCommand < LibraryCommand
         include Templates::Helpers::BaseHelper
         
         def items; raise NotImplementedError end

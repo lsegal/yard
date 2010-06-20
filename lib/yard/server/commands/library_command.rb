@@ -1,24 +1,24 @@
 module YARD
   module Server
     module Commands
-      class ProjectCommand < Base
-        # @return [String] the name of the project
-        attr_accessor :project
+      class LibraryCommand < Base
+        # @return [String] the name of the library
+        attr_accessor :library
 
         # @return [String] the path containing the yardoc file
-        attr_accessor :project_path
+        attr_accessor :library_path
 
         # @return [String] the yardoc to use for lookups
         attr_accessor :yardoc_file
 
-        # @return [Hash{Symbol => Object}] default options for the project
+        # @return [Hash{Symbol => Object}] default options for the library
         attr_accessor :options
 
         # @return [Serializers::Base] the serializer used to perform file linking
         attr_accessor :serializer
 
-        # @return [Boolean] whether router should route for multiple projects
-        attr_accessor :single_project
+        # @return [Boolean] whether router should route for multiple libraries
+        attr_accessor :single_library
         
         # @return [Boolean] whether to cache
         attr_accessor :caching
@@ -33,7 +33,7 @@ module YARD
           if yardoc_file == :gem
             initialize_gem
           else
-            self.project_path = File.dirname(yardoc_file) 
+            self.library_path = File.dirname(yardoc_file) 
           end
         end
 
@@ -41,13 +41,13 @@ module YARD
           self.options = SymbolHash.new(false).update(
             :serialize => false,
             :serializer => serializer,
-            :project => project,
-            :project_path => project_path,
-            :single_project => single_project,
+            :library => library,
+            :library_path => library_path,
+            :single_library => single_library,
             :markup => :rdoc,
             :format => :html
           )
-          setup_project
+          setup_library
           super
         end
         
@@ -59,15 +59,15 @@ module YARD
         
         def initialize_gem
           @gem = true
-          self.yardoc_file = Registry.yardoc_file_for_gem(project)
+          self.yardoc_file = Registry.yardoc_file_for_gem(library)
           return unless yardoc_file
           # Build gem docs on demand
-          CLI::Gems.run(project) unless File.directory?(yardoc_file)
-          spec = Gem.source_index.find_name(project).first
-          self.project_path = spec.full_gem_path
+          CLI::Gems.run(library) unless File.directory?(yardoc_file)
+          spec = Gem.source_index.find_name(library).first
+          self.library_path = spec.full_gem_path
         end
 
-        def setup_project
+        def setup_library
           return unless yardoc_file
           load_yardoc
           setup_yardopts
@@ -79,8 +79,8 @@ module YARD
         end
 
         def setup_yardopts
-          return unless @project_changed || !@first_load
-          Dir.chdir(project_path)
+          return unless @library_changed || !@first_load
+          Dir.chdir(library_path)
           yardoc = CLI::Yardoc.new
           if incremental
             yardoc.run('--incremental', '-n')
@@ -88,7 +88,7 @@ module YARD
             yardoc.parse_arguments
           end
           yardoc.options.delete(:serializer)
-          yardoc.options[:files].unshift(*Dir.glob(project_path + '/README*'))
+          yardoc.options[:files].unshift(*Dir.glob(library_path + '/README*'))
           options.update(yardoc.options.to_hash)
         end
 

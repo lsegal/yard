@@ -5,7 +5,7 @@ module YARD
     class WebrickAdapter < Adapter
       attr_accessor :server
       
-      def initialize(projects, options = {}, server_options = {})
+      def initialize(libraries, options = {}, server_options = {})
         server_options[:ServerType] = WEBrick::Daemon if server_options[:daemonize]
         self.server = WEBrick::HTTPServer.new(server_options)
         trap("INT") { server.shutdown }

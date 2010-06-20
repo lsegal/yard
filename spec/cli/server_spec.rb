@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::CLI::Server do
   before do
-    @no_verify_projects = false
-    @projects = {}
-    @options = {:single_project => true, :caching => false}
+    @no_verify_libraries = false
+    @libraries = {}
+    @options = {:single_library => true, :caching => false}
     @server_options = {:Port => 8808}
     @adapter = mock(:adapter)
     @cli = YARD::CLI::Server.new
@@ -12,37 +12,37 @@ describe YARD::CLI::Server do
   end
   
   def run(*args)
-    @projects = {File.basename(Dir.pwd) => '.yardoc'} if @projects.empty?
-    unless @no_verify_projects
-      @projects.values.each {|dir| File.should_receive(:exist?).with(dir).and_return(true) }
+    @libraries = {File.basename(Dir.pwd) => '.yardoc'} if @libraries.empty?
+    unless @no_verify_libraries
+      @libraries.values.each {|dir| File.should_receive(:exist?).with(dir).and_return(true) }
     end
-    @adapter.should_receive(:new).with(@projects, @options, @server_options).and_return(@adapter)
+    @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
     @adapter.should_receive(:start)
     @cli.run(*args.flatten)
   end
 
-  it "should default to current dir if no project is specified" do
+  it "should default to current dir if no library is specified" do
     Dir.should_receive(:pwd).and_return('/path/to/foo')
-    @projects['foo'] = '.yardoc'
+    @libraries['foo'] = '.yardoc'
     run
   end
   
-  it "should use .yardoc as yardoc file is project list is odd" do
-    @projects['a'] = '.yardoc'
+  it "should use .yardoc as yardoc file is library list is odd" do
+    @libraries['a'] = '.yardoc'
     run 'a'
   end
   
-  it "should force multi project if more than one project is listed" do
-    @options[:single_project] = false
-    @projects['a'] = 'b'
-    @projects['c'] = '.yardoc'
+  it "should force multi library if more than one library is listed" do
+    @options[:single_library] = false
+    @libraries['a'] = 'b'
+    @libraries['c'] = '.yardoc'
     run %w(a b c)
   end
   
-  it "should accept -m, --multi-project" do
-    @options[:single_project] = false
+  it "should accept -m, --multi-library" do
+    @options[:single_library] = false
     run '-m'
-    run '--multi-project'
+    run '--multi-library'
   end
   
   it "should accept -c, --cache" do
@@ -107,10 +107,10 @@ describe YARD::CLI::Server do
   end
   
   it "should accept -g, --gems" do
-    @no_verify_projects = true
-    @options[:single_project] = false
-    @projects['gem1'] = :gem
-    @projects['gem2'] = :gem
+    @no_verify_libraries = true
+    @options[:single_library] = false
+    @libraries['gem1'] = :gem
+    @libraries['gem2'] = :gem
     gem1 = mock(:gem1)
     gem1.stub!(:name).and_return('gem1')
     gem2 = mock(:gem2)

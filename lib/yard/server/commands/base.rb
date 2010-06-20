@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      class ProjectLoadError < RuntimeError; end
+      class LibraryLoadError < RuntimeError; end
       class FileLoadError < RuntimeError; end
       class ObjectLoadError < RuntimeError; end
       class FinishRequest < RuntimeError; end

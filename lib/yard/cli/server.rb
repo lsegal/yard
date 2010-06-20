@@ -8,8 +8,8 @@ module YARD
       # @return [Hash] a list of options to pass to the web server
       attr_accessor :server_options
       
-      # @return [Hash] a list of project names and yardoc files to serve
-      attr_accessor :projects
+      # @return [Hash] a list of library names and yardoc files to serve
+      attr_accessor :libraries
       
       # @return [Adapter] the adapter to use for loading the web server
       attr_accessor :adapter
@@ -24,17 +24,17 @@ module YARD
       end
       
       def run(*args)
-        self.projects = {}
+        self.libraries = {}
         self.options = SymbolHash.new(false).update(
-          :single_project => true,
+          :single_library => true,
           :caching => false
         )
         self.server_options = {:Port => 8808}
         optparse(*args)
         
         select_adapter
-        log.debug "Serving projects using #{adapter}: #{projects.keys.join(', ')}"
-        adapter.new(projects, options, server_options).start
+        log.debug "Serving libraries using #{adapter}: #{libraries.keys.join(', ')}"
+        adapter.new(libraries, options, server_options).start
       end
       
       private
@@ -48,31 +48,31 @@ module YARD
         self.adapter = YARD::Server::WebrickAdapter
       end
       
-      def add_projects(args)
-        args.each_slice(2) do |project, yardoc|
+      def add_libraries(args)
+        args.each_slice(2) do |library, yardoc|
           yardoc ||= '.yardoc'
           if File.exist?(yardoc)
-            projects[project] = yardoc
+            libraries[library] = yardoc
           else
-            log.warn "Cannot find yardoc db for #{project}: #{yardoc}"
+            log.warn "Cannot find yardoc db for #{library}: #{yardoc}"
           end
         end
       end
       
       def add_gems
         Gem.source_index.find_name('').each do |spec|
-          projects[spec.name] = :gem
+          libraries[spec.name] = :gem
         end
       end
       
       def optparse(*args)
         opts = OptionParser.new
-        opts.banner = 'Usage: yard server [options] [[project yardoc_file] ...]'
+        opts.banner = 'Usage: yard server [options] [[library yardoc_file] ...]'
         opts.separator ''
         opts.separator 'Example: yard server yard .yardoc ruby-core ../ruby/.yardoc'
         opts.separator 'The above example serves documentation for YARD and Ruby-core'
         opts.separator ''
-        opts.separator 'If no project/yardoc_file is specified, the server uses'
+        opts.separator 'If no library/yardoc_file is specified, the server uses'
         opts.separator 'the name of the current directory and `.yardoc` respectively'
         opts.separator ''
         opts.separator "General Options:"
@@ -82,13 +82,13 @@ module YARD
             exit
           end
         end
-        opts.on('-m', '--multi-project', 'Serves documentation for multiple projects') do
-          options[:single_project] = false
+        opts.on('-m', '--multi-library', 'Serves documentation for multiple libraries') do
+          options[:single_library] = false
         end
         opts.on('-c', '--cache', 'Caches all documentation to document root (see --docroot)') do
           options[:caching] = true
         end
-        opts.on('-r', '--reload', 'Reparses the project code on each request') do
+        opts.on('-r', '--reload', 'Reparses the library code on each request') do
           options[:incremental] = true
         end
         opts.on('-g', '--gems', 'Serves documentation for installed gems') do
@@ -120,11 +120,11 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
         
-        if args.empty? && projects.empty?
-          add_projects([File.basename(Dir.pwd), '.yardoc'])
+        if args.empty? && libraries.empty?
+          add_libraries([File.basename(Dir.pwd), '.yardoc'])
         else
-          add_projects(args)
-          options[:single_project] = false if projects.size > 1
+          add_libraries(args)
+          options[:single_library] = false if libraries.size > 1
         end
       end
     end

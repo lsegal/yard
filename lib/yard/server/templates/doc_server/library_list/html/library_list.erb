@@ -1,0 +1,5 @@
+<ul>
+<% @libraries.keys.each do |library_name| %>
+  <li><a href="/docs/<%= library_name %>"><%= library_name %></a> (<a href="/docs/<%= library_name %>/frames">frames</a>)</li>
+<% end %>
+</ul>

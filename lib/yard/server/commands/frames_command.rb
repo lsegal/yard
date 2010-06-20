@@ -12,7 +12,7 @@ module YARD
             page_title = "File: #{options[:files].first}"
             main_url = url_for_file(options[:files].first)
           elsif !path || path.empty?
-            page_title = "Documentation for #{project || Dir.pwd}"
+            page_title = "Documentation for #{library || Dir.pwd}"
           end
 
           options.update(

@@ -1,13 +1,13 @@
 module YARD
   module Server
     module Commands
-      class SearchCommand < ProjectCommand
+      class SearchCommand < LibraryCommand
         attr_accessor :results, :query
         
         def run
           Registry.load_all
           self.query = request.query['q']
-          redirect("/docs/#{single_project ? project : ''}") if query =~ /\A\s*\Z/
+          redirect("/docs/#{single_library ? library : ''}") if query =~ /\A\s*\Z/
           if found = Registry.at(query)
             redirect(serializer.serialized_path(found))
           end

@@ -16,8 +16,8 @@ module YARD
           super(object)
         end
         command = options[:command]
-        project_path = command.single_project ? '' : '/' + command.project.to_s
-        return File.join('/docs' + project_path, path)
+        library_path = command.single_library ? '' : '/' + command.library.to_s
+        return File.join('/docs' + library_path, path)
       end
     end
   end
