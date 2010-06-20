@@ -49,9 +49,10 @@ module YARD
       end
       
       def add_projects(args)
-        args.each_cons(2) do |project, yardoc| 
+        args.each_slice(2) do |project, yardoc|
+          yardoc ||= '.yardoc'
           if File.exist?(yardoc)
-            projects[project] = yardoc || '.yardoc'
+            projects[project] = yardoc
           else
             log.warn "Cannot find yardoc db for #{project}: #{yardoc}"
           end
@@ -111,7 +112,7 @@ module YARD
         parse_options(opts, args)
         
         if args.empty?
-          projects[File.basename(Dir.pwd)] = '.yardoc'
+          add_projects([File.basename(Dir.pwd), '.yardoc'])
         else
           add_projects(args)
           options[:single_project] = false if projects.size > 1
