@@ -11,6 +11,9 @@ module YARD
       # @return [Hash] a list of project names and yardoc files to serve
       attr_accessor :projects
       
+      # @return [Adapter] the adapter to use for loading the web server
+      attr_accessor :adapter
+      
       def description
         "Runs a local documentation server"
       end
@@ -29,11 +32,21 @@ module YARD
         self.server_options = {:Port => 8808}
         optparse(*args)
         
-        log.debug "Serving projects: #{projects.keys.join(', ')}"
-        YARD::Server::WebrickAdapter.start(projects, options, server_options) 
+        select_adapter
+        log.debug "Serving projects using #{adapter}: #{projects.keys.join(', ')}"
+        adapter.new(projects, options, server_options).start
       end
       
       private
+      
+      def select_adapter
+        return adapter if adapter
+        require 'rubygems'
+        require 'rack'
+        self.adapter = YARD::Server::RackAdapter
+      rescue LoadError
+        self.adapter = YARD::Server::WebrickAdapter
+      end
       
       def add_projects(args)
         args.each_cons(2) do |project, yardoc| 
@@ -56,6 +69,12 @@ module YARD
         opts.separator 'the name of the current directory and `.yardoc` respectively'
         opts.separator ''
         opts.separator "General Options:"
+        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
+          if !require(file.gsub(/\.rb$/, ''))
+            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
+            exit
+          end
+        end
         opts.on('-m', '--multi-project', 'Serves documentation for multiple projects') do
           options[:single_project] = false
         end
@@ -75,6 +94,18 @@ module YARD
         end
         opts.on('--docroot DOCROOT', 'Uses DOCROOT as document root') do |docroot|
           server_options[:DocumentRoot] = docroot
+        end
+        opts.on('-a', '--adapter ADAPTER', 'Use the ADAPTER (full Ruby class) for web server') do |adapter|
+          if adapter.downcase == 'webrick'
+            self.adapter = YARD::Server::WebrickAdapter
+          elsif adapter.downcase == 'rack'
+            self.adapter = YARD::Server::RackAdapter
+          else
+            self.adapter = eval(adapter)
+          end
+        end
+        opts.on('-s', '--server TYPE', 'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|
+          server_options[:server] = type
         end
         common_options(opts)
         parse_options(opts, args)
