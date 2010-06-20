@@ -8,7 +8,7 @@ module YARD
           main_url = "#{base_uri.gsub(/frames$/, '')}#{object_path}"
           if path && !path.empty?
             page_title = "Object: #{object_path}"
-          elsif options[:files].size > 0
+          elsif options[:files] && options[:files].size > 0
             page_title = "File: #{options[:files].first}"
             main_url = url_for_file(options[:files].first)
           elsif !path || path.empty?
