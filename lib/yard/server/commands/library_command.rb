@@ -60,9 +60,12 @@ module YARD
         def initialize_gem
           @gem = true
           self.yardoc_file = Registry.yardoc_file_for_gem(library)
-          return unless yardoc_file
-          # Build gem docs on demand
-          CLI::Gems.run(library) unless File.directory?(yardoc_file)
+          unless yardoc_file && File.directory?(yardoc_file)
+            # Build gem docs on demand
+            log.debug "Building gem docs for #{library}"
+            CLI::Gems.run(library)
+            self.yardoc_file = Registry.yardoc_file_for_gem(library)
+          end
           spec = Gem.source_index.find_name(library).first
           self.library_path = spec.full_gem_path
         end
