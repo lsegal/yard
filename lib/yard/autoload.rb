@@ -147,8 +147,10 @@ module YARD
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')
     end
     
+    autoload :Adapter,                __p('server/adapter')
     autoload :DocServerSerializer,    __p('server/doc_server_serializer')
     autoload :DocServerHelper,        __p('server/doc_server_helper')
+    autoload :RackAdapter,            __p('server/rack_adapter')
     autoload :WebrickAdapter,         __p('server/webrick_adapter')
   end
   

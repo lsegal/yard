@@ -1,5 +1,3 @@
-require 'webrick'
-
 module YARD
   module CLI
     # A local documentation server
