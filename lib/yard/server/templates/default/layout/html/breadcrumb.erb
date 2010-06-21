@@ -2,17 +2,19 @@
   Search: <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= @query %>" />
 </form>
 <script type="text/javascript" charset="utf-8">
-  $('#search_box').autocomplete('/<%= base_path('search') %>', {
-    width: 340,
-    formatItem: function(item) {
-      var values = item[0].split(",");
-      return values[0] + (values[1] == '' ? "" : " <small>(" + values[1] + ")</small>");
-    }
-  }).result(function(event, item) {
-    var values = item[0].split(",")
-    $('#search_box').val(values[1]);
-    location.href = values[3];
-    return false;
+  $(function() {
+    $('#search_box').autocomplete('/<%= base_path('search') %>', {
+      width: document.body.className == 'frames' ? 250 : 340,
+      formatItem: function(item) {
+        var values = item[0].split(",");
+        return values[0] + (values[1] == '' ? "" : " <small>(" + values[1] + ")</small>");
+      }
+    }).result(function(event, item) {
+      var values = item[0].split(",")
+      $('#search_box').val(values[1]);
+      location.href = values[3];
+      return false;
+    });
   });
 </script>
 <style>
