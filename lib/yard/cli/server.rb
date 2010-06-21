@@ -52,7 +52,8 @@ module YARD
         args.each_slice(2) do |library, yardoc|
           yardoc ||= '.yardoc'
           if File.exist?(yardoc)
-            libraries[library] = yardoc
+            libraries[library] ||= []
+            libraries[library] << YARD::Server::LibraryVersion.new(library, yardoc)
           else
             log.warn "Cannot find yardoc db for #{library}: #{yardoc}"
           end
@@ -62,7 +63,8 @@ module YARD
       def add_gems
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
-          libraries[spec.full_name] = spec
+          libraries[spec.name] ||= []
+          libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, :gem, spec.version.to_s)
         end
       end
       

@@ -150,6 +150,7 @@ module YARD
     autoload :Adapter,                __p('server/adapter')
     autoload :DocServerSerializer,    __p('server/doc_server_serializer')
     autoload :DocServerHelper,        __p('server/doc_server_helper')
+    autoload :LibraryVersion,         __p('server/library_version')
     autoload :RackAdapter,            __p('server/rack_adapter')
     autoload :WebrickAdapter,         __p('server/webrick_adapter')
   end

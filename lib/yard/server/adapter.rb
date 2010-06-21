@@ -35,18 +35,23 @@ module YARD
         raise NotImplementedError
       end
       
+      def mount_library(library, options)
+        PROJECT_COMMANDS.each do |uri, command|
+          uri = uri.gsub('/:library', options[:single_library] ? '' : "/#{library}")
+          opts = options.merge(
+            :library => library,
+            :base_uri => uri
+          )
+          mount_command(uri, command, opts)
+        end
+      end
+      
       private
       
       def mount_library_commands(libraries, options)
-        libraries.each do |name, yardoc|
-          PROJECT_COMMANDS.each do |uri, command|
-            uri = uri.gsub('/:library', options[:single_library] ? '' : "/#{name}")
-            opts = options.merge(
-              :library => name,
-              :yardoc_file => yardoc,
-              :base_uri => uri
-            )
-            mount_command(uri, command, opts)
+        libraries.each do |name, library_versions|
+          library_versions.each do |library|
+            mount_library(library, options)
           end
         end
       end
@@ -60,8 +65,7 @@ module YARD
         opts, command = {}, nil
         if options[:single_library]
           opts = options.merge(
-            :library => libraries.keys.first,
-            :yardoc_file => libraries.values.first,
+            :library => libraries.values.first,
             :base_uri => '/'
           )
           command = Commands::DisplayObjectCommand

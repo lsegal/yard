@@ -26,11 +26,12 @@ module YARD
       def build_gems
         require 'rubygems'
         @gems.each do |spec|
-          dir = Registry.yardoc_file_for_gem(spec.name)
+          ver = "= #{spec.version}"
+          dir = Registry.yardoc_file_for_gem(spec.name, ver)
           if dir && File.directory?(dir) && !@rebuild
             log.debug "#{spec.name} index already exists at '#{dir}'"
           else
-            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
+            yfile = Registry.yardoc_file_for_gem(spec.name, ver, true)
             next unless yfile
             next unless File.directory?(spec.full_gem_path)
             Registry.clear

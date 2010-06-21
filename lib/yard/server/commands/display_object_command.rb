@@ -15,7 +15,7 @@ module YARD
 
           title = options[:title]
           unless title
-            title = "Documentation for Library #{library || File.basename(Dir.pwd)}"
+            title = "Documentation for #{library.name} #{library.version ? '(' + library.version + ')' : ''}"
           end
           options.update(
             :object => '_index.html',

@@ -1,10 +1,8 @@
-require 'rubygems'
-
 module YARD
   module Server
     module Commands
       class LibraryCommand < Base
-        # @return [String] the name of the library
+        # @return [LibraryVersion] the object containing library information
         attr_accessor :library
 
         # @return [String] the path containing the yardoc file
@@ -32,9 +30,10 @@ module YARD
           super
           @gem = false
           self.serializer = DocServerSerializer.new(self)
-          if yardoc_file.is_a?(Gem::Specification)
+          if library.yardoc_file == :gem
             initialize_gem
           else
+            self.yardoc_file = library.yardoc_file
             self.library_path = File.dirname(yardoc_file) 
           end
         end
@@ -60,17 +59,17 @@ module YARD
         private
         
         def initialize_gem
+          require 'rubygems'
           @gem = true
-          spec = yardoc_file
-          ver = "= #{spec.version}"
-          self.yardoc_file = Registry.yardoc_file_for_gem(spec.name, ver)
+          ver = "= #{library.version}"
+          self.yardoc_file = Registry.yardoc_file_for_gem(library.name, ver)
           unless yardoc_file && File.directory?(yardoc_file)
             # Build gem docs on demand
-            log.debug "Building gem docs for #{spec.full_name}"
-            CLI::Gems.run(library, ver)
-            self.yardoc_file = Registry.yardoc_file_for_gem(spec.name, ver)
+            log.debug "Building gem docs for #{library.name}-#{library.version}"
+            CLI::Gems.run(library.name, ver)
+            self.yardoc_file = Registry.yardoc_file_for_gem(library.name, ver)
           end
-          spec = Gem.source_index.find_name(spec.name, ver).first
+          spec = Gem.source_index.find_name(library.name, ver).first
           self.library_path = spec.full_gem_path
         end
 
