@@ -79,7 +79,7 @@ module YARD
           setup_yardopts
           { :@@mixed_into => Templates::Engine.template(:default, :module),
             :@@subclasses => Templates::Engine.template(:default, :class) }.each do |var, mod|
-              mod.remove_class_variable(var) if mod.class_variable_defined?(var)
+              mod.send(:remove_class_variable, var) if mod.class_variable_defined?(var)
           end
           true
         end
