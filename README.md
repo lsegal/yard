@@ -5,12 +5,12 @@ YARD: Yay! A Ruby Documentation Tool
 **IRC**:          [irc://irc.freenode.net/yard](irc.freenode.net / #yard)    
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
-**Contributors**: Nathan Weizenbaum, Yehuda Katz, Denis Defreyne, Postmodern, 
-Michael Edgar    
+**Contributors**: Nathan Weizenbaum, Dann Kubb, Yehuda Katz, Denis Defreyne,    
+Postmodern, Michael Edgar    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.5.6 (codename "The Longest")    
-**Release Date**: May 22nd 2010    
+**Latest Version**: 0.5.7 (codename "The Longest")    
+**Release Date**: June 21st 2010    
 
 Synopsis
 --------
@@ -242,6 +242,13 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **June.21.10**: 0.5.7 release
+    - Fixed visibility flag parsing in `yardoc`
+    - Updated Parser Architecture documentation with new SourceParser API
+    - Improved Registry documentation for new load commands
+    - Fix loading of .yardoc file as cache (and preserving aliases)
+    - Fix "lib" directory missing when running YARD on installed gems
 
 - **June.12.10**: 0.5.6 release
     - Bug fixes for RubyGems plugin, `has_rdoc=false` should now work

@@ -1,3 +1,116 @@
+2010-06-21  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.5.7
+
+2010-06-17  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/serializers/file_system_serializer.rb,
+  spec/cli/yardoc_spec.rb: Clean up parsing of yardoc options and handle
+  .document files more effectively
+
+  * README.md: Add special installation instructions for some Ubuntu/Debian
+  installations. It is impossible to add rdoc as a dependency, since this will
+  force the RDoc gem to be installed rather than the Ruby stdlib package. It is
+  therefore preferable to install rdoc locally with apt-get on such an OS. 
+  Closes gh-109
+
+2010-06-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Don't undef 'on_bodystmt'
+
+  * lib/yard/cli/yardoc.rb: Add Yardoc#parse_arguments method to perform all
+  argument parsing (from CLI,.yardopts,.document) at once
+
+  * lib/yard/registry_store.rb, lib/yard/serializers/yardoc_serializer.rb:
+  Improve StubProxy to implement #hash which removes need for TemporaryObject
+  hack
+
+  * spec/verifier_spec.rb: Add spec for Verifier
+
+  * lib/yard/verifier.rb: Force updating of Verifier
+
+  * templates/default/module/html/item_summary.erb: Show full method name with
+  "=" suffix in method summary listing
+
+  * lib/yard/parser/source_parser.rb: Add documentation for
+  SourceParser.parser_types
+
+  * docs/Parser.md, docs/images/parser-class-diagram.png: Update Parser
+  Architecture documentation  Closes gh-137
+
+  * lib/yard/registry.rb: Update Registry documentation  Closes gh-136
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb:
+  Support list of regex in registered file extensions for parser type (instead
+  of a single Regexp)
+
+  * lib/yard/parser/source_parser.rb: Document parser_type_extensions as
+  @private attr
+
+2010-06-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Hide methods inside a
+  @private class if --no-private is used.
+
+  * templates/default/tags/text/example.erb: Don't wrap example code in yri.
+  Wrapping would just cause confusion.  Closes gh-71
+
+  * lib/yard/cli/yardoc.rb, lib/yard/verifier.rb, spec/cli/yardoc_spec.rb,
+  spec/verifier_spec.rb: Fix --private and other visibility flags when
+  specified in .yardopts file.  The following changes were made to make this
+  possible: - Generate verifier for visibilities after option parsing is
+  finished. - Add Verifier#add_expressions and Verifier#expressions to allow
+  manipulation of Verifier expressions after it is created. Modifying
+  expressions will recompile the verifier object.  Closes gh-142
+
+  * lib/yard/cli/yard_graph.rb: Update default options documentation for
+  YardGraph
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/code_objects/root_object.rb, lib/yard/registry_store.rb,
+  spec/registry_spec.rb, spec/serializers/data/serialized_yardoc/checksums,
+  .../data/serialized_yardoc/objects/Foo.dat,
+  .../data/serialized_yardoc/objects/Foo/bar_i.dat,
+  .../data/serialized_yardoc/objects/Foo/baz_i.dat,
+  .../data/serialized_yardoc/objects/root.dat,
+  .../serializers/data/serialized_yardoc/proxy_types,
+  spec/serializers/yardoc_serializer_spec.rb: Improve equality checking on
+  CodeObjects and add #hash/#equal? methods  Closes gh-119
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Fix "cannot resolve link"
+  warnings for --incremental  Closes gh-70
+
+2010-06-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/overload_tag.rb: Only override #to_a in 1.9.x
+
+  * lib/yard/tags/overload_tag.rb: 1.9.2 compatibility fix: add #to_ary and
+  #to_a implementations for splatting a delegate class
+
+  * lib/yard/code_objects/proxy.rb: 1.9.2 compatibility fix: re-implement fix
+  for #to_ary in Proxy in a cleaner way
+
+  * spec/parser/c_parser_spec.rb: 1.9.2 compatibility fix: require
+  'continuation' for CParser spec, since it is not required anywhere else
+
+  * spec/handlers/ruby/legacy/base_spec.rb: 1.9.2 compatibility fix: workaround
+  for RSpec not removing metaprogrammed class after test
+
+  * lib/yard/code_objects/proxy.rb: 1.9.2 compatibility fix: add #to_str as
+  alias for #path
+
+  * lib/yard/code_objects/proxy.rb: 1.9.2 compatibility fix: handle #to_ary
+  calls on Proxy class for #flatten in 1.9.2
+
+  * spec/handlers/ruby/base_spec.rb: 1.9.2 compatibility fix: name resolution
+  behaves differently
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix handling of "!!!lang" code
+  block prefix for RDoc markup
+
+  * lib/yard/parser/c_parser.rb: Fix parsing of call-seq in .c files  Closes
+  gh-135
+
 2010-06-12  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec: Release
