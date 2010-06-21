@@ -10,8 +10,9 @@ module YARD
         when CodeObjects::RootObject
           "toplevel"
         when CodeObjects::MethodObject
-          namespace = object.namespace.is_a?(CodeObjects::RootObject) ? 'toplevel' : super(object.namespace)
-          namespace + (object.scope == :instance ? ":" : ".") + object.name.to_s
+          return serialized_path(object.namespace) + (object.scope == :instance ? ":" : ".") + object.name.to_s
+        when CodeObjects::ConstantObject
+          return serialized_path(object.namespace) + "##{object.name}-#{object.type}"
         else
           super(object)
         end
