@@ -72,7 +72,7 @@ module YARD
         opts, command = {}, nil
         if options[:single_library]
           opts = options.merge(
-            :library => libraries.values.first,
+            :library => libraries.values.first.first,
             :base_uri => '/'
           )
           command = Commands::DisplayObjectCommand
