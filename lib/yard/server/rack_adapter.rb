@@ -38,10 +38,9 @@ module YARD
       end
       
       def call(env)
-        @command ||= @command_class.new(@options)
         request = Rack::Request.new(env)
         cache = check_static_cache(request, @adapter.document_root)
-        cache ? cache : @command.call(request) 
+        cache ? cache : @command_class.new(@options).call(request) 
       end
     end
   end
