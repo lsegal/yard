@@ -2,7 +2,6 @@ def init
   @breadcrumb = []
 
   if @onefile
-    p options[:readme]
     sections :layout
   elsif @file
     @contents = File.read(@file)
