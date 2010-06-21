@@ -152,6 +152,7 @@ module YARD
     autoload :DocServerHelper,        __p('server/doc_server_helper')
     autoload :LibraryVersion,         __p('server/library_version')
     autoload :RackAdapter,            __p('server/rack_adapter')
+    autoload :StaticCaching,          __p('server/static_caching')
     autoload :WebrickAdapter,         __p('server/webrick_adapter')
   end
   

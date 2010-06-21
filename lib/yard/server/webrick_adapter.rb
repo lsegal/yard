@@ -17,20 +17,33 @@ module YARD
       end
       
       def mount_servlet(path, servlet, *args)
-        server.mount(path, servlet, *args)
+        server.mount(path, servlet, self, *args)
+      end
+      
+      def start
+        server.start
       end
     end
 
     class WebrickServlet < WEBrick::HTTPServlet::AbstractServlet
-      attr_accessor :command
+      include StaticCaching
       
-      def initialize(server, cmd_class, opts = {})
+      attr_accessor :command
+      attr_accessor :adapter
+      
+      def initialize(server, adapter, cmd_class, opts = {})
         super
+        self.adapter = adapter
         self.command = cmd_class.new(opts)
       end
       
       def do_GET(request, response)
-        status, headers, body = *command.call(request)
+        if cache = check_static_cache(request, adapter.document_root)
+          status, headers, body = *cache
+        else
+          status, headers, body = *command.call(request)
+        end
+
         response.status = status
         response.body = body
         headers.each do |key, value|

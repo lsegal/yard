@@ -15,19 +15,33 @@ module YARD
       end
       
       def mount_command(path, command, options)
-        url_map.map(path) do
-          run lambda {|env| command.new(options).call(Rack::Request.new(env)) }
-        end
+        mount_servlet(path, RackServlet, command, options)
       end
       
       def mount_servlet(path, servlet, *args)
-        url_map.map(path) do
-          run lambda {|env| servlet.new(*args).call(env) }
-        end
+        adapter = self
+        url_map.map(path) { run servlet.new(adapter, *args) }
       end
       
       def start
         server.start
+      end
+    end
+    
+    class RackServlet
+      include StaticCaching
+      
+      def initialize(adapter, command, options)
+        @adapter = adapter
+        @command_class = command
+        @options = options
+      end
+      
+      def call(env)
+        @command ||= @command_class.new(@options)
+        request = Rack::Request.new(env)
+        cache = check_static_cache(request, @adapter.document_root)
+        cache ? cache : @command.call(request) 
       end
     end
   end

@@ -33,7 +33,6 @@ module YARD
         optparse(*args)
         
         select_adapter
-        log.debug "Serving libraries using #{adapter}: #{libraries.keys.join(', ')}"
         adapter.new(libraries, options, server_options).start
       end
       
@@ -106,7 +105,7 @@ module YARD
           server_options[:Port] = port.to_i
         end
         opts.on('--docroot DOCROOT', 'Uses DOCROOT as document root') do |docroot|
-          server_options[:DocumentRoot] = docroot
+          server_options[:DocumentRoot] = File.expand_path(docroot)
         end
         opts.on('-a', '--adapter ADAPTER', 'Use the ADAPTER (full Ruby class) for web server') do |adapter|
           if adapter.downcase == 'webrick'

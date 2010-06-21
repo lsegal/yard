@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module YARD
   module Server
     module Commands
@@ -30,6 +32,9 @@ module YARD
         
         # @return [Adapter] the server adapter
         attr_accessor :server
+        
+        # @return [Boolean] whether to cache
+        attr_accessor :caching
 
         def initialize(opts = {})
           opts.each do |key, value|
@@ -55,6 +60,13 @@ module YARD
         protected
         
         def cache(data)
+          if caching && server.document_root
+            path = File.join(server.document_root, request.path.sub(/\.html$/, '') + '.html')
+            path = path.sub(%r{/\.html$}, '/index.html')
+            FileUtils.mkdir_p(File.dirname(path))
+            log.debug "Caching data to #{path}"
+            File.open(path, 'wb') {|f| f.write(data) }
+          end
           self.body = data
         end
 

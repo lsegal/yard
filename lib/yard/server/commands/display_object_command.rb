@@ -33,7 +33,7 @@ module YARD
           if path == "toplevel"
             @object_path = :root
           else
-            @object_path = path.sub(':', '#').gsub('/', '::').sub(/^toplevel\b/, '')
+            @object_path = path.sub(':', '#').gsub('/', '::').sub(/^toplevel\b/, '').sub(/\.html$/, '')
           end
         end
       end

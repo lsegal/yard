@@ -20,9 +20,6 @@ module YARD
         # @return [Boolean] whether router should route for multiple libraries
         attr_accessor :single_library
         
-        # @return [Boolean] whether to cache
-        attr_accessor :caching
-        
         # @return [Boolean] whether to reparse data 
         attr_accessor :incremental
         
@@ -50,10 +47,6 @@ module YARD
           )
           setup_library
           super
-        end
-        
-        def gem?
-          @gem
         end
 
         private

@@ -1,6 +1,9 @@
 module YARD
   module Server
     class Adapter
+      # @return [String] the location where static files are located, if any
+      attr_accessor :document_root
+      
       PROJECT_COMMANDS = {
         "/docs/:library/frames" => Commands::FramesCommand,
         "/docs/:library/file" => Commands::DisplayFileCommand,
@@ -18,9 +21,13 @@ module YARD
       }
       
       def initialize(libraries, options = {}, server_options = {})
+        self.document_root = server_options[:DocumentRoot]
         options[:server] = self
         mount_library_commands(libraries, options)
         mount_root_commands(libraries, options)
+        log.debug "Serving libraries using #{self.class}: #{libraries.keys.join(', ')}"
+        log.debug "Caching on" if options[:caching]
+        log.debug "Document root: #{document_root}" if document_root
       end
       
       def start
