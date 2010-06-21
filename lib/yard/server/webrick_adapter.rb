@@ -40,3 +40,8 @@ module YARD
     end
   end
 end
+
+# @private
+class WEBrick::HTTPRequest
+  def xhr?; (self['X-Requested-With'] || "").downcase == 'xmlhttprequest' end
+end

@@ -12,7 +12,7 @@ module YARD
             redirect(serializer.serialized_path(found))
           end
           search_for_object
-          xhr? ? serve_xhr : serve_normal
+          request.xhr? ? serve_xhr : serve_normal
         end
         
         def visible_results

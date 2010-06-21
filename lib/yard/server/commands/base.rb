@@ -54,10 +54,6 @@ module YARD
         
         protected
         
-        def xhr?
-          (request['X-Requested-With'] || "").downcase == 'xmlhttprequest'
-        end
-        
         def cache(data)
           self.body = data
         end
