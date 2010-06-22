@@ -137,6 +137,28 @@ describe YARD::CLI::Yardoc do
     @yardoc.options[:verifier].call(obj).should == false
   end
   
+  it "should hide object if namespace is @private with --no-private" do
+    ns = mock(:namespace)
+    ns.stub!(:type).and_return(:module)
+    ns.should_receive(:tag).ordered.with(:private).and_return(true)
+    obj = mock(:object)
+    obj.stub!(:namespace).and_return(ns)
+    obj.should_receive(:tag).ordered.with(:private).and_return(false)
+    @yardoc.optparse *%w( --no-private )
+    @yardoc.options[:verifier].call(obj).should == false
+  end
+  
+  it "should not call #tag on namespace if namespace is proxy with --no-private" do
+    ns = mock(:namespace)
+    ns.stub!(:type).and_return(:proxy)
+    ns.should_not_receive(:tag)
+    obj = mock(:object)
+    obj.stub!(:namespace).and_return(ns)
+    obj.should_receive(:tag).ordered.with(:private).and_return(false)
+    @yardoc.optparse *%w( --no-private )
+    @yardoc.options[:verifier].call(obj).should == true
+  end
+  
   it "should hide methods inside a 'private' class/module with --no-private" do
     Registry.clear
     YARD.parse_string <<-eof
