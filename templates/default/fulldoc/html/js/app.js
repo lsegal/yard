@@ -106,6 +106,7 @@ function keyboardShortcuts() {
 
 function summaryToggle() {
   $('.summary_toggle').click(function() {
+    localStorage.summaryCollapsed = $(this).text();
     $(this).text($(this).text() == "collapse" ? "expand" : "collapse");
     var next = $(this).parent().parent().next();
     if (next.hasClass('compact')) {
@@ -124,7 +125,11 @@ function summaryToggle() {
       next.toggle();
     }
     return false;
-  })
+  });
+  if (localStorage) {
+    if (localStorage.summaryCollapsed == "collapse") $('.summary_toggle').click();
+    else localStorage.summaryCollapsed = "expand";
+  }
 }
 
 $(framesInit);
