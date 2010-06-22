@@ -5,12 +5,11 @@ YARD: Yay! A Ruby Documentation Tool
 **IRC**:          [irc://irc.freenode.net/yard](irc.freenode.net / #yard)    
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
-**Contributors**: Nathan Weizenbaum, Dann Kubb, Yehuda Katz, Denis Defreyne,    
-Postmodern, Michael Edgar    
+**Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.5.7 (codename "The Longest")    
-**Release Date**: June 21st 2010    
+**Latest Version**: 0.5.8 (codename "The Longest")    
+**Release Date**: June 22nd 2010    
 
 Synopsis
 --------
@@ -243,6 +242,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **June.22.10**: 0.5.8 release
+    - Merge fix from 0.6 branch for --no-private visibility checking
+
 - **June.21.10**: 0.5.7 release
     - Fixed visibility flag parsing in `yardoc`
     - Updated Parser Architecture documentation with new SourceParser API
@@ -321,7 +323,27 @@ Changelog
   to get people testing YARD on their code because there are too many possible  
   code styles to fit into a sane amount of test cases. It also demonstrates the 
   power of YARD and what to expect from the syntax (Yardoc style meta tags).    
-                                                          
+
+
+Contributors
+------------
+
+Special thanks to the following people for submitting patches:
+
+* Aman Gupta
+* Benjamin Bock
+* Denis Defreyne
+* Duane Johnson
+* Elliottcable
+* James Rosen
+* Jeff Rafter
+* Leonid Borisenko
+* Loren Segal
+* Michael Edgar
+* Nathan Weizenbaum
+* Postmodern
+* Yehuda Katz
+
 
 Copyright
 ---------

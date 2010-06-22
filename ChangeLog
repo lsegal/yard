@@ -1,3 +1,11 @@
+2010-06-22  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/yardoc_spec.rb: Add specs for --no-private  Closes gh-146
+
+2010-06-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Fix verifier for --no-private
+
 2010-06-21  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.5.7
