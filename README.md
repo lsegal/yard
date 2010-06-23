@@ -226,7 +226,7 @@ You can also do lookups on any installed gems. Just make sure to build the
 If you don't have sudo access, it will write these files to your `~/.yard`
 directory. `yri` will also cache lookups there.
 
-**4. `yard-graph` Graphviz Generator**
+**4. `yard graph` Graphviz Generator**
 
 You can use `yard-graph` to generate dot graphs of your code. This, of course,
 requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default
@@ -237,7 +237,7 @@ option to show mixin inclusions. You can output to stdout or a file, or pipe dir
 to `dot`. The same public, protected and private visibility rules apply to yard-graph.
 More options can be seen by typing `yard-graph --help`, but here is an example:
 
-    $ yard-graph --protected --full --dependencies
+    $ yard graph --protected --full --dependencies
 
 
 Changelog
