@@ -11,23 +11,26 @@ module YARD
       end
       
       def first_line
-        to_s(false)
+        to_s.split(/\n/)[0]
       end
       
       def to_s(include_block = true)
         tokens.map do |token|
-          RubyToken::TkBlockContents === token ? block.to_s : token.text
+          RubyToken::TkBlockContents === token ? (include_block ? block.to_s : '') : token.text
         end.join
       end
       alias source to_s
       
       def inspect
         l = line - 1
-        to_s.split(/\n/).map do |text|
+        to_s(false).split(/\n/).map do |text|
           "\t#{l += 1}:  #{text}"
         end.join("\n")
       end
-      alias show inspect
+      
+      def show
+        "\t #{line}: #{first_line}"
+      end
       
       # @return [Fixnum] the first line of Ruby source
       def line
