@@ -3,7 +3,7 @@ module YARD
     module DocServerHelper
       def url_for(obj, anchor = nil, relative = false)
         return "/#{obj}" if String === obj
-        super(obj, anchor, false).gsub('?', '%3F')
+        (super(obj, anchor, false) || '').gsub('?', '%3F')
       end
 
       def url_for_file(filename, anchor = nil)
