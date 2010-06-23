@@ -16,7 +16,7 @@ SPEC = Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.files         = Dir.glob("{docs,bin,lib,spec,templates,benchmarks}/**/*") + ['ChangeLog', 'LICENSE', 'LEGAL', 'README.md', 'Rakefile', '.yardopts']
   s.require_paths = ['lib']
-  s.executables   = [ 'yardoc', 'yri', 'yard-graph' ]
+  s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
 end
