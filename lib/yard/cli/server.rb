@@ -123,6 +123,12 @@ module YARD
         parse_options(opts, args)
         
         if args.empty? && libraries.empty?
+          if !File.exist?('.yardoc')
+            log.enter_level(Logger::INFO) do
+              log.info "No .yardoc file found in current directory, parsing source before starting server..."
+            end
+            Yardoc.run('-n')
+          end
           add_libraries([File.basename(Dir.pwd), '.yardoc'])
         else
           add_libraries(args)
