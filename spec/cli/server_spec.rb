@@ -11,10 +11,18 @@ describe YARD::CLI::Server do
     @cli.stub!(:adapter).and_return(@adapter)
   end
   
+  after(:all) do
+    Templates::Template.extra_includes.delete(Server::DocServerHelper)
+    Templates::Engine.template_paths.pop
+  end
+  
   def run(*args)
-    @libraries = {File.basename(Dir.pwd) => '.yardoc'} if @libraries.empty?
+    if @libraries.empty?
+      library = Server::LibraryVersion.new(File.basename(Dir.pwd), '.yardoc')
+      @libraries = {library.name => [library]}
+    end
     unless @no_verify_libraries
-      @libraries.values.each {|dir| File.should_receive(:exist?).with(dir).and_return(true) }
+      @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(lib.yardoc_file).and_return(true) } }
     end
     @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
     @adapter.should_receive(:start)
@@ -23,19 +31,19 @@ describe YARD::CLI::Server do
 
   it "should default to current dir if no library is specified" do
     Dir.should_receive(:pwd).and_return('/path/to/foo')
-    @libraries['foo'] = '.yardoc'
+    @libraries['foo'] = [Server::LibraryVersion.new('foo', '.yardoc')]
     run
   end
   
   it "should use .yardoc as yardoc file is library list is odd" do
-    @libraries['a'] = '.yardoc'
+    @libraries['a'] = [Server::LibraryVersion.new('a', '.yardoc')]
     run 'a'
   end
   
   it "should force multi library if more than one library is listed" do
     @options[:single_library] = false
-    @libraries['a'] = 'b'
-    @libraries['c'] = '.yardoc'
+    @libraries['a'] = [Server::LibraryVersion.new('a', 'b')]
+    @libraries['c'] = [Server::LibraryVersion.new('c', '.yardoc')]
     run %w(a b c)
   end
   
@@ -109,12 +117,14 @@ describe YARD::CLI::Server do
   it "should accept -g, --gems" do
     @no_verify_libraries = true
     @options[:single_library] = false
-    @libraries['gem1'] = :gem
-    @libraries['gem2'] = :gem
+    @libraries['gem1'] = [Server::LibraryVersion.new('gem1', :gem, '1.0.0')]
+    @libraries['gem2'] = [Server::LibraryVersion.new('gem2', :gem, '1.0.0')]
     gem1 = mock(:gem1)
     gem1.stub!(:name).and_return('gem1')
+    gem1.stub!(:version).and_return('1.0.0')
     gem2 = mock(:gem2)
     gem2.stub!(:name).and_return('gem2')
+    gem2.stub!(:version).and_return('1.0.0')
     source = mock(:source_index)
     source.stub!(:find_name).and_return([gem1, gem2])
     Gem.stub!(:source_index).and_return(source)

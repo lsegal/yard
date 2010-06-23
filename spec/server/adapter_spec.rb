@@ -1,6 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Server::Adapter do
+  before do
+    lib = Server::LibraryVersion.new('yard', '.yardoc')
+    @libraries = {lib.name => [lib]}
+  end
+  
   describe '#mount_library_commands' do
     it "should mount all library commands" do
       adapter = Server::Adapter.allocate
@@ -10,7 +15,24 @@ describe YARD::Server::Adapter do
           p.should == path; c.should == command
         end
       end
-      adapter.send(:mount_library_commands, {'yard' => '.yardoc'}, {})
+      adapter.send(:mount_library_commands, @libraries, {})
+    end
+    
+    it "should mount library commands for more than one library version" do
+      lib1 = Server::LibraryVersion.new('yard', '.yardoc', '1.0')
+      lib2 = Server::LibraryVersion.new('yard', '.yardoc2', '1.1')
+      @libraries = {lib1.name => [lib1, lib2]}
+      
+      adapter = Server::Adapter.allocate
+      [lib1, lib2].each do |lib|
+        Server::Adapter::PROJECT_COMMANDS.each do |path, command|
+          path = path.gsub('/:library', '/' + lib.to_s)
+          adapter.should_receive(:mount_command) do |p, c, o| 
+            p.should == path; c.should == command
+          end
+        end
+      end
+      adapter.send(:mount_library_commands, @libraries, {})
     end
     
     it "should not include library name if :single_library = true" do
@@ -21,7 +43,7 @@ describe YARD::Server::Adapter do
           p.should == path; c.should == command
         end
       end
-      adapter.send(:mount_library_commands, {'yard' => '.yardoc'}, {:single_library => true})
+      adapter.send(:mount_library_commands, @libraries, {:single_library => true})
     end
   end
   
@@ -35,7 +57,7 @@ describe YARD::Server::Adapter do
         end
       end
       adapter.should_receive(:mount_command)
-      adapter.send(:mount_root_commands, {'yard' => '.yardoc'}, {})
+      adapter.send(:mount_root_commands, @libraries, {})
     end
   end
   

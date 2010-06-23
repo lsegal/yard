@@ -14,6 +14,15 @@ module YARD
       def to_s
         version ? "#{name}-#{version}" : "#{name}"
       end
+      
+      def hash; to_s.hash end
+      
+      def eql?(other)
+        other.is_a?(LibraryVersion) && other.name == name && 
+          other.version == version && other.yardoc_file == yardoc_file
+      end
+      alias == eql?
+      alias equal? eql?
     end
   end
 end
