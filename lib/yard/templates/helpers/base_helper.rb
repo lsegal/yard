@@ -2,6 +2,12 @@ module YARD::Templates::Helpers
   module BaseHelper
     attr_accessor :object, :serializer
     
+    # An object that keeps track of global state throughout the entire template 
+    # rendering process (including any sub-templates).
+    # 
+    # @return [OpenStruct] a struct object that stores state
+    def globals; options[:__globals] end
+    
     def run_verifier(list)
       return list unless options[:verifier]
       list.reject {|item| options[:verifier].call(item).is_a?(FalseClass) }

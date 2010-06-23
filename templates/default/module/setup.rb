@@ -119,11 +119,11 @@ def scopes(list)
 end
 
 def mixed_into(object)
-  unless defined?(@@mixed_into) && @@mixed_into
-    @@mixed_into = {}
+  unless globals.mixed_into
+    globals.mixed_into = {}
     list = run_verifier Registry.all(:class, :module)
-    list.each {|o| o.mixins.each {|m| (@@mixed_into[m.path] ||= []) << o } }
+    list.each {|o| o.mixins.each {|m| (globals.mixed_into[m.path] ||= []) << o } }
   end
   
-  @@mixed_into[object.path] || []
+  globals.mixed_into[object.path] || []
 end

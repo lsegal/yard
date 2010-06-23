@@ -56,10 +56,6 @@ describe YARD::Templates::Engine.template(:default, :module) do
       module TMP; include A end
       class TMP2; extend A end
     eof
-    
-    # Hack to clear mixin list
-    mod = YARD::Templates::Engine.template(:default, :module)
-    mod.send(:class_variable_set, "@@mixed_into", nil)
   end
 
   it "should render html format correctly" do

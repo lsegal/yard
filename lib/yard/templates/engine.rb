@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module YARD
   module Templates
     module Engine
@@ -120,6 +122,7 @@ module YARD
         # @option options [Symbol] :template (:default) the default template
         # @return [void]
         def set_default_options(options = {})
+          options[:__globals] ||= OpenStruct.new
           options[:format] ||= :text
           options[:type] ||= options[:object].type if options[:object]
           options[:template] ||= :default
