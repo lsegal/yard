@@ -221,7 +221,7 @@ separator. Only modules, classes and constants should use "::".
 You can also do lookups on any installed gems. Just make sure to build the
 .yardoc databases for installed gems with:
 
-    $ sudo yardoc --build-gems
+    $ sudo yard gems
     
 If you don't have sudo access, it will write these files to your `~/.yard`
 directory. `yri` will also cache lookups there.
