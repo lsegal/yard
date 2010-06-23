@@ -147,9 +147,11 @@ module YARD
           else
             link = linkify(name, title)
             if link == name || link == title
-              match = text[/(.{0,20}\{.*?#{Regexp.quote name}.*?\}.{0,20})/, 1]
-              log.warn "In file `#{object.file}':#{object.line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
-              log.warn '...' + match.gsub(/\n/,"\n\t") + '...' if match
+              match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
+              file = (@file ? @file : object.file) || '(unknown)'
+              line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
+              log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
+              log.warn((match[1] ? '...' : '') + match[2].gsub("\n","") + (match[3] ? '...' : '')) if match
             end
             
             if name =~ %r{://} || name =~ /^(mailto|file):/
