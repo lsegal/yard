@@ -54,7 +54,7 @@ class Insertion
       if ignore_subsections && rel == 1 && @list[index + 1].is_a?(Array)
         rel += 1
       end
-      @list[index+rel,0] = @value 
+      @list[index+rel,0] = [@value]
     end
     @list
   end

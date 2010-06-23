@@ -29,5 +29,9 @@ describe Insertion do
     it "should not not ignore subsections if ignore_subections=false" do
       [1, [2]].place(3).after(1, false).should == [1, 3, [2]]
     end
+    
+    it "should place an array after an object" do
+      [1, 2, 3].place([4]).after(1).should == [1, [4], 2, 3]
+    end
   end
 end
