@@ -1,5 +1,5 @@
 class Array
-  # Places a value before or after another object (by value) in
+  # Places values before or after another object (by value) in
   # an array. This is used in tandem with the before and after
   # methods of the {Insertion} class.
   # 
@@ -7,11 +7,11 @@ class Array
   #   [1, 2, 3].place(4).before(3) # => [1, 2, 4, 3]
   # @example Places an item after another
   #   [:a, :b, :c].place(:x).after(:a) # => [:a, :x, :b, :c]
-  # @param [Object] value value to insert
+  # @param [Array] values value to insert
   # @return [Insertion] an insertion object to 
   # @see Insertion#before
   # @see Insertion#after
-  def place(value) Insertion.new(self, value) end
+  def place(*values) Insertion.new(self, values) end
 end
 
 # The Insertion class inserts a value before or after another
@@ -26,7 +26,7 @@ class Insertion
   # 
   # @param [Array] list the list to perform the insertion on
   # @param [Object] value the value to insert
-  def initialize(list, value) @list, @value = list, value end
+  def initialize(list, value) @list, @values = list, (Array === value ? value : [value]) end
     
   # Inserts the value before +val+
   # @param [Object] val the object the value will be inserted before
@@ -54,7 +54,7 @@ class Insertion
       if ignore_subsections && rel == 1 && @list[index + 1].is_a?(Array)
         rel += 1
       end
-      @list[index+rel,0] = [@value]
+      @list[index+rel,0] = @values
     end
     @list
   end
