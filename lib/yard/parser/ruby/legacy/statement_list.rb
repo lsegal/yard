@@ -8,7 +8,6 @@ module YARD
       OPEN_BLOCK_TOKENS = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
                            TkIF, TkELSIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
 
-      ##
       # Creates a new statement list
       #
       # @param [TokenList, String] content the tokens to create the list from
@@ -31,7 +30,6 @@ module YARD
         while stmt = next_statement do self << stmt end
       end
 
-      ##
       # Returns the next statement in the token stream
       #
       # @return [Statement] the next statement
@@ -121,7 +119,6 @@ module YARD
         end
       end
 
-      ##
       # Processes a single token
       #
       # @param [RubyToken::Token] tk the token to process
@@ -172,7 +169,6 @@ module YARD
         end
       end
 
-      ##
       # Processes a token in a block
       #
       # @param [RubyToken::Token] tk the token to process
@@ -191,7 +187,6 @@ module YARD
         end
       end
 
-      ##
       # Processes a comment token that comes before a statement
       #
       # @param [RubyToken::Token] tk the token to process
@@ -224,7 +219,6 @@ module YARD
         true
       end
 
-      ##
       # Processes a simple block-opening token;
       # that is, a block opener such as +begin+ or +do+
       # that isn't followed by an expression
@@ -250,7 +244,6 @@ module YARD
         true
       end
 
-      ##
       # Processes a complex block-opening token;
       # that is, a block opener such as +while+ or +for+
       # that is followed by an expression
@@ -266,7 +259,6 @@ module YARD
         true
       end
 
-      ##
       # Processes a token that closes a statement
       #
       # @param [RubyToken::Token] tk the token to process
@@ -320,7 +312,6 @@ module YARD
         end
       end
 
-      ##
       # Handles the balancing of parentheses and blocks
       #
       # @param [RubyToken::Token] tk the token to process
@@ -338,7 +329,6 @@ module YARD
         @level == 0
       end
 
-      ##
       # Adds a token to the current statement,
       # unless it's a newline, semicolon, or comment
       #
@@ -348,7 +338,6 @@ module YARD
         @statement << tk unless @level == 0 && [TkCOMMENT].include?(tk.class)
       end
 
-      ##
       # Returns the next token in the stream that's not a space
       #
       # @return [RubyToken::Token] the next non-space token

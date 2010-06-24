@@ -1,6 +1,5 @@
 module YARD
   module Tags
-    ##
     # Holds all the registered meta tags. If you want to extend YARD and add
     # a new meta tag, you can do it in one of two ways.
     #

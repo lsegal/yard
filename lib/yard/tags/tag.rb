@@ -3,7 +3,6 @@ module YARD
     class Tag
       attr_accessor :tag_name, :text, :types, :name, :object
 
-      ##
       # Creates a new tag object with a tag name and text. Optionally, formally declared types
       # and a key name can be specified.
       #
@@ -21,7 +20,6 @@ module YARD
         @tag_name, @text, @name, @types = tag_name.to_s, text, name, (types ? [types].flatten.compact : nil)
       end
 
-      ##
       # Convenience method to access the first type specified. This should mainly
       # be used for tags that only specify one type.
       #

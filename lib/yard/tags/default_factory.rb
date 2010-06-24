@@ -4,7 +4,6 @@ module YARD
       TYPELIST_OPENING_CHARS = '[({<'
       TYPELIST_CLOSING_CHARS = '>})]'
       
-      ##
       # Parses tag text and creates a new tag with descriptive text
       #
       # @param tag_name        the name of the tag to parse
@@ -14,7 +13,6 @@ module YARD
         Tag.new(tag_name, text)
       end
       
-      ##
       # Parses tag text and creates a new tag with a key name and descriptive text
       #
       # @param tag_name        the name of the tag to parse
@@ -25,7 +23,6 @@ module YARD
         Tag.new(tag_name, text, nil, name)
       end
       
-      ##
       # Parses tag text and creates a new tag with formally declared types and 
       # descriptive text
       #
@@ -38,7 +35,6 @@ module YARD
         Tag.new(tag_name, text, types)
       end
       
-      ##
       # Parses tag text and creates a new tag with formally declared types, a key 
       # name and descriptive text
       #
@@ -76,7 +72,6 @@ module YARD
       
       private
       
-      ##
       # Extracts the name from raw tag text returning the name and remaining value
       #
       # @param [String] text the raw tag text
