@@ -241,9 +241,7 @@ not yet been scanned by YARD) and served at [http://localhost:8808](http://local
 If you want to serve documentation on a project while you document it so that
 you can preview the results, simply pass `--reload` (`-r`) to the above command
 and YARD will reload any changed files on each request. This will allow you to
-change any documentation in the source and refresh to see the new contents. Note
-that this feature may cause the class listing to display incorrectly, and because of 
-this, is not meant for serving finalized documentation.
+change any documentation in the source and refresh to see the new contents.
 
 #### Serving Gems
 
