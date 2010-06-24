@@ -140,6 +140,24 @@ module YARD
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
+          if args.include?(:DISABLE_IDENTITY_MAP)
+            args.delete(:DISABLE_IDENTITY_MAP)
+            obj = nil
+          else
+            keyname = key_for(namespace, name, *args)
+            obj = Registry.at(keyname)
+            obj = nil if obj && obj.class != self
+          end
+          
+          if obj
+            yield(obj) if block_given?
+            obj
+          else
+            super(namespace, name, *args, &block)
+          end
+        end
+        
+        def key_for(namespace, name, *args)
           keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
           if self == RootObject
             keyname = :root
@@ -150,16 +168,7 @@ module YARD
           else
             keyname += NSEP + name.to_s
           end
-          
-          obj = Registry.objects[keyname]
-          obj = nil if obj && obj.class != self
-          
-          if self != RootObject && obj
-            yield(obj) if block_given?
-            obj
-          else
-            Registry.objects[keyname] = super(namespace, name, *args, &block)
-          end
+          keyname
         end
         
         # Compares the class with subclasses

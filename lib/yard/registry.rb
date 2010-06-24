@@ -21,19 +21,11 @@ module YARD
     
     include Singleton
   
-    @objects = {}
-
     class << self
-      # Holds the objects cache. This attribute should never be accessed
-      # directly.
-      # @return [Array<CodeObjects::Base>] the objects cache
-      attr_reader :objects
-      
       # Clears the registry and cache
       # @return [void] 
       def clear
         instance.clear 
-        objects.clear
       end
 
       # Returns the .yardoc file associated with a gem.
@@ -241,7 +233,6 @@ module YARD
     # @return [void] 
     def delete(object) 
       @store.delete(object.path)
-      self.class.objects.delete(object.path)
     end
 
     # Clears the registry
@@ -262,7 +253,6 @@ module YARD
     # @param [CodeObjects::Base] object the object to register
     # @return [CodeObjects::Base] the registered object
     def register(object)
-      self.class.objects[object.path] = object
       return if object.is_a?(CodeObjects::Proxy)
       @store[object.path] = object
     end

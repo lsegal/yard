@@ -11,7 +11,7 @@ module YARD
     def initialize
       @file = nil
       @checksums = {}
-      @store = { :root => CodeObjects::RootObject.new(nil, :root) }
+      @store = { :root => CodeObjects::RootObject.new(nil, :root, :DISABLE_IDENTITY_MAP) }
       @proxy_types = {}
       @notfound = {}
       @loaded_objects = 0
@@ -180,7 +180,6 @@ module YARD
     def load_yardoc
       return false unless @file
       if File.directory?(@file) # new format
-        Registry.objects.replace({})
         @loaded_objects = 0
         @available_objects = all_disk_objects.size
         load_proxy_types
