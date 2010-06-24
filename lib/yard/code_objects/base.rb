@@ -140,15 +140,9 @@ module YARD
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
-          if args.include?(:DISABLE_IDENTITY_MAP)
-            args.delete(:DISABLE_IDENTITY_MAP)
-            obj = nil
-          else
-            keyname = key_for(namespace, name, *args)
-            obj = Registry.at(keyname)
-            obj = nil if obj && obj.class != self
-          end
-          
+          keyname = key_for(namespace, name, *args)
+          obj = Registry.at(keyname)
+          obj = nil if obj && obj.class != self
           if obj
             yield(obj) if block_given?
             obj

@@ -11,11 +11,13 @@ module YARD
     def initialize
       @file = nil
       @checksums = {}
-      @store = { :root => CodeObjects::RootObject.new(nil, :root, :DISABLE_IDENTITY_MAP) }
+      @store = {}
       @proxy_types = {}
       @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
+      @store[:root] = CodeObjects::RootObject.allocate
+      @store[:root].send(:initialize, nil, :root)
     end
     
     # Gets a {CodeObjects::Base} from the store
