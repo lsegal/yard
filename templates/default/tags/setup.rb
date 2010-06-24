@@ -1,17 +1,11 @@
 def init
-  tags = Tags::Library.visible_tags.dup
-  [:abstract, :deprecated, :note, :todo].each {|t| tags.delete(t) }
-  create_tag_methods(tags)
-  sections :index, tags.map {|tag| "tag_#{tag}".to_sym }
-  sections.last.place([T('docstring')]).after(:tag_overload)
+  tags = Tags::Library.visible_tags - [:abstract, :deprecated, :note, :todo]
+  create_tag_methods(tags - [:example, :option, :overload, :see])
+  sections :index, tags
+  sections.last.place([T('docstring')]).after(:overload)
 end
 
-def tag_example; erb('example') end
-def tag_option; erb('option') end
-def tag_overload; erb('overload') end
-def tag_see; erb('see') end
-
-def tag_return
+def return
   if object.type == :method
     return if object.name == :initialize && object.scope == :instance
     return if object.tags(:return).size == 1 && object.tag(:return).types == ['void']
@@ -33,9 +27,9 @@ end
 
 def create_tag_methods(tags)
   tags.each do |tag|
-    next if respond_to?("tag_#{tag}")
+    next if respond_to?(tag)
     instance_eval(<<-eof, __FILE__, __LINE__ + 1)
-      def tag_#{tag}
+      def #{tag}
         opts = {:no_types => true, :no_names => true}
         case Tags::Library.factory_method_for(#{tag.inspect})
         when :with_types
