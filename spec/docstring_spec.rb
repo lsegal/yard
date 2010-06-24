@@ -253,5 +253,33 @@ eof
 eof
       doc.tag(:param).text.should == "some value\nfoo bar\n baz"
     end
+
+    it "should allow numbers in tags" do
+      Tags::Library.define_tag(nil, :foo1)
+      Tags::Library.define_tag(nil, :foo2)
+      Tags::Library.define_tag(nil, :foo3)
+      doc = Docstring.new(<<-eof)
+@foo1 bar1
+@foo2 bar2
+@foo3 bar3
+eof
+      doc.tag(:foo1).text.should == "bar1"
+      doc.tag(:foo2).text.should == "bar2"
+    end
+    
+    it "should end tag on newline if next line is not indented" do
+      doc = Docstring.new(<<-eof)
+@author bar1
+@api bar2
+Hello world
+eof
+      doc.tag(:author).text.should == "bar1"
+      doc.tag(:api).text.should == "bar2"
+    end
+    
+    it "should warn about unknown tag" do
+      log.should_receive(:warn).with(/Unknown tag @hello$/)
+      Docstring.new("@hello world")
+    end
   end
 end

@@ -26,7 +26,7 @@ module YARD
     attr_reader :all
 
     # Matches a tag at the start of a comment line
-    META_MATCH = /^@([a-z_]+)(?:\s+(.*))?$/i
+    META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
     
     # Creates a new docstring with the raw contents attached to an optional
     # object.
@@ -203,8 +203,8 @@ module YARD
         empty = (line =~ /^\s*$/ ? true : false)
         done = comments.size == index
 
-        if tag_name && (((indent < orig_indent && !empty) || done) || 
-            (indent <= last_indent && line =~ META_MATCH))
+        if tag_name && (((indent < orig_indent && !empty) || done || 
+            (indent == 0 && !empty)) || (indent <= last_indent && line =~ META_MATCH))
           create_tag(tag_name, tag_buf.join("\n"))
           tag_name, tag_buf, = nil, []
           orig_indent = 0
