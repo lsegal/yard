@@ -40,6 +40,9 @@ module YARD
       # @return [Array<Symbol>] a list of visibilities
       attr_accessor :visibilities
         
+      # @return [Array<Symbol>] a list of tags to hide from templates
+      attr_accessor :hidden_tags
+        
       # Creates a new instance of the commandline utility
       def initialize
         super
@@ -58,6 +61,7 @@ module YARD
         @visibilities = [:public]
         @excluded = []
         @files = []
+        @hidden_tags = []
         @use_cache = false
         @generate = true
         @incremental = false
@@ -114,6 +118,7 @@ module YARD
           options[:files] << options[:readme] if options[:readme]
           options[:readme] = Dir.glob(files.first).first 
         end
+        Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
       end
       
@@ -217,6 +222,12 @@ module YARD
         options[:verifier].add_expressions(vis_expr)
       end
       
+      def add_tag(tag_data, factory_method = nil)
+        tag, title = *tag_data.split(':')
+        Tags::Library.define_tag(title, tag.to_sym, factory_method)
+        Tags::Library.visible_tags << tag.to_sym
+      end
+      
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
@@ -274,7 +285,7 @@ module YARD
         opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
           YARD::Parser::SourceParser.parser_type = :ruby18
         end
-        
+
         opts.separator ""
         opts.separator "Output options:"
   
@@ -368,6 +379,33 @@ module YARD
         opts.on('-f', '--format FORMAT', 
                 'The output format for the template. (defaults to html)') do |format|
           options[:format] = format.to_sym
+        end
+        
+        opts.separator ""
+        opts.separator "Tag options: (TAG:TITLE looks like: 'overload:Overloaded Method')"
+        
+        opts.on('--tag TAG:TITLE', 'Registers a new free-form metadata @tag') do |tag|
+          add_tag(tag)
+        end
+
+        opts.on('--type-tag TAG:TITLE', 'Tag with an optional types field') do |tag|
+          add_tag(tag, :with_types)
+        end
+
+        opts.on('--type-name-tag TAG:TITLE', 'Tag with optional types and a name field') do |tag|
+          add_tag(tag, :with_types_and_name)
+        end
+
+        opts.on('--name-tag TAG:TITLE', 'Tag with a name field') do |tag|
+          add_tag(tag, :with_name)
+        end
+
+        opts.on('--title-tag TAG:TITLE', 'Tag with first line as title field') do |tag|
+          add_tag(tag, :with_title_and_text)
+        end
+        
+        opts.on('--hide-tag TAG', 'Hides a previously defined tag from templates') do |tag|
+          self.hidden_tags << tag.to_sym
         end
 
         common_options(opts)

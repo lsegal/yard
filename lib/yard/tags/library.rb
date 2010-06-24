@@ -80,22 +80,17 @@ module YARD
           @factory_methods[tag]
         end
         
-        # Sets the list of tags to display when rendering templates. If +tag_list+ is
-        # not provided, the tag list is returned. The order of tags in the list is
-        # also significant, as it represents the order that tags are displayed in
-        # templates.
+        # Sets the list of tags to display when rendering templates. The order of 
+        # tags in the list is also significant, as it represents the order that 
+        # tags are displayed in templates.
         # 
         # You can use the {Array#place} to insert new tags to be displayed in 
         # the templates at specific positions:
         # 
-        #   Library.show_tags.place(:mytag).before(:return)
+        #   Library.visible_tags.place(:mytag).before(:return)
         # 
-        # @param [Array<Symbol>] tag_list a list of tags to set as the new tags to show
         # @return [Array<Symbol>] a list of ordered tags
-        def visible_tags(*tag_list)
-          return @tag_list ||= [] if tag_list.empty?
-          @tag_list = tag_list.flatten
-        end
+        attr_accessor :visible_tags
       
         # Sorts the labels lexically by their label name, often used when displaying
         # the tags.
@@ -181,9 +176,9 @@ module YARD
       define_tag "Yield Parameters",  :yieldparam,  :with_types_and_name
       define_tag "Yield Returns",     :yieldreturn, :with_types
       
-      visible_tags :abstract, :deprecated, :note, :todo, :example, :overload, 
+      self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload, 
         :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise, 
-        :see, :author, :since, :version
+        :see, :author, :since, :version]
     end
   end
 end
