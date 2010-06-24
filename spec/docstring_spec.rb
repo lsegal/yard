@@ -134,6 +134,10 @@ describe YARD::Docstring do
   end
   
   describe '#empty?/#blank?' do
+    before(:all) do
+      Tags::Library.define_tag "Invisible", :invisible_tag
+    end
+
     it "should be blank and empty if it has no content and no tags" do
       Docstring.new.should be_blank
       Docstring.new.should be_empty
@@ -157,6 +161,17 @@ describe YARD::Docstring do
       d = Docstring.new("@return (see Foo#bar)")
       d.should be_empty
       d.should_not be_blank
+    end
+    
+    it "should be blank if it has no visible tags" do
+      d = Docstring.new("@invisible_tag value")
+      d.should be_blank
+    end
+    
+    it "should not be blank if it has invisible tags and only_visible_tags = false" do
+      d = Docstring.new("@invisible_tag value")
+      d.add_tag Tags::Tag.new('invisible_tag', nil, nil)
+      d.blank?(false).should == false
     end
   end
   

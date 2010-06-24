@@ -1,6 +1,8 @@
 def init
-  create_tag_methods
-  sections :index, Tags::Library.show_tags.map {|tag| "tag_#{tag}".to_sym }
+  tags = Tags::Library.visible_tags.dup
+  [:abstract, :deprecated, :note, :todo].each {|t| tags.delete(t) }
+  create_tag_methods(tags)
+  sections :index, tags.map {|tag| "tag_#{tag}".to_sym }
   sections.last.place([T('docstring')]).after(:tag_overload)
 end
 
@@ -29,8 +31,8 @@ def tag(name, opts = {})
   out
 end
 
-def create_tag_methods
-  Tags::Library.show_tags.each do |tag|
+def create_tag_methods(tags)
+  tags.each do |tag|
     next if respond_to?("tag_#{tag}")
     instance_eval(<<-eof, __FILE__, __LINE__ + 1)
       def tag_#{tag}

@@ -92,12 +92,11 @@ module YARD
         # 
         # @param [Array<Symbol>] tag_list a list of tags to set as the new tags to show
         # @return [Array<Symbol>] a list of ordered tags
-        def show_tags(*tag_list)
+        def visible_tags(*tag_list)
           return @tag_list ||= [] if tag_list.empty?
           @tag_list = tag_list.flatten
         end
       
-        ## 
         # Sorts the labels lexically by their label name, often used when displaying
         # the tags.
         # 
@@ -106,7 +105,6 @@ module YARD
           labels.sort_by {|a| a.last.downcase }
         end
       
-        ##
         # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
         # regular {DefaultFactory#parse_tag} factory method if none is supplied.
         #
@@ -183,8 +181,9 @@ module YARD
       define_tag "Yield Parameters",  :yieldparam,  :with_types_and_name
       define_tag "Yield Returns",     :yieldreturn, :with_types
       
-      show_tags :example, :overload, :param, :option, :yield, :yieldparam, 
-        :yieldreturn, :return, :raise, :see, :author, :since, :version
+      visible_tags :abstract, :deprecated, :note, :todo, :example, :overload, 
+        :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise, 
+        :see, :author, :since, :version
     end
   end
 end

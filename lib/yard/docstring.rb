@@ -123,7 +123,6 @@ module YARD
       list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
 
-    ##
     # Returns true if at least one tag by the name +name+ was declared
     #
     # @param [String] name the tag name to search for
@@ -132,11 +131,17 @@ module YARD
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
 
-    # Returns true if the docstring has no content
+    # Returns true if the docstring has no content that is visible to a template.
     #
+    # @param [Boolean] only_visible_tags whether only {Tags::Library::VISIBLE_TAGS}
+    #   should be checked, or if all tags should be considered.
     # @return [Boolean] whether or not the docstring has content
-    def blank?
-      empty? && @tags.empty? && @ref_tags.empty?
+    def blank?(only_visible_tags = true)
+      if only_visible_tags
+        empty? && !tags.any? {|tag| Tags::Library.visible_tags.include?(tag.tag_name.to_sym) }
+      else
+        empty? && @tags.empty? && @ref_tags.empty?
+      end
     end
 
     private
