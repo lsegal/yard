@@ -225,7 +225,7 @@ module YARD
       def add_tag(tag_data, factory_method = nil)
         tag, title = *tag_data.split(':')
         Tags::Library.define_tag(title, tag.to_sym, factory_method)
-        Tags::Library.visible_tags << tag.to_sym
+        Tags::Library.visible_tags |= [tag.to_sym]
       end
       
       # Parses commandline options.
@@ -405,7 +405,7 @@ module YARD
         end
         
         opts.on('--hide-tag TAG', 'Hides a previously defined tag from templates') do |tag|
-          self.hidden_tags << tag.to_sym
+          self.hidden_tags |= [tag.to_sym]
         end
 
         common_options(opts)

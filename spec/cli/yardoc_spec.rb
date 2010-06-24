@@ -236,18 +236,20 @@ describe YARD::CLI::Yardoc do
     
     def tag_created(switch, factory_method)
       visible_tags = mock(:visible_tags)
-      visible_tags.should_receive(:<<).ordered.with(:foo)
+      visible_tags.should_receive(:|).ordered.with([:foo])
       visible_tags.should_receive(:-).ordered.with([]).and_return(visible_tags)
       Tags::Library.should_receive(:define_tag).with(nil, :foo, factory_method)
+      Tags::Library.stub!(:visible_tags=)
       Tags::Library.should_receive(:visible_tags).at_least(1).times.and_return(visible_tags)
       @yardoc.parse_arguments("--#{switch}-tag", 'foo')
     end
     
     def tag_hidden(tag)
       visible_tags = mock(:visible_tags)
-      visible_tags.should_receive(:<<).ordered.with(tag)
+      visible_tags.should_receive(:|).ordered.with([tag])
       visible_tags.should_receive(:-).ordered.with([tag]).and_return([])
       Tags::Library.should_receive(:define_tag).with(nil, tag, nil)
+      Tags::Library.stub!(:visible_tags=)
       Tags::Library.should_receive(:visible_tags).at_least(1).times.and_return(visible_tags)
     end
 
@@ -259,6 +261,15 @@ describe YARD::CLI::Yardoc do
     it "should accept --tag without title" do
       Tags::Library.should_receive(:define_tag).with(nil, :foo, nil)
       @yardoc.parse_arguments('--tag', 'foo')
+    end
+    
+    it "should only list tag once if declared twice" do
+      visible_tags = []
+      Tags::Library.stub!(:define_tag)
+      Tags::Library.stub!(:visible_tags).and_return([:foo])
+      Tags::Library.stub!(:visible_tags=).with {|value| visible_tags = value }
+      @yardoc.parse_arguments('--tag', 'foo', '--tag', 'foo')
+      visible_tags.should == [:foo]
     end
 
     it "should accept --type-tag" do
