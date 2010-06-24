@@ -2,7 +2,7 @@ def init
   tags = Tags::Library.visible_tags - [:abstract, :deprecated, :note, :todo]
   create_tag_methods(tags - [:example, :option, :overload, :see])
   sections :index, tags
-  sections.last.place([T('docstring')]).after(:overload)
+  sections.any(:overload).push(T('docstring'))
 end
 
 def return
