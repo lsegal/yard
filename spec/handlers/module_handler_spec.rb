@@ -23,4 +23,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ModuleHandler" do
   it "should handle modules in the form ::ModName" do
     Registry.at("Kernel").should_not be_nil
   end
+  
+  it "should list mixins in proper order" do
+    Registry.at('D').mixins.should == [P(:C), P(:B), P(:A)]
+  end
 end

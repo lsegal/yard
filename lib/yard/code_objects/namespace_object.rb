@@ -143,9 +143,10 @@ module YARD::CodeObjects
     def included_meths(opts = {})
       opts = SymbolHash[:scope => [:instance, :class]].update(opts)
       [opts[:scope]].flatten.map do |scope|
-        mixins(scope).reverse.inject([]) do |list, mixin|
+        mixins(scope).inject([]) do |list, mixin|
           next list if mixin.is_a?(Proxy)
           arr = mixin.meths(opts.merge(:scope => :instance)).reject do |o|
+            next false if opts[:all]
             child(:name => o.name, :scope => scope) || list.find {|o2| o2.name == o.name }
           end
           arr.map! {|o| ExtendedMethodObject.new(o) } if scope == :class
@@ -168,7 +169,7 @@ module YARD::CodeObjects
     # Returns constants included from any mixins
     # @return [Array<ConstantObject>] a list of constant objects
     def included_constants
-      instance_mixins.reverse.inject([]) do |list, mixin|
+      instance_mixins.inject([]) do |list, mixin|
         if mixin.respond_to? :constants
           list += mixin.constants.reject do |o| 
             child(:name => o.name) || list.find {|o2| o2.name == o.name }

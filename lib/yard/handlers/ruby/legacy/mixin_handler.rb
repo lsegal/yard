@@ -23,6 +23,6 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
       obj = Proxy.new(namespace, obj.value)
     end
 
-    namespace.mixins(scope) << obj
+    namespace.mixins(scope).unshift(obj)
   end
 end

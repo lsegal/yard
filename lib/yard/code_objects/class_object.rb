@@ -59,7 +59,12 @@ module YARD::CodeObjects
     # @return [Array<MethodObject>] the list of methods that matched
     def meths(opts = {})
       opts = SymbolHash[:inherited => true].update(opts)
-      super(opts) + (opts[:inherited] ? inherited_meths(opts) : [])
+      list = super(opts) 
+      list += inherited_meths(opts).reject do |o|
+        next(false) if opts[:all]
+        list.find {|o2| o2.name == o.name && o2.scope == o.scope }
+      end if opts[:inherited]
+      list
     end
     
     # Returns only the methods that were inherited.
@@ -71,6 +76,7 @@ module YARD::CodeObjects
           list
         else
           list += superclass.meths(opts).reject do |o|
+            next(false) if opts[:all]
             child(:name => o.name, :scope => o.scope) ||
               list.find {|o2| o2.name == o.name && o2.scope == o.scope }
           end

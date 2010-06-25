@@ -48,7 +48,7 @@ describe YARD::CodeObjects::ClassObject do
     before(:all) do
       Registry.clear
     
-      Parser::SourceParser.parse_string <<-eof
+      YARD.parse_string <<-eof
         class SuperYard < String
           def foo; end
           def foo2; end
@@ -66,6 +66,14 @@ describe YARD::CodeObjects::ClassObject do
         class YARD < MiddleYard
           def mymethod; end
           def bar; end
+        end
+        
+        module IncludedYard
+          def foo; end
+        end
+        
+        class FinalYard < SuperYard
+          include IncludedYard
         end
       eof
     end
@@ -103,6 +111,12 @@ describe YARD::CodeObjects::ClassObject do
       meths = P(:YARD).inherited_meths
       meths.should include(P('MiddleYard#middle'))
       meths.should_not include(P('SuperYard#middle'))
+    end
+    
+    it "should show mixed in methods before superclass method" do
+      meths = P(:FinalYard).meths
+      meths.should include(P('IncludedYard#foo'))
+      meths.should_not include(P('SuperYard#foo'))
     end
   end
 
