@@ -201,7 +201,7 @@ module YARD
         sects = sects[start_at..-1] if start_at > 0
         sects = Section.new(nil, sects) unless sects.is_a?(Section)
         add_options(opts) do
-          sects.each_with_index do |s|
+          sects.each do |s|
             self.section = s
             subsection_index = 0
             value = render_section(section) do |*args|
