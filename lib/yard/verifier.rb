@@ -85,6 +85,9 @@ module YARD
     
     private
     
+    # @private
+    NILCLASS_METHODS = [:type, :method_missing]
+    
     # Modifies nil to not throw NoMethodErrors. This allows
     # syntax like object.tag(:return).text to work if the #tag
     # call returns nil, which means users don't need to perform
@@ -92,13 +95,17 @@ module YARD
     # 
     # @return [void] 
     def modify_nilclass
-      NilClass.send(:define_method, :method_missing) {|*args| }
+      NILCLASS_METHODS.each do |meth|
+        NilClass.send(:define_method, meth) {|*args| }
+      end
     end
     
     # Returns the state of NilClass back to normal
     # @return [void] 
     def unmodify_nilclass
-      NilClass.send(:undef_method, :method_missing)
+      NILCLASS_METHODS.each do |meth|
+        NilClass.send(:undef_method, meth)
+      end
     end
     
     # Creates the +__execute+ method by evaluating the expressions
