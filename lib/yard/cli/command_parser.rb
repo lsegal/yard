@@ -12,7 +12,8 @@ module YARD
         :graph  => Graph,
         :help   => Help,
         :ri     => YRI,
-        :server => Server
+        :server => Server,
+        :stats  => Stats
       ]
       
       self.default_command = :doc

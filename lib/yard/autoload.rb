@@ -9,6 +9,7 @@ module YARD
     autoload :Graph,          __p('cli/graph')
     autoload :Help,           __p('cli/help')
     autoload :Server,         __p('cli/server')
+    autoload :Stats,          __p('cli/stats')
     autoload :Yardoc,         __p('cli/yardoc')
     autoload :YRI,            __p('cli/yri')
   end

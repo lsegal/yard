@@ -6,6 +6,7 @@ describe YARD::CLI::Yardoc do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.stub!(:generate).and_return(false)
+    @yardoc.stub!(:statistics).and_return(false)
     Templates::Engine.stub!(:render)
     Templates::Engine.stub!(:generate)
     YARD.stub!(:parse)
@@ -67,6 +68,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.incremental.should == true
       @yardoc.use_cache.should == true
       @yardoc.generate.should == true
+    end
+    
+    it "should not print statistics with --no-stats" do
+      @yardoc.unstub(:statistics)
+      CLI::Stats.should_not_receive(:new)
+      @yardoc.run *%w( --no-stats )
     end
   end
   

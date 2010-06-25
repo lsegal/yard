@@ -42,6 +42,9 @@ module YARD
         
       # @return [Array<Symbol>] a list of tags to hide from templates
       attr_accessor :hidden_tags
+      
+      # @return [Boolean] whether to print statistics after parsing
+      attr_accessor :statistics
         
       # Creates a new instance of the commandline utility
       def initialize
@@ -66,6 +69,7 @@ module YARD
         @generate = true
         @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
+        @statistics = true
       end
       
       def description
@@ -87,7 +91,6 @@ module YARD
         YARD.parse(files, excluded)
         Registry.save(use_cache)
         
-        
         if generate
           if incremental
             generate_with_cache(checksums)
@@ -98,7 +101,13 @@ module YARD
         elsif list
           print_list
         end
-        
+
+        if statistics && log.level < Logger::ERROR
+          log.enter_level(Logger::ERROR) do
+            Stats.new(false).run(*args)
+          end
+        end
+                
         true
       end
       
@@ -384,6 +393,9 @@ module YARD
           options[:format] = format.to_sym
         end
         
+        opts.on('--no-stats', 'Don\'t print statistics') do
+          self.statistics = false
+        end
       end
 
       # Adds tag options
