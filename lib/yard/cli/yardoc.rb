@@ -244,6 +244,17 @@ module YARD
         opts.separator "A base set of options can be specified by adding a .yardopts"
         opts.separator "file to your base path containing all extra options separated"
         opts.separator "by whitespace."
+
+        general_options(opts)
+        output_options(opts)
+        tag_options(opts)
+        common_options(opts)
+        parse_options(opts, args)
+        parse_files(*args) unless args.empty?
+      end
+
+      # Adds general options
+      def general_options(opts)
         opts.separator ""
         opts.separator "General Options:"
 
@@ -252,70 +263,71 @@ module YARD
           YARD::Registry.yardoc_file = file if file
           self.use_cache = true
         end
-        
+
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
-        
+
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
           self.generate = false
         end
-        end
-        
-        opts.on('--one-file', 'Generates output as a single file') do
-          options[:onefile] = true
-        end
-        
-        opts.on('--incremental', 'Generates output for changed files only (implies -c)') do
-          self.incremental = true
-          self.generate = true
-          self.use_cache = true
-        end
-        
+
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
           self.excluded << path
         end
-        
+      end
 
+      # Adds output options
+      def output_options(opts)
         opts.separator ""
         opts.separator "Output options:"
-  
-        opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          visibilities.delete(:public)
-        end
 
-        opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          visibilities.push(:protected)
-        end
-
-        opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          visibilities.push(:private)
-        end
-        
-        opts.on('--no-private', "Hide objects with @private tag") do
-          options[:verifier].add_expressions '!object.tag(:private) && 
-            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
-        end
-
-        opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
-          options[:no_highlight] = true
-        end
-        
-        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
-          options[:default_return] = type
-        end
-        
-        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
-          options[:hide_void_return] = true
-        end
-        
-        opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
-          options[:verifier].add_expressions(query.taint)
+        opts.on('--one-file', 'Generates output as a single file') do
+          options[:onefile] = true
         end
 
         opts.on('--list', 'List objects to standard out (implies -n)') do |format|
           self.generate = false
           self.list = true
+        end
+
+        opts.on('--incremental', 'Generates output for changed files only (implies -c)') do
+          self.incremental = true
+          self.generate = true
+          self.use_cache = true
+        end
+
+        opts.on('--no-public', "Don't show public methods. (default shows public)") do 
+          visibilities.delete(:public)
+        end
+
+        opts.on('--protected', "Show protected methods. (default hides protected)") do
+          visibilities.push(:protected)
+        end
+
+        opts.on('--private', "Show private methods. (default hides private)") do 
+          visibilities.push(:private)
+        end
+
+        opts.on('--no-private', "Hide objects with @private tag") do
+          options[:verifier].add_expressions '!object.tag(:private) && 
+            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
+        end
+
+        opts.on('--no-highlight', "Don't highlight code blocks in output.") do 
+          options[:no_highlight] = true
+        end
+
+        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
+          options[:default_return] = type
+        end
+
+        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
+          options[:hide_void_return] = true
+        end
+
+        opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
+          options[:verifier].add_expressions(query.taint)
         end
 
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
@@ -329,7 +341,7 @@ module YARD
             log.warn "Could not find readme file: #{readme}"
           end
         end
-        
+
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
           add_extra_files(*files.split(","))
         end
@@ -343,12 +355,12 @@ module YARD
                 'Overrides the library used to process markup formatting (specify the gem name)') do |markup_provider|
           options[:markup_provider] = markup_provider.to_sym
         end
-        
+
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
           options[:serializer].basepath = dir
         end
-        
+
         opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
           begin
             Encoding.default_external = encoding
@@ -366,15 +378,19 @@ module YARD
                 'The template path to look for templates in. (used with -t).') do |path|
           YARD::Templates::Engine.register_template_path(path)
         end
-        
+
         opts.on('-f', '--format FORMAT', 
                 'The output format for the template. (defaults to html)') do |format|
           options[:format] = format.to_sym
         end
         
+      end
+
+      # Adds tag options
+      def tag_options(opts)
         opts.separator ""
         opts.separator "Tag options: (TAG:TITLE looks like: 'overload:Overloaded Method')"
-        
+
         opts.on('--tag TAG:TITLE', 'Registers a new free-form metadata @tag') do |tag|
           add_tag(tag)
         end
@@ -394,14 +410,10 @@ module YARD
         opts.on('--title-tag TAG:TITLE', 'Tag with first line as title field') do |tag|
           add_tag(tag, :with_title_and_text)
         end
-        
+
         opts.on('--hide-tag TAG', 'Hides a previously defined tag from templates') do |tag|
           self.hidden_tags |= [tag.to_sym]
         end
-
-        common_options(opts)
-        parse_options(opts, args)
-        parse_files(*args) unless args.empty?
       end
     end
   end
