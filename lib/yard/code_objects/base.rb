@@ -140,29 +140,11 @@ module YARD
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
-          keyname = key_for(namespace, name, *args)
-          obj = Registry.at(keyname)
-          obj = nil if obj && obj.class != self
-          if obj
-            yield(obj) if block_given?
-            obj
-          else
-            super(namespace, name, *args, &block)
-          end
-        end
-        
-        def key_for(namespace, name, *args)
-          keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
-          if self == RootObject
-            keyname = :root
-          elsif self == MethodObject
-            keyname += (args.first && args.first.to_sym == :class ? CSEP : ISEP) + name.to_s
-          elsif keyname.empty?
-            keyname = name.to_s
-          else
-            keyname += NSEP + name.to_s
-          end
-          keyname
+          obj = super(namespace, name, *args)
+          existing_obj = Registry.at(obj.path)
+          obj = existing_obj if existing_obj && existing_obj.class == self
+          yield(obj) if block_given?
+          obj
         end
         
         # Compares the class with subclasses
@@ -188,7 +170,7 @@ module YARD
       # @yield [self] a block to perform any extra initialization on the object
       # @yieldparam [Base] self the newly initialized code object
       # @return [Base] the newly created object
-      def initialize(namespace, name, *args)
+      def initialize(namespace, name, *args, &block)
         if namespace && namespace != :root && 
             !namespace.is_a?(NamespaceObject) && !namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
@@ -408,6 +390,8 @@ module YARD
         @namespace = (obj == :root ? Registry.root : obj)
       
         if @namespace
+          reg_obj = Registry.at(path)
+          return if reg_obj && reg_obj.class == self.class
           @namespace.children << self unless @namespace.is_a?(Proxy)
           Registry.register(self)
         end
