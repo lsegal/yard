@@ -22,6 +22,15 @@ module YARD
       def common_options(opts)
         opts.separator ""
         opts.separator "Other options:"
+        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
+          if !require(file.gsub(/\.rb$/, ''))
+            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
+            exit
+          end
+        end
+        opts.on('--legacy', 'Use old style Ruby parser and handlers. Always on in 1.8.x.') do
+          YARD::Parser::SourceParser.parser_type = :ruby18
+        end
         opts.on_tail('-q', '--quiet', 'Show no warnings.') { log.level = Logger::ERROR }
         opts.on_tail('--verbose', 'Show more information.') { log.level = Logger::INFO }
         opts.on_tail('--debug', 'Show debugging information.') { log.level = Logger::DEBUG }

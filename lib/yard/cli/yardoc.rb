@@ -260,12 +260,6 @@ module YARD
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
           self.generate = false
         end
-        
-        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          if !require(file.gsub(/\.rb$/, ''))
-            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
-            exit
-          end
         end
         
         opts.on('--one-file', 'Generates output as a single file') do
@@ -282,9 +276,6 @@ module YARD
           self.excluded << path
         end
         
-        opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
-          YARD::Parser::SourceParser.parser_type = :ruby18
-        end
 
         opts.separator ""
         opts.separator "Output options:"
