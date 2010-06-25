@@ -1,5 +1,6 @@
 require "benchmark"
-require 'lib/yard'
+require 'yard'
+require 'logger'
 
 PATH_ORDER = [
   'lib/yard/autoload.rb',
