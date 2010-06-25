@@ -133,7 +133,7 @@ module YARD
 
     # Returns true if the docstring has no content that is visible to a template.
     #
-    # @param [Boolean] only_visible_tags whether only {Tags::Library::VISIBLE_TAGS}
+    # @param [Boolean] only_visible_tags whether only {Tags::Library.visible_tags}
     #   should be checked, or if all tags should be considered.
     # @return [Boolean] whether or not the docstring has content
     def blank?(only_visible_tags = true)

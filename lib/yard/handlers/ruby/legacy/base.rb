@@ -32,8 +32,8 @@ module YARD
         private
       
         # The string value of a token. For example, the return value for the symbol :sym 
-        # would be :sym. The return value for a string "foo #{bar}" would be the literal 
-        # "foo #{bar}" without any interpolation. The return value of the identifier
+        # would be :sym. The return value for a string +"foo #{ bar}"+ would be the literal 
+        # +"foo #{ bar}"+ without any interpolation. The return value of the identifier
         # 'test' would be the same value: 'test'. Here is a list of common types and
         # their return values:
         # 
