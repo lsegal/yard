@@ -97,6 +97,13 @@ module YARD::CodeObjects
       explicit ? true : false
     end
     
+    # @return [MethodObject] the object that this method overrides
+    # @return [nil] if it does not override a method
+    def overridden_method
+      meths = namespace.meths(:all => true)
+      meths.find {|m| m.path != path && m.name == name && m.scope == scope }
+    end
+    
     # Returns all alias names of the object
     # @return [Array<Symbol>] the alias names
     def aliases

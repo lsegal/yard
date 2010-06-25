@@ -115,4 +115,33 @@ describe YARD::CodeObjects::MethodObject do
       MethodObject.new(@yard, :initialize).constructor?.should be_false
     end
   end
+  
+  describe '#overridden_method' do
+    before { Registry.clear }
+    
+    it "should return overridden method from mixin first" do
+      YARD.parse_string(<<-eof)
+        module C; def foo; end end
+        class A; def foo; end end
+        class B < A; include C; def foo; end end
+      eof
+      Registry.at('B#foo').overridden_method.should == Registry.at('C#foo')
+    end
+    
+    it "should return overridden method from superclass" do
+      YARD.parse_string(<<-eof)
+        class A; def foo; end end
+        class B < A; def foo; end end
+      eof
+      Registry.at('B#foo').overridden_method.should == Registry.at('A#foo')
+    end
+    
+    it "should return nil if none is found" do
+      YARD.parse_string(<<-eof)
+        class A; end
+        class B < A; def foo; end end
+      eof
+      Registry.at('B#foo').overridden_method.should be_nil
+    end
+  end
 end
