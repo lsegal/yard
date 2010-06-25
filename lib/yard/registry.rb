@@ -97,20 +97,20 @@ module YARD
     # 
     # @example Loads the yardoc file or parses files 'a', 'b' and 'c' (but not both)
     #   Registry.load(['a', 'b', 'c'])
-    # @example Reparses files 'a' and 'b' regardless if yardoc file exists
+    # @example Reparses files 'a' and 'b' regardless of whether yardoc file exists
     #   Registry.load(['a', 'b'], true)
     # @param [String, Array] files if +files+ is an Array, it should represent
     #   a list of files that YARD should parse into the registry. If reload is
     #   set to false and the yardoc file already exists, these files are skipped.
     #   If files is a String, it should represent the yardoc file to load
     #   into the registry.
-    # @param [Boolean] reload if reload is false and a yardoc file already
+    # @param [Boolean] reparse if reparse is false and a yardoc file already
     #   exists, any files passed in will be ignored.
     # @return [Boolean] true if the registry was successfully loaded 
     # @raise [ArgumentError] if files is not a String or Array
-    def load(files = [], reload = false)
+    def load(files = [], reparse = false)
       if files.is_a?(Array)
-        if File.exists?(yardoc_file) && !reload
+        if File.exists?(yardoc_file) && !reparse
           load_yardoc
         else
           size = @store.keys.size
