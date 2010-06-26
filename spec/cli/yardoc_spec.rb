@@ -71,7 +71,7 @@ describe YARD::CLI::Yardoc do
     end
     
     it "should not print statistics with --no-stats" do
-      @yardoc.unstub(:statistics)
+      @yardoc.stub!(:statistics).and_return(false)
       CLI::Stats.should_not_receive(:new)
       @yardoc.run *%w( --no-stats )
     end

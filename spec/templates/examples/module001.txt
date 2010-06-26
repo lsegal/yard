@@ -16,7 +16,7 @@ Defined Under Namespace:
 Includes:
 ---------
 
-    B, D, E, F, A::B::C
+    A::B::C, F, E, D, B
 
 
 Class methods:
