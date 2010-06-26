@@ -326,12 +326,15 @@ module YARD
           
           # Add group information
           if statement.group
-            object.namespace.groups |= [statement.group]
+            unless object.namespace.is_a?(Proxy)
+              object.namespace.groups |= [statement.group]
+            end
             object.group = statement.group
           end
           
           # Add transitive tags
           Tags::Library.transitive_tags.each do |tag|
+            next if object.namespace.is_a?(Proxy)
             next unless object.namespace.has_tag?(tag)
             next if object.has_tag?(tag)
             object.docstring.add_tag(*object.namespace.tags(tag))
