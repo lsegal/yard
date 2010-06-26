@@ -90,6 +90,14 @@ module YARD
         # 
         # @return [Array<Symbol>] a list of ordered tags
         attr_accessor :visible_tags
+        
+        # Sets the list of tags that should apply to any children inside the
+        # namespace they are defined in. For instance, a "@since" tag should
+        # apply to all methods inside a module is it defined in. Transitive
+        # tags can be overridden by directly defining a tag on the child object.
+        # 
+        # @return [Array<Symbol>] a list of transitive tags
+        attr_accessor :transitive_tags
       
         # Sorts the labels lexically by their label name, often used when displaying
         # the tags.
@@ -178,6 +186,8 @@ module YARD
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload, 
         :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise, 
         :see, :author, :since, :version]
+      
+      self.transitive_tags = [:since]
     end
   end
 end

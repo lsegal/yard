@@ -426,6 +426,10 @@ module YARD
         opts.on('--hide-tag TAG', 'Hides a previously defined tag from templates') do |tag|
           self.hidden_tags |= [tag.to_sym]
         end
+        
+        opts.on('--transitive-tag TAG', 'Adds a transitive tag') do |tag|
+          Tags::Library.transitive_tags += [tag.to_sym]
+        end
       end
     end
   end

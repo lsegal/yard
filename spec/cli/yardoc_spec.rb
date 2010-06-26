@@ -304,5 +304,10 @@ describe YARD::CLI::Yardoc do
       tag_hidden(:anewfoo2)
       @yardoc.parse_arguments('--tag', 'anewfoo2', '--hide-tag', 'anewfoo2')
     end
+    
+    it "should accept --transitive-tag" do
+      @yardoc.parse_arguments('--transitive-tag', 'foo')
+      Tags::Library.transitive_tags.should include(:foo)
+    end
   end
 end

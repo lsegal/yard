@@ -330,6 +330,13 @@ module YARD
             object.group = statement.group
           end
           
+          # Add transitive tags
+          Tags::Library.transitive_tags.each do |tag|
+            next unless object.namespace.has_tag?(tag)
+            next if object.has_tag?(tag)
+            object.docstring.add_tag(*object.namespace.tags(tag))
+          end
+          
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)
             object.source ||= statement
