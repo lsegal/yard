@@ -122,6 +122,14 @@ describe YARD::Templates::Section do
     end
   end
   
+  describe '#unshift' do
+    it "should unshift objects as Sections" do
+      s = Section.new(:foo)
+      s.unshift :bar
+      s[0].should == Section.new(:bar)
+    end
+  end
+  
   describe '#any' do
     it "should find item inside sections" do
       s = Section.new(:foo, Section.new(:bar, Section.new(:bar)))

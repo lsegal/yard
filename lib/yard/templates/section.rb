@@ -45,6 +45,10 @@ module YARD
       end
       alias << push
       
+      def unshift(*args)
+        super(*parse_sections(args))
+      end
+      
       def inspect
         n = name.respond_to?(:path) ? "T('#{name.path}')" : name.inspect
         subsects = empty? ? "" : ", subsections=#{super}"
