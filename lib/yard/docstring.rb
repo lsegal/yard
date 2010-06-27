@@ -28,6 +28,8 @@ module YARD
     # Matches a tag at the start of a comment line
     META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
     
+    # @group Creating a Docstring Object
+
     # Creates a new docstring with the raw contents attached to an optional
     # object.
     # 
@@ -53,6 +55,8 @@ module YARD
       super parse_comments(content)
     end
     alias all= replace
+
+    # @endgroup
     
     # @return [Fixnum] the first line of the {#line_range}.
     def line
@@ -83,6 +87,8 @@ module YARD
       @summary += '.' unless @summary.empty?
       @summary
     end
+
+    # @group Creating and Accessing Meta-data
     
     # Adds a tag or reftag object to the tag list
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
@@ -143,6 +149,8 @@ module YARD
         empty? && @tags.empty? && @ref_tags.empty?
       end
     end
+    
+    # @endgroup
 
     private
     

@@ -22,11 +22,7 @@ module YARD
     include Singleton
   
     class << self
-      # Clears the registry and cache
-      # @return [void] 
-      def clear
-        instance.clear 
-      end
+      # @group Getting .yardoc File Locations
 
       # Returns the .yardoc file associated with a gem.
       # 
@@ -87,11 +83,16 @@ module YARD
     # @see DEFAULT_YARDOC_FILE
     attr_accessor :yardoc_file
     
-    # The assumed types of a list of paths
-    # @return [{String => Symbol}] a set of unresolved paths and their assumed type
-    def proxy_types
-      @store.proxy_types
+    # @group Creating a new Registry Object
+    
+    # Creates the Registry
+    # @return [Registry]
+    def initialize
+      @yardoc_file = DEFAULT_YARDOC_FILE
+      clear
     end
+    
+    # @group Loading Data from Disk
     
     # Loads the registry and/or parses a list of files
     # 
@@ -158,6 +159,8 @@ module YARD
     def load_all
       @store.load_all
     end
+    
+    # @group Saving and Deleting Data from Disk
 
     # Saves the registry to +file+
     # 
@@ -167,23 +170,38 @@ module YARD
       @store.save(merge, file)
     end
     
-    # @return [Hash{String => String}] a set of checksums for files
-    def checksums
-      @store.checksums
-    end
-    
-    # @param [String] data data to checksum
-    # @return [String] the SHA1 checksum for data
-    def checksum_for(data)
-      Digest::SHA1.hexdigest(data)
-    end
-    
     # Deletes the yardoc file from disk
     # @return [void]
     def delete_from_disk
       @store.destroy
     end
+    
+    # @group Adding and Deleting Objects from the Registry
 
+    # Registers a new object with the registry
+    # 
+    # @param [CodeObjects::Base] object the object to register
+    # @return [CodeObjects::Base] the registered object
+    def register(object)
+      return if object.is_a?(CodeObjects::Proxy)
+      @store[object.path] = object
+    end
+    
+    # Deletes an object from the registry
+    # @param [CodeObjects::Base] object the object to remove
+    # @return [void] 
+    def delete(object) 
+      @store.delete(object.path)
+    end
+
+    # Clears the registry
+    # @return [void] 
+    def clear
+      @store = RegistryStore.new
+    end
+
+    # @group Accessing Objects in the Registry
+    
     # Returns all objects in the registry that match one of the types provided
     # in the +types+ list (if +types+ is provided).
     # 
@@ -228,35 +246,6 @@ module YARD
     # @return [CodeObjects::RootObject] the root object in the namespace
     def root; @store[:root] end
     
-    # Deletes an object from the registry
-    # @param [CodeObjects::Base] object the object to remove
-    # @return [void] 
-    def delete(object) 
-      @store.delete(object.path)
-    end
-
-    # Clears the registry
-    # @return [void] 
-    def clear
-      @store = RegistryStore.new
-    end
-
-    # Creates the Registry
-    # @return [Registry]
-    def initialize
-      @yardoc_file = DEFAULT_YARDOC_FILE
-      clear
-    end
-  
-    # Registers a new object with the registry
-    # 
-    # @param [CodeObjects::Base] object the object to register
-    # @return [CodeObjects::Base] the registered object
-    def register(object)
-      return if object.is_a?(CodeObjects::Proxy)
-      @store[object.path] = object
-    end
-
     # Attempts to find an object by name starting at +namespace+, performing
     # a lookup similar to Ruby's method of resolving a constant in a namespace.
     # 
@@ -315,6 +304,34 @@ module YARD
       end
       proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name) : nil
     end
+
+    # @group Managing Source File Checksums
+    
+    # @return [Hash{String => String}] a set of checksums for files
+    def checksums
+      @store.checksums
+    end
+    
+    # @param [String] data data to checksum
+    # @return [String] the SHA1 checksum for data
+    def checksum_for(data)
+      Digest::SHA1.hexdigest(data)
+    end
+    
+    # @group Managing Internal State (Testing Only)
+
+    # Clears the registry and cache
+    # @return [void] 
+    def self.clear
+      instance.clear 
+    end
+
+    # The assumed types of a list of paths. This method is used by CodeObjects::Base
+    # @return [{String => Symbol}] a set of unresolved paths and their assumed type
+    # @private
+    def proxy_types
+      @store.proxy_types
+    end
     
     # Define all instance methods as singleton methods on instance
     (public_instance_methods(false) - public_methods(false)).each do |meth|
@@ -322,8 +339,10 @@ module YARD
         def self.#{meth}(*args, &block) instance.send(:#{meth}, *args, &block) end
       eof
     end
-
+    
     private
+    
+    # @group Accessing Objects in the Registry
 
     # Attempts to resolve a name in a namespace
     # 

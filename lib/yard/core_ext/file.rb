@@ -4,6 +4,8 @@ class File
   RELATIVE_PARENTDIR = '..'
   RELATIVE_SAMEDIR = '.'
   
+  # @group Manipulating Paths
+  
   # Turns a path +to+ into a relative path from starting
   # point +from+. The argument +from+ is assumed to be
   # a filename. To treat it as a directory, make sure it
@@ -42,6 +44,8 @@ class File
     end
     File.join(*path)
   end
+  
+  # @group Reading Files
   
   # Forces opening a file (for writing) by first creating the file's directory
   def self.open!(file, *args, &block)

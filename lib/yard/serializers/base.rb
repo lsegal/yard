@@ -19,6 +19,8 @@ module YARD
       # @return [SymbolHash] the serializer options
       attr_reader :options
       
+      # @group Creating a New Serializer
+      
       # Creates a new serializer with options
       # 
       # @param [Hash] opts the options to assign to {#options}
@@ -26,19 +28,7 @@ module YARD
         @options = SymbolHash.new(false).update(opts)
       end
       
-      # Called before serialization. 
-      # 
-      # @abstract Should run code before serialization. Should return false
-      #   if serialization should not occur.
-      # @return [Boolean] whether or not serialization should occur
-      def before_serialize; end
-      
-      # Called after serialization. 
-      # 
-      # @abstract Should run code after serialization.
-      # @param [String] data the data that was serialized.
-      # @return [void]
-      def after_serialize(data); end
+      # @group Serializing an Object
       
       # Serializes an object.
       # 
@@ -58,6 +48,22 @@ module YARD
       # @param [CodeObjects::Base] object the object to return a path for
       # @return [String] the serialized path of an object
       def serialized_path(object) end
+
+        # @group Callbacks
+
+        # Called before serialization. 
+        # 
+        # @abstract Should run code before serialization. Should return false
+        #   if serialization should not occur.
+        # @return [Boolean] whether or not serialization should occur
+        def before_serialize; end
+
+        # Called after serialization. 
+        # 
+        # @abstract Should run code after serialization.
+        # @param [String] data the data that was serialized.
+        # @return [void]
+        def after_serialize(data); end
     end
   end
 end
