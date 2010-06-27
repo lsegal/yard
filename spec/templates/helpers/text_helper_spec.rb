@@ -28,4 +28,16 @@ describe YARD::Templates::Helpers::TextHelper do
     
     it_should_behave_like "signature"
   end
+
+  describe '#align_right' do
+    it "should align text right" do
+      text = "Method: #some_method (SomeClass)"
+      align_right(text).should == ' ' * 40 + text
+    end
+
+    it "should truncate text that is longer than allowed width" do
+      text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
+      align_right(text).should == ' ' + text[0,68] + '...'
+    end
+  end
 end

@@ -29,6 +29,7 @@ module YARD
         end
         
         def align_right(text, spacer = ' ', col = 72)
+          text = text[0, col - 4] + '...' if (col - 1 - text.length) < 0
           spacer * (col - 1 - text.length) + " " + text
         end
         
