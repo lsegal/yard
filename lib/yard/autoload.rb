@@ -133,6 +133,8 @@ module YARD
     autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
   end
   
+  # Namespace for classes and modules that handle serving documentation over HTTP
+  # @since 0.6.0
   module Server
     module Commands
       autoload :Base,                 __p('server/commands/base')

@@ -5,6 +5,10 @@ module YARD
     # A tool to view documentation in the console like `ri`
     class YRI < Command
       CACHE_FILE = File.expand_path('~/.yard/yri_cache')
+      
+      # A file containing all paths, delimited by newlines, to search for
+      # yardoc databases.
+      # @since 0.5.1
       SEARCH_PATHS_FILE = File.expand_path('~/.yard/yri_search_paths')
       
       # Helper method to run the utility on an instance.
@@ -52,6 +56,7 @@ module YARD
       
       protected
       
+      # @since 0.5.6
       def print_usage
         puts "Usage: yri [options] <Path to object>"
         puts "See yri --help for more options."
@@ -120,6 +125,7 @@ module YARD
       end
       
       # Adds paths in {SEARCH_PATHS_FILE}
+      # @since 0.5.1
       def add_default_paths
         return unless File.file?(SEARCH_PATHS_FILE)
         paths = File.readlines(SEARCH_PATHS_FILE).map {|l| l.strip }

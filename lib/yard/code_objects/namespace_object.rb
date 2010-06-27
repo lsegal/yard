@@ -8,6 +8,7 @@ module YARD::CodeObjects
     attr_writer :included_constants, :included_meths
     
     # @return [Array<String>] a list of ordered group names inside the namespace
+    # @since 0.6.0
     attr_accessor :groups
 
     # The list of objects defined in this namespace

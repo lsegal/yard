@@ -4,6 +4,7 @@ require 'open-uri'
 
 module YARD
   module CLI
+    # @since 0.6.0
     class Diff < Command
       def initialize
         super

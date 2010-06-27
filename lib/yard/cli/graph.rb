@@ -4,6 +4,7 @@ module YARD
     # a set of objects
     # 
     # @see Graph#run
+    # @since 0.6.0
     class Graph < Command
       # The options parsed out of the commandline.
       # Default options are:

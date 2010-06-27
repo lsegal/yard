@@ -6,6 +6,7 @@ module YARD
     # the option parser
     # 
     # @abstract
+    # @since 0.6.0
     class Command
       # Helper method to run the utility on an instance.
       # @see #run

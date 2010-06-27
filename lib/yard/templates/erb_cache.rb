@@ -1,5 +1,6 @@
 module YARD
   module Templates
+    # @since 0.5.4
     module ErbCache
       def self.method_for(filename, &block)
         @methods ||= {}

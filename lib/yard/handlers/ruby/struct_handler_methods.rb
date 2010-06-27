@@ -1,3 +1,4 @@
+# @since 0.5.6
 module YARD::Handlers::Ruby::StructHandlerMethods
   include YARD::CodeObjects
   

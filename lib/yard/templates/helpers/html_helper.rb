@@ -30,6 +30,7 @@ module YARD
       # +Encoding.default_external+.
       # 
       # @return [String] the current character set
+      # @since 0.5.4
       def charset
         return 'utf-8' unless RUBY19 || lang = ENV['LANG']
         if RUBY19
@@ -66,17 +67,29 @@ module YARD
         html
       end
       
+      # Converts Markdown to HTML
+      # @param [String] text input Markdown text
+      # @return [String] output HTML
+      # @since 0.6.0
       def html_markup_markdown(text)
         # TODO: other libraries might be more complex
         markup_class(:markdown).new(text).to_html
       end
       
+      # Converts Textile to HTML
+      # @param [String] text the input Textile text
+      # @return [String] output HTML
+      # @since 0.6.0
       def html_markup_textile(text)
         doc = markup_class(:textile).new(text)
         doc.hard_breaks = false if doc.respond_to?(:hard_breaks=)
         doc.to_html
       end
       
+      # Converts RDoc formatting (SimpleMarkup) to HTML
+      # @param [String] text the input RDoc formatted text
+      # @return [String] output HTML
+      # @since 0.6.0
       def html_markup_rdoc(text)
         begin
           SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
@@ -87,10 +100,18 @@ module YARD
         html = fix_typewriter(html)
       end
       
+      # Converts plaintext to HTML
+      # @param [String] text the input text
+      # @return [String] the output HTML
+      # @since 0.6.0
       def html_markup_text(text)
         "<pre>" + text + "</pre>"
       end
       
+      # Converts HTML to HTML
+      # @param [String] text input html
+      # @return [String] output HTML
+      # @since 0.6.0
       def html_markup_html(text)
         text
       end
@@ -285,6 +306,7 @@ module YARD
         link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
       end
       
+      # @since 0.5.3
       def signature_types(meth, link = true)
         meth = convert_method_to_overload(meth)
 
@@ -362,6 +384,7 @@ module YARD
       
       private
       
+      # @since 0.5.3
       def convert_method_to_overload(meth)
         # use first overload tag if it has a return type and method itself does not
         if !meth.tag(:return) && meth.tags(:overload).size == 1 && meth.tag(:overload).tag(:return)

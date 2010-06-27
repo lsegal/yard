@@ -1,3 +1,4 @@
+# @since 0.5.4
 class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby::Legacy::Base
   namespace_only
   handles TkIF, TkELSIF, TkUNLESS
@@ -22,6 +23,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
   # @return [true, false, nil] true if the condition can be definitely
   #   parsed to true, false if not, and nil if the condition cannot be
   #   parsed with certainty (it's dynamic)
+  # @since 0.5.5
   def parse_condition
     condition = nil
     
@@ -60,10 +62,12 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     condition
   end
   
+  # @since 0.5.5
   def parse_then_block
     parse_block
   end
   
+  # @since 0.5.5
   def parse_else_block
     stmtlist = YARD::Parser::Ruby::Legacy::StatementList
     stmtlist.new(statement.block).each do |stmt|

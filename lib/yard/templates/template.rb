@@ -95,6 +95,9 @@ module YARD
           Engine.template(*path)
         end
         
+        # Alias for creating a {Section} with arguments
+        # @see Section#initialize
+        # @since 0.6.0
         def S(*args)
           Section.new(*args)
         end

@@ -121,6 +121,7 @@ module YARD
       attr_accessor :dynamic
       
       # @return [String] the group this object is associated with
+      # @since 0.6.0
       attr_accessor :group
       
       # Is the object defined conditionally at runtime?
@@ -346,6 +347,7 @@ module YARD
       
       # @param [Base, String] other another code object (or object path)
       # @return [String] the shortest relative path from this object to +other+
+      # @since 0.5.3
       def relative_path(other)
         other = other.path if other.respond_to?(:path)
         return other unless namespace

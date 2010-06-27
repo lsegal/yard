@@ -211,6 +211,7 @@ module YARD
         # 
         # @see #process
         # @return [void]
+        # @since 0.5.4
         def process(&block)
           mod = Module.new
           mod.send(:define_method, :process, &block)

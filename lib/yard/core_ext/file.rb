@@ -48,6 +48,8 @@ class File
   # @group Reading Files
   
   # Forces opening a file (for writing) by first creating the file's directory
+  # @param [String] file the filename to open
+  # @since 0.5.2
   def self.open!(file, *args, &block)
     dir = dirname(file)
     FileUtils.mkdir_p(dir) unless directory?(dir)
@@ -56,6 +58,7 @@ class File
   
   # Reads a file with binary encoding
   # @return [String] the ascii-8bit encoded data
+  # @since 0.5.3
   def self.read_binary(file)
     File.open(file, 'rb') {|f| f.read }
   end

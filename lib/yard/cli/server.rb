@@ -1,6 +1,7 @@
 module YARD
   module CLI
     # A local documentation server
+    # @since 0.6.0
     class Server < Command
       # @return [Hash] a list of options to pass to the doc server
       attr_accessor :options

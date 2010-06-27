@@ -1,5 +1,6 @@
 module YARD
   module CLI
+    # @since 0.6.0
     class Stats < Yardoc
       include Templates::Helpers::BaseHelper
       

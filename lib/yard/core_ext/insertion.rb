@@ -26,9 +26,11 @@ class Insertion
   def after(val, recursive = false) insertion(val, 1, recursive) end
     
   # Alias for {#before} with +recursive+ set to true
+  # @since 0.6.0
   def before_any(val) insertion(val, 0, true) end
     
   # Alias for {#after} with +recursive+ set to true
+  # @since 0.6.0
   def after_any(val) insertion(val, 1, true) end
 
   private

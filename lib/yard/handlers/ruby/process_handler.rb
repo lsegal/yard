@@ -1,3 +1,4 @@
+# @since 0.5.4
 class YARD::Handlers::Ruby::ProcessHandler < YARD::Handlers::Ruby::Base
   handles method_call(:process)
   namespace_only

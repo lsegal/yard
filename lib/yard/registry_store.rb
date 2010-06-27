@@ -96,6 +96,7 @@ module YARD
     # @param [String, nil] file the name of the yardoc db to load
     # @return [Boolean] whether the database was loaded
     # @see #load_all
+    # @since 0.5.1
     def load!(file = nil)
       if load(file)
         load_all

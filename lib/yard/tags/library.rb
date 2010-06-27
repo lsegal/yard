@@ -75,6 +75,7 @@ module YARD
         # @return [Symbol] the factory method name for the tag
         # @return [Class<Tag>] the Tag class to use to parse the tag
         # @return [nil] if the tag is freeform text
+        # @since 0.6.0
         def factory_method_for(tag)
           @factory_methods[tag]
         end
@@ -89,6 +90,7 @@ module YARD
         #   Library.visible_tags.place(:mytag).before(:return)
         # 
         # @return [Array<Symbol>] a list of ordered tags
+        # @since 0.6.0
         attr_accessor :visible_tags
         
         # Sets the list of tags that should apply to any children inside the
@@ -97,6 +99,7 @@ module YARD
         # tags can be overridden by directly defining a tag on the child object.
         # 
         # @return [Array<Symbol>] a list of transitive tags
+        # @since 0.6.0
         attr_accessor :transitive_tags
       
         # Sorts the labels lexically by their label name, often used when displaying

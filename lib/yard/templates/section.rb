@@ -1,5 +1,8 @@
 module YARD
   module Templates
+    # Abstracts the structure for a section and its subsections into an ordered
+    # list of sections and subsections.
+    # @since 0.6.0
     class Section < Array
       attr_accessor :name
       

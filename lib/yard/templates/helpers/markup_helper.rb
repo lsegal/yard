@@ -18,6 +18,10 @@ module YARD
         :html => []
       }
       
+      # Returns a list of extensions for various markup types. To register
+      # extensions for a type, add them to the array of extensions for the
+      # type.
+      # @since 0.6.0
       MARKUP_EXTENSIONS = {
         :html => ['htm', 'html', 'shtml'],
         :text => ['txt'],
@@ -26,6 +30,8 @@ module YARD
         :rdoc => ['rdoc']
       }
       
+      # Contains the Regexp object that matches the shebang line of extra
+      # files to detect the markup type.
       MARKUP_FILE_SHEBANG = /\A#!(\S+)\s*$/
 
       begin
@@ -94,6 +100,7 @@ module YARD
       # 
       # @return [Symbol] the markup type recognized for the file
       # @see MARKUP_EXTENSIONS
+      # @since 0.6.0
       def markup_for_file(contents, filename)
         if contents =~ MARKUP_FILE_SHEBANG # Shebang support
           return $1.to_sym
@@ -110,6 +117,7 @@ module YARD
       # markup or preprocessing data.
       # 
       # @return [String] the file contents minus any preprocessing tags
+      # @since 0.6.0
       def markup_file_contents(contents)
         contents =~ MARKUP_FILE_SHEBANG ? $' : contents
       end

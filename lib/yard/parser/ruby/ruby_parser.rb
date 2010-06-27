@@ -15,6 +15,7 @@ module YARD
       end
       
       # Internal parser class
+      # @since 0.5.6
       class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
         alias root ast

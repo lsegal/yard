@@ -103,6 +103,7 @@ module YARD
         
         # @return [Hash{Symbol=>Object}] a list of registered parser types
         # @private
+        # @since 0.5.6
         attr_reader :parser_types
         undef parser_types
         def parser_types; @@parser_types ||= {} end
@@ -110,6 +111,7 @@ module YARD
         
         # @return [Hash] a list of registered parser type extensions
         # @private
+        # @since 0.5.6
         attr_reader :parser_type_extensions
         undef parser_type_extensions
         def parser_type_extensions; @@parser_type_extensions ||= {} end
@@ -119,6 +121,7 @@ module YARD
         # type is found, the default Ruby type is returned.
         # 
         # @return [Symbol] the parser type to be used for the extension
+        # @since 0.5.6
         def parser_type_for_extension(extension)
           type = parser_type_extensions.find do |t, exts|
             [exts].flatten.any? {|ext| ext === extension }
@@ -230,6 +233,7 @@ module YARD
       private
       
       # Searches for encoding line and forces encoding
+      # @since 0.5.3
       def convert_encoding(content)
         return content if RUBY18
         if content =~ /\A\s*#.*coding:\s*(\S+)\s*$/
@@ -262,6 +266,7 @@ module YARD
         parser_type == :ruby18 && type == :ruby ? :ruby18 : type
       end
       
+      # @since 0.5.6
       def parser_class
         klass = self.class.parser_types[parser_type]
         raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1] if !klass

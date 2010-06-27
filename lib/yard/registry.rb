@@ -143,6 +143,7 @@ module YARD
     # @return [void]
     # @see #load_yardoc
     # @see #load_all
+    # @since 0.5.1
     def load!(file = yardoc_file)
       clear
       @store.load!(file)
@@ -156,6 +157,7 @@ module YARD
     #   Registry.load_all
     #   Registry.all.count #=> 17
     # @return [void]
+    # @since 0.5.1
     def load_all
       @store.load_all
     end

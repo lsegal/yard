@@ -38,6 +38,7 @@ module YARD
       end
       
       # @return [Range<Fixnum>] the first to last lines of Ruby source
+      # @since 0.5.4
       def line_range
         tokens.first.line_no..tokens.last.line_no
       end

@@ -1,5 +1,7 @@
 module YARD
   module CLI
+    # Handles help for commands
+    # @since 0.6.0
     class Help < Command
       def description; "Retrieves help for a command" end
       

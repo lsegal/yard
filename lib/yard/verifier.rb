@@ -32,6 +32,7 @@ module YARD
   #   Verifier.new('@return && @param && @yield')
   class Verifier
     # @return [Array<String>] a list of all expressions the verifier checks for
+    # @since 0.5.6
     attr_reader :expressions
     
     def expressions=(value)
@@ -52,6 +53,7 @@ module YARD
     # 
     # @param [Array<String>] expressions a list of expressions
     # @return [void]
+    # @since 0.5.6
     def add_expressions(*expressions)
       self.expressions += expressions.flatten
     end

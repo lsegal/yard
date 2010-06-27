@@ -11,6 +11,7 @@ module YARD
     # @see #parse
     # @see #tokenize
     # @see #enumerator
+    # @since 0.5.6
     class Base
       # Convenience method to create a new parser and {#parse}
       def self.parse(source, filename = nil)

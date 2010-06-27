@@ -6,6 +6,7 @@ module YARD::Templates::Helpers
     # rendering process (including any sub-templates).
     # 
     # @return [OpenStruct] a struct object that stores state
+    # @since 0.6.0
     def globals; options[:__globals] end
     
     def run_verifier(list)
@@ -51,6 +52,7 @@ module YARD::Templates::Helpers
       url
     end
     
+    # @since 0.5.5
     def link_file(filename, title = nil, anchor = nil)
       filename
     end

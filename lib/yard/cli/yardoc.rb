@@ -15,6 +15,7 @@ module YARD
       attr_accessor :files
       
       # @return [Array<String>] list of excluded paths (regexp matches)
+      # @since 0.5.3
       attr_accessor :excluded
       
       # @return [Boolean] whether to use the existing yardoc db if the 
@@ -24,12 +25,14 @@ module YARD
       
       # @return [Boolean] whether to generate output incrementally (
       #   implies use_cache and generate)
+      # @since 0.5.3
       attr_accessor :incremental
       
       # @return [Boolean] whether to generate output
       attr_accessor :generate
 
       # @return [Boolean] whether to print a list of objects
+      # @since 0.5.5
       attr_accessor :list
 
       # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
@@ -38,12 +41,15 @@ module YARD
       
       # Keep track of which visibilities are to be shown
       # @return [Array<Symbol>] a list of visibilities
+      # @since 0.5.6
       attr_accessor :visibilities
         
       # @return [Array<Symbol>] a list of tags to hide from templates
+      # @since 0.6.0
       attr_accessor :hidden_tags
       
       # @return [Boolean] whether to print statistics after parsing
+      # @since 0.6.0
       attr_accessor :statistics
         
       # Creates a new instance of the commandline utility
@@ -114,6 +120,7 @@ module YARD
       # Parses commandline arguments
       # @param [Array<String>] args the list of arguments
       # @return [void]
+      # @since 0.5.6
       def parse_arguments(*args)
         optparse(*support_rdoc_document_file!)
         optparse(*yardopts)
@@ -151,6 +158,7 @@ module YARD
       
       # Generates output for changed objects in cache
       # @return [void]
+      # @since 0.5.1
       def generate_with_cache(checksums)
         changed_files = []
         Registry.checksums.each do |file, hash|
@@ -168,6 +176,7 @@ module YARD
 
       # Prints a list of all objects
       # @return [void]
+      # @since 0.5.5
       def print_list
         Registry.load_all
         Registry.all.
@@ -226,11 +235,13 @@ module YARD
       
       # Adds verifier rule for visibilities
       # @return [void]
+      # @since 0.5.6
       def add_visibility_verifier
         vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier].add_expressions(vis_expr)
       end
       
+      # @since 0.6.0
       def add_tag(tag_data, factory_method = nil)
         tag, title = *tag_data.split(':')
         Tags::Library.define_tag(title, tag.to_sym, factory_method)
@@ -399,6 +410,7 @@ module YARD
       end
 
       # Adds tag options
+      # @since 0.6.0
       def tag_options(opts)
         opts.separator ""
         opts.separator "Tag options: (TAG:TITLE looks like: 'overload:Overloaded Method')"
