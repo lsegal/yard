@@ -8,6 +8,7 @@ module YARD
       def initialize
         super
         @list_all = false
+        log.show_backtraces = true
       end
       
       def description
@@ -17,7 +18,7 @@ module YARD
       def run(*args)
         registry = optparse(*args).map do |gemfile|
           if load_gem_data(gemfile)
-            log.debug "Found #{gemfile}"
+            log.info "Found #{gemfile}"
             Registry.all.map {|o| o.path }
           else
             log.error "Cannot find gem #{gemfile}"
@@ -57,7 +58,7 @@ module YARD
         
         # First check for argument as .yardoc file
         [File.join(gemfile, '.yardoc'), gemfile].each do |yardoc|
-          log.debug "Searching for .yardoc db at #{yardoc}"
+          log.info "Searching for .yardoc db at #{yardoc}"
           if File.directory?(yardoc)
             Registry.load_yardoc(yardoc)
             Registry.load_all
@@ -67,7 +68,7 @@ module YARD
         
         # Next check installed RubyGems
         gemfile_without_ext = gemfile.sub(/\.gem$/, '')
-        log.debug "Searching for installed gem #{gemfile_without_ext}"
+        log.info "Searching for installed gem #{gemfile_without_ext}"
         Gem.source_index.find_name('').find do |spec| 
           if spec.full_name == gemfile_without_ext
             if yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
@@ -86,7 +87,7 @@ module YARD
         
         # Look for local .gem file
         gemfile += '.gem' unless gemfile =~ /\.gem$/
-        log.debug "Searching for local gem file #{gemfile}"
+        log.info "Searching for local gem file #{gemfile}"
         if File.exist?(gemfile)
           File.open(gemfile, 'rb') do |io|
             expand_and_parse(gemfile, io)
@@ -96,7 +97,7 @@ module YARD
         
         # Remote gemfile from rubygems.org
         url = "http://rubygems.org/downloads/#{gemfile}"
-        log.debug "Searching for remote gem file #{url}"
+        log.info "Searching for remote gem file #{url}"
         begin
           open(url) {|io| expand_and_parse(gemfile, io) }
           return true
@@ -120,7 +121,7 @@ module YARD
       
       def expand_gem(gemfile, io)
         tmpdir = File.join(Dir.tmpdir, gemfile)
-        log.debug "Expanding #{gemfile} to #{tmpdir}..."
+        log.info "Expanding #{gemfile} to #{tmpdir}..."
         FileUtils.mkdir_p(tmpdir)
         Gem::Package.open(io) do |pkg|
           pkg.each do |entry|
@@ -132,7 +133,7 @@ module YARD
       
       def cleanup(gemfile)
         dir = File.join(Dir.tmpdir, gemfile)
-        log.debug "Cleaning up #{dir}..."
+        log.info "Cleaning up #{dir}..."
         FileUtils.rm_rf(dir)
       end
       
