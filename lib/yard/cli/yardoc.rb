@@ -23,6 +23,12 @@ module YARD
       #   parse only changed files.
       attr_accessor :use_cache
       
+      # @return [Boolean] whether to parse options from .yardopts
+      attr_accessor :use_yardopts_file
+      
+      # @return [Boolean] whether to parse options from .document
+      attr_accessor :use_document_file
+      
       # @return [Boolean] whether to generate output incrementally (
       #   implies use_cache and generate)
       # @since 0.5.3
@@ -71,11 +77,14 @@ module YARD
         @excluded = []
         @files = []
         @hidden_tags = []
-        @use_cache = false
+        @use_cache = true
+        @use_yardopts_file = true
+        @use_document_file = true
         @generate = true
         @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
         @statistics = true
+        @list = false
       end
       
       def description
@@ -109,6 +118,7 @@ module YARD
         end
 
         if !list && statistics && log.level < Logger::ERROR
+          Registry.load_all
           log.enter_level(Logger::ERROR) do
             Stats.new(false).run(*args)
           end
@@ -122,8 +132,15 @@ module YARD
       # @return [void]
       # @since 0.5.6
       def parse_arguments(*args)
-        optparse(*support_rdoc_document_file!)
-        optparse(*yardopts)
+        # Hack: parse out --no-yardopts, --no-document before parsing files
+        ['document', 'yardopts'].each do |file|
+          without, with = args.index("--no-#{file}") || 0, args.index("--#{file}") || 0
+          send("use_#{file}_file=", false) if without > with
+        end
+        
+        # Parse files and then command line arguments
+        optparse(*support_rdoc_document_file!) if use_document_file
+        optparse(*yardopts) if use_yardopts_file
         optparse(*args)
 
         # Last minute modifications
@@ -147,8 +164,9 @@ module YARD
       end
       
       # Parses the .yardopts file for default yard options
-      # @return [void] 
+      # @return [Array<String>] an array of options parsed from .yardopts 
       def yardopts
+        return [] unless use_yardopts_file
         File.read_binary(options_file).shell_split
       rescue Errno::ENOENT
         []
@@ -187,9 +205,10 @@ module YARD
       end
 
       # Reads a .document file in the directory to get source file globs
-      # @return [void] 
+      # @return [Array<String>] an array of files parsed from .document
       def support_rdoc_document_file!
-        IO.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
+        return [] unless use_document_file
+        File.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
       rescue Errno::ENOENT
         []
       end
@@ -279,9 +298,21 @@ module YARD
         opts.separator "General Options:"
 
         opts.on('-c', '--use-cache [FILE]', 
-                "Use the cached .yardoc db to generate documentation. (defaults to no cache)") do |file|
+                "Use the cached .yardoc db to generate documentation. (this is default)") do |file|
           YARD::Registry.yardoc_file = file if file
           self.use_cache = true
+        end
+        
+        opts.on('--no-cache', "Clear .yardoc db before parsing source.") do
+          self.use_cache = false
+        end
+        
+        opts.on('--[no-]yardopts', "If arguments should be read from .yardopts file. (defaults to yes)") do |use_yardopts|
+          self.use_yardopts_file = use_yardopts
+        end
+
+        opts.on('--[no-]document', "If arguments should be read from .document file. (defaults to yes)") do |use_document|
+          self.use_document_file = use_document
         end
 
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
@@ -383,7 +414,7 @@ module YARD
 
         opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
           begin
-            Encoding.default_external = encoding
+            Encoding.default_external, Encoding.default_internal = encoding, encoding
           rescue ArgumentError => e
             raise OptionParser::InvalidOption, e
           end
