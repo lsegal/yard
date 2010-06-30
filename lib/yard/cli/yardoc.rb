@@ -108,7 +108,7 @@ module YARD
           print_list
         end
 
-        if statistics && log.level < Logger::ERROR
+        if !list && statistics && log.level < Logger::ERROR
           log.enter_level(Logger::ERROR) do
             Stats.new(false).run(*args)
           end
