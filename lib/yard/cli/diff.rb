@@ -4,6 +4,8 @@ require 'open-uri'
 
 module YARD
   module CLI
+    # CLI command to return the objects that were added/removed from 2 versions
+    # of a project (library, gem, working copy).
     # @since 0.6.0
     class Diff < Command
       def initialize
