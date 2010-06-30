@@ -29,6 +29,9 @@ module YARD
       # @return [Boolean] whether to parse options from .document
       attr_accessor :use_document_file
       
+      # @return [Boolean] whether objects should be serialized to .yardoc db
+      attr_accessor :save_yardoc
+      
       # @return [Boolean] whether to generate output incrementally (
       #   implies use_cache and generate)
       # @since 0.5.3
@@ -85,6 +88,7 @@ module YARD
         @options_file = DEFAULT_YARDOPTS_FILE
         @statistics = true
         @list = false
+        @save_yardoc = true
       end
       
       def description
@@ -104,7 +108,7 @@ module YARD
           checksums = Registry.checksums.dup
         end
         YARD.parse(files, excluded)
-        Registry.save(use_cache)
+        Registry.save(use_cache) if save_yardoc
         
         if generate
           if incremental
@@ -297,6 +301,14 @@ module YARD
         opts.separator ""
         opts.separator "General Options:"
 
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+          YARD::Registry.yardoc_file = yfile
+        end
+
+        opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
+          self.generate = false
+        end
+
         opts.on('-c', '--use-cache [FILE]', 
                 "Use the cached .yardoc db to generate documentation. (this is default)") do |file|
           YARD::Registry.yardoc_file = file if file
@@ -314,13 +326,9 @@ module YARD
         opts.on('--[no-]document', "If arguments should be read from .document file. (defaults to yes)") do |use_document|
           self.use_document_file = use_document
         end
-
-        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
-          YARD::Registry.yardoc_file = yfile
-        end
-
-        opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
-          self.generate = false
+        
+        opts.on('--no-save', 'Do not save the parsed data to the yardoc db') do
+          self.save_yardoc = false
         end
 
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|

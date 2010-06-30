@@ -118,7 +118,7 @@ module YARD
       def generate_yardoc(dir)
         olddir = Dir.pwd
         Dir.chdir(dir)
-        log.enter_level(Logger::ERROR) { Yardoc.run('-n') }
+        log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
         Dir.chdir(olddir)
       end
       

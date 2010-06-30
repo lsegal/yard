@@ -139,7 +139,13 @@ describe YARD::CLI::Yardoc do
     
     should_accept('--exclude') do |arg|
       YARD.should_receive(:parse).with(['a'], ['nota', 'b'])
-      @yardoc.run('--exclude', 'nota', '--exclude', 'b', 'a')
+      @yardoc.run(arg, 'nota', arg, 'b', 'a')
+    end
+    
+    should_accept('--no-save') do |arg|
+      YARD.should_receive(:parse)
+      Registry.should_not_receive(:save)
+      @yardoc.run(arg)
     end
   end
   

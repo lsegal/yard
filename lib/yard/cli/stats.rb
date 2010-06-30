@@ -27,13 +27,13 @@ module YARD
       def run(*args)
         parse_arguments(*args)
 
-        if @parse
+        if parse
           if use_cache
             Registry.load!
             checksums = Registry.checksums.dup
           end
           YARD.parse(files, excluded)
-          Registry.save(use_cache)
+          Registry.save(use_cache) if save_yardoc
         end
         
         print_statistics
