@@ -19,12 +19,17 @@ module YARD
       
       self.default_command = :doc
       
+      # Convenience method to create a new CommandParser and call {#run}
+      # @return (see #run)
       def self.run(*args) new.run(*args) end
         
       def initialize
         log.show_backtraces = false
       end
-            
+           
+      # Runs the {Command} object matching the command name of the first
+      # argument.
+      # @return [void] 
       def run(*args)
         unless args == ['--help']
           if args.size == 0 || args.first =~ /^-/
@@ -40,9 +45,9 @@ module YARD
         list_commands
       end
       
-      def commands; self.class.commands end
-      
       private
+
+      def commands; self.class.commands end
       
       def list_commands
         puts "Usage: yard <command> [options]"

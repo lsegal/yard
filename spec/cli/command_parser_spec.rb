@@ -9,7 +9,7 @@ describe YARD::CLI::CommandParser do
     it "should show help if --help is provided" do
       command = mock(:command)
       command.should_receive(:run).with('--help')
-      @cmd.commands[:foo] = command
+      CLI::CommandParser.commands[:foo] = command
       @cmd.class.default_command = :foo
       @cmd.run *%w( foo --help )
     end
@@ -17,7 +17,7 @@ describe YARD::CLI::CommandParser do
     it "should use default command if first argument is a switch" do
       command = mock(:command)
       command.should_receive(:run).with('--a', 'b', 'c')
-      @cmd.commands[:foo] = command
+      CLI::CommandParser.commands[:foo] = command
       @cmd.class.default_command = :foo
       @cmd.run *%w( --a b c )
     end
@@ -25,7 +25,7 @@ describe YARD::CLI::CommandParser do
     it "should use default command if no arguments are provided" do
       command = mock(:command)
       command.should_receive(:run)
-      @cmd.commands[:foo] = command
+      CLI::CommandParser.commands[:foo] = command
       @cmd.class.default_command = :foo
       @cmd.run
     end
