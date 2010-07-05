@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/lib/yard'
 require 'rbconfig'
 
+YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 WINDOWS = (Config::CONFIG['host_os'] =~ /mingw|win32|cygwin/ ? true : false) rescue false
 SUDO = WINDOWS ? '' : 'sudo'
 
@@ -8,7 +9,8 @@ task :default => :specs
 
 desc "Builds the gem"
 task :gem do
-  sh "gem build yard.gemspec"
+  load 'yard.gemspec'
+  Gem::Builder.new(SPEC).build
 end
 
 desc "Installs the gem"
