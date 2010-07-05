@@ -28,7 +28,7 @@ module YARD
       # Runs the command-line utility.
       # 
       # @example
-      #   grapher = YardGraph.new
+      #   grapher = Graph.new
       #   grapher.run('--private')
       # @param [Array<String>] args each tokenized argument
       def run(*args)
