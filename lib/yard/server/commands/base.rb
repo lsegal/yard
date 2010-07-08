@@ -13,7 +13,7 @@ module YARD
         attr_accessor :command_options
         
         # @return [String] the base URI for the command
-        attr_accessor :base_uri
+        attr_accessor :base_path
         
         # @return [Request] request object
         attr_accessor :request
@@ -45,7 +45,7 @@ module YARD
 
         def call(request)
           self.request = request
-          self.path = request.path[base_uri.length..-1].sub(%r{^/+}, '')
+          self.path = request.path[base_path.length..-1].sub(%r{^/+}, '')
           self.headers = {'Content-Type' => 'text/html'}
           self.body = ''
           self.status = 200

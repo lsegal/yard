@@ -47,7 +47,7 @@ module YARD
           uri = uri.gsub('/:library', options[:single_library] ? '' : "/#{library}")
           opts = options.merge(
             :library => library,
-            :base_uri => uri
+            :base_path => uri
           )
           mount_command(uri, command, opts)
         end
@@ -65,7 +65,7 @@ module YARD
       
       def mount_root_commands(libraries, options)
         ROOT_COMMANDS.each do |uri, command|
-          opts = options.merge(:base_uri => uri)
+          opts = options.merge(:base_path => uri)
           mount_command(uri, command, opts)
         end
         
@@ -73,11 +73,11 @@ module YARD
         if options[:single_library]
           opts = options.merge(
             :library => libraries.values.first.first,
-            :base_uri => '/'
+            :base_path => '/'
           )
           command = Commands::DisplayObjectCommand
         else
-          opts = options.merge(:base_uri => '/', :libraries => libraries)
+          opts = options.merge(:base_path => '/', :libraries => libraries)
           command = Commands::LibraryIndexCommand
         end
         mount_command('/', command, opts)
