@@ -5,7 +5,7 @@ module YARD
         include DocServerHelper
         
         def run
-          main_url = "#{base_path.gsub(/frames$/, '')}#{object_path}"
+          main_url = request.path.gsub(/^(.+)?\/frames\/(#{path})$/, '\1/\2')
           if path && !path.empty?
             page_title = "Object: #{object_path}"
           elsif options[:files] && options[:files].size > 0
