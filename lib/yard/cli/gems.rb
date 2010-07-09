@@ -38,7 +38,7 @@ module YARD
             Registry.clear
             Dir.chdir(spec.full_gem_path)
             log.info "Building yardoc index for gem: #{spec.full_name}"
-            Yardoc.run('-n', '-b', yfile)
+            Yardoc.run('--no-stats', '-n', '-b', yfile)
           end
         end
       end
