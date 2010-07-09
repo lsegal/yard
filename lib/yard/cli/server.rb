@@ -19,11 +19,6 @@ module YARD
         "Runs a local documentation server"
       end
       
-      def initialize
-        Templates::Template.extra_includes << YARD::Server::DocServerHelper
-        Templates::Engine.template_paths.push(File.dirname(__FILE__) + '/../server/templates')
-      end
-      
       def run(*args)
         self.libraries = {}
         self.options = SymbolHash.new(false).update(

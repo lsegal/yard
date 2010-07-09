@@ -1,86 +1,50 @@
 module YARD
   module Server
+    class FinishRequest < RuntimeError; end
+    class NotFoundError < RuntimeError; end
+
     class Adapter
       # @return [String] the location where static files are located, if any
       attr_accessor :document_root
       
-      PROJECT_COMMANDS = {
-        "/docs/:library/frames" => Commands::FramesCommand,
-        "/docs/:library/file" => Commands::DisplayFileCommand,
-        "/docs/:library" => Commands::DisplayObjectCommand,
-        "/search/:library" => Commands::SearchCommand,
-        "/list/:library/class" => Commands::ListClassesCommand,
-        "/list/:library/methods" => Commands::ListMethodsCommand,
-        "/list/:library/files" => Commands::ListFilesCommand
-      }
+      attr_accessor :libraries
       
-      ROOT_COMMANDS = {
-        "/css" => Commands::StaticFileCommand,
-        "/js" => Commands::StaticFileCommand,
-        "/images" => Commands::StaticFileCommand,
-      }
+      attr_accessor :options
       
-      def initialize(libraries, options = {}, server_options = {})
+      attr_accessor :server_options
+      
+      attr_accessor :router
+
+      def self.setup
+        Templates::Template.extra_includes |= [YARD::Server::DocServerHelper]
+        Templates::Engine.template_paths |= [File.dirname(__FILE__) + '/templates']
+      end
+
+      def self.shutdown
+        Templates::Template.extra_includes -= [YARD::Server::DocServerHelper]
+        Templates::Engine.template_paths -= [File.dirname(__FILE__) + '/templates']
+      end
+      
+      def initialize(libs, opts = {}, server_opts = {})
+        self.class.setup
+        self.libraries = libs
+        self.options = opts
+        self.server_options = server_opts
         self.document_root = server_options[:DocumentRoot]
-        options[:server] = self
-        mount_library_commands(libraries, options)
-        mount_root_commands(libraries, options)
+        self.router = Router.new(self)
+        options[:adapter] = self
         log.debug "Serving libraries using #{self.class}: #{libraries.keys.join(', ')}"
         log.debug "Caching on" if options[:caching]
         log.debug "Document root: #{document_root}" if document_root
       end
       
+      def add_library(library)
+        libraries[library.name] ||= []
+        libraries[library.name] |= [library]
+      end
+      
       def start
         raise NotImplementedError
-      end
-      
-      def mount_command(path, command, options)
-        raise NotImplementedError
-      end
-      
-      def mount_servlet(path, servlet, *args)
-        raise NotImplementedError
-      end
-      
-      def mount_library(library, options)
-        PROJECT_COMMANDS.each do |uri, command|
-          uri = uri.gsub('/:library', options[:single_library] ? '' : "/#{library}")
-          opts = options.merge(
-            :library => library,
-            :base_path => uri
-          )
-          mount_command(uri, command, opts)
-        end
-      end
-      
-      private
-      
-      def mount_library_commands(libraries, options)
-        libraries.each do |name, library_versions|
-          library_versions.each do |library|
-            mount_library(library, options)
-          end
-        end
-      end
-      
-      def mount_root_commands(libraries, options)
-        ROOT_COMMANDS.each do |uri, command|
-          opts = options.merge(:base_path => uri)
-          mount_command(uri, command, opts)
-        end
-        
-        opts, command = {}, nil
-        if options[:single_library]
-          opts = options.merge(
-            :library => libraries.values.first.first,
-            :base_path => '/'
-          )
-          command = Commands::DisplayObjectCommand
-        else
-          opts = options.merge(:base_path => '/', :libraries => libraries)
-          command = Commands::LibraryIndexCommand
-        end
-        mount_command('/', command, opts)
       end
     end
   end

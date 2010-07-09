@@ -11,8 +11,8 @@ module YARD
         self.version = version
       end
       
-      def to_s
-        version ? "#{name}-#{version}" : "#{name}"
+      def to_s(url_format = true)
+        version ? "#{name}#{url_format ? '/' : '-'}#{version}" : "#{name}"
       end
       
       def hash; to_s.hash end

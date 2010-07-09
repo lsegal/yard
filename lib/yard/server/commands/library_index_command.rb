@@ -1,17 +1,16 @@
 module YARD
   module Server
     module Commands
-      class LibraryIndexCommand < StaticFileCommand
-        attr_accessor :libraries
+      class LibraryIndexCommand < Base
         attr_accessor :options
         
         def run
-          return super unless path.empty?
+          return unless path.empty?
           
           self.options = SymbolHash.new(false).update(
             :markup => :rdoc,
             :format => :html,
-            :libraries => libraries,
+            :libraries => adapter.libraries,
             :template => :doc_server,
             :type => :library_list
           )

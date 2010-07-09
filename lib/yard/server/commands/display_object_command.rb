@@ -5,9 +5,12 @@ module YARD
         def run
           return index if path.empty?
           
-          object = Registry.at(object_path)
-          options.update(:type => :layout)
-          render(object)
+          if object = Registry.at(object_path)
+            options.update(:type => :layout)
+            render(object)
+          else
+            self.status = 404
+          end
         end
         
         def index
@@ -24,6 +27,10 @@ module YARD
             :type => :layout
           )
           render
+        end
+        
+        def not_found
+          self.body = "Could not find object: #{object_path}"
         end
         
         private

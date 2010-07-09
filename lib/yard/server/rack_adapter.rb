@@ -2,45 +2,25 @@ require 'rack'
 
 module YARD
   module Server
+    class RackMiddleware
+      def initialize(app, opts = {})
+        args = [opts[:libraries] || {}, opts[:options] || {}, opts[:server_options] || {}]
+        @app = RackAdapter.new(*args)
+      end
+      
+      def call(env) @app.call(env) end
+    end
+    
     class RackAdapter < Adapter
-      attr_accessor :server
-      attr_accessor :url_map
-      
-      def initialize(libraries, options = {}, server_options = {})
-        self.url_map = Rack::Builder.new
-        self.server = Rack::Server.new(server_options)
-        server.instance_variable_set("@app", url_map)
-        trap("INT") { server.shutdown }
-        super
-      end
-      
-      def mount_command(path, command, options)
-        mount_servlet(path, RackServlet, command, options)
-      end
-      
-      def mount_servlet(path, servlet, *args)
-        adapter = self
-        url_map.map(path) { run servlet.new(adapter, *args) }
+      def call(env)
+        router.call(Rack::Request.new(env))
       end
       
       def start
+        server = Rack::Server.new(server_options)
+        server.instance_variable_set("@app", self)
+        trap("INT") { server.shutdown }
         server.start
-      end
-    end
-    
-    class RackServlet
-      include StaticCaching
-      
-      def initialize(adapter, command, options)
-        @adapter = adapter
-        @command_class = command
-        @options = options
-      end
-      
-      def call(env)
-        request = Rack::Request.new(env)
-        cache = check_static_cache(request, @adapter.document_root)
-        cache ? cache : @command_class.new(@options).call(request) 
       end
     end
   end

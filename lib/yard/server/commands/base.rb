@@ -3,17 +3,9 @@ require 'fileutils'
 module YARD
   module Server
     module Commands
-      class LibraryLoadError < RuntimeError; end
-      class FileLoadError < RuntimeError; end
-      class ObjectLoadError < RuntimeError; end
-      class FinishRequest < RuntimeError; end
-      
       class Base
         # @return [Hash] the options passed to the command's constructor
         attr_accessor :command_options
-        
-        # @return [String] the base URI for the command
-        attr_accessor :base_path
         
         # @return [Request] request object
         attr_accessor :request
@@ -31,7 +23,7 @@ module YARD
         attr_accessor :body
         
         # @return [Adapter] the server adapter
-        attr_accessor :server
+        attr_accessor :adapter
         
         # @return [Boolean] whether to cache
         attr_accessor :caching
@@ -45,24 +37,37 @@ module YARD
 
         def call(request)
           self.request = request
-          self.path = request.path[base_path.length..-1].sub(%r{^/+}, '')
+          self.path ||= request.path[1..-1]
           self.headers = {'Content-Type' => 'text/html'}
           self.body = ''
           self.status = 200
-          begin; run; rescue FinishRequest; end
-          [status, headers, body]
+          begin
+            run
+          rescue FinishRequest
+          rescue NotFoundError
+            self.status = 404
+          end
+          not_found if status == 404
+          [status, headers, body.is_a?(Array) ? body : [body]]
         end
 
         def run
           raise NotImplementedError
         end
         
+        def not_found
+          return if body
+          self.body = "Not found: #{request.path}"
+          self.headers['Content-Type'] = 'text/plain'
+          self.headers['X-Cascade'] = 'pass'
+        end
+        
         protected
         
         def cache(data)
-          if caching && server.document_root
-            path = File.join(server.document_root, request.path.sub(/\.html$/, '') + '.html')
-            path = path.sub(%r{/\.html$}, '/index.html')
+          if caching && adapter.document_root
+            path = File.join(adapter.document_root, request.path.sub(/\.html$/, '') + '.html')
+            path = path.sub(%r{/\.html$}, '.html')
             FileUtils.mkdir_p(File.dirname(path))
             log.debug "Caching data to #{path}"
             File.open(path, 'wb') {|f| f.write(data) }
