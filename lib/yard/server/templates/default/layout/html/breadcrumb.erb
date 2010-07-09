@@ -26,7 +26,7 @@
 
 <div id="menu">
   <% unless @single_library %>
-    <a href="/" target="_top">Libraries</a> &raquo;
+    <a href="/docs" target="_top">Libraries</a> &raquo;
     <span class="title"><%= @library.name %> <% if @library.version %><small>(<%= @library.version %>)</small><% end %></span>
   <% end %>
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
