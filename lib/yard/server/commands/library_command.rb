@@ -54,11 +54,11 @@ module YARD
         def initialize_gem
           require 'rubygems'
           @gem = true
-          ver = "= #{library.version}"
+          ver = library.version ? "= #{library.version}" : ">= 0"
           self.yardoc_file = Registry.yardoc_file_for_gem(library.name, ver)
           unless yardoc_file && File.directory?(yardoc_file)
             # Build gem docs on demand
-            log.debug "Building gem docs for #{library.name}-#{library.version}"
+            log.debug "Building gem docs for #{library.to_s(false)}"
             CLI::Gems.run(library.name, ver)
             self.yardoc_file = Registry.yardoc_file_for_gem(library.name, ver)
           end
