@@ -88,9 +88,16 @@ module YARD
         end
 
         def load_yardoc
+          if @@last_yardoc == yardoc_file
+            log.debug "Reusing yardoc file: #{yardoc_file}"
+            return
+          end
           Registry.clear
           Registry.load(yardoc_file)
+          @@last_yardoc = yardoc_file
         end
+        
+        @@last_yardoc = nil
       end
     end
   end
