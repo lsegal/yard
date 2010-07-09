@@ -9,7 +9,7 @@ module YARD
           if path && !path.empty?
             page_title = "Object: #{object_path}"
           elsif options[:files] && options[:files].size > 0
-            page_title = "File: #{options[:files].first}"
+            page_title = "File: #{options[:files].first.sub(/^#{library_path}\/?/, '')}"
             main_url = url_for_file(options[:files].first)
           elsif !path || path.empty?
             page_title = "Documentation for #{library.name} #{library.version ? '(' + library.version + ')' : ''}"
