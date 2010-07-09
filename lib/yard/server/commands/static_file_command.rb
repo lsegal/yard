@@ -19,7 +19,7 @@ module YARD
         
         def run
           path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
-          STATIC_PATHS.each do |path_prefix|
+          ([adapter.document_root] + STATIC_PATHS).compact.each do |path_prefix|
             file = File.join(path_prefix, path)
             if File.exist?(file)
               ext = request.path.split('.').last
