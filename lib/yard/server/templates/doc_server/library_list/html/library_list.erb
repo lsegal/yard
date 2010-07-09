@@ -2,48 +2,11 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta name="Content-Type" content="text/html; charset=UTF-8" />
-    <title>YARD Documentation Server <%= YARD::VERSION %> - Library Listing</title>
-    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" charset="utf-8" />
-    <link rel="stylesheet" href="/css/custom.css" type="text/css" media="screen" charset="utf-8" />
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.js"></script>
-    <script type="text/javascript">
-      function framesLinks() {
-        $('#framelink').toggle(function() {
-          $(this).text('links with frames');
-          $('ul li a').each(function() {
-            $(this).attr('href', $(this).attr('href').replace(/\/frames$/, ''));
-          });
-        }, function() {
-          $(this).text('links without frames');
-          $('ul li a').each(function() {
-            $(this).attr('href', $(this).attr('href') + '/frames');
-          });
-        })
-      }
-      
-      $(framesLinks);
-    </script>
-    <style type="text/css" media="screen">
-      ul { list-style: circle inside none; padding: 0; }
-      li { font-size: 1.2em; line-height: 1.4em; padding: 3px 5px; }
-    </style>
+    <%= erb(:headers) %>
   </head>
   <body>
     <div id="content">
-      <h1>YARD Documentation Server <%= YARD::VERSION %></h1>
-      <h2>Library Listing <small>(<a id="framelink" href="#">links without frames</a>)</small></h2>
-      <ul>
-        <% @libraries.sort_by {|name, y| name.downcase }.each do |name, library_versions| %>
-        <li class="r<%= @row = @row == 1 ? 2 : 1 %>">
-          <% library_versions = library_versions.dup %>
-          <% first_lib = library_versions.pop %>
-          <a href="/docs/<%= first_lib %>/frames"><%= name %></a> 
-            <small>(<%= first_lib.version %><% if library_versions.size > 0 %>, 
-              <%= library_versions.map {|lib| "<a href=\"/docs/#{lib}/frames\">#{lib.version}</a>" }.join(', ') %><% end %>)</small>
-        </li>
-        <% end %>
-      </ul>
+      <%= yieldall %>
     </div>
   </body>
 </html>
