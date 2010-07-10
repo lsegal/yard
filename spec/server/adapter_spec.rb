@@ -19,8 +19,8 @@ describe YARD::Server::Adapter do
     end
     
     it "should mount library commands for more than one library version" do
-      lib1 = Server::LibraryVersion.new('yard', '.yardoc', '1.0')
-      lib2 = Server::LibraryVersion.new('yard', '.yardoc2', '1.1')
+      lib1 = Server::LibraryVersion.new('yard', '1.0', '.yardoc')
+      lib2 = Server::LibraryVersion.new('yard', '1.1', '.yardoc2')
       @libraries = {lib1.name => [lib1, lib2]}
       
       adapter = Server::Adapter.allocate

@@ -18,7 +18,7 @@ describe YARD::CLI::Server do
   
   def run(*args)
     if @libraries.empty?
-      library = Server::LibraryVersion.new(File.basename(Dir.pwd), '.yardoc')
+      library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, '.yardoc')
       @libraries = {library.name => [library]}
     end
     unless @no_verify_libraries
@@ -31,19 +31,19 @@ describe YARD::CLI::Server do
 
   it "should default to current dir if no library is specified" do
     Dir.should_receive(:pwd).and_return('/path/to/foo')
-    @libraries['foo'] = [Server::LibraryVersion.new('foo', '.yardoc')]
+    @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '.yardoc')]
     run
   end
   
   it "should use .yardoc as yardoc file is library list is odd" do
-    @libraries['a'] = [Server::LibraryVersion.new('a', '.yardoc')]
+    @libraries['a'] = [Server::LibraryVersion.new('a', nil,'.yardoc')]
     run 'a'
   end
   
   it "should force multi library if more than one library is listed" do
     @options[:single_library] = false
-    @libraries['a'] = [Server::LibraryVersion.new('a', 'b')]
-    @libraries['c'] = [Server::LibraryVersion.new('c', '.yardoc')]
+    @libraries['a'] = [Server::LibraryVersion.new('a', nil, 'b')]
+    @libraries['c'] = [Server::LibraryVersion.new('c', nil, '.yardoc')]
     run %w(a b c)
   end
   
@@ -117,8 +117,8 @@ describe YARD::CLI::Server do
   it "should accept -g, --gems" do
     @no_verify_libraries = true
     @options[:single_library] = false
-    @libraries['gem1'] = [Server::LibraryVersion.new('gem1', :gem, '1.0.0')]
-    @libraries['gem2'] = [Server::LibraryVersion.new('gem2', :gem, '1.0.0')]
+    @libraries['gem1'] = [Server::LibraryVersion.new('gem1', '1.0.0', nil, :gem)]
+    @libraries['gem2'] = [Server::LibraryVersion.new('gem2', '1.0.0', nil, :gem)]
     gem1 = mock(:gem1)
     gem1.stub!(:name).and_return('gem1')
     gem1.stub!(:version).and_return('1.0.0')
