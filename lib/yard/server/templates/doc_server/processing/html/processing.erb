@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="/css/custom.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8" src="/js/jquery.js"></script>
+    <title>Processing <%= @library.to_s(false) %></title>
+  </head>
+  <body>
+    <div id="menu">
+      <% unless @single_library %>
+        <a href="/<%= router.docs_prefix %>" target="_top">Libraries</a> &raquo;
+        <span class="title"><%= @library.name %> <% if @library.version %><small>(<%= @library.version %>)</small><% end %></span>
+      <% end %>
+    </div>
+    <h1>Still Processing <%= @library.to_s(false) %></h1>
+    <p>
+      <img src="/images/loading.gif" />
+      Sorry, <strong><%= @library.to_s(false) %></strong> is still being processed. 
+      You'll be redirected when the pages are built, it shouldn't take too much longer!</p>
+      
+    <script type="text/javascript" charset="utf-8">
+      function checkPage() {
+        $.ajax({cache: false, url: "<%= @path %>", success: function() { window.location = "<%= @path %>"; } });
+        setTimeout('checkPage()', 750);
+      }
+      $(checkPage);
+    </script>
+  </body>
+</html>

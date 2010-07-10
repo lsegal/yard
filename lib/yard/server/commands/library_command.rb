@@ -70,6 +70,10 @@ module YARD
           @@last_yardoc = library.yardoc_file
         end
         
+        def not_prepared(request)
+          self.caching = false
+          options.update(:path => request.path, :template => :doc_server, :type => :processing)
+          [302, {'Content-Type' => 'text/html'}, [render]]
         end
         
         @@last_yardoc = nil
