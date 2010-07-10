@@ -31,7 +31,7 @@ module YARD
         self.options = opts
         self.server_options = server_opts
         self.document_root = server_options[:DocumentRoot]
-        self.router = Router.new(self)
+        self.router = (options[:router] || Router).new(self)
         options[:adapter] = self
         log.debug "Serving libraries using #{self.class}: #{libraries.keys.join(', ')}"
         log.debug "Caching on" if options[:caching]
