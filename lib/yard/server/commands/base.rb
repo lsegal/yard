@@ -56,7 +56,7 @@ module YARD
         end
         
         def not_found
-          return if body
+          return unless body.empty?
           self.body = "Not found: #{request.path}"
           self.headers['Content-Type'] = 'text/plain'
           self.headers['X-Cascade'] = 'pass'
