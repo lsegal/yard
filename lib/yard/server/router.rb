@@ -4,10 +4,6 @@ module YARD
       include StaticCaching
       include Commands
       
-      DOCS_PREFIX = 'docs'
-      LIST_PREFIX = 'list'
-      SEARCH_PREFIX = 'search'
-      
       attr_accessor :request
       
       attr_accessor :adapter
@@ -24,6 +20,10 @@ module YARD
           StaticFileCommand.new(adapter.options).call(request)
         end
       end
+
+      def docs_prefix; 'docs' end
+      def list_prefix; 'list' end
+      def search_prefix; 'search' end
       
       # @return [Array(LibraryVersion, Array<String>)] the library followed
       #   by the rest of the path components in the request path. LibraryVersion
@@ -45,17 +45,18 @@ module YARD
       private
       
       def route
-        paths = request.path[1..-1].gsub(%r{//+}, '/').sub(%r{/$}, '').split('/')
-        return route_index if paths.empty? || paths == [DOCS_PREFIX]
-        prefix = paths.shift
-        case prefix
-        when DOCS_PREFIX, LIST_PREFIX, SEARCH_PREFIX
+        path = request.path.gsub(%r{//+}, '/').gsub(%r{^/|/$}, '')
+        return route_index if path.empty? || path == docs_prefix
+        case path
+        when /^(#{docs_prefix}|#{list_prefix}|#{search_prefix})(\/.*|$)/
+          prefix = $1
+          paths = $2.gsub(%r{^/|/$}, '').split('/')
           library, paths = *parse_library_from_path(paths)
           return unless library
           return case prefix
-          when DOCS_PREFIX;   route_docs(library, paths)
-          when LIST_PREFIX;   route_list(library, paths)
-          when SEARCH_PREFIX; route_search(library, paths)
+          when docs_prefix;   route_docs(library, paths)
+          when list_prefix;   route_list(library, paths)
+          when search_prefix; route_search(library, paths)
           end
         end
         nil

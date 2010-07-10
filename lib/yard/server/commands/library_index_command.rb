@@ -11,6 +11,7 @@ module YARD
             :markup => :rdoc,
             :format => :html,
             :libraries => adapter.libraries,
+            :adapter => adapter,
             :template => :doc_server,
             :type => :library_list
           )

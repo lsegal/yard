@@ -18,7 +18,7 @@ module YARD
         end
         command = options[:command]
         library_path = command.single_library ? '' : '/' + command.library.to_s
-        return File.join('/docs' + library_path, path)
+        return File.join('', command.adapter.router.docs_prefix, library_path, path)
       end
     end
   end

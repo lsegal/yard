@@ -7,7 +7,7 @@ module YARD
         def run
           Registry.load_all
           self.query = request.query['q']
-          redirect("/docs/#{single_library ? library : ''}") if query =~ /\A\s*\Z/
+          redirect("/#{adapter.router.docs_prefix}/#{single_library ? library : ''}") if query =~ /\A\s*\Z/
           if found = Registry.at(query)
             redirect(serializer.serialized_path(found))
           end
