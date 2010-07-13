@@ -1,16 +1,10 @@
+require 'webrick/httputils'
+
 module YARD
   module Server
     module Commands
       class StaticFileCommand < Base
-        MIME_TYPES = {
-          :js => 'text/javascript',
-          :css => 'text/css',
-          :png => 'image/png',
-          :jpeg => 'image/jpeg',
-          :jpg => 'image/jpg',
-          :gif => 'image/gif',
-          :bmp => 'image/bmp'
-        }
+        include WEBrick::HTTPUtils
 
         STATIC_PATHS = [
           File.join(YARD::TEMPLATE_ROOT, 'default', 'fulldoc', 'html'),
@@ -22,8 +16,8 @@ module YARD
           ([adapter.document_root] + STATIC_PATHS).compact.each do |path_prefix|
             file = File.join(path_prefix, path)
             if File.exist?(file)
-              ext = request.path.split('.').last
-              headers['Content-Type'] = MIME_TYPES[ext.downcase.to_sym] || 'text/html'
+              ext = "." + (request.path[/\.(\w+)$/, 1] || "html")
+              headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
               self.body = File.read(file)
               return
             end
