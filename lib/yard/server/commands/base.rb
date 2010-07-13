@@ -44,7 +44,8 @@ module YARD
           begin
             run
           rescue FinishRequest
-          rescue NotFoundError
+          rescue NotFoundError => e
+            self.body = e.message if e.message
             self.status = 404
           end
           not_found if status == 404

@@ -30,6 +30,7 @@ module YARD
         end
         
         def not_found
+          super
           self.body = "Could not find object: #{object_path}"
         end
         
