@@ -42,14 +42,8 @@ describe YARD::Server::Router do
   end
   
   describe '#route' do
-    def mock_route(route)
-      req = OpenStruct.new
-      req.path = route
-      req
-    end
-    
     def route_to(route, command, *args)
-      req = mock_route(route)
+      req = mock_request(route)
       router = MyRouterSpecRouter.new(@adapter)
       command.should_receive(:new).and_return do |*args|
         @command = command.allocate

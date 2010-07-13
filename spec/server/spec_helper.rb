@@ -11,3 +11,7 @@ def mock_adapter(opts = {})
   opts[:server_options] ||= {}
   OpenStruct.new(opts)
 end
+
+def mock_request(path = '/')
+  OpenStruct.new(:path => path)
+end
