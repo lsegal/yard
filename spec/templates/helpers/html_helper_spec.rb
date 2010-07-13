@@ -369,4 +369,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
       resolve_links("({file:TEST})")
     end
   end
+  
+  describe '#link_url' do
+    it "should add target if scheme is provided" do
+      link_url("http://url.com").should include(" target=\"_parent\"")
+      link_url("https://url.com").should include(" target=\"_parent\"")
+      link_url("irc://url.com").should include(" target=\"_parent\"")
+      link_url("../not/scheme").should_not include("target")
+    end
+  end
 end
