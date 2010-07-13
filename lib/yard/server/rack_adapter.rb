@@ -1,4 +1,5 @@
 require 'rack'
+require 'webrick/httputils'
 
 module YARD
   module Server
@@ -12,8 +13,12 @@ module YARD
     end
     
     class RackAdapter < Adapter
+      include WEBrick::HTTPUtils
+      
       def call(env)
-        router.call(Rack::Request.new(env))
+        request = Rack::Request.new(env)
+        request.path_info = unescape(request.path_info) # unescape things like %3F
+        router.call(request)
       end
       
       def start
