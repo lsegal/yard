@@ -133,6 +133,12 @@ function summaryToggle() {
   }
 }
 
+function fixOutsideWorldLinks() {
+  $('a').each(function() {
+    if (window.location.host != this.host) this.target = '_parent';
+  });
+}
+
 $(framesInit);
 $(createSourceLinks);
 $(createDefineLinks);
@@ -142,3 +148,4 @@ $(searchFrameLinks);
 $(linkSummaries);
 $(keyboardShortcuts);
 $(summaryToggle);
+$(fixOutsideWorldLinks);
