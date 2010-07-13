@@ -87,6 +87,7 @@ function framesInit() {
   if (window.top.frames.main) {
     document.body.className = 'frames';
     $('#menu .noframes a').attr('href', document.location);
+    $('html head title', window.parent.document).text($('html head title').text());
   }
 }
 

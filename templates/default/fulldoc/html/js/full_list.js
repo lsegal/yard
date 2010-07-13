@@ -57,12 +57,7 @@ function linkList() {
       }
     }
     if (clicked) clicked.removeClass('clicked');
-    var win = window.parent;
-    if (window.top.frames.main) {
-      win = window.top.frames.main;
-      var title = $('html head title', win.document).text();
-      $('html head title', window.parent.document).text(title);
-    }
+    var win = window.top.frames.main ? window.top.frames.main : window.parent;
     if (this.tagName.toLowerCase() == "a") {
       clicked = $(this).parent('li').addClass('clicked');
       win.location = this.href;
