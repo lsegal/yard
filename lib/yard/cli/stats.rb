@@ -4,6 +4,10 @@ module YARD
     class Stats < Yardoc
       include Templates::Helpers::BaseHelper
       
+      # Maintains the order in which +stats_for_+ statistics methods should be 
+      # printed.
+      # 
+      # @see #print_statistics
       STATS_ORDER = [:files, :modules, :classes, :constants, :methods]
       
       # @return [Boolean] whether to parse and load registry
