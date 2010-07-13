@@ -69,7 +69,7 @@ module YARD
       end
       
       def source_path_for_disk
-        File.dirname(yardoc_file)
+        File.dirname(yardoc_file) if yardoc_file
       end
       
       def source_path_for_gem

@@ -1,18 +1,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class MyRouter
+class MyDocServerSerializerRouter < YARD::Server::Router
   def initialize(adapter) end
   def docs_prefix; 'PREFIX' end
 end
 
 describe YARD::Server::DocServerSerializer do
   describe '#serialized_path' do
-    before(:all) do
+    before do
       Registry.clear
       @command = mock(:command)
       @command.stub!(:single_library).and_return(false)
       @command.stub!(:library).and_return('foo')
-      @command.stub!(:adapter).and_return(Server::RackAdapter.new({}, :router => MyRouter))
+      @command.stub!(:adapter).and_return(Server::RackAdapter.new({}, :router => MyDocServerSerializerRouter))
       @serializer = Server::DocServerSerializer.new(@command)
     end
 
