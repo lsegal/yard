@@ -6,6 +6,8 @@ module YARD
       class StaticFileCommand < Base
         include WEBrick::HTTPUtils
 
+        DefaultMimeTypes['js'] = 'text/javascript'
+
         STATIC_PATHS = [
           File.join(YARD::TEMPLATE_ROOT, 'default', 'fulldoc', 'html'),
           File.join(File.dirname(__FILE__), '..', 'templates', 'default', 'fulldoc', 'html')
