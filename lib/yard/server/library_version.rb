@@ -54,7 +54,6 @@ module YARD
         ver = version ? "= #{version}" : ">= 0"
         self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
         unless yardoc_file && File.directory?(yardoc_file)
-          puts "BUILDING GEM!!!"
           Thread.new do
             # Build gem docs on demand
             log.debug "Building gem docs for #{to_s(false)}"
