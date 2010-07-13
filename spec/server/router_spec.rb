@@ -1,7 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-require 'ostruct'
-
-include Server
+require File.dirname(__FILE__) + '/spec_helper'
 
 class MyRouterSpecRouter < Router
   def docs_prefix; 'mydocs/foo' end
@@ -13,11 +10,8 @@ end
 
 describe YARD::Server::Router do
   before do
-    @projects = [LibraryVersion.new('project', '1.0.0'), LibraryVersion.new('project', '1.0.1')]
-    @libraries = {'project' => @projects}
-    @adapter = mock(:adapter)
-    @adapter.stub!(:options).and_return({})
-    @adapter.stub!(:libraries).and_return(@libraries)
+    @adapter = mock_adapter
+    @projects = @adapter.libraries['project']
   end
 
   describe '#parse_library_from_path' do
@@ -48,8 +42,6 @@ describe YARD::Server::Router do
   end
   
   describe '#route' do
-    include Commands
-    
     def mock_route(route)
       req = OpenStruct.new
       req.path = route

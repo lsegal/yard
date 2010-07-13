@@ -1,6 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-
-include Server
+require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Server::Adapter do
   after(:all) { Server::Adapter.shutdown }
