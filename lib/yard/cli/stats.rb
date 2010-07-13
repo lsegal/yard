@@ -4,6 +4,8 @@ module YARD
     class Stats < Yardoc
       include Templates::Helpers::BaseHelper
       
+      STATS_ORDER = [:files, :modules, :classes, :constants, :methods]
+      
       # @return [Boolean] whether to parse and load registry
       attr_accessor :parse
       
@@ -46,9 +48,15 @@ module YARD
       # to this class that calls {#output}.
       def print_statistics
         @total, @undocumented = 0, 0
-        methods.map {|m| m.to_s }.grep(/^stats_for_/).each do |meth|
-          send(meth)
+        meths = methods.map {|m| m.to_s }.grep(/^stats_for_/)
+        STATS_ORDER.each do |meth|
+          mname = "stats_for_#{meth}"
+          if meths.include?(mname)
+            send(mname)
+            meths.delete(mname)
+          end
         end
+        meths.each {|m| send(m) }
         total = (@total - @undocumented).to_f / @total.to_f * 100
         puts("% 3.2f%% documented" % total)
       end
