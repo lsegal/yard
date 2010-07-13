@@ -11,11 +11,6 @@ describe YARD::CLI::Server do
     @cli.stub!(:adapter).and_return(@adapter)
   end
   
-  after(:all) do
-    Templates::Template.extra_includes.delete(Server::DocServerHelper)
-    Templates::Engine.template_paths.pop
-  end
-  
   def run(*args)
     if @libraries.empty?
       library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, '.yardoc')
@@ -122,11 +117,16 @@ describe YARD::CLI::Server do
     gem1 = mock(:gem1)
     gem1.stub!(:name).and_return('gem1')
     gem1.stub!(:version).and_return('1.0.0')
+    gem1.stub!(:full_gem_path).and_return('/path/to/foo')
     gem2 = mock(:gem2)
     gem2.stub!(:name).and_return('gem2')
     gem2.stub!(:version).and_return('1.0.0')
+    gem2.stub!(:full_gem_path).and_return('/path/to/bar')
+    specs = {'gem1' => gem1, 'gem2' => gem2}
     source = mock(:source_index)
-    source.stub!(:find_name).and_return([gem1, gem2])
+    source.stub!(:find_name).and_return do |k, ver|
+      k == '' ? specs.values : specs.grep(k).map {|name| specs[name] }
+    end
     Gem.stub!(:source_index).and_return(source)
     run '-g'
     run '--gems'

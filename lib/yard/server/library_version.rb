@@ -73,7 +73,7 @@ module YARD
       end
       
       def source_path_for_gem
-        gemspec.full_gem_path
+        gemspec.full_gem_path if gemspec
       end
       
       private

@@ -1,10 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Server::Adapter do
-  before do
+  before(:all) do
     lib = Server::LibraryVersion.new('yard', '.yardoc')
     @libraries = {lib.name => [lib]}
   end
+  
+  after(:all) { Server::Adapter.shutdown }
   
   describe '#mount_library_commands' do
     it "should mount all library commands" do
