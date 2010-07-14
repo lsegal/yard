@@ -51,7 +51,7 @@ module YARD
     # == Adding Custom Ad-Hoc Meta-data Tags (+--tag+)
     # 
     # YARD allows specification of {file:docs/Tags.md meta-data tags} 
-    # programmatically via the {YARD::Library} class, but often this is not 
+    # programmatically via the {YARD::Tags::Library} class, but often this is not 
     # practical for users writing documentation. To make adding custom tags
     # easier, Yardoc has a few command-line switches for creating basic tags 
     # and displaying them in generated HTML output.
@@ -75,6 +75,26 @@ module YARD
     # a meta-data tag that does not show up in output, use +--hide-tag TAG+.
     # Note that you can also use this option on existing tags to hide
     # builtin tags, for instance.
+    # 
+    # == Processed Data Storage (+.yardoc+ directory)
+    # 
+    # When Yardoc parses a source directory, it creates a +.yardoc+ directory
+    # (by default, override with +-b+) at the root of the project. This directory
+    # contains marshal dumps for all raw object data in the source, so that
+    # you can access it later for various commands (+stats+, +graph+, etc.).
+    # This directory is also used as a cache for any future calls to +yardoc+
+    # so as to process only the files which have changed since the last call.
+    # 
+    # Because Yardoc uses the cache in subsequent calls to +yardoc+, methods
+    # or classes that have been deleted from source since the last parsing
+    # will not be erased from the cache (YARD never deletes objects). In such
+    # a case, you should pass +--no-cache+ to wipe the cache and do a clean
+    # parsing of the source tree.
+    # 
+    # Note that since 0.6.0, Yardoc will default to using the existing +.yardoc+
+    # directory as a cache. In previous versions, the cache would only be used
+    # if +-c+ was passed. To avoid using the cached +.yardoc+ directory in 0.6.0
+    # and on, pass +--no-cache+ in the command line.
     # 
     # @since 0.2.1
     # @see Verifier
