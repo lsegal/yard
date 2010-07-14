@@ -228,6 +228,7 @@ describe YARD::CLI::Yardoc do
       obj = mock(:object)
       obj.stub!(:type).and_return(:class)
       obj.stub!(:namespace).and_return(ns)
+      obj.stub!(:visibility).and_return(:public)
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(obj).should == true

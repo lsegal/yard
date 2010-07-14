@@ -350,7 +350,7 @@ module YARD
       # @return [void]
       # @since 0.5.6
       def add_visibility_verifier
-        vis_expr = "#{visibilities.uniq.inspect}.include?(object.visibility)"
+        vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier].add_expressions(vis_expr)
       end
       
