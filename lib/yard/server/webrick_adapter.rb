@@ -3,14 +3,6 @@ require 'webrick'
 module YARD
   module Server
     class WebrickAdapter < Adapter
-      def mount_command(path, command, options)
-        mount_servlet(path, WebrickServlet, command, options)
-      end
-      
-      def mount_servlet(path, servlet, *args)
-        server.mount(path, servlet, self, *args)
-      end
-      
       def start
         server_options[:ServerType] = WEBrick::Daemon if server_options[:daemonize]
         server = WEBrick::HTTPServer.new(server_options)
