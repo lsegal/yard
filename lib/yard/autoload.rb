@@ -162,6 +162,7 @@ module YARD
     autoload :Router,                 __p('server/router')
     autoload :StaticCaching,          __p('server/static_caching')
     autoload :WebrickAdapter,         __p('server/webrick_adapter')
+    autoload :WebrickServlet,         __p('server/webrick_adapter')
   end
   
   module Tags # Namespace for Tag components
