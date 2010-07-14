@@ -176,7 +176,8 @@ module YARD
     autoload :TagFormatError, __p('tags/tag_format_error')
   end
   
-  module Templates # Namespace for templating system
+  # Namespace for templating system
+  module Templates
     module Helpers # Namespace for template helpers
       autoload :BaseHelper,                 __p('templates/helpers/base_helper')
       autoload :FilterHelper,               __p('templates/helpers/filter_helper')

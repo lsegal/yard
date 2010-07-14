@@ -3,6 +3,81 @@ require 'fileutils'
 
 module YARD
   module CLI
+    # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
+    # executable) used to generate and output (mainly) HTML documentation given
+    # a set of source files.
+    # 
+    # == Usage
+    # 
+    # Main usage for this command is:
+    # 
+    #   $ yardoc [options] [source_files [- extra_files]]
+    # 
+    # See +yardoc --help+ for details on valid options.
+    # 
+    # == Options File (+.yardopts+)
+    # 
+    # If a +.yardopts+ file is found in the source directory being processed,
+    # YARD will use the contents of the file as arguments to the command, 
+    # treating newlines as spaces. You can use shell-style quotations to
+    # group space delimited arguments, just like on the command line.
+    # 
+    # A valid +.yardopts+ file might look like:
+    # 
+    #   --no-private
+    #   --title "My Title"
+    #   --exclude foo --exclude bar
+    #   lib/**/*.erb 
+    #   lib/**/*.rb -
+    #   HACKING.rdoc LEGAL COPYRIGHT
+    # 
+    # Note that Yardoc also supports the legacy RDoc style +.document+ file,
+    # though this file can only specify source globs to parse, not options.
+    # 
+    # == Queries (+--query+)
+    # 
+    # Yardoc supports queries to select specific code objects for which to
+    # generate documentation. For example, you might want to generate
+    # documentation only for your public API. If you've documented your public
+    # methods with +@api public+, you can use the following query to select
+    # all of these objects:
+    # 
+    #   --query '@api.text == "public"'
+    # 
+    # Note that the syntax for queries is mostly Ruby with a few syntactic
+    # simplifications for meta-data tags. See the {Verifier} class for an
+    # overview of this syntax. 
+    # 
+    # == Adding Custom Ad-Hoc Meta-data Tags (+--tag+)
+    # 
+    # YARD allows specification of {file:docs/Tags.md meta-data tags} 
+    # programmatically via the {YARD::Library} class, but often this is not 
+    # practical for users writing documentation. To make adding custom tags
+    # easier, Yardoc has a few command-line switches for creating basic tags 
+    # and displaying them in generated HTML output.
+    # 
+    # To specify a custom tag to be displayed in output, use any of the 
+    # following:
+    # 
+    # * +--tag+ TAG:TITLE
+    # * +--name-tag+ TAG:TITLE
+    # * +--type-tag+ TAG:TITLE
+    # * +--type-name-tag+ TAG:TITLE
+    # * +--title-tag+ TAG:TITLE
+    # 
+    # "TAG:TITLE" is of the form: name:"Display Title", for example:
+    # 
+    #   --tag overload:"Overloaded Method"
+    # 
+    # See +yardoc --help+ for a description of the various options.
+    # 
+    # Tags added in this way are automatically displayed in output. To add
+    # a meta-data tag that does not show up in output, use +--hide-tag TAG+.
+    # Note that you can also use this option on existing tags to hide
+    # builtin tags, for instance.
+    # 
+    # @since 0.2.1
+    # @see Verifier
     class Yardoc < Command
       # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"

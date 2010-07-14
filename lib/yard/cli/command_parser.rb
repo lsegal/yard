@@ -1,8 +1,32 @@
 module YARD
   module CLI
+    # This class parses a command name out of the +yard+ CLI command and calls
+    # that command in the form:
+    # 
+    #   $ yard command_name [options]
+    # 
+    # If no command or arguments are specified, or if the arguments immediately
+    # begin with a +--opt+ (not +--help+), the {default_command} will be used 
+    # (which itself defaults to +:doc+).
+    # 
+    # == Adding a Command
+    # 
+    # To add a custom command via plugin, create a mapping in {commands} from 
+    # the Symbolic command name to the {Command} class that implements the 
+    # command. To implement a command, see the documentation for the {Command}
+    # class.
+    # 
+    # @see Command
+    # @see commands
+    # @see default_command
     class CommandParser
       class << self
+        # @return [Hash{Symbol => Command}] the mapping of command names to
+        #   command classes to parse the user command.
         attr_accessor :commands
+        
+        # @return [Symbol] the default command name to use when no options
+        #   are specified or 
         attr_accessor :default_command
       end
       
