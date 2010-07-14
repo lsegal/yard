@@ -186,12 +186,14 @@ ul.fullTree li.next:before { font-size: 1.2em; content: '\2B06'; color: #bbb; di
 #search { position: absolute; right: 14px; top: 0px; }
 #search a:link, #search a:visited { 
   display: block; float: left; margin-right: 4px;
-  padding: 8px 10px; text-decoration: none; color: #05a; background: #eaeaff;
+  padding: 8px 10px; text-decoration: none; color: #05a;
   border: 1px solid #d8d8e5;
   -moz-border-radius-bottomleft: 3px; -moz-border-radius-bottomright: 3px; 
   -webkit-border-bottom-left-radius: 3px; -webkit-border-bottom-right-radius: 3px;
+  background: #eaf0ff -webkit-gradient(linear, left bottom, left top, color-stop(0.09, #dae0ef), color-stop(0.7, #eaf0ff));
+  -webkit-box-shadow: -1px 1px 3px #ddd;
 }
-#search a:hover { background: #eef; color: #06b; }
+#search a:hover { background: #f5faff -webkit-gradient(linear, left bottom, left top, color-stop(0.2, #eaf0ff), color-stop(0.9, #fff)); color: #06b; }
 #search a.active { 
   background: #568; padding-bottom: 20px; color: #fff; border: 1px solid #457; 
   -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px;
