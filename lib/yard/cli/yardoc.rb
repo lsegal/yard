@@ -127,11 +127,6 @@ module YARD
       # @return [Boolean] whether objects should be serialized to .yardoc db
       attr_accessor :save_yardoc
       
-      # @return [Boolean] whether to generate output incrementally (
-      #   implies use_cache and generate)
-      # @since 0.5.3
-      attr_accessor :incremental
-      
       # @return [Boolean] whether to generate output
       attr_accessor :generate
 
@@ -179,7 +174,6 @@ module YARD
         @use_yardopts_file = true
         @use_document_file = true
         @generate = true
-        @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
         @statistics = true
         @list = false
@@ -198,6 +192,7 @@ module YARD
       def run(*args)
         parse_arguments(*args)
         
+        checksums = nil
         if use_cache
           Registry.load
           checksums = Registry.checksums.dup
@@ -206,12 +201,7 @@ module YARD
         Registry.save(use_cache) if save_yardoc
         
         if generate
-          if incremental
-            generate_with_cache(checksums)
-          else
-            Registry.load_all if use_cache
-            Templates::Engine.generate(all_objects, options)
-          end
+          run_generate(checksums)
         elsif list
           print_list
         end
@@ -273,22 +263,27 @@ module YARD
       
       private
       
-      # Generates output for changed objects in cache
+      # Generates output for objects
+      # @param [Hash, nil] checksums if supplied, a list of checkums for files.
       # @return [void]
       # @since 0.5.1
-      def generate_with_cache(checksums)
-        changed_files = []
-        Registry.checksums.each do |file, hash|
-          changed_files << file if checksums[file] != hash
-        end
-        Registry.load_all
-        all_objects.each do |object|
-          if object.files.any? {|f, line| changed_files.include?(f) }
-            log.info "Re-generating object #{object.path}..."
-            opts = options.merge(:object => object, :type => :layout)
-            Templates::Engine.render(opts)
+      def run_generate(checksums)
+        if checksums
+          changed_files = []
+          Registry.checksums.each do |file, hash|
+            changed_files << file if checksums[file] != hash
           end
         end
+        Registry.load_all if use_cache
+        objects = all_objects.reject do |object|
+          if checksums && !object.files.any? {|f, line| changed_files.include?(f) }
+            true
+          else
+            log.info "Re-generating object #{object.path}..."
+            false
+          end
+        end
+        Templates::Engine.generate(objects, options)
       end
 
       # Prints a list of all objects
@@ -443,12 +438,6 @@ module YARD
         opts.on('--list', 'List objects to standard out (implies -n)') do |format|
           self.generate = false
           self.list = true
-        end
-
-        opts.on('--incremental', 'Generates output for changed files only (implies -c)') do
-          self.incremental = true
-          self.generate = true
-          self.use_cache = true
         end
 
         opts.on('--no-public', "Don't show public methods. (default shows public)") do 

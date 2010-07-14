@@ -195,18 +195,6 @@ describe YARD::CLI::Yardoc do
       @yardoc.run *%w( --use-cache )
     end
 
-    it "should only generate changed objects with --incremental" do
-      YARD.should_receive(:parse)
-      Registry.should_receive(:load)
-      Registry.should_not_receive(:load_all)
-      @yardoc.stub!(:generate).and_return(true)
-      @yardoc.should_receive(:generate_with_cache)
-      @yardoc.run *%w( --incremental )
-      @yardoc.incremental.should == true
-      @yardoc.use_cache.should == true
-      @yardoc.generate.should == true
-    end
-    
     it "should not print statistics with --no-stats" do
       @yardoc.stub!(:statistics).and_return(false)
       CLI::Stats.should_not_receive(:new)
