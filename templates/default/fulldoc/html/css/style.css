@@ -100,6 +100,7 @@ dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-b
 
 .summary_desc { margin-left: 32px; display: block; font-family: sans-serif; }
 .summary_desc tt { font-size: 0.9em; }
+dl.constants .note { padding: 2px 6px; padding-right: 12px; margin-top: 6px; }
 dl.constants .docstring { margin-left: 32px; font-size: 0.9em; font-weight: normal; }
 dl.constants .tags { padding-left: 32px; font-size: 0.9em; line-height: 0.8em; }
 dl.constants .discussion *:first-child { margin-top: 0; }
