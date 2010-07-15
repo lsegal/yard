@@ -31,6 +31,13 @@ module YARD::Templates::Helpers
         case args.first
         when %r{://}, /^mailto:/
           link_url(args[0], args[1], {:target => '_parent'}.merge(args[2]||{}))
+        when /^include:(\S+)/
+          path = $1
+          if obj = YARD::Registry.resolve(object.namespace, path)
+            link_include_object(obj)
+          else
+            log.warn "Cannot find object at `#{path}' for inclusion"
+          end
         when /^file:(\S+?)(?:#(\S+))?$/
           link_file($1, args[1] ? args[1] : $1, $2)
         else
@@ -39,6 +46,12 @@ module YARD::Templates::Helpers
       else
         link_object(*args)
       end
+    end
+    
+    # Includes an object's docstring into output.
+    # @since 0.6.0
+    def link_include_object(object)
+      object.docstring
     end
 
     def link_object(object, title = nil)

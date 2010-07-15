@@ -175,11 +175,7 @@ module YARD
               log.warn((match[1] ? '...' : '') + match[2].gsub("\n","") + (match[3] ? '...' : '')) if match
             end
             
-            if name =~ %r{://} || name =~ /^(mailto|file):/
-              link
-            else
-              "<tt>" + link + "</tt>"
-            end
+            link
           end
         end
       end
@@ -215,6 +211,10 @@ module YARD
       def link_file(filename, title = nil, anchor = nil)
         link_url(url_for_file(filename, anchor), title)
       end
+      
+      def link_include_object(obj)
+        htmlify(obj.docstring)
+      end
     
       def link_object(obj, otitle = nil, anchor = nil, relative = true)
         return otitle if obj.nil?
@@ -232,7 +232,8 @@ module YARD
         return title if obj.is_a?(CodeObjects::Proxy)
               
         link = url_for(obj, anchor, relative)
-        link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
+        link = link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
+        "<span class='object_link'>" + link + "</span>"
       end
       
       def link_url(url, title = nil, params = {})
