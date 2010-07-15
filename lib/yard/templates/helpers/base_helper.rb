@@ -9,6 +9,12 @@ module YARD::Templates::Helpers
     # @since 0.6.0
     def globals; options[:__globals] end
     
+    # Runs a list of objects against the {Verifier} object passed into the 
+    # template and returns the subset of verified objects.
+    # 
+    # @param [Array<CodeObjects::Base>] list a list of code objects
+    # @return [Array<CodeObjects::Base>] a list of code objects that match
+    #   the verifier. If no verifier is supplied, all objects are returned.
     def run_verifier(list)
       return list unless options[:verifier]
       list.reject {|item| options[:verifier].call(item).is_a?(FalseClass) }

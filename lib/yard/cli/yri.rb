@@ -4,6 +4,8 @@ module YARD
   module CLI
     # A tool to view documentation in the console like `ri`
     class YRI < Command
+      # The location in {YARD::CONFIG_DIR} where the YRI cache file is loaded
+      # from.
       CACHE_FILE = File.expand_path('~/.yard/yri_cache')
       
       # A file containing all paths, delimited by newlines, to search for
@@ -56,12 +58,16 @@ module YARD
       
       protected
       
+      # Prints the command usage
+      # @return [void]
       # @since 0.5.6
       def print_usage
         puts "Usage: yri [options] <Path to object>"
         puts "See yri --help for more options."
       end
       
+      # Caches the .yardoc file where an object can be found in the {CACHE_FILE}
+      # @return [void]
       def cache_object(name, path)
         return if path == Registry.yardoc_file
         @cache[name] = path
@@ -73,6 +79,8 @@ module YARD
         end
       end
       
+      # @param [CodeObjects::Base] object the object to print.
+      # @return [String] the formatted output for an object.
       def print_object(object)
         if object.type == :method && object.is_alias?
           tmp = P(object.namespace, (object.scope == :instance ? "#" : "") + 
@@ -82,6 +90,12 @@ module YARD
         object.format(:serializer => @serializer)
       end
       
+      # Locates an object by name starting in the cached paths and then
+      # searching through any search paths.
+      # 
+      # @param [String] name the full name of the object
+      # @return [CodeObjects::Base] an object if found
+      # @return [nil] if no object is found
       def find_object(name)
         @search_paths.unshift(@cache[name]) if @cache[name]
         @search_paths.unshift(Registry.yardoc_file)
@@ -102,6 +116,8 @@ module YARD
       
       private
       
+      # Loads {CACHE_FILE}
+      # @return [void]
       def load_cache
         return unless File.file?(CACHE_FILE)
         File.readlines(CACHE_FILE).each do |line|
@@ -110,6 +126,8 @@ module YARD
         end
       end
       
+      # Adds all RubyGems yardoc files to search paths
+      # @return [void]
       def add_gem_paths
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
