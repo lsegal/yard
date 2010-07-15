@@ -28,18 +28,44 @@ module YARD
         def matches?(node) !node.send(name).is_a?(FalseClass) end
       end
       
+      # This is the base handler class for the new-style (1.9) Ruby parser.
+      # All handlers that subclass this base class will be used when the 
+      # new-style parser is used. For implementing legacy handlers, see
+      # {Legacy::Base}.
+      # 
+      # @abstract See {Handlers::Base} for subclassing information.
+      # @see Handlers::Base
+      # @see Legacy::Base
       class Base < Handlers::Base
         class << self
           include Parser::Ruby
           
+          # 
           def method_call(name)
             MethodCallWrapper.new(name.to_s)
           end
           
-          def meta_type(meth)
-            TestNodeWrapper.new(meth.to_s + "?")
+          # Matcher for handling a node with a specific meta-type. An {AstNode}
+          # has a {AstNode#type} to define its type but can also be associated
+          # with a set of types. For instance, +:if+ and +:unless+ are both
+          # of the meta-type +:condition+.
+          # 
+          # A meta-type is any method on the {AstNode} class ending in "?", 
+          # though you should not include the "?" suffix in your declaration.
+          # Some examples are: "condition", "call", "literal", "kw", "token",
+          # "ref".
+          # 
+          # @param [Symbol] type the meta-type to match. A meta-type can be
+          #   any method name + "?" that {AstNode} responds to.
+          # @example Handling any conditional statement (if, unless)
+          #   handles meta_type(:condition)
+          # @return [void]
+          def meta_type(type)
+            TestNodeWrapper.new(type.to_s + "?")
           end
           
+          # @return [Boolean] whether or not an {AstNode} object should be
+          #   handled by this handler
           def handles?(node)
             handlers.any? do |a_handler| 
               case a_handler 

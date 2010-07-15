@@ -259,14 +259,36 @@ module YARD
         raise NotImplementedError, "#{self} did not implement a #process method for handling."
       end
       
+      # Parses the semantic "block" contained in the statement node.
+      # 
+      # @abstract Subclasses should call {Processor#process parser.process}
       def parse_block(*args)
         raise NotImplementedError, "#{self} did not implement a #parse_block method for handling"
       end
       
       protected
       
-      attr_reader :parser, :statement
-      attr_accessor :owner, :namespace, :visibility, :scope
+      # @return [Processor] the processor object that manages all global state 
+      #   during handling.
+      attr_reader :parser
+      
+      # @return [Object] the statement object currently being processed. Usually
+      #   refers to one semantic language statement, though the strict definition
+      #   depends on the parser used.
+      attr_reader :statement
+      
+      # @return (see Processor#owner)
+      attr_accessor :owner
+      
+      # @return (see Processor#namespace)
+      attr_accessor :namespace
+      
+      # @return (see Processor#visibility)
+      attr_accessor :visibility
+      
+      # @return (see Processor#scope)
+      attr_accessor :scope
+      
       undef owner, owner=, namespace, namespace=
       undef visibility, visibility=, scope, scope=
       

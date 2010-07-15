@@ -28,31 +28,55 @@ module YARD
     end
     
     
+    # Namespace separator
     NSEP = '::'
+    
+    # Regex-quoted namespace separator
     NSEPQ = NSEP
+    
+    # Instance method separator
     ISEP = '#'
+
+    # Regex-quoted instance method separator
     ISEPQ = ISEP
+    
+    # Class method separator
     CSEP = '.'
+    
+    # Regex-quoted class method separator
     CSEPQ = Regexp.quote CSEP
+    
+    # Regular expression to match constant name
     CONSTANTMATCH = /[A-Z]\w*/
+    
+    # Regular expression to match namespaces (const A or complex path A::B)
     NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
+    
+    # Regular expression to match a method name
     METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|<=>|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
+    
+    # Regular expression to match a fully qualified method def (self.foo, Class.foo).
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
     
+    # All builtin Ruby exception classes for inheritance tree.
     BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
       "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError", 
       "RangeError", "NoMemoryError", "ArgumentError", "ThreadError", "EOFError", "RuntimeError", 
       "ZeroDivisionError", "StandardError", "LoadError", "NameError", "LocalJumpError", "SystemCallError", 
       "SignalException", "ScriptError", "SystemStackError", "RegexpError", "IndexError"]
-    # Note: MatchingData is a 1.8.x legacy class
+    # All builtin Ruby classes for inheritance tree.
+    # @note MatchingData is a 1.8.x legacy class
     BUILTIN_CLASSES = ["TrueClass", "Array", "Dir", "Struct", "UnboundMethod", "Object", "Fixnum", "Float", 
       "ThreadGroup", "MatchingData", "MatchData", "Proc", "Binding", "Class", "Time", "Bignum", "NilClass", "Symbol", 
       "Numeric", "String", "Data", "MatchData", "Regexp", "Integer", "File", "IO", "Range", "FalseClass", 
       "Method", "Continuation", "Thread", "Hash", "Module"] + BUILTIN_EXCEPTIONS
+    # All builtin Ruby modules for mixin handling.
     BUILTIN_MODULES = ["ObjectSpace", "Signal", "Marshal", "Kernel", "Process", "GC", "FileTest", "Enumerable", 
       "Comparable", "Errno", "Precision", "Math"]
+    # All builtin Ruby classes and modules.
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
     
+    # Hash of {BUILTIN_EXCEPTIONS} as keys and true as value (for O(1) lookups)
     BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
     
     # +Base+ is the superclass of all code objects recognized by YARD. A code

@@ -12,30 +12,50 @@ module YARD
       EXPR_DOT   = :EXPR_DOT
       EXPR_CLASS = :EXPR_CLASS
       
+      # Represents a token in the Ruby lexer
       class Token
+        # @return [Integer] the line number in the file/stream the token is
+        #   located.
+        attr_reader :line_no
+        
+        # @return [Integer] the character number in the file/stream the token
+        #   is located.
+        attr_reader :char_no
+        
+        # @return [String] the token text value
+        attr_reader :text
+        
+        # @return [Symbol] the lexical state at the token
+        attr_accessor :lex_state
+
+        # @private
         NO_TEXT = "??".freeze
 
+        # Creates a new Token object
+        # @param [Integer] line_no the line number to initialize the token to
+        # @param [Integer] char_no the char number to initialize the token to
         def initialize(line_no, char_no)
           @line_no = line_no
           @char_no = char_no
           @text    = NO_TEXT
         end
 
-        # Because we're used in contexts that expect to return a token,
-        # we set the text string and then return ourselves
+        # Chainable way to sets the text attribute
+        # 
+        # @param [String] text the new text
+        # @return [Token] this token object
         def set_text(text)
           @text = text
           self
         end
-
-        attr_reader :line_no, :char_no, :text
-        attr_accessor :lex_state
       end
       
+      # Represents a block
       class TkBlockContents < Token
         def text; '...' end
       end
       
+      # Represents an end statement
       class TkStatementEnd < Token
         def text; '' end
       end
@@ -44,9 +64,11 @@ module YARD
         attr :node
       end
       
+      # Represents whitespace
       class TkWhitespace < Token
       end
 
+      # Represents a Ruby identifier
       class TkId < Token
         def initialize(line_no, char_no, name)
           super(line_no, char_no)
@@ -55,9 +77,11 @@ module YARD
         attr :name
       end
 
+      # Represents a Ruby keyword
       class TkKW < TkId
       end
 
+      # Represents a Ruby value
       class TkVal < Token
         def initialize(line_no, char_no, value = nil)
           super(line_no, char_no)
@@ -91,11 +115,13 @@ module YARD
       class TkError < Token
       end
 
+      # @private
       def set_token_position(line, char)
         @prev_line_no = line
         @prev_char_no = char
       end
 
+      # @private
       def Token(token, value = nil)
         tk = nil
         case token
@@ -117,6 +143,7 @@ module YARD
         tk
       end
 
+      # @private
       TokenDefinitions = [
         [:TkCLASS,      TkKW,  "class",  EXPR_CLASS],
         [:TkMODULE,     TkKW,  "module", EXPR_BEG],
@@ -257,6 +284,7 @@ module YARD
       TkReading2Token = {}
       TkSymbol2Token = {}
 
+      # @private
       def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
         token_n = token_n.id2name unless token_n.kind_of?(String)
         if RubyToken.const_defined?(token_n)
@@ -298,11 +326,8 @@ module YARD
 
 
     # Lexical analyzer for Ruby source
-
+    # @private
     class RubyLex
-
-      ######################################################################
-      #
       # Read an input stream character by character. We allow for unlimited
       # ungetting of characters just read.
       #
@@ -330,7 +355,7 @@ module YARD
       # here document.  Once complete, it needs to read the rest of the
       # original line, but then skip the here document body.
       #
-  
+      # @private
       class BufferedReader
     
         attr_reader :line_num

@@ -2,6 +2,12 @@ require 'ostruct'
 
 module YARD
   module Templates
+    # This module manages all creation, handling and rendering of {Engine::Template} 
+    # objects. 
+    # 
+    # * To create a template object at a path, use {template}. 
+    # * To render a template, call {render}.
+    # * To register a template path in the lookup paths, call {register_template_path}.
     module Engine
       class << self
         # @return [Array<String>] the list of registered template paths
