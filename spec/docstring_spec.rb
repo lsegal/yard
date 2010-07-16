@@ -9,6 +9,26 @@ describe YARD::Docstring do
     end
   end
   
+  describe '#+' do
+    it "should add another Docstring" do
+      d = Docstring.new("FOO") + Docstring.new("BAR")
+      d.should == "FOO\nBAR"
+    end
+    
+    it "should copy over tags" do
+      d1 = Docstring.new("FOO\n@api private\n")
+      d2 = Docstring.new("BAR\n@param foo descr")
+      d = (d1 + d2)
+      d.should have_tag(:api)
+      d.should have_tag(:param)
+    end
+      
+    it "should add a String" do
+      d = Docstring.new("FOO") + "BAR"
+      d.should == "FOOBAR"
+    end
+  end
+  
   describe '#summary' do
     it "should handle empty docstrings" do
       o1 = Docstring.new

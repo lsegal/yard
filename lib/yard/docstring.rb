@@ -47,6 +47,20 @@ module YARD
       self.all = content
     end
     
+    # Adds another {Docstring}, copying over tags.
+    # 
+    # @param [Docstring, String] other the other docstring (or string) to
+    #   add.
+    # @return [Docstring] a new docstring with both docstrings combines
+    def +(other)
+      case other
+      when Docstring
+        Docstring.new([all, other.all].join("\n"), object)
+      else
+        super
+      end
+    end
+    
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
     def replace(content)

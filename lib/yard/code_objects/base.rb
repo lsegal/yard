@@ -339,6 +339,18 @@ module YARD
           @source = format_source(statement.to_s)
         end
       end
+      
+      def docstring
+        value = case @docstring
+        when Proxy
+          Docstring.new("", self)
+        when Base
+          @docstring.docstring
+        else
+          @docstring
+        end
+        @docstring_extra ? value + @docstring_extra : value
+      end
 
       # Attaches a docstring to a code oject by parsing the comments attached to the statement
       # and filling the {#tags} and {#docstring} methods with the parsed information.
@@ -347,7 +359,14 @@ module YARD
       #   the comments attached to the code object to be parsed 
       #   into a docstring and meta tags.
       def docstring=(comments)
-        @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
+        if comments =~ /^\s*\(see (\S+)\s*\)(?:\s|$)/
+          path, extra = $1, $'
+          @docstring_extra = extra.empty? ? nil : Docstring.new(extra, self)
+          @docstring = Proxy.new(namespace, path)
+        else
+          @docstring_extra = nil
+          @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
+        end
       end
       
       # Default type is the lowercase class name without the "Object" suffix.
@@ -435,15 +454,15 @@ module YARD
 
       # Gets a tag from the {#docstring}
       # @see Docstring#tag
-      def tag(name); @docstring.tag(name) end
+      def tag(name); docstring.tag(name) end
       
       # Gets a list of tags from the {#docstring}
       # @see Docstring#tags
-      def tags(name = nil); @docstring.tags(name) end
+      def tags(name = nil); docstring.tags(name) end
       
       # Tests if the {#docstring} has a tag
       # @see Docstring#has_tag?
-      def has_tag?(name); @docstring.has_tag?(name) end
+      def has_tag?(name); docstring.has_tag?(name) end
       
       # @return whether or not this object is a RootObject
       def root?; false end
