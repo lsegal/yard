@@ -48,6 +48,17 @@ module YARD
       # @param [CodeObjects::Base] object the object to return a path for
       # @return [String] the serialized path of an object
       def serialized_path(object) end
+        
+      # Returns whether an object has been serialized
+      # 
+      # @abstract This method should return whether the endpoint already exists.
+      #   For instance, a file system serializer would check if the file exists
+      #   on disk. You will most likely use {#basepath} and {#serialized_path} to 
+      #   get the endpoint's location.
+      # @param [CodeObjects::Base] object the object to check existence of
+      # @return [Boolean] whether the endpoint exists.
+      # @since 0.6.0
+      def exists?(object) false end
 
         # @group Callbacks
 

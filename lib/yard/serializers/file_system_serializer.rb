@@ -74,6 +74,14 @@ module YARD
         
         File.join(fspath)
       end
+      
+      # Checks the disk for an object and returns whether it was serialized.
+      # 
+      # @param [CodeObjects::Base] object the object to check
+      # @return [Boolean] whether an object has been serialized to disk
+      def exists?(object)
+        File.exist?(File.join(basepath, serialized_path(object)))
+      end
     end
   end
 end

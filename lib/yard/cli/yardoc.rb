@@ -275,8 +275,9 @@ module YARD
           end
         end
         Registry.load_all if use_cache
-        objects = all_objects.reject do |object|
-          if checksums && !object.files.any? {|f, line| changed_files.include?(f) }
+        objects = run_verifier(all_objects).reject do |object|
+          serialized = !options[:serializer] || options[:serializer].exists?(object)
+          if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
             true
           else
             log.info "Re-generating object #{object.path}..."
@@ -291,8 +292,7 @@ module YARD
       # @since 0.5.5
       def print_list
         Registry.load_all
-        Registry.all.
-          reject {|item| options[:verifier].call(item).is_a?(FalseClass) }.
+        run_verifier(Registry.all).
           sort_by {|item| [item.file, item.line]}.each do |item|
           puts "#{item.file}:#{item.line}: #{item}"
         end
@@ -352,6 +352,11 @@ module YARD
       def add_visibility_verifier
         vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier].add_expressions(vis_expr)
+      end
+      
+      # (see Templates::Helpers::BaseHelper#run_verifier)
+      def run_verifier(list)
+        options[:verifier] ? options[:verifier].run(list) : list
       end
       
       # @since 0.6.0
