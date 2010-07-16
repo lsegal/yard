@@ -16,8 +16,7 @@ module YARD::Templates::Helpers
     # @return [Array<CodeObjects::Base>] a list of code objects that match
     #   the verifier. If no verifier is supplied, all objects are returned.
     def run_verifier(list)
-      return list unless options[:verifier]
-      list.reject {|item| options[:verifier].call(item).is_a?(FalseClass) }
+      options[:verifier] ? options[:verifier].run(list) : list
     end
     
     # This is used a lot by the HtmlHelper and there should

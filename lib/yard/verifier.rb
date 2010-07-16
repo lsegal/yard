@@ -79,6 +79,16 @@ module YARD
       retval
     end
     
+    # Runs a list of objects against the verifier and returns the subset 
+    # of verified objects.
+    # 
+    # @param [Array<CodeObjects::Base>] list a list of code objects
+    # @return [Array<CodeObjects::Base>] a list of code objects that match
+    #   the verifier.
+    def run(list)
+      list.reject {|item| call(item).is_a?(FalseClass) }
+    end
+    
     protected
     
     # @return [CodeObjects::Base] the current object being tested
