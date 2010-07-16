@@ -277,16 +277,16 @@ module YARD
       #   depends on the parser used.
       attr_reader :statement
       
-      # @return (see Processor#owner)
+      # (see Processor#owner)
       attr_accessor :owner
       
-      # @return (see Processor#namespace)
+      # (see Processor#namespace)
       attr_accessor :namespace
       
-      # @return (see Processor#visibility)
+      # (see Processor#visibility)
       attr_accessor :visibility
       
-      # @return (see Processor#scope)
+      # (see Processor#scope)
       attr_accessor :scope
       
       undef owner, owner=, namespace, namespace=

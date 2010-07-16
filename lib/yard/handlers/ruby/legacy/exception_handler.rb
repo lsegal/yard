@@ -1,3 +1,4 @@
+# (see Ruby::ExceptionHandler)
 class YARD::Handlers::Ruby::Legacy::ExceptionHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Araise(\s|\()/
   

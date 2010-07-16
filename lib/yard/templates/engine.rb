@@ -28,6 +28,8 @@ module YARD
         # generated module as mixins (for overriding).
         # 
         # @param [Array<String, Symbol>] path a list of path components
+        # @raise [ArgumentError] if the path does not exist within one of the
+        #   {template_paths} on disk.
         # @return [Template] the module representing the template
         def template(*path)
           from_template = nil

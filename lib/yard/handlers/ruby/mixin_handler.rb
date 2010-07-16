@@ -1,3 +1,4 @@
+# Handles the 'include' statement to mixin a module in the instance scope
 class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles method_call(:include)

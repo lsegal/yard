@@ -1,6 +1,5 @@
-# `extend` works just like `include` except that it always
-# mixes the module in in class scope,
-# and that it can handle `extend self`.
+# Handles 'extend' call to include modules into the class scope of another
+# @see MixinHandler
 class YARD::Handlers::Ruby::ExtendHandler < YARD::Handlers::Ruby::MixinHandler
   namespace_only
   handles method_call(:extend)

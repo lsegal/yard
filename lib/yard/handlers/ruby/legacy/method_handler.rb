@@ -1,3 +1,4 @@
+# (see Ruby::MethodHandler)
 class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkDEF
     

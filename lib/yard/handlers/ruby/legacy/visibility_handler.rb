@@ -1,3 +1,4 @@
+# (see Ruby::VisibilityHandler)
 class YARD::Handlers::Ruby::Legacy::VisibilityHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\A(protected|private|public)(\s|\(|$)/
   

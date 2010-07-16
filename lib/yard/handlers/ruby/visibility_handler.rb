@@ -1,7 +1,9 @@
+# Handles 'private', 'protected', and 'public' calls.
 class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
   handles method_call(:private)
   handles method_call(:protected)
   handles method_call(:public)
+  namespace_only
   
   process do
     return if (ident = statement.jump(:ident)) == statement

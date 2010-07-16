@@ -1,5 +1,6 @@
 module YARD
   module Serializers
+    # Implements a serializer that reads from and writes to the filesystem.
     class FileSystemSerializer < Base
       # The base path to write data to.
       # @return [String] a base path

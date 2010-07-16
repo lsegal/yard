@@ -1,3 +1,4 @@
+# (see Ruby::ConstantHandler)
 class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Legacy::Base
   HANDLER_MATCH = /\A[A-Z]\w*\s*=[^=]\s*/m
   handles HANDLER_MATCH

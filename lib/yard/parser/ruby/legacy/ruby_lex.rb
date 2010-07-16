@@ -3,6 +3,7 @@ require "irb/slex"
 
 module YARD
   module Parser::Ruby::Legacy
+    # Legacy lexical tokenizer module.
     module RubyToken
       EXPR_BEG   = :EXPR_BEG
       EXPR_MID   = :EXPR_MID

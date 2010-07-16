@@ -1,3 +1,4 @@
+# (see Ruby::MixinHandler)
 class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Ainclude(\s|\()/
   

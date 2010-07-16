@@ -1,3 +1,4 @@
+# (see Ruby::YieldHandler)
 class YARD::Handlers::Ruby::Legacy::YieldHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkYIELD
   

@@ -40,7 +40,21 @@ module YARD
         class << self
           include Parser::Ruby
           
+          # Matcher for handling any type of method call. Method calls can
+          # be expressed by many {AstNode} types depending on the syntax
+          # with which it is called, so YARD allows you to use this matcher
+          # to simplify matching a method call.
           # 
+          # @example Match the "describe" method call
+          #   handles method_call(:describe)
+          #   
+          #   # The following will be matched:
+          #   # describe(...)
+          #   # object.describe(...)
+          #   # describe "argument" do ... end
+          # 
+          # @param [#to_s] name matches the method call of this name
+          # @return [void]
           def method_call(name)
             MethodCallWrapper.new(name.to_s)
           end
@@ -55,10 +69,10 @@ module YARD
           # Some examples are: "condition", "call", "literal", "kw", "token",
           # "ref".
           # 
-          # @param [Symbol] type the meta-type to match. A meta-type can be
-          #   any method name + "?" that {AstNode} responds to.
           # @example Handling any conditional statement (if, unless)
           #   handles meta_type(:condition)
+          # @param [Symbol] type the meta-type to match. A meta-type can be
+          #   any method name + "?" that {AstNode} responds to.
           # @return [void]
           def meta_type(type)
             TestNodeWrapper.new(type.to_s + "?")

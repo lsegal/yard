@@ -53,6 +53,11 @@ module YARD::Templates::Helpers
       object.docstring
     end
 
+    # Links to an object with an optional title
+    # 
+    # @param [CodeObjects::Base] object the object to link to
+    # @param [String] title the title to use for the link
+    # @return [String] the linked object
     def link_object(object, title = nil)
       return title if title
       
@@ -66,6 +71,12 @@ module YARD::Templates::Helpers
       end
     end
     
+    # Links to a URL
+    # 
+    # @param [String] url the URL to link to
+    # @param [String] title the optional title to display the link as
+    # @param [Hash] params optional parameters for the link
+    # @return [String] the linked URL
     def link_url(url, title = nil, params = nil)
       url
     end
@@ -79,6 +90,16 @@ module YARD::Templates::Helpers
       list.nil? || list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
     end
 
+    # @example Formatted type of an exception class
+    #   o = ClassObject.new(:root, :MyError)
+    #   o.superclass = P('RuntimeError')
+    #   format_object_type(o) # => "Exception"
+    # @example Formatted type of a method
+    #   o = MethodObject.new(:root, :to_s)
+    #   format_object_type(o) # => "Method"
+    # @param [CodeObjects::Base] object the object to retrieve the type for
+    # @return [String] the human-readable formatted {CodeObjects::Base#type #type} 
+    #   for the object
     def format_object_type(object)
       case object
       when YARD::CodeObjects::ClassObject
@@ -88,6 +109,11 @@ module YARD::Templates::Helpers
       end
     end
     
+    # @example
+    #   s = format_object_title ModuleObject.new(:root, :MyModuleName)
+    #   s # => "Module: MyModuleName"
+    # @param [CodeObjects::Base] object the object to retrieve a title for
+    # @return [String] the page title name for a given object
     def format_object_title(object)
       case object
       when YARD::CodeObjects::RootObject
@@ -97,6 +123,10 @@ module YARD::Templates::Helpers
       end
     end
     
+    # Indents and formats source code
+    # 
+    # @param [String] value the input source code
+    # @return [String] formatted source code
     def format_source(value)
       sp = value.split("\n").last[/^(\s+)/, 1]
       num = sp ? sp.size : 0

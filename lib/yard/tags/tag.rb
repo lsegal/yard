@@ -1,7 +1,31 @@
 module YARD
   module Tags
+    # Represents a metadata tag value (+@tag+). Tags can have any combination of
+    # {#types}, {#name} and {#text}, or none of the above.
+    # 
+    # @example Programmatic tag creation
+    #   # The following docstring syntax:
+    #   #   @param [String, nil] arg an argument
+    #   #
+    #   # is equivalent to:
+    #   Tag.new(:param, 'an argument', ['String', 'nil'], 'arg')
     class Tag
-      attr_accessor :tag_name, :text, :types, :name, :object
+      # @return [String] the name of the tag
+      attr_accessor :tag_name
+      
+      # @return [String] the tag text associated with the tag
+      # @return [nil] if no tag text is supplied
+      attr_accessor :text
+      
+      # @return [Array<String>] a list of types associated with the tag
+      # @return [nil] if no types are associated with the tag
+      attr_accessor :types
+      
+      # @return [String] a name associated with the tag
+      attr_accessor :name
+      
+      # @return [CodeObjects::Base] the associated object
+      attr_accessor :object
 
       # Creates a new tag object with a tag name and text. Optionally, formally declared types
       # and a key name can be specified.
@@ -11,7 +35,7 @@ module YARD
       # Key names are for tags that declare meta data for a specific key or name, such as +param+,
       # +raise+, etc.
       #
-      # @param tag_name                the tag name to create the tag for
+      # @param [#to_s] tag_name        the tag name to create the tag for
       # @param [String] text           the descriptive text for this tag
       # @param [Array<String>] types   optional type list of formally declared types
       #                                for the tag

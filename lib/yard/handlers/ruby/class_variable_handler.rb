@@ -1,3 +1,4 @@
+# Handles a class variable (@@variable)
 class YARD::Handlers::Ruby::ClassVariableHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles :assign

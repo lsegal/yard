@@ -60,21 +60,21 @@ module YARD
       # @since 0.6.0
       def exists?(object) false end
 
-        # @group Callbacks
+      # @group Callbacks
 
-        # Called before serialization. 
-        # 
-        # @abstract Should run code before serialization. Should return false
-        #   if serialization should not occur.
-        # @return [Boolean] whether or not serialization should occur
-        def before_serialize; end
+      # Called before serialization. 
+      # 
+      # @abstract Should run code before serialization. Should return false
+      #   if serialization should not occur.
+      # @return [Boolean] whether or not serialization should occur
+      def before_serialize; end
 
-        # Called after serialization. 
-        # 
-        # @abstract Should run code after serialization.
-        # @param [String] data the data that was serialized.
-        # @return [void]
-        def after_serialize(data); end
+      # Called after serialization. 
+      # 
+      # @abstract Should run code after serialization.
+      # @param [String] data the data that was serialized.
+      # @return [void]
+      def after_serialize(data); end
     end
   end
 end
