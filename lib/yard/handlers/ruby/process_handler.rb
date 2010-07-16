@@ -9,7 +9,8 @@ class YARD::Handlers::Ruby::ProcessHandler < YARD::Handlers::Ruby::Base
   
   process do
     return unless namespace.is_a?(ClassObject) && namespace.superclass.to_s =~ /^YARD::Handlers/
-    register MethodObject.new(namespace, :process) do |o| 
+    register MethodObject.new(namespace, :process) do |o|
+      o.docstring = "Main processing callback"
       o.signature = "def process"
       o.parameters = []
     end
