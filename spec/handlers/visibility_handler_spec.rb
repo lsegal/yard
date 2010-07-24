@@ -21,4 +21,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}VisibilityHandler" do
     Registry['Testing#notpriv2'].visibility.should == :protected
     Registry['Testing#notpriv?'].visibility.should == :protected
   end
+  
+  it "should only accept strings and symbols" do
+    Registry.at('Testing#name').should be_nil
+    Registry.at('Testing#argument').should be_nil
+    Registry.at('Testing#method_call').should be_nil
+  end
 end

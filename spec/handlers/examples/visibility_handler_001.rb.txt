@@ -17,4 +17,8 @@ class Testing
   def pub2; end
 
   protected :notpriv, 'notpriv2', :notpriv?
+  
+  private name
+  private *argument
+  private *(method_call)
 end
