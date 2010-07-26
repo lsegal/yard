@@ -285,4 +285,16 @@ describe YARD::CodeObjects::Base do
       o.docstring.should == "FOO"
     end
   end
+  
+  describe '#add_file' do
+    it "should only add a file/line combination once" do
+      o = ClassObject.new(:root, :Me)
+      o.add_file('filename', 12)
+      o.files.should == [['filename', 12]]
+      o.add_file('filename', 12)
+      o.files.should == [['filename', 12]]
+      o.add_file('filename', 40) # different line
+      o.files.should == [['filename', 12], ['filename', 40]]
+    end
+  end
 end

@@ -240,6 +240,7 @@ module YARD
       def add_file(file, line = nil, has_comments = false)
         raise(ArgumentError, "file cannot be nil or empty") if file.nil? || file == ''
         obj = [file.to_s, line]
+        return if files.include?(obj)
         if has_comments && !@current_file_has_comments
           @current_file_has_comments = true
           @files.unshift(obj) 
