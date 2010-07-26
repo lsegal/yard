@@ -3,8 +3,9 @@ module YARD
     # A command-line utility to generate Graphviz graphs from
     # a set of objects
     # 
-    # @see YardGraph#run
-    class YardGraph < Base
+    # @see Graph#run
+    # @since 0.6.0
+    class Graph < Command
       # The options parsed out of the commandline.
       # Default options are:
       #   :format => :dot
@@ -13,10 +14,6 @@ module YARD
       # The set of objects to include in the graph.
       attr_reader :objects
 
-      # Helper method to run the utility on an instance.
-      # @see #run
-      def self.run(*args) new.run(*args) end
-        
       # Creates a new instance of the command-line utility
       def initialize
         super
@@ -24,10 +21,14 @@ module YARD
         @options = SymbolHash[:format => :dot]
       end
       
+      def description
+        "Graphs class diagram using Graphviz"
+      end
+    
       # Runs the command-line utility.
       # 
       # @example
-      #   grapher = YardGraph.new
+      #   grapher = Graph.new
       #   grapher.run('--private')
       # @param [Array<String>] args each tokenized argument
       def run(*args)

@@ -1,3 +1,4 @@
+# Handles +attr_*+ statements in modules/classes
 class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   handles method_call(:attr)
   handles method_call(:attr_reader)
@@ -45,6 +46,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
             o.source ||= full_src
             o.signature ||= src
             o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
+            o.visibility = visibility
           end
 
           # Register the objects explicitly
@@ -59,6 +61,12 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   
   protected
   
+  # Strips out any non-essential arguments from the attr statement.
+  # 
+  # @param [Array<Parser::Ruby::AstNode>] params a list of the parameters
+  #   in the attr call.
+  # @return [Array<String>] the validated attribute names
+  # @raise [Parser::UndocumentableError] if the arguments are not valid.
   def validated_attribute_names(params)
     params.map do |obj|
       case obj.type

@@ -1,5 +1,6 @@
 --protected
 --no-private
+--exclude /server/templates/
 -
 docs/WhatsNew.md
 docs/GettingStarted.md

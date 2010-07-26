@@ -19,6 +19,8 @@ module YARD
       # @return [SymbolHash] the serializer options
       attr_reader :options
       
+      # @group Creating a New Serializer
+      
       # Creates a new serializer with options
       # 
       # @param [Hash] opts the options to assign to {#options}
@@ -26,19 +28,7 @@ module YARD
         @options = SymbolHash.new(false).update(opts)
       end
       
-      # Called before serialization. 
-      # 
-      # @abstract Should run code before serialization. Should return false
-      #   if serialization should not occur.
-      # @return [Boolean] whether or not serialization should occur
-      def before_serialize; end
-      
-      # Called after serialization. 
-      # 
-      # @abstract Should run code after serialization.
-      # @param [String] data the data that was serialized.
-      # @return [void]
-      def after_serialize(data); end
+      # @group Serializing an Object
       
       # Serializes an object.
       # 
@@ -58,6 +48,33 @@ module YARD
       # @param [CodeObjects::Base] object the object to return a path for
       # @return [String] the serialized path of an object
       def serialized_path(object) end
+        
+      # Returns whether an object has been serialized
+      # 
+      # @abstract This method should return whether the endpoint already exists.
+      #   For instance, a file system serializer would check if the file exists
+      #   on disk. You will most likely use {#basepath} and {#serialized_path} to 
+      #   get the endpoint's location.
+      # @param [CodeObjects::Base] object the object to check existence of
+      # @return [Boolean] whether the endpoint exists.
+      # @since 0.6.0
+      def exists?(object) false end
+
+      # @group Callbacks
+
+      # Called before serialization. 
+      # 
+      # @abstract Should run code before serialization. Should return false
+      #   if serialization should not occur.
+      # @return [Boolean] whether or not serialization should occur
+      def before_serialize; end
+
+      # Called after serialization. 
+      # 
+      # @abstract Should run code after serialization.
+      # @param [String] data the data that was serialized.
+      # @return [void]
+      def after_serialize(data); end
     end
   end
 end

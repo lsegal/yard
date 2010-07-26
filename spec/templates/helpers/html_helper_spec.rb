@@ -135,6 +135,15 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(obj)
       link_object("Bar#a").should =~ %r{href="Bar.html#a-instance_method"}
     end
+    
+    it "should use relative path in title" do
+      CodeObjects::ModuleObject.new(:root, :YARD)
+      CodeObjects::ClassObject.new(P('YARD'), :Bar)
+      stub!(:object).and_return(CodeObjects::ModuleObject.new(P('YARD'), :Foo))
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      link_object("Bar").should =~ %r{>Bar</a>}
+    end
   end
 
   describe '#url_for' do
@@ -243,6 +252,57 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :title => 'Steve'
       }
     end
+    
+    it "should warn about missing reference at right file location for object" do
+      YARD.parse_string <<-eof
+        # Comments here
+        # And a reference to {InvalidObject}
+        class MyObject; end
+      eof
+      logger = mock(:log)
+      logger.should_receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject from text:")
+      logger.should_receive(:warn).ordered.with("...{InvalidObject}")
+      stub!(:log).and_return(logger)
+      stub!(:object).and_return(Registry.at('MyObject'))
+      resolve_links(object.docstring)
+    end
+    
+    it "should show ellipsis on either side if there is more on the line in a reference warning" do
+      YARD.parse_string <<-eof
+        # {InvalidObject1} beginning of line
+        # end of line {InvalidObject2}
+        # Middle of {InvalidObject3} line
+        # {InvalidObject4}
+        class MyObject; end
+      eof
+      logger = mock(:log)
+      logger.should_receive(:warn).ordered.with("In file `(stdin)':1: Cannot resolve link to InvalidObject1 from text:")
+      logger.should_receive(:warn).ordered.with("{InvalidObject1}...")
+      logger.should_receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject2 from text:")
+      logger.should_receive(:warn).ordered.with("...{InvalidObject2}")
+      logger.should_receive(:warn).ordered.with("In file `(stdin)':3: Cannot resolve link to InvalidObject3 from text:")
+      logger.should_receive(:warn).ordered.with("...{InvalidObject3}...")
+      logger.should_receive(:warn).ordered.with("In file `(stdin)':4: Cannot resolve link to InvalidObject4 from text:")
+      logger.should_receive(:warn).ordered.with("{InvalidObject4}")
+      stub!(:log).and_return(logger)
+      stub!(:object).and_return(Registry.at('MyObject'))
+      resolve_links(object.docstring)
+    end
+    
+    it "should warn about missing reference for file template (no object)" do
+      @file = "myfile.txt"
+      logger = mock(:log)
+      logger.should_receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:")
+      logger.should_receive(:warn).ordered.with("...{InvalidObject Some Title}")
+      stub!(:log).and_return(logger)
+      stub!(:object).and_return(Registry.root)
+      resolve_links(<<-eof)
+        Hello world
+        This is a line
+        And {InvalidObject Some Title}
+        And more.
+      eof
+    end
   end
 
   describe '#signature' do
@@ -316,6 +376,15 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should resolve ({Name})" do
       should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
       resolve_links("({file:TEST})")
+    end
+  end
+  
+  describe '#link_url' do
+    it "should add target if scheme is provided" do
+      link_url("http://url.com").should include(" target=\"_parent\"")
+      link_url("https://url.com").should include(" target=\"_parent\"")
+      link_url("irc://url.com").should include(" target=\"_parent\"")
+      link_url("../not/scheme").should_not include("target")
     end
   end
 end

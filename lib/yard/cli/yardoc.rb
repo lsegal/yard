@@ -3,7 +3,102 @@ require 'fileutils'
 
 module YARD
   module CLI
-    class Yardoc < Base
+    # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
+    # executable) used to generate and output (mainly) HTML documentation given
+    # a set of source files.
+    # 
+    # == Usage
+    # 
+    # Main usage for this command is:
+    # 
+    #   $ yardoc [options] [source_files [- extra_files]]
+    # 
+    # See +yardoc --help+ for details on valid options.
+    # 
+    # == Options File (+.yardopts+)
+    # 
+    # If a +.yardopts+ file is found in the source directory being processed,
+    # YARD will use the contents of the file as arguments to the command, 
+    # treating newlines as spaces. You can use shell-style quotations to
+    # group space delimited arguments, just like on the command line.
+    # 
+    # A valid +.yardopts+ file might look like:
+    # 
+    #   --no-private
+    #   --title "My Title"
+    #   --exclude foo --exclude bar
+    #   lib/**/*.erb 
+    #   lib/**/*.rb -
+    #   HACKING.rdoc LEGAL COPYRIGHT
+    # 
+    # Note that Yardoc also supports the legacy RDoc style +.document+ file,
+    # though this file can only specify source globs to parse, not options.
+    # 
+    # == Queries (+--query+)
+    # 
+    # Yardoc supports queries to select specific code objects for which to
+    # generate documentation. For example, you might want to generate
+    # documentation only for your public API. If you've documented your public
+    # methods with +@api public+, you can use the following query to select
+    # all of these objects:
+    # 
+    #   --query '@api.text == "public"'
+    # 
+    # Note that the syntax for queries is mostly Ruby with a few syntactic
+    # simplifications for meta-data tags. See the {Verifier} class for an
+    # overview of this syntax. 
+    # 
+    # == Adding Custom Ad-Hoc Meta-data Tags (+--tag+)
+    # 
+    # YARD allows specification of {file:docs/Tags.md meta-data tags} 
+    # programmatically via the {YARD::Tags::Library} class, but often this is not 
+    # practical for users writing documentation. To make adding custom tags
+    # easier, Yardoc has a few command-line switches for creating basic tags 
+    # and displaying them in generated HTML output.
+    # 
+    # To specify a custom tag to be displayed in output, use any of the 
+    # following:
+    # 
+    # * +--tag+ TAG:TITLE
+    # * +--name-tag+ TAG:TITLE
+    # * +--type-tag+ TAG:TITLE
+    # * +--type-name-tag+ TAG:TITLE
+    # * +--title-tag+ TAG:TITLE
+    # 
+    # "TAG:TITLE" is of the form: name:"Display Title", for example:
+    # 
+    #   --tag overload:"Overloaded Method"
+    # 
+    # See +yardoc --help+ for a description of the various options.
+    # 
+    # Tags added in this way are automatically displayed in output. To add
+    # a meta-data tag that does not show up in output, use +--hide-tag TAG+.
+    # Note that you can also use this option on existing tags to hide
+    # builtin tags, for instance.
+    # 
+    # == Processed Data Storage (+.yardoc+ directory)
+    # 
+    # When Yardoc parses a source directory, it creates a +.yardoc+ directory
+    # (by default, override with +-b+) at the root of the project. This directory
+    # contains marshal dumps for all raw object data in the source, so that
+    # you can access it later for various commands (+stats+, +graph+, etc.).
+    # This directory is also used as a cache for any future calls to +yardoc+
+    # so as to process only the files which have changed since the last call.
+    # 
+    # Because Yardoc uses the cache in subsequent calls to +yardoc+, methods
+    # or classes that have been deleted from source since the last parsing
+    # will not be erased from the cache (YARD never deletes objects). In such
+    # a case, you should pass +--no-cache+ to wipe the cache and do a clean
+    # parsing of the source tree.
+    # 
+    # Note that since 0.6.0, Yardoc will default to using the existing +.yardoc+
+    # directory as a cache. In previous versions, the cache would only be used
+    # if +-c+ was passed. To avoid using the cached +.yardoc+ directory in 0.6.0
+    # and on, pass +--no-cache+ in the command line.
+    # 
+    # @since 0.2.1
+    # @see Verifier
+    class Yardoc < Command
       # The configuration filename to load extra options from
       DEFAULT_YARDOPTS_FILE = ".yardopts"
       
@@ -15,6 +110,7 @@ module YARD
       attr_accessor :files
       
       # @return [Array<String>] list of excluded paths (regexp matches)
+      # @since 0.5.3
       attr_accessor :excluded
       
       # @return [Boolean] whether to use the existing yardoc db if the 
@@ -22,14 +118,20 @@ module YARD
       #   parse only changed files.
       attr_accessor :use_cache
       
-      # @return [Boolean] whether to generate output incrementally (
-      #   implies use_cache and generate)
-      attr_accessor :incremental
+      # @return [Boolean] whether to parse options from .yardopts
+      attr_accessor :use_yardopts_file
+      
+      # @return [Boolean] whether to parse options from .document
+      attr_accessor :use_document_file
+      
+      # @return [Boolean] whether objects should be serialized to .yardoc db
+      attr_accessor :save_yardoc
       
       # @return [Boolean] whether to generate output
       attr_accessor :generate
 
       # @return [Boolean] whether to print a list of objects
+      # @since 0.5.5
       attr_accessor :list
 
       # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
@@ -38,14 +140,16 @@ module YARD
       
       # Keep track of which visibilities are to be shown
       # @return [Array<Symbol>] a list of visibilities
+      # @since 0.5.6
       attr_accessor :visibilities
+        
+      # @return [Array<Symbol>] a list of tags to hide from templates
+      # @since 0.6.0
+      attr_accessor :hidden_tags
       
-      # @return [Boolean] whether to build or rebuild gems
-      attr_accessor :build_gems, :rebuild_gems
-      
-      # Helper method to create an instance and run the utility
-      # @see #run
-      def self.run(*args) new.run(*args) end
+      # @return [Boolean] whether to print statistics after parsing
+      # @since 0.6.0
+      attr_accessor :statistics
         
       # Creates a new instance of the commandline utility
       def initialize
@@ -65,14 +169,21 @@ module YARD
         @visibilities = [:public]
         @excluded = []
         @files = []
-        @use_cache = false
-        @build_gems = false
-        @rebuild_gems = false
+        @hidden_tags = []
+        @use_cache = true
+        @use_yardopts_file = true
+        @use_document_file = true
         @generate = true
-        @incremental = false
         @options_file = DEFAULT_YARDOPTS_FILE
+        @statistics = true
+        @list = false
+        @save_yardoc = true
       end
       
+      def description
+        "Generates documentation"
+      end
+    
       # Runs the commandline utility, parsing arguments and generating
       # output if set.
       # 
@@ -81,41 +192,55 @@ module YARD
       def run(*args)
         parse_arguments(*args)
         
+        checksums = nil
         if use_cache
           Registry.load
           checksums = Registry.checksums.dup
         end
         YARD.parse(files, excluded)
-        Registry.save(use_cache)
+        Registry.save(use_cache) if save_yardoc
         
-        
-        if build_gems
-          do_build_gems(rebuild_gems)
-        elsif generate
-          if incremental
-            generate_with_cache(checksums)
-          else
-            Registry.load_all if use_cache
-            Templates::Engine.generate(all_objects, options)
-          end
+        if generate
+          run_generate(checksums)
         elsif list
           print_list
         end
-        
+
+        if !list && statistics && log.level < Logger::ERROR
+          Registry.load_all
+          log.enter_level(Logger::ERROR) do
+            Stats.new(false).run(*args)
+          end
+        end
+                
         true
       end
       
       # Parses commandline arguments
       # @param [Array<String>] args the list of arguments
       # @return [void]
+      # @since 0.5.6
       def parse_arguments(*args)
-        optparse(*support_rdoc_document_file!)
-        optparse(*yardopts)
+        # Hack: parse out --no-yardopts, --no-document before parsing files
+        ['document', 'yardopts'].each do |file|
+          without, with = args.index("--no-#{file}") || 0, args.index("--#{file}") || 0
+          send("use_#{file}_file=", false) if without > with
+        end
+        
+        # Parse files and then command line arguments
+        optparse(*support_rdoc_document_file!) if use_document_file
+        optparse(*yardopts) if use_yardopts_file
         optparse(*args)
 
         # Last minute modifications
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         options[:readme] ||= Dir.glob('README*').first
+        if options[:onefile]
+          options[:files] << options[:readme] if options[:readme]
+          options[:readme] = Dir.glob(files.first).first 
+        end
+        Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
       end
       
@@ -128,8 +253,9 @@ module YARD
       end
       
       # Parses the .yardopts file for default yard options
-      # @return [void] 
+      # @return [Array<String>] an array of options parsed from .yardopts 
       def yardopts
+        return [] unless use_yardopts_file
         File.read_binary(options_file).shell_split
       rescue Errno::ENOENT
         []
@@ -137,38 +263,46 @@ module YARD
       
       private
       
-      # Generates output for changed objects in cache
+      # Generates output for objects
+      # @param [Hash, nil] checksums if supplied, a list of checkums for files.
       # @return [void]
-      def generate_with_cache(checksums)
-        changed_files = []
-        Registry.checksums.each do |file, hash|
-          changed_files << file if checksums[file] != hash
-        end
-        Registry.load_all
-        all_objects.each do |object|
-          if object.files.any? {|f, line| changed_files.include?(f) }
-            log.info "Re-generating object #{object.path}..."
-            opts = options.merge(:object => object, :type => :layout)
-            Templates::Engine.render(opts)
+      # @since 0.5.1
+      def run_generate(checksums)
+        if checksums
+          changed_files = []
+          Registry.checksums.each do |file, hash|
+            changed_files << file if checksums[file] != hash
           end
         end
+        Registry.load_all if use_cache
+        objects = run_verifier(all_objects).reject do |object|
+          serialized = !options[:serializer] || options[:serializer].exists?(object)
+          if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
+            true
+          else
+            log.info "Re-generating object #{object.path}..."
+            false
+          end
+        end
+        Templates::Engine.generate(objects, options)
       end
 
       # Prints a list of all objects
       # @return [void]
+      # @since 0.5.5
       def print_list
         Registry.load_all
-        Registry.all.
-          reject {|item| options[:verifier].call(item).is_a?(FalseClass) }.
+        run_verifier(Registry.all).
           sort_by {|item| [item.file, item.line]}.each do |item|
           puts "#{item.file}:#{item.line}: #{item}"
         end
       end
 
       # Reads a .document file in the directory to get source file globs
-      # @return [void] 
+      # @return [Array<String>] an array of files parsed from .document
       def support_rdoc_document_file!
-        IO.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
+        return [] unless use_document_file
+        File.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
       rescue Errno::ENOENT
         []
       end
@@ -212,40 +346,31 @@ module YARD
         end
       end
       
-      # Builds .yardoc files for all non-existing gems
-      # @param [Boolean] rebuild Forces rebuild of all gems
-      def do_build_gems(rebuild = false)
-        require 'rubygems'
-        Gem.source_index.find_name('').each do |spec|
-          reload = true
-          dir = Registry.yardoc_file_for_gem(spec.name)
-          if dir && File.directory?(dir) && !rebuild
-            log.debug "#{spec.name} index already exists at '#{dir}'"
-          else
-            yfile = Registry.yardoc_file_for_gem(spec.name, ">= 0", true)
-            next unless yfile
-            Registry.clear
-            Dir.chdir(spec.full_gem_path)
-            log.info "Building yardoc index for gem: #{spec.full_name}"
-            Yardoc.run('-n', '-b', yfile)
-            reload = false
-          end
-        end
-        exit(0)
-      end
-      
       # Adds verifier rule for visibilities
       # @return [void]
+      # @since 0.5.6
       def add_visibility_verifier
         vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
         options[:verifier].add_expressions(vis_expr)
+      end
+      
+      # (see Templates::Helpers::BaseHelper#run_verifier)
+      def run_verifier(list)
+        options[:verifier] ? options[:verifier].run(list) : list
+      end
+      
+      # @since 0.6.0
+      def add_tag(tag_data, factory_method = nil)
+        tag, title = *tag_data.split(':')
+        Tags::Library.define_tag(title, tag.to_sym, factory_method)
+        Tags::Library.visible_tags |= [tag.to_sym]
       end
       
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
         opts = OptionParser.new
-        opts.banner = "Usage: yardoc [options] [source_files [- extra_files]]"
+        opts.banner = "Usage: yard doc [options] [source_files [- extra_files]]"
 
         opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
         opts.separator ""
@@ -257,92 +382,100 @@ module YARD
         opts.separator "A base set of options can be specified by adding a .yardopts"
         opts.separator "file to your base path containing all extra options separated"
         opts.separator "by whitespace."
+
+        general_options(opts)
+        output_options(opts)
+        tag_options(opts)
+        common_options(opts)
+        parse_options(opts, args)
+        parse_files(*args) unless args.empty?
+      end
+
+      # Adds general options
+      def general_options(opts)
         opts.separator ""
         opts.separator "General Options:"
 
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+          YARD::Registry.yardoc_file = yfile
+        end
+
+        opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
+          self.generate = false
+        end
+
         opts.on('-c', '--use-cache [FILE]', 
-                "Use the cached .yardoc db to generate documentation. (defaults to no cache)") do |file|
+                "Use the cached .yardoc db to generate documentation. (this is default)") do |file|
           YARD::Registry.yardoc_file = file if file
           self.use_cache = true
         end
         
-        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
-          YARD::Registry.yardoc_file = yfile
+        opts.on('--no-cache', "Clear .yardoc db before parsing source.") do
+          self.use_cache = false
         end
         
-        opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
-          self.generate = false
+        opts.on('--[no-]yardopts', "If arguments should be read from .yardopts file. (defaults to yes)") do |use_yardopts|
+          self.use_yardopts_file = use_yardopts
+        end
+
+        opts.on('--[no-]document', "If arguments should be read from .document file. (defaults to yes)") do |use_document|
+          self.use_document_file = use_document
         end
         
-        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          if !require(file.gsub(/\.rb$/, ''))
-            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
-            exit
-          end
+        opts.on('--no-save', 'Do not save the parsed data to the yardoc db') do
+          self.save_yardoc = false
         end
-        
-        opts.on('--incremental', 'Generates output for changed files only (implies -c)') do
-          self.incremental = true
-          self.generate = true
-          self.use_cache = true
-        end
-        
+
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
           self.excluded << path
         end
-        
-        opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
-          YARD::Parser::SourceParser.parser_type = :ruby18
-        end
-        
-        opts.on('--build-gems', 'Builds .yardoc files for all gems (implies -n)') do
-          self.build_gems = true
-        end
+      end
 
-        opts.on('--re-build-gems', 'Forces building .yardoc files for all gems (implies -n)') do
-          self.build_gems = true
-          self.rebuild_gems = true
-        end
-
+      # Adds output options
+      def output_options(opts)
         opts.separator ""
         opts.separator "Output options:"
-  
-        opts.on('--no-public', "Don't show public methods. (default shows public)") do 
-          visibilities.delete(:public)
-        end
 
-        opts.on('--protected', "Show or don't show protected methods. (default hides protected)") do
-          visibilities.push(:protected)
-        end
-
-        opts.on('--private', "Show or don't show private methods. (default hides private)") do 
-          visibilities.push(:private)
-        end
-        
-        opts.on('--no-private', "Hide objects with @private tag") do
-          options[:verifier].add_expressions '!object.tag(:private) && 
-            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
-        end
-
-        opts.on('--no-highlight', "Don't highlight code in docs as Ruby.") do 
-          options[:no_highlight] = true
-        end
-        
-        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
-          options[:default_return] = type
-        end
-        
-        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
-          options[:hide_void_return] = true
-        end
-        
-        opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
-          options[:verifier].add_expressions(query.taint)
+        opts.on('--one-file', 'Generates output as a single file') do
+          options[:onefile] = true
         end
 
         opts.on('--list', 'List objects to standard out (implies -n)') do |format|
           self.generate = false
           self.list = true
+        end
+
+        opts.on('--no-public', "Don't show public methods. (default shows public)") do 
+          visibilities.delete(:public)
+        end
+
+        opts.on('--protected', "Show protected methods. (default hides protected)") do
+          visibilities.push(:protected)
+        end
+
+        opts.on('--private', "Show private methods. (default hides private)") do 
+          visibilities.push(:private)
+        end
+
+        opts.on('--no-private', "Hide objects with @private tag") do
+          options[:verifier].add_expressions '!object.tag(:private) && 
+            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
+        end
+
+        opts.on('--no-highlight', "Don't highlight code blocks in output.") do 
+          options[:no_highlight] = true
+        end
+
+        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
+          options[:default_return] = type
+        end
+
+        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
+          options[:hide_void_return] = true
+        end
+
+        opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
+          options[:verifier].add_expressions(query.taint)
         end
 
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
@@ -356,7 +489,7 @@ module YARD
             log.warn "Could not find readme file: #{readme}"
           end
         end
-        
+
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
           add_extra_files(*files.split(","))
         end
@@ -370,15 +503,15 @@ module YARD
                 'Overrides the library used to process markup formatting (specify the gem name)') do |markup_provider|
           options[:markup_provider] = markup_provider.to_sym
         end
-        
+
         opts.on('-o', '--output-dir PATH', 
                 'The output directory. (defaults to ./doc)') do |dir|
           options[:serializer].basepath = dir
         end
-        
+
         opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
           begin
-            Encoding.default_external = encoding
+            Encoding.default_external, Encoding.default_internal = encoding, encoding
           rescue ArgumentError => e
             raise OptionParser::InvalidOption, e
           end
@@ -393,15 +526,50 @@ module YARD
                 'The template path to look for templates in. (used with -t).') do |path|
           YARD::Templates::Engine.register_template_path(path)
         end
-        
+
         opts.on('-f', '--format FORMAT', 
                 'The output format for the template. (defaults to html)') do |format|
           options[:format] = format.to_sym
         end
+        
+        opts.on('--no-stats', 'Don\'t print statistics') do
+          self.statistics = false
+        end
+      end
 
-        common_options(opts)
-        parse_options(opts, args)
-        parse_files(*args) unless args.empty?
+      # Adds tag options
+      # @since 0.6.0
+      def tag_options(opts)
+        opts.separator ""
+        opts.separator "Tag options: (TAG:TITLE looks like: 'overload:Overloaded Method')"
+
+        opts.on('--tag TAG:TITLE', 'Registers a new free-form metadata @tag') do |tag|
+          add_tag(tag)
+        end
+
+        opts.on('--type-tag TAG:TITLE', 'Tag with an optional types field') do |tag|
+          add_tag(tag, :with_types)
+        end
+
+        opts.on('--type-name-tag TAG:TITLE', 'Tag with optional types and a name field') do |tag|
+          add_tag(tag, :with_types_and_name)
+        end
+
+        opts.on('--name-tag TAG:TITLE', 'Tag with a name field') do |tag|
+          add_tag(tag, :with_name)
+        end
+
+        opts.on('--title-tag TAG:TITLE', 'Tag with first line as title field') do |tag|
+          add_tag(tag, :with_title_and_text)
+        end
+
+        opts.on('--hide-tag TAG', 'Hides a previously defined tag from templates') do |tag|
+          self.hidden_tags |= [tag.to_sym]
+        end
+        
+        opts.on('--transitive-tag TAG', 'Adds a transitive tag') do |tag|
+          Tags::Library.transitive_tags += [tag.to_sym]
+        end
       end
     end
   end

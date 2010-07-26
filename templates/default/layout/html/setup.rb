@@ -1,7 +1,9 @@
 def init
   @breadcrumb = []
 
-  if @file
+  if @onefile
+    sections :layout
+  elsif @file
     @contents = File.read(@file)
     @file = File.basename(@file)
     @fname = @file.gsub(/\.[^.]+$/, '')
@@ -38,32 +40,12 @@ end
 def index
   @objects_by_letter = {}
   objects = @objects.reject {|o| o.root? }.sort_by {|o| o.name.to_s }
+  objects = run_verifier(objects)
   objects.each {|o| (@objects_by_letter[o.name.to_s[0,1].upcase] ||= []) << o }
   erb(:index)
 end
 
 def diskfile
-  "<div id='filecontents'>" +
-  case (File.extname(@file)[1..-1] || '').downcase
-  when 'htm', 'html'
-    @contents
-  when 'txt'
-    "<pre>#{@contents}</pre>"
-  when 'textile', 'txtile'
-    htmlify(@contents, :textile)
-  when 'markdown', 'md', 'mdown', 'mkd'
-    htmlify(@contents, :markdown)
-  else
-    htmlify(@contents, diskfile_shebang_or_default)
-  end +
-  "</div>"
-end
-
-def diskfile_shebang_or_default
-  if @contents =~ /\A#!(\S+)\s*$/ # Shebang support
-    @contents = $'
-    $1.to_sym
-  else
-    options[:markup]
-  end
+  data = htmlify(markup_file_contents(@contents), markup_for_file(@contents, @file))
+  "<div id='filecontents'>" + data + "</div>"
 end

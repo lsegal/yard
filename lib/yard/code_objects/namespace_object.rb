@@ -6,6 +6,10 @@ module YARD::CodeObjects
     attr_writer :constants, :cvars, :mixins, :child, :meths
     attr_writer :class_attributes, :instance_attributes
     attr_writer :included_constants, :included_meths
+    
+    # @return [Array<String>] a list of ordered group names inside the namespace
+    # @since 0.6.0
+    attr_accessor :groups
 
     # The list of objects defined in this namespace
     # @return [Array<Base>] a list of objects
@@ -55,6 +59,7 @@ module YARD::CodeObjects
       @instance_mixins = CodeObjectList.new(self)
       @attributes = SymbolHash[:class => SymbolHash.new, :instance => SymbolHash.new]
       @aliases = {}
+      @groups = []
       super
     end
     
@@ -139,9 +144,10 @@ module YARD::CodeObjects
     def included_meths(opts = {})
       opts = SymbolHash[:scope => [:instance, :class]].update(opts)
       [opts[:scope]].flatten.map do |scope|
-        mixins(scope).reverse.inject([]) do |list, mixin|
+        mixins(scope).inject([]) do |list, mixin|
           next list if mixin.is_a?(Proxy)
           arr = mixin.meths(opts.merge(:scope => :instance)).reject do |o|
+            next false if opts[:all]
             child(:name => o.name, :scope => scope) || list.find {|o2| o2.name == o.name }
           end
           arr.map! {|o| ExtendedMethodObject.new(o) } if scope == :class
@@ -164,7 +170,7 @@ module YARD::CodeObjects
     # Returns constants included from any mixins
     # @return [Array<ConstantObject>] a list of constant objects
     def included_constants
-      instance_mixins.reverse.inject([]) do |list, mixin|
+      instance_mixins.inject([]) do |list, mixin|
         if mixin.respond_to? :constants
           list += mixin.constants.reject do |o| 
             child(:name => o.name) || list.find {|o2| o2.name == o.name }

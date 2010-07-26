@@ -28,31 +28,55 @@ module YARD
     end
     
     
+    # Namespace separator
     NSEP = '::'
+    
+    # Regex-quoted namespace separator
     NSEPQ = NSEP
+    
+    # Instance method separator
     ISEP = '#'
+
+    # Regex-quoted instance method separator
     ISEPQ = ISEP
+    
+    # Class method separator
     CSEP = '.'
+    
+    # Regex-quoted class method separator
     CSEPQ = Regexp.quote CSEP
+    
+    # Regular expression to match constant name
     CONSTANTMATCH = /[A-Z]\w*/
+    
+    # Regular expression to match namespaces (const A or complex path A::B)
     NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
+    
+    # Regular expression to match a method name
     METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|<=>|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/
+    
+    # Regular expression to match a fully qualified method def (self.foo, Class.foo).
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|self)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
     
+    # All builtin Ruby exception classes for inheritance tree.
     BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError", 
       "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError", 
       "RangeError", "NoMemoryError", "ArgumentError", "ThreadError", "EOFError", "RuntimeError", 
       "ZeroDivisionError", "StandardError", "LoadError", "NameError", "LocalJumpError", "SystemCallError", 
       "SignalException", "ScriptError", "SystemStackError", "RegexpError", "IndexError"]
-    # Note: MatchingData is a 1.8.x legacy class
+    # All builtin Ruby classes for inheritance tree.
+    # @note MatchingData is a 1.8.x legacy class
     BUILTIN_CLASSES = ["TrueClass", "Array", "Dir", "Struct", "UnboundMethod", "Object", "Fixnum", "Float", 
       "ThreadGroup", "MatchingData", "MatchData", "Proc", "Binding", "Class", "Time", "Bignum", "NilClass", "Symbol", 
       "Numeric", "String", "Data", "MatchData", "Regexp", "Integer", "File", "IO", "Range", "FalseClass", 
       "Method", "Continuation", "Thread", "Hash", "Module"] + BUILTIN_EXCEPTIONS
+    # All builtin Ruby modules for mixin handling.
     BUILTIN_MODULES = ["ObjectSpace", "Signal", "Marshal", "Kernel", "Process", "GC", "FileTest", "Enumerable", 
       "Comparable", "Errno", "Precision", "Math"]
+    # All builtin Ruby classes and modules.
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
     
+    # Hash of {BUILTIN_EXCEPTIONS} as keys and true as value (for O(1) lookups)
     BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
     
     # +Base+ is the superclass of all code objects recognized by YARD. A code
@@ -120,9 +144,20 @@ module YARD
       # @return [Boolean] true if the method is conditionally defined at runtime
       attr_accessor :dynamic
       
+      # @return [String] the group this object is associated with
+      # @since 0.6.0
+      attr_accessor :group
+      
       # Is the object defined conditionally at runtime?
       # @see #dynamic
       def dynamic?; @dynamic end
+      
+      # This attribute exists in order to maintain a consistent interface
+      # with the {MethodObject} class, so that a {Verifier} expression need
+      # not check the object type before accessing visibility.
+      # 
+      # @return [Symbol] always returns public for a base object. 
+      def visibility; :public end
       
       class << self
         # Allocates a new code object
@@ -137,26 +172,11 @@ module YARD
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
           
-          keyname = namespace && namespace.respond_to?(:path) ? namespace.path : ''
-          if self == RootObject
-            keyname = :root
-          elsif self == MethodObject
-            keyname += (args.first && args.first.to_sym == :class ? CSEP : ISEP) + name.to_s
-          elsif keyname.empty?
-            keyname = name.to_s
-          else
-            keyname += NSEP + name.to_s
-          end
-          
-          obj = Registry.objects[keyname]
-          obj = nil if obj && obj.class != self
-          
-          if self != RootObject && obj
-            yield(obj) if block_given?
-            obj
-          else
-            Registry.objects[keyname] = super(namespace, name, *args, &block)
-          end
+          obj = super(namespace, name, *args)
+          existing_obj = Registry.at(obj.path)
+          obj = existing_obj if existing_obj && existing_obj.class == self
+          yield(obj) if block_given?
+          obj
         end
         
         # Compares the class with subclasses
@@ -182,7 +202,7 @@ module YARD
       # @yield [self] a block to perform any extra initialization on the object
       # @yieldparam [Base] self the newly initialized code object
       # @return [Base] the newly created object
-      def initialize(namespace, name, *args)
+      def initialize(namespace, name, *args, &block)
         if namespace && namespace != :root && 
             !namespace.is_a?(NamespaceObject) && !namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
@@ -220,6 +240,7 @@ module YARD
       def add_file(file, line = nil, has_comments = false)
         raise(ArgumentError, "file cannot be nil or empty") if file.nil? || file == ''
         obj = [file.to_s, line]
+        return if files.include?(obj)
         if has_comments && !@current_file_has_comments
           @current_file_has_comments = true
           @files.unshift(obj) 
@@ -319,6 +340,18 @@ module YARD
           @source = format_source(statement.to_s)
         end
       end
+      
+      def docstring
+        value = case @docstring
+        when Proxy
+          Docstring.new("", self)
+        when Base
+          @docstring.docstring
+        else
+          @docstring
+        end
+        @docstring_extra ? value + @docstring_extra : value
+      end
 
       # Attaches a docstring to a code oject by parsing the comments attached to the statement
       # and filling the {#tags} and {#docstring} methods with the parsed information.
@@ -327,7 +360,14 @@ module YARD
       #   the comments attached to the code object to be parsed 
       #   into a docstring and meta tags.
       def docstring=(comments)
-        @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
+        if comments =~ /^\s*\(see (\S+)\s*\)(?:\s|$)/
+          path, extra = $1, $'
+          @docstring_extra = extra.empty? ? nil : Docstring.new(extra, self)
+          @docstring = Proxy.new(namespace, path)
+        else
+          @docstring_extra = nil
+          @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
+        end
       end
       
       # Default type is the lowercase class name without the "Object" suffix.
@@ -358,6 +398,7 @@ module YARD
       
       # @param [Base, String] other another code object (or object path)
       # @return [String] the shortest relative path from this object to +other+
+      # @since 0.5.3
       def relative_path(other)
         other = other.path if other.respond_to?(:path)
         return other unless namespace
@@ -402,6 +443,8 @@ module YARD
         @namespace = (obj == :root ? Registry.root : obj)
       
         if @namespace
+          reg_obj = Registry.at(path)
+          return if reg_obj && reg_obj.class == self.class
           @namespace.children << self unless @namespace.is_a?(Proxy)
           Registry.register(self)
         end
@@ -412,15 +455,15 @@ module YARD
 
       # Gets a tag from the {#docstring}
       # @see Docstring#tag
-      def tag(name); @docstring.tag(name) end
+      def tag(name); docstring.tag(name) end
       
       # Gets a list of tags from the {#docstring}
       # @see Docstring#tags
-      def tags(name = nil); @docstring.tags(name) end
+      def tags(name = nil); docstring.tags(name) end
       
       # Tests if the {#docstring} has a tag
       # @see Docstring#has_tag?
-      def has_tag?(name); @docstring.has_tag?(name) end
+      def has_tag?(name); docstring.has_tag?(name) end
       
       # @return whether or not this object is a RootObject
       def root?; false end

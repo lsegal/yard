@@ -164,7 +164,7 @@ You can also add a `.yardopts` file to your project directory which lists
 the switches separated by whitespace (newlines or space) to pass to yardoc 
 whenever it is run.
 
-<h4>Queries</h4>
+#### Queries
 
 The `yardoc` tool also supports a `--query` argument to only include objects
 that match a certain data or meta-data query. The query syntax is Ruby, though
@@ -220,12 +220,40 @@ separator. Only modules, classes and constants should use "::".
 You can also do lookups on any installed gems. Just make sure to build the
 .yardoc databases for installed gems with:
 
-    $ sudo yardoc --build-gems
+    $ sudo yard gems
     
 If you don't have sudo access, it will write these files to your `~/.yard`
 directory. `yri` will also cache lookups there.
 
-**4. `yard-graph` Graphviz Generator**
+**4. `yard server` Documentation Server**
+
+The `yard server` command serves documentation for a local project or all installed
+RubyGems. To serve documentation for a project you are working on, simply run:
+
+    $ yard server
+    
+And the project inside the current directory will be parsed (if the source has
+not yet been scanned by YARD) and served at [http://localhost:8808](http://localhost:8808).
+
+#### Live Reloading
+
+If you want to serve documentation on a project while you document it so that
+you can preview the results, simply pass `--reload` (`-r`) to the above command
+and YARD will reload any changed files on each request. This will allow you to
+change any documentation in the source and refresh to see the new contents.
+
+#### Serving Gems
+
+To serve documentation for all installed gems, call:
+
+    $ yard server --gems
+    
+This will also automatically build documentation for any gems that have not
+been previously scanned. Note that in this case there will be a slight delay
+between the first request of a newly parsed gem.
+
+
+**5. `yard graph` Graphviz Generator**
 
 You can use `yard-graph` to generate dot graphs of your code. This, of course,
 requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default
@@ -236,7 +264,7 @@ option to show mixin inclusions. You can output to stdout or a file, or pipe dir
 to `dot`. The same public, protected and private visibility rules apply to yard-graph.
 More options can be seen by typing `yard-graph --help`, but here is an example:
 
-    $ yard-graph --protected --full --dependencies
+    $ yard graph --protected --full --dependencies
 
 
 Changelog

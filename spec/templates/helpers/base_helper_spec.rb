@@ -5,7 +5,7 @@ describe YARD::Templates::Helpers::BaseHelper do
   
   describe '#run_verifier' do
     it "should run verifier proc against list if provided" do
-      mock = mock(:verifier)
+      mock = Verifier.new
       mock.should_receive(:call).with(1)
       mock.should_receive(:call).with(2)
       mock.should_receive(:call).with(3)
@@ -14,7 +14,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
     
     it "should prune list if lambda returns false and only false" do
-      mock = mock(:verifier)
+      mock = Verifier.new
       should_receive(:options).at_least(1).times.and_return(:verifier => mock)
       mock.should_receive(:call).with(1).and_return(false)
       mock.should_receive(:call).with(2).and_return(true)

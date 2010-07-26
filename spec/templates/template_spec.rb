@@ -128,7 +128,7 @@ describe YARD::Templates::Template do
       module YARD::Templates::Engine::Template__full_path_e
         def init; sections 1, 2, 3 end 
       end
-      template(:e).new.sections.should == [1, 2, 3]
+      template(:e).new.sections.should == Section.new(nil, 1, 2, 3)
     end
   end
   
@@ -184,23 +184,23 @@ describe YARD::Templates::Template do
     it "should allow sections to be set if arguments are provided" do
       mod = template(:e).new
       mod.sections 1, 2, [3]
-      mod.sections.should == [1, 2, [3]]
+      mod.sections.should == Section.new(nil, 1, 2, [3])
     end
   end
   
   describe '#run' do
     it "should render all sections" do
       mod = template(:e).new
-      mod.should_receive(:render_section).with(:a).and_return('a')
-      mod.should_receive(:render_section).with(:b).and_return('b')
-      mod.should_receive(:render_section).with(:c).and_return('c')
+      mod.should_receive(:render_section).with(Section.new(:a)).and_return('a')
+      mod.should_receive(:render_section).with(Section.new(:b)).and_return('b')
+      mod.should_receive(:render_section).with(Section.new(:c)).and_return('c')
       mod.sections :a, :b, :c
       mod.run.should == 'abc'
     end
     
     it "should render all sections with options" do
       mod = template(:e).new
-      mod.should_receive(:render_section).with(:a).and_return('a')
+      mod.should_receive(:render_section).with(Section.new(:a)).and_return('a')
       mod.should_receive(:add_options).with(:a => 1).and_yield
       mod.sections :a
       mod.run(:a => 1).should == 'a'
@@ -208,14 +208,14 @@ describe YARD::Templates::Template do
     
     it "should run section list if provided" do
       mod = template(:e).new
-      mod.should_receive(:render_section).with(:q)
-      mod.should_receive(:render_section).with(:x)
+      mod.should_receive(:render_section).with(Section.new(:q))
+      mod.should_receive(:render_section).with(Section.new(:x))
       mod.run({}, [:q, :x])
     end
     
     it "should accept a nil section as empty string" do
       mod = template(:e).new
-      mod.should_receive(:render_section).with(:a)
+      mod.should_receive(:render_section).with(Section.new(:a))
       mod.sections :a
       mod.run.should == ""
     end
@@ -274,17 +274,6 @@ describe YARD::Templates::Template do
       mod.run
     end
   end 
-  
-  describe '#subsections' do
-    it "should set subsections when they are available" do
-      mod = template(:e).new
-      mod.sections :a, [:b, :c]
-      mod.should_receive(:render_section).with(:a) do
-        mod.subsections.should == [:b, :c]
-      end
-      mod.run
-    end
-  end
   
   describe '#yield' do
     it "should yield a subsection" do

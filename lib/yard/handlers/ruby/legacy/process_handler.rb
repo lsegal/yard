@@ -1,3 +1,4 @@
+# (see Ruby::ProcessHandler)
 class YARD::Handlers::Ruby::Legacy::ProcessHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aprocess(?:\(?|\s)/
   namespace_only

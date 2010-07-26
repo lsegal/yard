@@ -11,11 +11,13 @@ module YARD
     def initialize
       @file = nil
       @checksums = {}
-      @store = { :root => CodeObjects::RootObject.new(nil, :root) }
+      @store = {}
       @proxy_types = {}
       @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
+      @store[:root] = CodeObjects::RootObject.allocate
+      @store[:root].send(:initialize, nil, :root)
     end
     
     # Gets a {CodeObjects::Base} from the store
@@ -94,6 +96,7 @@ module YARD
     # @param [String, nil] file the name of the yardoc db to load
     # @return [Boolean] whether the database was loaded
     # @see #load_all
+    # @since 0.5.1
     def load!(file = nil)
       if load(file)
         load_all
@@ -180,7 +183,6 @@ module YARD
     def load_yardoc
       return false unless @file
       if File.directory?(@file) # new format
-        Registry.objects.replace({})
         @loaded_objects = 0
         @available_objects = all_disk_objects.size
         load_proxy_types

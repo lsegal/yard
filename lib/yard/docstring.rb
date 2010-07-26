@@ -26,8 +26,10 @@ module YARD
     attr_reader :all
 
     # Matches a tag at the start of a comment line
-    META_MATCH = /^@([a-z_]+)(?:\s+(.*))?$/i
+    META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
     
+    # @group Creating a Docstring Object
+
     # Creates a new docstring with the raw contents attached to an optional
     # object.
     # 
@@ -45,6 +47,20 @@ module YARD
       self.all = content
     end
     
+    # Adds another {Docstring}, copying over tags.
+    # 
+    # @param [Docstring, String] other the other docstring (or string) to
+    #   add.
+    # @return [Docstring] a new docstring with both docstrings combines
+    def +(other)
+      case other
+      when Docstring
+        Docstring.new([all, other.all].join("\n"), object)
+      else
+        super
+      end
+    end
+    
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
     def replace(content)
@@ -53,6 +69,8 @@ module YARD
       super parse_comments(content)
     end
     alias all= replace
+
+    # @endgroup
     
     # @return [Fixnum] the first line of the {#line_range}.
     def line
@@ -83,6 +101,8 @@ module YARD
       @summary += '.' unless @summary.empty?
       @summary
     end
+
+    # @group Creating and Accessing Meta-data
     
     # Adds a tag or reftag object to the tag list
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
@@ -123,7 +143,6 @@ module YARD
       list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
 
-    ##
     # Returns true if at least one tag by the name +name+ was declared
     #
     # @param [String] name the tag name to search for
@@ -132,12 +151,20 @@ module YARD
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
 
-    # Returns true if the docstring has no content
+    # Returns true if the docstring has no content that is visible to a template.
     #
+    # @param [Boolean] only_visible_tags whether only {Tags::Library.visible_tags}
+    #   should be checked, or if all tags should be considered.
     # @return [Boolean] whether or not the docstring has content
-    def blank?
-      empty? && @tags.empty? && @ref_tags.empty?
+    def blank?(only_visible_tags = true)
+      if only_visible_tags
+        empty? && !tags.any? {|tag| Tags::Library.visible_tags.include?(tag.tag_name.to_sym) }
+      else
+        empty? && @tags.empty? && @ref_tags.empty?
+      end
     end
+    
+    # @endgroup
 
     private
     
@@ -198,8 +225,8 @@ module YARD
         empty = (line =~ /^\s*$/ ? true : false)
         done = comments.size == index
 
-        if tag_name && (((indent < orig_indent && !empty) || done) || 
-            (indent <= last_indent && line =~ META_MATCH))
+        if tag_name && (((indent < orig_indent && !empty) || done || 
+            (indent == 0 && !empty)) || (indent <= last_indent && line =~ META_MATCH))
           create_tag(tag_name, tag_buf.join("\n"))
           tag_name, tag_buf, = nil, []
           orig_indent = 0

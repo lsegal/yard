@@ -1,5 +1,13 @@
+require 'ostruct'
+
 module YARD
   module Templates
+    # This module manages all creation, handling and rendering of {Engine::Template} 
+    # objects. 
+    # 
+    # * To create a template object at a path, use {template}. 
+    # * To render a template, call {render}.
+    # * To register a template path in the lookup paths, call {register_template_path}.
     module Engine
       class << self
         # @return [Array<String>] the list of registered template paths
@@ -20,6 +28,8 @@ module YARD
         # generated module as mixins (for overriding).
         # 
         # @param [Array<String, Symbol>] path a list of path components
+        # @raise [ArgumentError] if the path does not exist within one of the
+        #   {template_paths} on disk.
         # @return [Template] the module representing the template
         def template(*path)
           from_template = nil
@@ -43,7 +53,7 @@ module YARD
           full_paths ||= [path]
           full_paths = [full_paths] unless full_paths.is_a?(Array)
           name = template_module_name(full_paths.first)
-          return const_get(name) rescue NameError 
+          begin; return const_get(name); rescue NameError; end
 
           mod = const_set(name, Module.new)
           mod.send(:include, Template)
@@ -120,6 +130,7 @@ module YARD
         # @option options [Symbol] :template (:default) the default template
         # @return [void]
         def set_default_options(options = {})
+          options[:__globals] ||= OpenStruct.new
           options[:format] ||= :text
           options[:type] ||= options[:object].type if options[:object]
           options[:template] ||= :default

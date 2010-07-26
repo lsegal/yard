@@ -18,10 +18,10 @@ module YARD
       # @return [CodeObjects::NamespaceObject] the current namespace
       attr_accessor :namespace
       
-      # @return [Symbol] the current visibility
+      # @return [Symbol] the current visibility (public, private, protected)
       attr_accessor :visibility
       
-      # @return [Symbol] the current scope
+      # @return [Symbol] the current scope (class, instance)
       attr_accessor :scope
       
       # @return [CodeObjects::Base, nil] unlike the namespace, the owner
@@ -33,7 +33,7 @@ module YARD
       # @return [Boolean] whether or not {Parser::LoadOrderError} is raised
       attr_accessor :load_order_errors
       
-      # @return [Symbol] the parser type (:ruby, :ruby18 or :c)
+      # @return [Symbol] the parser type (:ruby, :ruby18, :c)
       attr_accessor :parser_type
       
       # Creates a new Processor for a +file+.

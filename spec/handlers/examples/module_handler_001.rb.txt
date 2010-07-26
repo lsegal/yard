@@ -18,3 +18,8 @@ end
 module ::Kernel
   def x; end
 end
+
+module A; end
+module B; end
+module C; end
+class D; include A; include B; include C; end

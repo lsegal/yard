@@ -1,3 +1,4 @@
+# (see Ruby::AttributeHandler)
 class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/
   
@@ -44,6 +45,7 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
             o.source ||= full_src
             o.signature ||= src
             o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
+            o.visibility = visibility
           end
         
           # Register the objects explicitly

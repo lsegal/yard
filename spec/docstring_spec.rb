@@ -9,6 +9,26 @@ describe YARD::Docstring do
     end
   end
   
+  describe '#+' do
+    it "should add another Docstring" do
+      d = Docstring.new("FOO") + Docstring.new("BAR")
+      d.should == "FOO\nBAR"
+    end
+    
+    it "should copy over tags" do
+      d1 = Docstring.new("FOO\n@api private\n")
+      d2 = Docstring.new("BAR\n@param foo descr")
+      d = (d1 + d2)
+      d.should have_tag(:api)
+      d.should have_tag(:param)
+    end
+      
+    it "should add a String" do
+      d = Docstring.new("FOO") + "BAR"
+      d.should == "FOOBAR"
+    end
+  end
+  
   describe '#summary' do
     it "should handle empty docstrings" do
       o1 = Docstring.new
@@ -134,6 +154,10 @@ describe YARD::Docstring do
   end
   
   describe '#empty?/#blank?' do
+    before(:all) do
+      Tags::Library.define_tag "Invisible", :invisible_tag
+    end
+
     it "should be blank and empty if it has no content and no tags" do
       Docstring.new.should be_blank
       Docstring.new.should be_empty
@@ -157,6 +181,17 @@ describe YARD::Docstring do
       d = Docstring.new("@return (see Foo#bar)")
       d.should be_empty
       d.should_not be_blank
+    end
+    
+    it "should be blank if it has no visible tags" do
+      d = Docstring.new("@invisible_tag value")
+      d.should be_blank
+    end
+    
+    it "should not be blank if it has invisible tags and only_visible_tags = false" do
+      d = Docstring.new("@invisible_tag value")
+      d.add_tag Tags::Tag.new('invisible_tag', nil, nil)
+      d.blank?(false).should == false
     end
   end
   
@@ -237,6 +272,34 @@ eof
    baz
 eof
       doc.tag(:param).text.should == "some value\nfoo bar\n baz"
+    end
+
+    it "should allow numbers in tags" do
+      Tags::Library.define_tag(nil, :foo1)
+      Tags::Library.define_tag(nil, :foo2)
+      Tags::Library.define_tag(nil, :foo3)
+      doc = Docstring.new(<<-eof)
+@foo1 bar1
+@foo2 bar2
+@foo3 bar3
+eof
+      doc.tag(:foo1).text.should == "bar1"
+      doc.tag(:foo2).text.should == "bar2"
+    end
+    
+    it "should end tag on newline if next line is not indented" do
+      doc = Docstring.new(<<-eof)
+@author bar1
+@api bar2
+Hello world
+eof
+      doc.tag(:author).text.should == "bar1"
+      doc.tag(:api).text.should == "bar2"
+    end
+    
+    it "should warn about unknown tag" do
+      log.should_receive(:warn).with(/Unknown tag @hello$/)
+      Docstring.new("@hello world")
     end
   end
 end

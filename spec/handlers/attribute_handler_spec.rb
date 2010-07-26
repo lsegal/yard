@@ -87,4 +87,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AttributeHandler" do
   it "should add existing writer method as part of attr_reader combo" do
     Registry.at('C#foo').attr_info[:write].should == Registry.at('C#foo=')
   end
+  
+  it "should maintain visibility for attr_reader" do
+    Registry.at('D#parser').visibility.should == :protected
+  end
 end

@@ -7,6 +7,7 @@ unless defined? Gem::DocManager.load_yardoc
     overwrite_accessor(:has_rdoc) { @has_rdoc }
     overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   
+    # @since 0.5.3
     def has_yardoc=(value)
       @has_rdoc = 'yard'
     end

@@ -12,8 +12,27 @@ module YARD
         ],
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'}
-        ]
+        ],
+        :rdoc => [],
+        :text => [],
+        :html => []
       }
+      
+      # Returns a list of extensions for various markup types. To register
+      # extensions for a type, add them to the array of extensions for the
+      # type.
+      # @since 0.6.0
+      MARKUP_EXTENSIONS = {
+        :html => ['htm', 'html', 'shtml'],
+        :text => ['txt'],
+        :textile => ['textile', 'txtile'],
+        :markdown => ['markdown', 'md', 'mdown', 'mkd'],
+        :rdoc => ['rdoc']
+      }
+      
+      # Contains the Regexp object that matches the shebang line of extra
+      # files to detect the markup type.
+      MARKUP_FILE_SHEBANG = /\A#!(\S+)\s*$/
 
       begin
         require 'rdoc/markup'
@@ -45,12 +64,13 @@ module YARD
         @markup_cache[type] ||= {}
         
         providers = MARKUP_PROVIDERS[type]
+        return if providers && providers.empty?
         if options[:markup_provider]
-          providers = MARKUP_PROVIDERS[type].select {|p| p[:lib] == options[:markup_provider] }
+          providers = providers.select {|p| p[:lib] == options[:markup_provider] }
         end
         
         if providers == nil || providers.empty?
-          STDERR.puts "Invalid markup type '#{options[:markup]}'"
+          STDERR.puts "Invalid markup type '#{type}'"
           exit
         end
         
@@ -66,6 +86,40 @@ module YARD
         name, lib = providers.first[:const], providers.first[:lib]
         STDERR.puts "Missing #{name} gem for #{options[:markup].to_s.capitalize} formatting. Install it with `gem install #{lib}`"
         exit
+      end
+      
+      # Checks for a shebang or looks at the file extension to determine
+      # the markup type for the file contents. File extensions are registered
+      # for a markup type in {MARKUP_EXTENSIONS}.
+      # 
+      # A shebang should be on the first line of a file and be in the form:
+      # 
+      #   #!markup_type
+      # 
+      # Standard markup types are text, html, rdoc, markdown, textile
+      # 
+      # @return [Symbol] the markup type recognized for the file
+      # @see MARKUP_EXTENSIONS
+      # @since 0.6.0
+      def markup_for_file(contents, filename)
+        if contents =~ MARKUP_FILE_SHEBANG # Shebang support
+          return $1.to_sym
+        end
+
+        ext = (File.extname(filename)[1..-1] || '').downcase
+        MARKUP_EXTENSIONS.each do |type, exts|
+          return type if exts.include?(ext)
+        end
+        options[:markup]
+      end
+      
+      # Strips any shebang lines on the file contents that pertain to 
+      # markup or preprocessing data.
+      # 
+      # @return [String] the file contents minus any preprocessing tags
+      # @since 0.6.0
+      def markup_file_contents(contents)
+        contents =~ MARKUP_FILE_SHEBANG ? $' : contents
       end
       
       # Gets the markup provider class/module constant for a markup type

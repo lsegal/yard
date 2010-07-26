@@ -3,6 +3,7 @@ module YARD
     module Ruby
       module Legacy
         # Legacy Ruby parser
+        # @since 0.5.6
         class RubyParser < Parser::Base
           def initialize(source, filename)
             @source = source

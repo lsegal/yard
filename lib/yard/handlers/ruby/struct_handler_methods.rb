@@ -1,3 +1,6 @@
+# Helper methods to parse @attr_* tags on a Struct class.
+# 
+# @since 0.5.6
 module YARD::Handlers::Ruby::StructHandlerMethods
   include YARD::CodeObjects
   

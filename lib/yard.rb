@@ -1,7 +1,13 @@
 module YARD
-  VERSION = "0.5.8"
+  VERSION = "0.6.0.rc1"
+  
+  # The root path for YARD source libraries
   ROOT = File.expand_path(File.dirname(__FILE__))
+  
+  # The root path for YARD builtin templates
   TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
+  
+  # The location where YARD stores user-specific settings
   CONFIG_DIR = File.expand_path('~/.yard')
   
   # An alias to {Parser::SourceParser}'s parsing method

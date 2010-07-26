@@ -1,3 +1,4 @@
+# (see Ruby::ModuleHandler)
 class YARD::Handlers::Ruby::Legacy::ModuleHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkMODULE
   

@@ -27,6 +27,10 @@ module YARD
       super
     end
     
+    # Prints the backtrace +exc+ to the logger as error data.
+    # 
+    # @param [Array<String>] exc the backtrace list
+    # @return [void]
     def backtrace(exc)
       return unless show_backtraces
       error "#{exc.class.class_name}: #{exc.message}"
@@ -49,7 +53,9 @@ module YARD
       self.level = old_level
     end
     
-    # Log format (from Logger implementation)
+    private
+    
+    # Log format (from Logger implementation). Used by Logger internally
     def format_log(sev, time, prog, msg)
       "[#{sev.downcase}]: #{msg}\n"
     end

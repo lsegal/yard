@@ -6,6 +6,7 @@ def init
   options[:readme] = options[:files].first
   options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
   
+  return serialize_onefile if options[:onefile]
   generate_assets
   serialize('_index.html')
   options[:files].each_with_index do |file, i| 
@@ -31,6 +32,14 @@ def serialize(object)
   serialize_index(options) if object == '_index.html' && options[:files].empty?
   Templates::Engine.with_serializer(object, options[:serializer]) do
     T('layout').run(options)
+  end
+end
+
+def serialize_onefile
+  options[:css_data] = file('css/style.css', true) + "\n" + file('css/common.css', true)
+  options[:js_data] = file('js/jquery.js', true) + file('js/app.js', true)
+  Templates::Engine.with_serializer('index.html', options[:serializer]) do
+    T('onefile').run(options)
   end
 end
 

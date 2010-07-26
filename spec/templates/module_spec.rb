@@ -56,10 +56,6 @@ describe YARD::Templates::Engine.template(:default, :module) do
       module TMP; include A end
       class TMP2; extend A end
     eof
-    
-    # Hack to clear mixin list
-    mod = YARD::Templates::Engine.template(:default, :module)
-    mod.send(:class_variable_set, "@@mixed_into", nil)
   end
 
   it "should render html format correctly" do
@@ -81,5 +77,26 @@ describe YARD::Templates::Engine.template(:default, :module) do
   
   it "should render dot format correctly" do
     Registry.at('A').format(:format => :dot, :dependencies => true, :full => true).should == example(:module001, 'dot')
+  end
+  
+  it "should render groups correctly in html" do
+    Registry.clear
+    YARD.parse_string <<-'eof'
+      module A
+        # @group Foo
+        attr_accessor :foo_attr
+        def foo; end
+        def self.bar; end
+        
+        # @group Bar
+        def baz; end
+        
+        # @endgroup
+         
+        def self.baz; end
+      end
+    eof
+    
+    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module002)
   end
 end

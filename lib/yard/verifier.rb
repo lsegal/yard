@@ -32,6 +32,7 @@ module YARD
   #   Verifier.new('@return && @param && @yield')
   class Verifier
     # @return [Array<String>] a list of all expressions the verifier checks for
+    # @since 0.5.6
     attr_reader :expressions
     
     def expressions=(value)
@@ -52,6 +53,7 @@ module YARD
     # 
     # @param [Array<String>] expressions a list of expressions
     # @return [void]
+    # @since 0.5.6
     def add_expressions(*expressions)
       self.expressions += expressions.flatten
     end
@@ -77,6 +79,16 @@ module YARD
       retval
     end
     
+    # Runs a list of objects against the verifier and returns the subset 
+    # of verified objects.
+    # 
+    # @param [Array<CodeObjects::Base>] list a list of code objects
+    # @return [Array<CodeObjects::Base>] a list of code objects that match
+    #   the verifier.
+    def run(list)
+      list.reject {|item| call(item).is_a?(FalseClass) }
+    end
+    
     protected
     
     # @return [CodeObjects::Base] the current object being tested
@@ -85,6 +97,9 @@ module YARD
     
     private
     
+    # @private
+    NILCLASS_METHODS = [:type, :method_missing]
+    
     # Modifies nil to not throw NoMethodErrors. This allows
     # syntax like object.tag(:return).text to work if the #tag
     # call returns nil, which means users don't need to perform
@@ -92,13 +107,17 @@ module YARD
     # 
     # @return [void] 
     def modify_nilclass
-      NilClass.send(:define_method, :method_missing) {|*args| }
+      NILCLASS_METHODS.each do |meth|
+        NilClass.send(:define_method, meth) {|*args| }
+      end
     end
     
     # Returns the state of NilClass back to normal
     # @return [void] 
     def unmodify_nilclass
-      NilClass.send(:undef_method, :method_missing)
+      NILCLASS_METHODS.each do |meth|
+        NilClass.send(:undef_method, meth)
+      end
     end
     
     # Creates the +__execute+ method by evaluating the expressions

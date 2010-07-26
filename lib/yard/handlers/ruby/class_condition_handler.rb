@@ -1,3 +1,13 @@
+# Matches if/unless conditions inside classes and attempts to process only
+# one branch (by evaluating the condition if possible).
+# 
+# @example A simple class conditional
+#   class Foo
+#     if 0
+#       # This method is ignored
+#       def xyz; end
+#     end
+#   end
 class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles meta_type(:condition)

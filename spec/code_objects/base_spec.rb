@@ -42,12 +42,6 @@ describe YARD::CodeObjects::Base do
     o2.docstring.should == "NOT_DOCSTRING"
   end
   
-  it "should convert string into Docstring when #docstring= is set" do
-    o = ClassObject.new(:root, :Me) 
-    o.docstring = "DOCSTRING"
-    o.docstring.should be_instance_of(Docstring)
-  end
-
   it "should allow complex name and convert that to namespace" do
     obj = CodeObjects::Base.new(nil, "A::B")
     obj.namespace.path.should == "A"
@@ -250,6 +244,57 @@ describe YARD::CodeObjects::Base do
     it "should return a relative path for instance methods" do
       YARD.parse_string "module A; def b; end; def c; end; end"
       Registry.at('A#b').relative_path('A#c').should == '#c'
+    end
+  end
+  
+  describe '#docstring=' do
+    it "should convert string into Docstring when #docstring= is set" do
+      o = ClassObject.new(:root, :Me) 
+      o.docstring = "DOCSTRING"
+      o.docstring.should be_instance_of(Docstring)
+    end
+    
+    it "should set docstring to docstring of other object if docstring is '(see Path)'" do
+      ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
+      o = ClassObject.new(:root, :Me)
+      o.docstring = '(see AnotherObject)'
+      o.docstring.should == "FOO"
+    end
+    
+    it "should allow extra docstring after (see Path)" do
+      ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
+      o = ClassObject.new(:root, :Me)
+      o.docstring = "(see AnotherObject)\n\nEXTRA\n@api private"
+      o.docstring.should == "FOO\n\nEXTRA"
+      o.docstring.should have_tag(:api)
+    end
+  end
+  
+  describe '#docstring' do
+    it "should return empty string if docstring was '(see Path)' and Path is not resolved" do
+      o = ClassObject.new(:root, :Me)
+      o.docstring = '(see AnotherObject)'
+      o.docstring.should == ""
+    end
+    
+    it "should return docstring when object is resolved" do
+      o = ClassObject.new(:root, :Me)
+      o.docstring = '(see AnotherObject)'
+      o.docstring.should == ""
+      ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
+      o.docstring.should == "FOO"
+    end
+  end
+  
+  describe '#add_file' do
+    it "should only add a file/line combination once" do
+      o = ClassObject.new(:root, :Me)
+      o.add_file('filename', 12)
+      o.files.should == [['filename', 12]]
+      o.add_file('filename', 12)
+      o.files.should == [['filename', 12]]
+      o.add_file('filename', 40) # different line
+      o.files.should == [['filename', 12], ['filename', 40]]
     end
   end
 end

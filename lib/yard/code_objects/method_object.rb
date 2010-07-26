@@ -61,17 +61,20 @@ module YARD::CodeObjects
     # Returns the read/writer info for the attribute if it is one
     # @return [SymbolHash] if there is information about the attribute
     # @return [nil] if the method is not an attribute
+    # @since 0.5.3
     def attr_info
       return nil unless namespace.is_a?(NamespaceObject)
       namespace.attributes[scope][name.to_s.gsub(/=$/, '')]
     end
     
     # @return [Boolean] whether the method is a writer attribute
+    # @since 0.5.3
     def writer?
       !!((info = attr_info) && info[:write] == self)
     end
 
     # @return [Boolean] whether the method is a reader attribute
+    # @since 0.5.3
     def reader?
       !!((info = attr_info) && info[:read] == self)
     end
@@ -95,6 +98,14 @@ module YARD::CodeObjects
     # @return [Boolean] whether the method is explicitly defined in source
     def is_explicit?
       explicit ? true : false
+    end
+    
+    # @return [MethodObject] the object that this method overrides
+    # @return [nil] if it does not override a method
+    # @since 0.6.0
+    def overridden_method
+      meths = namespace.meths(:all => true)
+      meths.find {|m| m.path != path && m.name == name && m.scope == scope }
     end
     
     # Returns all alias names of the object

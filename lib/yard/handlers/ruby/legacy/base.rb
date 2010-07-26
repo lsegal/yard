@@ -1,10 +1,16 @@
 module YARD
   module Handlers
     module Ruby::Legacy
+      # This is the base handler for the legacy parser. To implement a legacy
+      # handler, subclass this class.
+      # 
+      # @abstract (see Ruby::Base)
       class Base < Handlers::Base
         # For tokens like TkDEF, TkCLASS, etc.
         include YARD::Parser::Ruby::Legacy::RubyToken
         
+        # @return [Boolean] whether or not a {Statement} object should be handled
+        #   by this handler.
         def self.handles?(stmt)
           handlers.any? do |a_handler|
             case a_handler
@@ -20,6 +26,13 @@ module YARD
 
         protected
 
+        # Parses a statement's block with a set of state values. If the 
+        # statement has no block, nothing happens. A description of state
+        # values can be found at {Handlers::Base#push_state}
+        # 
+        # @param [Hash] opts State options
+        # @option opts (see Handlers::Base#push_state)
+        # @see Handlers::Base#push_state #push_state
         def parse_block(opts = {})
           push_state(opts) do
             if statement.block
@@ -32,8 +45,8 @@ module YARD
         private
       
         # The string value of a token. For example, the return value for the symbol :sym 
-        # would be :sym. The return value for a string "foo #{bar}" would be the literal 
-        # "foo #{bar}" without any interpolation. The return value of the identifier
+        # would be :sym. The return value for a string +"foo #{ bar}"+ would be the literal 
+        # +"foo #{ bar}"+ without any interpolation. The return value of the identifier
         # 'test' would be the same value: 'test'. Here is a list of common types and
         # their return values:
         # 

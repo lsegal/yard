@@ -1,3 +1,4 @@
+# Handles the 'include' statement to mixin a module in the instance scope
 class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles method_call(:include)
@@ -20,6 +21,6 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
       obj = Proxy.new(namespace, obj.value)
     end
     
-    namespace.mixins(scope) << obj
+    namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
   end
 end

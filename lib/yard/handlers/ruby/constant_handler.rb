@@ -1,3 +1,4 @@
+# Handles any constant assignment
 class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles :assign

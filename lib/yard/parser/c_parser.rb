@@ -18,12 +18,14 @@ module YARD
         parse_includes
       end
       
+      # @since 0.5.6
       def tokenize
         raise NotImplementedError, "no tokenization support for C/C++ files"
       end
       
       private
       
+      # @since 0.5.3
       def remove_var_prefix(var)
         var.gsub(/^rb_[mc]|^[a-z_]+/, '')
       end

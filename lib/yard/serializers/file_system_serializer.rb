@@ -1,5 +1,6 @@
 module YARD
   module Serializers
+    # Implements a serializer that reads from and writes to the filesystem.
     class FileSystemSerializer < Base
       # The base path to write data to.
       # @return [String] a base path
@@ -73,6 +74,14 @@ module YARD
         end
         
         File.join(fspath)
+      end
+      
+      # Checks the disk for an object and returns whether it was serialized.
+      # 
+      # @param [CodeObjects::Base] object the object to check
+      # @return [Boolean] whether an object has been serialized to disk
+      def exists?(object)
+        File.exist?(File.join(basepath, serialized_path(object)))
       end
     end
   end

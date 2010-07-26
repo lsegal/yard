@@ -1,3 +1,4 @@
+# (see Ruby::MixinHandler)
 class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Ainclude(\s|\()/
   
@@ -23,6 +24,6 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
       obj = Proxy.new(namespace, obj.value)
     end
 
-    namespace.mixins(scope) << obj
+    namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
   end
 end

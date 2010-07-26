@@ -15,6 +15,7 @@ module YARD
       end
       
       # Internal parser class
+      # @since 0.5.6
       class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
         alias root ast
@@ -30,6 +31,7 @@ module YARD
           @ns_charno = 0
           @list = []
           @charno = 0
+          @groups = []
         end
 
         def parse
@@ -346,7 +348,15 @@ module YARD
 
         def on_comment(comment)
           visit_ns_token(:comment, comment)
-          
+          case comment
+          when /\A# @group\s+(.+)\s*\Z/
+            @groups.unshift [lineno, $1]
+            return
+          when /\A# @endgroup\s*\Z/
+            @groups.unshift [lineno, nil]
+            return
+          end
+
           comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
           
@@ -389,6 +399,13 @@ module YARD
                 node.docstring_range = ((line - comment.count("\n"))..line)
                 comments.delete(line)
                 break
+              end
+            end
+            if node.type == :def || node.type == :defs || node.call?
+              @groups.each do |group|
+                if group.first < node.line
+                  break node.group = group.last
+                end
               end
             end
           end

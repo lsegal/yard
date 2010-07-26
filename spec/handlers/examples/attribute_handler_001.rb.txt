@@ -25,3 +25,8 @@ class C
   def bar=(value); end
   attr_reader :bar
 end
+
+class D
+protected
+attr_reader :parser
+end

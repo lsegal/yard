@@ -2,7 +2,7 @@ module YARD
   module Parser::Ruby::Legacy
     class Statement 
       attr_reader :tokens, :comments, :block
-      attr_accessor :comments_range
+      attr_accessor :comments_range, :group
 
       def initialize(tokens, block = nil, comments = nil)
         @tokens = tokens
@@ -38,6 +38,7 @@ module YARD
       end
       
       # @return [Range<Fixnum>] the first to last lines of Ruby source
+      # @since 0.5.4
       def line_range
         tokens.first.line_no..tokens.last.line_no
       end

@@ -244,5 +244,29 @@ describe YARD::Parser::SourceParser do
         YARD::Parser::SourceParser.parse_string("$$$", :ruby)
       end
     end
+    
+    it "should handle groups" do
+      Registry.clear
+      YARD.parse_string <<-eof
+        class A
+          # @group Group Name
+          def foo; end
+          def foo2; end
+        
+          # @endgroup
+        
+          def bar; end
+          
+          # @group Group 2
+          def baz; end
+        end
+      eof
+      
+      Registry.at('A').groups.should == ['Group Name', 'Group 2']
+      Registry.at('A#bar').group.should be_nil
+      Registry.at('A#foo').group.should == "Group Name"
+      Registry.at('A#foo2').group.should == "Group Name"
+      Registry.at('A#baz').group.should == "Group 2"
+    end
   end
 end
