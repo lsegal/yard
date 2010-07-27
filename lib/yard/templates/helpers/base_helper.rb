@@ -1,4 +1,5 @@
 module YARD::Templates::Helpers
+  # The base helper module included in all templates.
   module BaseHelper
     attr_accessor :object, :serializer
     

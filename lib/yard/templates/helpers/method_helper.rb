@@ -1,6 +1,8 @@
 module YARD
   module Templates::Helpers
+    # Helper methods for method objects.
     module MethodHelper
+      # @return [String] formatted arguments for a method
       def format_args(object)
         return if object.parameters.nil?
         params = object.parameters
@@ -19,12 +21,14 @@ module YARD
         end
       end
       
+      # @return [String] formatted and linked return types for a method
       def format_return_types(object)
         return unless object.has_tag?(:return) && object.tag(:return).types
         return if object.tag(:return).types.empty?
         format_types [object.tag(:return).types.first], false
       end
       
+      # @return [String] formatted block if one exists
       def format_block(object)
         if object.has_tag?(:yield) && object.tag(:yield).types
           params = object.tag(:yield).types
@@ -39,12 +43,14 @@ module YARD
         params ? h("{|" + params.join(", ") + "| ... }") : ""
       end
       
+      # @return [String] formats line numbers for source code of an object
       def format_lines(object)
         return "" if object.source.nil? || object.line.nil?
         i = -1
         object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
       end
       
+      # @return [String] formats source of an object
       def format_code(object, show_lines = false)
         i = -1
         lines = object.source.split(/\n/)
@@ -55,6 +61,7 @@ module YARD
         end.join("\n")
       end
       
+      # @return [String] formats source code of a constant value
       def format_constant(value)
         sp = value.split("\n").last[/^(\s+)/, 1]
         num = sp ? sp.size : 0

@@ -2,6 +2,7 @@ require 'rubygems'
 
 module YARD
   module Templates::Helpers
+    # Helper methods for loading and managing markup types.
     module MarkupHelper
       MARKUP_PROVIDERS = {
         :markdown => [

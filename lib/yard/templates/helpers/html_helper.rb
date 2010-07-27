@@ -2,6 +2,7 @@ require 'cgi'
 
 module YARD
   module Templates::Helpers
+    # The helper module for HTML templates.
     module HtmlHelper
       include MarkupHelper
       include HtmlSyntaxHighlightHelper

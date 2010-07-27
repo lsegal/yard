@@ -1,7 +1,11 @@
 module YARD
   module Templates
     module Helpers
+      # Helper methods for syntax highlighting.
       module HtmlSyntaxHighlightHelper
+        # Highlights Ruby source
+        # @param [String] source the Ruby source code
+        # @return [String] the highlighted Ruby source
         def html_syntax_highlight_ruby(source)
           tokenlist = Parser::Ruby::RubyParser.parse(source, "(syntax_highlight)").tokens
           output = ""
