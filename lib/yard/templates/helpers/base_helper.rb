@@ -2,12 +2,16 @@ module YARD::Templates::Helpers
   module BaseHelper
     attr_accessor :object, :serializer
     
+    # @group Managing Global Template State
+    
     # An object that keeps track of global state throughout the entire template 
     # rendering process (including any sub-templates).
     # 
     # @return [OpenStruct] a struct object that stores state
     # @since 0.6.0
     def globals; options[:__globals] end
+    
+    # @group Running the Verifier
     
     # Runs a list of objects against the {Verifier} object passed into the 
     # template and returns the subset of verified objects.
@@ -19,12 +23,27 @@ module YARD::Templates::Helpers
       options[:verifier] ? options[:verifier].run(list) : list
     end
     
-    # This is used a lot by the HtmlHelper and there should
+    # @group Escaping Text
+    
+    # Escapes text. This is used a lot by the HtmlHelper and there should
     # be some helper to "clean up" text for whatever, this is it.
     def h(text)
       text
     end
     
+    # @group Linking Objects and URLs
+    
+    # Links objects or URLs. This method will delegate to the correct +link_+
+    # method depending on the arguments passed in.
+    # 
+    # @example Linking a URL
+    #   linkify('http://example.com')
+    # @example Including docstring contents of an object
+    #   linkify('include:YARD::Docstring')
+    # @example Linking to an extra file
+    #   linkify('file:README')
+    # @example Linking an object by path
+    #   linkify('YARD::Docstring')
     def linkify(*args) 
       if args.first.is_a?(String)
         case args.first
@@ -81,11 +100,28 @@ module YARD::Templates::Helpers
       url
     end
     
+    # Links to an extra file 
+    # 
+    # @param [String] filename the filename to link to
+    # @param [String] title the title of the link
+    # @param [String] anchor optional anchor
+    # @return [String] the link to the file
     # @since 0.5.5
     def link_file(filename, title = nil, anchor = nil)
       filename
     end
     
+    # @group Formatting Object Attributes
+    
+    # Formats a list of return types for output and links each type.
+    # 
+    # @example Formatting types
+    #   format_types(['String', 'Array']) #=> "(String, Array)"
+    # @example Formatting types without surrounding brackets
+    #   format_types(['String', 'Array'], false) #=> "String, Array"
+    # @param [Array<String>] list a list of types
+    # @param [Boolean] brackets whether to surround the types in brackets
+    # @return [String] the formatted list of Ruby types
     def format_types(list, brackets = true)
       list.nil? || list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
     end
