@@ -1,10 +1,33 @@
 module YARD
   module Handlers
     module Ruby
+      # To implement a custom handler matcher, subclass this class and implement
+      # {#matches?} to return whether a node matches the handler.
+      # 
+      # @example A Custom Handler Matcher Extension
+      #   # Implements a handler that checks for a specific string
+      #   # in the node's source.
+      #   class MyExtension < HandlesExtension
+      #     def matches?(node) node.source.include?(name) end
+      #   end
+      # 
+      #   # This handler will handle any node where the source includes 'foo'
+      #   class MyHandler < Handlers::Ruby::Base
+      #     handles MyExtension.new('foo') 
+      #   end
       class HandlesExtension
+        # Creates a new extension with a specific matcher value +name+
+        # @param [Object] name the matcher value to check against {#matches?}
         def initialize(name) @name = name end
+          
+        # Tests if the node matches the handler
+        # @param [Parser::Ruby::AstNode] node a Ruby node
+        # @return [Boolean] whether the +node+ matches the handler
         def matches?(node) raise NotImplementedError end
+          
         protected
+        
+        # @return [String] the extension matcher value
         attr_reader :name
       end
       
