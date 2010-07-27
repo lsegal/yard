@@ -40,6 +40,8 @@ module YARD
         class << self
           include Parser::Ruby
           
+          # @group Matching Statements
+          
           # Matcher for handling any type of method call. Method calls can
           # be expressed by many {AstNode} types depending on the syntax
           # with which it is called, so YARD allows you to use this matcher
@@ -78,6 +80,8 @@ module YARD
             TestNodeWrapper.new(type.to_s + "?")
           end
           
+          # @group Testing for a Handler
+          
           # @return [Boolean] whether or not an {AstNode} object should be
           #   handled by this handler
           def handles?(node)
@@ -99,6 +103,8 @@ module YARD
         end
 
         include Parser::Ruby
+        
+        # @group Parsing an Inner Block
         
         def parse_block(inner_node, opts = {})
           push_state(opts) do
