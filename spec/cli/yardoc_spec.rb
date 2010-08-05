@@ -21,7 +21,7 @@ describe YARD::CLI::Yardoc do
     end
     
     it "should use cache by default" do
-      @yardoc.use_cache.should == true
+      @yardoc.use_cache.should == false
     end
     
     it "print statistics by default" do

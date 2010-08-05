@@ -29,7 +29,7 @@ module YARD
           end
         end.compact
         
-        return if registry.count != 2
+        return if registry.size != 2
 
         [   ["Added objects", registry[1] - registry[0]],
             ["Removed objects", registry[0] - registry[1]]].each do |name, objects|

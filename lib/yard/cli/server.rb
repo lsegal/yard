@@ -44,7 +44,8 @@ module YARD
       end
       
       def add_libraries(args)
-        args.each_slice(2) do |library, yardoc|
+        (0...args.size).step(2) do |index|
+          library, yardoc = args[index], args[index + 1]
           yardoc ||= '.yardoc'
           if File.exist?(yardoc)
             libraries[library] ||= []

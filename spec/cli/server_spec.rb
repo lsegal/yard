@@ -11,6 +11,10 @@ describe YARD::CLI::Server do
     @cli.stub!(:adapter).and_return(@adapter)
   end
   
+  def rack_required
+    begin; require 'rack'; rescue LoadError; pending "rack required for this test" end
+  end
+  
   def run(*args)
     if @libraries.empty?
       library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, '.yardoc')
@@ -83,11 +87,13 @@ describe YARD::CLI::Server do
   end
   
   it "should accept -a rack to create Rack adapter" do
+    rack_required
     @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
     run '-a', 'rack'
   end
   
   it "should default to Rack adapter if exists on system" do
+    rack_required
     @cli.unstub(:adapter)
     @cli.should_receive(:require).with('rubygems').and_return(false)
     @cli.should_receive(:require).with('rack').and_return(true)

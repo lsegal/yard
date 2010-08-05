@@ -140,15 +140,17 @@ module YARD
       # @return [void]
       def add_gem_paths
         require 'rubygems'
+        gem_paths = []
         Gem.source_index.find_name('').each do |spec|
           if yfile = Registry.yardoc_file_for_gem(spec.name)
             if spec.name =~ /^yard-doc-/
-              @search_paths.unshift(yfile)
+              gem_paths.unshift(yfile)
             else
-              @search_paths.push(yfile)
+              gem_paths.push(yfile)
             end
           end
         end
+        @search_paths.push(gem_paths)
       rescue LoadError
       end
       

@@ -132,7 +132,7 @@ eof
       File.should_receive(:directory?).with('gem2.gem/.yardoc').and_return(false)
       File.should_receive(:directory?).with('gem1').and_return(false)
       File.should_receive(:directory?).with('gem2.gem').and_return(false)
-      File.should_receive(:directory?).at_least(1).times
+      File.should_receive(:directory?).any_number_of_times
       File.should_receive(:exist?).with('gem1.gem').and_return(true)
       File.should_receive(:exist?).with('gem2.gem').and_return(true)
       File.should_receive(:open).with('gem1.gem', 'rb').and_yield(iomock)
@@ -149,7 +149,7 @@ eof
       File.should_receive(:directory?).with('gem2.gem/.yardoc').and_return(false)
       File.should_receive(:directory?).with('gem1').and_return(false)
       File.should_receive(:directory?).with('gem2.gem').and_return(false)
-      File.should_receive(:directory?).at_least(1).times
+      File.should_receive(:directory?).any_number_of_times
       File.should_receive(:exist?).with('gem1.gem').and_return(false)
       File.should_receive(:exist?).with('gem2.gem').and_return(false)
       @diff.should_receive(:open).with('http://rubygems.org/downloads/gem1.gem').and_yield(iomock)
