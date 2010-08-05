@@ -85,16 +85,12 @@ module YARD
     # This directory is also used as a cache for any future calls to +yardoc+
     # so as to process only the files which have changed since the last call.
     # 
-    # Because Yardoc uses the cache in subsequent calls to +yardoc+, methods
+    # When Yardoc uses the cache in subsequent calls to +yardoc+, methods
     # or classes that have been deleted from source since the last parsing
     # will not be erased from the cache (YARD never deletes objects). In such
-    # a case, you should pass +--no-cache+ to wipe the cache and do a clean
-    # parsing of the source tree.
-    # 
-    # Note that since 0.6.0, Yardoc will default to using the existing +.yardoc+
-    # directory as a cache. In previous versions, the cache would only be used
-    # if +-c+ was passed. To avoid using the cached +.yardoc+ directory in 0.6.0
-    # and on, pass +--no-cache+ in the command line.
+    # a case, you should wipe the cache and do a clean parsing of the source tree.
+    # You can do this by deleting the +.yardoc+ directory manually, or running
+    # Yardoc without +--cache+
     # 
     # @since 0.2.1
     # @see Verifier
@@ -170,7 +166,7 @@ module YARD
         @excluded = []
         @files = []
         @hidden_tags = []
-        @use_cache = true
+        @use_cache = false
         @use_yardopts_file = true
         @use_document_file = true
         @generate = true
@@ -405,7 +401,7 @@ module YARD
         end
 
         opts.on('-c', '--use-cache [FILE]', 
-                "Use the cached .yardoc db to generate documentation. (this is default)") do |file|
+                "Use the cached .yardoc db to generate documentation. (defaults to no cache)") do |file|
           YARD::Registry.yardoc_file = file if file
           self.use_cache = true
         end
