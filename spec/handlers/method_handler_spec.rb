@@ -122,4 +122,9 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     meth.tag(:param).name.should == "opts"
     meth.tag(:param).types.should == ["Hash"]
   end
+  
+  it "should raise an undocumentable error when a method is defined on an object instance" do
+    undoc_error "error = Foo; def error.at(foo) end"
+    Registry.at('error').should be_nil
+  end
 end

@@ -6,8 +6,11 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     nobj = namespace
     mscope = scope
     if statement.type == :defs
+      if statement[0][0].type == :ident
+        raise YARD::Parser::UndocumentableError, 'method defined on object instance'
+      end
       meth = statement[2][0]
-      nobj = P(namespace, statement[0].source) unless statement[0].source == "self"
+      nobj = P(namespace, statement[0].source) if statement[0][0].type == :const
       args = format_args(statement[3])
       blk = statement[4]
       mscope = :class

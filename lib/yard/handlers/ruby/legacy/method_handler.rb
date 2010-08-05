@@ -14,11 +14,14 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     else
       raise YARD::Parser::UndocumentableError, "method: invalid name"
     end
-    
+
     # Class method if prefixed by self(::|.) or Module(::|.)
     if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
-      mscope, meth = :class, $1
-      nobj = P(namespace, $`) unless $` == "self"
+      mscope, meth, prefix = :class, $1, $`
+      if prefix =~ /^[a-z]/ && prefix != "self"
+        raise YARD::Parser::UndocumentableError, 'method defined on object instance'
+      end
+      nobj = P(namespace, prefix) unless prefix == "self"
     end
     
     obj = register MethodObject.new(nobj, meth, mscope) do |o| 
