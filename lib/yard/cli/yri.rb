@@ -13,6 +13,16 @@ module YARD
       # @since 0.5.1
       SEARCH_PATHS_FILE = File.expand_path('~/.yard/yri_search_paths')
       
+      # Default search paths that should be loaded dynamically into YRI. These paths
+      # take precedence over all other paths ({SEARCH_PATHS_FILE} and RubyGems
+      # paths). To add a path, call: 
+      # 
+      #   DEFAULT_SEARCH_PATHS.push("/path/to/.yardoc")
+      # 
+      # @return [Array<String>] a list of extra search paths
+      # @since 0.6.0
+      DEFAULT_SEARCH_PATHS = []
+      
       # Helper method to run the utility on an instance.
       # @see #run
       def self.run(*args) new.run(*args) end
@@ -145,6 +155,7 @@ module YARD
       # Adds paths in {SEARCH_PATHS_FILE}
       # @since 0.5.1
       def add_default_paths
+        @search_paths.push(*DEFAULT_SEARCH_PATHS)
         return unless File.file?(SEARCH_PATHS_FILE)
         paths = File.readlines(SEARCH_PATHS_FILE).map {|l| l.strip }
         @search_paths.push(*paths)

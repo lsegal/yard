@@ -50,5 +50,17 @@ describe YARD::CLI::Yardoc do
       spaths.should include('line1')
       spaths.should include('line2')
     end
+    
+    it "should use DEFAULT_SEARCH_PATHS prior to other paths" do
+      YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.push('foo', 'bar')
+      path = %r{/\.yard/yri_search_paths$}
+      File.should_receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      File.should_receive(:file?).with(path).and_return(true)
+      File.should_receive(:readlines).with(path).and_return(%w(line1 line2))
+      @yri = YARD::CLI::YRI.new
+      spaths = @yri.instance_variable_get("@search_paths")
+      spaths[0,4].should == %w(foo bar line1 line2)
+      YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
+    end
   end
 end
