@@ -154,8 +154,14 @@ function generateTOC() {
     show = true;
     var thisTag = parseInt(this.tagName[1]);
     if (this.id.length == 0) this.id = "__toc__section" + (counter++);
-    if (thisTag > lastTag) { var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; }
-    if (thisTag < lastTag) { toc = toc.parent(); }
+    if (thisTag > lastTag) { 
+      for (var i = 0; i < thisTag - lastTag; i++) { 
+        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; 
+      } 
+    }
+    if (thisTag < lastTag) { 
+      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent(); 
+    }
     toc.append('<li><a href="#' + this.id + '">' + this.innerText + '</a></li>');
     lastTag = thisTag;
   });
