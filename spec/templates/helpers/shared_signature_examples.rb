@@ -58,6 +58,15 @@ shared_examples_for "signature" do
     eof
     signature(Registry.at('#foo')).should == @results[:type_nil]
   end
+  
+  it "should show 'Type?' if return types are [Type, nil, nil] (extra nil)" do
+    YARD.parse_string <<-'eof'
+      # @return [Type, nil]
+      # @return [nil]
+      def foo; end
+    eof
+    signature(Registry.at('#foo')).should == @results[:type_nil]
+  end
 
   it "should show 'Type+' if return types are [Type, Array<Type>]" do
     YARD.parse_string <<-'eof'

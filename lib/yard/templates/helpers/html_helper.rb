@@ -355,7 +355,7 @@ module YARD
 
         type = options[:default_return] || ""
         if meth.tag(:return) && meth.tag(:return).types
-          types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten
+          types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
           first = link ? h(types.first) : format_types([types.first], false)
           if types.size == 2 && types.last == 'nil'
             type = first + '<sup>?</sup>'

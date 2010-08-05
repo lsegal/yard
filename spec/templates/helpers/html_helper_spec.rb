@@ -329,7 +329,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it_should_behave_like "signature"
   end
-  
+
   describe '#html_syntax_highlight' do
     before do
       stub!(:options).and_return(:no_highlight => false)
