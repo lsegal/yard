@@ -90,7 +90,7 @@ module YARD
     # will not be erased from the cache (YARD never deletes objects). In such
     # a case, you should wipe the cache and do a clean parsing of the source tree.
     # You can do this by deleting the +.yardoc+ directory manually, or running
-    # Yardoc without +--cache+
+    # Yardoc without +--use-cache+ (+-c+).
     # 
     # @since 0.2.1
     # @see Verifier
