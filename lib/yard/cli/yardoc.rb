@@ -174,6 +174,8 @@ module YARD
         @statistics = true
         @list = false
         @save_yardoc = true
+        
+        Encoding.default_external, Encoding.default_internal = 'utf-8', 'utf-8'
       end
       
       def description

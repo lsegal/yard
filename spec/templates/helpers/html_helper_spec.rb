@@ -98,7 +98,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
   
   describe '#htmlify' do
     it "should not use hard breaks for textile markup (RedCloth specific)" do
+      begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
       htmlify("A\nB", :textile).should_not include("<br")
+    end
+    
+    it "should handle various encodings" do
+      Encoding.default_internal = 'utf-8'
+      htmlify("\xB0\xB1", :text)
+      # TODO: add more encoding tests
     end
   end
   
