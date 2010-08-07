@@ -260,6 +260,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
       }
     end
     
+    it "should ignore {links} that begin with |...|" do
+      resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
+    end
+    
     it "should warn about missing reference at right file location for object" do
       YARD.parse_string <<-eof
         # Comments here

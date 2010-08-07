@@ -173,13 +173,14 @@ module YARD
       def resolve_links(text)
         code_tags = 0
         text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
-          closed, tag, name, title = $1, $2, $3, $4
+          closed, tag, name, title, match = $1, $2, $3, $4, $&
           if tag
             code_tags += (closed ? -1 : 1)
             next str
           end
           next str unless code_tags == 0
           
+          next(match) if name[0,1] == '|'
           if object.is_a?(String)
             object
           else
