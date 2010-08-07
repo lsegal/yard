@@ -103,7 +103,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should handle various encodings" do
-      Encoding.default_internal = 'utf-8'
+      Encoding.default_internal = 'utf-8' if defined?(Encoding)
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
     end

@@ -42,7 +42,7 @@ module YARD
         return text unless markup
         load_markup_provider(markup)
         html = send("html_markup_#{markup}", text)
-        html = html.encode(:invalid => :replace, :replace => '?') if RUBY19
+        html = html.encode(:invalid => :replace, :replace => '?') if html.respond_to?(:encode)
         html = resolve_links(html)
         html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           str = $1
