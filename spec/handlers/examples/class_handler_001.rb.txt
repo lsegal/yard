@@ -83,6 +83,10 @@ end
 class Zebra
 end
 
+# A simple struct
+class RegularStruct < Struct; end
+class RegularStruct2 < ::Struct; end
+
 class Point < Struct.new(:x, :y, :z)
 end
 

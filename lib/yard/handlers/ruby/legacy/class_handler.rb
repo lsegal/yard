@@ -74,10 +74,12 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   end
   
   def struct_superclass_name(superclass)
-    paramstring = superclass.match(/\A(Struct)\.new\((.*?)\)/)[2].split(",")
-    first = paramstring.first.strip
-    if first[0,1] =~ /['"]/ && first[-1,1] =~ /['"]/ && first !~ /\#\{/
-      return "Struct::#{first[1..-2]}"
+    if match = superclass.match(/\A(Struct)\.new\((.*?)\)/)
+      paramstring = match[2].split(",")
+      first = paramstring.first.strip
+      if first[0,1] =~ /['"]/ && first[-1,1] =~ /['"]/ && first !~ /\#\{/
+        return "Struct::#{first[1..-2]}"
+      end
     end
     "Struct"
   end

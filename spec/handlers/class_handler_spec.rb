@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   before(:all) { parse_file :class_handler_001, __FILE__ }
@@ -230,4 +230,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     Registry.at("SemiDoccedStruct#fourth=").docstring.should == "sets the proc that writes stuff"
   end
     
+  it "should inherit from a regular struct" do
+    Registry.at('RegularStruct').superclass.should == P(:Struct)
+    Registry.at('RegularStruct2').superclass.should == P(:Struct)
+  end
 end

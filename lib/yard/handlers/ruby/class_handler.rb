@@ -76,15 +76,17 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   end
   
   def struct_superclass_name(superclass)
-    first = superclass.parameters.first
-    if first.type == :string_literal && first[0].type == :string_content && first[0].size == 1
-      return "Struct::#{first[0][0][0]}"
+    if superclass.call?
+      first = superclass.parameters.first
+      if first.type == :string_literal && first[0].type == :string_content && first[0].size == 1
+        return "Struct::#{first[0][0][0]}"
+      end
     end
     "Struct"
   end
   
   def parse_struct_superclass(klass, superclass)
-    return unless superclass.parameters
+    return unless superclass.call? && superclass.parameters
     members = extract_parameters(superclass)
     create_attributes(klass, members)
   end
