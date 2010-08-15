@@ -9,6 +9,7 @@ module YARD
     # @since 0.6.0
     class Diff < Command
       def initialize
+        require_rubygems
         super
         @list_all = false
         log.show_backtraces = true
@@ -132,6 +133,14 @@ module YARD
           end
         end
         tmpdir
+      end
+
+      def require_rubygems
+        require 'rubygems'
+        require 'rubygems/package'
+      rescue LoadError => e
+        log.error "Missing RubyGems, cannot run this command."
+        raise(e)
       end
       
       def cleanup(gemfile)
