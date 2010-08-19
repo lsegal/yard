@@ -223,7 +223,7 @@ describe YARD::Registry do
     it "should iterate over .all" do
       items = []
       Registry.each {|x| items << x.path }
-      items.should == ['#a', '#b', '#c']
+      items.sort.should == ['#a', '#b', '#c']
     end
     
     it "should include Enumerable and allow for find, select" do
