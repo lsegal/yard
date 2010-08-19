@@ -73,13 +73,13 @@ describe YARD::Registry do
     end
   end
   
-  describe '#root' do
+  describe '.root' do
     it "should have an empty path for root" do
       Registry.root.path.should == ""
     end
   end
   
-  describe '#resolve' do
+  describe '.resolve' do
     it "should resolve any existing namespace" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ModuleObject.new(o1, :B)
@@ -139,18 +139,18 @@ describe YARD::Registry do
     end
     
     it "should only check 'Path' in lookup on root namespace" do
-      Registry.instance.should_receive(:at).once.with('Test').and_return(true)
+      Registry.should_receive(:at).once.with('Test').and_return(true)
       Registry.resolve(Registry.root, "Test")
     end
     
     it "should not perform lookup by joining namespace and name without separator" do
       yard = ClassObject.new(:root, :YARD)
-      Registry.instance.should_not_receive(:at).with('YARDB')
+      Registry.should_not_receive(:at).with('YARDB')
       Registry.resolve(yard, 'B')
     end
   end
   
-  describe '#all' do
+  describe '.all' do
     it "should return objects of types specified by arguments" do
       ModuleObject.new(:root, :A)
       o1 = ClassObject.new(:root, :B)
@@ -167,7 +167,7 @@ describe YARD::Registry do
       r.should include(o1, o2)
     end
   
-    it "should allow #all to omit list" do
+    it "should allow .all to omit list" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ClassObject.new(:root, :B)
       r = Registry.all
@@ -175,7 +175,7 @@ describe YARD::Registry do
     end
   end
   
-  describe '#paths' do
+  describe '.paths' do
     it "should return all object paths" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ClassObject.new(:root, :B)
@@ -183,7 +183,7 @@ describe YARD::Registry do
     end
   end
   
-  describe '#load_yardoc' do
+  describe '.load_yardoc' do
     it "should delegate load to RegistryStore" do
       store = RegistryStore.new
       store.should_receive(:load).with('foo')
@@ -193,7 +193,7 @@ describe YARD::Registry do
     end
     
     it "should return itself" do
-      Registry.load_yardoc.should be_a(Registry)
+      Registry.load_yardoc.should == Registry
     end
     
     it "should maintain hash key equality on loaded objects" do
@@ -206,10 +206,34 @@ describe YARD::Registry do
   end
   
   ['load', 'load_all', 'load!'].each do |meth|
-    describe('#' + meth) do
+    describe('.' + meth) do
       it "should return itself" do
-        Registry.send(meth).should be_a(Registry)
+        Registry.send(meth).should == Registry
       end
+    end
+  end
+  
+  describe '.each' do
+    before do 
+      YARD.parse_string "def a; end; def b; end; def c; end"
+    end
+    
+    after { Registry.clear }
+    
+    it "should iterate over .all" do
+      items = []
+      Registry.each {|x| items << x.path }
+      items.should == ['#a', '#b', '#c']
+    end
+    
+    it "should include Enumerable and allow for find, select" do
+      Registry.find {|x| x.path == "#a" }.should be_a(CodeObjects::MethodObject)
+    end
+  end
+  
+  describe '.instance' do
+    it "should return itself" do
+      Registry.instance.should == Registry
     end
   end
 end

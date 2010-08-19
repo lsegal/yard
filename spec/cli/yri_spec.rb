@@ -7,7 +7,7 @@ end
 describe YARD::CLI::Yardoc do
   before do
     @yri = YARD::CLI::YRI.new
-    Registry.instance.stub!(:load)
+    Registry.stub!(:load)
   end
   
   describe '#find_object' do
