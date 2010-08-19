@@ -107,7 +107,7 @@ module YARD
     #   into the registry.
     # @param [Boolean] reparse if reparse is false and a yardoc file already
     #   exists, any files passed in will be ignored.
-    # @return [Boolean] true if the registry was successfully loaded 
+    # @return [Registry] the registry object (for chaining)
     # @raise [ArgumentError] if files is not a String or Array
     def load(files = [], reparse = false)
       if files.is_a?(Array)
@@ -118,35 +118,36 @@ module YARD
           YARD.parse(files)
           save if @store.keys.size > size
         end
-        true
       elsif files.is_a?(String)
         load_yardoc(files)
-        true
       else
         raise ArgumentError, "Must take a list of files to parse or the .yardoc file to load."
       end
+      self
     end
     
     # Loads a yardoc file directly
     # 
     # @param [String] file the yardoc file to load.
-    # @return [void] 
+    # @return [Registry] the registry object (for chaining)
     def load_yardoc(file = yardoc_file)
       clear
       @store.load(file)
+      self
     end
     
     # Loads a yardoc file and forces all objects cached on disk into
     # memory. Equivalent to calling {#load_yardoc} followed by {#load_all}
     # 
     # @param [String] file the yardoc file to load
-    # @return [void]
+    # @return [Registry] the registry object (for chaining)
     # @see #load_yardoc
     # @see #load_all
     # @since 0.5.1
     def load!(file = yardoc_file)
       clear
       @store.load!(file)
+      self
     end
     
     # Forces all objects cached on disk into memory
@@ -156,10 +157,11 @@ module YARD
     #   Registry.all.count #=> 0
     #   Registry.load_all
     #   Registry.all.count #=> 17
-    # @return [void]
+    # @return [Registry] the registry object (for chaining)
     # @since 0.5.1
     def load_all
       @store.load_all
+      self
     end
     
     # @group Saving and Deleting Data from Disk

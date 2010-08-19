@@ -192,12 +192,24 @@ describe YARD::Registry do
       Registry.load_yardoc
     end
     
+    it "should return itself" do
+      Registry.load_yardoc.should be_a(Registry)
+    end
+    
     it "should maintain hash key equality on loaded objects" do
       Registry.clear
       Registry.load!(File.dirname(__FILE__) + '/serializers/data/serialized_yardoc')
       baz = Registry.at('Foo#baz')
       Registry.at('Foo').aliases.keys.should include(baz)
       Registry.at('Foo').aliases.has_key?(baz).should == true
+    end
+  end
+  
+  ['load', 'load_all', 'load!'].each do |meth|
+    describe('#' + meth) do
+      it "should return itself" do
+        Registry.send(meth).should be_a(Registry)
+      end
     end
   end
 end
