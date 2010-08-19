@@ -53,7 +53,7 @@ module YARD
       # 
       # @abstract This method should return whether the endpoint already exists.
       #   For instance, a file system serializer would check if the file exists
-      #   on disk. You will most likely use {#basepath} and {#serialized_path} to 
+      #   on disk. You will most likely use +#basepath+ and {#serialized_path} to 
       #   get the endpoint's location.
       # @param [CodeObjects::Base] object the object to check existence of
       # @return [Boolean] whether the endpoint exists.

@@ -9,7 +9,7 @@ module YARD
         # For tokens like TkDEF, TkCLASS, etc.
         include YARD::Parser::Ruby::Legacy::RubyToken
         
-        # @return [Boolean] whether or not a {Statement} object should be handled
+        # @return [Boolean] whether or not a {Parser::Ruby::Legacy::Statement} object should be handled
         #   by this handler.
         def self.handles?(stmt)
           handlers.any? do |a_handler|

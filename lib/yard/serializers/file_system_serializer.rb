@@ -30,7 +30,7 @@ module YARD
         @extension = (options.has_key?(:extension) ? options[:extension] : 'html').to_s
       end
       
-      # Serializes object with data to its serialized path (prefixed by the {#basepath}).
+      # Serializes object with data to its serialized path (prefixed by the +#basepath+).
       # 
       # @return [String] the written data (for chaining)
       def serialize(object, data)
