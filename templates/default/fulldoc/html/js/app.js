@@ -153,7 +153,11 @@ function generateTOC() {
     if (this.id == "filecontents") return;
     show = true;
     var thisTag = parseInt(this.tagName[1]);
-    if (this.id.length == 0) this.id = "__toc__section" + (counter++);
+    if (this.id.length == 0) {
+      var proposedId = $(this).text().replace(/[^a-z]/ig, '_');
+      if ($('#' + proposedId).length > 0) proposedId += counter++;
+      this.id = proposedId;
+    }
     if (thisTag > lastTag) { 
       for (var i = 0; i < thisTag - lastTag; i++) { 
         var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; 
