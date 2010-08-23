@@ -17,6 +17,7 @@ module YARD
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
+    @yardoc_file = DEFAULT_YARDOC_FILE
 
     extend Enumerable
 
@@ -57,7 +58,6 @@ module YARD
       # @return [String] the yardoc filename
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
-      @yardoc_file = DEFAULT_YARDOC_FILE
     
       # @group Loading Data from Disk
     
@@ -356,7 +356,7 @@ module YARD
         end
       end
     end
+    
+    clear
   end
-  
-  Registry.clear
 end
