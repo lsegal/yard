@@ -4,7 +4,7 @@ function fullListSearch() {
     if (value == "") {
       $('#full_list').removeClass('insearch');
       $('#full_list li').each(function() {
-        var link = $(this).children('a:last');
+        var link = $(this).find('.object_link a');
         link.text(link.text()); 
       });
       if (clicked) {
@@ -17,7 +17,7 @@ function fullListSearch() {
     else {
       $('#full_list').addClass('insearch');
       $('#full_list li').each(function() {
-        var link = $(this).children('a:last');
+        var link = $(this).find('.object_link a');
         var text = link.text();
         if (text.toLowerCase().indexOf(value) == -1) {
           $(this).removeClass('found');
