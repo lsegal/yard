@@ -7,7 +7,7 @@ module YARD
         return @methods[filename] if @methods[filename]
         @methods[filename] = name = "_erb_cache_#{@methods.size}"
         erb = yield.src
-        encoding = erb[/\A(#coding:.*\r?\n)/, 1] || ''
+        encoding = erb[/\A(#coding[:=].*\r?\n)/, 1] || ''
         module_eval "#{encoding}def #{name}; #{erb}; end", filename
         
         name

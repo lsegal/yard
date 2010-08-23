@@ -236,7 +236,7 @@ module YARD
       # @since 0.5.3
       def convert_encoding(content)
         return content if RUBY18
-        if content =~ /\A\s*#.*coding:\s*(\S+)\s*$/
+        if content =~ /\A\s*#.*coding[:=]\s*(\S+)\s*$/
           content.force_encoding($1)
         else
           content
