@@ -162,7 +162,7 @@ function generateTOC() {
     if (thisTag < lastTag) { 
       for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent(); 
     }
-    toc.append('<li><a href="#' + this.id + '">' + this.innerText + '</a></li>');
+    toc.append('<li><a href="#' + this.id + '">' + $(this).text() + '</a></li>');
     lastTag = thisTag;
   });
   if (!show) return;
