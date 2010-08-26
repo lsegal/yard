@@ -24,8 +24,10 @@ module YARD
         opts.separator ""
         opts.separator "Other options:"
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          if !require(file.gsub(/\.rb$/, ''))
-            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
+          begin
+            require(file.gsub(/\.rb$/, ''))
+          rescue LoadError
+            log.error "The file `#{file}' could not be loaded, check the path and try again."
             exit
           end
         end
