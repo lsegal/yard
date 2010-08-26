@@ -51,7 +51,7 @@ module YARD
           Dir.chdir(library.source_path)
           yardoc = CLI::Yardoc.new
           if incremental
-            yardoc.run('-n', '--no-stats')
+            yardoc.run('-c', '-n', '--no-stats')
           else
             yardoc.parse_arguments
           end
