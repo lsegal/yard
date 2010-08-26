@@ -12,6 +12,25 @@ module YARD
     # 
     # @see Handlers::Base
     class Processor
+
+      class << self
+        # Registeres a new namespace for handlers of the given type.
+        # @since 0.6.0
+        def register_handler_namespace(type, ns)
+          namespace_for_handler[type] = ns
+        end
+
+        # @return [Hash] a list of registered parser type extensions
+        # @private
+        # @since 0.6.0
+        attr_reader :namespace_for_handler
+        undef namespace_for_handler
+        def namespace_for_handler; @@parser_type_extensions ||= {} end
+      end
+
+      register_handler_namespace :ruby, Ruby
+      register_handler_namespace :ruby18, Ruby::Legacy
+
       # @return [String] the filename
       attr_accessor :file
 
@@ -113,10 +132,7 @@ module YARD
       # @return [Module] the module containing the handlers depending on
       #   {#parser_type}.
       def handler_base_namespace
-        case parser_type
-        when :ruby;   Ruby
-        when :ruby18; Ruby::Legacy
-        end
+        self.class.namespace_for_handler[parser_type]
       end
       
       # Loads handlers from {#handler_base_namespace}. This ensures that
