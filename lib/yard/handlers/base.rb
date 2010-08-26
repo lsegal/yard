@@ -305,38 +305,33 @@ module YARD
       # {#namespace} and {#scope}.
       # 
       # @param [Proc] block the block to execute with specific state
-      # @option opts [CodeObjects::NamespaceObject] :namespace (nil) 
+      # @option opts [CodeObjects::NamespaceObject] :namespace (value of #namespace) 
       #   the namespace object that {#namespace} will be equal to for the
       #   duration of the block. 
       # @option opts [Symbol] :scope (:instance) 
       #   the scope for the duration of the block.
-      # @option opts [CodeObjects::Base] :owner (nil) 
+      # @option opts [CodeObjects::Base] :owner (value of #owner) 
       #   the owner object (method) for the duration of the block
       # @yield a block to execute with the given state values.
       def push_state(opts = {}, &block)
         opts = {
-          :namespace => nil,
+          :namespace => namespace,
           :scope => :instance,
-          :owner => nil
+          :owner => owner
         }.update(opts)
 
-        if opts[:namespace]
-          ns, vis, sc = namespace, visibility, scope
-          self.namespace = opts[:namespace]
-          self.visibility = :public
-          self.scope = opts[:scope]
-        end
+        ns, vis, sc, oo = namespace, visibility, scope, owner
+        self.namespace = opts[:namespace]
+        self.visibility = :public
+        self.scope = opts[:scope]
+        self.owner = opts[:owner] ? opts[:owner] : namespace
 
-        oldowner, self.owner = self.owner, opts[:owner] ? opts[:owner] : namespace
         yield
-        self.owner = oldowner
 
-        if opts[:namespace]
-          self.namespace = ns
-          self.owner = namespace
-          self.visibility = vis
-          self.scope = sc
-        end
+        self.namespace = ns
+        self.visibility = vis
+        self.scope = sc
+        self.owner = oo
       end
       
       # Do some post processing on a list of code objects. 

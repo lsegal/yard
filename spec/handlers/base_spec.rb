@@ -57,4 +57,55 @@ describe YARD::Handlers::Base do
       Registry.at('A#bar').tag(:author).should be_nil
     end
   end
+  
+  describe '#push_state' do
+    def process(klass)
+      state = OpenStruct.new(:namespace => "ROOT", :scope => :instance, :owner => "ROOT")
+      klass.new(state, nil).process
+    end
+    
+    it "should push and return all old state info after block" do
+      class PushStateHandler1 < Handlers::Base
+        def process
+          push_state(:namespace => "FOO", :scope => :class, :owner => "BAR") do
+            namespace.should == "FOO"
+            scope.should == :class
+            owner.should == "BAR"
+          end
+          namespace.should == "ROOT"
+          owner.should == "ROOT"
+          scope.should == :instance
+        end
+      end
+      process PushStateHandler1
+    end
+    
+    it "should allow owner to be pushed individually" do
+      class PushStateHandler2 < Handlers::Base
+        def process
+          push_state(:owner => "BAR") do
+            namespace.should == "ROOT"
+            scope.should == :instance
+            owner.should == "BAR"
+          end
+          owner.should == "ROOT"
+        end
+      end
+      process PushStateHandler2
+    end
+    
+    it "should allow scope to be pushed individually" do
+      class PushStateHandler3 < Handlers::Base
+        def process
+          push_state(:scope => :foo) do
+            namespace.should == "ROOT"
+            scope.should == :foo
+            owner.should == "ROOT"
+          end
+          scope.should == :instance
+        end
+      end
+      process PushStateHandler3
+    end
+  end
 end
