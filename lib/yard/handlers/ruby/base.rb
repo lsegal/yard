@@ -63,7 +63,7 @@ module YARD
         class << self
           include Parser::Ruby
           
-          # @group Matching Statements
+          # @group Statement Matcher Extensions
           
           # Matcher for handling any type of method call. Method calls can
           # be expressed by many {AstNode} types depending on the syntax

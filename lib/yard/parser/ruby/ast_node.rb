@@ -38,11 +38,50 @@ module YARD
       # list, like Strings or Symbols representing names. To return only 
       # the AstNode children of the node, use {#children}.
       class AstNode < Array
-        attr_accessor :type, :parent, :docstring, :docstring_range, :source, :group
+        attr_accessor :docstring, :docstring_range, :source, :group
         attr_writer :source_range, :line_range, :file, :full_source
         alias comments docstring
         alias comments_range docstring_range
         alias to_s source
+        
+        # @return [Symbol] the node's unique symbolic type
+        attr_accessor :type
+        
+        # @return [AstNode, nil] the node's parent or nil if it is a root node.
+        attr_accessor :parent
+
+        # @return [Range] the character range in {#full_source} represented
+        #   by the node
+        def source_range
+          reset_line_info unless @source_range
+          @source_range
+        end
+        
+        # @return [Range] the line range in {#full_source} represented
+        #   by the node
+        def line_range
+          reset_line_info unless @line_range
+          @line_range
+        end
+
+        # @return [String] the filename the node was parsed from
+        def file
+          return parent.file if parent
+          @file
+        end
+
+        # @return [String] the full source that the node was parsed from
+        def full_source
+          return parent.full_source if parent
+          return @full_source if @full_source
+          return IO.read(@file) if file && File.exist?(file)
+        end
+
+        # @return [String] the parse of {#full_source} that the node represents
+        def source
+          return parent.full_source[source_range] if parent
+          full_source
+        end
         
         # List of all known keywords
         # @return [Hash] 
@@ -54,6 +93,8 @@ module YARD
           while: true, while_mod: true, yield: true, yield0: true, zsuper: true,
           unless: true, unless_mod: true, for: true, super: true, return0: true }
         
+        # @group Creating an AstNode
+
         # Finds the node subclass that should be instantiated for a specific
         # node type
         # 
@@ -73,7 +114,7 @@ module YARD
             AstNode
           end
         end
-
+        
         # Creates a new AST node
         # 
         # @param [Symbol] type the type of node being created
@@ -99,44 +140,13 @@ module YARD
         
         # @return [Boolean] whether the node is equal to another by checking 
         #   the list and type
+        # @private
         def ==(ast)
           super && type == ast.type
         end
         
-        # @return [String] the first line of source the node represents
-        def show
-          "\t#{line}: #{first_line}"
-        end
-        
-        # @return [Range] the character range in {#full_source} represented
-        #   by the node
-        def source_range
-          reset_line_info unless @source_range
-          @source_range
-        end
-        
-        # @return [Range] the line range in {#full_source} represented
-        #   by the node
-        def line_range
-          reset_line_info unless @line_range
-          @line_range
-        end
-        
-        # @return [Boolean] whether the node has a {#line_range} set
-        def has_line?
-          @line_range ? true : false
-        end
-        
-        # @return [Fixnum] the starting line number of the node
-        def line
-          line_range && line_range.first
-        end
-        
-        # @return [String] the first line of source represented by the node.
-        def first_line
-          full_source.split(/\r?\n/)[line - 1].strip
-        end
-        
+        # @group Traversing a Node
+    
         # Searches through the node and all descendents and returns the
         # first node with a type matching any of +node_types+, otherwise
         # returns the original node (self).
@@ -166,6 +176,21 @@ module YARD
         def children
           @children ||= select {|e| AstNode === e }
         end
+
+        # Traverses the object and yields each node (including descendents) in order.
+        # 
+        # @yield each descendent node in order
+        # @yieldparam [AstNode] self, or a child/descendent node
+        # @return [void] 
+        def traverse
+          nodes = [self]
+          nodes.each.with_index do |node, index|
+            yield node
+            nodes.insert index+1, *node.children
+          end
+        end
+        
+        # @group Node Meta Types
 
         # @return [Boolean] whether the node is a token
         def token?
@@ -198,25 +223,30 @@ module YARD
           false
         end
 
-        # @return [String] the filename the node was parsed from
-        def file
-          return parent.file if parent
-          @file
+        # @group Getting Line Information
+        
+        # @return [Boolean] whether the node has a {#line_range} set
+        def has_line?
+          @line_range ? true : false
+        end
+        
+        # @return [Fixnum] the starting line number of the node
+        def line
+          line_range && line_range.first
+        end
+        
+        # @return [String] the first line of source represented by the node.
+        def first_line
+          full_source.split(/\r?\n/)[line - 1].strip
         end
 
-        # @return [String] the full source that the node was parsed from
-        def full_source
-          return parent.full_source if parent
-          return @full_source if @full_source
-          return IO.read(@file) if file && File.exist?(file)
+        # @group Printing a Node
+        
+        # @return [String] the first line of source the node represents
+        def show
+          "\t#{line}: #{first_line}"
         end
-
-        # @return [String] the parse of {#full_source} that the node represents
-        def source
-          return parent.full_source[source_range] if parent
-          full_source
-        end
-
+        
         # @return [nil] pretty prints the node
         def pretty_print(q)
           objs = [*self.dup, :__last__]
@@ -257,18 +287,7 @@ module YARD
           's(' + typeinfo + map(&:inspect).join(", ") + ')'
         end
 
-        # Traverses the object and yields each node (including descendents) in order.
-        # 
-        # @yield each descendent node in order
-        # @yieldparam [AstNode] self, or a child/descendent node
-        # @return [void] 
-        def traverse
-          nodes = [self]
-          nodes.each.with_index do |node, index|
-            yield node
-            nodes.insert index+1, *node.children
-          end
-        end
+        # @endgroup
         
         private
 
