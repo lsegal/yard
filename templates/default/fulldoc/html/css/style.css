@@ -248,7 +248,7 @@ li.r2 { background: #fafafa; }
 #content ul.summary li.deprecated a:visited { text-decoration: line-through; font-style: italic; }
 
 #toc { 
-  padding: 20px; padding-right: 30px; border: 1px solid #ddd; float: right; background: #fff; margin-left: 20px; 
+  padding: 20px; padding-right: 30px; border: 1px solid #ddd; float: right; background: #fff; margin-left: 20px; margin-bottom: 20px;
   max-width: 300px;
   -webkit-box-shadow: -2px 2px 6px #bbb;
   -moz-box-shadow: -2px 2px 6px #bbb;
