@@ -247,6 +247,7 @@ module YARD
       # The list of all objects to process. Override this method to change
       # which objects YARD should generate documentation for.
       # 
+      # @deprecated To hide methods use the +@private+ tag instead.
       # @return [Array<CodeObjects::Base>] a list of code objects to process
       def all_objects
         Registry.all(:root, :module, :class)
