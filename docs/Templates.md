@@ -223,8 +223,8 @@ For instance, the first line in `default/class/html/setup.rb` is:
 This includes the 'default/module/html', which means it also includes 'default/module'
 by extension. This allows class to make use of any of module's erb files.
 
-Inserting Sections
-------------------
+Inserting and Traversing Sections
+---------------------------------
 
 The ability to insert sections was mentioned above. The class template, for
 instance, will modify the #init method to insert class specific sections:
@@ -238,10 +238,31 @@ instance, will modify the #init method to insert class specific sections:
     
 Observe how sections has been modified after the super method was called (the
 super method would have been defined in `default/module/setup.rb`). The
-custom method {Array#place} is added by YARD to allow sections to be inserted
-before or after another section by it's given name rather than index. This
-allows the overriding of templates in a way that does not depend on where
-the section is located (since it may have been overriden by another module).
+`sections` object is of the {YARD::Section} class and allows sections to be inserted
+before or after another section using {Array#place} by it's given name rather 
+than index. This allows the overriding of templates in a way that does not
+depend on where the section is located (since it may have been overriden by 
+another module).
+
+You can also use `sections[:name]` to find the first child section named `:name`.
+For instance, with the following sections declaration:
+
+    sections :a, [:b, :c, [:d]]
+    
+You can get to the :d section with:
+
+    sections[:a][:c][:d]
+    
+You can use this to insert a section inside a nested set without using indexed
+access. The following command would result in `[:a, [:b, :c, [:d, :e]]]`:
+
+    sections[:a][:c].place(:e).after(:d)
+    
+There are also two methods, {Insertion#before_any} and {Insertion#after_any},
+which allow you to insert sections before or after the first matching section name
+recursively. The above example could simply be rewritten as:
+
+    sections.place(:e).after_any(:d)
 
 Overriding Templates by Registering a Template Path
 ---------------------------------------------------
