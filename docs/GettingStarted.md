@@ -113,7 +113,7 @@ Symbols:
 List of Tags
 ------------
     
-A list of tags can be found in {file:Tags.md#taglist}
+A list of tags can be found in {file:docs/Tags.md#taglist}
         
 Other Extended Syntax
 ---------------------
@@ -123,7 +123,7 @@ Other Extended Syntax
 To minimize rewriting of documentation and to ease maintenance, a special
 tag syntax is allowed to reference tags from other objects. Doing this allows
 a tag to be added as meta-data for multiple objects. A full example of this
-syntax is found in the {file:Tags.md#reftags Tags} file.
+syntax is found in the {file:docs/Tags.md#reftags Tags} file.
 
 **Inter-Document Links**
 
@@ -152,22 +152,22 @@ Extending YARD
 There are many ways to extend YARD to support non-standard Ruby syntax (DSLs), 
 add new meta-data tags or programmatically access the intermediate metadata
 and documentation from code. An overview of YARD's full architecture can be
-found in the {file:Overview.md} document.
+found in the {file:docs/Overview.md} document.
 
-For information on adding support for Ruby DSLs, see the {file:Handlers.md}
-and {file:Parser.md} architecture documents.
+For information on adding support for Ruby DSLs, see the {file:docs/Handlers.md}
+and {file:docs/Parser.md} architecture documents.
 
-For information on adding extra tags, see {file:Tags.md}.
+For information on adding extra tags, see {file:docs/Tags.md}.
 
 For information on accessing the data YARD stores about your documentation,
-look at the {file:CodeObjects.md} architecture document.
+look at the {file:docs/CodeObjects.md} architecture document.
 
 <a name="templating"></a>
 Templating YARD
 ===============
 
 In many cases you may want to change the style of YARD's templates or add extra
-information after extending it. The {file:Templates.md} architecture
+information after extending it. The {file:docs/Templates.md} architecture
 document covers the basics of how YARD's templating system works.
 
 <a name="plugins"></a>

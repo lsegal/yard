@@ -205,7 +205,7 @@ that existed but were previously omitted from the generated documentation.
 
 There is also a new templating engine (based on the tadpole templating library) 
 to allow for much more user customization. You can read about it in 
-{file:Templates.md}.
+{file:docs/Templates.md}.
 
 yardoc `--query` argument
 -------------------------
@@ -252,7 +252,7 @@ use this tag sparingly, as it is not meant to be an equivalent to RDoc's
 This tag exists so that you can create a query (`--query !@private`) to
 ignore all of these private objects in your documentation. You can also
 use the new `--no-private` switch, which is a shortcut to the afformentioned
-query. You can read more about the new tags in the {file:GettingStarted.md} 
+query. You can read more about the new tags in the {file:docs/GettingStarted.md} 
 guide.
 
 Default rake task is now `rake yard`

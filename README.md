@@ -37,7 +37,7 @@ important information about objects, such as what parameters they take and what 
 they are expected to be, what type a method should return, what exceptions it can 
 raise, if it is deprecated, etc.. It also allows information to be better (and more 
 consistently) organized during the output generation phase. You can find a list
-of tags in the {file:Tags.md#taglist Tags.md} file.
+of tags in the {file:docs/Tags.md#taglist Tags.md} file.
 
 YARD also supports an optional "types" declarations for certain tags. 
 This allows the developer to document type signatures for ruby methods and 
@@ -282,7 +282,7 @@ Changelog
 
 - **June.12.10**: 0.5.6 release
     - Bug fixes for RubyGems plugin, `has_rdoc=false` should now work
-    - New API for registering custom parsers. See {file:WhatsNew.md}
+    - New API for registering custom parsers. See {file:docs/WhatsNew.md}
 
 - **May.22.10**: 0.5.5 release
     - Various bug fixes
@@ -309,7 +309,7 @@ Changelog
     - Added plugin support
     - New `@abstract` and `@private` tags
     - Changed default rake task to `rake yard`
-    - Read about changes in {file:WhatsNew.md}
+    - Read about changes in {file:docs/WhatsNew.md}
 
 - **August.13.09**: 0.2.3.5 release
     - Minor bug fixes.
@@ -338,7 +338,7 @@ Changelog
       RDoc. To take advantage of this plugin, set `has_rdoc = 'yard'` in your
       .gemspec file.
 
-- **Jun.07.09**: 0.2.3 release. See the {file:WhatsNew.md} file for a 
+- **Jun.07.09**: 0.2.3 release. See the {file:docs/WhatsNew.md} file for a 
   list of important new features.
 
 - **Jun.16.08**: 0.2.2 release. This is the largest changset since yard's 

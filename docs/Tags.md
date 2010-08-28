@@ -259,7 +259,7 @@ Programmatic API
 Accessing Tag Information
 -------------------------
 
-Tag metadata is added when a {YARD::Docstring} is added to a {file:CodeObjects.md code object}
+Tag metadata is added when a {YARD::Docstring} is added to a {file:docs/CodeObjects.md code object}
 using the {YARD::CodeObjects::Base#docstring=} attribute. In addition to adding
 conventional comments, tags are parsed and associated with the object. The easiest
 way to access tags on an object is to use the {YARD::CodeObjects::Base#tag} and `#tags`

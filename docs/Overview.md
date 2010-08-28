@@ -30,10 +30,10 @@ This component is made up of four sub-components, each of which have separate
 tasks during the data gathering process (*note: the tag architecture is not*
 *shown in the class diagram*). These sub-components are:
 
-  * {file:Parser.md Parser Architecture}
-  * {file:Handlers.md Handler Architecture}
-  * {file:CodeObjects.md Code Object Architecture}
-  * {file:Tags.md Tag Architecture}
+  * {file:docs/Parser.md Parser Architecture}
+  * {file:docs/Handlers.md Handler Architecture}
+  * {file:docs/CodeObjects.md Code Object Architecture}
+  * {file:docs/Tags.md Tag Architecture}
 
 The parser component reads source files and converts it into a set of statements
 which the handlers then process, creating code objects which in turn create tags 
@@ -57,4 +57,4 @@ Post Processing & Templating System
 This component handles processing of objects from the registry through a templating
 engine that allows output to a variety of formats. Practically speaking, this is
 where templates can be implemented to change the design, output or structure of
-the data. See {file:Templates.md Templates Architecture} for a complete overview.
+the data. See {file:docs/Templates.md Templates Architecture} for a complete overview.
