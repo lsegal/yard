@@ -150,7 +150,7 @@ module YARD
             end
           end
         end
-        @search_paths.push(gem_paths)
+        @search_paths += gem_paths
       rescue LoadError
       end
       
