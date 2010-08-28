@@ -166,6 +166,8 @@ module YARD
         opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
 
         general_options(opts)
+        output_options(opts)
+        tag_options(opts)
         common_options(opts)
         parse_options(opts, args)
         parse_files(*args) unless args.empty?
