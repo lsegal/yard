@@ -146,6 +146,10 @@ module YARD
       # @return [Boolean] whether to print statistics after parsing
       # @since 0.6.0
       attr_accessor :statistics
+      
+      # @return [Array<String>] a list of assets to copy after generation
+      # @since 0.6.0
+      attr_accessor :assets
         
       # Creates a new instance of the commandline utility
       def initialize
@@ -163,6 +167,7 @@ module YARD
           :verifier => Verifier.new
         )
         @visibilities = [:public]
+        @assets = {}
         @excluded = []
         @files = []
         @hidden_tags = []
@@ -202,6 +207,7 @@ module YARD
         
         if generate
           run_generate(checksums)
+          copy_assets
         elsif list
           print_list
         end
@@ -286,6 +292,19 @@ module YARD
           end
         end
         Templates::Engine.generate(objects, options)
+      end
+      
+      # Copies any assets to the output directory
+      # @return [void]
+      # @since 0.6.0
+      def copy_assets
+        return unless options[:serializer]
+        outpath = options[:serializer].basepath
+        assets.each do |from, to|
+          to = File.join(outpath, to)
+          log.debug "Copying asset '#{from}' to '#{to}'"
+          FileUtils.cp_r(from, to)
+        end
       end
 
       # Prints a list of all objects
@@ -495,6 +514,22 @@ module YARD
           add_extra_files(*files.split(","))
         end
 
+        opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output directory after generating') do |asset|
+          re = /^(?:\.\.\/|\/)/
+          from, to = *asset.split(':').map {|f| File.cleanpath(f) }
+          to ||= from
+          if from =~ re || to =~ re
+            log.warn "Invalid file '#{asset}'"
+          else
+            assets[from] = to
+          end
+        end
+
+        opts.on('-o', '--output-dir PATH', 
+                'The output directory. (defaults to ./doc)') do |dir|
+          options[:serializer].basepath = dir
+        end
+        
         opts.on('-m', '--markup MARKUP', 
                 'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
           options[:markup] = markup.to_sym
@@ -503,11 +538,6 @@ module YARD
         opts.on('-M', '--markup-provider MARKUP_PROVIDER', 
                 'Overrides the library used to process markup formatting (specify the gem name)') do |markup_provider|
           options[:markup_provider] = markup_provider.to_sym
-        end
-
-        opts.on('-o', '--output-dir PATH', 
-                'The output directory. (defaults to ./doc)') do |dir|
-          options[:serializer].basepath = dir
         end
 
         opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|

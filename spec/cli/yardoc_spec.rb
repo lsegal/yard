@@ -200,6 +200,44 @@ describe YARD::CLI::Yardoc do
       CLI::Stats.should_not_receive(:new)
       @yardoc.run *%w( --no-stats )
     end
+    
+    describe '--asset' do
+      before do
+        @yardoc.generate = true
+        @yardoc.stub!(:run_generate)
+      end
+      
+      it "should copy assets to output directory" do
+        FileUtils.should_receive(:cp_r).with('a', 'doc/a')
+        @yardoc.run *%w( --asset a )
+        @yardoc.assets.should == {'a' => 'a'}
+      end
+
+      it "should allow multiple --asset options" do
+        FileUtils.should_receive(:cp_r).with('a', 'doc/a')
+        FileUtils.should_receive(:cp_r).with('b', 'doc/b')
+        @yardoc.run *%w( --asset a --asset b )
+        @yardoc.assets.should == {'a' => 'a', 'b' => 'b'}
+      end
+
+      it "should not allow from or to to refer to a path above current path" do
+        log.should_receive(:warn).exactly(4).times.with(/invalid/i)
+        @yardoc.run *%w( --asset ../../../etc/passwd )
+        @yardoc.assets.should be_empty
+        @yardoc.run *%w( --asset a/b/c/d/../../../../../../etc/passwd )
+        @yardoc.assets.should be_empty
+        @yardoc.run *%w( --asset /etc/passwd )
+        @yardoc.assets.should be_empty
+        @yardoc.run *%w( --asset normal:/etc/passwd )
+        @yardoc.assets.should be_empty
+      end
+
+      it "should allow from:to syntax" do
+        FileUtils.should_receive(:cp_r).with('foo', 'doc/bar')
+        @yardoc.run *%w( --asset foo:bar )
+        @yardoc.assets.should == {'foo' => 'bar'}
+      end
+    end
   end
   
   describe '--no-private option' do

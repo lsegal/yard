@@ -44,5 +44,4 @@ end
 
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
-  t.after = lambda { `cp -R docs/images/ doc/images/` }
 end

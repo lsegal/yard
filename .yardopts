@@ -1,6 +1,7 @@
 --protected
 --no-private
 --exclude /server/templates/
+--asset docs/images:images
 -
 docs/WhatsNew.md
 docs/GettingStarted.md
