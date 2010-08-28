@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.5.8 (codename "The Longest")    
-**Release Date**: June 22nd 2010    
+**Latest Version**: 0.6.0 (codename "The Cubic")    
+**Release Date**: August 29th 2010    
 
 Synopsis
 --------
@@ -119,21 +119,32 @@ Usage
 -----
 
 There are a couple of ways to use YARD. The first is via command-line, and the
-second is the Rake task. There are also the `yard-graph` and `yri` binaries to
-look at, if you want to poke around.
+second is the Rake task. 
 
-**1. yardoc Command-line Tool**
+**1. yard Command-line Tool**
 
-The most obvious way to run YARD is to run the `yardoc` binary file that comes
-with YARD. This will, among other things, generate the HTML documentation for
-your project code. You can type `yardoc --help` to see the options
-that YARD provides, but the easiest way to generate docs for your code is to
-simply type `yardoc` in your project root. This will assume your files are
+YARD comes packaged with a executable named `yard` which can control the many
+functions of YARD, including generating documentation, graphs running the
+YARD server, and so on. To view a list of available YARD commands, type:
+
+    $ yard --help
+    
+Plugins can also add commands to the `yard` executable to provide extra
+functionality.
+
+#### Generating Documentation
+
+<span class="note">The `yardoc` executable is a shortcut for `yard doc`.</span>
+
+The most common command you will probably use is `yard doc`, or `yardoc`. You 
+can type `yardoc --help` to see the options that YARD provides, but the 
+easiest way to generate docs for your code is to simply type `yardoc` in your 
+project root. This will assume your files are
 located in the `lib/` directory. If they are located elsewhere, you can specify
 paths and globs from the commandline via:
 
     $ yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
-
+    
 The tool will generate a `.yardoc` file which will store the cached database
 of your source code and documentation. If you want to re-generate your docs
 with another template you can simply use the `--use-cache` (or -c) 
@@ -269,6 +280,19 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **August.28.10**: 0.6.0 release
+    - Added dynamic local documentation server
+    - Added @group/@endgroup declarations to organize methods into groups
+    - Added `yard` executable to serve as main CLI tool with pluggable commands
+    - Added `--asset` switch to `yardoc` to copy files/dirs to output dir
+    - Added ability to register/manipulate tags via CLI (`--tag`, etc.)
+    - Added `yard diff` command
+    - Added statistics to `yardoc` output (and `yard stats` command)
+    - Added Javascript generated Table of Contents to file pages
+    - Updated various APIs
+    - Removed `yard-graph` executable
+    - See more changes in the {file:docs/WhatsNew.md what's new document}
 
 - **June.22.10**: 0.5.8 release
     - Merge fix from 0.6 branch for --no-private visibility checking
