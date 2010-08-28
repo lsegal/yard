@@ -115,7 +115,7 @@ module YARD
       attr_reader :files
       
       # The namespace the object is defined in. If the object is in the
-      # top level namespace, this is {Registry#root}
+      # top level namespace, this is {Registry.root}
       # @return [NamespaceObject] the namespace object
       attr_reader :namespace
       
@@ -196,7 +196,7 @@ module YARD
       #   CodeObjects::Base.new(P("X::Y"), :Z) # or
       #   CodeObjects::Base.new(Registry.root, "X::Y")
       # @param [NamespaceObject] namespace the namespace the object belongs in,
-      #   {Registry#root} or :root should be provided if it is associated with
+      #   {Registry.root} or :root should be provided if it is associated with
       #   the top level namespace.
       # @param [Symbol, String] name the name (or complex path) of the object. 
       # @yield [self] a block to perform any extra initialization on the object
@@ -432,7 +432,7 @@ module YARD
       # Sets the namespace the object is defined in.
       # 
       # @param [NamespaceObject, :root, nil] obj the new namespace (:root 
-      #   for {Registry#root}). If obj is nil, the object is unregistered
+      #   for {Registry.root}). If obj is nil, the object is unregistered
       #   from the Registry.
       def namespace=(obj)
         if @namespace

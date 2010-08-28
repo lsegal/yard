@@ -6,8 +6,8 @@ module YARD
   # during parsing. The storage is a key value store with the object's path
   # (see {CodeObjects::Base#path}) as the key and the object itself as the value.
   # Object paths must be unique to be stored in the Registry. All lookups for 
-  # objects are done on the singleton Registry instance using the {Registry#at} 
-  # or {Registry#resolve} methods.
+  # objects are done on the singleton Registry instance using the {Registry.at} 
+  # or {Registry.resolve} methods.
   # 
   # The registry is saved to a "yardoc" file, which can be loaded back to 
   # perform any lookups.
@@ -104,7 +104,7 @@ module YARD
       end
     
       # Loads a yardoc file and forces all objects cached on disk into
-      # memory. Equivalent to calling {#load_yardoc} followed by {#load_all}
+      # memory. Equivalent to calling {load_yardoc} followed by {load_all}
       # 
       # @param [String] file the yardoc file to load
       # @return [Registry] the registry object (for chaining)
@@ -173,7 +173,7 @@ module YARD
 
       # @group Accessing Objects in the Registry
      
-      # Iterates over {#all} with no arguments
+      # Iterates over {all} with no arguments
       def each(&block)
         all.each(&block)
       end
@@ -212,7 +212,7 @@ module YARD
     
       # Returns the object at a specific path.
       # @param [String, :root] path the pathname to look for. If +path+ is +root+,
-      #   returns the {#root} object.
+      #   returns the {root} object.
       # @return [CodeObjects::Base] the object at path
       # @return [nil] if no object is found
       def at(path) @store[path] end
@@ -236,7 +236,7 @@ module YARD
       # @example Looks for a complex path from a namespace
       #   Registry.resolve(P('A::B'), 'B::D') # => #<yardoc class A::B::D>
       # @param [CodeObjects::NamespaceObject, nil] namespace the starting namespace
-      #   (module or class). If +nil+ or +:root+, starts from the {#root} object.
+      #   (module or class). If +nil+ or +:root+, starts from the {root} object.
       # @param [String, Symbol] name the name (or complex path) to look for from
       #   +namespace+.
       # @param [Boolean] inheritance Follows inheritance chain (mixins, superclass)

@@ -6,14 +6,14 @@ module YARD
     # The Proxy class is a way to lazily resolve code objects in
     # cases where the object may not yet exist. A proxy simply stores
     # an unresolved path until a method is called on the object, at which
-    # point it does a lookup using {Registry#resolve}. If the object is
+    # point it does a lookup using {Registry.resolve}. If the object is
     # not found, a warning is raised and {ProxyMethodError} might be raised.
     # 
     # @example Creates a Proxy to the String class from a module
     #   # When the String class is parsed this method will
     #   # begin to act like the String ClassObject.
     #   Proxy.new(mymoduleobj, "String")
-    # @see Registry#resolve
+    # @see Registry.resolve
     # @see ProxyMethodError
     class Proxy
       def self.===(other) other.is_a?(self) end
