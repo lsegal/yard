@@ -358,20 +358,22 @@ Contributors
 
 Special thanks to the following people for submitting patches:
 
-* Aman Gupta
-* Benjamin Bock
-* Denis Defreyne
+* Nathan Weizenbaum
+* Nick Plante
+* Michael Edgar
+* Yehuda Katz
 * Duane Johnson
+* Postmodern
+* Pieter van de Bruggen
+* Leonid Borisenko
+* Jeff Rafter
 * Elliottcable
 * James Rosen
-* Jeff Rafter
-* Leonid Borisenko
-* Loren Segal
-* Michael Edgar
-* Nathan Weizenbaum
-* Postmodern
-* Yehuda Katz
-
+* Jake Kerr
+* Gabriel Horner
+* Denis Defreyne
+* Benjamin Bock
+* Aman Gupta
 
 Copyright
 ---------
