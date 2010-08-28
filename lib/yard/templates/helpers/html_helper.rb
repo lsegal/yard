@@ -140,10 +140,12 @@ module YARD
       # @param [Symbol] type the language type (:ruby, :plain, etc). Use
       #   :plain for no syntax highlighting. 
       # @return [String] the highlighted source
-      def html_syntax_highlight(source, type = :ruby)
+      def html_syntax_highlight(source, type = nil)
         return "" unless source
         return h(source) if options[:no_highlight]
-        
+
+        type ||= object.source_type || :ruby
+
         # handle !!!LANG prefix to send to html_syntax_highlight_LANG
         if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
           type, source = $1, $'

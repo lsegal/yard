@@ -5,6 +5,11 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlSyntaxHighlightHelper
   
   describe '#html_syntax_highlight' do
+    before do
+      stub!(:object).and_return Registry.root
+      Registry.root.source_type = :ruby
+    end
+
     it "should not highlight source if options[:no_highlight] is set" do
       should_receive(:options).and_return(:no_highlight => true)
       html_syntax_highlight("def x\nend").should == "def x\nend"

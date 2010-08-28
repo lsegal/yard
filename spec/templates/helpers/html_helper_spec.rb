@@ -103,6 +103,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should handle various encodings" do
+      stub!(:object).and_return(Registry.root)
       Encoding.default_internal = 'utf-8' if defined?(Encoding)
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
@@ -344,6 +345,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
   describe '#html_syntax_highlight' do
     before do
       stub!(:options).and_return(:no_highlight => false)
+      stub!(:object).and_return(Registry.root)
     end
     
     it "should return empty string on nil input" do
@@ -351,10 +353,18 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should call #html_syntax_highlight_ruby by default" do
+      Registry.root.source_type = nil
       should_receive(:html_syntax_highlight_ruby).with('def x; end')
       html_syntax_highlight('def x; end')
     end
     
+    it "should call #html_syntax_highlight_NAME if there's an object with a #source_type" do
+      Registry.root.source_type = :NAME
+      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
+      should_receive(:html_syntax_highlight_NAME).and_return("foobar")
+      html_syntax_highlight('def x; end').should == 'foobar'
+    end
+
     it "should call html_syntax_highlight_NAME if source starts with !!!NAME" do
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       should_receive(:html_syntax_highlight_NAME).and_return("foobar")
