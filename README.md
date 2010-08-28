@@ -63,26 +63,26 @@ object returned by the method, and although this may be obvious for a 
 'reverse' method, it becomes very useful when the method name may not be as 
 descriptive. 
                                                                               
-**3. Custom Constructs and Extensibility of YARD**: Take for instance the example: 
+**3. Custom Constructs and Extensibility of YARD**: YARD is designed to be 
+extended and customized by plugins. Take for instance the scenario where you 
+need to document the following code: 
    
-    class A 
-      class << self 
-        def define_name(name, value) 
-          class_eval "def #{name}; #{value.inspect} end" 
-        end 
-      end 
- 
-      # Documentation string for this name 
-      define_name :publisher, "O'Reilly"
+    class List
+      # Sets the publisher name for the list.
+      cattr_accessor :publisher
     end
                                                                         
 This custom declaration provides dynamically generated code that is hard for a
 documentation tool to properly document without help from the developer. To 
 ease the pains of manually documenting the procedure, YARD can be extended by 
-the developer to handled the `define_name` construct and add the required 
-method to the defined methods of the class with its documentation. This makes 
+the developer to handle the `cattr_accessor` construct and automatically create
+an attribute on the class with the associated documentation. This makes 
 documenting external API's, especially dynamic ones, a lot more consistent for
 consumption by the users. 
+
+YARD is also designed for extensibility everywhere else, allowing you to add
+support for new programming languages, new data structures and even where/how
+data is stored.
                                                                               
 **4. Raw Data Output**: YARD also outputs documented objects as raw data (the 
 dumped Namespace) which can be reloaded to do generation at a later date, or 
@@ -94,6 +94,13 @@ who would like to reap the benefits of YARD's processing in other forms, such 
 as throwing all the documentation into a database. Another useful way of 
 exploiting this raw data format would be to write tools that can auto generate
 test cases, for example, or show possible unhandled exceptions in code. 
+
+**5. Local Documentation Server**: YARD can serve documentation for projects
+or installed gems (similar to `gem server`) with the added benefit of dynamic
+searching, as well as live reloading. Using the live reload feature, you can
+document your code and immediately preview the results by refreshing the page; 
+YARD will do all the work in re-generating the HTML. This makes writing 
+documentation a much faster process.
 
 
 Installing
