@@ -238,7 +238,7 @@ instance, will modify the #init method to insert class specific sections:
     
 Observe how sections has been modified after the super method was called (the
 super method would have been defined in `default/module/setup.rb`). The
-`sections` object is of the {YARD::Section} class and allows sections to be inserted
+`sections` object is of the {YARD::Templates::Section} class and allows sections to be inserted
 before or after another section using {Array#place} by it's given name rather 
 than index. This allows the overriding of templates in a way that does not
 depend on where the section is located (since it may have been overriden by 
