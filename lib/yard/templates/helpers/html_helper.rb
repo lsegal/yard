@@ -41,8 +41,11 @@ module YARD
         return "" unless text
         return text unless markup
         load_markup_provider(markup)
-        html = send("html_markup_#{markup}", text)
-        html = html.encode(:invalid => :replace, :replace => '?') if html.respond_to?(:encode)
+        html = send(markup_meth, text)
+        if html.respond_to?(:encode)
+          html = html.force_encoding(text.encoding) # for libs that mess with encoding
+          html = html.encode(:invalid => :replace, :replace => '?')
+        end
         html = resolve_links(html)
         html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           str = $1
