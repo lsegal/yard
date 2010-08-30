@@ -229,6 +229,7 @@ li.r1 { background: #f0f0f0; }
 li.r2 { background: #fafafa; }
 
 #search_frame {
+  z-index: 9999;
   background: #fff;
   display: none;
   position: absolute; 
