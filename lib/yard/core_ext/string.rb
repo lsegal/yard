@@ -1,25 +1,4 @@
 class String
-  # Separates capital letters following lower case letters by an underscore
-  # and returns the entire string in lower case
-  # 
-  # @example
-  #   "FooBar".underscore # => "foo_bar"
-  #   "Foo::Bar".underscore # => "foo/bar"
-  # @return [String] the underscored lower case string
-  def underscore
-    gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
-  end
-  
-  # Camel cases any underscored text.
-  # 
-  # @example
-  #   "foo_bar_baz".camelcase # => "FooBarBaz"
-  #   "foo/bar".camelcase # => "Foo::Bar"
-  # @return [String] the camel cased text
-  def camelcase
-    gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(?:^|_)(.)/) { $1.upcase }
-  end
-  
   # Splits text into tokens the way a shell would, handling quoted
   # text as a single token. Use '\"' and "\'" to escape quotes and
   # '\\' to escape a backslash.
