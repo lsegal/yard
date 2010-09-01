@@ -1,9 +1,24 @@
+var inSearch = null;
+var searchIndex = 0;
+var searchCache = [];
+var searchString = '';
+
 function fullListSearch() {
+  // generate cache
+  searchCache = [];
+  $('#full_list li').each(function() {
+    var link = $(this).find('.object_link a');
+    searchCache.push({name:link.text(), node:$(this), link:link});
+  });
+  
   $('#search input').keyup(function() {
-    var value = this.value.toLowerCase();
-    if (value == "") {
-      $('#full_list').removeClass('insearch');
-      $('#full_list li').each(function() {
+    searchString = this.value.toLowerCase();
+    if (searchString == "") {
+      clearTimeout(inSearch);
+      inSearch = null;
+      $('#full_list, #content').removeClass('insearch');
+      $('#full_list li').removeClass('found').each(function() {
+        
         var link = $(this).find('.object_link a');
         link.text(link.text()); 
       });
@@ -15,34 +30,56 @@ function fullListSearch() {
       highlight();
     }
     else {
-      $('#full_list').addClass('insearch');
-      $('#full_list li').each(function() {
-        var link = $(this).find('.object_link a');
-        var text = link.text();
-        if (text.toLowerCase().indexOf(value) == -1) {
-          $(this).removeClass('found');
-          link.text(link.text());
-        }
-        else {
-          $(this).css('padding-left', '10px').addClass('found');
-          link.html(link.text().replace(new RegExp("(" + 
-            value.replace(/([\/.*+?|()\[\]{}\\])/g, "\\$1") + ")", "ig"), 
-            '<strong>$1</strong>'));
-        }
-      });
-      highlight(true);
-    }
-    
-    if ($('#full_list li:visible').size() == 0) {
-      $('#noresults').fadeIn();
-    }
-    else {
-      $('#noresults').hide();
+      if (inSearch) clearTimeout(inSearch);
+      searchIndex = 0;
+      lastRowClass = '';
+      $('#full_list, #content').addClass('insearch');
+      $('#noresults').text('');
+      searchItem();
     }
   });
   
   $('#search input').focus();
-  $('#full_list').after("<div id='noresults'>No results were found.</div>")
+  $('#full_list').after("<div id='noresults'></div>")
+}
+
+var lastRowClass = '';
+function searchItem() {
+  for (var i = 0; i < searchCache.length / 50; i++) {
+    var item = searchCache[searchIndex];
+    if (item.name.toLowerCase().indexOf(searchString) == -1) {
+      item.node.removeClass('found');
+    }
+    else {
+      item.node.css('padding-left', '10px').addClass('found');
+      item.node.removeClass(lastRowClass).addClass(lastRowClass == 'r1' ? 'r2' : 'r1');
+      lastRowClass = item.node.hasClass('r1') ? 'r1' : 'r2';
+      item.link.html(item.name.replace(new RegExp("(" + 
+        searchString.replace(/([\/.*+?|()\[\]{}\\])/g, "\\$1") + ")", "ig"), 
+        '<strong>$1</strong>'));
+    }
+
+    if (searchCache.length == searchIndex + 1) {
+      return searchDone();
+    }
+    else {
+      searchIndex++;
+    }
+  }
+  inSearch = setTimeout('searchItem()', 0);
+}
+
+function searchDone() {
+  highlight(true);
+  if ($('#full_list li:visible').size() == 0) {
+    $('#noresults').text('No results were found.').hide().fadeIn();
+  }
+  else {
+    $('#noresults').text('');
+  }
+  $('#content').removeClass('insearch');
+  clearTimeout(inSearch);
+  inSearch = null;
 }
 
 clicked = null;
