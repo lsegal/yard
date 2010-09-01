@@ -402,7 +402,10 @@ module YARD
       def relative_path(other)
         other = other.path if other.respond_to?(:path)
         return other unless namespace
-        other.gsub(/^#{Regexp.quote namespace.path}(::|\.)?/, '')
+        common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
+        common = common.sub(/(\.|::|#)$/, '')
+        result = other.sub(/^#{Regexp.quote common}(::|\.|)?/, '')
+        result.empty? ? other : result
       end
       
       # Renders the object using the {Templates::Engine templating system}.

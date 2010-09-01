@@ -152,6 +152,15 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:serializer).and_return(serializer)
       link_object("Bar").should =~ %r{>Bar</a>}
     end
+    
+    it "should use relative path to parent class in title" do
+      root = CodeObjects::ModuleObject.new(:root, :YARD)
+      obj = CodeObjects::ModuleObject.new(root, :SubModule)
+      stub!(:object).and_return(obj)
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      p(link_object("YARD")).should =~ %r{>YARD</a>}
+    end
   end
 
   describe '#url_for' do
