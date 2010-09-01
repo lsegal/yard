@@ -18,7 +18,7 @@ module YARD
     class Proxy
       def self.===(other) other.is_a?(self) end
 
-      attr_reader :namespace, :name
+      attr_reader :namespace
       alias_method :parent, :namespace
 
       # Creates a new Proxy
@@ -58,6 +58,11 @@ module YARD
           @name.gsub!(/^#{NSEPQ}/, '')
           @namespace = Registry.root
         end
+      end
+      
+      # (see Base#name)
+      def name(prefix = false)
+        prefix ? (@imethod ? ISEP : '') + @name.to_s : @name
       end
 
       # Returns a text representation of the Proxy
