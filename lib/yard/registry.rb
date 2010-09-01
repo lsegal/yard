@@ -215,7 +215,7 @@ module YARD
       #   returns the {root} object.
       # @return [CodeObjects::Base] the object at path
       # @return [nil] if no object is found
-      def at(path) @store[path] end
+      def at(path) path ? @store[path] : nil end
       alias_method :[], :at
     
       # The root namespace object.
