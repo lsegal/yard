@@ -24,7 +24,6 @@ module YARD
       def start
         server = Rack::Server.new(server_options)
         server.instance_variable_set("@app", self)
-        trap("INT") { server.shutdown }
         server.start
       end
     end
