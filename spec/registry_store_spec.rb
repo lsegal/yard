@@ -72,7 +72,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(true)
-      File.should_receive(:read).with('foo/objects/root.dat').and_return(Marshal.dump('foo'))
+      File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump('foo'))
       @store.load('foo').should == true
       @store.root.should == 'foo'
     end
