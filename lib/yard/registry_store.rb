@@ -198,14 +198,14 @@ module YARD
     end
     
     def load_yardoc_old
-      @store, @proxy_types = *Marshal.load(File.read(@file))
+      @store, @proxy_types = *Marshal.load(File.read_binary(@file))
     end
     
     private
     
     def load_proxy_types
       return unless File.file?(proxy_types_path)
-      @proxy_types = Marshal.load(File.read(proxy_types_path))
+      @proxy_types = Marshal.load(File.read_binary(proxy_types_path))
     end
     
     def load_checksums
