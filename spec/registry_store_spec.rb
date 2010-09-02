@@ -7,8 +7,10 @@ describe YARD::RegistryStore do
     it "should load old yardoc format if .yardoc is a file" do
       File.should_receive(:directory?).with('foo').and_return(false)
       File.should_receive(:file?).with('foo').and_return(true)
-      File.should_receive(:read).with('foo').and_return('FOO')
-      Marshal.should_receive(:load).with('FOO')
+
+      io = StringIO.new('FOO')
+      File.should_receive(:open!).with('foo').and_yield(io)
+      Marshal.should_receive(:load).with(io)
 
       @store.load('foo')
     end
@@ -25,7 +27,10 @@ describe YARD::RegistryStore do
     it "should return true if .yardoc is loaded (file)" do
       File.should_receive(:directory?).with('myyardoc').and_return(false)
       File.should_receive(:file?).with('myyardoc').and_return(true)
-      File.should_receive(:read).with('myyardoc').and_return(Marshal.dump(''))
+
+      io = StringIO.new(Marshal.dump(''))
+      File.should_receive(:open!).with('myyardoc').and_yield(io)
+
       @store.load('myyardoc').should == true
     end
 
@@ -62,7 +67,10 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(true)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
-      File.should_receive(:read).with('foo/proxy_types').and_return(Marshal.dump({'a' => 'b'}))
+
+      io = StringIO.new(Marshal.dump({'a' => 'b'}))
+      File.should_receive(:open!).with('foo/proxy_types').and_yield(io)
+
       @store.load('foo').should == true
       @store.proxy_types.should == {'a' => 'b'}
     end
@@ -72,7 +80,10 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(true)
-      File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump('foo'))
+
+      io = StringIO.new(Marshal.dump('foo'))
+      File.should_receive(:open!).with('foo/objects/root.dat').and_yield(io)
+
       @store.load('foo').should == true
       @store.root.should == 'foo'
     end

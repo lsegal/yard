@@ -59,16 +59,21 @@ module YARD
         end
         File.join('objects', path)
       end
-      
+
+      # Serializes object with data to its serialized path (prefixed by the +#basepath+).
+      #
+      # @return [String] the written data (for chaining)
       def serialize(object)
-        super(object, dump(object))
+        path = File.join(basepath, *serialized_path(object))
+        log.debug "Serializing to #{path}"
+        File.open!(path, "w") {|f| Marshal.dump(object, f) }
       end
       
       def deserialize(path, is_path = false)
         path = File.join(basepath, serialized_path(path)) unless is_path
         if File.file?(path)
           log.debug "Deserializing #{path}..."
-          Marshal.load(File.read_binary(path))
+          File.open!(path) { |f| Marshal.load(f) }
         else
           log.debug "Could not find #{path}"
           nil
@@ -76,9 +81,9 @@ module YARD
       end
       
       private
-      
-      def dump(object)
-        Marshal.dump(internal_dump(object, true))
+
+      def dump(object, io)
+        Marshal.dump(internal_dump(object, true), io)
       end
       
       def internal_dump(object, first_object = false)

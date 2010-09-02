@@ -198,14 +198,14 @@ module YARD
     end
     
     def load_yardoc_old
-      @store, @proxy_types = *Marshal.load(File.read(@file))
+      @store, @proxy_types = *(File.open!(@file) { |f| Marshal.load(f) })
     end
     
     private
     
     def load_proxy_types
       return unless File.file?(proxy_types_path)
-      @proxy_types = Marshal.load(File.read(proxy_types_path))
+      @proxy_types = File.open!(proxy_types_path) { |f| Marshal.load(f) }
     end
     
     def load_checksums
@@ -227,7 +227,7 @@ module YARD
     end
     
     def write_proxy_types
-      File.open!(proxy_types_path, 'wb') {|f| f.write(Marshal.dump(@proxy_types)) }
+      File.open!(proxy_types_path, "w") {|f| Marshal.dump(@proxy_types, f) }
     end
     
     def write_checksums
