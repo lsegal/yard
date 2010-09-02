@@ -236,6 +236,8 @@ describe YARD::CodeObjects::Base do
     it "should return the full path if they don't have a common namespace" do
       YARD.parse_string "module A; class B; end; end; module D; class C; end; end"
       Registry.at('A::B').relative_path('D::C').should == 'D::C'
+      YARD.parse_string 'module C::B::C; module Apple; end; module Ant; end end'
+      Registry.at('C::B::C::Apple').relative_path('C::B::C::Ant').should == 'Ant'
     end
     
     it "should return a relative path for class methods" do
