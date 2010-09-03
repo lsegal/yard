@@ -48,7 +48,7 @@ module YARD
         #   {YARD::Logger}
         # @return the parser object that was used to parse the source. 
         def parse(paths = ["lib/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
-          log.debug("Parsing #{paths} with `#{parser_type}` parser")
+          log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
             case path
             when Regexp; path
