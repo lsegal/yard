@@ -159,7 +159,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(obj)
       serializer = Serializers::FileSystemSerializer.new
       stub!(:serializer).and_return(serializer)
-      p(link_object("YARD")).should =~ %r{>YARD</a>}
+      link_object("YARD").should =~ %r{>YARD</a>}
     end
   end
 
