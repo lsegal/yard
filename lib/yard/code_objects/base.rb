@@ -403,6 +403,7 @@ module YARD
         other = other.path if other.respond_to?(:path)
         return other unless namespace
         common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
+        common = path unless common =~ /(\.|::|#)$/
         common = common.sub(/(\.|::|#)[^:#\.]*?$/, '')
         result = other.sub(/^#{Regexp.quote common}(::|\.|)?/, '')
         result.empty? ? other : result

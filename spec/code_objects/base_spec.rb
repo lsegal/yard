@@ -238,6 +238,8 @@ describe YARD::CodeObjects::Base do
       Registry.at('A::B').relative_path('D::C').should == 'D::C'
       YARD.parse_string 'module C::B::C; module Apple; end; module Ant; end end'
       Registry.at('C::B::C::Apple').relative_path('C::B::C::Ant').should == 'Ant'
+      YARD.parse_string 'module OMG::ABC; end; class Object; end'
+      Registry.at('OMG::ABC').relative_path('Object').should == "Object"
     end
     
     it "should return a relative path for class methods" do
