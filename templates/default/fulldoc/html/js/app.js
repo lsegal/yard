@@ -31,14 +31,12 @@ function createFullTreeLinks() {
     var tHeight = 0;
     $('.inheritanceTree').toggle(function() {
         tHeight = $(this).parent().prev().height();
-        $(this).prev().prev().hide();
-        $(this).prev().show();
+        $(this).parent().toggleClass('showAll');
         $(this).text("(hide)");
         $(this).parent().prev().height($(this).parent().height());
     },
     function() {
-        $(this).prev().prev().show();
-        $(this).prev().hide();
+        $(this).parent().toggleClass('showAll');
         $(this).parent().prev().height(tHeight);
         $(this).text("show all")
     });
