@@ -258,6 +258,12 @@ describe YARD::CodeObjects::Base do
       YARD.parse_string "module A; module B; end end"
       Registry.at('A::B').relative_path('A').should == 'A'
     end
+    
+    it "should only return name for relative path to self" do
+      YARD.parse_string("class A::B::C; def foo; end end")
+      Registry.at('A::B::C').relative_path('A::B::C').should == 'C'
+      Registry.at('A::B::C#foo').relative_path('A::B::C#foo').should == '#foo'
+    end
   end
   
   describe '#docstring=' do
