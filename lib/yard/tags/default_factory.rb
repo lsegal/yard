@@ -82,6 +82,7 @@ module YARD
       end
             
       def extract_title_and_desc_from_text(text)
+        raise TagFormatError if text.nil? || text.empty?
         title, desc = nil, nil
         if text =~ /\A[ \t]\n/
           desc = text
