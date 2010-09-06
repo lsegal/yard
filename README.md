@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.6.0 (codename "The Cubic")    
-**Release Date**: August 29th 2010    
+**Latest Version**: 0.6.1 (codename "The Cubic")    
+**Release Date**: September 6th 2010    
 
 Synopsis
 --------
@@ -288,7 +288,16 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
-- **August.28.10**: 0.6.0 release
+- **September.06.10**: 0.6.1 release
+    - Fixed TOC showing on top of class/method list in no-frames view
+    - A message now displays when running `yard server` with Rack/Mongrel installed
+    - Improved performance of JS inline search for large class/method lists
+    - Improved link titles for relative object links
+    - Removed `String#camelcase` and `String#underscore` for better Rails compat.
+    - Fixed support for loading .yardoc files under Windows
+    - Fixed inheritance tree arrows not displaying in certain environments
+
+- **August.29.10**: 0.6.0 release
     - Added dynamic local documentation server
     - Added @group/@endgroup declarations to organize methods into groups
     - Added `yard` executable to serve as main CLI tool with pluggable commands

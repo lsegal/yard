@@ -1,4 +1,97 @@
+2010-09-06  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.1
+
+  * templates/default/fulldoc/html/js/app.js: Fix TOC id links to include some
+  punctuation and digits
+
+  * spec/code_objects/base_spec.rb: Add spec for relative_path
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/default/fulldoc/html/js/app.js: Refactor inheritance arrow and
+  inheritance box display code
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Fix relative
+  path linking with common substrings
+
+  * lib/yard/tags/default_factory.rb: Gracefully error out if @example tag is
+  misformatted
+
+2010-09-03  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/helpers/html_helper_spec.rb: Fix broken spec of #link_object
+
+2010-09-03  Arthur Schreiber <schreiber.arthur@gmail.com>
+
+  * spec/registry_store_spec.rb: Update specs to match reading marshal data as
+  binary.
+
+2010-09-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb: Fix printing of debugging information
+  when displaying parser paths in 1.8.x
+
+2010-09-02  Arthur Schreiber <schreiber.arthur@gmail.com>
+
+  * lib/yard/registry_store.rb: Fix remaining cases where Marshal data was not
+  read as binary.
+
+2010-09-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Fix matching
+  of common namespace in Base#relative_path
+
+2010-09-01  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/js/full_list.js: Improve inline JS search
+  responsiveness on large lists
+
+2010-09-01  Arthur Schreiber <schreiber.arthur@gmail.com>
+
+  * lib/yard/serializers/yardoc_serializer.rb, spec/registry_store_spec.rb: Fix
+  #168 - open files with serialized contents in binary mode.
+
+2010-09-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix
+  CodeObjects::Base#relative_path to work with parent namespaces and methods in
+  sibling namespaces
+
+  * lib/yard/code_objects/proxy.rb: Fix proxy implementation of name to match
+  Base#name
+
+2010-08-31  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/registry.rb, lib/yard/server/commands/search_command.rb: Avoid
+  exception when Registry.at(nil) is accessed (for search command)
+
+  * lib/yard/server/rack_adapter.rb: Print startup message for `yard server` if
+  Mongrel is being used
+
+  * lib/yard/server/rack_adapter.rb: Remove trap(INT) and server.shutdown, Rack
+  does this on its own.  Closes gh-165
+
+  * lib/yard/core_ext/string.rb, spec/core_ext/string_spec.rb,
+  spec/spec_helper.rb: Removed String#underscore and String#camelcase.  These
+  methods were not being used in YARD's codebase (minus a few small utility
+  functions) and they were causing incompatibility issues with other frameworks
+  like Rails.  Closes gh-167
+
+2010-08-30  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/style.css: Put class list above ToC
+  (take 2)  Closes gh-164
+
 2010-08-29  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/style.css: Lower z-index so class list
+  shows up above
+
+  * yard.gemspec: Update release date in gemspec
+
+  * ChangeLog: Update ChangeLog
 
   * templates/default/fulldoc/html/css/style.css: Fix positioning for TOC
 
