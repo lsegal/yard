@@ -2,7 +2,7 @@ YARD: Yay! A Ruby Documentation Tool
 ====================================
 
 **Homepage**:     [http://yardoc.org](http://yardoc.org)   
-**IRC**:          [irc://irc.freenode.net/yard](irc.freenode.net / #yard)    
+**IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/yard)    
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: See Contributors section below    
@@ -171,7 +171,7 @@ the globs and the filenames with '-'.
 
     $ yardoc 'app/**/*.rb' - README LICENSE FAQ
     
-If no globs preceed the '-' argument, the default glob (lib/**/*.rb) is
+If no globs preceed the '-' argument, the default glob (`lib/**/*.rb`) is
 used:
 
     $ yardoc - README LICENSE FAQ

@@ -254,13 +254,13 @@ Incremental parsing and output generation with `yardoc -c` (0.5.0, 0.5.3)
 YARD now compares file checksums before parsing when using `yardoc -c`
 (aka `yardoc --use-cache`) to do incremental parsing of only the files that
 have changed. HTML (or other output format) generation will also only be
-done on the objects that were parsed from changed files (*). This makes doing
+done on the objects that were parsed from changed files (\*). This makes doing
 a documentation development cycle much faster for quick HTML previews. Just
 remember that when using incremental output generation, the index will not
 be rebuilt and inter-file links might not hook up right, so it is best to
 perform a full rebuild at the end of such previews.
 
-(*) Only for versions prior to 0.5.3. For 0.5.3+, use `--incremental` for
+(\*) Only for versions prior to 0.5.3. For 0.5.3+, use `--incremental` for
 incremental HTML output.
 
 Improved `yri` support to perform lookups on installed Gems (0.5.0)
