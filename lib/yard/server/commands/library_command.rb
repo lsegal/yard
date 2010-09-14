@@ -36,7 +36,7 @@ module YARD
           setup_library
           super
         rescue LibraryNotPreparedError
-          not_prepared(request)
+          not_prepared
         end
 
         private
@@ -72,7 +72,7 @@ module YARD
           @@last_yardoc = library.yardoc_file
         end
         
-        def not_prepared(request)
+        def not_prepared
           self.caching = false
           options.update(:path => request.path, :template => :doc_server, :type => :processing)
           [302, {'Content-Type' => 'text/html'}, [render]]
