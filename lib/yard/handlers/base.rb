@@ -224,12 +224,14 @@ module YARD
         # 
         # @param [String, Regexp] filename a matching filename or regex
         # @return [void]
+        # @since 0.6.2
         def in_file(filename)
           (@in_files ||= []) << filename
         end
         
         # @return [Boolean] whether the filename matches the declared file
         #   match for a handler. If no file match is specified, returns true.
+        # @since 0.6.2
         def matches_file?(filename)
           return true unless @in_files
           @in_files.any? do |in_file|
