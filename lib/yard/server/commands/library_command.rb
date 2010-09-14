@@ -23,6 +23,7 @@ module YARD
         end
 
         def call(request)
+          self.request = request
           self.options = SymbolHash.new(false).update(
             :serialize => false,
             :serializer => serializer,
@@ -41,7 +42,7 @@ module YARD
         private
 
         def setup_library
-          library.prepare!
+          library.prepare! if request.xhr? && request.query['process']
           load_yardoc
           setup_yardopts
           true
@@ -61,6 +62,7 @@ module YARD
         end
 
         def load_yardoc
+          raise LibraryNotPreparedError unless library.yardoc_file
           if @@last_yardoc == library.yardoc_file
             log.debug "Reusing yardoc file: #{library.yardoc_file}"
             return

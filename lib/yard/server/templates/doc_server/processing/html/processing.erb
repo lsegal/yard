@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/css/custom.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8" src="/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8">
-      function checkPage() {
-        $.ajax({cache: false, url: "<%= @path %>", success: function() { window.location = "<%= @path %>"; } });
+      function checkPage(process) {
+        $.ajax({cache: false, url: "<%= @path %>" + (process ? "?process=true" : ""), success: function() { window.location = "<%= @path %>"; } });
         setTimeout('checkPage()', 2000);
       }
       function setFade() {
@@ -23,7 +23,7 @@
         $('#processing').css('left', ($(window).width() / 2 - $('#processing').width() / 2) + 'px');
         $('#processing').css('top', ($(window).height() / 2 - $('#processing').height() / 2) + 'px');
       }
-      $(checkPage);
+      $(function() { checkPage(true); });
       $(setFade);
     </script>
     <style type="text/css" media="screen">
