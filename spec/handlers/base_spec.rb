@@ -108,4 +108,68 @@ describe YARD::Handlers::Base do
       process PushStateHandler3
     end
   end
+  
+  describe '.in_file' do
+    def parse(filename, src = "class A; end")
+      parser = Parser::SourceParser.new
+      parser.instance_variable_set("@file", filename)
+      parser.parse(StringIO.new(src))
+    end
+    
+    def create_handler(stmts)
+      @@counter ||= 0
+      sklass = Parser::SourceParser.parser_type == :ruby ? "Base" : "Legacy::Base"
+      instance_eval(<<-eof)
+        class ::InFileHandler#{@@counter += 1} < Handlers::Ruby::#{sklass}
+          handles /^class/
+          #{stmts}
+          def process; MethodObject.new(:root, :FOO) end
+        end
+      eof
+    end
+    
+    def test_handler(file, stmts, creates = true)
+      Registry.clear
+      Registry.at('#FOO').should be_nil
+      create_handler(stmts)
+      parse(file)
+      Registry.at('#FOO').send(creates ? :should_not : :should, be_nil)
+      Handlers::Base.subclasses.delete_if {|k,v| k.to_s =~ /^InFileHandler/ }
+    end
+    
+    [:ruby, :ruby18].each do |parser_type|
+      next if parser_type == :ruby && !RUBY19
+      describe "Parser type = #{parser_type.inspect}" do
+        Parser::SourceParser.parser_type = parser_type
+        it "should allow handler to be specific to a file" do
+          test_handler 'file_a.rb', 'in_file "file_a.rb"', true
+        end
+        
+        it "should ignore handler if filename does not match" do
+          test_handler 'file_b.rb', 'in_file "file_a.rb"', false
+        end
+
+        it "should only test filename part when given a String" do
+          test_handler '/path/to/file_a.rb', 'in_file "/to/file_a.rb"', false
+        end
+        
+        it "should test exact match for entire String" do
+          test_handler 'file_a.rb', 'in_file "file"', false
+        end
+
+        it "should allow a Regexp as argument and test against full path" do
+          test_handler 'file_a.rbx', 'in_file /\.rbx$/', true
+          test_handler '/path/to/file_a.rbx', 'in_file /\/to\/file_/', true
+          test_handler '/path/to/file_a.rbx', 'in_file /^\/path/', true
+        end
+
+        it "should allow multiple in_file declarations" do
+          stmts = 'in_file "x"; in_file /y/; in_file "foo.rb"'
+          test_handler 'foo.rb', stmts, true
+          test_handler 'xyzzy.rb', stmts, true
+          test_handler 'x', stmts, true
+        end
+      end
+    end
+  end
 end

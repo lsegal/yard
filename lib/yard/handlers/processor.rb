@@ -115,7 +115,7 @@ module YARD
         Base.subclasses.find_all do |handler|
           handler_base_class > handler &&
           (handler.namespace_only? ? owner.is_a?(CodeObjects::NamespaceObject) : true) &&
-          handler.handles?(statement)
+          handler.matches_file?(file) && handler.handles?(statement)
         end
       end
       

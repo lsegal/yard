@@ -219,6 +219,31 @@ module YARD
           (@namespace_only ||= false) ? true : false
         end
         
+        # Declares that a handler should only be called when inside a filename
+        # by its basename or a regex match for the full path.
+        # 
+        # @param [String, Regexp] filename a matching filename or regex
+        # @return [void]
+        def in_file(filename)
+          (@in_files ||= []) << filename
+        end
+        
+        # @return [Boolean] whether the filename matches the declared file
+        #   match for a handler. If no file match is specified, returns true.
+        def matches_file?(filename)
+          return true unless @in_files
+          @in_files.any? do |in_file|
+            case in_file
+            when String
+              File.basename(filename) == in_file
+            when Regexp
+              filename =~ in_file
+            else
+              true
+            end
+          end
+        end
+        
         # Generates a +process+ method, equivalent to +def process; ... end+.
         # Blocks defined with this syntax will be wrapped inside an anonymous
         # module so that the handler class can be extended with mixins that
