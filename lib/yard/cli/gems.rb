@@ -61,9 +61,6 @@ module YARD
         opts.on('--rebuild', 'Rebuilds index') do
           @rebuild = true
         end
-        opts.on('--legacy', 'Use old style parser and handlers. Unavailable under Ruby 1.8.x') do
-          YARD::Parser::SourceParser.parser_type = :ruby18
-        end
         
         common_options(opts)
         parse_options(opts, args)
