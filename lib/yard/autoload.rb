@@ -197,6 +197,7 @@ module YARD
     autoload :Template, __p('templates/template')
   end
 
+  autoload :Config,         __p('config')
   autoload :Docstring,      __p('docstring')
   autoload :Logger,         __p('logging')
   autoload :Registry,       __p('registry')

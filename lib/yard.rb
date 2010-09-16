@@ -7,7 +7,7 @@ module YARD
   # The root path for YARD builtin templates
   TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
   
-  # The location where YARD stores user-specific settings
+  # @deprecated Use {Config::CONFIG_DIR}
   CONFIG_DIR = File.expand_path('~/.yard')
   
   # An alias to {Parser::SourceParser}'s parsing method
@@ -24,31 +24,9 @@ module YARD
   # @see Parser::SourceParser.parse_string
   def self.parse_string(*args) Parser::SourceParser.parse_string(*args) end
   
-  # Loads gems that match the name 'yard-*' (recommended) or 'yard_*' except
-  # those listed in +~/.yard/ignored_plugins+. This is called immediately 
-  # after YARD is loaded to allow plugin support.
-  # 
-  # @return [true] always returns true
-  def self.load_plugins
-    ignored_plugins_file = File.join(CONFIG_DIR, "ignored_plugins")
-    if File.file?(ignored_plugins_file)
-      ignored_plugins = IO.read(ignored_plugins_file).split(/\s+/)
-    else
-      ignored_plugins = []
-    end
-    
-    Gem.source_index.find_name('').each do |gem|
-      begin
-        if gem.name =~ /^yard[-_](?!doc-)/ && !ignored_plugins.include?(gem.name)
-          log.debug "Loading plugin '#{gem.name}'..."
-          require gem.name 
-        end
-      rescue Gem::LoadError, LoadError
-        log.warn "Error loading plugin '#{gem.name}'"
-      end
-    end
-    true
-  end
+  # (see YARD::Config.load_plugins)
+  # @deprecated Use {Config.load_plugins}
+  def self.load_plugins; YARD::Config.load_plugins end
 end
 
 # Ruby 1.9.2 removes '.' which is not exactly a good idea
@@ -66,10 +44,5 @@ end
   require File.join(YARD::ROOT, 'yard', file)
 end
 
-# Load any plugins
-begin
-  require 'rubygems'
-  YARD.load_plugins
-rescue LoadError
-  log.debug "RubyGems is not present, skipping plugin loading"
-end
+# Load YARD configuration options (and plugins)
+YARD::Config.load
