@@ -31,6 +31,10 @@ module YARD
             exit
           end
         end
+        opts.on('--plugin PLUGIN', 'Load a YARD plugin (gem with `yard-\' prefix)') do |name|
+          # Not actually necessary to load here, this is done at boot in YARD::Config.load_plugins
+          # YARD::Config.load_plugin(name)
+        end
         opts.on('--legacy', 'Use old style Ruby parser and handlers. Always on in 1.8.x.') do
           YARD::Parser::SourceParser.parser_type = :ruby18
         end
