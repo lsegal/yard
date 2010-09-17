@@ -400,11 +400,16 @@ module YARD
       # @return [String] the shortest relative path from this object to +other+
       # @since 0.5.3
       def relative_path(other)
-        other = other.path if other.respond_to?(:path)
+        other = Registry.at(other) if String === other && Registry.at(other)
+        same_parent = false
+        if other.respond_to?(:path)
+          same_parent = other.parent == parent
+          other = other.path
+        end
         return other unless namespace
         common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
         common = path unless common =~ /(\.|::|#)$/
-        common = common.sub(/(\.|::|#)[^:#\.]*?$/, '')
+        common = common.sub(/(\.|::|#)[^:#\.]*?$/, '') if same_parent
         result = other.sub(/^#{Regexp.quote common}(::|\.|)?/, '')
         result.empty? ? other : result
       end
