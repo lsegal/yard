@@ -37,4 +37,14 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MixinHandler" do
     P("ABC::DEF::FOO").mixins.should == [P("ABC::FOO")]
     P("ABC::DEF::BAR").mixins.should == [P("ABC::BAR")]
   end
+  
+  it "should raise undocumentable error if argument is variable" do
+    undoc_error "module X; include invalid; end"
+    Registry.at('X').mixins.should == []
+  end
+  
+  it "should parse all other arguments before erroring out on undocumentable error" do
+    undoc_error "module X; include invalid, Y; end"
+    Registry.at('X').mixins.should == [P('Y')]
+  end
 end

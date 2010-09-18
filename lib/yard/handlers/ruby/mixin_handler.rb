@@ -4,15 +4,18 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   handles method_call(:include)
   
   process do
-    statement.parameters(false).each {|mixin| process_mixin(mixin) }
+    errors = statement.parameters(false).map {|mixin| process_mixin(mixin) }.compact
+    if errors.size > 0
+      msg = errors.size == 1 ? " #{errors[0]}" : "s #{errors.join(", ")}"
+      raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
+    end
   end
 
   protected
 
   def process_mixin(mixin)
-    unless mixin.ref?
-      raise YARD::Parser::UndocumentableError, "mixin #{mixin.source} for class #{namespace.path}"
-    end
+    return mixin.source unless mixin.ref?
+    return mixin.source if mixin.first.type == :ident
     
     case obj = Proxy.new(namespace, mixin.source)
     when Proxy
@@ -22,5 +25,6 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     end
     
     namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
+    nil
   end
 end

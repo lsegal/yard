@@ -14,5 +14,6 @@ class YARD::Handlers::Ruby::ExtendHandler < YARD::Handlers::Ruby::MixinHandler
     else
       super
     end
+    nil
   end
 end
