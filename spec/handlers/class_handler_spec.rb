@@ -21,7 +21,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   end
   
   it "should interpret class << ClassName as a class level block in ClassName's namespace" do
-    P("A::B::C::Hello").should be_instance_of(CodeObjects::MethodObject)
+    P("A::B::C.Hello").should be_instance_of(CodeObjects::MethodObject)
   end
   
   it "should make visibility public when parsing a block" do

@@ -230,8 +230,14 @@ module YARD
       def to_obj
         return @obj if @obj
         if @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
-          @namespace = @obj.namespace
-          @name = @obj.name
+          if @origname && @origname.include?("::") && !@obj.path.include?(@origname)
+            # the object's path should include the original proxy namespace,
+            # otherwise it's (probably) not the right object.
+            @obj = nil
+          else
+            @namespace = @obj.namespace
+            @name = @obj.name
+          end
         end
         @obj
       end

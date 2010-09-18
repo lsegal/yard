@@ -97,4 +97,20 @@ describe YARD::CodeObjects::Proxy do
     resolved.namespace.should == Registry.root
     resolved.name.should == :YARD
   end
+  
+  it "should ensure that the correct object was resolved" do
+    foo = ModuleObject.new(:root, :Foo)
+    foobar = ModuleObject.new(foo, :Bar)
+    foobaz = ClassObject.new(foo, :Baz)
+    
+    # Remember, we're looking for Qux::Bar, not just 'Bar'
+    proxy = Proxy.new(foobar, 'Foo::Qux::Bar')
+    proxy.type.should == :proxy
+    
+    qux = ModuleObject.new(foo, :Qux)
+    quxbar = ModuleObject.new(qux, :Bar)
+    
+    # Now it should resolve
+    proxy.type.should == :module
+  end
 end
