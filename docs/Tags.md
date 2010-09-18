@@ -125,7 +125,7 @@ YARD supplies the following built-in tags:
     first line is an optional title.
 
         @example Reverse a string
-          "mystring.reverse" #=> "gnirtsym"
+          "mystring".reverse #=> "gnirtsym"
 
   * `@option`: Describe an options hash in a method. The tag takes the
     name of the options parameter first, followed by optional types,
