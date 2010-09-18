@@ -3,8 +3,19 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
   handles /\Ainclude(\s|\()/
   
   process do
+    errors = []
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
-      process_mixin(mixin.strip)
+      mixin = mixin.strip
+      begin
+        process_mixin(mixin)
+      rescue YARD::Parser::UndocumentableError
+        errors << mixin
+      end
+    end
+    
+    if errors.size > 0
+      msg = errors.size == 1 ? " #{errors[0]}" : "s #{errors.join(", ")}"
+      raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
     end
   end
 
@@ -12,7 +23,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
 
   def process_mixin(mixin)
     unless mixmatch = mixin[/\A(#{NAMESPACEMATCH})/, 1]
-      raise YARD::Parser::UndocumentableError, "mixin #{mixin} for class #{namespace.path}"
+      raise YARD::Parser::UndocumentableError
     end
 
     obj = Proxy.new(namespace, mixmatch)
