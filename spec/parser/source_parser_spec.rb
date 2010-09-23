@@ -204,6 +204,38 @@ describe YARD::Parser::SourceParser do
       File.should_not_receive(:read_binary)
       YARD.parse(["foo/bar", "foo/baz"], ["foo", /baz$/])
     end
+    
+    it "should convert file contents to proper encoding if coding line is present" do
+      valid = []
+      valid << "# encoding: sjis"
+      valid << "# xxxxxencoding: sjis"
+      valid << "# xxxxxencoding: sjis xxxxxx"
+      valid << "# ENCODING: sjis"
+      valid << "#coDiNG: sjis"
+      valid << "# -*- coding: sjis -*-"
+      valid << "### coding: sjis"
+      valid << "# encoding=sjis"
+      valid << "# encoding:sjis"
+      valid << "# encoding   =   sjis"
+      valid << "# encoding   ==   sjis"
+      valid << "# encoding :  sjis"
+      valid << "# encoding ::  sjis"
+      valid << "#!/bin/shebang\n# encoding: sjis"
+      valid << "#!/bin/shebang\r\n# coding: sjis"
+      invalid = []
+      invalid << "#\n# encoding: sjis"
+      invalid << "#!/bin/shebang\n#\n# encoding: sjis"
+      invalid << "# !/bin/shebang\n# encoding: sjis"
+      {:should => valid, :should_not => invalid}.each do |msg, list|
+        list.each do |src|
+          Registry.clear
+          parser = Parser::SourceParser.new
+          File.should_receive(:read_binary).with('tmpfile').and_return(src)
+          result = parser.parse("tmpfile")
+          result.enumerator[0].source.encoding.to_s.send(msg) == 'Shift_JIS'
+        end
+      end
+    end if RUBY19
   end
   
   describe '#parse_in_order' do
