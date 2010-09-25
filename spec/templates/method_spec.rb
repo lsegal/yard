@@ -27,7 +27,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
         # @raise [Exception] hi!
         # @deprecated for great justice
         def m(x) end
-        alias x m
+        alias :x :m
       eof
     end
     

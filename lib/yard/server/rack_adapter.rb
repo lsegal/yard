@@ -45,6 +45,6 @@ end
 
 # @private
 class Rack::Request
-  alias query params
+  alias :query :params
   def xhr?; (env['HTTP_X_REQUESTED_WITH'] || "").downcase == "xmlhttprequest" end
 end

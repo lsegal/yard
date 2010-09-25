@@ -21,7 +21,7 @@ unless defined? Gem::DocManager.load_yardoc
       @has_rdoc && @has_rdoc != 'yard'
     end
   
-    alias has_yardoc? has_yardoc
+    alias :has_yardoc? :has_yardoc
   end
 
   class Gem::DocManager
@@ -84,8 +84,8 @@ unless defined? Gem::DocManager.load_yardoc
       say "Building YARD (yri) index for #{@spec.full_name}..."
       run_yardoc '-c', '-n'
     end
-    alias install_ri_yard_orig install_ri
-    alias install_ri install_ri_yard
+    alias :install_ri_yard_orig :install_ri
+    alias :install_ri :install_ri_yard
 
     def install_rdoc_yard
       if @spec.has_rdoc?
@@ -94,7 +94,7 @@ unless defined? Gem::DocManager.load_yardoc
         install_yardoc
       end
     end
-    alias install_rdoc_yard_orig install_rdoc
-    alias install_rdoc install_rdoc_yard
+    alias :install_rdoc_yard_orig :install_rdoc
+    alias :install_rdoc :install_rdoc_yard
   end
 end

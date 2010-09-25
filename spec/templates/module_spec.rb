@@ -27,7 +27,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
         
         def self.a; end
         def a; end
-        alias b a
+        alias :b :a
 
         # @overload test_overload(a)
         #   hello2

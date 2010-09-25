@@ -40,9 +40,9 @@ module YARD
       class AstNode < Array
         attr_accessor :docstring, :docstring_range, :source, :group
         attr_writer :source_range, :line_range, :file, :full_source
-        alias comments docstring
-        alias comments_range docstring_range
-        alias to_s source
+        alias :comments :docstring
+        alias :comments_range :docstring_range
+        alias :to_s :source
         
         # @return [Symbol] the node's unique symbolic type
         attr_accessor :type

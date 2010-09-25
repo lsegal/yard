@@ -19,7 +19,7 @@ module YARD
           RubyToken::TkBlockContents === token ? (include_block ? block.to_s : '') : token.text
         end.join
       end
-      alias source to_s
+      alias :source :to_s
       
       def inspect
         l = line - 1

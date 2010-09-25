@@ -93,7 +93,7 @@ module YARD
     
     # @return [CodeObjects::Base] the current object being tested
     attr_reader :object
-    alias o object
+    alias :o :object
     
     private
     

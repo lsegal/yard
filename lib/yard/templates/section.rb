@@ -46,7 +46,7 @@ module YARD
       def push(*args)
         super(*parse_sections(args))
       end
-      alias << push
+      alias :<< :push
       
       def unshift(*args)
         super(*parse_sections(args))

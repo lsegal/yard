@@ -276,8 +276,8 @@ module YARD
           super
         end
       end
-      alias == equal?
-      alias eql? equal?
+      alias :== :equal?
+      alias :eql? :equal?
       
       # @return [Integer] the object's hash value (for equality checking)
       def hash; path.hash end

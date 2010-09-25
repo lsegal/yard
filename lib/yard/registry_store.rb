@@ -55,8 +55,8 @@ module YARD
       end
     end
     
-    alias [] get
-    alias []= put
+    alias :[] :get
+    alias :[]= :put
     
     def delete(key) @store.delete(key.to_sym) end
     

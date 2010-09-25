@@ -29,8 +29,8 @@ module YARD
         other.is_a?(LibraryVersion) && other.name == name && 
           other.version == version && other.yardoc_file == yardoc_file
       end
-      alias == eql?
-      alias equal? eql?
+      alias :== :eql?
+      alias :equal? :eql?
       
       def prepare!
         return if yardoc_file

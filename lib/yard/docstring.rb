@@ -68,7 +68,7 @@ module YARD
       @all = content
       super parse_comments(content)
     end
-    alias all= replace
+    alias :all= :replace
 
     # @endgroup
     

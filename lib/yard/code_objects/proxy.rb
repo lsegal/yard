@@ -99,8 +99,8 @@ module YARD
           end
         end
       end
-      alias to_s path
-      alias to_str path
+      alias :to_s :path
+      alias :to_str :path
     
       # @return [Boolean] 
       def is_a?(klass)
@@ -137,7 +137,7 @@ module YARD
           false
         end
       end
-      alias == equal?
+      alias :== :equal?
       
       # @return [Integer] the object's hash value (for equality checking)
       def hash; path.hash end

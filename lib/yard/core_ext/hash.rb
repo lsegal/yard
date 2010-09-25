@@ -9,7 +9,7 @@ class Hash
         create_186(*args)
       end
     end
-    alias create_186 []
-    alias [] create
+    alias :create_186 :[]
+    alias :[] :create
   end
 end if RUBY_VERSION < "1.8.7"

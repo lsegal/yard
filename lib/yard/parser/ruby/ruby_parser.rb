@@ -18,7 +18,7 @@ module YARD
       # @since 0.5.6
       class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
-        alias root ast
+        alias :root :ast
 
         def initialize(source, filename, *args)
           super
@@ -251,7 +251,7 @@ module YARD
         def on_body_stmt(*args)
           args.compact.size == 1 ? args.first : AstNode.new(:list, args)
         end
-        alias on_bodystmt on_body_stmt
+        alias :on_bodystmt :on_body_stmt
         
         def on_assoc_new(*args)
           AstNode.new(:assoc, args)
