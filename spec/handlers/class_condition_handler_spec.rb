@@ -8,6 +8,10 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
     names.each {|name| Registry.at("A##{name}not").should be_nil }
   end
   
+  def no_undoc_error(code)
+    lambda { StubbedSourceParser.parse_string(code) }.should_not raise_error
+  end
+  
   it "should parse all unless blocks for complex conditions" do
     verify_method :g
   end
@@ -45,13 +49,14 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassConditionHandler
   end
   
   it "should not fail on complex conditions" do
-    lambda { YARD.parse_string("if defined?(A) && defined?(B); puts 'hi' end") }.should_not raise_error
-    lambda do 
-      YARD.parse_string(<<-eof)
-        (<<-TEST) unless defined?(ABCD_MODEL_TEST)
-          'String'
-        TEST
-      eof
-    end.should_not raise_error
+    log.should_not_receive(:warn)
+    log.should_not_receive(:error)
+    no_undoc_error "if defined?(A) && defined?(B); puts 'hi' end"
+    no_undoc_error(<<-eof)
+      (<<-TEST) unless defined?(ABCD_MODEL_TEST)
+        'String'
+      TEST
+    eof
+    no_undoc_error "if caller.none? { |l| l =~ %r{lib/rails/generators\\.rb:(\\d+):in `lookup!'$} }; end"
   end
 end

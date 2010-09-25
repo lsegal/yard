@@ -70,6 +70,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
   
   # @since 0.5.5
   def parse_else_block
+    return unless statement.block
     stmtlist = YARD::Parser::Ruby::Legacy::StatementList
     stmtlist.new(statement.block).each do |stmt|
       if TkELSE === stmt.tokens.first
