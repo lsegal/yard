@@ -158,8 +158,8 @@ module YARD
           # distinct (for example Kernel.hash and Kernel.object_id share the same
           # implementation
 
-          # override_comment = find_override_comment(object)
-          # comment = override_comment if override_comment
+          override_comment = find_override_comment(object)
+          comment = override_comment if override_comment
 
           object.docstring = parse_comments(object, comment) if comment
           object.source = body_text
@@ -168,9 +168,20 @@ module YARD
           find_method_body(object, $2, content)
         else
           # No body, but might still have an override comment
-          # comment = find_override_comment(object)
-          comment = nil
+          comment = find_override_comment(object)
           object.docstring = parse_comments(object, comment) if comment
+        end
+      end
+
+      def find_override_comment(object, content = @content)
+        name = Regexp.escape(object.name.to_s)
+        class_name = object.parent.path
+        if content =~ %r{Document-method:\s+#{class_name}(?:\.|::|#)#{name}\s*?\n((?>.*?\*/))}m then
+          $1
+        elsif content =~ %r{Document-method:\s#{name}\s*?\n((?>.*?\*/))}m then
+          $1
+        else
+          nil
         end
       end
       
