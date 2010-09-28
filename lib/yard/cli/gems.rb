@@ -44,6 +44,7 @@ module YARD
       end
       
       def add_gems(gems)
+        require 'enumerable'
         gems.each_slice(2) do |gem, ver_require|
           specs = Gem.source_index.find_name(gem, ver_require || ">= 0")
           @gems += specs unless specs.empty?
