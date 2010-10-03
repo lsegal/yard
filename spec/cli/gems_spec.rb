@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require 'ostruct'
-
-include CLI
+require 'rubygems'
 
 describe YARD::CLI::Gems do
   before do
@@ -27,33 +26,33 @@ describe YARD::CLI::Gems do
       Dir.should_receive(:chdir).with(themock.full_gem_path)
     end
     Registry.should_receive(:clear).exactly(specs.size).times
-    Yardoc.should_receive(:run).exactly(specs.size).times
+    CLI::Yardoc.should_receive(:run).exactly(specs.size).times
   end
   
   describe '#run' do
     it "should build all gem indexes if no gem is specified" do
       build_specs(@gem1, @gem2)
       Gem.source_index.should_receive(:find_name).with('').and_return([@gem1, @gem2])
-      Gems.run
+      CLI::Gems.run
     end
     
     it "should allow gem to be specified" do
       build_specs(@gem1)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 0').and_return([@gem1])
-      Gems.run(@gem1.name)
+      CLI::Gems.run(@gem1.name)
     end
     
     it "should allow multiple gems to be specified for building" do
       build_specs(@gem1, @gem2)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, @gem1.version).and_return([@gem1])
       Gem.source_index.should_receive(:find_name).with(@gem2.name, '>= 0').and_return([@gem2])
-      Gems.run(@gem1.name, @gem1.version, @gem2.name)
+      CLI::Gems.run(@gem1.name, @gem1.version, @gem2.name)
     end
     
     it "should allow version to be specified with gem" do
       build_specs(@gem1)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 1.0').and_return([@gem1])
-      Gems.run(@gem1.name, '>= 1.0')
+      CLI::Gems.run(@gem1.name, '>= 1.0')
     end
     
     it "should warn if one of the gems is not found, but it should process others" do
@@ -61,22 +60,22 @@ describe YARD::CLI::Gems do
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
       Gem.source_index.should_receive(:find_name).with(@gem2.name, '>= 0').and_return([@gem2])
       log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
-      Gems.run(@gem1.name, '>= 2.0', @gem2.name)
+      CLI::Gems.run(@gem1.name, '>= 2.0', @gem2.name)
     end
     
     it "should fail if specified gem(s) is/are not found" do
-      Yardoc.should_not_receive(:run)
+      CLI::Yardoc.should_not_receive(:run)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
       log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
       log.should_receive(:error).with(/No specified gems could be found/)
-      Gems.run(@gem1.name, '>= 2.0')
+      CLI::Gems.run(@gem1.name, '>= 2.0')
     end
     
     it "should accept --rebuild" do
       @rebuild = true
       build_specs(@gem1)
       Gem.source_index.should_receive(:find_name).with('').and_return([@gem1])
-      Gems.run('--rebuild')
+      CLI::Gems.run('--rebuild')
     end
   end
 end
