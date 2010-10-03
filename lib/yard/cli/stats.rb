@@ -67,7 +67,7 @@ module YARD
       
       # Prints list of undocumented objects
       def print_undocumented_objects
-        return unless @undoc_list
+        return if @undoc_list.empty?
         puts
         puts "Undocumented Objects:"
         
