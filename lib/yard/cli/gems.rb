@@ -17,7 +17,6 @@ module YARD
       def run(*args)
         require 'rubygems'
         optparse(*args)
-        @gems += Gem.source_index.find_name('') if @gems.empty?
         build_gems
       end
       
@@ -46,9 +45,13 @@ module YARD
       
       def add_gems(gems)
         0.step(gems.size - 1, 2) do |index|
-          gem, ver_require = gems[index], gems[index + 1]
-          specs = Gem.source_index.find_name(gem, ver_require || ">= 0")
-          @gems += specs unless specs.empty?
+          gem, ver_require = gems[index], gems[index + 1] || ">= 0"
+          specs = Gem.source_index.find_name(gem, ver_require)
+          if specs.empty?
+            log.warn "#{gem} #{ver_require} could not be found in RubyGems index"
+          else
+            @gems += specs
+          end
         end
       end
       
@@ -67,6 +70,13 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
         add_gems(args)
+        
+        
+        if !args.empty? && @gems.empty?
+          log.error "No specified gems could be found for command"
+        elsif @gems.empty?
+          @gems += Gem.source_index.find_name('') if @gems.empty?
+        end
       end
     end
   end
