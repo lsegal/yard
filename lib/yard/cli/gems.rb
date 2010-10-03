@@ -44,7 +44,8 @@ module YARD
       end
       
       def add_gems(gems)
-        gems.each_slice(2) do |gem, ver_require|
+        0.step(gems.size - 1, 2) do |index|
+          gem, ver_require = gems[index], gems[index + 1]
           specs = Gem.source_index.find_name(gem, ver_require || ">= 0")
           @gems += specs unless specs.empty?
         end
