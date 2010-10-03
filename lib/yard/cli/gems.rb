@@ -15,6 +15,7 @@ module YARD
       # @param [Array<String>] args the list of arguments
       # @return [void] 
       def run(*args)
+        require 'rubygems'
         optparse(*args)
         @gems += Gem.source_index.find_name('') if @gems.empty?
         build_gems
