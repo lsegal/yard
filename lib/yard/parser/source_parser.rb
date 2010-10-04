@@ -1,5 +1,8 @@
 require 'stringio'
-require 'continuation' unless RUBY18
+
+begin
+  require 'continuation'
+rescue LoadError; end
 
 module YARD
   module Parser
