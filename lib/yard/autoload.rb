@@ -202,6 +202,7 @@ module YARD
   autoload :Logger,         __p('logging')
   autoload :Registry,       __p('registry')
   autoload :RegistryStore,  __p('registry_store')
+  autoload :StubProxy,      __p('serializers/yardoc_serializer')
   autoload :Verifier,       __p('verifier')
 end
 
