@@ -36,7 +36,13 @@ $LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9.1" ? [true, false] : [false, true])
 
 # Whether or not continuations are (properly) supported
-CONTINUATIONS_SUPPORTED = !(RUBY_PLATFORM =~ /java/ || defined?(::Rubinius))
+begin
+  begin; require 'continuation'; rescue LoadError; end
+  cc = callcc {|cc| cc }; cc.call if cc
+  CONTINUATIONS_SUPPORTED = true
+rescue
+  CONTINUATIONS_SUPPORTED = false
+end
 
 # Load Ruby core extension classes
 Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|

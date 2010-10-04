@@ -457,7 +457,7 @@ module YARD
         unless CONTINUATIONS_SUPPORTED
           unless $NO_CONTINUATION_WARNING
             $NO_CONTINUATION_WARNING = true
-            log.warn "JRuby/Rubinius do not implement Kernel#callcc and cannot " +
+            log.warn "JRuby/MacRuby/Rubinius do not implement Kernel#callcc and cannot " +
               "load files in order. You must specify the correct order manually."
           end
           raise NamespaceMissingError, object
