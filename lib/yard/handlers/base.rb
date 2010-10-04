@@ -454,7 +454,7 @@ module YARD
           end
         end
         
-        if RUBY_PLATFORM =~ /java/ || defined?(::Rubinius)
+        unless CONTINUATIONS_SUPPORTED
           unless $NO_CONTINUATION_WARNING
             $NO_CONTINUATION_WARNING = true
             log.warn "JRuby/Rubinius do not implement Kernel#callcc and cannot " +

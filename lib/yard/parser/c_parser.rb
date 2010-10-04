@@ -32,7 +32,7 @@ module YARD
       
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
-        if RUBY_PLATFORM =~ /java/ || defined?(::Rubinius)
+        unless CONTINUATIONS_SUPPORTED
           unless $NO_CONTINUATION_WARNING
             $NO_CONTINUATION_WARNING = true
             log.warn "JRuby/Rubinius do not implement Kernel#callcc and cannot " +
