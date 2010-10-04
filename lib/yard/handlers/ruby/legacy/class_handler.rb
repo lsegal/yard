@@ -98,6 +98,8 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
          /\ADelegateClass\((.+?)\)\s*\Z/,
          /\A(#{NAMESPACEMATCH})\(/
       $1
+    when "self"
+      namespace.path
     end
   end
 end

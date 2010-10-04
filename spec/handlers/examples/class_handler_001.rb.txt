@@ -106,3 +106,7 @@ end
 # @attr_writer [IO] fourth sets the proc that writes stuff
 class SemiDoccedStruct < Struct.new(:first, :second, :third, :fourth)
 end
+
+class Outer1
+  class Inner1 < self; end
+end

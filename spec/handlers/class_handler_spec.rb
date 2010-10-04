@@ -234,4 +234,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     Registry.at('RegularStruct').superclass.should == P(:Struct)
     Registry.at('RegularStruct2').superclass.should == P(:Struct)
   end
+  
+  it "should handle inheritance from 'self'" do
+    Registry.at('Outer1::Inner1').superclass.should == Registry.at('Outer1')
+  end
 end

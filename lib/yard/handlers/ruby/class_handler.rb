@@ -96,6 +96,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     
     case superclass.type
     when :var_ref
+      return namespace.path if superclass.first == s(:kw, "self")
       return superclass.source if superclass.first.type == :const
     when :const, :const_ref, :const_path_ref, :top_const_ref
       return superclass.source
