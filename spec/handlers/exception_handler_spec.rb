@@ -36,4 +36,9 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ExceptionHandler" do
   it "should ignore any raise calls on a receiver" do
     P('Testing#mymethod9').tag(:raise).should be_nil
   end
+  
+  it "should handle raise expressions that are method calls" do
+    P('Testing#mymethod10').tag(:raise).should be_nil
+    P('Testing#mymethod11').tag(:raise).should be_nil
+  end
 end
