@@ -24,6 +24,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       nobj = P(namespace, prefix) unless prefix == "self"
     end
     
+    nobj = P(namespace, nobj.value) while nobj.type == :constant
     obj = register MethodObject.new(nobj, meth, mscope) do |o| 
       o.visibility = visibility 
       o.source = statement

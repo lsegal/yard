@@ -127,4 +127,9 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}MethodHandler" do
     undoc_error "error = Foo; def error.at(foo) end"
     Registry.at('error').should be_nil
   end
+  
+  it "should allow class method to be defined on constant reference object" do
+    Registry.at('Foo.meth_on_const').should_not be_nil
+    Registry.at('Foo.meth2_on_const').should_not be_nil
+  end
 end

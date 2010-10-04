@@ -79,3 +79,9 @@ end
   def auto_opts(opts)
   end
 end
+
+CONST = Foo
+def CONST.meth_on_const; end
+CONST2 = CONST
+def CONST2.meth2_on_const; end
+
