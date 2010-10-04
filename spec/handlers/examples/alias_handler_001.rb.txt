@@ -25,4 +25,6 @@ class B < C
   alias_method :t, :inspect if 500 == 3 * CONSTANT
   alias_method :<<, :a
   alias_method :for, :a
+  alias do x
+  alias x2 do
 end
