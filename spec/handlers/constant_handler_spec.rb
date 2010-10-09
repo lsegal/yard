@@ -45,6 +45,19 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ConstantHandler" do
     obj.attributes[:instance].should be_empty
   end
   
+  it "should maintain docstrings on structs defined via constants" do
+    obj = Registry.at("DocstringStruct")
+    obj.should_not be_nil
+    obj.docstring.should == "A crazy struct."
+    obj.attributes[:instance].should_not be_empty
+    a1 = Registry.at("DocstringStruct#bar")
+    a2 = Registry.at("DocstringStruct#baz")
+    a1.docstring.should == "An attr"
+    a1.tag(:return).types.should == ["String"]
+    a2.docstring.should == "Another attr"
+    a2.tag(:return).types.should == ["Number"]
+  end
+  
   it "should raise undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
     undoc_error "nonconst = Struct.new"
   end if RUBY19
