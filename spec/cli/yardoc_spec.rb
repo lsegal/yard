@@ -483,5 +483,11 @@ describe YARD::CLI::Yardoc do
       @yardoc.run('--query', 'foo')
       @yardoc.options[:verifier].expressions.should_not include("foo")
     end
+    
+    it "should not allow modifying the template paths" do
+      YARD::Templates::Engine.should_not_receive(:register_template_path)
+      @yardoc.run('-p', 'foo')
+      @yardoc.run('--template-path', 'foo')
+    end
   end
 end

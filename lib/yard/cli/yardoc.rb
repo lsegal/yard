@@ -556,6 +556,7 @@ module YARD
 
         opts.on('-p', '--template-path PATH', 
                 'The template path to look for templates in. (used with -t).') do |path|
+          next if Config.options[:safe_mode]
           YARD::Templates::Engine.register_template_path(path)
         end
 
