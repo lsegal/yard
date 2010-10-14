@@ -24,6 +24,7 @@ module YARD
         opts.separator ""
         opts.separator "Other options:"
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
+          next if Config.options[:safe_mode]
           begin
             require(file.gsub(/\.rb$/, ''))
           rescue LoadError

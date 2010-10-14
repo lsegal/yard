@@ -38,6 +38,14 @@ module YARD
   # should now be specified in the main configuration file, though YARD
   # will support the +ignored_plugins+ file until 0.7.x.
   # 
+  # == Safe Mode
+  # 
+  # YARD supports running in safe-mode. By doing this, it will avoid executing
+  # any user code such as require files or queries. Plugins will still be
+  # loaded with safe mode on, because plugins are properly namespaced with
+  # a 'yard-' prefix, must be installed as a gem, and therefore cannot be
+  # touched by the user. To specify safe mode, use the +safe_mode+ key.
+  # 
   # @since 0.6.2
   # @see options
   class Config
@@ -62,9 +70,12 @@ module YARD
     DEFAULT_CONFIG_OPTIONS = {
       :load_plugins => false,   # Whether to load plugins automatically with YARD
       :ignored_plugins => [],   # A list of ignored plugins by name
-      :autoload_plugins => []   # A list of plugins to be automatically loaded
+      :autoload_plugins => [],  # A list of plugins to be automatically loaded
+      :safe_mode => false       # Does not execute or eval any user-level code
     }
     
+    # The prefix used for YARD plugins. Name your gem with this prefix
+    # to allow it to be used as a plugin.
     YARD_PLUGIN_PREFIX = /^yard[-_]/
     
     # Loads settings from {CONFIG_FILE}. This method is called by YARD at

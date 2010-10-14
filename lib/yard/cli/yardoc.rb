@@ -495,6 +495,7 @@ module YARD
         end
 
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
+          next if Config.options[:safe_mode]
           options[:verifier].add_expressions(query.taint)
         end
 

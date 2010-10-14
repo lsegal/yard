@@ -29,9 +29,6 @@ module YARD
   def self.load_plugins; YARD::Config.load_plugins end
 end
 
-# Ruby 1.9.2 removes '.' which is not exactly a good idea
-$LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
-
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9.1" ? [true, false] : [false, true])
 

@@ -467,4 +467,21 @@ describe YARD::CLI::Yardoc do
       Tags::Library.transitive_tags.should include(:foo)
     end
   end
+  
+  describe 'Safe mode' do
+    before do
+      YARD::Config.stub!(:options).and_return(:safe_mode => true)
+    end
+    
+    it "should not allow --load or -e in safe mode" do
+      @yardoc.should_not_receive(:require)
+      @yardoc.run('--load', 'foo')
+      @yardoc.run('-e', 'foo')
+    end
+
+    it "should not allow --query in safe mode" do
+      @yardoc.run('--query', 'foo')
+      @yardoc.options[:verifier].expressions.should_not include("foo")
+    end
+  end
 end
