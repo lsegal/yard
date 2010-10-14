@@ -19,7 +19,11 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
-      parse_struct_subclass(klass, superclass_def) if is_a_struct
+      if is_a_struct
+        parse_struct_subclass(klass, superclass_def)
+      elsif klass
+        create_attributes(klass, members_from_tags(klass))
+      end
       parse_block(:namespace => klass)
        
       if undocsuper

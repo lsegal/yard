@@ -107,6 +107,13 @@ end
 class SemiDoccedStruct < Struct.new(:first, :second, :third, :fourth)
 end
 
+# @attr [String] first the first entry
+# @attr_reader [Fixnum] second this only has a reader
+# @attr_writer [Array] third this only has a writer
+# @attr_reader [#read] fourth returns a proc that reads
+# @attr_writer [IO] fourth sets the proc that writes stuff
+class NotAStruct; end
+
 class Outer1
   class Inner1 < self; end
 end
