@@ -27,4 +27,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}VisibilityHandler" do
     Registry.at('Testing#argument').should be_nil
     Registry.at('Testing#method_call').should be_nil
   end
+  
+  it "should handle constants passed in as symbols" do
+    Registry.at('Testing#Foo').visibility.should == :private
+  end
 end
