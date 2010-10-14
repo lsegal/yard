@@ -47,8 +47,6 @@ module YARD
         require 'rdoc/markup/simple_markup/to_html'
         SimpleMarkup = SM::SimpleMarkup.new
       end
-
-      private
       
       # Attempts to load the first valid markup provider in {MARKUP_PROVIDERS}.
       # If a provider is specified, immediately try to load it.
@@ -59,20 +57,22 @@ module YARD
       # 
       # On failure this method will inform the user that no provider could be
       # found and exit the program.
+      # 
+      # @return [Boolean] whether the markup provider was successfully loaded.
       def load_markup_provider(type = options[:markup])
-        return if type == :rdoc || (@markup_cache && @markup_cache[type])
+        return true if type == :rdoc || (@markup_cache && @markup_cache[type])
         @markup_cache ||= {}
         @markup_cache[type] ||= {}
         
         providers = MARKUP_PROVIDERS[type]
-        return if providers && providers.empty?
-        if options[:markup_provider]
+        return true if providers && providers.empty?
+        if providers && options[:markup_provider]
           providers = providers.select {|p| p[:lib] == options[:markup_provider] }
         end
         
         if providers == nil || providers.empty?
-          STDERR.puts "Invalid markup type '#{type}'"
-          exit
+          log.error "Invalid markup type '#{type}' or markup provider is not registered."
+          return false
         end
         
         # Search for provider, return the library class name as const if found
@@ -80,13 +80,13 @@ module YARD
           begin require provider[:lib].to_s; rescue LoadError; next end
           @markup_cache[type][:provider] = provider[:lib] # Cache the provider
           @markup_cache[type][:class] = Kernel.const_get(provider[:const])
-          return
+          return false
         end
         
         # Show error message telling user to install first potential provider
         name, lib = providers.first[:const], providers.first[:lib]
-        STDERR.puts "Missing #{name} gem for #{options[:markup].to_s.capitalize} formatting. Install it with `gem install #{lib}`"
-        exit
+        log.error "Missing #{name} gem for #{options[:markup].to_s.capitalize} formatting. Install it with `gem install #{lib}`"
+        false
       end
       
       # Checks for a shebang or looks at the file extension to determine

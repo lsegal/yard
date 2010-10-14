@@ -197,6 +197,9 @@ module YARD
       def run(*args)
         parse_arguments(*args)
         
+        # fail early if markup provider is not found
+        return if generate && !verify_markup_options
+        
         checksums = nil
         if use_cache
           Registry.load
@@ -292,6 +295,16 @@ module YARD
           end
         end
         Templates::Engine.generate(objects, options)
+      end
+      
+      # Verifies that the markup options are valid before parsing any code.
+      # Failing early is better than failing late.
+      # 
+      # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
+      def verify_markup_options
+        obj = Struct.new(:options).new(options)
+        obj.extend(Templates::Helpers::MarkupHelper)
+        obj.load_markup_provider
       end
       
       # Copies any assets to the output directory
