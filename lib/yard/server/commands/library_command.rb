@@ -2,6 +2,10 @@ module YARD
   module Server
     module Commands
       class LibraryCommand < Base
+
+        #Seems the threads step on one another in setup_yardopts
+        @@library_chdir_lock = Mutex.new
+
         # @return [LibraryVersion] the object containing library information
         attr_accessor :library
 
@@ -49,16 +53,19 @@ module YARD
         end
 
         def setup_yardopts
-          Dir.chdir(library.source_path)
-          yardoc = CLI::Yardoc.new
-          if incremental
-            yardoc.run('-c', '-n', '--no-stats')
-          else
-            yardoc.parse_arguments
+          @@library_chdir_lock.synchronize do
+            Dir.chdir(library.source_path) do
+              yardoc = CLI::Yardoc.new
+              if incremental
+                yardoc.run('-c', '-n', '--no-stats')
+              else
+                yardoc.parse_arguments
+              end
+              yardoc.options.delete(:serializer)
+              yardoc.options[:files].unshift(*Dir.glob(library.source_path + '/README*'))
+              options.update(yardoc.options.to_hash)
+            end
           end
-          yardoc.options.delete(:serializer)
-          yardoc.options[:files].unshift(*Dir.glob(library.source_path + '/README*'))
-          options.update(yardoc.options.to_hash)
         end
 
         def load_yardoc
