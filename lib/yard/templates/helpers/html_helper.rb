@@ -51,7 +51,7 @@ module YARD
           str = $1
           str = html_syntax_highlight(CGI.unescapeHTML(str)) unless options[:no_highlight]
           %Q{<pre class="code">#{str}</pre>}
-        end
+        end unless markup == :text
         html
       end
       
