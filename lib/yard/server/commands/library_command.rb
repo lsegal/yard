@@ -2,10 +2,6 @@ module YARD
   module Server
     module Commands
       class LibraryCommand < Base
-
-        #Seems the threads step on one another in setup_yardopts
-        @@library_chdir_lock = Mutex.new
-
         # @return [LibraryVersion] the object containing library information
         attr_accessor :library
 
@@ -20,6 +16,10 @@ module YARD
         
         # @return [Boolean] whether to reparse data 
         attr_accessor :incremental
+
+        # Needed to synchronize threads in {#setup_yardopts}
+        # @private
+        @@library_chdir_lock = Mutex.new
         
         def initialize(opts = {})
           super
