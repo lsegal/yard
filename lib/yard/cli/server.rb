@@ -68,7 +68,7 @@ module YARD
         opts = OptionParser.new
         opts.banner = 'Usage: yard server [options] [[library yardoc_file] ...]'
         opts.separator ''
-        opts.separator 'Example: yard server yard .yardoc ruby-core ../ruby/.yardoc'
+        opts.separator 'Example: yard server -m yard .yardoc ruby-core ../ruby/.yardoc'
         opts.separator 'The above example serves documentation for YARD and Ruby-core'
         opts.separator ''
         opts.separator 'If no library/yardoc_file is specified, the server uses'
