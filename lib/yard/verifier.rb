@@ -67,11 +67,13 @@ module YARD
       end
     end
 
-    # Tests the expressions on the object
+    # Tests the expressions on the object.
     # 
+    # @note If the object is a {CodeObjects::Proxy} the result will always be true.
     # @param [CodeObjects::Base] object the object to verify
     # @return [Boolean] the result of the expressions
     def call(object)
+      return true if object.is_a?(CodeObjects::Proxy)
       modify_nilclass
       @object = object
       retval = __execute ? true : false

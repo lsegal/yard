@@ -271,6 +271,11 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(obj).should == true
     end
+    
+    it "should not call #tag on proxy object" do # @bug gh-197
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options[:verifier].call(P('ProxyClass')).should == true
+    end
 
     it "should hide methods inside a 'private' class/module with --no-private" do
       Registry.clear
