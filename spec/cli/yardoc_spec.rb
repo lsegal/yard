@@ -261,7 +261,7 @@ describe YARD::CLI::Yardoc do
 
     it "should not call #tag on namespace if namespace is proxy with --no-private" do
       ns = mock(:namespace)
-      ns.stub!(:type).and_return(:proxy)
+      ns.should_receive(:is_a?).with(CodeObjects::Proxy).and_return(true)
       ns.should_not_receive(:tag)
       obj = mock(:object)
       obj.stub!(:type).and_return(:class)
@@ -270,6 +270,16 @@ describe YARD::CLI::Yardoc do
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(obj).should == true
+    end
+
+    # @bug gh-197
+    it "should not call #tag on namespace if namespace is proxy with --no-private" do
+      Registry.clear
+      YARD.parse_string "module Qux; class Foo::Bar; end; end"
+      foobar = Registry.at('Foo::Bar')
+      foobar.namespace.type = :module
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options[:verifier].call(foobar).should == true
     end
     
     it "should not call #tag on proxy object" do # @bug gh-197

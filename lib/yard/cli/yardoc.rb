@@ -492,7 +492,7 @@ module YARD
 
         opts.on('--no-private', "Hide objects with @private tag") do
           options[:verifier].add_expressions '!object.tag(:private) && 
-            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
+            (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
         end
 
         opts.on('--no-highlight', "Don't highlight code blocks in output.") do 
