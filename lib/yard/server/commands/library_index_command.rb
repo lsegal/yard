@@ -1,6 +1,7 @@
 module YARD
   module Server
     module Commands
+      # Returns the index of libraries served by the server.
       class LibraryIndexCommand < Base
         attr_accessor :options
         
