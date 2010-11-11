@@ -136,6 +136,8 @@ module YARD
   # Namespace for classes and modules that handle serving documentation over HTTP
   # @since 0.6.0
   module Server
+    require __p('server')
+
     module Commands
       autoload :Base,                 __p('server/commands/base')
       autoload :DisplayFileCommand,   __p('server/commands/display_file_command')
