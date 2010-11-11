@@ -8,13 +8,13 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
       mixin = mixin.strip
       begin
         process_mixin(mixin)
-      rescue YARD::Parser::UndocumentableError
-        errors << mixin
+      rescue YARD::Parser::UndocumentableError => err
+        errors << err.message
       end
     end
     
     if errors.size > 0
-      msg = errors.size == 1 ? " #{errors[0]}" : "s #{errors.join(", ")}"
+      msg = errors.size == 1 ? ": #{errors[0]}" : "s: #{errors.join(", ")}"
       raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
     end
   end
