@@ -8,6 +8,9 @@ class YARD::Handlers::Ruby::Legacy::ExtendHandler < YARD::Handlers::Ruby::Legacy
 
   def process_mixin(mixin)
     if mixin == "self"
+      if namespace.is_a?(ClassObject)
+        raise UndocumentableError, "extend(self) statement on class"
+      end
       namespace.mixins(scope) << namespace
     else
       super

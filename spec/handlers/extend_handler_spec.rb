@@ -16,4 +16,8 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ExtendHandler" do
   it "should extend module with correct namespace" do
     Registry.at('Q::R::S').class_mixins.first.path.should == 'A'
   end
+  
+  it "should not allow extending self if object is a class" do
+    undoc_error "class Foo; extend self; end"
+  end
 end
