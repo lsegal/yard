@@ -45,6 +45,7 @@ module YARD::CodeObjects
         list += [superclass] unless superclass == P(:Object) || superclass == P(:BasicObject)
       end
       [self] + list.map do |m|
+        next m if m == self
         next m unless m.respond_to?(:inheritance_tree)
         m.inheritance_tree(include_mods)
       end.flatten.uniq
