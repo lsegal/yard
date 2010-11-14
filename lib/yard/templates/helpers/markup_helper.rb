@@ -9,7 +9,8 @@ module YARD
           {:lib => :bluecloth, :const => 'BlueCloth'},
           {:lib => :maruku, :const => 'Maruku'},
           {:lib => :"rpeg-markdown", :const => "PEGMarkdown"},
-          {:lib => :rdiscount, :const => "RDiscount"}
+          {:lib => :rdiscount, :const => "RDiscount"},
+          {:lib => :kramdown, :const => "Kramdown::Document"}
         ],
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'}
@@ -79,7 +80,7 @@ module YARD
         providers.each do |provider|
           begin require provider[:lib].to_s; rescue LoadError; next end
           @markup_cache[type][:provider] = provider[:lib] # Cache the provider
-          @markup_cache[type][:class] = Kernel.const_get(provider[:const])
+          @markup_cache[type][:class] = eval(provider[:const])
           return false
         end
         
