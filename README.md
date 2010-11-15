@@ -288,6 +288,20 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **November.15.10**: 0.6.2 release
+    - **Plugins no longer automatically load, use `--plugin` to load a plugin**
+    - Added YARD::Config and ~/.yard/config YAML configuration file
+    - Added `yard config` command to view/edit YARD configuration file
+    - Fixes for YARD in 1.8.6 (gh-178)
+    - Various HTML template adjustments and fixes (gh-198,199,200)
+    - Improved `yard server -m` multi-project stability (gh-193)
+    - Fixed handling of `yardoc --no-private` with missing class definitions (gh-197)
+    - Added support for constants defined in C extensions (gh-177)
+    - Added support for Structs defined as "Klass = Struct.new(...)" (gh-187)
+    - Improved parsing support for third-party gems (gh-174,180)
+    - Improved support for JRuby 1.6.4+. YARD now passes all specs in JRuby (gh-185)
+    - Improved YARD documentation (gh-172,191,196)
+
 - **September.06.10**: 0.6.1 release
     - Fixed TOC showing on top of class/method list in no-frames view
     - A message now displays when running `yard server` with Rack/Mongrel installed
