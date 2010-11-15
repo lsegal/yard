@@ -88,6 +88,9 @@ module YARD
       add_ignored_plugins_file
       translate_plugin_names
       load_plugins
+    rescue
+      log.error "Invalid configuration file, using default options."
+      options.update(DEFAULT_CONFIG_OPTIONS)
     end
     
     # Saves settings to {CONFIG_FILE}.
