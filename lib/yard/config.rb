@@ -90,6 +90,13 @@ module YARD
       load_plugins
     end
     
+    # Saves settings to {CONFIG_FILE}.
+    # @return [void]
+    def self.save
+      require 'yaml'
+      File.open(CONFIG_FILE, 'w') {|f| f.write(YAML.dump(options)) }
+    end
+    
     # Loads gems that match the name 'yard-*' (recommended) or 'yard_*' except
     # those listed in +~/.yard/ignored_plugins+. This is called immediately 
     # after YARD is loaded to allow plugin support.

@@ -28,6 +28,16 @@ describe YARD::Config do
     end
   end
   
+  describe '.save' do
+    it "should save options to config file" do
+      YARD::Config.stub!(:options).and_return(:a => 1, :b => %w(a b c))
+      file = mock(:file)
+      File.should_receive(:open).with(YARD::Config::CONFIG_FILE, 'w').and_yield(file)
+      file.should_receive(:write).with(YAML.dump(:a => 1, :b => %w(a b c)))
+      YARD::Config.save
+    end
+  end
+  
   describe '.load_plugin' do
     it "should load a plugin by 'name' as 'yard-name'" do
       YARD::Config.should_receive(:require).with('yard-foo')
