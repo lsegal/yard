@@ -6,6 +6,7 @@ document will cover the most common ways to use YARD:
 
 * [Documenting Code with YARD](#docing)
 * [Using YARD to Generate Documentation](#using)
+* [Configuring YARD](#config)
 * [Extending YARD](#extending)
 * [Templating YARD](#templating)
 * [Plugin Support](#plugins)
@@ -159,6 +160,28 @@ The `yard` tool will interface your YARD-based documentation with other resource
 You can use this if you want to document all installed gems, run a local
 documentation server, generate UML using [Graphviz][graphviz], view `ri`-style
 documentation, diff documentation, or analyze statistics.
+
+<a name="docing"></a>
+Configuring YARD
+================
+
+YARD (0.6.2+) supports a global configuration file stored in `~/.yard/config`.
+This file is stored as a YAML file and can contain arbitrary keys and values
+that can be used by YARD at run-time. YARD defines specific keys that are used
+to control various features, and they are listed in {YARD::Config::DEFAULT_CONFIG_OPTIONS}.
+A sample configuration file might look like:
+
+    :load_plugins: false
+    :ignored_plugins:
+      - my_plugin
+      - my_other_plugin
+    :autoload_plugins:
+      - my_autoload_plugin
+    :safe_mode: false
+    
+You can also view and edit these configuration options from the commandline
+using the `yard config` command. To list your configuration, use `yard config --list`.
+To view a key, use `yard config ITEM`, and to set it, use `yard config ITEM VALUE`.
 
 <a name="extending"></a>
 Extending YARD

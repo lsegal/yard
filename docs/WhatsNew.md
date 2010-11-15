@@ -14,6 +14,11 @@ What's New in 0.6.x?
 11. **Added `--transitive-tags` to register transitive tags** (0.6.0)
 12. **`yardoc` now displays RDoc-like statistics (`--no-stats` to hide)** (0.6.0)
 13. **`yri` now works on constants** (0.6.0)
+14. **Plugins are no longer auto-loaded (added `--plugin` switch)** (0.6.2)
+15. **Added `YARD::Config` API and `~/.yard/config` configuration file** (0.6.2)
+16. **Added `yard config` command to view/edit configuration** (0.6.2)
+17. **Added `yard server -t` template path switch** (0.6.2)
+18. **Added `YARD::Server.register_static_path` for static server assets** (0.6.2)
 
 ## Local documentation server for RubyGems or projects (`yard server`) (0.6.0)
 
@@ -217,6 +222,59 @@ To hide this output when yardoc is run, use `--no-stats`.
 
 Templates have now been added for text view of constants, which displays any 
 documentation and the constant value.
+
+## Plugins are no longer auto-loaded (added `--plugin` switch) (0.6.2)
+
+This is a backwards-incompatible change that disables plugins from automatically
+loading when YARD starts up. From now on, you should manually declare which
+plugins your project is using by adding `--plugin PLUGINNAME` to a `.yardopts`
+file in the root of your project. You can also re-enable autoloaded plugins
+by setting `load_plugins` to true in your configuration file (`yard config load_plugins true`, 
+see next item). You can also set `autoload_plugins` to a list of plugins 
+to be automatically loaded on start.
+
+If you are a YARD plugin author, please make sure to inform your users of these
+changes.
+
+Note that `--plugin` switches passed on the commandline (not via `.yardopts`) 
+are parsed before commands are loaded, and therefore can add in new CLI commands.
+
+## Added `YARD::Config` API and `~/.yard/config` configuration file (0.6.2)
+
+There is a new global configuration API that can be accessed programmatically
+and set via the `~/.yard/config` file. The file is encoded as a YAML file,
+and looks like:
+
+    :load_plugins: false
+    :ignored_plugins:
+      - my_plugin
+      - my_other_plugin
+    :autoload_plugins:
+      - my_autoload_plugin
+    :safe_mode: false
+
+You can also set configuration options via the command-line (see next item).
+    
+## Added `yard config` command to view/edit configuration (0.6.2)
+
+A new `yard config` command was created to view or edit the configuration
+file via the commandline. 
+
+* To view the current configuration use `yard config --list`.
+* To view a specific item use `yard config ITEMNAME`
+* To modify an item value use `yard config ITEMNAME VALUE`
+
+## Added `yard server -t` template path switch (0.6.2)
+
+The `yard server` command now accepts `-t` or `--template-path` to register
+a new template path for template customization.
+
+## Added `YARD::Server.register_static_path` for static server assets (0.6.2)
+
+The server now supports a command to register static asset paths. If you are
+extending the YARD::Server modules, make sure to register your asset paths
+through this method.
+
 
 What's New in 0.5.x?
 ====================
