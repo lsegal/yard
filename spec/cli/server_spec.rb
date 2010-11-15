@@ -12,7 +12,6 @@ describe YARD::CLI::Server do
     @adapter = mock(:adapter)
     @adapter.stub!(:setup)
     @cli = YARD::CLI::Server.new
-    @cli.stub!(:adapter).and_return(@adapter)
   end
   
   def rack_required
@@ -21,7 +20,6 @@ describe YARD::CLI::Server do
   
   def unstub_adapter
     @no_adapter_mock = true
-    @cli.unstub!(:adapter)
   end
   
   def run(*args)
@@ -33,6 +31,7 @@ describe YARD::CLI::Server do
       @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(lib.yardoc_file).and_return(true) } }
     end
     unless @no_adapter_mock
+      @cli.stub!(:adapter).and_return(@adapter)
       @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
       @adapter.should_receive(:start)
     end
@@ -105,7 +104,6 @@ describe YARD::CLI::Server do
   
   it "should default to Rack adapter if exists on system" do
     rack_required
-    @cli.unstub(:adapter)
     @cli.should_receive(:require).with('rubygems').and_return(false)
     @cli.should_receive(:require).with('rack').and_return(true)
     @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
@@ -113,7 +111,6 @@ describe YARD::CLI::Server do
   end
 
   it "should fall back to WEBrick adapter if Rack is not on system" do
-    @cli.unstub(:adapter)
     @cli.should_receive(:require).with('rubygems').and_return(false)
     @cli.should_receive(:require).with('rack').and_raise(LoadError)
     @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
