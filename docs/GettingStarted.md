@@ -153,6 +153,7 @@ Unless your documentation is very small, you'll end up needing to run `yardoc`
 with many options.  The `yardoc` tool will use the options found in this file.
 It is recommended to check this in to your repository and distribute it with
 your source.  Options for `yardoc` are discussed in the {file:README.md README}.
+A full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
 
 `yard`
 ------
