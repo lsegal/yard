@@ -154,11 +154,13 @@ module YARD
       options[:autoload_plugins].each {|name| load_plugin(name) }
     end
     
-    # Load plugins from ARGV arguments
+    # Load plugins from {#arguments}
     def self.load_commandline_plugins
-      arguments.each_with_index do |arg, i|
-        next unless arg == '--plugin'
-        load_plugin(arguments[i+1])
+      with_yardopts do
+        arguments.each_with_index do |arg, i|
+          next unless arg == '--plugin'
+          load_plugin(arguments[i+1])
+        end
       end
     end
     
@@ -204,8 +206,19 @@ module YARD
       name
     end
     
-    # Returns ARGV. Used for test stubbing only.
-    def self.arguments; ARGV end
+    # Temporarily loads .yardopts file into @yardopts
+    def self.with_yardopts(&block)
+      yfile = CLI::Yardoc::DEFAULT_YARDOPTS_FILE
+      @yardopts = File.file?(yfile) ? File.read_binary(yfile).shell_split : []
+      result = yield
+      @yardopts = nil
+      result
+    end
+    
+    # @return [Array<String>] arguments from commandline and yardopts file
+    def self.arguments
+      ARGV + @yardopts
+    end
   end
   
   Config.options = Config::DEFAULT_CONFIG_OPTIONS
