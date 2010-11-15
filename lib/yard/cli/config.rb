@@ -91,6 +91,8 @@ module YARD
         opts.separator "parsed as an array of values."
         opts.separator ""
         opts.separator "Note that `true` and `false` are reserved words."
+        opts.separator ""
+        opts.separator "General options:"
         
         opts.on('-l', '--list', 'List current configuration') do
           list = true
