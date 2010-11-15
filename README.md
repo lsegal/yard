@@ -404,8 +404,15 @@ Special thanks to the following people for submitting patches:
 * Yehuda Katz
 * Duane Johnson
 * Postmodern
+* Edward Muller
 * Pieter van de Bruggen
 * Leonid Borisenko
+* Arthur Schreiber
+* Robert Wahler
+* Mark Evans
+* David Turnbull
+* Anthony Thibault
+* Sam Rawlins
 * Jeff Rafter
 * Elliottcable
 * James Rosen
