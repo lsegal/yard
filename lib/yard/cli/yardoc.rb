@@ -508,7 +508,7 @@ module YARD
         end
 
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
-          next if Config.options[:safe_mode]
+          next if YARD::Config.options[:safe_mode]
           options[:verifier].add_expressions(query.taint)
         end
 
@@ -569,7 +569,7 @@ module YARD
 
         opts.on('-p', '--template-path PATH', 
                 'The template path to look for templates in. (used with -t).') do |path|
-          next if Config.options[:safe_mode]
+          next if YARD::Config.options[:safe_mode]
           YARD::Templates::Engine.register_template_path(path)
         end
 

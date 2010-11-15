@@ -59,7 +59,7 @@ module YARD
       # @param [String] file the path to the script to load
       # @since 0.6.2
       def load_script(file)
-        return if Config.options[:safe_mode]
+        return if YARD::Config.options[:safe_mode]
         require(file.gsub(/\.rb$/, ''))
       rescue LoadError
         log.error "The file `#{file}' could not be loaded, check the path and try again."

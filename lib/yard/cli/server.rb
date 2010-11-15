@@ -51,7 +51,7 @@ module YARD
       end
       
       def load_template_paths
-        return if Config.options[:safe_mode]
+        return if YARD::Config.options[:safe_mode]
         Templates::Engine.template_paths |= template_paths
       end
       
