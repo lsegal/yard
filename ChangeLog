@@ -1,5 +1,14 @@
 2010-11-15  Loren Segal <lsegal@soen.ca>
 
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.2
+
+  * spec/cli/server_spec.rb: Fix specs failing under 1.8.x due to unstub! call
+
+  * README.md, docs/GettingStarted.md: Tell users where to read information
+  about .yardopts
+
+  * ChangeLog, README.md: Update ChangeLog and summarize in README
+
   * spec/server/commands/static_file_command_spec.rb: Fix failing specs due to
   StaticFileCommand refactor and add new test cases
 

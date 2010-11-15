@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.6.1 (codename "The Cubic")    
-**Release Date**: September 6th 2010    
+**Latest Version**: 0.6.2 (codename "White Picket Fences")    
+**Release Date**: November 15th 2010    
 
 Synopsis
 --------
