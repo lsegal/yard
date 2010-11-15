@@ -168,7 +168,7 @@ module YARD
     # @return [false]
     def self.load_plugin_failed(name, exception)
       log.warn "Error loading plugin '#{name}'"
-      log.backtrace(exception)
+      log.backtrace(exception) if $DEBUG
       false
     end
     
