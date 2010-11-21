@@ -261,7 +261,7 @@ describe YARD::CLI::Yardoc do
 
     it "should not call #tag on namespace if namespace is proxy with --no-private" do
       ns = mock(:namespace)
-      ns.stub!(:type).and_return(:proxy)
+      ns.should_receive(:is_a?).with(CodeObjects::Proxy).and_return(true)
       ns.should_not_receive(:tag)
       obj = mock(:object)
       obj.stub!(:type).and_return(:class)
@@ -270,6 +270,21 @@ describe YARD::CLI::Yardoc do
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(obj).should == true
+    end
+
+    # @bug gh-197
+    it "should not call #tag on namespace if namespace is proxy with --no-private" do
+      Registry.clear
+      YARD.parse_string "module Qux; class Foo::Bar; end; end"
+      foobar = Registry.at('Foo::Bar')
+      foobar.namespace.type = :module
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options[:verifier].call(foobar).should == true
+    end
+    
+    it "should not call #tag on proxy object" do # @bug gh-197
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options[:verifier].call(P('ProxyClass')).should == true
     end
 
     it "should hide methods inside a 'private' class/module with --no-private" do
@@ -465,6 +480,29 @@ describe YARD::CLI::Yardoc do
     it "should accept --transitive-tag" do
       @yardoc.parse_arguments('--transitive-tag', 'foo')
       Tags::Library.transitive_tags.should include(:foo)
+    end
+  end
+  
+  describe 'Safe mode' do
+    before do
+      YARD::Config.stub!(:options).and_return(:safe_mode => true)
+    end
+    
+    it "should not allow --load or -e in safe mode" do
+      @yardoc.should_not_receive(:require)
+      @yardoc.run('--load', 'foo')
+      @yardoc.run('-e', 'foo')
+    end
+
+    it "should not allow --query in safe mode" do
+      @yardoc.run('--query', 'foo')
+      @yardoc.options[:verifier].expressions.should_not include("foo")
+    end
+    
+    it "should not allow modifying the template paths" do
+      YARD::Templates::Engine.should_not_receive(:register_template_path)
+      @yardoc.run('-p', 'foo')
+      @yardoc.run('--template-path', 'foo')
     end
   end
 end

@@ -12,11 +12,9 @@
             <% if tag.pair.defaults %>
               &mdash; default:
               <%= tag.pair.defaults.map {|t| "<tt>#{h t}</tt>" }.join(", ") %>
-            <% else %>
-              <span class="na">N/A</span>
             <% end %>
           </span>
-          <%= "&mdash;" + htmlify_line(tag.pair.text) if tag.pair.text %>
+          <%= "&mdash; " + htmlify_line(tag.pair.text) if tag.pair.text %>
         </tr>
       <% end %>
     </ul>

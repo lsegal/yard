@@ -270,4 +270,15 @@ eof
     s[1].tokens.to_s.should == "else"
     s[1].block.to_s.should == "bar"
   end
+  
+  it "should allow aliasing keywords" do
+    ['do x', 'x do', 'end begin', 'begin end'].each do |a|
+      s = stmt("alias #{a}\ndef foo; end")
+      s.tokens.to_s.should == "alias #{a}"
+      s.block.should be_nil
+    end
+    
+    s = stmt("alias do x if 2 ==\n 2")
+    s.tokens.to_s.should == "alias do x if 2 ==\n 2"
+  end
 end

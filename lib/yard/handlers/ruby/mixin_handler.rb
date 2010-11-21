@@ -8,12 +8,12 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     statement.parameters(false).each do |mixin|
       begin
         process_mixin(mixin)
-      rescue YARD::Parser::UndocumentableError
-        errors << mixin
+      rescue YARD::Parser::UndocumentableError => err
+        errors << err.message
       end
     end
     if errors.size > 0
-      msg = errors.size == 1 ? " #{errors[0]}" : "s #{errors.join(", ")}"
+      msg = errors.size == 1 ? ": #{errors[0]}" : "s: #{errors.join(", ")}"
       raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
     end
   end

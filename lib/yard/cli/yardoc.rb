@@ -197,6 +197,9 @@ module YARD
       def run(*args)
         parse_arguments(*args)
         
+        # fail early if markup provider is not found
+        return if generate && !verify_markup_options
+        
         checksums = nil
         if use_cache
           Registry.load
@@ -292,6 +295,16 @@ module YARD
           end
         end
         Templates::Engine.generate(objects, options)
+      end
+      
+      # Verifies that the markup options are valid before parsing any code.
+      # Failing early is better than failing late.
+      # 
+      # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
+      def verify_markup_options
+        obj = Struct.new(:options).new(options)
+        obj.extend(Templates::Helpers::MarkupHelper)
+        obj.load_markup_provider
       end
       
       # Copies any assets to the output directory
@@ -479,7 +492,7 @@ module YARD
 
         opts.on('--no-private', "Hide objects with @private tag") do
           options[:verifier].add_expressions '!object.tag(:private) && 
-            (object.namespace.type == :proxy || !object.namespace.tag(:private))'
+            (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
         end
 
         opts.on('--no-highlight', "Don't highlight code blocks in output.") do 
@@ -495,6 +508,7 @@ module YARD
         end
 
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
+          next if YARD::Config.options[:safe_mode]
           options[:verifier].add_expressions(query.taint)
         end
 
@@ -555,6 +569,7 @@ module YARD
 
         opts.on('-p', '--template-path PATH', 
                 'The template path to look for templates in. (used with -t).') do |path|
+          next if YARD::Config.options[:safe_mode]
           YARD::Templates::Engine.register_template_path(path)
         end
 

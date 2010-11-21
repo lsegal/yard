@@ -17,23 +17,40 @@ describe YARD::Server::Commands::StaticFileCommand do
     
     it "should search through document root before static paths" do
       File.should_receive(:exist?).with('/c/path/to/file.txt').ordered.and_return(false)
-      StaticFileCommand::STATIC_PATHS.each do |path|
+      StaticFileCommand::STATIC_PATHS.reverse.each do |path|
         File.should_receive(:exist?).with(File.join(path, 'path/to/file.txt')).ordered.and_return(false)
       end
       run '/path/to/file.txt'
     end
     
     it "should return file contents if found" do
-      path = File.join(StaticFileCommand::STATIC_PATHS[0], '/path/to/file.txt')
+      path = File.join(StaticFileCommand::STATIC_PATHS.last, '/path/to/file.txt')
       File.should_receive(:exist?).with('/c/path/to/file.txt').and_return(false)
       File.should_receive(:exist?).with(path).and_return(true)
       File.should_receive(:read).with(path).and_return('FOO')
       run('/path/to/file.txt', 200, 'FOO')
     end
     
+    it "should allow registering of new paths and use those before other static paths" do
+      Server.register_static_path '/foo'
+      path = '/foo/path/to/file.txt'
+      File.should_receive(:exist?).with('/c/path/to/file.txt').and_return(false)
+      File.should_receive(:exist?).with(path).and_return(true)
+      File.should_receive(:read).with(path).and_return('FOO')
+      run('/path/to/file.txt', 200, 'FOO')
+    end
+
+    it "should not use registered path before docroot" do
+      Server.register_static_path '/foo'
+      path = '/foo/path/to/file.txt'
+      File.should_receive(:exist?).with('/c/path/to/file.txt').and_return(true)
+      File.should_receive(:read).with('/c/path/to/file.txt').and_return('FOO')
+      run('/c/path/to/file.txt', 200, 'FOO')
+    end
+    
     it "should return 404 if not found" do
       File.should_receive(:exist?).with('/c/path/to/file.txt').ordered.and_return(false)
-      StaticFileCommand::STATIC_PATHS.each do |path|
+      StaticFileCommand::STATIC_PATHS.reverse.each do |path|
         File.should_receive(:exist?).with(File.join(path, 'path/to/file.txt')).ordered.and_return(false)
       end
       run('/path/to/file.txt', 404)

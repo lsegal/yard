@@ -22,7 +22,9 @@ describe YARD::Templates::Engine.template(:default, :method) do
       YARD.parse_string <<-'eof'
         private
         # Comments
-        # @param [String] x the x argument
+        # @param [Hash] x the x argument
+        # @option x [String] :key1 (default) first key
+        # @option x [Symbol] :key2 second key
         # @return [String] the result
         # @raise [Exception] hi!
         # @deprecated for great justice

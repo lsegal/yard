@@ -1,4 +1,4 @@
-# Helper methods to parse @attr_* tags on a Struct class.
+# Helper methods to parse @attr_* tags on a class.
 # 
 # @since 0.5.6
 module YARD::Handlers::Ruby::StructHandlerMethods
@@ -14,6 +14,15 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   def member_tag_for_member(klass, member, type = :read)
     specific_tag = type == :read ? :attr_reader : :attr_writer
     (klass.tags(specific_tag) + klass.tags(:attr)).find {|tag| tag.name == member}
+  end
+
+  # Retrieves all members defined in @attr* tags
+  # 
+  # @param [ClassObject] klass the class with the attributes
+  # @return [Array<String>] the list of members defined as attributes on the class
+  def members_from_tags(klass)
+    tags = klass.tags(:attr) + klass.tags(:attr_reader) + klass.tags(:attr_writer)
+    tags.map {|t| t.name }.uniq
   end
   
   # Determines whether to create an attribute method based on the class's

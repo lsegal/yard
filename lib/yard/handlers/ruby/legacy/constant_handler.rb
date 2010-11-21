@@ -1,5 +1,6 @@
 # (see Ruby::ConstantHandler)
 class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Legacy::Base
+  include YARD::Handlers::Ruby::StructHandlerMethods
   HANDLER_MATCH = /\A[A-Z]\w*\s*=[^=]\s*/m
   handles HANDLER_MATCH
   
@@ -19,15 +20,12 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
   private
   
   def process_structclass(classname, parameters)
-    scope = :instance
-    klass = register ClassObject.new(namespace, classname)
-    klass.superclass = P(:Struct)
-
-    tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(parameters), TkSYMBOL).each do |name|
-      klass.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
-      {:read => name, :write => "#{name}="}.each do |type, meth|
-        klass.attributes[scope][name][type] = register MethodObject.new(klass, meth, scope)
-      end
-    end
+    klass = create_class(classname, P(:Struct))
+    create_attributes(klass, extract_parameters(parameters))
+  end
+  
+  def extract_parameters(parameters)
+    members = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(parameters), TkSYMBOL)
+    members.map {|m| m.to_s }
   end
 end

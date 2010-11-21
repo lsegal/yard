@@ -1,3 +1,367 @@
+2010-11-21  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.3
+
+  * lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Fix regression where markup
+  loading fails when generating HTML
+
+2010-11-15  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.2
+
+  * spec/cli/server_spec.rb: Fix specs failing under 1.8.x due to unstub! call
+
+  * README.md, docs/GettingStarted.md: Tell users where to read information
+  about .yardopts
+
+  * ChangeLog, README.md: Update ChangeLog and summarize in README
+
+  * spec/server/commands/static_file_command_spec.rb: Fix failing specs due to
+  StaticFileCommand refactor and add new test cases
+
+  * lib/yard/config.rb: Only show backtrace when plugin fails to load in Ruby
+  debug mode (ruby -d), since we haven't parsed backtrace info yet
+
+  * lib/yard/config.rb, spec/config_spec.rb: Ensure that --plugin is parsed out
+  of .yardopts file as well
+
+  * lib/yard/cli/command.rb, lib/yard/cli/server.rb, lib/yard/cli/yardoc.rb:
+  Fix CLI commands accessing Config class after adding new CLI::Config
+
+  * README.md: Add new contributors
+
+2010-11-14  Loren Segal <lsegal@soen.ca>
+
+  * docs/GettingStarted.md, docs/WhatsNew.md: Document new YARD features in
+  0.6.2
+
+  * lib/yard/cli/config.rb: Update yard config help contents
+
+  * lib/yard/autoload.rb, lib/yard/cli/command_parser.rb,
+  lib/yard/cli/config.rb, lib/yard/config.rb, spec/cli/config_spec.rb: Add
+  `yard config` CLI command to view or modify the YARD global configuration
+  file (~/.yard/config).
+
+  * lib/yard/config.rb, spec/config_spec.rb: Add YARD::Config.save for
+  serializing to CONFIG_FILE
+
+2010-11-14  Robert Wahler <robert@gearheadforhire.com>
+
+  * lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: add kramdown as a markdown
+  provider  Kramdown is a fast, pure Ruby markdown processor. Windows users
+  need more pure Ruby options to avoid having to compile "C" extensions. Note
+  that 'eval' is used instead of Kernel.get_const because the latter cannot
+  find classes nested in modules.
+
+2010-11-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server.rb: YARD::Server.register_static_path is since 0.6.2
+
+  * lib/yard/autoload.rb, lib/yard/server.rb, spec/server_spec.rb: Add
+  YARD::Server.register_static_path to register a static asset lookup path
+
+  * lib/yard/server/commands/library_index_command.rb,
+  lib/yard/server/commands/search_command.rb,
+  lib/yard/server/commands/static_file_command.rb: Document some server
+  commands and reverse search order of static assets in StaticFileCommand
+
+2010-11-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/extend_handler.rb,
+  lib/yard/handlers/ruby/legacy/extend_handler.rb,
+  spec/handlers/extend_handler_spec.rb: Disallow `extend self` inside of a
+  class.  Closes gh-202
+
+  * lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb: Fix error messages for
+  undocumentable mixins
+
+  * lib/yard/code_objects/class_object.rb: Disallow recursive inheritance_trees
+  for mixins including classes (should never happen, but protected anyway)
+
+2010-11-10  Anthony Thibault <ajt@hyperlogic.org>
+
+  * lib/yard/parser/c_parser.rb: Fixed parsing of constants defined in c
+  extensions.
+
+2010-11-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/command.rb, lib/yard/cli/server.rb, spec/cli/server_spec.rb:
+  Add -t (--template-path) switch to `yard server` and load ruby scripts after
+  adapter loads in order to allow overriding of adapter code.
+
+2010-11-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Fixes --no-private with
+  proxy namespace defined as a module  Re-closes gh-197
+
+2010-11-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/server.rb: Fix documentation in yard server CLI usage
+  description
+
+  * lib/yard/server/commands/library_command.rb: Clean up class variable
+  declaration
+
+  * lib/yard/verifier.rb, spec/cli/yardoc_spec.rb, spec/verifier_spec.rb:
+  Verifier#call should ignore unresolved Proxy objects and return true. This
+  makes it easier to write queries on objects that may include proxies.  Closes
+  gh-197
+
+  * templates/default/fulldoc/html/css/style.css: Fix spacing between summary
+  note badges
+
+  * templates/default/fulldoc/html/css/style.css: Add vertical space between
+  notes in method/class/module detail section.  Closes gh-199
+
+  * spec/templates/examples/method001.html,
+  templates/default/tags/html/option.erb: Add space after mdash for option
+  description text.  Closes gh-200
+
+  * docs/Tags.md: Document missing tags @api and @note  Closes gh-196
+
+  * docs/Tags.md: Clarify that @attr tags are only meant for Structs
+
+  * spec/templates/examples/method001.html,
+  spec/templates/examples/method001.txt, spec/templates/method_spec.rb,
+  templates/default/tags/html/option.erb: Do not display N/A for @option with
+  no default value.  Closes gh-198
+
+2010-11-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Don't perform syntax
+  highlighting on plaintext extra files
+
+2010-11-02  Mark Evans <mark@new-bamboo.co.uk>
+
+  * templates/default/fulldoc/html/js/app.js: Replace quotes with underscore
+  for table of contents id generation (otherwise it causes errors)
+
+2010-10-31  freeformz <emuller@engineyard.com>
+
+  * lib/yard/server/commands/library_command.rb: we're already chrooted'
+
+2010-10-29  freeformz <emuller@engineyard.com>
+
+  * lib/yard/server/commands/library_command.rb: stop the threads from trying
+  to chdir over each other
+
+2010-10-22  David Turnbull <dturnbull@gmail.com>
+
+  * docs/GettingStarted.md: Expanded usage section.  Getting Started has more
+  overview of the tools and directs to the readme for details.
+
+2010-10-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Refactor MarkupHelper and check
+  markup options before doing any file parsing. This way we can fail early and
+  tell the user to install a gem right away instead of the old behaviour of
+  failing after all the code was parsed (which could take a long time).
+
+  * lib/yard/handlers/ruby/visibility_handler.rb,
+  .../examples/visibility_handler_001.rb.txt,
+  spec/handlers/visibility_handler_spec.rb: Fix visibility statements using
+  constant symbol values (private :Foo)
+
+2010-10-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  lib/yard/handlers/ruby/struct_handler_methods.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Support @attr* on non-struct
+  classes
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Disable --template-path
+  from being used in safe mode
+
+  * lib/yard.rb, lib/yard/cli/command.rb, lib/yard/cli/yardoc.rb,
+  lib/yard/config.rb, spec/cli/yardoc_spec.rb: Add safe_mode Config
+  (~/.yard/config) option to disable user-code from being executed (-e, --load
+  and --query)
+
+2010-10-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/constant_handler.rb,
+  lib/yard/handlers/ruby/legacy/constant_handler.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/examples/constant_handler_001.rb.txt: Support @attr
+  declarations in "Klass = Struct.new(:a, :b, ...)" syntax  Closes gh-187
+
+  * lib/yard/code_objects/method_object.rb,
+  spec/code_objects/method_object_spec.rb: If a method is in a proxy namespace,
+  overridden methods should return nil.
+
+2010-10-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/serializers/yardoc_serializer.rb: Refactor
+  StubProxy
+
+  * lib/yard.rb, lib/yard/handlers/base.rb, lib/yard/parser/c_parser.rb: Change
+  the way continuation support is detected (actually test callcc)
+
+2010-10-03  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/proxy_spec.rb, spec/parser/base_spec.rb,
+  spec/parser/c_parser_spec.rb, spec/parser/source_parser_spec.rb: Fix various
+  JRuby spec failings.
+
+  * lib/yard.rb, lib/yard/handlers/base.rb, lib/yard/parser/c_parser.rb: Change
+  the way continuation support is checked
+
+  * lib/yard/parser/source_parser.rb: Require continuation only if the lib
+  exists (ie. ruby1.9).
+
+  * lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt: Add support for inheriting
+  from 'self' keyword, using current namespace as superclass.  Example:  class
+  X class Y < self; end end
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: If class method is defined on CONSTANT
+  object, convert constant to class/module that the constant is referencing.
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Fix handling of keywords in
+  alias statements for block openers/closers (for/do/end)  Closes gh-184
+
+  * lib/yard/handlers/ruby/legacy/exception_handler.rb: Ignore raise
+  expressions that call methods on 1.8 as well
+
+  * lib/yard/handlers/ruby/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Gracefully ignore raise expressions
+  that cannot be documented (`raise method_call('args')`)  Closes gh-180
+
+  * lib/yard/cli/stats.rb, spec/cli/stats_spec.rb: Fix yard stats --list-undoc
+  raising exception when no objects are undocumented.  Closes gh-186
+
+2010-09-27  srawlins <sam.rawlins@gmail.com>
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb,
+  spec/parser/examples/override.c.txt: Added
+  Parser::CParser#find_override_comment, almost straight from RDoc
+
+2010-10-03  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/gems_spec.rb: Fix specs under 1.8.6
+
+  * spec/cli/gems_spec.rb: Add specs for yard gems command
+
+  * lib/yard/cli/gems.rb: Add warnings if specified gems are not found, stop
+  command entirely if none of the specified gems are found
+
+  * lib/yard/cli/gems.rb: Require 'rubygems' in yard gems command for 1.8.x
+  compat
+
+  * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration. 
+  Closes gh-178
+
+2010-09-25  Loren Segal <lsegal@soen.ca>
+
+  * .../ruby/legacy/class_condition_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb: Fix handling of complex class
+  conditions with no else block  Closes gh-175
+
+2010-09-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb: Fix
+  handling of encoding line when shebang is present.  Adds tests for the many
+  ways an encoding line can be written.  Closes gh-174
+
+2010-09-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/extend_handler.rb,
+  lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb: Refactor mixin undocumentable error
+  changes and backport to 1.8
+
+  * lib/yard/server/commands/frames_command.rb: Show alpha index for yard
+  server if no README is present
+
+  * lib/yard/code_objects/proxy.rb, spec/code_objects/proxy_spec.rb,
+  spec/handlers/class_handler_spec.rb: Fix proxy lookups for complex namespaces
+  (A::B::C).  Previously a lookup on "B::C" from inside "A" would find object
+  "A::C" if A::C was defined before A::B::C. The new semantics will verify that
+  the found object ("A::C") includes the original lookup path ("B::C") in the
+  path string. If the path string is not found, the object is invalidated and
+  the object is still a proxy.  Also fixes a test that was incorrectly passing
+  due to bug.
+
+  * lib/yard/handlers/ruby/extend_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb, spec/handlers/mixin_handler_spec.rb:
+  Add undocumentable error warning for 'include <variable>' statement
+
+2010-09-17  Loren Segal <lsegal@soen.ca>
+
+  * docs/Tags.md: Fix typo in Tags.md  Closes gh-172
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Improve
+  relative path support for objects inside of a namespace (when called from
+  outside that same namespace)
+
+2010-09-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/command.rb, lib/yard/config.rb: Add documentation for
+  YARD::Config and add --plugin option for commandline parsing so no warnings
+  display
+
+  * lib/yard.rb, lib/yard/autoload.rb, lib/yard/config.rb, spec/config_spec.rb,
+  spec/yard_spec.rb: Refactored configuration support, adding YARD::Config
+  class. Plugins are no longer loaded automatically by default, but this can be
+  changed by editing ~/.yard/config as detailed below:  The Config class now
+  manages the loading of the ~/.yard/config file, a YAML file containing the
+  YARD::Config::DEFAULT_CONFIG_OPTIONS options. It also manages the loading of
+  plugins.  The configuration file has 3 options specifying rules to use when
+  loading plugins:  :load_plugins (default: false) When enabled, gem plugins
+  are automatically loaded (0.5.x and 0.6.0/1 behaviour) :autoload_plugins
+  specifies a list of plugins to load automatically :ignored_plugins specifies
+  a list of plugins to ignore  The ~/.yard/ignored_plugins file is now
+  deprecated in favour of specifying the :ignored_plugins setting in the config
+  file.
+
+2010-09-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/base.rb: Document introduction of in_file call
+
+  * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb,
+  spec/handlers/base_spec.rb: Add Handlers::Base.in_file to declare that a
+  handler should only process certain files by string/regex match.  Example: 
+  class MyHandler < Handlers::Ruby::Base handles method_call(:foo) in_file
+  %r{/templates/}  def process # Only process "foo" calls inside the
+  /templates/ directory end end
+
+  * lib/yard/server/commands/library_command.rb: Refactor #not_prepared to use
+  request object
+
+  * lib/yard/server/commands/library_command.rb,
+  .../doc_server/processing/html/processing.erb: On-demand processing should
+  commence from xhr request with ?process=true to avoid bots inadvertently
+  triggering a parse. Also stops JS refresh code from retriggering the parser N
+  times
+
+  * lib/yard/cli/gems.rb: Remove --legacy option from gems option parser
+  (switch is not removed from CLI, simply refactored. the option exists in the
+  superclass)
+
+2010-09-08  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/tags/setup.rb: Refactor tag method generation code for
+  templates
+
+2010-09-07  Loren Segal <lsegal@soen.ca>
+
+  * README.md, docs/WhatsNew.md: Fix some markdown formatting errors
+
 2010-09-06  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.1

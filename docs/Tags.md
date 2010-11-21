@@ -96,19 +96,25 @@ YARD supplies the following built-in tags:
     implementor information.
   
         @abstract Subclass and override {#run} to implement a custom Threadable class.
+        
+  * `@api`: Declares the API that the object belongs to. Does not display in
+    output, but useful for performing queries (`yardoc --query`). Any text is
+    allowable in this tag, and there are no predefined values.
+    
+        @api freeform text
       
   * `@attr`: Declares an attribute from the docstring of a class. Meant to be
-    used on Struct classes (classes that inherit Struct).
+    used on Struct classes only (classes that inherit Struct).
   
         @attr [Types] attribute_name a full description of the attribute
       
   * `@attr_reader`: Declares a readonly attribute from the docstring of a class.
-    Meant to be used on Struct classes (classes that inherit Struct). See `@attr`.
+    Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
   
         @attr_reader [Types] name description of a readonly attribute
       
   * `@attr_writer`: Declares a writeonly attribute from the docstring of class.
-    Meant to be used on Struct classes (classes that inherit Struct). See `@attr`.
+    Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
   
         @attr_writer [Types] name description of writeonly attribute
 
@@ -126,6 +132,11 @@ YARD supplies the following built-in tags:
 
         @example Reverse a string
           "mystring".reverse #=> "gnirtsym"
+          
+  * `@note`: Creates an emphasized note for the users to read about the
+    object.
+    
+        @note This method should only be used in outer space.
 
   * `@option`: Describe an options hash in a method. The tag takes the
     name of the options parameter first, followed by optional types,
@@ -168,7 +179,7 @@ YARD supplies the following built-in tags:
     command-line switch to yardoc (see {file:README.md}).
   
         @private
-
+        
   * `@raise`: Describes an Exception that a method may throw
 
         @raise [ExceptionClass] description

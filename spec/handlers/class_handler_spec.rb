@@ -174,64 +174,72 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
     obj.tag(:param).types.should == ["IO"]
   end
   
-  it "defines both readers and writers when @attr is used on Structs" do
-    obj = Registry.at("SemiDoccedStruct")
-    attrs = obj.attributes[:instance]
-    attrs[:first][:read].should_not be_nil
-    attrs[:first][:write].should_not be_nil
-  end
+  ["SemiDoccedStruct", "NotAStruct"].each do |struct|
+    describe("Attributes on a " + (struct == "NotAStruct" ? "class" : "struct")) do
+      it "defines both readers and writers when @attr is used on Structs" do
+        obj = Registry.at(struct)
+        attrs = obj.attributes[:instance]
+        attrs[:first][:read].should_not be_nil
+        attrs[:first][:write].should_not be_nil
+      end
   
-  it "defines only a reader when only @attr_reader is used on Structs" do
-    obj = Registry.at("SemiDoccedStruct")
-    attrs = obj.attributes[:instance]
-    attrs[:second][:read].should_not be_nil
-    attrs[:second][:write].should be_nil
-  end
+      it "defines only a reader when only @attr_reader is used on Structs" do
+        obj = Registry.at(struct)
+        attrs = obj.attributes[:instance]
+        attrs[:second][:read].should_not be_nil
+        attrs[:second][:write].should be_nil
+      end
   
-  it "defines only a writer when only @attr_writer is used on Structs" do
-    obj = Registry.at("SemiDoccedStruct")
-    attrs = obj.attributes[:instance]
-    attrs[:third][:read].should be_nil
-    attrs[:third][:write].should_not be_nil
-  end
+      it "defines only a writer when only @attr_writer is used on Structs" do
+        obj = Registry.at(struct)
+        attrs = obj.attributes[:instance]
+        attrs[:third][:read].should be_nil
+        attrs[:third][:write].should_not be_nil
+      end
   
-  it "defines a reader with correct return types when @attr_reader is used on Structs" do
-    obj = Registry.at("SemiDoccedStruct#second")
-    obj.tag(:return).types.should == ["Fixnum"]
-  end
+      it "defines a reader with correct return types when @attr_reader is used on Structs" do
+        obj = Registry.at("#{struct}#second")
+        obj.tag(:return).types.should == ["Fixnum"]
+      end
   
-  it "defines a writer with correct parameter types when @attr_writer is used on Structs" do
-    obj = Registry.at("SemiDoccedStruct#third=")
-    obj.tag(:param).types.should == ["Array"]
-  end
+      it "defines a writer with correct parameter types when @attr_writer is used on Structs" do
+        obj = Registry.at("#{struct}#third=")
+        obj.tag(:param).types.should == ["Array"]
+      end
   
-  it "defines a reader and a writer when both @attr_reader and @attr_writer are used" do
-    obj = Registry.at("SemiDoccedStruct")
-    attrs = obj.attributes[:instance]
-    attrs[:fourth][:read].should_not be_nil
-    attrs[:fourth][:write].should_not be_nil
-  end
+      it "defines a reader and a writer when both @attr_reader and @attr_writer are used" do
+        obj = Registry.at(struct)
+        attrs = obj.attributes[:instance]
+        attrs[:fourth][:read].should_not be_nil
+        attrs[:fourth][:write].should_not be_nil
+      end
   
-  it "uses @attr_reader for the getter when both @attr_reader and @attr_writer are given" do
-    obj = Registry.at("SemiDoccedStruct#fourth")
-    obj.tag(:return).types.should == ["#read"]
-  end
+      it "uses @attr_reader for the getter when both @attr_reader and @attr_writer are given" do
+        obj = Registry.at("#{struct}#fourth")
+        obj.tag(:return).types.should == ["#read"]
+      end
   
-  it "uses @attr_writer for the setter when both @attr_reader and @attr_writer are given" do
-    obj = Registry.at("SemiDoccedStruct#fourth=")
-    obj.tag(:param).types.should == ["IO"]
-  end
+      it "uses @attr_writer for the setter when both @attr_reader and @attr_writer are given" do
+        obj = Registry.at("#{struct}#fourth=")
+        obj.tag(:param).types.should == ["IO"]
+      end
   
-  it "extracts text from @attr_reader" do
-    Registry.at("SemiDoccedStruct#fourth").docstring.should == "returns a proc that reads"
-  end
+      it "extracts text from @attr_reader" do
+        Registry.at("#{struct}#fourth").docstring.should == "returns a proc that reads"
+      end
   
-  it "extracts text from @attr_writer" do
-    Registry.at("SemiDoccedStruct#fourth=").docstring.should == "sets the proc that writes stuff"
+      it "extracts text from @attr_writer" do
+        Registry.at("#{struct}#fourth=").docstring.should == "sets the proc that writes stuff"
+      end
+    end
   end
     
   it "should inherit from a regular struct" do
     Registry.at('RegularStruct').superclass.should == P(:Struct)
     Registry.at('RegularStruct2').superclass.should == P(:Struct)
+  end
+  
+  it "should handle inheritance from 'self'" do
+    Registry.at('Outer1::Inner1').superclass.should == Registry.at('Outer1')
   end
 end

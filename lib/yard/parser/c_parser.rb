@@ -15,6 +15,7 @@ module YARD
         parse_modules
         parse_classes
         parse_methods
+        parse_constants
         parse_includes
       end
       
@@ -32,10 +33,10 @@ module YARD
       
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
-        if RUBY_PLATFORM =~ /java/ || defined?(::Rubinius)
+        unless CONTINUATIONS_SUPPORTED
           unless $NO_CONTINUATION_WARNING
             $NO_CONTINUATION_WARNING = true
-            log.warn "JRuby/Rubinius do not implement Kernel#callcc and cannot " +
+            log.warn "JRuby/MacRuby/Rubinius do not implement Kernel#callcc and cannot " +
               "load files in order. You must specify the correct order manually."
           end
           raise NamespaceMissingError, object
@@ -94,7 +95,10 @@ module YARD
       def handle_constants(type, var_name, const_name, definition)
         namespace = @namespaces[var_name]
         obj = CodeObjects::ConstantObject.new(namespace, const_name)
-        comment = find_constant_docstring(type, const_name)
+        obj.value = definition
+        obj.add_file(@file)
+        obj.source_type = :c
+        comment = find_constant_docstring(obj, type, const_name)
 
         # In the case of rb_define_const, the definition and comment are in
         # "/* definition: comment */" form.  The literal ':' and '\' characters
@@ -126,8 +130,8 @@ module YARD
         object.docstring = parse_comments(object, comment) if comment
       end
       
-      def find_constant_docstring(type, const_name)
-        comments = if @content =~ %r{((?>^\s*/\*.*?\*/\s+))
+      def find_constant_docstring(object, type, const_name)
+        comment = if @content =~ %r{((?>^\s*/\*.*?\*/\s+))
                        rb_define_#{type}\((?:\s*(\w+),)?\s*"#{const_name}"\s*,.*?\)\s*;}xmi
           $1
         elsif @content =~ %r{Document-(?:const|global|variable):\s#{const_name}\s*?\n((?>.*?\*/))}m
@@ -135,7 +139,7 @@ module YARD
         else
           ''
         end
-        parse_comments(object, comments)
+        object.docstring = parse_comments(object, comment) if comment
       end
       
       def find_method_body(object, func_name, content = @content)

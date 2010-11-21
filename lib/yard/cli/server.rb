@@ -15,11 +15,21 @@ module YARD
       # @return [Adapter] the adapter to use for loading the web server
       attr_accessor :adapter
       
+      # @return [Array<String>] a list of scripts to load
+      # @since 0.6.2
+      attr_accessor :scripts
+      
+      # @return [Array<String>] a list of template paths to register
+      # @since 0.6.2
+      attr_accessor :template_paths
+      
       def description
         "Runs a local documentation server"
       end
       
       def run(*args)
+        self.scripts = []
+        self.template_paths = []
         self.libraries = {}
         self.options = SymbolHash.new(false).update(
           :single_library => true,
@@ -28,11 +38,22 @@ module YARD
         self.server_options = {:Port => 8808}
         optparse(*args)
         
-        select_adapter
+        select_adapter.setup
+        load_scripts
+        load_template_paths
         adapter.new(libraries, options, server_options).start
       end
       
       private
+      
+      def load_scripts
+        scripts.each {|file| load_script(file) }
+      end
+      
+      def load_template_paths
+        return if YARD::Config.options[:safe_mode]
+        Templates::Engine.template_paths |= template_paths
+      end
       
       def select_adapter
         return adapter if adapter
@@ -68,19 +89,13 @@ module YARD
         opts = OptionParser.new
         opts.banner = 'Usage: yard server [options] [[library yardoc_file] ...]'
         opts.separator ''
-        opts.separator 'Example: yard server yard .yardoc ruby-core ../ruby/.yardoc'
+        opts.separator 'Example: yard server -m yard .yardoc ruby-core ../ruby/.yardoc'
         opts.separator 'The above example serves documentation for YARD and Ruby-core'
         opts.separator ''
         opts.separator 'If no library/yardoc_file is specified, the server uses'
         opts.separator 'the name of the current directory and `.yardoc` respectively'
         opts.separator ''
         opts.separator "General Options:"
-        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          if !require(file.gsub(/\.rb$/, ''))
-            log.error "The file `#{file}' was already loaded, perhaps you need to specify the absolute path to avoid name collisions."
-            exit
-          end
-        end
         opts.on('-m', '--multi-library', 'Serves documentation for multiple libraries') do
           options[:single_library] = false
         end
@@ -92,6 +107,10 @@ module YARD
         end
         opts.on('-g', '--gems', 'Serves documentation for installed gems') do
           add_gems
+        end
+        opts.on('-t', '--template-path PATH', 
+                'The template path to look for templates in. (used with -t).') do |path|
+          self.template_paths << path
         end
         opts.separator ''
         opts.separator "Web Server Options:"
@@ -117,6 +136,9 @@ module YARD
           server_options[:server] = type
         end
         common_options(opts)
+        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
+          self.scripts << file
+        end
         parse_options(opts, args)
         
         if args.empty? && libraries.empty?

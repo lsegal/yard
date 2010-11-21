@@ -16,7 +16,7 @@ module YARD
     
     def method_missing(meth, *args, &block)
       return true if meth == :respond_to? && args.first == :_dump
-      return Registry.at(@path).send(meth, *args, &block) if @transient
+      @object = nil if @transient
       @object ||= Registry.at(@path)
       @object.send(meth, *args, &block)
     rescue NoMethodError => e
@@ -84,7 +84,7 @@ module YARD
       def internal_dump(object, first_object = false)
         if !first_object && object.is_a?(CodeObjects::Base) && 
             !(Tags::OverloadTag === object)
-          return StubProxy.new(object.path, true)
+          return StubProxy.new(object.path)
         end
         
         if object.is_a?(Hash) || object.is_a?(Array) || 

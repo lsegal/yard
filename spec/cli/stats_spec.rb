@@ -45,6 +45,21 @@ A#foo
 eof
   end
   
+  it "should list no undocumented objects with --list-undoc when objects are undocumented" do
+    Registry.clear
+    YARD.parse_string <<-eof
+      # documentation
+      def foo; end
+    eof
+    @stats.run('--list-undoc')
+    @output.string.should ==  "Files:           1\n" +
+                              "Modules:         0 (    0 undocumented)\n" +
+                              "Classes:         0 (    0 undocumented)\n" +
+                              "Constants:       0 (    0 undocumented)\n" +
+                              "Methods:         1 (    0 undocumented)\n" +
+                              " 100.00% documented\n"
+  end
+  
   it "should list undocumented objects in compact mode with --list-undoc --compact" do
     @stats.run('--list-undoc', '--compact')
     @output.string.should == <<-eof

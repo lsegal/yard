@@ -104,6 +104,7 @@ module YARD::CodeObjects
     # @return [nil] if it does not override a method
     # @since 0.6.0
     def overridden_method
+      return nil if namespace.is_a?(Proxy)
       meths = namespace.meths(:all => true)
       meths.find {|m| m.path != path && m.name == name && m.scope == scope }
     end

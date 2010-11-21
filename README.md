@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.6.1 (codename "The Cubic")    
-**Release Date**: September 6th 2010    
+**Latest Version**: 0.6.3 (codename "Better White Picket Fences")    
+**Release Date**: November 21st 2010    
 
 Synopsis
 --------
@@ -180,7 +180,8 @@ Note that the README file can be specified with its own `--readme` switch.
 
 You can also add a `.yardopts` file to your project directory which lists
 the switches separated by whitespace (newlines or space) to pass to yardoc 
-whenever it is run.
+whenever it is run. A full overview of the `.yardopts` file can be found in
+{YARD::CLI::Yardoc}.
 
 #### Queries
 
@@ -287,6 +288,23 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **November.21.10**: 0.6.3 release
+    - Fixed regression that caused `yardoc --markup` to silently exit
+
+- **November.15.10**: 0.6.2 release
+    - **Plugins no longer automatically load, use `--plugin` to load a plugin**
+    - Added YARD::Config and ~/.yard/config YAML configuration file
+    - Added `yard config` command to view/edit YARD configuration file
+    - Fixes for YARD in 1.8.6 (gh-178)
+    - Various HTML template adjustments and fixes (gh-198,199,200)
+    - Improved `yard server -m` multi-project stability (gh-193)
+    - Fixed handling of `yardoc --no-private` with missing class definitions (gh-197)
+    - Added support for constants defined in C extensions (gh-177)
+    - Added support for Structs defined as "Klass = Struct.new(...)" (gh-187)
+    - Improved parsing support for third-party gems (gh-174,180)
+    - Improved support for JRuby 1.6.4+. YARD now passes all specs in JRuby (gh-185)
+    - Improved YARD documentation (gh-172,191,196)
 
 - **September.06.10**: 0.6.1 release
     - Fixed TOC showing on top of class/method list in no-frames view
@@ -404,8 +422,15 @@ Special thanks to the following people for submitting patches:
 * Yehuda Katz
 * Duane Johnson
 * Postmodern
+* Edward Muller
 * Pieter van de Bruggen
 * Leonid Borisenko
+* Arthur Schreiber
+* Robert Wahler
+* Mark Evans
+* David Turnbull
+* Anthony Thibault
+* Sam Rawlins
 * Jeff Rafter
 * Elliottcable
 * James Rosen

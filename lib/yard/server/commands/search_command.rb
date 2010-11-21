@@ -1,6 +1,8 @@
 module YARD
   module Server
     module Commands
+      # Performs a search over the objects inside of a library and returns
+      # the results as HTML or plaintext
       class SearchCommand < LibraryCommand
         attr_accessor :results, :query
         

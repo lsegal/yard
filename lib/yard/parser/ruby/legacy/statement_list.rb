@@ -42,7 +42,7 @@ module YARD
         @current_block = nil
         @comments_line = nil
         @statement, @block, @comments = TokenList.new, nil, nil
-        @last_tk, @last_ns_tk, @before_last_tk = nil, nil, nil
+        @last_tk, @last_ns_tk, @before_last_tk, @before_last_ns_tk = nil, nil, nil, nil
         @first_line = nil
 
         while !@done && tk = @tokens.shift
@@ -50,6 +50,7 @@ module YARD
 
           @before_last_tk = @last_tk
           @last_tk = tk # Save last token
+          @before_last_ns_tk = @last_ns_tk
           @last_ns_tk = tk unless [TkSPACE, TkNL, TkEND_OF_SCRIPT].include? tk.class
         end
 
@@ -130,6 +131,12 @@ module YARD
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           @comments_last_line = nil
+          if @statement.empty? && tk.class == TkALIAS
+            @state = :alias_statement
+            @alias_values = []
+            push_token(tk)
+            return
+          end
           return if process_simple_block_opener(tk)
           push_token(tk)
           return if process_complex_block_opener(tk)
@@ -138,6 +145,15 @@ module YARD
             process_statement_end(tk)
           else
             @state = :balance
+          end
+        when :alias_statement
+          push_token(tk)
+          @alias_values << tk unless [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
+          if @alias_values.size == 2
+            @state = :first_statement
+            if [NilClass, TkNL, TkEND_OF_SCRIPT, TkSEMICOLON].include?(peek_no_space.class)
+              @done = true
+            end
           end
         when :balance
           @statement << tk
@@ -251,7 +267,6 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       def process_complex_block_opener(tk)
         return unless OPEN_BLOCK_TOKENS.include?(tk.class)
-        return if @last_ns_tk.class == TkALIAS
 
         @current_block = tk.class
         @state = :block_statement
@@ -265,7 +280,7 @@ module YARD
       def process_statement_end(tk)
         # Whitespace means that we keep the same value of @new_statement as last token
         return if tk.class == TkSPACE
-
+        
         return unless 
           # We might be coming after a statement-ending token...
           ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
@@ -318,12 +333,14 @@ module YARD
       # @return [Boolean] whether or not the current statement's parentheses and blocks
       #   are balanced after +tk+
       def balances?(tk)
-        if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
-          @level += 1
-        elsif OPEN_BLOCK_TOKENS.include?(tk.class)
-          @level += 1 unless @last_ns_tk.class == TkALIAS || tk.class == TkELSIF
-        elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
-          @level -= 1
+        unless @last_ns_tk.class == TkALIAS || @before_last_ns_tk.class == TkALIAS
+          if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
+            @level += 1
+          elsif OPEN_BLOCK_TOKENS.include?(tk.class)
+            @level += 1 unless tk.class == TkELSIF
+          elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
+            @level -= 1
+          end
         end
         
         @level == 0

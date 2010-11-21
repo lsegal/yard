@@ -48,6 +48,13 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}AliasHandler" do
     P('B#for').should be_instance_of(CodeObjects::MethodObject)
   end
   
+  it "should handle keywords in alias names" do
+    P('B#do').is_alias?.should == true
+    P('B#x2').is_alias?.should == true
+    P(:B).aliases[P('B#do')].should == :x
+    P(:B).aliases[P('B#x2')].should == :do
+  end
+  
   it "should raise an UndocumentableError if only one parameter is passed" do
     undoc_error "alias_method :q"
   end

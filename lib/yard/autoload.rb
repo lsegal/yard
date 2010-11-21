@@ -5,6 +5,7 @@ module YARD
   module CLI # Namespace for command-line interface components
     autoload :Command,        __p('cli/command')
     autoload :CommandParser,  __p('cli/command_parser')
+    autoload :Config,         __p('cli/config')
     autoload :Diff,           __p('cli/diff')
     autoload :Gems,           __p('cli/gems')
     autoload :Graph,          __p('cli/graph')
@@ -136,6 +137,8 @@ module YARD
   # Namespace for classes and modules that handle serving documentation over HTTP
   # @since 0.6.0
   module Server
+    require __p('server')
+
     module Commands
       autoload :Base,                 __p('server/commands/base')
       autoload :DisplayFileCommand,   __p('server/commands/display_file_command')
@@ -202,6 +205,7 @@ module YARD
   autoload :Logger,         __p('logging')
   autoload :Registry,       __p('registry')
   autoload :RegistryStore,  __p('registry_store')
+  autoload :StubProxy,      __p('serializers/yardoc_serializer')
   autoload :Verifier,       __p('verifier')
 end
 

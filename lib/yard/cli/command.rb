@@ -24,12 +24,7 @@ module YARD
         opts.separator ""
         opts.separator "Other options:"
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          begin
-            require(file.gsub(/\.rb$/, ''))
-          rescue LoadError
-            log.error "The file `#{file}' could not be loaded, check the path and try again."
-            exit
-          end
+          load_script(file)
         end
         opts.on('--plugin PLUGIN', 'Load a YARD plugin (gem with `yard-\' prefix)') do |name|
           # Not actually necessary to load here, this is done at boot in YARD::Config.load_plugins
@@ -56,6 +51,19 @@ module YARD
         opts.parse!(args)
       rescue OptionParser::InvalidOption => e
         log.warn "Unrecognized/#{e.message}"
+      end
+      
+      # Loads a Ruby script. If +Config.options[:safe_mode]+ is enabled,
+      # this method will do nothing.
+      # 
+      # @param [String] file the path to the script to load
+      # @since 0.6.2
+      def load_script(file)
+        return if YARD::Config.options[:safe_mode]
+        require(file.gsub(/\.rb$/, ''))
+      rescue LoadError
+        log.error "The file `#{file}' could not be loaded, check the path and try again."
+        exit
       end
     end
   end

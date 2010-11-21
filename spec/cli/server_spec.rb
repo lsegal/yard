@@ -1,18 +1,25 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+class Server::WebrickAdapter; def start; end end
+
 describe YARD::CLI::Server do
   before do
     @no_verify_libraries = false
+    @no_adapter_mock = false
     @libraries = {}
     @options = {:single_library => true, :caching => false}
     @server_options = {:Port => 8808}
     @adapter = mock(:adapter)
+    @adapter.stub!(:setup)
     @cli = YARD::CLI::Server.new
-    @cli.stub!(:adapter).and_return(@adapter)
   end
   
   def rack_required
     begin; require 'rack'; rescue LoadError; pending "rack required for this test" end
+  end
+  
+  def unstub_adapter
+    @no_adapter_mock = true
   end
   
   def run(*args)
@@ -23,8 +30,11 @@ describe YARD::CLI::Server do
     unless @no_verify_libraries
       @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(lib.yardoc_file).and_return(true) } }
     end
-    @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
-    @adapter.should_receive(:start)
+    unless @no_adapter_mock
+      @cli.stub!(:adapter).and_return(@adapter)
+      @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
+      @adapter.should_receive(:start)
+    end
     @cli.run(*args.flatten)
   end
 
@@ -94,7 +104,6 @@ describe YARD::CLI::Server do
   
   it "should default to Rack adapter if exists on system" do
     rack_required
-    @cli.unstub(:adapter)
     @cli.should_receive(:require).with('rubygems').and_return(false)
     @cli.should_receive(:require).with('rack').and_return(true)
     @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
@@ -102,7 +111,6 @@ describe YARD::CLI::Server do
   end
 
   it "should fall back to WEBrick adapter if Rack is not on system" do
-    @cli.unstub(:adapter)
     @cli.should_receive(:require).with('rubygems').and_return(false)
     @cli.should_receive(:require).with('rack').and_raise(LoadError)
     @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
@@ -136,5 +144,27 @@ describe YARD::CLI::Server do
     Gem.stub!(:source_index).and_return(source)
     run '-g'
     run '--gems'
+  end
+  
+  it "should load template paths after adapter template paths" do
+    unstub_adapter
+    @cli.adapter = Server::WebrickAdapter
+    run '-t', 'foo'
+    Templates::Engine.template_paths.last.should == 'foo'
+  end
+  
+  it "should load ruby code (-e) after adapter" do
+    unstub_adapter
+    @cli.adapter = Server::WebrickAdapter
+    File.open(File.dirname(__FILE__) + '/tmp.adapterscript.rb', 'w') do |f|
+      begin
+        f.puts "YARD::Templates::Engine.register_template_path 'foo'"
+        f.flush
+        run '-e', f.path
+        Templates::Engine.template_paths.last.should == 'foo'
+      ensure
+        File.unlink(f.path)
+      end
+    end
   end
 end

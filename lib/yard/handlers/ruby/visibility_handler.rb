@@ -13,7 +13,7 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
     when :fcall, :command
       statement[1].traverse do |node|
         case node.type
-        when :symbol; source = node.jump(:ident).last
+        when :symbol; source = node.first.source
         when :string_content; source = node.source
         else next
         end

@@ -1,5 +1,5 @@
 module YARD
-  VERSION = "0.6.1"
+  VERSION = "0.6.3"
   
   # The root path for YARD source libraries
   ROOT = File.expand_path(File.dirname(__FILE__))
@@ -29,11 +29,17 @@ module YARD
   def self.load_plugins; YARD::Config.load_plugins end
 end
 
-# Ruby 1.9.2 removes '.' which is not exactly a good idea
-$LOAD_PATH.push('.') if RUBY_VERSION >= '1.9.2'
-
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9.1" ? [true, false] : [false, true])
+
+# Whether or not continuations are (properly) supported
+begin
+  begin; require 'continuation'; rescue LoadError; end
+  cc = callcc {|cc| cc }; cc.call if cc
+  CONTINUATIONS_SUPPORTED = true
+rescue
+  CONTINUATIONS_SUPPORTED = false
+end
 
 # Load Ruby core extension classes
 Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|

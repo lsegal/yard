@@ -51,6 +51,11 @@ describe YARD::Verifier do
     it "should not fail if no expressions were added" do
       lambda { Verifier.new.call(nil) }.should_not raise_error
     end
+    
+    it "should always ignore proxy objects and return true" do
+      v = Verifier.new('tag(:x)')
+      lambda { v.call(P('foo')).should == true }.should_not raise_error
+    end
   end
   
   describe '#expressions' do

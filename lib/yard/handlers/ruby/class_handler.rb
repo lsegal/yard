@@ -18,7 +18,11 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
         o.superclass = superclass if superclass
         o.superclass.type = :class if o.superclass.is_a?(Proxy)
       end
-      parse_struct_superclass(klass, statement[1]) if is_a_struct
+      if is_a_struct
+        parse_struct_superclass(klass, statement[1])
+      elsif klass
+        create_attributes(klass, members_from_tags(klass))
+      end
       parse_block(statement[2], namespace: klass)
        
       if undocsuper
@@ -96,6 +100,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     
     case superclass.type
     when :var_ref
+      return namespace.path if superclass.first == s(:kw, "self")
       return superclass.source if superclass.first.type == :const
     when :const, :const_ref, :const_path_ref, :top_const_ref
       return superclass.source

@@ -1,5 +1,6 @@
 # Handles any constant assignment
 class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
+  include YARD::Handlers::Ruby::StructHandlerMethods
   namespace_only
   handles :assign
   
@@ -23,25 +24,22 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   def process_structclass(statement)
     lhs = statement[0][0]
     if lhs.type == :const
-      klass = register ClassObject.new(namespace, lhs[0])
-      klass.superclass = P(:Struct)
-      parse_attributes(klass, statement[1].parameters)
+      klass = create_class(lhs[0], P(:Struct))
+      create_attributes(klass, extract_parameters(statement[1]))
     else
       raise YARD::Parser::UndocumentableError, "Struct assignment to #{statement[0].source}"
     end
   end
   
-  def parse_attributes(klass, attributes)
-    return unless attributes
-    
-    scope = :instance
-    attributes.each do |node|
-      next if !node.respond_to?(:type) || node.type != :symbol_literal
-      name = node.jump(:ident).source
-      klass.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
-      {read: name, write: "#{name}="}.each do |type, meth|
-        klass.attributes[scope][name][type] = register MethodObject.new(klass, meth, scope)
-      end
-    end
+  # Extract the parameters from the Struct.new AST node, returning them as a list
+  # of strings
+  #
+  # @param [MethodCallNode] superclass the AST node for the Struct.new call
+  # @return [Array<String>] the member names to generate methods for
+  def extract_parameters(superclass)
+    return [] unless superclass.parameters
+    members = superclass.parameters.select {|x| x && x.type == :symbol_literal}
+    members.map! {|x| x.source.strip[1..-1]}
+    members
   end
 end

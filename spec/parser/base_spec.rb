@@ -7,7 +7,7 @@ describe YARD::Parser::Base do
     end
     
     it "should take 2 arguments" do
-      lambda { Parser::Base.new }.should raise_error(ArgumentError, /wrong number of arguments/)
+      lambda { Parser::Base.new }.should raise_error(ArgumentError, /wrong (number|#) of arguments/)
     end
     
     it "should raise NotImplementedError on #initialize" do

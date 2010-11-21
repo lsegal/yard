@@ -58,4 +58,4 @@ describe YARD::Parser::CParser do
       neg_self.source.should be_nil
     end
   end
-end
+end if CONTINUATIONS_SUPPORTED

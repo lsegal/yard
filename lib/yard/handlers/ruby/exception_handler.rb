@@ -15,7 +15,7 @@ class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
       elsif params.first.call? && params.first.method_name(true) == :new
         klass = params.first.namespace.source
       end
-    else
+    elsif params.size > 1
       klass = params.first.source
     end
 

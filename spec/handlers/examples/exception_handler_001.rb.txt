@@ -44,4 +44,12 @@ class Testing
     obj.raise IgnoreMe
 	obj.raise(IgnoreMe)
   end
+  
+  def mymethod10
+    raise ArgumentError 'Message' # actually a method call
+  end
+  
+  def mymethod11
+    raise foo('bar')
+  end
 end

@@ -2,6 +2,10 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 
 describe YARD::Config do
   describe '.load' do
+    before do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
+    end
+
     it "should use default options if no ~/.yard/config is found" do
       File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
@@ -25,6 +29,16 @@ describe YARD::Config do
       YARD::Config.options[:ignored_plugins].should == ['yard-plugin', 'yard-plugin2']
       YARD::Config.should_not_receive(:require).with('yard-plugin2')
       YARD::Config.load_plugin('yard-plugin2').should == false
+    end
+  end
+  
+  describe '.save' do
+    it "should save options to config file" do
+      YARD::Config.stub!(:options).and_return(:a => 1, :b => %w(a b c))
+      file = mock(:file)
+      File.should_receive(:open).with(YARD::Config::CONFIG_FILE, 'w').and_yield(file)
+      file.should_receive(:write).with(YAML.dump(:a => 1, :b => %w(a b c)))
+      YARD::Config.save
     end
   end
   
@@ -74,6 +88,7 @@ describe YARD::Config do
   
   describe '.load_plugins' do
     it "should load gem plugins if :load_plugins is true" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       YARD::Config.stub!(:options).and_return(:load_plugins => true, :ignored_plugins => [], :autoload_plugins => [])
       YARD::Config.should_receive(:require).with('rubygems')
       YARD::Config.load_plugins
@@ -86,6 +101,7 @@ describe YARD::Config do
     end
     
     it "should load certain plugins automatically when specified in :autoload_plugins" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       YARD::Config.stub!(:options).and_return(:load_plugins => false, :ignored_plugins => [], :autoload_plugins => ['yard-plugin'])
       YARD::Config.should_receive(:require).with('yard-plugin').and_return(true)
       YARD::Config.load_plugins.should == true
@@ -98,7 +114,17 @@ describe YARD::Config do
       YARD::Config.load_plugins.should == true
     end
     
+    it "should load --plugin arguments from .yardopts" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).once.and_return(true)
+      File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
+      File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
+      File.should_receive(:read_binary).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).once.and_return('--plugin foo')
+      YARD::Config.should_receive(:load_plugin).with('foo')
+      YARD::Config.load
+    end
+    
     it "should load any gem plugins starting with 'yard_' or 'yard-'" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       YARD::Config.stub!(:options).and_return(:load_plugins => true, :ignored_plugins => ['yard_plugin'], :autoload_plugins => [])
       plugins = {
         'yard' => mock('yard'), 

@@ -143,5 +143,10 @@ describe YARD::CodeObjects::MethodObject do
       eof
       Registry.at('B#foo').overridden_method.should be_nil
     end
+    
+    it "should return nil if namespace is a proxy" do
+      YARD.parse_string "def ARGV.foo; end"
+      Registry.at('ARGV.foo').overridden_method.should be_nil
+    end
   end
 end

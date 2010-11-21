@@ -38,11 +38,10 @@ describe YARD::CodeObjects::Proxy do
     P(:YARD).respond_to?(:children).should == true
     P(:NOTYARD).respond_to?(:children).should == false
 
-    private_method = P(:instantiated).private_methods.first
-    P(:YARD).respond_to?(private_method).should == false
-    P(:YARD).respond_to?(private_method, true).should == true
-    P(:NOTYARD).respond_to?(private_method).should == false
-    P(:NOTYARD).respond_to?(private_method, true).should == true
+    P(:YARD).respond_to?(:initialize).should == false
+    P(:YARD).respond_to?(:initialize, true).should == true
+    P(:NOTYARD).respond_to?(:initialize).should == false
+    P(:NOTYARD).respond_to?(:initialize, true).should == true
   end
   
   it "should make itself obvious that it's a proxy" do

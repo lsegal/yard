@@ -12,7 +12,14 @@
 Parameters:
 -----------
 
-    (String) x - the x argument
+    (Hash) x - the x argument
+
+Options Hash (x):
+-----------------
+
+    (String) :key1 - default: default - first key
+
+    (Symbol) :key2 - second key
 
 Returns:
 --------
