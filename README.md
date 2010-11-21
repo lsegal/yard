@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.6.2 (codename "White Picket Fences")    
-**Release Date**: November 15th 2010    
+**Latest Version**: 0.6.3 (codename "Better White Picket Fences")    
+**Release Date**: November 21st 2010    
 
 Synopsis
 --------
@@ -288,6 +288,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **November.21.10**: 0.6.3 release
+    - Fixed regression that caused `yardoc --markup` to silently exit
 
 - **November.15.10**: 0.6.2 release
     - **Plugins no longer automatically load, use `--plugin` to load a plugin**

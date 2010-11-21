@@ -9,7 +9,7 @@ SPEC = Gem::Specification.new do |s|
     custom Ruby constructs such as custom class level definitions.
   eof
   s.version       = YARD::VERSION
-  s.date          = "2010-11-15"
+  s.date          = "2010-11-21"
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yardoc.org"
