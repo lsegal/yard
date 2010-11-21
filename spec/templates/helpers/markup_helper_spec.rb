@@ -35,12 +35,14 @@ describe YARD::Templates::Helpers::MarkupHelper do
     end
   
     it "should search through available markup providers for the markup type if none is set" do
+      module YARD::Templates::Helpers::MarkupHelper::BlueCloth; end
       @gen.should_receive(:require).with('bluecloth').and_return(true)
+      @gen.should_not_receive(:require).with('maruku')
       @gen.stub!(:options).and_return({:markup => :markdown})
       # this only raises an exception because we mock out require to avoid 
       # loading any libraries but our implementation tries to return the library 
       # name as a constant
-      @gen.load_markup_provider.should rescue nil
+      @gen.load_markup_provider.should == true
       @gen.markup_provider.should == :bluecloth
     end
   

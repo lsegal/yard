@@ -81,7 +81,7 @@ module YARD
           begin require provider[:lib].to_s; rescue LoadError; next end
           @markup_cache[type][:provider] = provider[:lib] # Cache the provider
           @markup_cache[type][:class] = eval(provider[:const])
-          return false
+          return true
         end
         
         # Show error message telling user to install first potential provider
