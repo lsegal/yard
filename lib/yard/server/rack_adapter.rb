@@ -6,10 +6,18 @@ module YARD
     class RackMiddleware
       def initialize(app, opts = {})
         args = [opts[:libraries] || {}, opts[:options] || {}, opts[:server_options] || {}]
-        @app = RackAdapter.new(*args)
+        @app = app
+        @adapter = RackAdapter.new(*args)
       end
       
-      def call(env) @app.call(env) end
+      def call(env)
+        status, headers, body = *@adapter.call(env)
+        if status == 404
+          @app.call(env)
+        else
+          [status, headers, body]
+        end
+      end
     end
     
     class RackAdapter < Adapter
