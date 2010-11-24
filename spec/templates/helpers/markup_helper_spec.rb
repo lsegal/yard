@@ -4,21 +4,21 @@ module YARD::Templates::Helpers::MarkupHelper
   public :load_markup_provider, :markup_class, :markup_provider
 end
 
-class MyMock
+class GeneratorMock
   attr_accessor :options
   include YARD::Templates::Helpers::MarkupHelper
+  def initialize(options = {}) self.options = options end
 end
 
 describe YARD::Templates::Helpers::MarkupHelper do
   describe '#load_markup_provider' do
     before do
       log.stub!(:error)
-      @gen = mock('Generator')
-      @gen.extend(YARD::Templates::Helpers::MarkupHelper)
+      @gen = GeneratorMock.new
     end
   
     it "should exit on an invalid markup type" do
-      @gen.stub!(:options).and_return({:markup => :invalid})
+      @gen.options = {:markup => :invalid}
       @gen.load_markup_provider.should == false
     end
 

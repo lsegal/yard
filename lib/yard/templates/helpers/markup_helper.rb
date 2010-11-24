@@ -49,6 +49,9 @@ module YARD
         SimpleMarkup = SM::SimpleMarkup.new
       end
       
+      # @private
+      @@markup_cache = nil
+      
       # Attempts to load the first valid markup provider in {MARKUP_PROVIDERS}.
       # If a provider is specified, immediately try to load it.
       # 
@@ -61,9 +64,9 @@ module YARD
       # 
       # @return [Boolean] whether the markup provider was successfully loaded.
       def load_markup_provider(type = options[:markup])
-        return true if type == :rdoc || (@markup_cache && @markup_cache[type])
-        @markup_cache ||= {}
-        @markup_cache[type] ||= {}
+        return true if type == :rdoc || (@@markup_cache && @@markup_cache[type])
+        @@markup_cache ||= {}
+        @@markup_cache[type] ||= {}
         
         providers = MARKUP_PROVIDERS[type]
         return true if providers && providers.empty?
@@ -79,8 +82,8 @@ module YARD
         # Search for provider, return the library class name as const if found
         providers.each do |provider|
           begin require provider[:lib].to_s; rescue LoadError; next end
-          @markup_cache[type][:provider] = provider[:lib] # Cache the provider
-          @markup_cache[type][:class] = eval(provider[:const])
+          @@markup_cache[type][:provider] = provider[:lib] # Cache the provider
+          @@markup_cache[type][:class] = eval("::" + provider[:const])
           return true
         end
         
@@ -130,7 +133,7 @@ module YARD
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Class] the markup class
       def markup_class(type = options[:markup])
-        type == :rdoc ? SimpleMarkup : @markup_cache[type][:class]
+        type == :rdoc ? SimpleMarkup : @@markup_cache[type][:class]
       end
       
       # Gets the markup provider name for a markup type
@@ -139,7 +142,7 @@ module YARD
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Symbol] the markup provider name (usually the gem name of the library)
       def markup_provider(type = options[:markup])
-        type == :rdoc ? nil : @markup_cache[type][:provider]
+        type == :rdoc ? nil : @@markup_cache[type][:provider]
       end
     end
   end
