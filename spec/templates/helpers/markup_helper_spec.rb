@@ -11,6 +11,10 @@ class GeneratorMock
 end
 
 describe YARD::Templates::Helpers::MarkupHelper do
+  before do
+    YARD::Templates::Helpers::MarkupHelper.clear_markup_cache
+  end
+  
   describe '#load_markup_provider' do
     before do
       log.stub!(:error)
@@ -35,7 +39,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
     end
   
     it "should search through available markup providers for the markup type if none is set" do
-      module YARD::Templates::Helpers::MarkupHelper::BlueCloth; end
+      @gen.should_receive(:eval).with('::BlueCloth').and_return(mock(:bluecloth))
       @gen.should_receive(:require).with('bluecloth').and_return(true)
       @gen.should_not_receive(:require).with('maruku')
       @gen.stub!(:options).and_return({:markup => :markdown})
