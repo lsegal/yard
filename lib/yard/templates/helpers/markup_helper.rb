@@ -56,16 +56,16 @@ module YARD
         begin
           require 'rdoc/markup'
           require 'rdoc/markup/to_html'
-          rdoc_class = RDoc::Markup
+          rdoc_provider = RDoc::Markup.new
         rescue Gem::LoadError
           raise
         rescue LoadError
           require 'rubygems'
           require 'rdoc/markup/simple_markup'
           require 'rdoc/markup/simple_markup/to_html'
-          rdoc_class = SM::SimpleMarkup
+          rdoc_provider = SM::SimpleMarkup.new
         end
-        self.class.class_eval("SimpleMarkup = #{rdoc_class}.new")
+        self.class.const_set("SimpleMarkup", rdoc_provider)
       end
       
       # Attempts to load the first valid markup provider in {MARKUP_PROVIDERS}.
