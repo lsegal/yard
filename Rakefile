@@ -19,15 +19,15 @@ task :install => :gem do
 end
 
 begin
-  require 'spec'
-  require 'spec/rake/spectask'
+  require 'rspec'
+  require 'rspec/core/rake_task'
 
   desc "Run all specs"
-  Spec::Rake::SpecTask.new("specs") do |t|
+  RSpec::Core::RakeTask.new("specs") do |t|
     $DEBUG = true if ENV['DEBUG']
-    t.spec_opts = ["--format", "specdoc", "--colour"]
-    t.spec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
-    t.spec_files = Dir["spec/**/*_spec.rb"].sort
+    t.rspec_opts = ["--colour"]
+    t.rspec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
+    t.pattern = "spec/**/*_spec.rb"
   
     if ENV['RCOV']
       hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
