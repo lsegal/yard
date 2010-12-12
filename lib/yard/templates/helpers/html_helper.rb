@@ -7,6 +7,8 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
       
+      SimpleMarkupHtml = RDoc::Markup::ToHtml.new rescue (SM::ToHtml.new rescue nil)
+      
       # @group Escaping Template Data
     
       # Escapes HTML entities
@@ -77,11 +79,8 @@ module YARD
       # @return [String] output HTML
       # @since 0.6.0
       def html_markup_rdoc(text)
-        begin
-          html_processor = RDoc::Markup::ToHtml.new rescue SM::ToHtml.new
-          html_processor.instance_variable_set("@from_path", url_for(object))
-          html = MarkupHelper::SimpleMarkup.convert(text, rdoc_html_processor)
-        end
+        SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
+        html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
 
         html = fix_dash_dash(html)
         html = fix_typewriter(html)
