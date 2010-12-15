@@ -70,13 +70,13 @@ module YARD
 
         def load_yardoc
           raise LibraryNotPreparedError unless library.yardoc_file
-          if @@last_yardoc == library.yardoc_file
+          if Thread.current[:__yard_last_yardoc__] == library.yardoc_file
             log.debug "Reusing yardoc file: #{library.yardoc_file}"
             return
           end
           Registry.clear
           Registry.load_yardoc(library.yardoc_file)
-          @@last_yardoc = library.yardoc_file
+          Thread.current[:__yard_last_yardoc__] = library.yardoc_file
         end
         
         def not_prepared
