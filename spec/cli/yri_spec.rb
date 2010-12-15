@@ -63,4 +63,25 @@ describe YARD::CLI::Yardoc do
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
   end
+  
+  describe '#run' do
+    it "should search for objects and print their documentation" do
+      obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
+      @yri.should_receive(:print_object).with(obj)
+      @yri.run('Foo')
+      Registry.clear
+    end
+    
+    it "should print usage if no object is provided" do
+      @yri.should_receive(:print_usage)
+      @yri.should_receive(:exit).with(1)
+      @yri.run('')
+    end
+    
+    it "should print no documentation exists for object if object is not found" do
+      STDERR.should_receive(:puts).with("No documentation for `Foo'")
+      @yri.should_receive(:exit).with(1)
+      @yri.run('Foo')
+    end
+  end
 end
