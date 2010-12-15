@@ -49,7 +49,7 @@ module YARD
       def run(*args)
         optparse(*args)
         
-        if Config::CONFIG['host_os'] =~ /mingw|win32/
+        if ::Config::CONFIG['host_os'] =~ /mingw|win32/
           @serializer ||= YARD::Serializers::StdoutSerializer.new
         else
           @serializer ||= YARD::Serializers::ProcessSerializer.new('less')
