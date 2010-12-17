@@ -5,6 +5,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper
+  
+  def options; {} end
 
   describe '#h' do
     it "should use #h to escape HTML" do
@@ -357,6 +359,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(Registry.root)
     end
     
+    def fix_rspec2_mock_teardown
+      return unless defined?(RSpec)
+      should_receive(:respond_to?).with(:teardown_mocks_for_rspec).and_return(false)
+      should_receive(:respond_to?).with(:verify_mocks_for_rspec).and_return(false)
+    end
+    
     it "should return empty string on nil input" do
       html_syntax_highlight(nil).should == ''
     end
@@ -369,12 +377,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it "should call #html_syntax_highlight_NAME if there's an object with a #source_type" do
       Registry.root.source_type = :NAME
+      fix_rspec2_mock_teardown
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       should_receive(:html_syntax_highlight_NAME).and_return("foobar")
       html_syntax_highlight('def x; end').should == 'foobar'
     end
 
     it "should call html_syntax_highlight_NAME if source starts with !!!NAME" do
+      fix_rspec2_mock_teardown
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       should_receive(:html_syntax_highlight_NAME).and_return("foobar")
       html_syntax_highlight(<<-eof
@@ -391,6 +401,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should not highlight if there is no highlight method specified by !!!NAME" do
+      fix_rspec2_mock_teardown
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
       should_not_receive(:html_syntax_highlight_NAME)
       html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
