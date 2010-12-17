@@ -446,7 +446,7 @@ describe YARD::CLI::Yardoc do
       visible_tags = []
       Tags::Library.stub!(:define_tag)
       Tags::Library.stub!(:visible_tags).and_return([:foo])
-      Tags::Library.stub!(:visible_tags=).with {|value| visible_tags = value }
+      Tags::Library.stub!(:visible_tags=) {|value| visible_tags = value }
       @yardoc.parse_arguments('--tag', 'foo', '--tag', 'foo')
       visible_tags.should == [:foo]
     end

@@ -31,8 +31,8 @@ describe YARD::CLI::Diff do
       @diff.should_receive(:load_gem_data).ordered.with('gem2').and_return(true)
       Registry.should_receive(:all).ordered.and_return(@objects1.map {|o| P(o) })
       Registry.should_receive(:all).ordered.and_return(@objects2.map {|o| P(o) })
-      @diff.stub!(:print).with {|data| @data << data }
-      @diff.stub!(:puts).with {|*args| @data << args.join("\n"); @data << "\n" }
+      @diff.stub!(:print) {|data| @data << data }
+      @diff.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
       @diff.run(*(args + ['gem1', 'gem2']))
     end
 

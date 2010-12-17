@@ -11,7 +11,7 @@ end
 
 def text_equals(result, expected_example)
   return if only_copy?(result, expected_example, :text)
-  text_equals_string(result, example(expected_example, :txt))
+  text_equals_string(result, example_contents(expected_example, :txt))
 end
 
 def text_equals_string(result, expected)
@@ -20,7 +20,7 @@ end
 
 def html_equals(result, expected_example)
   return if only_copy?(result, expected_example, :html)
-  html_equals_string(result, example(expected_example))
+  html_equals_string(result, example_contents(expected_example))
 end
 
 def html_equals_string(result, expected)
@@ -31,7 +31,7 @@ def html_equals_string(result, expected)
   text_equals_string(result, expected)
 end
 
-def example(filename, ext = 'html')
+def example_contents(filename, ext = 'html')
   File.read(File.join(File.dirname(__FILE__), 'examples', "#{filename}.#{ext}"))
 end
 
