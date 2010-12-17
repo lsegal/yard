@@ -25,7 +25,7 @@ begin
   desc "Run all specs"
   RSpec::Core::RakeTask.new("specs") do |t|
     $DEBUG = true if ENV['DEBUG']
-    t.rspec_opts = ["--colour"]
+    t.rspec_opts = ["--colour", "-f", "d"]
     t.rspec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
     t.pattern = "spec/**/*_spec.rb"
   

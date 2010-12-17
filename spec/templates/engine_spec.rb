@@ -78,9 +78,12 @@ describe YARD::Templates::Engine do
     end
   
     before(:all) do 
+      @object = CodeObjects::MethodObject.new(:root, :method)
+    end
+    
+    before do
       @template = mock(:template)
       @template.stub!(:include)
-      @object = CodeObjects::MethodObject.new(:root, :method)
     end
   
     it "should accept method call with no parameters" do
