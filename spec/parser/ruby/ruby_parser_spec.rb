@@ -175,6 +175,20 @@ if RUBY19
         s.source.should == "::\nFoo::Bar"
         s.line_range.to_a.should == [1, 2]
       end
+      
+      it "should show proper source for heredoc" do
+        src = "<<-XML\n  foo\n\nXML"
+        s = stmt(src)
+        s.source.should == src
+      end
+      
+      it "should show proper source for string" do
+        ["'", '"'].each do |q|
+          src = "#{q}hello\n\nworld#{q}"
+          s = stmt(src)
+          s.source.should == src
+        end
+      end
     end
   end
 end

@@ -316,7 +316,12 @@ module YARD
         end
         
         def on_string_literal(*args)
-          visit_event_arr AstNode.new(:string_literal, args)
+          node = visit_event_arr(AstNode.new(:string_literal, args))
+          if @source[charno, 1] !~ /["']/
+            nsr = node.source_range
+            node.source_range = Range.new(nsr.first, nsr.last + 1) 
+          end
+          node
         end
         
         def on_lambda(*args)
