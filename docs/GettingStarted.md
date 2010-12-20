@@ -60,6 +60,16 @@ Using tags we can add semantic metadata to our code without worrying about
 presentation. YARD will handle presentation for us when we decide to generate
 documentation later.
 
+Which Markup Format?
+--------------------
+
+YARD does not impose a specific markup. The above example uses standard RDoc
+markup formatting, but YARD also supports textile and markdown via the 
+command-line switch or `.yardopts` file (see below). This means that you are
+free to use whatever formatting you like. YARD, however, does add a few important
+syntaxes that are processed no matter which markup formatting you use, such 
+as tag support and inter-document linking. These syntaxes are discussed below.
+
 Adding Tags to Documentation
 ----------------------------
 
@@ -79,6 +89,62 @@ lines following a tag as part of the tag data. For example:
     #   The new method accepts the same parameters.
     def mymethod
     end
+    
+### List of Tags
+
+A list of tags can be found in {file:docs/Tags.md#taglist}    
+    
+### Reference Tags
+
+To reduce the amount of duplication in writing documentation for repetitive
+code, YARD introduces "reference tags", which are not quite tags, but not
+quite docstrings either. In a sense, they are tag (and docstring) modifiers.
+Basically, any docstring (or tag) that begins with "(see OTHEROBJECT)" will
+implicitly link the docstring or tag to the "OTHEROBJECT", copying any data
+from that docstring/tag into your current object. Consider the example:
+
+    class MyWebServer
+      # Handles a request
+      # @param [Request] request the request object
+      # @return [String] the resulting webpage
+      def get(request) "hello" end
+
+      # (see #get)
+      def post(request) "hello" end
+    end
+    
+The above `#post` method takes the docstring and all tags (`param` and `return`)
+of the `#get` method. When you generate HTML documentation, you will see this
+duplication automatically, so you don't have to manually type it out. We can
+also add our own custom docstring information below the "see" reference, and
+whatever we write will be appended to the docstring:
+
+    # (see #get)
+    # @note This method may modify our application state!
+    def post(request) self.state += 1; "hello" end
+    
+Here we added another tag, but we could have also added plain text.
+
+Note that we don't have to "refer" the whole docstring. We can also link 
+individual tags instead. Since "get" and "post" actually have different 
+descriptions, a more accurate example would be to only refer our parameter 
+and return tags:
+
+    class MyWebServer
+      # Handles a GET request
+      # @param [Request] request the request object
+      # @return [String] the resulting webpage
+      def get(request) "hello" end
+      
+      # Handles a POST request
+      # @note This method may modify our application state!
+      # @param (see #get)
+      # @return (see #get)
+      def post(request) self.state += 1; "hello" end
+    end
+    
+The above copies all of the param and return tags from `#get`. Note that you
+cannot copy individual tags of a specific type with this syntax.
 
 Declaring Types
 ---------------
@@ -111,56 +177,129 @@ Symbols:
   
     # @param [Array<String, Symbol>] list the list of strings and symbols.
 
-List of Tags
-------------
+Inter-document Linking
+----------------------
+
+YARD supports a special syntax to link to other code objects, URLs, files,
+or embed docstrings between documents. This syntax has the general form
+of `{Name OptionalTitle}` (where `OptionalTitle` can have spaces, but `Name`
+cannot).
+
+### Linking Objects
+
+To link another "object" (class, method, module, etc.), use the format:
+
+    {ObjectName#method OPTIONAL_TITLE}
+    {Class::CONSTANT My constant's title}
+    {#method_inside_current_namespace}
     
-A list of tags can be found in {file:docs/Tags.md#taglist}
-        
-Other Extended Syntax
----------------------
+Without an explicit title, YARD will use the relative path to the object as
+the link name. Note that you can also use relative paths inside the object
+path to refer to an object inside the same namespace as your current docstring.
 
-**Reference Tags**
+Note that the `@see` tag automatically links its data. You should not use
+the link syntax in this tag:
 
-To minimize rewriting of documentation and to ease maintenance, a special
-tag syntax is allowed to reference tags from other objects. Doing this allows
-a tag to be added as meta-data for multiple objects. A full example of this
-syntax is found in the {file:docs/Tags.md#reftags Tags} file.
+    # @see #methodname   <- Correct.
+    # @see {#methodname} <- Incorrect.
+    
+### Linking URLs
 
-**Inter-Document Links**
+URLs are also linked using this `{...}` syntax:
 
-YARD supports a special syntax to link to other code objects or files.
-The syntax is `{ObjectName#method OPTIONAL_TITLE}`. This syntax is acceptable
-anywhere in documentation with the exception of the @see tag, which 
-automatically links its data.
+    {http://example.com Optional Title}
+    {mailto:email@example.com}
+
+### Linking Files
+
+Files can also be linked using this same syntax but by adding the `file:`
+prefix to the object name. Files refer to extra readme files you added
+via the command-line. Consider the following examples:
+
+    {file:docs/GettingStarted.md Getting Started}
+    {file:mypage.html Name#anchor}
+    
+As shown, you can also add an optional `#anchor` if the page is an HTML link.
+
+### Embedding Docstrings
+
+We saw the `(see ...)` syntax above, which allowed us to link an entire docstring
+with another. Sometimes, however, we just want to copy docstring text without
+tags. Using the same `{...}` syntax, but using the `include:` prefix, we can
+embed a docstring (minus tags) at a specific point in the text.
+
+    # This class is cool
+    # @abstract
+    class Foo; end
+    
+    # This is another class. {include:Foo} too!
+    class Bar; end
+    
+The docstring for Bar becomes: 
+
+    "This is another class. This class is cool too!"
+
+Note that this prefix currently only works for objects.
 
 <a name="using"></a>
 Using YARD to Generate Documentation
 ====================================
 
-YARD ships with a number of tools you will want to integrate into your
-development process.
+YARD ships with a single executable aptly named `yard`. In addition to
+generating standard documentation for your project, you would use this tool 
+if you wanted to: 
 
-`yardoc`
---------
-Obviously, since YARD is a documentation tool, one of its primary goals is
-to generate documentation for a variety of formats, most commonly HTML. The
-`yardoc` tool that is installed with YARD allows you to quickly export code
-documentation to HTML document files. 
+* Document all installed gems
+* Run a local documentation server
+* Generate UML diagrams using [Graphviz][graphviz]
+* View `ri`-style documentation
+* Diff your documentation
+* Analyze documentation statistics.
 
-`.yardopts`
------------
+The following commands are available in YARD 0.6.x (see `yard help` for a 
+full list):
+
+    Usage: yard <command> [options]
+
+    Commands:
+    config   Views or edits current global configuration
+    diff     Returns the object diff of two gems or .yardoc files
+    doc      Generates documentation
+    gems     Builds YARD index for gems
+    graph    Graphs class diagram using Graphviz
+    help     Retrieves help for a command
+    ri       A tool to view documentation in the console like `ri`
+    server   Runs a local documentation server
+    stats    Prints documentation statistics on a set of files
+
+Note that `yardoc` is an alias for `yard doc`, and `yri` is an alias for
+`yard ri`. These commands are maintained for backwards compatibility.
+
+The `.yardopts` Options File
+----------------------------
+
 Unless your documentation is very small, you'll end up needing to run `yardoc`
 with many options.  The `yardoc` tool will use the options found in this file.
 It is recommended to check this in to your repository and distribute it with
-your source.  Options for `yardoc` are discussed in the {file:README.md README}.
-A full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
+your source. This file is placed at the root of your project (in the directory
+you run `yardoc` from) and contains all of arguments you would otherwise pass
+to the command-line tool. For instance, if you often type:
 
-`yard`
-------
-The `yard` tool will interface your YARD-based documentation with other resources.
-You can use this if you want to document all installed gems, run a local
-documentation server, generate UML using [Graphviz][graphviz], view `ri`-style
-documentation, diff documentation, or analyze statistics.
+    yardoc --no-private --protected app/**/*.rb - README LEGAL COPYING
+    
+You can place the following into your `.yardopts`:
+
+    --no-private --protected app/**/*.rb - README LEGAL COPYING
+    
+This way, you only need to type:
+
+    yardoc
+
+Any extra switches passed to the command-line now will be appended to your
+`.yardopts` options.
+
+Note that options for `yardoc` are discussed in the {file:README.md README}, 
+and a full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
 
 <a name="docing"></a>
 Configuring YARD
