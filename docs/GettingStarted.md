@@ -66,9 +66,10 @@ Which Markup Format?
 YARD does not impose a specific markup. The above example uses standard RDoc
 markup formatting, but YARD also supports textile and markdown via the 
 command-line switch or `.yardopts` file (see below). This means that you are
-free to use whatever formatting you like. YARD, however, does add a few important
-syntaxes that are processed no matter which markup formatting you use, such 
-as tag support and inter-document linking. These syntaxes are discussed below.
+free to use whatever formatting you like. This guide is actually written
+using markdown. YARD, however, does add a few important syntaxes that are 
+processed no matter which markup formatting you use, such as tag support 
+and inter-document linking. These syntaxes are discussed below.
 
 Adding Tags to Documentation
 ----------------------------
@@ -123,7 +124,9 @@ whatever we write will be appended to the docstring:
     # @note This method may modify our application state!
     def post(request) self.state += 1; "hello" end
     
-Here we added another tag, but we could have also added plain text.
+Here we added another tag, but we could have also added plain text. The
+text must be appended *after* the `(see ...)` statement, preferably on
+a separate line.
 
 Note that we don't have to "refer" the whole docstring. We can also link 
 individual tags instead. Since "get" and "post" actually have different 
@@ -176,6 +179,12 @@ For instance, consider the following Array that holds a set of Strings and
 Symbols:
   
     # @param [Array<String, Symbol>] list the list of strings and symbols.
+    
+We mentioned that these type fields are "mostly" free-form. In truth, they
+are defined "by convention". To view samples of common type specifications
+and recommended conventions for writing type specifications, see 
+{http://yardoc.org/types.html}. Note that these conventions may change every now 
+and then, although we are working on a more "formal" type specification proposal.
 
 Inter-document Linking
 ----------------------
@@ -245,6 +254,9 @@ Note that this prefix currently only works for objects.
 Using YARD to Generate Documentation
 ====================================
 
+`yard` Executable
+-----------------
+
 YARD ships with a single executable aptly named `yard`. In addition to
 generating standard documentation for your project, you would use this tool 
 if you wanted to: 
@@ -275,8 +287,8 @@ full list):
 Note that `yardoc` is an alias for `yard doc`, and `yri` is an alias for
 `yard ri`. These commands are maintained for backwards compatibility.
 
-The `.yardopts` Options File
-----------------------------
+`.yardopts` Options File
+------------------------
 
 Unless your documentation is very small, you'll end up needing to run `yardoc`
 with many options.  The `yardoc` tool will use the options found in this file.
