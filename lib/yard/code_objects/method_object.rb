@@ -45,6 +45,7 @@ module YARD::CodeObjects
     def scope=(v) 
       reregister = @scope ? true : false
       YARD::Registry.delete(self) if reregister
+      @path = nil
       @scope = v.to_sym 
       YARD::Registry.register(self) if reregister
     end
@@ -124,7 +125,7 @@ module YARD::CodeObjects
     # (they should still have a separator as a prefix).
     # @return [String] the path of a method
     def path
-      if !namespace || namespace.path == "" 
+      @path ||= if !namespace || namespace.path == "" 
         sep + super
       else
         super

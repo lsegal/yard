@@ -388,7 +388,7 @@ module YARD
       # @return [String] the unique path of the object
       # @see #sep
       def path
-        if parent && !parent.root?
+        @path ||= if parent && !parent.root?
           [parent.path, name.to_s].join(sep)
         else
           name.to_s
