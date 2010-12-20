@@ -166,6 +166,15 @@ if RUBY19
       it "should show proper source for assignment" do
         stmt("A=1").jump(:assign).source.should == "A=1"
       end
+      
+      it "should show proper source for a top_const_ref" do
+        s = stmt("::\nFoo::Bar")
+        s.jump(:top_const_ref).source.should == "::\nFoo"
+        s.should be_ref
+        s.jump(:top_const_ref).should be_ref
+        s.source.should == "::\nFoo::Bar"
+        s.line_range.to_a.should == [1, 2]
+      end
     end
   end
 end

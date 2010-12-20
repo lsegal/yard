@@ -88,6 +88,7 @@ module YARD
           :string_literal => [:tstring_beg, :heredoc_beg],
           :super => "super",
           :symbol => :symbeg,
+          :top_const_ref => "::",
           :undef => "undef",
           :unless => "unless",
           :until => "until",
@@ -279,6 +280,23 @@ module YARD
         def on_rbracket(tok)
           (@map[:aref] ||= []) << [lineno, charno]
           visit_ns_token(:rbracket, tok, false)
+        end
+        
+        def on_top_const_ref(*args)
+          type = :top_const_ref
+          node = AstNode.node_class_for(type).new(type, args)
+          mapping = @map[MAPPINGS[type]]
+          extra_op = mapping.last[1] + 2 == charno ? mapping.pop : nil
+          lstart, sstart = *mapping.pop
+          node.source_range = Range.new(sstart, args.last.source_range.last)
+          node.line_range = Range.new(lstart, args.last.line_range.last)
+          mapping.push(extra_op) if extra_op
+          node
+        end
+        
+        def on_const_path_ref(*args)
+          klass = AstNode.node_class_for(:const_path_ref)
+          klass.new(:const_path_ref, args, listline: lineno..lineno, listchar: charno..charno)
         end
         
         [:if_mod, :unless_mod, :while_mod].each do |kw|

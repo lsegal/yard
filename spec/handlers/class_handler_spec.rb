@@ -57,6 +57,7 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ClassHandler" do
   
   it "should handle a superclass of the same name in the form ::ClassName" do
     P('Q::Logger').superclass.should == P(:Logger)
+    P('Q::Foo').superclass.should_not == P('Q::Logger')
   end
   
   ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|

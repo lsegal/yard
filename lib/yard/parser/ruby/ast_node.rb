@@ -321,10 +321,6 @@ module YARD
         def namespace
           Array.new flatten[0...-1]
         end
-        
-        def source
-          super.split(/\s+/).first
-        end
       end
       
       class ParameterNode < AstNode

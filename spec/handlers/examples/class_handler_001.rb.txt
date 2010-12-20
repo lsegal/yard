@@ -65,6 +65,7 @@ end
 
 module Q
   class Logger < ::Logger; end
+  class Foo < ::Logger; end
 end
 
 class << Symbol
