@@ -2,7 +2,7 @@ require 'ostruct'
 
 module YARD
   module Templates
-    # This module manages all creation, handling and rendering of {Engine::Template} 
+    # This module manages all creation, handling and rendering of {Template} 
     # objects. 
     # 
     # * To create a template object at a path, use {template}. 
