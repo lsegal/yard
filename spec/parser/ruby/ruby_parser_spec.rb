@@ -10,6 +10,10 @@ if RUBY19
       YARD::Parser::Ruby::RubyParser.new(stmts, nil).parse.root
     end
     
+    def tokenize(stmt)
+      YARD::Parser::Ruby::RubyParser.new(stmt, nil).parse.tokens
+    end
+    
     describe '#parse' do
       it "should get comment line numbers" do
         s = stmt <<-eof
@@ -177,9 +181,11 @@ if RUBY19
       end
       
       it "should show proper source for heredoc" do
-        src = "<<-XML\n  foo\n\nXML"
+        src = "def foo\n  foo(<<-XML, 1, 2)\n    bar\n\n  XML\nend"
         s = stmt(src)
+        t = tokenize(src)
         s.source.should == src
+        t.map {|x| x[1] }.join.should == src
       end
       
       it "should show proper source for string" do

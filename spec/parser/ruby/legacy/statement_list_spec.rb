@@ -281,4 +281,10 @@ eof
     s = stmt("alias do x if 2 ==\n 2")
     s.tokens.to_s.should == "alias do x if 2 ==\n 2"
   end
+  
+  it "should convert heredoc to string" do
+    src = "<<-XML\n  foo\n\nXML"
+    s = stmt(src)
+    s.source.should == '"foo\n\n"'
+  end
 end

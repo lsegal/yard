@@ -27,6 +27,7 @@ module YARD
           @source = source
           @tokens = []
           @comments = {}
+          @heredoc_tokens = []
           @map = {}
           @ns_charno = 0
           @list = []
@@ -219,8 +220,13 @@ module YARD
         def add_token(token, data)
           if @tokens.last && @tokens.last[0] == :symbeg
             @tokens[-1] = [:symbol, ":" + data]
+          elsif token == :heredoc_end
+            @heredoc_tokens << [@tokens.pop, [token, data]]
           else
             @tokens << [token, data]
+            if token == :nl && @heredoc_tokens.size > 0
+              @tokens += @heredoc_tokens.pop
+            end
           end
         end
 
