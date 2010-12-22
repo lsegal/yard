@@ -123,20 +123,28 @@ module YARD
           raise NotImplementedError
         end
 
+        protected
+        
         # @group Helper Methods
         
-        # Sets the body and headers (but not status) for a 404 response. Does
-        # nothing if the body is already set.
+        # Renders a specific object if provided, or a regular template rendering
+        # if object is not provided.
         # 
-        # @return [void]
-        def not_found
-          return unless body.empty?
-          self.body = "Not found: #{request.path}"
-          self.headers['Content-Type'] = 'text/plain'
-          self.headers['X-Cascade'] = 'pass'
+        # @todo This method is dependent on +#options+, it should be in {LibraryCommand}.
+        # @param [CodeObjects::Base, nil] object calls {CodeObjects::Base#format} if
+        #   an object is provided, or {Templates::Engine.render} if object is nil. Both
+        #   receive +#options+ as an argument.
+        # @return [String] the resulting output to display
+        def render(object = nil)
+          case object
+          when CodeObjects::Base
+            cache object.format(options)
+          when nil
+            cache Templates::Engine.render(options)
+          else
+            cache object
+          end
         end
-        
-        protected
         
         # Override this method to implement custom caching mechanisms for
         # 
@@ -157,6 +165,17 @@ module YARD
             File.open(path, 'wb') {|f| f.write(data) }
           end
           self.body = data
+        end
+
+        # Sets the body and headers (but not status) for a 404 response. Does
+        # nothing if the body is already set.
+        # 
+        # @return [void]
+        def not_found
+          return unless body.empty?
+          self.body = "Not found: #{request.path}"
+          self.headers['Content-Type'] = 'text/plain'
+          self.headers['X-Cascade'] = 'pass'
         end
 
         # Sets the headers and status code for a redirection to a given URL

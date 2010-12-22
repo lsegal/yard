@@ -49,31 +49,7 @@ module YARD
           not_prepared
         end
         
-        protected
-        
-        # @group Helper Methods
-
-        # Renders a specific object if provided, or a regular template rendering
-        # if object is not provided.
-        # 
-        # @param [CodeObjects::Base, nil] object calls {CodeObjects::Base#format} if
-        #   an object is provided, or {Templates::Engine.render} if object is nil. Both
-        #   receive {#options} as an argument.
-        # @return [String] the resulting output to display
-        def render(object = nil)
-          case object
-          when CodeObjects::Base
-            cache object.format(options)
-          when nil
-            cache Templates::Engine.render(options)
-          else
-            cache object
-          end
-        end
-
         private
-        
-        # @endgroup
 
         def setup_library
           library.prepare! if request.xhr? && request.query['process']
