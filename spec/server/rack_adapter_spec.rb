@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Server::RackMiddleware do
+describe "YARD::Server::RackMiddleware" do
   before do
+    begin; require 'rack'; rescue LoadError; pending "rack required for these tests" end
     @superapp = mock(:superapp)
-    @app = YARD::Server::RackMiddleware.new(@superapp, :libraries => {:foo => [LibraryVersion.new('foo', nil)]})
+    @app = YARD::Server::RackMiddleware.new(@superapp, :libraries => {'foo' => [LibraryVersion.new('foo', nil)]})
   end
   
   it "should handle requests" do
