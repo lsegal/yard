@@ -2,7 +2,10 @@ require 'webrick'
 
 module YARD
   module Server
+    # The main adapter to initialize a WEBrick server.
     class WebrickAdapter < Adapter
+      # Initializes a WEBrick server. If {Adapter#server_options} contains a
+      # +:daemonize+ key set to true, the server will be daemonized.
       def start
         server_options[:ServerType] = WEBrick::Daemon if server_options[:daemonize]
         server = WEBrick::HTTPServer.new(server_options)
@@ -12,6 +15,7 @@ module YARD
       end
     end
 
+    # The main WEBrick servlet implementation, accepting only GET requests.
     class WebrickServlet < WEBrick::HTTPServlet::AbstractServlet
       attr_accessor :adapter
       

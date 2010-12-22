@@ -1,6 +1,7 @@
 module YARD
   module Server
     module Commands
+      # Returns a list of objects of a specific type
       class ListCommand < LibraryCommand
         include Templates::Helpers::BaseHelper
         
@@ -14,6 +15,7 @@ module YARD
         end
       end
       
+      # Returns the list of classes / modules in a library
       class ListClassesCommand < ListCommand
         def type; :class end
         
@@ -23,6 +25,7 @@ module YARD
         end
       end
       
+      # Returns the list of methods in a library
       class ListMethodsCommand < ListCommand
         include Templates::Helpers::ModuleHelper
         
@@ -35,6 +38,7 @@ module YARD
         end
       end
       
+      # Returns the list of README/extra files in a library
       class ListFilesCommand < ListCommand
         def type; :files end
         def items; options[:files] end

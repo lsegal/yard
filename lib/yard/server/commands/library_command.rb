@@ -1,6 +1,12 @@
 module YARD
   module Server
     module Commands
+      # This is the base command for all commands that deal directly with libraries.
+      # Some commands do not, but most (like {DisplayObjectCommand}) do. If your
+      # command deals with libraries directly, subclass this class instead.
+      # See {Base} for notes on how to subclass a command.
+      # 
+      # @abstract
       class LibraryCommand < Base
         # @return [LibraryVersion] the object containing library information
         attr_accessor :library
@@ -42,8 +48,32 @@ module YARD
         rescue LibraryNotPreparedError
           not_prepared
         end
+        
+        protected
+        
+        # @group Helper Methods
+
+        # Renders a specific object if provided, or a regular template rendering
+        # if object is not provided.
+        # 
+        # @param [CodeObjects::Base, nil] object calls {CodeObjects::Base#format} if
+        #   an object is provided, or {Templates::Engine.render} if object is nil. Both
+        #   receive {#options} as an argument.
+        # @return [String] the resulting output to display
+        def render(object = nil)
+          case object
+          when CodeObjects::Base
+            cache object.format(options)
+          when nil
+            cache Templates::Engine.render(options)
+          else
+            cache object
+          end
+        end
 
         private
+        
+        # @endgroup
 
         def setup_library
           library.prepare! if request.xhr? && request.query['process']
@@ -85,6 +115,7 @@ module YARD
           [302, {'Content-Type' => 'text/html'}, [render]]
         end
         
+        # @private
         @@last_yardoc = nil
       end
     end

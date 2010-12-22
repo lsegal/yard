@@ -1,6 +1,7 @@
 module YARD
   module Server
     module Commands
+      # Displays an object wrapped in frames
       class FramesCommand < DisplayObjectCommand
         include DocServerHelper
         

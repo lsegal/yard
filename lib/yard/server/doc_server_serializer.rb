@@ -2,6 +2,8 @@ require 'webrick/httputils'
 
 module YARD
   module Server
+    # A custom {Serializers::Base serializer} which returns resource URLs instead of
+    # static relative paths to files on disk.
     class DocServerSerializer < Serializers::FileSystemSerializer
       include WEBrick::HTTPUtils
       

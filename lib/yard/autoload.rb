@@ -135,10 +135,20 @@ module YARD
   end
   
   # Namespace for classes and modules that handle serving documentation over HTTP
+  # 
+  # == Implementing a Custom Server
+  # To customize the YARD server, see the {Adapter} and {Router} classes. 
+  # 
+  # == Rack Middleware
+  # If you want to use the YARD server as a Rack middleware, see the documentation
+  # in {RackMiddleware}.
+  # 
   # @since 0.6.0
   module Server
     require __p('server')
 
+    # Commands implement specific kinds of server responses which are routed
+    # to by the {Router} class. To implement a custom command, subclass {Commands::Base}.
     module Commands
       autoload :Base,                 __p('server/commands/base')
       autoload :DisplayFileCommand,   __p('server/commands/display_file_command')
