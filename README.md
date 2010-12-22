@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2010    
 **License**:      MIT License    
-**Latest Version**: 0.6.3 (codename "Better White Picket Fences")    
-**Release Date**: November 21st 2010    
+**Latest Version**: 0.6.4 (codename "Snowy White Picket Fences")    
+**Release Date**: December 21st 2010    
 
 Synopsis
 --------
@@ -289,6 +289,17 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **December.21.10**: 0.6.4 release
+    - Fix yri tool crashing with new Config class (gh-217)
+    - Fix support for ::TopLevelConstants (gh-216)
+    - YARD's test suite is now RSpec2 compatible (gh-215)
+    - Improved documentation for YARD::Server features (gh-207)
+    - Fix displaying of collaped method summary lists (gh-204)
+    - Fix automatic loading of markup providers (gh-206)
+    - Fix keyboard shortcuts for Chrome (gh-203)
+    - Disallow `extend self` inside of a class (gh-202)
+    - Constants now recognized in C extensions (gh-201)
+
 - **November.21.10**: 0.6.3 release
     - Fixed regression that caused `yardoc --markup` to silently exit
 
@@ -428,6 +439,8 @@ Special thanks to the following people for submitting patches:
 * Arthur Schreiber
 * Robert Wahler
 * Mark Evans
+* Lee Jarvis
+* Franklin Webber
 * David Turnbull
 * Anthony Thibault
 * Sam Rawlins
@@ -435,6 +448,7 @@ Special thanks to the following people for submitting patches:
 * Elliottcable
 * James Rosen
 * Jake Kerr
+* Gioele Barabucci
 * Gabriel Horner
 * Denis Defreyne
 * Benjamin Bock

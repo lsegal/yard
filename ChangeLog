@@ -1,3 +1,109 @@
+2010-12-21  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.4
+
+  * spec/server/rack_adapter_spec.rb: Fix RackMiddleware tests for 1.8.x
+
+  * lib/yard/server/commands/base.rb,
+  lib/yard/server/commands/library_command.rb: Move #render back to
+  Commands::Base, since another class depends on it
+
+  * lib/yard/autoload.rb, lib/yard/server/adapter.rb,
+  lib/yard/server/commands/base.rb,
+  lib/yard/server/commands/display_file_command.rb,
+  lib/yard/server/commands/display_object_command.rb,
+  lib/yard/server/commands/frames_command.rb,
+  lib/yard/server/commands/library_command.rb,
+  lib/yard/server/commands/list_command.rb,
+  lib/yard/server/doc_server_helper.rb,
+  lib/yard/server/doc_server_serializer.rb, lib/yard/server/library_version.rb,
+  lib/yard/server/rack_adapter.rb, lib/yard/server/router.rb,
+  lib/yard/server/static_caching.rb, lib/yard/server/webrick_adapter.rb: Beef
+  up YARD::Server* documentation
+
+2010-12-20  Loren Segal <lsegal@soen.ca>
+
+  * docs/GettingStarted.md: Extra information about type specifications, fix
+  tools section
+
+  * docs/GettingStarted.md: Improve getting started documentation, add more
+  syntax documentation
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/method_object.rb,
+  lib/yard/code_objects/root_object.rb: Cache CodeObjects::Base#path to
+  significantly improve performance
+
+  * lib/yard/templates/engine.rb: Fix broken documentation reference
+
+2010-12-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb,
+  spec/parser/ruby/ruby_parser_spec.rb: Fix ordering of heredoc tokens  Closes
+  gh-209
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix listing of heredoc source in 1.9.x
+
+  * lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/examples/class_handler_001.rb.txt,
+  spec/parser/ruby/ruby_parser_spec.rb: Fix Derived < ::Base inheriting wrong
+  Base (not top level)  Closes gh-216
+
+2010-12-17  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile, spec/spec_helper.rb, spec/templates/helpers/html_helper_spec.rb,
+  spec/templates/module_spec.rb: Make rakefile backwards compatible for rspec
+  1.x users
+
+  * Rakefile, spec/cli/diff_spec.rb, spec/cli/stats_spec.rb,
+  spec/cli/yardoc_spec.rb, spec/templates/engine_spec.rb: Add compatibility
+  with rspec2
+
+2010-12-15  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/spec_helper.rb: Can't use example() with rspec2
+
+2010-12-12  Gioele Barabucci <gioele@svario.it>
+
+  * Rakefile, spec/spec_helper.rb: Minimal update to RSpec 2
+
+2010-12-15  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/yri_spec.rb: Add sanity check tests to YRI specs
+
+2010-12-15  Lee Jarvis <lee@jarvis.co>
+
+  * lib/yard/cli/yri.rb: prepend :: to adhere to rubys class lookup rules for
+  Config::CONFIG
+
+2010-11-24  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Fix automatic loading of markup
+  providers by properly caching provider information.  Closes gh-206
+
+  * lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Initial fix for automatic
+  markup provider searching
+
+2010-11-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server/rack_adapter.rb, spec/server/rack_adapter_spec.rb:
+  RackMiddleware should now pass 404 responses up to the next middleware in the
+  stack
+
+2010-11-21  srawlins <sam.rawlins@gmail.com>
+
+  * templates/default/fulldoc/html/css/style.css: Typos. Tested. Now this patch
+  looks goooood.
+
+  * spec/parser/c_parser_spec.rb: Fixed newline
+
+  * templates/default/fulldoc/html/css/style.css: Fixed wrapping in Firefox,
+  clipping in Chrome
+
 2010-11-21  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.3
@@ -5,6 +111,13 @@
   * lib/yard/templates/helpers/markup_helper.rb,
   spec/templates/helpers/markup_helper_spec.rb: Fix regression where markup
   loading fails when generating HTML
+
+2010-11-17  Franklin Webber <franklin.webber@gmail.com>
+
+  * templates/default/fulldoc/html/js/app.js: Minor Javascript Fix - Keyboard
+  Shortcuts  List link shortcuts checked to see if the original Target of the
+  event was a INPUT or TEXTARA.  However, if the orignal Target was undefined
+  an error was raised.  Checking for undefined.
 
 2010-11-15  Loren Segal <lsegal@soen.ca>
 
@@ -265,6 +378,12 @@
 
   * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration. 
   Closes gh-178
+
+2010-09-27  srawlins <sam.rawlins@gmail.com>
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb,
+  spec/parser/examples/override.c.txt: Added
+  Parser::CParser#find_override_comment, almost straight from RDoc
 
 2010-09-25  Loren Segal <lsegal@soen.ca>
 
