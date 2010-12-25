@@ -152,12 +152,10 @@ module YARD
       # @see #dynamic
       def dynamic?; @dynamic end
       
-      # This attribute exists in order to maintain a consistent interface
-      # with the {MethodObject} class, so that a {Verifier} expression need
-      # not check the object type before accessing visibility.
-      # 
-      # @return [Symbol] always returns public for a base object. 
-      def visibility; :public end
+      # @return [Symbol] the visibility of an object (:public, :private, :protected)
+      attr_accessor :visibility
+      undef visibility=
+      def visibility=(v) @visibility = v.to_sym end
       
       class << self
         # Allocates a new code object
@@ -212,6 +210,7 @@ module YARD
         @current_file_has_comments = false
         @name = name.to_sym
         @source_type = :ruby
+        @visibility = :public
         @tags = []
         @docstring = Docstring.new('', self)
         @namespace = nil

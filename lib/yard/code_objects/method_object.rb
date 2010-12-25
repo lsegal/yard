@@ -1,11 +1,6 @@
 module YARD::CodeObjects
   # Represents a Ruby method in source
   class MethodObject < Base
-    # The visibility of the method (+:public:+, +:protected+, +:private+)
-    # 
-    # @return [Symbol] the method visibility
-    attr_reader :visibility
-    
     # The scope of the method (+:class+ or +:instance+)
     # 
     # @return [Symbol] the scope
@@ -49,10 +44,6 @@ module YARD::CodeObjects
       @scope = v.to_sym 
       YARD::Registry.register(self) if reregister
     end
-    
-    # Sets the visibility
-    # @param [Symbol] v the new visibility (:public, :private, or :protected)
-    def visibility=(v) @visibility = v.to_sym end
       
     # @return whether or not the method is the #initialize constructor method
     def constructor?
