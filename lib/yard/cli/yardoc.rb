@@ -433,8 +433,8 @@ module YARD
           YARD::Registry.yardoc_file = yfile
         end
         
-        opts.on('--single-db', 'Store code objects to single database file (advanced)') do
-          Registry.single_object_db = true
+        opts.on('--[no-]single-db', 'Whether code objects should be stored to single database file (advanced)') do |use_single_db|
+          Registry.single_object_db = use_single_db
         end
 
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
