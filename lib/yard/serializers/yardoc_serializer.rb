@@ -61,7 +61,11 @@ module YARD
       end
       
       def serialize(object)
-        super(object, dump(object))
+        if Hash === object
+          super(object[:root], dump(object)) if object[:root]
+        else
+          super(object, dump(object))
+        end
       end
       
       def deserialize(path, is_path = false)
@@ -78,7 +82,8 @@ module YARD
       private
       
       def dump(object)
-        Marshal.dump(internal_dump(object, true))
+        object = internal_dump(object, true) unless object.is_a?(Hash)
+        Marshal.dump(object)
       end
       
       def internal_dump(object, first_object = false)

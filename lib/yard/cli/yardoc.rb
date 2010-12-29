@@ -432,6 +432,10 @@ module YARD
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
+        
+        opts.on('--[no-]single-db', 'Whether code objects should be stored to single database file (advanced)') do |use_single_db|
+          Registry.single_object_db = use_single_db
+        end
 
         opts.on('-n', '--no-output', 'Only generate .yardoc database, no documentation.') do
           self.generate = false

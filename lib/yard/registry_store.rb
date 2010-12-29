@@ -137,8 +137,14 @@ module YARD
         @serializer = Serializers::YardocSerializer.new(@file)
       end
       destroy unless merge
-      values(false).each do |object|
-        @serializer.serialize(object)
+      
+      sdb = Registry.single_object_db
+      if sdb == true || (sdb == nil && keys.size < 3000)
+        @serializer.serialize(@store)
+      else
+        values(false).each do |object|
+          @serializer.serialize(object)
+        end
       end
       write_proxy_types
       write_checksums
@@ -197,11 +203,11 @@ module YARD
       end
     end
     
+    private
+
     def load_yardoc_old
       @store, @proxy_types = *Marshal.load(File.read_binary(@file))
     end
-    
-    private
     
     def load_proxy_types
       return unless File.file?(proxy_types_path)
@@ -218,7 +224,14 @@ module YARD
     
     def load_root
       if root = @serializer.deserialize('root')
-        @store[:root] = root
+        @loaded_objects += 1
+        if root.is_a?(Hash) # single object db
+          log.debug "Loading single object DB from .yardoc"
+          @loaded_objects += (root.keys.size - 1)
+          @store = root
+        else # just the root object
+          @store[:root] = root
+        end
       end
     end
 

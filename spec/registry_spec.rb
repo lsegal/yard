@@ -237,6 +237,13 @@ describe YARD::Registry do
     end
   end
   
+  describe '.single_object_db' do
+    it "should default to nil" do
+      Registry.single_object_db.should == nil
+      Thread.new { Registry.single_object_db.should == nil }.join
+    end
+  end
+  
   describe 'Thread local' do
     it "should maintain two Registries in separate threads" do
       barrier = 0

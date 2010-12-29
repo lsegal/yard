@@ -84,6 +84,16 @@ describe YARD::CLI::Yardoc do
       end
     end
     
+    should_accept('--single-db') do |arg|
+      @yardoc.parse_arguments(arg)
+      Registry.single_object_db.should == true
+    end
+
+    should_accept('--no-single-db') do |arg|
+      @yardoc.parse_arguments(arg)
+      Registry.single_object_db.should == false
+    end
+    
     should_accept('-c', '--use-cache') do |arg|
       @yardoc.parse_arguments(arg)
       @yardoc.use_cache.should == true
