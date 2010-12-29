@@ -139,7 +139,7 @@ module YARD
       destroy unless merge
       
       sdb = Registry.single_object_db
-      if sdb == true || (sdb == nil && keys.size < 5000)
+      if sdb == true || (sdb == nil && keys.size < 3000)
         @serializer.serialize(@store)
       else
         values(false).each do |object|
@@ -207,10 +207,6 @@ module YARD
 
     def load_yardoc_old
       @store, @proxy_types = *Marshal.load(File.read_binary(@file))
-    end
-
-    def load_single_object_db
-      @store = Marshal.load(@serializer.deserialize('root'))
     end
     
     def load_proxy_types

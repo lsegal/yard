@@ -322,9 +322,7 @@ module YARD
       #   adapter will decide how to store the data.
       attr_accessor :single_object_db
       def single_object_db=(v) Thread.current[:__yard_single_db__] = v end
-      def single_object_db
-        Thread.current[:__yard_single_db__] ||= nil
-      end
+      def single_object_db; Thread.current[:__yard_single_db__] end
 
       # The assumed types of a list of paths. This method is used by CodeObjects::Base
       # @return [{String => Symbol}] a set of unresolved paths and their assumed type

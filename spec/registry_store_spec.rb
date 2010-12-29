@@ -1,9 +1,23 @@
 require File.join(File.dirname(__FILE__), "spec_helper")
 
 describe YARD::RegistryStore do
-  before { @store = RegistryStore.new }
+  before do
+    @store = RegistryStore.new
+    @serializer = Serializers::YardocSerializer.new('foo')
+    Serializers::YardocSerializer.stub!(:new).and_return(@serializer)
+  end
   
   describe '#load' do
+    it "should load root.dat as full object list if it is a Hash" do
+      File.should_receive(:directory?).with('foo').and_return(true)
+      File.should_receive(:file?).with('foo/checksums').and_return(false)
+      File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      @serializer.should_receive(:deserialize).with('root').and_return({:root => 'foo', :A => 'bar'})
+      @store.load('foo').should == true
+      @store.root.should == 'foo'
+      @store.get('A').should == 'bar'
+    end
+    
     it "should load old yardoc format if .yardoc is a file" do
       File.should_receive(:directory?).with('foo').and_return(false)
       File.should_receive(:file?).with('foo').and_return(true)
@@ -75,6 +89,62 @@ describe YARD::RegistryStore do
       File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump('foo'))
       @store.load('foo').should == true
       @store.root.should == 'foo'
+    end
+  end
+  
+  describe '#save' do
+    before do
+      @store.stub!(:write_proxy_types)
+      @store.stub!(:write_checksums)
+      @store.stub!(:destroy)
+    end
+    
+    after do
+      Registry.single_object_db = nil
+    end
+    
+    def saves_to_singledb
+      @serializer.should_receive(:serialize).once.with(instance_of(Hash))
+      @store.save(true, 'foo')
+    end
+    
+    def add_items(n)
+      n.times {|i| @store[i.to_s] = 'foo' }
+    end
+    
+    def saves_to_multidb
+      times = @last ? @store.keys.size - @last + 1 : @store.keys.size
+      @serializer.should_receive(:serialize).exactly(times).times
+      @store.save(true, 'foo')
+      @last = times
+    end
+    
+    it "should save as single object db if single_object_db is nil and there are less than 3000 objects" do
+      Registry.single_object_db = nil
+      add_items(100)
+      saves_to_singledb
+    end
+    
+    it "should not save as single object db if single_object_db is nil and there are more than 3000 objects" do
+      Registry.single_object_db = nil
+      add_items(5000)
+      saves_to_multidb
+    end
+    
+    it "should save as single object db if single_object_db is true (and any amount of objects)" do
+      Registry.single_object_db = true
+      add_items(100)
+      saves_to_singledb
+      add_items(5000)
+      saves_to_singledb
+    end
+    
+    it "should never save as single object db if single_object_db is false" do
+      Registry.single_object_db = false
+      add_items(100)
+      saves_to_multidb
+      add_items(5000)
+      saves_to_multidb
     end
   end
   
