@@ -236,4 +236,49 @@ describe YARD::Registry do
       Registry.instance.should == Registry
     end
   end
+  
+  describe 'Thread local' do
+    it "should maintain two Registries in separate threads" do
+      barrier = 0
+      threads = []
+      threads << Thread.new do 
+        Registry.clear
+        YARD.parse_string "# docstring 1\nclass Foo; end"
+        barrier += 1
+        while barrier < 2 do end
+        Registry.at('Foo').docstring.should == "docstring 1"
+      end
+      threads << Thread.new do
+        Registry.clear
+        YARD.parse_string "# docstring 2\nclass Foo; end"
+        barrier += 1
+        while barrier < 2 do end
+          Registry.at('Foo').docstring.should == "docstring 2"
+      end
+      threads.each {|t| t.join }
+    end
+    
+    it "should allow setting of yardoc_file in separate threads" do
+      barrier = 0
+      threads = []
+      threads << Thread.new do 
+        Registry.yardoc_file.should == '.yardoc'
+        Registry.yardoc_file = 'foo'
+        barrier += 1
+        while barrier == 1 do end
+        Registry.yardoc_file.should == 'foo'
+      end
+      threads << Thread.new do
+        while barrier == 0 do end
+        Registry.yardoc_file.should == '.yardoc'
+        barrier += 1
+        Registry.yardoc_file = 'foo2'
+      end
+      threads.each {|t| t.join }
+    end
+    
+    it "should automatically clear in new threads" do
+      Thread.new { Registry.all.should be_empty }.join
+    end
+  end
 end

@@ -9,15 +9,27 @@ module YARD
   # objects are done on the singleton Registry instance using the {Registry.at} 
   # or {Registry.resolve} methods.
   # 
-  # The registry is saved to a "yardoc" file, which can be loaded back to 
-  # perform any lookups.
+  # == Saving / Loading a Registry 
+  # The registry is saved to a "yardoc file" (actually a directory), which can 
+  # be loaded back to perform any lookups. See {Registry.load!} and 
+  # {Registry.save} for information on saving and loading of a yardoc file.
   # 
-  # This class is a singleton class. Any method called on the class will be
-  # delegated to the instance.
+  # == Threading Notes
+  # The registry class is a singleton class that is accessed directly in many
+  # places across YARD. To mitigate threading issues, YARD (0.6.5+) makes
+  # the Registry thread local. This means all access to a registry for a specific
+  # object set must occur in the originating thread.
+  # 
+  # @example Loading a Registry
+  #   Registry.load!('/path/to/yardocfile') # loads all objects into memory
+  #   Registry.at('YARD::CodeObjects::Base').docstring
+  #   # => "+Base+ is the superclass of all code objects ..."
+  # @example Performing a Search on a Registry
+  #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring')
+  #   # => <
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
-    @yardoc_file = DEFAULT_YARDOC_FILE
 
     extend Enumerable
 
@@ -58,6 +70,10 @@ module YARD
       # @return [String] the yardoc filename
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
+      def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
+      def yardoc_file
+        Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE 
+      end
     
       # @group Loading Data from Disk
     
@@ -358,15 +374,15 @@ module YARD
       
       # @group Threading support
        
+      # @since 0.6.5
       def thread_local_store
-        Thread.current[:__yard_registry__]
+        Thread.current[:__yard_registry__] ||= clear
       end
       
+      # @since 0.6.5
       def thread_local_store=(value)
         Thread.current[:__yard_registry__] = value
       end
     end
-    
-    clear
   end
 end
