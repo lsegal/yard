@@ -281,6 +281,13 @@ describe YARD::CodeObjects::Base do
       o.docstring = '(see AnotherObject)'
       o.docstring.should == "FOO"
     end
+
+    it "should not copy docstring mid-docstring" do
+      doc = "Hello.\n(see file.rb)\nmore documentation"
+      o = ClassObject.new(:root, :Me)
+      o.docstring = doc
+      o.docstring.should == doc
+    end
     
     it "should allow extra docstring after (see Path)" do
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }

@@ -359,7 +359,7 @@ module YARD
       #   the comments attached to the code object to be parsed 
       #   into a docstring and meta tags.
       def docstring=(comments)
-        if comments =~ /^\s*\(see (\S+)\s*\)(?:\s|$)/
+        if comments =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
           path, extra = $1, $'
           @docstring_extra = extra.empty? ? nil : Docstring.new(extra, self)
           @docstring = Proxy.new(namespace, path)
