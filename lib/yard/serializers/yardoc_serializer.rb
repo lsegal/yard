@@ -61,7 +61,11 @@ module YARD
       end
       
       def serialize(object)
-        super(object.is_a?(Hash) ? object[:root] : object, dump(object))
+        if Hash === object
+          super(object[:root], dump(object)) if object[:root]
+        else
+          super(object, dump(object))
+        end
       end
       
       def deserialize(path, is_path = false)
