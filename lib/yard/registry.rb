@@ -30,6 +30,7 @@ module YARD
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
+    @single_object_db = nil
 
     extend Enumerable
 
@@ -310,7 +311,17 @@ module YARD
         Digest::SHA1.hexdigest(data)
       end
     
-      # @group Managing Internal State (Testing Only)
+      # @group Managing Internal State (Advanced / Testing Only)
+       
+      # Whether or not the Registry storage should load everything into a
+      # single object database (for disk efficiency), or spread them out 
+      # (for load time efficiency).
+      # 
+      # @note Setting this attribute to nil will offload the decision to
+      #   the {RegistryStore storage adapter}.
+      # @return [Boolean, nil] if this value is set to nil, the storage
+      #   adapter will decide how to store the data.
+      attr_accessor :single_object_db
 
       # The assumed types of a list of paths. This method is used by CodeObjects::Base
       # @return [{String => Symbol}] a set of unresolved paths and their assumed type
