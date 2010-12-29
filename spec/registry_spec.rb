@@ -253,7 +253,7 @@ describe YARD::Registry do
         YARD.parse_string "# docstring 2\nclass Foo; end"
         barrier += 1
         while barrier < 2 do end
-          Registry.at('Foo').docstring.should == "docstring 2"
+        Registry.at('Foo').docstring.should == "docstring 2"
       end
       threads.each {|t| t.join }
     end
