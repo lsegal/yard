@@ -9,15 +9,27 @@ module YARD
   # objects are done on the singleton Registry instance using the {Registry.at} 
   # or {Registry.resolve} methods.
   # 
-  # The registry is saved to a "yardoc" file, which can be loaded back to 
-  # perform any lookups.
+  # == Saving / Loading a Registry 
+  # The registry is saved to a "yardoc file" (actually a directory), which can 
+  # be loaded back to perform any lookups. See {Registry.load!} and 
+  # {Registry.save} for information on saving and loading of a yardoc file.
   # 
-  # This class is a singleton class. Any method called on the class will be
-  # delegated to the instance.
+  # == Threading Notes
+  # The registry class is a singleton class that is accessed directly in many
+  # places across YARD. To mitigate threading issues, YARD (0.6.5+) makes
+  # the Registry thread local. This means all access to a registry for a specific
+  # object set must occur in the originating thread.
+  # 
+  # @example Loading a Registry
+  #   Registry.load!('/path/to/yardocfile') # loads all objects into memory
+  #   Registry.at('YARD::CodeObjects::Base').docstring
+  #   # => "+Base+ is the superclass of all code objects ..."
+  # @example Performing a Search on a Registry
+  #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring')
+  #   # => <
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
-    @yardoc_file = DEFAULT_YARDOC_FILE
 
     extend Enumerable
 
@@ -58,6 +70,10 @@ module YARD
       # @return [String] the yardoc filename
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
+      def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
+      def yardoc_file
+        Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE 
+      end
     
       # @group Loading Data from Disk
     
@@ -81,9 +97,9 @@ module YARD
           if File.exists?(yardoc_file) && !reparse
             load_yardoc
           else
-            size = @store.keys.size
+            size = thread_local_store.keys.size
             YARD.parse(files)
-            save if @store.keys.size > size
+            save if thread_local_store.keys.size > size
           end
         elsif files.is_a?(String)
           load_yardoc(files)
@@ -99,7 +115,7 @@ module YARD
       # @return [Registry] the registry object (for chaining)
       def load_yardoc(file = yardoc_file)
         clear
-        @store.load(file)
+        thread_local_store.load(file)
         self
       end
     
@@ -113,7 +129,7 @@ module YARD
       # @since 0.5.1
       def load!(file = yardoc_file)
         clear
-        @store.load!(file)
+        thread_local_store.load!(file)
         self
       end
     
@@ -127,7 +143,7 @@ module YARD
       # @return [Registry] the registry object (for chaining)
       # @since 0.5.1
       def load_all
-        @store.load_all
+        thread_local_store.load_all
         self
       end
     
@@ -138,13 +154,13 @@ module YARD
       # @param [String] file the yardoc file to save to
       # @return [Boolean] true if the file was saved
       def save(merge = false, file = yardoc_file)
-        @store.save(merge, file)
+        thread_local_store.save(merge, file)
       end
     
       # Deletes the yardoc file from disk
       # @return [void]
       def delete_from_disk
-        @store.destroy
+        thread_local_store.destroy
       end
     
       # @group Adding and Deleting Objects from the Registry
@@ -155,20 +171,20 @@ module YARD
       # @return [CodeObjects::Base] the registered object
       def register(object)
         return if object.is_a?(CodeObjects::Proxy)
-        @store[object.path] = object
+        thread_local_store[object.path] = object
       end
     
       # Deletes an object from the registry
       # @param [CodeObjects::Base] object the object to remove
       # @return [void] 
       def delete(object) 
-        @store.delete(object.path)
+        thread_local_store.delete(object.path)
       end
 
       # Clears the registry
       # @return [void] 
       def clear
-        @store = RegistryStore.new
+        self.thread_local_store = RegistryStore.new
       end
 
       # @group Accessing Objects in the Registry
@@ -191,7 +207,7 @@ module YARD
       # @return [Array<CodeObjects::Base>] the list of objects found
       # @see CodeObjects::Base#type
       def all(*types)
-        @store.values.select do |obj| 
+        thread_local_store.values.select do |obj| 
           if types.empty?
             obj != root
           else
@@ -207,7 +223,7 @@ module YARD
       # @param [Boolean] reload whether to load entire database
       # @return [Array<String>] all of the paths in the registry.
       def paths(reload = false)
-        @store.keys(reload).map {|k| k.to_s }
+        thread_local_store.keys(reload).map {|k| k.to_s }
       end
     
       # Returns the object at a specific path.
@@ -215,12 +231,12 @@ module YARD
       #   returns the {root} object.
       # @return [CodeObjects::Base] the object at path
       # @return [nil] if no object is found
-      def at(path) path ? @store[path] : nil end
+      def at(path) path ? thread_local_store[path] : nil end
       alias_method :[], :at
     
       # The root namespace object.
       # @return [CodeObjects::RootObject] the root object in the namespace
-      def root; @store[:root] end
+      def root; thread_local_store[:root] end
     
       # Attempts to find an object by name starting at +namespace+, performing
       # a lookup similar to Ruby's method of resolving a constant in a namespace.
@@ -285,7 +301,7 @@ module YARD
     
       # @return [Hash{String => String}] a set of checksums for files
       def checksums
-        @store.checksums
+        thread_local_store.checksums
       end
     
       # @param [String] data data to checksum
@@ -300,7 +316,7 @@ module YARD
       # @return [{String => Symbol}] a set of unresolved paths and their assumed type
       # @private
       def proxy_types
-        @store.proxy_types
+        thread_local_store.proxy_types
       end
       
       # @group Legacy Methods
@@ -355,8 +371,18 @@ module YARD
           File.exist?(path) ? path : nil
         end
       end
+      
+      # @group Threading support
+       
+      # @since 0.6.5
+      def thread_local_store
+        Thread.current[:__yard_registry__] ||= clear
+      end
+      
+      # @since 0.6.5
+      def thread_local_store=(value)
+        Thread.current[:__yard_registry__] = value
+      end
     end
-    
-    clear
   end
 end
