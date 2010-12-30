@@ -446,6 +446,11 @@ module YARD
       
       private
       
+      # Gets the SimpleMarkup class for the local thread
+      # 
+      # @return [RDoc::Markup::ToHtml] if RDoc 2.x is loaded
+      # @return [SM::ToHtml] if RDoc 1.x is loaded
+      # @since 0.6.5
       def simple_markup_html
         Thread.current[:__yard_simple_markup_html__] ||= 
           (RDoc::Markup::ToHtml.new rescue SM::ToHtml.new)
