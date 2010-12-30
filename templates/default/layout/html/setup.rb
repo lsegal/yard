@@ -14,7 +14,7 @@ def init
     case object
     when '_index.html'
       @page_title = options[:title]
-      sections :layout, [:index]
+      sections :layout, [:index, [:listing, [:files, :objects]]]
     when CodeObjects::Base
       unless object.root?
         cur = object.namespace
