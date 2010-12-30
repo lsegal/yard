@@ -7,8 +7,6 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
       
-      SimpleMarkupHtml = RDoc::Markup::ToHtml.new rescue SM::ToHtml.new
-    
       # @group Escaping Template Data
     
       # Escapes HTML entities
@@ -80,8 +78,8 @@ module YARD
       # @since 0.6.0
       def html_markup_rdoc(text)
         begin
-          SimpleMarkupHtml.instance_variable_set("@from_path", url_for(object))
-          html = MarkupHelper::SimpleMarkup.convert(text, SimpleMarkupHtml)
+          simple_markup_html.instance_variable_set("@from_path", url_for(object))
+          html = MarkupHelper::SimpleMarkup.convert(text, simple_markup_html)
         end
 
         html = fix_dash_dash(html)
@@ -447,6 +445,11 @@ module YARD
       # @endgroup
       
       private
+      
+      def simple_markup_html
+        Thread.current[:__yard_simple_markup_html__] ||= 
+          (RDoc::Markup::ToHtml.new rescue SM::ToHtml.new)
+      end
       
       # Converts a set of hash options into HTML attributes for a tag
       # 
