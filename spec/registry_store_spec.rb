@@ -113,7 +113,7 @@ describe YARD::RegistryStore do
     end
     
     def saves_to_multidb
-      times = @last ? @store.keys.size - @last + 1 : @store.keys.size
+      times = @store.keys.size
       @serializer.should_receive(:serialize).exactly(times).times
       @store.save(true, 'foo')
       @last = times
