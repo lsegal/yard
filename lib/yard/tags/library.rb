@@ -9,8 +9,8 @@ module YARD
     # be auto expanded into ruby code similar to what is shown in method #2. If you
     # do not provide a factory method to use, it will default to {DefaultFactory#parse_tag}
     # Example:
-    #   define_tag :param, :with_types_and_name
-    #   define_tag :author
+    #   define_tag "Parameter", :param, :with_types_and_name
+    #   define_tag "Author", :author
     #
     # The first line will expand to the code:
     #   def param_tag(text) tag_factory.parse_tag_with_types_and_name(text) end
