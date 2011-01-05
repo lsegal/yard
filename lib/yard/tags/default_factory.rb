@@ -10,7 +10,7 @@ module YARD
       # @param [String] text   the raw tag text
       # @return [Tag]          a tag object with the tag_name and text values filled
       def parse_tag(tag_name, text)
-        Tag.new(tag_name, text)
+        Tag.new(tag_name, text.strip)
       end
       
       # Parses tag text and creates a new tag with a key name and descriptive text

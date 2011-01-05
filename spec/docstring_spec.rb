@@ -301,5 +301,10 @@ eof
       log.should_receive(:warn).with(/Unknown tag @hello$/)
       Docstring.new("@hello world")
     end
+    
+    it "should not add trailing whitespace to freeform tags" do
+      doc = Docstring.new("@api private   \t   ")
+      doc.tag(:api).text.should == "private"
+    end
   end
 end

@@ -3,6 +3,12 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe YARD::Tags::DefaultFactory do
   before { @f = YARD::Tags::DefaultFactory.new }
 
+  describe '#parse_tag' do
+    it "should not have trailing whitespace on a regular freeform tag" do
+      @f.parse_tag('api', 'private     ').text.should == "private"
+    end
+  end
+
   describe '#extract_types_and_name_from_text' do
     def parse_types(types)
       @f.send(:extract_types_and_name_from_text, types)
