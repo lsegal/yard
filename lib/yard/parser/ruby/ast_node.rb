@@ -38,10 +38,12 @@ module YARD
       # list, like Strings or Symbols representing names. To return only 
       # the AstNode children of the node, use {#children}.
       class AstNode < Array
+        attr_accessor :docstring_hash_flag
         attr_accessor :docstring, :docstring_range, :source, :group
         attr_writer :source_range, :line_range, :file, :full_source
         alias comments docstring
         alias comments_range docstring_range
+        alias comments_hash_flag docstring_hash_flag
         alias to_s source
         
         # @return [Symbol] the node's unique symbolic type

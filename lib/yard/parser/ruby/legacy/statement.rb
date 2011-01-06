@@ -3,11 +3,13 @@ module YARD
     class Statement 
       attr_reader :tokens, :comments, :block
       attr_accessor :comments_range, :group
+      attr_accessor :comments_hash_flag
 
       def initialize(tokens, block = nil, comments = nil)
         @tokens = tokens
         @block  = block
         @comments = comments
+        @comments_hash_flag = false
       end
       
       def first_line

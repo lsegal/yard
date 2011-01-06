@@ -1,10 +1,8 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
+class MyParser < Parser::Base; end
+
 shared_examples_for "parser type registration" do
-  before do
-    class MyParser < Parser::Base; end
-  end
-  
   after do
     Parser::SourceParser.parser_types.delete(:my_parser)
     Parser::SourceParser.parser_type_extensions.delete(:my_parser)
@@ -136,6 +134,13 @@ describe YARD::Parser::SourceParser do
 
       YARD.parse_string "=begin\nfoo\n\nbar\n=end\nclass Foo; end\n"
       Registry.at(:Foo).docstring.should == "foo\n\nbar"
+    end
+    
+    it "should know about docstrings starting with ##" do
+      {'#' => false, '##' => true}.each do |hash, expected|
+        YARD.parse_string "#{hash}\n# Foo bar\nclass Foo; end"
+        Registry.at(:Foo).docstring.hash_flag.should == expected
+      end
     end
   end
 

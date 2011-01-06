@@ -27,6 +27,7 @@ module YARD
           @source = source
           @tokens = []
           @comments = {}
+          @comments_flags = {}
           @heredoc_tokens = []
           @map = {}
           @ns_charno = 0
@@ -386,15 +387,19 @@ module YARD
             return
           end
 
-          comment = comment.gsub(/^\#{1,2}\s{0,1}/, '').chomp
+          comment = comment.gsub(/^(\#{1,2})\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
-          
+          hash_flag = $1 == '##' ? true : false
+
           if append_comment && @comments_last_column == column
             @comments.delete(lineno - 1)
+            @comments_flags[lineno] = @comments_flags[lineno - 1]
+            @comments_flags.delete(lineno - 1)
             comment = append_comment + "\n" + comment
           end
           
           @comments[lineno] = comment
+          @comments_flags[lineno] = hash_flag if !append_comment
           @comments_last_column = column
         end
         
@@ -424,9 +429,11 @@ module YARD
             (node.line - 2).upto(node.line) do |line|
               comment = @comments[line]
               if comment && !comment.empty?
+                node.docstring_hash_flag = @comments_flags[line]
                 node.docstring = comment
                 node.docstring_range = ((line - comment.count("\n"))..line)
-                comments.delete(line)
+                @comments.delete(line)
+                @comments_flags.delete(line)
                 break
               end
             end

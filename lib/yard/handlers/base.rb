@@ -394,6 +394,7 @@ module YARD
 
           # Add docstring if there is one.
           object.docstring = statement.comments if statement.comments
+          object.docstring.hash_flag = statement.comments_hash_flag
           object.docstring.line_range = statement.comments_range
           
           # Add group information

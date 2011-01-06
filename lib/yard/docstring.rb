@@ -24,6 +24,10 @@ module YARD
     
     # @return [String] the raw documentation (including raw tag text)
     attr_reader :all
+    
+    # @return [Boolean] whether the docstring was started with "##"
+    attr_reader :hash_flag
+    def hash_flag=(v) @hash_flag = v == nil ? false : v end
 
     # Matches a tag at the start of a comment line
     META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
@@ -43,6 +47,7 @@ module YARD
     def initialize(content = '', object = nil)
       @object = object
       @summary = nil
+      @hash_flag = false
       
       self.all = content
     end

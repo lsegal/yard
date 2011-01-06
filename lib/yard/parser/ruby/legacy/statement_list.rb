@@ -41,6 +41,7 @@ module YARD
         @done = false
         @current_block = nil
         @comments_line = nil
+        @comments_hash_flag = nil
         @statement, @block, @comments = TokenList.new, nil, nil
         @last_tk, @last_ns_tk, @before_last_tk, @before_last_ns_tk = nil, nil, nil, nil
         @first_line = nil
@@ -65,6 +66,7 @@ module YARD
           stmt.group = @group
           if @comments && @comments_line
             stmt.comments_range = (@comments_line..(@comments_line + @comments.size - 1))
+            stmt.comments_hash_flag = @comments_hash_flag
           end
           stmt
         else
@@ -209,7 +211,7 @@ module YARD
       # @return [Boolean] whether or not +tk+ was processed as an initial comment
       def process_initial_comment(tk)
         if @statement.empty? && (@comments_last_line || 0) < tk.line_no - 2
-          @comments = nil 
+          @comments = nil
         end
         
         return unless tk.class == TkCOMMENT
@@ -228,7 +230,8 @@ module YARD
           @comments += tk.text.gsub(/\A=begin.*\r?\n|\r?\n=end.*\r?\n?\Z/, '').split(/\r?\n/)
           @comments_last_line = tk.line_no + lines
         else
-          @comments << tk.text.gsub(/^#+\s{0,1}/, '')
+          @comments << tk.text.gsub(/^(#+)\s{0,1}/, '')
+          @comments_hash_flag = $1 == '##' if @comments_hash_flag == nil
           @comments_last_line = tk.line_no
         end
         @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/
