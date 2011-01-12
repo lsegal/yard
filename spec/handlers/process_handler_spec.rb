@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ProcessHandler" do
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ProcessHandler" do
   before(:all) { parse_file :process_handler_001, __FILE__ }
 
   it "should only work for classes that extend YARD::Handlers::*" do

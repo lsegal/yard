@@ -198,7 +198,7 @@ module YARD
       autoload :BaseHelper,                 __p('templates/helpers/base_helper')
       autoload :FilterHelper,               __p('templates/helpers/filter_helper')
       autoload :HtmlHelper,                 __p('templates/helpers/html_helper')
-      autoload :HtmlSyntaxHighlightHelper,  __p('templates/helpers/html_syntax_highlight_helper' + (RUBY18 ? '18' : ''))
+      autoload :HtmlSyntaxHighlightHelper,  __p('templates/helpers/html_syntax_highlight_helper' + (LEGACY_PARSER ? '18' : ''))
       autoload :MarkupHelper,               __p('templates/helpers/markup_helper')
       autoload :MethodHelper,               __p('templates/helpers/method_helper')
       autoload :ModuleHelper,               __p('templates/helpers/module_helper')

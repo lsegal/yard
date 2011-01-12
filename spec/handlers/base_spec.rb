@@ -138,7 +138,7 @@ describe YARD::Handlers::Base do
     end
     
     [:ruby, :ruby18].each do |parser_type|
-      next if parser_type == :ruby && !RUBY19
+      next if parser_type == :ruby && LEGACY_PARSER
       describe "Parser type = #{parser_type.inspect}" do
         Parser::SourceParser.parser_type = parser_type
         it "should allow handler to be specific to a file" do

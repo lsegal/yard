@@ -87,4 +87,4 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     end
     invalid MethCallHandler, ast[9]
   end
-end if RUBY19
+end if HAVE_RIPPER

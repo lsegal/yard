@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}YieldHandler" do
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}YieldHandler" do
   before(:all) { parse_file :yield_handler_001, __FILE__ }
   
   it "should only parse yield blocks in methods" do

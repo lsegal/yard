@@ -139,7 +139,7 @@ module YARD
         # @return [Symbol] the validated parser type
         # @private
         def validated_parser_type(type)
-          RUBY18 && type == :ruby ? :ruby18 : type
+          !HAVE_RIPPER && type == :ruby ? :ruby18 : type
         end
         
         private
@@ -171,7 +171,7 @@ module YARD
 
       self.parser_type = :ruby
       
-      register_parser_type :ruby,   Ruby::RubyParser if RUBY19
+      register_parser_type :ruby,   Ruby::RubyParser if HAVE_RIPPER
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
       

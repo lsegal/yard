@@ -87,13 +87,13 @@ module YARD
         
         # List of all known keywords
         # @return [Hash] 
-        KEYWORDS = { class: true, alias: true, lambda: true, do_block: true,
-          def: true, defs: true, begin: true, rescue: true, rescue_mod: true,
-          if: true, if_mod: true, else: true, elsif: true, case: true,
-          when: true, next: true, break: true, retry: true, redo: true,
-          return: true, throw: true, catch: true, until: true, until_mod: true,
-          while: true, while_mod: true, yield: true, yield0: true, zsuper: true,
-          unless: true, unless_mod: true, for: true, super: true, return0: true }
+        KEYWORDS = { :class => true, :alias => true, :lambda => true, :do_block => true,
+          :def => true, :defs => true, :begin => true, :rescue => true, :rescue_mod => true,
+          :if => true, :if_mod => true, :else => true, :elsif => true, :case => true,
+          :when => true, :next => true, :break => true, :retry => true, :redo => true,
+          :return => true, :throw => true, :catch => true, :until => true, :until_mod => true,
+          :while => true, :while_mod => true, :yield => true, :yield0 => true, :zsuper => true,
+          :unless => true, :unless_mod => true, :for => true, :super => true, :return0 => true }
         
         # @group Creating an AstNode
 
@@ -110,10 +110,12 @@ module YARD
             MethodCallNode
           when :if, :elsif, :if_mod, :unless, :unless_mod
             ConditionalNode
-          when /_ref\Z/
-            ReferenceNode
           else
-            AstNode
+            if type.to_s =~ /_ref\Z/
+              ReferenceNode
+            else
+              AstNode
+            end
           end
         end
         
@@ -251,26 +253,27 @@ module YARD
         
         # @return [nil] pretty prints the node
         def pretty_print(q)
-          objs = [*self.dup, :__last__]
+          objs = self.dup + [:__last__]
           objs.unshift(type) if type && type != :list
 
-          options = {}
+          options = []
           if @docstring
-            options[:docstring] = docstring
+            options << ['docstring', docstring]
           end
           if @source_range || @line_range
-            options[:line] = line_range
-            options[:source] = source_range
+            options << ['line', line_range]
+            options << ['source', source_range]
           end
           objs.pop if options.size == 0
 
           q.group(3, 's(', ')') do
             q.seplist(objs, nil, :each) do |v| 
               if v == :__last__
-                q.seplist(options, nil, :each) do |k, v2| 
+                q.seplist(options, nil, :each) do |arr|
+                  k, v2 = *arr
                   q.group(3) do 
                     q.text k
-                    q.group(3) do 
+                    q.group(3) do
                       q.text ': '
                       q.pp v2 
                     end

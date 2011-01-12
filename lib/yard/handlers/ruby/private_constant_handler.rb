@@ -6,7 +6,7 @@ class YARD::Handlers::Ruby::PrivateConstantHandler < YARD::Handlers::Ruby::Base
   process do
     errors = []
     statement.parameters.each do |param|
-      next unless param.respond_to?(:type)
+      next unless AstNode === param
       begin
         privatize_constant(param)
       rescue UndocumentableError => err

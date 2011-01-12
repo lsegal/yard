@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ModuleHandler" do
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler" do
   before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "should parse a module block" do

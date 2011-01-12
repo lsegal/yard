@@ -23,14 +23,14 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       elsif klass
         create_attributes(klass, members_from_tags(klass))
       end
-      parse_block(statement[2], namespace: klass)
+      parse_block(statement[2], :namespace => klass)
        
       if undocsuper
         raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.type == :sclass
       if statement[0] == s(:var_ref, s(:kw, "self"))
-        parse_block(statement[1], namespace: namespace, scope: :class)
+        parse_block(statement[1], :namespace => namespace, :scope => :class)
       else
         classname = statement[0].source
         proxy = Proxy.new(namespace, classname)
@@ -46,7 +46,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
 
         if classname[0,1] =~ /[A-Z]/
           register ClassObject.new(namespace, classname) if Proxy === proxy
-          parse_block(statement[1], namespace: proxy, scope: :class)
+          parse_block(statement[1], :namespace => proxy, :scope => :class)
         else
           raise YARD::Parser::UndocumentableError, "class '#{classname}'"
         end

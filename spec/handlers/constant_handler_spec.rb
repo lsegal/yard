@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ConstantHandler" do
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandler" do
   before(:all) { parse_file :constant_handler_001, __FILE__ }
   
   it "should not parse constants inside methods" do
@@ -60,5 +60,5 @@ describe "YARD::Handlers::Ruby::#{RUBY18 ? "Legacy::" : ""}ConstantHandler" do
   
   it "should raise undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
     undoc_error "nonconst = Struct.new"
-  end if RUBY19
+  end unless LEGACY_PARSER
 end

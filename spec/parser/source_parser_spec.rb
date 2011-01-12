@@ -256,7 +256,7 @@ describe YARD::Parser::SourceParser do
           result.enumerator[0].source.encoding.to_s.send(msg) == 'Shift_JIS'
         end
       end
-    end if RUBY19
+    end if RUBY19 && HAVE_RIPPER
   end
   
   describe '#parse_in_order' do
@@ -290,7 +290,7 @@ describe YARD::Parser::SourceParser do
       YARD::Parser::SourceParser.parse_string("int main() { }", :d)
     end
     
-    if RUBY19
+    if HAVE_RIPPER
       it "should display a warning for a syntax error (with new parser)" do
         err_msg = "Syntax error in `(stdin)`:(1,3): syntax error, unexpected $undefined, expecting $end"
         log.should_receive(:warn).with(err_msg)

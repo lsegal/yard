@@ -32,6 +32,14 @@ end
 # Keep track of Ruby version for compatibility code
 RUBY19, RUBY18 = *(RUBY_VERSION >= "1.9.1" ? [true, false] : [false, true])
 
+begin
+  require 'ripper'
+rescue LoadError
+ensure
+  HAVE_RIPPER = defined?(::Ripper) ? true : false
+  LEGACY_PARSER = !HAVE_RIPPER
+end
+
 # Whether or not continuations are (properly) supported
 begin
   begin; require 'continuation'; rescue LoadError; end

@@ -21,8 +21,11 @@ end
 
 begin
   hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
-  hide += ',legacy\/.+_handler,html_syntax_highlight_helper18\.rb$' if RUBY19
-  hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$,html_syntax_highlight_helper\.rb$' if RUBY18
+  if HAVE_RIPPER
+    hide += ',legacy\/.+_handler,html_syntax_highlight_helper18\.rb$'
+  else
+    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$,html_syntax_highlight_helper\.rb$'
+  end
 
   require 'rspec'
   require 'rspec/core/rake_task'
