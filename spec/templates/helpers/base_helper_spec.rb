@@ -64,6 +64,10 @@ describe YARD::Templates::Helpers::BaseHelper do
   end
   
   describe '#linkify' do
+    before do
+      stub!(:object).and_return(Registry.root)
+    end
+    
     it "should call #link_url for mailto: links" do
       should_receive(:link_url)
       linkify("mailto:steve@example.com")
@@ -77,6 +81,40 @@ describe YARD::Templates::Helpers::BaseHelper do
     it "should call #link_file for file: links" do
       should_receive(:link_file).with('Filename', 'Filename', 'anchor')
       linkify("file:Filename#anchor")
+    end
+    
+    it "should pass off to #link_object if argument is an object" do
+      obj = CodeObjects::NamespaceObject.new(nil, :YARD)
+      should_receive(:link_object).with(obj)
+      linkify obj
+    end
+    
+    it "should return empty string and warn if object does not exist" do
+      log.should_receive(:warn).with(/Cannot find object .* for inclusion/)
+      linkify('include:NotExist').should == ''
+    end
+  
+    it "should pass off to #link_url if argument is recognized as a URL" do
+      url = "http://yardoc.org/"
+      should_receive(:link_url).with(url, nil, {:target => '_parent'})
+      linkify url
+    end
+    
+    it "should call #link_include_object for include:ObjectName" do
+      obj = CodeObjects::NamespaceObject.new(:root, :Foo)
+      should_receive(:link_include_object).with(obj)
+      linkify 'include:Foo'
+    end
+    
+    it "should call #link_include_file for include:file:path/to/file" do
+      File.should_receive(:file?).with('path/to/file').and_return(true)
+      File.should_receive(:read).with('path/to/file').and_return('FOO')
+      linkify('include:file:path/to/file').should == 'FOO'
+    end
+    
+    it "should warn if include:file:path does not exist" do
+      log.should_receive(:warn).with(/Cannot find file .+ for inclusion/)
+      linkify('include:file:/notexist').should == ''
     end
   end
   
@@ -127,20 +165,6 @@ describe YARD::Templates::Helpers::BaseHelper do
       obj.stub!(:type).and_return(:class)
       obj.stub!(:path).and_return("A::B::C")
       format_object_title(obj).should == "Class: A::B::C"
-    end
-  end
-
-  describe "#linkify" do
-    it "should pass off to #link_object if argument is an object" do
-      obj = CodeObjects::NamespaceObject.new(nil, :YARD)
-      should_receive(:link_object).with(obj)
-      linkify obj
-    end
-  
-    it "should pass off to #link_url if argument is recognized as a URL" do
-      url = "http://yardoc.org/"
-      should_receive(:link_url).with(url, nil, {:target => '_parent'})
-      linkify url
     end
   end
 end
