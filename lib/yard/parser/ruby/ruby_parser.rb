@@ -34,6 +34,11 @@ module YARD
           @list = []
           @charno = 0
           @groups = []
+          @has_shebang = false
+        end
+
+        def has_shebang?
+          @has_shebang
         end
 
         def parse
@@ -390,6 +395,17 @@ module YARD
           comment = comment.gsub(/^(\#{1,2})\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
           hash_flag = $1 == '##' ? true : false
+
+          if lineno == 1 && !hash_flag
+            if comment =~ /^!/
+              @has_shebang = true
+              return
+            end
+          end
+
+          if (lineno == (has_shebang? ? 2 : 1)) && !hash_flag
+            return if comment =~ /^[\s\-\*]*(?:en)?coding\:\s*[\w\-\d]+[\s\-\*]*$/
+          end
 
           if append_comment && @comments_last_column == column
             @comments.delete(lineno - 1)
