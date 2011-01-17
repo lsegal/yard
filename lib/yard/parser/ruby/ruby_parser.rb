@@ -403,8 +403,8 @@ module YARD
             end
           end
 
-          if ((has_shebang? && lineno == 2) || (!has_shebang? && lineno == 1)) && !hash_flag
-            return if comment =~ /^\s*encoding\:\s*[\w\-\d]+\s*$/
+          if (lineno == (has_shebang? ? 2 : 1)) && !hash_flag
+            return if comment =~ /^[\s\-\*]*(?:en)?coding\:\s*[\w\-\d]+[\s\-\*]*$/
           end
 
           if append_comment && @comments_last_column == column
