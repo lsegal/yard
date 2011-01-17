@@ -4,11 +4,8 @@ require 'yaml'
 
 describe YARD::Config do
   describe '.load' do
-    before do
-      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
-    end
-
     it "should use default options if no ~/.yard/config is found" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
       YARD::Config.load
@@ -24,6 +21,7 @@ describe YARD::Config do
     end
     
     it "should ignore any plugins specified in '~/.yard/ignored_plugins'" do
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
       File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(true)
       File.should_receive(:read).with(YARD::Config::IGNORED_PLUGINS).and_return('yard-plugin plugin2')
