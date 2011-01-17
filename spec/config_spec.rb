@@ -92,6 +92,7 @@ describe YARD::Config do
     it "should load gem plugins if :load_plugins is true" do
       File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       YARD::Config.stub!(:options).and_return(:load_plugins => true, :ignored_plugins => [], :autoload_plugins => [])
+      YARD::Config.stub!(:load_plugin)
       YARD::Config.should_receive(:require).with('rubygems')
       YARD::Config.load_plugins
     end
