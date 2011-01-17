@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+require 'yaml'
+
 describe YARD::CLI::Config do
   before do
     @config = YARD::CLI::Config.new

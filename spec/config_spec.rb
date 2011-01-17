@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), "spec_helper")
 
+require 'yaml'
+
 describe YARD::Config do
   describe '.load' do
     before do
