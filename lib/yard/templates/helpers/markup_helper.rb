@@ -23,10 +23,10 @@ module YARD
       MARKUP_PROVIDERS = {
         :markdown => [
           {:lib => :bluecloth, :const => 'BlueCloth'},
+          {:lib => :kramdown, :const => "Kramdown::Document"},
           {:lib => :maruku, :const => 'Maruku'},
           {:lib => :"rpeg-markdown", :const => "PEGMarkdown"},
-          {:lib => :rdiscount, :const => "RDiscount"},
-          {:lib => :kramdown, :const => "Kramdown::Document"}
+          {:lib => :rdiscount, :const => "RDiscount"}
         ],
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'}
