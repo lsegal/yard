@@ -52,16 +52,16 @@ describe YARD::Templates::Helpers::MarkupHelper do
   
     it "should continue searching if some of the providers are unavailable" do
       @gen.should_receive(:require).with('bluecloth').and_raise(LoadError)
+      @gen.should_receive(:require).with('kramdown').and_raise(LoadError)
       @gen.should_receive(:require).with('maruku').and_raise(LoadError)
       @gen.should_receive(:require).with('rpeg-markdown').and_raise(LoadError)
-      @gen.should_receive(:require).with('rdiscount').and_raise(LoadError)
-      @gen.should_receive(:require).with('kramdown').and_return(true)
+      @gen.should_receive(:require).with('rdiscount').and_return(true)
       @gen.stub!(:options).and_return({:markup => :markdown})
       # this only raises an exception because we mock out require to avoid 
       # loading any libraries but our implementation tries to return the library 
       # name as a constant
       @gen.load_markup_provider.should rescue nil
-      @gen.markup_provider.should == :"kramdown"
+      @gen.markup_provider.should == :"rdiscount"
     end
   
     it "should override the search if `:markup_provider` is set in options" do
