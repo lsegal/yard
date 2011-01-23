@@ -409,7 +409,12 @@ module YARD
         common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
         common = path unless common =~ /(\.|::|#)$/
         common = common.sub(/(\.|::|#)[^:#\.]*?$/, '') if same_parent
-        result = other.sub(/^#{Regexp.quote common}(::|\.|)?/, '')
+        if %w(. :).include?(common[-1,1]) || other[common.size,1] == '#'
+          suffix = ''
+        else
+          suffix = '(::|\.)'
+        end
+        result = other.sub(/^#{Regexp.quote common}#{suffix}/, '')
         result.empty? ? other : result
       end
       

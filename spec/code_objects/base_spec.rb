@@ -226,6 +226,12 @@ describe YARD::CodeObjects::Base do
         Registry.at('A::B').relative_path('A::C')
     end
     
+    it "should return full class name when objects share a common class prefix" do
+      YARD.parse_string "module User; end; module UserManager; end"
+      Registry.at('User').relative_path('UserManager').should == 'UserManager'
+      Registry.at('User').relative_path(Registry.at('UserManager')).should == 'UserManager'
+    end
+    
     it "should return the relative path when they share a common namespace" do
       YARD.parse_string "module A; class B; end; class C; end; end"
       Registry.at('A::B').relative_path(Registry.at('A::C')).should == 'C'
