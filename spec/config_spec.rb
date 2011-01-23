@@ -17,7 +17,7 @@ describe YARD::Config do
     
     it "should overwrite options with data in ~/.yard/config" do
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(true)
-      File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(true)
+      File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
       YAML.should_receive(:load_file).with(YARD::Config::CONFIG_FILE).and_return({'test' => true})
       YARD::Config.load
       YARD::Config.options[:test].should be_true
