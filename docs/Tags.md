@@ -99,9 +99,13 @@ YARD supplies the following built-in tags:
         
   * `@api`: Declares the API that the object belongs to. Does not display in
     output, but useful for performing queries (`yardoc --query`). Any text is
-    allowable in this tag, and there are no predefined values.
+    allowable in this tag, and there are no predefined values(*).
     
         @api freeform text
+        
+    (*) Note that the special name `@api private` does display a notice in 
+    documentation if it is listed, letting users know that the method is not
+    to be used.
       
   * `@attr`: Declares an attribute from the docstring of a class. Meant to be
     used on Struct classes only (classes that inherit Struct).
