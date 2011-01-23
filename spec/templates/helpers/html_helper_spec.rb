@@ -33,6 +33,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should not apply to code blocks" do
       fix_typewriter("<code>+hello+</code>").should == "<code>+hello+</code>"
     end
+    
+    it "should not apply to HTML tag attributes" do
+      fix_typewriter("<a href='http://foo.com/A+b+c'>A+b+c</a>").should == 
+        "<a href='http://foo.com/A+b+c'>A+b+c</a>"
+      fix_typewriter("<foo class='foo+bar+baz'/>").should == 
+        "<foo class='foo+bar+baz'/>"
+    end
   end
   
   describe '#charset' do
