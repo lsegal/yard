@@ -1,7 +1,7 @@
 module YARD
   module Server
     module Commands
-      # Displays documentation for a specific object identiied by the path
+      # Displays documentation for a specific object identified by the path
       class DisplayObjectCommand < LibraryCommand
         def run
           return index if path.empty?

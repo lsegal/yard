@@ -201,7 +201,7 @@ in the templates, use the `--hide-tag` option to hide it from generated output:
 
 ## Added `--transitive-tags` to register transitive tags (0.6.0)
 
-Transitive tags are tags that apply to all descendents of a namespace (class 
+Transitive tags are tags that apply to all descendants of a namespace (class 
 or module) when documented on that namespace. For instance, the `@since` tag 
 is a transitive tag. Applying `@since` to a class will automatically apply 
 `@since` to all methods in the class. Creating a `@since` tag directly on a 

@@ -4,7 +4,7 @@ module YARD
     # an operation on an object's namespace but the namespace could
     # not be resolved.
     class NamespaceMissingError < Parser::UndocumentableError
-      # The object the error occured on
+      # The object the error occurred on
       # @return [CodeObjects::Base] a code object
       attr_accessor :object
       

@@ -145,7 +145,7 @@ module YARD
       end
     
       # Loads a template specified by path. If +:template+ or +:format+ is
-      # specified in the {#options} hash, they are prependend and appended
+      # specified in the {#options} hash, they are prepended and appended
       # to the path respectively.
       # 
       # @param [Array<String, Symbol>] path the path of the template

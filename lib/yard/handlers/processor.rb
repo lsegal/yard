@@ -14,7 +14,7 @@ module YARD
     class Processor
 
       class << self
-        # Registeres a new namespace for handlers of the given type.
+        # Registers a new namespace for handlers of the given type.
         # @since 0.6.0
         def register_handler_namespace(type, ns)
           namespace_for_handler[type] = ns

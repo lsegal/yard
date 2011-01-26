@@ -149,7 +149,7 @@ module YARD
         
         # @group Traversing a Node
     
-        # Searches through the node and all descendents and returns the
+        # Searches through the node and all descendants and returns the
         # first node with a type matching any of +node_types+, otherwise
         # returns the original node (self).
         # 
@@ -179,10 +179,10 @@ module YARD
           @children ||= select {|e| AstNode === e }
         end
 
-        # Traverses the object and yields each node (including descendents) in order.
+        # Traverses the object and yields each node (including descendants) in order.
         # 
-        # @yield each descendent node in order
-        # @yieldparam [AstNode] self, or a child/descendent node
+        # @yield each descendant node in order
+        # @yieldparam [AstNode] self, or a child/descendant node
         # @return [void] 
         def traverse
           nodes = [self]
