@@ -352,7 +352,7 @@ module YARD
         @docstring_extra ? value + @docstring_extra : value
       end
 
-      # Attaches a docstring to a code oject by parsing the comments attached to the statement
+      # Attaches a docstring to a code object by parsing the comments attached to the statement
       # and filling the {#tags} and {#docstring} methods with the parsed information.
       #
       # @param [String, Array<String>, Docstring] comments 

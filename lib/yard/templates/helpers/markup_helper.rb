@@ -70,7 +70,7 @@ module YARD
       # 
       # On success this sets `@markup_provider` and `@markup_class` to
       # the provider name and library constant class/module respectively for
-      # the loaded proider.
+      # the loaded provider.
       # 
       # On failure this method will inform the user that no provider could be
       # found and exit the program.

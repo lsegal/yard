@@ -13,7 +13,7 @@ module YARD
         @cmd = cmd
       end
       
-      # Overrides serialize behavour and writes data to standard input
+      # Overrides serialize behaviour and writes data to standard input
       # of the associated command
       def serialize(object, data)
         IO.popen(@cmd, 'w') {|io| io.write(data) }
