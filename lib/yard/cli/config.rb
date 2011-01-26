@@ -12,11 +12,19 @@ module YARD
       # @return [Boolean] whether to reset the {#key}
       attr_accessor :reset
       
+      # @return [Boolean] whether the value being set should be inside a list
+      attr_accessor :as_list
+      
+      # @return [Boolean] whether to append values to existing key
+      attr_accessor :append
+      
       def initialize
         super
         self.key = nil
         self.values = []
         self.reset = false
+        self.append = false
+        self.as_list = false
       end
       
       def description
@@ -44,7 +52,9 @@ module YARD
           YARD::Config.options[key] = YARD::Config::DEFAULT_CONFIG_OPTIONS[key]
         else
           log.debug "Setting #{key} to #{values.inspect}"
-          YARD::Config.options[key] = encode_values
+          items, current_items = encode_values, YARD::Config.options[key]
+          items = [current_items].flatten + [items].flatten if append
+          YARD::Config.options[key] = items
         end
         YARD::Config.save
       end
@@ -61,7 +71,7 @@ module YARD
       end
       
       def encode_values
-        if values.size == 1
+        if values.size == 1 && !as_list
           encode_value(values.first)
         else
           values.map {|v| encode_value(v) }
@@ -79,6 +89,8 @@ module YARD
       
       def optparse(*args)
         list = false
+        self.as_list = false
+        self.append = false
         opts = OptionParser.new
         opts.banner = "Usage: yard config [options] [item [value ...]]"
         opts.separator ""
@@ -100,6 +112,17 @@ module YARD
         opts.on('-r', '--reset', 'Resets the specific item to default') do
           self.reset = true
         end
+        
+        opts.separator ""
+        opts.separator "Modifying keys:"
+        
+        opts.on('-a', '--append', 'Appends items to existing key values') do
+          self.append = true
+        end
+        opts.on('--as-list', 'Forces the value(s) to be wrapped in an array') do
+          self.as_list = true
+        end
+        
         common_options(opts)
         parse_options(opts, args)
         args = [] if list

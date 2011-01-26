@@ -40,6 +40,24 @@ describe YARD::CLI::Config do
       YARD::Config.options[:load_plugins].should == false
     end
     
+    it "should accept --as-list to force single item as list" do
+      run('--as-list', 'foo', 'bar')
+      YARD::Config.options[:foo].should == ['bar']
+    end
+    
+    it "should accept --append to append values to existing key" do
+      YARD::Config.options[:foo] = ['bar']
+      run('--append', 'foo', 'baz', 'quux')
+      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux']
+      run('-a', 'foo', 'last')
+      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux', 'last']
+    end
+    
+    it "should turn key into list if --append is used on single item" do
+      YARD::Config.options[:foo] = 'bar'
+      run('-a', 'foo', 'baz')
+      YARD::Config.options[:foo].should == ['bar', 'baz']
+    end
     
     it "should modify item if value is given" do
       run('foo', 'xxx')
