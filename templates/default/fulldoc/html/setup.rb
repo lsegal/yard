@@ -36,8 +36,8 @@ def serialize(object)
 end
 
 def serialize_onefile
-  options[:css_data] = file('css/style.css', true) + "\n" + file('css/common.css', true)
-  options[:js_data] = file('js/jquery.js', true) + file('js/app.js', true)
+  options[:css_data] = file('css/style.css', true) + "\n" + file('css/custom.css', true)
+  options[:js_data] = file('js/jquery.js', true) + file('js/app.js', true)  + file('js/custom.js', true)
   Templates::Engine.with_serializer('index.html', options[:serializer]) do
     T('onefile').run(options)
   end
@@ -69,8 +69,8 @@ def asset(path, content)
 end
 
 def generate_assets
-  %w( js/jquery.js js/app.js js/full_list.js 
-      css/style.css css/full_list.css css/common.css ).each do |file|
+  %w( js/jquery.js js/app.js js/full_list.js js/custom.js
+      css/style.css css/full_list.css css/custom.css ).each do |file|
     asset(file, file(file, true))
   end
   
