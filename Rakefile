@@ -9,6 +9,7 @@ task :default => :specs
 
 desc "Builds the gem"
 task :gem do
+  Gem.load_plugins # load plugins because they are not autoloaded anymore
   load 'yard.gemspec'
   Gem::Builder.new(SPEC).build
 end

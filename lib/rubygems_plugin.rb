@@ -1,4 +1,4 @@
 unless defined?(Gem::DocManager.load_yardoc)
-  require 'yard/rubygems/specification'
-  require 'yard/rubygems/doc_manager'
+  require File.expand_path(File.dirname(__FILE__) + '/yard/rubygems/specification')
+  require File.expand_path(File.dirname(__FILE__) + '/yard/rubygems/doc_manager')
 end
