@@ -9,6 +9,6 @@
 |
 <% method_listing.each do |obj| %>
 <%= uml_visibility obj %> <%= h obj.name(true) %>
-<%= h(" : #{obj.tag(:return).types.first}") if obj.has_tag?(:return) && obj.tag(:return).types.size > 0 %>\l
+<%= h(" : #{obj.tag(:return).types.first}") if obj.has_tag?(:return) && obj.tag(:return).types && obj.tag(:return).types.size > 0 %>\l
 <% end %>
 <% end %>
