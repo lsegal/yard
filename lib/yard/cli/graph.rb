@@ -79,7 +79,7 @@ module YARD
         opts.separator ""
         opts.separator "Output options:"
 
-        opts.on('--dot [OPTIONS]', 'Send the results direclty to `dot` with optional arguments.') do |dotopts|
+        opts.on('--dot [OPTIONS]', 'Send the results directly to `dot` with optional arguments.') do |dotopts|
           @serializer = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
         end
         
