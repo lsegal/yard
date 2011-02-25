@@ -78,6 +78,22 @@ describe YARD::Parser::SourceParser do
       Registry.at("Hello::Hi#me").docstring.line_range.should == (3..4)
     end
     
+    it "should parse Ruby code with metaclasses" do
+      YARD.parse_string(<<-eof)
+        module Hello
+          class Hi
+            class <<self
+              # Docstring
+              def me; "VALUE" end
+            end
+          end
+        end
+      eof
+      Registry.at(:Hello).should_not == nil
+      Registry.at("Hello::Hi.me").should_not == nil
+      Registry.at("Hello::Hi.me").docstring.should == "Docstring"
+    end
+    
     it "should only use prepended comments for an object" do
       YARD.parse_string(<<-eof)
         # Test
