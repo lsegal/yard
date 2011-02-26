@@ -31,7 +31,10 @@ module YARD
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'}
         ],
-        :rdoc => [],
+        :rdoc => [
+          {:lib => 'rdoc/markup', :const => 'RDoc::Markup'},
+          {:lib => 'rdoc/markup/simple_markup', :const => 'SM::SimpleMarkup'}
+        ],
         :text => [],
         :html => []
       }
@@ -52,19 +55,6 @@ module YARD
       # files to detect the markup type.
       MARKUP_FILE_SHEBANG = /\A#!(\S+)\s*$/
 
-      begin
-        require 'rdoc/markup'
-        require 'rdoc/markup/to_html'
-        SimpleMarkup = RDoc::Markup.new
-      rescue Gem::LoadError
-        raise
-      rescue LoadError
-        require 'rubygems'
-        require 'rdoc/markup/simple_markup'
-        require 'rdoc/markup/simple_markup/to_html'
-        SimpleMarkup = SM::SimpleMarkup.new
-      end
-      
       # Attempts to load the first valid markup provider in {MARKUP_PROVIDERS}.
       # If a provider is specified, immediately try to load it.
       # 
@@ -77,7 +67,7 @@ module YARD
       # 
       # @return [Boolean] whether the markup provider was successfully loaded.
       def load_markup_provider(type = options[:markup])
-        return true if type == :rdoc || MarkupHelper.markup_cache[type]
+        return true if MarkupHelper.markup_cache[type]
         MarkupHelper.markup_cache[type] ||= {}
         
         providers = MARKUP_PROVIDERS[type]
@@ -94,8 +84,9 @@ module YARD
         # Search for provider, return the library class name as const if found
         providers.each do |provider|
           begin require provider[:lib].to_s; rescue LoadError; next end
+          begin klass = eval("::" + provider[:const]); rescue NameError; next end
           MarkupHelper.markup_cache[type][:provider] = provider[:lib] # Cache the provider
-          MarkupHelper.markup_cache[type][:class] = eval("::" + provider[:const])
+          MarkupHelper.markup_cache[type][:class] = klass
           return true
         end
         
@@ -145,7 +136,7 @@ module YARD
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Class] the markup class
       def markup_class(type = options[:markup])
-        type == :rdoc ? SimpleMarkup : MarkupHelper.markup_cache[type][:class]
+        MarkupHelper.markup_cache[type][:class]
       end
       
       # Gets the markup provider name for a markup type
@@ -154,7 +145,7 @@ module YARD
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Symbol] the markup provider name (usually the gem name of the library)
       def markup_provider(type = options[:markup])
-        type == :rdoc ? nil : MarkupHelper.markup_cache[type][:provider]
+        MarkupHelper.markup_cache[type][:provider]
       end
     end
   end

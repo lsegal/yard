@@ -32,10 +32,24 @@ describe YARD::Templates::Helpers::MarkupHelper do
       @gen.markup_class.should == nil
     end
   
-    it "should load nothing if rdoc is specified" do
+    it "should load RDoc 2.x if rdoc is specified and 2.x is installed" do
+      rdoc_lib = mock(:rdoc)
       @gen.stub!(:options).and_return({:markup => :rdoc})
+      @gen.should_receive(:eval).with('::RDoc::Markup').and_return(rdoc_lib)
+      @gen.should_receive(:require).with('rdoc/markup').and_return(true)
       @gen.load_markup_provider.should == true
-      @gen.markup_class.should == YARD::Templates::Helpers::MarkupHelper::SimpleMarkup
+      @gen.markup_class.should == rdoc_lib
+    end
+    
+    it "should load RDoc 1.x if rdoc 1.x is installed" do
+      rdoc_lib = mock(:rdoc)
+      @gen.stub!(:options).and_return({:markup => :rdoc})
+      @gen.should_receive(:eval).with('::RDoc::Markup').and_raise(NameError)
+      @gen.should_receive(:eval).with('::SM::SimpleMarkup').and_return(rdoc_lib)
+      @gen.should_receive(:require).with('rdoc/markup').and_return(true)
+      @gen.should_receive(:require).with('rdoc/markup/simple_markup').and_return(true)
+      @gen.load_markup_provider.should == true
+      @gen.markup_class.should == rdoc_lib
     end
   
     it "should search through available markup providers for the markup type if none is set" do
@@ -56,16 +70,18 @@ describe YARD::Templates::Helpers::MarkupHelper do
       @gen.should_receive(:require).with('maruku').and_raise(LoadError)
       @gen.should_receive(:require).with('rpeg-markdown').and_raise(LoadError)
       @gen.should_receive(:require).with('rdiscount').and_return(true)
+      @gen.should_receive(:eval).with('::RDiscount').and_return(true)
       @gen.stub!(:options).and_return({:markup => :markdown})
       # this only raises an exception because we mock out require to avoid 
       # loading any libraries but our implementation tries to return the library 
       # name as a constant
       @gen.load_markup_provider.should rescue nil
-      @gen.markup_provider.should == :"rdiscount"
+      @gen.markup_provider.should == :rdiscount
     end
   
     it "should override the search if `:markup_provider` is set in options" do
       @gen.should_receive(:require).with('rdiscount').and_return(true)
+      @gen.should_receive(:eval).with('::RDiscount').and_return(true)
       @gen.stub!(:options).and_return({:markup => :markdown, :markup_provider => :rdiscount})
       @gen.load_markup_provider.should rescue nil
       @gen.markup_provider.should == :rdiscount

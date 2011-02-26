@@ -79,7 +79,7 @@ module YARD
       def html_markup_rdoc(text)
         begin
           simple_markup_html.instance_variable_set("@from_path", url_for(object))
-          html = MarkupHelper::SimpleMarkup.convert(text, simple_markup_html)
+          html = markup_class(:rdoc).new.convert(text, simple_markup_html)
         end
 
         html = fix_dash_dash(html)
