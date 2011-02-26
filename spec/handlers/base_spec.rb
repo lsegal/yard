@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper'
+require 'ostruct'
 
 include Parser
 
@@ -110,15 +111,15 @@ describe YARD::Handlers::Base do
   end
   
   describe '.in_file' do
-    def parse(filename, src = "class A; end")
-      parser = Parser::SourceParser.new
+    def parse(filename, parser_type, src = "class A; end")
+      parser = Parser::SourceParser.new(parser_type)
       parser.instance_variable_set("@file", filename)
       parser.parse(StringIO.new(src))
     end
     
-    def create_handler(stmts)
+    def create_handler(stmts, parser_type)
       @@counter ||= 0
-      sklass = Parser::SourceParser.parser_type == :ruby ? "Base" : "Legacy::Base"
+      sklass = parser_type == :ruby ? "Base" : "Legacy::Base"
       instance_eval(<<-eof)
         class ::InFileHandler#{@@counter += 1} < Handlers::Ruby::#{sklass}
           handles /^class/
@@ -128,11 +129,11 @@ describe YARD::Handlers::Base do
       eof
     end
     
-    def test_handler(file, stmts, creates = true)
+    def test_handler(file, stmts, creates = true, parser_type = :ruby)
       Registry.clear
       Registry.at('#FOO').should be_nil
-      create_handler(stmts)
-      parse(file)
+      create_handler(stmts, parser_type)
+      parse(file, parser_type)
       Registry.at('#FOO').send(creates ? :should_not : :should, be_nil)
       Handlers::Base.subclasses.delete_if {|k,v| k.to_s =~ /^InFileHandler/ }
     end
@@ -140,34 +141,33 @@ describe YARD::Handlers::Base do
     [:ruby, :ruby18].each do |parser_type|
       next if parser_type == :ruby && LEGACY_PARSER
       describe "Parser type = #{parser_type.inspect}" do
-        Parser::SourceParser.parser_type = parser_type
         it "should allow handler to be specific to a file" do
-          test_handler 'file_a.rb', 'in_file "file_a.rb"', true
+          test_handler 'file_a.rb', 'in_file "file_a.rb"', true, parser_type
         end
-        
+    
         it "should ignore handler if filename does not match" do
-          test_handler 'file_b.rb', 'in_file "file_a.rb"', false
+          test_handler 'file_b.rb', 'in_file "file_a.rb"', false, parser_type
         end
 
         it "should only test filename part when given a String" do
-          test_handler '/path/to/file_a.rb', 'in_file "/to/file_a.rb"', false
+          test_handler '/path/to/file_a.rb', 'in_file "/to/file_a.rb"', false, parser_type
         end
-        
+    
         it "should test exact match for entire String" do
-          test_handler 'file_a.rb', 'in_file "file"', false
+          test_handler 'file_a.rb', 'in_file "file"', false, parser_type
         end
 
         it "should allow a Regexp as argument and test against full path" do
-          test_handler 'file_a.rbx', 'in_file /\.rbx$/', true
-          test_handler '/path/to/file_a.rbx', 'in_file /\/to\/file_/', true
-          test_handler '/path/to/file_a.rbx', 'in_file /^\/path/', true
+          test_handler 'file_a.rbx', 'in_file /\.rbx$/', true, parser_type
+          test_handler '/path/to/file_a.rbx', 'in_file /\/to\/file_/', true, parser_type
+          test_handler '/path/to/file_a.rbx', 'in_file /^\/path/', true, parser_type
         end
 
         it "should allow multiple in_file declarations" do
           stmts = 'in_file "x"; in_file /y/; in_file "foo.rb"'
-          test_handler 'foo.rb', stmts, true
-          test_handler 'xyzzy.rb', stmts, true
-          test_handler 'x', stmts, true
+          test_handler 'foo.rb', stmts, true, parser_type
+          test_handler 'xyzzy.rb', stmts, true, parser_type
+          test_handler 'x', stmts, true, parser_type
         end
       end
     end

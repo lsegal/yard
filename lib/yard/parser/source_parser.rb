@@ -1,8 +1,6 @@
 require 'stringio'
 
-begin
-  require 'continuation'
-rescue LoadError; end
+begin require 'continuation'; rescue LoadError; end
 
 module YARD
   module Parser
@@ -133,13 +131,14 @@ module YARD
         end
         
         # Returns the validated parser type. Basically, enforces that :ruby
-        # type is never set from Ruby 1.8
+        # type is never set if the Ripper library is not available
         # 
         # @param [Symbol] type the parser type to set
         # @return [Symbol] the validated parser type
         # @private
         def validated_parser_type(type)
-          !HAVE_RIPPER && type == :ruby ? :ruby18 : type
+          begin require 'ripper'; rescue LoadError; end
+          !defined?(::Ripper) && type == :ruby ? :ruby18 : type
         end
         
         private
@@ -171,7 +170,7 @@ module YARD
 
       self.parser_type = :ruby
       
-      register_parser_type :ruby,   Ruby::RubyParser if HAVE_RIPPER
+      register_parser_type :ruby,   Ruby::RubyParser
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
       

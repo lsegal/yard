@@ -21,10 +21,10 @@ end
 
 begin
   hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
-  if HAVE_RIPPER
-    hide += ',legacy\/.+_handler,html_syntax_highlight_helper18\.rb$'
+  if YARD::Parser::SourceParser.parser_type == :ruby
+    hide += ',legacy\/.+_handler'
   else
-    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$,html_syntax_highlight_helper\.rb$'
+    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$'
   end
 
   require 'rspec'
