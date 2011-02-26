@@ -191,8 +191,12 @@ describe YARD::Parser::Ruby::RubyParser do
       ["'", '"'].each do |q|
         src = "#{q}hello\n\nworld#{q}"
         s = stmt(src)
+        s.jump(:string_content)[0].should == "hello\n\nworld"
         s.source.should == src
       end
+      
+      src = '("this is a string")'
+      stmt(src).jump(:string_literal).source.should == '"this is a string"'
     end
   end
 end if HAVE_RIPPER

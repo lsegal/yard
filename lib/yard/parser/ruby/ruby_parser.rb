@@ -330,9 +330,13 @@ module YARD
         
         def on_string_literal(*args)
           node = visit_event_arr(AstNode.new(:string_literal, args))
-          if @source[charno, 1] !~ /["']/
-            nsr = node.source_range
-            node.source_range = Range.new(nsr.first, nsr.last + 1) 
+          if args.size == 1
+            r = args[0].source_range
+            if node.source_range != Range.new(r.first - 1, r.last + 1)
+              klass = AstNode.node_class_for(node[0].type)
+              r = Range.new(node.source_range.first + 1, node.source_range.last - 1)
+              node[0] = klass.new(node[0].type, [@source[r]], :line => node.line_range, :char => r)
+            end
           end
           node
         end
