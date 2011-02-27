@@ -309,29 +309,29 @@ pre.code .regexp, .dregexp { color: #036A07; }
 pre.code a { border-bottom: 1px dotted #bbf; }
 
 /* style for <ul> */
-#filecontent li > p, .docstring li > p {
+#filecontents li > p, .docstring li > p {
   margin: 0px;	
 }
 
-#filecontent ul, .docstring ul {
+#filecontents ul, .docstring ul {
 	padding-left: 20px;
 }
 
 /* style for <dl> */
-#filecontent dl, .docstring dl {
+#filecontents dl, .docstring dl {
   border: 1px solid #CCCCCC;
 }
 
-#filecontent dt, .docstring dt {
+#filecontents dt, .docstring dt {
   background: #DDDDDD;
   font-weight: bold;
   padding: 2px 4px;
 }
 
-#filecontent dd, .docstring dd {
+#filecontents dd, .docstring dd {
 	padding: 5px 0px;
 }
 
-#filecontent dd > p, .docstring dd > p { 
+#filecontents dd > p, .docstring dd > p { 
 	margin: 0px ;
 }
