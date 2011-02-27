@@ -308,32 +308,30 @@ pre.code .id.nth_ref { color: #6D79DE; }
 pre.code .regexp, .dregexp { color: #036A07; }
 pre.code a { border-bottom: 1px dotted #bbf; }
 
-/* style for <ul>. e.g.  list */
-.discussion li > p {
- margin: 0px;	
+/* style for <ul> */
+#filecontent li > p, .docstring li > p {
+  margin: 0px;	
 }
 
-.discussion ul {
+#filecontent ul, .docstring ul {
 	padding-left: 20px;
 }
 
-/* style for <dl>. e.g. rdoc:[named-label] */
-
-.discussion dl {
-    border: 1px solid #CCCCCC;
+/* style for <dl> */
+#filecontent dl, .docstring dl {
+  border: 1px solid #CCCCCC;
 }
 
-.discussion dt {
-    background: #DDDDDD;
-    font-weight: bold;
-    padding: 2px 4px;
-
+#filecontent dt, .docstring dt {
+  background: #DDDDDD;
+  font-weight: bold;
+  padding: 2px 4px;
 }
 
-.discussion dd {
+#filecontent dd, .docstring dd {
 	padding: 5px 0px;
 }
 
-ul.summary dd, .discussion dd > p { 
+#filecontent dd > p, .docstring dd > p { 
 	margin: 0px ;
 }
