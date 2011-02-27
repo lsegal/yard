@@ -452,6 +452,11 @@ module YARD
       # @return [SM::ToHtml] if RDoc 1.x is loaded
       # @since 0.6.5
       def simple_markup_html
+        begin
+          require 'rdoc/markup/to_html'
+        rescue LoadError
+          require 'rdoc/markup/simple_markup/to_html' 
+        end
         Thread.current[:__yard_simple_markup_html__] ||= 
           (RDoc::Markup::ToHtml.new rescue SM::ToHtml.new)
       end
