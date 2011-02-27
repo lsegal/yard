@@ -28,6 +28,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
         "No ++problem."
       fix_typewriter("Math + stuff +is ok+").should == 
         "Math + stuff <tt>is ok</tt>"
+      fix_typewriter("Hello +{Foo}+ World").should == "Hello <tt>{Foo}</tt> World"
     end
     
     it "should not apply to code blocks" do
@@ -39,6 +40,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
         "<a href='http://foo.com/A+b+c'>A+b+c</a>"
       fix_typewriter("<foo class='foo+bar+baz'/>").should == 
         "<foo class='foo+bar+baz'/>"
+    end
+    
+    it "should still apply inside of other tags" do
+      fix_typewriter("<p>+foo+</p>").should == "<p><tt>foo</tt></p>"
     end
   end
   
@@ -281,6 +286,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it "should ignore {links} that begin with |...|" do
       resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
+    end
+    
+    %w(tt code pre).each do |tag|
+      it "should ignore links in <#{tag}>" do
+        text = "<#{tag}>{Foo}</#{tag}>"
+        resolve_links(text).should == text
+      end
     end
     
     it "should warn about missing reference at right file location for object" do

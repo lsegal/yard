@@ -111,9 +111,9 @@ module YARD
       # 
       # @todo Refactor into own SimpleMarkup subclass
       def fix_typewriter(text)
-        text.gsub(/\+(?! )([^\n\+]{1,900})(?! )\+/) do
+        text.gsub(/(?<=\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+/) do
           type_text, pre_text, no_match = $1, $`, $&
-          pre_match = pre_text.scan(%r(</?(?:(?:pre|tt|code).*?>|[^>]+)))
+          pre_match = pre_text.scan(%r(</?(?:(?:pre|tt|code).*?>|[^>]+)\Z))
           if pre_match.last.nil? || pre_match.last[1,1] == '/'
             '<tt>' + h(type_text) + '</tt>'
           else
