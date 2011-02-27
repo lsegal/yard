@@ -20,6 +20,9 @@ module YARD
           def enumerator
             @parse
           end
+          
+          def encoding_line; @parse.encoding_line end
+          def shebang_line; @parse.shebang_line end
         end
       end
     end

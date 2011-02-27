@@ -32,6 +32,9 @@ module YARD
     # @see Handlers::Base
     # @see CodeObjects::Base
     class SourceParser 
+      SHEBANG_LINE  = /\A\s*#!\S+/
+      ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*#+.*coding\s*[:=]{1,2}\s*(\S+)/i
+      
       class << self
         # @return [Symbol] the default parser type (defaults to :ruby)
         attr_reader :parser_type
@@ -237,8 +240,8 @@ module YARD
       # Searches for encoding line and forces encoding
       # @since 0.5.3
       def convert_encoding(content)
-        return content if RUBY18
-        if content =~ /\A(?:\s*#*!.*\r?\n)?\s*#+.*coding\s*[:=]{1,2}\s*(\S+)/i
+        return content unless content.respond_to?(:force_encoding)
+        if content =~ ENCODING_LINE
           content.force_encoding($1)
         else
           content

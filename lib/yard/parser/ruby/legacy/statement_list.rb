@@ -2,6 +2,8 @@ module YARD
   module Parser::Ruby::Legacy
     class StatementList < Array
       include RubyToken
+      
+      attr_accessor :shebang_line, :encoding_line
 
       # The following list of tokens will require a block to be opened 
       # if used at the beginning of a statement.
@@ -13,6 +15,8 @@ module YARD
       # @param [TokenList, String] content the tokens to create the list from
       def initialize(content)
         @group = nil
+        @shebang_line = nil
+        @encoding_line = nil
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
@@ -215,6 +219,20 @@ module YARD
         end
         
         return unless tk.class == TkCOMMENT
+
+        case tk.text
+        when Parser::SourceParser::SHEBANG_LINE
+          if !@last_ns_tk && !@encoding_line
+            @shebang_line = tk.text
+            return
+          end
+        when Parser::SourceParser::ENCODING_LINE
+          if (@last_ns_tk.class == TkCOMMENT && @last_ns_tk.text == @shebang_line) ||
+              !@last_ns_tk
+            @encoding_line = tk.text
+            return
+          end
+        end
         return if !@statement.empty? && @comments
         return if @first_line && tk.line_no > @first_line
         

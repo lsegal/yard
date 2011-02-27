@@ -158,6 +158,16 @@ describe YARD::Parser::SourceParser do
         Registry.at(:Foo).docstring.hash_flag.should == expected
       end
     end
+    
+    it "should remove shebang from initial file comments" do
+      YARD.parse_string "#!/bin/ruby\n# this is a comment\nclass Foo; end"
+      Registry.at(:Foo).docstring.should == "this is a comment"
+    end
+    
+    it "should remove encoding line from initial file comments" do
+      YARD.parse_string "# encoding: utf-8\n# this is a comment\nclass Foo; end"
+      Registry.at(:Foo).docstring.should == "this is a comment"
+    end
   end
 
   describe '#parse' do
@@ -253,10 +263,13 @@ describe YARD::Parser::SourceParser do
           parser = Parser::SourceParser.new
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
-          result.enumerator[0].source.encoding.to_s.send(msg) == 'Shift_JIS'
+          if HAVE_RIPPER && RUBY19
+            result.enumerator[0].source.encoding.to_s.send(msg) == 'Shift_JIS'
+          end
+          result.encoding_line.send(msg) == src.split("\n").last
         end
       end
-    end if RUBY19 && HAVE_RIPPER
+    end
   end
   
   describe '#parse_in_order' do

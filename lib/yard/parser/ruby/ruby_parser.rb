@@ -8,6 +8,9 @@ module YARD
   module Parser
     module Ruby
       # Ruby 1.9 parser
+      # @attr_reader encoding_line
+      # @attr_reader shebang_line
+      # @attr_reader enumerator
       class RubyParser < Parser::Base
         def initialize(source, filename)
           @parser = RipperParser.new(source, filename)
@@ -16,12 +19,15 @@ module YARD
         def parse; @parser.parse end
         def tokenize; @parser.tokens end
         def enumerator; @parser.enumerator end
+        def shebang_line; @parser.shebang_line end
+        def encoding_line; @parser.encoding_line end
       end
       
       # Internal parser class
       # @since 0.5.6
       class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
+        attr_reader :shebang_line, :encoding_line
         alias root ast
 
         def initialize(source, filename, *args)
@@ -38,6 +44,8 @@ module YARD
           @list = []
           @charno = 0
           @groups = []
+          @shebang_line = nil
+          @encoding_line = nil
         end
 
         def parse
@@ -387,7 +395,22 @@ module YARD
         end
 
         def on_comment(comment)
+          not_comment = false
+          if @last_ns_token.nil? || @last_ns_token.size == 0
+            if comment =~ SourceParser::SHEBANG_LINE && !@encoding_line
+              @shebang_line = comment
+              not_comment = true
+            elsif comment =~ SourceParser::ENCODING_LINE
+              @encoding_line = comment
+              not_comment = true
+            end
+          end
+
           visit_ns_token(:comment, comment)
+          if not_comment
+            @last_ns_token = nil
+            return
+          end
           case comment
           when /\A# @group\s+(.+)\s*\Z/
             @groups.unshift [lineno, $1]
@@ -396,7 +419,7 @@ module YARD
             @groups.unshift [lineno, nil]
             return
           end
-
+          
           comment = comment.gsub(/^(\#{1,2})\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
           hash_flag = $1 == '##' ? true : false
