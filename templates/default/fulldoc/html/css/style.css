@@ -30,8 +30,8 @@ h2 small { font-weight: normal; font-size: 0.7em; display: block; float: right; 
 #filecontents ul, .docstring ul { padding-left: 20px; }
 /* style for <dl> */
 #filecontents dl, .docstring dl { border: 1px solid #ccc; }
-#filecontents dt, .docstring dt { background: #ddd; font-weight: bold; padding: 2px 4px; }
-#filecontents dd, .docstring dd { padding: 5px 0px; }
+#filecontents dt, .docstring dt { background: #ddd; font-weight: bold; padding: 3px 5px; }
+#filecontents dd, .docstring dd { padding: 5px 0px; margin-left: 18px; }
 #filecontents dd > p, .docstring dd > p { margin: 0px; }
 
 .note { 
