@@ -55,6 +55,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
     P(:B).aliases[P('B#x2')].should == :do
   end
   
+  it "should handle quoted symbols" do
+    foo = Registry.at('A#foo')
+    foo.should_not be_nil
+    foo.should be_is_alias
+    Registry.at('A').aliases[foo].should == :a
+  end
+  
   it "should raise an UndocumentableError if only one parameter is passed" do
     undoc_error "alias_method :q"
   end

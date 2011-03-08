@@ -12,6 +12,9 @@ module A
   alias * a
   alias for a
   alias ConstantName a
+  
+  # Handle quoted symbols
+  alias :'foo' :'a'
 end
 
 class C

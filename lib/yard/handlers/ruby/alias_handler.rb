@@ -5,7 +5,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
   process do
     names = []
     if statement.type == :alias
-      names = statement.map {|o| o.jump(:ident, :op, :kw, :const).first }
+      names = statement.map {|o| o.jump(:ident, :op, :kw, :const).source }
     elsif statement.call?
       statement.parameters(false).each do |obj|
         case obj.type
