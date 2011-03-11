@@ -140,7 +140,6 @@ module YARD
         # @return [Symbol] the validated parser type
         # @private
         def validated_parser_type(type)
-          begin require 'ripper'; rescue LoadError; end
           !defined?(::Ripper) && type == :ruby ? :ruby18 : type
         end
         
@@ -171,11 +170,11 @@ module YARD
         end
       end
 
-      self.parser_type = :ruby
-      
-      register_parser_type :ruby,   Ruby::RubyParser if defined?(::Ripper)
+      register_parser_type :ruby,   Ruby::RubyParser
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
+
+      self.parser_type = :ruby
       
       # The filename being parsed by the parser.
       attr_reader :file

@@ -483,7 +483,7 @@ module YARD
             freeze_tree(child)
           end
         end
-      end
+      end if defined?(::Ripper)
     end
   end
 end
