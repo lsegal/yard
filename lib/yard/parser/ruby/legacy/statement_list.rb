@@ -55,8 +55,10 @@ module YARD
 
           @before_last_tk = @last_tk
           @last_tk = tk # Save last token
-          @before_last_ns_tk = @last_ns_tk
-          @last_ns_tk = tk unless [TkSPACE, TkNL, TkEND_OF_SCRIPT].include? tk.class
+          unless [TkSPACE, TkNL, TkEND_OF_SCRIPT].include? tk.class
+            @before_last_ns_tk = @last_ns_tk
+            @last_ns_tk = tk
+          end
         end
 
         # Return the code block with starting token and initial comments

@@ -282,6 +282,15 @@ eof
     s.tokens.to_s.should == "alias do x if 2 ==\n 2"
   end
   
+  it "should not open a block on an aliased keyword block opener" do
+    s = stmts(<<-eof)
+      class A; alias x do end
+      class B; end
+    eof
+    s[0].block.to_s.should == 'alias x do'
+    s.size.should > 1
+  end
+  
   it "should convert heredoc to string" do
     src = "<<-XML\n  foo\n\nXML"
     s = stmt(src)
