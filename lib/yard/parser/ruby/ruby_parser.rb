@@ -312,8 +312,7 @@ module YARD
         end
         
         def on_const_path_ref(*args)
-          klass = AstNode.node_class_for(:const_path_ref)
-          klass.new(:const_path_ref, args, :listline => lineno..lineno, :listchar => charno..charno)
+          ReferenceNode.new(:const_path_ref, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
         
         [:if_mod, :unless_mod, :while_mod].each do |kw|
@@ -329,11 +328,11 @@ module YARD
         end
         
         def on_qwords_new
-          visit_event AstNode.new(:qwords_literal, [])
+          visit_event LiteralNode.new(:qwords_literal, [])
         end
         
         def on_string_literal(*args)
-          node = visit_event_arr(AstNode.new(:string_literal, args))
+          node = visit_event_arr(LiteralNode.new(:string_literal, args))
           if args.size == 1
             r = args[0].source_range
             if node.source_range != Range.new(r.first - 1, r.last + 1)

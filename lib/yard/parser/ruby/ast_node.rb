@@ -113,6 +113,10 @@ module YARD
           else
             if type.to_s =~ /_ref\Z/
               ReferenceNode
+            elsif type.to_s =~ /_literal\Z/
+              LiteralNode
+            elsif KEYWORDS.has_key?(type)
+              KeywordNode
             else
               AstNode
             end
@@ -209,12 +213,12 @@ module YARD
         
         # @return [Boolean] whether the node is a literal value
         def literal?
-          @literal ||= type =~ /_literal$/ ? true : false
+          false
         end
         
         # @return [Boolean] whether the node is a keyword
         def kw?
-          @kw ||= KEYWORDS.has_key?(type)
+          false
         end
         
         # @return [Boolean] whether the node is a method call
@@ -328,6 +332,14 @@ module YARD
         end
       end
       
+      class LiteralNode < AstNode
+        def literal?; true end
+      end
+      
+      class KeywordNode < AstNode
+        def kw?; true end
+      end
+      
       class ParameterNode < AstNode
         def required_params; self[0] end
         def required_end_params; self[3] end
@@ -365,7 +377,7 @@ module YARD
         end
       end
       
-      class ConditionalNode < AstNode
+      class ConditionalNode < KeywordNode
         def condition?; true end
         def condition; first end
         def then_block; self[1] end
