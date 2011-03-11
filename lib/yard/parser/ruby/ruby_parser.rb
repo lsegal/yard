@@ -1,8 +1,4 @@
-begin
-  require 'ripper'
-rescue LoadError => e
-  begin; require 'ripper18'; rescue LoadError; raise(e) end
-end
+begin require 'ripper'; rescue LoadError; end
 
 module YARD
   module Parser

@@ -173,7 +173,7 @@ module YARD
 
       self.parser_type = :ruby
       
-      register_parser_type :ruby,   Ruby::RubyParser
+      register_parser_type :ruby,   Ruby::RubyParser if defined?(::Ripper)
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
       
