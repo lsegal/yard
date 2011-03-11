@@ -447,6 +447,7 @@ module YARD
       #   finishes processing.
       def ensure_loaded!(object, max_retries = 1)
         return if object.root?
+        return object unless object.is_a?(Proxy)
         unless parser.load_order_errors
           if object.is_a?(Proxy)
             raise NamespaceMissingError, object
