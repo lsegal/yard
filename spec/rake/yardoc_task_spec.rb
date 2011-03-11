@@ -4,17 +4,17 @@ describe YARD::Rake::YardocTask do
   before do
     @yardoc = mock(:cli)
     YARD::CLI::Yardoc.stub!(:new).and_return(@yardoc)
-    Rake.application.clear
+    ::Rake.application.clear
   end
   
   def run
-    Rake.application.tasks[0].invoke
+    ::Rake.application.tasks[0].invoke
   end
   
   describe '#initialize' do
     it "should allow separate rake task name to be set" do
       YARD::Rake::YardocTask.new(:notyardoc)
-      Rake.application.tasks[0].name.should == "notyardoc"
+      ::Rake.application.tasks[0].name.should == "notyardoc"
     end
   end
   
