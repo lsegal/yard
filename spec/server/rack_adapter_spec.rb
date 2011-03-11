@@ -12,7 +12,7 @@ describe "YARD::Server::RackMiddleware" do
   end
   
   it "should pass up to the next middleware on 404" do
-    @superapp.should_receive(:call).and_return([200, {}, 'OK'])
-    @app.call(Rack::MockRequest.env_for('/INVALID')).should == [200, {}, 'OK']
+    @superapp.should_receive(:call).and_return([200, {}, ['OK']])
+    @app.call(Rack::MockRequest.env_for('/INVALID')).should == [200, {}, ['OK']]
   end
 end
