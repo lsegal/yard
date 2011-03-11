@@ -47,6 +47,12 @@ module YARD
         @obj = nil
         @imethod ||= nil
         
+        if @namespace.is_a?(ConstantObject)
+          @origname = nil # forget these for a constant
+          @orignamespace = nil
+          @namespace = Proxy.new(@namespace.namespace, @namespace.value)
+        end
+        
         unless @namespace.is_a?(NamespaceObject) or @namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end

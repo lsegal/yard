@@ -163,6 +163,10 @@ module YARD
         # @see #initialize
         def new(namespace, name, *args, &block)
           raise ArgumentError, "invalid empty object name" if name.to_s.empty?
+          if namespace.is_a?(ConstantObject)
+            namespace = Proxy.new(namespace.namespace, namespace.value)
+          end
+
           if name.to_s[0,2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root

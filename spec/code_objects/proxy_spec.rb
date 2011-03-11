@@ -112,4 +112,13 @@ describe YARD::CodeObjects::Proxy do
     # Now it should resolve
     proxy.type.should == :module
   end
+  
+  
+  it "should handle constant names in namespaces" do
+    YARD.parse_string <<-eof
+      module A; end; B = A
+      module B::C; def foo; end end
+    eof
+    Proxy.new(:root, 'B::C').should == Registry.at('A::C')
+  end
 end

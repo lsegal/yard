@@ -27,4 +27,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   it "should list mixins in proper order" do
     Registry.at('D').mixins.should == [P(:C), P(:B), P(:A)]
   end
+  
+  it "should create proper module when constant is in namespace" do
+    Registry.at('Q::FOO::A').should_not be_nil
+  end
 end
