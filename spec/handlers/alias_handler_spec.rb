@@ -62,6 +62,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
     Registry.at('A').aliases[foo].should == :a
   end
   
+  it "should prepend aliases object's docstring to comments" do
+    Registry.at('D#a').tag(:return).types.should == ['Numeric']
+    Registry.at('D#b').tag(:return).types.should == ['String']
+    Registry.at('D#b').docstring.should == "Foo bar"
+  end
+  
   it "should raise an UndocumentableError if only one parameter is passed" do
     undoc_error "alias_method :q"
   end

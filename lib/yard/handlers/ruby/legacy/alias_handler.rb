@@ -18,13 +18,15 @@ class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy:
       o.scope = scope
       o.add_file(parser.file, statement.tokens.first.line_no)
       o.docstring = statement.comments
+    end
 
-      if old_obj
-        o.signature = old_obj.signature
-        o.source = old_obj.source
-      else
-        o.signature = "def #{new_meth}" # this is all we know.
-      end
+    if old_obj
+      new_obj.signature = old_obj.signature
+      new_obj.source = old_obj.source
+      new_obj.docstring = old_obj.docstring + YARD::Docstring.new(statement.comments)
+      new_obj.docstring.object = new_obj
+    else
+      new_obj.signature = "def #{new_meth}" # this is all we know.
     end
     
     namespace.aliases[new_obj] = old_meth

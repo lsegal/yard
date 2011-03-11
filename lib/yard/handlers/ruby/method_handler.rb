@@ -28,6 +28,13 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       o.explicit = true
       o.parameters = args
     end
+    
+    # delete any aliases referencing old method
+    nobj.aliases.each do |aobj, name|
+      next unless name == obj.name
+      nobj.aliases.delete(aobj)
+    end if nobj.is_a?(NamespaceObject)
+    
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, 

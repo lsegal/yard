@@ -85,3 +85,9 @@ def CONST.meth_on_const; end
 CONST2 = CONST
 def CONST2.meth2_on_const; end
 
+class D
+  alias b a
+  
+  # foo bar
+  def a; end
+end

@@ -132,4 +132,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     Registry.at('Foo.meth_on_const').should_not be_nil
     Registry.at('Foo.meth2_on_const').should_not be_nil
   end
+  
+  it "should copy alias information on method (re-)definition to new method" do
+    Registry.at('D').aliases.should be_empty
+    Registry.at('D#b').is_alias?.should == false
+    Registry.at('D#a').is_alias?.should == false
+  end
 end

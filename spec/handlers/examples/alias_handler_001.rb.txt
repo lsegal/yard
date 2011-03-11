@@ -31,3 +31,14 @@ class B < C
   alias do x
   alias x2 do
 end
+
+class D
+  # Foo bar
+  def a; "FOO" end
+  
+  # @return [String]
+  alias b a
+  
+  # @return [Numeric]
+  def a; 0 end
+end
