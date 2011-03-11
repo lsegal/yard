@@ -23,7 +23,7 @@ desc 'Run spec suite'
 task :suite do
   ['ruby186', 'ruby18', 'ruby19', 'ruby192', 'jruby'].each do |ruby|
     2.times do |legacy|
-      next if legacy == 1 && ruby =~ /^jruby|18/
+      next if legacy == 1 && ruby =~ /^jruby|186/
       puts "Running specs with #{ruby}#{legacy == 1 ? ' (in legacy mode)' : ''}"
       cmd = "#{ruby} -S rake specs SUITE=1 #{legacy == 1 ? 'LEGACY=1' : ''}"
       puts cmd
