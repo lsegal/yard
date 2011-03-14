@@ -6,10 +6,10 @@ YARD: Yay! A Ruby Documentation Tool
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: See Contributors section below    
-**Copyright**:    2007-2010    
+**Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.6.4 (codename "Snowy White Picket Fences")    
-**Release Date**: December 21st 2010    
+**Latest Version**: 0.6.5 (codename "Happy Birthday!")    
+**Release Date**: March 13th 2011    
 
 Synopsis
 --------
@@ -289,6 +289,28 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **March.13.11**: 0.6.5 release
+    - Support `ripper` gem in Ruby 1.8.7
+    - Upgrade jQuery to 1.5.1
+    - Fix handling of alias statements with quoted symbols (#262)
+    - Add CSS styles (#260)
+    - Unhandled exception in YARD::Handlers::Ruby::MixinHandler indexing documentation for eventmachine (#248)
+    - Splice any alias references on method re-definitions into separate methods (#247)
+    - Fix "yard graph" (#245)
+    - Don't process ++ typewriter text inside of HTML attributes (#244)
+    - Prioritize loading of Kramdown before Maruku (#241)
+    - Skip shebang encoding in docstrings (#238)
+    - Fix truncation of references in @deprecated (#232)
+    - Show @api private note when no other tags are present (#231)
+    - Detect docstrings starting with "##" as `Docstring#hash_flag` (#230)
+    - Remove trailing whitespace from freeform tags (#229)
+    - Fix line through for deprecated methods (#225)
+    - Mistake in Tags.md (#223)
+    - Improve database storage by being more efficient with filesystem usage (#222)
+    - Make Registry thread local (#221)
+    - Support `private_constant` class method for 1.9.3 (#219)
+    - Do not assume RDoc is installed (#214)
+
 - **December.21.10**: 0.6.4 release
     - Fix yri tool crashing with new Config class (gh-217)
     - Fix support for ::TopLevelConstants (gh-216)
@@ -430,9 +452,10 @@ Special thanks to the following people for submitting patches:
 * Nathan Weizenbaum
 * Nick Plante
 * Michael Edgar
+* Sam Rawlins
 * Yehuda Katz
 * Duane Johnson
-* Postmodern
+* Hal Brodigan
 * Edward Muller
 * Pieter van de Bruggen
 * Leonid Borisenko
@@ -441,9 +464,11 @@ Special thanks to the following people for submitting patches:
 * Mark Evans
 * Lee Jarvis
 * Franklin Webber
+* Dominik Honnef
 * David Turnbull
+* Bob Aman
 * Anthony Thibault
-* Sam Rawlins
+* Philip Roberts
 * Jeff Rafter
 * Elliottcable
 * James Rosen
@@ -457,7 +482,7 @@ Special thanks to the following people for submitting patches:
 Copyright
 ---------
 
-YARD &copy; 2007-2010 by [Loren Segal](mailto:lsegal@soen.ca). YARD is 
+YARD &copy; 2007-2011 by [Loren Segal](mailto:lsegal@soen.ca). YARD is 
 licensed under the MIT license except for some files which come from the
 RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL} 
 documents for more information.

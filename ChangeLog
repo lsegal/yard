@@ -1,3 +1,341 @@
+2011-03-13  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, LICENSE, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec:
+  Update to 0.6.5
+
+2011-03-11  Loren Segal <lsegal@soen.ca>
+
+  * spec/parser/c_parser_spec.rb: Gracefully continue if continuation is not
+  present (for non-MRI 1.9 implementations)
+
+  * lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb: Add
+  KeywordNode, LiteralNode and improve RubyParser (ripper) support in 1.8.7
+
+  * Rakefile: Run ruby18 through test suite with ripper
+
+  * lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Splice any alias references on method
+  (re-)definitions into separate methods  You can add extra documentation
+  information for the alias itself as comments in the alias (or alias_method)
+  statement. For instance,  # Foo Bar def foo; "Hello" end  # @deprecated alias
+  bar foo  # NOT FOO! def foo; 2 end  Will turn 'bar' into its own method with
+  docstring 'Foo Bar' *and* a @deprecated tag. 'foo' will be redefined to have
+  the docstring 'NOT FOO!'.  The alias information will be removed, and the
+  methods will be considered separate.  Closes #247
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/ruby/legacy/statement_list_spec.rb: Fix registering of
+  'before_last_ns_tk' in StatementList parser and properly handle keywords
+  inside alias statements when in blocks
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  spec/code_objects/proxy_spec.rb,
+  spec/handlers/examples/module_handler_001.rb.txt,
+  spec/handlers/module_handler_spec.rb: Handle constants used as 'aliases' to
+  other namespaces  ie. module CONST::Foo; end  Closes #248
+
+2011-03-10  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile: Add 'rake suite' task to run specs across all(?) supported ruby
+  versions (and modes)
+
+  * spec/server/rack_adapter_spec.rb: Fix specs to use proper rack protocol
+
+  * spec/parser/base_spec.rb, spec/rake/yardoc_task_spec.rb: Fix specs in 1.9.1
+
+  * lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb: Make
+  ruby_parser.rb loadable if Ripper is not available
+
+  * lib/yard/handlers/base.rb: ensure_loaded! should short circuit with object
+  if present (avoid callcc warnings)
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix fix_typewriter regression
+
+  * lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb: Fix
+  ruby18 support if ripper is not present
+
+2011-03-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/markup_helper.rb: Print markup provider in error
+  message when it cannot be loaded.
+
+2011-03-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/alias_handler.rb,
+  lib/yard/handlers/ruby/legacy/alias_handler.rb,
+  spec/handlers/alias_handler_spec.rb,
+  spec/handlers/examples/alias_handler_001.rb.txt: Support alias call with
+  quoted symbols  Closes #262
+
+2011-02-28  Akzhan Abdulin <akzhan.abdulin@gmail.com>
+
+  * templates/default/fulldoc/html/js/jquery.js: Upgrade jQuery from 1.4.2 to
+  1.5.1
+
+2011-02-27  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix regression where improved
+  RDoc ++ parsing was not being activating inside of tag blocks
+
+  * templates/default/fulldoc/html/css/style.css: Adjust padding on dt/dd to
+  match rest of style
+
+  * templates/default/fulldoc/html/css/style.css: Minor formatting adjustments
+
+  * templates/default/fulldoc/html/css/style.css: Fix typo on css declarations
+
+2011-02-28  Guten <ywzhaifei@gmail.com>
+
+  * templates/default/fulldoc/html/css/style.css: changes css style on list
+
+2011-02-27  Guten <ywzhaifei@gmail.com>
+
+  * templates/default/fulldoc/html/css/style.css: add css style to list 
+  support <ul> <dl>
+
+2011-02-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix regression in templates
+  incorrectly loading rdoc ToHtml formatter
+
+  * lib/yard/parser/ruby/legacy/ruby_parser.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, lib/yard/parser/source_parser.rb,
+  spec/parser/source_parser_spec.rb: Skip shebang and encoding lines in
+  docstrings.  Also also expose these comments in RubyParser classes through -
+  RubyParser#encoding_line - RubyParser#shebang_line For new and legacy
+  parsers.  Closes #238
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix a bug in Ripper that causes string_content tokens with newlines to only
+  show the last line as a token in the AST.
+
+  * Rakefile, lib/yard.rb, lib/yard/autoload.rb,
+  lib/yard/parser/source_parser.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  .../helpers/html_syntax_highlight_helper18.rb, spec/handlers/base_spec.rb,
+  spec/handlers/ruby/base_spec.rb, spec/spec_helper.rb,
+  .../helpers/html_syntax_highlight_helper_spec.rb: Update specs to allow
+  toggling on and off of LEGACY environment variable for legacy tests in
+  1.8/1.9  Remove HAVE_RIPPER and LEGACY_PARSER from main YARD code, only use
+  in specs.
+
+2011-01-11  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile, lib/yard.rb, lib/yard/autoload.rb,
+  lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/method_condition_handler.rb,
+  lib/yard/handlers/ruby/private_constant_handler.rb,
+  lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/ruby_parser.rb,
+  lib/yard/parser/source_parser.rb, spec/handlers/alias_handler_spec.rb,
+  spec/handlers/attribute_handler_spec.rb, spec/handlers/base_spec.rb,
+  spec/handlers/class_condition_handler_spec.rb,
+  spec/handlers/class_handler_spec.rb,
+  spec/handlers/class_variable_handler_spec.rb,
+  spec/handlers/constant_handler_spec.rb,
+  spec/handlers/exception_handler_spec.rb,
+  spec/handlers/extend_handler_spec.rb,
+  spec/handlers/method_condition_handler_spec.rb,
+  spec/handlers/method_handler_spec.rb, spec/handlers/mixin_handler_spec.rb,
+  spec/handlers/module_handler_spec.rb,
+  spec/handlers/private_constant_handler_spec.rb,
+  spec/handlers/process_handler_spec.rb, spec/handlers/ruby/base_spec.rb,
+  spec/handlers/visibility_handler_spec.rb,
+  spec/handlers/yield_handler_spec.rb, spec/parser/ruby/ast_node_spec.rb,
+  spec/parser/ruby/ruby_parser_spec.rb, spec/parser/source_parser_spec.rb,
+  .../helpers/html_syntax_highlight_helper_spec.rb: Backport new-style parser
+  to 1.8 compatible syntax (and semantics) for ripper1.8
+
+2011-02-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Do not assume RDoc is
+  installed.  Moves requiring of SimpleMarkup code as a markup provider.
+  Installs without rdoc installed will now load YARD properly.  Based on
+  patches by gioele.  Closes #214
+
+2011-01-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/base_helper.rb,
+  spec/templates/helpers/base_helper_spec.rb: Add {include:file:FILENAME}
+  syntax
+
+2011-02-25  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile, lib/rubygems_plugin.rb, lib/yard/rubygems/doc_manager.rb: Fix
+  loading of YARD rubygems plugin in new location, and load gem plugins when
+  building the gem
+
+2011-02-25  Postmodern <postmodern.mod3@gmail.com>
+
+  * lib/rubygems_plugin.rb, lib/yard/rubygems/doc_manager.rb,
+  lib/yard/rubygems/specification.rb: Move YARDs extensions to
+  Gem::Specification and Gem::DocManager into 'yard/rubygems'.  * Since
+  RubyGems 1.4 disabled RubyGems Plugin loading for non-gem commands, YARDs
+  extensions to RubyGems cannot be loaded by normal Ruby code. Moving these
+  extensions into 'lib/yard', allows 'require' to load them again.
+
+2011-02-25  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/class/dot/superklass.erb: Ignore BasicObject superclass
+
+  * templates/default/module/dot/info.erb,
+  templates/default/module/dot/setup.rb: Fix invalid parsing of modules as
+  classes in `yard graph` template  Closes #245
+
+2011-02-23  Bob Aman <bobaman@google.com>
+
+  * templates/default/layout/html/headers.erb: Fixed invalid meta element in
+  headers.
+
+  * spec/parser/source_parser_spec.rb: Added spec to verify docstrings on
+  metaclasses get parsed correctly.
+
+2011-02-07  latentflip <phil@latentflip.com>
+
+  * lib/yard/cli/graph.rb: Fixed a typo in yard-graph help messages:  Direclty
+  -> Directly
+
+2011-01-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb, lib/yard/serializers/process_serializer.rb,
+  lib/yard/templates/helpers/markup_helper.rb: More spelling corrections
+
+  * docs/WhatsNew.md, lib/yard/handlers/base.rb,
+  lib/yard/handlers/processor.rb, lib/yard/parser/ruby/ast_node.rb,
+  lib/yard/server/commands/display_object_command.rb,
+  lib/yard/templates/template.rb: Fix typos in docs thanks to yard spellcheck
+
+  * lib/yard/cli/config.rb, spec/cli/config_spec.rb: Add yard config --as-list
+  and yard config --append to force setting of a single value as a list, and to
+  append values to an existing list, respectively.
+
+2011-01-23  Loren Segal <lsegal@soen.ca>
+
+  * docs/Tags.md: Write a note about @api private  Closes #223
+
+  * templates/default/docstring/setup.rb: Show docstring if @api exists (even
+  though it is a "hidden tag")  Closes #231
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Fix relative
+  object link names removing common object name prefix  Closes #232
+
+  * spec/config_spec.rb: Fix failing spec when ~/.yard/ignored_plugins does not
+  exist
+
+  * spec/templates/helpers/markup_helper_spec.rb: Fix broken spec with changed
+  markup provider order
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Don't process ++ typewriter text
+  inside of HTML attributes  Closes #244
+
+2011-01-19  Postmodern <postmodern.mod3@gmail.com>
+
+  * lib/yard/templates/helpers/markup_helper.rb: Prioritize the loading of
+  kramdown before maruku.
+
+2011-01-19  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/js/app.js: Generate better ids
+
+2011-01-17  Akzhan Abdulin <akzhan.abdulin@gmail.com>
+
+  * spec/config_spec.rb: Specs should not broken when plugins installed in
+  system
+
+  * spec/cli/config_spec.rb, spec/config_spec.rb: Fix uninitialized constant
+  RSpec::Core::ExampleGroup::Nested_2::Nested_1::YAML error
+
+2011-01-05  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/docstring.rb, lib/yard/handlers/base.rb,
+  lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/legacy/statement.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Add
+  Docstring#hash_flag to denote when a docstring comment started with '##' 
+  Closes gh-230
+
+  * lib/yard/tags/default_factory.rb, spec/docstring_spec.rb,
+  spec/tags/default_factory_spec.rb: Remove trailing whitespace from freeform
+  tags  Closes gh-229
+
+  * spec/tags/default_factory_spec.rb: Update default_factory_spec.rb
+  formatting
+
+2011-01-01  Dominik Honnef <dominikh@fork-bomb.org>
+
+  * templates/default/fulldoc/html/css/style.css: make sure that alternatives
+  specified in @deprecated don't get struck through and that they're set using
+  a monospace font
+
+2010-12-30  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/yardoc_spec.rb, spec/registry_store_spec.rb: Fix broken specs
+
+  * templates/default/layout/html/files.erb,
+  templates/default/layout/html/index.erb,
+  templates/default/layout/html/listing.erb,
+  templates/default/layout/html/objects.erb,
+  templates/default/layout/html/setup.rb: Split index/listing templates into
+  listing/files/objects
+
+  * lib/yard/templates/helpers/html_helper.rb: Add documentation to
+  simple_markup_html
+
+  * lib/yard/templates/helpers/html_helper.rb: Make SimpleMarkupHtml thread
+  local, remove constant
+
+2010-12-29  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/library.rb: Fix documentation on tag library
+
+  * lib/yard/registry.rb, lib/yard/registry_store.rb, spec/cli/yardoc_spec.rb,
+  spec/registry_store_spec.rb, spec/serializers/yardoc_serializer_spec.rb: Add
+  specs to single object db functionality
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add spec for single_object_db
+  attribute default value
+
+2010-12-28  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/serializers/yardoc_serializer.rb: Add check for empty object db
+
+  * lib/yard/cli/yardoc.rb: Allow disabling of single_object_db
+
+  * lib/yard/cli/yardoc.rb, lib/yard/registry.rb, lib/yard/registry_store.rb,
+  lib/yard/serializers/yardoc_serializer.rb: Initial single object db
+  implementation
+
+2010-12-29  Loren Segal <lsegal@soen.ca>
+
+  * spec/registry_spec.rb: Fix formatting in spec
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add specs to thread local
+  storage code, improve initializations
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Make sure
+  the non-tag form of (see ...) only works at the start of a docstring
+
+2010-12-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/autoload.rb, lib/yard/code_objects/base.rb,
+  lib/yard/code_objects/method_object.rb,
+  .../ruby/legacy/private_constant_handler.rb,
+  lib/yard/handlers/ruby/private_constant_handler.rb,
+  .../examples/private_constant_handler_001.rb.txt,
+  spec/handlers/private_constant_handler_spec.rb: Add support for
+  `private_constant` class method calls to recognize private class, module and
+  constant definitions (proposed for Ruby 1.9.3).  Closes gh-219
+
 2010-12-21  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb, yard.gemspec: Bump to version 0.6.4
@@ -72,6 +410,9 @@
 2010-12-15  Loren Segal <lsegal@soen.ca>
 
   * spec/cli/yri_spec.rb: Add sanity check tests to YRI specs
+
+  * lib/yard/registry.rb, lib/yard/server/commands/library_command.rb: Use
+  threadlocal registries
 
 2010-12-15  Lee Jarvis <lee@jarvis.co>
 

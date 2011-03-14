@@ -19,6 +19,8 @@ What's New in 0.6.x?
 16. **Added `yard config` command to view/edit configuration** (0.6.2)
 17. **Added `yard server -t` template path switch** (0.6.2)
 18. **Added `YARD::Server.register_static_path` for static server assets** (0.6.2)
+19. **YARD::Registry is now thread local** (0.6.5)
+20. **Support for ripper gem in Ruby 1.8.7** (0.6.5)
 
 ## Local documentation server for RubyGems or projects (`yard server`) (0.6.0)
 
@@ -274,6 +276,21 @@ a new template path for template customization.
 The server now supports a command to register static asset paths. If you are
 extending the YARD::Server modules, make sure to register your asset paths
 through this method.
+
+## YARD::Registry is now thread local (0.6.5)
+
+Creating a new thread will now implicitly load a new Registry that can be used
+to parse and process new code objects independently of the other threads. Note
+that this means you can no longer use the Registry across threads; you must
+either access the threadlocal object directly, or synchronize threads to do
+the processing in the initial registry's thread.
+
+## Support for ripper gem in Ruby 1.8.7 (0.6.5)
+
+YARD now supports the Ruby 1.8.7 port of the `ripper` gem to improve parsing
+of source, both in terms of performance and functionality. When the `ripper`
+gem is available, YARD will use the "new-style" handlers. You can take advantage
+of this functionality by performing a `gem install ripper`.
 
 
 What's New in 0.5.x?
