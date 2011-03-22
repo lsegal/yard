@@ -199,7 +199,7 @@ module YARD
       tag_factory = Tags::Library.instance
       tag_method = "#{tag_name}_tag"
       if tag_name && tag_factory.respond_to?(tag_method)
-        add_tag(*tag_factory.send(tag_method, tag_buf))
+        add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
       else
         log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end

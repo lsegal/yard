@@ -37,11 +37,6 @@ module YARD
       alias kind_of? is_a?
       
       private
-
-      if RUBY19
-        def to_a; nil end 
-        def to_ary; nil end
-      end
       
       def parse_tag(text)
         @signature, text = *text.split(/\r?\n/, 2)
