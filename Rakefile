@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/lib/yard'
+require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
 require 'rbconfig'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
@@ -9,7 +10,6 @@ task :default => :specs
 
 desc "Builds the gem"
 task :gem do
-  Gem.load_plugins # load plugins because they are not autoloaded anymore
   load 'yard.gemspec'
   Gem::Builder.new(SPEC).build
 end
