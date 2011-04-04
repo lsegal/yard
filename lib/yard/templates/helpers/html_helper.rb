@@ -148,7 +148,7 @@ module YARD
       # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/) do |str|
+        text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/m) do |str|
           closed, tag, name, title, match = $1, $2, $3, $4, $&
           if tag
             code_tags += (closed ? -1 : 1)
@@ -208,12 +208,13 @@ module YARD
       # (see BaseHelper#link_url)
       def link_url(url, title = nil, params = {})
         title ||= url
+        title.gsub!(/[\r\n]/, ' ')
         params = SymbolHash.new(false).update(
           :href => url,
           :title  => h(title)
         ).update(params)
         params[:target] ||= '_parent' if url =~ /^(\w+):\/\//
-        "<a #{tag_attrs(params)}>#{title}</a>"
+        "<a #{tag_attrs(params)}>#{title}</a>".gsub(/[\r\n]/, ' ')
       end
       
       # @group URL Helpers

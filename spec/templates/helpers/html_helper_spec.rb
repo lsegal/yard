@@ -196,10 +196,9 @@ describe YARD::Templates::Helpers::HtmlHelper do
   describe '#resolve_links' do
     def parse_link(link)
       results = {}
-      link =~ /<a (.+?)>(.+?)<\/a>/
+      link =~ /<a (.+?)>(.+?)<\/a>/m
       params, results[:inner_text] = $1, $2
-      params.split(/\s+/).each do |match|
-        key, value = *match.split('=')
+      params.scan(/\s*(\S+?)=['"](.+?)['"]\s*/).each do |key, value|
         results[key.to_sym] = value.gsub(/^["'](.+)["']$/, '\1')
       end
       results
@@ -260,6 +259,25 @@ describe YARD::Templates::Helpers::HtmlHelper do
         text = "<#{tag}>{Foo}</#{tag}>"
         resolve_links(text).should == text
       end
+    end
+
+    it "should resolve {Name}" do
+      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      resolve_links("{file:TEST}")
+    end
+
+    it "should resolve ({Name})" do
+      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      resolve_links("({file:TEST})")
+    end
+    
+    it "should resolve link with newline in title-part" do
+      parse_link(resolve_links("{http://example.com foo\nbar}")).should == {
+        :inner_text => "foo bar",
+        :target => "_parent",
+        :href => "http://example.com",
+        :title => "foo bar"
+      }
     end
     
     it "should warn about missing reference at right file location for object" do
@@ -391,18 +409,6 @@ describe YARD::Templates::Helpers::HtmlHelper do
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
       should_not_receive(:html_syntax_highlight_NAME)
       html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
-    end
-  end
-  
-  describe '#resolve_links' do
-    it "should resolve {Name}" do
-      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
-      resolve_links("{file:TEST}")
-    end
-
-    it "should resolve ({Name})" do
-      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
-      resolve_links("({file:TEST})")
     end
   end
   
