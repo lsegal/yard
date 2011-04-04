@@ -77,13 +77,9 @@ module YARD
       # @return [String] output HTML
       # @since 0.6.0
       def html_markup_rdoc(text)
-        begin
-          simple_markup_html.instance_variable_set("@from_path", url_for(object))
-          html = markup_class(:rdoc).new.convert(text, simple_markup_html)
-        end
-
-        html = fix_dash_dash(html)
-        html = fix_typewriter(html)
+        doc = markup_class(:rdoc).new(text)
+        doc.from_path = url_for(object) if doc.respond_to?(:from_path=)
+        doc.to_html
       end
       
       # Converts plaintext to HTML
@@ -105,29 +101,6 @@ module YARD
       # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
         "<div class='inline'>" + htmlify(*args) + "</div>"
-      end
-      
-      # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
-      # 
-      # @todo Refactor into own SimpleMarkup subclass
-      def fix_typewriter(text)
-        text.gsub(/(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+/) do
-          first_text, type_text, pre_text, no_match = $1, $2, $`, $&
-          pre_match = (pre_text+first_text).scan(%r(</?(?:(?:pre|tt|code).*?>|[^>]+)\Z))
-          if pre_match.last.nil? || pre_match.last[1,1] == '/'
-            first_text + '<tt>' + h(type_text) + '</tt>'
-          else
-            no_match
-          end
-        end
-      end
-      
-      # Don't allow -- to turn into &#8212; element. The chances of this being
-      # some --option is far more likely than the typographical meaning.
-      # 
-      # @todo Refactor into own SimpleMarkup subclass
-      def fix_dash_dash(text)
-        text.gsub(/&#8212;(?=\S)/, '--')
       end
       
       # @group Syntax Highlighting Source Code
@@ -445,22 +418,7 @@ module YARD
       # @endgroup
       
       private
-      
-      # Gets the SimpleMarkup class for the local thread
-      # 
-      # @return [RDoc::Markup::ToHtml] if RDoc 2.x is loaded
-      # @return [SM::ToHtml] if RDoc 1.x is loaded
-      # @since 0.6.5
-      def simple_markup_html
-        begin
-          require 'rdoc/markup/to_html'
-        rescue LoadError
-          require 'rdoc/markup/simple_markup/to_html' 
-        end
-        Thread.current[:__yard_simple_markup_html__] ||= 
-          (RDoc::Markup::ToHtml.new rescue SM::ToHtml.new)
-      end
-      
+
       # Converts a set of hash options into HTML attributes for a tag
       # 
       # @param [Hash{String => String}] opts the tag options

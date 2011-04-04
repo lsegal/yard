@@ -14,39 +14,6 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
   end
   
-  describe '#fix_typewriter' do
-    it "should use #fix_typewriter to convert +text+ to <tt>text</tt>" do
-      fix_typewriter("Some +typewriter text+.").should == 
-        "Some <tt>typewriter" +
-        " text</tt>."
-      fix_typewriter("Not +typewriter text.").should == 
-        "Not +typewriter text."
-      fix_typewriter("Alternating +type writer+ text +here+.").should == 
-        "Alternating <tt>type writer" +
-        "</tt> text <tt>here</tt>."
-      fix_typewriter("No ++problem.").should == 
-        "No ++problem."
-      fix_typewriter("Math + stuff +is ok+").should == 
-        "Math + stuff <tt>is ok</tt>"
-      fix_typewriter("Hello +{Foo}+ World").should == "Hello <tt>{Foo}</tt> World"
-    end
-    
-    it "should not apply to code blocks" do
-      fix_typewriter("<code>+hello+</code>").should == "<code>+hello+</code>"
-    end
-    
-    it "should not apply to HTML tag attributes" do
-      fix_typewriter("<a href='http://foo.com/A+b+c'>A+b+c</a>").should == 
-        "<a href='http://foo.com/A+b+c'>A+b+c</a>"
-      fix_typewriter("<foo class='foo+bar+baz'/>").should == 
-        "<foo class='foo+bar+baz'/>"
-    end
-    
-    it "should still apply inside of other tags" do
-      fix_typewriter("<p>+foo+</p>").should == "<p><tt>foo</tt></p>"
-    end
-  end
-  
   describe '#charset' do
     it "should return foo if LANG=foo" do
       ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if RUBY18

@@ -32,24 +32,17 @@ describe YARD::Templates::Helpers::MarkupHelper do
       @gen.markup_class.should == nil
     end
   
-    it "should load RDoc 2.x if rdoc is specified and 2.x is installed" do
-      rdoc_lib = mock(:rdoc)
+    it "should load RDocMarkup if rdoc is specified and it is installed" do
       @gen.stub!(:options).and_return({:markup => :rdoc})
-      @gen.should_receive(:eval).with('::RDoc::Markup').and_return(rdoc_lib)
-      @gen.should_receive(:require).with('rdoc/markup').and_return(true)
       @gen.load_markup_provider.should == true
-      @gen.markup_class.should == rdoc_lib
+      @gen.markup_class.should == YARD::Templates::Helpers::Markup::RDocMarkup
     end
     
-    it "should load RDoc 1.x if rdoc 1.x is installed" do
-      rdoc_lib = mock(:rdoc)
+    it "should fail if RDoc cannot be loaded" do
       @gen.stub!(:options).and_return({:markup => :rdoc})
-      @gen.should_receive(:eval).with('::RDoc::Markup').and_raise(NameError)
-      @gen.should_receive(:eval).with('::SM::SimpleMarkup').and_return(rdoc_lib)
-      @gen.should_receive(:require).with('rdoc/markup').and_return(true)
-      @gen.should_receive(:require).with('rdoc/markup/simple_markup').and_return(true)
-      @gen.load_markup_provider.should == true
-      @gen.markup_class.should == rdoc_lib
+      @gen.should_receive(:eval).with('::YARD::Templates::Helpers::Markup::RDocMarkup').and_raise(NameError)
+      @gen.load_markup_provider.should == false
+      @gen.markup_provider.should == nil
     end
   
     it "should search through available markup providers for the markup type if none is set" do
