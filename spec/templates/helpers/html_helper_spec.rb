@@ -89,6 +89,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
     end
+    
+    it "should return regular text with :none markup" do
+      htmlify("fo\no\n\nbar<>", :none).should == "fo\no<br/>bar&lt;&gt;"
+    end
   end
   
   describe "#link_object" do

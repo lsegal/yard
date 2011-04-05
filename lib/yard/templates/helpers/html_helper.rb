@@ -90,6 +90,12 @@ module YARD
         "<pre>" + text + "</pre>"
       end
       
+      # @return [String] the same text with no markup
+      # @since 0.6.6
+      def html_markup_none(text)
+        h(text).gsub(/(?:\r?\n){2}/, '<br/>')
+      end
+      
       # Converts HTML to HTML
       # @param [String] text input html
       # @return [String] output HTML

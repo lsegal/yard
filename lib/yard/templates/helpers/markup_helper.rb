@@ -35,7 +35,8 @@ module YARD
           {:lib => 'rdoc', :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
         :text => [],
-        :html => []
+        :html => [],
+        :none => []
       }
       
       # Returns a list of extensions for various markup types. To register
@@ -47,7 +48,7 @@ module YARD
         :text => ['txt'],
         :textile => ['textile', 'txtile'],
         :markdown => ['markdown', 'md', 'mdown', 'mkd'],
-        :rdoc => ['rdoc']
+        :rdoc => ['rdoc'],
       }
       
       # Contains the Regexp object that matches the shebang line of extra

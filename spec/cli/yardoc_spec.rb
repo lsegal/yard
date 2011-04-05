@@ -44,8 +44,8 @@ describe YARD::CLI::Yardoc do
       @yardoc.files.should == ['lib/**/*.rb', 'ext/**/*.c']
     end
     
-    it "should use rdoc as default markup type" do
-      @yardoc.options[:markup].should == :rdoc
+    it "should be nil as default markup type (but defaults to rdoc and falls back on none)" do
+      @yardoc.options[:markup].should == nil
     end
     
     it "should use default as default template" do
@@ -515,6 +515,24 @@ describe YARD::CLI::Yardoc do
       YARD::Templates::Engine.should_not_receive(:register_template_path)
       @yardoc.run('-p', 'foo')
       @yardoc.run('--template-path', 'foo')
+    end
+  end
+  
+  describe 'Markup Loading' do
+    it "should load rdoc markup if no markup is provided" do
+      @yardoc.generate = true
+      @yardoc.run
+      @yardoc.options[:markup].should == :rdoc
+    end
+    
+    it "should warn if rdoc cannot be loaded and fallback to :none" do
+      mod = YARD::Templates::Helpers::MarkupHelper
+      mod.clear_markup_cache
+      mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:rdoc).and_return([{:lib => 'INVALID'}])
+      log.should_receive(:warn).with(/Could not load default RDoc formatter/)
+      @yardoc.generate = true
+      @yardoc.run
+      @yardoc.options[:markup].should == :none
     end
   end
 end

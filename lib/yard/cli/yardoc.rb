@@ -158,7 +158,7 @@ module YARD
         @options.update(
           :format => :html, 
           :template => :default, 
-          :markup => :rdoc,
+          :markup => nil, # default is :rdoc but falls back on :none
           :serializer => YARD::Serializers::FileSystemSerializer.new,
           :default_return => "Object",
           :hide_void_return => false,
@@ -302,9 +302,20 @@ module YARD
       # 
       # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
       def verify_markup_options
+        has_markup = options[:markup] ? true : false
+        options[:markup] ||= :rdoc
+        result, lvl = false, has_markup ? log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
-        obj.load_markup_provider
+        log.enter_level(lvl) { result = obj.load_markup_provider }
+        if !result && !has_markup
+          log.warn "Could not load default RDoc formatter, " +
+            "ignoring any markup (install RDoc to get default formatting)."
+          options[:markup] = :none
+          true
+        else
+          result
+        end
       end
       
       # Copies any assets to the output directory
