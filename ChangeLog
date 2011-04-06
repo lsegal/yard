@@ -1,3 +1,53 @@
+2011-04-06  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: 0.6.6 release
+
+  * lib/yard/templates/helpers/markup_helper.rb: Remove loading of 'rdoc' lib
+  (not all systems have even this file)
+
+2011-04-05  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb, spec/cli/yardoc_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add :none markup format (yard -m
+  none) to bypass markup, and fallback on this format if RDoc is not present
+  and no markup type is provided.
+
+2011-04-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix matching of {http://link
+  description} matches when description has newline in it.  Closes #267
+
+  * lib/yard/autoload.rb, lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Refactor RDoc markup into
+  Templates::Helpers::Markup::RDocMarkup class and improve early error
+  detection if RDoc is not present on the system.  Closes #270
+
+  * Rakefile, lib/yard/rubygems/specification.rb: Add support for RubyGems
+  1.7.x  Closes #272
+
+2011-03-22  Loren Segal <lsegal@soen.ca>
+
+  * benchmarks/splat_vs_flatten.rb, lib/yard/docstring.rb,
+  lib/yard/tags/overload_tag.rb: Remove hackish OverloadTag#to_a support to
+  workaround create_tag(*tags) issue (and fix support in JRuby)
+
+2011-03-17  Akzhan Abdulin <akzhan.abdulin@gmail.com>
+
+  * lib/yard/core_ext/hash.rb: Fix RDoc failure in lib/yard/core_ext/hash.rb at
+  or around line 13 column 11  Before reporting this, could you check that the
+  file you're documenting compiles cleanly--RDoc is not a full Ruby parser, and
+  gets confused easily if fed invalid programs.  The internal error was: 
+  ERROR:  While generating documentation for yard-0.6.5 ... MESSAGE:   Name or
+  symbol expected (got #<RubyToken::TkfLBRACK:0x1025e40e0>) ... RDOC args: --ri
+  --op /Users/akzhanabdulin/.rvm/gems/ree-1.8.7-2011.03/doc/yard-0.6.5/ri
+  --quiet lib --title yard-0.6.5 Documentation (continuing with the rest of the
+  installation) Installing RDoc documentation for ripper-1.0.2... Installing
+  RDoc documentation for yard-0.6.5...
+
 2011-03-13  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, LICENSE, README.md, docs/WhatsNew.md, lib/yard.rb, yard.gemspec:

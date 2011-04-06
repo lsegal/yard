@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.6.5 (codename "Happy Birthday!")    
-**Release Date**: March 13th 2011    
+**Latest Version**: 0.6.6 (codename "No codename")    
+**Release Date**: April 6th 2011    
 
 Synopsis
 --------
@@ -288,6 +288,12 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **April.6.11**: 0.6.6 release
+		- Fix error message when RDoc is not present (#270)
+		- Add markup type 'none' to perform basic HTML translation (fallback when RDoc is not present)
+		- Add support for RubyGems 1.7.x (#272)
+		- Fix rendering of `{url description}` syntax when description contains newline
 
 - **March.13.11**: 0.6.5 release
     - Support `ripper` gem in Ruby 1.8.7
