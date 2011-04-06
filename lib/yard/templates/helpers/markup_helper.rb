@@ -32,7 +32,7 @@ module YARD
           {:lib => :redcloth, :const => 'RedCloth'}
         ],
         :rdoc => [
-          {:lib => 'rdoc', :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
+          {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
         :text => [],
         :html => [],
@@ -84,7 +84,7 @@ module YARD
         
         # Search for provider, return the library class name as const if found
         providers.each do |provider|
-          begin require provider[:lib].to_s; rescue LoadError; next end
+          begin require provider[:lib].to_s; rescue LoadError; next end if provider[:lib]
           begin klass = eval("::" + provider[:const]); rescue NameError; next end
           MarkupHelper.markup_cache[type][:provider] = provider[:lib] # Cache the provider
           MarkupHelper.markup_cache[type][:class] = klass
@@ -92,7 +92,7 @@ module YARD
         end
         
         # Show error message telling user to install first potential provider
-        name, lib = *[providers.first[:const], providers.first[:lib]]
+        name, lib = *[providers.first[:const], providers.first[:lib] || type]
         log.error "Missing '#{lib}' gem for #{options[:markup].to_s.capitalize} formatting. Install it with `gem install #{lib}`"
         false
       end
