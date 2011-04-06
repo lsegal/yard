@@ -290,13 +290,13 @@ Changelog
 ---------
 
 - **April.6.11**: 0.6.7 release
-		- Fix has_rdoc gem specification issue with new RubyGems plugin API (oops!)
+    - Fix has_rdoc gem specification issue with new RubyGems plugin API (oops!)
 
 - **April.6.11**: 0.6.6 release
-		- Fix error message when RDoc is not present (#270)
-		- Add markup type 'none' to perform basic HTML translation (fallback when RDoc is not present)
-		- Add support for RubyGems 1.7.x (#272)
-		- Fix rendering of `{url description}` syntax when description contains newline
+    - Fix error message when RDoc is not present (#270)
+    - Add markup type 'none' to perform basic HTML translation (fallback when RDoc is not present)
+    - Add support for RubyGems 1.7.x (#272)
+    - Fix rendering of `{url description}` syntax when description contains newline
 
 - **March.13.11**: 0.6.5 release
     - Support `ripper` gem in Ruby 1.8.7
