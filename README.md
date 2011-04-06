@@ -8,7 +8,7 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.6.6 (codename "No codename")    
+**Latest Version**: 0.6.7 (codename "No codename")    
 **Release Date**: April 6th 2011    
 
 Synopsis
@@ -288,6 +288,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **April.6.11**: 0.6.7 release
+		- Fix has_rdoc gem specification issue with new RubyGems plugin API (oops!)
 
 - **April.6.11**: 0.6.6 release
 		- Fix error message when RDoc is not present (#270)

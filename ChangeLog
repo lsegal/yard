@@ -1,5 +1,7 @@
 2011-04-06  Loren Segal <lsegal@soen.ca>
 
+  * yard.gemspec: Fix gemspec date
+
   * ChangeLog, README.md, lib/yard.rb: 0.6.6 release
 
   * lib/yard/templates/helpers/markup_helper.rb: Remove loading of 'rdoc' lib

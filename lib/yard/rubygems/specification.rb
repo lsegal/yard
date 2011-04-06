@@ -36,6 +36,6 @@ class Gem::Specification
   
     @@default_value[:has_rdoc] = true if defined?(@@default_value)
     @@attributes << 'has_rdoc' if defined?(@@attributes)
-    @@non_nil_attributes << 'has_rdoc' if defined?(@@non_nil_attributes)
+    @@nil_attributes << 'has_rdoc' if defined?(@@nil_attributes)
   end
 end
