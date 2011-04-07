@@ -1,3 +1,5 @@
+require 'rubygems'
+
 require File.dirname(__FILE__) + '/lib/yard'
 require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
 require 'rbconfig'
@@ -6,18 +8,14 @@ YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 WINDOWS = (Config::CONFIG['host_os'] =~ /mingw|win32|cygwin/ ? true : false) rescue false
 SUDO = WINDOWS ? '' : 'sudo'
 
+begin
+  require 'bundler'
+  Bundler::GemHelper.install_tasks
+rescue LoadError
+  $stderr.puts "Bundler not available. Install it with: gem install bundler"
+end
+
 task :default => :specs
-
-desc "Builds the gem"
-task :gem do
-  load 'yard.gemspec'
-  Gem::Builder.new(SPEC).build
-end
-
-desc "Installs the gem"
-task :install => :gem do 
-  sh "#{SUDO} gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
-end
 
 desc 'Run spec suite'
 task :suite do
@@ -83,3 +81,4 @@ end
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
 end
+

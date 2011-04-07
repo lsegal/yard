@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/lib/yard')
-SPEC = Gem::Specification.new do |s|
+Gem::Specification.new do |s|
   s.name          = "yard"
   s.summary       = "Documentation tool for consistent and usable documentation in Ruby." 
   s.description   = <<-eof
@@ -9,7 +9,6 @@ SPEC = Gem::Specification.new do |s|
     custom Ruby constructs such as custom class level definitions.
   eof
   s.version       = YARD::VERSION
-  s.date          = "2011-04-06"
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yardoc.org"
@@ -19,4 +18,10 @@ SPEC = Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
+  s.add_development_dependency('bundler', '>= 1.0')
+  s.add_development_dependency('rspec-core')
+  s.add_development_dependency('rspec-expectations')
+  s.add_development_dependency('rspec-mocks')
+  s.add_development_dependency('rake')
+
 end

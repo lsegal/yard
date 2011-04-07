@@ -6,3 +6,4 @@ _Yardoc
 /pkg
 /doc
 /coverage
+Gemfile.lock
