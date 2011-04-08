@@ -10,8 +10,7 @@ task :default => :specs
 
 desc "Builds the gem"
 task :gem do
-  load 'yard.gemspec'
-  Gem::Builder.new(SPEC).build
+  Gem::Builder.new(eval(File.read('yard.gemspec'))).build
 end
 
 desc "Installs the gem"
