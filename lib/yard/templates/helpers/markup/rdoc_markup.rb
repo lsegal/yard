@@ -69,8 +69,10 @@ module YARD
             @hyperlink ? special.text : super
           end
           
-          def accept_paragraph(par)
-            @hyperlink = !!(par.text =~ /\{(https?:|mailto:|link:|www\.)/)
+          def accept_paragraph(*args)
+            par = args.last
+            text = par.respond_to?(:txt) ? par.txt : par.text
+            @hyperlink = !!(text =~ /\{(https?:|mailto:|link:|www\.)/)
             super
           end
         end
