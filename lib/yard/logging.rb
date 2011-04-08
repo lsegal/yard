@@ -4,7 +4,8 @@ module YARD
   # Handles console logging for info, warnings and errors.
   # Uses the stdlib Logger class in Ruby for all the backend logic.
   class Logger < ::Logger
-    attr_accessor :show_backtraces
+    attr_writer :show_backtraces
+    def show_backtraces; @show_backtraces || level == DEBUG end
     
     # The logger instance
     # @return [Logger] the logger instance
