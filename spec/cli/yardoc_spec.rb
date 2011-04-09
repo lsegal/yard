@@ -45,7 +45,7 @@ describe YARD::CLI::Yardoc do
     end
     
     it "should be nil as default markup type (but defaults to rdoc and falls back on none)" do
-      @yardoc.options[:markup].should == nil
+      @yardoc.options[:markup].should == :rdoc
     end
     
     it "should use default as default template" do

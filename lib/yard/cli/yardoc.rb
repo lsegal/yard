@@ -158,7 +158,7 @@ module YARD
         @options.update(
           :format => :html, 
           :template => :default, 
-          :markup => nil, # default is :rdoc but falls back on :none
+          :markup => :rdoc, # default is :rdoc but falls back on :none
           :serializer => YARD::Serializers::FileSystemSerializer.new,
           :default_return => "Object",
           :hide_void_return => false,
@@ -195,10 +195,8 @@ module YARD
       # @param [Array<String>] args the list of arguments
       # @return [void] 
       def run(*args)
-        parse_arguments(*args)
-        
-        # fail early if markup provider is not found
-        return if generate && !verify_markup_options
+        # fail early if arguments are not valid
+        return unless parse_arguments(*args)
         
         checksums = nil
         if use_cache
@@ -227,9 +225,11 @@ module YARD
       
       # Parses commandline arguments
       # @param [Array<String>] args the list of arguments
-      # @return [void]
+      # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
+        options[:markup] = nil # reset markup
+        
         # Hack: parse out --no-yardopts, --no-document before parsing files
         ['document', 'yardopts'].each do |file|
           without, with = args.index("--no-#{file}") || 0, args.index("--#{file}") || 0
@@ -251,6 +251,12 @@ module YARD
         end
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
+        
+        if generate && !verify_markup_options
+          false
+        else
+          true
+        end
       end
       
       # The list of all objects to process. Override this method to change
