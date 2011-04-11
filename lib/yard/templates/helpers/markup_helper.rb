@@ -107,14 +107,12 @@ module YARD
       # 
       # Standard markup types are text, html, rdoc, markdown, textile
       # 
+      # @param [String] contents Unused. Was necessary prior to 0.7.0.
+      #   Newer versions of YARD use {CodeObjects::ExtraFileObject#contents}
       # @return [Symbol] the markup type recognized for the file
       # @see MARKUP_EXTENSIONS
       # @since 0.6.0
       def markup_for_file(contents, filename)
-        if contents =~ MARKUP_FILE_SHEBANG # Shebang support
-          return $1.to_sym
-        end
-
         ext = (File.extname(filename)[1..-1] || '').downcase
         MARKUP_EXTENSIONS.each do |type, exts|
           return type if exts.include?(ext)
@@ -125,6 +123,7 @@ module YARD
       # Strips any shebang lines on the file contents that pertain to 
       # markup or preprocessing data.
       # 
+      # @deprecated Use {CodeObjects::ExtraFileObject#contents} instead
       # @return [String] the file contents minus any preprocessing tags
       # @since 0.6.0
       def markup_file_contents(contents)
