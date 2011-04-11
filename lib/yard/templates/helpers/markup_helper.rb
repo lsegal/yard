@@ -70,7 +70,7 @@ module YARD
         return true if MarkupHelper.markup_cache[type]
         MarkupHelper.markup_cache[type] ||= {}
         
-        providers = MARKUP_PROVIDERS[type]
+        providers = MARKUP_PROVIDERS[type.to_sym]
         return true if providers && providers.empty?
         if providers && options[:markup_provider]
           providers = providers.select {|p| p[:lib] == options[:markup_provider] }
