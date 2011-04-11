@@ -79,7 +79,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
     
     it "should call #link_file for file: links" do
-      should_receive(:link_file).with('Filename', 'Filename', 'anchor')
+      should_receive(:link_file).with('Filename', nil, 'anchor')
       linkify("file:Filename#anchor")
     end
     

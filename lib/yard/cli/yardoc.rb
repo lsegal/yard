@@ -245,10 +245,12 @@ module YARD
         # Last minute modifications
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
-        options[:readme] ||= CodeObjects::ExtraFileObject.new(Dir.glob('README*').first)
+        readme = Dir.glob('README*').first
+        options[:readme] ||= CodeObjects::ExtraFileObject.new(readme) if readme
         if options[:onefile]
           options[:files] << options[:readme] if options[:readme]
-          options[:readme] = CodeObjects::ExtraFileObject.new(Dir.glob(files.first).first)
+          readme = Dir.glob(files.first).first
+          options[:readme] = CodeObjects::ExtraFileObject.new(readme) if readme
         end
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
