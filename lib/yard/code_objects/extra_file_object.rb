@@ -17,7 +17,7 @@ module YARD::CodeObjects
       self.filename = filename
       self.name = File.basename(filename).gsub(/\.[^.]+$/, '')
       self.attributes = SymbolHash.new(false)
-      parse_contents(contents ? [contents] : File.readlines(@filename))
+      parse_contents(contents || File.read(@filename))
     end
     
     alias path name
@@ -43,9 +43,10 @@ module YARD::CodeObjects
         
     private
     
-    # @param [Array<String>] contents the file contents
+    # @param [String] contents the file contents
     def parse_contents(contents)
       cut_index = 0
+      contents = contents.split("\n")
       contents.each_with_index do |line, index|
         case line
         when /^#!(\S+)\s*$/
@@ -63,7 +64,7 @@ module YARD::CodeObjects
         end
       end
       contents = contents[cut_index..-1] if cut_index > 0
-      self.contents = contents.join
+      self.contents = contents.join("\n")
     end
   end
 end
