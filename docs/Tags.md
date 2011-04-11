@@ -1,5 +1,6 @@
-Tags Overview
-=============
+# @title Tags Overview
+
+# Tags Overview
 
 Tags represent the metadata that can be added to documentation through the `@tag`
 style syntax:
@@ -15,8 +16,7 @@ way to access it later without having to parse the entire comment string. The
 rest of the document will describe the tag syntax, how to access the tag 
 metadata and how to extend YARD to support custom tags or override existing tags.
 
-Tag Syntax
-----------
+## Tag Syntax
 
 Tags begin with "@tagname" at the start of a comment line. Tags can span multiple
 lines if the subsequent lines are indented by more than one space. The following
@@ -87,8 +87,8 @@ As mentioned, types are optional, so the following is also valid:
 
 
 <a name="taglist"></a>
-List of Available Tags
-----------------------
+
+## List of Available Tags
 
 YARD supplies the following built-in tags:
 
@@ -229,8 +229,8 @@ YARD supplies the following built-in tags:
 
 
 <a name="reftags"></a>
-Reference Tags
---------------
+
+## Reference Tags
 
 Although attempt is made in YARD to leave as many of the syntax details as
 possible to the factory provider, there is a special tag syntax for referencing
@@ -268,11 +268,9 @@ method only references one of the tags by adding `username` before the reference
 Reference tags are represented by the {YARD::Tags::RefTag} class and are created
 directly during parsing by {YARD::Docstring}.
 
-Programmatic API
-================
+## Programmatic API
 
-Accessing Tag Information
--------------------------
+### Accessing Tag Information
 
 Tag metadata is added when a {YARD::Docstring} is added to a {file:docs/CodeObjects.md code object}
 using the {YARD::CodeObjects::Base#docstring=} attribute. In addition to adding
@@ -288,8 +286,7 @@ of tags. The `#tag` method is an alias for the first item in the list of tags.
 Also note that the `#tag`, `#tags` and `#has_tag?` methods are all convenience
 methods that delegate to the {YARD::Docstring} object described above.
 
-Adding Custom Tags
-------------------
+### Adding Custom Tags
 
 The `@tagname` tag used in the above examples is clearly not part of the tags
 that come with YARD. If such a tag would actually be part of documentation under
@@ -304,8 +301,7 @@ tag that stores simple text like our `@tagname` tag above, use:
 
 This will now allow YARD to add the metadata from `@tagname` to the docstring.
 
-Tag Factory Architecture
-------------------------
+## Tag Factory Architecture
 
 Recognizing a tag is one part of the process. Parsing the tag contents is the
 second step. YARD has a tag architecture that allows developers to add or completely

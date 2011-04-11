@@ -1,3 +1,5 @@
+# @markup markdown
+
 2011-04-06  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb, lib/yard/rubygems/specification.rb:

@@ -1,5 +1,4 @@
-Glossary
-========
+# Glossary
 
 * **Code Object**: Any explicitly defined Ruby source that describes a feature
   of the code. By default, this refers to classes, modules, methods, constants

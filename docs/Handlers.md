@@ -1,5 +1,6 @@
-Handlers Architecture
-=====================
+# @title Handlers Architecture
+
+# Handlers Architecture
 
 Handlers allow the processing of parsed source code. Handling is done after
 parsing to abstract away the implementation details of lexical and semantic
@@ -8,8 +9,7 @@ source statements as {file:docs/CodeObjects.md code objects}.
 
 ![Handlers Architecture Class Diagram](images/handlers-class-diagram.png)
 
-The Pipeline
-------------
+## The Pipeline
 
 After the {file:docs/Parser.md parser component} finishes analyzing the
 source, it is handed off for post-processing to the {YARD::Handlers::Processor}
@@ -19,8 +19,7 @@ the parser and delegating them to matching handlers. Handlers match when the
 The handler can then perform any action after being invoked by the `process`
 method.
 
-The Processor Class
--------------------
+## The Processor Class
 
 The main purpose of the processor, as mentioned above, is to traverse through
 the list of statements given to it by the parser. The processor also keeps
@@ -32,8 +31,7 @@ is most often the same as the namespace, except when parsing the body of a metho
 where the namespace would be the class/module the method is defined in and the 
 owner would be the method object itself.
 
-Implementing a Handler
-======================
+## Implementing a Handler
 
 This section covers the basics of implementing a *new-style* Ruby handler. For
 details on implementing a legacy handler, see the "API Differences" section below.
@@ -60,8 +58,7 @@ node types respectively (the latter refers to classes defined as `class << Somet
 The {YARD::Handlers::Base#statement statement} attribute refers to the current
 node (or statement) that is being handled by the handler.
 
-Handling a Method Call
-----------------------
+### Handling a Method Call
 
 In some cases, a developer might need to handle a method call. The parser can
 express a method call in many AST forms, so to simplify this process, a method
@@ -85,8 +82,7 @@ the following syntaxes:
       a_block
     end
     
-Creating a new Code Object
---------------------------
+### Creating a new Code Object
 
 Usually (but not always) handling is performed to create new code objects to add
 to the registry (for information about code objects, see {file:docs/CodeObjects.md this document}).
@@ -96,8 +92,7 @@ will be enough to add them to the registry. There is also a convenience
 on the newly created object, such as the file, line, source and docstring of the
 object. This method will be seen in the next example.
     
-Handling an Inner Block
------------------------
+### Handling an Inner Block
 
 By default, the parser gives the processor class a list of all the top level
 statements and the processor parses only those top level statements. If an inner
@@ -125,8 +120,7 @@ wish to parse. Note here that when parsing objects like modules and classes,
 we set the namespace for the duration of the block parsing by setting options
 on the `parse_block` method.
 
-API Differences for Legacy Handler
-----------------------------------
+### API Differences for Legacy Handler
 
 Because the legacy handler uses the legacy parser and therefore a different kind
 of AST, there are subtle differences in the handler API. Most importantly, the

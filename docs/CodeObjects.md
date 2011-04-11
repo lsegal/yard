@@ -1,13 +1,13 @@
-CodeObjects Architecture
-========================
+# @title CodeObjects Architecture
+
+# CodeObjects Architecture
 
 Code objects are Ruby objects that describe the code being documented. For instance,
 all classes, modules, methods, etc. are all extracted from the Ruby source as code
 objects. All of these code objects extend from the {YARD::CodeObjects::Base} class, which
 provides basic attributes like source location, source code, name and path.
 
-CodeObjects Organization
-------------------------
+## CodeObjects Organization
 
 Code objects are divided into two basic types. {YARD::CodeObjects::NamespaceObject NamespaceObjects}
 and non-namespace objects. A namespace object refers to any object in Ruby that can have
@@ -23,8 +23,7 @@ The following is an overview of the classes within the `CodeObjects` namespace:
 
 ![CodeObjects Class Diagram](images/code-objects-class-diagram.png)
 
-Unique Path Representation
---------------------------
+## Unique Path Representation
 
 All CodeObjects are uniquely defined by their implementation of {YARD::CodeObjects::Base#path}.
 This path is used to locate or store a code object in the {YARD::Registry}. It is therefore
@@ -41,8 +40,7 @@ would have the following respective paths:
 * Constant `VERSION` inside class `YARD`: `YARD::VERSION`
 * Class variable `@@abc` inside class `A`: `A::@@abc`
 
-Registry
---------
+## Registry
 
 CodeObjects classes are coupled with the {YARD::Registry} class which keeps track of
 all instantiated code objects. This is an explicit design choice to allow objects
@@ -51,8 +49,7 @@ above, this coupling is a result of the fact that each object is uniquely identi
 its path, which is used to implement lookups. You can read more about the registry 
 in the {YARD::Registry} class.
 
-Identity Map
-------------
+## Identity Map
 
 Code objects are instantiated using an identity-map like implementation that guarantees
 only one unique Ruby object exists for an object described by a specific path. This
@@ -62,8 +59,7 @@ the {YARD::Registry}. The following example will only create one object:
     id = ClassObject.new(:root, "MyClass").object_id #=> 13352
     ClassObject.new(:root, "MyClass").object_id #=> 13352 
 
-Proxy Objects
--------------
+## Proxy Objects
 
 In addition to providing access to existing objects, a {YARD::CodeObjects::Proxy}
 class exists which can represent an object at a path that may or may not have been
@@ -80,8 +76,7 @@ for example:
     P(:InvalidObject).type == :proxy  #=> true
     P(:InvalidObject).is_a?(Proxy)    #=> true
 
-Adding Data to Code Objects
----------------------------
+## Adding Data to Code Objects
 
 Code objects act as hash-like structures that allow any arbitrary value to be set.
 This allows easy extending of existing objects without creating custom subclasses.
@@ -96,8 +91,7 @@ well as like any other method:
 
     object.modified_at #=> 2009-06-03 20:08:46 -0400
 
-Creating a Custom CodeObject
-----------------------------
+## Creating a Custom CodeObject
 
 It should first be mentioned that creating a custom code object should not be
 necessary in most cases, except when functionality that cannot be represented

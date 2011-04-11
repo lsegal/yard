@@ -1,5 +1,6 @@
-Getting Started with YARD
-=========================
+# @title Getting Started Guide
+
+# Getting Started with YARD
 
 There are a few ways which YARD can be of use to you or your project. This 
 document will cover the most common ways to use YARD:
@@ -13,8 +14,7 @@ document will cover the most common ways to use YARD:
 
 <a name="docing"></a>
 
-Documenting Code with YARD
---------------------------
+## Documenting Code with YARD
 
 By default, YARD is compatible with the same RDoc syntax most Ruby developers
 are already familiar with. However, one of the biggest advantages of YARD is
@@ -61,8 +61,7 @@ Using tags we can add semantic metadata to our code without worrying about
 presentation. YARD will handle presentation for us when we decide to generate
 documentation later.
 
-Which Markup Format?
---------------------
+## Which Markup Format?
 
 YARD does not impose a specific markup. The above example uses standard RDoc
 markup formatting, but YARD also supports textile and markdown via the 
@@ -72,8 +71,7 @@ using markdown. YARD, however, does add a few important syntaxes that are
 processed no matter which markup formatting you use, such as tag support 
 and inter-document linking. These syntaxes are discussed below.
 
-Adding Tags to Documentation
-----------------------------
+## Adding Tags to Documentation
 
 The tag syntax that YARD uses is the same @tag-style syntax you may have seen 
 if you've ever coded in Java, Python, PHP, Objective-C or a myriad of other 
@@ -150,8 +148,7 @@ and return tags:
 The above copies all of the param and return tags from `#get`. Note that you
 cannot copy individual tags of a specific type with this syntax.
 
-Declaring Types
----------------
+## Declaring Types
 
 Some tags also have an optional "types" field which let us declare a list of
 types associated with the tag. For instance, a return tag can be declared
@@ -187,8 +184,7 @@ and recommended conventions for writing type specifications, see
 {http://yardoc.org/types.html}. Note that these conventions may change every now 
 and then, although we are working on a more "formal" type specification proposal.
 
-Inter-document Linking
-----------------------
+## Inter-document Linking
 
 YARD supports a special syntax to link to other code objects, URLs, files,
 or embed docstrings between documents. This syntax has the general form
@@ -252,11 +248,10 @@ The docstring for Bar becomes:
 Note that this prefix currently only works for objects.
 
 <a name="using"></a>
-Using YARD to Generate Documentation
-====================================
 
-`yard` Executable
------------------
+## Using YARD to Generate Documentation
+
+### `yard` Executable
 
 YARD ships with a single executable aptly named `yard`. In addition to
 generating standard documentation for your project, you would use this tool 
@@ -288,8 +283,7 @@ full list):
 Note that `yardoc` is an alias for `yard doc`, and `yri` is an alias for
 `yard ri`. These commands are maintained for backwards compatibility.
 
-`.yardopts` Options File
-------------------------
+### `.yardopts` Options File
 
 Unless your documentation is very small, you'll end up needing to run `yardoc`
 with many options.  The `yardoc` tool will use the options found in this file.
@@ -315,8 +309,8 @@ Note that options for `yardoc` are discussed in the {file:README.md README},
 and a full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
 
 <a name="docing"></a>
-Configuring YARD
-================
+
+## Configuring YARD
 
 YARD (0.6.2+) supports a global configuration file stored in `~/.yard/config`.
 This file is stored as a YAML file and can contain arbitrary keys and values
@@ -337,8 +331,8 @@ using the `yard config` command. To list your configuration, use `yard config --
 To view a key, use `yard config ITEM`, and to set it, use `yard config ITEM VALUE`.
 
 <a name="extending"></a>
-Extending YARD
-==============
+
+## Extending YARD
 
 There are many ways to extend YARD to support non-standard Ruby syntax (DSLs), 
 add new meta-data tags or programmatically access the intermediate metadata
@@ -354,16 +348,16 @@ For information on accessing the data YARD stores about your documentation,
 look at the {file:docs/CodeObjects.md} architecture document.
 
 <a name="templating"></a>
-Templating YARD
-===============
+
+## Templating YARD
 
 In many cases you may want to change the style of YARD's templates or add extra
 information after extending it. The {file:docs/Templates.md} architecture
 document covers the basics of how YARD's templating system works.
 
 <a name="plugins"></a>
-Plugin Support
-==============
+
+## Plugin Support
 
 As of 0.4, YARD will automatically load any gem named with the prefix of
 `yard-` or `yard_`. You can use this to load a custom plugin that 
