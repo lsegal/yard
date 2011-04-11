@@ -63,6 +63,12 @@ describe YARD::Serializers::FileSystemSerializer do
         s.serialized_path(m).should == value
       end
     end
+    
+    it "should handle ExtraFileObject's" do
+      s = Serializers::FileSystemSerializer.new
+      e = CodeObjects::ExtraFileObject.new('filename.txt', '')
+      s.serialized_path(e).should == 'file.filename.html'
+    end
 
     it "should differentiate instance and class methods from serialized path" do
       s = Serializers::FileSystemSerializer.new

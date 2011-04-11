@@ -41,18 +41,22 @@ module YARD
       
       # Implements the serialized path of a code object.
       # 
-      # @param [CodeObjects::Base, String] object the object to get a path for.
-      #   The path of a string is the string itself.
+      # @param [CodeObjects::Base, CodeObjects::ExtraFileObject, String] object 
+      #   the object to get a path for. The path of a string is the string itself.
       # @return [String] if object is a String, returns
       #   object, otherwise the path on disk (without the basepath).
       def serialized_path(object)
         return object if object.is_a?(String)
 
-        objname = object != YARD::Registry.root ? object.name.to_s : "top-level-namespace"
-        objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
-        fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
-        if object.namespace && object.namespace.path != ""
-          fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
+        if object.is_a?(CodeObjects::ExtraFileObject)
+          fspath = ['file.' + object.name + (extension.empty? ? '' : ".#{extension}")]
+        else
+          objname = object != YARD::Registry.root ? object.name.to_s : "top-level-namespace"
+          objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
+          fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
+          if object.namespace && object.namespace.path != ""
+            fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
+          end
         end
         
         # Don't change the filenames, it just makes it more complicated

@@ -183,10 +183,12 @@ module YARD
       # (see BaseHelper#link_file)
       def link_file(filename, title = nil, anchor = nil)
         if CodeObjects::ExtraFileObject === filename
-          title = filename.title
-          filename = filename.filename
+          file = filename
+        else
+          contents = File.file?(filename) ? nil : ''
+          file = CodeObjects::ExtraFileObject.new(filename, contents)
         end
-        link_url(url_for_file(filename, anchor), title)
+        link_url(url_for_file(file, anchor), title || file.title)
       end
       
       # (see BaseHelper#link_include_object)
@@ -292,12 +294,13 @@ module YARD
         end
         from = serializer.serialized_path(fromobj)
         if filename == options[:readme]
-          filename = 'index'
+          path = 'index.html'
         else
-          filename = 'file.' + File.basename(filename).gsub(/\.[^.]+$/, '')
+          path = serializer.serialized_path(filename)
         end
-        link = File.relative_path(from, filename)
-        link + '.html' + (anchor ? '#' + urlencode(anchor) : '')
+        link = File.relative_path(from, path)
+        link += (anchor ? '#' + urlencode(anchor) : '')
+        link
       end
       
       # @group Formatting Objects and Attributes

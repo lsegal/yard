@@ -1,17 +1,23 @@
 module YARD::CodeObjects
-  # A ClassObject represents a Ruby class in source code. It is a {ModuleObject}
-  # with extra inheritance semantics through the superclass.
+  # An ExtraFileObject represents an extra documentation file (README or other
+  # file). It is not strictly a CodeObject (does not inherit from `Base`) although
+  # it implements `path`, `name` and `type`, and therefore should be structurally
+  # compatible with most CodeObject interfaces.
   class ExtraFileObject
     attr_accessor :filename
     attr_accessor :attributes
     attr_accessor :name
     attr_accessor :contents
     
-    def initialize(filename)
+    # Creates a new extra file object.
+    # @param [String] filename the location on disk of the file
+    # @param [String] contents the file contents. If not set, the contents
+    #   will be read from disk using the +filename+.
+    def initialize(filename, contents = nil)
       self.filename = filename
       self.name = File.basename(filename).gsub(/\.[^.]+$/, '')
       self.attributes = SymbolHash.new(false)
-      parse_contents
+      parse_contents(contents ? [contents] : File.readlines(@filename))
     end
     
     alias path name
@@ -21,14 +27,24 @@ module YARD::CodeObjects
     end
     
     def inspect
-      "#<yardoc extra_file #{filename} attrs=#{attributes.inspect}>"
+      "#<yardoc #{type} #{filename} attrs=#{attributes.inspect}>"
     end
     alias to_s inspect
+    
+    def type; 'extra_file' end
+    
+    def ==(other)
+      return false unless self.class === other
+      other.filename == filename
+    end
+    alias eql? ==
+    alias equal? ==
+    def hash; filename.hash end
         
     private
     
-    def parse_contents
-      contents = File.readlines(@filename)
+    # @param [Array<String>] contents the file contents
+    def parse_contents(contents)
       cut_index = 0
       contents.each_with_index do |line, index|
         case line

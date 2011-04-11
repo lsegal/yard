@@ -76,7 +76,7 @@ module YARD::Templates::Helpers
             ''
           end  
         when /^file:(\S+?)(?:#(\S+))?$/
-          link_file($1, args[1] ? args[1] : $1, $2)
+          link_file($1, args[1] ? args[1] : nil, $2)
         else
           link_object(*args)
         end
@@ -137,6 +137,7 @@ module YARD::Templates::Helpers
     # @return [String] the link to the file
     # @since 0.5.5
     def link_file(filename, title = nil, anchor = nil)
+      return filename.filename if CodeObjects::ExtraFileObject === filename
       filename
     end
     
