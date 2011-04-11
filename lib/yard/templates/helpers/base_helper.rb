@@ -66,6 +66,15 @@ module YARD::Templates::Helpers
             log.warn "Cannot find object at `#{path}' for inclusion"
             ""
           end
+        when /^render:(\S+)/
+          path = $1
+          if obj = YARD::Registry.resolve(object, path)
+            opts = options.dup
+            opts.delete(:serializer)
+            obj.format(opts)
+          else
+            ''
+          end  
         when /^file:(\S+?)(?:#(\S+))?$/
           link_file($1, args[1] ? args[1] : $1, $2)
         else
