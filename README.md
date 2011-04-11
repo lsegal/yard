@@ -139,7 +139,7 @@ YARD server, and so on. To view a list of available YARD commands, type:
 Plugins can also add commands to the `yard` executable to provide extra
 functionality.
 
-#### Generating Documentation
+### Generating Documentation
 
 <span class="note">The `yardoc` executable is a shortcut for `yard doc`.</span>
 
@@ -183,7 +183,7 @@ the switches separated by whitespace (newlines or space) to pass to yardoc
 whenever it is run. A full overview of the `.yardopts` file can be found in
 {YARD::CLI::Yardoc}.
 
-#### Queries
+### Queries
 
 The `yardoc` tool also supports a `--query` argument to only include objects
 that match a certain data or meta-data query. The query syntax is Ruby, though
@@ -254,14 +254,14 @@ RubyGems. To serve documentation for a project you are working on, simply run:
 And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at [http://localhost:8808](http://localhost:8808).
 
-#### Live Reloading
+### Live Reloading
 
 If you want to serve documentation on a project while you document it so that
 you can preview the results, simply pass `--reload` (`-r`) to the above command
 and YARD will reload any changed files on each request. This will allow you to
 change any documentation in the source and refresh to see the new contents.
 
-#### Serving Gems
+### Serving Gems
 
 To serve documentation for all installed gems, call:
 

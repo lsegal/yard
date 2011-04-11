@@ -12,8 +12,9 @@ document will cover the most common ways to use YARD:
 * [Plugin Support](#plugins)
 
 <a name="docing"></a>
+
 Documenting Code with YARD
-==========================
+--------------------------
 
 By default, YARD is compatible with the same RDoc syntax most Ruby developers
 are already familiar with. However, one of the biggest advantages of YARD is
