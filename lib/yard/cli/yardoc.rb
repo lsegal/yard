@@ -244,10 +244,10 @@ module YARD
         # Last minute modifications
         self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
-        options[:readme] ||= Dir.glob('README*').first
+        options[:readme] ||= CodeObjects::ExtraFileObject.new(Dir.glob('README*').first)
         if options[:onefile]
           options[:files] << options[:readme] if options[:readme]
-          options[:readme] = Dir.glob(files.first).first 
+          options[:readme] = CodeObjects::ExtraFileObject.new(Dir.glob(files.first).first)
         end
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
@@ -363,7 +363,7 @@ module YARD
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
           if File.file?(file)
-            options[:files] << file
+            options[:files] << CodeObjects::ExtraFileObject.new(file)
           else
             log.warn "Could not find extra file: #{file}"
           end
@@ -539,7 +539,7 @@ module YARD
 
         opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page of documentation.') do |readme|
           if File.file?(readme)
-            options[:readme] = readme
+            options[:readme] = CodeObjects::ExtraFileObject.new(readme)
           else 
             log.warn "Could not find readme file: #{readme}"
           end

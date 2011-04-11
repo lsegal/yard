@@ -2,15 +2,14 @@ include Helpers::ModuleHelper
 
 def init
   options[:objects] = objects = run_verifier(options[:objects])
-  options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
+  options[:files] = ([options[:readme]] + options[:files]).compact
   options[:readme] = options[:files].first
-  options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
   
   return serialize_onefile if options[:onefile]
   generate_assets
   serialize('_index.html')
   options[:files].each_with_index do |file, i| 
-    serialize_file(file, i == 0 ? options[:title] : nil) 
+    serialize_file(file, file.title) 
   end
 
   options.delete(:objects)
@@ -52,16 +51,13 @@ end
 def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
-  options[:page_title] = title
-  options[:serialized_path] = 'file.' + File.basename(file.gsub(/\.[^.]+$/, '')) + '.html'
+  outfile = 'file.' + file.name + '.html'
 
   serialize_index(options) if file == options[:readme]
-  Templates::Engine.with_serializer(options[:serialized_path], options[:serializer]) do
+  Templates::Engine.with_serializer(outfile, options[:serializer]) do
     T('layout').run(options)
   end
   options.delete(:file)
-  options.delete(:serialized_path)
-  options.delete(:page_title)
 end
 
 def asset(path, content)

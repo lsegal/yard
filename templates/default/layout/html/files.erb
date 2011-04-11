@@ -3,7 +3,7 @@
   <ul id="files">
   <% n = 1 %>
   <% @files.each_with_index do |file, i| %>
-    <li class="r<%= n %>"><%= link_file(file, File.basename(file).gsub(/\.[^.]+$/, '')) %></li>
+    <li class="r<%= n %>"><%= link_file(file) %></li>
     <% n = n == 2 ? 1 : 2 %>
   <% end %>
   </ul>

@@ -169,7 +169,7 @@ module YARD
             link = linkify(name, title)
             if link == name || link == title
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
-              file = (@file ? @file : object.file) || '(unknown)'
+              file = (@file ? @file.filename : object.file) || '(unknown)'
               line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
               log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
               log.warn((match[1] ? '...' : '') + match[2].gsub("\n","") + (match[3] ? '...' : '')) if match
@@ -182,6 +182,10 @@ module YARD
       
       # (see BaseHelper#link_file)
       def link_file(filename, title = nil, anchor = nil)
+        if CodeObjects::ExtraFileObject === filename
+          title = filename.title
+          filename = filename.filename
+        end
         link_url(url_for_file(filename, anchor), title)
       end
       

@@ -27,6 +27,7 @@ module YARD
     autoload :ClassVariableObject,  __p('code_objects/class_variable_object')
     autoload :ConstantObject,       __p('code_objects/constant_object')
     autoload :ExtendedMethodObject, __p('code_objects/extended_method_object')
+    autoload :ExtraFileObject,      __p('code_objects/extra_file_object')
     autoload :MethodObject,         __p('code_objects/method_object')
     autoload :ModuleObject,         __p('code_objects/module_object')
     autoload :NamespaceObject,      __p('code_objects/namespace_object')
