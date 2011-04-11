@@ -109,7 +109,9 @@ describe YARD::CLI::Yardoc do
     should_accept('--yardopts') do |arg|
       @yardoc = CLI::Yardoc.new
       @yardoc.use_document_file = false
-      @yardoc.should_receive(:yardopts).and_return([])
+      @yardoc.should_receive(:yardopts).at_least(1).times.and_return([])
+      @yardoc.parse_arguments(arg)
+      @yardoc.use_yardopts_file.should == true
       @yardoc.parse_arguments('--no-yardopts', arg)
       @yardoc.use_yardopts_file.should == true
     end
@@ -118,6 +120,8 @@ describe YARD::CLI::Yardoc do
       @yardoc = CLI::Yardoc.new
       @yardoc.use_document_file = false
       @yardoc.should_not_receive(:yardopts)
+      @yardoc.parse_arguments(arg)
+      @yardoc.use_yardopts_file.should == false
       @yardoc.parse_arguments('--yardopts', arg)
       @yardoc.use_yardopts_file.should == false
     end

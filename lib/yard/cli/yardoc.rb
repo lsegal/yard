@@ -232,10 +232,10 @@ module YARD
         
         # Hack: parse out --no-yardopts, --no-document before parsing files
         ['document', 'yardopts'].each do |file|
-          without, with = args.index("--no-#{file}") || 0, args.index("--#{file}") || 0
+          without, with = args.index("--no-#{file}") || -2, args.index("--#{file}") || -1
           send("use_#{file}_file=", false) if without > with
         end
-        
+
         # Parse files and then command line arguments
         optparse(*support_rdoc_document_file!) if use_document_file
         optparse(*yardopts) if use_yardopts_file
