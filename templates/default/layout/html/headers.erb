@@ -1,5 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=<%= charset %>" />
-<title><%= @page_title %></title>
+<title>
+  <%= h @page_title %>
+  <% if options[:title] && @page_title != options[:title] %>
+    &mdash; <%= h options[:title] %>
+  <% end %>
+</title>
 <link rel="stylesheet" href="<%= url_for("css/style.css") %>" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="<%= url_for("css/common.css") %>" type="text/css" media="screen" charset="utf-8" />
 <% if @extra_css %>

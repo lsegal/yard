@@ -164,6 +164,7 @@ module YARD
           :hide_void_return => false,
           :no_highlight => false, 
           :files => [],
+          :title => "Documentation by YARD #{YARD::VERSION}",
           :verifier => Verifier.new
         )
         @visibilities = [:public]
