@@ -49,3 +49,11 @@ def diskfile
   data = htmlify(markup_file_contents(@contents), markup_for_file(@contents, @file))
   "<div id='filecontents'>" + data + "</div>"
 end
+
+def stylesheets
+  ["css/style.css", "css/common.css" ]
+end
+
+def javascripts
+  [ "js/jquery.js", "js/app.js" ]
+end
