@@ -154,13 +154,15 @@ module YARD
       # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(/<(\/)?(pre|code|tt)|\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/m) do |str|
-          closed, tag, name, title, match = $1, $2, $3, $4, $&
+        text.gsub(/<(\/)?(pre|code|tt)|(\\)?\{(\S+?)(?:\s(.*?\S))?\}(?=[\W<]|.+<\/|$)/m) do |str|
+          closed, tag, escape, name, title, match = $1, $2, $3, $4, $5, $&
           if tag
             code_tags += (closed ? -1 : 1)
             next str
           end
           next str unless code_tags == 0
+          
+          next(match[1..-1]) if escape
           
           next(match) if name[0,1] == '|'
           if object.is_a?(String)

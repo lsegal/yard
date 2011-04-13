@@ -207,6 +207,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
       results
     end
+    
+    it "should escape {} syntax with backslash (\\{foo bar})" do
+      input  = '\{foo bar} \{XYZ} \{file:FOO}'
+      output = '{foo bar} {XYZ} {file:FOO}'
+      resolve_links(input).should == output
+    end
 
     it "should link static files with file: prefix" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
