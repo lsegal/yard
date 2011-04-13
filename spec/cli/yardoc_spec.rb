@@ -44,7 +44,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.files.should == ['lib/**/*.rb', 'ext/**/*.c']
     end
     
-    it "should be nil as default markup type (but defaults to rdoc and falls back on none)" do
+    it "should use rdoc as default markup type (but falls back on none)" do
       @yardoc.options[:markup].should == :rdoc
     end
     
