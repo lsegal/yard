@@ -1,6 +1,9 @@
 def init
   @breadcrumb = []
-
+  
+  @stylesheets = [ "css/style.css",  "css/common.css" ]
+  @javascripts = [ "js/jquery.js", "js/app.js" ]
+  
   if @onefile
     sections :layout
   elsif @file
