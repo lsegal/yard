@@ -8,6 +8,7 @@ def init
   
   options[:stylesheets] = stylesheets
   options[:javascripts] = javascripts
+  options[:search_fields] = menu_lists
   
   return serialize_onefile if options[:onefile]
   generate_assets
@@ -105,9 +106,9 @@ end
 # The list of search links and drop-down menus
 #
 def menu_lists
-  [ { :type => 'class', :title => 'Classes' },
-    { :type => 'method', :title => 'Methods' }, 
-    { :type => 'file', :title => 'Files' } ]
+  [ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
+    { :type => 'method', :title => 'Methods', :search_title => 'Method List' }, 
+    { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
 end
 
 def generate_assets

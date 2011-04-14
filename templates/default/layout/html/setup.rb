@@ -3,6 +3,7 @@ def init
   
   @stylesheets = options[:stylesheets]
   @javascripts = options[:javascripts]
+  @search_fields = options[:search_fields]
   
   if @onefile
     sections :layout
@@ -54,9 +55,13 @@ def diskfile
 end
 
 def stylesheets
-  options[:stylesheets]
+  @stylesheets
 end
 
 def javascripts
-  options[:javascripts]
+  @javascripts
+end
+
+def search_fields
+  @search_fields
 end
