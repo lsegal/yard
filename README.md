@@ -289,6 +289,10 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **April.14.11**: 0.6.8 release
+    - Fix regression in RDoc 1.x markup loading
+    - Fix regression in loading of markup libraries for `yard server`
+
 - **April.6.11**: 0.6.7 release
     - Fix has_rdoc gem specification issue with new RubyGems plugin API (oops!)
 
