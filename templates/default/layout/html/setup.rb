@@ -1,6 +1,9 @@
 def init
   @breadcrumb = []
-
+  
+  @stylesheets = options[:stylesheets]
+  @javascripts = options[:javascripts]
+  
   if @onefile
     sections :layout
   elsif @file
@@ -51,9 +54,9 @@ def diskfile
 end
 
 def stylesheets
-  ["css/style.css", "css/common.css" ]
+  options[:stylesheets]
 end
 
 def javascripts
-  [ "js/jquery.js", "js/app.js" ]
+  options[:javascripts]
 end
