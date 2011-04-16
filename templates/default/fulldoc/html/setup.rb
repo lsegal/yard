@@ -58,7 +58,7 @@ end
 # e.g. Class List
 #
 def stylesheets_full_list
-  [ 'css/common.css', 'css/full_list.css' ]
+  [ 'css/full_list.css', 'css/common.css' ]
 end
 
 def serialize(object)
