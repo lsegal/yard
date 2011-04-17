@@ -2,15 +2,18 @@ include Helpers::ModuleHelper
 
 def init
   options[:objects] = objects = run_verifier(options[:objects])
-  options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
+  options[:files] = ([options[:readme]] + options[:files]).compact
   options[:readme] = options[:files].first
-  options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
+  
+  options[:stylesheets] = stylesheets
+  options[:javascripts] = javascripts
+  options[:search_fields] = menu_lists
   
   return serialize_onefile if options[:onefile]
   generate_assets
   serialize('_index.html')
   options[:files].each_with_index do |file, i| 
-    serialize_file(file, i == 0 ? options[:title] : nil) 
+    serialize_file(file, file.title) 
   end
 
   options.delete(:objects)
@@ -27,6 +30,36 @@ def init
   end
 end
 
+#
+# The core javascript files for the documentation template
+#
+def javascripts
+  [ 'js/jquery.js', 'js/app.js' ]
+end
+
+#
+# Javascript files that are additionally loaded for the searchable full lists
+# e.g. Class List, Method List, File List
+#
+def javascripts_full_list
+  [ 'js/jquery.js', 'js/full_list.js' ]
+end
+
+#
+# The core stylesheets for the documentation template
+#
+def stylesheets
+  [ 'css/style.css', 'css/common.css' ]
+end
+
+#
+# Stylesheet files that are additionally loaded for the searchable full lists
+# e.g. Class List, Method List, File List
+#
+def stylesheets_full_list
+  [ 'css/full_list.css', 'css/common.css' ]
+end
+
 def serialize(object)
   options[:object] = object
   serialize_index(options) if object == '_index.html' && options[:files].empty?
@@ -36,8 +69,8 @@ def serialize(object)
 end
 
 def serialize_onefile
-  options[:css_data] = file('css/style.css', true) + "\n" + file('css/common.css', true)
-  options[:js_data] = file('js/jquery.js', true) + file('js/app.js', true)
+  options[:css_data] = stylesheets.map{|sheet| file(sheet,true) }.join("\n")
+  options[:js_data] = javascripts.map{|script| file(script,true) }.join("")
   Templates::Engine.with_serializer('index.html', options[:serializer]) do
     T('onefile').run(options)
   end
@@ -52,32 +85,52 @@ end
 def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
-  options[:page_title] = title
-  options[:serialized_path] = 'file.' + File.basename(file.gsub(/\.[^.]+$/, '')) + '.html'
+  outfile = 'file.' + file.name + '.html'
 
   serialize_index(options) if file == options[:readme]
-  Templates::Engine.with_serializer(options[:serialized_path], options[:serializer]) do
+  Templates::Engine.with_serializer(outfile, options[:serializer]) do
     T('layout').run(options)
   end
   options.delete(:file)
-  options.delete(:serialized_path)
-  options.delete(:page_title)
 end
 
 def asset(path, content)
   options[:serializer].serialize(path, content) if options[:serializer]
 end
 
+#
+# The list of search links and drop-down menus
+#
+def menu_lists
+  [ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
+    { :type => 'method', :title => 'Methods', :search_title => 'Method List' }, 
+    { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
+end
+
 def generate_assets
-  %w( js/jquery.js js/app.js js/full_list.js 
-      css/style.css css/full_list.css css/common.css ).each do |file|
+  
+  (javascripts + javascripts_full_list + 
+    stylesheets + stylesheets_full_list).uniq.each do |file|
     asset(file, file(file, true))
   end
   
+  #@javascripts = javascripts_full_list
+  #@stylesheets = stylesheets_full_list
+  
   @object = Registry.root
-  generate_method_list
-  generate_class_list
-  generate_file_list
+  
+  menu_lists.each do |list|
+    
+    list_generator_method = "generate_#{list[:type]}_list"
+    
+    if respond_to?(list_generator_method)
+      send(list_generator_method)
+    else
+      log.error "Unable to generate '#{list[:title]}' list because no method " + 
+        "'#{list_generator_method}' exists"
+    end
+  end
+  
   generate_frameset
 end
 
@@ -107,6 +160,8 @@ def generate_file_list
 end
 
 def generate_frameset
+  @javascripts = javascripts_full_list
+  @stylesheets = stylesheets_full_list
   asset('frames.html', erb(:frames))
 end
 
