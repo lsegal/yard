@@ -1,6 +1,10 @@
 def init
   @breadcrumb = []
-
+  
+  @stylesheets = options[:stylesheets]
+  @javascripts = options[:javascripts]
+  @search_fields = options[:search_fields]
+  
   if @onefile
     sections :layout
   elsif @file
@@ -49,4 +53,16 @@ def diskfile
   @file.attributes[:markup] ||= markup_for_file('', @file.filename)
   data = htmlify(@file.contents, @file.attributes[:markup])
   "<div id='filecontents'>" + data + "</div>"
+end
+
+def stylesheets
+  @stylesheets
+end
+
+def javascripts
+  @javascripts
+end
+
+def search_fields
+  @search_fields
 end

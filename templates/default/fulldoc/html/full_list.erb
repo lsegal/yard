@@ -3,10 +3,14 @@
 <html>
   <head>
     <meta name="Content-Type" content="text/html; charset=<%= charset %>" />
-    <link rel="stylesheet" href="css/full_list.css" type="text/css" media="screen" charset="utf-8" />
-    <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
-    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/full_list.js"></script>
+    <% stylesheets_full_list.each do |stylesheet| %>
+      <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" media="screen" charset="utf-8" />
+    <% end %>
+    
+    <% javascripts_full_list.each do |javascript| %>
+      <script type="text/javascript" charset="utf-8" src="<%= url_for(javascript) %>"></script>
+    <% end %>
+    
     <base id="base_target" target="_parent" />
   </head>
   <body>
@@ -19,16 +23,15 @@
     <div id="content">
       <h1 id="full_list_header"><%= @list_title %></h1>
       <div id="nav">
-        <a target="_self" href="class_list.html">Classes</a> | 
-        <a target="_self" href="method_list.html">Methods</a> |
-        <a target="_self" href="file_list.html">Files</a>
+        <% menu_lists.each do |list| %>
+          <a target="_self" href="<%= list[:type] %>_list.html"><%= list[:title] %></a>
+        <% end %>
       </div>
       <div id="search">Search: <input type="text" /></div>
 
-      <ul id="full_list" class="<%= @list_type %>">
+      <ul id="full_list" class="<%= @list_class || @list_type %>">
         <%= erb "full_list_#{@list_type}" %>
       </ul>
     </div>
   </body>
 </html>
-
