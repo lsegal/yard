@@ -1,8 +1,9 @@
-_Yardoc
-.DS_Store
-*.pdf
-.yardoc
 *.gem
-/pkg
-/doc
+*.pdf
+.DS_Store
+.yardoc
 /coverage
+/doc
+/pkg
+Gemfile.lock
+_Yardoc

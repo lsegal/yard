@@ -19,4 +19,9 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
+  s.add_development_dependency 'bluecloth', '~> 2.1'
+  s.add_development_dependency 'rake', '~> 0.8'
+  s.add_development_dependency 'rack', '~> 1.2'
+  s.add_development_dependency 'RedCloth', '~> 4.2'
+  s.add_development_dependency 'rspec', '~> 2.5'
 end
