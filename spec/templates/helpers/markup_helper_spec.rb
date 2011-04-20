@@ -62,6 +62,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
       @gen.should_receive(:require).with('kramdown').and_raise(LoadError)
       @gen.should_receive(:require).with('maruku').and_raise(LoadError)
       @gen.should_receive(:require).with('rpeg-markdown').and_raise(LoadError)
+      @gen.should_receive(:require).with('redcarpet').and_raise(LoadError)
       @gen.should_receive(:require).with('rdiscount').and_return(true)
       @gen.should_receive(:eval).with('::RDiscount').and_return(true)
       @gen.stub!(:options).and_return({:markup => :markdown})

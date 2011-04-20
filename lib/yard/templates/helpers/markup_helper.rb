@@ -23,20 +23,21 @@ module YARD
       MARKUP_PROVIDERS = {
         :markdown => [
           {:lib => :bluecloth, :const => 'BlueCloth'},
-          {:lib => :kramdown, :const => "Kramdown::Document"},
+          {:lib => :kramdown, :const => 'Kramdown::Document'},
           {:lib => :maruku, :const => 'Maruku'},
-          {:lib => :"rpeg-markdown", :const => "PEGMarkdown"},
-          {:lib => :rdiscount, :const => "RDiscount"}
+          {:lib => :'rpeg-markdown', :const => 'PEGMarkdown'},
+          {:lib => :redcarpet, :const => 'Redcarpet'},
+          {:lib => :rdiscount, :const => 'RDiscount'},
         ],
         :textile => [
-          {:lib => :redcloth, :const => 'RedCloth'}
+          {:lib => :redcloth, :const => 'RedCloth'},
         ],
         :rdoc => [
           {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
         :text => [],
         :html => [],
-        :none => []
+        :none => [],
       }
       
       # Returns a list of extensions for various markup types. To register
