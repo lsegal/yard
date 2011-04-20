@@ -12,7 +12,7 @@ The above example adds metadata under the name `tagname` to the Foo class object
 
 Tags are the best way to add arbitrary metadata when documenting an object in a
 way to access it later without having to parse the entire comment string. The
-rest of the document will describe the tag syntax, how to access the tag 
+rest of the document will describe the tag syntax, how to access the tag
 metadata and how to extend YARD to support custom tags or override existing tags.
 
 Tag Syntax
@@ -22,18 +22,18 @@ Tags begin with "@tagname" at the start of a comment line. Tags can span multipl
 lines if the subsequent lines are indented by more than one space. The following
 syntax is valid:
 
-    # @tagname This is 
+    # @tagname This is
     #   tag data
     # but this is not
-    
+
 In the above example, "@tagname" will have the text *"This is tag data"*.
 
 If a tag's data begins with `(see NAME)` it is considered a "reference tag".
 The syntax and semantics of a reference tag are discussed in the section below
 titled "[Reference Tags](#reftags)"
 
-Although custom tags can be parsed in any way, the built-in tags follow a few 
-common syntax structures by convention in order to simplify the syntax. The 
+Although custom tags can be parsed in any way, the built-in tags follow a few
+common syntax structures by convention in order to simplify the syntax. The
 following syntaxes are available:
 
 ### Freeform Data
@@ -42,7 +42,7 @@ This syntax has no special syntax, it is simply a tagname followed by any
 data.
 
     @tagname data here
-    
+
 ### Freeform Data With Title
 
 Occasionally a freeform tag may reserve the first line for a title (or some
@@ -53,7 +53,7 @@ first line is the method signature for the overload. Here is an example of both:
 
     @example Reverse a string
       "hello world".reverse
-      
+
     @overload request(method = :get, url = 'http://example.com')
       Performs a request on +url+
       @param [Symbol] method the request method
@@ -67,7 +67,7 @@ tag. Type information is specified as a freeform list of Ruby types, duck
 types or literal values. The following is a valid tag with type information:
 
     @return [String, #read] a string or object that responds to #read
-    
+
 ### Data With Name and Optional Type Information
 
 A special case of the above data with optional type information is the case
@@ -80,7 +80,7 @@ shows how this can be used:
 Note that "url" in the above example is the key name. The syntax is of the form:
 
     @tagname [types] <name> <description>
-    
+
 As mentioned, types are optional, so the following is also valid:
 
     @param url the URL to perform the request on
@@ -94,32 +94,32 @@ YARD supplies the following built-in tags:
 
   * `@abstract`: Marks a class/module/method as abstract with optional
     implementor information.
-  
+
         @abstract Subclass and override {#run} to implement a custom Threadable class.
-        
+
   * `@api`: Declares the API that the object belongs to. Does not display in
     output, but useful for performing queries (`yardoc --query`). Any text is
     allowable in this tag, and there are no predefined values(*).
-    
+
         @api freeform text
-        
-    (*) Note that the special name `@api private` does display a notice in 
+
+    (*) Note that the special name `@api private` does display a notice in
     documentation if it is listed, letting users know that the method is not
     to be used.
-      
+
   * `@attr`: Declares an attribute from the docstring of a class. Meant to be
     used on Struct classes only (classes that inherit Struct).
-  
+
         @attr [Types] attribute_name a full description of the attribute
-      
+
   * `@attr_reader`: Declares a readonly attribute from the docstring of a class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
-  
+
         @attr_reader [Types] name description of a readonly attribute
-      
+
   * `@attr_writer`: Declares a writeonly attribute from the docstring of class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
-  
+
         @attr_writer [Types] name description of writeonly attribute
 
   * `@author`: List the author(s) of a class/method
@@ -136,24 +136,24 @@ YARD supplies the following built-in tags:
 
         @example Reverse a string
           "mystring".reverse #=> "gnirtsym"
-          
+
   * `@note`: Creates an emphasized note for the users to read about the
     object.
-    
+
         @note This method should only be used in outer space.
 
   * `@option`: Describe an options hash in a method. The tag takes the
     name of the options parameter first, followed by optional types,
-    the option key name, an optional default value for the key and a 
+    the option key name, an optional default value for the key and a
     description of the option.
 
         # @param [Hash] opts the options to create a message with.
         # @option opts [String] :subject The subject
         # @option opts [String] :from ('nobody') From address
         # @option opts [String] :to Recipient email
-        # @option opts [String] :body ('') The email's body 
+        # @option opts [String] :body ('') The email's body
         def send_email(opts = {})
-        end 
+        end
 
   * `@overload`: Describe that your method can be used in various
     contexts with various parameters or return types. The first
@@ -170,20 +170,20 @@ YARD supplies the following built-in tags:
         #   @param [Object] value describe value param
         def set(*args)
         end
-      
+
   * `@param`: Defines method parameters
 
         @param [optional, types, ...] argname description
-      
+
   * `@private`: Defines an object as private. This exists for classes,
     modules and constants that do not obey Ruby's visibility rules. For
     instance, an inner class might be considered "private", though Ruby
     would make no such distinction. By declaring the @private tag, the
     class can be hidden from documentation by using the `--no-private`
     command-line switch to yardoc (see {file:README.md}).
-  
+
         @private
-        
+
   * `@raise`: Describes an Exception that a method may throw
 
         @raise [ExceptionClass] description
@@ -191,21 +191,21 @@ YARD supplies the following built-in tags:
   * `@return`: Describes return value of method
 
         @return [optional, types, ...] description
-      
+
   * `@see`: "See Also" references for an object. Accepts URLs or
     other code objects with an optional description at the end.
 
         @see http://example.com Description of URL
         @see SomeOtherClass#method
-      
+
   * `@since`: Lists the version the feature/object was first added
 
         @since 1.2.4
-      
+
   * `@todo`: Marks a TODO note in the object being documented
 
         @todo Add support for Jabberwocky service
-          There is an open source Jabberwocky library available 
+          There is an open source Jabberwocky library available
           at http://somesite.com that can be integrated easily
           into the project.
 
@@ -282,7 +282,7 @@ methods, for example:
 
     # Using the Foo class object from above
     obj.tags(:tagname).first.text #=> "some data"
-    
+
 Because multiple tags can be stored with the same name, they are stored as a list
 of tags. The `#tag` method is an alias for the first item in the list of tags.
 Also note that the `#tag`, `#tags` and `#has_tag?` methods are all convenience
@@ -324,26 +324,26 @@ are:
 
   * Standard text: no parsing is done, but text is stripped of newlines and
     multiple spaces.
-    
+
   * Raw text: does no parsing at all, no stripping of newlines or spaces. This
     is best used for code snippets.
 
   * Raw text with title: does no parsing on the text but extracts the first line
     of the metadata as the "title", useful for tags such as `@example`:
-        
+
         # @example Inspect an element
         #   myobj.inspect #=> #<Object:0x123525>
 
   * Text with types: parses a list of types at the beginning of the text. Types
-    are optional. The standard syntax is in the form `[type1, type2, ...]`, 
+    are optional. The standard syntax is in the form `[type1, type2, ...]`,
     for example:
-        
+
         # @return [String, Symbol] a description here
         # @return description here with no types
-    
+
   * Text with types and a name: parses a list of types at the beginning of text
     followed by a name and extra descriptive text. For example:
-        
+
         # @param [String] str the string to reverse
         def reverse(str) '...' end
 
@@ -352,7 +352,7 @@ be swapped out for any factory. In some cases, a developer may want to change
 the type declaration syntax to be in the form:
 
     # @tagname name <Types, here> description
-    
+
 This can be done by simply implementing a new factory that parses the data in
 this form.
 
@@ -363,7 +363,7 @@ method where SUFFIX refers to the suffix added when declaring the tag. For examp
 a tag can also be declared as follows:
 
     YARD::Tags::Library.define_tag "Parameter", :param, :with_types
-    
+
 In such a case, the factory will be called with method `parse_tag_with_types`. In
 all cases, the method should return a new {YARD::Tags::Tag} object. Generally,
 the `parse_tag` methods take 2 or 3 parameters. A simple tag can be implemented

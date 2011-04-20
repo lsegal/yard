@@ -5,9 +5,9 @@ module YARD::CodeObjects
     # The {ClassObject} that this class object inherits from in Ruby source.
     # @return [ClassObject] a class object that is the superclass of this one
     attr_reader :superclass
-    
+
     # Creates a new class object in +namespace+ with +name+
-    # 
+    #
     # @see Base.new
     def initialize(namespace, name, *args, &block)
       super
@@ -25,16 +25,16 @@ module YARD::CodeObjects
         end
       end
     end
-    
+
     # Whether or not the class is a Ruby Exception
-    # 
+    #
     # @return [Boolean] whether the object represents a Ruby exception
     def is_exception?
       inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS_HASH.has_key? o.path }
     end
-    
+
     # Returns the inheritance tree of the object including self.
-    # 
+    #
     # @param [Boolean] include_mods whether or not to include mixins in the
     #   inheritance tree.
     # @return [Array<NamespaceObject>] the list of code objects that make up
@@ -50,10 +50,10 @@ module YARD::CodeObjects
         m.inheritance_tree(include_mods)
       end.flatten.uniq
     end
-    
+
     # Returns the list of methods matching the options hash. Returns
     # all methods if hash is empty.
-    # 
+    #
     # @param [Hash] opts the options hash to match
     # @option opts [Boolean] :inherited (true) whether inherited methods should be
     #   included in the list
@@ -62,16 +62,16 @@ module YARD::CodeObjects
     # @return [Array<MethodObject>] the list of methods that matched
     def meths(opts = {})
       opts = SymbolHash[:inherited => true].update(opts)
-      list = super(opts) 
+      list = super(opts)
       list += inherited_meths(opts).reject do |o|
         next(false) if opts[:all]
         list.find {|o2| o2.name == o.name && o2.scope == o.scope }
       end if opts[:inherited]
       list
     end
-    
+
     # Returns only the methods that were inherited.
-    # 
+    #
     # @return [Array<MethodObject>] the list of inherited method objects
     def inherited_meths(opts = {})
       inheritance_tree[1..-1].inject([]) do |list, superclass|
@@ -86,9 +86,9 @@ module YARD::CodeObjects
         end
       end
     end
-    
+
     # Returns the list of constants matching the options hash.
-    # 
+    #
     # @param [Hash] opts the options hash to match
     # @option opts [Boolean] :inherited (true) whether inherited constant should be
     #   included in the list
@@ -99,9 +99,9 @@ module YARD::CodeObjects
       opts = SymbolHash[:inherited => true].update(opts)
       super(opts) + (opts[:inherited] ? inherited_constants : [])
     end
-    
+
     # Returns only the constants that were inherited.
-    # 
+    #
     # @return [Array<ConstantObject>] the list of inherited constant objects
     def inherited_constants
       inheritance_tree[1..-1].inject([]) do |list, superclass|
@@ -114,11 +114,11 @@ module YARD::CodeObjects
         end
       end
     end
-    
+
     # Sets the superclass of the object
-    # 
+    #
     # @param [Base, Proxy, String, Symbol, nil] object the superclass value
-    # @return [void] 
+    # @return [void]
     def superclass=(object)
       case object
       when Base, Proxy, NilClass
@@ -126,13 +126,13 @@ module YARD::CodeObjects
       when String, Symbol
         @superclass = Proxy.new(namespace, object)
       else
-        raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol" 
+        raise ArgumentError, "superclass must be CodeObject, Proxy, String or Symbol"
       end
 
       if name == @superclass.name && namespace != YARD::Registry.root && !object.is_a?(Base)
         @superclass = Proxy.new(namespace.namespace, object)
       end
-      
+
       if @superclass == self
         msg = "superclass #{@superclass.inspect} cannot be the same as the declared class #{self.inspect}"
         @superclass = P("::Object")

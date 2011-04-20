@@ -86,7 +86,7 @@
   * lib/yard/core_ext/hash.rb: Fix RDoc failure in lib/yard/core_ext/hash.rb at
   or around line 13 column 11  Before reporting this, could you check that the
   file you're documenting compiles cleanly--RDoc is not a full Ruby parser, and
-  gets confused easily if fed invalid programs.  The internal error was: 
+  gets confused easily if fed invalid programs.  The internal error was:
   ERROR:  While generating documentation for yard-0.6.5 ... MESSAGE:   Name or
   symbol expected (got #<RubyToken::TkfLBRACK:0x1025e40e0>) ... RDOC args: --ri
   --op /Users/akzhanabdulin/.rvm/gems/ree-1.8.7-2011.03/doc/yard-0.6.5/ri
@@ -193,7 +193,7 @@
 
 2011-02-27  Guten <ywzhaifei@gmail.com>
 
-  * templates/default/fulldoc/html/css/style.css: add css style to list 
+  * templates/default/fulldoc/html/css/style.css: add css style to list
   support <ul> <dl>
 
 2011-02-26  Loren Segal <lsegal@soen.ca>
@@ -357,7 +357,7 @@
   lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/legacy/statement.rb,
   lib/yard/parser/ruby/legacy/statement_list.rb,
   lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Add
-  Docstring#hash_flag to denote when a docstring comment started with '##' 
+  Docstring#hash_flag to denote when a docstring comment started with '##'
   Closes gh-230
 
   * lib/yard/tags/default_factory.rb, spec/docstring_spec.rb,
@@ -813,7 +813,7 @@
   * lib/yard/cli/gems.rb: Require 'rubygems' in yard gems command for 1.8.x
   compat
 
-  * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration. 
+  * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration.
   Closes gh-178
 
 2010-09-27  srawlins <sam.rawlins@gmail.com>
@@ -891,7 +891,7 @@
 
   * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb,
   spec/handlers/base_spec.rb: Add Handlers::Base.in_file to declare that a
-  handler should only process certain files by string/regex match.  Example: 
+  handler should only process certain files by string/regex match.  Example:
   class MyHandler < Handlers::Ruby::Base handles method_call(:foo) in_file
   %r{/templates/}  def process # Only process "foo" calls inside the
   /templates/ directory end end
@@ -1108,7 +1108,7 @@
   `coding=ENC` encoding comment format (previously only supported `coding:ENC`)
    Closes gh-159
 
-  * templates/default/fulldoc/html/js/full_list.js: Fix inline searching JS 
+  * templates/default/fulldoc/html/js/full_list.js: Fix inline searching JS
   Closes gh-161
 
   * templates/default/fulldoc/html/js/jquery.js: Update jQuery to 1.4.2
@@ -1119,7 +1119,7 @@
   * templates/default/fulldoc/html/css/style.css: Remove webkit gradients on
   search links
 
-  * templates/default/fulldoc/html/js/app.js: Fix undefined links in TOC 
+  * templates/default/fulldoc/html/js/app.js: Fix undefined links in TOC
   Closes gh-160
 
   * lib/yard/registry.rb: Fix bug in Registry refactoring that broke .yardoc
@@ -1197,7 +1197,7 @@
   objects (yri)  Closes gh-150
 
   * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Add `YRI::DEFAULT_SEARCH_PATHS`
-  to add extra search paths at runtime to be searched before all other paths. 
+  to add extra search paths at runtime to be searched before all other paths.
   Closes gh-151
 
   * lib/yard/code_objects/base.rb,
@@ -1703,7 +1703,7 @@
   problematic when multiple plugins overload the same template (because the
   numeric index is not guaranteed).  This change also adds Insertion#before_any
   and Insertion#after_any to insert an object before any section no matter how
-  deeply nested it is.  [1,[2,[3]]].place(4).after_any(3) #=> [1, [2, [3, 4]]] 
+  deeply nested it is.  [1,[2,[3]]].place(4).after_any(3) #=> [1, [2, [3, 4]]]
   The above template could be refactored as:  def init sections :a, :b, :c,
   [:sub1, :sub2] sections.place(:sub3).after_any(:sub1) end  Closes gh-58
 
@@ -1996,7 +1996,7 @@
   templates/default/layout/html/setup.rb: Better support for file shebangs and
   better markup support in general. Adds two new markup types "text" and "html"
   which can be used in shebangs as well as a markup type (-m switch to yardoc).
-   Can now implement htmlify for custom markup types by implementing 
+   Can now implement htmlify for custom markup types by implementing
   YARD::Templates::Helpers::HtmlHelper#html_markup_MARKUPTYPE  Where MARKUPTYPE
   is the markup type name. A provider must also be added to
   MarkupHelper::MARKUP_PROVIDERS, though it can be a blank list of libraries.
@@ -2073,7 +2073,7 @@
   * README.md: Add special installation instructions for some Ubuntu/Debian
   installations. It is impossible to add rdoc as a dependency, since this will
   force the RDoc gem to be installed rather than the Ruby stdlib package. It is
-  therefore preferable to install rdoc locally with apt-get on such an OS. 
+  therefore preferable to install rdoc locally with apt-get on such an OS.
   Closes gh-109
 
 2010-06-16  Loren Segal <lsegal@soen.ca>
@@ -2587,7 +2587,7 @@
   * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
   templates/default/fulldoc/html/css/style.css,
   templates/default/module/html/constant_summary.erb,
-  templates/default/module/setup.rb: Show full docstrings for constants. 
+  templates/default/module/setup.rb: Show full docstrings for constants.
   Closes gh-89 Closes gh-90
 
   * lib/yard/docstring.rb, spec/docstring_spec.rb: Finish parsing @tag when
@@ -2975,7 +2975,7 @@
 
   * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Allow user to specify
   ~/.yard/yri_search_paths file listing extra yardoc dbs to search.  File
-  format should just be newline separated .yardoc files/directories: 
+  format should just be newline separated .yardoc files/directories:
   /path/to/.yardoc /path/to/other.yardoc ...
 
   * lib/yard/cli/yardoc.rb: Improve behaviour of re-generating changed objects
@@ -4904,7 +4904,7 @@
 2009-08-18  James Rosen <jrosen@mitre.org>
 
   * lib/yard/generators/helpers/html_helper.rb,
-  spec/generators/helpers/html_helper_spec.rb: added support for mailto: links 
+  spec/generators/helpers/html_helper_spec.rb: added support for mailto: links
 
 2009-08-14  Loren Segal <lsegal@soen.ca>
 
@@ -4948,7 +4948,7 @@
 2009-08-12  Loren Segal <lsegal@soen.ca>
 
   * lib/yard/registry.rb, spec/registry_spec.rb: Explicitly define all of
-  Registry's instance methods as singleton methods delegated to instance. 
+  Registry's instance methods as singleton methods delegated to instance.
   Closes gh-26
 
 2009-08-11  Loren Segal <lsegal@soen.ca>
@@ -5501,7 +5501,7 @@
   * lib/yard/generators/tags_generator.rb,
   templates/default/tags/html/todo.erb: Add @todo to output generation
 
-  * lib/yard/generators/tags_generator.rb: Add @yield to output generation. 
+  * lib/yard/generators/tags_generator.rb: Add @yield to output generation.
   Closes gh-15
 
   * lib/yard/generators/class_generator.rb,
@@ -5881,7 +5881,7 @@
 2009-05-16  Nathan Weizenbaum <nex342@gmail.com>
 
   * templates/default/attributes/html/header.erb,
-  templates/default/fulldoc/html/style.css: Display aliases of attributes. 
+  templates/default/fulldoc/html/style.css: Display aliases of attributes.
   Closes gh-2
 
 2009-05-23  Loren Segal <lsegal@soen.ca>
@@ -5941,7 +5941,7 @@
 
   * lib/yard/tags/library.rb, spec/handlers/examples/method_handler_001.rb.txt,
   spec/handlers/method_handler_spec.rb: Some specs and basic definition of
-  @overload tag for defining method overloads. 
+  @overload tag for defining method overloads.
 
 2009-05-23  Loren Segal <lsegal@soen.ca>
 
@@ -5991,7 +5991,7 @@
   spec/code_objects/method_object_spec.rb,
   spec/code_objects/module_object_spec.rb, spec/handlers/class_handler_spec.rb,
   spec/handlers/method_handler_spec.rb: Add a CSEP separator for class methods
-  (Foo.meth instead of Foo::meth). 
+  (Foo.meth instead of Foo::meth).
 
   * lib/yard/code_objects/base.rb: Parse setter methods (e.g. #foo=).
 
@@ -6105,7 +6105,7 @@
 
   * lib/yard/handlers/extend_handler.rb, lib/yard/handlers/mixin_handler.rb,
   spec/handlers/examples/extend_handler_001.rb.txt,
-  spec/handlers/extend_handler_spec.rb: Handle "extend self" properly. 
+  spec/handlers/extend_handler_spec.rb: Handle "extend self" properly.
 
 2009-05-21  Loren Segal <lsegal@soen.ca>
 
@@ -6378,17 +6378,17 @@
 
   * lib/yard/parser/ruby_lex.rb: Fix a Ruby lexing bug where symbol-beginning
   colons were sometimes read as statement-delimiting colons.  For example:  def
-  foo if :/ return 12 end end 
+  foo if :/ return 12 end end
 
-  * README.markdown: Make README Maruku-compatible. 
+  * README.markdown: Make README Maruku-compatible.
 
 2009-04-26  Nathan Weizenbaum <nex342@gmail.com>
 
   * lib/yard/docstring.rb, spec/docstring_spec.rb: Add a method to Docstring
-  for determining if it's empty. 
+  for determining if it's empty.
 
   * lib/yard/handlers/base.rb, lib/yard/handlers/mixin_handler.rb: Fix some
-  minor grammar errors. 
+  minor grammar errors.
 
 2009-05-09  Loren Segal <lsegal@soen.ca>
 
@@ -6399,12 +6399,12 @@
 2009-04-01  postmodern <postmodern.mod3@gmail.com>
 
   * lib/yard/serializers/file_system_serializer.rb: Refactored serialize_path
-  to be Ruby 1.9.1 compatible. 
+  to be Ruby 1.9.1 compatible.
 
 2009-05-07  jeffrafter <jeff@baobabhealth.org>
 
   * lib/yard/cli/yardoc.rb: Cli options for alternate template paths had a
-  typo; corrected 
+  typo; corrected
 
 2009-05-03  Loren Segal <lsegal@soen.ca>
 
@@ -6468,7 +6468,7 @@
 
 2008-06-22  elliottcable <git@elliottcable.name>
 
-  * lib/yard/generators/full_doc_generator.rb: Added .mkdn support 
+  * lib/yard/generators/full_doc_generator.rb: Added .mkdn support
 
 2008-08-29  lsegal <lsegal@soen.ca>
 
@@ -7776,7 +7776,7 @@
   aliases for the method object
 
   * lib/yard/generators/base.rb: Add extra_opts to initialize so generators can
-  be initialized without updating the options hash that's passed in: 
+  be initialized without updating the options hash that's passed in:
   MethodGenerator.new(options, :other => :options)
 
   * lib/yard/generators/constants_generator.rb: Update documentation
@@ -8738,7 +8738,7 @@
 
 2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * .gitignore: Add pkg/ to gitignore  
+  * .gitignore: Add pkg/ to gitignore
 
 2008-02-26  Loren Segal <lsegal@soen.ca>
 
@@ -8757,9 +8757,9 @@
 
 2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * .gitignore: Add DS_Store to gitignore  
+  * .gitignore: Add DS_Store to gitignore
 
-  * yard.gemspec: Update gemspec to deal with new README files  
+  * yard.gemspec: Update gemspec to deal with new README files
 
 2008-02-26  Loren Segal <lsegal@soen.ca>
 
@@ -8769,7 +8769,7 @@
 
 2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * README.txt: Missed tab  
+  * README.txt: Missed tab
 
 2008-02-26  Loren Segal <lsegal@soen.ca>
 
@@ -8794,7 +8794,7 @@
 
 2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * README.pdf, help.pdf: Rename README so it doesn't break github  
+  * README.pdf, help.pdf: Rename README so it doesn't break github
 
 2008-02-25  Loren Segal <lsegal@soen.ca>
 
@@ -8802,7 +8802,7 @@
 
 2008-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * README.txt: Add text version of old reamde just for github  
+  * README.txt: Add text version of old reamde just for github
 
 2008-02-25  Loren Segal <lsegal@soen.ca>
 
@@ -8814,18 +8814,18 @@
   lib/tag_library.rb, templates/default/html/_fulldoc.erb,
   templates/default/html/class.erb: Added wycats' formatting changes for future
   Merb support. Yard can now run through activerecord,activesupport,actionpack
-  with minimal errors 
+  with minimal errors
 
-  * lib/tag_type.rb: Removing obsolete class 
+  * lib/tag_type.rb: Removing obsolete class
 
 2008-02-24  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
   * lib/ruby_lex.rb: Oops, turns out I can't remove those dependencies from
-  RubyLex 
+  RubyLex
 
 2008-02-23  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * lib/ruby_lex.rb: Remove some lame dependencies from RubyLex 
+  * lib/ruby_lex.rb: Remove some lame dependencies from RubyLex
 
   * bin/yardoc, doc/Logger.html, doc/RubyLex.html,
   doc/RubyLex_BufferedReader.html, doc/RubyToken_TkError.html,
@@ -8857,11 +8857,11 @@
   lib/code_object.rb, lib/formatter.rb, lib/handlers/constant_handler.rb,
   lib/handlers/mixin_handler.rb, lib/source_parser.rb, lib/yard.rb,
   templates/default/html/class.erb, templates/default/html/module.erb: No more
-  need for docs in project - update to 0.2.1 
+  need for docs in project - update to 0.2.1
 
 2008-02-21  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * yard.gemspec: Add erubis as gem dep 
+  * yard.gemspec: Add erubis as gem dep
 
   * doc/Logger.html, doc/TestCodeObject.html, doc/TestNamespace.html,
   doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
@@ -8883,16 +8883,16 @@
   doc/YARD_RubyToken_TkVal.html, doc/YARD_RubyToken_Token.html,
   doc/YARD_SourceParser.html, doc/YARD_Statement.html,
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
-  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html: New docs 
+  doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html: New docs
 
   * lib/code_object.rb, lib/formatter.rb: Do not list superclasses if object
-  doest not respond to the method 
+  doest not respond to the method
 
   * bin/yardoc, lib/code_object.rb, lib/formatter.rb,
   templates/default/html/class.erb: Fix formatting for Erubius, print basic
-  output info for yardoc file generation 
+  output info for yardoc file generation
 
-  * Rakefile: Print rake install message before doing task 
+  * Rakefile: Print rake install message before doing task
 
   * doc/Logger.html, doc/TestCodeObject.html, doc/TestNamespace.html,
   doc/YARD_AttributeHandler.html, doc/YARD_AuthorTag.html,
@@ -8915,11 +8915,11 @@
   doc/YARD_SourceParser.html, doc/YARD_Statement.html,
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
-  lib/formatter.rb: Use Erubis from now on 
+  lib/formatter.rb: Use Erubis from now on
 
   * Rakefile, bin/yardoc, doc/YARD_RubyLex_BufferedReader.html,
   lib/handlers/attribute_handler.rb, lib/handlers/exception_handler.rb,
-  yard.gemspec: Add better exception handling, add 'rake install' task 
+  yard.gemspec: Add better exception handling, add 'rake install' task
 
 2007-04-28  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
@@ -8934,7 +8934,7 @@
   lib/handlers/mixin_handler.rb, lib/logger.rb, lib/ruby_lex.rb,
   lib/source_parser.rb, lib/yard.rb: Better source error handling. Parser
   displays warnings when code is undocumentable (for attributes). This revision
-  can parse activerecord-1.15.3 
+  can parse activerecord-1.15.3
 
 2007-03-08  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
@@ -8961,11 +8961,11 @@
   lib/yard.rb, templates/default/html/_fulldoc.erb,
   templates/default/html/class.erb, templates/default/html/method.erb,
   templates/html_formatter.erb: Refactored templates, added support for attr_*
-  in a (class of) a module 
+  in a (class of) a module
 
 2007-03-02  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * lib/namespace.rb: Fixed default yardoc raw output filename 
+  * lib/namespace.rb: Fixed default yardoc raw output filename
 
   * doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -8988,7 +8988,7 @@
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
   doc/all-classes.html, doc/all-methods.html, doc/index.html: Added
-  documentation 
+  documentation
 
   * doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9011,7 +9011,7 @@
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
   doc/all-classes.html, doc/all-methods.html, doc/index.html: Removing
-  documentation 
+  documentation
 
   * bin/yardoc, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9034,9 +9034,9 @@
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
   doc/all-classes.html, doc/all-methods.html, doc/index.html, lib/namespace.rb,
-  lib/yard.rb: Added documentation, fixed links for scripts 
+  lib/yard.rb: Added documentation, fixed links for scripts
 
-  * bin/yardoc, bin/yri, lib/yard.rb, yard.gemspec: Corrected gemspec 
+  * bin/yardoc, bin/yri, lib/yard.rb, yard.gemspec: Corrected gemspec
 
   * Rakefile, bin/yardoc, bin/yri, doc/NilClass.html, doc/RubyLex.html,
   doc/RubyLex_BufferedReader.html, doc/RubyToken_TkError.html,
@@ -9062,7 +9062,7 @@
   doc/all-classes.html, doc/all-methods.html, doc/domain_model.jpg,
   doc/index.html, lib/formatter.rb, lib/handlers/class_variable_handler.rb,
   lib/quick_doc.rb, lib/yard.rb, templates/html_formatter.erb,
-  test_generate_html.rb, yard.gemspec, yard.rb, yri: Added gemspec 
+  test_generate_html.rb, yard.gemspec, yard.rb, yri: Added gemspec
 
 2007-03-01  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
@@ -9070,7 +9070,7 @@
   doc/YARD_DeprecatedTag.html, doc/YARD_ReturnTag.html,
   doc/YARD_StatementList.html, lib/code_object.rb,
   lib/handlers/constant_handler.rb, lib/source_parser.rb,
-  templates/html_formatter.erb: Fixed parsing of end statements 
+  templates/html_formatter.erb: Fixed parsing of end statements
 
   * doc/RubyLex.html, doc/RubyToken_Token.html, doc/TestCodeObject.html,
   doc/TestNamespace.html, doc/YARD_ClassObject.html,
@@ -9079,12 +9079,12 @@
   doc/YARD_TokenList.html, doc/all-methods.html, doc/index.html,
   lib/code_object.rb, lib/handlers/constant_handler.rb,
   templates/html_formatter.erb, test_generate_html.rb, yard.rb: Fixed constant
-  listing and definitions of global variables 
+  listing and definitions of global variables
 
-  * doc/all-methods.html: All methods index 
+  * doc/all-methods.html: All methods index
 
   * doc/all-classes.html, doc/index.html, test_generate_html.rb: List all
-  methods 
+  methods
 
   * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9108,7 +9108,7 @@
   doc/YARD_TokenList.html, doc/YARD_VisibilityHandler.html,
   doc/YARD_YieldHandler.html, doc/all-classes.html, lib/code_object.rb,
   lib/formatter.rb, lib/handlers/class_variable_handler.rb,
-  templates/html_formatter.erb: Added class variables 
+  templates/html_formatter.erb: Added class variables
 
   * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9134,7 +9134,7 @@
   lib/handlers/class_handler.rb, lib/handlers/code_object_handler.rb,
   lib/handlers/constant_handler.rb, lib/handlers/method_handler.rb,
   lib/namespace.rb, templates/html_formatter.erb: Added dynamic method summary
-  and better inheritance chain information 
+  and better inheritance chain information
 
 2007-02-28  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
@@ -9160,7 +9160,7 @@
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html, doc/index.html,
   lib/formatter.rb, lib/handlers/attribute_handler.rb, lib/namespace.rb,
   templates/html_formatter.erb: Added documentation of dynamic method handling,
-  fixed link resolution for methods, added docstring to class and constructor 
+  fixed link resolution for methods, added docstring to class and constructor
 
   * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9183,7 +9183,7 @@
   doc/YARD_TokenList.html, doc/YARD_VisibilityHandler.html,
   doc/YARD_YieldHandler.html, lib/formatter.rb, lib/handlers/method_handler.rb,
   templates/html_formatter.erb: Updated formatting, fixed method handler bug
-  with Constant as method name 
+  with Constant as method name
 
   * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9205,7 +9205,7 @@
   doc/YARD_ReturnTag.html, doc/YARD_SourceParser.html, doc/YARD_Statement.html,
   doc/YARD_StatementList.html, doc/YARD_Tag.html, doc/YARD_TokenList.html,
   doc/YARD_VisibilityHandler.html, doc/YARD_YieldHandler.html,
-  templates/html_formatter.erb: Updated formatting 
+  templates/html_formatter.erb: Updated formatting
 
   * doc/NilClass.html, doc/RubyLex.html, doc/RubyLex_BufferedReader.html,
   doc/RubyToken_TkError.html, doc/RubyToken_TkId.html, doc/RubyToken_TkKW.html,
@@ -9232,34 +9232,34 @@
   lib/hash_struct.rb, lib/namespace.rb, templates/html_formatter.erb,
   test_generate_html.rb, yard.rb: Added prototype of html generation, use
   test_generate_html.rb to test. Template uses javadoc style for now, just as a
-  base 
+  base
 
 2007-02-27  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
   * lib/code_object.rb, lib/formatter.rb, lib/source_parser.rb, yard.rb: Add
-  basic output formatter class 
+  basic output formatter class
 
   * lib/source_parser.rb: Comments on end of a line are now ignored from an
-  ongoing statement 
+  ongoing statement
 
 2007-02-26  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
   * lib/handlers/method_handler.rb, lib/namespace.rb, lib/source_parser.rb,
   yard.rb: Added support for 'def Class.method_name' and a relative name
-  resolution method for the Namespace 
+  resolution method for the Namespace
 
 2007-02-25  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
   * lib/code_object.rb, lib/handlers/attribute_handler.rb,
   lib/handlers/mixin_handler.rb, lib/ruby_lex.rb, lib/source_parser.rb: Added
-  support for include statements at class or module level 
+  support for include statements at class or module level
 
 2007-02-24  loren <loren@a99b2113-df67-db11-8bcc-000c76553aea>
 
-  * README.pdf: Updated PDF formatting 
+  * README.pdf: Updated PDF formatting
 
   * LICENSE.txt, README.pdf, lib/code_object.rb, yri, yri.rb: Added readme and
-  license information, renamed yri.rb to yri for convenience 
+  license information, renamed yri.rb to yri for convenience
 
   * doc/domain_model.jpg, lib/code_object.rb, lib/handlers/all_handlers.rb,
   lib/handlers/attribute_handler.rb, lib/handlers/class_handler.rb,
@@ -9271,4 +9271,4 @@
   lib/source_parser.rb, lib/tag_library.rb, lib/tag_type.rb,
   test/fixtures/docstring.txt, test/fixtures/docstring2.txt,
   test/test_code_object.rb, test/test_namespace.rb, yri.rb: Creating
-  trunk/branches/tags 
+  trunk/branches/tags

@@ -12,7 +12,7 @@ module YARD
               !object.tags(:param).any? {|t| t.name == param[0][1..-1] }
           end
         end
-        
+
         unless params.empty?
           args = params.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
           h("(#{args})")
@@ -20,14 +20,14 @@ module YARD
           ""
         end
       end
-      
+
       # @return [String] formatted and linked return types for a method
       def format_return_types(object)
         return unless object.has_tag?(:return) && object.tag(:return).types
         return if object.tag(:return).types.empty?
         format_types [object.tag(:return).types.first], false
       end
-      
+
       # @return [String] formatted block if one exists
       def format_block(object)
         if object.has_tag?(:yield) && object.tag(:yield).types
@@ -42,25 +42,25 @@ module YARD
 
         params ? h("{|" + params.join(", ") + "| ... }") : ""
       end
-      
+
       # @return [String] formats line numbers for source code of an object
       def format_lines(object)
         return "" if object.source.nil? || object.line.nil?
         i = -1
         object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
       end
-      
+
       # @return [String] formats source of an object
       def format_code(object, show_lines = false)
         i = -1
         lines = object.source.split(/\n/)
         longestline = (object.line + lines.size).to_s.length
-        lines.map do |line| 
+        lines.map do |line|
           lineno = object.line + (i += 1)
           (" " * (longestline - lineno.to_s.length)) + lineno.to_s + "    " + line
         end.join("\n")
       end
-      
+
       # @return [String] formats source code of a constant value
       def format_constant(value)
         sp = value.split("\n").last[/^(\s+)/, 1]

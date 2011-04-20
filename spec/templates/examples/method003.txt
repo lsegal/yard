@@ -5,7 +5,7 @@
     root.m(x, y, z) (private)
 ------------------------------------------------------------------------
 
-    Method comments 
+    Method comments
 
 Overloads:
 ----------
@@ -13,33 +13,33 @@ Overloads:
 ------------------------------------------------------------------------
     root.m(x, y) (private)
 ------------------------------------------------------------------------
-    
-        Overload docstring 
-    
+
+        Overload docstring
+
     Parameters:
     -----------
-    
+
         (String) x - parameter x
-    
+
         (Boolean) y - parameter y
-    
-    
+
+
 
 ------------------------------------------------------------------------
     root.m(x, y, z) (private)
 ------------------------------------------------------------------------
-    
-        
+
+
     Parameters:
     -----------
-    
+
         (String) x - parameter x
-    
+
         (Boolean) y - parameter y
-    
+
         (Boolean) z - parameter z
-    
-    
+
+
 
 
 

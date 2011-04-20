@@ -1,14 +1,14 @@
 ------------------------------------------------------------- Method: #m
                                                    (Defined in: (stdin))
 
-    root.m(opts = {}) {|a| ... } -> String 
+    root.m(opts = {}) {|a| ... } -> String
 ------------------------------------------------------------------------
 
     Deprecated. for great justice
 
     Abstract. override me
 
-    Comments 
+    Comments
 
 Examples:
 ---------

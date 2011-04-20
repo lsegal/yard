@@ -11,7 +11,7 @@ unless defined?(HAVE_RIPPER)
   begin require 'ripper'; rescue LoadError; end
   HAVE_RIPPER = defined?(::Ripper) && !ENV['LEGACY'] ? true : false
   LEGACY_PARSER = !HAVE_RIPPER
-  
+
   class YARD::Parser::SourceParser
     def self.parser_type; :ruby18 end
   end if ENV['LEGACY']
@@ -37,18 +37,18 @@ def described_in_docs(klass, meth, file = nil)
       YARD::Parser::SourceParser.new.parse(filename)
     end
   end
-  
+
   # Get the object
   objname = klass.name + (meth[0,1] == '#' ? meth : '::' + meth)
   obj = Registry.at(objname)
   raise "Cannot find object #{objname} described by spec." unless obj
   raise "#{obj.path} has no @it tags to spec." unless obj.has_tag? :it
-  
+
   # Run examples
   describe(klass, meth) do
     obj.tags(:it).each do |it|
       path = File.relative_path(YARD::ROOT, obj.file)
-      it(it.name + " (from #{path}:#{obj.line})") do 
+      it(it.name + " (from #{path}:#{obj.line})") do
         begin
           eval(it.text)
         rescue => e
@@ -68,13 +68,13 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
     next unless File.exists? filename
     YARD::Parser::SourceParser.new.parse(filename)
   end
-  
+
   # Get the object
   objname = klass.name + objname if objname =~ /^[^A-Z]/
   obj = Registry.at(objname)
   raise "Cannot find object #{objname} described by spec." unless obj
   raise "#{obj.path} has no @example tags to spec." unless obj.has_tag? :example
-  
+
   # Run examples
   obj.tags(:example).each do |exs|
     exs.text.split(/\n/).each do |ex|

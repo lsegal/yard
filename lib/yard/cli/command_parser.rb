@@ -2,20 +2,20 @@ module YARD
   module CLI
     # This class parses a command name out of the +yard+ CLI command and calls
     # that command in the form:
-    # 
+    #
     #   $ yard command_name [options]
-    # 
+    #
     # If no command or arguments are specified, or if the arguments immediately
-    # begin with a +--opt+ (not +--help+), the {default_command} will be used 
+    # begin with a +--opt+ (not +--help+), the {default_command} will be used
     # (which itself defaults to +:doc+).
-    # 
+    #
     # == Adding a Command
-    # 
-    # To add a custom command via plugin, create a mapping in {commands} from 
-    # the Symbolic command name to the {Command} class that implements the 
+    #
+    # To add a custom command via plugin, create a mapping in {commands} from
+    # the Symbolic command name to the {Command} class that implements the
     # command. To implement a command, see the documentation for the {Command}
     # class.
-    # 
+    #
     # @see Command
     # @see commands
     # @see default_command
@@ -24,12 +24,12 @@ module YARD
         # @return [Hash{Symbol => Command}] the mapping of command names to
         #   command classes to parse the user command.
         attr_accessor :commands
-        
+
         # @return [Symbol] the default command name to use when no options
-        #   are specified or 
+        #   are specified or
         attr_accessor :default_command
       end
-      
+
       self.commands = SymbolHash[
         :config => Config,
         :diff   => Diff,
@@ -41,20 +41,20 @@ module YARD
         :server => Server,
         :stats  => Stats
       ]
-      
+
       self.default_command = :doc
-      
+
       # Convenience method to create a new CommandParser and call {#run}
       # @return (see #run)
       def self.run(*args) new.run(*args) end
-        
+
       def initialize
         log.show_backtraces = false
       end
-           
+
       # Runs the {Command} object matching the command name of the first
       # argument.
-      # @return [void] 
+      # @return [void]
       def run(*args)
         unless args == ['--help']
           if args.size == 0 || args.first =~ /^-/
@@ -69,18 +69,18 @@ module YARD
         end
         list_commands
       end
-      
+
       private
 
       def commands; self.class.commands end
-      
+
       def list_commands
         puts "Usage: yard <command> [options]"
         puts
         puts "Commands:"
         commands.keys.sort_by {|k| k.to_s }.each do |command_name|
           command = commands[command_name].new
-          puts "%-8s %s" % [command_name, command.description] 
+          puts "%-8s %s" % [command_name, command.description]
         end
       end
     end

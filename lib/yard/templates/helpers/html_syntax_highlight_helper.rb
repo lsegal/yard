@@ -13,9 +13,9 @@ module YARD
             html_syntax_highlight_ruby_legacy(source)
           end
         end
-        
+
         private
-        
+
         def html_syntax_highlight_ruby_ripper(source)
           tokenlist = Parser::Ruby::RubyParser.parse(source, "(syntax_highlight)").tokens
           output = ""
@@ -35,10 +35,10 @@ module YARD
         rescue Parser::ParserSyntaxError
           h(source)
         end
-        
+
         def html_syntax_highlight_ruby_legacy(source)
           tokenlist = Parser::Ruby::Legacy::TokenList.new(source)
-          tokenlist.map do |s| 
+          tokenlist.map do |s|
             prettyclass = s.class.class_name.sub(/^Tk/, '').downcase
             prettysuper = s.class.superclass.class_name.sub(/^Tk/, '').downcase
 

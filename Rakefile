@@ -14,7 +14,7 @@ task :gem do
 end
 
 desc "Installs the gem"
-task :install => :gem do 
+task :install => :gem do
   sh "#{SUDO} gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
 end
 
@@ -50,9 +50,9 @@ begin
     t.rspec_opts += ['-I', YARD::ROOT]
     t.pattern = "spec/**/*_spec.rb"
     t.verbose = $DEBUG ? true : false
-  
+
     if ENV['RCOV']
-      t.rcov = true 
+      t.rcov = true
       t.rcov_opts = ['-x', hide]
     end
   end
@@ -61,7 +61,7 @@ rescue LoadError
   begin # Try for rspec 1.x
     require 'spec'
     require 'spec/rake/spectask'
-    
+
     Spec::Rake::SpecTask.new("specs") do |t|
       $DEBUG = true if ENV['DEBUG']
       t.spec_opts = ["--format", "specdoc", "--colour"]
@@ -69,7 +69,7 @@ rescue LoadError
       t.pattern = "spec/**/*_spec.rb"
 
       if ENV['RCOV']
-        t.rcov = true 
+        t.rcov = true
         t.rcov_opts = ['-x', hide]
       end
     end

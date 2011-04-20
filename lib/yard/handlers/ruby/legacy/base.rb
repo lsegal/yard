@@ -3,12 +3,12 @@ module YARD
     module Ruby::Legacy
       # This is the base handler for the legacy parser. To implement a legacy
       # handler, subclass this class.
-      # 
+      #
       # @abstract (see Ruby::Base)
       class Base < Handlers::Base
         # For tokens like TkDEF, TkCLASS, etc.
         include YARD::Parser::Ruby::Legacy::RubyToken
-        
+
         # @return [Boolean] whether or not a {Parser::Ruby::Legacy::Statement} object should be handled
         #   by this handler.
         def self.handles?(stmt)
@@ -19,17 +19,17 @@ module YARD
             when Regexp
               stmt.tokens.to_s =~ a_handler
             else
-              a_handler == stmt.tokens.first.class 
+              a_handler == stmt.tokens.first.class
             end
           end
         end
 
         protected
 
-        # Parses a statement's block with a set of state values. If the 
+        # Parses a statement's block with a set of state values. If the
         # statement has no block, nothing happens. A description of state
         # values can be found at {Handlers::Base#push_state}
-        # 
+        #
         # @param [Hash] opts State options
         # @option opts (see Handlers::Base#push_state)
         # @see Handlers::Base#push_state #push_state
@@ -41,38 +41,38 @@ module YARD
             end
           end
         end
-        
+
         private
-      
-        # The string value of a token. For example, the return value for the symbol :sym 
-        # would be :sym. The return value for a string +"foo #{ bar}"+ would be the literal 
+
+        # The string value of a token. For example, the return value for the symbol :sym
+        # would be :sym. The return value for a string +"foo #{ bar}"+ would be the literal
         # +"foo #{ bar}"+ without any interpolation. The return value of the identifier
         # 'test' would be the same value: 'test'. Here is a list of common types and
         # their return values:
-        # 
-        # @example 
+        #
+        # @example
         #   tokval(TokenList.new('"foo"').first) => "foo"
         #   tokval(TokenList.new(':foo').first) => :foo
         #   tokval(TokenList.new('CONSTANT').first, RubyToken::TkId) => "CONSTANT"
         #   tokval(TokenList.new('identifier').first, RubyToken::TkId) => "identifier"
         #   tokval(TokenList.new('3.25').first) => 3.25
         #   tokval(TokenList.new('/xyz/i').first) => /xyz/i
-        # 
+        #
         # @param [Token] token The token of the class
-        # 
+        #
         # @param [Array<Class<Token>>, Symbol] accepted_types
         #   The allowed token types that this token can be. Defaults to [{TkVal}].
         #   A list of types would be, for example, [+TkSTRING+, +TkSYMBOL+], to return
-        #   the token's value if it is either of those types. If +TkVal+ is accepted, 
+        #   the token's value if it is either of those types. If +TkVal+ is accepted,
         #   +TkNode+ is also accepted.
-        # 
+        #
         #   Certain symbol keys are allowed to specify multiple types in one fell swoop.
         #   These symbols are:
         #     :string       => +TkSTRING+, +TkDSTRING+, +TkDXSTRING+ and +TkXSTRING+
         #     :attr         => +TkSYMBOL+ and +TkSTRING+
         #     :identifier   => +TkIDENTIFIER, +TkFID+ and +TkGVAR+.
         #     :number       => +TkFLOAT+, +TkINTEGER+
-        # 
+        #
         # @return [Object] if the token is one of the accepted types, in its real value form.
         #   It should be noted that identifiers and constants are kept in String form.
         # @return [nil] if the token is not any of the specified accepted types
@@ -99,7 +99,7 @@ module YARD
           return unless accepted_types.any? {|t| t === token }
 
           case token
-          when TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING 
+          when TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING
             token.text[1..-2]
           when TkSYMBOL
             token.text[1..-1].to_sym
@@ -121,26 +121,26 @@ module YARD
           end
         end
 
-        # Returns a list of symbols or string values from a statement. 
-        # The list must be a valid comma delimited list, and values 
+        # Returns a list of symbols or string values from a statement.
+        # The list must be a valid comma delimited list, and values
         # will only be returned to the end of the list only.
-        # 
+        #
         # Example:
         #   attr_accessor :a, 'b', :c, :d => ['a', 'b', 'c', 'd']
-        #   attr_accessor 'a', UNACCEPTED_TYPE, 'c' => ['a', 'c'] 
-        # 
+        #   attr_accessor 'a', UNACCEPTED_TYPE, 'c' => ['a', 'c']
+        #
         # The tokval list of a {Parser::Ruby::Legacy::TokenList} of the above
         # code would be the {#tokval} value of :a, 'b',
         # :c and :d.
-        # 
+        #
         # It should also be noted that this function stops immediately at
         # any ruby keyword encountered:
         #   "attr_accessor :a, :b, :c if x == 5"  => ['a', 'b', 'c']
-        # 
+        #
         # @param [TokenList] tokenlist The list of tokens to process.
         # @param [Array<Class<Token>>] accepted_types passed to {#tokval}
         # @return [Array<String>] the list of tokvalues in the list.
-        # @return [Array<EMPTY>] if there are no symbols or Strings in the list 
+        # @return [Array<EMPTY>] if there are no symbols or Strings in the list
         # @see #tokval
         def tokval_list(tokenlist, *accepted_types)
           return [] unless tokenlist
@@ -176,7 +176,7 @@ module YARD
                 parencount -= 1
               end
             when TkLBRACE, TkLBRACK, TkDO
-              parencount += 1 
+              parencount += 1
               out.last << token.text if tokval != nil
             when TkRBRACE, TkRBRACK, TkEND
               out.last << token.text if tokval != nil
@@ -186,14 +186,14 @@ module YARD
 
               seen_comma = false unless TkWhitespace === token
               if parencount == 0
-                next if needcomma 
+                next if needcomma
                 next if TkWhitespace === token
                 if tokval != nil
                   out.last << tokval
                 else
                   out.last.clear
                   needcomma = true
-                end 
+                end
               elsif parencond
                 needcomma = true
                 out.last << token.text

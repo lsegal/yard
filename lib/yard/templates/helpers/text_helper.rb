@@ -8,7 +8,7 @@ module YARD
           out = ""
           text = text.split(/\n/)
           text.each_with_index do |line, i|
-            out << 
+            out <<
             case line
             when /^\s*$/; "\n\n"
             when /^\s+\S/, /^=/; line + "\n"
@@ -20,30 +20,30 @@ module YARD
 
         # @return [String] wraps text at +col+ columns.
         def wrap(text, col = 72)
-          text.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n") 
+          text.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n")
         end
-                
+
         # @return [String] indents +text+ by +len+ characters.
         def indent(text, len = 4)
           text.gsub(/^/, ' ' * len)
         end
-        
+
         # @return [String] aligns a title to the right
         def title_align_right(text, col = 72)
           align_right(text, '-', col)
         end
-        
+
         # @return [String] aligns text to the right
         def align_right(text, spacer = ' ', col = 72)
           text = text[0, col - 4] + '...' if (col - 1 - text.length) < 0
           spacer * (col - 1 - text.length) + " " + text
         end
-        
+
         # @return [String] returns a horizontal rule for output
         def hr(col = 72, sep = "-")
           sep * col
         end
-        
+
         # @return [String] the formatted signature for a method
         def signature(meth)
           # use first overload tag if it has a return type and method itself does not

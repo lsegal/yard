@@ -2,7 +2,7 @@ module YARD
   module Tags
     # Represents a metadata tag value (+@tag+). Tags can have any combination of
     # {#types}, {#name} and {#text}, or none of the above.
-    # 
+    #
     # @example Programmatic tag creation
     #   # The following docstring syntax:
     #   #   @param [String, nil] arg an argument
@@ -12,18 +12,18 @@ module YARD
     class Tag
       # @return [String] the name of the tag
       attr_accessor :tag_name
-      
+
       # @return [String] the tag text associated with the tag
       # @return [nil] if no tag text is supplied
       attr_accessor :text
-      
+
       # @return [Array<String>] a list of types associated with the tag
       # @return [nil] if no types are associated with the tag
       attr_accessor :types
-      
+
       # @return [String] a name associated with the tag
       attr_accessor :name
-      
+
       # @return [CodeObjects::Base] the associated object
       attr_accessor :object
 
@@ -31,7 +31,7 @@ module YARD
       # and a key name can be specified.
       #
       # Types are mainly for meta tags that rely on type information, such as +param+, +return+, etc.
-      # 
+      #
       # Key names are for tags that declare meta data for a specific key or name, such as +param+,
       # +raise+, etc.
       #
@@ -47,7 +47,7 @@ module YARD
       # Convenience method to access the first type specified. This should mainly
       # be used for tags that only specify one type.
       #
-      # @return [String] the first of the list of specified types 
+      # @return [String] the first of the list of specified types
       # @see #types
       def type
         types.first

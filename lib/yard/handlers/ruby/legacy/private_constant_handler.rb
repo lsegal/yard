@@ -2,15 +2,15 @@
 class YARD::Handlers::Ruby::Legacy::PrivateConstantHandler < YARD::Handlers::Ruby::Legacy::Base
   namespace_only
   handles /\Aprivate_constant(\s|\(|$)/
-  
+
   process do
     tokval_list(statement.tokens[2..-1], :attr, TkCONSTANT).each do |name|
       privatize_constant name
     end
   end
-  
+
   private
-  
+
   def privatize_constant(name)
     const = Proxy.new(namespace, name)
     ensure_loaded!(const)

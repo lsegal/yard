@@ -13,7 +13,7 @@ class Foo
   def initialize; end
 
   def ==(other)
-    'hello' 
+    'hello'
   end
   def /(other) 'hi' end
 
@@ -22,24 +22,24 @@ class Foo
   def method1
     def dynamic; end
   end
- 
+
   def self.method2; end
 
   # Docstring
   def String :: hello; "" end
-  
+
   def self.new() end
 
   def [](key = 'default') puts key end
   def []=(key, value) end
-  def 
+  def
 allowed?
 end
 
   def ` param; end
   def /(x = File.new('x', 'w'), y = 2) end
   def |; end; def =~ ()
-  def -@; end; 
+  def -@; end;
 end
   def *(o) def +@; end
     def ~@
@@ -47,7 +47,7 @@ end
   def &(o) end
   def %(o) end
   def ^(o) end
-  
+
   def optsmeth(x, opts = {}) end
   def blockmeth(x, &block) end
 
@@ -87,7 +87,7 @@ def CONST2.meth2_on_const; end
 
 class D
   alias b a
-  
+
   # foo bar
   def a; end
 end

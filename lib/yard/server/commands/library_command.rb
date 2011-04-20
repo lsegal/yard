@@ -5,7 +5,7 @@ module YARD
       # Some commands do not, but most (like {DisplayObjectCommand}) do. If your
       # command deals with libraries directly, subclass this class instead.
       # See {Base} for notes on how to subclass a command.
-      # 
+      #
       # @abstract
       class LibraryCommand < Base
         # @return [LibraryVersion] the object containing library information
@@ -19,14 +19,14 @@ module YARD
 
         # @return [Boolean] whether router should route for multiple libraries
         attr_accessor :single_library
-        
-        # @return [Boolean] whether to reparse data 
+
+        # @return [Boolean] whether to reparse data
         attr_accessor :incremental
 
         # Needed to synchronize threads in {#setup_yardopts}
         # @private
         @@library_chdir_lock = Mutex.new
-        
+
         def initialize(opts = {})
           super
           self.serializer = DocServerSerializer.new(self)
@@ -48,7 +48,7 @@ module YARD
         rescue LibraryNotPreparedError
           not_prepared
         end
-        
+
         private
 
         def setup_library
@@ -84,13 +84,13 @@ module YARD
           Registry.load_yardoc(library.yardoc_file)
           Thread.current[:__yard_last_yardoc__] = library.yardoc_file
         end
-        
+
         def not_prepared
           self.caching = false
           options.update(:path => request.path, :template => :doc_server, :type => :processing)
           [302, {'Content-Type' => 'text/html'}, [render]]
         end
-        
+
         # @private
         @@last_yardoc = nil
       end

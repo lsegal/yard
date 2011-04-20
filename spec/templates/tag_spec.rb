@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Templates::Engine.template(:default, :tags) do
   before { Registry.clear }
-  
+
   describe 'all known tags' do
     before do
       YARD.parse_string <<-'eof'

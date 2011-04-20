@@ -6,7 +6,7 @@ describe Hash do
       list = [['foo', 'bar'], ['foo2', 'bar2']]
       Hash[list].should == {'foo' => 'bar', 'foo2' => 'bar2'}
     end
-    
+
     it "should accept an array as a key" do
       Hash[['a', 'b'], 1].should == {['a', 'b'] => 1}
     end

@@ -17,7 +17,7 @@ end
 class StubbedProcessor < Processor
   def process(statements)
     statements.each_with_index do |stmt, index|
-      find_handlers(stmt).each do |handler| 
+      find_handlers(stmt).each do |handler|
         handler.new(self, stmt).process
       end
     end
@@ -31,4 +31,3 @@ class StubbedSourceParser < Parser::SourceParser
     post.process(@parser.enumerator)
   end
 end
-  

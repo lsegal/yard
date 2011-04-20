@@ -5,19 +5,19 @@ module YARD
   module Server
     # This class wraps the {RackAdapter} into a Rack-compatible middleware.
     # See {#initialize} for a list of options to pass via Rack's +#use+ method.
-    # 
+    #
     # @note You must pass a +:libraries+ option to the RackMiddleware via +#use+. To
     #   read about how to return a list of libraries, see {LibraryVersion} or look
     #   at the example below.
     # @example Using the RackMiddleware in a Rack application
     #   libraries = {:mylib => [YARD::Server::LibraryVersion.new('mylib', nil, '/path/to/.yardoc')]}
     #   use YARD::Server::RackMiddleware, :libraries => libraries
-    # 
+    #
     class RackMiddleware
       # Creates a new Rack-based middleware for serving YARD documentation.
-      # 
+      #
       # @param app the next Rack middleware in the stack
-      # @option opts [Hash{String=>Array<LibraryVersion>}] :libraries ({}) 
+      # @option opts [Hash{String=>Array<LibraryVersion>}] :libraries ({})
       #   the map of libraries to serve through the adapter. This option is *required*.
       # @option opts [Hash] :options ({}) a list of options to pass to the adapter.
       #   See {Adapter#options} for a list.
@@ -28,7 +28,7 @@ module YARD
         @app = app
         @adapter = RackAdapter.new(*args)
       end
-      
+
       def call(env)
         status, headers, body = *@adapter.call(env)
         if status == 404
@@ -38,11 +38,11 @@ module YARD
         end
       end
     end
-    
+
     # A server adapter to respond to requests using the Rack server infrastructure.
     class RackAdapter < Adapter
       include WEBrick::HTTPUtils
-      
+
       # Responds to Rack requests and builds a response with the {Router}.
       # @return [Array(Number,Hash,Array)] the Rack-style response
       def call(env)
@@ -50,7 +50,7 @@ module YARD
         request.path_info = unescape(request.path_info) # unescape things like %3F
         router.call(request)
       end
-      
+
       # Starts the +Rack::Server+. This method will pass control to the server and
       # block.
       # @return [void]
@@ -60,9 +60,9 @@ module YARD
         print_start_message(server)
         server.start
       end
-      
+
       private
-      
+
       def print_start_message(server)
         opts = server.default_options.merge(server.options)
         puts ">> YARD #{YARD::VERSION} documentation server at http://#{opts[:Host]}:#{opts[:Port]}"

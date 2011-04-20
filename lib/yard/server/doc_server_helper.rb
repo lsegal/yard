@@ -18,10 +18,10 @@ module YARD
       # @param (see Templates::Helpers::HtmlHelper#url_for_file)
       # @return (see Templates::Helpers::HtmlHelper#url_for_file)
       def url_for_file(filename, anchor = nil)
-        "/#{base_path(router.docs_prefix)}/file/" + filename.sub(%r{^#{@library.source_path.to_s}/}, '') + 
+        "/#{base_path(router.docs_prefix)}/file/" + filename.sub(%r{^#{@library.source_path.to_s}/}, '') +
           (anchor ? "##{anchor}" : "")
       end
-      
+
       # @example The base path for a library 'foo'
       #   base_path('docs') # => 'docs/foo'
       # @param [String] path the path prefix for a base path URI
@@ -29,7 +29,7 @@ module YARD
       def base_path(path)
         path + (@single_library ? '' : "/#{@library}")
       end
-      
+
       # @return [Router] convenience method for accessing the router
       def router; @adapter.router end
     end

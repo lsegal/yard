@@ -9,14 +9,14 @@ describe YARD::Parser::CParser do
     override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
     @override_parser = Parser::CParser.new(IO.read(override_file)).parse
   end
-  
+
   describe '#parse' do
     it "should parse Array class" do
       obj = YARD::Registry.at('Array')
       obj.should_not be_nil
       obj.docstring.should_not be_blank
     end
-    
+
     it "should parse method" do
       obj = YARD::Registry.at('Array#initialize')
       obj.docstring.should_not be_blank

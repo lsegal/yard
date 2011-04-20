@@ -25,14 +25,14 @@ describe YARD::Serializers::YardocSerializer do
       @foo.should == newfoo
       newfoo.hash.should == @foo.hash
     end
-    
+
     it "should maintain hash key equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
       {@foo => 1}.should have_key(newfoo)
       {newfoo => 1}.should have_key(@foo)
     end
   end
-  
+
   describe '#serialize' do
     it "should accept a hash of codeobjects (and write to root)" do
       data = {:root => Registry.root}

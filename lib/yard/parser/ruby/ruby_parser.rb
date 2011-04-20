@@ -11,14 +11,14 @@ module YARD
         def initialize(source, filename)
           @parser = RipperParser.new(source, filename)
         end
-        
+
         def parse; @parser.parse end
         def tokenize; @parser.tokens end
         def enumerator; @parser.enumerator end
         def shebang_line; @parser.shebang_line end
         def encoding_line; @parser.encoding_line end
       end
-      
+
       # Internal parser class
       # @since 0.5.6
       class RipperParser < Ripper
@@ -52,13 +52,13 @@ module YARD
           insert_comments
           self
         end
-        
+
         def enumerator
           ast.children
         end
-        
+
         private
-        
+
         MAPPINGS = {
           :BEGIN => "BEGIN",
           :END => "END",
@@ -110,7 +110,7 @@ module YARD
           :zsuper => "super"
         }
         REV_MAPPINGS = {}
-        
+
         AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
           :int, :float, :ivar, :label, :period, :regexp_end, :tstring_content, :backtick]
 
@@ -124,7 +124,7 @@ module YARD
 
         PARSER_EVENT_TABLE.each do |event, arity|
           node_class = AstNode.node_class_for(event)
-          
+
           if /_new\z/ =~ event.to_s and arity == 0
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               def on_#{event}(*args)
@@ -165,7 +165,7 @@ module YARD
             end
           eof
         end
-        
+
         REV_MAPPINGS.select {|k,v| k.is_a?(Symbol) }.each do |pair|
           event, value = *pair
           ast_token = AST_TOKENS.include?(event)
@@ -177,7 +177,7 @@ module YARD
             end
           eof
         end
-        
+
         [:kw, :op].each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
@@ -200,7 +200,7 @@ module YARD
             end
           eof
         end
-        
+
         def visit_event(node)
           map = @map[MAPPINGS[node.type]]
           lstart, sstart = *(map ? map.pop : [lineno, lineno])
@@ -208,7 +208,7 @@ module YARD
           node.line_range = Range.new(lstart, lineno)
           node
         end
-        
+
         def visit_event_arr(node)
           mapping = MAPPINGS[node.type].find {|k| @map[k] && !@map[k].empty? }
           lstart, sstart = *@map[mapping].pop
@@ -227,7 +227,7 @@ module YARD
             AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno-1, :token => true)
           end
         end
-        
+
         def add_token(token, data)
           if @tokens.last && @tokens.last[0] == :symbeg
             @tokens[-1] = [:symbol, ":" + data]
@@ -270,7 +270,7 @@ module YARD
           args.compact.size == 1 ? args.first : AstNode.new(:list, args)
         end
         alias on_bodystmt on_body_stmt
-        
+
         def on_assoc_new(*args)
           AstNode.new(:assoc, args)
         end
@@ -278,27 +278,27 @@ module YARD
         def on_hash(*args)
           visit_event AstNode.new(:hash, args.first || [])
         end
-        
+
         def on_bare_assoc_hash(*args)
           AstNode.new(:list, args.first)
         end
-        
+
         def on_assoclist_from_args(*args)
           args.first
         end
-        
+
         def on_aref(*args)
           ll, lc = *@map[:aref].pop
           sr = args.first.source_range.first..lc
           lr = args.first.line_range.first..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
         end
-        
+
         def on_rbracket(tok)
           (@map[:aref] ||= []) << [lineno, charno]
           visit_ns_token(:rbracket, tok, false)
         end
-        
+
         def on_top_const_ref(*args)
           type = :top_const_ref
           node = AstNode.node_class_for(type).new(type, args)
@@ -310,11 +310,11 @@ module YARD
           mapping.push(extra_op) if extra_op
           node
         end
-        
+
         def on_const_path_ref(*args)
           ReferenceNode.new(:const_path_ref, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
-        
+
         [:if_mod, :unless_mod, :while_mod].each do |kw|
           node_class = AstNode.node_class_for(kw)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
@@ -326,11 +326,11 @@ module YARD
             end
           eof
         end
-        
+
         def on_qwords_new
           visit_event LiteralNode.new(:qwords_literal, [])
         end
-        
+
         def on_string_literal(*args)
           node = visit_event_arr(LiteralNode.new(:string_literal, args))
           if args.size == 1
@@ -343,15 +343,15 @@ module YARD
           end
           node
         end
-        
+
         def on_lambda(*args)
           visit_event_arr AstNode.new(:lambda, args)
         end
-        
+
         def on_string_content(*args)
           AstNode.new(:string_content, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
-        
+
         def on_rescue(exc, *args)
           exc = AstNode.new(:list, exc) if exc
           visit_event AstNode.new(:rescue, [exc, *args])
@@ -380,7 +380,7 @@ module YARD
           end
           ParameterNode.new(:params, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
-        
+
         def on_label(data)
           add_token(:label, data)
           ch = charno
@@ -414,7 +414,7 @@ module YARD
             @groups.unshift [lineno, nil]
             return
           end
-          
+
           comment = comment.gsub(/^(\#{1,2})\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
           hash_flag = $1 == '##' ? true : false
@@ -425,32 +425,32 @@ module YARD
             @comments_flags.delete(lineno - 1)
             comment = append_comment + "\n" + comment
           end
-          
+
           @comments[lineno] = comment
           @comments_flags[lineno] = hash_flag if !append_comment
           @comments_last_column = column
         end
-        
+
         def on_embdoc_beg(text)
           visit_ns_token(:embdoc_beg, text)
           @embdoc = ""
         end
-        
+
         def on_embdoc(text)
           visit_ns_token(:embdoc, text)
           @embdoc << text
         end
-        
+
         def on_embdoc_end(text)
           visit_ns_token(:embdoc_end, text)
           @comments[lineno] = @embdoc
           @embdoc = nil
         end
-        
+
         def on_parse_error(msg)
           raise ParserSyntaxError, "syntax error in `#{file}`:(#{lineno},#{column}): #{msg}"
         end
-        
+
         def insert_comments
           root.traverse do |node|
             next if node.type == :list || node.parent.type != :list
@@ -474,7 +474,7 @@ module YARD
             end
           end
         end
-        
+
         def freeze_tree(node = nil)
           node ||= root
           node.children.each do |child|

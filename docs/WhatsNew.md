@@ -25,109 +25,109 @@ What's New in 0.6.x?
 ## Local documentation server for RubyGems or projects (`yard server`) (0.6.0)
 
 The new `yard server` command spawns a documentation server that can serve
-either documentation for a local project or installed RubyGems. The server 
-will host (by default) on http://localhost:8808. 
+either documentation for a local project or installed RubyGems. The server
+will host (by default) on http://localhost:8808.
 
 To serve documentation for the active project (in the current directory):
 
     $ yard server
-    
-The server can also run in "incremental" mode for local projects. In this 
-situation, any modified sources will immediately be updated at each request, 
-ensuring that the server always serve the code exactly as it is on disk. 
-Documenting your code in this fashion essentially gives you an efficient a 
-live preview without running a separate command everytime you make a change. 
+
+The server can also run in "incremental" mode for local projects. In this
+situation, any modified sources will immediately be updated at each request,
+ensuring that the server always serve the code exactly as it is on disk.
+Documenting your code in this fashion essentially gives you an efficient a
+live preview without running a separate command everytime you make a change.
 To serve documentation for the active project in incremental mode:
 
     $ yard server --reload
-    
-<span class="note">Note that in incremental mode, objects or method groupings 
-  cannot be removed. If you have removed objects or modified groupings, you 
-  will need to flush the cache by deleting `.yardoc` and (optionally) 
+
+<span class="note">Note that in incremental mode, objects or method groupings
+  cannot be removed. If you have removed objects or modified groupings, you
+  will need to flush the cache by deleting `.yardoc` and (optionally)
   restarting the server.</span>
 
-The documentation server can also serve documentation for all installed gems 
-on your system, similar to `gem server`, but using YARD's functionality and 
+The documentation server can also serve documentation for all installed gems
+on your system, similar to `gem server`, but using YARD's functionality and
 templates. To serve documentation for installed gems:
 
     $ yard server --gems
-    
-<span class="note">Documentation for the gem need not be previously generated 
-  at install-time. If documentation for the gem has not been generated, YARD 
-  will do this for you on-the-fly. It is therefore possible to speed up your 
+
+<span class="note">Documentation for the gem need not be previously generated
+  at install-time. If documentation for the gem has not been generated, YARD
+  will do this for you on-the-fly. It is therefore possible to speed up your
   gem installs by using `gem install GEMNAME --no-rdoc` without repercussion.
   You can also add this switch to your `~/.gemrc` file so that you don't need
-   to re-type it each time. See [this link](http://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install) 
+   to re-type it each time. See [this link](http://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)
    for exact instructions.</span>
 
 ## Groups support for method listing (0.6.0)
 
-You can now organize methods in a class/module into logical separated groups. 
-These groups apply lexically and are listed in the order they are defined. 
+You can now organize methods in a class/module into logical separated groups.
+These groups apply lexically and are listed in the order they are defined.
 For instance, to define a group:
 
     # @group Rendering an Object
-    
+
     # Documentation here
     def foo; end
-    
+
     # Extra documentation...
     def bar; end
-    
+
     # @group Another Group
-    
+
     def aaa; end
-    
-<span class="note">Note that these `@group` and `@endgroup` declarations are 
-  not "tags" and should always be separated with at least 1 line of whitespace 
+
+<span class="note">Note that these `@group` and `@endgroup` declarations are
+  not "tags" and should always be separated with at least 1 line of whitespace
   from any other documentation or code.</span>
-    
-In the above example, "Rendering an Object" will be listed with "foo" and 
-"bar" above "Another Group", even though "aaa" comes before the two other 
-methods, alphabetically. To end a group, use `@endgroup`. It is not necessary 
-to end a group to start a new one, only if there is an object following the 
+
+In the above example, "Rendering an Object" will be listed with "foo" and
+"bar" above "Another Group", even though "aaa" comes before the two other
+methods, alphabetically. To end a group, use `@endgroup`. It is not necessary
+to end a group to start a new one, only if there is an object following the
 group that should not belong in any group.
 
     # @group Group 1
-    
+
     def foo; end
-    
+
     # @endgroup
-    
+
     # This method should not be listed in any group
     def bar; end
 
 ## Single file template (`--one-file`) support (0.6.0)
 
-`yardoc` now has the `--one-file` option to generate a single-file template 
-for small scripts and libraries. In this case, any comments at the top of 
+`yardoc` now has the `--one-file` option to generate a single-file template
+for small scripts and libraries. In this case, any comments at the top of
 the script file will be recognized as a README.
 
 ## `yard` CLI executable with pluggable commands (0.6.0)
 
-<span class="note">The `yardoc` and `yri` commands are not deprecated and can 
-  continue to be used. They are shortcuts for `yard doc` and `yard ri` 
+<span class="note">The `yardoc` and `yri` commands are not deprecated and can
+  continue to be used. They are shortcuts for `yard doc` and `yard ri`
   respectively. However, `yard-graph` has been removed.</span>
 
-YARD now has a `yard` executable which combines all pre-existing and new 
-commands into a single pluggable command that is both easier to remember and 
+YARD now has a `yard` executable which combines all pre-existing and new
+commands into a single pluggable command that is both easier to remember and
 access. To get a list of commands, type `yard --help`.
 
-If you are a plugin developer, you can create your own `yard` command by first 
-subclassing the {YARD::CLI::Command} class and then registering this class 
+If you are a plugin developer, you can create your own `yard` command by first
+subclassing the {YARD::CLI::Command} class and then registering this class
 with the {YARD::CLI::CommandParser.commands} list. For instance:
 
     YARD::CLI::CommandParser.commands[:my_command] = MyCommandClass
-    
+
 The above line will enable the user to execute `yard my_command [options]`.
 
 ## `yard diff` command to object-diff two versions of a project (0.6.0)
 
-One of the built-in commands that comes with the new `yard` executable is the 
-ability to do object-oriented diffing across multiple versions of the same 
-project, either by 2 versions of a gem, or 2 working copies. Just like 
-regular diffing tells you which lines have been added/removed in a file, 
-object diffing allows you to see what classes/methods/modules have been 
+One of the built-in commands that comes with the new `yard` executable is the
+ability to do object-oriented diffing across multiple versions of the same
+project, either by 2 versions of a gem, or 2 working copies. Just like
+regular diffing tells you which lines have been added/removed in a file,
+object diffing allows you to see what classes/methods/modules have been
 added/removed between versions of a codebase.
 
 For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](http://gnuu.org/2010/06/26/yard-object-oriented-diffing/).
@@ -142,30 +142,30 @@ YARD now outputs the following statistics when `yard stats` is run:
     Constants:      53 (   20 undocumented)
     Methods:       602 (   70 undocumented)
      85.16% documented
-    
-Note that these statistics are based on what you have set to show in your 
-documentation. If you use `@private` tags and/or do not display 
-private/protected methods in your documentation, these will not show up as 
+
+Note that these statistics are based on what you have set to show in your
+documentation. If you use `@private` tags and/or do not display
+private/protected methods in your documentation, these will not show up as
 undocumented. Therefore this metric is contextual.
 
-You can also specifically list all undocumented objects (and their file 
+You can also specifically list all undocumented objects (and their file
 locations) with the `--list-undoc` option.
 
 ## Added `--asset` option to `yardoc` (0.6.0)
 
-The `yardoc` command can now take the `--asset` option to copy over 
-files/directories (recursively) to the output path after generating 
-documentation. The format of the argument is "from:to" where from is the 
-source path and to is the destination. For instance, YARD uses the following 
-syntax in the `.yardopts` file to copy over image assets from the 
+The `yardoc` command can now take the `--asset` option to copy over
+files/directories (recursively) to the output path after generating
+documentation. The format of the argument is "from:to" where from is the
+source path and to is the destination. For instance, YARD uses the following
+syntax in the `.yardopts` file to copy over image assets from the
 'docs/images' directory into the 'images' directory after generating HTML:
 
     --asset docs/images:images
 
 ## New template API (0.6.0)
 
-The new template API allows for easier insertion of sections within an 
-inherited template. You should no longer need to insert by index, an 
+The new template API allows for easier insertion of sections within an
+inherited template. You should no longer need to insert by index, an
 error-prone process that could break when a template is updated. Instead of:
 
     sections.last.place(:my_section).before(:another_section)
@@ -173,56 +173,56 @@ error-prone process that could break when a template is updated. Instead of:
 use:
 
     sections.place(:my_section).before_any(:another_section)
-    
+
 You can see more in the {file:docs/Templates.md#Inserting_and_Traversing_Sections}
 document.
 
 ## HTML template now adds inline Table of Contents for extra files pages (0.6.0)
 
-A table of contents is now generated dynamically using JavaScript for extra 
+A table of contents is now generated dynamically using JavaScript for extra
 file pages (such as README's, or this document). It is generated based off the
-headers (h1,h2,... tags) used in the document, and can be floated to the 
+headers (h1,h2,... tags) used in the document, and can be floated to the
 right or listed inline on the page.
 
 ## Ad-hoc tag registration via `yardoc` CLI (`--tag`, etc.) (0.6.0)
 
-Simple meta-data tags can now be added at the command-line and registered to 
-display in templates in a number of pre-defined ways. For instance, to create 
+Simple meta-data tags can now be added at the command-line and registered to
+display in templates in a number of pre-defined ways. For instance, to create
 a freeform text tag, use the following:
 
     --tag my_tag_name:"My Tag Title"
-    
-You can also create a "typed" tag (similar to `@return`), a typed named tag 
-(similar to `@param`) as well as various combinations. The full list of 
+
+You can also create a "typed" tag (similar to `@return`), a typed named tag
+(similar to `@param`) as well as various combinations. The full list of
 options are listed in `yardoc --help` under the "Tag Options" section.
-    
-If you wish to create a tag to store data but do not wish to show this data 
+
+If you wish to create a tag to store data but do not wish to show this data
 in the templates, use the `--hide-tag` option to hide it from generated output:
 
     --hide-tag my_tag_name
 
 ## Added `--transitive-tags` to register transitive tags (0.6.0)
 
-Transitive tags are tags that apply to all descendants of a namespace (class 
-or module) when documented on that namespace. For instance, the `@since` tag 
-is a transitive tag. Applying `@since` to a class will automatically apply 
-`@since` to all methods in the class. Creating a `@since` tag directly on a 
+Transitive tags are tags that apply to all descendants of a namespace (class
+or module) when documented on that namespace. For instance, the `@since` tag
+is a transitive tag. Applying `@since` to a class will automatically apply
+`@since` to all methods in the class. Creating a `@since` tag directly on a
 method will override the inherited value.
 
 You can specify transitive tags on the command-line by using this option. Note
 that the tags must already exist (built-in or created with the `--tag` option)
-to be specified as transitive. If you wish to do this programmatically, see 
+to be specified as transitive. If you wish to do this programmatically, see
 the {YARD::Tags::Library.transitive_tags} attribute.
 
 ## `yardoc` now displays RDoc-like statistics (`--no-stats` to hide) (0.6.0)
 
-As seen in the `yard stats` feature overview, `yardoc` displays RDoc-like 
-statistics when it is run. The output is equivalent to typing `yard stats`. 
+As seen in the `yard stats` feature overview, `yardoc` displays RDoc-like
+statistics when it is run. The output is equivalent to typing `yard stats`.
 To hide this output when yardoc is run, use `--no-stats`.
 
 ## `yri` now works on constants (0.6.0)
 
-Templates have now been added for text view of constants, which displays any 
+Templates have now been added for text view of constants, which displays any
 documentation and the constant value.
 
 ## Plugins are no longer auto-loaded (added `--plugin` switch) (0.6.2)
@@ -231,14 +231,14 @@ This is a backwards-incompatible change that disables plugins from automatically
 loading when YARD starts up. From now on, you should manually declare which
 plugins your project is using by adding `--plugin PLUGINNAME` to a `.yardopts`
 file in the root of your project. You can also re-enable autoloaded plugins
-by setting `load_plugins` to true in your configuration file (`yard config load_plugins true`, 
-see next item). You can also set `autoload_plugins` to a list of plugins 
+by setting `load_plugins` to true in your configuration file (`yard config load_plugins true`,
+see next item). You can also set `autoload_plugins` to a list of plugins
 to be automatically loaded on start.
 
 If you are a YARD plugin author, please make sure to inform your users of these
 changes.
 
-Note that `--plugin` switches passed on the commandline (not via `.yardopts`) 
+Note that `--plugin` switches passed on the commandline (not via `.yardopts`)
 are parsed before commands are loaded, and therefore can add in new CLI commands.
 
 ## Added `YARD::Config` API and `~/.yard/config` configuration file (0.6.2)
@@ -256,11 +256,11 @@ and looks like:
     :safe_mode: false
 
 You can also set configuration options via the command-line (see next item).
-    
+
 ## Added `yard config` command to view/edit configuration (0.6.2)
 
 A new `yard config` command was created to view or edit the configuration
-file via the commandline. 
+file via the commandline.
 
 * To view the current configuration use `yard config --list`.
 * To view a specific item use `yard config ITEMNAME`
@@ -321,8 +321,8 @@ as an installable gem for yri support (see #3).
 Incremental parsing and output generation with `yardoc -c` (0.5.0, 0.5.3)
 -------------------------------------------------------------------------
 
-<p class="note">Note: in 0.5.3 and above you must use <tt>--incremental</tt> 
-  to incrementally generate HTML, otherwise only parsing will be done 
+<p class="note">Note: in 0.5.3 and above you must use <tt>--incremental</tt>
+  to incrementally generate HTML, otherwise only parsing will be done
   incrementally but HTML will be generated with all objects. <tt>--incremental</tt>
   implies <tt>-c</tt>, so no need to specify them both.</p>
 
@@ -346,7 +346,7 @@ by yard. Therefore, to use this command you must first parse all gems with
 YARD. To parse all gems, use the following command:
 
     $ sudo yardoc --build-gems
-    
+
 The above command builds a .yardoc file for all installed gems in the
 respective gem directory. If you do not have write access to the gem path,
 YARD will write the yardoc file to `~/.yard/gem_index/NAME-VERSION.yardoc`.
@@ -356,7 +356,7 @@ Note: you can also use `--re-build-gems` to force re-parsing of all gems.
 You can now do lookups with yri:
 
     $ yri JSON
-    
+
 All lookups are cached to `~/.yard/yri_cache` for quicker lookups the second
 time onward.
 
@@ -368,7 +368,7 @@ method that has not declared a @return tag. To customize the default
 return type, you can specify:
 
     $ yardoc --default-return 'MyDefaultType'
-    
+
 You can also use the empty string to list no return type.
 
 In addition, you can use --hide-void-return to ignore any method that
@@ -377,7 +377,7 @@ defines itself as a void type by: `@return [void]`
 Multiple syntax highlighting language support (0.5.0)
 -----------------------------------------------------
 
-YARD now supports the ability to specify a language type for code blocks in 
+YARD now supports the ability to specify a language type for code blocks in
 docstrings. Although no actual highlighting support is added for any language
 but Ruby, you can add your own support by writing your own helper method:
 
@@ -385,7 +385,7 @@ but Ruby, you can add your own support by writing your own helper method:
     def html_syntax_highlight_LANGNAME(source)
       # return highlighted HTML
     end
-    
+
 To use this language in code blocks, prefix the block with `!!!LANGNAME`:
 
     !!!plain
@@ -410,9 +410,9 @@ Support for yard-doc-* gem packages as hosted .yardoc dbs (0.5.1)
 
 You can now install special YARD plugin gems titled yard-doc-NAME to get
 packaged a .yardoc database. This will enable yri lookups or building docs
-for the gem without the code. 
+for the gem without the code.
 
-One main use for this is the `yard-doc-core` package, which enabled yri 
+One main use for this is the `yard-doc-core` package, which enabled yri
 support for Ruby core classes (stdlib coming soon as `yard-doc-stdlib`).
 To install it, simply:
 
@@ -428,7 +428,7 @@ for a specific version of Ruby, use the `--version` switch on gem:
 Support for extra search paths in `yri` (0.5.1)
 -----------------------------------------------
 
-You can now add custom paths to non-gem .yardoc files 
+You can now add custom paths to non-gem .yardoc files
 by adding them as newline separated paths in `~/.yard/yri_search_paths`.
 
 Generating HTML docs now adds frames view (0.5.3)
@@ -441,7 +441,7 @@ still find frames beneficial.
 Tree view for class list (0.5.3)
 --------------------------------
 
-The class list now displays as an expandable tree view to better organized an 
+The class list now displays as an expandable tree view to better organized an
 otherwise cluttered namespace. If you properly namespace your less important
 classes (like Rails timezone classes), they will not take up space in the
 class list unless the user looks for them.
@@ -454,8 +454,8 @@ top of the file with a shebang-like line:
 
     #!textile
     contents here
-    
-The above file contents will be rendered with a textile markup engine 
+
+The above file contents will be rendered with a textile markup engine
 (eg. RedCloth).
 
 Keyboard shortcuts for default HTML template (0.5.4)
@@ -472,7 +472,7 @@ You can now register parsers for custom source languages by calling the
 following method:
 
     SourceParser.register_parser_type(:java, MyJavaParser, 'java')
-    
+
 The parser class MyJavaParser should be a subclass of {YARD::Parser::Base},
 and the last argument is a set of extensions (string, array or regexp). You
 can read more about registering parsers at the {YARD::Parser::SourceParser}
@@ -493,13 +493,13 @@ New templating engine and templates
 -----------------------------------
 
 The templates were redesigned, most notably removing the ugly frameset, adding
-search to the class/method lists, simplifying the layout and making things 
+search to the class/method lists, simplifying the layout and making things
 generally prettier. You should also notice that more tags are now visible in
 the templates such as @todo, the new @abstract and @note tags and some others
 that existed but were previously omitted from the generated documentation.
 
-There is also a new templating engine (based on the tadpole templating library) 
-to allow for much more user customization. You can read about it in 
+There is also a new templating engine (based on the tadpole templating library)
+to allow for much more user customization. You can read about it in
 {file:docs/Templates.md}.
 
 yardoc `--query` argument
@@ -512,7 +512,7 @@ adding "@api public" to each of your public API methods/classes and using
 the following argument:
 
     --query '@api.text == "public"'
-    
+
 More information on queries is in the {file:README.md}.
 
 Greatly expanded API documentation
@@ -528,7 +528,7 @@ New plugin support
 ------------------
 
 YARD now supports loading of plugins via RubyGems. Any gem named `yard-*` or
-`yard_*` will now be loaded when YARD starts up. Note that the '-' separator 
+`yard_*` will now be loaded when YARD starts up. Note that the '-' separator
 is the recommended naming scheme.
 
 To ignore plugins, add the gem names to `~/.yard/ignored_plugins` on separate
@@ -547,14 +547,14 @@ use this tag sparingly, as it is not meant to be an equivalent to RDoc's
 This tag exists so that you can create a query (`--query !@private`) to
 ignore all of these private objects in your documentation. You can also
 use the new `--no-private` switch, which is a shortcut to the afformentioned
-query. You can read more about the new tags in the {file:docs/GettingStarted.md} 
+query. You can read more about the new tags in the {file:docs/GettingStarted.md}
 guide.
 
 Default rake task is now `rake yard`
 ------------------------------------
 
 Not a big change, but anyone using the default "rake yardoc" task should
-update their scripts: 
+update their scripts:
 
 [http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
 
@@ -571,21 +571,21 @@ What's New in 0.2.3.x?
 Full Ruby 1.9 support
 ---------------------
 
-YARD's development actually focuses primarily on 1.9 from the get-go, so it is 
-not an afterthought. All features are first implemented for compatibility with 
+YARD's development actually focuses primarily on 1.9 from the get-go, so it is
+not an afterthought. All features are first implemented for compatibility with
 1.9, but of course all functionality is also tested in 1.8.x. YARD 0.2.2 was
 mostly compatible with 1.9, but the new release improves and extends in certain
 areas where compatibility was lacking. The new release should be fully functional
 in Ruby 1.9.
-  
+
 New parser code and handler API for 1.9
 ---------------------------------------
 
-Using Ruby 1.9 also gives YARD the advantage of using the new `ripper` library 
-which was added to stdlib. The ripper parser is Ruby's official answer to 
-projects like ParseTree and ruby2ruby. Ripper allows access to the AST as it 
-is parsed by the Ruby compiler. This has some large benefits over alternative 
-projects: 
+Using Ruby 1.9 also gives YARD the advantage of using the new `ripper` library
+which was added to stdlib. The ripper parser is Ruby's official answer to
+projects like ParseTree and ruby2ruby. Ripper allows access to the AST as it
+is parsed by the Ruby compiler. This has some large benefits over alternative
+projects:
 
   1. It is officially supported and maintained by the Ruby core team.
   2. The AST is generated directly from the exact same code that drives the
@@ -593,7 +593,7 @@ projects:
      equivalent AST.
   3. It needs no hacks, gems or extra libs and works out of the box in 1.9.
   4. It's *fast*.
-  
+
 Having the AST means that developers looking to extend YARD have much better
 access to the parsed code than in previous versions. The only caveat is that
 this library is not back-compatible to 1.8.x. Because of this, there are
@@ -604,11 +604,11 @@ handlers that are compatible for both 1.8.x and 1.9 in one shot, or decide to
 implement the handler using both APIs. Realize that the benefit of using the new
 API means 1.9 users will get a 2.5x parsing speed increase over running the legacy
 handlers (this is *in addition to* the ~1.8x speed increase of using YARV over MRI).
-    
+
 A new `@overload` tag
 ---------------------
 
-The new `@overload` tag enables users to document methods that take multiple 
+The new `@overload` tag enables users to document methods that take multiple
 parameters depending on context. This is basically equivalent to RDoc's call-seq,
 but with a name that is more akin to the OOP concept of method overloading
 that is actually being employed. Here's an example:
@@ -624,7 +624,7 @@ that is actually being employed. Here's an example:
       def to_html(*args)
         # split args depending on context
       end
-      
+
 As you can see each overload takes its own nested tags (including a docstring)
 as if it were its own method. This allows "virtual" overloading behaviour at
 the API level to make Ruby look like overload-aware languages without caring

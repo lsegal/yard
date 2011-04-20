@@ -17,15 +17,15 @@ module YARD
             raise NameError, "could not load RDocMarkup (rdoc is not installed)"
           end
         end
-        
+
         class RDocMarkup
           attr_accessor :from_path
-          
+
           def initialize(text)
             @text = text
             @markup = MARKUP.new
           end
-          
+
           def to_html
             formatter = RDocMarkupToHtml.new
             formatter.from_path = from_path
@@ -34,11 +34,11 @@ module YARD
             html = fix_typewriter(html)
             html
           end
-          
+
           private
 
           # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
-          # 
+          #
           # @todo Refactor into own SimpleMarkup subclass
           def fix_typewriter(text)
             text.gsub(/(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+/) do
@@ -54,21 +54,21 @@ module YARD
 
           # Don't allow -- to turn into &#8212; element. The chances of this being
           # some --option is far more likely than the typographical meaning.
-          # 
+          #
           # @todo Refactor into own SimpleMarkup subclass
           def fix_dash_dash(text)
             text.gsub(/&#8212;(?=\S)/, '--')
           end
         end
-        
+
         class RDocMarkupToHtml
           attr_accessor :from_path
-          
+
           # Disable auto-link of URLs
           def handle_special_HYPERLINK(special)
             @hyperlink ? special.text : super
           end
-          
+
           def accept_paragraph(*args)
             par = args.last
             text = par.respond_to?(:txt) ? par.txt : par.text

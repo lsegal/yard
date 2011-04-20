@@ -9,7 +9,7 @@ module YARD
         erb = yield.src
         encoding = erb[/\A(#coding[:=].*\r?\n)/, 1] || ''
         module_eval "#{encoding}def #{name}; #{erb}; end", filename
-        
+
         name
       end
 

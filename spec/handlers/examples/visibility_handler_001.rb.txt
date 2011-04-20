@@ -1,6 +1,6 @@
 class Testing
   def pub; end
-  
+
   private
 
   def priv; end
@@ -17,11 +17,11 @@ class Testing
   def pub2; end
 
   protected :notpriv, 'notpriv2', :notpriv?
-  
+
   private name
   private *argument
   private *(method_call)
-  
+
   def Foo; end
   private :Foo
 end

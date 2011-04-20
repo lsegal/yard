@@ -12,21 +12,21 @@ module YARD
         when :private;   '-'
         end
       end
-      
+
       # Formats the path of an object for Graphviz syntax
       # @param [CodeObjects::Base] object an object to format the path of
       # @return [String] the encoded path
       def format_path(object)
         object.path.gsub('::', '_')
       end
-      
+
       # Encodes text in escaped Graphviz syntax
       # @param [String] text text to encode
       # @return [String] the encoded text
       def h(text)
         text.to_s.gsub(/(\W)/, '\\\\\1')
       end
-      
+
       # Tidies data by formatting and indenting text
       # @param [String] data pre-formatted text
       # @return [String] tidied text.

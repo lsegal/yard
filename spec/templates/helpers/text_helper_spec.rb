@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + "/shared_signature_examples"
 describe YARD::Templates::Helpers::TextHelper do
   include YARD::Templates::Helpers::TextHelper
   include YARD::Templates::Helpers::MethodHelper
-  
+
   describe '#signature' do
     before do
       @results = {
@@ -23,9 +23,9 @@ describe YARD::Templates::Helpers::TextHelper do
         :block => "root.foo {|a, b, c| ... } -> Object"
       }
     end
-    
+
     def signature(obj) super(obj).strip end
-    
+
     it_should_behave_like "signature"
   end
 

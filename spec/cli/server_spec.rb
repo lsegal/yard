@@ -13,15 +13,15 @@ describe YARD::CLI::Server do
     @adapter.stub!(:setup)
     @cli = YARD::CLI::Server.new
   end
-  
+
   def rack_required
     begin; require 'rack'; rescue LoadError; pending "rack required for this test" end
   end
-  
+
   def unstub_adapter
     @no_adapter_mock = true
   end
-  
+
   def run(*args)
     if @libraries.empty?
       library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, '.yardoc')
@@ -43,65 +43,65 @@ describe YARD::CLI::Server do
     @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '.yardoc')]
     run
   end
-  
+
   it "should use .yardoc as yardoc file is library list is odd" do
     @libraries['a'] = [Server::LibraryVersion.new('a', nil,'.yardoc')]
     run 'a'
   end
-  
+
   it "should force multi library if more than one library is listed" do
     @options[:single_library] = false
     @libraries['a'] = [Server::LibraryVersion.new('a', nil, 'b')]
     @libraries['c'] = [Server::LibraryVersion.new('c', nil, '.yardoc')]
     run %w(a b c)
   end
-  
+
   it "should accept -m, --multi-library" do
     @options[:single_library] = false
     run '-m'
     run '--multi-library'
   end
-  
+
   it "should accept -c, --cache" do
     @options[:caching] = true
     run '-c'
     run '--cache'
   end
-  
+
   it "should accept -r, --reload" do
     @options[:incremental] = true
     run '-r'
     run '--reload'
   end
-  
+
   it "should accept -d, --daemon" do
     @server_options[:daemonize] = true
     run '-d'
     run '--daemon'
   end
-  
+
   it "should accept -p, --port" do
     @server_options[:Port] = 10
     run '-p', '10'
     run '--port', '10'
   end
-  
+
   it "should accept --docroot" do
     @server_options[:DocumentRoot] = '/foo/bar'
     run '--docroot', '/foo/bar'
   end
-  
+
   it "should accept -a webrick to create WEBrick adapter" do
     @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
     run '-a', 'webrick'
   end
-  
+
   it "should accept -a rack to create Rack adapter" do
     rack_required
     @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
     run '-a', 'rack'
   end
-  
+
   it "should default to Rack adapter if exists on system" do
     rack_required
     @cli.should_receive(:require).with('rubygems').and_return(false)
@@ -116,13 +116,13 @@ describe YARD::CLI::Server do
     @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
     @cli.send(:select_adapter)
   end
-  
+
   it "should accept -s, --server" do
     @server_options[:server] = 'thin'
     run '-s', 'thin'
     run '--server', 'thin'
   end
-  
+
   it "should accept -g, --gems" do
     @no_verify_libraries = true
     @options[:single_library] = false
@@ -145,14 +145,14 @@ describe YARD::CLI::Server do
     run '-g'
     run '--gems'
   end
-  
+
   it "should load template paths after adapter template paths" do
     unstub_adapter
     @cli.adapter = Server::WebrickAdapter
     run '-t', 'foo'
     Templates::Engine.template_paths.last.should == 'foo'
   end
-  
+
   it "should load ruby code (-e) after adapter" do
     unstub_adapter
     @cli.adapter = Server::WebrickAdapter

@@ -11,7 +11,7 @@ describe YARD::CLI::Yardoc do
     Templates::Engine.stub!(:generate)
     YARD.stub!(:parse)
   end
-  
+
   describe 'Defaults' do
     before do
       @yardoc = CLI::Yardoc.new
@@ -19,71 +19,71 @@ describe YARD::CLI::Yardoc do
       @yardoc.stub!(:support_rdoc_document_file!).and_return([])
       @yardoc.parse_arguments
     end
-    
+
     it "should use cache by default" do
       @yardoc.use_cache.should == false
     end
-    
+
     it "print statistics by default" do
       @yardoc.statistics.should == true
     end
-    
+
     it "should generate output by default" do
       @yardoc.generate.should == true
     end
-    
+
     it "should read .yardopts by default" do
       @yardoc.use_yardopts_file.should == true
     end
-    
+
     it "should read .document by default" do
       @yardoc.use_document_file.should == true
     end
-    
+
     it "should use lib/**/*.rb and ext/**/*.c as default file glob" do
       @yardoc.files.should == ['lib/**/*.rb', 'ext/**/*.c']
     end
-    
+
     it "should use rdoc as default markup type (but falls back on none)" do
       @yardoc.options[:markup].should == :rdoc
     end
-    
+
     it "should use default as default template" do
       @yardoc.options[:template].should == :default
     end
-    
+
     it "should use HTML as default format" do
       @yardoc.options[:format].should == :html
     end
-    
+
     it "should use 'Object' as default return type" do
       @yardoc.options[:default_return].should == 'Object'
     end
-    
+
     it "should not hide void return types by default" do
       @yardoc.options[:hide_void_return].should == false
     end
-    
+
     it "should only show public visibility by default" do
       @yardoc.visibilities.should == [:public]
     end
-    
+
     it "should not list objects by default" do
       @yardoc.list.should == false
     end
   end
-  
+
   describe 'General options' do
     def self.should_accept(*args, &block)
       @counter ||= 0
       @counter += 1
       counter = @counter
-      args.each do |arg| 
+      args.each do |arg|
         define_method("test_options_#{@counter}", &block)
         it("should accept #{arg}") { send("test_options_#{counter}", arg) }
       end
     end
-    
+
     should_accept('--single-db') do |arg|
       @yardoc.parse_arguments(arg)
       Registry.single_object_db.should == true
@@ -95,17 +95,17 @@ describe YARD::CLI::Yardoc do
       Registry.single_object_db.should == false
       Registry.single_object_db = nil
     end
-    
+
     should_accept('-c', '--use-cache') do |arg|
       @yardoc.parse_arguments(arg)
       @yardoc.use_cache.should == true
     end
-    
+
     should_accept('--no-cache') do |arg|
       @yardoc.parse_arguments(arg)
       @yardoc.use_cache.should == false
     end
-    
+
     should_accept('--yardopts') do |arg|
       @yardoc = CLI::Yardoc.new
       @yardoc.use_document_file = false
@@ -141,30 +141,30 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments('--document', arg)
       @yardoc.use_document_file.should == false
     end
-    
+
     should_accept('-b', '--db') do |arg|
       @yardoc.parse_arguments(arg, 'test')
       Registry.yardoc_file.should == 'test'
       Registry.yardoc_file = '.yardoc'
     end
-    
+
     should_accept('-n', '--no-output') do |arg|
       Templates::Engine.should_not_receive(:generate)
       @yardoc.run(arg)
     end
-    
+
     should_accept('--exclude') do |arg|
       YARD.should_receive(:parse).with(['a'], ['nota', 'b'])
       @yardoc.run(arg, 'nota', arg, 'b', 'a')
     end
-    
+
     should_accept('--no-save') do |arg|
       YARD.should_receive(:parse)
       Registry.should_not_receive(:save)
       @yardoc.run(arg)
     end
   end
-  
+
   describe 'Output options' do
     it "should accept --title" do
       @yardoc.parse_arguments('--title', 'hello world')
@@ -216,13 +216,13 @@ describe YARD::CLI::Yardoc do
       CLI::Stats.should_not_receive(:new)
       @yardoc.run *%w( --no-stats )
     end
-    
+
     describe '--asset' do
       before do
         @yardoc.generate = true
         @yardoc.stub!(:run_generate)
       end
-      
+
       it "should copy assets to output directory" do
         FileUtils.should_receive(:cp_r).with('a', 'doc/a')
         @yardoc.run *%w( --asset a )
@@ -255,7 +255,7 @@ describe YARD::CLI::Yardoc do
       end
     end
   end
-  
+
   describe '--no-private option' do
     it "should accept --no-private" do
       obj = mock(:object)
@@ -297,7 +297,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(foobar).should == true
     end
-    
+
     it "should not call #tag on proxy object" do # @bug gh-197
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options[:verifier].call(P('ProxyClass')).should == true
@@ -316,12 +316,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.options[:verifier].call(Registry.at('ABC#foo')).should be_false
     end
   end
-  
+
   describe '.yardopts and .document handling' do
     before do
       @yardoc.use_yardopts_file = true
     end
-    
+
     it "should search for and use yardopts file specified by #options_file" do
       File.should_receive(:read_binary).with("test").and_return("-o \n\nMYPATH\nFILE1 FILE2")
       @yardoc.use_document_file = false
@@ -355,12 +355,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.files.should == ["FILE2", "FILE3", "FILE1"]
     end
   end
-  
+
   describe 'Query options' do
     before do
       Registry.clear
     end
-    
+
     it "should setup visibility rules as verifier" do
       methobj = CodeObjects::MethodObject.new(:root, :test) {|o| o.visibility = :private }
       File.should_receive(:read_binary).with("test").and_return("--private")
@@ -384,7 +384,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.options[:verifier].call(obj).should == false
     end
   end
-  
+
   describe 'Extra file arguments' do
     it "should accept extra files if specified after '-' with source files" do
       File.should_receive(:file?).with('extra_file1').and_return(true)
@@ -420,14 +420,14 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments *%w( -r UNKNOWN )
     end
   end
-  
+
   describe 'Source file arguments' do
     it "should accept no params and parse lib/**/*.rb ext/**/*.c" do
       @yardoc.parse_arguments
       @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
     end
   end
-  
+
   describe 'Tags options' do
     def tag_created(switch, factory_method)
       visible_tags = mock(:visible_tags)
@@ -438,7 +438,7 @@ describe YARD::CLI::Yardoc do
       Tags::Library.should_receive(:visible_tags).at_least(1).times.and_return(visible_tags)
       @yardoc.parse_arguments("--#{switch}-tag", 'foo')
     end
-    
+
     def tag_hidden(tag)
       visible_tags = mock(:visible_tags)
       visible_tags.should_receive(:|).ordered.with([tag])
@@ -457,7 +457,7 @@ describe YARD::CLI::Yardoc do
       Tags::Library.should_receive(:define_tag).with(nil, :foo, nil)
       @yardoc.parse_arguments('--tag', 'foo')
     end
-    
+
     it "should only list tag once if declared twice" do
       visible_tags = []
       Tags::Library.stub!(:define_tag)
@@ -482,28 +482,28 @@ describe YARD::CLI::Yardoc do
     it "should accept --title-tag" do
       tag_created 'title', :with_title_and_text
     end
-    
+
     it "should accept --hide-tag before tag is listed" do
       tag_hidden(:anewfoo)
       @yardoc.parse_arguments('--hide-tag', 'anewfoo', '--tag', 'anewfoo')
     end
-    
+
     it "should accept --hide-tag after tag is listed" do
       tag_hidden(:anewfoo2)
       @yardoc.parse_arguments('--tag', 'anewfoo2', '--hide-tag', 'anewfoo2')
     end
-    
+
     it "should accept --transitive-tag" do
       @yardoc.parse_arguments('--transitive-tag', 'foo')
       Tags::Library.transitive_tags.should include(:foo)
     end
   end
-  
+
   describe 'Safe mode' do
     before do
       YARD::Config.stub!(:options).and_return(:safe_mode => true)
     end
-    
+
     it "should not allow --load or -e in safe mode" do
       @yardoc.should_not_receive(:require)
       @yardoc.run('--load', 'foo')
@@ -514,21 +514,21 @@ describe YARD::CLI::Yardoc do
       @yardoc.run('--query', 'foo')
       @yardoc.options[:verifier].expressions.should_not include("foo")
     end
-    
+
     it "should not allow modifying the template paths" do
       YARD::Templates::Engine.should_not_receive(:register_template_path)
       @yardoc.run('-p', 'foo')
       @yardoc.run('--template-path', 'foo')
     end
   end
-  
+
   describe 'Markup Loading' do
     it "should load rdoc markup if no markup is provided" do
       @yardoc.generate = true
       @yardoc.run
       @yardoc.options[:markup].should == :rdoc
     end
-    
+
     it "should warn if rdoc cannot be loaded and fallback to :none" do
       mod = YARD::Templates::Helpers::MarkupHelper
       mod.clear_markup_cache

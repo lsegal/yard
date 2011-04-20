@@ -17,7 +17,7 @@ module YARD
           File.join(YARD::TEMPLATE_ROOT, 'default', 'fulldoc', 'html'),
           File.join(File.dirname(__FILE__), '..', 'templates', 'default', 'fulldoc', 'html')
         ]
-        
+
         def run
           path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
           ([adapter.document_root] + STATIC_PATHS.reverse).compact.each do |path_prefix|
@@ -32,9 +32,9 @@ module YARD
           favicon?
           self.status = 404
         end
-        
+
         private
-        
+
         # Return an empty favicon.ico if it does not exist so that
         # browsers don't complain.
         def favicon?

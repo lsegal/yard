@@ -44,7 +44,7 @@ function createFullTreeLinks() {
 
 function fixBoxInfoHeights() {
     $('dl.box dd.r1, dl.box dd.r2').each(function() {
-       $(this).prev().height($(this).height()); 
+       $(this).prev().height($(this).height());
     });
 }
 
@@ -93,8 +93,8 @@ function keyboardShortcuts() {
   if (window.top.frames.main) return;
   $(document).keypress(function(evt) {
     if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
-    if (typeof evt.orignalTarget !== "undefined" &&  
-        (evt.originalTarget.nodeName == "INPUT" || 
+    if (typeof evt.orignalTarget !== "undefined" &&
+        (evt.originalTarget.nodeName == "INPUT" ||
         evt.originalTarget.nodeName == "TEXTAREA")) return;
     switch (evt.charCode) {
       case 67: case 99:  $('#class_list_link').click(); break;  // 'c'
@@ -112,7 +112,7 @@ function summaryToggle() {
     if (next.hasClass('compact')) {
       next.toggle();
       next.next().toggle();
-    } 
+    }
     else if (next.hasClass('summary')) {
       var list = $('<ul class="summary compact" />');
       list.html(next.html());
@@ -157,13 +157,13 @@ function generateTOC() {
       if ($('#' + proposedId).length > 0) proposedId += counter++;
       this.id = proposedId;
     }
-    if (thisTag > lastTag) { 
-      for (var i = 0; i < thisTag - lastTag; i++) { 
-        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; 
-      } 
+    if (thisTag > lastTag) {
+      for (var i = 0; i < thisTag - lastTag; i++) {
+        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp;
+      }
     }
-    if (thisTag < lastTag) { 
-      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent(); 
+    if (thisTag < lastTag) {
+      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent();
     }
     toc.append('<li><a href="#' + this.id + '">' + $(this).text() + '</a></li>');
     lastTag = thisTag;
@@ -172,7 +172,7 @@ function generateTOC() {
   html = '<div id="toc"><p class="title"><a class="hide_toc" href="#"><strong>Table of Contents</strong></a> <small>(<a href="#" class="float_toc">left</a>)</small></p></div>';
   $('#content').prepend(html);
   $('#toc').append(_toc);
-  $('#toc .hide_toc').toggle(function() { 
+  $('#toc .hide_toc').toggle(function() {
     $('#toc .top').slideUp('fast');
     $('#toc').toggleClass('hidden');
     $('#toc .title small').toggle();
@@ -181,7 +181,7 @@ function generateTOC() {
     $('#toc').toggleClass('hidden');
     $('#toc .title small').toggle();
   });
-  $('#toc .float_toc').toggle(function() { 
+  $('#toc .float_toc').toggle(function() {
     $(this).text('float');
     $('#toc').toggleClass('nofloat');
   }, function() {

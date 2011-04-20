@@ -17,7 +17,7 @@ Benchmark.bmbm do |x|
         def erb_with(str, x) Erubis::Eruby.new(str) end
       end end end
     eof
-    
+
     rungen
   end
 
@@ -27,7 +27,7 @@ Benchmark.bmbm do |x|
         def erb_with(str, x) Erubis::FastEruby.new(str) end
       end end end
     eof
-    
+
     rungen
   end
 
@@ -37,7 +37,7 @@ Benchmark.bmbm do |x|
         def erb_with(str, x) Erubis::TinyEruby.new(str) end
       end end end
     eof
-    
+
     rungen
   end
 
@@ -47,7 +47,7 @@ Benchmark.bmbm do |x|
         def erb_with(str, x) ERB.new(str, nil) end
       end end end
     eof
-    
+
     rungen
   end
 end

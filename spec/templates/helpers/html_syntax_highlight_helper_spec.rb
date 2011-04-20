@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::HtmlSyntaxHighlightHelper
-  
+
   describe '#html_syntax_highlight' do
     before do
       stub!(:object).and_return Registry.root
@@ -14,7 +14,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
       should_receive(:options).and_return(:no_highlight => true)
       html_syntax_highlight("def x\nend").should == "def x\nend"
     end
-    
+
     it "should highlight source (legacy)" do
       type = Parser::SourceParser.parser_type
       Parser::SourceParser.parser_type = :ruby18
@@ -30,7 +30,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
     it "should highlight source (ripper)" do
       should_receive(:options).and_return(:no_highlight => false)
       Parser::SourceParser.parser_type = :ruby
-      expect = "<span class='kw'>def</span> <span class='id x'>x</span>  
+      expect = "<span class='kw'>def</span> <span class='id x'>x</span>
         <span class='tstring'><span class='tstring_beg'>'</span>
         <span class='tstring_content'>x</span><span class='tstring_end'>'</span>
         </span> <span class='op'>+</span> <span class='tstring'>
@@ -39,7 +39,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
       result = html_syntax_highlight("def x\n  'x' + /x/i\nend")
       html_equals_string(result, expect)
     end if HAVE_RIPPER
-    
+
     it "should return escaped unhighlighted source if a syntax error is found (ripper)" do
       should_receive(:options).and_return(:no_highlight => false)
       html_syntax_highlight("def &x; ... end").should == "def &amp;x; ... end"

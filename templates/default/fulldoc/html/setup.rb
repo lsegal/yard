@@ -5,18 +5,18 @@ def init
   options[:files] = ([options[:readme]] + options[:files]).compact.map {|t| t.to_s }
   options[:readme] = options[:files].first
   options[:title] ||= "Documentation by YARD #{YARD::VERSION}"
-  
+
   return serialize_onefile if options[:onefile]
   generate_assets
   serialize('_index.html')
-  options[:files].each_with_index do |file, i| 
-    serialize_file(file, i == 0 ? options[:title] : nil) 
+  options[:files].each_with_index do |file, i|
+    serialize_file(file, i == 0 ? options[:title] : nil)
   end
 
   options.delete(:objects)
   options.delete(:files)
-  
-  objects.each do |object| 
+
+  objects.each do |object|
     begin
       serialize(object)
     rescue => e
@@ -69,11 +69,11 @@ def asset(path, content)
 end
 
 def generate_assets
-  %w( js/jquery.js js/app.js js/full_list.js 
+  %w( js/jquery.js js/app.js js/full_list.js
       css/style.css css/full_list.css css/common.css ).each do |file|
     asset(file, file(file, true))
   end
-  
+
   @object = Registry.root
   generate_method_list
   generate_class_list

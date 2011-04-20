@@ -6,22 +6,22 @@ module YARD
         @rebuild = false
         @gems = []
       end
-      
+
       def description; "Builds YARD index for gems" end
-      
+
       # Runs the commandline utility, parsing arguments and generating
       # YARD indexes for gems.
-      # 
+      #
       # @param [Array<String>] args the list of arguments
-      # @return [void] 
+      # @return [void]
       def run(*args)
         require 'rubygems'
         optparse(*args)
         build_gems
       end
-      
+
       private
-      
+
       # Builds .yardoc files for all non-existing gems
       # @param [Array] gems
       def build_gems
@@ -42,7 +42,7 @@ module YARD
           end
         end
       end
-      
+
       def add_gems(gems)
         0.step(gems.size - 1, 2) do |index|
           gem, ver_require = gems[index], gems[index + 1] || ">= 0"
@@ -54,7 +54,7 @@ module YARD
           end
         end
       end
-      
+
       # Parses options
       def optparse(*args)
         opts = OptionParser.new
@@ -66,12 +66,11 @@ module YARD
         opts.on('--rebuild', 'Rebuilds index') do
           @rebuild = true
         end
-        
+
         common_options(opts)
         parse_options(opts, args)
         add_gems(args)
-        
-        
+
         if !args.empty? && @gems.empty?
           log.error "No specified gems could be found for command"
         elsif @gems.empty?

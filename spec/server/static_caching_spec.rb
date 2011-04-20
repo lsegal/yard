@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Server::StaticCaching do
   include StaticCaching
-  
+
   describe '#check_static_cache' do
     def adapter; @adapter ||= mock_adapter end
     def request; @request ||= OpenStruct.new end
@@ -11,7 +11,7 @@ describe YARD::Server::StaticCaching do
       adapter.document_root = nil
       check_static_cache.should be_nil
     end
-    
+
     it "should read a file from document root if path matches file on system" do
       request.path = '/hello/world.html'
       File.should_receive(:file?).with('/public/hello/world.html').and_return(true)
@@ -20,7 +20,7 @@ describe YARD::Server::StaticCaching do
       s.should == 200
       b.should == ["body"]
     end
-    
+
     it "should read a file if path matches file on system + .html" do
       request.path = '/hello/world'
       File.should_receive(:file?).with('/public/hello/world.html').and_return(true)
@@ -29,7 +29,7 @@ describe YARD::Server::StaticCaching do
       s.should == 200
       b.should == ["body"]
     end
-    
+
     it "should return nil if no matching file is found" do
       request.path = '/hello/foo'
       File.should_receive(:file?).with('/public/hello/foo.html').and_return(false)

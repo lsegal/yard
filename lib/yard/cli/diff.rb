@@ -14,11 +14,11 @@ module YARD
         @list_all = false
         log.show_backtraces = true
       end
-      
+
       def description
         'Returns the object diff of two gems or .yardoc files'
       end
-      
+
       def run(*args)
         registry = optparse(*args).map do |gemfile|
           if load_gem_data(gemfile)
@@ -29,7 +29,7 @@ module YARD
             nil
           end
         end.compact
-        
+
         return if registry.size != 2
 
         [   ["Added objects", registry[1] - registry[0]],
@@ -54,12 +54,12 @@ module YARD
           puts
         end
       end
-      
+
       private
-      
+
       def load_gem_data(gemfile)
         Registry.clear
-        
+
         # First check for argument as .yardoc file
         [File.join(gemfile, '.yardoc'), gemfile].each do |yardoc|
           log.info "Searching for .yardoc db at #{yardoc}"
@@ -69,11 +69,11 @@ module YARD
             return true
           end
         end
-        
+
         # Next check installed RubyGems
         gemfile_without_ext = gemfile.sub(/\.gem$/, '')
         log.info "Searching for installed gem #{gemfile_without_ext}"
-        Gem.source_index.find_name('').find do |spec| 
+        Gem.source_index.find_name('').find do |spec|
           if spec.full_name == gemfile_without_ext
             if yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
               Registry.load_yardoc(yardoc)
@@ -88,7 +88,7 @@ module YARD
             return true
           end
         end
-        
+
         # Look for local .gem file
         gemfile += '.gem' unless gemfile =~ /\.gem$/
         log.info "Searching for local gem file #{gemfile}"
@@ -98,7 +98,7 @@ module YARD
           end
           return true
         end
-        
+
         # Remote gemfile from rubygems.org
         url = "http://rubygems.org/downloads/#{gemfile}"
         log.info "Searching for remote gem file #{url}"
@@ -109,20 +109,20 @@ module YARD
         end
         false
       end
-      
+
       def expand_and_parse(gemfile, io)
         dir = expand_gem(gemfile, io)
         generate_yardoc(dir)
         cleanup(gemfile)
       end
-      
+
       def generate_yardoc(dir)
         olddir = Dir.pwd
         Dir.chdir(dir)
         log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
         Dir.chdir(olddir)
       end
-      
+
       def expand_gem(gemfile, io)
         tmpdir = File.join(Dir.tmpdir, gemfile)
         log.info "Expanding #{gemfile} to #{tmpdir}..."
@@ -142,13 +142,13 @@ module YARD
         log.error "Missing RubyGems, cannot run this command."
         raise(e)
       end
-      
+
       def cleanup(gemfile)
         dir = File.join(Dir.tmpdir, gemfile)
         log.info "Cleaning up #{dir}..."
         FileUtils.rm_rf(dir)
       end
-      
+
       def optparse(*args)
         opts = OptionParser.new
         opts.banner = "Usage: yard diff [options] oldgem newgem"
@@ -158,7 +158,7 @@ module YARD
         opts.separator "If the files don't exist locally, they will be grabbed using the `gem fetch`"
         opts.separator "command. If the gem is a .yardoc directory, it will be used. Finally, if the"
         opts.separator "gem name matches an installed gem (full name-version syntax), that gem will be used."
-        
+
         opts.on('-a', '--all', 'List all objects, even if they are inside added/removed module/class') do
           @list_all = true
         end
@@ -168,7 +168,7 @@ module YARD
           puts opts.banner
           exit(0)
         end
-          
+
         args
       end
     end

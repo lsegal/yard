@@ -1,15 +1,15 @@
 LEGAL NOTICE INFORMATION
 ------------------------
 
-All the files in this distribution are covered under either the MIT 
+All the files in this distribution are covered under either the MIT
 license (see the file LICENSE) except some files mentioned below.
 
 lib/parser/c_parser.rb:
 
   This file includes code from the RDoc distribution. It is under the Ruby
   license but adds the following copyright:
-    
-    RDoc is copyrighted free software by Dave Thomas, Eric Hodel, and others.  
+
+    RDoc is copyrighted free software by Dave Thomas, Eric Hodel, and others.
     It is licensed under the same terms as Ruby
 
 lib/parser/ruby/legacy/ruby_lex.rb:
@@ -62,9 +62,9 @@ lib/parser/ruby/legacy/ruby_lex.rb:
          For the list of those files and their copying conditions, see the
          file LEGAL.
 
-      5. The scripts and library files supplied as input to or produced as 
+      5. The scripts and library files supplied as input to or produced as
          output from the software do not automatically fall under the
-         copyright of the software, but belong to whomever generated them, 
+         copyright of the software, but belong to whomever generated them,
          and may be sold commercially, and may be aggregated with this
          software.
 

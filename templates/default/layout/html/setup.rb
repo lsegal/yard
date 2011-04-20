@@ -23,7 +23,7 @@ def init
           cur = cur.namespace
         end
       end
-    
+
       @page_title = format_object_title(object)
       type = object.root? ? :module : object.type
       sections :layout, [T(type)]

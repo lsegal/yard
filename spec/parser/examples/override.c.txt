@@ -406,7 +406,7 @@ void init_gmpz()
   // Integer Arithmetic
   rb_define_method(cGMP_Z, "+",       r_gmpz_add, 1);
   rb_define_method(cGMP_Z, "add!",    r_gmpz_add_self, 1);
-  rb_define_method(cGMP_Z, "-",       r_gmpz_sub, 1);  
+  rb_define_method(cGMP_Z, "-",       r_gmpz_sub, 1);
   rb_define_method(cGMP_Z, "sub!",    r_gmpz_sub_self, 1);
   rb_define_method(cGMP_Z, "*",       r_gmpz_mul, 1);
   rb_define_method(cGMP_Z, "addmul!", r_gmpz_addmul_self, 2);

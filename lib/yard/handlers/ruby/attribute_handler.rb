@@ -4,12 +4,12 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   handles method_call(:attr_reader)
   handles method_call(:attr_writer)
   handles method_call(:attr_accessor)
-  
+
   process do
     return if statement.type == :var_ref
     read, write = true, false
     params = statement.parameters(false).dup
-    
+
     # Change read/write based on attr_reader/writer/accessor
     case statement.method_name(true)
     when :attr
@@ -28,7 +28,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
     # Add all attributes
     validated_attribute_names(params).each do |name|
       namespace.attributes[scope][name] ||= SymbolHash[:read => nil, :write => nil]
-      
+
       # Show their methods as well
       {:read => name, :write => "#{name}="}.each do |type, meth|
         if (type == :read ? read : write)
@@ -58,11 +58,11 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
       end
     end
   end
-  
+
   protected
-  
+
   # Strips out any non-essential arguments from the attr statement.
-  # 
+  #
   # @param [Array<Parser::Ruby::AstNode>] params a list of the parameters
   #   in the attr call.
   # @return [Array<String>] the validated attribute names

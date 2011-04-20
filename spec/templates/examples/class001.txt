@@ -2,7 +2,7 @@
 
     Abstract. override this class
 
-    Comments 
+    Comments
 
 See Also:
 ---------
