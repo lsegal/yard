@@ -5,7 +5,7 @@ module YARD::CodeObjects
     # The source code representing the constant's value
     # @return [String] the value the constant is set to
     attr_reader :value
-    
+
     def value=(value)
       @value = format_source(value)
     end

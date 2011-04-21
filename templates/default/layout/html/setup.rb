@@ -1,14 +1,18 @@
 def init
   @breadcrumb = []
-
+  
+  @stylesheets = options[:stylesheets]
+  @javascripts = options[:javascripts]
+  @search_fields = options[:search_fields]
+  
   if @onefile
     sections :layout
   elsif @file
-    @contents = File.read(@file)
-    @file = File.basename(@file)
-    @fname = @file.gsub(/\.[^.]+$/, '')
-    @breadcrumb_title = "File: " + @fname
-    @page_title ||= @breadcrumb_title
+    if @file.attributes[:namespace]
+      @object = options[:object] = Registry.at(@file.attributes[:namespace]) || Registry.root 
+    end
+    @breadcrumb_title = "File: " + @file.title
+    @page_title = @breadcrumb_title
     sections :layout, [:diskfile]
   elsif object
     case object
@@ -46,6 +50,19 @@ def index
 end
 
 def diskfile
-  data = htmlify(markup_file_contents(@contents), markup_for_file(@contents, @file))
+  @file.attributes[:markup] ||= markup_for_file('', @file.filename)
+  data = htmlify(@file.contents, @file.attributes[:markup])
   "<div id='filecontents'>" + data + "</div>"
+end
+
+def stylesheets
+  @stylesheets
+end
+
+def javascripts
+  @javascripts
+end
+
+def search_fields
+  @search_fields
 end

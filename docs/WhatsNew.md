@@ -1,5 +1,6 @@
-What's New in 0.6.x?
-====================
+# @title What's New?
+
+# What's New in 0.6.x?
 
 1. **Local documentation server for RubyGems or projects (`yard server`)** (0.6.0)
 2. **Groups support for method listing** (0.6.0)

@@ -1,5 +1,6 @@
-Parser Architecture
-===================
+# @title Parser Architecture
+
+# Parser Architecture
 
 The parser component of YARD is the first component in the data processing pipeline
 that runs before any handling is done on the source. The parser is meant to translate
@@ -13,8 +14,7 @@ system below:
 
 (Note: the RubyToken classes are omitted from the diagram)
 
-SourceParser
-------------
+## SourceParser
 
 The main class {YARD::Parser::SourceParser} acts as a factory class, instantiating
 the correct parser class, an implementation of {YARD::Parser::Base}. The selected parser
@@ -28,8 +28,7 @@ the individual parser classes since it initiates the pipeline that runs the
 handlers on the parsed source. The parser used must also match the handlers,
 and this is coordinated by the `SourceParser` class as well.
 
-Using the SourceParser Class
-----------------------------
+## Using the SourceParser Class
 
 The `SourceParser` class API is optimized for parsing globs of files. As such,
 the main method to use the class is the `parse` class method, which takes an
@@ -56,8 +55,7 @@ You can also provide the parser type explicitly as the second argument:
 Note that these two methods are aliased as {YARD.parse} and {YARD.parse_string} for 
 convenience.
     
-Implementing and Registering a Custom Parser
---------------------------------------------
+## Implementing and Registering a Custom Parser
 
 To implement a custom parser, subclass {YARD::Parser::Base}. Documentation on which
 abstract methods should be implemented are documented in that class. After the class
@@ -72,8 +70,7 @@ The last argument can be a single extension, a list of extensions (Array), a sin
 list of Regexps. Do not include the '.' in the extension.
 
 
-The Two Ruby Parser Types
--------------------------
+## The Two Ruby Parser Types
 
 When parsing Ruby, the SourceParser can either instantiate the new {YARD::Parser::Ruby::RubyParser}
 class or the {YARD::Parser::Ruby::Legacy::StatementList} class. The first of the 
@@ -83,8 +80,7 @@ compatibility is required. The choice of parser will affect which handlers
 ultimately get used, since new handlers can only use the new parser and the 
 same requirement applies to the legacy parser & handlers.
 
-Switching to Legacy Parser
---------------------------
+## Switching to Legacy Parser
 
 By default, running YARD under Ruby 1.9 will automatically select the new parser
 and new handlers by extension. Although YARD supports both handler styles, plugins
@@ -98,8 +94,7 @@ The default value is `:ruby`. Note that this cannot be forced the other way arou
 a parser type of `:ruby` cannot be set under Ruby 1.8.x as the new parser is not
 supported under 1.8.
 
-RubyParser (the New Parser)
-===========================
+## RubyParser (the New Parser)
 
 The new Ruby parser uses the Ripper library that is packaged as part of stdlib
 in Ruby 1.9. Because of this, it can generate an AST from a string of Ruby input
@@ -107,8 +102,7 @@ that is similar to the style of other sexp libraries (such as ParseTree). Each
 node generated in the tree is of the base type {YARD::Parser::Ruby::AstNode},
 which has some subclasses for common node types.
 
-AstNode Basics
---------------
+### AstNode Basics
 
 The `AstNode` class behaves like a standard Array class in which all of its data
 make up the list of elements in the array. Unlike other sexp style libraries, however,
@@ -131,8 +125,7 @@ the sexp declared above, we can do:
 
     node.children #=> [s(:int, "1"), s(:var_ref, s(:ident, "hello"))]
 
-AstNode#source and #line
-------------------------
+### AstNode#source and #line
 
 Every node defines the `#source` method which returns the source code that the 
 node represents. One of the most common things to do with a node is to grab its 
@@ -157,8 +150,7 @@ We can also get the line and line ranges in a similar fashion:
     ast[0].line       #=> 1
     ast[0].line_range #=> 1..3 (note the newlines in the source)
 
-AstNode#jump
-------------
+### AstNode#jump
 
 Often the AST will be such that the node we care about might be buried arbitrarily
 deep in a node's hierarchy. The {YARD::Parser::Ruby::AstNode#jump} method exists
@@ -171,8 +163,7 @@ to quickly get at a node of a specific type in such a situation:
 Multiple types can be searched for at once. If none are found, the original root
 node is returned so that it may be chained.
 
-The Legacy Parser
-=================
+## The Legacy Parser
 
 The goal of the legacy parser is much the same as the new parser, but it is far
 more simplistic. Instead of a full-blown AST, the legacy parser simply groups

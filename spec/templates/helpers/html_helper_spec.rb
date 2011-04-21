@@ -207,14 +207,20 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
       results
     end
+    
+    it "should escape {} syntax with backslash (\\{foo bar})" do
+      input  = '\{foo bar} \{XYZ} \{file:FOO}'
+      output = '{foo bar} {XYZ} {file:FOO}'
+      resolve_links(input).should == output
+    end
 
     it "should link static files with file: prefix" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
       stub!(:object).and_return Registry.root
 
       parse_link(resolve_links("{file:TEST.txt#abc}")).should == {
-        :inner_text => "TEST.txt",
-        :title => "TEST.txt",
+        :inner_text => "TEST",
+        :title => "TEST",
         :href => "file.TEST.html#abc"
       }
       parse_link(resolve_links("{file:TEST.txt title}")).should == {
@@ -266,12 +272,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should resolve {Name}" do
-      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      should_receive(:link_file).with('TEST', nil, nil).and_return('')
       resolve_links("{file:TEST}")
     end
 
     it "should resolve ({Name})" do
-      should_receive(:link_file).with('TEST', 'TEST', nil).and_return('')
+      should_receive(:link_file).with('TEST', nil, nil).and_return('')
       resolve_links("({file:TEST})")
     end
     
@@ -321,7 +327,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should warn about missing reference for file template (no object)" do
-      @file = "myfile.txt"
+      @file = CodeObjects::ExtraFileObject.new('myfile.txt', '')
       logger = mock(:log)
       logger.should_receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:")
       logger.should_receive(:warn).ordered.with("...{InvalidObject Some Title}")

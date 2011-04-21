@@ -15,25 +15,26 @@ module YARD
     autoload :Yardoc,         __p('cli/yardoc')
     autoload :YRI,            __p('cli/yri')
   end
-  
+
   # A "code object" is defined as any entity in the Ruby language.
   # Classes, modules, methods, class variables and constants are the
   # major objects, but DSL languages can create their own by inheriting
   # from {CodeObjects::Base}.
-  module CodeObjects 
+  module CodeObjects
     autoload :Base,                 __p('code_objects/base')
     autoload :CodeObjectList,       __p('code_objects/base')
     autoload :ClassObject,          __p('code_objects/class_object')
     autoload :ClassVariableObject,  __p('code_objects/class_variable_object')
     autoload :ConstantObject,       __p('code_objects/constant_object')
     autoload :ExtendedMethodObject, __p('code_objects/extended_method_object')
+    autoload :ExtraFileObject,      __p('code_objects/extra_file_object')
     autoload :MethodObject,         __p('code_objects/method_object')
     autoload :ModuleObject,         __p('code_objects/module_object')
     autoload :NamespaceObject,      __p('code_objects/namespace_object')
     autoload :Proxy,                __p('code_objects/proxy')
     autoload :ProxyMethodError,     __p('code_objects/proxy')
     autoload :RootObject,           __p('code_objects/root_object')
-    
+
     autoload :BUILTIN_ALL,          __p('code_objects/base')
     autoload :BUILTIN_CLASSES,      __p('code_objects/base')
     autoload :BUILTIN_MODULES,      __p('code_objects/base')
@@ -100,7 +101,7 @@ module YARD
     autoload :Processor,                  __p('handlers/processor')
   end
 
-  # The parser namespace holds all parsing engines used by YARD. 
+  # The parser namespace holds all parsing engines used by YARD.
   # Currently only Ruby parsers are implemented with support planned for C.
   module Parser
     module Ruby # Ruby parsing components.
@@ -123,11 +124,11 @@ module YARD
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
   end
-  
+
   module Rake # Holds Rake tasks used by YARD
     autoload :YardocTask, __p('rake/yardoc_task')
   end
-  
+
   module Serializers # Namespace for components that serialize to various endpoints
     autoload :Base,                 __p('serializers/base')
     autoload :FileSystemSerializer, __p('serializers/file_system_serializer')
@@ -135,16 +136,16 @@ module YARD
     autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
     autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
   end
-  
+
   # Namespace for classes and modules that handle serving documentation over HTTP
-  # 
+  #
   # == Implementing a Custom Server
-  # To customize the YARD server, see the {Adapter} and {Router} classes. 
-  # 
+  # To customize the YARD server, see the {Adapter} and {Router} classes.
+  #
   # == Rack Middleware
   # If you want to use the YARD server as a Rack middleware, see the documentation
   # in {RackMiddleware}.
-  # 
+  #
   # @since 0.6.0
   module Server
     require __p('server')
@@ -165,7 +166,7 @@ module YARD
       autoload :SearchCommand,        __p('server/commands/search_command')
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')
     end
-    
+
     autoload :Adapter,                __p('server/adapter')
     autoload :DocServerSerializer,    __p('server/doc_server_serializer')
     autoload :DocServerHelper,        __p('server/doc_server_helper')
@@ -179,7 +180,7 @@ module YARD
     autoload :WebrickAdapter,         __p('server/webrick_adapter')
     autoload :WebrickServlet,         __p('server/webrick_adapter')
   end
-  
+
   module Tags # Namespace for Tag components
     autoload :DefaultFactory, __p('tags/default_factory')
     autoload :DefaultTag,     __p('tags/default_tag')
@@ -191,14 +192,14 @@ module YARD
     autoload :Tag,            __p('tags/tag')
     autoload :TagFormatError, __p('tags/tag_format_error')
   end
-  
+
   # Namespace for templating system
   module Templates
     module Helpers # Namespace for template helpers
       module Markup # Namespace for markup providers
         autoload :RDocMarkup,               __p('templates/helpers/markup/rdoc_markup')
       end
-      
+
       autoload :BaseHelper,                 __p('templates/helpers/base_helper')
       autoload :FilterHelper,               __p('templates/helpers/filter_helper')
       autoload :HtmlHelper,                 __p('templates/helpers/html_helper')

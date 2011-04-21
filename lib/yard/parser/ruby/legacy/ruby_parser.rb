@@ -8,19 +8,19 @@ module YARD
           def initialize(source, filename)
             @source = source
           end
-          
+
           def parse
             @parse ||= StatementList.new(@source)
           end
-          
+
           def tokenize
             @tokenize ||= TokenList.new(@source)
           end
-          
+
           def enumerator
             @parse
           end
-          
+
           def encoding_line; @parse.encoding_line end
           def shebang_line; @parse.shebang_line end
         end

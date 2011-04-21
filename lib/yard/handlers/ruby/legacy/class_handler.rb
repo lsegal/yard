@@ -2,7 +2,7 @@
 class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
   handles TkCLASS
-  
+
   process do
     if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/m
       classname = $1
@@ -25,14 +25,14 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
         create_attributes(klass, members_from_tags(klass))
       end
       parse_block(:namespace => klass)
-       
+
       if undocsuper
         raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
       classname = $1
       proxy = Proxy.new(namespace, classname)
-      
+
       # Allow constants to reference class names
       if ConstantObject === proxy
         if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
@@ -41,10 +41,10 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
           raise YARD::Parser::UndocumentableError, "constant class reference '#{classname}'"
         end
       end
-      
+
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
-      elsif classname[0,1] =~ /[A-Z]/ 
+      elsif classname[0,1] =~ /[A-Z]/
         register ClassObject.new(namespace, classname) if Proxy === proxy
         parse_block(:namespace => proxy, :scope => :class)
       else
@@ -54,9 +54,9 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       raise YARD::Parser::UndocumentableError, "class: #{statement.tokens}"
     end
   end
-  
+
   private
-  
+
   # Extracts the parameter list from the Struct.new declaration and returns it
   # formatted as a list of member names. Expects the user will have used symbols
   # to define the struct member names
@@ -67,7 +67,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     paramstring = superstring.match(/\A(O?Struct)\.new\((.*?)\)/)[2]
     paramstring.split(",").select {|x| x.strip[0,1] == ":"}.map {|x| x.strip[1..-1] } # the 1..-1 chops the leading :
   end
-  
+
   def create_struct_superclass(superclass, superclass_def)
     return if superclass == "Struct"
     the_super = register ClassObject.new(P("Struct"), superclass[8..-1]) do |o|
@@ -76,7 +76,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     parse_struct_subclass(the_super, superclass_def)
     the_super
   end
-  
+
   def struct_superclass_name(superclass)
     if match = superclass.match(/\A(Struct)\.new\((.*?)\)/)
       paramstring = match[2].split(",")
@@ -87,17 +87,17 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     end
     "Struct"
   end
-  
+
   def parse_struct_subclass(klass, superclass_def)
     # Bounce if there's no parens
     return unless superclass_def =~ /O?Struct\.new\((.*?)\)/
     members = extract_parameters(superclass_def)
     create_attributes(klass, members)
   end
-  
+
   def parse_superclass(superclass)
     case superclass
-    when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/, 
+    when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/,
          /\A(Struct|OStruct)\.new/,
          /\ADelegateClass\((.+?)\)\s*\Z/,
          /\A(#{NAMESPACEMATCH})\(/

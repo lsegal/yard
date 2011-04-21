@@ -10,7 +10,7 @@ module YARD
         @namespaces = {}
         @content = clean_source(source)
       end
-      
+
       def parse
         parse_modules
         parse_classes
@@ -18,19 +18,19 @@ module YARD
         parse_constants
         parse_includes
       end
-      
+
       # @since 0.5.6
       def tokenize
         raise NotImplementedError, "no tokenization support for C/C++ files"
       end
-      
+
       private
-      
+
       # @since 0.5.3
       def remove_var_prefix(var)
         var.gsub(/^rb_[mc]|^[a-z_]+/, '')
       end
-      
+
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
         unless CONTINUATIONS_SUPPORTED
@@ -41,11 +41,11 @@ module YARD
           end
           raise NamespaceMissingError, object
         end
-        
+
         retries = 0
         context = callcc {|c| c }
-        retries += 1 
-        
+        retries += 1
+
         if object.is_a?(CodeObjects::Proxy)
           if retries <= max_retries
             log.debug "Missing object #{object} in file `#{@file}', moving it to the back of the line."
@@ -60,7 +60,7 @@ module YARD
         ensure_loaded!(namespace)
         obj = CodeObjects::ModuleObject.new(namespace, mod_name)
         obj.add_file(@file)
-        find_namespace_docstring(obj)      
+        find_namespace_docstring(obj)
         @namespaces[var_name] = obj
       end
 
@@ -71,17 +71,17 @@ module YARD
         obj = CodeObjects::ClassObject.new(namespace, class_name)
         obj.superclass = @namespaces[parent] || remove_var_prefix(parent) if parent
         obj.add_file(@file)
-        find_namespace_docstring(obj)      
+        find_namespace_docstring(obj)
         @namespaces[var_name] = obj
       end
-      
+
       # @todo Handle +source_file+
       def handle_method(scope, var_name, name, func_name, source_file = nil)
         case scope
         when "singleton_method", "module_function"; scope = :class
         else; scope = :instance
         end
-        
+
         namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
         ensure_loaded!(namespace)
         obj = CodeObjects::MethodObject.new(namespace, name, scope)
@@ -91,7 +91,7 @@ module YARD
         obj.source_type = :c
         find_method_body(obj, func_name)
       end
-      
+
       def handle_constants(type, var_name, const_name, definition)
         namespace = @namespaces[var_name]
         obj = CodeObjects::ConstantObject.new(namespace, const_name)
@@ -118,7 +118,7 @@ module YARD
 
         obj.docstring = comment
       end
-      
+
       def find_namespace_docstring(object)
         comment = nil
         if @content =~ %r{((?>/\*.*?\*/\s+))
@@ -129,7 +129,7 @@ module YARD
         end
         object.docstring = parse_comments(object, comment) if comment
       end
-      
+
       def find_constant_docstring(object, type, const_name)
         comment = if @content =~ %r{((?>^\s*/\*.*?\*/\s+))
                        rb_define_#{type}\((?:\s*(\w+),)?\s*"#{const_name}"\s*,.*?\)\s*;}xmi
@@ -141,7 +141,7 @@ module YARD
         end
         object.docstring = parse_comments(object, comment) if comment
       end
-      
+
       def find_method_body(object, func_name, content = @content)
         case content
         when %r"((?>/\*.*?\*/\s*))(?:(?:static|SWIGINTERN)\s+)?(?:intern\s+)?VALUE\s+#{func_name}
@@ -188,7 +188,7 @@ module YARD
           nil
         end
       end
-      
+
       def parse_comments(object, comments)
         spaces = nil
         comments = remove_private_comments(comments)
@@ -207,7 +207,7 @@ module YARD
         comments = parse_callseq(object, comments)
         comments.join("\n")
       end
-      
+
       def parse_callseq(object, comments)
         return comments unless comments[0] =~ /\Acall-seq:\s*(\S.+)?/
         if $1
@@ -247,10 +247,10 @@ module YARD
           overloads << "  @yield [#{blkparams}]" if blk
           overloads << "  @return [#{types.join(', ')}]" unless types.empty?
         end
-        
+
         comments + [""] + overloads
       end
-      
+
       def parse_types(object, types)
         if types =~ /true or false/
           ["Boolean"]
@@ -288,7 +288,7 @@ module YARD
           end.compact
         end
       end
-      
+
       def parse_modules
         @content.scan(/(\w+)\s* = \s*rb_define_module\s*
             \(\s*"(\w+)"\s*\)/mx) do |var_name, class_name|
@@ -303,7 +303,7 @@ module YARD
           handle_module(var_name, class_name, in_module)
         end
       end
-      
+
       def parse_classes
         # The '.' lets us handle SWIG-generated files
         @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_class|boot_defclass)\s*
@@ -323,7 +323,7 @@ module YARD
           handle_class(var_name, class_name, parent, in_module)
         end
       end
-      
+
       def parse_methods
         @content.scan(%r{rb_define_
                        (
@@ -357,7 +357,7 @@ module YARD
           handle_method("method", "rb_mKernel", name, func_name, source_file)
         end
       end
-      
+
       def parse_includes
         @content.scan(/rb_include_module\s*\(\s*(\w+?),\s*(\w+?)\s*\)/) do |klass, mod|
           if klass = @namespaces[klass]
@@ -366,7 +366,7 @@ module YARD
           end
         end
       end
-      
+
       def parse_constants
         @content.scan(%r{\Wrb_define_
                        (
@@ -384,20 +384,20 @@ module YARD
           handle_constants(type, var_name, const_name, definition)
         end
       end
-      
+
       private
-      
+
       def clean_source(source)
         source = handle_ifdefs_in(source)
         source = handle_tab_width(source)
         source = remove_commented_out_lines(source)
         source
       end
-      
+
       def handle_ifdefs_in(body)
         body.gsub(/^#ifdef HAVE_PROTOTYPES.*?#else.*?\n(.*?)#endif.*?\n/m, '\1')
       end
-      
+
       def handle_tab_width(body)
         if /\t/ =~ body
           tab_width = 4
@@ -409,11 +409,11 @@ module YARD
           body
         end
       end
-        
+
       def remove_commented_out_lines(body)
         body.gsub(%r{//.*rb_define_}, '//')
       end
-      
+
       def remove_private_comments(comment)
          comment = comment.gsub(/\/?\*--\n(.*?)\/?\*\+\+/m, '')
          comment = comment.sub(/\/?\*--\n.*/m, '')

@@ -6,7 +6,7 @@ module YARD
     # static relative paths to files on disk.
     class DocServerSerializer < Serializers::FileSystemSerializer
       include WEBrick::HTTPUtils
-      
+
       def initialize(command)
         super(:command => command, :extension => '')
       end

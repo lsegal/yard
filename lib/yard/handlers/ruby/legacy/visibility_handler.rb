@@ -1,7 +1,7 @@
 # (see Ruby::VisibilityHandler)
 class YARD::Handlers::Ruby::Legacy::VisibilityHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\A(protected|private|public)(\s|\(|$)/
-  
+
   process do
     vis = statement.tokens.first.text
     if statement.tokens.size == 1

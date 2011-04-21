@@ -4,7 +4,7 @@ module YARD
       # Displays an object wrapped in frames
       class FramesCommand < DisplayObjectCommand
         include DocServerHelper
-        
+
         def run
           main_url = request.path.gsub(/^(.+)?\/frames(?:\/(#{path}))?$/, '\1/\2')
           if path =~ %r{^file/}

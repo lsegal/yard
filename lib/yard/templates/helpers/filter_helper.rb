@@ -11,12 +11,12 @@ module YARD
       def is_namespace?(object)
         object.is_a?(CodeObjects::NamespaceObject)
       end
-      
+
       # @return [Boolean] whether an object is a class
       def is_class?(object)
         object.is_a?(CodeObjects::ClassObject)
       end
-      
+
       # @return [Boolean] whether an object is a module
       def is_module?(object)
         object.is_a?(CodeObjects::ModuleObject)

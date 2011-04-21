@@ -11,8 +11,15 @@ describe YARD::Templates::Engine.template(:default, :module) do
         def e; end
       end
 
+      module BaseMod
+        attr_reader :base_attr1
+        attr_writer :base_attr2
+        attr_accessor :base_attr3
+      end
+
       # Comments
       module A
+        include BaseMod
         attr_accessor :attr1
         attr_reader :attr2
         

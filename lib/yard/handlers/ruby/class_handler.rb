@@ -3,7 +3,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
   namespace_only
   handles :class, :sclass
-  
+
   process do
     if statement.type == :class
       classname = statement[0].source
@@ -24,7 +24,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
         create_attributes(klass, members_from_tags(klass))
       end
       parse_block(statement[2], :namespace => klass)
-       
+
       if undocsuper
         raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
@@ -56,9 +56,9 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       raise YARD::Parser::UndocumentableError, "class: #{statement.source[0..sig_end]}"
     end
   end
-  
+
   private
-  
+
   # Extract the parameters from the Struct.new AST node, returning them as a list
   # of strings
   #
@@ -69,7 +69,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     members.map! {|x| x.source.strip[1..-1]}
     members
   end
-  
+
   def create_struct_superclass(superclass, superclass_def)
     return if superclass == "Struct"
     the_super = register ClassObject.new(P("Struct"), superclass[8..-1]) do |o|
@@ -78,7 +78,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     parse_struct_superclass(the_super, superclass_def)
     the_super
   end
-  
+
   def struct_superclass_name(superclass)
     if superclass.call?
       first = superclass.parameters.first
@@ -88,16 +88,16 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     end
     "Struct"
   end
-  
+
   def parse_struct_superclass(klass, superclass)
     return unless superclass.call? && superclass.parameters
     members = extract_parameters(superclass)
     create_attributes(klass, members)
   end
-  
+
   def parse_superclass(superclass)
     return nil unless superclass
-    
+
     case superclass.type
     when :var_ref
       return namespace.path if superclass.first == s(:kw, "self")

@@ -31,7 +31,7 @@
   <% end %>
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
     <% unless @single_library %>&raquo;<% end %>
-    <a href="/<%= base_path(router.docs_prefix) %>"><% if object.root? || object.type == :method %>Index<% else %>Index (<%= object.name.to_s[0] %>)<% end %></a> &raquo; 
+    <a href="/<%= base_path(router.docs_prefix) %>"><% if object.root? || object.type == :method %>Index<% else %>Index (<%= object.name.to_s[0] %>)<% end %></a> &raquo;
     <%= @breadcrumb.map {|obj| "<span class='title'>" + linkify(obj, obj.name) + "</span>" }.join(" &raquo; ") %>
     <%= @breadcrumb.size > 0 ? " &raquo; " : "" %>
     <span class='title'><%= object.root? ? "Top Level Namespace" : object.name(true) %></span>
@@ -40,7 +40,7 @@
     <% if object != '_index.html' %><a href="/<%= base_path(router.docs_prefix) %>">Index</a> &raquo; <% end %>
     <span class='title'><%= @breadcrumb_title %></span>
   <% end %>
-  
+
   <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
 </div>
 

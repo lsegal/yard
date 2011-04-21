@@ -183,7 +183,7 @@ describe YARD::CLI::Yardoc do
       readme = File.join(File.dirname(__FILE__),'..','..','README.md')
 
       @yardoc.parse_arguments('--main', readme)
-      @yardoc.options[:readme].should == readme
+      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new(readme, '')
     end
 
     it "should select a markup provider when --markup-provider or -mp is set" do
@@ -387,27 +387,36 @@ describe YARD::CLI::Yardoc do
   
   describe 'Extra file arguments' do
     it "should accept extra files if specified after '-' with source files" do
+      Dir.should_receive(:glob).with('README*').and_return([])
       File.should_receive(:file?).with('extra_file1').and_return(true)
       File.should_receive(:file?).with('extra_file2').and_return(true)
+      File.should_receive(:read).with('extra_file1').and_return('')
+      File.should_receive(:read).with('extra_file2').and_return('')
       @yardoc.parse_arguments *%w( file1 file2 - extra_file1 extra_file2 )
       @yardoc.files.should == %w( file1 file2 )
-      @yardoc.options[:files].should == %w( extra_file1 extra_file2 )
+      @yardoc.options[:files].should == 
+        [CodeObjects::ExtraFileObject.new('extra_file1', ''), 
+          CodeObjects::ExtraFileObject.new('extra_file2', '')]
     end
 
     it "should accept files section only containing extra files" do
       @yardoc.parse_arguments *%w( - LICENSE )
       @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
-      @yardoc.options[:files].should == %w( LICENSE )
+      @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
     it "should accept globs as extra files" do
       Dir.should_receive(:glob).with('README*').and_return []
       Dir.should_receive(:glob).with('*.txt').and_return ['a.txt', 'b.txt']
+      File.should_receive(:read).with('a.txt').and_return('')
+      File.should_receive(:read).with('b.txt').and_return('')
       File.should_receive(:file?).with('a.txt').and_return(true)
       File.should_receive(:file?).with('b.txt').and_return(true)
       @yardoc.parse_arguments *%w( file1 file2 - *.txt )
       @yardoc.files.should == %w( file1 file2 )
-      @yardoc.options[:files].should == %w( a.txt b.txt )
+      @yardoc.options[:files].should == 
+        [CodeObjects::ExtraFileObject.new('a.txt', ''), 
+          CodeObjects::ExtraFileObject.new('b.txt', '')]
     end
 
     it "should warn if extra file is not found" do

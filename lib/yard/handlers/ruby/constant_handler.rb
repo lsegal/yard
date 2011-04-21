@@ -3,24 +3,24 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
   namespace_only
   handles :assign
-  
+
   process do
-    if statement[1].call? && statement[1][0][0] == s(:const, "Struct") && 
+    if statement[1].call? && statement[1][0][0] == s(:const, "Struct") &&
         statement[1][2] == s(:ident, "new")
       process_structclass(statement)
     elsif statement[0].type == :var_field && statement[0][0].type == :const
       process_constant(statement)
     end
   end
-  
+
   private
-  
+
   def process_constant(statement)
     name = statement[0][0][0]
     value = statement[1].source
     register ConstantObject.new(namespace, name) {|o| o.source = statement; o.value = value.strip }
   end
-  
+
   def process_structclass(statement)
     lhs = statement[0][0]
     if lhs.type == :const
@@ -30,7 +30,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
       raise YARD::Parser::UndocumentableError, "Struct assignment to #{statement[0].source}"
     end
   end
-  
+
   # Extract the parameters from the Struct.new AST node, returning them as a list
   # of strings
   #

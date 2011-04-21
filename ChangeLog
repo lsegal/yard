@@ -1,39 +1,4 @@
-2011-04-14  Loren Segal <lsegal@soen.ca>
-
-  * ChangeLog, README.md, lib/yard.rb: 0.6.8 release
-
-2011-04-12  Loren Segal <lsegal@soen.ca>
-
-  * spec/cli/yardoc_spec.rb: Fix spec title
-
-2011-04-10  Loren Segal <lsegal@soen.ca>
-
-  * lib/yard/templates/helpers/markup_helper.rb: Ensure that
-  load_markup_provider loads type as symbol
-
-  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Properly recognize
-  --no-yardopts (and --no-document) when no --yardopts argument is in the
-  options.  Closes #276
-
-2011-04-09  Loren Segal <lsegal@soen.ca>
-
-  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Fix regression where
-  default markup was not being set in yard server
-
-2011-04-07  Loren Segal <lsegal@soen.ca>
-
-  * Rakefile, yard.gemspec: gemspec date can be set with Ruby!
-
-  * lib/yard/logging.rb, spec/logging_spec.rb: Logger should show backtraces
-  whenever logger level is set to debug
-
-  * lib/yard/templates/helpers/markup/rdoc_markup.rb: Fix regression and
-  support old RDoc versions
-
-2011-04-07  Akzhan Abdulin <akzhan.abdulin@gmail.com>
-
-  * templates/default/fulldoc/html/js/jquery.js: Upgrade jQuery from 1.5.1 to
-  1.5.2
+# @markup markdown
 
 2011-04-06  Loren Segal <lsegal@soen.ca>
 

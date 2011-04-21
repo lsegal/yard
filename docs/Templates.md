@@ -1,12 +1,12 @@
-Templates Architecture
-======================
+# @title Templates Architecture
+
+# Templates Architecture
 
 Templates are the main component in the output rendering process of YARD,
 which is invoked when conventional HTML/text output needs to be rendered
 for a set of code objects.
 
-Design Goals
-------------
+## Design Goals
 
 The general design attempts to be as abstracted from actual content and templates
 as possible. Unlike RDoc which uses one file to describe the entire template,
@@ -30,15 +30,13 @@ The design goals can be summarized as follows:
      any existing sections in the document. This allows for easy modification
      of templates by plugins.
      
-Templates
----------
+## Templates
 
 Template modules are the objects used to orchestrate the design goals listed 
 above. Specifically, they organize the sections and render the template contents
 depending on the format. 
 
-Engine
-------
+## Engine
 
 The Engine class orchestrates the creation and rendering of Template modules and 
 handles serialization or specific rendering scenarios (like HTML). To create
@@ -63,8 +61,7 @@ object. For instance, the above render example is equivalent to the simple
 call `myobject.format`. The `generate` method is a special kind of render
 and is called from the {YARD::CLI::Yardoc} command line utility.
 
-Template Options
-----------------
+## Template Options
 
 A template keeps state when it is rendering output. This state is kept in
 an options hash which is initially passed to it during instantiation. Some
@@ -75,8 +72,7 @@ HTML instead of text can be done as follows:
 
     myobject.format(:format => :html)
     
-Serializer
-----------
+## Serializer
 
 This class abstracts the logic involved in deciding how to serialize data to
 the expected endpoint. For instance, there is both a {YARD::Serializers::StdoutSerializer StdoutSerializer}
@@ -91,8 +87,7 @@ otherwise the rendered object is returned as a string to its parent. Nested
 Templates automatically set the serializer to nil so that they return
 as a String to their parent.
 
-Creating a Template
--------------------
+## Creating a Template
 
 Templates are represented by a directory inside the {YARD::Templates::Engine.template_paths}
 on disk. A standard template directory looks like the following tree:
@@ -137,8 +132,7 @@ files are the sections that make up the template.
 Note that the subdirectory `html/` is also its own "template" that inherits
 from the parent directory. We will see more on this later.
 
-setup.rb
---------
+## setup.rb
 
 Every template should have at least one `setup.rb` file that defines the 
 {YARD::Templates::Template#init #init} method to set the 
@@ -153,8 +147,7 @@ A standard setup.rb file looks like:
       sections :section1, :section2, :section3
     end
 
-Sections
---------
+## Sections
 
 Sections are smaller components that correlate to template
 fragments. Practically speaking, a section can either be a template fragment 
@@ -162,8 +155,7 @@ fragments. Practically speaking, a section can either be a template fragment
 (which returns a String) or another {YARD::Templates::Template} (which in turn has its own 
 list of sections).
 
-Nested Sections
----------------
+## Nested Sections
 
 Sections often require the ability to encapsulate a set of sub-sections in markup
 (HTML, for instance). Rather than use heavier Template subclass objects, a more
@@ -198,8 +190,7 @@ to each individually (in order) until there are no more left to yield to.
 In the vast majority of cases, you'd want to use `yieldall`, since `yield`
 makes it hard for users to override your template.
 
-Inheriting Templates
---------------------
+## Inheriting Templates
 
 Parent directory templates are automatically inherited (or mixed in, to be
 more accurate) by the current template. This means that the 'default/class/html'
@@ -223,8 +214,7 @@ For instance, the first line in `default/class/html/setup.rb` is:
 This includes the 'default/module/html', which means it also includes 'default/module'
 by extension. This allows class to make use of any of module's erb files.
 
-Inserting and Traversing Sections
----------------------------------
+## Inserting and Traversing Sections
 
 The ability to insert sections was mentioned above. The class template, for
 instance, will modify the #init method to insert class specific sections:
@@ -264,8 +254,7 @@ recursively. The above example could simply be rewritten as:
 
     sections.place(:e).after_any(:d)
 
-Overriding Templates by Registering a Template Path
----------------------------------------------------
+## Overriding Templates by Registering a Template Path
 
 Inheriting templates explicitly is useful when creating a customized template
 that wants to take advantage of code re-use. However, most users who want
