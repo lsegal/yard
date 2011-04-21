@@ -88,7 +88,7 @@ module YARD
         def call(request)
           self.request = request
           self.path ||= request.path[1..-1]
-          self.headers = {'Content-Type' => 'text/html'}
+          self.headers = {'Content-Type' => 'text/html; charset=UTF-8'}
           self.body = ''
           self.status = 200
           begin

@@ -39,7 +39,7 @@ describe YARD::Server::Commands::Base do
     it "should return a valid redirection" do
       cmd = MyProcCommand.new { redirect '/foo' }
       cmd.call(mock_request('/foo')).should == 
-        [302, {"Content-Type" => "text/html", "Location" => "/foo"}, [""]]
+        [302, {"Content-Type" => "text/html; charset=UTF-8", "Location" => "/foo"}, [""]]
     end
   end
   
