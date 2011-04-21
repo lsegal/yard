@@ -2,17 +2,17 @@ module YARD
   module Tags
     class OverloadTag < Tag
       attr_reader :signature, :parameters, :docstring
-      
+
       def initialize(tag_name, text)
         super(tag_name, nil)
         parse_tag(text)
         parse_signature
       end
-      
+
       def tag(name) docstring.tag(name) end
       def tags(name = nil) docstring.tags(name) end
       def has_tag?(name) docstring.has_tag?(name) end
-        
+
       def object=(value)
         super(value)
         docstring.object = value
@@ -22,22 +22,22 @@ module YARD
         return @name unless prefix
         object.scope == :class ? @name.to_s : "#{object.send(:sep)}#{@name}"
       end
-      
+
       def method_missing(*args, &block)
         object.send(*args, &block)
       end
-      
+
       def type
         object.type
       end
-      
+
       def is_a?(other)
         object.is_a?(other) || self.class >= other.class || false
       end
       alias kind_of? is_a?
-      
+
       private
-      
+
       def parse_tag(text)
         @signature, text = *text.split(/\r?\n/, 2)
         @signature.strip!
@@ -47,7 +47,7 @@ module YARD
         text.strip!
         @docstring = Docstring.new(text, nil)
       end
-      
+
       def parse_signature
         if signature =~ /^(?:def\s)?\s*(#{CodeObjects::METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
           meth, args = $1, $2

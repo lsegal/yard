@@ -9,7 +9,7 @@ module YARD
       def equal?(other)
         other == :root ? true : super(other)
       end
-      
+
       def hash; :root.hash end
     end
   end

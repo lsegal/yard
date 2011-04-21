@@ -3,7 +3,7 @@
 class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby::Legacy::Base
   namespace_only
   handles TkIF, TkELSIF, TkUNLESS
-  
+
   process do
     condition = parse_condition
     if condition == nil
@@ -16,25 +16,25 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
       parse_else_block
     end
   end
-  
+
   protected
-  
+
   # Parses the condition part of the if/unless statement
-  # 
+  #
   # @return [true, false, nil] true if the condition can be definitely
   #   parsed to true, false if not, and nil if the condition cannot be
   #   parsed with certainty (it's dynamic)
   # @since 0.5.5
   def parse_condition
     condition = nil
-    
+
     # Right now we can handle very simple unary conditions like:
     #   if true
     #   if false
     #   if 0
     #   if 100 (not 0)
     #   if defined? SOME_CONSTANT
-    # 
+    #
     # The last case will do a lookup in the registry and then one
     # in the Ruby world (using eval).
     case statement.tokens[1..-1].to_s.strip
@@ -56,18 +56,18 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     when "false"
       condition = false
     end
-    
+
     if TkUNLESS === statement.tokens.first
       condition = !condition if condition != nil
     end
     condition
   end
-  
+
   # @since 0.5.5
   def parse_then_block
     parse_block
   end
-  
+
   # @since 0.5.5
   def parse_else_block
     return unless statement.block

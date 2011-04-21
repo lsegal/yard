@@ -2,10 +2,10 @@ module YARD
   module Parser::Ruby::Legacy
     class StatementList < Array
       include RubyToken
-      
+
       attr_accessor :shebang_line, :encoding_line
 
-      # The following list of tokens will require a block to be opened 
+      # The following list of tokens will require a block to be opened
       # if used at the beginning of a statement.
       OPEN_BLOCK_TOKENS = [TkCLASS, TkDEF, TkMODULE, TkUNTIL,
                            TkIF, TkELSIF, TkUNLESS, TkWHILE, TkFOR, TkCASE]
@@ -21,13 +21,13 @@ module YARD
           @tokens = content.dup
         elsif content.is_a? String
           @tokens = TokenList.new(content.gsub("\r", ""))
-        else 
+        else
           raise ArgumentError, "Invalid content for StatementList: #{content.inspect}:#{content.class}"
         end
 
         parse_statements
       end
-      
+
       private
 
       def parse_statements
@@ -79,7 +79,7 @@ module YARD
           nil
         end
       end
-      
+
       def sanitize_statement_end
         extra = []
         (@statement.size - 1).downto(0) do |index|
@@ -110,7 +110,7 @@ module YARD
           end
         end
       end
-      
+
       def preprocess_token(tk)
         if tk.is_a?(TkCOMMENT)
           case tk.text
@@ -187,7 +187,7 @@ module YARD
           process_statement_end(tk)
           @state = :block
         end
-        
+
         if @first_line == tk.line_no && !@statement.empty? && TkCOMMENT === tk
           process_initial_comment(tk)
         end
@@ -219,7 +219,7 @@ module YARD
         if @statement.empty? && (@comments_last_line || 0) < tk.line_no - 2
           @comments = nil
         end
-        
+
         return unless tk.class == TkCOMMENT
 
         case tk.text
@@ -237,7 +237,7 @@ module YARD
         end
         return if !@statement.empty? && @comments
         return if @first_line && tk.line_no > @first_line
-        
+
         @comments = nil if @comments_last_line && @comments_last_line < tk.line_no - 1
         @comments_line = tk.line_no unless @comments
 
@@ -303,8 +303,8 @@ module YARD
       def process_statement_end(tk)
         # Whitespace means that we keep the same value of @new_statement as last token
         return if tk.class == TkSPACE
-        
-        return unless 
+
+        return unless
           # We might be coming after a statement-ending token...
           ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
            # Or we might be at the beginning of an argument list
@@ -329,13 +329,13 @@ module YARD
 
         # Continue with the statement if we've hit a comma in a def
         return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
-        
-        
+
+
         if [TkEND_OF_SCRIPT, TkNL, TkSEMICOLON].include?(tk.class) && @state == :block_statement &&
             [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
           @current_block = nil
         end
-        
+
         unless @current_block
           @done = true
           return
@@ -365,7 +365,7 @@ module YARD
             @level -= 1
           end
         end
-        
+
         @level == 0
       end
 

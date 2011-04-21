@@ -2,10 +2,10 @@ require 'ostruct'
 
 module YARD
   module Templates
-    # This module manages all creation, handling and rendering of {Template} 
-    # objects. 
-    # 
-    # * To create a template object at a path, use {template}. 
+    # This module manages all creation, handling and rendering of {Template}
+    # objects.
+    #
+    # * To create a template object at a path, use {template}.
     # * To render a template, call {render}.
     # * To register a template path in the lookup paths, call {register_template_path}.
     module Engine
@@ -14,19 +14,19 @@ module YARD
         attr_accessor :template_paths
 
         # Registers a new template path in {template_paths}
-        # 
+        #
         # @param [String] path a new template path
-        # @return [void] 
+        # @return [void]
         def register_template_path(path)
           template_paths.push path
         end
-        
-        # Creates a template module representing the path. Searches on disk 
-        # for the first directory named +path+ (joined by '/') within the 
-        # template paths and builds a template module for. All other matching 
-        # directories in other template paths will be included in the 
+
+        # Creates a template module representing the path. Searches on disk
+        # for the first directory named +path+ (joined by '/') within the
+        # template paths and builds a template module for. All other matching
+        # directories in other template paths will be included in the
         # generated module as mixins (for overriding).
-        # 
+        #
         # @param [Array<String, Symbol>] path a list of path components
         # @raise [ArgumentError] if the path does not exist within one of the
         #   {template_paths} on disk.
@@ -36,16 +36,16 @@ module YARD
           from_template = path.shift if path.first.is_a?(Template)
           path = path.join('/')
           full_paths = find_template_paths(from_template, path)
-          
+
           path = File.cleanpath(path).gsub('../', '')
           raise ArgumentError, "No such template for #{path}" if full_paths.empty?
           mod = template!(path, full_paths)
 
           mod
         end
-        
+
         # Forces creation of a template at +path+ within a +full_path+.
-        # 
+        #
         # @param [String] path the path name of the template
         # @param [Array<String>] full_paths the full path on disk of the template
         # @return [Template] the template module representing the +path+
@@ -63,12 +63,12 @@ module YARD
 
         # Renders a template on a {CodeObjects::Base code object} using
         # a set of default (overridable) options. Either the +:object+
-        # or +:type+ keys must be provided. 
-        # 
+        # or +:type+ keys must be provided.
+        #
         # If a +:serializer+ key is provided and +:serialize+ is not set to
         # false, the rendered contents will be serialized through the {Serializers::Base}
         # object. See {with_serializer}.
-        # 
+        #
         # @example Renders an object with html formatting
         #   Engine.render(:format => :html, :object => obj)
         # @example Renders without an object
@@ -81,18 +81,18 @@ module YARD
         def render(options = {})
           set_default_options(options)
           mod = template(options[:template], options[:type], options[:format])
-          
+
           if options[:serialize] != false
             with_serializer(options[:object], options[:serializer]) { mod.run(options) }
           else
             mod.run(options)
           end
         end
-        
-        # Passes a set of objects to the +:fulldoc+ template for full documentation generation. 
-        # This is called by {CLI::Yardoc} to most commonly perform HTML 
+
+        # Passes a set of objects to the +:fulldoc+ template for full documentation generation.
+        # This is called by {CLI::Yardoc} to most commonly perform HTML
         # documentation generation.
-        # 
+        #
         # @param [Array<CodeObjects::Base>] objects a list of {CodeObjects::Base}
         #   objects to pass to the template
         # @param [Hash] options (see {render})
@@ -104,7 +104,7 @@ module YARD
         end
 
         # Serializes the results of a block with a +serializer+ object.
-        # 
+        #
         # @param [CodeObjects::Base] object the code object to serialize
         # @param [Serializers::Base] serializer the serializer object
         # @yield a block whose result will be serialize
@@ -119,11 +119,11 @@ module YARD
           end
           output
         end
-        
+
         private
-        
+
         # Sets default options on the options hash
-        # 
+        #
         # @param [Hash] options the options hash
         # @option options [Symbol] :format (:text) the default format
         # @option options [Symbol] :type (nil) the :object's type, if provided
@@ -138,7 +138,7 @@ module YARD
 
         # Searches through the registered {template_paths} and returns
         # all full directories that have the +path+ within them on disk.
-        # 
+        #
         # @param [Template] from_template if provided, allows a relative
         #   path to be specified from this template's full path.
         # @param [String] path the path component to search for in the
@@ -148,7 +148,7 @@ module YARD
         def find_template_paths(from_template, path)
           paths = template_paths.dup
           paths = from_template.full_paths + paths if from_template
-          
+
           paths.inject([]) do |acc, tp|
             full_path = File.cleanpath(File.join(tp, path))
             acc.unshift(full_path) if File.directory?(full_path)
@@ -157,7 +157,7 @@ module YARD
         end
 
         # The name of the module that represents a +path+
-        # 
+        #
         # @param [String] the path toe generate a module name for
         # @return [String] the module name
         def template_module_name(path)
@@ -167,7 +167,7 @@ module YARD
 
       self.template_paths = []
     end
-    
+
     Engine.register_template_path(File.join(YARD::ROOT, '..', 'templates'))
   end
 end

@@ -6,47 +6,47 @@ module YARD
       # This is the base command class used to implement custom commands for
       # a server. A command will be routed to by the {Router} class and return
       # a Rack-style response.
-      # 
+      #
       # == Attribute Initializers
       # All attributes can be initialized via options passed into the {#initialize}
-      # method. When creating a custom command, the {Adapter#options} will 
+      # method. When creating a custom command, the {Adapter#options} will
       # automatically be mapped to attributes by the same name on your class.
-      # 
+      #
       #   class MyCommand < Base
       #     attr_accessor :myattr
       #   end
-      # 
+      #
       #   Adapter.new(libs, {:myattr => 'foo'}).start
-      #   
+      #
       #   # when a request comes in, cmd.myattr == 'foo'
-      # 
+      #
       # == Subclassing Notes
       # To implement a custom command, override the {#run} method, not {#call}.
       # In your implementation, you should set the body and status for requests.
       # See details in the +#run+ method documentation.
-      # 
+      #
       # Note that if your command deals directly with libraries, you should
       # consider subclassing the more specific {LibraryCommand} class instead.
-      # 
+      #
       # @abstract
       # @see #run
       class Base
         # @group Basic Command and Adapter Options
-        
+
         # @return [Hash] the options passed to the command's constructor
         attr_accessor :command_options
-        
+
         # @return [Adapter] the server adapter
         attr_accessor :adapter
 
         # @return [Boolean] whether to cache
         attr_accessor :caching
-        
+
         # @group Attributes Set Per Request
 
         # @return [Request] request object
         attr_accessor :request
-        
+
         # @return [String] the path after the command base URI
         attr_accessor :path
 
@@ -58,13 +58,13 @@ module YARD
 
         # @return [String] the response body. Defaults to empty string.
         attr_accessor :body
-        
+
         # @group Instance Method Summary
 
-        # Creates a new command object, setting attributes named by keys 
+        # Creates a new command object, setting attributes named by keys
         # in the options hash. After initialization, the options hash
         # is saved in {#command_options} for further inspection.
-        # 
+        #
         # @example Creating a Command
         #   cmd = DisplayObjectCommand.new(:caching => true, :library => mylib)
         #   cmd.library # => mylib
@@ -79,7 +79,7 @@ module YARD
         end
 
         # The main method called by a router with a request object.
-        # 
+        #
         # @note This command should not be overridden by subclasses. Implement
         #   the callback method {#run} instead.
         # @param [Adapter Dependent] request the request object
@@ -101,13 +101,13 @@ module YARD
           not_found if status == 404
           [status, headers, body.is_a?(Array) ? body : [body]]
         end
-        
+
         # @group Abstract Methods
 
         # Subclass this method to implement a custom command. This method
-        # should set the {#status} and {#body}, and optionally modify the 
+        # should set the {#status} and {#body}, and optionally modify the
         # {#headers}. Note that +#status+ defaults to 200.
-        # 
+        #
         # @example A custom command
         #   class ErrorCommand < Base
         #     def run
@@ -116,7 +116,7 @@ module YARD
         #       self.headers['Conten-Type'] = 'text/plain'
         #     end
         #   end
-        #       
+        #
         # @abstract
         # @return [void]
         def run
@@ -124,12 +124,12 @@ module YARD
         end
 
         protected
-        
+
         # @group Helper Methods
-        
+
         # Renders a specific object if provided, or a regular template rendering
         # if object is not provided.
-        # 
+        #
         # @todo This method is dependent on +#options+, it should be in {LibraryCommand}.
         # @param [CodeObjects::Base, nil] object calls {CodeObjects::Base#format} if
         #   an object is provided, or {Templates::Engine.render} if object is nil. Both
@@ -145,9 +145,9 @@ module YARD
             cache object
           end
         end
-        
+
         # Override this method to implement custom caching mechanisms for
-        # 
+        #
         # @example Caching to memory
         #   $memory_cache = {}
         #   def cache(data)
@@ -169,7 +169,7 @@ module YARD
 
         # Sets the body and headers (but not status) for a 404 response. Does
         # nothing if the body is already set.
-        # 
+        #
         # @return [void]
         def not_found
           return unless body.empty?

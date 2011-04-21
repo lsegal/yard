@@ -2,7 +2,7 @@
 class YARD::Handlers::Ruby::PrivateConstantHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles method_call(:private_constant)
-  
+
   process do
     errors = []
     statement.parameters.each do |param|
@@ -18,9 +18,9 @@ class YARD::Handlers::Ruby::PrivateConstantHandler < YARD::Handlers::Ruby::Base
       raise UndocumentableError, "private constant#{msg} for #{namespace.path}"
     end
   end
-  
+
   private
-  
+
   def privatize_constant(node)
     if node.literal? || (node.type == :var_ref && node[0].type == :const)
       node = node.jump(:tstring_content, :const)

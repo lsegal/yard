@@ -1,7 +1,7 @@
 # (see Ruby::MixinHandler)
 class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Ainclude(\s|\()/
-  
+
   process do
     errors = []
     statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
@@ -12,7 +12,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
         errors << err.message
       end
     end
-    
+
     if errors.size > 0
       msg = errors.size == 1 ? ": #{errors[0]}" : "s: #{errors.join(", ")}"
       raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
@@ -27,7 +27,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
     end
 
     obj = Proxy.new(namespace, mixmatch)
-    
+
     case obj
     when Proxy
       obj.type = :module

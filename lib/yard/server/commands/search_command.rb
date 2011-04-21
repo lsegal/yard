@@ -5,7 +5,7 @@ module YARD
       # the results as HTML or plaintext
       class SearchCommand < LibraryCommand
         attr_accessor :results, :query
-        
+
         def run
           Registry.load_all
           self.query = request.query['q']
@@ -16,16 +16,16 @@ module YARD
           search_for_object
           request.xhr? ? serve_xhr : serve_normal
         end
-        
+
         def visible_results
           results[0, 10]
         end
-        
+
         private
-        
+
         def serve_xhr
           self.headers['Content-Type'] = 'text/plain'
-          self.body = visible_results.map {|o| 
+          self.body = visible_results.map {|o|
             [(o.type == :method ? o.name(true) : o.name).to_s,
              o.path,
              o.namespace.root? ? '' : o.namespace.path,
@@ -33,7 +33,7 @@ module YARD
             ].join(",")
           }.join("\n")
         end
-        
+
         def serve_normal
           options.update(
             :visible_results => visible_results,
@@ -44,7 +44,7 @@ module YARD
           )
           self.body = Templates::Engine.render(options)
         end
-        
+
         def search_for_object
           splitquery = query.split(/\s+/).map {|c| c.downcase }.reject {|m| m.empty? }
           self.results = Registry.all.select {|o|
@@ -57,7 +57,7 @@ module YARD
                 !(query =~ /[#.]/) && query.include?("::")
               when :class, :module, :constant, :class_variable
                 query =~ /[#.]/
-              end 
+              end
             }.sort_by {|o|
               name = (o.type == :method ? o.name(true) : o.name).to_s
               name.length.to_f / query.length.to_f

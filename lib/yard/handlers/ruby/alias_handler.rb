@@ -1,7 +1,7 @@
 # Handles alias and alias_method calls
 class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
   handles :alias, method_call(:alias_method)
-  
+
   process do
     names = []
     if statement.type == :alias
@@ -17,7 +17,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
       end
     end
     raise YARD::Parser::UndocumentableError, "alias/alias_method" if names.size != 2
-    
+
     new_meth, old_meth = names[0].to_sym, names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
@@ -34,7 +34,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     else
       new_obj.signature = "def #{new_meth}" # this is all we know.
     end
-    
+
     namespace.aliases[new_obj] = old_meth
   end
 end

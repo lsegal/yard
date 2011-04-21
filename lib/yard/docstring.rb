@@ -1,45 +1,45 @@
 module YARD
-  # A documentation string, or "docstring" for short, encapsulates the 
+  # A documentation string, or "docstring" for short, encapsulates the
   # comments and metadata, or "tags", of an object. Meta-data is expressed
   # in the form +@tag VALUE+, where VALUE can span over multiple lines as
   # long as they are indented. The following +@example+ tag shows how tags
   # can be indented:
-  # 
+  #
   #   # @example My example
   #   #   a = "hello world"
   #   #   a.reverse
   #   # @version 1.0
-  # 
-  # Tags can be nested in a documentation string, though the {Tags::Tag} 
+  #
+  # Tags can be nested in a documentation string, though the {Tags::Tag}
   # itself is responsible for parsing the inner tags.
   class Docstring < String
     # @return [Array<Tags::RefTag>] the list of reference tags
     attr_reader :ref_tags
-    
+
     # @return [CodeObjects::Base] the object that owns the docstring.
     attr_accessor :object
-    
+
     # @return [Range] line range in the {#object}'s file where the docstring was parsed from
     attr_accessor :line_range
-    
+
     # @return [String] the raw documentation (including raw tag text)
     attr_reader :all
-    
+
     # @return [Boolean] whether the docstring was started with "##"
     attr_reader :hash_flag
     def hash_flag=(v) @hash_flag = v == nil ? false : v end
 
     # Matches a tag at the start of a comment line
     META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
-    
+
     # @group Creating a Docstring Object
 
     # Creates a new docstring with the raw contents attached to an optional
     # object.
-    # 
+    #
     # @example
     #   Docstring.new("hello world\n@return Object return", someobj)
-    # 
+    #
     # @param [String] content the raw comments to be parsed into a docstring
     #   and associated meta-data.
     # @param [CodeObjects::Base] object an object to associate the docstring
@@ -48,12 +48,12 @@ module YARD
       @object = object
       @summary = nil
       @hash_flag = false
-      
+
       self.all = content
     end
-    
+
     # Adds another {Docstring}, copying over tags.
-    # 
+    #
     # @param [Docstring, String] other the other docstring (or string) to
     #   add.
     # @return [Docstring] a new docstring with both docstrings combines
@@ -65,7 +65,7 @@ module YARD
         super
       end
     end
-    
+
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
     def replace(content)
@@ -76,12 +76,12 @@ module YARD
     alias all= replace
 
     # @endgroup
-    
+
     # @return [Fixnum] the first line of the {#line_range}.
     def line
       line_range.first
     end
-    
+
     # Gets the first line of a docstring to the period or the first paragraph.
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
@@ -108,7 +108,7 @@ module YARD
     end
 
     # @group Creating and Accessing Meta-data
-    
+
     # Adds a tag or reftag object to the tag list
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
     def add_tag(*tags)
@@ -124,7 +124,7 @@ module YARD
         end
       end
     end
-    
+
     # Convenience method to return the first tag
     # object in the list of tag objects of that name
     #
@@ -168,26 +168,26 @@ module YARD
         empty? && @tags.empty? && @ref_tags.empty?
       end
     end
-    
+
     # @endgroup
 
     private
-    
+
     # Maps valid reference tags
-    # 
+    #
     # @return [Array<Tags::RefTag>] the list of valid reference tags
     def convert_ref_tags
       list = @ref_tags.reject {|t| CodeObjects::Proxy === t.owner }
       list.map {|t| t.tags }.flatten
     end
-    
+
     # Creates a {Tags::RefTag}
     def create_ref_tag(tag_name, name, object_name)
       @ref_tags << Tags::RefTagList.new(tag_name, P(object, object_name), name)
     end
-    
+
     # Creates a tag from the {Tags::DefaultFactory tag factory}.
-    # 
+    #
     # @param [String] tag_name the tag name
     # @param [String] tag_buf the text attached to the tag with newlines removed.
     # @return [Tags::Tag, Tags::RefTag] a tag
@@ -195,7 +195,7 @@ module YARD
       if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
         return create_ref_tag(tag_name, $1, $2)
       end
-        
+
       tag_factory = Tags::Library.instance
       tag_method = "#{tag_name}_tag"
       if tag_name && tag_factory.respond_to?(tag_method)
@@ -209,10 +209,10 @@ module YARD
 
     # Parses out comments split by newlines into a new code object
     #
-    # @param [String] comments 
+    # @param [String] comments
     #   the newline delimited array of comments. If the comments
-    #   are passed as a String, they will be split by newlines. 
-    # 
+    #   are passed as a String, they will be split by newlines.
+    #
     # @return [String] the non-metadata portion of the comments to
     #   be used as a docstring
     def parse_comments(comments)
@@ -226,11 +226,11 @@ module YARD
       tag_name, tag_klass, tag_buf = nil, nil, []
 
       (comments+['']).each_with_index do |line, index|
-        indent = line[/^\s*/].length 
+        indent = line[/^\s*/].length
         empty = (line =~ /^\s*$/ ? true : false)
         done = comments.size == index
 
-        if tag_name && (((indent < orig_indent && !empty) || done || 
+        if tag_name && (((indent < orig_indent && !empty) || done ||
             (indent == 0 && !empty)) || (indent <= last_indent && line =~ META_MATCH))
           create_tag(tag_name, tag_buf.join("\n"))
           tag_name, tag_buf, = nil, []
@@ -244,12 +244,12 @@ module YARD
           orig_indent = indent if orig_indent == 0
           # Extra data added to the tag on the next line
           last_empty = last_line =~ /^[ \t]*$/ ? true : false
-          
+
           tag_buf << '' if last_empty
           tag_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
         elsif !tag_name
           # Regular docstring text
-          docstring << line << "\n" 
+          docstring << line << "\n"
         end
 
         last_indent = indent

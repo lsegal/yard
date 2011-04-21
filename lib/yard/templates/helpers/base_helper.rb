@@ -2,41 +2,41 @@ module YARD::Templates::Helpers
   # The base helper module included in all templates.
   module BaseHelper
     attr_accessor :object, :serializer
-    
+
     # @group Managing Global Template State
-    
-    # An object that keeps track of global state throughout the entire template 
+
+    # An object that keeps track of global state throughout the entire template
     # rendering process (including any sub-templates).
-    # 
+    #
     # @return [OpenStruct] a struct object that stores state
     # @since 0.6.0
     def globals; options[:__globals] end
-    
+
     # @group Running the Verifier
-    
-    # Runs a list of objects against the {Verifier} object passed into the 
+
+    # Runs a list of objects against the {Verifier} object passed into the
     # template and returns the subset of verified objects.
-    # 
+    #
     # @param [Array<CodeObjects::Base>] list a list of code objects
     # @return [Array<CodeObjects::Base>] a list of code objects that match
     #   the verifier. If no verifier is supplied, all objects are returned.
     def run_verifier(list)
       options[:verifier] ? options[:verifier].run(list) : list
     end
-    
+
     # @group Escaping Text
-    
+
     # Escapes text. This is used a lot by the HtmlHelper and there should
     # be some helper to "clean up" text for whatever, this is it.
     def h(text)
       text
     end
-    
+
     # @group Linking Objects and URLs
-    
+
     # Links objects or URLs. This method will delegate to the correct +link_+
     # method depending on the arguments passed in.
-    # 
+    #
     # @example Linking a URL
     #   linkify('http://example.com')
     # @example Including docstring contents of an object
@@ -45,7 +45,7 @@ module YARD::Templates::Helpers
     #   linkify('file:README')
     # @example Linking an object by path
     #   linkify('YARD::Docstring')
-    def linkify(*args) 
+    def linkify(*args)
       if args.first.is_a?(String)
         case args.first
         when %r{://}, /^mailto:/
@@ -74,7 +74,7 @@ module YARD::Templates::Helpers
             obj.format(opts)
           else
             ''
-          end  
+          end
         when /^file:(\S+?)(?:#(\S+))?$/
           link_file($1, args[1] ? args[1] : nil, $2)
         else
@@ -84,7 +84,7 @@ module YARD::Templates::Helpers
         link_object(*args)
       end
     end
-    
+
     # Includes an object's docstring into output.
     # @since 0.6.0
     # @param [CodeObjects::Base] object the object to include
@@ -92,7 +92,7 @@ module YARD::Templates::Helpers
     def link_include_object(object)
       object.docstring
     end
-    
+
     # Include a file as a docstring in output
     # @since 0.7.0
     # @param [String] file the filename to include
@@ -102,13 +102,13 @@ module YARD::Templates::Helpers
     end
 
     # Links to an object with an optional title
-    # 
+    #
     # @param [CodeObjects::Base] object the object to link to
     # @param [String] title the title to use for the link
     # @return [String] the linked object
     def link_object(object, title = nil)
       return title if title
-      
+
       case object
       when YARD::CodeObjects::Base, YARD::CodeObjects::Proxy
         object.path
@@ -118,9 +118,9 @@ module YARD::Templates::Helpers
         object
       end
     end
-    
+
     # Links to a URL
-    # 
+    #
     # @param [String] url the URL to link to
     # @param [String] title the optional title to display the link as
     # @param [Hash] params optional parameters for the link
@@ -128,9 +128,9 @@ module YARD::Templates::Helpers
     def link_url(url, title = nil, params = nil)
       url
     end
-    
-    # Links to an extra file 
-    # 
+
+    # Links to an extra file
+    #
     # @param [String] filename the filename to link to
     # @param [String] title the title of the link
     # @param [String] anchor optional anchor
@@ -140,11 +140,11 @@ module YARD::Templates::Helpers
       return filename.filename if CodeObjects::ExtraFileObject === filename
       filename
     end
-    
+
     # @group Formatting Object Attributes
-    
+
     # Formats a list of return types for output and links each type.
-    # 
+    #
     # @example Formatting types
     #   format_types(['String', 'Array']) #=> "(String, Array)"
     # @example Formatting types without surrounding brackets
@@ -164,7 +164,7 @@ module YARD::Templates::Helpers
     #   o = MethodObject.new(:root, :to_s)
     #   format_object_type(o) # => "Method"
     # @param [CodeObjects::Base] object the object to retrieve the type for
-    # @return [String] the human-readable formatted {CodeObjects::Base#type #type} 
+    # @return [String] the human-readable formatted {CodeObjects::Base#type #type}
     #   for the object
     def format_object_type(object)
       case object
@@ -174,7 +174,7 @@ module YARD::Templates::Helpers
         object.type.to_s.capitalize
       end
     end
-    
+
     # @example
     #   s = format_object_title ModuleObject.new(:root, :MyModuleName)
     #   s # => "Module: MyModuleName"
@@ -188,9 +188,9 @@ module YARD::Templates::Helpers
         format_object_type(object) + ": " + object.path
       end
     end
-    
+
     # Indents and formats source code
-    # 
+    #
     # @param [String] value the input source code
     # @return [String] formatted source code
     def format_source(value)

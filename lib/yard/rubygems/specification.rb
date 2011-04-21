@@ -24,7 +24,7 @@ class Gem::Specification
   else
     attr_accessor :has_rdoc
   end
-  
+
   if defined?(Gem::VERSION) && Gem::VERSION =~ /^1\.7\./
     def _dump_with_rdoc(limit)
       dmp = _dump_without_rdoc(limit)
@@ -33,7 +33,7 @@ class Gem::Specification
     end
     alias _dump_without_rdoc _dump
     alias _dump _dump_with_rdoc
-  
+
     @@default_value[:has_rdoc] = true if defined?(@@default_value)
     @@attributes << 'has_rdoc' if defined?(@@attributes)
     @@nil_attributes << 'has_rdoc' if defined?(@@nil_attributes)

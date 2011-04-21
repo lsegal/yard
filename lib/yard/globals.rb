@@ -1,7 +1,7 @@
 # @group Global Convenience Methods
 
 # Shortcut for creating a YARD::CodeObjects::Proxy via a path
-# 
+#
 # @see YARD::CodeObjects::Proxy
 # @see YARD::Registry.resolve
 def P(namespace, name = nil)
@@ -10,7 +10,7 @@ def P(namespace, name = nil)
 end
 
 # The global {YARD::Logger} instance
-# 
+#
 # @return [YARD::Logger] the global {YARD::Logger} instance
 # @see YARD::Logger
 def log

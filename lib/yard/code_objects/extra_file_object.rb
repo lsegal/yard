@@ -8,7 +8,7 @@ module YARD::CodeObjects
     attr_accessor :attributes
     attr_accessor :name
     attr_accessor :contents
-    
+
     # Creates a new extra file object.
     # @param [String] filename the location on disk of the file
     # @param [String] contents the file contents. If not set, the contents
@@ -19,20 +19,20 @@ module YARD::CodeObjects
       self.attributes = SymbolHash.new(false)
       parse_contents(contents || File.read(@filename))
     end
-    
+
     alias path name
-    
+
     def title
       attributes[:title] || name
     end
-    
+
     def inspect
       "#<yardoc #{type} #{filename} attrs=#{attributes.inspect}>"
     end
     alias to_s inspect
-    
+
     def type; 'extra_file' end
-    
+
     def ==(other)
       return false unless self.class === other
       other.filename == filename
@@ -40,9 +40,9 @@ module YARD::CodeObjects
     alias eql? ==
     alias equal? ==
     def hash; filename.hash end
-        
+
     private
-    
+
     # @param [String] contents the file contents
     def parse_contents(contents)
       cut_index = 0

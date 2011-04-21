@@ -1,7 +1,7 @@
 # (see Ruby::MethodHandler)
 class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy::Base
   handles TkDEF
-    
+
   process do
     nobj = namespace
     mscope = scope
@@ -23,27 +23,27 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       end
       nobj = P(namespace, prefix) unless prefix == "self"
     end
-    
+
     nobj = P(namespace, nobj.value) while nobj.type == :constant
-    obj = register MethodObject.new(nobj, meth, mscope) do |o| 
-      o.visibility = visibility 
+    obj = register MethodObject.new(nobj, meth, mscope) do |o|
+      o.visibility = visibility
       o.source = statement
       o.explicit = true
       o.parameters = args
     end
-    
+
     # delete any aliases referencing old method
     nobj.aliases.each do |aobj, name|
       next unless name == obj.name
       nobj.aliases.delete(aobj)
     end if nobj.is_a?(NamespaceObject)
-    
+
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
-        obj.docstring.add_tag(YARD::Tags::Tag.new(:return, 
+        obj.docstring.add_tag(YARD::Tags::Tag.new(:return,
           "a new instance of #{namespace.name}", namespace.name.to_s))
       end
-    elsif mscope == :class && obj.docstring.blank? && %w(inherited included 
+    elsif mscope == :class && obj.docstring.blank? && %w(inherited included
         extended method_added method_removed method_undefined).include?(meth)
       obj.docstring.add_tag(YARD::Tags::Tag.new(:private, nil))
     elsif meth.to_s =~ /\?$/
@@ -53,7 +53,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
       end
     end
-    
+
     if obj.has_tag?(:option)
       # create the options parameter if its missing
       obj.tags(:option).each do |option|
@@ -64,7 +64,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
         end
       end
     end
-    
+
     if info = obj.attr_info
       if meth.to_s =~ /=$/ # writer
         info[:write] = obj if info[:read]
