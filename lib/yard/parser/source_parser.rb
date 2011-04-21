@@ -6,51 +6,51 @@ module YARD
   module Parser
     # Raised when an object is recognized but cannot be documented. This
     # generally occurs when the Ruby syntax used to declare an object is
-    # too dynamic in nature. 
+    # too dynamic in nature.
     class UndocumentableError < Exception; end
-    
+
     # Raised when the parser sees a Ruby syntax error
     class ParserSyntaxError < UndocumentableError; end
-    
-    # A LoadOrderError occurs when a handler needs to modify a 
+
+    # A LoadOrderError occurs when a handler needs to modify a
     # {CodeObjects::NamespaceObject} (usually by adding a child to it)
-    # that has not yet been resolved. 
-    # 
+    # that has not yet been resolved.
+    #
     # @see Handers::Base#ensure_loaded!
     class LoadOrderError < Exception; end
-    
+
     # Responsible for parsing a source file into the namespace. Parsing
     # also invokes handlers to process the parsed statements and generate
     # any code objects that may be recognized.
-    # 
+    #
     # == Custom Parsers
     # SourceParser allows custom parsers to be registered and called when
     # a certain filetype is recognized. To register a parser and hook it
     # up to a set of file extensions, call {register_parser_type}
-    # 
+    #
     # @see register_parser_type
     # @see Handlers::Base
     # @see CodeObjects::Base
-    class SourceParser 
+    class SourceParser
       SHEBANG_LINE  = /\A\s*#!\S+/
       ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*#+.*coding\s*[:=]{1,2}\s*(\S+)/i
-      
+
       class << self
         # @return [Symbol] the default parser type (defaults to :ruby)
         attr_reader :parser_type
-        
+
         def parser_type=(value)
           @parser_type = validated_parser_type(value)
         end
-        
+
         # Parses a path or set of paths
-        # 
+        #
         # @param [String, Array<String>] paths a path, glob, or list of paths to
         #   parse
         # @param [Array<String, Regexp>] excluded a list of excluded path matchers
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
-        # @return the parser object that was used to parse the source. 
+        # @return the parser object that was used to parse the source.
         def parse(paths = ["lib/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
           log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
@@ -68,27 +68,27 @@ module YARD
             parse_in_order(*files.uniq)
           end
         end
-      
+
         # Parses a string +content+
-        # 
+        #
         # @param [String] content the block of code to parse
         # @param [Symbol] ptype the parser type to use. See {parser_type}.
         # @return the parser object that was used to parse +content+
         def parse_string(content, ptype = parser_type)
           new(ptype).parse(StringIO.new(content))
         end
-        
+
         # Tokenizes but does not parse the block of code
-        # 
+        #
         # @param [String] content the block of code to tokenize
         # @param [Symbol] ptype the parser type to use. See {parser_type}.
         # @return [Array] a list of tokens
         def tokenize(content, ptype = parser_type)
           new(ptype).tokenize(content)
         end
-        
+
         # Registers a new parser type.
-        # 
+        #
         # @example Registering a parser for "java" files
         #   SourceParser.register_parser_type :java, JavaParser, 'java'
         # @param [Symbol] type a symbolic name for the parser type
@@ -104,7 +104,7 @@ module YARD
           parser_type_extensions[type.to_sym] = extensions if extensions
           parser_types[type.to_sym] = parser_klass
         end
-        
+
         # @return [Hash{Symbol=>Object}] a list of registered parser types
         # @private
         # @since 0.5.6
@@ -112,7 +112,7 @@ module YARD
         undef parser_types
         def parser_types; @@parser_types ||= {} end
         def parser_types=(value) @@parser_types = value end
-        
+
         # @return [Hash] a list of registered parser type extensions
         # @private
         # @since 0.5.6
@@ -123,7 +123,7 @@ module YARD
 
         # Finds a parser type that is registered for the extension. If no
         # type is found, the default Ruby type is returned.
-        # 
+        #
         # @return [Symbol] the parser type to be used for the extension
         # @since 0.5.6
         def parser_type_for_extension(extension)
@@ -132,23 +132,23 @@ module YARD
           end
           validated_parser_type(type ? type.first : :ruby)
         end
-        
+
         # Returns the validated parser type. Basically, enforces that :ruby
         # type is never set if the Ripper library is not available
-        # 
+        #
         # @param [Symbol] type the parser type to set
         # @return [Symbol] the validated parser type
         # @private
         def validated_parser_type(type)
           !defined?(::Ripper) && type == :ruby ? :ruby18 : type
         end
-        
+
         private
-        
+
         # Parses a list of files in a queue. If a {LoadOrderError} is caught,
         # the file is moved to the back of the queue with a Continuation object
         # that can continue processing the file.
-        # 
+        #
         # @param [Array<String>] files a list of files to queue for parsing
         # @return [void]
         def parse_in_order(*files)
@@ -175,16 +175,16 @@ module YARD
       register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
 
       self.parser_type = :ruby
-      
+
       # The filename being parsed by the parser.
       attr_reader :file
-      
+
       # The parser type associated with the parser instance. This should
       # be set by the {#initialize constructor}.
       attr_reader :parser_type
 
       # Creates a new parser object for code parsing with a specific parser type.
-      # 
+      #
       # @param [Symbol] parser_type the parser type to use
       # @param [Boolean] load_order_errors whether or not to raise the {LoadOrderError}
       def initialize(parser_type = SourceParser.parser_type, load_order_errors = false)
@@ -214,7 +214,7 @@ module YARD
         else
           content = content.read if content.respond_to? :read
         end
-        
+
         @parser = parser_class.new(content, file)
         @parser.parse
         post_process
@@ -224,18 +224,18 @@ module YARD
       rescue ParserSyntaxError => e
         log.warn(e.message.capitalize)
       end
-      
+
       # Tokenizes but does not parse the block of code using the current {#parser_type}
-      # 
+      #
       # @param [String] content the block of code to tokenize
       # @return [Array] a list of tokens
       def tokenize(content)
         @parser = parser_class.new(content, file)
         @parser.tokenize
       end
-      
+
       private
-      
+
       # Searches for encoding line and forces encoding
       # @since 0.5.3
       def convert_encoding(content)
@@ -248,7 +248,7 @@ module YARD
       end
 
       # Runs a {Handlers::Processor} object to post process the parsed statements.
-      # @return [void] 
+      # @return [void]
       def post_process
         return unless @parser.respond_to? :enumerator
         return unless enumerator = @parser.enumerator
@@ -259,9 +259,9 @@ module YARD
       def parser_type=(value)
         @parser_type = self.class.validated_parser_type(value)
       end
-      
+
       # Guesses the parser type to use depending on the file extension.
-      # 
+      #
       # @param [String] filename the filename to use to guess the parser type
       # @return [Symbol] a parser type that matches the filename
       def parser_type_for_filename(filename)
@@ -269,7 +269,7 @@ module YARD
         type = self.class.parser_type_for_extension(ext)
         parser_type == :ruby18 && type == :ruby ? :ruby18 : type
       end
-      
+
       # @since 0.5.6
       def parser_class
         klass = self.class.parser_types[parser_type]

@@ -2,7 +2,7 @@
 class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   namespace_only
   handles method_call(:include)
-  
+
   process do
     errors = []
     statement.parameters(false).each do |mixin|
@@ -23,14 +23,14 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   def process_mixin(mixin)
     raise YARD::Parser::UndocumentableError unless mixin.ref?
     raise YARD::Parser::UndocumentableError if mixin.first.type == :ident
-    
+
     case obj = Proxy.new(namespace, mixin.source)
     when Proxy
       obj.type = :module
     when ConstantObject # If a constant is included, use its value as the real object
       obj = Proxy.new(namespace, obj.value)
     end
-    
+
     namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
   end
 end

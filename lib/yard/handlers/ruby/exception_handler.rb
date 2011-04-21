@@ -1,7 +1,7 @@
 # Handles 'raise' calls inside methods
 class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
   handles method_call(:raise)
-  
+
   process do
     return unless owner.is_a?(MethodObject) # Only methods yield
     return if [:command_call, :call].include? statement.type
@@ -9,7 +9,7 @@ class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
 
     klass = nil
     params = statement.parameters(false)
-    if params.size == 1 
+    if params.size == 1
       if params.first.ref? && params.first.first.type != :ident
         klass = params.first.source
       elsif params.first.call? && params.first.method_name(true) == :new

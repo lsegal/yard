@@ -5,7 +5,7 @@ module YARD
       class DisplayObjectCommand < LibraryCommand
         def run
           return index if path.empty?
-          
+
           if object = Registry.at(object_path)
             options.update(:type => :layout)
             render(object)
@@ -13,7 +13,7 @@ module YARD
             self.status = 404
           end
         end
-        
+
         def index
           Registry.load_all
 
@@ -29,14 +29,14 @@ module YARD
           )
           render
         end
-        
+
         def not_found
           super
           self.body = "Could not find object: #{object_path}"
         end
-        
+
         private
-        
+
         def object_path
           return @object_path if @object_path
           if path == "toplevel"

@@ -2,7 +2,7 @@ module YARD
   module Server
     module Commands
       # Displays a README or extra file.
-      # 
+      #
       # @todo Implement better support for detecting binary (image) filetypes
       class DisplayFileCommand < LibraryCommand
         def run

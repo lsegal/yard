@@ -18,12 +18,12 @@ module YARD
     # The main WEBrick servlet implementation, accepting only GET requests.
     class WebrickServlet < WEBrick::HTTPServlet::AbstractServlet
       attr_accessor :adapter
-      
+
       def initialize(server, adapter)
         super
         self.adapter = adapter
       end
-      
+
       def do_GET(request, response)
         status, headers, body = *adapter.router.call(request)
         response.status = status

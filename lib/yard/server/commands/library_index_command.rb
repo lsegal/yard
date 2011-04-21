@@ -4,10 +4,10 @@ module YARD
       # Returns the index of libraries served by the server.
       class LibraryIndexCommand < Base
         attr_accessor :options
-        
+
         def run
           return unless path.empty?
-          
+
           self.options = SymbolHash.new(false).update(
             :markup => :rdoc,
             :format => :html,

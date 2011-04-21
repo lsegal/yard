@@ -4,20 +4,20 @@ module YARD
   module CLI
     # Abstract base class for CLI utilities. Provides some helper methods for
     # the option parser
-    # 
+    #
     # @abstract
     # @since 0.6.0
     class Command
       # Helper method to run the utility on an instance.
       # @see #run
       def self.run(*args) new.run(*args) end
-        
+
       def description; '' end
-          
+
       protected
 
       # Adds a set of common options to the tail of the OptionParser
-      # 
+      #
       # @param [OptionParser] opts the option parser object
       # @return [void]
       def common_options(opts)
@@ -40,9 +40,9 @@ module YARD
         opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
         opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
       end
-    
+
       # Parses the option and gracefully handles invalid switches
-      # 
+      #
       # @param [OptionParser] opts the option parser object
       # @param [Array<String>] args the arguments passed from input. This
       #   array will be modified.
@@ -52,10 +52,10 @@ module YARD
       rescue OptionParser::InvalidOption => e
         log.warn "Unrecognized/#{e.message}"
       end
-      
+
       # Loads a Ruby script. If +Config.options[:safe_mode]+ is enabled,
       # this method will do nothing.
-      # 
+      #
       # @param [String] file the path to the script to load
       # @since 0.6.2
       def load_script(file)

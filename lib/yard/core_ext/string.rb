@@ -2,7 +2,7 @@ class String
   # Splits text into tokens the way a shell would, handling quoted
   # text as a single token. Use '\"' and "\'" to escape quotes and
   # '\\' to escape a backslash.
-  # 
+  #
   # @return [Array] an array representing the tokens
   def shell_split
     out = [""]
@@ -45,7 +45,7 @@ class String
             escape_next = false
           elsif char == state
             out.last << quote
-            state = :none 
+            state = :none
           else
             quote << char
           end

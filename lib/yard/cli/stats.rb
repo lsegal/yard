@@ -3,16 +3,16 @@ module YARD
     # @since 0.6.0
     class Stats < Yardoc
       include Templates::Helpers::BaseHelper
-      
-      # Maintains the order in which +stats_for_+ statistics methods should be 
+
+      # Maintains the order in which +stats_for_+ statistics methods should be
       # printed.
-      # 
+      #
       # @see #print_statistics
       STATS_ORDER = [:files, :modules, :classes, :constants, :methods]
-      
+
       # @return [Boolean] whether to parse and load registry
       attr_accessor :parse
-      
+
       # @param [Boolean] parse whether to parse and load registry (see {#parse})
       def initialize(parse = true)
         super()
@@ -20,16 +20,16 @@ module YARD
         @undoc_list = nil
         @compact = false
       end
-      
+
       def description
         "Prints documentation statistics on a set of files"
       end
-      
+
       # Runs the commandline utility, parsing arguments and generating
       # output if set.
-      # 
+      #
       # @param [Array<String>] args the list of arguments
-      # @return [void] 
+      # @return [void]
       def run(*args)
         parse_arguments(*args)
 
@@ -41,13 +41,13 @@ module YARD
           YARD.parse(files, excluded)
           Registry.save(use_cache) if save_yardoc
         end
-        
+
         print_statistics
         print_undocumented_objects
       end
-      
+
       # Prints statistics for different object types
-      # 
+      #
       # To add statistics for a specific type, add a method +#stats_for_TYPE+
       # to this class that calls {#output}.
       def print_statistics
@@ -64,13 +64,13 @@ module YARD
         total = (@total - @undocumented).to_f / @total.to_f * 100
         puts("% 3.2f%% documented" % total)
       end
-      
+
       # Prints list of undocumented objects
       def print_undocumented_objects
         return if !@undoc_list || @undoc_list.empty?
         puts
         puts "Undocumented Objects:"
-        
+
         objects = @undoc_list.sort_by {|o| o.file }
         max = objects.sort_by {|o| o.path.length }.last.path.length
         if @compact
@@ -89,21 +89,21 @@ module YARD
           end
         end
       end
-      
+
       # @return [Array<CodeObjects::Base>] all the parsed objects in the registry,
       #   removing any objects that are not visible (private, protected) depending
       #   on the arguments passed to the command.
       def all_objects
         @all_objects ||= run_verifier Registry.all
       end
-      
+
       # Statistics for files
       def stats_for_files
         files = []
         all_objects.each {|o| files |= [o.file] }
         output "Files", files.size
       end
-      
+
       # Statistics for modules
       def stats_for_modules
         output "Modules", *type_statistics(:module)
@@ -113,7 +113,7 @@ module YARD
       def stats_for_classes
         output "Classes", *type_statistics(:class)
       end
-      
+
       # Statistics for constants
       def stats_for_constants
         output "Constants", *type_statistics(:constant)
@@ -127,10 +127,10 @@ module YARD
         @undoc_list |= undoc if @undoc_list
         output "Methods", objs.size, undoc.size
       end
-      
+
       # Prints a statistic to standard out. This method is optimized for
       # getting Integer values, though it allows any data to be printed.
-      # 
+      #
       # @param [String] name the statistic name
       # @param [Integer, String] data the numeric (or any) data representing
       #   the statistic. If +data+ is an Integer, it should represent the
@@ -147,16 +147,16 @@ module YARD
         end
         puts("%-12s %s" % [name + ":", data])
       end
-      
+
       private
-      
+
       def type_statistics(type)
         objs = all_objects.select {|m| m.type == type }
         undoc = objs.find_all {|m| m.docstring.blank? }
         @undoc_list |= undoc if @undoc_list
         [objs.size, undoc.size]
       end
-      
+
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
@@ -172,19 +172,19 @@ module YARD
         parse_options(opts, args)
         parse_files(*args) unless args.empty?
       end
-      
+
       def general_options(opts)
         super(opts)
-        
+
         opts.on('--list-undoc', 'List all undocumented objects') do
           @undoc_list = []
         end
-        
+
         opts.on('--compact', 'Compact undocumented objects listing') do
           @compact = true
         end
-        
-        opts.on('--no-public', "Don't include public methods in statistics.") do 
+
+        opts.on('--no-public', "Don't include public methods in statistics.") do
           visibilities.delete(:public)
         end
 
@@ -192,15 +192,15 @@ module YARD
           visibilities.push(:protected)
         end
 
-        opts.on('--private', "Include private methods in statistics.") do 
+        opts.on('--private', "Include private methods in statistics.") do
           visibilities.push(:private)
         end
-        
+
         opts.on('--no-private', "Don't include objects with @private tag in statistics.") do
-          options[:verifier].add_expressions '!object.tag(:private) && 
+          options[:verifier].add_expressions '!object.tag(:private) &&
             (object.namespace.type == :proxy || !object.namespace.tag(:private))'
         end
-        
+
         opts.on('--query QUERY', "Only includes objects that match a specific query") do |query|
           options[:verifier].add_expressions(query.taint)
         end

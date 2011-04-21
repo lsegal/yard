@@ -7,7 +7,7 @@
       <% name = result.type == :method ? result.name(true).to_s : result.name.to_s %>
       <% path = name.gsub(/(#{Regexp.quote @query})/i, '<strong>\1</strong>') %>
       <li class="r<%= n %>">
-        <a href="<%= serializer.serialized_path(result) %>" 
+        <a href="<%= serializer.serialized_path(result) %>"
           title="<%= result.path %>"><%= path %></a>
           <% if !result.namespace.root? %>
           <small>(<%= result.namespace.path %>)</small>

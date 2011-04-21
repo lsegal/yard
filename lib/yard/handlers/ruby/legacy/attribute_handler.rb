@@ -1,7 +1,7 @@
 # (see Ruby::AttributeHandler)
 class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/
-  
+
   process do
     begin
       attr_type   = statement.tokens.first.text.to_sym
@@ -10,7 +10,7 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
     rescue SyntaxError
       raise YARD::Parser::UndocumentableError, attr_type
     end
-    
+
     # Change read/write based on attr_reader/writer/accessor
     case attr_type
     when :attr
@@ -25,9 +25,9 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
     end
 
     # Add all attributes
-    symbols.each do |name| 
+    symbols.each do |name|
       namespace.attributes[scope][name] = SymbolHash[:read => nil, :write => nil]
-      
+
       # Show their methods as well
       {:read => name, :write => "#{name}="}.each do |type, meth|
         if (type == :read ? read : write)
@@ -47,7 +47,7 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
             o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
             o.visibility = visibility
           end
-        
+
           # Register the objects explicitly
           register namespace.attributes[scope][name][type]
         elsif obj = namespace.children.find {|o| o.name == meth.to_sym && o.scope == scope }

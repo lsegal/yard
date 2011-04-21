@@ -12,20 +12,20 @@ module YARD
       EXPR_FNAME = :EXPR_FNAME
       EXPR_DOT   = :EXPR_DOT
       EXPR_CLASS = :EXPR_CLASS
-      
+
       # Represents a token in the Ruby lexer
       class Token
         # @return [Integer] the line number in the file/stream the token is
         #   located.
         attr_reader :line_no
-        
+
         # @return [Integer] the character number in the file/stream the token
         #   is located.
         attr_reader :char_no
-        
+
         # @return [String] the token text value
         attr_reader :text
-        
+
         # @return [Symbol] the lexical state at the token
         attr_accessor :lex_state
 
@@ -42,7 +42,7 @@ module YARD
         end
 
         # Chainable way to sets the text attribute
-        # 
+        #
         # @param [String] text the new text
         # @return [Token] this token object
         def set_text(text)
@@ -50,12 +50,12 @@ module YARD
           self
         end
       end
-      
+
       # Represents a block
       class TkBlockContents < Token
         def text; '...' end
       end
-      
+
       # Represents an end statement
       class TkStatementEnd < Token
         def text; '' end
@@ -64,7 +64,7 @@ module YARD
       class TkNode < Token
         attr :node
       end
-      
+
       # Represents whitespace
       class TkWhitespace < Token
       end
@@ -131,8 +131,8 @@ module YARD
           if (tk = source[token]).nil?
             IRB.fail TkReading2TokenNoKey, token
           end
-          tk = Token(tk[0], value) 
-        else 
+          tk = Token(tk[0], value)
+        else
           if token
             tk = if (token.ancestors & [TkId, TkVal, TkOPASGN, TkUnknownChar]).empty?
                    token.new(@prev_line_no, @prev_char_no)
@@ -236,14 +236,14 @@ module YARD
         [:TkASSOC,      TkOp,   "=>"],
         [:TkQUESTION,   TkOp,   "?"],  #?
         [:TkCOLON,      TkOp,   ":"],        #:
-    
+
 #        [:TkfLPAREN],         # func( #
 #        [:TkfLBRACK],         # func[ #
 #        [:TkfLBRACE],         # func{ #
         [:TkSTAR],            # *arg
         [:TkAMPER],           # &arg #
 #        [:TkSYMBOL,     TkId],          # :SYMBOL
-        [:TkSYMBEG,     TkId], 
+        [:TkSYMBEG,     TkId],
         [:TkGT,         TkOp,   ">"],
         [:TkLT,         TkOp,   "<"],
         [:TkPLUS,       TkOp,   "+"],
@@ -295,7 +295,7 @@ module YARD
         token_c =  Class.new super_token
         RubyToken.const_set token_n, token_c
         # token_c.inspect
- 
+
         if reading
           if TkReading2Token[reading]
             IRB.fail TkReading2TokenDuplicateError, token_n, reading
@@ -358,9 +358,9 @@ module YARD
       #
       # @private
       class BufferedReader
-    
+
         attr_reader :line_num
-    
+
         def initialize(content)
           if /\t/ =~ content
             tab_width = 2
@@ -379,34 +379,34 @@ module YARD
           @last_newline = 0
           @newline_pending = false
         end
-    
+
         def column
           @offset - @last_newline
         end
-    
+
         def getc
           return nil if @offset >= @size
           ch = @content[@offset, 1]
-      
+
           @offset += 1
           @hwm = @offset if @hwm < @offset
-      
+
           if @newline_pending
             @line_num += 1
             @last_newline = @offset - 1
             @newline_pending = false
           end
-      
+
           if ch == "\n"
             @newline_pending = true
           end
           ch
         end
-    
+
         def getc_already_read
           getc
         end
-    
+
         def ungetc(ch)
           raise "unget past beginning of file" if @offset <= 0
           @offset -= 1
@@ -414,13 +414,13 @@ module YARD
             @newline_pending = false
           end
         end
-    
+
         def get_read
           res = @content[@read_back_offset...@offset]
           @read_back_offset = @offset
           res
         end
-    
+
         def peek(at)
           pos = @offset + at
           if pos >= @size
@@ -429,11 +429,11 @@ module YARD
             @content[pos, 1]
           end
         end
-    
+
         def peek_equal(str)
           @content[@offset, str.length] == str
         end
-    
+
         def divert_read_from(reserve)
           @content[@offset, 0] = reserve
           @size      = @content.size
@@ -446,10 +446,10 @@ module YARD
       def_exception(:AlreadyDefinedToken, "Already defined token(%s)")
       def_exception(:TkReading2TokenNoKey, "key nothing(key='%s')")
       def_exception(:TkSymbol2TokenNoKey, "key nothing(key='%s')")
-      def_exception(:TkReading2TokenDuplicateError, 
+      def_exception(:TkReading2TokenDuplicateError,
         "key duplicate(token_n='%s', key='%s')")
       def_exception(:SyntaxError, "%s")
-  
+
       include RubyToken
       include IRB
 
@@ -473,7 +473,7 @@ module YARD
         @quoted = nil
         @lex_state = EXPR_BEG
         @space_seen = false
-    
+
         @continue = false
         @line = ""
 
@@ -569,7 +569,7 @@ module YARD
           tk
         end
       end
-  
+
       ENINDENT_CLAUSE = [
         "case", "class", "def", "do", "for", "if",
         "module", "unless", "until", "while", "begin" #, "when"
@@ -586,7 +586,7 @@ module YARD
         "w" => "]",
         "W" => "]"
       }
-  
+
       PERCENT_PAREN = {
         "{" => "}",
         "[" => "]",
@@ -670,10 +670,10 @@ module YARD
           Token(TkNL).set_text("\n")
         end
 
-        @OP.def_rules("*", "**",  
+        @OP.def_rules("*", "**",
           "!", "!=", "!~",
-          "=", "==", "===", 
-          "=~", "<=>",  
+          "=", "==", "===",
+          "=~", "<=>",
           "<", "<=",
           ">", ">=", ">>") do |op, io|
           @lex_state = EXPR_BEG
@@ -682,7 +682,7 @@ module YARD
 
         @OP.def_rules("<<") do |op, io|
           tk = nil
-          if @lex_state != EXPR_END && @lex_state != EXPR_CLASS && 
+          if @lex_state != EXPR_END && @lex_state != EXPR_CLASS &&
              (@lex_state != EXPR_ARG || @space_seen)
             c = peek(0)
             tk = identify_here_document if /[-\w_\"\'\`]/ =~ c
@@ -732,8 +732,8 @@ module YARD
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
-    
-        @OP.def_rules("+=", "-=", "*=", "**=", 
+
+        @OP.def_rules("+=", "-=", "*=", "**=",
           "&=", "|=", "^=", "<<=", ">>=", "||=", "&&=") do |op, io|
           @lex_state = EXPR_BEG
           op =~ /^(.*)=$/
@@ -784,7 +784,7 @@ module YARD
 
         lex_int2
       end
-  
+
       def lex_int2
         @OP.def_rules("]", "}", ")") do
           |op, io|
@@ -793,7 +793,7 @@ module YARD
           Token(op).set_text(op)
         end
 
-        @OP.def_rule(":") do 
+        @OP.def_rule(":") do
           if (@colonblock_seen && @lex_state != EXPR_BEG) || peek(0) =~ /\s/
             @lex_state = EXPR_BEG
             tk = Token(TkCOLON)
@@ -825,7 +825,7 @@ module YARD
             Token(TkOPASGN, :/).set_text("/=") #")
           elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
             identify_string(op)
-          else 
+          else
             @lex_state = EXPR_BEG
             Token("/").set_text(op)
           end
@@ -840,7 +840,7 @@ module YARD
         #   @lex_state = EXPR_BEG
         #   Token(TkOPASGN, :^)
         # end
-    
+
         @OP.def_rules(",", ";") do |op, io|
           @colonblock_seen = false
           @lex_state = EXPR_BEG
@@ -856,7 +856,7 @@ module YARD
           @lex_state = EXPR_BEG
           Token("~").set_text("~@")
         end
-    
+
         @OP.def_rule("(") do
           @indent += 1
           # if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
@@ -907,15 +907,15 @@ module YARD
         end
 
         @OP.def_rule('\\') do   #'
-          if getc == "\n" 
+          if getc == "\n"
             @space_seen = true
             @continue = true
             Token(TkSPACE).set_text("\\\n")
-          else 
+          else
             ungetc
             Token("\\").set_text("\\")  #"
-          end 
-        end 
+          end
+        end
 
         @OP.def_rule('%') do
           |op, io|
@@ -945,7 +945,7 @@ module YARD
           end
         end
 
-        # @OP.def_rule("def", proc{|op, io| /\s/ =~ io.peek(0)}) do 
+        # @OP.def_rule("def", proc{|op, io| /\s/ =~ io.peek(0)}) do
         #   |op, io|
         #   @indent += 1
         #   @lex_state = EXPR_FNAME
@@ -969,10 +969,10 @@ module YARD
           printf "MATCH: end %s: %s\n", op, io.inspect if RubyLex.debug?
           t
         end
-    
+
         p @OP if RubyLex.debug?
       end
-  
+
       def identify_gvar
         @lex_state = EXPR_END
         str = "$"
@@ -981,15 +981,15 @@ module YARD
              when /[~_*$?!@\/\\;,=:<>".]/   #"
                str << ch
                Token(TkGVAR, str)
-           
+
              when "-"
                str << "-" << getc
                Token(TkGVAR, str)
-           
+
              when "&", "`", "'", "+"
                str << ch
                Token(TkBACK_REF, str)
-           
+
              when /[1-9]/
                str << ch
                while (ch = getc) =~ /[0-9]/
@@ -1001,13 +1001,13 @@ module YARD
                ungetc
                ungetc
                return identify_identifier
-             else 
+             else
                ungetc
-               Token("$")     
+               Token("$")
              end
         tk.set_text(str)
       end
-  
+
       def identify_identifier
         token = ""
         token.concat getc if peek(0) =~ /[$@]/
@@ -1018,7 +1018,7 @@ module YARD
           token.concat ch
         end
         ungetc
-    
+
         if ch == "!" or ch == "?"
           token.concat getc
         end
@@ -1033,7 +1033,7 @@ module YARD
           @lex_state = EXPR_END
           return Token(TkIVAR, token).set_text(token)
         end
-    
+
         if @lex_state != EXPR_DOT
           print token, "\n" if RubyLex.debug?
 
@@ -1051,8 +1051,8 @@ module YARD
               if @lex_state != EXPR_FNAME
                 if ENINDENT_CLAUSE.include?(token)
                   @indent += 1
-            
-                  if ACCEPTS_COLON.include?(token)  
+
+                  if ACCEPTS_COLON.include?(token)
                     @colonblock_seen = true
                   else
                     @colonblock_seen = false
@@ -1138,7 +1138,7 @@ module YARD
         @lex_state = EXPR_END
         Token(Ltype2Token[lt], str).set_text(str.dump)
       end
-  
+
       def identify_quotation(initial_char)
         ch = getc
         if lt = PERCENT_LTYPE[ch]
@@ -1219,7 +1219,7 @@ module YARD
         end
         Token(type).set_text(str)
       end
-  
+
       def identify_string(ltype, quoted = ltype, opener=nil, initial_char = nil)
         @ltype = ltype
         @quoted = quoted
@@ -1231,9 +1231,9 @@ module YARD
 
         nest = 0
         begin
-          while ch = getc 
+          while ch = getc
             str << ch
-            if @quoted == ch 
+            if @quoted == ch
               if nest == 0
                 break
               else
@@ -1294,7 +1294,7 @@ module YARD
             if ch == "\n"
               ch = " "
             else
-              comment << "\\" 
+              comment << "\\"
             end
           else
             if ch == "\n"
@@ -1307,7 +1307,7 @@ module YARD
         end
         return Token(TkCOMMENT).set_text(comment)
       end
-  
+
       def read_escape
         res = ""
         case ch = getc
@@ -1324,7 +1324,7 @@ module YARD
           end
           res << ch
         end
-      
+
         when "x"
           res << ch
           2.times do

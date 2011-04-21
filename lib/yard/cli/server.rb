@@ -5,28 +5,28 @@ module YARD
     class Server < Command
       # @return [Hash] a list of options to pass to the doc server
       attr_accessor :options
-      
+
       # @return [Hash] a list of options to pass to the web server
       attr_accessor :server_options
-      
+
       # @return [Hash] a list of library names and yardoc files to serve
       attr_accessor :libraries
-      
+
       # @return [Adapter] the adapter to use for loading the web server
       attr_accessor :adapter
-      
+
       # @return [Array<String>] a list of scripts to load
       # @since 0.6.2
       attr_accessor :scripts
-      
+
       # @return [Array<String>] a list of template paths to register
       # @since 0.6.2
       attr_accessor :template_paths
-      
+
       def description
         "Runs a local documentation server"
       end
-      
+
       def run(*args)
         self.scripts = []
         self.template_paths = []
@@ -37,24 +37,24 @@ module YARD
         )
         self.server_options = {:Port => 8808}
         optparse(*args)
-        
+
         select_adapter.setup
         load_scripts
         load_template_paths
         adapter.new(libraries, options, server_options).start
       end
-      
+
       private
-      
+
       def load_scripts
         scripts.each {|file| load_script(file) }
       end
-      
+
       def load_template_paths
         return if YARD::Config.options[:safe_mode]
         Templates::Engine.template_paths |= template_paths
       end
-      
+
       def select_adapter
         return adapter if adapter
         require 'rubygems'
@@ -63,7 +63,7 @@ module YARD
       rescue LoadError
         self.adapter = YARD::Server::WebrickAdapter
       end
-      
+
       def add_libraries(args)
         (0...args.size).step(2) do |index|
           library, yardoc = args[index], args[index + 1]
@@ -76,7 +76,7 @@ module YARD
           end
         end
       end
-      
+
       def add_gems
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
@@ -84,7 +84,7 @@ module YARD
           libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)
         end
       end
-      
+
       def optparse(*args)
         opts = OptionParser.new
         opts.banner = 'Usage: yard server [options] [[library yardoc_file] ...]'
@@ -108,7 +108,7 @@ module YARD
         opts.on('-g', '--gems', 'Serves documentation for installed gems') do
           add_gems
         end
-        opts.on('-t', '--template-path PATH', 
+        opts.on('-t', '--template-path PATH',
                 'The template path to look for templates in. (used with -t).') do |path|
           self.template_paths << path
         end
@@ -140,7 +140,7 @@ module YARD
           self.scripts << file
         end
         parse_options(opts, args)
-        
+
         if args.empty? && libraries.empty?
           if !File.exist?('.yardoc')
             log.enter_level(Logger::INFO) do

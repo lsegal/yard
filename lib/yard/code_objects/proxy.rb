@@ -8,7 +8,7 @@ module YARD
     # an unresolved path until a method is called on the object, at which
     # point it does a lookup using {Registry.resolve}. If the object is
     # not found, a warning is raised and {ProxyMethodError} might be raised.
-    # 
+    #
     # @example Creates a Proxy to the String class from a module
     #   # When the String class is parsed this method will
     #   # begin to act like the String ClassObject.
@@ -22,17 +22,17 @@ module YARD
       alias_method :parent, :namespace
 
       # Creates a new Proxy
-      # 
+      #
       # @raise [ArgumentError] if namespace is not a NamespaceObject
       # @return [Proxy] self
       def initialize(namespace, name)
         namespace = Registry.root if !namespace || namespace == :root
-        
+
         if name =~ /^#{NSEPQ}/
           namespace = Registry.root
           name = name[2..-1]
         end
-        
+
         if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
@@ -40,23 +40,23 @@ module YARD
           name = $1
         else
           @orignamespace, @origname, @imethod = nil, nil, nil
-        end 
-        
+        end
+
         @name = name.to_sym
         @namespace = namespace
         @obj = nil
         @imethod ||= nil
-        
+
         if @namespace.is_a?(ConstantObject)
           @origname = nil # forget these for a constant
           @orignamespace = nil
           @namespace = Proxy.new(@namespace.namespace, @namespace.value)
         end
-        
+
         unless @namespace.is_a?(NamespaceObject) or @namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end
-        
+
         # If the name begins with "::" (like "::String")
         # this is definitely a root level object, so
         # remove the namespace and attach it to the root
@@ -65,7 +65,7 @@ module YARD
           @namespace = Registry.root
         end
       end
-      
+
       # (see Base#name)
       def name(prefix = false)
         prefix ? (@imethod ? ISEP : '') + @name.to_s : @name
@@ -80,10 +80,10 @@ module YARD
           "P(#{path})"
         end
       end
-      
+
       # If the proxy resolves to an object, returns its path, otherwise
       # guesses at the correct path using the original namespace and name.
-      # 
+      #
       # @return [String] the assumed path of the proxy (or the real path
       #   of the resolved object)
       def path
@@ -107,8 +107,8 @@ module YARD
       end
       alias to_s path
       alias to_str path
-    
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def is_a?(klass)
         if obj = to_obj
           obj.is_a?(klass)
@@ -116,8 +116,8 @@ module YARD
           self.class <= klass
         end
       end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def ===(other)
         if obj = to_obj
           obj === other
@@ -125,8 +125,8 @@ module YARD
           self.class <= other.class
         end
       end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def <=>(other)
         if other.respond_to? :path
           path <=> other.path
@@ -134,8 +134,8 @@ module YARD
           false
         end
       end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def equal?(other)
         if other.respond_to? :path
           path == other.path
@@ -144,12 +144,12 @@ module YARD
         end
       end
       alias == equal?
-      
+
       # @return [Integer] the object's hash value (for equality checking)
       def hash; path.hash end
 
       # Returns the class name of the object the proxy is mimicking, if
-      # resolved. Otherwise returns +Proxy+. 
+      # resolved. Otherwise returns +Proxy+.
       # @return [Class] the resolved object's class or +Proxy+
       def class
         if obj = to_obj
@@ -158,7 +158,7 @@ module YARD
           Proxy
         end
       end
-      
+
       # Returns the type of the proxy. If it cannot be resolved at the
       # time of the call, it will either return the inferred proxy type
       # (see {#type=}) or +:proxy+
@@ -171,23 +171,23 @@ module YARD
           Registry.proxy_types[path] || :proxy
         end
       end
-      
+
       # Allows a parser to infer the type of the proxy by its path.
       # @param [#to_sym] type the proxy's inferred type
-      # @return [void] 
+      # @return [void]
       def type=(type) Registry.proxy_types[path] = type.to_sym end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def instance_of?(klass)
         self.class == klass
       end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def kind_of?(klass)
         self.class <= klass
       end
-      
-      # @return [Boolean] 
+
+      # @return [Boolean]
       def respond_to?(meth, include_private = false)
         if obj = to_obj
           obj.respond_to?(meth, include_private)
@@ -195,9 +195,9 @@ module YARD
           super
         end
       end
-      
+
       # Dispatches the method to the resolved object.
-      # 
+      #
       # @raise [ProxyMethodError] if the proxy cannot find the real object
       def method_missing(meth, *args, &block)
         if obj = to_obj
@@ -212,26 +212,26 @@ module YARD
           log.warn "YARD will recover from this error and continue to parse but you *may* have problems"
           log.warn "with your generated documentation. You should probably fix this."
           log.warn "-"
-          begin 
+          begin
             super
           rescue NoMethodError
             raise ProxyMethodError, "Proxy cannot call method ##{meth} on object '#{path}'"
           end
         end
       end
-      
+
       # This class is never a root object
       def root?; false end
-    
+
       private
 
       # @note this method fixes a bug in 1.9.2: http://gist.github.com/437136
       def to_ary; nil end
-    
+
       # Attempts to find the object that this unresolved object
       # references by checking if any objects by this name are
       # registered all the way up the namespace tree.
-      # 
+      #
       # @return [Base, nil] the registered code object or nil
       def to_obj
         return @obj if @obj

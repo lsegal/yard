@@ -5,18 +5,18 @@ module YARD
     # @since 0.6.0
     class Section < Array
       attr_accessor :name
-      
+
       def initialize(name, *args)
         self.name = name
         replace(parse_sections(args))
       end
-      
+
       def dup
         obj = super
         obj.name = name
         obj
       end
-      
+
       def [](*args)
         if args.first.is_a?(Range) || args.size > 1
           obj = super(*args)
@@ -27,11 +27,11 @@ module YARD
         end
         find {|o| o.name == args.first }
       end
-      
+
       def eql?(other)
         super(other) && name == other.name
       end
-      
+
       def ==(other)
         case other
         when Section
@@ -42,26 +42,26 @@ module YARD
           name == other
         end
       end
-      
+
       def push(*args)
         super(*parse_sections(args))
       end
       alias << push
-      
+
       def unshift(*args)
         super(*parse_sections(args))
       end
-      
+
       def inspect
         n = name.respond_to?(:path) ? "T('#{name.path}')" : name.inspect
         subsects = empty? ? "" : ", subsections=#{super}"
         "Section(#{n}#{subsects})"
       end
-      
+
       def place(*args)
         super(*parse_sections(args))
       end
-      
+
       def to_a
         list = [name]
         unless empty?
@@ -71,7 +71,7 @@ module YARD
         end
         list
       end
-      
+
       def any(item)
         find do |section|
           return section if section == item
@@ -79,9 +79,9 @@ module YARD
         end
         nil
       end
-      
+
       private
-      
+
       def parse_sections(args)
         if args.size == 1 && args.first.is_a?(Array) && !args.first.is_a?(Section)
           args = args.first
@@ -94,7 +94,7 @@ module YARD
           else
             subsections = args[index + 1].is_a?(Array) ? args[index + 1] : []
             if subsections.is_a?(Section)
-              subsections = [] 
+              subsections = []
             end
             sections << Section.new(name, subsections)
           end
