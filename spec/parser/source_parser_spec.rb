@@ -270,6 +270,18 @@ describe YARD::Parser::SourceParser do
         end
       end
     end
+
+    Parser::SourceParser::ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
+      it "should understand #{encoding.upcase} BOM" do
+        parser = Parser::SourceParser.new
+        src = bom + "class FooBar; end".force_encoding('binary')
+        src.force_encoding('binary')
+        File.should_receive(:read_binary).with('tmpfile').and_return(src)
+        result = parser.parse('tmpfile')
+        Registry.all(:class).first.path.should == "FooBar"
+        result.enumerator[0].source.encoding.to_s.downcase.should == encoding
+      end
+    end if RUBY19
   end
   
   describe '#parse_in_order' do

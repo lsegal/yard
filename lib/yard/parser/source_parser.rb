@@ -34,6 +34,17 @@ module YARD
     class SourceParser
       SHEBANG_LINE  = /\A\s*#!\S+/
       ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*#+.*coding\s*[:=]{1,2}\s*(\S+)/i
+      
+      # Byte order marks for various encodings
+      # @since 0.7.0
+      ENCODING_BYTE_ORDER_MARKS = {
+        'utf-8' => "\xEF\xBB\xBF",
+        # Not yet supported
+        #'utf-16be' => "\xFE\xFF",
+        #'utf-16le' => "\xFF\xFE",
+        #'utf-32be' => "\x00\x00\xFF\xFE",
+        #'utf-32le' => "\xFF\xFE",
+      }
 
       class << self
         # @return [Symbol] the default parser type (defaults to :ruby)
@@ -243,6 +254,16 @@ module YARD
         if content =~ ENCODING_LINE
           content.force_encoding($1)
         else
+          old_encoding = content.encoding
+          content.force_encoding('binary')
+          ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
+            bom.force_encoding('binary')
+            if content[0,bom.size] == bom
+              content.force_encoding(encoding)
+              return content
+            end
+          end
+          content.force_encoding(old_encoding)
           content
         end
       end
