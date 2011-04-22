@@ -190,7 +190,7 @@ module YARD
         :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise,
         :see, :author, :since, :version]
 
-      self.transitive_tags = [:since]
+      self.transitive_tags = [:since, :api]
     end
   end
 end
