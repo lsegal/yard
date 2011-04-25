@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-    <meta name="Content-Type" content="text/html; charset=<%= charset %>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=<%= charset %>" />
     <% stylesheets_full_list.each do |stylesheet| %>
       <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" media="screen" charset="utf-8" />
     <% end %>
