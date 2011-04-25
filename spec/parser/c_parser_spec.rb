@@ -22,6 +22,15 @@ describe YARD::Parser::CParser do
       obj.docstring.should_not be_blank
       obj.tags(:overload).size.should > 1
     end
+    
+    it "should look for methods in extra files (if 'in' comment is found)" do
+      multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
+      extrafile = File.join(File.dirname(__FILE__), 'examples', 'extrafile.c.txt')
+      contents = File.read(multifile)
+      File.should_receive(:read).with('extra.c').and_return(IO.read(extrafile))
+      Parser::CParser.new(contents).parse
+      YARD::Registry.at('Multifile#extra').docstring.should == 'foo'
+    end
   end
 
   describe '#find_override_comment' do

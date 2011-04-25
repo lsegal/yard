@@ -75,7 +75,6 @@ module YARD
         @namespaces[var_name] = obj
       end
 
-      # @todo Handle +source_file+
       def handle_method(scope, var_name, name, func_name, source_file = nil)
         case scope
         when "singleton_method", "module_function"; scope = :class
@@ -89,7 +88,7 @@ module YARD
         obj.parameters = []
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
         obj.source_type = :c
-        find_method_body(obj, func_name)
+        find_method_body(obj, func_name, source_file ? File.read(source_file) : @content)
       end
 
       def handle_constants(type, var_name, const_name, definition)
