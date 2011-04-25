@@ -2,38 +2,59 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 begin require 'continuation'; rescue LoadError; end unless RUBY18
 
 describe YARD::Parser::CParser do
-  before(:all) do
-    file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
-    @parser = Parser::CParser.new(IO.read(file)).parse
-
-    override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
-    @override_parser = Parser::CParser.new(IO.read(override_file)).parse
-  end
-  
   describe '#parse' do
-    it "should parse Array class" do
-      obj = YARD::Registry.at('Array')
-      obj.should_not be_nil
-      obj.docstring.should_not be_blank
+    before(:all) do
+      file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
+      @parser = Parser::CParser.new(IO.read(file)).parse
+    end
+
+    describe 'Array class' do
+      it "should parse Array class" do
+        obj = YARD::Registry.at('Array')
+        obj.should_not be_nil
+        obj.docstring.should_not be_blank
+      end
+
+      it "should parse method" do
+        obj = YARD::Registry.at('Array#initialize')
+        obj.docstring.should_not be_blank
+        obj.tags(:overload).size.should > 1
+      end
     end
     
-    it "should parse method" do
-      obj = YARD::Registry.at('Array#initialize')
-      obj.docstring.should_not be_blank
-      obj.tags(:overload).size.should > 1
-    end
-    
-    it "should look for methods in extra files (if 'in' comment is found)" do
-      multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
-      extrafile = File.join(File.dirname(__FILE__), 'examples', 'extrafile.c.txt')
-      contents = File.read(multifile)
-      File.should_receive(:read).with('extra.c').and_return(IO.read(extrafile))
-      Parser::CParser.new(contents).parse
-      YARD::Registry.at('Multifile#extra').docstring.should == 'foo'
+    describe 'Source located in extra files' do
+      before(:all) do
+        @multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
+        @extrafile = File.join(File.dirname(__FILE__), 'examples', 'extrafile.c.txt')
+        @contents = File.read(@multifile)
+      end
+      
+      def parse
+        Registry.clear
+        Parser::CParser.new(@contents).parse
+      end
+      
+      it "should look for methods in extra files (if 'in' comment is found)" do
+        extra_contents = File.read(@extrafile)
+        File.should_receive(:read).with('extra.c').and_return(extra_contents)
+        parse
+        Registry.at('Multifile#extra').docstring.should == 'foo'
+      end
+
+      it "should stop searching for extra source file gracefully if file is not found" do
+        File.should_receive(:read).with('extra.c').and_raise(Errno::ENOENT)
+        parse
+        Registry.at('Multifile#extra').docstring.should == ''
+      end
     end
   end
 
   describe '#find_override_comment' do
+    before(:all) do
+      override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
+      @override_parser = Parser::CParser.new(IO.read(override_file)).parse
+    end
+    
     it "should parse GMP::Z class" do
       z = YARD::Registry.at('GMP::Z')
       z.should_not be_nil

@@ -81,6 +81,14 @@ module YARD
         else; scope = :instance
         end
 
+        content = nil
+        begin
+          content = File.read(source_file) if source_file
+        rescue Errno::ENOENT, Errno::ENOTFILE
+        ensure
+          content ||= @content
+        end
+
         namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
         ensure_loaded!(namespace)
         obj = CodeObjects::MethodObject.new(namespace, name, scope)
@@ -88,7 +96,7 @@ module YARD
         obj.parameters = []
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
         obj.source_type = :c
-        find_method_body(obj, func_name, source_file ? File.read(source_file) : @content)
+        find_method_body(obj, func_name, content)
       end
 
       def handle_constants(type, var_name, const_name, definition)
