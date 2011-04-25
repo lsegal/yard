@@ -81,14 +81,6 @@ module YARD
         else; scope = :instance
         end
 
-        content = nil
-        begin
-          content = File.read(source_file) if source_file
-        rescue Errno::ENOENT, Errno::ENOTFILE
-        ensure
-          content ||= @content
-        end
-
         namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
         ensure_loaded!(namespace)
         obj = CodeObjects::MethodObject.new(namespace, name, scope)
@@ -96,6 +88,16 @@ module YARD
         obj.parameters = []
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
         obj.source_type = :c
+
+        content = nil
+        begin
+          content = File.read(source_file) if source_file
+        rescue Errno::ENOENT, Errno::ENOTFILE
+          path = "#{namespace}#{scope == :instance ? '#' : '.'}#{name}"
+          log.warn "Missing source file `#{source_file}' when parsing #{path}"
+        ensure
+          content ||= @content
+        end
         find_method_body(obj, func_name, content)
       end
 

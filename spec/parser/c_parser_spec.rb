@@ -43,6 +43,7 @@ describe YARD::Parser::CParser do
 
       it "should stop searching for extra source file gracefully if file is not found" do
         File.should_receive(:read).with('extra.c').and_raise(Errno::ENOENT)
+        log.should_receive(:warn).with("Missing source file `extra.c' when parsing Multifile#extra")
         parse
         Registry.at('Multifile#extra').docstring.should == ''
       end
