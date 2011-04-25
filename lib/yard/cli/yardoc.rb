@@ -150,6 +150,10 @@ module YARD
       # @return [Array<String>] a list of assets to copy after generation
       # @since 0.6.0
       attr_accessor :assets
+      
+      # @return [Boolean] whether markup option was specified
+      # @since 0.7.0
+      attr_accessor :has_markup
 
       # Creates a new instance of the commandline utility
       def initialize
@@ -180,6 +184,7 @@ module YARD
         @statistics = true
         @list = false
         @save_yardoc = true
+        @has_markup = false
 
         if defined?(Encoding)
           Encoding.default_external, Encoding.default_internal = 'utf-8', 'utf-8'
@@ -229,9 +234,6 @@ module YARD
       # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
-        # reset markup when generating output to force verification of markup
-        options[:markup] = nil if generate
-        
         # Hack: parse out --no-yardopts, --no-document before parsing files
         ['document', 'yardopts'].each do |file|
           without, with = args.index("--no-#{file}") || -2, args.index("--#{file}") || -1
@@ -312,8 +314,7 @@ module YARD
       #
       # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
       def verify_markup_options
-        has_markup = options[:markup] ? true : false
-        options[:markup] ||= :rdoc
+        options[:markup] = :rdoc unless has_markup
         result, lvl = false, has_markup ? log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
@@ -571,6 +572,7 @@ module YARD
 
         opts.on('-m', '--markup MARKUP',
                 'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
+          self.has_markup = true
           options[:markup] = markup.to_sym
         end
 
