@@ -152,7 +152,7 @@ describe YARD::CLI::Yardoc do
       Templates::Engine.should_not_receive(:generate)
       @yardoc.run(arg)
     end
-    
+        
     should_accept('--exclude') do |arg|
       YARD.should_receive(:parse).with(['a'], ['nota', 'b'])
       @yardoc.run(arg, 'nota', arg, 'b', 'a')
@@ -535,6 +535,11 @@ describe YARD::CLI::Yardoc do
     it "should load rdoc markup if no markup is provided" do
       @yardoc.generate = true
       @yardoc.run
+      @yardoc.options[:markup].should == :rdoc
+    end
+    
+    it "should load rdoc markup even when no output is specified" do
+      @yardoc.parse_arguments('--no-output')
       @yardoc.options[:markup].should == :rdoc
     end
     

@@ -229,8 +229,7 @@ module YARD
       # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
-        options[:markup] = nil # reset markup
-
+        
         # Hack: parse out --no-yardopts, --no-document before parsing files
         ['document', 'yardopts'].each do |file|
           without, with = args.index("--no-#{file}") || -2, args.index("--#{file}") || -1
@@ -255,6 +254,9 @@ module YARD
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
 
+        # reset markup when generating output to force verification of markup
+        options[:markup] = nil if generate
+        
         if generate && !verify_markup_options
           false
         else
