@@ -13,7 +13,8 @@ module YARD
             headers['Content-Type'] = StaticFileCommand::DefaultMimeTypes[$1.downcase] || 'text/html'
             render IO.read(filename)
           else
-            options.update(:object => Registry.root, :type => :layout, :file => filename)
+            file = CodeObjects::ExtraFileObject.new(filename)
+            options.update(:object => Registry.root, :type => :layout, :file => file)
             render
           end
         end

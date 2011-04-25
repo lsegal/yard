@@ -18,6 +18,9 @@ module YARD
       # @param (see Templates::Helpers::HtmlHelper#url_for_file)
       # @return (see Templates::Helpers::HtmlHelper#url_for_file)
       def url_for_file(filename, anchor = nil)
+        if filename.is_a?(CodeObjects::ExtraFileObject)
+          filename = filename.filename
+        end
         "/#{base_path(router.docs_prefix)}/file/" + filename.sub(%r{^#{@library.source_path.to_s}/}, '') +
           (anchor ? "##{anchor}" : "")
       end

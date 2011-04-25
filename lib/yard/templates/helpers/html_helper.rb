@@ -286,7 +286,7 @@ module YARD
 
       # Returns the URL for a specific file
       #
-      # @param [String] filename the filename to link to
+      # @param [String, CodeObjects::ExtraFileObject] filename the filename to link to
       # @param [String] anchor optional anchor
       # @return [String] the URL pointing to the file
       def url_for_file(filename, anchor = nil)
