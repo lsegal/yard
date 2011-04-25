@@ -192,6 +192,13 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments("--markup-provider", "test2")
       @yardoc.options[:markup_provider].should == :test2
     end
+    
+    it "should select a markup format when -m is set" do
+      @yardoc.should_receive(:verify_markup_options).and_return(true)
+      @yardoc.generate = true
+      @yardoc.parse_arguments('-m', 'markdown')
+      @yardoc.options[:markup].should == :markdown
+    end
 
     it "should accept --default-return" do
       @yardoc.parse_arguments *%w( --default-return XYZ )
