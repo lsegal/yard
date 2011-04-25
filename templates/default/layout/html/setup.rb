@@ -1,10 +1,5 @@
 def init
-  @breadcrumb = []
-  
-  @stylesheets = options[:stylesheets]
-  @javascripts = options[:javascripts]
-  @search_fields = options[:search_fields]
-  
+  @breadcrumb = []  
   if @onefile
     sections :layout
   elsif @file
@@ -55,14 +50,22 @@ def diskfile
   "<div id='filecontents'>" + data + "</div>"
 end
 
-def stylesheets
-  @stylesheets
-end
-
+# @return [Array<String>] core javascript files for layout
+# @since 0.7.0
 def javascripts
-  @javascripts
+  %w(js/jquery.js js/app.js)
 end
 
-def search_fields
-  @search_fields
+# @return [Array<String>] core stylesheets for the layout
+# @since 0.7.0
+def stylesheets
+  %w(css/style.css css/common.css)
+end
+
+# @return [Array<Hash{Symbol=>String}>] the list of search links and drop-down menus
+# @since 0.7.0
+def menu_lists
+[ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
+  { :type => 'method', :title => 'Methods', :search_title => 'Method List' }, 
+  { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
 end

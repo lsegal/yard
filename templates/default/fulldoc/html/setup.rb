@@ -5,10 +5,6 @@ def init
   options[:files] = ([options[:readme]] + options[:files]).compact
   options[:readme] = options[:files].first
   
-  options[:stylesheets] = stylesheets
-  options[:javascripts] = javascripts
-  options[:search_fields] = menu_lists
-  
   return serialize_onefile if options[:onefile]
   generate_assets
   serialize('_index.html')
@@ -28,36 +24,6 @@ def init
       log.backtrace(e)
     end
   end
-end
-
-#
-# The core javascript files for the documentation template
-#
-def javascripts
-  [ 'js/jquery.js', 'js/app.js' ]
-end
-
-#
-# Javascript files that are additionally loaded for the searchable full lists
-# e.g. Class List, Method List, File List
-#
-def javascripts_full_list
-  [ 'js/jquery.js', 'js/full_list.js' ]
-end
-
-#
-# The core stylesheets for the documentation template
-#
-def stylesheets
-  [ 'css/style.css', 'css/common.css' ]
-end
-
-#
-# Stylesheet files that are additionally loaded for the searchable full lists
-# e.g. Class List, Method List, File List
-#
-def stylesheets_full_list
-  [ 'css/full_list.css', 'css/common.css' ]
 end
 
 def serialize(object)
@@ -98,36 +64,42 @@ def asset(path, content)
   options[:serializer].serialize(path, content) if options[:serializer]
 end
 
-#
-# The list of search links and drop-down menus
-#
+# @return [Array<String>] Stylesheet files that are additionally loaded for the 
+#   searchable full lists, e.g., Class List, Method List, File List
+# @since 0.7.0
+def stylesheets_full_list
+  %w(css/full_list.css css/common.css)
+end
+
+# @return [Array<String>] Javascript files that are additionally loaded for the 
+#   searchable full lists, e.g., Class List, Method List, File List.
+# @since 0.7.0
+def javascripts_full_list
+  %w(js/jquery.js js/full_list.js)
+end
+
 def menu_lists
-  [ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
-    { :type => 'method', :title => 'Methods', :search_title => 'Method List' }, 
-    { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
+  Object.new.extend(T('layout')).menu_lists
 end
 
 def generate_assets
-  
-  (javascripts + javascripts_full_list + 
-    stylesheets + stylesheets_full_list).uniq.each do |file|
+  @object = Registry.root
+
+  layout = Object.new.extend(T('layout'))
+  (layout.javascripts + javascripts_full_list +
+      layout.stylesheets + stylesheets_full_list).uniq.each do |file|
     asset(file, file(file, true))
   end
-  
-  @object = Registry.root
-  
-  menu_lists.each do |list|
-    
+  layout.menu_lists.each do |list|
     list_generator_method = "generate_#{list[:type]}_list"
-    
     if respond_to?(list_generator_method)
       send(list_generator_method)
     else
-      log.error "Unable to generate '#{list[:title]}' list because no method " + 
+      log.error "Unable to generate '#{list[:title]}' list because no method " +
         "'#{list_generator_method}' exists"
     end
   end
-  
+
   generate_frameset
 end
 
