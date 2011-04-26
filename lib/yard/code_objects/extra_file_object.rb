@@ -43,11 +43,11 @@ module YARD::CodeObjects
 
     private
 
-    # @param [String] contents the file contents
-    def parse_contents(contents)
+    # @param [String] data the file contents
+    def parse_contents(data)
       cut_index = 0
-      contents = contents.split("\n")
-      contents.each_with_index do |line, index|
+      data = data.split("\n")
+      data.each_with_index do |line, index|
         case line
         when /^#!(\S+)\s*$/
           if index == 0
@@ -63,8 +63,16 @@ module YARD::CodeObjects
           break
         end
       end
-      contents = contents[cut_index..-1] if cut_index > 0
-      self.contents = contents.join("\n")
+      data = data[cut_index..-1] if cut_index > 0
+      self.contents = data.join("\n")
+      
+      if contents.respond_to?(:force_encoding) && attributes[:encoding]
+        begin
+          contents.force_encoding(attributes[:encoding])
+        rescue ArgumentError
+          log.warn "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
+        end
+      end
     end
   end
 end

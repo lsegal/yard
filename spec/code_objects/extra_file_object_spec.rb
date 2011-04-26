@@ -64,6 +64,27 @@ describe YARD::CodeObjects::ExtraFileObject do
       file = ExtraFileObject.new('file.txt', "# @title FooBar\r\nHello world")
       file.attributes[:title].should == "FooBar"
     end
+    
+    it "should force encoding to @encoding attribute if present" do
+      log.should_not_receive(:warn)
+      data = "# @encoding sjis\nFOO"
+      data.force_encoding('binary')
+      file = ExtraFileObject.new('file.txt', data)
+      file.contents.encoding.to_s.should == 'Shift_JIS'
+    end if RUBY19
+
+    it "should warn if @encoding is invalid" do
+      log.should_receive(:warn).with("Invalid encoding `INVALID' in file.txt")
+      data = "# @encoding INVALID\nFOO"
+      encoding = data.encoding
+      file = ExtraFileObject.new('file.txt', data)
+      file.contents.encoding.should == encoding
+    end if RUBY19
+    
+    it "should ignore encoding in 1.8.x (or encoding-unaware platforms)" do
+      log.should_not_receive(:warn)
+      file = ExtraFileObject.new('file.txt', "# @encoding INVALID\nFOO")
+    end if RUBY18
   end
   
   describe '#name' do
