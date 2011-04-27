@@ -152,8 +152,8 @@ describe YARD::Parser::SourceParser do
       Registry.at(:Foo).docstring.should == "foo\n\nbar"
     end
     
-    it "should know about docstrings starting with ##" do
-      {'#' => false, '##' => true}.each do |hash, expected|
+    it "should know about docstrings starting with more than one '#'" do
+      {'#' => false, '##' => true, '###' => true}.each do |hash, expected|
         YARD.parse_string "#{hash}\n# Foo bar\nclass Foo; end"
         Registry.at(:Foo).docstring.hash_flag.should == expected
       end
