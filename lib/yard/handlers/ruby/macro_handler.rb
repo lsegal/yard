@@ -35,7 +35,7 @@ class YARD::Handlers::Ruby::MacroHandler < YARD::Handlers::Ruby::Base
     return unless new_macro?
     macro_name = @orig_docstring.tag(:macro).name
     raise UndocumentableError, 'method/attribute, missing macro name' unless macro_name
-    macro_object = MacroObject.new(:root, macro_name)
+    macro_object = YARD::CodeObjects::MacroObject.new(:root, macro_name)
     macro_object.raw_data = macro_data(true)
     macro_object.object = namespace
     macro_object.method_name = caller_method.to_s
@@ -46,13 +46,13 @@ class YARD::Handlers::Ruby::MacroHandler < YARD::Handlers::Ruby::Base
     return if new_macro?
     
     if @docstring.tag(:macro)
-      if @macro = Registry.at(".macro.#{@docstring.tag(:macro).name}")
+      if @macro = YARD::Registry.at(".macro.#{@docstring.tag(:macro).name}")
         return @macro
       end
     end
     
     # Look for implicit macros
-    Registry.all(:macro).each do |macro|
+    YARD::Registry.all(:macro).each do |macro|
       next unless macro.attached
       next unless macro.method_name == caller_method
       namespace.inheritance_tree.each do |obj|
@@ -73,7 +73,7 @@ class YARD::Handlers::Ruby::MacroHandler < YARD::Handlers::Ruby::Base
       comments += "\n" + @docstring.all if @docstring.all
     end
     comments = parse_macro_comments(comments) if new_macro? || @macro
-    @docstring = Docstring.new(comments)
+    @docstring = YARD::Docstring.new(comments)
     comments
   end
   
