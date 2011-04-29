@@ -251,6 +251,10 @@ module YARD
         # module so that the handler class can be extended with mixins that
         # override the +process+ method without alias chaining.
         #
+        # @macro yard.handlers.process
+        #   @method process
+        #   Main processing callback
+        #   @return [void]
         # @see #process
         # @return [void]
         # @since 0.5.4
