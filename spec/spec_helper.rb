@@ -88,4 +88,18 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
   end
 end
 
+module Kernel
+  require 'cgi'
+
+  def p(*args)
+    puts args.map {|arg| CGI.escapeHTML(arg.inspect) }.join("<br/>\n")
+    args.first
+  end
+  
+  def puts(str)
+    STDOUT.puts str + "<br/>\n"
+    str
+  end
+end
+
 include YARD
