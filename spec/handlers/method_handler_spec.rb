@@ -140,7 +140,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   end
   
   it "should add macros for class methods" do
-    macro = Registry.at('.macro.prop')
+    macro = CodeObjects::MacroObject.find('prop')
     macro.should_not be_nil
     macro.macro_data.should == "@method $1(value)\n$3\n@return [$2]"
     macro.method_object.should == Registry.at('E.property')
@@ -153,7 +153,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   end
   
   it "should skip macros on instance methods" do
-    Registry.at('.macro.xyz').should be_nil
+    CodeObjects::MacroObject.find('xyz').should be_nil
     Registry.at('E#a').should be_nil
   end
   

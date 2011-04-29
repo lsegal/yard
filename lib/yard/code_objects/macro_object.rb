@@ -28,6 +28,10 @@ module YARD::CodeObjects
       obj
     end
     
+    def self.find(macro_name)
+      Registry.at('.macro.' + macro_name.to_s)
+    end
+    
     attr_accessor :macro_data
     attr_accessor :method_object
     

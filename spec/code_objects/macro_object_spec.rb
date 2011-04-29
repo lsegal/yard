@@ -31,4 +31,16 @@ describe YARD::CodeObjects::MacroObject do
       obj.should be_attached
     end
   end
+  
+  describe '.find' do
+    before { MacroObject.create('foo', 'DATA') }
+    
+    it "should search for an object by name" do
+      MacroObject.find('foo').macro_data.should == 'DATA'
+    end
+    
+    it "should accept Symbol" do
+      MacroObject.find(:foo).macro_data.should == 'DATA'
+    end
+  end
 end

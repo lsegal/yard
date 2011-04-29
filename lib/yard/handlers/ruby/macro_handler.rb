@@ -43,7 +43,7 @@ class YARD::Handlers::Ruby::MacroHandler < YARD::Handlers::Ruby::Base
     return if new_macro?
     
     if @docstring.tag(:macro)
-      if @macro = YARD::Registry.at(".macro.#{@docstring.tag(:macro).name}")
+      if @macro = YARD::CodeObjects::MacroObject.find(@docstring.tag(:macro).name)
         return @macro
       end
     end
