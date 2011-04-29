@@ -74,6 +74,22 @@ module YARD
       super parse_comments(content)
     end
     alias all= replace
+    
+    # Deep-copies a docstring
+    # 
+    # @note This method creates a new docstring with new tag lists, but does
+    #   not create new individual tags. Modifying the tag objects will still
+    #   affect the original tags.
+    # @return [Docstring] a new copied docstring
+    # @since 0.7.0
+    def dup
+      obj = super
+      %w(all summary tags ref_tags).each do |name|
+        val = instance_variable_get("@#{name}")
+        obj.instance_variable_set("@#{name}", val ? val.dup : nil)
+      end
+      obj
+    end
 
     # @endgroup
 
@@ -106,6 +122,24 @@ module YARD
       @summary = self[0..idx]
       @summary += '.' unless @summary.empty?
       @summary
+    end
+    
+    # Reformats and returns a raw representation of the tag data using the
+    # current tag and docstring data, not the original text.
+    # 
+    # @return [String] the updated raw formatted docstring data
+    # @since 0.7.0
+    # @todo Add Tags::Tag#to_raw and refactor
+    def to_raw
+      tag_data = tags.sort_by {|t| t.tag_name }.map do |tag|
+        tag_text = '@' + tag.tag_name
+        tag_text += ' [' + tag.types.join(', ') + ']' if tag.types
+        tag_text += ' ' + tag.name if tag.name
+        tag_text += "\n " if tag.name && tag.text
+        tag_text += ' ' + tag.text.strip.gsub(/\n/, "\n  ") if tag.text
+        tag_text
+      end
+      [strip, tag_data.join("\n")].reject {|l| l.empty? }.compact.join("\n")
     end
 
     # @group Creating and Accessing Meta-data
@@ -155,6 +189,24 @@ module YARD
     # @return [Boolean] whether or not the tag +name+ was declared
     def has_tag?(name)
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
+    end
+    
+    # Delete all tags with +name+
+    # @param [String] name the tag name
+    # @return [void]
+    # @since 0.7.0
+    def delete_tags(name)
+      delete_tag_if {|tag| tag.tag_name.to_s == name.to_s }
+    end
+    
+    # Deletes all tags where the block returns true
+    # @yieldparam [Tags::Tag] tag the tag that is being tested
+    # @yieldreturn [Boolean] true if the tag should be deleted 
+    # @return [void]
+    # @since 0.7.0
+    def delete_tag_if(&block)
+      @tags.delete_if(&block)
+      @ref_tags.delete_if(&block)
     end
 
     # Returns true if the docstring has no content that is visible to a template.

@@ -319,4 +319,87 @@ eof
       doc.tag(:api).text.should == "private"
     end
   end
+  
+  describe '#delete_tags' do
+    it "should delete tags by a given tag name" do
+      doc = Docstring.new("@param name x\n@param name2 y\n@return foo")
+      doc.delete_tags(:param)
+      doc.tags.size.should == 1
+    end
+  end
+  
+  describe '#delete_tag_if' do
+    it "should delete tags for a given block" do
+      doc = Docstring.new("@param name x\n@param name2 y\n@return foo")
+      doc.delete_tag_if {|t| t.name == 'name2' }
+      doc.tags.size.should == 2
+    end
+  end
+  
+  describe '#to_raw' do
+    it "should return a clean representation of tags" do
+      doc = Docstring.new("Hello world\n@return [String, X] foobar\n@param name<Array> the name\nBYE!")
+      doc.to_raw.should == "Hello world\nBYE!\n@param [Array] name\n  the name\n@return [String, X] foobar"
+    end
+    
+    it "should handle tags with newlines and indentation" do
+      doc = Docstring.new("@example TITLE\n  the \n  example\n  @foo\n@param [X] name\n  the name")
+      doc.to_raw.should == "@example TITLE\n  the \n  example\n  @foo\n@param [X] name\n  the name"
+    end
+    
+    it "should handle deleted tags" do
+      doc = Docstring.new("@example TITLE\n  the \n  example\n  @foo\n@param [X] name\n  the name")
+      doc.delete_tags(:param)
+      doc.to_raw.should == "@example TITLE\n  the \n  example\n  @foo"
+    end
+    
+    it "should handle added tags" do
+      doc = Docstring.new("@example TITLE\n  the \n  example\n  @foo")
+      doc.add_tag(Tags::Tag.new('foo', 'foo'))
+      doc.to_raw.should == "@example TITLE\n  the \n  example\n  @foo\n@foo foo"
+    end
+    
+    it "should be equal to .all if not modified" do
+      doc = Docstring.new("123\n@param")
+      doc.to_raw.should == doc.all
+    end
+    
+    it "should do something" do
+      doc = Docstring.new("@macro\n$1\\$2$3")
+      p doc.dup.to_raw
+    end
+  end
+  
+  describe '#dup' do
+    it "should duplicate docstring text" do
+      doc = Docstring.new("foo")
+      doc.dup.should == doc
+      doc.dup.all.should == doc
+    end
+    
+    it "should duplicate tags to new list" do
+      doc = Docstring.new("@param x\n@return y")
+      doc2 = doc.dup
+      doc2.delete_tags(:param)
+      doc.tags.size.should == 2
+      doc2.tags.size.should == 1
+    end
+    
+    it "should preserve summary" do
+      doc = Docstring.new("foo. bar")
+      doc.dup.summary.should == doc.summary
+    end
+    
+    it "should preserve hash_flag" do
+      doc = Docstring.new
+      doc.hash_flag = 'foo'
+      doc.dup.hash_flag.should == doc.hash_flag
+    end
+    
+    it "should preserve line_range" do
+      doc = Docstring.new
+      doc.line_range = (1..2)
+      doc.dup.line_range.should == doc.line_range
+    end
+  end
 end
