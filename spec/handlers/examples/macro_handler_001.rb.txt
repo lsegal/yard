@@ -5,6 +5,14 @@ class Foo
   
   # Not recognized
   just_a_method_for :implicit_invalid
+  
+  #
+  ## IS NOT RECOGNIZED!
+  just_a_method_for :implicit_invalid2
+
+  ##
+  # IS RECOGNIZED!
+  just_a_method_for 'implicit_valid'
 
   # @attribute [r]
   # @return [Numeric] a number

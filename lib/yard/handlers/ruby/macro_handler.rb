@@ -10,7 +10,7 @@ class YARD::Handlers::Ruby::MacroHandler < YARD::Handlers::Ruby::Base
 
     @orig_docstring = @docstring = YARD::Docstring.new(statement.comments)
     parse_comments
-    return if !@macro && @docstring.tags.size == 0
+    return if !@macro && !statement.comments_hash_flag && @docstring.tags.size == 0
     @docstring.hash_flag = statement.comments_hash_flag
     @docstring.line_range = statement.comments_range
     name = method_name

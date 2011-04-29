@@ -113,7 +113,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
   it "should ignore DSL methods without tags" do
     Registry.at('Foo#implicit_invalid').should be_nil
   end
-  
+
+  it "should accept a DSL method without tags if it has hash_flag (##)" do
+    Registry.at('Foo#implicit_valid').should_not be_nil
+    Registry.at('Foo#implicit_invalid2').should be_nil
+  end
+ 
   it "should allow creation of macros" do
     macro = CodeObjects::MacroObject.find('property')
     macro.should_not be_nil
