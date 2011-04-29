@@ -21,10 +21,18 @@ module YARD::CodeObjects
   #   # Extra data added to docstring
   #   property :bar
   class MacroObject < Base
-    attr_accessor :object
-    attr_accessor :raw_data
-    attr_accessor :method_name
-    attr_accessor :attached
+    def self.create(macro_name, data, method_object = nil)
+      obj = new(:root, macro_name)
+      obj.macro_data = data
+      obj.method_object = method_object
+      obj
+    end
+    
+    attr_accessor :macro_data
+    attr_accessor :method_object
+    
+    def attached?; method_object ? true : false end
     def path; '.macro.' + name.to_s end
+    def sep; '.' end
   end
 end

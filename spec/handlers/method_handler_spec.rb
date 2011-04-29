@@ -142,9 +142,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   it "should add macros for class methods" do
     macro = Registry.at('.macro.prop')
     macro.should_not be_nil
-    macro.raw_data.should == "@method $1(value)\n$3\n@return [$2]"
-    macro.method_name.should == 'property'
-    macro.attached.should == true
+    macro.macro_data.should == "@method $1(value)\n$3\n@return [$2]"
+    macro.method_object.should == Registry.at('E.property')
+    macro.should be_attached
     obj = Registry.at('E#foo')
     obj.should_not be_nil
     obj.docstring.should == 'create a foo'

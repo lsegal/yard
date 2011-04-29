@@ -117,8 +117,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
   it "should allow creation of macros" do
     macro = Registry.at('.macro.property')
     macro.should_not be_nil
-    macro.method_name.should == 'property'
-    macro.object.should == Registry.at('Foo')
+    macro.should_not be_attached
+    macro.method_object.should be_nil
   end
   
   it "should apply new macro docstrings on new objects" do
@@ -147,8 +147,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
   
   it "should use implicitly named macros" do
     macro = Registry.at('.macro.parser')
-    macro.raw_data.should == "@method $1(opts = {})\n@return NOTHING!"
+    macro.macro_data.should == "@method $1(opts = {})\n@return NOTHING!"
     macro.should_not be_nil
+    macro.should be_attached
+    macro.method_object.should == P('Foo.parser')
     obj = Registry.at('Foo#c_parser')
     obj.should_not be_nil
     obj.docstring.should == ""
