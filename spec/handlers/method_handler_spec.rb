@@ -138,4 +138,27 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     Registry.at('D#b').is_alias?.should == false
     Registry.at('D#a').is_alias?.should == false
   end
+  
+  it "should add macros for class methods" do
+    macro = Registry.at('.macro.prop')
+    macro.should_not be_nil
+    macro.raw_data.should == "@method $1(value)\n$3\n@return [$2]"
+    macro.method_name.should == 'property'
+    macro.attached.should == true
+    obj = Registry.at('E#foo')
+    obj.should_not be_nil
+    obj.docstring.should == 'create a foo'
+    obj.signature.should == 'def foo(value)'
+    obj.tag(:return).types.should == ['String']
+  end
+  
+  it "should skip macros on instance methods" do
+    Registry.at('.macro.xyz').should be_nil
+    Registry.at('E#a').should be_nil
+  end
+  
+  it "should warn if the macro name is invalid" do
+    log.should_receive(:warn).with(/Invalid.+macro name.+Foo\.foo/)
+    YARD.parse_string "class Foo\n# @macro\ndef self.foo; end\nend"
+  end
 end
