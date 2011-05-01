@@ -4,65 +4,6 @@ require 'ostruct'
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" do
   before(:all) { parse_file :macro_handler_001, __FILE__ }
   
-  describe 'Macro expansion' do
-    def expand(comments)
-      klass = eval("YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler")
-      stmt = OpenStruct.new(:comments => comments)
-      a = mock(:a)
-      a.stub!(:jump).and_return(OpenStruct.new(:source => 'a'))
-      b = mock(:b)
-      b.stub!(:jump).and_return(OpenStruct.new(:source => 'b'))
-      c = mock(:c)
-      c.stub!(:jump).and_return(OpenStruct.new(:source => 'c'))
-      node_mock = mock(:node)
-      node_mock.stub!(:jump).and_return(OpenStruct.new(:source => 'abc'))
-      stmt.stub!(:[]).with(0).and_return(node_mock)
-      stmt.stub!(:method_name).with(true).and_return('foo')
-      stmt.stub!(:parameters).and_return([a, b, c])
-      stmt.stub!(:source).and_return('foo :bar, :baz')
-      handler = klass.new(nil, stmt)
-      handler.instance_variable_set("@docstring", Docstring.new(comments))
-      handler.instance_variable_set("@orig_docstring", Docstring.new(comments))
-      handler.send(:parse_comments).strip
-    end
-    
-    it "should only expand macros if @macro is present" do
-      expand("$1$2$3").should == "$1$2$3"
-    end
-    
-    it "should allow escaping of macro syntax" do
-      expand("@macro name\n$1\\$2$3").should == "a$2c"
-    end
-    
-    it "should replace $* with the whole statement" do
-      expand("@macro name\n$* ${*}").should == "foo :bar, :baz foo :bar, :baz"
-    end
-    
-    it "should replace $0 with method name" do
-      expand("@macro name\n$0 ${0}").should == "foo foo"
-    end
-    
-    it "should replace all $N values with the Nth argument in the method call" do
-      expand("@macro name\n$1$2$3${3}\nfoobar").should == "abcc\nfoobar"
-    end
-    
-    it "should replace ${N-M} ranges with N-M arguments (incl. commas)" do
-      expand("@macro name\n${1-2}x").should == "a, bx"
-    end
-    
-    it "should handle open ended ranges (${N-})" do
-      expand("@macro name\n${2-}").should == "b, c"
-    end
-    
-    it "should handle negative indexes ($-N)" do
-      expand("@macro name\n$-1 ${-2-} ${-2--2}").should == "c b, c b"
-    end
-
-    it "should handle macro text inside block" do
-      expand("@macro name\n  foo$1$2$3\nfoobaz").should == "fooabc\nfoobaz"
-    end
-  end
-  
   it "should create a readable attribute when @attribute r is found" do
     obj = Registry.at('Foo#attr1')
     obj.should_not be_nil

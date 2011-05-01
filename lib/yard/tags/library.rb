@@ -173,7 +173,7 @@ module YARD
       define_tag "End Grouping",       :endgroup
       define_tag "Grouping",           :group
       define_tag "Macro",              :macro,       :with_types_and_name
-      define_tag "Method (macro)",     :method
+      define_tag "Method (macro)",     :method,      :with_title_and_text
       define_tag "Note",               :note
       define_tag "Options Hash",       :option,      :with_options
       define_tag "Overloads",          :overload,    OverloadTag
