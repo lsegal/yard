@@ -152,11 +152,14 @@ describe YARD::Parser::SourceParser do
       Registry.at(:Foo).docstring.should == "foo\n\nbar"
     end
     
-    it "should know about docstrings starting with more than one '#'" do
-      {'#' => false, '##' => true, '###' => true}.each do |hash, expected|
-        YARD.parse_string "#{hash}\n# Foo bar\nclass Foo; end"
-        Registry.at(:Foo).docstring.hash_flag.should == expected
-      end
+    it "should know that docstrings which start with one '#' don't have the hash flag enabled" do
+      YARD.parse_string "#\n# Foo bar\nclass Foo; end"
+      Registry.at(:Foo).docstring.hash_flag.should == false
+    end
+
+    it "should know that docstrings which start with two '#' characters have the hash flag enabled" do
+      YARD.parse_string "##\n# Foo bar\nclass Foo; end"
+      Registry.at(:Foo).docstring.hash_flag.should == true
     end
     
     it "should remove shebang from initial file comments" do
