@@ -407,17 +407,17 @@ module YARD
             return
           end
           case comment
-          when /\A# @group\s+(.+)\s*\Z/
+          when /\A#+ @group\s+(.+)\s*\Z/
             @groups.unshift [lineno, $1]
             return
-          when /\A# @endgroup\s*\Z/
+          when /\A#+ @endgroup\s*\Z/
             @groups.unshift [lineno, nil]
             return
           end
 
-          comment = comment.gsub(/^(\#{1,2})\s{0,1}/, '').chomp
+          comment = comment.gsub(/^(#+)\s?/, '').chomp
           append_comment = @comments[lineno - 1]
-          hash_flag = $1 == '##' ? true : false
+          hash_flag = $1.length > 1
 
           if append_comment && @comments_last_column == column
             @comments.delete(lineno - 1)

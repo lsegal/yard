@@ -252,6 +252,43 @@ eof
     ss[1].comments.should == ['hello']
   end
   
+  it "should handle comments with more than one hash" do
+    s = stmt <<-eof
+      ### comment
+      ### comment
+      ### comment
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment", "comment"]
+    s.comments_range.should == (1..3)
+
+    s = stmt <<-eof
+
+      ### comment
+      ### comment
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment"]
+    s.comments_range.should == (2..3)
+
+    s = stmt <<-eof
+      ### comment
+      ### comment
+
+      def method; end
+    eof
+    s.comments.should == ["comment", "comment"]
+    s.comments_range.should == (1..2)
+
+    s = stmt <<-eof
+      ### comment
+      def method; end
+    eof
+    s.comments.should == ["comment"]
+    s.comments_range.should == (1..1)
+
+  end
+  
   it "should handle CRLF (Windows) newlines" do
     s = stmts("require 'foo'\r\n\r\n# Test Test\r\n# \r\n# Example:\r\n#   example code\r\ndef test\r\nend\r\n")
     s[1].comments.should == ['Test Test', '', 'Example:', '  example code']

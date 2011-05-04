@@ -54,6 +54,14 @@ describe YARD::Parser::Ruby::RubyParser do
       eof
       s.comments.should == "comment"
       s.comments_range.should == (1..1)
+
+      s = stmt <<-eof
+        ### comment
+        ### comment
+        def method; end
+      eof
+      s.comments.should == "comment\ncomment"
+      s.comments_range.should == (1..2)
     end
     
     it "should only look up to two lines back for comments" do
