@@ -249,6 +249,7 @@ module YARD
         undef on_aref
         undef on_rbracket
         undef on_qwords_new
+        undef on_qwords_add
         undef on_string_literal
         undef on_lambda
         undef on_string_content
@@ -326,9 +327,22 @@ module YARD
             end
           eof
         end
-
-        def on_qwords_new
-          visit_event LiteralNode.new(:qwords_literal, [])
+        
+        def on_qwords_new(*args)
+          node = LiteralNode.new(:qwords_literal, args)
+          if @map[:qwords_beg]
+            sstart, lstart = *@map[:qwords_beg].pop
+            node.source_range = Range.new(sstart-1, @ns_charno)
+            node.line_range = Range.new(lstart, lineno)
+          end
+          node
+        end
+        
+        def on_qwords_add(list, item)
+          list.source_range = (list.source_range.first..@ns_charno)
+          list.line_range = (list.line_range.first..lineno)
+          list.push(item)
+          list
         end
 
         def on_string_literal(*args)

@@ -198,5 +198,10 @@ describe YARD::Parser::Ruby::RubyParser do
       src = '("this is a string")'
       stmt(src).jump(:string_literal).source.should == '"this is a string"'
     end
+    
+    it "should show proper source for %w() array" do
+      src = "%w(\na b c\n d e f\n)"
+      stmt(src).jump(:qwords_literal).source.should == src
+    end
   end
 end if HAVE_RIPPER
