@@ -560,4 +560,21 @@ describe YARD::CLI::Yardoc do
       @yardoc.options[:markup].should == :none
     end
   end
+  
+  describe '#run' do
+    it "should parse_arguments if run() is called" do
+      @yardoc.should_receive(:parse_arguments)
+      @yardoc.run
+    end
+
+    it "should parse_arguments if run(arg1, arg2, ...) is called" do
+      @yardoc.should_receive(:parse_arguments)
+      @yardoc.run('--private', '-p', 'foo')
+    end
+
+    it "should not parse_arguments if run(nil) is called" do
+      @yardoc.should_not_receive(:parse_arguments)
+      @yardoc.run(nil)
+    end
+  end
 end

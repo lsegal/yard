@@ -198,11 +198,14 @@ module YARD
       # Runs the commandline utility, parsing arguments and generating
       # output if set.
       #
-      # @param [Array<String>] args the list of arguments
+      # @param [Array<String>] args the list of arguments. If the list only
+      #   contains a single nil value, skip calling of {#parse_arguments}
       # @return [void]
       def run(*args)
-        # fail early if arguments are not valid
-        return unless parse_arguments(*args)
+        if args.size == 0 || !args.first.nil?
+          # fail early if arguments are not valid
+          return unless parse_arguments(*args)
+        end
 
         checksums = nil
         if use_cache
