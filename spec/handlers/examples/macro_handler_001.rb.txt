@@ -50,6 +50,10 @@ class Foo
   parser :x
   
   parser :c_parser
+  
+  # @macro [attach] none
+  # @method none(foo, bar)
+  none
 end
 
 class Bar
@@ -58,4 +62,5 @@ end
 
 class Baz < Foo
   parser :y_parser
+  none { }
 end

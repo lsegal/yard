@@ -32,6 +32,7 @@ module YARD
         private
 
         def call_params
+          return [] unless statement.respond_to?(:parameters)
           statement.parameters(false).map do |param|
             param.jump(:ident, :tstring_content).source
           end
