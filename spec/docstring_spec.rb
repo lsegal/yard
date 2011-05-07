@@ -363,11 +363,6 @@ eof
       doc = Docstring.new("123\n@param")
       doc.to_raw.should == doc.all
     end
-    
-    it "should do something" do
-      doc = Docstring.new("@macro\n$1\\$2$3")
-      p doc.dup.to_raw
-    end
   end
   
   describe '#dup' do
