@@ -345,15 +345,15 @@ module YARD
       end
 
       def docstring
-        value = case @docstring
+        return @docstring if !@docstring_extra
+        case @docstring
         when Proxy
-          Docstring.new("", self)
+          return @docstring_extra
         when Base
-          @docstring.docstring
-        else
-          @docstring
+          @docstring = @docstring.docstring + @docstring_extra
+          @docstring_extra = nil
         end
-        @docstring_extra ? value + @docstring_extra : value
+        @docstring
       end
 
       # Attaches a docstring to a code object by parsing the comments attached to the statement
@@ -365,7 +365,7 @@ module YARD
       def docstring=(comments)
         if comments =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
           path, extra = $1, $'
-          @docstring_extra = extra.empty? ? nil : Docstring.new(extra, self)
+          @docstring_extra = Docstring.new(extra, self)
           @docstring = Proxy.new(namespace, path)
         else
           @docstring_extra = nil
