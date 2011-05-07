@@ -393,9 +393,11 @@ module YARD
           object.add_file(parser.file, statement.line, statement.comments)
 
           # Add docstring if there is one.
-          object.docstring = statement.comments if statement.comments
-          object.docstring.hash_flag = statement.comments_hash_flag
-          object.docstring.line_range = statement.comments_range
+          if statement.comments
+            object.docstring = statement.comments
+            object.docstring.hash_flag = statement.comments_hash_flag
+            object.docstring.line_range = statement.comments_range
+          end
 
           # Add group information
           if statement.group

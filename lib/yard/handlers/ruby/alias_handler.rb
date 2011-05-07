@@ -30,6 +30,8 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
       new_obj.signature = old_obj.signature
       new_obj.source = old_obj.source
       new_obj.docstring = old_obj.docstring + YARD::Docstring.new(statement.comments)
+      new_obj.docstring.line_range = statement.comments_range
+      new_obj.docstring.hash_flag = statement.comments_hash_flag
       new_obj.docstring.object = new_obj
     else
       new_obj.signature = "def #{new_meth}" # this is all we know.
