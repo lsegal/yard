@@ -92,7 +92,7 @@ module YARD
         content = nil
         begin
           content = File.read(source_file) if source_file
-        rescue Errno::ENOENT, Errno::ENOTFILE
+        rescue Errno::ENOENT
           path = "#{namespace}#{scope == :instance ? '#' : '.'}#{name}"
           log.warn "Missing source file `#{source_file}' when parsing #{path}"
         ensure
