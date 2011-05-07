@@ -141,6 +141,17 @@ describe YARD::Parser::SourceParser do
       Registry.at(:Hello).docstring.should == "PASS"
     end
     
+    it "should strip all hashes prefixed on comment line" do
+      YARD.parse_string(<<-eof)
+        ### PASS
+        #### PASS
+        ##### PASS
+        module Hello
+        end
+      eof
+      Registry.at(:Hello).docstring.should == "PASS\nPASS\nPASS"
+    end
+    
     it "should handle =begin/=end style comments" do
       YARD.parse_string "=begin\nfoo\nbar\n=end\nclass Foo; end\n"
       Registry.at(:Foo).docstring.should == "foo\nbar"
