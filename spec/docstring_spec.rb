@@ -29,6 +29,18 @@ describe YARD::Docstring do
     end
   end
   
+  describe '#line' do
+    it "should return nil if #line_range is not set" do
+      Docstring.new('foo').line.should be_nil
+    end
+    
+    it "should return line_range.first if #line_range is set" do
+      doc = Docstring.new('foo')
+      doc.line_range = (1..10)
+      doc.line.should == doc.line_range.first
+    end
+  end
+  
   describe '#summary' do
     it "should handle empty docstrings" do
       o1 = Docstring.new

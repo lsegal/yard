@@ -77,9 +77,10 @@ module YARD
 
     # @endgroup
 
-    # @return [Fixnum] the first line of the {#line_range}.
+    # @return [Fixnum] the first line of the {#line_range}
+    # @return [nil] if there is no associated {#line_range}
     def line
-      line_range.first
+      line_range ? line_range.first : nil
     end
 
     # Gets the first line of a docstring to the period or the first paragraph.
