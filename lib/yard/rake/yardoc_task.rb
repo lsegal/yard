@@ -27,9 +27,9 @@ module YARD
       # @return [Proc] a proc to call after running the task
       attr_accessor :after
 
-      # @return [Proc] an optional lambda to run against all objects being
-      #   generated. Any object that the lambda returns false for will be
-      #   excluded from documentation.
+      # @return [Verifier, Proc] an optional {Verifier} to run against all objects 
+      #   being generated. Any object that the verifier returns false for will be
+      #   excluded from documentation. This attribute can also be a lambda.
       # @see Verifier
       attr_accessor :verifier
 
