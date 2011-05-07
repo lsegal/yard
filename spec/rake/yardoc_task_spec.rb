@@ -2,7 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Rake::YardocTask do
   before do
-    @yardoc = mock(:cli)
+    @yardoc = YARD::CLI::Yardoc.new
+    @yardoc.statistics = false
+    @yardoc.use_document_file = false
+    @yardoc.use_yardopts_file = false
+    @yardoc.generate = false
+    Templates::Engine.stub!(:render)
+    Templates::Engine.stub!(:generate)
+    YARD.stub!(:parse)
     YARD::CLI::Yardoc.stub!(:new).and_return(@yardoc)
     ::Rake.application.clear
   end
@@ -20,21 +27,21 @@ describe YARD::Rake::YardocTask do
   
   describe '#files' do
     it "should allow files to be set" do
-      @yardoc.should_receive(:run).with('a', 'b', 'c')
       YARD::Rake::YardocTask.new do |t|
         t.files = ['a', 'b', 'c']
       end
       run
+      @yardoc.files.should == %w(a b c)
     end
   end
   
   describe '#options' do
     it "should allow extra options to be set" do
-      @yardoc.should_receive(:run).with('--extra', '--opts')
       YARD::Rake::YardocTask.new do |t|
-        t.options = ['--extra', '--opts']
+        t.options = ['--private', '--protected']
       end
       run
+      @yardoc.visibilities.should == [:public, :private, :protected]
     end
   end
   
@@ -59,24 +66,22 @@ describe YARD::Rake::YardocTask do
     
     describe '#verifier' do
       it "should allow a verifier proc to be set" do
-        proc = mock(:proc)
-        mockopts = mock(:options)
-        mockopts.should_receive(:[]=).with(:verifier, proc)
-        @yardoc.should_receive(:options).and_return(mockopts)
-        @yardoc.should_receive(:run)
-        YARD::Rake::YardocTask.new {|t| t.verifier = proc }
+        verifier = Verifier.new
+        @yardoc.should_receive(:run) do
+          @yardoc.options[:verifier].should == verifier
+        end
+        YARD::Rake::YardocTask.new {|t| t.verifier = verifier }
         run
       end
 
-      it "should only use verifier if no --query options are passed" do
-        proc = mock(:proc)
-        mockopts = mock(:options)
-        mockopts.should_receive(:[]=).with(:verifier, proc)
-        @yardoc.should_receive(:options).and_return(mockopts)
-        @yardoc.should_receive(:run)
+      it "should override --query options" do
+        verifier = Verifier.new
+        @yardoc.should_receive(:run) do
+          @yardoc.options[:verifier].should == verifier
+        end
         YARD::Rake::YardocTask.new do |t| 
           t.options += ['--query', '@return']
-          t.verifier = proc
+          t.verifier = verifier
         end
         run
       end

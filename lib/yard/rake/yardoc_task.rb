@@ -60,8 +60,9 @@ module YARD
         task(name) do
           before.call if before.is_a?(Proc)
           yardoc = YARD::CLI::Yardoc.new
+          yardoc.parse_arguments *(options + files)
           yardoc.options[:verifier] = verifier if verifier
-          yardoc.run *(options + files)
+          yardoc.run
           after.call if after.is_a?(Proc)
         end
       end
