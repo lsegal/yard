@@ -100,6 +100,6 @@ module Kernel
     STDOUT.puts str + "<br/>\n"
     str
   end
-end
+end if ENV['TM_APP_PATH']
 
 include YARD
