@@ -106,7 +106,7 @@ module YARD
         def attribute_readable?
           if @docstring.tag(:attribute) 
             types = @docstring.tag(:attribute).types
-            return types ? (types.join =~ /(?<!w)r/ ? true : false) : true
+            return types ? (types.join =~ /(?!w)r/ ? true : false) : true
           end
           false
         end
