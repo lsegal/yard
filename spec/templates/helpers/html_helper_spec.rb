@@ -93,6 +93,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should return regular text with :none markup" do
       htmlify("fo\no\n\nbar<>", :none).should == "fo\no<br/>bar&lt;&gt;"
     end
+    
+    it "should highlight ruby if markup is :ruby" do
+      htmlify("class Foo; end", :ruby).should =~ /\A<pre class="code"><span/
+    end
+    
+    it "should include file and htmlify it" do
+      File.should_receive(:file?).with('foo.rdoc').and_return(true)
+      File.should_receive(:read).with('foo.rdoc').and_return('= HI')
+      htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><h1>HI</h1></p>"
+    end
   end
   
   describe "#link_object" do
@@ -419,6 +429,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
       should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
       should_not_receive(:html_syntax_highlight_NAME)
       html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
+    end
+    
+    it "should highlight as ruby if htmlify(text, :ruby) is called" do
+      should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
+      htmlify('def x; end', :ruby).should == '<pre class="code">x</pre>'
     end
   end
   

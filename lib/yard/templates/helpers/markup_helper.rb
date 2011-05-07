@@ -35,6 +35,7 @@ module YARD
         :rdoc => [
           {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
+        :ruby => [],
         :text => [],
         :html => [],
         :none => [],
@@ -50,6 +51,7 @@ module YARD
         :textile => ['textile', 'txtile'],
         :markdown => ['markdown', 'md', 'mdown', 'mkd'],
         :rdoc => ['rdoc'],
+        :ruby => ['rb', 'ru']
       }
 
       # Contains the Regexp object that matches the shebang line of extra

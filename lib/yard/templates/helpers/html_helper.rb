@@ -103,6 +103,17 @@ module YARD
       def html_markup_html(text)
         text
       end
+      
+      # Highlights Ruby source. Similar to {#html_syntax_highlight}, but
+      # this method is meant to be called from {#htmlify} when markup is
+      # set to "ruby".
+      # 
+      # @param [String] source the Ruby source
+      # @return [String] the highlighted HTML
+      # @since 0.7.0
+      def html_markup_ruby(source)
+        '<pre class="code">' + html_syntax_highlight(source, :ruby) + '</pre>'
+      end
 
       # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
@@ -191,6 +202,15 @@ module YARD
           file = CodeObjects::ExtraFileObject.new(filename, contents)
         end
         link_url(url_for_file(file, anchor), title || file.title)
+      end
+      
+      # (see BaseHelper#link_include_file)
+      def link_include_file(file)
+        unless file.is_a?(CodeObjects::ExtraFileObject)
+          file = CodeObjects::ExtraFileObject.new(file)
+        end
+        file.attributes[:markup] ||= markup_for_file('', file.filename)
+        htmlify(file.contents, file.attributes[:markup] || options[:markup])
       end
 
       # (see BaseHelper#link_include_object)
