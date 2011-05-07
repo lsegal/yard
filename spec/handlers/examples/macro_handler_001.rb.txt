@@ -1,4 +1,6 @@
 class Foo
+  attr_accessor :ignoreme
+
   # IMPLICIT METHOD!
   # @return [String]
   just_a_method_for :implicit0
