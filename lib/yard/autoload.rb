@@ -102,7 +102,7 @@ module YARD
   end
 
   # The parser namespace holds all parsing engines used by YARD.
-  # Currently only Ruby parsers are implemented with support planned for C.
+  # Currently only Ruby and C (Ruby) parsers are implemented.
   module Parser
     module Ruby # Ruby parsing components.
       module Legacy # Handles Ruby parsing in Ruby 1.8.
