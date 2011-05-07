@@ -143,6 +143,7 @@ module YARD
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Class] the markup class
       def markup_class(type = options[:markup])
+        load_markup_provider(type)
         MarkupHelper.markup_cache[type][:class]
       end
 

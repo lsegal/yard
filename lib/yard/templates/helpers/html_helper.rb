@@ -38,7 +38,6 @@ module YARD
         return text unless respond_to?(markup_meth)
         return "" unless text
         return text unless markup
-        load_markup_provider(markup)
         html = send(markup_meth, text)
         if html.respond_to?(:encode)
           html = html.force_encoding(text.encoding) # for libs that mess with encoding

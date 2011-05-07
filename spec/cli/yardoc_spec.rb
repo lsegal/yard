@@ -558,6 +558,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.generate = true
       @yardoc.run
       @yardoc.options[:markup].should == :none
+      mod.clear_markup_cache
     end
   end
   
