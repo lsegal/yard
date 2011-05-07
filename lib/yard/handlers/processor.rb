@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module YARD
   module Handlers
     # Iterates over all statements in a file and delegates them to the
@@ -54,6 +56,21 @@ module YARD
 
       # @return [Symbol] the parser type (:ruby, :ruby18, :c)
       attr_accessor :parser_type
+      
+      # Handlers can share state through this attribute.
+      # 
+      # @example Sharing state among two handlers
+      #   class Handler1 < YARD::Handlers::Ruby::Base
+      #     handles :class
+      #     process { globals.foo = :bar }
+      #   end
+      # 
+      #   class Handler2 < YARD::Handlers::Ruby::Base
+      #     handles :method
+      #     process { puts globals.foo }
+      #   end
+      # @return [OpenStruct] global shared state for post-processing stage
+      attr_accessor :globals
 
       # Creates a new Processor for a +file+.
       #
@@ -75,6 +92,7 @@ module YARD
         @load_order_errors = load_order_errors
         @parser_type = parser_type
         @handlers_loaded = {}
+        @globals = OpenStruct.new
         load_handlers
       end
 

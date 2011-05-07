@@ -59,6 +59,28 @@ describe YARD::Handlers::Base do
     end
   end
   
+  describe 'sharing global state' do
+    it "should allow globals to share global state among handlers" do
+      class GlobalStateHandler1 < Handlers::Ruby::Base
+        class << self; attr_accessor :state end
+        handles :class
+        process { self.class.state = globals.foo; globals.foo = :bar }
+      end
+
+      class GlobalStateHandler2 < Handlers::Ruby::Base
+        class << self; attr_accessor :state end
+        handles :def
+        process { self.class.state = globals.foo }
+      end
+
+      2.times do
+        YARD.parse_string 'class Foo; end; def foo; end'
+        GlobalStateHandler1.state.should == nil
+        GlobalStateHandler2.state.should == :bar
+      end
+    end
+  end if HAVE_RIPPER
+  
   describe '#push_state' do
     def process(klass)
       state = OpenStruct.new(:namespace => "ROOT", :scope => :instance, :owner => "ROOT")
