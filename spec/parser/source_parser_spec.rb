@@ -292,7 +292,7 @@ describe YARD::Parser::SourceParser do
         Registry.all(:class).first.path.should == "FooBar"
         result.enumerator[0].source.encoding.to_s.downcase.should == encoding
       end
-    end if RUBY19
+    end if HAVE_RIPPER && RUBY19
   end
   
   describe '#parse_in_order' do
