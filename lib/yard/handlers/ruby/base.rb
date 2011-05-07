@@ -36,12 +36,12 @@ module YARD
           case node.type
           when :var_ref
             if !node.parent || node.parent.type == :list
-              return true if node[0].type == :ident && node[0][0] == name
+              return true if node[0].type == :ident && (name.nil? || node[0][0] == name)
             end
           when :fcall, :command
-            return true if node[0][0] == name
+            return true if name.nil? || node[0][0] == name
           when :call, :command_call
-            return true if node[2][0] == name
+            return true if name.nil? || node[2][0] == name
           end
           false
         end
@@ -80,8 +80,8 @@ module YARD
           #
           # @param [#to_s] name matches the method call of this name
           # @return [void]
-          def method_call(name)
-            MethodCallWrapper.new(name.to_s)
+          def method_call(name = nil)
+            MethodCallWrapper.new(name ? name.to_s : nil)
           end
 
           # Matcher for handling a node with a specific meta-type. An {AstNode}

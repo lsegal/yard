@@ -91,3 +91,20 @@ class D
   # foo bar
   def a; end
 end
+
+class E
+  # @macro prop
+  #   @method $1(value)
+  #   $3
+  #   @return [$2]
+  def self.property(name, ret_type, docstring)
+  end
+  
+  property :foo, String, "create a foo"
+  
+  # @macro xyz
+  #   @method $1
+  def xyz; end
+  
+  xyz :a
+end
