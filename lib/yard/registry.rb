@@ -48,7 +48,7 @@ module YARD
       # @return [nil] if +for_writing+ is set to false and no yardoc file
       #   is found, returns nil.
       def yardoc_file_for_gem(gem, ver_require = ">= 0", for_writing = false)
-        spec = Gem.source_index.find_name(gem, ver_require)
+        spec = Gem::Specification.find_by_name(gem, ver_require)
         return if spec.empty?
         spec = spec.first
 
