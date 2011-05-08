@@ -10,6 +10,7 @@ module YARD
     autoload :Gems,           __p('cli/gems')
     autoload :Graph,          __p('cli/graph')
     autoload :Help,           __p('cli/help')
+    autoload :List,           __p('cli/list')
     autoload :Server,         __p('cli/server')
     autoload :Stats,          __p('cli/stats')
     autoload :Yardoc,         __p('cli/yardoc')

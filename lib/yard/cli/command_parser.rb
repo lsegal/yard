@@ -37,6 +37,7 @@ module YARD
         :gems   => Gems,
         :graph  => Graph,
         :help   => Help,
+        :list   => List,
         :ri     => YRI,
         :server => Server,
         :stats  => Stats
