@@ -294,3 +294,126 @@ The `setup.rb` file would look like:
 
 Now, when a class object is formatted as HTML, our customsection.erb will be 
 appended to the rendered data.
+
+
+### Overriding Stylesheets and Javascripts
+
+Template authors can override existing stylesheets and javascripts by creating
+a file with the same name as existing files within the `fulldoc` template. The
+documentation output will utilize the new replacement file.
+
+YARD's `fulldoc` template defines three stylesheets:
+
+    /yard/templates/default/:
+    |-- fulldoc
+    |   |-- html
+    |   |   |-- css
+    |   |   |   |-- common.css
+    |   |   |   |-- full_list.css
+    |   |   |   |-- style.css
+
+The `style.css` is the primary stylesheet for the HTML output.
+
+The `full_list.css` is an additional stylesheet loaded specifically for the
+search field menus (i.e. class list, method list, and file list).
+
+The `common.css` is an empty css file that an template author can easily override
+to provide custom styles for their plugin. However, if a user installs multiple
+plugins that utilize this same file to deliver styles, it is possible that they
+will be overridden.
+
+YARD's `fulldoc` template defines three javascript files:
+
+    /yard/templates/default/:
+    |-- fulldoc
+    |   |-- html
+    |   |   |-- js
+    |   |   |   |-- app.js
+    |   |   |   |-- full_list.js
+    |   |   |   |-- jquery.js
+
+The `app.js` is the primary javascript file for the HTML output.
+
+The `full_list.js` defines additional javascript loaded specifically for the
+search field menus (i.e. class list, method list, and file list).
+
+The `jquery.js` is copy of the jquery javascript library.
+
+### Adding a Custom Stylesheet or Javascript
+
+To load additional stylesheets and javascripts with every page (except the search
+field menus) generated from the base `layout` template:
+
+  1. Define your own custom stylesheet and/or javascript file:
+
+        /path/to/mytemplates/:
+        |-- fulldoc
+        |   |-- html
+        |   |   |-- css
+        |   |   |   |-- custom.css
+        |   |   |-- js
+        |   |   |   |-- custom.js
+
+    
+  2. Generate the asset to in the output by adding an asset line to your `fulldoc` `setup.rb`
+  
+        def init
+          super
+          # ... other template actions ...
+          asset('css/custom.css',file('css/custom.css',true))
+          asset('js/custom.js',file('js/custom.js',true))
+        end
+  
+  3. Create a `setup.rb` in a `layout` template directory and override the methods 
+     `stylesheets` and `javascripts`.
+  
+        /path/to/mytemplates/:
+        |-- layout
+        |   |-- html
+        |   |   |-- setup.rb
+  
+        def stylesheets
+          # Load the existing stylesheets while appending the custom one
+          super + %w(css/custom.css)
+        end
+    
+        def javascripts
+          # Load the existing javascripts while appending the custom one
+          super + %w(js/custom.js)
+        end
+    
+
+To load additional stylesheets and javascripts for the search menus loaded from 
+the `fulldoc` template:
+
+  1. Define your own custom stylesheet and/or javascript file.
+
+        /path/to/mytemplates/:
+        |-- fulldoc
+        |   |-- html
+        |   |   |-- css
+        |   |   |   |-- custom_full_menu.css
+        |   |   |-- js
+        |   |   |   |-- custom_full_menu.js
+
+
+  2. Generate the asset to in the output by adding an asset line to your `fulldoc` `setup.rb`
+
+        def init
+          super
+          # ... other template actions ...
+          asset('css/custom_full_menu.css',file('css/custom_full_menu.css',true))
+          asset('js/custom_full_menu.js',file('js/custom_full_menu.js',true))
+        end
+
+  3. Override the methods `stylesheets_full_list` and `javascripts_full_list`.
+
+        def stylesheets_full_list
+          # Load the existing stylesheets while appending the custom one
+          super + %w(css/custom.css)
+        end
+
+        def javascripts_full_list
+          # Load the existing javascripts while appending the custom one
+          super + %w(js/custom.js)
+        end
