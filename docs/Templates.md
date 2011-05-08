@@ -364,7 +364,7 @@ field menus) generated from the base `layout` template:
           asset('js/custom.js',file('js/custom.js',true))
         end
   
-  3. Create a `setup.rb` in a `layout` template directory and override the methods 
+  3. Create a `setup.rb` in the `layout` template directory and override the methods 
      `stylesheets` and `javascripts`.
   
         /path/to/mytemplates/:
@@ -417,3 +417,117 @@ the `fulldoc` template:
           # Load the existing javascripts while appending the custom one
           super + %w(js/custom.js)
         end
+
+### Overriding Search Menus
+
+By default YARD's `fulldoc` template generates three search fields:
+
+  * Class List
+  * Method List
+  * File List
+
+Their contents are rendered in methods within the `fulldoc` template:
+
+  * `generate_class_list`
+  * `generate_method_list`
+  * `generate_file_list`
+  
+To override these lists you will need to:
+
+  1. Create a `setup.rb` in the `fulldoc` template directory and override the
+     particular method.
+     
+         /path/to/mytemplates/:
+         |-- fulldoc
+         |   |-- html
+         |   |   |-- setup.rb
+ 
+         def generate_method_list
+           @items = prune_method_listing(Registry.all(:method), false)
+           @items = @items.reject {|m| m.name.to_s =~ /=$/ && m.is_attribute? }
+   
+           # Here we changed the functionality to reverse the order of displayed methods
+           @items = @items.sort_by {|m| m.name.to_s }.reverse
+           @list_title = "Method List"
+           @list_type = "methods"
+           asset('method_list.html', erb(:full_list))
+         end
+
+### Adding Additional Search Menus
+
+By default YARD's `fulldoc` template generates three search fields:
+
+  * Class List
+  * Method List
+  * File List
+
+These are defined in the `layout` template method `menu_lists` and pulled into
+the `fulldoc` template through a similarly named method.
+
+To load an additional menu item:
+
+
+  1. Create a `setup.rb` in the `layout` template directory and override the methods 
+   `menu_lists`. The `type` informs the search field the name of the file.
+    The `title` is the name that appears above the section when viewed in frames.
+    The `search_title` is the name that appears in the search field tab on the page.
+   
+
+        /path/to/mytemplates/:
+        |-- layout
+        |   |-- html
+        |   |   |-- setup.rb
+
+        def menu_lists
+          # Load the existing menus
+          super + [ { :type => 'feature', :title => 'Features', :search_title => 'Feature List' } ]
+        end
+        
+  2. Create a `setup.rb` in the `fulldoc` template directory and create a method
+     to generate a menu for the specified `type`. 
+     The method `generate_assets` will look for a function with a signature prefixed
+     with `generate`, the type value specified, and the suffix `list`. Within that 
+     method you can configure and load the specific objects you wish to display.
+     
+         /path/to/mytemplates/:
+         |-- fulldoc
+         |   |-- html
+         |   |   |-- setup.rb
+
+         def generate_feature_list
+         
+           # load all the features from the Registry
+           @items = Registry.all(:feature)
+           @list_title = "Feature List"
+           @list_type = "feature"
+           
+           # optional: the specified stylesheet class
+           # when not specified it will default to the value of @list_type
+           @list_class = "class"
+           
+           # Generate the full list html file with named feature_list.html
+           # @note this file must be match the name of the type
+           asset('feature_list.html', erb(:full_list))
+         end
+
+
+  3. Define custom javascript to load the search fields and the keyboard shortcuts.
+  
+        function featureSearchFrameLinks() {
+            $('#feature_list_link').click(function() {
+                toggleSearchFrame(this, relpath + 'feature_list.html');
+            });
+        }
+
+        function featureKeyboardShortcuts() {
+          if (window.top.frames.main) return;
+          $(document).keypress(function(evt) {
+            if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
+            if (typeof evt.orignalTarget !== "undefined" &&  
+                (evt.originalTarget.nodeName == "INPUT" || 
+                evt.originalTarget.nodeName == "TEXTAREA")) return;
+            switch (evt.charCode) {
+              case 82: case 114: $('#feature_list_link').click(); break; // 'r'
+            }
+          });
+        }
