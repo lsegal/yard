@@ -51,6 +51,3 @@ li.collapsed.clicked a.toggle { background-position: top right; }
 #full_list.insearch li.found { display: list-item; padding-left: 10px; }
 #full_list.insearch li a.toggle { display: none; }
 #full_list.insearch li small.search_info { display: block; }
-
-#nav a:after { content: " | "; }
-#nav a:last-child:after { content: " "; }
