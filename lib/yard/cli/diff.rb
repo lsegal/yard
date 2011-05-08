@@ -9,9 +9,11 @@ module YARD
     # @since 0.6.0
     class Diff < Command
       def initialize
-        require_rubygems
         super
         @list_all = false
+        @use_git = false
+        @old_git_commit = nil
+        @old_path = Dir.pwd
         log.show_backtraces = true
       end
 
@@ -21,12 +23,17 @@ module YARD
 
       def run(*args)
         registry = optparse(*args).map do |gemfile|
-          if load_gem_data(gemfile)
-            log.info "Found #{gemfile}"
+          if @use_git
+            load_git_commit(gemfile)
             Registry.all.map {|o| o.path }
           else
-            log.error "Cannot find gem #{gemfile}"
-            nil
+            if load_gem_data(gemfile)
+              log.info "Found #{gemfile}"
+              Registry.all.map {|o| o.path }
+            else
+              log.error "Cannot find gem #{gemfile}"
+              nil
+            end
           end
         end.compact
 
@@ -56,8 +63,23 @@ module YARD
       end
 
       private
+      
+      def load_git_commit(commit)
+        commit_path = 'git_commit' + commit.gsub(/\W/, '_')
+        tmpdir = File.join(Dir.tmpdir, commit_path)
+        log.info "Expanding #{commit} to #{tmpdir}..."
+        Dir.chdir(@old_path)
+        FileUtils.mkdir_p(tmpdir)
+        FileUtils.cp_r('.', tmpdir)
+        Dir.chdir(tmpdir)
+        log.info("git says: " + `git reset --hard #{commit}`.chomp)
+        generate_yardoc(tmpdir)
+        Dir.chdir(@old_path)
+        cleanup(commit_path)
+      end
 
       def load_gem_data(gemfile)
+        require_rubygems
         Registry.clear
 
         # First check for argument as .yardoc file
@@ -161,6 +183,9 @@ module YARD
 
         opts.on('-a', '--all', 'List all objects, even if they are inside added/removed module/class') do
           @list_all = true
+        end
+        opts.on('--git', 'Compare versions from two git commit/branches') do
+          @use_git = true
         end
         common_options(opts)
         parse_options(opts, args)
