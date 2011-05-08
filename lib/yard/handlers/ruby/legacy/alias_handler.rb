@@ -1,6 +1,7 @@
 # (see Ruby::AliasHandler)
 class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy::Base
   handles /\Aalias(_method)?(\s|\()/
+  namespace_only
 
   process do
     if TkALIAS === statement.tokens.first

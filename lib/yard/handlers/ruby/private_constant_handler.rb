@@ -1,7 +1,7 @@
 # Sets visibility of a constant (class, module, const)
 class YARD::Handlers::Ruby::PrivateConstantHandler < YARD::Handlers::Ruby::Base
-  namespace_only
   handles method_call(:private_constant)
+  namespace_only
 
   process do
     errors = []

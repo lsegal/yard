@@ -3,12 +3,9 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
   include YARD::Handlers::Ruby::StructHandlerMethods
   HANDLER_MATCH = /\A[A-Z]\w*\s*=[^=]\s*/m
   handles HANDLER_MATCH
+  namespace_only
 
   process do
-    # Don't document CONSTANTS if they're set in second class objects (methods) because
-    # they're not "static" when executed from a method
-    return unless owner.is_a? NamespaceObject
-
     name, value = *statement.tokens.to_s.split(/\s*=\s*/, 2)
     if value =~ /\A\s*Struct.new(?:\s*\(?|\b)/
       process_structclass(name, $')

@@ -9,8 +9,8 @@
 #     end
 #   end
 class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
-  namespace_only
   handles meta_type(:condition)
+  namespace_only
 
   process do
     condition = parse_condition

@@ -1,8 +1,8 @@
 # Handles 'extend' call to include modules into the class scope of another
 # @see MixinHandler
 class YARD::Handlers::Ruby::ExtendHandler < YARD::Handlers::Ruby::MixinHandler
-  namespace_only
   handles method_call(:extend)
+  namespace_only
 
   def scope; :class end
 

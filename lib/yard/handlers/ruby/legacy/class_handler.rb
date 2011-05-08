@@ -2,6 +2,7 @@
 class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
   handles TkCLASS
+  namespace_only
 
   process do
     if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/m
