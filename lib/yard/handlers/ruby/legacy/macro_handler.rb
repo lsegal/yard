@@ -10,7 +10,13 @@ module YARD
           namespace_only
 
           process do
-            return if AttributeHandler.handles?(statement) # ignore attributes
+            return if namespace == Registry.root
+            globals.__attached_macros ||= {}
+            if !globals.__attached_macros[caller_method]
+              return if Ruby::MacroHandler::IGNORE_METHODS[caller_method]
+              return if !statement.comments || statement.comments.empty?
+            end
+
             comments = statement.comments ? statement.comments.join("\n") : ""
             @macro, @docstring = nil, Docstring.new(comments)
             find_or_create_macro

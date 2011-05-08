@@ -1,8 +1,8 @@
 # Handles class declarations
 class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
-  namespace_only
   handles :class, :sclass
+  namespace_only
 
   process do
     if statement.type == :class

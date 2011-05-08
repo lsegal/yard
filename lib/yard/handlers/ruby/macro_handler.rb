@@ -7,9 +7,19 @@ module YARD
         include MacroHandlerMethods
         handles method_call
         namespace_only
-
+        
+        IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor 
+          attr_reader attr_writer extend include public private protected 
+          private_constant).map {|n| [n, true] }.flatten]
+        
         process do
-          return if AttributeHandler.handles?(statement) # ignore attributes
+          return if namespace == Registry.root
+          globals.__attached_macros ||= {}
+          if !globals.__attached_macros[caller_method]
+            return if IGNORE_METHODS[caller_method]
+            return if !statement.comments || statement.comments.empty?
+          end
+          
           @macro, @docstring = nil, Docstring.new(statement.comments)
           find_or_create_macro
           return if !@macro && !statement.comments_hash_flag && @docstring.tags.size == 0

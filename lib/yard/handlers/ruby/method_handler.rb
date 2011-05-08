@@ -66,7 +66,8 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       # create macro if it has one
       macro_name = obj.tag(:macro).name
       if macro_name
-        YARD::CodeObjects::MacroObject.create(macro_name, obj.tag(:macro).text, obj)
+        macro = YARD::CodeObjects::MacroObject.create(macro_name, obj.tag(:macro).text, obj)
+        ((globals.__attached_macros ||= {})[obj.name.to_s] ||= []) << macro
       else
         log.warn "Invalid/missing macro name for #{obj.path} (#{statement.file}:#{statement.line})"
       end

@@ -1,8 +1,8 @@
 # Handles any constant assignment
 class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::StructHandlerMethods
-  namespace_only
   handles :assign
+  namespace_only
 
   process do
     if statement[1].call? && statement[1][0][0] == s(:const, "Struct") &&

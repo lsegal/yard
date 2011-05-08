@@ -1,6 +1,7 @@
 # Handles alias and alias_method calls
 class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
   handles :alias, method_call(:alias_method)
+  namespace_only
 
   process do
     names = []

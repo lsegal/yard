@@ -1,4 +1,5 @@
 require 'stringio'
+require 'ostruct'
 
 begin require 'continuation'; rescue LoadError; end
 
@@ -163,6 +164,7 @@ module YARD
         # @param [Array<String>] files a list of files to queue for parsing
         # @return [void]
         def parse_in_order(*files)
+          global_state = OpenStruct.new
           files = files.sort_by {|x| x.length if x }
           while file = files.shift
             begin
@@ -171,7 +173,7 @@ module YARD
                 file.last.call
               elsif file.is_a?(String)
                 log.debug("Processing #{file}...")
-                new(parser_type, true).parse(file)
+                new(parser_type, true, global_state).parse(file)
               end
             rescue LoadOrderError => e
               # Out of order file. Push the context to the end and we'll call it
@@ -198,9 +200,11 @@ module YARD
       #
       # @param [Symbol] parser_type the parser type to use
       # @param [Boolean] load_order_errors whether or not to raise the {LoadOrderError}
-      def initialize(parser_type = SourceParser.parser_type, load_order_errors = false)
+      # @param [OpenStruct] globals global state to be re-used across separate source files
+      def initialize(parser_type = SourceParser.parser_type, load_order_errors = false, globals = nil)
         @load_order_errors = load_order_errors
         @file = '(stdin)'
+        @globals = globals || OpenStruct.new
         self.parser_type = parser_type
       end
 
@@ -273,7 +277,7 @@ module YARD
       def post_process
         return unless @parser.respond_to? :enumerator
         return unless enumerator = @parser.enumerator
-        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
+        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type, @globals)
         post.process(enumerator)
       end
 

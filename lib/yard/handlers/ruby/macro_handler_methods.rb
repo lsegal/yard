@@ -10,15 +10,16 @@ module YARD
             macro_name = @docstring.tag(:macro).name
             raise UndocumentableError, 'method/attribute, missing macro name' unless macro_name
             @macro = MacroObject.find_or_create(@docstring, P(namespace, caller_method))
+            if @macro.attached?
+              globals.__attached_macros[caller_method] ||= []
+              globals.__attached_macros[caller_method] |= [@macro]
+            end
             return if @macro
           end
 
           # Look for implicit macros
-          Registry.all(:macro).each do |macro|
-            next unless macro.attached?
-            next unless macro.method_object.name == caller_method.to_sym
+          (globals.__attached_macros[caller_method] || []).each do |macro|
             namespace.inheritance_tree.each do |obj|
-              ensure_loaded!(obj)
               break(@macro = macro) if obj == macro.method_object.namespace
             end
           end

@@ -1,7 +1,7 @@
 # (see Ruby::PrivateConstantHandler)
 class YARD::Handlers::Ruby::Legacy::PrivateConstantHandler < YARD::Handlers::Ruby::Legacy::Base
-  namespace_only
   handles /\Aprivate_constant(\s|\(|$)/
+  namespace_only
 
   process do
     tokval_list(statement.tokens[2..-1], :attr, TkCONSTANT).each do |name|

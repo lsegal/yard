@@ -170,7 +170,7 @@ module YARD
           if name.to_s[0,2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root
-          elsif name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
+          elsif name =~ /(?:#{NSEPQ})([^:]+)$/
             return new(Proxy.new(namespace, $`), $1, *args, &block)
           end
 
