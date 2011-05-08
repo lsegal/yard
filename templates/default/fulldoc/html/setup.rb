@@ -26,6 +26,9 @@ def init
   end
 end
 
+# Generate an HTML document for the specified object. This method is used by
+# most of the objects found in the Registry.
+# @param [CodeObject] object to be saved to HTML
 def serialize(object)
   options[:object] = object
   serialize_index(options) if object == '_index.html' && options[:files].empty?
@@ -34,6 +37,9 @@ def serialize(object)
   end
 end
 
+# Generate the documentation output in one file (--one-file) which will load the
+# contents of all the javascript and css and output the entire contents without 
+# depending on any additional files
 def serialize_onefile
   options[:css_data] = stylesheets.map {|sheet| file(sheet,true) }.join("\n")
   options[:js_data] = javascripts.map {|script| file(script,true) }.join("")
@@ -42,12 +48,21 @@ def serialize_onefile
   end
 end
 
+# Generate the index document for the output
+# @params [Hash] options contains data and flags that influence the output 
 def serialize_index(options)
   Templates::Engine.with_serializer('index.html', options[:serializer]) do
     T('layout').run(options)
   end
 end
 
+# Generate a single HTML file with the layout template applied. This is generally
+# the README file or files specified on the command-line.
+# 
+# @param [File] file object to be saved to the output
+# @param [String] title currently unused
+# 
+# @see layout#diskfile
 def serialize_file(file, title = nil)
   options[:object] = Registry.root
   options[:file] = file
@@ -60,6 +75,16 @@ def serialize_file(file, title = nil)
   options.delete(:file)
 end
 
+# 
+# Generates a file to the output with the specified contents.
+# 
+# @example saving a custom html file to the documenation root
+#
+#   asset('my_custom.html','<html><body>Custom File</body></html>')
+# 
+# @param [String] path relative to the document output where the file will be
+#   created.
+# @param [String] content the contents that are saved to the file.
 def asset(path, content)
   options[:serializer].serialize(path, content) if options[:serializer]
 end
@@ -82,6 +107,10 @@ def menu_lists
   Object.new.extend(T('layout')).menu_lists
 end
 
+# Generates all the javascript files, stylesheet files, menu lists
+# (i.e. class, method, and file) based on the the values returned from the 
+# layout's menu_list method, and the frameset in the documentation output
+# 
 def generate_assets
   @object = Registry.root
 
@@ -103,6 +132,8 @@ def generate_assets
   generate_frameset
 end
 
+# Generate a searchable method list in the output
+# @see ModuleHelper#prune_method_listing
 def generate_method_list
   @items = prune_method_listing(Registry.all(:method), false)
   @items = @items.reject {|m| m.name.to_s =~ /=$/ && m.is_attribute? }
@@ -112,6 +143,7 @@ def generate_method_list
   asset('method_list.html', erb(:full_list))
 end
 
+# Generate a searchable class list in the output
 def generate_class_list
   @items = options[:objects]
   @list_title = "Class List"
@@ -119,6 +151,7 @@ def generate_class_list
   asset('class_list.html', erb(:full_list))
 end
 
+# Generate a searchable file list in the output
 def generate_file_list
   @file_list = true
   @items = options[:files]
@@ -128,12 +161,15 @@ def generate_file_list
   @file_list = nil
 end
 
+# Generate the frame documentation in the output
 def generate_frameset
   @javascripts = javascripts_full_list
   @stylesheets = stylesheets_full_list
   asset('frames.html', erb(:frames))
 end
 
+# @return [String] HTML output of the classes to be displayed in the
+#    full_list_class template.
 def class_list(root = Registry.root)
   out = ""
   children = run_verifier(root.children)
