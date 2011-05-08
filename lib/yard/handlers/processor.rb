@@ -10,7 +10,10 @@ module YARD
     # statements will have access to this state. This allows "public",
     # "protected" and "private" statements to be handled in classes and modules.
     # In addition, the {#namespace} can be set during parsing to control
-    # where objects are being created from.
+    # where objects are being created from. You can also access extra stateful
+    # properties that any handler can set during the duration of the post
+    # processing of a file from {#extra_state}. If you need to access state
+    # across different files, look at {#globals}.
     #
     # @see Handlers::Base
     class Processor
@@ -57,7 +60,9 @@ module YARD
       # @return [Symbol] the parser type (:ruby, :ruby18, :c)
       attr_accessor :parser_type
       
-      # Handlers can share state through this attribute.
+      # Handlers can share state for the entire post processing stage through 
+      # this attribute. Note that post processing stage spans multiple files.
+      # To share state only within a single file, use {#extra_state}
       # 
       # @example Sharing state among two handlers
       #   class Handler1 < YARD::Handlers::Ruby::Base
@@ -70,7 +75,19 @@ module YARD
       #     process { puts globals.foo }
       #   end
       # @return [OpenStruct] global shared state for post-processing stage
+      # @see #extra_state
       attr_accessor :globals
+      
+      # Share state across different handlers inside of a file.
+      # This attribute is similar to {#visibility}, {#scope}, {#namespace}
+      # and {#owner}, in that they all maintain state across all handlers
+      # for the entire source file. Use this attribute to store any data
+      # your handler might need to save during the parsing of a file. If
+      # you need to save state across files, see {#globals}.
+      # 
+      # @return [OpenStruct] an open structure that can store arbitrary data
+      # @see #globals
+      attr_accessor :extra_state
 
       # Creates a new Processor for a +file+.
       #
@@ -83,7 +100,9 @@ module YARD
       # @param [Symbol] parser_type the parser type (:ruby, :ruby18, :c) from
       #   the parser. Used to select the handler (since handlers are specific
       #   to a parser type).
-      def initialize(file = nil, load_order_errors = false, parser_type = Parser::SourceParser.parser_type)
+      # @param [OpenStruct] globals the object holding all state during the
+      #   post processing stage
+      def initialize(file = nil, load_order_errors = false, parser_type = Parser::SourceParser.parser_type, globals = nil)
         @file = file || "(stdin)"
         @namespace = YARD::Registry.root
         @visibility = :public
@@ -92,7 +111,8 @@ module YARD
         @load_order_errors = load_order_errors
         @parser_type = parser_type
         @handlers_loaded = {}
-        @globals = OpenStruct.new
+        @globals = globals || OpenStruct.new
+        @extra_state = OpenStruct.new
         load_handlers
       end
 

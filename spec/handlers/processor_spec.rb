@@ -16,4 +16,8 @@ describe YARD::Handlers::Processor do
   it "should start in root namespace" do
     @proc.namespace.should == Registry.root
   end
+  
+  it "should have a globals structure" do
+    @proc.globals.should be_a(OpenStruct)
+  end
 end

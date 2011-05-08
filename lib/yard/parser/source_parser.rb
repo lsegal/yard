@@ -1,4 +1,5 @@
 require 'stringio'
+require 'ostruct'
 
 begin require 'continuation'; rescue LoadError; end
 
@@ -201,6 +202,7 @@ module YARD
       def initialize(parser_type = SourceParser.parser_type, load_order_errors = false)
         @load_order_errors = load_order_errors
         @file = '(stdin)'
+        @globals = OpenStruct.new
         self.parser_type = parser_type
       end
 
@@ -273,7 +275,7 @@ module YARD
       def post_process
         return unless @parser.respond_to? :enumerator
         return unless enumerator = @parser.enumerator
-        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type)
+        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type, @globals)
         post.process(enumerator)
       end
 

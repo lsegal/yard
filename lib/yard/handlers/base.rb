@@ -323,6 +323,9 @@ module YARD
       # (see Processor#globals)
       attr_reader :globals
 
+      # (see Processor#extra_state)
+      attr_reader :extra_state
+      
       undef owner, owner=, namespace, namespace=
       undef visibility, visibility=, scope, scope=
 
@@ -335,6 +338,7 @@ module YARD
       def scope; parser.scope end
       def scope=(v); parser.scope=(v) end
       def globals; parser.globals end
+      def extra_state; parser.extra_state end
 
       # Executes a given block with specific state values for {#owner},
       # {#namespace} and {#scope}.
