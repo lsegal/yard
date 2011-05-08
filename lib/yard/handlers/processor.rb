@@ -111,7 +111,7 @@ module YARD
         @load_order_errors = load_order_errors
         @parser_type = parser_type
         @handlers_loaded = {}
-        @globals = globals
+        @globals = globals || OpenStruct.new
         @extra_state = OpenStruct.new
         load_handlers
       end
