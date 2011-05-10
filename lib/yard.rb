@@ -46,6 +46,9 @@ Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|
   require file
 end
 
+# Backport RubyGems SourceIndex and other classes
+require File.join(YARD::ROOT, 'yard', 'rubygems', 'backports')
+
 ['autoload', 'globals'].each do |file|
   require File.join(YARD::ROOT, 'yard', file)
 end
