@@ -179,6 +179,23 @@ describe YARD::Parser::SourceParser do
       YARD.parse_string "# encoding: utf-8\n# this is a comment\nclass Foo; end"
       Registry.at(:Foo).docstring.should == "this is a comment"
     end
+    
+    it "should add macros on any object" do
+      YARD.parse_string <<-eof
+        # @macro [new] foo
+        # This is a macro
+        # @return [String] the string
+        class Foo
+          # @macro foo
+          def foo; end
+        end
+      eof
+      
+      macro = CodeObjects::MacroObject.find('foo')
+      macro.macro_data.should == "This is a macro\n@return [String] the string"
+      Registry.at('Foo').docstring.all.should ==  macro.macro_data
+      Registry.at('Foo#foo').docstring.all.should == macro.macro_data
+    end
   end
 
   describe '#parse' do

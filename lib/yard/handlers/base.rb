@@ -405,8 +405,13 @@ module YARD
           object.add_file(parser.file, statement.line, statement.comments)
 
           # Add docstring if there is one.
+          object.docstring = statement.comments if statement.comments
+
+          # Expand/create any @macro tags
+          expand_macro(object, find_or_create_macro(object))
+
+          # Add hash_flag/line_range
           if statement.comments
-            object.docstring = statement.comments
             object.docstring.hash_flag = statement.comments_hash_flag
             object.docstring.line_range = statement.comments_range
           end
@@ -492,6 +497,73 @@ module YARD
           end
         end
         object
+      end
+      
+      # @group Macro Support
+      
+      # @abstract Implement this method to return the parameters in a method call
+      #   statement. It should return an empty list if the statement is not a
+      #   method call.
+      # @return [Array<String>] a list of argument names
+      def call_params
+        raise NotImplementedError
+      end
+      
+      # @abstract Implement this method to return the method being called in
+      #   a method call. It should return nil if the statement is not a method
+      #   call.
+      # @return [String] the method name being called
+      # @return [nil] if the statement is not a method call
+      def caller_method
+        raise NotImplementedError
+      end
+      
+      # Attempts to find or create a macro if a +@macro+ tag is found in the
+      # docstring (or the object's docstring).
+      # 
+      # @param [Docstring, CodeObjects::Base] object_or_docstring the docstring
+      #   or it's object with which to check for a macro
+      # @return [CodeObjects::MacroObject] the newly created macro
+      # @return [nil] if the docstring does not create or reference a macro
+      def find_or_create_macro(object_or_docstring)
+        if object_or_docstring.is_a?(Docstring)
+          object, docstring = nil, object_or_docstring
+        else
+          object, docstring = object_or_docstring, object_or_docstring.docstring
+        end
+        return unless macro_tag = docstring.tag(:macro)
+        unless macro_tag.name
+          if object
+            log.warn "Invalid/missing macro name for #{object.path} (#{parser.file}:#{statement.line})"
+            return nil
+          else
+            raise UndocumentableError, 'method/attribute, missing macro name'
+          end
+        end
+        caller_obj = caller_method ? P(namespace, caller_method) : nil
+        if macro = MacroObject.find_or_create(docstring, caller_obj)
+          attached_method_name = caller_method
+          if object && object.is_a?(MethodObject) && object.scope == :class
+            macro.method_object = object
+            attached_method_name = object.name.to_s
+          end
+          if macro.attached?
+            globals.__attached_macros[attached_method_name] ||= []
+            globals.__attached_macros[attached_method_name] |= [macro]
+          end
+        end
+        macro
+      end
+      
+      # Sets the docstring on +object+ to the expanded macro.
+      # @param [CodeObjects::Base] object the object to expand the macro on
+      # @param [CodeObjects::MacroObject] macro the macro object to expand
+      # @return [void]
+      def expand_macro(object, macro)
+        return unless macro
+        all_params = ([caller_method] + call_params).compact
+        data = MacroObject.apply_macro(macro, object.docstring, all_params, statement.source)
+        object.docstring = data
       end
     end
   end
