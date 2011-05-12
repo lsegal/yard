@@ -69,6 +69,7 @@ module YARD
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
     def replace(content)
+      content = content.join("\n") if content.is_a?(Array)
       @tags, @ref_tags = [], []
       @all = content
       super parse_comments(content)
