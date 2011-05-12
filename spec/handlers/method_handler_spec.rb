@@ -152,8 +152,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     obj.tag(:return).types.should == ['String']
   end
   
+  it "should handle macros on any object" do
+    macro = CodeObjects::MacroObject.find('xyz')
+    macro.should_not be_nil
+    macro.macro_data.should == '@method $1'
+  end
+  
   it "should skip macros on instance methods" do
-    CodeObjects::MacroObject.find('xyz').should be_nil
     Registry.at('E#a').should be_nil
   end
   

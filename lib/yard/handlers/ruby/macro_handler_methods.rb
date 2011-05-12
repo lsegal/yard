@@ -5,17 +5,9 @@ module YARD
         include CodeObjects
         include Parser
         
-        def find_or_create_macro
-          if @docstring.tag(:macro)
-            macro_name = @docstring.tag(:macro).name
-            raise UndocumentableError, 'method/attribute, missing macro name' unless macro_name
-            @macro = MacroObject.find_or_create(@docstring, P(namespace, caller_method))
-            if @macro.attached?
-              globals.__attached_macros[caller_method] ||= []
-              globals.__attached_macros[caller_method] |= [@macro]
-            end
-            return if @macro
-          end
+        def find_or_create_macro(docstring)
+          return @macro if @macro
+          return if @macro = super(docstring)
 
           # Look for implicit macros
           (globals.__attached_macros[caller_method] || []).each do |macro|
@@ -27,10 +19,19 @@ module YARD
         
         def expanded_macro_or_docstring
           return @docstring unless @macro
-          data = MacroObject.apply_macro(@macro, @docstring, method_and_call_params, statement.source)
+          all_params = ([caller_method] + call_params).compact
+          data = MacroObject.apply_macro(@macro, @docstring, all_params, statement.source)
           Docstring.new(data)
         end
-
+        
+        def expand_macro(object, macro)
+          if @docstring
+            object.docstring = @docstring
+          else
+            super(object, macro)
+          end
+        end
+        
         def sanitize_scope
           tmp_scope = @docstring.tag(:scope) ? @docstring.tag(:scope).text : ''
           %w(class instance).include?(tmp_scope) ? tmp_scope.to_sym : scope
@@ -99,19 +100,7 @@ module YARD
           name =~ /^def\b/ ? name : "def #{name}"
         end
 
-        def call_params
-          raise NotImplementedError
-        end
-        
-        def caller_method
-          raise NotImplementedError
-        end
-
         private
-        
-        def method_and_call_params
-          [caller_method] + call_params
-        end
 
         def attribute_writable?
           if @docstring.tag(:attribute) 

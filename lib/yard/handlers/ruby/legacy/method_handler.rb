@@ -65,18 +65,6 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       end
     end
 
-    if obj.has_tag?(:macro) && obj.scope == :class
-      # create macro if it has one
-      macro_name = obj.tag(:macro).name
-      if macro_name
-        macro = YARD::CodeObjects::MacroObject.create(macro_name, obj.tag(:macro).text, obj)
-        ((globals.__attached_macros ||= {})[obj.name.to_s] ||= []) << macro
-      else
-        log.warn "Invalid/missing macro name for #{obj.path} "+
-          "(#{parser.file}:#{statement.tokens.first.line_no})"
-      end
-    end
-
     if info = obj.attr_info
       if meth.to_s =~ /=$/ # writer
         info[:write] = obj if info[:read]

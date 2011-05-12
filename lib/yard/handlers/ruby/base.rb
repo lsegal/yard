@@ -135,6 +135,25 @@ module YARD
             parser.process(nodes)
           end
         end
+        
+        # @group Macro Handling
+
+        def call_params
+          return [] unless statement.respond_to?(:parameters)
+          statement.parameters(false).map do |param|
+            param.jump(:ident, :tstring_content).source
+          end
+        end
+
+        def caller_method
+          if statement.call?
+            statement.method_name(true).to_s
+          elsif statement.type == :var_ref
+            statement[0].jump(:ident).source
+          else
+            nil
+          end
+        end
       end
     end
   end
