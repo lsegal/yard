@@ -40,8 +40,8 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file.should == true
     end
     
-    it "should use lib/**/*.rb and ext/**/*.c as default file glob" do
-      @yardoc.files.should == ['lib/**/*.rb', 'ext/**/*.c']
+    it "should use {lib,app}/**/*.rb and ext/**/*.c as default file glob" do
+      @yardoc.files.should == ['{lib,app}/**/*.rb', 'ext/**/*.c']
     end
     
     it "should use rdoc as default markup type (but falls back on none)" do
@@ -408,7 +408,7 @@ describe YARD::CLI::Yardoc do
 
     it "should accept files section only containing extra files" do
       @yardoc.parse_arguments *%w( - LICENSE )
-      @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
+      @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
       @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
@@ -438,9 +438,9 @@ describe YARD::CLI::Yardoc do
   end
   
   describe 'Source file arguments' do
-    it "should accept no params and parse lib/**/*.rb ext/**/*.c" do
+    it "should accept no params and parse {lib,app}/**/*.rb ext/**/*.c" do
       @yardoc.parse_arguments
-      @yardoc.files.should == %w( lib/**/*.rb ext/**/*.c )
+      @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
     end
   end
   

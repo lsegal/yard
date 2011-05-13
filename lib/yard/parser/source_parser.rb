@@ -63,7 +63,7 @@ module YARD
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
         # @return the parser object that was used to parse the source.
-        def parse(paths = ["lib/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
+        def parse(paths = ["{lib,app}/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
           log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
             case path

@@ -249,7 +249,7 @@ module YARD
         optparse(*args)
 
         # Last minute modifications
-        self.files = ['lib/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        self.files = ['{lib,app}/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README*').first
         options[:readme] ||= CodeObjects::ExtraFileObject.new(readme) if readme
@@ -430,7 +430,8 @@ module YARD
         opts = OptionParser.new
         opts.banner = "Usage: yard doc [options] [source_files [- extra_files]]"
 
-        opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
+        opts.separator "(if a list of source files is omitted, "
+        opts.separator "  {lib,app}/**/*.rb ext/**/*.c is used.)"
         opts.separator ""
         opts.separator "Example: yardoc -o documentation/ - FAQ LICENSE"
         opts.separator "  The above example outputs documentation for files in"
