@@ -184,14 +184,130 @@ and recommended conventions for writing type specifications, see
 {http://yardoc.org/types.html}. Note that these conventions may change every now 
 and then, although we are working on a more "formal" type specification proposal.
 
-## Inter-document Linking
+## Documenting DSL Methods
+
+Application code in Ruby often makes use of DSL style metaprogrammed methods.
+The most common is the `attr_accessor` method, which of course has built-in
+support in YARD. However, frameworks and libraries often expose custom
+methods that perform similar metaprogramming tasks, and it is often useful
+to document their functionality in your application. Consider the `property`
+method in a project like {http://datamapper.org DataMapper}, which creates
+a typed attribute for a database model. The code might look like:
+
+    class Post
+      include DataMapper::Resource
+      
+      property :title, String
+    end
+    
+As of version 0.7.0, YARD will automatically pick up on these basic methods if
+you document them with a docstring. Therefore, simply adding some comments to
+the code will cause it to generate documentation:
+
+    class Post
+      include DataMapper::Resource
+      
+      # @return [String] the title property of the post
+      property :title, String
+    end
+
+Note that YARD uses the first argument in the method call to determine the
+method name. In some cases, this would not be the method name, and you would
+need to declare it manually. You can do so with the `@method` tag:
+
+    # @method foo
+    create_a_foo_method
+    
+The @method tag can also accept a full method signature with parameters:
+
+    # @method foo(name, opts = {})
+    create_a_foo_method
+
+You can also set visibility and scope, or modify the method signature with
+extra tags. The following adds documentation for a private class method:
+
+    # @method foo(opts = {})
+    # The foo method!
+    # @scope class
+    # @visibility private
+    create_a_private_foo_class_method
+    
+Finally, you can tag a method as an attribute by replacing the @method
+tag with @attribute. The @attribute tag allows for the flags [r], [w], or
+[rw] to declare a readonly, writeonly, or readwrite attribute, respectively.
+
+    # @attribute [w]
+    # The writeonly foo attribute!
+    a_writeonly_attribute :foo
+    
+(Note that if the name can be automatically detected, you do not need to
+specify it in the @method or @attribute tag)
+    
+However, you will notice a few drawbacks with this basic support:
+
+1. There is a fair bit of duplication in such documentation. Specifically, we
+   repeat the term String and title twice in the property example.
+2. We must write a code comment for this property to show up in the documentation.
+   If we do not write a comment, it is ignored.
+
+### Macros
+   
+Fortunately YARD 0.7.0 also adds macros, a powerful way to add support for
+these DSL methods on the fly without writing extra plugins. Macros allow
+you to interpolate arguments from the method call inside the docstring,
+reducing duplication. If we re-wrote the `property` example from above
+using a macro, it might look like:
+
+    class Post
+      include DataMapper::Resource
+  
+      # @macro dm.property
+      # @return [$2] the $1 $0 of the post
+      property :title, String
+    end
+
+(Note that $0 represents the method call, in this case `property`. The rest
+are arguments in the method call.)
+
+The above example is equivalent to the first version shown in the previous
+section. There is also some extra benefit to using this macro, in that we
+can re-apply it to any other property in our class by simply calling on
+the macro. The following:
+
+    # @macro dm.property
+    property :view_count, Integer
+
+Would be equivalent to:
+
+    # @return [Integer] the view_count property of the post
+    property :view_count, Integer
+
+Finally, macros can be "attached" to method calls, allowing them to be implicitly
+activated every time the method call is seen in the source code of the class,
+or an inheriting class. By simply adding the `[attach]` flag, the macro
+becomes implicit on future calls. All of the properties below get documented
+by using this snippet:
+
+    class Post
+      include DataMapper::Resource
+
+      # @macro [attach] dm.property
+      # @return [$2] the $1 $0 of the post
+      property :title, String
+      property :view_count, Integer
+      property :email, String
+    end
+
+You can read more about macros in the {file:docs/Tags.md Tags Overview} document.
+
+## Customized YARD Markup
 
 YARD supports a special syntax to link to other code objects, URLs, files,
 or embed docstrings between documents. This syntax has the general form
 of `{Name OptionalTitle}` (where `OptionalTitle` can have spaces, but `Name`
 cannot).
 
-### Linking Objects
+### Linking Objects `{...}`
 
 To link another "object" (class, method, module, etc.), use the format:
 
@@ -308,7 +424,57 @@ Any extra switches passed to the command-line now will be appended to your
 Note that options for `yardoc` are discussed in the {file:README.md README}, 
 and a full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
 
-<a name="docing"></a>
+### Documenting Extra Files
+
+"Extra files" are extra guide style documents that help to give a brief overview
+of how to use your library/framework, as well as any extra information that
+might be vital for your users. The most common "extra file" is the README,
+which is automatically detected by YARD if found in the root of your project
+(any file starting with `README*`). You can specify extra files on the command
+line (or in the `.yardopts` file) by listing them after the '-' separator:
+
+    yardoc lib/**/*.rb ext/**/*.c - LICENSE.txt
+  
+Note that the README will automatically be picked up, so you do not need to
+specify it. If you don't want to modify the default file globs, you can ignore
+the first set of arguments:
+
+    yardoc - LICENSE.txt
+    
+Below you can read about how to customize the look of these extra files, both
+with markup and pretty titles.
+
+#### Adding Meta-Data to Extra Files
+
+You can add YARD-style `@tag` metadata to the top of any extra file if prefixed
+by a `#` hash comment. YARD allows for arbitrary meta-data, but pays special
+attention to the tags `@markup` and `@title`. Note that there cannot be any
+whitespace before the tags. Here is an example of some tag data in a README:
+
+    # @markup markdown
+    # @title The Best Library in the World!
+    # @author The Author Name
+    
+    This is the best library you will ever meet. Lipsum ...
+
+The `@markup` tag allows you to specify a markup format to use for the file,
+including "markdown", "textile", "rdoc", "ruby", "text", "html", or "none" 
+(no markup). This can be used when the markup cannot be auto-detected using
+the extension of the filename, if the file has no extension, or if you want
+to override the auto-detection.
+
+The `@title` tag allows you to specify a full title name for the document.
+By default, YARD uses the filename as the title of the document and lists
+it in the file list in the index and file menu. In some cases, the file name
+might not be descriptive enough, so YARD allows you to specify a full title:
+
+    contents of TITLE.txt:
+    # @title The Title of The Document
+
+Currently all other meta-data is hidden from view, though accessible
+programmatically using the {YARD::CodeObjects::ExtraFileObject} class.
+
+<a name="config"></a>
 
 ## Configuring YARD
 
