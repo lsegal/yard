@@ -550,6 +550,7 @@ module YARD
             attached_method_name = object.name.to_s
           end
           if macro.attached?
+            globals.__attached_macros ||= {}
             globals.__attached_macros[attached_method_name] ||= []
             globals.__attached_macros[attached_method_name] |= [macro]
           end
