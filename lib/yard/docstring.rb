@@ -153,8 +153,35 @@ module YARD
 
     # @group Creating and Accessing Meta-data
 
-    # Adds a tag or reftag object to the tag list
+    # Creates a tag from the {Tags::DefaultFactory tag factory}.
+    # 
+    # To add an already created tag object, use {#add_tag}
+    #
+    # @param [String] tag_name the tag name
+    # @param [String] tag_buf the text attached to the tag with newlines removed.
+    # @return [Tags::Tag, Tags::RefTag] a tag
+    def create_tag(tag_name, tag_buf)
+      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
+        return create_ref_tag(tag_name, $1, $2)
+      end
+
+      tag_factory = Tags::Library.instance
+      tag_method = "#{tag_name}_tag"
+      if tag_name && tag_factory.respond_to?(tag_method)
+        add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
+      else
+        log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+      end
+    rescue Tags::TagFormatError
+      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+    end
+
+    # Adds a tag or reftag object to the tag list. If you want to parse
+    # tag data based on the {Tags::DefaultFactory} tag factory, use {#create_tag}
+    # instead.
+    # 
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
+    # @return [void]
     def add_tag(*tags)
       tags.each_with_index do |tag, i|
         case tag
@@ -246,27 +273,6 @@ module YARD
     # Creates a {Tags::RefTag}
     def create_ref_tag(tag_name, name, object_name)
       @ref_tags << Tags::RefTagList.new(tag_name, P(object, object_name), name)
-    end
-
-    # Creates a tag from the {Tags::DefaultFactory tag factory}.
-    #
-    # @param [String] tag_name the tag name
-    # @param [String] tag_buf the text attached to the tag with newlines removed.
-    # @return [Tags::Tag, Tags::RefTag] a tag
-    def create_tag(tag_name, tag_buf)
-      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
-        return create_ref_tag(tag_name, $1, $2)
-      end
-
-      tag_factory = Tags::Library.instance
-      tag_method = "#{tag_name}_tag"
-      if tag_name && tag_factory.respond_to?(tag_method)
-        add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
-      else
-        log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
-      end
-    rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
     # Parses out comments split by newlines into a new code object
