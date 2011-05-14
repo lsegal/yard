@@ -200,6 +200,7 @@ module YARD
           contents = File.file?(filename) ? nil : ''
           file = CodeObjects::ExtraFileObject.new(filename, contents)
         end
+        return title || file.title unless serializer
         link_url(url_for_file(file, anchor), title || file.title)
       end
       
@@ -309,6 +310,7 @@ module YARD
       # @param [String] anchor optional anchor
       # @return [String] the URL pointing to the file
       def url_for_file(filename, anchor = nil)
+        return '' unless serializer
         fromobj = object
         if CodeObjects::Base === fromobj && !fromobj.is_a?(CodeObjects::NamespaceObject)
           fromobj = fromobj.namespace
