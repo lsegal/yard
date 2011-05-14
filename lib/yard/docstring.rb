@@ -133,11 +133,19 @@ module YARD
     # @todo Add Tags::Tag#to_raw and refactor
     def to_raw
       tag_data = tags.sort_by {|t| t.tag_name }.map do |tag|
-        tag_text = '@' + tag.tag_name
-        tag_text += ' [' + tag.types.join(', ') + ']' if tag.types
-        tag_text += ' ' + tag.name if tag.name
-        tag_text += "\n " if tag.name && tag.text
-        tag_text += ' ' + tag.text.strip.gsub(/\n/, "\n  ") if tag.text
+        case tag
+        when Tags::OverloadTag
+          tag_text = "@#{tag.tag_name} #{tag.signature}\n"
+          unless tag.docstring.blank?
+            tag_text += "\n" + tag.docstring.all.gsub(/\r?\n/, "\n  ")
+          end
+        else
+          tag_text = '@' + tag.tag_name
+          tag_text += ' [' + tag.types.join(', ') + ']' if tag.types
+          tag_text += ' ' + tag.name.to_s if tag.name
+          tag_text += "\n " if tag.name && tag.text
+          tag_text += ' ' + tag.text.strip.gsub(/\n/, "\n  ") if tag.text
+        end
         tag_text
       end
       [strip, tag_data.join("\n")].reject {|l| l.empty? }.compact.join("\n")

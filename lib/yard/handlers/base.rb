@@ -405,7 +405,9 @@ module YARD
           object.add_file(parser.file, statement.line, statement.comments)
 
           # Add docstring if there is one.
-          object.docstring = statement.comments if statement.comments
+          if statement.comments
+            object.docstring = Docstring.new(statement.comments, object)
+          end
 
           # Expand/create any @macro tags
           expand_macro(object, find_or_create_macro(object))
@@ -563,7 +565,7 @@ module YARD
         return unless macro
         all_params = ([caller_method] + call_params).compact
         data = MacroObject.apply_macro(macro, object.docstring, all_params, statement.source)
-        object.docstring = data
+        object.docstring = Docstring.new(data, object)
       end
     end
   end

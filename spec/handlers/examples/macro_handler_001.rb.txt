@@ -54,6 +54,13 @@ class Foo
   # @macro [attach] none
   # @method none(foo, bar)
   none
+  
+  # @macro something
+  # @overload $1(a, b, c)
+  something :qux
+  
+  # @overload qux2(a, b, c)
+  something
 end
 
 class Bar

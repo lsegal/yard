@@ -27,6 +27,9 @@ module YARD
         def expand_macro(object, macro)
           if @docstring
             object.docstring = @docstring
+            object.docstring.tags.each do |tag|
+              tag.object = object if tag.respond_to?(:object=)
+            end
           else
             super(object, macro)
           end
@@ -66,9 +69,13 @@ module YARD
         
         def method_name
           name = nil
-          [:method, :attribute, :overload].each do |tag|
-            if @docstring.tag(tag)
-              name = @docstring.tag(tag).send(tag == :method ? :name : :text)
+          [:method, :attribute, :overload].each do |tag_name|
+            if tag = @docstring.tag(tag_name)
+              name = tag.send(tag == :overload ? :text : :name).to_s
+              if tag_name == :method && name =~ /\(|\s/
+                overload = Tags::OverloadTag.new(:overload, name)
+                @docstring.add_tag(overload)
+              end
               break
             end
           end
@@ -88,7 +95,7 @@ module YARD
           if @docstring.tag(:method)
             name = @docstring.tag(:method).name
           elsif @docstring.tag(:overload)
-            name = @docstring.tag(:overload).text
+            name = @docstring.tag(:overload).signature
           elsif @docstring.tag(:attribute)
             name = @docstring.tag(:attribute).text
             name += '=(value)' if !attribute_readable?
