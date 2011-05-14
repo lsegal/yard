@@ -325,14 +325,14 @@ the link syntax in this tag:
     # @see #methodname   <- Correct.
     # @see {#methodname} <- Incorrect.
     
-### Linking URLs
+### Linking URLs `{http://...}`
 
 URLs are also linked using this `{...}` syntax:
 
     {http://example.com Optional Title}
     {mailto:email@example.com}
 
-### Linking Files
+### Linking Files `{file:...}`
 
 Files can also be linked using this same syntax but by adding the `file:`
 prefix to the object name. Files refer to extra readme files you added
@@ -343,7 +343,7 @@ via the command-line. Consider the following examples:
     
 As shown, you can also add an optional `#anchor` if the page is an HTML link.
 
-### Embedding Docstrings
+### Embedding Docstrings `{include:...}`
 
 We saw the `(see ...)` syntax above, which allowed us to link an entire docstring
 with another. Sometimes, however, we just want to copy docstring text without
@@ -361,7 +361,37 @@ The docstring for Bar becomes:
 
     "This is another class. This class is cool too!"
 
-Note that this prefix currently only works for objects.
+### Embedding Files `{include:file:...}`
+
+You can embed the contents of files using `{include:file:path/to/file}`, 
+similar to the `{include:OBJECT}` tag above. If the file uses a specific markup
+type, it will be applied and embedded as marked up text. The following
+shows how the tag can be used inside of comments:
+
+    # Here is an example of a highlighted Ruby file:
+    #
+    # {include:file:examples/test.rb}
+    
+### Rendering Objects
+
+Entire objects can also be rendered in place in documentation. This can be
+used for guide-style documentation which does not document the entire source
+tree, but instead selectively renders important classes or methods. Consider
+the following documentation inside of a README file:
+
+    = igLatinPay!
+    
+    This library adds pig latin methods to the string class, allowing you
+    to transform sentences into pig latin.
+    
+    {render:String#pig_latin}
+    
+    You can also un-pig-latin-ify a word or sentence:
+    
+    {render:String#de_pig_latin}
+    
+The above would render the methods in place inside the README document,
+allowing you to summarize a small library in a single file.
 
 <a name="using"></a>
 
