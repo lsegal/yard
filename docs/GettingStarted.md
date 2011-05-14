@@ -372,7 +372,7 @@ shows how the tag can be used inside of comments:
     #
     # {include:file:examples/test.rb}
     
-### Rendering Objects
+### Rendering Objects `{render:...}`
 
 Entire objects can also be rendered in place in documentation. This can be
 used for guide-style documentation which does not document the entire source
