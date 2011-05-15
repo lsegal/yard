@@ -419,12 +419,12 @@ arbitrarily attach the macro to any method call. Suppose we only had the
 Post class in our codebase, we could add the macro to the first usage of
 the `property` call:
 
-  class Post < Resource
-    # @macro [attach] property
-    # @return [$2] the $1 property
-    property :title, String
-    property :view_count, Integer
-  end
+    class Post < Resource
+      # @macro [attach] property
+      # @return [$2] the $1 property
+      property :title, String
+      property :view_count, Integer
+    end
 
 ### Macro Variable Interpolation Syntax
 
