@@ -194,7 +194,7 @@ module YARD
         #   parsing all files
         # @yieldparam [Array<String>] files the list of files that will be parsed.
         # @yieldparam [OpenStruct] globals a global structure to store arbitrary
-        #   state for post processing (see {Processor#globals})
+        #   state for post processing (see {Handlers::Processor#globals})
         # @yieldreturn [Boolean] if the block returns +false+, parsing is
         #   cancelled.
         # @return [Proc] the yielded block
@@ -219,7 +219,7 @@ module YARD
         #   parsing all files
         # @yieldparam [Array<String>] files the list of files that will be parsed.
         # @yieldparam [OpenStruct] globals a global structure to store arbitrary
-        #   state for post processing (see {Processor#globals})
+        #   state for post processing (see {Handlers::Processor#globals})
         # @yieldreturn [void] the return value for the block is ignored.
         # @return [Proc] the yielded block
         # @see before_parse_list

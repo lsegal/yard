@@ -81,7 +81,7 @@ module YARD
         # Interpolation rules:
         # * $0, $1, $2, ... = the Nth parameter in +call_params+
         # * $& = the full statement source (excluding block)
-        # * Also supports {$N-M} ranges, as well as negative indexes on N or M
+        # * Also supports $\{N-M} ranges, as well as negative indexes on N or M
         # * Use \$ to escape the variable name in a macro.
         # 
         # @macro [new] macro.expand
