@@ -12,9 +12,147 @@
 8. **Added `{render:OBJECT}` syntax to embed object docs in extra files** (0.7.0)
 9. **Added improved templates API for custom CSS/JS/menus** (0.7.0)
 10. **Added Ruby markup type (`-m ruby`)** (0.7.0)
-11. **Can now use `{include:file:FILENAME}` to embed Ruby source** (0.7.0)
-12. **Added state tracking variables to Parser/Handler architecture** (0.7.0)
-13. **Added before/after callbacks to SourceParser** (0.7.0)
+11. **Added state tracking variables to Parser/Handler architecture** (0.7.0)
+12. **Added before/after callbacks to SourceParser** (0.7.0)
+
+## Macro support and detection of DSL methods (0.7.0)
+
+YARD will now automatically detect class level method calls, similar to the
+way it knows what an `attr_accessor` is. By simply adding documentation to
+your class level declarations, YARD can automatically detect them as methods
+or attributes in your class. Consider DataMapper's "property" declaration:
+
+    class Post
+      # @attribute
+      # @return [String] the title of the post
+      property :title, String
+    end
+    
+The above declaration would be created as the `Post#title`. The optional
+`@attribute` tag tells YARD that the property is an "attribute", and not just
+a regular method.
+
+In addition to basic DSL method detection, YARD also supports macros to create
+docstrings that can be copies to other objects; these macros can also be 
+"attached" to class level methods to create implicit documentation for macros.
+
+Macros and DSL method detection are discussed in much more detail in the 
+{file:docs/GettingStarted.md}, so you should read about them there if you're
+interested in this feature.
+
+## Inherited attributes now show in HTML output (0.7.0)
+
+Inherited attributes will now show up in HTML documentation using the default
+template in the same manner that inherited methods do.
+
+## The 'app' directory is now parsed by default (0.7.0)
+
+YARD tries to follow the "It Just Works" attitude in writing developer tools, 
+and therefore has added `app/**/*.rb` to the default list of globs that it
+searches for code in. You no longer need to create a `.yardopts` just to
+list your app directory when documenting your code on rubydoc.info. 
+We should have done this a while ago! And don't worry, YARD still checks
+lib and ext by default, too.
+
+## Added support for metadata (@title, @markup) in extra files/readmes (0.7.0)
+
+Extra files (READMEs, ChangeLogs, LICENSE files, and other guides) now support
+metadata tags, just like docstrings in code comments. By adding @tag values
+to the top of a file (no whitespace preceding it) inside of a `# comment` line,
+YARD will detect and parse these tags and store it for later usage. 
+
+Tags can contain arbitrary data as well as arbitrary tag names, however the 
+tag names @title and @markup are reserved to specify the document title and 
+markup format respectively. The title will be used in the file list menu,
+index page, as well as any linking of the file via the `{file:Filename}`
+syntax. An example of a document with metadata would be:
+
+    # @title The Best Project Ever!
+    # @markup rdoc
+    # @author Foo Bar (custom tag, does not display in templates)
+    
+    = This Project Rules
+    
+    == Contents
+    
+    ...
+
+Note that previous versions of YARD recommended specifying the markup of an
+extra file with the `#!markup` shebang, but the `@markup` metadata tag is now
+the "best practice" for specifying the markup format of an extra file.
+
+## Added `yard list` command (alias for `yardoc --list`) (0.7.0)
+
+The `yardoc --list` command is used to list objects that are parsed from
+a codebase. This can be used to grep methods/classes in a codebase from the
+command line. `yard list` now calls `yardoc --list` as a convenience command.
+
+Note that the `yardoc --list` command may eventually be replaced by a more 
+feature-filled `yard list` command, so `yard list` should be used instead of
+`yardoc --list` when possible.
+
+## Added Git support in `yard diff` (0.7.0)
+
+The `yard diff` command can now perform object diffing on git repositories.
+Provide the `--git` switch to `yard diff` with 2 commit/branches like so:
+
+    $ yard diff --git HEAD~5 HEAD
+    Added objects:
+
+      YARD::Parser::SourceParser#contents
+      YARD::Parser::SourceParser#globals
+      ...
+
+## Added `{include:file:FILENAME}` syntax (0.7.0)
+
+You can now use the `{include:file:FILENAME}` syntax to embed the contents
+of an extra file marked up in its markup format. This syntax supports embedding
+Ruby source files and performing syntax highlighting on the code.
+
+## Added `{render:OBJECT}` syntax to embed object docs in extra files (0.7.0)
+
+You can now use the `{render:Object}` syntax to embed the documentation 
+rendering of an entire object (method, class, module) inside of an extra file.
+This is useful when writing non-API based guides that might require listing
+a few helper methods or classes. The {file:docs/GettingStarted.md} discussed
+this syntax in more detail (with example usage).
+
+## Added improved templates API for custom CSS/JS/menus (0.7.0)
+
+Plugin & template developers can now more easily insert custom stylesheet
+or JavaScript files in their customized templates, thanks to an abstraction
+of the template API. This is documented in the {docs/Templates.md} document.
+In addition to custom CSS/JS, developers can also create custom menu tabs
+in both the framed and non framed version of the default theme.
+
+## Added Ruby markup type (`-m ruby`) (0.7.0)
+
+The Ruby markup type (`-m ruby`) will now use syntax highlighting for all
+formatting. This is probably not useful as a global switch, but can be used
+on individual extra files using the metadata markup specification discussed
+above.
+
+## Added state tracking variables to Parser/Handler architecture (0.7.0)
+
+The parser and handler architecture now contain state variables 
+{YARD::Handlers::Base#extra_state} and {YARD::Handlers::Processor#globals}
+to share data across handlers and the entire processing phase. `#extra_state`
+provided a place to store per-file data, while `#globals` gives the developer
+access to inter-file state when parsing multiple files at once.
+
+## Added before/after callbacks to SourceParser (0.7.0)
+
+The {YARD::Parser::SourceParser} class can now register callbacks to execute
+code before and after parsing of file globs, as well as before and after
+parsing of individual files. This allows plugin developers to perform
+setup/teardown (and set global state or update the {YARD::Registry}).
+
+See the documentation for the following methods:
+
+* {YARD::Parser::SourceParser.before_parse_list}
+* {YARD::Parser::SourceParser.after_parse_list}
+* {YARD::Parser::SourceParser.before_parse_file}
+* {YARD::Parser::SourceParser.after_parse_file}
 
 # What's New in 0.6.x?
 
