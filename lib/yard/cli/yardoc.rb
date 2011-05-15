@@ -455,11 +455,13 @@ module YARD
         opts.separator ""
         opts.separator "General Options:"
 
-        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to',
+                      '  (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
 
-        opts.on('--[no-]single-db', 'Whether code objects should be stored to single database file (advanced)') do |use_single_db|
+        opts.on('--[no-]single-db', 'Whether code objects should be stored to single',
+                                    '  database file (advanced)') do |use_single_db|
           Registry.single_object_db = use_single_db
         end
 
@@ -468,7 +470,8 @@ module YARD
         end
 
         opts.on('-c', '--use-cache [FILE]',
-                "Use the cached .yardoc db to generate documentation. (defaults to no cache)") do |file|
+                "Use the cached .yardoc db to generate documentation.",
+                "  (defaults to no cache)") do |file|
           YARD::Registry.yardoc_file = file if file
           self.use_cache = true
         end
@@ -477,11 +480,13 @@ module YARD
           self.use_cache = false
         end
 
-        opts.on('--[no-]yardopts', "If arguments should be read from .yardopts file. (defaults to yes)") do |use_yardopts|
+        opts.on('--[no-]yardopts', "If arguments should be read from .yardopts file. ",
+                                   "  (defaults to yes)") do |use_yardopts|
           self.use_yardopts_file = use_yardopts
         end
 
-        opts.on('--[no-]document', "If arguments should be read from .document file. (defaults to yes)") do |use_document|
+        opts.on('--[no-]document', "If arguments should be read from .document file. ",
+                                   "  (defaults to yes)") do |use_document|
           self.use_document_file = use_document
         end
 
@@ -529,11 +534,13 @@ module YARD
           options[:no_highlight] = true
         end
 
-        opts.on('--default-return TYPE', "Shown if method has no return type. Defaults to 'Object'") do |type|
+        opts.on('--default-return TYPE', "Shown if method has no return type. ",
+                                         "  (defaults to 'Object')") do |type|
           options[:default_return] = type
         end
 
-        opts.on('--hide-void-return', "Hides return types specified as 'void'. Default is shown.") do
+        opts.on('--hide-void-return', "Hides return types specified as 'void'. ",
+                                      "  (default is shown)") do
           options[:hide_void_return] = true
         end
 
@@ -546,7 +553,8 @@ module YARD
           options[:title] = title
         end
 
-        opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page of documentation.') do |readme|
+        opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page',
+                                                      '  of documentation.') do |readme|
           if File.file?(readme)
             options[:readme] = CodeObjects::ExtraFileObject.new(readme)
           else
@@ -554,11 +562,13 @@ module YARD
           end
         end
 
-        opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be included (eg. FAQ)') do |files|
+        opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be ',
+                                           '  included (eg. FAQ)') do |files|
           add_extra_files(*files.split(","))
         end
 
-        opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output directory after generating') do |asset|
+        opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output ',
+                                     '  directory after generating') do |asset|
           re = /^(?:\.\.\/|\/)/
           from, to = *asset.split(':').map {|f| File.cleanpath(f) }
           to ||= from
@@ -575,17 +585,20 @@ module YARD
         end
 
         opts.on('-m', '--markup MARKUP',
-                'Markup style used in documentation, like textile, markdown or rdoc. (defaults to rdoc)') do |markup|
+                'Markup style used in documentation, like textile, ',
+                '  markdown or rdoc. (defaults to rdoc)') do |markup|
           self.has_markup = true
           options[:markup] = markup.to_sym
         end
 
         opts.on('-M', '--markup-provider MARKUP_PROVIDER',
-                'Overrides the library used to process markup formatting (specify the gem name)') do |markup_provider|
+                'Overrides the library used to process markup ', 
+                '  formatting (specify the gem name)') do |markup_provider|
           options[:markup_provider] = markup_provider.to_sym
         end
 
-        opts.on('--charset ENC', 'Character set to use for HTML output (default is system locale)') do |encoding|
+        opts.on('--charset ENC', 'Character set to use for HTML output ', 
+                                 '  (default is system locale)') do |encoding|
           begin
             Encoding.default_external, Encoding.default_internal = encoding, encoding
           rescue ArgumentError => e
@@ -599,13 +612,15 @@ module YARD
         end
 
         opts.on('-p', '--template-path PATH',
-                'The template path to look for templates in. (used with -t).') do |path|
+                'The template path to look for templates in.',
+                '  (used with -t).') do |path|
           next if YARD::Config.options[:safe_mode]
           YARD::Templates::Engine.register_template_path(path)
         end
 
         opts.on('-f', '--format FORMAT',
-                'The output format for the template. (defaults to html)') do |format|
+                'The output format for the template.',
+                '  (defaults to html)') do |format|
           options[:format] = format.to_sym
         end
 
