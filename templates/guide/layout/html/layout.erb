@@ -13,6 +13,19 @@
 		</script>
   </head>
   <body>
+		<div id="top_nav">
+			<div id="inner_nav">
+				<% if options[:readme] != options[:file] && options[:title] %>
+					<span class="title"><strong><%= options[:title] %></strong>: <%= @page_title %></span>
+					<small class="links">
+						<% links = [link_file('index.html', 'top'), 
+												@prevfile ? link_file(@prevfile, 'prev') : nil, 
+												@nextfile ? link_file(@nextfile, 'next') : nil].compact %>
+						(<%= links.join(", ") %>)
+					</small>
+				<% end %>
+			</div>
+		</div>
 		<div id="page">
 			<div id="sidebar">
 				<h2>Table Of Contents</h2>
@@ -29,13 +42,13 @@
 							<% if @prevfile %>
 								<li>
 									<strong>Previous:</strong>
-									<%= link_file(@prevfile.filename, @prevfile.title) %>
+									<%= link_file(@prevfile) %>
 								</li>
 							<% end %>
 							<% if @nextfile %>
 							<li>
 								<strong>Next:</strong>
-								<%= link_file(@nextfile.filename, @nextfile.title) %>
+								<%= link_file(@nextfile) %>
 							</li>
 							<% end %>
 						</ol>
