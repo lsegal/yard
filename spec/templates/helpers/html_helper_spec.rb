@@ -274,6 +274,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
       resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
     end
     
+    it "should gracefully ignore {} in links" do
+      should_receive(:linkify).with('Foo', 'Foo').and_return('FOO')
+      resolve_links("{} {} {Foo Foo}").should == '{} {} FOO'
+    end
+    
     %w(tt code pre).each do |tag|
       it "should ignore links in <#{tag}>" do
         text = "<#{tag}>{Foo}</#{tag}>"
