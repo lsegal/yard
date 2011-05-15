@@ -382,6 +382,7 @@ module YARD
       attr_reader :globals
       
       # @return [String] the contents of the file to be parsed
+      # @since 0.7.0
       attr_reader :contents
 
       # Creates a new parser object for code parsing with a specific parser type.
