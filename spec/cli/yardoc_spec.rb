@@ -116,6 +116,15 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_yardopts_file.should == true
     end
 
+    should_accept('--yardopts with filename') do |arg|
+      @yardoc = CLI::Yardoc.new
+      File.should_receive(:read_binary).with('.foobar').and_return('')
+      @yardoc.use_document_file = false
+      @yardoc.parse_arguments('--yardopts', '.foobar')
+      @yardoc.use_yardopts_file.should == true
+      @yardoc.options_file.should == '.foobar'
+    end
+
     should_accept('--no-yardopts') do |arg|
       @yardoc = CLI::Yardoc.new
       @yardoc.use_document_file = false

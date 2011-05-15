@@ -237,11 +237,7 @@ module YARD
       # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
-        # Hack: parse out --no-yardopts, --no-document before parsing files
-        ['document', 'yardopts'].each do |file|
-          without, with = args.index("--no-#{file}") || -2, args.index("--#{file}") || -1
-          send("use_#{file}_file=", false) if without > with
-        end
+        parse_yardopts_options(*args)
 
         # Parse files and then command line arguments
         optparse(*support_rdoc_document_file!) if use_document_file
@@ -353,6 +349,20 @@ module YARD
         run_verifier(Registry.all).
           sort_by {|item| [item.file || '', item.line || 0] }.each do |item|
           puts "#{item.file}:#{item.line}: #{item.path}"
+        end
+      end
+      
+      # Parses out the yardopts/document options
+      def parse_yardopts_options(*args)
+        opts = OptionParser.new
+        yardopts_options(opts)
+        begin
+          opts.parse(args)
+        rescue OptionParser::ParseError => err
+          idx = args.index(err.args.first)
+          args = args[(idx+1)..-1]
+          args.shift while args.first && args.first[0,1] != '-'
+          retry
         end
       end
 
@@ -480,15 +490,7 @@ module YARD
           self.use_cache = false
         end
 
-        opts.on('--[no-]yardopts', "If arguments should be read from .yardopts file. ",
-                                   "  (defaults to yes)") do |use_yardopts|
-          self.use_yardopts_file = use_yardopts
-        end
-
-        opts.on('--[no-]document', "If arguments should be read from .document file. ",
-                                   "  (defaults to yes)") do |use_document|
-          self.use_document_file = use_document
-        end
+        yardopts_options(opts)
 
         opts.on('--no-save', 'Do not save the parsed data to the yardoc db') do
           self.save_yardoc = false
@@ -496,6 +498,25 @@ module YARD
 
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
           self.excluded << path
+        end
+      end
+      
+      # Adds --[no-]yardopts / --[no-]document
+      def yardopts_options(opts)
+        opts.on('--[no-]yardopts [FILE]', 
+                "If arguments should be read from FILE",
+                "  (defaults to yes, FILE defaults to .yardopts)") do |use_yardopts|
+          if use_yardopts.is_a?(String)
+            self.options_file = use_yardopts
+            self.use_yardopts_file = true
+          else
+            self.use_yardopts_file = (use_yardopts != false)
+          end
+        end
+
+        opts.on('--[no-]document', "If arguments should be read from .document file. ",
+                                   "  (defaults to yes)") do |use_document|
+          self.use_document_file = use_document
         end
       end
 
