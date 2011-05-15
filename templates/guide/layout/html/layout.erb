@@ -9,7 +9,12 @@
 					$(this).html($(this).find('a').html()) 
 				});
 			});
-			$(generateTOC);
+			$(function() {
+				generateTOC();
+				if ($('#toc li').size() == 0) {
+					$('#sidebar h2.toc').hide();
+				}
+			})
 		</script>
   </head>
   <body>
@@ -28,7 +33,7 @@
 		</div>
 		<div id="page">
 			<div id="sidebar">
-				<h2>Table Of Contents</h2>
+				<h2 class="toc">Table Of Contents</h2>
 				<div id="toc"></div>
 				
 				<% if options[:readme] != options[:file] %>
