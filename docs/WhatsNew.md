@@ -1,5 +1,21 @@
 # @title What's New?
 
+# What's New in 0.7.x?
+
+1. **Macro support and detection of DSL methods** (0.7.0)
+2. **Inherited attributes now show in HTML output** (0.7.0)
+3. **The 'app' directory is now parsed by default** (0.7.0)
+4. **Added support for metadata (@title, @markup) in extra files/readmes** (0.7.0)
+5. **Added `yard list` command (alias for `yardoc --list`)** (0.7.0)
+6. **Added Git support in `yard diff`** (0.7.0)
+7. **Added `{include:file:FILENAME}` syntax** (0.7.0)
+8. **Added `{render:OBJECT}` syntax to embed object docs in extra files** (0.7.0)
+9. **Added improved templates API for custom CSS/JS/menus** (0.7.0)
+10. **Added Ruby markup type (`-m ruby`)** (0.7.0)
+11. **Can now use `{include:file:FILENAME}` to embed Ruby source** (0.7.0)
+12. **Added state tracking variables to Parser/Handler architecture** (0.7.0)
+13. **Added before/after callbacks to SourceParser** (0.7.0)
+
 # What's New in 0.6.x?
 
 1. **Local documentation server for RubyGems or projects (`yard server`)** (0.6.0)
