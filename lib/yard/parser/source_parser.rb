@@ -154,6 +154,176 @@ module YARD
         def validated_parser_type(type)
           !defined?(::Ripper) && type == :ruby ? :ruby18 : type
         end
+        
+        # @group Parser Callbacks
+        
+        # Registers a callback to be called before a list of files is parsed 
+        # via {parse}. The block passed to this method will be called on 
+        # subsequent parse calls.
+        # 
+        # @example Installing a simple callback
+        #   SourceParser.before_parse_list do |files, globals|
+        #     puts "Starting to parse..."
+        #   end
+        #   YARD.parse('lib/**/*.rb')
+        #   # prints "Starting to parse..."
+        # 
+        # @example Setting global state
+        #   SourceParser.before_parse_list do |files, globals|
+        #     globals.method_count = 0
+        #   end
+        #   SourceParser.after_parse_list do |files, globals|
+        #     puts "Found #{globals.method_count} methods"
+        #   end
+        #   class MyCountHandler < Handlers::Ruby::Base
+        #     handles :def, :defs
+        #     process { globals.method_count += 1 }
+        #   end
+        #   YARD.parse
+        #   # Prints: "Found 37 methods"
+        # 
+        # @example Using a global callback to cancel parsing
+        #   SourceParser.before_parse_list do |files, globals|
+        #     return false if files.include?('foo.rb')
+        #   end
+        # 
+        #   YARD.parse(['foo.rb', 'bar.rb']) # callback cancels this method
+        #   YARD.parse('bar.rb') # parses normally
+        # 
+        # @yield [files, globals] the yielded block is called once before 
+        #   parsing all files
+        # @yieldparam [Array<String>] files the list of files that will be parsed.
+        # @yieldparam [OpenStruct] globals a global structure to store arbitrary
+        #   state for post processing (see {Processor#globals})
+        # @yieldreturn [Boolean] if the block returns +false+, parsing is
+        #   cancelled.
+        # @return [Proc] the yielded block
+        # @see after_parse_list
+        # @see before_parse_file
+        # @since 0.7.0
+        def before_parse_list(&block)
+          before_parse_list_callbacks << block
+        end
+        
+        # Registers a callback to be called after a list of files is parsed 
+        # via {parse}. The block passed to this method will be called on 
+        # subsequent parse calls.
+        # 
+        # @example Printing results after parsing occurs
+        #   SourceParser.after_parse_list do
+        #     puts "Finished parsing!"
+        #   end
+        #   YARD.parse
+        #   # Prints "Finished parsing!" after parsing files
+        # @yield [files, globals] the yielded block is called once before 
+        #   parsing all files
+        # @yieldparam [Array<String>] files the list of files that will be parsed.
+        # @yieldparam [OpenStruct] globals a global structure to store arbitrary
+        #   state for post processing (see {Processor#globals})
+        # @yieldreturn [void] the return value for the block is ignored.
+        # @return [Proc] the yielded block
+        # @see before_parse_list
+        # @see before_parse_file
+        # @since 0.7.0
+        def after_parse_list(&block)
+          after_parse_list_callbacks << block
+        end
+        
+        # Registers a callback to be called before an individual file is parsed. 
+        # The block passed to this method will be called on subsequent parse 
+        # calls.
+        # 
+        # To register a callback that is called before the entire list of files
+        # is processed, see {before_parse_list}.
+        # 
+        # @example Installing a simple callback
+        #   SourceParser.before_parse_file do |parser|
+        #     puts "I'm parsing #{parser.file}"
+        #   end
+        #   YARD.parse('lib/**/*.rb')
+        #   # prints:
+        #   "I'm parsing lib/foo.rb"
+        #   "I'm parsing lib/foo_bar.rb"
+        #   "I'm parsing lib/last_file.rb"
+        # 
+        # @example Cancel parsing of any test_*.rb files
+        #   SourceParser.before_parse_file do |parser|
+        #     return false if parser.file =~ /^test_.+\.rb$/
+        #   end
+        # 
+        # @yield [parser] the yielded block is called once before each
+        #   file that is parsed. This might happen many times for a single
+        #   codebase.
+        # @yieldparam [SourceParser] parser the parser object that will {#parse}
+        #   the file.
+        # @yieldreturn [Boolean] if the block returns +false+, parsing for 
+        #   the file is cancelled.
+        # @return [Proc] the yielded block
+        # @see after_parse_file
+        # @see before_parse_list
+        # @since 0.7.0
+        def before_parse_file(&block)
+          before_parse_file_callbacks << block
+        end
+        
+        # Registers a callback to be called after an individual file is parsed. 
+        # The block passed to this method will be called on subsequent parse 
+        # calls.
+        # 
+        # To register a callback that is called after the entire list of files
+        # is processed, see {after_parse_list}.
+        # 
+        # @example Printing the length of each file after it is parsed
+        #   SourceParser.after_parse_file do |parser|
+        #     puts "#{parser.file} is #{parser.contents.size} characters"
+        #   end
+        #   YARD.parse('lib/**/*.rb')
+        #   # prints:
+        #   "lib/foo.rb is 1240 characters"
+        #   "lib/foo_bar.rb is 248 characters"
+        # 
+        # @yield [parser] the yielded block is called once after each file 
+        #   that is parsed. This might happen many times for a single codebase.
+        # @yieldparam [SourceParser] parser the parser object that parsed
+        #   the file.
+        # @yieldreturn [void] the return value for the block is ignored.
+        # @return [Proc] the yielded block
+        # @see before_parse_file
+        # @see after_parse_list
+        # @since 0.7.0
+        def after_parse_file(&block)
+          after_parse_file_callbacks << block
+        end
+        
+        # @return [Array<Proc>] the list of callbacks to be called before
+        #   parsing a list of files. Should only be used for testing.
+        # @since 0.7.0
+        def before_parse_list_callbacks
+          @before_parse_list_callbacks ||= []
+        end
+        
+        # @return [Array<Proc>] the list of callbacks to be called after
+        #   parsing a list of files. Should only be used for testing.
+        # @since 0.7.0
+        def after_parse_list_callbacks
+          @after_parse_list_callbacks ||= []
+        end
+        
+        # @return [Array<Proc>] the list of callbacks to be called before
+        #   parsing a file. Should only be used for testing.
+        # @since 0.7.0
+        def before_parse_file_callbacks
+          @before_parse_file_callbacks ||= []
+        end
+        
+        # @return [Array<Proc>] the list of callbacks to be called after
+        #   parsing a file. Should only be used for testing.
+        # @since 0.7.0
+        def after_parse_file_callbacks
+          @after_parse_file_callbacks ||= []
+        end
+        
+        # @endgroup
 
         private
 
@@ -166,6 +336,12 @@ module YARD
         def parse_in_order(*files)
           global_state = OpenStruct.new
           files = files.sort_by {|x| x.length if x }
+          files_copy = files.dup
+          
+          before_parse_list_callbacks.each do |cb|
+            return if cb.call(files_copy, global_state) == false
+          end
+          
           while file = files.shift
             begin
               if file.is_a?(Array) && file.last.is_a?(Continuation)
@@ -180,6 +356,10 @@ module YARD
               files.push([file, e.message])
             end
           end
+          
+          after_parse_list_callbacks.each do |cb|
+            cb.call(files_copy, global_state)
+          end
         end
       end
 
@@ -189,12 +369,20 @@ module YARD
 
       self.parser_type = :ruby
 
-      # The filename being parsed by the parser.
+      # @return [String] the filename being parsed by the parser.
       attr_reader :file
 
-      # The parser type associated with the parser instance. This should
-      # be set by the {#initialize constructor}.
+      # @return [Symbol] the parser type associated with the parser instance.
+      #   This should be set by the {#initialize constructor}.
       attr_reader :parser_type
+      
+      # @return [OpenStruct] an open struct containing arbitrary global state
+      #   shared between files and handlers.
+      # @since 0.7.0
+      attr_reader :globals
+      
+      # @return [String] the contents of the file to be parsed
+      attr_reader :contents
 
       # Creates a new parser object for code parsing with a specific parser type.
       #
@@ -230,9 +418,20 @@ module YARD
           content = content.read if content.respond_to? :read
         end
 
+        @contents = content
         @parser = parser_class.new(content, file)
+        
+        self.class.before_parse_file_callbacks.each do |cb|
+          return @parser if cb.call(self) == false
+        end
+          
         @parser.parse
         post_process
+        
+        self.class.after_parse_file_callbacks.each do |cb|
+          cb.call(self)
+        end
+        
         @parser
       rescue ArgumentError, NotImplementedError => e
         log.warn("Cannot parse `#{file}': #{e.message}")

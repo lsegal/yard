@@ -14,6 +14,201 @@ describe YARD::Parser::SourceParser do
     Registry.clear
   end
   
+  def parse_list(*list)
+    files = list.map do |v|
+      filename, source = *v
+      File.stub!(:read_binary).with(filename).and_return(source)
+      filename
+    end
+    Parser::SourceParser.send(:parse_in_order, *files)
+  end
+
+  def before_list(&block)
+    Parser::SourceParser.before_parse_list(&block)
+  end
+
+  def after_list(&block)
+    Parser::SourceParser.after_parse_list(&block)
+  end
+
+  def before_file(&block)
+    Parser::SourceParser.before_parse_file(&block)
+  end
+
+  def after_file(&block)
+    Parser::SourceParser.after_parse_file(&block)
+  end
+  
+  describe '.before_parse_list' do
+    before do
+      Parser::SourceParser.before_parse_list_callbacks.clear
+      Parser::SourceParser.after_parse_list_callbacks.clear
+    end
+
+    it "should handle basic callback support" do
+      before_list do |files, globals|
+        files.should == ['foo.rb', 'bar.rb']
+        globals.should == OpenStruct.new
+      end
+      parse_list ['foo.rb', 'foo!'], ['bar.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+    end
+    
+    it "should support multiple callbacks" do
+      checks = []
+      before_list { checks << :one }
+      before_list { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil  
+      checks.should == [:one, :two]
+    end
+    
+    it "should cancel parsing if it returns false" do
+      checks = []
+      before_list { checks << :one }
+      before_list { false }
+      before_list { checks << :three }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should be_nil
+      checks.should == [:one]
+    end
+    
+    it "should not cancel on nil" do
+      checks = []
+      before_list { checks << :one }
+      before_list { nil }
+      before_list { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+      checks.should == [:one, :two]
+    end
+    
+    it "should pass in globals" do
+      before_list {|f,g| g.x = 1 }
+      before_list {|f,g| g.x += 1 }
+      before_list {|f,g| g.x += 1 }
+      after_list {|f,g| g.x.should == 3 }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+    end
+  end
+
+  describe '.after_parse_list' do
+    before do
+      Parser::SourceParser.before_parse_list_callbacks.clear
+      Parser::SourceParser.after_parse_list_callbacks.clear
+    end
+
+    it "should handle basic callback support and maintain files/globals" do
+      before_list do |f,g| g.foo = :bar end
+      after_list do |files, globals|
+        files.should == ['foo.rb', 'bar.rb']
+        globals.foo.should == :bar
+      end
+      parse_list ['foo.rb', 'foo!'], ['bar.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+    end
+    
+    it "should support multiple callbacks" do
+      checks = []
+      after_list { checks << :one }
+      after_list { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil  
+      checks.should == [:one, :two]
+    end
+    
+    it "should not cancel parsing if it returns false" do
+      checks = []
+      after_list { checks << :one }
+      after_list { false }
+      after_list { checks << :three }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+      checks.should == [:one, :three]
+    end
+  end
+
+  describe '.before_parse_file' do
+    before do
+      Parser::SourceParser.before_parse_file_callbacks.clear
+      Parser::SourceParser.after_parse_file_callbacks.clear
+    end
+
+    it "should handle basic callback support" do
+      before_file do |parser|
+        parser.contents.should == 'class Foo; end'
+        parser.file.should =~ /(foo|bar)\.rb/
+      end
+      parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+    end
+    
+    it "should support multiple callbacks" do
+      checks = []
+      before_file { checks << :one }
+      before_file { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil  
+      checks.should == [:one, :two, :one, :two, :one, :two]
+    end
+    
+    it "should cancel parsing if it returns false" do
+      checks = []
+      before_file { checks << :one }
+      before_file { false }
+      before_file { checks << :three }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should be_nil
+      checks.should == [:one, :one, :one]
+    end
+    
+    it "should not cancel on nil" do
+      checks = []
+      before_file { checks << :one }
+      before_file { nil }
+      before_file { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+      checks.should == [:one, :two, :one, :two, :one, :two]
+    end
+  end
+  
+  describe '.after_parse_file' do
+    before do
+      Parser::SourceParser.before_parse_file_callbacks.clear
+      Parser::SourceParser.after_parse_file_callbacks.clear
+    end
+
+    it "should handle basic callback support" do
+      after_file do |parser|
+        parser.contents.should == 'class Foo; end'
+        parser.file.should =~ /(foo|bar)\.rb/
+      end
+      parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+    end
+    
+    it "should support multiple callbacks" do
+      checks = []
+      after_file { checks << :one }
+      after_file { checks << :two }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil  
+      checks.should == [:one, :two, :one, :two, :one, :two]
+    end
+    
+    it "should not cancel parsing if it returns false" do
+      checks = []
+      after_file { checks << :one }
+      after_file { false }
+      after_file { checks << :three }
+      parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
+      Registry.at('Foo').should_not be_nil
+      checks.should == [:one, :three, :one, :three, :one, :three]
+    end
+  end
+  
   describe '.register_parser_type' do
     it_should_behave_like "parser type registration"
     
