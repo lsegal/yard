@@ -16,13 +16,9 @@ end
 
 private
 
-def read_file(file)
-  File.read(file).force_encoding(charset)
-end
-
 def parse_top_comments_from_file
   data = ""
-  tokens = TokenList.new(read_file(@readme))
+  tokens = TokenList.new(@readme.contents)
   tokens.each do |token|
     break unless token.is_a?(RubyToken::TkCOMMENT) || token.is_a?(RubyToken::TkNL)
     data << (token.text[/\A#\s{0,1}(.*)/, 1] || "\n")
@@ -31,7 +27,13 @@ def parse_top_comments_from_file
 end
 
 def override_serializer
+  return if @serializer.nil?
   class << @serializer
+    def serialize(object, data)
+      return unless object == 'index.html'
+      super
+    end
+    
     def serialized_path(object)
       return object if object.is_a?(String)
       return 'index.html'
