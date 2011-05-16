@@ -618,7 +618,7 @@ module YARD
           options[:markup_provider] = markup_provider.to_sym
         end
 
-        opts.on('--charset ENC', 'Character set to use for HTML output ', 
+        opts.on('--charset ENC', 'Character set to use when parsing files ', 
                                  '  (default is system locale)') do |encoding|
           begin
             Encoding.default_external, Encoding.default_internal = encoding, encoding
