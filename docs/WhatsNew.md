@@ -14,6 +14,7 @@
 10. **Added Ruby markup type (`-m ruby`)** (0.7.0)
 11. **Added state tracking variables to Parser/Handler architecture** (0.7.0)
 12. **Added before/after callbacks to SourceParser** (0.7.0)
+13. **Can now use `--yardopts FILE` to specify a custom yardopts file** (0.7.0)
 
 ## Macro support and detection of DSL methods (0.7.0)
 
@@ -153,6 +154,12 @@ See the documentation for the following methods:
 * {YARD::Parser::SourceParser.after_parse_list}
 * {YARD::Parser::SourceParser.before_parse_file}
 * {YARD::Parser::SourceParser.after_parse_file}
+
+## Can now use `--yardopts FILE` to specify a custom yardopts file (0.7.0)
+
+The `yardoc` command now supports `--yardopts FILE` to specify custom .yardopts
+options files. This is useful if you have multiple documentation sets, such
+as a guide documentation set and an API documentation set.
 
 # What's New in 0.6.x?
 
