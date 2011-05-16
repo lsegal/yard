@@ -45,6 +45,7 @@ module YARD::CodeObjects
 
     # @param [String] data the file contents
     def parse_contents(data)
+      retried = false
       cut_index = 0
       data = data.split("\n")
       data.each_with_index do |line, index|
@@ -73,6 +74,16 @@ module YARD::CodeObjects
           log.warn "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
         end
       end
+    rescue ArgumentError => e
+      if retried && e.message =~ /invalid byte sequence/
+        # This should never happen.
+        log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
+        self.contents = ''
+        return
+      end
+      data.force_encoding('binary') if data.respond_to?(:force_encoding)
+      retried = true
+      retry
     end
   end
 end

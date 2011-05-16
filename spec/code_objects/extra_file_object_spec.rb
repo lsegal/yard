@@ -85,6 +85,14 @@ describe YARD::CodeObjects::ExtraFileObject do
       log.should_not_receive(:warn)
       file = ExtraFileObject.new('file.txt', "# @encoding INVALID\nFOO")
     end if RUBY18
+    
+    it "should attempt to re-parse data as 8bit ascii if parsing fails" do
+      log.should_not_receive(:warn)
+      str = "\xB0"
+      str.force_encoding('utf-8') if str.respond_to?(:force_encoding)
+      file = ExtraFileObject.new('file.txt', str)
+      file.contents.should == "\xB0"
+    end
   end
   
   describe '#name' do
