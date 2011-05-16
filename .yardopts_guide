@@ -1,5 +1,6 @@
 -t guide
 --title YARD
+-o doc_guide
 --exclude /server/templates/
 --exclude /yard/rubygems/
 --asset docs/images:images
