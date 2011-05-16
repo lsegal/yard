@@ -184,7 +184,7 @@ module YARD
             object
           else
             link = linkify(name, title)
-            if link == name || link == title
+            if (link == name || link == title) && (name+' '+link !~ /\A<a\s.*>/)
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
               file = (@file ? @file.filename : object.file) || '(unknown)'
               line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
