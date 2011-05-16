@@ -344,9 +344,10 @@ The `jquery.js` is copy of the jquery javascript library.
 To load additional stylesheets and javascripts with every page (except the search
 field menus) generated from the base `layout` template:
 
-  1. Define your own custom stylesheet and/or javascript file:
+  1. Define your own custom stylesheet and/or javascript file 
+     (default/ is the default template name inside of the /template root directory):
 
-        /path/to/mytemplates/:
+        /template/default/:
         |-- fulldoc
         |   |-- html
         |   |   |-- css
@@ -354,23 +355,15 @@ field menus) generated from the base `layout` template:
         |   |   |-- js
         |   |   |   |-- custom.js
 
-    
-  2. Generate the asset to in the output by adding an asset line to your `fulldoc` `setup.rb`
+  2. Create a `setup.rb` in the `layout` template directory and override the methods 
+     `stylesheets` and `javascripts`. The path to the template would be:
   
-        def init
-          super
-          # ... other template actions ...
-          asset('css/custom.css',file('css/custom.css',true))
-          asset('js/custom.js',file('js/custom.js',true))
-        end
-  
-  3. Create a `setup.rb` in the `layout` template directory and override the methods 
-     `stylesheets` and `javascripts`.
-  
-        /path/to/mytemplates/:
+        /template/default/:
         |-- layout
         |   |-- html
         |   |   |-- setup.rb
+        
+      And the code would look like:
   
         def stylesheets
           # Load the existing stylesheets while appending the custom one
@@ -397,16 +390,8 @@ the `fulldoc` template:
         |   |   |   |-- custom_full_menu.js
 
 
-  2. Generate the asset to in the output by adding an asset line to your `fulldoc` `setup.rb`
-
-        def init
-          super
-          # ... other template actions ...
-          asset('css/custom_full_menu.css',file('css/custom_full_menu.css',true))
-          asset('js/custom_full_menu.js',file('js/custom_full_menu.js',true))
-        end
-
-  3. Override the methods `stylesheets_full_list` and `javascripts_full_list`.
+  3. Override the methods `stylesheets_full_list` and `javascripts_full_list`
+     in the `setup.rb` file inside fulldoc/html.
 
         def stylesheets_full_list
           # Load the existing stylesheets while appending the custom one
