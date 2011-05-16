@@ -5,4 +5,5 @@ _Yardoc
 *.gem
 /pkg
 /doc
+/doc_guide
 /coverage
