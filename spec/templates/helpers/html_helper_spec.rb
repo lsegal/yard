@@ -114,6 +114,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
       File.should_receive(:read).with('foo.rdoc').and_return('= HI')
       htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><h1>HI</h1></p>"
     end
+    
+    it "should autolink URLs (markdown specific)" do
+      log.enter_level(Logger::FATAL) do
+        pending 'This test depends on markdown' unless markup_class(:markdown)
+      end
+      htmlify('http://example.com', :markdown).should include('<a href="http://example.com"')
+    end
   end
   
   describe "#link_object" do

@@ -58,7 +58,12 @@ module YARD
       # @since 0.6.0
       def html_markup_markdown(text)
         # TODO: other libraries might be more complex
-        markup_class(:markdown).new(text).to_html
+        provider = markup_class(:markdown)
+        if provider.to_s == 'RDiscount'
+          markup_class(:markdown).new(text, :autolink).to_html
+        else
+          markup_class(:markdown).new(text).to_html
+        end
       end
 
       # Converts Textile to HTML
