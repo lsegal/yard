@@ -478,8 +478,9 @@ with markup and pretty titles.
 
 You can add YARD-style `@tag` metadata to the top of any extra file if prefixed
 by a `#` hash comment. YARD allows for arbitrary meta-data, but pays special
-attention to the tags `@markup` and `@title`. Note that there cannot be any
-whitespace before the tags. Here is an example of some tag data in a README:
+attention to the tags `@markup`, `@encoding`, and `@title`. Note that there 
+cannot be any whitespace before the tags. Here is an example of some tag data 
+in a README:
 
     # @markup markdown
     # @title The Best Library in the World!
@@ -492,6 +493,14 @@ including "markdown", "textile", "rdoc", "ruby", "text", "html", or "none"
 (no markup). This can be used when the markup cannot be auto-detected using
 the extension of the filename, if the file has no extension, or if you want
 to override the auto-detection.
+
+By using `@encoding` you can specify a non-standard encoding. Note that 
+`yardoc --charset` sets the global encoding (for all comments / files),
+so if you are using unicode across all your files, you can specify it there.
+Using the `@encoding` tag might be used to override the default global
+charset, say, if you had a localized `README.jp` file with SJIS data.
+Also note that this only affects Ruby 1.9.x, as Ruby 1.8 is not properly
+encoding aware.
 
 The `@title` tag allows you to specify a full title name for the document.
 By default, YARD uses the filename as the title of the document and lists
