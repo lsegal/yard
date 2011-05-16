@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
+require 'ostruct'
 
 describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
@@ -28,6 +29,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
         charset.should == 'iso-8859-1'
       end
     end
+    
+    it "should take file encoding if there is a file" do
+      @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
+      charset.should == 'Shift_JIS' # not the correct charset name, but good enough
+    end if RUBY19
+
+    it "should take file encoding if there is a file" do
+      @file = OpenStruct.new(:contents => 'foo')
+      charset.should == 'utf-8'
+    end if RUBY18
     
     if RUBY18
       it "should return utf-8 if no LANG env is set" do

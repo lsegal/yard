@@ -440,11 +440,15 @@ module YARD
       # @return [String] the current character set
       # @since 0.5.4
       def charset
-        return 'utf-8' unless RUBY19 || lang = ENV['LANG']
-        if RUBY19
-          lang = Encoding.default_external.name.downcase
+        if @file && RUBY19
+          lang = @file.contents.encoding.to_s
         else
-          lang = lang.downcase.split('.').last
+          return 'utf-8' unless RUBY19 || lang = ENV['LANG']
+          if RUBY19
+            lang = Encoding.default_external.name.downcase
+          else
+            lang = lang.downcase.split('.').last
+          end
         end
         case lang
         when "ascii-8bit", "us-ascii", "ascii-7bit"; 'iso-8859-1'
