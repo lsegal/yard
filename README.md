@@ -8,7 +8,7 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.7.0 (codename "")    
+**Latest Version**: 0.7.0 (codename "Heroes")    
 **Release Date**: May 17th 2011    
 
 Synopsis
