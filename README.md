@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.6.7 (codename "No codename")    
-**Release Date**: April 6th 2011    
+**Latest Version**: 0.7.0 (codename "")    
+**Release Date**: May 17th 2011    
 
 Synopsis
 --------
@@ -288,6 +288,16 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **May.17.11**: 0.7.0 release
+    - See the {docs/WhatsNew.md} document for details on added features
+    - Make sure that Docstring#line_range is filled when possible (#243)
+    - Set #verifier in YardocTask (#282)
+    - Parse BOM in UTF-8 files (#288)
+    - Fix instance attributes not showing up in method list (#302)
+    - Fix rendering of %w() literals in constants (#306)
+    - Ignore keyboard shortcuts when an input is active (#312)
+    - And more...
 
 - **April.14.11**: 0.6.8 release
     - Fix regression in RDoc 1.x markup loading
