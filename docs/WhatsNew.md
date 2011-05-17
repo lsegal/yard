@@ -15,6 +15,7 @@
 11. **Added state tracking variables to Parser/Handler architecture** (0.7.0)
 12. **Added before/after callbacks to SourceParser** (0.7.0)
 13. **Can now use `--yardopts FILE` to specify a custom yardopts file** (0.7.0)
+14. **Added new `-t guide` template for guide based docs** (0.7.0)
 
 ## Macro support and detection of DSL methods (0.7.0)
 
@@ -160,6 +161,19 @@ See the documentation for the following methods:
 The `yardoc` command now supports `--yardopts FILE` to specify custom .yardopts
 options files. This is useful if you have multiple documentation sets, such
 as a guide documentation set and an API documentation set.
+
+## Added new `-t guide` template for guide based docs (0.7.0)
+
+You can now write guide style documentation using a new 'guide' template that
+only generates documentation for extra files. You would use it in the form:
+
+    yardoc -t guide - README GettingStarted FAQ TroubleShooting LICENSE
+
+This creates the sections for the readme, a getting started, frequently asked
+questions, trouble shooting and license page.
+
+If you need to refer to class / method documentation, you can embed API documentation
+using the `{render:Object}` tag discussed above.
 
 # What's New in 0.6.x?
 
