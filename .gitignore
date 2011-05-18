@@ -1,5 +1,6 @@
 _Yardoc
 .DS_Store
+*.rbc
 *.pdf
 .yardoc
 *.gem
