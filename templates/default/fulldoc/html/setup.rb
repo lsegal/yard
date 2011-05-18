@@ -146,7 +146,7 @@ end
 
 # Generate a searchable class list in the output
 def generate_class_list
-  @items = options[:objects]
+  @items = options[:objects] if options[:objects]
   @list_title = "Class List"
   @list_type = "class"
   asset('class_list.html', erb(:full_list))
