@@ -141,9 +141,9 @@ module YARD
         @total += data if data.is_a?(Integer) && undoc
         @undocumented += undoc if undoc.is_a?(Integer)
         if undoc
-          data = ("% 5s (% 5d undocumented)" % [data, undoc])
+          data = ("%5s (% 5d undocumented)" % [data, undoc])
         else
-          data = "% 5s" % data
+          data = "%5s" % data
         end
         puts("%-12s %s" % [name + ":", data])
       end

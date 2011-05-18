@@ -5,7 +5,8 @@ describe YARD::Parser::Base do
     class MyParser < Parser::Base; def initialize(a, b) end end
     
     it "should take 2 arguments" do
-      lambda { YARD::Parser::Base.new }.should raise_error(ArgumentError, /wrong (number|#) of arguments/)
+      lambda { YARD::Parser::Base.new }.should raise_error(ArgumentError, 
+        /wrong (number|#) of arguments|given 0, expected 2/)
     end
     
     it "should raise NotImplementedError on #initialize" do
