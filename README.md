@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.7.0 (codename "Heroes")    
-**Release Date**: May 17th 2011    
+**Latest Version**: 0.7.1 (codename "Heroes")    
+**Release Date**: May 18th 2011    
 
 Synopsis
 --------
@@ -288,6 +288,9 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **May.18.11**: 0.7.1 release
+    - Fixes a bug in `yard server` not displaying class list properly.
 
 - **May.17.11**: 0.7.0 release
     - See the {docs/WhatsNew.md} document for details on added features
