@@ -1,4 +1,15 @@
+2011-05-18  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, lib/yard.rb: Update version / changelog
+
+  * README.md: Bump to 0.7.1
+
+  * spec/code_objects/constants_spec.rb: Fix a spec
+
 2011-05-17  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/setup.rb: Oops, yard server sets @items
+  manually and does not fill options[:objects]
 
   * ChangeLog, README.md: Release 0.7.0
 
