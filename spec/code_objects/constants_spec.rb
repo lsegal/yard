@@ -50,7 +50,7 @@ end
 describe YARD::CodeObjects, "BUILTIN_CLASSES" do
   it "should include all base classes" do
     YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
-      next if RUBY19 && ["MatchingData"].include?(name)
+      next if name == "MatchingData" && !defined?(::MatchingData)
       eval(name).should be_instance_of(Class)
     end
   end
