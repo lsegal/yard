@@ -181,7 +181,7 @@ Symbols:
 We mentioned that these type fields are "mostly" free-form. In truth, they
 are defined "by convention". To view samples of common type specifications
 and recommended conventions for writing type specifications, see 
-{http://yardoc.org/types.html}. Note that these conventions may change every now 
+http://yardoc.org/types.html. Note that these conventions may change every now 
 and then, although we are working on a more "formal" type specification proposal.
 
 ## Documenting DSL Methods
@@ -191,7 +191,7 @@ The most common is the `attr_accessor` method, which of course has built-in
 support in YARD. However, frameworks and libraries often expose custom
 methods that perform similar metaprogramming tasks, and it is often useful
 to document their functionality in your application. Consider the `property`
-method in a project like {http://datamapper.org DataMapper}, which creates
+method in a project like [DataMapper](http://datamapper.org), which creates
 a typed attribute for a database model. The code might look like:
 
     class Post
