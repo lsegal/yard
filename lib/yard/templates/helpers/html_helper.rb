@@ -450,7 +450,7 @@ module YARD
         else
           return 'utf-8' unless RUBY19 || lang = ENV['LANG']
           if RUBY19
-            lang = Encoding.default_external.name.downcase
+            lang = ::Encoding.default_external.name.downcase
           else
             lang = lang.downcase.split('.').last
           end
