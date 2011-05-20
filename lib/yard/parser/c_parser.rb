@@ -34,12 +34,8 @@ module YARD
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
         unless CONTINUATIONS_SUPPORTED
-          unless $NO_CONTINUATION_WARNING
-            $NO_CONTINUATION_WARNING = true
-            log.warn "JRuby/MacRuby/Rubinius do not implement Kernel#callcc and cannot " +
-              "load files in order. You must specify the correct order manually."
-          end
-          raise NamespaceMissingError, object
+          log.warn_no_continuations
+          raise Handlers::NamespaceMissingError, object
         end
 
         retries = 0
