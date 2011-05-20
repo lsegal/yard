@@ -171,7 +171,7 @@ module YARD
           comment = override_comment if override_comment
 
           object.docstring = parse_comments(object, comment) if comment
-          object.source = body_text
+          object.source = body_text.gsub(/\A#{Regexp.quote comment}/, '')
         when %r{((?>/\*.*?\*/\s*))^\s*\#\s*define\s+#{func_name}\s+(\w+)}m
           comment = $1
           find_method_body(object, $2, content)

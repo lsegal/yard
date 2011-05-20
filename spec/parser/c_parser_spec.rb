@@ -1,11 +1,14 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 begin require 'continuation'; rescue LoadError; end unless RUBY18
 
+class YARD::Parser::CParser; def ensure_loaded!(a, b=1) a end end
+
 describe YARD::Parser::CParser do
   describe '#parse' do
     before(:all) do
       file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
-      @parser = Parser::CParser.new(IO.read(file)).parse
+      @parser = Parser::CParser.new(IO.read(file))
+      @parser.parse
     end
 
     describe 'Array class' do
@@ -46,6 +49,30 @@ describe YARD::Parser::CParser do
         log.should_receive(:warn).with("Missing source file `extra.c' when parsing Multifile#extra")
         parse
         Registry.at('Multifile#extra').docstring.should == ''
+      end
+    end
+    
+    describe 'Foo' do
+      def parse
+        Registry.clear
+        Parser::CParser.new(@contents).parse
+      end
+
+      it 'should not include comments in docstring source' do
+        @contents = <<-eof
+          /* 
+           * Hello world
+           */
+          VALUE foo(VALUE x) {
+            int value = x;
+          }
+          
+          void Init_Foo() {
+            rb_define_method(rb_cFoo, "foo", foo, 1);
+          }
+        eof
+        parse
+        Registry.at('Foo#foo').source.should == 'VALUE foo(VALUE x)'
       end
     end
   end
@@ -89,4 +116,4 @@ describe YARD::Parser::CParser do
       neg_self.source.should be_nil
     end
   end
-end if CONTINUATIONS_SUPPORTED
+end
