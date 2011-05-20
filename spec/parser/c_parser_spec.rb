@@ -72,7 +72,8 @@ describe YARD::Parser::CParser do
           }
         eof
         parse
-        Registry.at('Foo#foo').source.should == 'VALUE foo(VALUE x)'
+        Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should == 
+          "VALUE foo(VALUE x) { int value = x;\n}"
       end
     end
   end

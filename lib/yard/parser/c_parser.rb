@@ -158,7 +158,7 @@ module YARD
 
           # see if we can find the whole body
 
-          re = Regexp.escape(body_text) + '[^(]*^\{.*?^\}'
+          re = Regexp.escape(body_text) + '[^(]*\{.*?\}'
           body_text = $& if /#{re}/m =~ content
 
           # The comment block may have been overridden with a 'Document-method'
