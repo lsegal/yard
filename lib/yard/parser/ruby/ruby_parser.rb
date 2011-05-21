@@ -327,7 +327,7 @@ module YARD
             end
           eof
         end
-        
+
         def on_qwords_new(*args)
           node = LiteralNode.new(:qwords_literal, args)
           if @map[:qwords_beg]
@@ -337,7 +337,7 @@ module YARD
           end
           node
         end
-        
+
         def on_qwords_add(list, item)
           list.source_range = (list.source_range.first..@ns_charno)
           list.line_range = (list.line_range.first..lineno)

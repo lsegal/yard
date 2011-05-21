@@ -63,7 +63,7 @@ module YARD
       end
 
       private
-      
+
       def load_git_commit(commit)
         commit_path = 'git_commit' + commit.gsub(/\W/, '_')
         tmpdir = File.join(Dir.tmpdir, commit_path)

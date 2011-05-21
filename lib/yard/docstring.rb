@@ -75,9 +75,9 @@ module YARD
       super parse_comments(content)
     end
     alias all= replace
-    
+
     # Deep-copies a docstring
-    # 
+    #
     # @note This method creates a new docstring with new tag lists, but does
     #   not create new individual tags. Modifying the tag objects will still
     #   affect the original tags.
@@ -124,10 +124,10 @@ module YARD
       @summary += '.' unless @summary.empty?
       @summary
     end
-    
+
     # Reformats and returns a raw representation of the tag data using the
     # current tag and docstring data, not the original text.
-    # 
+    #
     # @return [String] the updated raw formatted docstring data
     # @since 0.7.0
     # @todo Add Tags::Tag#to_raw and refactor
@@ -154,7 +154,7 @@ module YARD
     # @group Creating and Accessing Meta-data
 
     # Creates a tag from the {Tags::DefaultFactory tag factory}.
-    # 
+    #
     # To add an already created tag object, use {#add_tag}
     #
     # @param [String] tag_name the tag name
@@ -179,7 +179,7 @@ module YARD
     # Adds a tag or reftag object to the tag list. If you want to parse
     # tag data based on the {Tags::DefaultFactory} tag factory, use {#create_tag}
     # instead.
-    # 
+    #
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
     # @return [void]
     def add_tag(*tags)
@@ -226,7 +226,7 @@ module YARD
     def has_tag?(name)
       tags.any? {|tag| tag.tag_name.to_s == name.to_s }
     end
-    
+
     # Delete all tags with +name+
     # @param [String] name the tag name
     # @return [void]
@@ -234,10 +234,10 @@ module YARD
     def delete_tags(name)
       delete_tag_if {|tag| tag.tag_name.to_s == name.to_s }
     end
-    
+
     # Deletes all tags where the block returns true
     # @yieldparam [Tags::Tag] tag the tag that is being tested
-    # @yieldreturn [Boolean] true if the tag should be deleted 
+    # @yieldreturn [Boolean] true if the tag should be deleted
     # @return [void]
     # @since 0.7.0
     def delete_tag_if(&block)

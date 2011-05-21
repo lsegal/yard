@@ -325,7 +325,7 @@ module YARD
 
       # (see Processor#extra_state)
       attr_reader :extra_state
-      
+
       undef owner, owner=, namespace, namespace=
       undef visibility, visibility=, scope, scope=
 
@@ -496,9 +496,9 @@ module YARD
         end
         object
       end
-      
+
       # @group Macro Support
-      
+
       # @abstract Implement this method to return the parameters in a method call
       #   statement. It should return an empty list if the statement is not a
       #   method call.
@@ -506,7 +506,7 @@ module YARD
       def call_params
         raise NotImplementedError
       end
-      
+
       # @abstract Implement this method to return the method being called in
       #   a method call. It should return nil if the statement is not a method
       #   call.
@@ -515,10 +515,10 @@ module YARD
       def caller_method
         raise NotImplementedError
       end
-      
+
       # Attempts to find or create a macro if a +@macro+ tag is found in the
       # docstring (or the object's docstring).
-      # 
+      #
       # @param [Docstring, CodeObjects::Base] object_or_docstring the docstring
       #   or it's object with which to check for a macro
       # @return [CodeObjects::MacroObject] the newly created macro
@@ -553,7 +553,7 @@ module YARD
         end
         macro
       end
-      
+
       # Sets the docstring on +object+ to the expanded macro.
       # @param [CodeObjects::Base] object the object to expand the macro on
       # @param [CodeObjects::MacroObject] macro the macro object to expand

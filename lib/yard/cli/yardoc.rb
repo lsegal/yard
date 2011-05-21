@@ -150,7 +150,7 @@ module YARD
       # @return [Array<String>] a list of assets to copy after generation
       # @since 0.6.0
       attr_accessor :assets
-      
+
       # @return [Boolean] whether markup option was specified
       # @since 0.7.0
       attr_accessor :has_markup
@@ -256,7 +256,7 @@ module YARD
         end
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
-        
+
         if generate && !verify_markup_options
           false
         else
@@ -351,7 +351,7 @@ module YARD
           puts "#{item.file}:#{item.line}: #{item.path}"
         end
       end
-      
+
       # Parses out the yardopts/document options
       def parse_yardopts_options(*args)
         opts = OptionParser.new
@@ -501,10 +501,10 @@ module YARD
           self.excluded << path
         end
       end
-      
+
       # Adds --[no-]yardopts / --[no-]document
       def yardopts_options(opts)
-        opts.on('--[no-]yardopts [FILE]', 
+        opts.on('--[no-]yardopts [FILE]',
                 "If arguments should be read from FILE",
                 "  (defaults to yes, FILE defaults to .yardopts)") do |use_yardopts|
           if use_yardopts.is_a?(String)
@@ -614,12 +614,12 @@ module YARD
         end
 
         opts.on('-M', '--markup-provider MARKUP_PROVIDER',
-                'Overrides the library used to process markup ', 
+                'Overrides the library used to process markup ',
                 '  formatting (specify the gem name)') do |markup_provider|
           options[:markup_provider] = markup_provider.to_sym
         end
 
-        opts.on('--charset ENC', 'Character set to use when parsing files ', 
+        opts.on('--charset ENC', 'Character set to use when parsing files ',
                                  '  (default is system locale)') do |encoding|
           begin
             Encoding.default_external, Encoding.default_internal = encoding, encoding

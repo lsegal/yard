@@ -2,20 +2,20 @@ require "benchmark"
 require File.join(File.dirname(__FILE__), '..', 'lib', 'yard')
 
 unless YARD::CodeObjects::Proxy.private_instance_methods.include?('to_obj')
-  raise "This benchmark is dependent on YARD::CodeObjects::Proxy#to_obj" 
+  raise "This benchmark is dependent on YARD::CodeObjects::Proxy#to_obj"
 end
 
 def rungen
   YARD::Registry.clear
-  YARD::CLI::Yardoc.run('--quiet', '--use-cache') 
+  YARD::CLI::Yardoc.run('--quiet', '--use-cache')
 end
 
 def redef(lock = false)
   eval <<-eof
-    class YARD::CodeObjects::Proxy; 
+    class YARD::CodeObjects::Proxy;
       def to_obj
-        @obj #{lock ? '||' : ''}= YARD::Registry.resolve(@namespace, @name) 
-      end 
+        @obj #{lock ? '||' : ''}= YARD::Registry.resolve(@namespace, @name)
+      end
     end
   eof
 end
