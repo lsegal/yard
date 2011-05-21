@@ -355,6 +355,7 @@ module YARD
       # Parses out the yardopts/document options
       def parse_yardopts_options(*args)
         opts = OptionParser.new
+        opts.base.long.clear # HACK: why are --help and --version defined?
         yardopts_options(opts)
         begin
           opts.parse(args)
