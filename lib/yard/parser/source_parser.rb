@@ -62,7 +62,7 @@ module YARD
         # @param [Array<String, Regexp>] excluded a list of excluded path matchers
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
-        # @return the parser object that was used to parse the source.
+        # @return [void]
         def parse(paths = ["{lib,app}/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
           log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
