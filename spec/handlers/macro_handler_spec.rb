@@ -137,4 +137,16 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     Registry.at('Bar#x_parser').should be_nil
     Registry.at('Baz#y_parser').should_not be_nil
   end
+  
+  it "should handle top-level DSL methods" do
+    obj = Registry.at('#my_other_method')
+    obj.should_not be_nil
+    obj.docstring.should == "Docstring for method"
+  end
+  
+  it "should handle Constant.foo syntax" do
+    obj = Registry.at('#beep')
+    obj.should_not be_nil
+    obj.signature.should == 'def beep(a, b, c)'
+  end
 end

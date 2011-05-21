@@ -10,7 +10,6 @@ module YARD
           namespace_only
 
           process do
-            return if namespace == Registry.root
             globals.__attached_macros ||= {}
             if !globals.__attached_macros[caller_method]
               return if Ruby::MacroHandler::IGNORE_METHODS[caller_method]

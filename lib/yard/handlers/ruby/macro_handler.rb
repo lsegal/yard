@@ -13,7 +13,6 @@ module YARD
           private_constant).map {|n| [n, true] }.flatten]
         
         process do
-          return if namespace == Registry.root
           globals.__attached_macros ||= {}
           if !globals.__attached_macros[caller_method]
             return if IGNORE_METHODS[caller_method]

@@ -71,3 +71,10 @@ class Baz < Foo
   parser :y_parser
   none { }
 end
+
+# @method my_other_method
+# Docstring for method
+method_that_makes_a_method
+
+# @macro something
+foobarbaz :beep
