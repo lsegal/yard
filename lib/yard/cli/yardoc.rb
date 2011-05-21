@@ -186,7 +186,7 @@ module YARD
         @save_yardoc = true
         @has_markup = false
 
-        if defined?(Encoding)
+        if defined?(Encoding) && Encoding.respond_to?(:default_external=)
           Encoding.default_external, Encoding.default_internal = 'utf-8', 'utf-8'
         end
       end
