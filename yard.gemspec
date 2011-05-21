@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
+  s.add_runtime_dependency 'rdiscount', '~> 1.6.8'
 end
