@@ -107,11 +107,11 @@ module YARD
       def html_markup_html(text)
         text
       end
-      
+
       # Highlights Ruby source. Similar to {#html_syntax_highlight}, but
       # this method is meant to be called from {#htmlify} when markup is
       # set to "ruby".
-      # 
+      #
       # @param [String] source the Ruby source
       # @return [String] the highlighted HTML
       # @since 0.7.0
@@ -208,7 +208,7 @@ module YARD
         return title || file.title unless serializer
         link_url(url_for_file(file, anchor), title || file.title)
       end
-      
+
       # (see BaseHelper#link_include_file)
       def link_include_file(file)
         unless file.is_a?(CodeObjects::ExtraFileObject)

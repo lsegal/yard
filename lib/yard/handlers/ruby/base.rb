@@ -135,7 +135,7 @@ module YARD
             parser.process(nodes)
           end
         end
-        
+
         # @group Macro Handling
 
         def call_params

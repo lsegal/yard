@@ -3,7 +3,7 @@ module YARD
     # Lists all constant and method names in the codebase. Uses {Yardoc} --list.
     class List < Command
       def description; 'Lists all constant and methods. Uses `yard doc --list`' end
-      
+
       # Runs the commandline utility, parsing arguments and displaying a
       # list of objects
       #

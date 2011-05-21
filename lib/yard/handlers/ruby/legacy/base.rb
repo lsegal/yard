@@ -41,7 +41,7 @@ module YARD
             end
           end
         end
-        
+
         def call_params
           tokens = statement.tokens[1..-1]
           tokval_list(tokens, :attr, :identifier, TkId).map do |value|

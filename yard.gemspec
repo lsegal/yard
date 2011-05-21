@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/lib/yard')
 Gem::Specification.new do |s|
   s.name          = "yard"
-  s.summary       = "Documentation tool for consistent and usable documentation in Ruby." 
+  s.summary       = "Documentation tool for consistent and usable documentation in Ruby."
   s.description   = <<-eof
     YARD is a documentation generation tool for the Ruby programming language.
     It enables the user to generate consistent, usable documentation that can be
@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
+  s.add_runtime_dependency 'rdiscount', '~> 1.6.8'
 end

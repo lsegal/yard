@@ -4,7 +4,7 @@ module YARD
       module MacroHandlerMethods
         include CodeObjects
         include Parser
-        
+
         def find_or_create_macro(docstring)
           return @macro if @macro
           return if @macro = super(docstring)
@@ -16,14 +16,14 @@ module YARD
             end
           end
         end
-        
+
         def expanded_macro_or_docstring
           return @docstring unless @macro
           all_params = ([caller_method] + call_params).compact
           data = MacroObject.apply_macro(@macro, @docstring, all_params, statement.source)
           Docstring.new(data)
         end
-        
+
         def expand_macro(object, macro)
           if @docstring
             object.docstring = @docstring
@@ -34,7 +34,7 @@ module YARD
             super(object, macro)
           end
         end
-        
+
         def sanitize_scope
           tmp_scope = @docstring.tag(:scope) ? @docstring.tag(:scope).text : ''
           %w(class instance).include?(tmp_scope) ? tmp_scope.to_sym : scope
@@ -66,7 +66,7 @@ module YARD
             namespace.attributes[object.scope][clean_name][:write] = writer
           end
         end
-        
+
         def method_name
           name = nil
           [:method, :attribute, :overload].each do |tag_name|
@@ -110,7 +110,7 @@ module YARD
         private
 
         def attribute_writable?
-          if @docstring.tag(:attribute) 
+          if @docstring.tag(:attribute)
             types = @docstring.tag(:attribute).types
             return types ? types.join.include?('w') : true
           end
@@ -118,7 +118,7 @@ module YARD
         end
 
         def attribute_readable?
-          if @docstring.tag(:attribute) 
+          if @docstring.tag(:attribute)
             types = @docstring.tag(:attribute).types
             return types ? (types.join =~ /(?!w)r/ ? true : false) : true
           end

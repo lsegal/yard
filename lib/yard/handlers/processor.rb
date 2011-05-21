@@ -59,17 +59,17 @@ module YARD
 
       # @return [Symbol] the parser type (:ruby, :ruby18, :c)
       attr_accessor :parser_type
-      
-      # Handlers can share state for the entire post processing stage through 
+
+      # Handlers can share state for the entire post processing stage through
       # this attribute. Note that post processing stage spans multiple files.
       # To share state only within a single file, use {#extra_state}
-      # 
+      #
       # @example Sharing state among two handlers
       #   class Handler1 < YARD::Handlers::Ruby::Base
       #     handles :class
       #     process { globals.foo = :bar }
       #   end
-      # 
+      #
       #   class Handler2 < YARD::Handlers::Ruby::Base
       #     handles :method
       #     process { puts globals.foo }
@@ -77,14 +77,14 @@ module YARD
       # @return [OpenStruct] global shared state for post-processing stage
       # @see #extra_state
       attr_accessor :globals
-      
+
       # Share state across different handlers inside of a file.
       # This attribute is similar to {#visibility}, {#scope}, {#namespace}
       # and {#owner}, in that they all maintain state across all handlers
       # for the entire source file. Use this attribute to store any data
       # your handler might need to save during the parsing of a file. If
       # you need to save state across files, see {#globals}.
-      # 
+      #
       # @return [OpenStruct] an open structure that can store arbitrary data
       # @see #globals
       attr_accessor :extra_state
