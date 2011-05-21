@@ -50,8 +50,10 @@ module YARD
       # @return [void]
       def parse_options(opts, args)
         opts.parse!(args)
-      rescue OptionParser::InvalidOption => e
-        log.warn "Unrecognized/#{e.message}"
+      rescue OptionParser::ParseError => err
+        log.warn "Unrecognized/#{err.message}"
+        args.shift if args.first && args.first[0,1] != '-'
+        retry
       end
 
       # Loads a Ruby script. If +Config.options[:safe_mode]+ is enabled,
