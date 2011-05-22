@@ -36,6 +36,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end if RUBY19
 
     it "should take file encoding if there is a file" do
+      ENV.stub!(:[]).with('LANG').and_return('utf-8') if RUBY18
       @file = OpenStruct.new(:contents => 'foo')
       charset.should == 'utf-8'
     end if RUBY18
