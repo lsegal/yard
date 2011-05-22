@@ -457,6 +457,7 @@ module YARD
         end
         case lang
         when "ascii-8bit", "us-ascii", "ascii-7bit"; 'iso-8859-1'
+        when "utf8"; 'utf-8'
         else; lang
         end
       end

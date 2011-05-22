@@ -30,6 +30,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
     end
     
+    it "should support utf8 as an encoding value for utf-8" do
+      type = 'utf8'
+      ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
+      Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
+      charset.should == 'utf-8'
+    end
+    
     it "should take file encoding if there is a file" do
       @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
       charset.should == 'Shift_JIS' # not the correct charset name, but good enough
