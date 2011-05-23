@@ -622,7 +622,9 @@ module YARD
         opts.on('--charset ENC', 'Character set to use when parsing files ', 
                                  '  (default is system locale)') do |encoding|
           begin
-            Encoding.default_external, Encoding.default_internal = encoding, encoding
+            if defined?(Encoding) && Encoding.respond_to?(:default_external=)
+              Encoding.default_external, Encoding.default_internal = encoding, encoding
+            end
           rescue ArgumentError => e
             raise OptionParser::InvalidOption, e
           end
