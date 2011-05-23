@@ -71,7 +71,7 @@ module YARD
           name = nil
           [:method, :attribute, :overload].each do |tag_name|
             if tag = @docstring.tag(tag_name)
-              name = tag.send(tag == :overload ? :text : :name).to_s
+              name = tag.send(tag_name == :attribute ? :text : :name).to_s
               if tag_name == :method && name =~ /\(|\s/
                 overload = Tags::OverloadTag.new(:overload, name)
                 @docstring.add_tag(overload)

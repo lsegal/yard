@@ -27,6 +27,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     obj.should_not be_nil
     obj.should be_writer
   end
+  
+  it "should allow @attribute to define alternate method name" do
+    Registry.at('Foo#attr4').should be_nil
+    Registry.at('Foo#custom').should_not be_nil
+  end
 
   it "should default to creating an instance method for any DSL method with tags" do
     obj = Registry.at('Foo#implicit0')

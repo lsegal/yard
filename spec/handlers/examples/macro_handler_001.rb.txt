@@ -26,6 +26,9 @@ class Foo
   # @attribute
   default_attribute :attr3
   
+  # @attribute custom
+  default_attribute :attr4
+  
   # @method xyz(a, b, c)
   # The foo method
   # @param [String] a
