@@ -404,9 +404,24 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     def format_types(types, brackets = false) types.join(", ") end
-    def signature(obj) super(obj, false).strip end
+    def signature(obj, link = false) super(obj, link).strip end
     
     it_should_behave_like "signature"
+    
+    it "should link to regular method if overload name does not have the same method name" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @overload bar(a, b, c)
+          def foo; end
+        end
+      eof
+      serializer = mock(:serializer)
+      serializer.stub!(:serialized_path).with(Registry.at('Foo')).and_return('')
+      stub!(:serializer).and_return(serializer)
+      stub!(:object).and_return(Registry.at('Foo'))
+      signature(Registry.at('Foo#foo').tag(:overload), true).should == 
+        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">- <strong>bar</strong>(a, b, c) </a>"
+    end
   end
 
   describe '#html_syntax_highlight' do

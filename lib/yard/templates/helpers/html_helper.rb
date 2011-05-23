@@ -429,7 +429,8 @@ module YARD
           else
             link_title = "#{h name} (#{meth.type})"
           end
-          link_url(url_for(meth), title, :title => link_title) + extras_text
+          obj = meth.respond_to?(:object) ? meth.object : meth
+          link_url(url_for(obj), title, :title => link_title) + extras_text
         else
           title + extras_text
         end
