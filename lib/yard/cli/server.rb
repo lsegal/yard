@@ -67,7 +67,7 @@ module YARD
       def add_libraries(args)
         (0...args.size).step(2) do |index|
           library, yardoc = args[index], args[index + 1]
-          yardoc ||= '.yardoc'
+          yardoc = yardoc.nil? ? File.expand_path('.yardoc') : File.expand_path(yardoc)
           if File.exist?(yardoc)
             libraries[library] ||= []
             libraries[library] << YARD::Server::LibraryVersion.new(library, nil, yardoc)
@@ -142,13 +142,13 @@ module YARD
         parse_options(opts, args)
 
         if args.empty? && libraries.empty?
-          if !File.exist?('.yardoc')
+          if !File.exist? File.expand_path('.yardoc')
             log.enter_level(Logger::INFO) do
               log.info "No .yardoc file found in current directory, parsing source before starting server..."
             end
             Yardoc.run('-n')
           end
-          add_libraries([File.basename(Dir.pwd), '.yardoc'])
+          add_libraries([File.basename(Dir.pwd), File.expand_path('.yardoc')])
         else
           add_libraries(args)
           options[:single_library] = false if libraries.size > 1

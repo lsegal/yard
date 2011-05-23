@@ -24,11 +24,11 @@ describe YARD::CLI::Server do
   
   def run(*args)
     if @libraries.empty?
-      library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, '.yardoc')
+      library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, File.expand_path('.yardoc'))
       @libraries = {library.name => [library]}
     end
     unless @no_verify_libraries
-      @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(lib.yardoc_file).and_return(true) } }
+      @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(File.expand_path(lib.yardoc_file)).and_return(true) } }
     end
     unless @no_adapter_mock
       @cli.stub!(:adapter).and_return(@adapter)
@@ -40,19 +40,19 @@ describe YARD::CLI::Server do
 
   it "should default to current dir if no library is specified" do
     Dir.should_receive(:pwd).and_return('/path/to/foo')
-    @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '.yardoc')]
+    @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('.yardoc'))]
     run
   end
   
   it "should use .yardoc as yardoc file is library list is odd" do
-    @libraries['a'] = [Server::LibraryVersion.new('a', nil,'.yardoc')]
+    @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('.yardoc'))]
     run 'a'
   end
   
   it "should force multi library if more than one library is listed" do
     @options[:single_library] = false
-    @libraries['a'] = [Server::LibraryVersion.new('a', nil, 'b')]
-    @libraries['c'] = [Server::LibraryVersion.new('c', nil, '.yardoc')]
+    @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('b'))]
+    @libraries['c'] = [Server::LibraryVersion.new('c', nil, File.expand_path('.yardoc'))]
     run %w(a b c)
   end
   
