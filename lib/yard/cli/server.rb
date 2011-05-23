@@ -67,7 +67,8 @@ module YARD
       def add_libraries(args)
         (0...args.size).step(2) do |index|
           library, yardoc = args[index], args[index + 1]
-          yardoc = yardoc.nil? ? File.expand_path('.yardoc') : File.expand_path(yardoc)
+          yardoc ||= '.yardoc'
+          yardoc = File.expand_path(yardoc)
           if File.exist?(yardoc)
             libraries[library] ||= []
             libraries[library] << YARD::Server::LibraryVersion.new(library, nil, yardoc)
