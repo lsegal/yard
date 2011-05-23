@@ -80,7 +80,7 @@ module YARD
         # 
         # Interpolation rules:
         # * $0, $1, $2, ... = the Nth parameter in +call_params+
-        # * $& = the full statement source (excluding block)
+        # * $* = the full statement source (excluding block)
         # * Also supports $\{N-M} ranges, as well as negative indexes on N or M
         # * Use \$ to escape the variable name in a macro.
         # 
@@ -88,7 +88,7 @@ module YARD
         #   @param [Array<String>] call_params the method name and parameters
         #     to the method call. These arguments will fill \$0-N
         #   @param [String] full_source the full source line (excluding block) 
-        #     interpolated as \$&
+        #     interpolated as \$*
         #   @param [String] block_source Currently unused. Will support 
         #     interpolating the block data as a variable.
         #   @return [String] the expanded macro data
