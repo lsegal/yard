@@ -371,6 +371,9 @@ module YARD
       # @since 0.5.3
       def signature_types(meth, link = true)
         meth = convert_method_to_overload(meth)
+        if meth.respond_to?(:object) && !meth.has_tag?(:return)
+          meth = meth.object
+        end
 
         type = options[:default_return] || ""
         if meth.tag(:return) && meth.tag(:return).types

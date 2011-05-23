@@ -108,4 +108,14 @@ shared_examples_for "signature" do
     eof
     signature(Registry.at('#foo')).should == @results[:block]
   end
+  
+  it "should use regular return tag if the @overload is empty" do
+    YARD.parse_string <<-'eof'
+      # @overload foobar
+      #   Hello world
+      # @return [String]
+      def foo; end
+    eof
+    signature(Registry.at('#foo').tag(:overload)).should == @results[:empty_overload]
+  end
 end

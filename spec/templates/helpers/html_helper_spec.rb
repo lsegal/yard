@@ -399,7 +399,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :multitype => "- (Type, ...) <strong>foo</strong>",
         :void => "- (void) <strong>foo</strong>",
         :hide_void => "- <strong>foo</strong>",
-        :block => "- (Object) <strong>foo</strong> {|a, b, c| ... }"
+        :block => "- (Object) <strong>foo</strong> {|a, b, c| ... }",
+        :empty_overload => '- (String) <strong>foobar</strong>'
       }
     end
     
