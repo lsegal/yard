@@ -202,7 +202,7 @@ Multiple `--query` arguments are allowed in the command line parameters. The
 following two lines both check for the existence of a return and param tag:
 
     --query '@return' --query '@param'
-    --query '@rturn && @param'
+    --query '@return && @param'
     
 For more information about the query syntax, see the {YARD::Verifier} class.
 
