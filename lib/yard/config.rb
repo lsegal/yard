@@ -64,7 +64,7 @@ module YARD
   #     yard-sample-plugin:
   #       show-results-inline: true
   # 
-  # As the configuration is available is available system wide, it can be
+  # As the configuration is available system wide, it can be
   # accessed within the plugin code.
   # 
   # 
