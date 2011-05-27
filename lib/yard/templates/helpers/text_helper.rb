@@ -52,8 +52,12 @@ module YARD
           end
 
           type = options[:default_return] || ""
-          if meth.tag(:return) && meth.tag(:return).types
-            types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
+          rmeth = meth
+          if !rmeth.has_tag?(:return) && rmeth.respond_to?(:object)
+            rmeth = meth.object
+          end
+          if rmeth.tag(:return) && rmeth.tag(:return).types
+            types = rmeth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
             first = types.first
             if types.size == 2 && types.last == 'nil'
               type = first + '?'

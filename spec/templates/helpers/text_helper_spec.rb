@@ -20,7 +20,8 @@ describe YARD::Templates::Helpers::TextHelper do
         :multitype => "root.foo -> (Type, ...)",
         :void => "root.foo -> void",
         :hide_void => "root.foo",
-        :block => "root.foo {|a, b, c| ... } -> Object"
+        :block => "root.foo {|a, b, c| ... } -> Object",
+        :empty_overload => 'root.foobar -> String'
       }
     end
     
