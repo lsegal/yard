@@ -1,3 +1,5 @@
+require 'thread'
+
 module YARD
   module Server
     module Commands
