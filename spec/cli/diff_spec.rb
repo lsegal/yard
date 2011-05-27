@@ -135,6 +135,7 @@ eof
       File.should_receive(:directory?).any_number_of_times
       File.should_receive(:exist?).with('gem1.gem').and_return(true)
       File.should_receive(:exist?).with('gem2.gem').and_return(true)
+      File.should_receive(:exist?).any_number_of_times
       File.should_receive(:open).with('gem1.gem', 'rb').and_yield(iomock)
       File.should_receive(:open).with('gem2.gem', 'rb')
       FileUtils.should_receive(:mkdir_p)
@@ -152,6 +153,7 @@ eof
       File.should_receive(:directory?).any_number_of_times
       File.should_receive(:exist?).with('gem1.gem').and_return(false)
       File.should_receive(:exist?).with('gem2.gem').and_return(false)
+      File.should_receive(:exist?).any_number_of_times
       @diff.should_receive(:open).with('http://rubygems.org/downloads/gem1.gem').and_yield(iomock)
       @diff.should_receive(:open).with('http://rubygems.org/downloads/gem2.gem')
       FileUtils.should_receive(:mkdir_p)
