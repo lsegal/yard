@@ -96,7 +96,7 @@ module YARD
     # @see Verifier
     class Yardoc < Command
       # The configuration filename to load extra options from
-      DEFAULT_YARDOPTS_FILE = ".yardopts"
+      DEFAULT_YARDOPTS_FILE = "{.yardopts,.yard/opts}"
 
       # @return [Hash] the hash of options passed to the template.
       # @see Templates::Engine#render
@@ -277,7 +277,8 @@ module YARD
       # @return [Array<String>] an array of options parsed from .yardopts
       def yardopts
         return [] unless use_yardopts_file
-        File.read_binary(options_file).shell_split
+        file = Dir.glob(options_file).first
+        File.read_binary(file).shell_split
       rescue Errno::ENOENT
         []
       end
