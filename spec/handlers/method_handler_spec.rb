@@ -166,4 +166,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     log.should_receive(:warn).with(/Invalid.+macro name.+Foo\.foo/)
     YARD.parse_string "class Foo\n# @macro\ndef self.foo; end\nend"
   end
+  
+  it "should handle 'def end' methods" do
+    obj = Registry.at('F::A#foo')
+    obj.should_not be_nil
+    obj = Registry.at('F::A#bar')
+    obj.should_not be_nil
+    obj.docstring.should == 'PASS'
+  end
 end

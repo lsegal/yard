@@ -108,3 +108,15 @@ class E
   
   xyz :a
 end
+
+module F
+  class A
+    def foo; end
+    
+    def end
+    end
+    
+    # PASS
+    def bar; end
+  end
+end
