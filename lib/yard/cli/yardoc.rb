@@ -254,7 +254,7 @@ module YARD
         end
 
         options[:readme] ||= CodeObjects::ExtraFileObject.new(readme) if readme
-        options[:files].unshift(options[:readme]) if options[:readme]
+        options[:files].unshift(options[:readme]).uniq! if options[:readme]
 
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
