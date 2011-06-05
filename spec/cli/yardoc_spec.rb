@@ -418,7 +418,8 @@ describe YARD::CLI::Yardoc do
     it "should accept files section only containing extra files" do
       @yardoc.parse_arguments *%w( - LICENSE )
       @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
-      @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
+      @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('README.md'),
+                                         CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
     it "should accept globs as extra files" do

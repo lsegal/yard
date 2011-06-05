@@ -70,7 +70,6 @@ module YARD
                 yardoc.parse_arguments
               end
               yardoc.options.delete(:serializer)
-              yardoc.options[:files].unshift(*Dir.glob('README*'))
               options.update(yardoc.options.to_hash)
             end
           end
