@@ -96,8 +96,7 @@ module YARD
     # @see Verifier
     class Yardoc < Command
       # The configuration filename to load extra options from
-      #DEFAULT_YARDOPTS_FILE = "{.yardopts,.yard/opts}"
-      DEFAULT_YARDOPTS_FILE = ".yardopts"
+      DEFAULT_YARDOPTS_FILES = [".yardopts", ".yard/options"]
 
       # @return [Hash] the hash of options passed to the template.
       # @see Templates::Engine#render
@@ -181,7 +180,7 @@ module YARD
         @use_yardopts_file = true
         @use_document_file = true
         @generate = true
-        @options_file = DEFAULT_YARDOPTS_FILE
+        @options_file = default_options_file
         @statistics = true
         @list = false
         @save_yardoc = true
@@ -278,13 +277,20 @@ module YARD
       # @return [Array<String>] an array of options parsed from .yardopts
       def yardopts
         return [] unless use_yardopts_file
-        file = Dir.glob(options_file).first || options_file
-        File.read_binary(file).shell_split
+        File.read_binary(options_file).shell_split
       rescue Errno::ENOENT
         []
       end
 
       private
+
+      # Default options_file settings looks to see if there is an existing
+      # file for any listed in DEFAULT_YARDOPTS_FILES. If so it is returned,
+      # otherwise fallsback to the first filename in the list.
+      # @return [String] filename of default options file
+      def default_options_file
+        DEFAULT_YARDOPTS_FILES.find{ |f| File.file?(f) } || DEFAULT_YARDOPTS_FILE.first
+      end
 
       # Generates output for objects
       # @param [Hash, nil] checksums if supplied, a list of checkums for files.
