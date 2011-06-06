@@ -30,11 +30,11 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
         def bar; end
       end
     eof
+    readme = CodeObjects::ExtraFileObject.new('README', 
+      "# This is a code comment\n\n# Top of file\n\n\nclass C; end")
     Templates::Engine.generate Registry.all(:class), 
       :serializer => StringSerializer.new(files, string),
-      :onefile => true, :format => :html, :files => [
-        CodeObjects::ExtraFileObject.new('README', 
-          "# This is a code comment\n\n# Top of file\n\n\nclass C; end"),
+      :onefile => true, :format => :html, :readme => readme, :files => [readme,
         CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')
       ]
     files.should == ['index.html']
