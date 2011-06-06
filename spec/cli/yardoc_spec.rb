@@ -416,6 +416,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should accept files section only containing extra files" do
+      Dir.should_receive(:glob).with('README*').and_return([])
       @yardoc.parse_arguments *%w( - LICENSE )
       @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
       @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
@@ -443,6 +444,21 @@ describe YARD::CLI::Yardoc do
     it "should warn if readme file is not found" do
       log.should_receive(:warn).with(/Could not find readme file: UNKNOWN/)
       @yardoc.parse_arguments *%w( -r UNKNOWN )
+    end
+    
+    it "should use first file as readme if no readme is specified when using --one-file" do
+      Dir.should_receive(:glob).with('README*').and_return []
+      Dir.should_receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
+      File.should_receive(:read).with('lib/foo.rb').and_return('')
+      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
+    end
+    
+    it "should use readme it exists when using --one-file" do
+      Dir.should_receive(:glob).with('README*').and_return ['README']
+      File.should_receive(:read).with('README').and_return('')
+      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new('README', '')
     end
   end
   
