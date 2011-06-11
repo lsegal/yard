@@ -2,8 +2,6 @@ include Helpers::ModuleHelper
 
 def init
   options[:objects] = objects = run_verifier(options[:objects])
-  options[:files] = ([options[:readme]] + options[:files]).uniq.compact
-  options[:readme] = options[:files].first
   
   return serialize_onefile if options[:onefile]
   generate_assets
