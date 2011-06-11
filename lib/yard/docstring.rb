@@ -170,10 +170,10 @@ module YARD
       if tag_name && tag_factory.respond_to?(tag_method)
         add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
       else
-        log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+        warn_unknown_tag(tag_name, tag_buf)
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+      warn_invalid_tag_format(tag_name, tag_buf)
     end
 
     # Adds a tag or reftag object to the tag list. If you want to parse
@@ -326,6 +326,16 @@ module YARD
 
       # Remove trailing/leading whitespace / newlines
       docstring.gsub!(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
+    end
+
+    #
+    def warn_unknown_tag(tag_name, tag_buf)
+      log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+    end
+
+    #
+    def warn_invlide_tag_format(tag_name, tag_buf)
+      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
   end
 end
