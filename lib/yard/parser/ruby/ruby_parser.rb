@@ -331,15 +331,15 @@ module YARD
         def on_qwords_new(*args)
           node = LiteralNode.new(:qwords_literal, args)
           if @map[:qwords_beg]
-            sstart, lstart = *@map[:qwords_beg].pop
-            node.source_range = Range.new(sstart-1, @ns_charno)
+            lstart, sstart = *@map[:qwords_beg].pop
+            node.source_range = Range.new(sstart, @ns_charno-1)
             node.line_range = Range.new(lstart, lineno)
           end
           node
         end
         
         def on_qwords_add(list, item)
-          list.source_range = (list.source_range.first..@ns_charno)
+          list.source_range = (list.source_range.first..@ns_charno-1)
           list.line_range = (list.line_range.first..lineno)
           list.push(item)
           list

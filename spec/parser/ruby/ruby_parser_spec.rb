@@ -203,5 +203,14 @@ describe YARD::Parser::Ruby::RubyParser do
       src = "%w(\na b c\n d e f\n)"
       stmt(src).jump(:qwords_literal).source.should == src
     end
+    
+    it "should parse %w() array in constant declaration" do
+      s = stmt(<<-eof)
+        class Foo
+          FOO = %w( foo bar )
+        end
+      eof
+      s.jump(:qwords_literal).source.should == '%w( foo bar )'
+    end
   end
 end if HAVE_RIPPER
