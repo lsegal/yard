@@ -95,7 +95,7 @@ module YARD
 
         # Sets the list of tags that should apply to any children inside the
         # namespace they are defined in. For instance, a "@since" tag should
-        # apply to all methods inside a module is it defined in. Transitive
+        # apply to all methods inside a module it is defined in. Transitive
         # tags can be overridden by directly defining a tag on the child object.
         #
         # @return [Array<Symbol>] a list of transitive tags
