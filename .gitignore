@@ -4,7 +4,9 @@ _Yardoc
 *.pdf
 .yardoc
 *.gem
+Gemfile.lock
 /pkg
 /doc
 /doc_guide
 /coverage
+
