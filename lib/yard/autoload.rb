@@ -1,5 +1,5 @@
 # @private
-def __p(*path) File.join(YARD::ROOT, 'yard', *path) end
+def __p(path) File.join(YARD::ROOT, 'yard', *path.split('/')); end
 
 module YARD
   module CLI # Namespace for command-line interface components
