@@ -429,6 +429,7 @@ module YARD
       # @since 0.6.0
       def add_tag(tag_data, factory_method = nil)
         tag, title = *tag_data.split(':')
+        title ||= tag.capitalize
         Tags::Library.define_tag(title, tag.to_sym, factory_method)
         Tags::Library.visible_tags |= [tag.to_sym]
       end

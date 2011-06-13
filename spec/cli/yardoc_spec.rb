@@ -474,7 +474,7 @@ describe YARD::CLI::Yardoc do
       visible_tags = mock(:visible_tags)
       visible_tags.should_receive(:|).ordered.with([:foo])
       visible_tags.should_receive(:-).ordered.with([]).and_return(visible_tags)
-      Tags::Library.should_receive(:define_tag).with(nil, :foo, factory_method)
+      Tags::Library.should_receive(:define_tag).with('Foo', :foo, factory_method)
       Tags::Library.stub!(:visible_tags=)
       Tags::Library.should_receive(:visible_tags).at_least(1).times.and_return(visible_tags)
       @yardoc.parse_arguments("--#{switch}-tag", 'foo')
@@ -484,7 +484,7 @@ describe YARD::CLI::Yardoc do
       visible_tags = mock(:visible_tags)
       visible_tags.should_receive(:|).ordered.with([tag])
       visible_tags.should_receive(:-).ordered.with([tag]).and_return([])
-      Tags::Library.should_receive(:define_tag).with(nil, tag, nil)
+      Tags::Library.should_receive(:define_tag).with(tag.to_s.capitalize, tag, nil)
       Tags::Library.stub!(:visible_tags=)
       Tags::Library.should_receive(:visible_tags).at_least(1).times.and_return(visible_tags)
     end
@@ -494,8 +494,8 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments('--tag', 'foo:Title of Foo')
     end
 
-    it "should accept --tag without title" do
-      Tags::Library.should_receive(:define_tag).with(nil, :foo, nil)
+    it "should accept --tag without title (and default to captialized tag name)" do
+      Tags::Library.should_receive(:define_tag).with('Foo', :foo, nil)
       @yardoc.parse_arguments('--tag', 'foo')
     end
     
