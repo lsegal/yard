@@ -138,6 +138,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
       htmlify('{http://example.com Title}', :markdown).chomp.should =~
         %r{<p><a href="http://example.com".*>Title</a></p>}
+      htmlify('{http://example.com}', :markdown).chomp.should =~
+        %r{<p><a href="http://example.com".*>http://example.com</a></p>}
     end
   end
   

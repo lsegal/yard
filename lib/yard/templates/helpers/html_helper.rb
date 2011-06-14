@@ -181,8 +181,9 @@ module YARD
 
           next(match) if name[0,1] == '|'
           
-          if name == '<a' && title =~ /href=["'](.+?)["'].*>.*<\/a>\s*(.+?)\Z/
+          if name == '<a' && title =~ /href=["'](.+?)["'].*>.*<\/a>\s*(.*)\Z/
             name, title = $1, $2
+            title = nil if title.empty?
           end
           
           if object.is_a?(String)
