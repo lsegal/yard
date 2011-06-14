@@ -32,16 +32,18 @@ task :suite do
 end
 
 task :travis_ci do
+  status = 0
   ENV['SUITE'] = '1'
   ENV['CI'] = '1'
   system "bundle exec rake specs"
-  exit(1) if $?.to_i != 0
-  if RUBY_VERSION >= '1.8.7' && RUBY_PLATFORM != 'java'
+  status = 1 if $?.to_i != 0
+  if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
     puts ""
     puts "Running specs with in legacy mode"
     system "bundle exec rake specs LEGACY=1"
-    exit(1) if $?.to_i != 0
+    status = 1 if $?.to_i != 0
   end
+  exit(status)
 end
 
 begin
