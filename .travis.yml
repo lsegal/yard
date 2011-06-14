@@ -9,10 +9,10 @@ rvm:
   - 1.8.6
   - ree
   - jruby
-  - ruby-head
+#  - ruby-head (RedCloth does not compile)
 
 # Define how to run your tests (defaults to `bundle exec rake` or `rake` depending on whether you have a `Gemfile`)
-script: "rake travis_ci"
+script: "bundle exec rake travis_ci"
 
 # Define tasks to be completed before and after tests run . Will allow folding of content on frontend
 #before_script:
