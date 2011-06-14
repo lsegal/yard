@@ -31,6 +31,19 @@ task :suite do
   end
 end
 
+task :travis_ci do
+  ENV['SUITE'] = '1'
+  ENV['CI'] = '1'
+  system "bundle exec rake specs"
+  exit(1) if $?.to_i != 0
+  if RUBY_VERSION >= '1.8.7' && RUBY_PLATFORM != 'java'
+    puts ""
+    puts "Running specs with in legacy mode"
+    system "bundle exec rake specs LEGACY=1"
+    exit(1) if $?.to_i != 0
+  end
+end
+
 begin
   hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
   if YARD::Parser::SourceParser.parser_type == :ruby
