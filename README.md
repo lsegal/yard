@@ -482,37 +482,10 @@ Changelog
 Contributors
 ------------
 
-Special thanks to the following people for submitting patches:
+Special thanks to all contributors for submitting patches. A full list of
+contributors including their patches can be found at: 
 
-* Nathan Weizenbaum
-* Nick Plante
-* Michael Edgar
-* Sam Rawlins
-* Yehuda Katz
-* Duane Johnson
-* Hal Brodigan
-* Edward Muller
-* Pieter van de Bruggen
-* Leonid Borisenko
-* Arthur Schreiber
-* Robert Wahler
-* Mark Evans
-* Lee Jarvis
-* Franklin Webber
-* Dominik Honnef
-* David Turnbull
-* Bob Aman
-* Anthony Thibault
-* Philip Roberts
-* Jeff Rafter
-* Elliottcable
-* James Rosen
-* Jake Kerr
-* Gioele Barabucci
-* Gabriel Horner
-* Denis Defreyne
-* Benjamin Bock
-* Aman Gupta
+http://github.com/lsegal/yard/contributors
 
 Copyright
 ---------
