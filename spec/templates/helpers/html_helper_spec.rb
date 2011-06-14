@@ -128,7 +128,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
-      htmlify('http://example.com', :markdown).should include('<a href="http://example.com"')
+      htmlify('http://example.com', :markdown).chomp.should ==
+        '<p><a href="http://example.com">http://example.com</a></p>'
+    end
+    
+    it "should not autolink URLs inside of {} (markdown specific)" do
+      log.enter_level(Logger::FATAL) do
+        pending 'This test depends on markdown' unless markup_class(:markdown)
+      end
+      htmlify('{http://example.com Title}', :markdown).chomp.should =~
+        %r{<p><a href="http://example.com".*>Title</a></p>}
     end
   end
   

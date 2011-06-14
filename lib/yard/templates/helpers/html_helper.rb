@@ -180,6 +180,11 @@ module YARD
           next(match[1..-1]) if escape
 
           next(match) if name[0,1] == '|'
+          
+          if name == '<a' && title =~ /href=["'](.+?)["'].*>.*<\/a>\s*(.+?)\Z/
+            name, title = $1, $2
+          end
+          
           if object.is_a?(String)
             object
           else
