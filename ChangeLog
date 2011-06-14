@@ -1,10 +1,190 @@
+2011-06-14  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: 0.7.2 release
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add extra spec for `{http://...}`
+  links (and fix behaviour)
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Support YARD style `{http://...
+  title}` links when using markdown provider that performs URL autolinking. 
+  Closes #353
+
+2011-06-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Print correct constant values when using %w() arrays  Closes #348
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Use capitalized tag name
+  if title is not provided in --tag  Closes #352
+
+  * .gitignore, Gemfile: Add Gemfile for Bundler support
+
+2011-06-12  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/library.rb: Fix typo in transitive_tags docs
+
+2011-06-11  Michael S. Klishin <michael@novemberain.com>
+
+  * spec/registry_spec.rb: Eliminate deadlocks for thread-local spec group on
+  1.8.7-p334  Ruby 1.8.7 seems to treat empty while loops "specially". As soon
+  as a Kernel#puts call or a variable assignment happens in the while loop
+  body, deadlocks are gone. Note that synchronization alone wasn't sufficient.
+
+2011-06-07  Akzhan Abdulin <akzhan.abdulin@gmail.com>
+
+  * lib/yard/autoload.rb: __p method should not depend on / file path
+  separator. Actually it has only one parameter.
+
+2011-06-06  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb,
+  spec/templates/onefile_spec.rb, templates/default/onefile/html/setup.rb: Fix
+  readme logic using --one-file and add tests
+
+  * templates/default/fulldoc/html/setup.rb: No longer need to add
+  files/readmes in templates (done inside CLI::Yardoc)
+
+  * spec/cli/yardoc_spec.rb: Stub out README in extra files spec
+
+2011-06-05  Nick Plante <nap@zerosum.org>
+
+  * lib/yard/cli/yardoc.rb: ensure that readme isn't duplicated in file list
+
+  * lib/yard/cli/yardoc.rb, lib/yard/server/commands/frames_command.rb,
+  lib/yard/server/commands/library_command.rb, spec/cli/yardoc_spec.rb: Fix
+  readme option display for YARD server (frames)
+
+2011-06-03  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Properly handle 'def end' in legacy
+  parser  Closes #343
+
+2011-05-27  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/diff_spec.rb: Make File mocks in diff_spec.rb more resilient to
+  different environments (bundler)
+
+  * lib/yard/templates/helpers/text_helper.rb,
+  spec/templates/helpers/text_helper_spec.rb: Make overload fix work with text
+  helper as well
+
+  * lib/yard/server/commands/library_command.rb: Require 'thread' in
+  LibraryCommand  Closes #338
+
+2011-05-24  Franklin Webber <franklin.webber@gmail.com>
+
+  * lib/yard/config.rb: YARD::Config - fixed typo  Thanks Loren
+
+  * lib/yard/config.rb: YARD Configuration Documentation  Included example of
+  using the YARD::Config from the point-of-view of plugin designer.
+
+2011-05-24  Jon Wood <jon@blankpad.net>
+
+  * README.md: Fix a type in the query documentation.
+
+2011-05-23  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb,
+  .../templates/helpers/shared_signature_examples.rb: Method signature should
+  use regular return tag if @overload is empty
+
+  * lib/yard/code_objects/macro_object.rb: Fix documentation for macro
+  interpolation ($* not $&)
+
+  * lib/yard/handlers/ruby/macro_handler_methods.rb,
+  spec/handlers/examples/macro_handler_001.rb.txt,
+  spec/handlers/macro_handler_spec.rb: The @attribute tag should allow setting
+  the method name
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Link to correct object when
+  `@overload` tag uses different method name  Reported by @ryansobol  Closes
+  #330
+
+  * lib/yard/cli/yardoc.rb: Don't use --charset in 1.8
+
+  * spec/templates/helpers/html_helper_spec.rb: Load markup provider before
+  stubbing file so specs pass
+
+  * lib/yard/cli/server.rb: Simplify the assignment of expanded library path
+
+2011-05-23  Rob Gleeson <rob@flowof.info>
+
+  * lib/yard/cli/server.rb, spec/cli/server_spec.rb: Fix failing specs.
+
+2011-05-22  Rob Gleeson <rob@flowof.info>
+
+  * lib/yard/cli/server.rb: Resolve relative links in daemon mode.
+
+2011-05-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Handles the valid 'utf8' locale
+  value as 'utf-8'  Supporting #317
+
+  * spec/templates/helpers/html_helper_spec.rb: Stub ENV for charset test 
+  Closes #317
+
+2011-05-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb: Fix documentation claiming that
+  SourceParser.parse returns a parser object; it returns void.  Closes #325
+
+  * spec/cli/command_spec.rb: Add more tests for unrecognized options in yard
+  commands
+
+  * lib/yard/cli/command.rb, spec/cli/command_spec.rb: Try to continue parsing
+  options if one argument failed to parse
+
+2011-05-20  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb: Remove default parsing of --help/--version in
+  OptionParser so that yardoc --help shows up again  Closes #324
+
+  * lib/yard/handlers/ruby/legacy/macro_handler.rb,
+  lib/yard/handlers/ruby/macro_handler.rb,
+  spec/handlers/examples/macro_handler_001.rb.txt,
+  spec/handlers/macro_handler_spec.rb: Enable DSL/macro detection in top level
+  namespace  Closes #321
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Don't enforce
+  K&R C syntax when searching for CRuby function bodies  Closes #320
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Refactor C
+  Parser tests and ensure that comments are no longer part of the method body
+
+  * lib/yard/handlers/base.rb, lib/yard/logging.rb,
+  lib/yard/parser/c_parser.rb: Add Logger#warn_no_continuations to refactor the
+  multiple calls to this global warning switch
+
+  * lib/yard/autoload.rb: Add NamespaceMissingError to autoload
+
+2011-05-20  Rob Gleeson <rob@flowof.info>
+
+  * lib/yard/cli/yardoc.rb: Provide a solution to issue #322.  Ask 'Encoding'
+  does it respond to default_external= before assuming that it does.
+
 2011-05-18  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/stats.rb, spec/parser/base_spec.rb: Fix some incompatible
+  specs on Rubinius
+
+  * .gitignore: Ignore .rbc files from project
 
   * ChangeLog, lib/yard.rb: Update version / changelog
 
   * README.md: Bump to 0.7.1
 
   * spec/code_objects/constants_spec.rb: Fix a spec
+
+2011-05-18  Simone Carletti <weppos@weppos.net>
+
+  * docs/GettingStarted.md: Fixed broken links.
 
 2011-05-17  Loren Segal <lsegal@soen.ca>
 

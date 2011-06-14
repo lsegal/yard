@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.7.1 (codename "Heroes")    
-**Release Date**: May 18th 2011    
+**Latest Version**: 0.7.2 (codename "Heroes")    
+**Release Date**: June 14th 2011    
 
 Synopsis
 --------
@@ -288,6 +288,15 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **June.14.11**: 0.7.2 release
+    - Fix `yard --help` not showing proper output
+    - YARD now expands path to `.yardoc` file in daemon mode for server (#328)
+    - Fix `@overload` tag linking to wrong method (#330)
+    - Fix incorrect return type when using `@macro` (#334)
+    - YARD now requires 'thread' to support RubyGems 1.7+ (#338)
+    - Fix bug in constant documentation when using `%w()` (#348)
+    - Fix YARD style URL links when using autolinking markdown (#353)
 
 - **May.18.11**: 0.7.1 release
     - Fixes a bug in `yard server` not displaying class list properly.
