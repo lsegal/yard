@@ -52,4 +52,8 @@ class Testing
   def mymethod11
     raise foo('bar')
   end
+  
+  def mymethod12
+    raise
+  end
 end

@@ -41,4 +41,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ExceptionHandl
     P('Testing#mymethod10').tag(:raise).should be_nil
     P('Testing#mymethod11').tag(:raise).should be_nil
   end
+  
+  it "should handle empty raise call" do
+    P('Testing#mymethod12').tag(:raise).types.should == ['Exception']
+  end
 end
