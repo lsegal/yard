@@ -98,8 +98,7 @@ describe YARD::Parser::CParser do
 
       it "should allow extra file to include /'s and other filename characters" do
         File.should_receive(:read).at_least(1).times.with('ext/a-file.c').and_return(<<-eof)
-          /* 
-           * Hello world
+          /* FOO
            */
           VALUE foo(VALUE x) {
             int value = x;
@@ -114,12 +113,12 @@ describe YARD::Parser::CParser do
         @contents = <<-eof
           void Init_Foo() {
             rb_define_method(rb_cFoo, "foo", foo, 1); /* in ext/a-file.c */
-            rb_define_global_function("bar", foo, 1); /* in ext/a-file.c */
+            rb_define_global_function("bar", bar, 1); /* in ext/a-file.c */
           }
         eof
         parse
-        Registry.at('Foo#foo').docstring.should == 'Hello world'
-        Registry.at('Foo#foo').docstring.should == 'Hello world'
+        Registry.at('Foo#foo').docstring.should == 'FOO'
+        Registry.at('Kernel#bar').docstring.should == 'BAR'
       end
     end
   end
