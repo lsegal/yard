@@ -7,7 +7,7 @@ class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
     return if [:command_call, :call].include? statement.type
     return if owner.has_tag?(:raise)
 
-    klass = 'Exception'
+    klass = nil
     if statement.call?
       params = statement.parameters(false)
       if params.size == 1
