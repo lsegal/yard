@@ -71,6 +71,57 @@ describe YARD::Parser::CParser do
           "VALUE foo(VALUE x) { int value = x;\n}"
       end
     end
+    
+    describe 'Defining methods with source in other files' do
+      it "should look in another file for method" do
+        File.should_receive(:read).at_least(1).times.with('file.c').and_return(<<-eof)
+          /* FOO
+           */
+          VALUE foo(VALUE x) 
+          { }
+
+          /* BAR
+           */
+          VALUE bar(VALUE x) 
+          { }
+        eof
+        @contents = <<-eof
+          void Init_Foo() {
+            rb_define_method(rb_cFoo, "foo", foo, 1); /* in file.c */
+            rb_define_global_function("bar", bar, 1); /* in file.c */
+          }
+        eof
+        parse
+        Registry.at('Foo#foo').docstring.should == 'FOO'
+        Registry.at('Kernel#bar').docstring.should == 'BAR'
+      end
+
+      it "should allow extra file to include /'s and other filename characters" do
+        File.should_receive(:read).at_least(1).times.with('ext/a-file.c').and_return(<<-eof)
+          /* 
+           * Hello world
+           */
+          VALUE foo(VALUE x) {
+            int value = x;
+          }
+          
+          /* BAR
+           */
+          VALUE bar(VALUE x) {
+            int value = x;
+          }
+        eof
+        @contents = <<-eof
+          void Init_Foo() {
+            rb_define_method(rb_cFoo, "foo", foo, 1); /* in ext/a-file.c */
+            rb_define_global_function("bar", foo, 1); /* in ext/a-file.c */
+          }
+        eof
+        parse
+        Registry.at('Foo#foo').docstring.should == 'Hello world'
+        Registry.at('Foo#foo').docstring.should == 'Hello world'
+      end
+    end
   end
 
   describe '#find_override_comment' do

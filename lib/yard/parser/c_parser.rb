@@ -341,7 +341,7 @@ module YARD
                          \s*"([^"]+)",
                          \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
                          \s*(-?\w+)\s*\)
-                       (?:;\s*/[*/]\s+in\s+(\w+?\.[cy]))?
+                       (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
                      }xm) do |type, var_name, name, func_name, param_count, source_file|
 
           # Ignore top-object and weird struct.c dynamic stuff
@@ -357,7 +357,7 @@ module YARD
                                  \s*"([^"]+)",
                                  \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
                                  \s*(-?\w+)\s*\)
-                    (?:;\s*/[*/]\s+in\s+(\w+?\.[cy]))?
+                    (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
                     }xm) do |name, func_name, param_count, source_file|
           handle_method("method", "rb_mKernel", name, func_name, source_file)
         end
