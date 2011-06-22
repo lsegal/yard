@@ -11,6 +11,11 @@ describe YARD::Parser::CParser do
       @parser.parse
     end
 
+    def parse
+      Registry.clear
+      Parser::CParser.new(@contents).parse
+    end
+
     describe 'Array class' do
       it "should parse Array class" do
         obj = YARD::Registry.at('Array')
@@ -32,11 +37,6 @@ describe YARD::Parser::CParser do
         @contents = File.read(@multifile)
       end
       
-      def parse
-        Registry.clear
-        Parser::CParser.new(@contents).parse
-      end
-      
       it "should look for methods in extra files (if 'in' comment is found)" do
         extra_contents = File.read(@extrafile)
         File.should_receive(:read).with('extra.c').and_return(extra_contents)
@@ -52,12 +52,7 @@ describe YARD::Parser::CParser do
       end
     end
     
-    describe 'Foo' do
-      def parse
-        Registry.clear
-        Parser::CParser.new(@contents).parse
-      end
-
+    describe 'Foo class' do
       it 'should not include comments in docstring source' do
         @contents = <<-eof
           /* 
