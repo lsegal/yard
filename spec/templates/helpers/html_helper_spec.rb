@@ -114,7 +114,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should highlight ruby if markup is :ruby" do
-      htmlify("class Foo; end", :ruby).should =~ /\A<pre class="code"><span/
+      htmlify("class Foo; end", :ruby).should =~ /\A<pre class="code ruby"><span/
     end
     
     it "should include file and htmlify it" do
@@ -506,7 +506,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it "should highlight as ruby if htmlify(text, :ruby) is called" do
       should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
-      htmlify('def x; end', :ruby).should == '<pre class="code">x</pre>'
+      htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
     end
   end
   
