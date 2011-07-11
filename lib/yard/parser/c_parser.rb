@@ -184,6 +184,7 @@ module YARD
 
       def find_override_comment(object, content = @content)
         name = Regexp.escape(object.name.to_s)
+        name = "(?:initialize|new)" if name == 'initialize'
         class_name = object.parent.path
         if content =~ %r{Document-method:\s+#{class_name}(?:\.|::|#)#{name}\s*?\n((?>.*?\*/))}m then
           $1
