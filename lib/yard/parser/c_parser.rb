@@ -265,7 +265,7 @@ module YARD
             when "class"; "Class"
             when "obj", "object", "anObject"; "Object"
             when "arr", "array", "anArray", /^\[/; "Array"
-            when "str", "string", "new_str"; "String"
+            when /^char\s*\*/, "char", "str", "string", "new_str"; "String"
             when "enum", "anEnumerator"; "Enumerator"
             when "exc", "exception"; "Exception"
             when "proc", "proc_obj", "prc"; "Proc"
@@ -280,15 +280,16 @@ module YARD
             when "matchdata"; "MatchData"
             when "encoding"; "Encoding"
             when "fixnum", "fix"; "Fixnum"
-            when "int", "integer", "Integer"; "Integer"
+            when /^(?:un)?signed$/, /^(?:(?:un)?signed\s*)?(?:short|int|long|long\s+long)$/, "integer", "Integer"; "Integer"
             when "num", "numeric", "Numeric", "number"; "Numeric"
             when "aBignum"; "Bignum"
             when "nil"; "nil"
             when "true"; "true"
             when "false"; "false"
-            when "boolean", "Boolean"; "Boolean"
+            when "bool", "boolean", "Boolean"; "Boolean"
             when "self"; object.namespace.name.to_s
             when /^[-+]?\d/; t
+            when /[A-Z][_a-z0-9]+/; t
             end
           end.compact
         end
