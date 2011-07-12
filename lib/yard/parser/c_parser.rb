@@ -157,9 +157,18 @@ module YARD
           remove_private_comments(comment) if comment
 
           # see if we can find the whole body
+          open_braces = 0
+          start = content.index(body_text)
+          index = start + body_text.size
+          begin
+            index = content.index(/\{|\}/, index)
+            break if index.nil?
+            open_braces += content[index,1] == '{' ? +1 : -1
+            index += 1
+          end while (open_braces > 0)
 
-          re = Regexp.escape(body_text) + '[^(]*\{.*?\}'
-          body_text = $& if /#{re}/m =~ content
+          start += comment.to_s.size
+          body_text = content[start,index - start] unless index.nil?
 
           # The comment block may have been overridden with a 'Document-method'
           # block. This happens in the interpreter when multiple methods are
