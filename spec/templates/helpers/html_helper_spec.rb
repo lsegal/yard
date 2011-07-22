@@ -194,6 +194,20 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:serializer).and_return(serializer)
       link_object("YARD").should =~ %r{>YARD</a>}
     end
+
+    it "should escape method name in title" do
+      YARD.parse_string <<-'eof'
+        class Array
+          def &(other)
+          end
+        end
+      eof
+      obj = Registry.at('Array#&')
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      stub!(:object).and_return(obj)
+      link_object("Array#&").should =~ %r{title="Array#&amp; \(method\)"}
+    end
   end
 
   describe '#url_for' do
