@@ -246,7 +246,7 @@ module YARD
         return title if obj.is_a?(CodeObjects::Proxy)
 
         link = url_for(obj, anchor, relative)
-        link = link ? link_url(link, title, :title => "#{obj.path} (#{obj.type})") : title
+        link = link ? link_url(link, title, :title => h("#{obj.path} (#{obj.type})")) : title
         "<span class='object_link'>" + link + "</span>"
       end
 
