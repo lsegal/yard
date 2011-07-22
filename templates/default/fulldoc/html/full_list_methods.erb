@@ -1,7 +1,7 @@
 <% n = 1 %>
 <% @items.each do |item| %>
   <li class="r<%= n %> <%= item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
-    <%= linkify item, item.name(true) %> 
+    <%= linkify item, h(item.name(true)) %>
     <% if item.namespace && !item.namespace.root? %>
       <small><%= item.namespace %></small>
     <% else %>
