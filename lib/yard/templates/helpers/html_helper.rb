@@ -44,10 +44,12 @@ module YARD
           html = html.encode(:invalid => :replace, :replace => '?')
         end
         html = resolve_links(html)
-        html = html.gsub(/<pre>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
-          str = $1
-          str = html_syntax_highlight(CGI.unescapeHTML(str)) unless options[:no_highlight]
-          %Q{<pre class="code">#{str}</pre>}
+        html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
+          language = $1
+          string   = $2 
+          
+          string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
+          %Q{<pre class="code">#{string}</pre>}
         end unless markup == :text
         html
       end
@@ -61,6 +63,8 @@ module YARD
         provider = markup_class(:markdown)
         if provider.to_s == 'RDiscount'
           markup_class(:markdown).new(text, :autolink).to_html
+        elsif provider.to_s == 'RedcarpetCompat'
+          provider.new(text, :gh_blockcode, :fenced_code).to_html
         else
           markup_class(:markdown).new(text).to_html
         end
