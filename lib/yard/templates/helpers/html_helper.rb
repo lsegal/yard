@@ -96,7 +96,7 @@ module YARD
       # @return [String] the output HTML
       # @since 0.6.0
       def html_markup_text(text)
-        "<pre>" + text + "</pre>"
+        "<pre>" + h(text) + "</pre>"
       end
 
       # @return [String] the same text with no markup
