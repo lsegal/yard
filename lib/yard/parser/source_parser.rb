@@ -18,7 +18,16 @@ module YARD
     # that has not yet been resolved.
     #
     # @see Handers::Base#ensure_loaded!
-    class LoadOrderError < Exception; end
+    class LoadOrderError < Exception
+      # @return [Continuation] the context representing the
+      #   point at which the load order error occurred.
+      attr_accessor :context
+      
+      # @param [Continuation] context see {#context}
+      def initialize(context)
+        @context = context
+      end
+    end
 
     # Responsible for parsing a source file into the namespace. Parsing
     # also invokes handlers to process the parsed statements and generate
@@ -353,7 +362,7 @@ module YARD
               end
             rescue LoadOrderError => e
               # Out of order file. Push the context to the end and we'll call it
-              files.push([file, e.message])
+              files.push([file, e.context])
             end
           end
           

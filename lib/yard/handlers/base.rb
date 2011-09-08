@@ -489,7 +489,7 @@ module YARD
         if object.is_a?(Proxy)
           if retries <= max_retries
             log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
-            raise Parser::LoadOrderError, context
+            raise Parser::LoadOrderError.new(context)
           else
             raise NamespaceMissingError, object
           end
