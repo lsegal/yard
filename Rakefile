@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
 require 'rbconfig'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
-WINDOWS = (Config::CONFIG['host_os'] =~ /mingw|win32|cygwin/ ? true : false) rescue false
+WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mingw|win32|cygwin/ ? true : false) rescue false
 SUDO = WINDOWS ? '' : 'sudo'
 
 task :default => :specs
