@@ -58,11 +58,11 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
 
   it "should handle AstNode input (matches AST literally)" do
     class ASTHandler < Handlers::Ruby::Base
-      handles s(:var_ref, s(:ident, "hello_world"))
+      handles s(:vcall, s(:ident, "hello_world"))
     end
     Handlers::Base.stub!(:subclasses).and_return [ASTHandler]
-    valid ASTHandler, s(:var_ref, s(:ident, "hello_world"))
-    invalid ASTHandler, s(:var_ref, s(:ident, "NOTHELLOWORLD"))
+    valid ASTHandler, s(:vcall, s(:ident, "hello_world"))
+    invalid ASTHandler, s(:vcall, s(:ident, "NOTHELLOWORLD"))
   end
   
   it "should handle #method_call(:methname) on a valid AST" do

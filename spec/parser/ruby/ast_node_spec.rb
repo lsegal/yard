@@ -22,7 +22,8 @@ describe YARD::Parser::Ruby::AstNode do
       obj = YARD::Parser::Ruby::RubyParser.parse("# x\nbye", "x").ast
       out = StringIO.new
       PP.pp(obj, out)
-      out.string.should == "s(s(:var_ref,\n" +
+      vcall = RUBY_VERSION >= '1.9.3' ? 'vcall' : 'var_ref'
+      out.string.should == "s(s(:#{vcall},\n" +
         "      s(:ident, \"bye\", line: 2..2, source: 4..6),\n" +
         "      docstring: \"x\",\n" +
         "      line: 2..2,\n" +

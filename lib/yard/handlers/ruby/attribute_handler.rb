@@ -7,7 +7,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   namespace_only
 
   process do
-    return if statement.type == :var_ref
+    return if statement.type == :var_ref || statement.type == :vcall
     read, write = true, false
     params = statement.parameters(false).dup
 

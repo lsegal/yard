@@ -106,7 +106,7 @@ module YARD
           case type
           when :params
             ParameterNode
-          when :call, :fcall, :command, :command_call
+          when :call, :fcall, :vcall, :command, :command_call
             MethodCallNode
           when :if, :elsif, :if_mod, :unless, :unless_mod
             ConditionalNode
@@ -358,6 +358,7 @@ module YARD
         end
 
         def parameters(include_block_param = true)
+          return [] if type == :vcall
           params = self[1 + index_adjust]
           return [] unless params
           params = call_has_paren? ? params.first : params

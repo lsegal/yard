@@ -38,7 +38,7 @@ module YARD
             if !node.parent || node.parent.type == :list
               return true if node[0].type == :ident && (name.nil? || node[0][0] == name)
             end
-          when :fcall, :command
+          when :fcall, :command, :vcall
             return true if name.nil? || node[0][0] == name
           when :call, :command_call
             return true if name.nil? || node[2][0] == name
@@ -148,7 +148,7 @@ module YARD
         def caller_method
           if statement.call?
             statement.method_name(true).to_s
-          elsif statement.type == :var_ref
+          elsif statement.type == :var_ref || statement.type == :vcall
             statement[0].jump(:ident).source
           else
             nil
