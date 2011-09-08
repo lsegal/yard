@@ -487,7 +487,8 @@ describe YARD::Parser::SourceParser do
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
           if HAVE_RIPPER && RUBY19
-            result.enumerator[0].source.encoding.to_s.send(msg) == 'Shift_JIS'
+            ['Shift_JIS', 'Windows-31J'].send(msg, include(
+              result.enumerator[0].source.encoding.to_s))
           end
           result.encoding_line.send(msg) == src.split("\n").last
         end

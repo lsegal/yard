@@ -39,7 +39,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
     
     it "should take file encoding if there is a file" do
       @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
-      charset.should == 'Shift_JIS' # not the correct charset name, but good enough
+      # not the correct charset name, but good enough
+      ['Shift_JIS', 'Windows-31J'].should include(charset)
     end if RUBY19
 
     it "should take file encoding if there is a file" do

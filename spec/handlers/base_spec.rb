@@ -140,10 +140,10 @@ describe YARD::Handlers::Base do
     end
     
     def create_handler(stmts, parser_type)
-      @@counter ||= 0
+      $handler_counter ||= 0
       sklass = parser_type == :ruby ? "Base" : "Legacy::Base"
       instance_eval(<<-eof)
-        class ::InFileHandler#{@@counter += 1} < Handlers::Ruby::#{sklass}
+        class ::InFileHandler#{$handler_counter += 1} < Handlers::Ruby::#{sklass}
           handles /^class/
           #{stmts}
           def process; MethodObject.new(:root, :FOO) end

@@ -70,7 +70,7 @@ describe YARD::CodeObjects::ExtraFileObject do
       data = "# @encoding sjis\nFOO"
       data.force_encoding('binary')
       file = ExtraFileObject.new('file.txt', data)
-      file.contents.encoding.to_s.should == 'Shift_JIS'
+      ['Shift_JIS', 'Windows-31J'].should include(file.contents.encoding.to_s)
     end if RUBY19
 
     it "should warn if @encoding is invalid" do
