@@ -85,6 +85,20 @@ module YARD
           libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)
         end
       end
+      
+      def add_gems_from_gemfile(gemfile = nil)
+        require 'rubygems'
+        require 'bundler'
+        gemfile ||= "Gemfile"
+        if File.exists?("#{gemfile}.lock")
+          Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
+            libraries[spec.name] ||= []
+            libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)
+          end
+        else
+          log.warn "Cannot find #{gemfile}.lock"
+        end
+      end
 
       def optparse(*args)
         opts = OptionParser.new
@@ -108,6 +122,9 @@ module YARD
         end
         opts.on('-g', '--gems', 'Serves documentation for installed gems') do
           add_gems
+        end
+        opts.on('-G', '--gemfile [GEMFILE]', 'Serves documentation for gems from Gemfile') do |gemfile|
+          add_gems_from_gemfile(gemfile)
         end
         opts.on('-t', '--template-path PATH',
                 'The template path to look for templates in. (used with -t).') do |path|
