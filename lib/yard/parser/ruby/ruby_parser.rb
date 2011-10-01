@@ -339,7 +339,8 @@ module YARD
         end
         
         def on_qwords_add(list, item)
-          list.source_range = (list.source_range.first..@ns_charno-1)
+          sl = @ns_charno + (@source[@ns_charno] == "\n" ? -1 : 0)
+          list.source_range = (list.source_range.first..sl)
           list.line_range = (list.line_range.first..lineno)
           list.push(item)
           list

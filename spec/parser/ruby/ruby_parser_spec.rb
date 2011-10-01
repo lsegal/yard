@@ -191,7 +191,7 @@ describe YARD::Parser::Ruby::RubyParser do
       ["'", '"'].each do |q|
         src = "#{q}hello\n\nworld#{q}"
         s = stmt(src)
-        s.jump(:string_content)[0].should == "hello\n\nworld"
+        s.jump(:string_content).source.should == "hello\n\nworld"
         s.source.should == src
       end
       
