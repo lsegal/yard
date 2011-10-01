@@ -157,9 +157,18 @@ module YARD
           remove_private_comments(comment) if comment
 
           # see if we can find the whole body
+          open_braces = 0
+          start = content.index(body_text)
+          index = start + body_text.size
+          begin
+            index = content.index(/\{|\}/, index)
+            break if index.nil?
+            open_braces += content[index,1] == '{' ? +1 : -1
+            index += 1
+          end while (open_braces > 0)
 
-          re = Regexp.escape(body_text) + '[^(]*\{.*?\}'
-          body_text = $& if /#{re}/m =~ content
+          start += comment.to_s.size
+          body_text = content[start,index - start] unless index.nil?
 
           # The comment block may have been overridden with a 'Document-method'
           # block. This happens in the interpreter when multiple methods are
@@ -184,6 +193,7 @@ module YARD
 
       def find_override_comment(object, content = @content)
         name = Regexp.escape(object.name.to_s)
+        name = "(?:initialize|new)" if name == 'initialize'
         class_name = object.parent.path
         if content =~ %r{Document-method:\s+#{class_name}(?:\.|::|#)#{name}\s*?\n((?>.*?\*/))}m then
           $1
@@ -265,7 +275,7 @@ module YARD
             when "class"; "Class"
             when "obj", "object", "anObject"; "Object"
             when "arr", "array", "anArray", /^\[/; "Array"
-            when "str", "string", "new_str"; "String"
+            when /^char\s*\*/, "char", "str", "string", "new_str"; "String"
             when "enum", "anEnumerator"; "Enumerator"
             when "exc", "exception"; "Exception"
             when "proc", "proc_obj", "prc"; "Proc"
@@ -280,15 +290,16 @@ module YARD
             when "matchdata"; "MatchData"
             when "encoding"; "Encoding"
             when "fixnum", "fix"; "Fixnum"
-            when "int", "integer", "Integer"; "Integer"
+            when /^(?:un)?signed$/, /^(?:(?:un)?signed\s*)?(?:short|int|long|long\s+long)$/, "integer", "Integer"; "Integer"
             when "num", "numeric", "Numeric", "number"; "Numeric"
             when "aBignum"; "Bignum"
             when "nil"; "nil"
             when "true"; "true"
             when "false"; "false"
-            when "boolean", "Boolean"; "Boolean"
+            when "bool", "boolean", "Boolean"; "Boolean"
             when "self"; object.namespace.name.to_s
             when /^[-+]?\d/; t
+            when /[A-Z][_a-z0-9]+/; t
             end
           end.compact
         end
