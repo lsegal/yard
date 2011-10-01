@@ -96,7 +96,7 @@ module YARD
 
         # Show error message telling user to install first potential provider
         name, lib = *[providers.first[:const], providers.first[:lib] || type]
-        log.error "Missing '#{lib}' gem for #{options[:markup].to_s.capitalize} formatting. Install it with `gem install #{lib}`"
+        log.error "Missing '#{lib}' gem for #{type.to_s.capitalize} formatting. Install it with `gem install #{lib}`"
         false
       end
 
