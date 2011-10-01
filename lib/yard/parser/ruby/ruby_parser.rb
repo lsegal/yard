@@ -203,7 +203,7 @@ module YARD
 
         def visit_event(node)
           map = @map[MAPPINGS[node.type]]
-          lstart, sstart = *(map ? map.pop : [lineno, lineno])
+          lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
           node
@@ -293,6 +293,21 @@ module YARD
           sr = args.first.source_range.first..lc
           lr = args.first.line_range.first..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
+        end
+        
+        def on_array(other)
+          node = AstNode.node_class_for(:array).new(:array, [other])
+          map = @map[MAPPINGS[node.type]]
+          lstart, sstart = *(map ? map.pop : 
+            [other.line_range.first, other.source_range.first])
+          node.source_range = Range.new(sstart, @ns_charno - 1)
+          node.line_range = Range.new(lstart, lineno)
+          node
+        end
+        
+        def on_lbracket(tok)
+          (@map[:lbracket] ||= []) << [lineno, charno]
+          visit_ns_token(:lbracket, tok, false)
         end
 
         def on_rbracket(tok)

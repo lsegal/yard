@@ -211,6 +211,18 @@ describe YARD::Parser::Ruby::RubyParser do
         end
       eof
       s.jump(:qwords_literal).source.should == '%w( foo bar )'
+      if RUBY_VERSION >= '1.9.3' # ripper fix: array node encapsulates qwords
+        s.jump(:array).source.should == '%w( foo bar )'
+      end
+    end
+    
+    it "should parse [] as array" do
+      s = stmt(<<-eof)
+        class Foo
+          FOO = ['foo', 'bar']
+        end
+      eof
+      s.jump(:array).source.should == "['foo', 'bar']"
     end
   end
 end if HAVE_RIPPER
