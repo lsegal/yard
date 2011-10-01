@@ -243,15 +243,18 @@ module YARD
 
         undef on_program
         undef on_assoc_new
+        undef on_array
         undef on_hash
         undef on_bare_assoc_hash
         undef on_assoclist_from_args
         undef on_aref
+        undef on_lbracket
         undef on_rbracket
         undef on_qwords_new
         undef on_qwords_add
         undef on_string_literal
         undef on_lambda
+        undef on_unary
         undef on_string_content
         undef on_rescue
         undef on_void_stmt
@@ -286,6 +289,15 @@ module YARD
 
         def on_assoclist_from_args(*args)
           args.first
+        end
+        
+        def on_unary(op, val)
+          map = @map[op.to_s[0,1]]
+          lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+          node = AstNode.node_class_for(:unary).new(:unary, [op, val])
+          node.source_range = Range.new(sstart, @ns_charno - 1)
+          node.line_range = Range.new(lstart, lineno)
+          node
         end
 
         def on_aref(*args)

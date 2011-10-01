@@ -224,5 +224,13 @@ describe YARD::Parser::Ruby::RubyParser do
       eof
       s.jump(:array).source.should == "['foo', 'bar']"
     end
+    
+    it "should show source for unary minus" do
+      stmt("X = - 1").jump(:unary).source.should == '- 1'
+    end
+
+    it "should show source for unary exclamation" do
+      stmt("X = !1").jump(:unary).source.should == '!1'
+    end
   end
 end if HAVE_RIPPER
