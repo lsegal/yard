@@ -30,6 +30,7 @@ function fullListSearch() {
     if (searchString === "") {
       clearTimeout(inSearch);
       inSearch = null;
+      $('ul .search_uncollapsed').removeClass('search_uncollapsed');
       $('#full_list, #content').removeClass('insearch');
       $('#full_list li').removeClass('found').each(function() {
         
@@ -69,6 +70,7 @@ function searchItem() {
     }
     else {
       item.node.css('padding-left', '10px').addClass('found');
+      item.node.parents().addClass('search_uncollapsed');
       item.node.removeClass(lastRowClass).addClass(lastRowClass == 'r1' ? 'r2' : 'r1');
       lastRowClass = item.node.hasClass('r1') ? 'r1' : 'r2';
       item.link.html(item.name.replace(matchRegexp, "<strong>$&</strong>"));
