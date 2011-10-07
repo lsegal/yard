@@ -310,10 +310,14 @@ module YARD
         def on_array(other)
           node = AstNode.node_class_for(:array).new(:array, [other])
           map = @map[MAPPINGS[node.type]]
-          lstart, sstart = *(map ? map.pop : 
-            [other.line_range.first, other.source_range.first])
-          node.source_range = Range.new(sstart, @ns_charno - 1)
-          node.line_range = Range.new(lstart, lineno)
+          if map && !map.empty?
+            lstart, sstart = *map.pop
+            node.source_range = Range.new(sstart, @ns_charno - 1)
+            node.line_range = Range.new(lstart, lineno)
+          else
+            node.source_range = other.source_range
+            node.line_range = other.line_range
+          end
           node
         end
         
@@ -366,8 +370,7 @@ module YARD
         end
         
         def on_qwords_add(list, item)
-          sl = @ns_charno + (@source[@ns_charno] == "\n" ? -1 : 0)
-          list.source_range = (list.source_range.first..sl)
+          list.source_range = (list.source_range.first..(@ns_charno - 1))
           list.line_range = (list.line_range.first..lineno)
           list.push(item)
           list

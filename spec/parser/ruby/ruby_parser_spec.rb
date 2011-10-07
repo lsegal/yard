@@ -204,6 +204,11 @@ describe YARD::Parser::Ruby::RubyParser do
       stmt(src).jump(:qwords_literal).source.should == src
     end
     
+    it "should show proper source for %w{} array" do
+      src = "%w{\na b c\n d e f\n}"
+      stmt(src).jump(:array).source.should == src
+    end
+
     it "should parse %w() array in constant declaration" do
       s = stmt(<<-eof)
         class Foo
