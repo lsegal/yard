@@ -28,6 +28,8 @@ ul { list-style: square; }
 .docstring h3 { font-size: 1.1em; }
 #filecontents strong { font-weight: normal; color: #000; }
 .readonly { font-size: 0.75em; color: #888; vertical-align: super; }
+.rdoc-term { padding-right: 25px; font-weight: bold; }
+.rdoc-list p { margin: 0; padding: 0; margin-bottom: 4px; }
 
 #page { width: 940px; margin: 0px auto; }
 #top_nav { background: #8e0; padding: 4px 8px; }
