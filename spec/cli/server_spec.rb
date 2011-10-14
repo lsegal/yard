@@ -145,6 +145,35 @@ describe YARD::CLI::Server do
     run '-g'
     run '--gems'
   end
+
+  it "should accept -G, --gemfile" do
+    @no_verify_libraries = true
+    @options[:single_library] = false
+    
+    @libraries['gem1'] = [Server::LibraryVersion.new('gem1', '1.0.0', nil, :gem)]
+    @libraries['gem2'] = [Server::LibraryVersion.new('gem2', '1.0.0', nil, :gem)]
+    gem1 = mock(:gem1)
+    gem1.stub!(:name).and_return('gem1')
+    gem1.stub!(:version).and_return('1.0.0')
+    gem1.stub!(:full_gem_path).and_return('/path/to/foo')
+    gem2 = mock(:gem2)
+    gem2.stub!(:name).and_return('gem2')
+    gem2.stub!(:version).and_return('1.0.0')
+    gem2.stub!(:full_gem_path).and_return('/path/to/bar')
+    specs = {'gem1' => gem1, 'gem2' => gem2}
+    lockfile_parser = mock(:new)
+    lockfile_parser.stub!(:specs).and_return([gem1, gem2])
+    Bundler::LockfileParser.stub!(:new).and_return(lockfile_parser)
+
+    File.should_receive(:exists?).at_least(2).times.with("Gemfile.lock").and_return(true)
+    File.stub!(:read)
+
+    run '-G'
+    run '--gemfile'
+    
+    File.should_receive(:exists?).with("different_name.lock").and_return(true)
+    run '--gemfile', 'different_name'
+  end
   
   it "should load template paths after adapter template paths" do
     unstub_adapter

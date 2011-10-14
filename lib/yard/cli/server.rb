@@ -87,7 +87,6 @@ module YARD
       end
       
       def add_gems_from_gemfile(gemfile = nil)
-        require 'rubygems'
         require 'bundler'
         gemfile ||= "Gemfile"
         if File.exists?("#{gemfile}.lock")
@@ -98,6 +97,9 @@ module YARD
         else
           log.warn "Cannot find #{gemfile}.lock"
         end
+      rescue LoadError
+        log.error "Could not find bundler"
+        exit(1)
       end
 
       def optparse(*args)
