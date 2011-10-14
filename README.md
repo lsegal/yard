@@ -44,7 +44,7 @@ This allows the developer to document type signatures for ruby methods and
 parameters in a non intrusive but helpful and consistent manner. Instead of
 describing this data in the body of the description, a developer may formally
 declare the parameter or return type(s) in a single line. Consider the
-following Yardoc'd method:
+following method documented with YARD formatting:
 
      # Reverses the contents of a String or IO object. 
      # 
