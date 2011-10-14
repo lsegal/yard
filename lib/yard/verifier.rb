@@ -118,7 +118,7 @@ module YARD
     # @return [void]
     def unmodify_nilclass
       NILCLASS_METHODS.each do |meth|
-        NilClass.send(:undef_method, meth)
+        NilClass.send(:remove_method, meth)
       end
     end
 
