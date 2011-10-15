@@ -12,7 +12,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   end
   
   it "should maintain newlines" do
-    Registry.at("A::B::MYCONSTANT").value.should == "A +\nB +\nC +\nD"
+    Registry.at("A::B::MYCONSTANT").value.gsub("\r", "").should == "A +\nB +\nC +\nD"
   end
   
   it "should turn Const = Struct.new(:sym) into class Const with attr :sym" do

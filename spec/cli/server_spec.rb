@@ -87,8 +87,8 @@ describe YARD::CLI::Server do
   end
   
   it "should accept --docroot" do
-    @server_options[:DocumentRoot] = '/foo/bar'
-    run '--docroot', '/foo/bar'
+    @server_options[:DocumentRoot] = Dir.pwd + '/__foo/bar'
+    run '--docroot', '__foo/bar'
   end
   
   it "should accept -a webrick to create WEBrick adapter" do
@@ -156,15 +156,16 @@ describe YARD::CLI::Server do
   it "should load ruby code (-e) after adapter" do
     unstub_adapter
     @cli.adapter = Server::WebrickAdapter
-    File.open(File.dirname(__FILE__) + '/tmp.adapterscript.rb', 'w') do |f|
-      begin
+    path = File.dirname(__FILE__) + '/tmp.adapterscript.rb'
+    begin
+      File.open(path, 'w') do |f|
         f.puts "YARD::Templates::Engine.register_template_path 'foo'"
         f.flush
         run '-e', f.path
         Templates::Engine.template_paths.last.should == 'foo'
-      ensure
-        File.unlink(f.path)
       end
+    ensure
+      File.unlink(path)
     end
   end
 end
