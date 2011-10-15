@@ -20,7 +20,7 @@ end
 
 desc 'Run spec suite'
 task :suite do
-  ['ruby186', 'ruby18', 'ruby19', 'ruby192', 'jruby'].each do |ruby|
+  ['ruby186', 'ruby18', 'ruby19', 'ruby192', 'ruby193', 'jruby'].each do |ruby|
     2.times do |legacy|
       next if legacy == 1 && ruby =~ /^jruby|186/
       puts "Running specs with #{ruby}#{legacy == 1 ? ' (in legacy mode)' : ''}"
