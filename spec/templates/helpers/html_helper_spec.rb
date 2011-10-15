@@ -272,8 +272,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should escape {} syntax with backslash (\\{foo bar})" do
-      input  = '\{foo bar} \{XYZ} \{file:FOO}'
-      output = '{foo bar} {XYZ} {file:FOO}'
+      input  = '\{foo bar} \{XYZ} \{file:FOO} $\{N-M}'
+      output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
+      resolve_links(input).should == output
+    end
+
+    it "should escape {} syntax with ! (!{foo bar})" do
+      input  = '!{foo bar} !{XYZ} !{file:FOO} $!{N-M}'
+      output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
       resolve_links(input).should == output
     end
 
