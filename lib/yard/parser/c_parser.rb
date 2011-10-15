@@ -15,6 +15,7 @@ module YARD
         parse_modules
         parse_classes
         parse_methods
+        parse_attributes
         parse_constants
         parse_includes
       end
@@ -71,6 +72,7 @@ module YARD
         @namespaces[var_name] = obj
       end
 
+      # @return [CodeObjects::Base]
       def handle_method(scope, var_name, name, func_name, source_file = nil)
         case scope
         when "singleton_method", "module_function"; scope = :class
@@ -95,6 +97,18 @@ module YARD
           content ||= @content
         end
         find_method_body(obj, func_name, content)
+        obj
+      end
+      
+      def handle_attribute(var_name, name, func_name, read, write, source_file = nil)
+        values = {:read => read.to_i, :write => write.to_i}
+        {:read => name, :write => "#{name}="}.each do |type, meth_name|
+          next unless values[type] > 0
+          obj = handle_method(:instance, var_name, meth_name, func_name, source_file)
+          ensure_loaded!(obj.namespace)
+          obj.namespace.attributes[:instance][name] ||= SymbolHash[:read => nil, :write => nil]
+          obj.namespace.attributes[:instance][name][type] = obj
+        end
       end
 
       def handle_constants(type, var_name, const_name, definition)
@@ -362,6 +376,25 @@ module YARD
                     (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
                     }xm) do |name, func_name, param_count, source_file|
           handle_method("method", "rb_mKernel", name, func_name, source_file)
+        end
+      end
+      
+      def parse_attributes
+        @content.scan(%r{rb_define_attr
+                       \s*\(\s*([\w\.]+),
+                         \s*"([^"]+)",
+                         \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
+                         \s*(0|1)\s*,\s*(0|1)\s*\)
+                       (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
+                     }xm) do |var_name, name, func_name, read, write, source_file|
+
+          # Ignore top-object and weird struct.c dynamic stuff
+          next if var_name == "ruby_top_self"
+          next if var_name == "nstr"
+          next if var_name == "envtbl"
+
+          var_name = "rb_cObject" if var_name == "rb_mKernel"
+          handle_attribute(var_name, name, func_name, read, write, source_file)
         end
       end
 
