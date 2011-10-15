@@ -23,7 +23,7 @@ to express small bits of information in a structured and formal manner. While
 RDoc syntax expects you to describe your method in a completely free-form
 manner, YARD recommends declaring your parameters, return types, etc. with
 the `@tag` syntax, which makes outputting the documentation more consistent
-and easier to read. Consider the RDoc documentation for a method reverse:
+and easier to read. Consider the RDoc documentation for a method to_format:
 
     # Converts the object into textual markup given a specific `format` 
     # (defaults to `:html`)
