@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.7.2 (codename "Heroes")    
-**Release Date**: June 14th 2011    
+**Latest Version**: 0.7.3 (codename "Rhombus")    
+**Release Date**: October 15th 2011    
 
 Synopsis
 --------
@@ -288,6 +288,12 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **October.15.11**: 0.7.3 release
+    - Improve support for parsing under Ruby 1.9.2p290 and 1.9.3 (#365, #370)
+    - Add support for SWIG generated CRuby code (#369)
+    - Add support for `rb_define_attr` calls in CRuby code (#362)
+    - Handle file pointers in CRuby code (#358)
 
 - **June.14.11**: 0.7.2 release
     - Fix `yard --help` not showing proper output

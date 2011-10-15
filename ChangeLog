@@ -1,4 +1,209 @@
+2011-10-15  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: Update README, ChangeLog and bump to
+  0.7.3 for release
+
+  * Rakefile: Add ruby193 to suite
+
+  * spec/config_spec.rb: Remove unnecessary file? stub, fixes JRuby spec
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Support
+  rb_define_attr in CRuby code  Allows for commented /* rb_define_attr */ block
+  to define an attribute silently when attribute methods are defined through
+  rb_define_method.  Closes #362
+
+  * docs/GettingStarted.md: Fix reference to changed method name in Getting
+  Started documentation
+
+2011-10-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix tokenizing of heredoc source  Closes #366
+
+  * lib/yard/code_objects/macro_object.rb: Fix escaping of {}
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Use ! to escape {} syntax
+
+  * spec/cli/server_spec.rb, spec/handlers/constant_handler_spec.rb: Make tests
+  more Windows friendly
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Fix parsing of %w{} and %w() when
+  ended by a newline
+
+  * README.md: Sentence rewording
+
+  * README.md: Get rid of those unicode characters in README
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/guide/fulldoc/html/css/style.css: Add styling for RDoc definition
+  lists (default and guide templates)  Fixes #359
+
+2011-10-14  Dirkjan Bussink <d.bussink@gmail.com>
+
+  * lib/yard/verifier.rb: Use remove_method instead of undef_method 
+  undef_method has very different semantics. It prevents the class from
+  responding to the named method. This means that also original methods on
+  super classes won't be called. This for example results in weird behavior on
+  Rubinius since the original method_missing method can't be called which
+  normally throws the NoMethodError.  Also see:
+  http://www.nach-vorne.de/2008/2/28/undef_method-remove_method/index.html
+
+2011-10-07  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Clean up array AST node handling
+
+2011-10-05  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/full_list.css,
+  templates/default/fulldoc/html/js/full_list.js: Force items to show in list
+  search when parent lists are collapsed.  Fixes #392
+
+  * templates/default/fulldoc/html/js/full_list.js: Improve JS searching
+  capabilities by adding minimal fuzzy finding behaviour. Toggle case sensitive
+  searching when capital letters are used
+
+2011-10-04  Grégory Karékinian <greg@karekinian.com>
+
+  * docs/GettingStarted.md: Added information about escaping curly braces
+
+2011-10-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix displaying of source for unary operator nodes in the AST  Closes #371
+
+  * lib/yard/templates/helpers/markup_helper.rb: Print proper missing gem error
+  message for files with auto-detected markups that are different from default
+  markup format.  Closes #373
+
+  * lib/yard/parser/source_parser.rb: Display backtraces on parser errors in
+  debugging mode
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fixes "Bad value for range" error in 1.9.2-p290 and 1.9.3 when using %w{}
+  syntax (changes to ripper API).  Fixes #370
+
+2011-07-12  Tobias Koch <tobias@tobijk.de>
+
+  * lib/yard/parser/c_parser.rb: More flexible return type guessing in c-parser
+   * handle keyword (un)signed for Integers * handle class names as return
+  types * recognize C++ 'bool' * treat return types starting with 'char' as
+  String 
+
+  * lib/yard/parser/c_parser.rb: Find override comment for C constructor 
+
+2011-10-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix broken ruby parser specs
+
+2011-09-07  Loren Segal <lsegal@soen.ca>
+
+  * spec/code_objects/extra_file_object_spec.rb, spec/handlers/base_spec.rb,
+  spec/parser/source_parser_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb: Fix various encoding and toplevel
+  class variable changes for 1.9.3 compatibility
+
+  * lib/yard/handlers/ruby/attribute_handler.rb,
+  lib/yard/handlers/ruby/base.rb, lib/yard/handlers/ruby/visibility_handler.rb,
+  lib/yard/parser/ruby/ast_node.rb, spec/handlers/ruby/base_spec.rb,
+  spec/parser/ruby/ast_node_spec.rb: Add support for new Ripper vcall AST node,
+  replaces var_ref for method calls  Closes #384
+
+  * lib/yard/handlers/base.rb, lib/yard/parser/source_parser.rb: LoadOrderError
+  should not stuff continuation inside of message (1.9.3 now calls to_s on
+  raise argument)
+
+  * Rakefile, lib/yard/cli/yri.rb: Remove depcrecated Config in favour of
+  RbConfig
+
+2011-08-18  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/templates/helpers/html_helper.rb: escape HTML meta characters in
+  text for HTML output.  Here is an example text file.  hello.txt:  Hello >_<! 
+  Here is a command to generate HTML:  % yardoc - hello.txt  It generates the
+  following HTML:  ... ...<pre>Hello >_<!</pre>... ...  We should escape ">",
+  "<" and so on in text to output valid HTML.
+
+2011-08-14  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/method001.html: Fix broken spec from incomplete
+  merge on #372
+
+2011-08-07  Kouhei Sutou <kou@clear-code.com>
+
+  * templates/default/tags/html/option.erb: fix wrong close tag.
+
+2011-07-01  Rob Gleeson <rob@flowof.info>
+
+  * lib/yard/templates/helpers/html_helper.rb: Add support for GitHub
+  codeblocks when using RedCarpet.
+
+2011-07-07  Kouhei Sutou <kou@clear-code.com>
+
+  * .../default/fulldoc/html/full_list_methods.erb: [template][html] add
+  missing escape in object link label.  This problem can be reproducable by the
+  following steps:  1. Create the following script:  class Array def &(other)
+  end end  2. Genreate documents from the above script:  % yardoc array-amp.rb 
+  3. Find link markup in method_list.html:  % grep '#&' method_list.html <span
+  class='object_link'><a href="Array.html#%26-instance_method" title="Array#&
+  (method)">#&</a></span>  '>#&</a' should be '>#&amp;</a'.
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: [html] fix missing escape in
+  title.
+
+2011-06-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/exception_handler.rb,
+  spec/handlers/exception_handler_spec.rb: Ignore empty raise calls instead. It
+  is too ambiguous for YARD to guess at
+
+  * spec/parser/c_parser_spec.rb: Fix C parser spec
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Handle proper
+  filenames in C parser /* in FILE */ declarations  Closes #358
+
+  * spec/parser/c_parser_spec.rb: Refactor C parser specs
+
+2011-06-20  Sven Fuchs <svenfuchs@artweb-design.de>
+
+  * .travis.yml: Don't use bundler_args: --local in .travis.yml  This setting
+  only works on the current production worker because the gems all happen to be
+  installed already. The new worker setup will rollback changes after every
+  install and so tests will always fail with this setting.
+
+2011-06-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/rubygems/specification.rb: Support RubyGems 1.8.x in
+  rubygems_plugin.rb
+
+2011-06-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/exception_handler.rb,
+  .../handlers/examples/exception_handler_001.rb.txt,
+  spec/handlers/exception_handler_spec.rb: Handle empty raise statements as
+  raising Exception  Closes #356
+
 2011-06-14  Loren Segal <lsegal@soen.ca>
+
+  * README.md: Point contributors section to github's contributors page (easier
+  maintenance)
+
+  * .travis.yml: Only test for 1.8.6, 1.8.7 and ree on travis-ci.org
+
+  * .travis.yml: One more update for Travis CI
+
+  * Rakefile: Fix travis_ci task status exiting and legacy mode
+
+  * Gemfile: Remove ripper from Gemfile temporarily
+
+  * .travis.yml, Rakefile, spec/cli/yri_spec.rb: Add support for travis-ci.org
+
+  * Gemfile: Fix Gemfile to add ripper/rubygems sources
 
   * ChangeLog, README.md, lib/yard.rb: 0.7.2 release
 
