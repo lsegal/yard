@@ -324,7 +324,10 @@ the link syntax in this tag:
 
     # @see #methodname   <- Correct.
     # @see {#methodname} <- Incorrect.
-    
+
+If you want to use a Hash, escape the first { :
+   # \{ :some_key => 'value' }
+
 ### Linking URLs `{http://...}`
 
 URLs are also linked using this `{...}` syntax:
