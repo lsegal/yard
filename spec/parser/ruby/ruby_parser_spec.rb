@@ -179,8 +179,24 @@ describe YARD::Parser::Ruby::RubyParser do
       s.line_range.to_a.should == [1, 2]
     end
     
-    it "should show proper source for heredoc" do
+    it "should show proper source for inline heredoc" do
       src = "def foo\n  foo(<<-XML, 1, 2)\n    bar\n\n  XML\nend"
+      s = stmt(src)
+      t = tokenize(src)
+      s.source.should == src
+      t.map {|x| x[1] }.join.should == src
+    end
+    
+    it "should show proper source for regular heredoc" do
+      src = "def foo\n  x = <<-XML\n  Hello \#{name}!\n  Bye!\n  XML\nend"
+      s = stmt(src)
+      t = tokenize(src)
+      s.source.should == src
+      t.map {|x| x[1] }.join.should == src
+    end
+
+    it "should show proper source for heredoc with comment" do
+      src = "def foo\n  x = <<-XML # HI!\n  Hello \#{name}!\n  Bye!\n  XML\nend"
       s = stmt(src)
       t = tokenize(src)
       s.source.should == src

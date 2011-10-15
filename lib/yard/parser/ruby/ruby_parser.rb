@@ -34,7 +34,8 @@ module YARD
           @tokens = []
           @comments = {}
           @comments_flags = {}
-          @heredoc_tokens = []
+          @heredoc_tokens = nil
+          @heredoc_state = nil
           @map = {}
           @ns_charno = 0
           @list = []
@@ -231,12 +232,19 @@ module YARD
         def add_token(token, data)
           if @tokens.last && @tokens.last[0] == :symbeg
             @tokens[-1] = [:symbol, ":" + data]
-          elsif token == :heredoc_end
-            @heredoc_tokens << [@tokens.pop, [token, data]]
+          elsif @heredoc_state == :started
+            @heredoc_tokens << [token, data]
+            @heredoc_state = :ended if token == :heredoc_end
+          elsif (token == :nl || token == :comment) && @heredoc_state == :ended
+            @heredoc_tokens.unshift([token, data])
+            @tokens += @heredoc_tokens
+            @heredoc_tokens = nil
+            @heredoc_state = nil
           else
             @tokens << [token, data]
-            if token == :nl && @heredoc_tokens.size > 0
-              @tokens += @heredoc_tokens.pop
+            if token == :heredoc_beg
+              @heredoc_state = :started
+              @heredoc_tokens = [] 
             end
           end
         end
