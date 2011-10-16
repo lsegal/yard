@@ -7,7 +7,19 @@ module YARD
       attr_reader :options
 
       class << self
-        # @return [Array<Module>] a list of modules to be automatically included
+        # Extra includes are mixins that are included after a template is created. These
+        # mixins can be registered by plugins to operate on templates and override behaviour.
+        # 
+        # Note that this array can be filled with modules or proc objects. If a proc object
+        # is given, the proc will be called with the {Template#options} hash containing
+        # relevant template information like the object, format, and more. The proc should
+        # return a module or nil if there is none.
+        # 
+        # @example Adding in extra mixins to include on a template
+        #   Template.extra_includes << MyHelper
+        # @example Conditionally including a mixin if the format is html
+        #   Template.extra_includes << proc {|opts| MyHelper if opts[:format] == :html }
+        # @return [Array<Module, Proc>] a list of modules to be automatically included
         #   into any new template module
         attr_accessor :extra_includes
 
@@ -15,10 +27,29 @@ module YARD
         def included(klass)
           klass.extend(ClassMethods)
         end
+        
+        # Includes the {extra_includes} modules into the template object.
+        # 
+        # @param [Template] template the template object to mixin the extra includes.
+        # @param [SymbolHash] options the options hash containing all template information
+        # @return [void]
+        def include_extra(template, options)
+          extra_includes.each do |mod|
+            mod = mod.call(options) if mod.is_a?(Proc)
+            next unless mod.is_a?(Module)
+            template.extend(mod)
+          end
+        end
       end
 
-      self.extra_includes = []
-
+      self.extra_includes = [
+        proc {|options| 
+          { :html => Helpers::HtmlHelper, 
+            :text => Helpers::TextHelper, 
+            :dot  => Helpers::UMLHelper }[options[:format]]
+        }
+      ]
+      
       include ErbCache
       include Helpers::BaseHelper
       include Helpers::MethodHelper
@@ -135,12 +166,7 @@ module YARD
         @cache, @cache_filename = {}, {}
         @sections, @options = [], opts.class.new
         add_options(opts)
-
-        extend(Helpers::HtmlHelper) if options.format == :html
-        extend(Helpers::TextHelper) if options.format == :text
-        extend(Helpers::UMLHelper) if options.format == :dot
-        extend(*Template.extra_includes) unless Template.extra_includes.empty?
-
+        Template.include_extra(self, options)
         init
       end
 
