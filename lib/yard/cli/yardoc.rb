@@ -311,10 +311,15 @@ module YARD
       #
       # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
       def verify_markup_options
-        options[:markup] = :rdoc unless has_markup
         result, lvl = false, has_markup ? log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
+        options[:files].each do |file|
+          markup = file.attributes[:markup] || obj.markup_for_file('', file.filename)
+          result = obj.load_markup_provider(markup)
+          return false if !result && markup != :rdoc
+        end
+        options[:markup] = :rdoc unless has_markup
         log.enter_level(lvl) { result = obj.load_markup_provider }
         if !result && !has_markup
           log.warn "Could not load default RDoc formatter, " +

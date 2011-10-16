@@ -580,9 +580,31 @@ describe YARD::CLI::Yardoc do
       mod.clear_markup_cache
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:rdoc).and_return([{:lib => 'INVALID'}])
       log.should_receive(:warn).with(/Could not load default RDoc formatter/)
-      @yardoc.generate = true
+      @yardoc.stub(:generate) { @yardoc.options[:files] = []; true }
       @yardoc.run
       @yardoc.options[:markup].should == :none
+      mod.clear_markup_cache
+    end
+
+    it "should error immediately if markup for any files are missing" do
+      mod = YARD::Templates::Helpers::MarkupHelper
+      mod.clear_markup_cache
+      mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
+      log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
+      files = [CodeObjects::ExtraFileObject.new('test.md', '')]
+      @yardoc.stub(:generate) { @yardoc.options[:files] = files; true }
+      @yardoc.run
+      mod.clear_markup_cache
+    end
+
+    it "should error immediately if markup for any files are missing (file markup specified in attributes)" do
+      mod = YARD::Templates::Helpers::MarkupHelper
+      mod.clear_markup_cache
+      mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
+      log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
+      files = [CodeObjects::ExtraFileObject.new('test', '# @markup markdown')]
+      @yardoc.stub(:generate) { @yardoc.options[:files] = files; true }
+      @yardoc.run
       mod.clear_markup_cache
     end
   end
