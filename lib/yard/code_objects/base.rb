@@ -284,6 +284,9 @@ module YARD
 
       # @return [Integer] the object's hash value (for equality checking)
       def hash; path.hash end
+      
+      # @return [nil] this object does not turn into an array
+      def to_ary; nil end
 
       # Accesses a custom attribute on the object
       # @param [#to_s] key the name of the custom attribute
