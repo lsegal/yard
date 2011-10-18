@@ -54,12 +54,12 @@ module YARD::Templates::Helpers
           file = $1
           relpath = File.relative_path(Dir.pwd, File.expand_path(file))
           if relpath =~ /^\.\./
-            log.warn "Cannot include file from path `#{file}'"
+            log.warn "Cannot include file from path `#{file}' into `#{@file}'"
             ""
           elsif File.file?(file)
             link_include_file(file)
           else
-            log.warn "Cannot find file at `#{file}' for inclusion"
+            log.warn "Cannot find file at `#{file}' for inclusion into `#{@file}'"
             ""
           end
         when /^include:(\S+)/
@@ -67,7 +67,7 @@ module YARD::Templates::Helpers
           if obj = YARD::Registry.resolve(object.namespace, path)
             link_include_object(obj)
           else
-            log.warn "Cannot find object at `#{path}' for inclusion"
+            log.warn "Cannot find object at `#{path}' for inclusion into `#{@file}'"
             ""
           end
         when /^render:(\S+)/
