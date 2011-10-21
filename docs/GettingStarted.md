@@ -181,8 +181,9 @@ Symbols:
 We mentioned that these type fields are "mostly" free-form. In truth, they
 are defined "by convention". To view samples of common type specifications
 and recommended conventions for writing type specifications, see 
-http://yardoc.org/types.html. Note that these conventions may change every now 
-and then, although we are working on a more "formal" type specification proposal.
+[http://yardoc.org/types.html](http://yardoc.org/types.html). Note that these 
+conventions may change every now and then, although we are working on a more 
+"formal" type specification proposal.
 
 ## Documenting DSL Methods
 
