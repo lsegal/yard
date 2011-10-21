@@ -19,7 +19,7 @@ class Gem::Specification
 
   # has_rdoc should not be ignored!
   if respond_to?(:overwrite_accessor)
-    overwrite_accessor(:has_rdoc) { @has_rdoc }
+    overwrite_accessor(:has_rdoc) { @has_rdoc ||= true }
     overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   else
     attr_accessor :has_rdoc
