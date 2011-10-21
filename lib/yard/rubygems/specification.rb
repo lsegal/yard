@@ -12,7 +12,7 @@ class Gem::Specification
 
   undef has_rdoc?
   def has_rdoc?
-    @has_rdoc && @has_rdoc != 'yard'
+    (@has_rdoc ||= true) && @has_rdoc != 'yard'
   end
 
   alias has_yardoc? has_yardoc
