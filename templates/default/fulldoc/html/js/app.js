@@ -2,11 +2,11 @@ function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
     $('.toggleSource').toggle(function() {
-       $(this).parent().next().slideDown(100);
+       $(this).parent().next('.source_code').slideDown(100);
        $(this).text("Hide source");
     },
     function() {
-        $(this).parent().next().slideUp(100);
+        $(this).parent().next('.source_code').slideUp(100);
         $(this).text("View source");
     });
 }
@@ -109,10 +109,10 @@ function summaryToggle() {
   $('.summary_toggle').click(function() {
     localStorage.summaryCollapsed = $(this).text();
     $(this).text($(this).text() == "collapse" ? "expand" : "collapse");
-    var next = $(this).parent().parent().next();
+    var next = $(this).parent().parent().next('ul.summary');
     if (next.hasClass('compact')) {
       next.toggle();
-      next.next().toggle();
+      next.next('ul.summary').toggle();
     } 
     else if (next.hasClass('summary')) {
       var list = $('<ul class="summary compact" />');
