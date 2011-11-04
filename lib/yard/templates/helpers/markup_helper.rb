@@ -33,7 +33,7 @@ module YARD
           {:lib => :redcloth, :const => 'RedCloth'},
         ],
         :rdoc => [
-          {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
+          {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
         :ruby => [],
         :text => [],
