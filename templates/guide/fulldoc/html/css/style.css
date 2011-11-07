@@ -57,7 +57,7 @@ a:hover { color: #060; background: #8e0; }
 #filecontents pre.code, .docstring pre.code { display: block; }
 .source_code .lines { padding-right: 12px; color: #555; text-align: right; }
 #filecontents pre.code, .docstring pre.code, 
-.tags .example { 
+.tags pre.example { 
   font-size: 0.9em;
   padding: 7px 30px;
   margin: 15px -30px;
