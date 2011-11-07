@@ -2,7 +2,7 @@ module YARD
   module Tags
     class DefaultFactory
       TYPELIST_OPENING_CHARS = '[({<'
-      TYPELIST_CLOSING_CHARS = '>})]'
+      TYPELIST_CLOSING_CHARS = '])}>'
 
       # Parses tag text and creates a new tag with descriptive text
       #
@@ -108,11 +108,19 @@ module YARD
         s, e = 0, 0
         before = ''
         list, level, seen_space = [''], 0, false
+        closing_char = nil
         text.split(//).each_with_index do |c, i|
           if opening_types.include?(c)
+            if closing_char == nil
+              # Found opening character of type list.
+              closing_char = closing_types[opening_types.index(c), 1]
+            end
             list.last << c if level > 0
             s = i if level == 0
             level += 1
+          elsif c == closing_char
+            # Found matched closing character of type list.
+            break e = i
           elsif closing_types.include?(c)
             level -= 1 unless list.last[-1,1] == '='
             break e = i if level == 0

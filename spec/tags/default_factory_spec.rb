@@ -57,6 +57,10 @@ describe YARD::Tags::DefaultFactory do
       v = parse_types(' [Test, Array<String, Hash{A => {B => C}}, C>, String]')
       v.should include(["Test", "Array<String, Hash{A => {B => C}}, C>", "String"])
     end
+
+    it "should allow opening characters in type list" do
+      parse_types('[#<<] description').should == [nil, ['#<<'], 'description']
+    end
   end
 
   describe '#parse_tag_with_types' do
