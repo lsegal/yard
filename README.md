@@ -171,7 +171,7 @@ the globs and the filenames with '-'.
 
     $ yardoc 'app/**/*.rb' - README LICENSE FAQ
     
-If no globs preceed the '-' argument, the default glob (`lib/**/*.rb`) is
+If no globs precede the '-' argument, the default glob (`lib/**/*.rb`) is
 used:
 
     $ yardoc - README LICENSE FAQ
