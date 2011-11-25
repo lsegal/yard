@@ -43,7 +43,7 @@ module YARD
     # @see CodeObjects::Base
     class SourceParser
       SHEBANG_LINE  = /\A\s*#!\S+/
-      ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*#+.*coding\s*[:=]{1,2}\s*([a-z\d_\-]+)/i
+      ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*(?:#+|\/\*+|\/\/+).*coding\s*[:=]{1,2}\s*([a-z\d_\-]+)/i
       
       # Byte order marks for various encodings
       # @since 0.7.0

@@ -497,6 +497,25 @@ describe YARD::Parser::SourceParser do
       end
     end
 
+    it "should convert C file contents to proper encoding if coding line is present" do
+      valid = []
+      valid << "/* coding: utf-8 */"
+      valid << "/* -*- coding: utf-8; c-file-style: \"ruby\" -*- */"
+      valid << "// coding: utf-8"
+      valid << "// -*- coding: utf-8; c-file-style: \"ruby\" -*-"
+      invalid = []
+      {:should => valid, :should_not => invalid}.each do |msg, list|
+        list.each do |src|
+          Registry.clear
+          parser = Parser::SourceParser.new
+          File.should_receive(:read_binary).with('tmpfile.c').and_return(src)
+          result = parser.parse("tmpfile.c")
+          content = result.instance_variable_get("@content")
+          ['UTF-8'].send(msg, include(content.encoding.to_s))
+        end
+      end
+    end if RUBY19
+
     Parser::SourceParser::ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
       it "should understand #{encoding.upcase} BOM" do
         parser = Parser::SourceParser.new
