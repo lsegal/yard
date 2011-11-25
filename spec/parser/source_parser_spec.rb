@@ -468,6 +468,7 @@ describe YARD::Parser::SourceParser do
       valid << "# ENCODING: sjis"
       valid << "#coDiNG: sjis"
       valid << "# -*- coding: sjis -*-"
+      valid << "# -*- coding: utf-8; indent-tabs-mode: nil"
       valid << "### coding: sjis"
       valid << "# encoding=sjis"
       valid << "# encoding:sjis"
