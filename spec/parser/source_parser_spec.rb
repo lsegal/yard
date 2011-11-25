@@ -462,6 +462,7 @@ describe YARD::Parser::SourceParser do
     it "should convert file contents to proper encoding if coding line is present" do
       valid = []
       valid << "# encoding: sjis"
+      valid << "# encoding: utf-8"
       valid << "# xxxxxencoding: sjis"
       valid << "# xxxxxencoding: sjis xxxxxx"
       valid << "# ENCODING: sjis"
@@ -487,7 +488,7 @@ describe YARD::Parser::SourceParser do
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
           if HAVE_RIPPER && RUBY19
-            ['Shift_JIS', 'Windows-31J'].send(msg, include(
+            ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
               result.enumerator[0].source.encoding.to_s))
           end
           result.encoding_line.send(msg) == src.split("\n").last
