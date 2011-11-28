@@ -89,7 +89,7 @@ module YARD
         def not_prepared
           self.caching = false
           options.update(:path => request.path, :template => :doc_server, :type => :processing)
-          [302, {'Content-Type' => 'text/html'}, [render]]
+          [202, {'Content-Type' => 'text/html'}, [render]]
         end
 
         # @private
