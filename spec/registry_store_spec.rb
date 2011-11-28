@@ -2,6 +2,7 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 
 describe YARD::RegistryStore do
   before do
+    FileUtils.rm_rf("foo")
     @store = RegistryStore.new
     @serializer = Serializers::YardocSerializer.new('foo')
     Serializers::YardocSerializer.stub!(:new).and_return(@serializer)
