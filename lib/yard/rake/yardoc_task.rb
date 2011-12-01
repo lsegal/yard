@@ -11,11 +11,15 @@ module YARD
       attr_accessor :name
 
       # Options to pass to {CLI::Yardoc}
-      # @return [Hash] the options passed to the commandline utility
+      # @return [Array<String>] the options passed to the commandline utility
       attr_accessor :options
 
       # The Ruby source files (and any extra documentation files separated by '-')
-      # to process
+      # to process.
+      # @example Task files assignment
+      #   YARD::Rake::YardocTask.new do |t|
+      #     t.files   = ['app/**/*.rb', 'lib/**/*.rb', '-', 'doc/FAQ.md', 'doc/Changes.md']
+      #   end
       # @return [Array<String>] a list of files
       attr_accessor :files
 
