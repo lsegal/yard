@@ -63,11 +63,11 @@ module YARD
         # TODO: other libraries might be more complex
         provider = markup_class(:markdown)
         if provider.to_s == 'RDiscount'
-          markup_class(:markdown).new(text, :autolink).to_html
+          provider.new(text, :autolink).to_html
         elsif provider.to_s == 'RedcarpetCompat'
-          provider.new(text, :gh_blockcode, :fenced_code).to_html
+          provider.new(text, :gh_blockcode, :fenced_code, :autolink).to_html
         else
-          markup_class(:markdown).new(text).to_html
+          provider.new(text).to_html
         end
       end
 
