@@ -32,6 +32,9 @@ module YARD
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'},
         ],
+        :textile_strict => [
+          {:lib => :redcloth, :const => 'RedCloth'},
+        ],
         :rdoc => [
           {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],

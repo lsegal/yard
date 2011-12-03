@@ -81,6 +81,14 @@ module YARD
         doc.to_html
       end
 
+      # Converts plaintext to strict Textile (hard breaks)
+      # @param [String] text the input textile data
+      # @return [String] the output HTML
+      # @since 0.6.0
+      def html_markup_textile_strict(text)
+        markup_class(:textile).new(text).to_html
+      end
+
       # Converts RDoc formatting (SimpleMarkup) to HTML
       # @param [String] text the input RDoc formatted text
       # @return [String] output HTML

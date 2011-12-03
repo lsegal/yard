@@ -103,6 +103,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify("A\nB", :textile).should_not include("<br")
     end
     
+    it "should use hard breaks for textile_strict markup (RedCloth specific)" do
+      begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
+      htmlify("A\nB", :textile_strict).should include("<br")
+    end
+
     it "should handle various encodings" do
       stub!(:object).and_return(Registry.root)
       Encoding.default_internal = 'utf-8' if defined?(Encoding)
