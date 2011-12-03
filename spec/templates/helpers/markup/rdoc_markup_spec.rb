@@ -67,7 +67,7 @@ describe YARD::Templates::Helpers::Markup::RDocMarkup do
     end
     
     it "should not apply to code blocks" do
-      fix_typewriter("<code>+hello+</code>").should == "<code>+hello+</code>"
+      fix_typewriter("<code>Hello +hello+</code>").should == "<code>Hello +hello+</code>"
     end
     
     it "should not apply to HTML tag attributes" do
