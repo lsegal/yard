@@ -19,9 +19,9 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
       type = Parser::SourceParser.parser_type
       Parser::SourceParser.parser_type = :ruby18
       should_receive(:options).and_return(:no_highlight => false)
-      expect = "<span class='def def kw'>def</span><span class='x identifier id'>x</span>
+      expect = "<span class='rubyid_def def kw'>def</span><span class='rubyid_x identifier id'>x</span>
         <span class='string val'>'x'</span><span class='plus op'>+</span>
-        <span class='regexp val'>/x/i</span><span class='end end kw'>end</span>"
+        <span class='regexp val'>/x/i</span><span class='rubyid_end end kw'>end</span>"
       result = html_syntax_highlight("def x\n  'x' + /x/i\nend")
       html_equals_string(result, expect)
       Parser::SourceParser.parser_type = type
@@ -30,7 +30,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
     it "should highlight source (ripper)" do
       should_receive(:options).and_return(:no_highlight => false)
       Parser::SourceParser.parser_type = :ruby
-      expect = "<span class='kw'>def</span> <span class='id x'>x</span>  
+      expect = "<span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>  
         <span class='tstring'><span class='tstring_beg'>'</span>
         <span class='tstring_content'>x</span><span class='tstring_end'>'</span>
         </span> <span class='op'>+</span> <span class='tstring'>
