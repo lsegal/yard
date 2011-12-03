@@ -462,11 +462,13 @@ describe YARD::Parser::SourceParser do
     it "should convert file contents to proper encoding if coding line is present" do
       valid = []
       valid << "# encoding: sjis"
+      valid << "# encoding: utf-8"
       valid << "# xxxxxencoding: sjis"
       valid << "# xxxxxencoding: sjis xxxxxx"
       valid << "# ENCODING: sjis"
       valid << "#coDiNG: sjis"
       valid << "# -*- coding: sjis -*-"
+      valid << "# -*- coding: utf-8; indent-tabs-mode: nil"
       valid << "### coding: sjis"
       valid << "# encoding=sjis"
       valid << "# encoding:sjis"
@@ -487,13 +489,32 @@ describe YARD::Parser::SourceParser do
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
           if HAVE_RIPPER && RUBY19
-            ['Shift_JIS', 'Windows-31J'].send(msg, include(
+            ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
               result.enumerator[0].source.encoding.to_s))
           end
           result.encoding_line.send(msg) == src.split("\n").last
         end
       end
     end
+
+    it "should convert C file contents to proper encoding if coding line is present" do
+      valid = []
+      valid << "/* coding: utf-8 */"
+      valid << "/* -*- coding: utf-8; c-file-style: \"ruby\" -*- */"
+      valid << "// coding: utf-8"
+      valid << "// -*- coding: utf-8; c-file-style: \"ruby\" -*-"
+      invalid = []
+      {:should => valid, :should_not => invalid}.each do |msg, list|
+        list.each do |src|
+          Registry.clear
+          parser = Parser::SourceParser.new
+          File.should_receive(:read_binary).with('tmpfile.c').and_return(src)
+          result = parser.parse("tmpfile.c")
+          content = result.instance_variable_get("@content")
+          ['UTF-8'].send(msg, include(content.encoding.to_s))
+        end
+      end
+    end if RUBY19
 
     Parser::SourceParser::ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
       it "should understand #{encoding.upcase} BOM" do
