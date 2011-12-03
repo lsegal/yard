@@ -16,6 +16,10 @@
 12. **Added before/after callbacks to SourceParser** (0.7.0)
 13. **Can now use `--yardopts FILE` to specify a custom yardopts file** (0.7.0)
 14. **Added new `-t guide` template for guide based docs** (0.7.0)
+15. **Github Flavoured Markdown now works out-of-box** (0.7.4)
+16. **Added `-m textile_strict` and `-m pre` markup types** (0.7.4)
+17. **Reorganized markup types 'text' and 'none'** (0.7.4)
+18. **Add support for `rb_define_alias`** (0.7.4)
 
 ## Macro support and detection of DSL methods (0.7.0)
 
@@ -174,6 +178,56 @@ questions, trouble shooting and license page.
 
 If you need to refer to class / method documentation, you can embed API documentation
 using the `{render:Object}` tag discussed above.
+
+## Github Flavoured Markdown now works out-of-box (0.7.4)
+
+Due to the growing popularity of Github-Flavoured-Markdown (GFM), YARD now uses
+the Redcarpet library as the default Markdown formatting library with GFM fenced
+code blocks enabled. This means that you can use fenced code blocks inside of
+Markdown files with redcarpet installed without any extra code. Previously, users
+who wanted GFM in their Markdown would have to specify `-m markdown -M redcarpet`,
+but this is now the default behaviour for YARD.
+
+Note that you can still specify language types in code blocks without GFM in YARD
+by using the "!!!lang" prefix syntax. For example (plain means no markup):
+
+    !!!plain
+    !!!plain
+    Some code
+    block here.
+
+The GFM version would be:
+
+    !!!plain
+    ```plain
+    Some code
+    block here.
+    ```
+
+## Added `-m textile_strict` and `-m pre` markup types (0.7.4)
+
+A new "textile_strict" markup type was added which behaves exactly like "textile"
+except it enables hard breaks, so newlines behave as line breaks in the HTML
+(using `<br>` tags). This option is added for users who want the classic textile
+behaviour.
+
+## Reorganized markup types 'text' and 'none' (0.7.4)
+
+Due to the new pre markup type, the behaviour for text and none were slightly
+reorganized to be more intuitive. The following behaviours now represent these
+markup types:
+
+ * pre: Used to wrap text inside `<pre>` tags
+ * text: No formatting except for hard breaks (`<br>`) on newlines
+ * none: No formatting at all.
+ 
+In all cases, HTML is escaped from input. If you want no HTML escaping, use the
+html markup type.
+
+## Add support for `rb_define_alias` (0.7.4)
+
+CRuby code can now make use of the `rb_define_alias` function. Documentation
+for aliases is not supported, however.
 
 # What's New in 0.6.x?
 

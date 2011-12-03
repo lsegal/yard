@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2011    
 **License**:      MIT License    
-**Latest Version**: 0.7.3 (codename "Rhombus")    
-**Release Date**: October 15th 2011    
+**Latest Version**: 0.7.4 (codename "Kennedy")    
+**Release Date**: December 2nd 2011    
 
 Synopsis
 --------
@@ -289,6 +289,18 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 Changelog
 ---------
 
+- **December.2.11**: 0.7.4 release
+    - Redcarpet is now the default Markdown formatting library. GFM now works out-of-box (#404)
+    - Fix server side searching for elements that are marked private (#420)
+    - Add 'textile_strict' and 'pre' markup types, reorganize text and none (#416)
+    - Improve encoding line detection (#415)
+    - Add support for `rb_define_alias` in CRuby code (#413)
+    - Fix rendering of some keywords in source view (#410)
+    - Add support for RDoc 3.10+ (#406, #407)
+    - Fix typewriter text being processed in code blocks (#403)
+    - Improve support for has_rdoc in RubyGems 1.8.x (#401)
+    - See the {file:docs/WhatsNew.md} document for details on added features
+
 - **October.15.11**: 0.7.3 release
     - Improve support for parsing under Ruby 1.9.2p290 and 1.9.3 (#365, #370)
     - Add support for SWIG generated CRuby code (#369)
@@ -308,7 +320,7 @@ Changelog
     - Fixes a bug in `yard server` not displaying class list properly.
 
 - **May.17.11**: 0.7.0 release
-    - See the {docs/WhatsNew.md} document for details on added features
+    - See the {file:docs/WhatsNew.md} document for details on added features
     - Make sure that Docstring#line_range is filled when possible (#243)
     - Set #verifier in YardocTask (#282)
     - Parse BOM in UTF-8 files (#288)

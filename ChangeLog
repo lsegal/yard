@@ -1,3 +1,143 @@
+2011-12-03  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb: Bump to version 0.7.4
+  and update README/ChangeLog/WhatsNew
+
+  * lib/yard/templates/helpers/markup_helper.rb: Revert loading of RDoc inside
+  of markup helper, load it in RDocMarkup instead (since JRuby does not like
+  this all the time)
+
+  * lib/yard/templates/helpers/markup/rdoc_markup.rb: JRuby doesn't like doing
+  a require 'rdoc' without the gem.
+
+  * lib/yard/templates/helpers/markup/rdoc_markup.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add support for RDoc 3.10 which
+  no longer requires 'rdoc' inside markup sources
+
+  * lib/yard/server/commands/search_command.rb: Prune search results according
+  to verifiers (no-private, etc.)  This should ensure that the server side
+  search results are in sync with the statically generated class/method lists. 
+  Closes #420
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Add support for
+  rb_define_alias  Closes #413
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Re-organize markup types text,
+  none, and add type 'pre'.  The new behaviour for the types are as follows: 
+  pre: Pre-formatted text, wrapping input inside <pre> tags. text: No
+  formatting except for replacing newlines with <br> tags. none: No formatting
+  at all.  In all cases, HTML is escaped. Note that syntax highlighting does
+  not work in these markup types.  Closes #416
+
+2011-12-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add 'textile_strict' markup type
+  that uses strict hard breaks on newlines
+
+  * lib/yard/templates/helpers/markup/rdoc_markup.rb,
+  spec/templates/helpers/markup/rdoc_markup_spec.rb: Ignore +typewritertext+
+  inside code blocks  Closes #403
+
+  * lib/yard/templates/helpers/markup_helper.rb,
+  spec/templates/helpers/markup_helper_spec.rb: Redcarpet is now the default
+  markdown provider for YARD
+
+  * lib/yard/templates/helpers/html_helper.rb: Autolink when using red carpet
+
+  * .../helpers/html_syntax_highlight_helper_spec.rb: Fix specs to use new css
+  rules when generating HTML syntax highlighted Ruby
+
+  * .../helpers/html_syntax_highlight_helper.rb,
+  templates/default/fulldoc/html/css/style.css,
+  templates/guide/fulldoc/html/css/style.css: Change generated HTML when
+  performing syntax highlighting of Ruby code to generate ids with CSS prefix
+  "rubyid_" to avoid collisions with other CSS class names.
+
+2011-12-01  Mark Morga <markmorga@gmail.com>
+
+  * lib/yard/rake/yardoc_task.rb: Documentation improvements in YardocTask. 
+  Fixed attr :options to indicate that it should be an Array<String> rather
+  than Hash. Added an example for attr :files to show correct use of "-" for
+  extra files.
+
+2011-11-28  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server/commands/library_command.rb,
+  .../doc_server/processing/html/processing.erb: Server "processing" response
+  should return HTTP code 202 Accepted instead of 302.  This change makes
+  IE8/IE9 happier about redirects, and is the proper response code for this
+  situation.  Closes #418
+
+2011-11-26  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb:
+  support encoding detection in C source file.
+
+  * spec/parser/source_parser_spec.rb: accept 'coding: ENCODING; OTHER
+  PARAMTERS' style encoding line.
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb:
+  support UTF-8 as encoding name.
+
+2011-11-25  Kouhei Sutou <kou@clear-code.com>
+
+  * spec/registry_store_spec.rb: ensure test directory nonexistent.
+
+2011-11-09  yuta yamada <yamada@clear-code.com>
+
+  * README.md: fix a typo.
+
+2011-11-06  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/css/style.css,
+  templates/guide/fulldoc/html/css/style.css: Better CSS targeting to handle
+  example identifiers inside code blocks  Closes #410
+
+2011-11-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/markup_helper.rb: Require 'rdoc' when loading
+  RDoc markup. Fixes issues with new RDoc 3.x markup loading.  Closes #406,
+  #407
+
+2011-10-21  Loren Segal <lsegal@soen.ca>
+
+  * templates/default/fulldoc/html/js/app.js: Actually want nextAll(), not
+  next() when filtering next elements in collapse/view source links
+
+  * templates/default/fulldoc/html/js/app.js: Be more specific about which
+  next() element to toggle (collapse and view source JS event handlers)
+
+  * docs/GettingStarted.md: Fix link to types.html
+
+2011-10-20  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/rubygems/specification.rb: Also ensure that has_rdoc is always
+  boolean inside of has_rdoc? (in case accessor was not called by newer
+  RubyGems)  References #401
+
+  * lib/yard/rubygems/specification.rb: Ensure that has_rdoc is true by default
+  (always boolean)  Closes #401
+
+2011-10-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Error early if files have
+  markup formats that are not available on the system
+
+  * lib/yard/code_objects/base.rb: Remove unused self.line setting method. 
+  This method was initiating a dispatch to method_missing, since the method did
+  not exist, and was silently setting an attribute on the object that is never
+  used.
+
+  * lib/yard/code_objects/base.rb: Implement to_ary on CodeObjects::Base  Ruby
+  1.9.2+ likes to ask the base object if it responds to to_ary when
+  Array#flatten is called on a list. This causes method_missing to be
+  dispatched to and incurs significant overhead. A 6% performance improvement
+  was noted for implementing this method alone.
+
 2011-10-15  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb: Update README, ChangeLog and bump to
