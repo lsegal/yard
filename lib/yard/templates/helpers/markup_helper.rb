@@ -40,6 +40,7 @@ module YARD
         ],
         :ruby => [],
         :text => [],
+        :pre  => [],
         :html => [],
         :none => [],
       }

@@ -114,9 +114,17 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
     end
+
+    it "should return pre-formatted text with :pre markup" do
+      htmlify("fo\no\n\nbar<>", :pre).should == "<pre>fo\no\n\nbar&lt;&gt;</pre>"
+    end
     
-    it "should return regular text with :none markup" do
-      htmlify("fo\no\n\nbar<>", :none).should == "fo\no<br/>bar&lt;&gt;"
+    it "should return regular text with :text markup" do
+      htmlify("fo\no\n\nbar<>", :text).should == "fo<br/>o<br/><br/>bar&lt;&gt;"
+    end
+
+    it "should return unmodified text with :none markup" do
+      htmlify("fo\no\n\nbar<>", :none).should == "fo\no\n\nbar&lt;&gt;"
     end
     
     it "should highlight ruby if markup is :ruby" do
