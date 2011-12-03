@@ -4,6 +4,9 @@ module YARD
       # Performs a search over the objects inside of a library and returns
       # the results as HTML or plaintext
       class SearchCommand < LibraryCommand
+        include Templates::Helpers::BaseHelper
+        include Templates::Helpers::ModuleHelper
+
         attr_accessor :results, :query
 
         def run
@@ -47,7 +50,7 @@ module YARD
 
         def search_for_object
           splitquery = query.split(/\s+/).map {|c| c.downcase }.reject {|m| m.empty? }
-          self.results = Registry.all.select {|o|
+          self.results = run_verifier(Registry.all).select {|o|
               o.path.downcase.include?(query.downcase)
             }.reject {|o|
               name = (o.type == :method ? o.name(true) : o.name).to_s.downcase
