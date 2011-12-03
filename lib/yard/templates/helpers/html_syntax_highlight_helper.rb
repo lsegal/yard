@@ -25,7 +25,7 @@ module YARD
             when :nl, :ignored_nl, :sp
               output << h(s.last)
             when :ident
-              output << "<span class='id #{h(s.last)}'>#{h(s.last)}</span>"
+              output << "<span class='id identifier rubyid_#{h(s.last)}'>#{h(s.last)}</span>"
             else
               output << "<span class='#{s.first}'>#{h(s.last)}</span>"
             end
@@ -47,7 +47,7 @@ module YARD
               h s.text
             when Parser::Ruby::Legacy::RubyToken::TkId
               prettyval = h(s.text)
-              "<span class='#{prettyval} #{prettyclass} #{prettysuper}'>#{prettyval}</span>"
+              "<span class='rubyid_#{prettyval} #{prettyclass} #{prettysuper}'>#{prettyval}</span>"
             else
               "<span class='#{prettyclass} #{prettysuper}'>#{h s.text}</span>"
             end
