@@ -134,8 +134,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should include file and htmlify it" do
       load_markup_provider(:rdoc)
       File.should_receive(:file?).with('foo.rdoc').and_return(true)
-      File.should_receive(:read).with('foo.rdoc').and_return('= HI')
-      htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><h1>HI</h1></p>"
+      File.should_receive(:read).with('foo.rdoc').and_return('HI')
+      htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><p>HI</p></p>"
     end
     
     it "should autolink URLs (markdown specific)" do

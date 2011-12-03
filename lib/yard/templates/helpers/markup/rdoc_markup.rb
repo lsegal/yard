@@ -3,12 +3,14 @@ module YARD
     module Helpers
       module Markup
         begin
+          require 'rdoc'
           require 'rdoc/markup'
           require 'rdoc/markup/to_html'
           class RDocMarkup; MARKUP = RDoc::Markup end
           class RDocMarkupToHtml < RDoc::Markup::ToHtml; end
         rescue LoadError
           begin
+            require 'rdoc'
             require 'rdoc/markup/simple_markup'
             require 'rdoc/markup/simple_markup/to_html'
             class RDocMarkup; MARKUP = SM::SimpleMarkup end
