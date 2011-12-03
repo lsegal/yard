@@ -15,6 +15,7 @@ module YARD
         parse_modules
         parse_classes
         parse_methods
+        parse_aliases
         parse_attributes
         parse_constants
         parse_includes
@@ -98,6 +99,30 @@ module YARD
         end
         find_method_body(obj, func_name, content)
         obj
+      end
+      
+      def handle_alias(var_name, new_name, old_name)
+        namespace = P(remove_var_prefix(var_name))
+        ensure_loaded!(namespace)
+        new_meth, old_meth = new_name.to_sym, old_name.to_sym
+        old_obj = namespace.child(:name => old_meth, :scope => :instance)
+        new_obj = YARD::CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
+          o.visibility = :public
+          o.scope = :instance
+          o.add_file(@file)
+          o.source_type = :c
+        end
+
+        if old_obj
+          new_obj.signature = old_obj.signature
+          new_obj.source = old_obj.source
+          new_obj.docstring = old_obj.docstring
+          new_obj.docstring.object = new_obj
+        else
+          new_obj.signature = "def #{new_meth}" # this is all we know.
+        end
+
+        namespace.aliases[new_obj] = old_meth
       end
       
       def handle_attribute(var_name, name, func_name, read, write, source_file = nil)
@@ -376,6 +401,18 @@ module YARD
                     (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
                     }xm) do |name, func_name, param_count, source_file|
           handle_method("method", "rb_mKernel", name, func_name, source_file)
+        end
+      end
+      
+      def parse_aliases
+        @content.scan(%r{rb_define_alias
+                       \s*\(\s*([\w\.]+),
+                         \s*"([^"]+)",
+                         \s*"([^"]+)"\s*\)
+                     }xm) do |var_name, new_name, old_name|
+
+          var_name = "rb_cObject" if var_name == "rb_mKernel"
+          handle_alias(var_name, new_name, old_name)
         end
       end
       
