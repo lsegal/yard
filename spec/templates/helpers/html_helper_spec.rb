@@ -142,7 +142,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
-      htmlify('http://example.com', :markdown).chomp.should ==
+      htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/').should ==
         '<p><a href="http://example.com">http://example.com</a></p>'
     end
     
@@ -527,6 +527,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should highlight as ruby if htmlify(text, :ruby) is called" do
       should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
       htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
+    end
+    
+    it "should highlight source when matching a pre lang= tag" do
+      htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should == 
+        '<pre class="code foo"><code>x = 1</code></pre>'
+    end
+    
+    it "should highlight source when matching a code class= tag" do
+      htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should == 
+        '<pre class="code foo"><code>x = 1</code></pre>'
     end
   end
   
