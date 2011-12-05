@@ -14,7 +14,7 @@ that tools like RDoc do not do. These components are:
 This separation is a major goal of the project, and means that YARD is not *just* 
 a tool to generate HTML output. The expectation is that any subset of YARD's 
 major components may be used, extended or modified independently. YARD may be 
-used just as a data gathering tool (to parse and audit code), just as as a data 
+used just as a data gathering tool (to parse and audit code), just as a data 
 source (a webserver containing raw unformatted data about code), or just as a 
 conventional HTML documentation generation tool (like RDoc).
 
