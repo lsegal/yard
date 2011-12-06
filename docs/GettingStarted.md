@@ -384,6 +384,7 @@ used for guide-style documentation which does not document the entire source
 tree, but instead selectively renders important classes or methods. Consider
 the following documentation inside of a README file:
 
+    !!!plain
     = igLatinPay!
     
     This library adds pig latin methods to the string class, allowing you
