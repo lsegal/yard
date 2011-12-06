@@ -41,6 +41,7 @@ following syntaxes are available:
 This syntax has no special syntax, it is simply a tagname followed by any
 data.
 
+    !!!plain
     @tagname data here
     
 ### Freeform Data With Title
@@ -66,6 +67,7 @@ This syntax optionally contains type information to be associated with the
 tag. Type information is specified as a freeform list of Ruby types, duck
 types or literal values. The following is a valid tag with type information:
 
+    !!!plain
     @return [String, #read] a string or object that responds to #read
     
 ### Data With Name and Optional Type Information
@@ -75,14 +77,17 @@ of tags like `@param`, where the data is further associated with a key. In
 the case of `@param` the key is an argument name in the method. The following
 shows how this can be used:
 
+    !!!plain
     @param [String] url the URL to perform the request on
 
 Note that "url" in the above example is the key name. The syntax is of the form:
 
+    !!!plain
     @tagname [types] <name> <description>
     
 As mentioned, types are optional, so the following is also valid:
 
+    !!!plain
     @param url the URL to perform the request on
 
 
@@ -94,13 +99,15 @@ YARD supplies the following built-in tags:
 
   * `@abstract`: Marks a class/module/method as abstract with optional
     implementor information.
-  
+
+        !!!plain
         @abstract Subclass and override {#run} to implement a custom Threadable class.
         
   * `@api`: Declares the API that the object belongs to. Does not display in
     output, but useful for performing queries (`yardoc --query`). Any text is
     allowable in this tag, and there are no predefined values(*).
-    
+
+        !!!plain
         @api freeform text
         
     (*) Note that the special name `@api private` does display a notice in 
@@ -109,32 +116,38 @@ YARD supplies the following built-in tags:
       
   * `@attr`: Declares an attribute from the docstring of a class. Meant to be
     used on Struct classes only (classes that inherit Struct).
-  
+
+        !!!plain
         @attr [Types] attribute_name a full description of the attribute
       
   * `@attr_reader`: Declares a readonly attribute from the docstring of a class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
-  
+
+        !!!plain
         @attr_reader [Types] name description of a readonly attribute
       
   * `@attr_writer`: Declares a writeonly attribute from the docstring of class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
-  
+
+        !!!plain
         @attr_writer [Types] name description of writeonly attribute
 
   * `@attribute`: Recognizes a DSL class method as an attribute with the given
     name. Also accepts the r, w, or rw flag to signify that the attribute is 
     readonly, writeonly, or readwrite (default). Only used with DSL methods.
 
+        !!!plain
         @attribute [rw|r|w] NAME
 
   * `@author`: List the author(s) of a class/method
 
+        !!!plain
         @author Full Name
 
   * `@deprecated`: Marks a method/class as deprecated with an optional
     reason.
 
+        !!!plain
         @deprecated Describe the reason or provide alt. references here
 
   * `@example`: Show an example snippet of code for an object. The
@@ -145,18 +158,21 @@ YARD supplies the following built-in tags:
           
   * `@macro`: Registers or expands a new macro. See the [Macros](#macros)
     section for more details. Note that the name parameter is never optional.
-    
+
+        !!!plain
         @macro [new|attached] macro_name
           The macro contents to expand
           
   * `@method`: Recognizes a DSL class method as a method with the given name
     and optional signature. Only used with DSL methods.
-      
+
+        !!!plain
         @method method_signature(opts = {}, &block)
   
   * `@note`: Creates an emphasized note for the users to read about the
     object.
-    
+
+        !!!plain
         @note This method should only be used in outer space.
 
   * `@option`: Describe an options hash in a method. The tag takes the
@@ -190,6 +206,7 @@ YARD supplies the following built-in tags:
       
   * `@param`: Defines method parameters
 
+        !!!plain
         @param [optional, types, ...] argname description
       
   * `@private`: Defines an object as private. This exists for classes,
@@ -203,10 +220,12 @@ YARD supplies the following built-in tags:
         
   * `@raise`: Describes an Exception that a method may throw
 
+        !!!plain
         @raise [ExceptionClass] description
 
   * `@return`: Describes return value of method
 
+        !!!plain
         @return [optional, types, ...] description
   
   * `@scope`: Sets the scope of a DSL method. Only applicable to DSL method
@@ -226,6 +245,7 @@ YARD supplies the following built-in tags:
       
   * `@todo`: Marks a TODO note in the object being documented
 
+        !!!plain
         @todo Add support for Jabberwocky service
           There is an open source Jabberwocky library available 
           at http://somesite.com that can be integrated easily
@@ -243,15 +263,18 @@ YARD supplies the following built-in tags:
   * `@yield`: Describes the block. Use types to list the parameter
     names the block yields.
 
+        !!!plain
         # for block {|a, b, c| ... }
         @yield [a, b, c] Description of block
 
   * `@yieldparam`: Defines parameters yielded by a block
 
+        !!!plain
         @yieldparam [optional, types, ...] argname description
 
   * `@yieldreturn`: Defines return type of a block
 
+        !!!plain
         @yieldreturn [optional, types, ...] description
 
 
