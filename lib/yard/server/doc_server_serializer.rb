@@ -7,24 +7,24 @@ module YARD
     class DocServerSerializer < Serializers::FileSystemSerializer
       include WEBrick::HTTPUtils
 
-      def initialize(command)
-        super(:command => command, :extension => '')
+      def initialize(command = nil)
+        super(:basepath => '', :extension => '')
       end
 
       def serialized_path(object)
-        path = case object
+        case object
         when CodeObjects::RootObject
           "toplevel"
         when CodeObjects::MethodObject
-          return escape_path(serialized_path(object.namespace) + (object.scope == :instance ? ":" : ".") + object.name.to_s)
+          serialized_path(object.namespace) +
+            (object.scope == :instance ? ":" : ".") + escape(object.name.to_s)
         when CodeObjects::ConstantObject, CodeObjects::ClassVariableObject
-          return escape_path(serialized_path(object.namespace)) + "##{object.name}-#{object.type}"
+          serialized_path(object.namespace) + "##{object.name}-#{object.type}"
+        when CodeObjects::ExtraFileObject
+          super(object).gsub(/^file./, 'file/')
         else
-          object.path.gsub('::', '/')
+          super(object)
         end
-        command = options[:command]
-        library_path = command.single_library ? '' : '/' + command.library.to_s
-        return escape_path(File.join('', command.adapter.router.docs_prefix, library_path, path))
       end
     end
   end

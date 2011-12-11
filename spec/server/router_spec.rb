@@ -12,23 +12,30 @@ describe YARD::Server::Router do
   before do
     @adapter = mock_adapter
     @projects = @adapter.libraries['project']
+    @request = mock_request
   end
 
   describe '#parse_library_from_path' do
     def parse(*args)
-      MyRouterSpecRouter.new(@adapter).parse_library_from_path(args.flatten)
+      @request.path = '/' + args.join('/')
+      @router = MyRouterSpecRouter.new(@adapter)
+      @router.request = @request
+      @router.parse_library_from_path(args.flatten)
     end
     
     it "should parse library and version name out of path" do
       parse('project', '1.0.0').should == [@projects[0], []]
+      @request.version_supplied.should be_true
     end
     
     it "should parse library and use latest version if version is not supplied" do
       parse('project').should == [@projects[1], []]
+      @request.version_supplied.should be_false
     end
 
     it "should parse library and use latest version if next component is not a version" do
       parse('project', 'notaversion').should == [@projects[1], ['notaversion']]
+      @request.version_supplied.should be_false
     end
     
     it "should return nil library if no library is found" do

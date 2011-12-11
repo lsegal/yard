@@ -31,7 +31,7 @@ module YARD
 
         def initialize(opts = {})
           super
-          self.serializer = DocServerSerializer.new(self)
+          self.serializer = DocServerSerializer.new
         end
 
         def call(request)
