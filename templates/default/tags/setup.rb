@@ -13,6 +13,10 @@ def return
   tag(:return)
 end
 
+def param
+  tag(:param) if object.type == :method
+end
+
 private
 
 def tag(name, opts = nil)

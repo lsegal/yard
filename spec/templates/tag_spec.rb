@@ -36,4 +36,16 @@ describe YARD::Templates::Engine.template(:default, :tags) do
       text_equals(Registry.at('#m').format, :tag001)
     end
   end
+  
+  describe 'param tags on non-methods' do
+    it 'should not display @param tags on non-method objects' do
+      YARD.parse_string <<-'eof'
+        # @param [#to_s] name the name
+        module Foo; end
+      eof
+      
+      proc = lambda { Registry.at('Foo').format(:format => :html) }
+      proc.should_not raise_error(NoMethodError)
+    end
+  end
 end
