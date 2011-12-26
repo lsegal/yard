@@ -15,8 +15,8 @@ module YARD
         parse_modules
         parse_classes
         parse_methods
-        parse_aliases
         parse_attributes
+        parse_aliases
         parse_constants
         parse_includes
       end
