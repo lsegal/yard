@@ -106,4 +106,21 @@ describe YARD::Templates::Engine.template(:default, :module) do
     
     html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module002)
   end
+  
+  it "should ignore overwritten attributes from inherited list" do
+    Registry.clear
+    YARD.parse_string <<-'eof'
+      module B
+        attr_reader :foo
+        attr_accessor :bar
+      end
+      module A
+        include B
+        def foo; end
+        attr_reader :bar
+      end
+    eof
+    
+    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module003)
+  end
 end
