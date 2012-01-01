@@ -7,6 +7,8 @@ describe "YARD::Server::RackMiddleware" do
     @app = YARD::Server::RackMiddleware.new(@superapp, :libraries => {'foo' => [LibraryVersion.new('foo', nil)]})
   end
   
+  after(:all) { YARD::Server::Adapter.shutdown }
+  
   it "should handle requests" do
     @app.call(Rack::MockRequest.env_for('/'))[0].should == 200
   end
