@@ -102,7 +102,7 @@ module YARD
       end
       
       def handle_alias(var_name, new_name, old_name)
-        namespace = P(remove_var_prefix(var_name))
+        namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
         ensure_loaded!(namespace)
         new_meth, old_meth = new_name.to_sym, old_name.to_sym
         old_obj = namespace.child(:name => old_meth, :scope => :instance)
