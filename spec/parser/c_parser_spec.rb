@@ -5,18 +5,18 @@ class YARD::Parser::CParser; def ensure_loaded!(a, b=1) a end end
 
 describe YARD::Parser::CParser do
   describe '#parse' do
-    before(:all) do
-      file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
-      @parser = Parser::CParser.new(IO.read(file))
-      @parser.parse
-    end
-
     def parse
       Registry.clear
       Parser::CParser.new(@contents).parse
     end
 
     describe 'Array class' do
+      before(:all) do
+        file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
+        @parser = Parser::CParser.new(IO.read(file))
+        @parser.parse
+      end
+
       it "should parse Array class" do
         obj = YARD::Registry.at('Array')
         obj.should_not be_nil
@@ -69,6 +69,35 @@ describe YARD::Parser::CParser do
         parse
         Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should == 
           "VALUE foo(VALUE x) { int value = x;\n}"
+      end
+    end
+    
+    describe 'Handling namespace parsing' do
+      it 'should track variable names defined under namespaces' do
+        @contents = <<-eof
+          void Init_Foo(void) {
+              mFoo = rb_define_module("Foo");
+              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
+              rb_define_method(cBar, "foo", foo, 1);
+          }
+        eof
+        parse
+        Registry.at('Foo::Bar').should_not be_nil
+        Registry.at('Foo::Bar#foo').should_not be_nil
+      end
+
+      it 'should track variable names defined under namespaces' do
+        @contents = <<-eof
+          void Init_Foo(void) {
+              mFoo = rb_define_module("Foo");
+              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
+              mBaz = rb_define_module_under(cBar, "Baz");
+              rb_define_method(mBaz, "foo", foo, 1);
+          }
+        eof
+        parse
+        Registry.at('Foo::Bar::Baz').should_not be_nil
+        Registry.at('Foo::Bar::Baz#foo').should_not be_nil
       end
     end
     

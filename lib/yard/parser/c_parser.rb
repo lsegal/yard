@@ -12,8 +12,7 @@ module YARD
       end
 
       def parse
-        parse_modules
-        parse_classes
+        parse_namespaces
         parse_methods
         parse_aliases
         parse_attributes
@@ -31,6 +30,11 @@ module YARD
       # @since 0.5.3
       def remove_var_prefix(var)
         var.gsub(/^rb_[mc]|^[a-z_]+/, '')
+      end
+      
+      # @since 0.7.5
+      def lookup_var(var)
+        @namespaces[var] || P(remove_var_prefix(var))
       end
 
       def ensure_loaded!(object, max_retries = 1)
@@ -52,9 +56,17 @@ module YARD
         end
         object
       end
+      
+      # @since 0.7.5
+      def handle_namespace(var_name, ns_type, ns_name, parent, in_module = nil)
+        case ns_type
+        when 'module'; handle_module(var_name, ns_name, in_module)
+        else handle_class(var_name, ns_name, parent, in_module)
+        end
+      end
 
       def handle_module(var_name, mod_name, in_module = nil)
-        namespace = @namespaces[in_module] || (in_module ? P(remove_var_prefix(in_module)) : :root)
+        namespace = in_module ? lookup_var(in_module) : :root
         ensure_loaded!(namespace)
         obj = CodeObjects::ModuleObject.new(namespace, mod_name)
         obj.add_file(@file)
@@ -64,10 +76,10 @@ module YARD
 
       def handle_class(var_name, class_name, parent, in_module = nil)
         parent = nil if parent == "0"
-        namespace = @namespaces[in_module] || (in_module ? P(remove_var_prefix(in_module)) : :root)
+        namespace = in_module ? lookup_var(in_module) : :root
         ensure_loaded!(namespace)
         obj = CodeObjects::ClassObject.new(namespace, class_name)
-        obj.superclass = @namespaces[parent] || remove_var_prefix(parent) if parent
+        obj.superclass = lookup_var(parent) if parent
         obj.add_file(@file)
         find_namespace_docstring(obj)
         @namespaces[var_name] = obj
@@ -80,7 +92,7 @@ module YARD
         else; scope = :instance
         end
 
-        namespace = @namespaces[var_name] || P(remove_var_prefix(var_name))
+        namespace = lookup_var(var_name)
         ensure_loaded!(namespace)
         obj = CodeObjects::MethodObject.new(namespace, name, scope)
         obj.add_file(@file)
@@ -102,7 +114,7 @@ module YARD
       end
       
       def handle_alias(var_name, new_name, old_name)
-        namespace = P(remove_var_prefix(var_name))
+        namespace = lookup_var(var_name)
         ensure_loaded!(namespace)
         new_meth, old_meth = new_name.to_sym, old_name.to_sym
         old_obj = namespace.child(:name => old_meth, :scope => :instance)
@@ -137,7 +149,8 @@ module YARD
       end
 
       def handle_constants(type, var_name, const_name, definition)
-        namespace = @namespaces[var_name]
+        namespace = lookup_var(var_name)
+        ensure_loaded!(namespace)
         obj = CodeObjects::ConstantObject.new(namespace, const_name)
         obj.value = definition
         obj.add_file(@file)
@@ -335,38 +348,23 @@ module YARD
         end
       end
 
-      def parse_modules
-        @content.scan(/(\w+)\s* = \s*rb_define_module\s*
-            \(\s*"(\w+)"\s*\)/mx) do |var_name, class_name|
-          handle_module(var_name, class_name)
-        end
-
-        @content.scan(/(\w+)\s* = \s*rb_define_module_under\s*
-                  \(
-                     \s*(\w+),
-                     \s*"(\w+)"
-                  \s*\)/mx) do |var_name, in_module, class_name|
-          handle_module(var_name, class_name, in_module)
-        end
-      end
-
-      def parse_classes
+      def parse_namespaces
         # The '.' lets us handle SWIG-generated files
-        @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_class|boot_defclass)\s*
+        @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_(class|module)|boot_defclass)\s*
                   \(
-                     \s*"(\w+)",
-                     \s*(\w+|0)\s*
-                  \)/mx) do |var_name, class_name, parent|
-          handle_class(var_name, class_name, parent)
+                     \s*"(\w+)"(?:,
+                     \s*(\w+|0)\s*)?
+                  \)/mx) do |var_name, ns_type, ns_name, parent|
+          handle_namespace(var_name, ns_type, ns_name, parent)
         end
 
-        @content.scan(/([\w\.]+)\s* = \s*rb_define_class_under\s*
+        @content.scan(/([\w\.]+)\s* = \s*rb_define_(class|module)_under\s*
                   \(
                      \s*(\w+),
-                     \s*"(\w+)",
-                     \s*([\w\*\s\(\)\.\->]+)\s*  # for SWIG
-                  \s*\)/mx) do |var_name, in_module, class_name, parent|
-          handle_class(var_name, class_name, parent, in_module)
+                     \s*"(\w+)"(?:,
+                     \s*([\w\*\s\(\)\.\->]+)\s*)?  # for SWIG
+                  \s*\)/mx) do |var_name, ns_type, in_module, ns_name, parent|
+          handle_namespace(var_name, ns_type, ns_name, parent, in_module)
         end
       end
 
@@ -438,8 +436,7 @@ module YARD
       def parse_includes
         @content.scan(/rb_include_module\s*\(\s*(\w+?),\s*(\w+?)\s*\)/) do |klass, mod|
           if klass = @namespaces[klass]
-            mod = @namespaces[mod] || P(remove_var_prefix(mod))
-            klass.mixins(:instance) << mod
+            klass.mixins(:instance) << lookup_var(mod)
           end
         end
       end
