@@ -14,8 +14,8 @@ module YARD
       def parse
         parse_namespaces
         parse_methods
-        parse_aliases
         parse_attributes
+        parse_aliases
         parse_constants
         parse_includes
       end
