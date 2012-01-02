@@ -99,6 +99,20 @@ describe YARD::Parser::CParser do
         Registry.at('Foo::Bar::Baz').should_not be_nil
         Registry.at('Foo::Bar::Baz#foo').should_not be_nil
       end
+      
+      it "should handle rb_path2class() calls" do
+        @contents = <<-eof
+          void Init_Foo(void) {
+              somePath = rb_path2class("Foo::Bar::Baz")
+              mFoo = rb_define_module("Foo");
+              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
+              mBaz = rb_define_module_under(cBar, "Baz");
+              rb_define_method(somePath, "foo", foo, 1);
+          }
+        eof
+        parse
+        Registry.at('Foo::Bar::Baz#foo').should_not be_nil
+      end
     end
     
     describe 'Defining methods with source in other files' do

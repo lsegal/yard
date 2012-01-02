@@ -61,6 +61,7 @@ module YARD
       def handle_namespace(var_name, ns_type, ns_name, parent, in_module = nil)
         case ns_type
         when 'module'; handle_module(var_name, ns_name, in_module)
+        when 'path2class'; handle_class_lookup(var_name, ns_name)
         else handle_class(var_name, ns_name, parent, in_module)
         end
       end
@@ -83,6 +84,11 @@ module YARD
         obj.add_file(@file)
         find_namespace_docstring(obj)
         @namespaces[var_name] = obj
+      end
+      
+      # @since 0.7.5
+      def handle_class_lookup(var_name, class_name)
+        @namespaces[var_name] = P(class_name)
       end
 
       # @return [CodeObjects::Base]
@@ -350,12 +356,12 @@ module YARD
 
       def parse_namespaces
         # The '.' lets us handle SWIG-generated files
-        @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_(class|module)|boot_defclass)\s*
+        @content.scan(/([\w\.]+)\s* = \s*(?:rb_define_(class|module)|boot_defclass|rb_(path2class))\s*
                   \(
-                     \s*"(\w+)"(?:,
+                     \s*"([\w:]+)"(?:,
                      \s*(\w+|0)\s*)?
-                  \)/mx) do |var_name, ns_type, ns_name, parent|
-          handle_namespace(var_name, ns_type, ns_name, parent)
+                  \)/mx) do |var_name, ns_type, path2class, ns_name, parent|
+          handle_namespace(var_name, path2class || ns_type, ns_name, parent)
         end
 
         @content.scan(/([\w\.]+)\s* = \s*rb_define_(class|module)_under\s*
