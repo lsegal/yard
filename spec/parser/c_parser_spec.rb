@@ -163,7 +163,7 @@ describe YARD::Parser::CParser do
           void Init_Foo() {
             rb_cFoo = rb_define_class("Foo", rb_cObject);
             #{commented ? '/*' : ''} 
-              rb_define_attr(rb_cFoo, "foo", foo, #{read}, #{write});
+              rb_define_attr(rb_cFoo, "foo", #{read}, #{write});
             #{commented ? '*/' : ''}
           }
         eof

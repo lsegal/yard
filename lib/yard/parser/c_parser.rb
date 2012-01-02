@@ -136,12 +136,12 @@ module YARD
 
         namespace.aliases[new_obj] = old_meth
       end
-      
-      def handle_attribute(var_name, name, func_name, read, write, source_file = nil)
+
+      def handle_attribute(var_name, name, read, write, source_file = nil)
         values = {:read => read.to_i, :write => write.to_i}
         {:read => name, :write => "#{name}="}.each do |type, meth_name|
           next unless values[type] > 0
-          obj = handle_method(:instance, var_name, meth_name, func_name, source_file)
+          obj = handle_method(:instance, var_name, meth_name, nil, source_file)
           ensure_loaded!(obj.namespace)
           obj.namespace.attributes[:instance][name] ||= SymbolHash[:read => nil, :write => nil]
           obj.namespace.attributes[:instance][name][type] = obj
@@ -418,10 +418,9 @@ module YARD
         @content.scan(%r{rb_define_attr
                        \s*\(\s*([\w\.]+),
                          \s*"([^"]+)",
-                         \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
                          \s*(0|1)\s*,\s*(0|1)\s*\)
                        (?:;\s*/[*/]\s+in\s+(.+?\.[cy]))?
-                     }xm) do |var_name, name, func_name, read, write, source_file|
+                     }xm) do |var_name, name, read, write, source_file|
 
           # Ignore top-object and weird struct.c dynamic stuff
           next if var_name == "ruby_top_self"
@@ -429,7 +428,7 @@ module YARD
           next if var_name == "envtbl"
 
           var_name = "rb_cObject" if var_name == "rb_mKernel"
-          handle_attribute(var_name, name, func_name, read, write, source_file)
+          handle_attribute(var_name, name, read, write, source_file)
         end
       end
 
