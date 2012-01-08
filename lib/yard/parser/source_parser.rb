@@ -374,7 +374,7 @@ module YARD
 
       register_parser_type :ruby,   Ruby::RubyParser
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
-      register_parser_type :c,      CParser, ['c', 'cc', 'cxx', 'cpp']
+      register_parser_type :c,      C::CParser, ['c', 'cc', 'cxx', 'cpp']
 
       self.parser_type = :ruby
 

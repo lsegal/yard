@@ -108,6 +108,15 @@ module YARD
   # The parser namespace holds all parsing engines used by YARD.
   # Currently only Ruby and C (Ruby) parsers are implemented.
   module Parser
+    module C # CRuby Parsing components
+      autoload :BodyStatement,     __p('parser/c/statement')
+      autoload :Comment,           __p('parser/c/statement')
+      autoload :CommentParser,     __p('parser/c/comment_parser')
+      autoload :CParser,           __p('parser/c/c_parser')
+      autoload :Statement,         __p('parser/c/statement')
+      autoload :ToplevelStatement, __p('parser/c/statement')
+    end
+
     module Ruby # Ruby parsing components.
       module Legacy # Handles Ruby parsing in Ruby 1.8.
         autoload :RipperParser,   __p('parser/ruby/legacy/ruby_parser')
