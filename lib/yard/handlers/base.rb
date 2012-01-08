@@ -405,7 +405,8 @@ module YARD
           object.add_file(parser.file, statement.line, statement.comments)
 
           # Add docstring if there is one.
-          if statement.comments
+          case statement.comments
+          when String, Array
             object.docstring = Docstring.new(statement.comments, object)
           end
 
