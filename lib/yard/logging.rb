@@ -43,13 +43,9 @@ module YARD
     # to JRuby, Rubinius and MacRuby. This warning will only display once
     # per Ruby process.
     # 
+    # @deprecated Continuations are no longer needed by YARD 0.8.0+.
     # @return [void]
     def warn_no_continuations
-      return if CONTINUATIONS_SUPPORTED
-      return if $NO_CONTINUATION_WARNING
-      $NO_CONTINUATION_WARNING = true
-      warn "JRuby/MacRuby/Rubinius do not implement Kernel#callcc and cannot " +
-           "load files in order. You must specify the correct order manually."
     end
 
     # Sets the logger level for the duration of the block

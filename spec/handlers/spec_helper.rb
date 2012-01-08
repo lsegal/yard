@@ -27,7 +27,7 @@ end
 class StubbedSourceParser < Parser::SourceParser
   StubbedSourceParser.parser_type = :ruby
   def post_process
-    post = StubbedProcessor.new(@file, @load_order_errors, @parser_type, @globals)
+    post = StubbedProcessor.new(self)
     post.process(@parser.enumerator)
   end
 end

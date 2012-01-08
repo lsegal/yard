@@ -39,10 +39,6 @@ module YARD
 
       def ensure_loaded!(object, max_retries = 1)
         return if object.is_a?(CodeObjects::RootObject)
-        unless CONTINUATIONS_SUPPORTED
-          log.warn_no_continuations
-          raise Handlers::NamespaceMissingError, object
-        end
 
         retries = 0
         context = callcc {|c| c }

@@ -54,9 +54,6 @@ module YARD
       #   is set as the owner, in case any extra method information is processed.
       attr_accessor :owner
 
-      # @return [Boolean] whether or not {Parser::LoadOrderError} is raised
-      attr_accessor :load_order_errors
-
       # @return [Symbol] the parser type (:ruby, :ruby18, :c)
       attr_accessor :parser_type
       
@@ -90,28 +87,16 @@ module YARD
       attr_accessor :extra_state
 
       # Creates a new Processor for a +file+.
-      #
-      # @param [String] file the name of the file that is being processed.
-      #   uses '(stdin)' if file is nil.
-      # @param [Boolean] load_order_error whether or not to raise {Parser::LoadOrderError}
-      #   when a file has unresolved references that need to be parsed first.
-      #   If these errors are raised, the processor will attempt to load all
-      #   other files before continuing to parse the file.
-      # @param [Symbol] parser_type the parser type (:ruby, :ruby18, :c) from
-      #   the parser. Used to select the handler (since handlers are specific
-      #   to a parser type).
-      # @param [OpenStruct] globals the object holding all state during the
-      #   post processing stage
-      def initialize(file = nil, load_order_errors = false, parser_type = Parser::SourceParser.parser_type, globals = nil)
-        @file = file || "(stdin)"
+      # @param [SourceParser] parser the parser used to initialize the processor
+      def initialize(parser)
+        @file = parser.file || "(stdin)"
         @namespace = YARD::Registry.root
         @visibility = :public
         @scope = :instance
         @owner = @namespace
-        @load_order_errors = load_order_errors
-        @parser_type = parser_type
+        @parser_type = parser.parser_type
         @handlers_loaded = {}
-        @globals = globals || OpenStruct.new
+        @globals = parser.globals || OpenStruct.new
         @extra_state = OpenStruct.new
         load_handlers
       end
@@ -126,8 +111,6 @@ module YARD
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process
-            rescue Parser::LoadOrderError => loaderr
-              raise # Pass this up
             rescue NamespaceMissingError => missingerr
               log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
               log.warn "If this class/method is part of your source tree, this will affect your documentation results."
@@ -142,6 +125,19 @@ module YARD
               log.backtrace(e)
             end
           end
+        end
+      end
+      
+      # Continue parsing the remainder of the files in the +globals.ordered_parser+
+      # object. After the remainder of files are parsed, processing will continue
+      # on the current file.
+      # 
+      # @return [void]
+      # @see Parser::OrderedParser
+      def parse_remaining_files
+        if globals.ordered_parser
+          globals.ordered_parser.parse
+          log.debug("Re-processing #{@file}...")
         end
       end
 

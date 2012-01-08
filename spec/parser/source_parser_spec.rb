@@ -543,7 +543,7 @@ describe YARD::Parser::SourceParser do
       msgs[2].should =~ /Missing object MyModule/
       msgs[3].should =~ /Processing .+parse_in_order_002.+/
       msgs[4].should =~ /Re-processing .+parse_in_order_001.+/
-    end if CONTINUATIONS_SUPPORTED
+    end
     
     it "should attempt to order files by length (process toplevel files first)" do
       %w(a a/b a/b/c).each do |file|
