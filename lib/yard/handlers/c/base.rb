@@ -58,7 +58,9 @@ module YARD
         end
         
         def namespace_for_variable(var)
-          namespaces[var] || P(remove_var_prefix(var))
+          return namespaces[var] if namespaces[var]
+          var = remove_var_prefix(var)
+          var.empty? ? nil : P(var)
         end
 
         def namespaces
