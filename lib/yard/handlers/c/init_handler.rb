@@ -7,7 +7,7 @@ class YARD::Handlers::C::InitHandler < YARD::Handlers::C::Base
   process do
     parse_block
     ns = namespace_for_variable(statement.declaration[MATCH, 1])
-    if ns.is_a?(CodeObjects::NamespaceObject) && ns.docstring.blank?
+    if ns.is_a?(YARD::CodeObjects::NamespaceObject) && ns.docstring.blank?
       if statement.comments
         register_docstring(ns, statement.comments.source, statement)
       end

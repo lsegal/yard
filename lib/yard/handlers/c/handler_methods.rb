@@ -7,7 +7,7 @@ module YARD
         def handle_class(var_name, class_name, parent, in_module = nil)
           parent = nil if parent == "0"
           namespace = in_module ? namespace_for_variable(in_module) : YARD::Registry.root
-          register CodeObjects::ClassObject.new(namespace, class_name) do |obj|
+          register YARD::CodeObjects::ClassObject.new(namespace, class_name) do |obj|
             obj.superclass = namespace_for_variable(parent) if parent
             namespaces[var_name] = obj
           end
@@ -15,7 +15,7 @@ module YARD
         
         def handle_module(var_name, module_name, in_module = nil)
           namespace = in_module ? namespace_for_variable(in_module) : YARD::Registry.root
-          register CodeObjects::ModuleObject.new(namespace, module_name) do |obj|
+          register YARD::CodeObjects::ModuleObject.new(namespace, module_name) do |obj|
             namespaces[var_name] = obj
           end
         end
@@ -29,7 +29,7 @@ module YARD
           end
 
           namespace = namespace_for_variable(var_name)
-          register CodeObjects::MethodObject.new(namespace, name, scope) do |obj|
+          register YARD::CodeObjects::MethodObject.new(namespace, name, scope) do |obj|
             obj.visibility = visibility
             find_method_body(obj, func_name)
             obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
@@ -50,7 +50,7 @@ module YARD
           namespace = namespace_for_variable(var_name)
           new_meth, old_meth = new_name.to_sym, old_name.to_sym
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
-          new_obj = register CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
+          new_obj = register YARD::CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
             o.visibility = visibility
           end
 
@@ -69,7 +69,7 @@ module YARD
         def handle_constants(type, var_name, const_name, value)
           return unless type == 'const'
           namespace = namespace_for_variable(var_name)
-          register CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
+          register YARD::CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
             find_constant_docstring(obj)

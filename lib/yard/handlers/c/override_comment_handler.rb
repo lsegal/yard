@@ -10,11 +10,11 @@ class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
       obj = nil
       case type
       when :class
-        obj = CodeObjects::ClassObject.new(:root, name)
+        obj = YARD::CodeObjects::ClassObject.new(:root, name)
       when :module
-        obj = CodeObjects::ModuleObject.new(:root, name)
+        obj = YARD::CodeObjects::ModuleObject.new(:root, name)
       end
-      obj.docstring = statement.source if obj
+      register_docstring(obj, statement.source, statement) if obj
     end
   end
 end
