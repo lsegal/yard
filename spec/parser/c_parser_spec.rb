@@ -67,46 +67,6 @@ describe YARD::Parser::C::CParser do
       end
     end
     
-    describe 'Handling namespace parsing' do
-      it 'should track variable names defined under namespaces' do
-        parse <<-eof
-          void Init_Foo(void) {
-              mFoo = rb_define_module("Foo");
-              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
-              rb_define_method(cBar, "foo", foo, 1);
-          }
-        eof
-        Registry.at('Foo::Bar').should_not be_nil
-        Registry.at('Foo::Bar#foo').should_not be_nil
-      end
-
-      it 'should track variable names defined under namespaces' do
-        parse <<-eof
-          void Init_Foo(void) {
-              mFoo = rb_define_module("Foo");
-              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
-              mBaz = rb_define_module_under(cBar, "Baz");
-              rb_define_method(mBaz, "foo", foo, 1);
-          }
-        eof
-        Registry.at('Foo::Bar::Baz').should_not be_nil
-        Registry.at('Foo::Bar::Baz#foo').should_not be_nil
-      end
-      
-      it "should handle rb_path2class() calls" do
-        parse <<-eof
-          void Init_Foo(void) {
-              somePath = rb_path2class("Foo::Bar::Baz")
-              mFoo = rb_define_module("Foo");
-              cBar = rb_define_class_under(mFoo, "Bar", rb_cObject);
-              mBaz = rb_define_module_under(cBar, "Baz");
-              rb_define_method(somePath, "foo", foo, 1);
-          }
-        eof
-        Registry.at('Foo::Bar::Baz#foo').should_not be_nil
-      end
-    end
-    
     describe 'Defining methods with source in other files' do
       it "should look in another file for method" do
         File.should_receive(:read).at_least(1).times.with('file.c').and_return(<<-eof)
@@ -152,85 +112,6 @@ describe YARD::Parser::C::CParser do
         eof
         Registry.at('Foo#foo').docstring.should == 'FOO'
         Registry.at('Kernel#bar').docstring.should == 'BAR'
-      end
-    end
-    
-    describe 'Defining attributes' do
-      before do
-        Registry.clear
-      end
-      
-      def run(read, write, commented = nil)
-        parse <<-eof
-          /* FOO */
-          VALUE foo(VALUE x) { int value = x; }
-          void Init_Foo() {
-            rb_cFoo = rb_define_class("Foo", rb_cObject);
-            #{commented ? '/*' : ''} 
-              rb_define_attr(rb_cFoo, "foo", #{read}, #{write});
-            #{commented ? '*/' : ''}
-          }
-        eof
-      end
-      
-      it "should handle readonly attribute (rb_define_attr)" do
-        run(1, 0)
-        Registry.at('Foo#foo').should be_reader
-        Registry.at('Foo#foo=').should be_nil
-      end
-
-      it "should handle writeonly attribute (rb_define_attr)" do
-        run(0, 1)
-        Registry.at('Foo#foo').should be_nil
-        Registry.at('Foo#foo=').should be_writer
-      end
-
-      it "should handle readwrite attribute (rb_define_attr)" do
-        run(1, 1)
-        Registry.at('Foo#foo').should be_reader
-        Registry.at('Foo#foo=').should be_writer
-      end
-
-      it "should handle commented writeonly attribute (/* rb_define_attr */)" do
-        run(1, 1, true)
-        Registry.at('Foo#foo').should be_reader
-        Registry.at('Foo#foo=').should be_writer
-      end
-    end
-    
-    describe 'Defining aliases' do
-      before do
-        Registry.clear
-      end
-      
-      it "should allow defining of aliases (rb_define_alias)" do
-        parse <<-eof
-          /* FOO */
-          VALUE foo(VALUE x) { int value = x; }
-          void Init_Foo() {
-            rb_cFoo = rb_define_class("Foo", rb_cObject);
-            rb_define_method(rb_cFoo, "foo", foo, 1);
-            rb_define_alias(rb_cFoo, "bar", "foo");
-          }
-        eof
-        
-        Registry.at('Foo#bar').should be_is_alias
-        Registry.at('Foo#bar').docstring.should == 'FOO'
-      end
-
-      it "should allow defining of aliases (rb_define_alias) of attributes" do
-        parse <<-eof
-          /* FOO */
-          VALUE foo(VALUE x) { int value = x; }
-          void Init_Foo() {
-            rb_cFoo = rb_define_class("Foo", rb_cObject);
-            rb_define_attr(rb_cFoo, "foo", 1, 0);
-            rb_define_alias(rb_cFoo, "foo?", "foo");
-          }
-        eof
-
-        Registry.at('Foo#foo').should be_reader
-        Registry.at('Foo#foo?').should be_is_alias
       end
     end
   end
