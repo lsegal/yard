@@ -41,7 +41,7 @@ module YARD
       def parse
         while file = files.shift
           log.debug("Processing #{file}...")
-          SourceParser.new(SourceParser.parser_type, true, @global_state).parse(file)
+          SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
         end
       end
     end
