@@ -30,7 +30,6 @@ module YARD
       end
 
       class BodyStatement < Statement
-        attr_accessor :parent
         attr_accessor :comments
       end
       
