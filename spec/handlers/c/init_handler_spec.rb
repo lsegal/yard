@@ -1,10 +1,8 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Handlers::C::InitHandler do
-  before { Registry.clear }
-
   it "should add documentation in Init_ClassName() to ClassName" do
-    cparse(<<-eof)
+    parse(<<-eof)
       // Bar!
       void Init_A() {
         rb_cA = rb_define_class("A", rb_cObject);
@@ -14,7 +12,7 @@ describe YARD::Handlers::C::InitHandler do
   end
   
   it "should not add documentation if ClassName is not created in Init" do
-    cparse(<<-eof)
+    parse(<<-eof)
       // Bar!
       void Init_A() {
       }
@@ -23,7 +21,7 @@ describe YARD::Handlers::C::InitHandler do
   end
   
   it "should not overwrite override comment" do
-    cparse(<<-eof)
+    parse(<<-eof)
       /* Document-class: A
        * Foo!
        */

@@ -1,11 +1,9 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Handlers::C::OverrideCommentHandler do
-  before { Registry.clear }
-  
   [:class, :module].each do |type|
     it "should handle Document-#{type}" do
-      cparse(<<-eof)
+      parse(<<-eof)
         /* Document-#{type}: A
          * Foo bar baz
          */
@@ -17,7 +15,7 @@ describe YARD::Handlers::C::OverrideCommentHandler do
   end
   
   it "should handle multiple class/module combinations" do
-    cparse(<<-eof)
+    parse(<<-eof)
       /* Document-class: A
        * Document-class: B
        * Document-module: C
