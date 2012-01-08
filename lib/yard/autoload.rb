@@ -57,6 +57,22 @@ module YARD
   # parsing phase. This allows YARD as well as any custom extension to
   # analyze source and generate {CodeObjects} to be stored for later use.
   module Handlers
+    module C # CRuby Handlers
+      autoload :Base,                     __p('handlers/c/base')
+
+      autoload :AliasHandler,             __p('handlers/c/alias_handler')
+      autoload :AttributeHandler,         __p('handlers/c/attribute_handler')
+      autoload :ClassHandler,             __p('handlers/c/class_handler')
+      autoload :ConstantHandler,          __p('handlers/c/constant_handler')
+      autoload :InitHandler,              __p('handlers/c/init_handler')
+      autoload :MethodHandler,            __p('handlers/c/method_handler')
+      autoload :HandlerMethods,           __p('handlers/c/handler_methods')
+      autoload :ModuleHandler,            __p('handlers/c/module_handler')
+      autoload :OverrideCommentHandler,   __p('handlers/c/override_comment_handler')
+      autoload :PathHandler,              __p('handlers/c/path_handler')
+      autoload :SymbolHandler,            __p('handlers/c/symbol_handler')
+    end
+
     module Ruby # All Ruby handlers
       module Legacy # Handlers for old Ruby 1.8 parser
         autoload :Base,                   __p('handlers/ruby/legacy/base')
