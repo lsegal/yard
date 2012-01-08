@@ -35,6 +35,7 @@ module YARD
 
       register_handler_namespace :ruby, Ruby
       register_handler_namespace :ruby18, Ruby::Legacy
+      register_handler_namespace :c, C
 
       # @return [String] the filename
       attr_accessor :file
@@ -149,11 +150,20 @@ module YARD
         Base.subclasses.find_all do |handler|
           handler_base_class > handler &&
           (handler.namespace_only? ? owner.is_a?(CodeObjects::NamespaceObject) : true) &&
-          handler.matches_file?(file) && handler.handles?(statement)
+          handles?(handler, statement)
         end
       end
 
       private
+      
+      def handles?(handler, statement)
+        return false unless handler.matches_file?(file)
+        if handler.method(:handles?).arity == 1
+          handler.handles?(statement)
+        elsif [-1, 2].include?(handler.method(:handles?).arity)
+          handler.handles?(statement, self)
+        end
+      end
 
       # Returns the handler base class
       # @return [Base] the base class

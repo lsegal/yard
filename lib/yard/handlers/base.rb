@@ -405,7 +405,8 @@ module YARD
           object.add_file(parser.file, statement.line, statement.comments)
 
           # Add docstring if there is one.
-          if statement.comments
+          case statement.comments
+          when String, Array
             object.docstring = Docstring.new(statement.comments, object)
           end
 
@@ -437,6 +438,7 @@ module YARD
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)
             object.source ||= statement
+            object.source_type = parser.parser_type
           end
 
           # Make it dynamic if its owner is not its namespace.

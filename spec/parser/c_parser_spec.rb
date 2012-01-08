@@ -7,7 +7,7 @@ describe YARD::Parser::CParser do
   describe '#parse' do
     def parse
       Registry.clear
-      Parser::CParser.new(@contents).parse
+      Parser::SourceParser.parse_string(@contents, :c)
     end
 
     describe 'Array class' do
