@@ -66,6 +66,7 @@ module YARD
       autoload :ConstantHandler,          __p('handlers/c/constant_handler')
       autoload :InitHandler,              __p('handlers/c/init_handler')
       autoload :MethodHandler,            __p('handlers/c/method_handler')
+      autoload :MixinHandler,             __p('handlers/c/mixin_handler')
       autoload :HandlerMethods,           __p('handlers/c/handler_methods')
       autoload :ModuleHandler,            __p('handlers/c/module_handler')
       autoload :OverrideCommentHandler,   __p('handlers/c/override_comment_handler')
