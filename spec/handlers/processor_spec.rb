@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Handlers::Processor do
   before do
-    @proc = Handlers::Processor.new
+    @proc = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby))
   end
   
   it "should start with public visibility" do

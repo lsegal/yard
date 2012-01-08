@@ -6,7 +6,7 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
   before do
     Handlers::Ruby::Legacy::Base.stub!(:inherited)
     Handlers::Ruby::Legacy::MixinHandler.stub!(:inherited) # fixes a Ruby1.9 issue
-    @processor = Handlers::Processor.new(nil, false, :ruby18)
+    @processor = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby18))
   end
   
   def stmt(string)

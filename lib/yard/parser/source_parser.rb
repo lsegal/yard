@@ -1,8 +1,6 @@
 require 'stringio'
 require 'ostruct'
 
-begin require 'continuation'; rescue LoadError; end
-
 module YARD
   module Parser
     # Raised when an object is recognized but cannot be documented. This
@@ -12,20 +10,39 @@ module YARD
 
     # Raised when the parser sees a Ruby syntax error
     class ParserSyntaxError < UndocumentableError; end
-
-    # A LoadOrderError occurs when a handler needs to modify a
-    # {CodeObjects::NamespaceObject} (usually by adding a child to it)
-    # that has not yet been resolved.
-    #
-    # @see Handers::Base#ensure_loaded!
-    class LoadOrderError < Exception
-      # @return [Continuation] the context representing the
-      #   point at which the load order error occurred.
-      attr_accessor :context
+    
+    # Responsible for parsing a list of files in order. The
+    # {#parse} method of this class can be called from the 
+    # {SourceParser#globals} globals state list to re-enter
+    # parsing for the remainder of files in the list recursively.
+    # 
+    # @see Processor#parse_remaining_files
+    class OrderedParser
+      # @return [Array<String>] the list of remaining files to parse
+      attr_accessor :files
       
-      # @param [Continuation] context see {#context}
-      def initialize(context)
-        @context = context
+      # Creates a new OrderedParser with the global state and a list
+      # of files to parse.
+      # 
+      # @note OrderedParser sets itself as the +ordered_parser+ key on 
+      #   global_state for later use in {Processor}.
+      # @param [OpenStruct] global_state a structure containing all global
+      #   state during parsing
+      # @param [Array<String>] files the list of files to parse
+      def initialize(global_state, files)
+        @global_state = global_state
+        @files = files.dup
+        @global_state.ordered_parser = self
+      end
+      
+      # Parses the remainder of the {#files} list.
+      # 
+      # @see Processor#parse_remaining_files
+      def parse
+        while file = files.shift
+          log.debug("Processing #{file}...")
+          SourceParser.new(SourceParser.parser_type, true, @global_state).parse(file)
+        end
       end
     end
 
@@ -336,38 +353,22 @@ module YARD
 
         private
 
-        # Parses a list of files in a queue. If a {LoadOrderError} is caught,
-        # the file is moved to the back of the queue with a Continuation object
-        # that can continue processing the file.
+        # Parses a list of files in a queue.
         #
         # @param [Array<String>] files a list of files to queue for parsing
         # @return [void]
         def parse_in_order(*files)
           global_state = OpenStruct.new
           files = files.sort_by {|x| x.length if x }
-          files_copy = files.dup
           
           before_parse_list_callbacks.each do |cb|
-            return if cb.call(files_copy, global_state) == false
+            return if cb.call(files, global_state) == false
           end
           
-          while file = files.shift
-            begin
-              if file.is_a?(Array) && file.last.is_a?(Continuation)
-                log.debug("Re-processing #{file.first}")
-                file.last.call
-              elsif file.is_a?(String)
-                log.debug("Processing #{file}...")
-                new(parser_type, true, global_state).parse(file)
-              end
-            rescue LoadOrderError => e
-              # Out of order file. Push the context to the end and we'll call it
-              files.push([file, e.context])
-            end
-          end
+          OrderedParser.new(global_state, files).parse
           
           after_parse_list_callbacks.each do |cb|
-            cb.call(files_copy, global_state)
+            cb.call(files, global_state)
           end
         end
       end
@@ -394,13 +395,13 @@ module YARD
       # @since 0.7.0
       attr_reader :contents
 
-      # Creates a new parser object for code parsing with a specific parser type.
+      # @overload initialize(parser_type = SourceParser.parser_type, globals = nil)
+      #   Creates a new parser object for code parsing with a specific parser type.
       #
-      # @param [Symbol] parser_type the parser type to use
-      # @param [Boolean] load_order_errors whether or not to raise the {LoadOrderError}
-      # @param [OpenStruct] globals global state to be re-used across separate source files
-      def initialize(parser_type = SourceParser.parser_type, load_order_errors = false, globals = nil)
-        @load_order_errors = load_order_errors
+      #   @param [Symbol] parser_type the parser type to use
+      #   @param [OpenStruct] globals global state to be re-used across separate source files
+      def initialize(parser_type = SourceParser.parser_type, globals1 = nil, globals2 = nil)
+        globals = [true, false].include?(globals1) ? globals2 : globals1
         @file = '(stdin)'
         @globals = globals || OpenStruct.new
         self.parser_type = parser_type
@@ -488,7 +489,7 @@ module YARD
       def post_process
         return unless @parser.respond_to? :enumerator
         return unless enumerator = @parser.enumerator
-        post = Handlers::Processor.new(@file, @load_order_errors, @parser_type, @globals)
+        post = Handlers::Processor.new(self)
         post.process(enumerator)
       end
 

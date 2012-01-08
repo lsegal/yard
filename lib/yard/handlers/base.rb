@@ -469,30 +469,16 @@ module YARD
       def ensure_loaded!(object, max_retries = 1)
         return if object.root?
         return object unless object.is_a?(Proxy)
-        unless parser.load_order_errors
-          if object.is_a?(Proxy)
-            raise NamespaceMissingError, object
-          else
-            nil
-          end
-        end
-
-        unless CONTINUATIONS_SUPPORTED
-          log.warn_no_continuations
-          raise NamespaceMissingError, object
-        end
 
         retries = 0
-        context = callcc {|c| c }
-        retries += 1
-
-        if object.is_a?(Proxy)
+        while object.is_a?(Proxy)
           if retries <= max_retries
             log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
-            raise Parser::LoadOrderError.new(context)
+            parser.parse_remaining_files
           else
             raise NamespaceMissingError, object
           end
+          retries += 1
         end
         object
       end

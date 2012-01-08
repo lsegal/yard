@@ -5,7 +5,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
 
   before do
     Handlers::Ruby::Base.stub!(:inherited)
-    @processor = Handlers::Processor.new(nil, false, :ruby)
+    @processor = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby))
   end
   
   def valid(handler, stmt)
