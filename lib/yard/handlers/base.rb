@@ -438,6 +438,7 @@ module YARD
           # Add source only to non-class non-module objects
           unless object.is_a?(NamespaceObject)
             object.source ||= statement
+            object.source_type = parser.parser_type
           end
 
           # Make it dynamic if its owner is not its namespace.
