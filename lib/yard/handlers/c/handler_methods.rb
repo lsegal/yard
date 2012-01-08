@@ -81,20 +81,21 @@ module YARD
         def find_constant_docstring(object)
           comment = nil
           
-          # found source (possibly) but no docstring
-          # so look in overrides
+          # look inside overrides for declaration value
           override_comments.each do |name, override_comment|
             next unless override_comment.file == statement.file
             just_const_name = name.gsub(/\A.+::/, '')
             if object.path == name || object.name.to_s == just_const_name
               comment = override_comment.source
+              stmt = override_comment
               break
             end
           end
 
           # use any comments on this statement as a last resort
           if comment.nil? && statement.comments && statement.comments.source =~ /\S/
-            object.docstring = statement.comments.source
+            comment = statement.comments.source
+            stmt = statement.comments
           end
           
           # In the case of rb_define_const, the definition and comment are in
@@ -110,7 +111,7 @@ module YARD
             new_definition.sub!(/\A(\s+)/, '')
             comment = $1.nil? ? elements.last : "#{$1}#{elements.last.lstrip}"
             object.value = new_definition
-            object.docstring = comment
+            register_docstring(object, comment, stmt)
           end
         end
 
@@ -122,10 +123,10 @@ module YARD
           end
 
           if src_stmt = symbols[symbol]
-            object.files.replace([src_stmt.file, src_stmt.line])
-            object.source = src_stmt.source
+            register_file_info(object, src_stmt.file, src_stmt.line, true)
+            register_source(object, src_stmt)
             unless src_stmt.comments.nil? || src_stmt.comments.source.empty?
-              object.docstring = src_stmt.comments.source
+              register_docstring(object, src_stmt.comments.source, src_stmt)
               return # found docstring
             end
           end
@@ -138,14 +139,14 @@ module YARD
             just_method_name = name.gsub(/\A.+(#|::|\.)/, '')
             just_method_name = 'initialize' if just_method_name == 'new'
             if object.path == name || object.name.to_s == just_method_name
-              object.docstring = override_comment.source
+              register_docstring(object, override_comment.source, override_comment)
               return
             end
           end
 
           # use any comments on this statement as a last resort
           if !in_file && statement.comments && statement.comments.source =~ /\S/
-            object.docstring = statement.comments.source
+            register_docstring(object, statement.comments.source, statement)
           end
         end
       end

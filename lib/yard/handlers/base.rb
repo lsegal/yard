@@ -388,64 +388,109 @@ module YARD
       def register(*objects)
         objects.flatten.each do |object|
           next unless object.is_a?(CodeObjects::Base)
-
-          begin
-            ensure_loaded!(object.namespace)
-            object.namespace.children << object
-          rescue NamespaceMissingError
-          end
-
-          # Yield the object to the calling block because ruby will parse the syntax
-          #
-          #     register obj = ClassObject.new {|o| ... }
-          #
-          # as the block for #register. We need to make sure this gets to the object.
+          register_ensure_loaded(object)
           yield(object) if block_given?
-
-          object.add_file(parser.file, statement.line, statement.comments)
-
-          # Add docstring if there is one.
-          case statement.comments
-          when String, Array
-            object.docstring = Docstring.new(statement.comments, object)
-          end
-
-          # Expand/create any @macro tags
-          expand_macro(object, find_or_create_macro(object))
-
-          # Add hash_flag/line_range
-          if statement.comments
-            object.docstring.hash_flag = statement.comments_hash_flag
-            object.docstring.line_range = statement.comments_range
-          end
-
-          # Add group information
-          if statement.group
-            unless object.namespace.is_a?(Proxy)
-              object.namespace.groups |= [statement.group]
-            end
-            object.group = statement.group
-          end
-
-          # Add transitive tags
-          Tags::Library.transitive_tags.each do |tag|
-            next if object.namespace.is_a?(Proxy)
-            next unless object.namespace.has_tag?(tag)
-            next if object.has_tag?(tag)
-            object.docstring.add_tag(*object.namespace.tags(tag))
-          end
-
-          # Add source only to non-class non-module objects
-          unless object.is_a?(NamespaceObject)
-            object.source ||= statement
-            object.source_type = parser.parser_type
-          end
-
-          # Make it dynamic if its owner is not its namespace.
-          # This generally means it was defined in a method (or block of some sort)
-          object.dynamic = true if owner != namespace
+          register_file_info(object)
+          register_docstring(object)
+          register_source(object)
+          register_group(object)
+          register_dynamic(object)
         end
         objects.size == 1 ? objects.first : objects
+      end
+      
+      # Ensures that the object's namespace is loaded before attaching it
+      # to the namespace.
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_ensure_loaded(object)
+        begin
+          ensure_loaded!(object.namespace)
+          object.namespace.children << object
+        rescue NamespaceMissingError
+        end
+      end
+      
+      # Registers the file/line of the declaration with the object
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_file_info(object, file = parser.file, line = statement.line, comments = statement.comments)
+        object.add_file(file, line, comments)
+      end
+      
+      # Registers any docstring found for the object and expands macros
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_docstring(object, docstring = statement.comments, stmt = statement)
+        case docstring
+        when String, Array
+          object.docstring = Docstring.new(docstring, object)
+        end
+
+        # Expand/create any @macro tags
+        expand_macro(object, find_or_create_macro(object))
+
+        # Add hash_flag/line_range
+        if docstring && stmt
+          object.docstring.hash_flag = stmt.comments_hash_flag
+          object.docstring.line_range = stmt.comments_range
+        end
+        
+        register_transitive_tags(object)
+      end
+      
+      # Registers the object as being inside a specific group
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_group(object, group = statement.group)
+        if group
+          unless object.namespace.is_a?(Proxy)
+            object.namespace.groups |= [group]
+          end
+          object.group = group
+        end
+      end
+      
+      # Registers any transitive tags from the namespace on the object
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_transitive_tags(object)
+        Tags::Library.transitive_tags.each do |tag|
+          next if object.namespace.is_a?(Proxy)
+          next unless object.namespace.has_tag?(tag)
+          next if object.has_tag?(tag)
+          object.docstring.add_tag(*object.namespace.tags(tag))
+        end
+      end
+      
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_source(object, source = statement, type = parser.parser_type)
+        unless object.is_a?(NamespaceObject)
+          object.source ||= source
+          object.source_type = type
+        end
+      end
+      
+      # Registers the object as dynamic if the object is defined inside
+      # a method or block (owner != namespace)
+      # 
+      # @param [CodeObjects::Base] object the object to register
+      # @return [void]
+      # @since 0.8.0
+      def register_dynamic(object)
+        object.dynamic = true if owner != namespace
       end
 
       # Ensures that a specific +object+ has been parsed and loaded into the

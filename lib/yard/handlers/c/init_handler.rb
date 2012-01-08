@@ -8,7 +8,9 @@ class YARD::Handlers::C::InitHandler < YARD::Handlers::C::Base
     parse_block
     ns = namespace_for_variable(statement.declaration[MATCH, 1])
     if ns.is_a?(CodeObjects::NamespaceObject) && ns.docstring.blank?
-      ns.docstring = statement.comments.source if statement.comments
+      if statement.comments
+        register_docstring(ns, statement.comments.source, statement)
+      end
     end
   end
 end

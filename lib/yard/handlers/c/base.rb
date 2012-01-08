@@ -33,6 +33,20 @@ module YARD
         
         protected
         
+        # @group Registering objects
+        
+        def register_docstring(object, docstring = nil, stmt = nil)
+          super(object, docstring, stmt) if docstring
+        end
+        
+        def register_file_info(object, file = nil, line = nil, comments = nil)
+          super(object, file, line, comments) if file
+        end
+        
+        def register_source(object, source = nil, type = nil)
+          super(object, source, type) if source
+        end
+        
         # @group Looking up Symbol and Var Values
         
         def symbols
