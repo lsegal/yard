@@ -1,20 +1,16 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
-begin require 'continuation'; rescue LoadError; end unless RUBY18
 
-class YARD::Parser::CParser; def ensure_loaded!(a, b=1) a end end
-
-describe YARD::Parser::CParser do
+describe YARD::Parser::C::CParser do
   describe '#parse' do
     def parse
       Registry.clear
-      Parser::SourceParser.parse_string(@contents, :c)
+      YARD.parse_string(@contents, :c)
     end
 
     describe 'Array class' do
       before(:all) do
         file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
-        @parser = Parser::CParser.new(IO.read(file))
-        @parser.parse
+        YARD.parse_string(File.read(file), :c)
       end
 
       it "should parse Array class" do
@@ -250,8 +246,9 @@ describe YARD::Parser::CParser do
 
   describe '#find_override_comment' do
     before(:all) do
+      Registry.clear
       override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
-      @override_parser = Parser::CParser.new(IO.read(override_file)).parse
+      @override_parser = YARD.parse_string(File.read(override_file), :c)
     end
     
     it "should parse GMP::Z class" do

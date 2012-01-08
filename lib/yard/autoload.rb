@@ -149,7 +149,6 @@ module YARD
     end
 
     autoload :Base,                __p('parser/base')
-    autoload :CParser,             __p('parser/c_parser')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
