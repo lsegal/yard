@@ -19,7 +19,7 @@ module YARD
         end
         
         def comments_range
-          respond_to?(:comments) ? comments.line_range : nil
+          comments.line_range
         end
         
         alias first_line line
@@ -51,7 +51,7 @@ module YARD
           super(parse_comments(source), file, line)
         end
         
-        def comments; nil end
+        def comments; self end
       end
     end
   end
