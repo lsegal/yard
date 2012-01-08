@@ -8,9 +8,6 @@ module YARD
         # @return [Boolean] whether the handler handles this statement
         def self.handles?(statement, processor)
           processor.globals.cruby_processed_files ||= {}
-          processor.globals.cruby_ignored_files ||= {}
-
-          return false if processor.globals.cruby_ignored_files[processor.file]
           processor.globals.cruby_processed_files[processor.file] = true
 
           if statement.respond_to? :declaration
@@ -39,11 +36,11 @@ module YARD
         # @group Looking up Symbol and Var Values
         
         def symbols
-          parser.globals.cruby_symbols ||= {}
+          globals.cruby_symbols ||= {}
         end
         
         def override_comments
-          parser.globals.cruby_override_comments ||= []
+          globals.cruby_override_comments ||= []
         end
         
         def namespace_for_variable(var)
@@ -51,17 +48,13 @@ module YARD
         end
 
         def namespaces
-          parser.globals.cruby_namespaces ||= {}
+          globals.cruby_namespaces ||= {}
         end
         
         def processed_files
-          parser.globals.cruby_processed_files ||= {}
+          globals.cruby_processed_files ||= {}
         end
 
-        def ignored_files
-          parser.globals.cruby_ignored_files ||= {}
-        end
-                
         # @group Parsing an Inner Block
         
         def parse_block(opts = {})
@@ -74,11 +67,11 @@ module YARD
         # @group Processing other files
 
         def process_file(file, object)
-          log.debug "Processing embedded call to C source #{file}..."
-          file = File.relative_path(statement.file, file)
+          file = File.cleanpath(File.relative_path(statement.file, file))
           return if processed_files[file]
-          ignored_files[file] = true
           begin
+            log.debug "Processing embedded call to C source #{file}..."
+            globals.ordered_parser.files.delete(file) if globals.ordered_parser
             parser.process(Parser::C::CParser.new(File.read(file)).parse)
           rescue Errno::ENOENT
             log.warn "Missing source file `#{file}' when parsing #{object}"
