@@ -66,7 +66,53 @@ module YARD
           namespace.aliases[new_obj] = old_meth
         end
         
+        def handle_constants(type, var_name, const_name, value)
+          return unless type == 'const'
+          namespace = namespace_for_variable(var_name)
+          register CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
+            obj.source_type = :c
+            obj.value = value
+            find_constant_docstring(obj)
+          end
+        end
+        
         private
+        
+        def find_constant_docstring(object)
+          comment = nil
+          
+          # found source (possibly) but no docstring
+          # so look in overrides
+          override_comments.each do |name, override_comment|
+            next unless override_comment.file == statement.file
+            just_const_name = name.gsub(/\A.+::/, '')
+            if object.path == name || object.name.to_s == just_const_name
+              comment = override_comment.source
+              break
+            end
+          end
+
+          # use any comments on this statement as a last resort
+          if comment.nil? && statement.comments && statement.comments.source =~ /\S/
+            object.docstring = statement.comments.source
+          end
+          
+          # In the case of rb_define_const, the definition and comment are in
+          # "/* definition: comment */" form.  The literal ':' and '\' characters
+          # can be escaped with a backslash.
+          if comment
+            elements = comment.split(':')
+            new_definition = elements[0..-2].join(':')
+            if !new_definition.empty? then # Default to literal C definition
+              new_definition.gsub!("\:", ":")
+              new_definition.gsub!("\\", '\\')
+            end
+            new_definition.sub!(/\A(\s+)/, '')
+            comment = $1.nil? ? elements.last : "#{$1}#{elements.last.lstrip}"
+            object.value = new_definition
+            object.docstring = comment
+          end
+        end
 
         def find_method_body(object, symbol)
           file, in_file = statement.file, false
