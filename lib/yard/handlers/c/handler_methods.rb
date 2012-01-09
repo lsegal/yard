@@ -75,7 +75,7 @@ module YARD
           register YARD::CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
-            register_file_info(obj, statement.file)
+            register_file_info(obj, statement.file, statement.line)
             find_constant_docstring(obj)
           end
         end
@@ -106,15 +106,10 @@ module YARD
           # "/* definition: comment */" form.  The literal ':' and '\' characters
           # can be escaped with a backslash.
           if comment
-            elements = comment.split(':')
-            new_definition = elements[0..-2].join(':')
-            if !new_definition.empty? then # Default to literal C definition
-              new_definition.gsub!("\:", ":")
-              new_definition.gsub!("\\", '\\')
+            comment.scan(/\A\s*(.*?[^\s\\]):\s*(.+)/) do |new_value, new_comment|
+              object.value = new_value.gsub(/\\:/, ':')
+              comment = new_comment
             end
-            new_definition.sub!(/\A(\s+)/, '')
-            comment = $1.nil? ? elements.last : "#{$1}#{elements.last.lstrip}"
-            object.value = new_definition
             register_docstring(object, comment, stmt)
           end
         end
