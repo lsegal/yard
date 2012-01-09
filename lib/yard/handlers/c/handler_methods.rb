@@ -10,6 +10,7 @@ module YARD
           register YARD::CodeObjects::ClassObject.new(namespace, class_name) do |obj|
             obj.superclass = namespace_for_variable(parent) if parent
             namespaces[var_name] = obj
+            register_file_info(obj, statement.file, statement.line)
           end
         end
         
@@ -17,6 +18,7 @@ module YARD
           namespace = in_module ? namespace_for_variable(in_module) : YARD::Registry.root
           register YARD::CodeObjects::ModuleObject.new(namespace, module_name) do |obj|
             namespaces[var_name] = obj
+            register_file_info(obj, statement.file, statement.line)
           end
         end
         
@@ -52,6 +54,7 @@ module YARD
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
           new_obj = register YARD::CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
             o.visibility = visibility
+            register_file_info(obj, statement.file, statement.line)
           end
 
           if old_obj
@@ -72,6 +75,7 @@ module YARD
           register YARD::CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
+            register_file_info(obj, statement.file)
             find_constant_docstring(obj)
           end
         end

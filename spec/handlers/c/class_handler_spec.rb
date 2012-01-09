@@ -43,4 +43,12 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     Registry.at('Foo').docstring.should be_blank
   end
+  
+  it "should associate a file with the declaration" do
+    parse_init(<<-eof)
+      cFoo = rb_define_class("Foo", cObject);
+    eof
+    Registry.at('Foo').file.should == '(stdin)'
+    Registry.at('Foo').line.should == 2
+  end
 end
