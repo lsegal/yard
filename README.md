@@ -274,14 +274,14 @@ between the first request of a newly parsed gem.
 
 **5. `yard graph` Graphviz Generator**
 
-You can use `yard-graph` to generate dot graphs of your code. This, of course,
+You can use `yard graph` to generate dot graphs of your code. This, of course,
 requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default
 this will generate a graph of the classes and modules in the best UML2 notation
 that Graphviz can support, but without any methods listed. With the `--full`
 option, methods and attributes will be listed. There is also a `--dependencies`
 option to show mixin inclusions. You can output to stdout or a file, or pipe directly
-to `dot`. The same public, protected and private visibility rules apply to yard-graph.
-More options can be seen by typing `yard-graph --help`, but here is an example:
+to `dot`. The same public, protected and private visibility rules apply to `yard graph`.
+More options can be seen by typing `yard graph --help`, but here is an example:
 
     $ yard graph --protected --full --dependencies
 
