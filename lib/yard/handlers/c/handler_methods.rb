@@ -54,7 +54,7 @@ module YARD
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
           new_obj = register YARD::CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
             o.visibility = visibility
-            register_file_info(obj, statement.file, statement.line)
+            register_file_info(o, statement.file, statement.line)
           end
 
           if old_obj
