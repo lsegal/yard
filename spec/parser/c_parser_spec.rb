@@ -66,57 +66,9 @@ describe YARD::Parser::C::CParser do
           "VALUE foo(VALUE x) { int value = x;\n}"
       end
     end
-    
-    describe 'Defining methods with source in other files' do
-      it "should look in another file for method" do
-        File.should_receive(:read).at_least(1).times.with('file.c').and_return(<<-eof)
-          /* FOO
-           */
-          VALUE foo(VALUE x) 
-          { }
-
-          /* BAR
-           */
-          VALUE bar(VALUE x) 
-          { }
-        eof
-        parse <<-eof
-          void Init_Foo() {
-            rb_define_method(rb_cFoo, "foo", foo, 1); /* in file.c */
-            rb_define_global_function("bar", bar, 1); /* in file.c */
-          }
-        eof
-        Registry.at('Foo#foo').docstring.should == 'FOO'
-        Registry.at('Kernel#bar').docstring.should == 'BAR'
-      end
-
-      it "should allow extra file to include /'s and other filename characters" do
-        File.should_receive(:read).at_least(1).times.with('ext/a-file.c').and_return(<<-eof)
-          /* FOO
-           */
-          VALUE foo(VALUE x) {
-            int value = x;
-          }
-          
-          /* BAR
-           */
-          VALUE bar(VALUE x) {
-            int value = x;
-          }
-        eof
-        parse <<-eof
-          void Init_Foo() {
-            rb_define_method(rb_cFoo, "foo", foo, 1); /* in ext/a-file.c */
-            rb_define_global_function("bar", bar, 1); /* in ext/a-file.c */
-          }
-        eof
-        Registry.at('Foo#foo').docstring.should == 'FOO'
-        Registry.at('Kernel#bar').docstring.should == 'BAR'
-      end
-    end
   end
 
-  describe '#find_override_comment' do
+  describe 'Override comments' do
     before(:all) do
       Registry.clear
       override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')

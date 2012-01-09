@@ -85,10 +85,11 @@ module YARD
         def process_file(file, object)
           file = File.cleanpath(File.relative_path(statement.file, file))
           return if processed_files[file]
+          processed_files[file] = file
           begin
             log.debug "Processing embedded call to C source #{file}..."
             globals.ordered_parser.files.delete(file) if globals.ordered_parser
-            parser.process(Parser::C::CParser.new(File.read(file)).parse)
+            parser.process(Parser::C::CParser.new(File.read(file), file).parse)
           rescue Errno::ENOENT
             log.warn "Missing source file `#{file}' when parsing #{object}"
           end
