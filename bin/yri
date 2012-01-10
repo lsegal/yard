@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby
-require File.dirname(__FILE__) + '/../lib/yard'
+
+# We do all this work just to find the proper load path
+path = __FILE__
+while File.symlink?(path)
+  path = File.expand_path(File.readlink(__FILE__), File.dirname(__FILE__))
+end
+$:.unshift(File.join(File.dirname(File.expand_path(path)), '..', 'lib'))
+
+require 'yard'
 
 YARD::CLI::YRI.run(*ARGV)
