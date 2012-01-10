@@ -71,6 +71,10 @@ describe YARD::CLI::Yardoc do
     it "should not list objects by default" do
       @yardoc.list.should == false
     end
+    
+    it "should not embed mixins by default" do
+      @yardoc.options[:embed_mixins].should be_false
+    end
   end
   
   describe 'General options' do
@@ -217,6 +221,11 @@ describe YARD::CLI::Yardoc do
     it "should allow --hide-void-return to be set" do
       @yardoc.parse_arguments *%w( --hide-void-return )
       @yardoc.options[:hide_void_return].should be_true
+    end
+    
+    it "should accept --embed-mixins" do
+      @yardoc.parse_arguments *%w( --embed-mixins )
+      @yardoc.options[:embed_mixins].should be_true
     end
 
     it "should generate all objects with --use-cache" do

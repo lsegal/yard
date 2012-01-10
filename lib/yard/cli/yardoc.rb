@@ -167,6 +167,7 @@ module YARD
           :default_return => "Object",
           :hide_void_return => false,
           :no_highlight => false,
+          :embed_mixins => false,
           :files => [],
           :title => "Documentation by YARD #{YARD::VERSION}",
           :verifier => Verifier.new
@@ -554,6 +555,10 @@ module YARD
         opts.on('--no-private', "Hide objects with @private tag") do
           options[:verifier].add_expressions '!object.tag(:private) &&
             (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
+        end
+        
+        opts.on('--embed-mixins', "Embeds mixin methods into class documentation") do
+          options[:embed_mixins] = true
         end
 
         opts.on('--no-highlight', "Don't highlight code blocks in output.") do
