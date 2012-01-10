@@ -1,6 +1,7 @@
 <% found_method = false %>
 <% object.inheritance_tree(true)[1..-1].each do |superclass| %>
   <% next if superclass.is_a?(YARD::CodeObjects::Proxy) %>
+  <% next if options[:embed_mixins] && superclass.is_a?(YARD::CodeObjects::ModuleObject) %>
   <% attribs = superclass.attributes[:instance] %>
   <% attribs = attribs.reject {|name,rw| object.child(:scope => :instance, :name => name) != nil } %>
   <% next if attribs.size == 0 %>

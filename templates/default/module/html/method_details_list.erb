@@ -3,7 +3,7 @@
     <h2><%= scope.to_s.capitalize %> Method Details</h2>
     
     <% list.each_with_index do |meth, i| %>
-      <%= yieldall :object => meth, :index => i %>
+      <%= yieldall :object => meth, :owner => object, :index => i %>
     <% end %>
   </div>
 <% end %>

@@ -35,7 +35,7 @@ end
 def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
   return @meths if @meths
-  @meths = object.meths(:inherited => false, :included => false)
+  @meths = object.meths(:inherited => false, :included => options[:embed_mixins])
   @meths = sort_listing(prune_method_listing(@meths))
   @meths
 end
@@ -49,10 +49,14 @@ end
 def attr_listing
   return @attrs if @attrs
   @attrs = []
-  [:class, :instance].each do |scope|
-    object.attributes[scope].each do |name, rw|
-      @attrs << (rw[:read] || rw[:write])
+  object.inheritance_tree(true).each do |superclass|
+    next if options[:embed_mixins] && !superclass.is_a?(CodeObjects::ModuleObject) 
+    [:class, :instance].each do |scope|
+      superclass.attributes[scope].each do |name, rw|
+        @attrs << (rw[:read] || rw[:write])
+      end
     end
+    break unless options[:embed_mixins]
   end
   @attrs = sort_listing(prune_method_listing(@attrs, false))
 end
@@ -90,7 +94,8 @@ end
 
 def groups(list, type = "Method")
   if groups_data = object.groups
-    others = list.select {|m| !m.group }
+    list.each {|m| groups_data |= [m.group] if m.group && owner != m.namespace }
+    others = list.select {|m| !m.group || !groups_data.include?(m.group) }
     groups_data.each do |name|
       items = list.select {|m| m.group == name }
       yield(items, name) unless items.empty?
