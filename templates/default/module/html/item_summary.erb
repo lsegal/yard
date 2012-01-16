@@ -18,8 +18,8 @@
     <% if rw[:write] && !rw[:read] %><span class="note title writeonly">writeonly</span><% end %>
   <% end %>
   <% if @item.visibility != :public %><span class="note title <%= @item.visibility %>"><%= @item.visibility %></span><% end %>
-  <% if @item.has_tag?(:abstract) %><span class="abstract note title">Abstract</span><% end %>
-  <% if @item.has_tag?(:deprecated) %><span class="deprecated note title">Deprecated</span><% end %>
+  <% if @item.has_tag?(:abstract) %><span class="abstract note title">abstract</span><% end %>
+  <% if @item.has_tag?(:deprecated) %><span class="deprecated note title">deprecated</span><% end %>
   <% if @item.has_tag?(:api) && @item.tag(:api).text == 'private' %><span class="private note title">Private</span><% end %>
 
   <% if @item.has_tag?(:deprecated) %>
