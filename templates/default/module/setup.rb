@@ -69,6 +69,17 @@ def sort_listing(list)
   list.sort_by {|o| [o.scope.to_s, o.name.to_s.downcase] }
 end
 
+def inherited_attr_list(&block)
+  object.inheritance_tree(true)[1..-1].each do |superclass|
+    next if superclass.is_a?(YARD::CodeObjects::Proxy)
+    attribs = superclass.attributes[:instance]
+    attribs = attribs.reject {|name, rw| object.child(:scope => :instance, :name => name) != nil }
+    attribs = attribs.sort_by {|args| args.first.to_s }.map {|n, m| m[:read] || m[:write] }
+    attribs = prune_method_listing(attribs, false)
+    yield superclass, attribs if attribs.size > 0
+  end
+end
+
 def docstring_full(obj)
   docstring = ""
   if obj.tags(:overload).size == 1 && obj.docstring.empty?
