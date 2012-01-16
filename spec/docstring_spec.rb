@@ -208,24 +208,34 @@ describe YARD::Docstring do
   end
   
   describe '#add_tag' do
-    it "should only parse tags with charset [A-Za-z_]" do
-      doc = Docstring.new
-      valid = %w( @testing @valid @is_a @is_A @__ )
-      invalid = %w( @ @return@ @param, @x.y @x-y )
-
-      log.enter_level(Logger::FATAL) do
-        {valid => 1, invalid => 0}.each do |tags, size|
-          tags.each do |tag|
-            class << doc
-              def create_tag(tag_name, *args)
-                add_tag Tags::Tag.new(tag_name, *args)
-              end
-            end
-            doc.all = tag
-            doc.tags(tag[1..-1]).size.should == size
-          end
-        end
+    before { @taglib = Tags::Library.instance }
+    
+    def mock_tag(name, tag_name = name)
+      meth_name = name + '_tag'
+      @taglib.should_receive(:respond_to?).with(meth_name).and_return(true)
+      @taglib.should_receive(meth_name) {|text| Tags::Tag.new(tag_name, text) }
+    end
+    
+    it "should accept valid tags" do
+      valid = %w( testing valid is_a is_A __ )
+      valid.each do |tag|
+        mock_tag(tag)
+        doc = Docstring.new('@' + tag + ' foo bar')
+        doc.tag(tag).text.should == 'foo bar'
       end
+    end
+    
+    it "should not parse invalid tag names" do
+      invalid = %w( @ @return@ @param, @x-y @.x.y.z )
+      invalid.each do |tag|
+        Docstring.new(tag + ' foo bar').should == tag + ' foo bar'
+      end
+    end
+    
+    it "should allow namespaced tags in the form @x.y.z" do
+      mock_tag('x_y_z', 'x.y.z')
+      doc = Docstring.new("@x.y.z foo bar")
+      doc.tag('x.y.z').text.should == 'foo bar'
     end
   end
   

@@ -117,15 +117,16 @@ module YARD
         # @param [#to_s, Class<Tag>] meth the {Tag} factory method to call when
         #   creating the tag or the name of the class to directly create a tag for
         def define_tag(label, tag, meth = nil)
+          tag_meth = tag.to_s.gsub('.', '_')
           if meth.is_a?(Class) && Tag > meth
             class_eval <<-eof, __FILE__, __LINE__
-              def #{tag}_tag(text)
+              def #{tag_meth}_tag(text)
                 #{meth}.new(#{tag.inspect}, text)
               end
             eof
           else
             class_eval <<-eof, __FILE__, __LINE__
-              def #{tag}_tag(text)
+              def #{tag_meth}_tag(text)
                 send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
               end
             eof

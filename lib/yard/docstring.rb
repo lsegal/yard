@@ -30,7 +30,7 @@ module YARD
     def hash_flag=(v) @hash_flag = v == nil ? false : v end
 
     # Matches a tag at the start of a comment line
-    META_MATCH = /^@([a-z_0-9]+)(?:\s+(.*))?$/i
+    META_MATCH = /^@((?:\w\.?)+)(?:\s+(.*))?$/i
 
     # @group Creating a Docstring Object
 
@@ -166,7 +166,7 @@ module YARD
       end
 
       tag_factory = Tags::Library.instance
-      tag_method = "#{tag_name}_tag"
+      tag_method = "#{tag_name.gsub('.', '_')}_tag"
       if tag_name && tag_factory.respond_to?(tag_method)
         add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
       else
