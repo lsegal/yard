@@ -2,7 +2,7 @@ module YARD
   module Server
 
     # Short circuits a request by raising an error. This exception is caught
-    # by {Commands::Base#call} to immedaitely end a request and return a response.
+    # by {Commands::Base#call} to immediately end a request and return a response.
     class FinishRequest < RuntimeError; end
 
     # Raises an error if a resource is not found. This exception is caught by
