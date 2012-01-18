@@ -158,7 +158,7 @@ module YARD
 
         # The name of the module that represents a +path+
         #
-        # @param [String] the path toe generate a module name for
+        # @param [String] the path to generate a module name for
         # @return [String] the module name
         def template_module_name(path)
           'Template_' + path.to_s.gsub(/[^a-z0-9]/i, '_')
