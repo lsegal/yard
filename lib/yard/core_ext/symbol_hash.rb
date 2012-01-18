@@ -57,7 +57,7 @@ class SymbolHash < Hash
   # @return [Boolean] whether the key exists
   def has_key?(key) super(key.to_sym) end
 
-  # Updates the object with the contents of another Hash object
+  # Updates the object with the contents of another Hash object.
   # This method modifies the original SymbolHash object
   #
   # @param [Hash] hash the hash object to copy the values from
