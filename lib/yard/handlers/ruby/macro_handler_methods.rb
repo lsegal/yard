@@ -11,7 +11,7 @@ module YARD
 
           # Look for implicit macros
           (globals.__attached_macros[caller_method] || []).each do |macro|
-            namespace.inheritance_tree.each do |obj|
+            (namespace.inheritance_tree + [P('Object')]).each do |obj|
               break(@macro = macro) if obj == macro.method_object.namespace
             end
           end
