@@ -126,10 +126,10 @@ describe YARD::RegistryStore do
       saves_to_singledb
     end
     
-    it "should not save as single object db if single_object_db is nil and there are more than 3000 objects" do
+    it "should save as single object db if single_object_db is nil and there are more than 3000 objects" do
       Registry.single_object_db = nil
       add_items(5000)
-      saves_to_multidb
+      saves_to_singledb
     end
     
     it "should save as single object db if single_object_db is true (and any amount of objects)" do

@@ -139,7 +139,7 @@ module YARD
       destroy unless merge
 
       sdb = Registry.single_object_db
-      if sdb == true || (sdb == nil && keys.size < 3000)
+      if sdb == true || sdb == nil
         @serializer.serialize(@store)
       else
         values(false).each do |object|
