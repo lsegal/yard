@@ -82,6 +82,7 @@ module YARD
           name = nil if name =~ /\A\s*\Z/
           name ||= call_params.first
           return unless name
+          return unless name =~ /^#{METHODNAMEMATCH}(\s|\(|$)/
           if name =~ /\A\s*([^\(; \t]+)/
             name = $1
           end

@@ -154,4 +154,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     obj.should_not be_nil
     obj.signature.should == 'def beep(a, b, c)'
   end
+  
+  it "should not detect implicit macros with invalid method names" do
+    undoc_error <<-eof
+      ##
+      # IMPLICIT METHOD THAT SHOULD 
+      # NOT BE DETECTED
+      dsl_method '/foo/bar'
+    eof
+  end
 end
