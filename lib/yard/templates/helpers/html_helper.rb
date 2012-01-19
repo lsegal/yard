@@ -47,8 +47,8 @@ module YARD
         html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           language = $1 || $2
           string   = $3
-          
-          string = html_syntax_highlight(h(string), language) unless options[:no_highlight]
+
+          string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
           classes = ['code', language].compact.join(' ')
           %Q{<pre class="#{classes}"><code>#{string}</code></pre>}
         end unless [:text, :none, :pre].include?(markup)
