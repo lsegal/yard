@@ -529,6 +529,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
     end
     
+    it "shouldn't escape code snippets twice" do
+      htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should == 
+        '<pre class="code foo"><code>{&quot;foo&quot; =&gt; 1}</code></pre>'
+    end
+    
     it "should highlight source when matching a pre lang= tag" do
       htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should == 
         '<pre class="code foo"><code>x = 1</code></pre>'
