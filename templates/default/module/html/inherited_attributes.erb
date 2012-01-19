@@ -1,17 +1,13 @@
 <% found_method = false %>
-<% object.inheritance_tree(true)[1..-1].each do |superclass| %>
-  <% next if superclass.is_a?(YARD::CodeObjects::Proxy) %>
-  <% attribs = superclass.attributes[:instance] %>
-  <% attribs = attribs.reject {|name,rw| object.child(:scope => :instance, :name => name) != nil } %>
-  <% next if attribs.size == 0 %>
+<% inherited_attr_list do |superclass, attribs| %>
   <% if attr_listing.size == 0 && !found_method %><h2>Instance Attribute Summary</h2><% end %>
   <% found_method = true %>
   <h3 class="inherited">Attributes <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify superclass %></h3>
-  <p class="inherited"><%=
-    attribs.sort_by {|args| args.first.to_s }.collect do |args|
-      name, methods = args
-      method = methods[:read] || methods[:write]
-      name = method.name.to_s.gsub(/^#/,'') if superclass.type == :module && object.class_mixins.include?(superclass)
+  <p class="inherited"><%= attribs.map do |method|
+      name = method.name(true).gsub(/=$/, '')
+      if superclass.type == :module && object.instance_mixins.include?(superclass)
+        name = "##{name}" unless name =~ /^#/
+      end
       linkify(method, name)
     end.join(", ")
   %></p>
