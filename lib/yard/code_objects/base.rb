@@ -217,6 +217,8 @@ module YARD
         @visibility = :public
         @tags = []
         @docstring = Docstring.new('', self)
+        @docstring_extra = nil
+        @docstring_extra_tags = nil
         @namespace = nil
         self.namespace = namespace
         yield(self) if block_given?
@@ -353,7 +355,9 @@ module YARD
           return @docstring_extra
         when Base
           @docstring = @docstring.docstring + @docstring_extra
+          @docstring.add_tag(*@docstring_extra_tags)
           @docstring_extra = nil
+          @docstring_extra_tags = nil
         end
         @docstring
       end
@@ -368,9 +372,12 @@ module YARD
         if comments =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
           path, extra = $1, $'
           @docstring_extra = Docstring.new(extra, self)
+          @docstring_extra_tags = Docstring === comments ? comments.tags : []
+          @docstring_extra.add_tag(*@docstring_extra_tags)
           @docstring = Proxy.new(namespace, path)
         else
           @docstring_extra = nil
+          @docstring_extra_tags = nil
           @docstring = Docstring === comments ? comments : Docstring.new(comments, self)
         end
       end
