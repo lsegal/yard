@@ -106,6 +106,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     meth.tag(:return).types.should == ['NotBoolean', 'nil']
   end
   
+  it "should not change return type for method ending in ? with return types set by @overload" do
+    meth = P('Foo#rainy?')
+    meth.should have_tag(:overload)
+    meth.tag(:overload).should have_tag(:return)
+    meth.should_not have_tag(:return)
+  end
+  
   it "should add method writer to existing attribute" do
     Registry.at('Foo#attr_name').should be_reader
     Registry.at('Foo#attr_name=').should be_writer
