@@ -298,7 +298,7 @@ describe YARD::CodeObjects::Base do
     it "should allow extra docstring after (see Path)" do
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
       o = ClassObject.new(:root, :Me)
-      o.docstring = "(see AnotherObject)\n\nEXTRA\n@api private"
+      o.docstring = Docstring.new("(see AnotherObject)\n\nEXTRA\n@api private", o)
       o.docstring.should == "FOO\n\nEXTRA"
       o.docstring.should have_tag(:api)
     end
