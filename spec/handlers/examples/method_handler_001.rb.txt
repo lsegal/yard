@@ -69,6 +69,10 @@ end
   # @return [NotBoolean, nil]
   def boolean3?; end
 
+  # @overload rainy?
+  #   @return whether today is the rainy day.
+  def rainy?; end
+
   attr_writer :attr_name
   def attr_name; end
 
