@@ -256,6 +256,7 @@ module YARD
         undef on_bare_assoc_hash
         undef on_assoclist_from_args
         undef on_aref
+        undef on_aref_field
         undef on_lbracket
         undef on_rbracket
         undef on_qwords_new
@@ -309,12 +310,19 @@ module YARD
         end
 
         def on_aref(*args)
+          @map[:lbracket].pop
           ll, lc = *@map[:aref].pop
           sr = args.first.source_range.first..lc
           lr = args.first.line_range.first..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
         end
-        
+
+        def on_aref_field(*args)
+          @map[:lbracket].pop
+          AstNode.new(:aref_field, args,
+                      :listline => lineno..lineno, :listchar => charno...charno)
+        end
+
         def on_array(other)
           node = AstNode.node_class_for(:array).new(:array, [other])
           map = @map[MAPPINGS[node.type]]
@@ -323,6 +331,10 @@ module YARD
             node.source_range = Range.new(sstart, @ns_charno - 1)
             node.line_range = Range.new(lstart, lineno)
           else
+            sstart = other.source_range.begin
+            lstart = other.line_range.begin
+            node.source_range = Range.new(sstart, @ns_charno - 1)
+            node.line_range = Range.new(lstart, lineno)
             node.source_range = other.source_range
             node.line_range = other.line_range
           end
