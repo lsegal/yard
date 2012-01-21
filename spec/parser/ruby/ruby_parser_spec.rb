@@ -236,7 +236,23 @@ describe YARD::Parser::Ruby::RubyParser do
         s.jump(:array).source.should == '%w( foo bar )'
       end
     end
-    
+
+    it "should parse %w() array source in object[] parsed context" do
+      s = stmts(<<-eof)
+        {}[:key]
+        FOO = %w( foo bar )
+      eof
+      s[1].jump(:array).source.should == '%w( foo bar )'
+    end
+
+    it "should parse %w() array source in object[]= parsed context" do
+      s = stmts(<<-eof)
+        {}[:key] = :value
+        FOO = %w( foo bar )
+      eof
+      s[1].jump(:array).source.should == '%w( foo bar )'
+    end
+
     it "should parse [] as array" do
       s = stmt(<<-eof)
         class Foo
