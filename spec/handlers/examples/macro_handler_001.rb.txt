@@ -4,6 +4,14 @@ class Foo
   # IMPLICIT METHOD!
   # @return [String]
   just_a_method_for :implicit0
+
+  # IMPLICIT METHOD2!
+  # @scope class
+  just_a_method_for :implicit1
+
+  # IMPLICIT METHOD3!
+  # @visibility protected
+  just_a_method_for :implicit2
   
   # Not recognized
   just_a_method_for :implicit_invalid
@@ -11,6 +19,9 @@ class Foo
   #
   ## IS NOT RECOGNIZED!
   just_a_method_for :implicit_invalid2
+
+  # @deprecated don't use this
+  just_a_method_for :implicit_invalid3
 
   ##
   # IS RECOGNIZED!

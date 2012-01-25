@@ -107,6 +107,11 @@ module YARD
           name ||= call_params.first
           name =~ /^def\b/ ? name : "def #{name}"
         end
+        
+        def implicit_docstring?
+          tags = %w(method attribute overload visibility scope return)
+          tags.any? {|tag| @docstring.has_tag?(tag) }
+        end
 
         private
 

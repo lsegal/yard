@@ -33,11 +33,28 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     Registry.at('Foo#custom').should_not be_nil
   end
 
-  it "should default to creating an instance method for any DSL method with tags" do
+  it "should default to creating an instance method for any DSL method with special tags" do
     obj = Registry.at('Foo#implicit0')
     obj.should_not be_nil
     obj.docstring.should == "IMPLICIT METHOD!"
     obj.tag(:return).types.should == ['String']
+  end
+  
+  it "should recognize implicit docstring when it has scope tag" do
+    obj = Registry.at("Foo.implicit1")
+    obj.should_not be_nil
+    obj.scope.should == :class
+  end
+
+  it "should recognize implicit docstring when it has visibility tag" do
+    obj = Registry.at("Foo#implicit2")
+    obj.should_not be_nil
+    obj.visibility.should == :protected
+  end
+  
+  it "should not recognize implicit docstring with any other normal tag" do
+    obj = Registry.at('Foo#implicit_invalid3')
+    obj.should be_nil
   end
   
   it "should set the method name when using @method" do

@@ -21,7 +21,7 @@ module YARD
           
           @macro, @docstring = nil, Docstring.new(statement.comments)
           find_or_create_macro(@docstring)
-          return if !@macro && !statement.comments_hash_flag && @docstring.tags.size == 0
+          return if !@macro && !statement.comments_hash_flag && !implicit_docstring?
           @docstring = expanded_macro_or_docstring
           name = method_name
           raise UndocumentableError, "method, missing name" if name.nil? || name.empty?
