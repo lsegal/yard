@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Templates::Engine.template(:default, :docstring) do
   before do
+    Registry.clear
     YARD.parse_string <<-'eof'
       private
       # Comments

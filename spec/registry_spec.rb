@@ -294,6 +294,7 @@ describe YARD::Registry do
         Registry.yardoc_file = 'foo2'
       end
       threads.each {|t| t.join }
+      Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
     end
     
     it "should automatically clear in new threads" do
