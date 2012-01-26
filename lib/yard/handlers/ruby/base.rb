@@ -141,7 +141,7 @@ module YARD
         def call_params
           return [] unless statement.respond_to?(:parameters)
           statement.parameters(false).map do |param|
-            param.jump(:ident, :tstring_content).source
+            param.jump(:ident, :kw, :tstring_content).source
           end
         end
 
@@ -149,7 +149,7 @@ module YARD
           if statement.call?
             statement.method_name(true).to_s
           elsif statement.type == :var_ref || statement.type == :vcall
-            statement[0].jump(:ident).source
+            statement[0].jump(:ident, :kw).source
           else
             nil
           end
