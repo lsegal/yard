@@ -4,6 +4,9 @@
 --exclude /server/templates/
 --exclude /yard/rubygems/
 --asset docs/images:images
+--type-name-tag yard.tag:"YARD Tag"
+--hide-tag yard.tag
+--template-path ./docs/templates
 -
 docs/WhatsNew.md
 docs/GettingStarted.md

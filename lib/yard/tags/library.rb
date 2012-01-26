@@ -241,7 +241,18 @@ module YARD
         send(meth, tag, parser)
       end
 
+      # @macro [attach] yard.tag
+      #   @method $2_tag
+      #   @visibility private
+      #   @yard.tag $2 [$3] $1
+      # 
+      # Defines the abstract tag
+      # 
+      # @example
+      #   # @abstract
+      #   class Foo; end
       define_tag "Abstract",           :abstract
+      
       define_tag "API Visibility",     :api
       define_tag "Attribute",          :attr,        :with_types_and_name
       define_tag "Attribute Getter",   :attr_reader, :with_types_and_name

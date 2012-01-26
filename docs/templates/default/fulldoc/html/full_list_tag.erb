@@ -1,0 +1,10 @@
+<% n = 1 %>
+<% @items.each do |item| %>
+  <li class="r<%= n %> <%= item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
+    <% tag = item.tag('yard.tag') %>
+    <span class="object_link">
+      <%= link_url 'tag_page.html#' + tag.name, h("@" + tag.name) %>
+    </span>
+  </li>
+  <% n = n == 2 ? 1 : 2 %>
+<% end %>

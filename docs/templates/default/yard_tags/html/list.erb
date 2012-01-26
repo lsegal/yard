@@ -1,0 +1,7 @@
+<% @items.each do |item| %>
+<div class="method_details">
+  <% tag = item.tag('yard.tag') %>
+  <p class="signature" id="<%= h tag.name %>"><%= tag_signature tag %></p>
+  <%= yieldall :object => item %>
+</div>
+<% end %>

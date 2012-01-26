@@ -1,0 +1,10 @@
+<h2>YARD Tag Listing</h2>
+<ul id="tags" class="index_inline_list">
+<% n = 1 %>
+<% @items.each_with_index do |item| %>
+  <% tag = item.tag('yard.tag') %>
+  <li class="r<%= n %>"><%= link_url 'tag_page.html#' + tag.name, h("@" + tag.name) %></li>
+  <% n = n == 2 ? 1 : 2 %>
+<% end %>
+</ul>
+<div class="clear"></div>
