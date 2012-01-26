@@ -50,7 +50,9 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       if obj.tag(:return) && (obj.tag(:return).types || []).empty?
         obj.tag(:return).types = ['Boolean']
       elsif obj.tag(:return).nil?
-        obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+        unless obj.tags(:overload).any? {|overload| overload.tag(:return) }
+          obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+        end
       end
     end
 
