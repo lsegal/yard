@@ -9,7 +9,9 @@ def init
     @breadcrumb_title = "File: " + @file.title
     @page_title = @breadcrumb_title
     sections :layout, [:diskfile]
-  elsif object
+  elsif @contents
+    sections :layout, [:contents]
+  else
     case object
     when '_index.html'
       @page_title = options[:title]
@@ -27,8 +29,6 @@ def init
       type = object.root? ? :module : object.type
       sections :layout, [T(type)]
     end
-  else
-    sections :layout, [:contents]
   end
 end
 
