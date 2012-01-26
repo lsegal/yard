@@ -112,6 +112,38 @@ module YARD
           tags = %w(method attribute overload visibility scope return)
           tags.any? {|tag| @docstring.has_tag?(tag) }
         end
+        
+        IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor 
+          attr_reader attr_writer extend include public private protected 
+          private_constant).map {|n| [n, true] }.flatten]
+        
+        def handle_comments
+          globals.__attached_macros ||= {}
+          if !globals.__attached_macros[caller_method]
+            return if IGNORE_METHODS[caller_method]
+            return if !statement.comments || statement.comments.empty?
+          end
+          
+          comments = statement.comments
+          comments = comments.join("\n") if Array === comments
+          @macro, @docstring = nil, Docstring.new(comments)
+          find_or_create_macro(@docstring)
+          return if !@macro && !statement.comments_hash_flag && !implicit_docstring?
+          @docstring = expanded_macro_or_docstring
+          name = method_name
+          if name.nil? || name.empty?
+            raise UndocumentableError, "method, missing name"
+          end
+          
+          tmp_scope = sanitize_scope
+          tmp_vis = sanitize_visibility
+          object = MethodObject.new(namespace, name, tmp_scope)
+          register(object)
+          object.visibility = tmp_vis
+          object.dynamic = true
+          object.signature = method_signature
+          create_attribute_data(object)
+        end
 
         private
 
