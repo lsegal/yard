@@ -100,6 +100,7 @@ module YARD
         def generate(objects, options = {})
           set_default_options(options)
           options[:objects] = objects
+          options[:object] = Registry.root
           template(options[:template], :fulldoc, options[:format]).run(options)
         end
 

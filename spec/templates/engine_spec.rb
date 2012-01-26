@@ -66,7 +66,8 @@ describe YARD::Templates::Engine do
   describe '.generate' do
     it "should generate with fulldoc template" do
       mod = mock(:template)
-      mod.should_receive(:run).with(:__globals => OpenStruct.new, :format => :text, :template => :default, :objects => [:a, :b, :c])
+      mod.should_receive(:run).with(:__globals => OpenStruct.new, :format => :text, 
+        :template => :default, :objects => [:a, :b, :c], :object => Registry.root)
       Engine.should_receive(:template).with(:default, :fulldoc, :text).and_return(mod)
       Engine.generate([:a, :b, :c])
     end
