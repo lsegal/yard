@@ -269,6 +269,23 @@ describe YARD::CLI::Yardoc do
         @yardoc.run *%w( --asset foo:bar )
         @yardoc.assets.should == {'foo' => 'bar'}
       end
+      
+      it "should not put from inside of to/ if from is a directory" do
+        begin
+          from = 'tmp_foo'
+          to = 'tmp_bar'
+          full_to = File.join(File.dirname(__FILE__), to)
+          FileUtils.mkdir_p(from)
+          @yardoc.options[:serializer].basepath = File.dirname(__FILE__)
+          @yardoc.run("--asset", "#{from}:#{to}")
+          @yardoc.run("--asset", "#{from}:#{to}")
+          File.directory?(full_to).should be_true
+          File.directory?(File.join(full_to, 'tmp_foo')).should be_false
+        ensure
+          FileUtils.rm_rf(from)
+          FileUtils.rm_rf(full_to)
+        end
+      end
     end
   end
   
