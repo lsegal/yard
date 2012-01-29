@@ -340,6 +340,7 @@ module YARD
         assets.each do |from, to|
           to = File.join(outpath, to)
           log.debug "Copying asset '#{from}' to '#{to}'"
+          from += '/.' if File.directory?(from)
           FileUtils.cp_r(from, to)
         end
       end
