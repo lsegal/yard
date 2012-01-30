@@ -510,11 +510,11 @@ module YARD
       end
 
       # @param [String] source the source code whose language to determine
-      # @return [Array(String, String)] the language, if any, and the remaining source
+      # @return [Array(Symbol, String)] the language, if any, and the remaining source
       def parse_lang_for_codeblock(source)
         type = nil
         if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
-          type, source = $1, $'
+          type, source = $1.to_sym, $'
         end
 
         [type, source]
