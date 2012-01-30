@@ -130,11 +130,11 @@ module YARD
       def html_markup_html(text)
         text
       end
-      
+
       # Highlights Ruby source. Similar to {#html_syntax_highlight}, but
       # this method is meant to be called from {#htmlify} when markup is
       # set to "ruby".
-      # 
+      #
       # @param [String] source the Ruby source
       # @return [String] the highlighted HTML
       # @since 0.7.0
@@ -150,7 +150,7 @@ module YARD
       # @group Syntax Highlighting Source Code
 
       # @param [String] source the source code whose language to determine
-      # @return [String, String] the language, if any, and the remaining source
+      # @return [Array(String, String)] the language, if any, and the remaining source
       def parse_lang(source)
         type = nil
         if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
@@ -206,12 +206,12 @@ module YARD
           next(match[1..-1]) if escape
 
           next(match) if name[0,1] == '|'
-          
+
           if name == '<a' && title =~ /href=["'](.+?)["'].*>.*<\/a>\s*(.*)\Z/
             name, title = $1, $2
             title = nil if title.empty?
           end
-          
+
           if object.is_a?(String)
             object
           else
@@ -240,7 +240,7 @@ module YARD
         return title || file.title unless serializer
         link_url(url_for_file(file, anchor), title || file.title)
       end
-      
+
       # (see BaseHelper#link_include_file)
       def link_include_file(file)
         unless file.is_a?(CodeObjects::ExtraFileObject)
