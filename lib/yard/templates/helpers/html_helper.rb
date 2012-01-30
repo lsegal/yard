@@ -45,8 +45,10 @@ module YARD
         end
         html = resolve_links(html)
         html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
-          language = $1 || $2
           string   = $3
+          # handle !!!LANG prefix to send to html_syntax_highlight_LANG
+          language, string = parse_lang(string)
+          language ||= $1 || $2 || object.source_type || :ruby
 
           string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
           classes = ['code', language].compact.join(' ')
@@ -147,6 +149,17 @@ module YARD
 
       # @group Syntax Highlighting Source Code
 
+      # @param [String] source the source code whose language to determine
+      # @return [String, String] the language, if any, and the remaining source
+      def parse_lang(source)
+        type = nil
+        if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
+          type, source = $1, $'
+        end
+
+        [type, source]
+      end
+
       # Syntax highlights +source+ in language +type+.
       #
       # @note To support a specific language +type+, implement the method
@@ -159,14 +172,6 @@ module YARD
       def html_syntax_highlight(source, type = nil)
         return "" unless source
         return h(source) if options[:no_highlight]
-
-        type ||= object.source_type || :ruby
-
-        # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-        if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
-          type, source = $1, $'
-          source = $'
-        end
 
         meth = "html_syntax_highlight_#{type}"
         respond_to?(meth) ? send(meth, source) : h(source)
