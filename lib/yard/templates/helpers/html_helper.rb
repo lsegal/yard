@@ -47,8 +47,8 @@ module YARD
         html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           string   = $3
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-          language, string = parse_lang_for_codeblock(string)
-          language ||= $1 || $2 || object.source_type || :ruby
+          language, _ = parse_lang_for_codeblock(string)
+          language ||= ($1 || $2 || object.source_type || :ruby).to_sym
 
           string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
           classes = ['code', language].compact.join(' ')
@@ -162,6 +162,8 @@ module YARD
         return "" unless source
         return h(source) if options[:no_highlight]
 
+        new_type, source = parse_lang_for_codeblock(source)
+        type ||= new_type || object.source_type || :ruby
         meth = "html_syntax_highlight_#{type}"
         respond_to?(meth) ? send(meth, source) : h(source)
       end
