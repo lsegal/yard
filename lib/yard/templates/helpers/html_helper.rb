@@ -47,7 +47,7 @@ module YARD
         html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
           string   = $3
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-          language, string = parse_lang(string)
+          language, string = parse_lang_for_codeblock(string)
           language ||= $1 || $2 || object.source_type || :ruby
 
           string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
@@ -148,17 +148,6 @@ module YARD
       end
 
       # @group Syntax Highlighting Source Code
-
-      # @param [String] source the source code whose language to determine
-      # @return [Array(String, String)] the language, if any, and the remaining source
-      def parse_lang(source)
-        type = nil
-        if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
-          type, source = $1, $'
-        end
-
-        [type, source]
-      end
 
       # Syntax highlights +source+ in language +type+.
       #
@@ -518,6 +507,17 @@ module YARD
           return meth.tag(:overload)
         end
         meth
+      end
+
+      # @param [String] source the source code whose language to determine
+      # @return [Array(String, String)] the language, if any, and the remaining source
+      def parse_lang_for_codeblock(source)
+        type = nil
+        if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
+          type, source = $1, $'
+        end
+
+        [type, source]
       end
     end
   end
