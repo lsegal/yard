@@ -45,12 +45,14 @@ module YARD
         end
         html = resolve_links(html)
         html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
-          string   = $3
+          string = $3
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-          language, string = parse_lang_for_codeblock(string)
-          language ||= $1 || $2 || object.source_type || :ruby
+          language, _ = parse_lang_for_codeblock(string)
+          language ||= $1 || $2 || object.source_type
 
-          string = html_syntax_highlight(CGI.unescapeHTML(string), language) unless options[:no_highlight]
+          unless options[:no_highlight]
+            string = html_syntax_highlight(CGI.unescapeHTML(string), language)
+          end
           classes = ['code', language].compact.join(' ')
           %Q{<pre class="#{classes}"><code>#{string}</code></pre>}
         end unless [:text, :none, :pre].include?(markup)
@@ -155,13 +157,15 @@ module YARD
       #   +html_syntax_highlight_TYPE+ in this class.
       #
       # @param [String] source the source code to highlight
-      # @param [Symbol] type the language type (:ruby, :plain, etc). Use
+      # @param [Symbol, String] type the language type (:ruby, :plain, etc). Use
       #   :plain for no syntax highlighting.
       # @return [String] the highlighted source
       def html_syntax_highlight(source, type = nil)
         return "" unless source
         return h(source) if options[:no_highlight]
 
+        new_type, source = parse_lang_for_codeblock(source)
+        type ||= new_type || :ruby
         meth = "html_syntax_highlight_#{type}"
         respond_to?(meth) ? send(meth, source) : h(source)
       end
