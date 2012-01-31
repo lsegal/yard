@@ -5,9 +5,14 @@ class YARD::Parser::CParser; def ensure_loaded!(a, b=1) a end end
 
 describe YARD::Parser::CParser do
   describe '#parse' do
-    def parse
-      Registry.clear
-      Parser::CParser.new(@contents).parse
+    def parse(src = @contents)
+      YARD::Registry.clear
+      Parser::CParser.new(src).parse
+    end
+
+    def parse_init(src = @contents)
+      YARD::Registry.clear
+      Parser::CParser.new("void Init_Foo() {\n#{src}\n}").parse
     end
 
     describe 'Array class' do
@@ -206,6 +211,67 @@ describe YARD::Parser::CParser do
         run(1, 1, true)
         Registry.at('Foo#foo').should be_reader
         Registry.at('Foo#foo=').should be_writer
+      end
+    end
+    
+    describe 'Defining constants' do
+      it "should register constants" do
+        parse_init <<-eof
+          mFoo = rb_define_module("Foo");
+          rb_define_const(mFoo, "FOO", ID2SYM(100));
+        eof
+        Registry.at('Foo::FOO').type.should == :constant
+      end
+
+      it "should look for override comments" do
+        parse <<-eof
+          /* Document-const: FOO
+           * Foo bar!
+           */
+
+          void Init_Foo() {
+            mFoo = rb_define_module("Foo");
+            rb_define_const(mFoo, "FOO", ID2SYM(100));
+          }
+        eof
+        foo = Registry.at('Foo::FOO')
+        foo.type.should == :constant
+        foo.docstring.should == 'Foo bar!'
+        foo.value.should == 'ID2SYM(100)'
+        foo.file.should == '(stdin)'
+      end
+
+      it "should use comment attached to declaration as fallback" do
+        parse_init <<-eof
+          mFoo = rb_define_module("Foo");
+          /* foobar! */
+          rb_define_const(mFoo, "FOO", ID2SYM(100));
+        eof
+        foo = Registry.at('Foo::FOO')
+        foo.value.should == 'ID2SYM(100)'
+        foo.docstring.should == 'foobar!'
+      end
+
+      it "should allow the form VALUE: DOCSTRING to document value" do
+        parse_init <<-eof
+          mFoo = rb_define_module("Foo");
+          /* 100: foobar! */
+          rb_define_const(mFoo, "FOO", ID2SYM(100));
+        eof
+        foo = Registry.at('Foo::FOO')
+        foo.value.should == '100'
+        foo.docstring.should == 'foobar!'
+      end
+
+      it "should allow escaping of backslashes in VALUE: DOCSTRING syntax" do
+        parse_init <<-eof
+          mFoo = rb_define_module("Foo");
+          /* 100\\:x\\:y: foobar:x! */
+          rb_define_const(mFoo, "FOO", ID2SYM(100));
+        eof
+        foo = Registry.at('Foo::FOO')
+        foo.value.should == '100:x:y'
+        foo.docstring.should == 'foobar:x!'
       end
     end
     
