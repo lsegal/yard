@@ -69,6 +69,7 @@ module YARD
               else
                 yardoc.parse_arguments
               end
+              yardoc.send(:verify_markup_options)
               yardoc.options.delete(:serializer)
               options.update(yardoc.options.to_hash)
             end
