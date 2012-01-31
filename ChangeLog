@@ -1,3 +1,165 @@
+2012-01-31  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: Bump to 0.7.5
+
+  * spec/templates/examples/module003.html, spec/templates/module_spec.rb,
+  .../default/module/html/inherited_constants.erb,
+  templates/default/module/setup.rb: Don't show inherited constants if
+  overridden  Backports #474, referencing #467
+
+  * lib/yard/server/commands/library_command.rb: Verify markup options when
+  loading yard opts in server mode  Backports #456, referencing #467
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Update tests for
+  rb_define_const(), capture definitions  Backports #443, referencing #467
+
+  * lib/yard/templates/helpers/html_helper.rb: Refactor code block parsing out
+  of htmlify
+
+2012-01-30  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Update tests for
+  html_syntax_highlight and minor refactor  Backports #478, #479, referencing
+  #467  Conflicts:  lib/yard/templates/helpers/html_helper.rb
+
+2012-01-30  Dominik Honnef <dominikh@fork-bomb.org>
+
+  * lib/yard/templates/helpers/html_helper.rb: make parse_lang_for_codeblock
+  return the language as a symbol, not a string
+
+  * lib/yard/templates/helpers/html_helper.rb: rename parse_lang to
+  parse_lang_for_codeblock and mark private
+
+  * lib/yard/templates/helpers/html_helper.rb: fix @return tag of
+  HtmlHelper#parse_lang
+
+  * lib/yard/templates/helpers/html_helper.rb: move parsing of !!!LANG up one
+  level to add lang classes to <pre> tags
+
+2012-01-29  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Do not copy asset inside
+  of to/ if to is directory  Backports #477, referencing #467
+
+2012-01-26  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb: Fix issue #458 for legacy handlers 
+  Backport to 0.7.x, referencing #467
+
+2012-01-25  Loren Segal <lsegal@soen.ca>
+
+  * spec/registry_spec.rb, spec/templates/class_spec.rb: Fix Debian test
+  failures in 1.9.3  Backports #397, referencing #467
+
+2012-01-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Fix %w() source in []/[]= parsed context.  Backports #461, referencing #467
+
+  * lib/yard/handlers/ruby/method_handler.rb,
+  spec/handlers/examples/method_handler_001.rb.txt,
+  spec/handlers/method_handler_spec.rb: Don't add default @return if a
+  @overload has @return.  Backports #458, referencing #467
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Don't
+  discard tags by (see ...).  Backports #457 referencing #467
+
+2012-01-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/macro_handler_methods.rb: Allow processing of macros
+  attached to Object class (via inheritance)  Backports and closes #465,
+  referencing #467
+
+  * lib/yard/handlers/ruby/macro_handler_methods.rb,
+  spec/handlers/macro_handler_spec.rb: Do not auto-detect DSL methods as method
+  objects if parameter name is not a valid method name  Backports and closes
+  #464, referencing #467
+
+  * lib/yard/registry_store.rb, spec/registry_store_spec.rb: Remove heuristics
+  that disable single object db  Closes #466 referencing #467
+
+2012-01-07  Ankur Patel <ankur.patel@ymail.com>
+
+  * templates/default/fulldoc/html/js/full_list.js: Ignoring non-printable
+  characters in search  Closes #446 referencing #467
+
+2012-01-05  Sergey Avseyev <sergey.avseyev@gmail.com>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Do not escape snippets twice 
+  Markup helpers aleardy done escaping. This is actually partial revert of
+  414e53424c28129625d743e41b15556f150fe083  Closes #445 referencing #467
+
+2012-01-19  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/module001.html,
+  spec/templates/examples/module003.html, spec/templates/module_spec.rb,
+  .../default/module/html/inherited_attributes.erb,
+  templates/default/module/setup.rb: Run verifier on inherited attributes list 
+  Backports #432 referencing #467  Conflicts: 
+  templates/default/module/html/inherited_attributes.erb
+
+2012-01-02  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Add support for
+  rb_path2class() in CRuby
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Properly handle
+  parsing of nested namespace definitions  Fixes #437
+
+2012-01-01  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/examples/module003.html, spec/templates/module_spec.rb,
+  .../default/module/html/inherited_attributes.erb: Ignore overwritten
+  attributes from inherited list  Closes #442
+
+  * spec/server/rack_adapter_spec.rb: Properly shutdown adapter after rack
+  middleware specs
+
+2011-12-26  Sergey Avseyev <sergey.avseyev@gmail.com>
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Allow aliases
+  for attributes
+
+  * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Fix attribute
+  parsing  This is the real signature for rb_define_attr(). There is only four
+  arguments.  void rb_define_attr(VALUE klass, const char *name, int read, int
+  write)
+
+2011-12-19  Loren Segal <lsegal@soen.ca>
+
+  * spec/templates/tag_spec.rb, templates/default/tags/setup.rb: Don't render
+  param tags on non-method objects  Closes #429
+
+2011-12-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server/commands/library_command.rb,
+  lib/yard/server/doc_server_helper.rb,
+  lib/yard/server/doc_server_serializer.rb, lib/yard/server/rack_adapter.rb,
+  lib/yard/server/router.rb, .../doc_server/library_list/html/contents.erb,
+  .../templates/doc_server/search/html/search.erb,
+  lib/yard/server/webrick_adapter.rb, spec/server/doc_server_helper_spec.rb,
+  spec/server/doc_server_serializer_spec.rb, spec/server/router_spec.rb: Only
+  add /version/ to URLs accessed with /version/  Adds request.version_supplied
+  to detect whether the version was parsed out of the URL. Rewrote some of the
+  URL helpers and serializers to respect this new behaviour.  The biggest
+  change is that the DocServerSerializer will no longer add the /prefix to the
+  serialized_path, and it will now ignore the command passed in to the
+  constructor (which is now optional). Instead, DocServerHelper#url_for should
+  be used to generate a URL with a prefix.  Closes #426
+
+2011-12-04  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Be more forgiving about generated
+  HTML for code blocks
+
+2011-12-05  yuta yamada <yamada@clear-code.com>
+
+  * docs/Glossary.md, docs/Overview.md: fix-typo
+
 2011-12-03  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb: Bump to version 0.7.4

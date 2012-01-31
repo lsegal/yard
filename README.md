@@ -6,10 +6,10 @@ YARD: Yay! A Ruby Documentation Tool
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: See Contributors section below    
-**Copyright**:    2007-2011    
+**Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.7.4 (codename "Kennedy")    
-**Release Date**: December 2nd 2011    
+**Latest Version**: 0.7.5 (codename "Jackson")    
+**Release Date**: January 31st 2012    
 
 Synopsis
 --------
@@ -288,6 +288,23 @@ More options can be seen by typing `yard-graph --help`, but here is an example:
 
 Changelog
 ---------
+
+- **January.31.12**: 0.7.5 release
+    - Mostly bugfix release (backports from 0.8.0 branch, full list in #467)
+    - Don't show inherited attributes if overridden (#432)
+    - Capture definitions in `/* definition: docstring */` format in C Ruby (#443)
+    - Do not escape highlighted code blocks twice (#445)
+    - Ignore non-printable characters in search autocomplete (#446)
+    - Verify markup options when loading .yardopts file in server mode (#456)
+    - Don't discard tags in (see ...) references (#457)
+    - Don't add @return to methods ending in '?' if has @overload (#458)
+    - Fix listing of source for %w() blocks with arrays (#461)
+    - Do not detect invalid method names as DSL methods (#464)
+    - Allow processing of macros attached to Object class (#465)
+    - Multi-object db is only enabled via switch (#466)
+    - Ignore inherited constants if overridden (#474)
+    - Do not copy asset inside dest directory if source is directory (#477)
+    - Set pre className when !!!lang is used to denote highlight language (#478, #479)
 
 - **December.2.11**: 0.7.4 release
     - Redcarpet is now the default Markdown formatting library. GFM now works out-of-box (#404)
