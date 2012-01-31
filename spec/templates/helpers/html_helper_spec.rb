@@ -471,40 +471,46 @@ describe YARD::Templates::Helpers::HtmlHelper do
   end
 
   describe '#html_syntax_highlight' do
-    before do
-      stub!(:options).and_return(:no_highlight => false)
-      stub!(:object).and_return(Registry.root)
-    end
-    
-    def fix_rspec2_mock_teardown
-      return unless defined?(RSpec)
-      should_receive(:respond_to?).with(:teardown_mocks_for_rspec).and_return(false)
-      should_receive(:respond_to?).with(:verify_mocks_for_rspec).and_return(false)
+    subject do
+      obj = OpenStruct.new
+      obj.options = {:no_highlight => false}
+      obj.object = Registry.root
+      obj.extend(Templates::Helpers::HtmlHelper)
+      obj
     end
     
     it "should return empty string on nil input" do
-      html_syntax_highlight(nil).should == ''
+      subject.html_syntax_highlight(nil).should == ''
     end
     
     it "should call #html_syntax_highlight_ruby by default" do
       Registry.root.source_type = nil
-      should_receive(:html_syntax_highlight_ruby).with('def x; end')
-      html_syntax_highlight('def x; end')
+      subject.should_receive(:html_syntax_highlight_ruby).with('def x; end')
+      subject.html_syntax_highlight('def x; end')
     end
     
     it "should call #html_syntax_highlight_NAME if there's an object with a #source_type" do
-      Registry.root.source_type = :NAME
-      fix_rspec2_mock_teardown
-      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
-      should_receive(:html_syntax_highlight_NAME).and_return("foobar")
-      html_syntax_highlight('def x; end').should == 'foobar'
+      subject.object = OpenStruct.new(:source_type => :NAME)
+      subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
+      subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
+      subject.should_receive(:html_syntax_highlight_NAME).and_return("foobar")
+      subject.htmlify('<pre><code>def x; end</code></pre>', :html).should == 
+        '<pre class="code NAME"><code>foobar</code></pre>'
+    end
+    
+    it "should add !!!LANG to className in outputted pre tag" do
+      subject.object = OpenStruct.new(:source_type => :LANG)
+      subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
+      subject.should_receive(:respond_to?).with('html_syntax_highlight_LANG').and_return(true)
+      subject.should_receive(:html_syntax_highlight_LANG).and_return("foobar")
+      subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html).should == 
+        '<pre class="code LANG"><code>foobar</code></pre>'
     end
 
     it "should call html_syntax_highlight_NAME if source starts with !!!NAME" do
-      fix_rspec2_mock_teardown
-      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
-      should_receive(:html_syntax_highlight_NAME).and_return("foobar")
-      html_syntax_highlight(<<-eof
+      subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
+      subject.should_receive(:html_syntax_highlight_NAME).and_return("foobar")
+      subject.html_syntax_highlight(<<-eof
         !!!NAME
         def x; end
       eof
@@ -512,35 +518,40 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
     
     it "should not highlight if :no_highlight option is true" do
-      stub!(:options).and_return(:no_highlight => true)
-      should_not_receive(:html_syntax_highlight_ruby)
-      html_syntax_highlight('def x; end').should == 'def x; end'
+      subject.options[:no_highlight] = true
+      subject.should_not_receive(:html_syntax_highlight_ruby)
+      subject.html_syntax_highlight('def x; end').should == 'def x; end'
     end
     
     it "should not highlight if there is no highlight method specified by !!!NAME" do
-      fix_rspec2_mock_teardown
-      should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
-      should_not_receive(:html_syntax_highlight_NAME)
-      html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
+      subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
+      subject.should_not_receive(:html_syntax_highlight_NAME)
+      subject.html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
     end
     
     it "should highlight as ruby if htmlify(text, :ruby) is called" do
-      should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
-      htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
+      subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
+      subject.htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
+    end
+    
+    it "should not prioritize object source type when called directly" do
+      subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
+      subject.object = OpenStruct.new(:source_type => :c)
+      subject.html_syntax_highlight("def x; end").should == "x"
     end
     
     it "shouldn't escape code snippets twice" do
-      htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should == 
+      subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should == 
         '<pre class="code foo"><code>{&quot;foo&quot; =&gt; 1}</code></pre>'
     end
     
     it "should highlight source when matching a pre lang= tag" do
-      htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should == 
+      subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should == 
         '<pre class="code foo"><code>x = 1</code></pre>'
     end
     
     it "should highlight source when matching a code class= tag" do
-      htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should == 
+      subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should == 
         '<pre class="code foo"><code>x = 1</code></pre>'
     end
   end
