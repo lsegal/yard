@@ -107,7 +107,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
     html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module002)
   end
   
-  it "should ignore overwritten/private attributes from inherited list" do
+  it "should ignore overwritten/private attributes/constants from inherited list" do
     Registry.clear
     YARD.parse_string <<-'eof'
       module B
@@ -115,11 +115,13 @@ describe YARD::Templates::Engine.template(:default, :module) do
         attr_accessor :bar
         # @private
         attr_writer :baz
+        FOO = 1
       end
       module A
         include B
         def foo; end
         attr_reader :bar
+        FOO = 2
       end
     eof
     

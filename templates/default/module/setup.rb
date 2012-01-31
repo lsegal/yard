@@ -80,6 +80,17 @@ def inherited_attr_list(&block)
   end
 end
 
+def inherited_constant_list(&block)
+  object.inheritance_tree(true)[1..-1].each do |superclass|
+    next if superclass.is_a?(YARD::CodeObjects::Proxy)
+    consts = superclass.constants(:included => false, :inherited => false)
+    consts = consts.reject {|const| object.child(:type => :constant, :name => const.name) != nil }
+    consts = consts.sort_by {|const| const.name.to_s }
+    consts = run_verifier(consts)
+    yield superclass, consts if consts.size > 0
+  end
+end
+
 def docstring_full(obj)
   docstring = ""
   if obj.tags(:overload).size == 1 && obj.docstring.empty?
