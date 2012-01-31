@@ -44,18 +44,9 @@ module YARD
           html = html.encode(:invalid => :replace, :replace => '?')
         end
         html = resolve_links(html)
-        html = html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
-          string = $3
-          # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-          language, _ = parse_lang_for_codeblock(string)
-          language ||= $1 || $2 || object.source_type
-
-          unless options[:no_highlight]
-            string = html_syntax_highlight(CGI.unescapeHTML(string), language)
-          end
-          classes = ['code', language].compact.join(' ')
-          %Q{<pre class="#{classes}"><code>#{string}</code></pre>}
-        end unless [:text, :none, :pre].include?(markup)
+        unless [:text, :none, :pre].include?(markup)
+          html = parse_codeblocks(html)
+        end
         html
       end
 
@@ -513,15 +504,41 @@ module YARD
         meth
       end
 
+      # Parses !!!lang out of codeblock, returning the codeblock language
+      # followed by the source code.
+      # 
       # @param [String] source the source code whose language to determine
-      # @return [Array(Symbol, String)] the language, if any, and the remaining source
+      # @return [Array(String, String)] the language, if any, and the 
+      #   remaining source
+      # @since 0.7.5
       def parse_lang_for_codeblock(source)
         type = nil
         if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
-          type, source = $1.to_sym, $'
+          type, source = $1, $'
         end
 
         [type, source]
+      end
+      
+      # Parses code blocks out of html and performs syntax highlighting
+      # on code inside of the blocks.
+      # 
+      # @param [String] html the html to search for code in
+      # @return [String] highlighted html
+      # @see #html_syntax_highlight
+      def parse_codeblocks(html)
+        html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
+          string = $3
+          # handle !!!LANG prefix to send to html_syntax_highlight_LANG
+          language, _ = parse_lang_for_codeblock(string)
+          language ||= $1 || $2 || object.source_type
+
+          unless options[:no_highlight]
+            string = html_syntax_highlight(CGI.unescapeHTML(string), language)
+          end
+          classes = ['code', language].compact.join(' ')
+          %Q{<pre class="#{classes}"><code>#{string}</code></pre>}
+        end
       end
     end
   end
