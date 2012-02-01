@@ -34,7 +34,7 @@ module YARD
       #
       # @return [String] the written data (for chaining)
       def serialize(object, data)
-        path = File.join(basepath, *serialized_path(object))
+        path = File.join(basepath, serialized_path(object))
         log.debug "Serializing to #{path}"
         File.open!(path, "wb") {|f| f.write data }
       end
@@ -58,26 +58,8 @@ module YARD
             fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
           end
         end
-
-        # Don't change the filenames, it just makes it more complicated
-        # to figure out the original name.
-        #fspath.map! do |p|
-        #  p.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
-        #end
-
-        # Remove special chars from filenames.
-        # Windows disallows \ / : * ? " < > | but we will just remove any
-        # non alphanumeric (plus period, underscore and dash).
-        fspath.map! do |p|
-          p.gsub(/[^\w\.-]/) do |x|
-            encoded = '_'
-
-            x.each_byte { |b| encoded << ("%X" % b) }
-            encoded
-          end
-        end
-
-        File.join(fspath)
+        
+        File.join(encode_path_components(*fspath))
       end
 
       # Checks the disk for an object and returns whether it was serialized.
@@ -86,6 +68,22 @@ module YARD
       # @return [Boolean] whether an object has been serialized to disk
       def exists?(object)
         File.exist?(File.join(basepath, serialized_path(object)))
+      end
+      
+      private
+      
+      # Remove special chars from filenames.
+      # Windows disallows \ / : * ? " < > | but we will just remove any
+      # non alphanumeric (plus period, underscore and dash).
+      def encode_path_components(*components)
+        components.map! do |p|
+          p.gsub(/[^\w\.-]/) do |x|
+            encoded = '_'
+
+            x.each_byte { |b| encoded << ("%X" % b) }
+            encoded
+          end
+        end
       end
     end
   end
