@@ -16,13 +16,17 @@ end
 describe YARD::Templates::Engine.template(:default, :onefile) do
   before do
     Registry.clear
-    @eenc, Encoding.default_external = Encoding.default_external, 'ascii-8bit'
-    @ienc, Encoding.default_internal = Encoding.default_internal, 'ascii-8bit'
+    if defined?(::Encoding)
+      @eenc, Encoding.default_external = Encoding.default_external, 'ascii-8bit'
+      @ienc, Encoding.default_internal = Encoding.default_internal, 'ascii-8bit'
+    end
   end
 
   after do
-    Encoding.default_internal = @ienc
-    Encoding.default_external = @eenc
+    if defined?(::Encoding)
+      Encoding.default_internal = @ienc
+      Encoding.default_external = @eenc
+    end
   end
   
   def render
