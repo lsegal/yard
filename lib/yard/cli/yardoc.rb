@@ -254,6 +254,14 @@ module YARD
 
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
+        
+        # US-ASCII is invalid encoding for onefile
+        if defined?(::Encoding) && options[:onefile] 
+          if ::Encoding.default_internal == ::Encoding::US_ASCII
+            log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
+            ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
+          end
+        end
 
         if generate && !verify_markup_options
           false

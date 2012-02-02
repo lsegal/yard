@@ -477,6 +477,17 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments *%w( --one-file lib/*.rb )
       @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new('README', '')
     end
+    
+    it "should not allow US-ASCII charset when using --one-file" do
+      ienc = Encoding.default_internal
+      eenc = Encoding.default_external
+      log.should_receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
+      @yardoc.parse_arguments *%w( --one-file --charset us-ascii )
+      Encoding.default_internal.name.should == 'ASCII-8BIT'
+      Encoding.default_external.name.should == 'ASCII-8BIT'
+      Encoding.default_internal = ienc
+      Encoding.default_external = eenc
+    end if defined?(::Encoding)
   end
   
   describe 'Source file arguments' do

@@ -14,11 +14,20 @@ class StringSerializer < YARD::Serializers::Base
 end
 
 describe YARD::Templates::Engine.template(:default, :onefile) do
-  before { Registry.clear }
+  before do
+    Registry.clear
+    @eenc, Encoding.default_external = Encoding.default_external, 'ascii-8bit'
+    @ienc, Encoding.default_internal = Encoding.default_internal, 'ascii-8bit'
+  end
 
-  it "should render html" do
-    files = []
-    string = ''
+  after do
+    Encoding.default_internal = @ienc
+    Encoding.default_external = @eenc
+  end
+  
+  def render
+    @files = []
+    @output = ''
     YARD.parse_string <<-eof
       class A
         # Foo method
@@ -33,15 +42,19 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
     readme = CodeObjects::ExtraFileObject.new('README', 
       "# This is a code comment\n\n# Top of file\n\n\nclass C; end")
     Templates::Engine.generate Registry.all(:class), 
-      :serializer => StringSerializer.new(files, string),
+      :serializer => StringSerializer.new(@files, @output),
       :onefile => true, :format => :html, :readme => readme, :files => [readme,
         CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')
       ]
-    files.should == ['index.html']
-    string.should include("This is a code comment")
-    string.should include("This is a license!")
-    string.should include("Class: A")
-    string.should include("Foo method")
-    string.should include("Bar method")
+  end
+
+  it "should render html" do
+    render
+    @files.should == ['index.html']
+    @output.should include("This is a code comment")
+    @output.should include("This is a license!")
+    @output.should include("Class: A")
+    @output.should include("Foo method")
+    @output.should include("Bar method")
   end
 end
