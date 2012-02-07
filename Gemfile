@@ -6,7 +6,7 @@ group :development do
 end
 
 group :markdown do
-  gem 'redcarpet'
+  gem 'redcarpet', '= 1.17.2'
 end
 
 group :textile do
