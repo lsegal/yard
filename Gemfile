@@ -6,8 +6,7 @@ group :development do
 end
 
 group :markdown do
-  gem 'rdiscount'
-  gem 'kramdown'
+  gem 'redcarpet'
 end
 
 group :textile do
