@@ -21,7 +21,7 @@ function fullListSearch() {
     searchCache.push({name:link.text(), fullName:fullName, node:$(this), link:link});
   });
   
-  $('#search input').keyup(function() {
+  $('#search input').keyup(function(event) {
     if ((event.keyCode > ignoreKeyCodeMin && event.keyCode < ignoreKeyCodeMax) 
          || event.keyCode == commandKey)
       return;
