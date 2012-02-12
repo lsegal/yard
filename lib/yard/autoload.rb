@@ -71,6 +71,7 @@ module YARD
       autoload :ModuleHandler,            __p('handlers/c/module_handler')
       autoload :OverrideCommentHandler,   __p('handlers/c/override_comment_handler')
       autoload :PathHandler,              __p('handlers/c/path_handler')
+      autoload :StructHandler,            __p('handlers/c/struct_handler')
       autoload :SymbolHandler,            __p('handlers/c/symbol_handler')
     end
 
