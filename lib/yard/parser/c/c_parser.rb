@@ -123,7 +123,7 @@ module YARD
         end
 
         def consume_whitespace
-          advance_loop { break if char !~ /[\t \r\n]/; nextline if char == "\n"; advance }
+          advance_loop { nextline if char == "\n"; break if char =~ /\S/; advance }
         end
 
         def consume_comment(add_comment = true)
