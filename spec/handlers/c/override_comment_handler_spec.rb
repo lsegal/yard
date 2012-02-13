@@ -27,4 +27,17 @@ describe YARD::Handlers::C::OverrideCommentHandler do
     Registry.at('C').docstring.should == 'Foo bar baz'
     Registry.at('C').type == :module
   end
+  
+  it "should handle Document-class with inheritance" do
+    parse(<<-eof)
+      /* Document-class: A < B
+       * Foo bar baz
+       */
+      void 
+    eof
+    obj = Registry.at('A')
+    obj.type.should == :class
+    obj.docstring.should == 'Foo bar baz'
+    obj.superclass.should == P('B')
+  end
 end
