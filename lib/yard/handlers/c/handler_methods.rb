@@ -3,20 +3,29 @@ module YARD
     module C
       module HandlerMethods
         include Parser::C
+        include CodeObjects
         
         def handle_class(var_name, class_name, parent, in_module = nil)
           parent = nil if parent == "0"
-          namespace = in_module ? namespace_for_variable(in_module) : YARD::Registry.root
-          register YARD::CodeObjects::ClassObject.new(namespace, class_name) do |obj|
-            obj.superclass = namespace_for_variable(parent) if parent
+          namespace = in_module ? namespace_for_variable(in_module) : Registry.root
+          register ClassObject.new(namespace, class_name) do |obj|
+            if parent
+              parent_class = namespace_for_variable(parent)
+              if parent_class.is_a?(Proxy)
+                obj.superclass = "::#{parent_class.path}"
+                obj.superclass.type = :class
+              else
+                obj.superclass = parent_class
+              end
+            end
             namespaces[var_name] = obj
             register_file_info(obj, statement.file, statement.line)
           end
         end
         
         def handle_module(var_name, module_name, in_module = nil)
-          namespace = in_module ? namespace_for_variable(in_module) : YARD::Registry.root
-          register YARD::CodeObjects::ModuleObject.new(namespace, module_name) do |obj|
+          namespace = in_module ? namespace_for_variable(in_module) : Registry.root
+          register ModuleObject.new(namespace, module_name) do |obj|
             namespaces[var_name] = obj
             register_file_info(obj, statement.file, statement.line)
           end

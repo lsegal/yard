@@ -51,4 +51,14 @@ describe YARD::Handlers::C::ClassHandler do
     Registry.at('Foo').file.should == '(stdin)'
     Registry.at('Foo').line.should == 2
   end
+  
+  it "should properly handle Proxy superclasses" do
+    parse_init <<-eof
+      cFoo = rb_define_class_under(mFoo, "Bar", rb_cBar);
+    eof
+    Registry.at('Foo::Bar').type.should == :class
+    Registry.at('Foo::Bar').superclass.should == P('Bar')
+    P('Bar').should be_a(CodeObjects::Proxy)
+    P('Bar').type.should == :class
+  end
 end
