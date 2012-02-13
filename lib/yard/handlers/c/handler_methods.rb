@@ -40,6 +40,7 @@ module YARD
           end
 
           namespace = namespace_for_variable(var_name)
+          return if namespace.nil? # XXX: raise UndocumentableError might be too noisy.
           register YARD::CodeObjects::MethodObject.new(namespace, name, scope) do |obj|
             obj.visibility = visibility
             find_method_body(obj, func_name)
