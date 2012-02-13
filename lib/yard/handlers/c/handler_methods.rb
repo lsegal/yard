@@ -41,10 +41,10 @@ module YARD
 
           namespace = namespace_for_variable(var_name)
           return if namespace.nil? # XXX: raise UndocumentableError might be too noisy.
-          register YARD::CodeObjects::MethodObject.new(namespace, name, scope) do |obj|
+          register MethodObject.new(namespace, name, scope) do |obj|
             obj.visibility = visibility
             find_method_body(obj, func_name)
-            obj.docstring.add_tag(YARD::Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
+            obj.docstring.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
           end
         end
 
@@ -62,7 +62,7 @@ module YARD
           namespace = namespace_for_variable(var_name)
           new_meth, old_meth = new_name.to_sym, old_name.to_sym
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
-          new_obj = register YARD::CodeObjects::MethodObject.new(namespace, new_meth, :instance) do |o|
+          new_obj = register MethodObject.new(namespace, new_meth, :instance) do |o|
             o.visibility = visibility
             register_file_info(o, statement.file, statement.line)
           end
@@ -82,7 +82,7 @@ module YARD
         def handle_constants(type, var_name, const_name, value)
           return unless type == 'const'
           namespace = namespace_for_variable(var_name)
-          register YARD::CodeObjects::ConstantObject.new(namespace, const_name) do |obj|
+          register ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
             register_file_info(obj, statement.file, statement.line)
