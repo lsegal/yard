@@ -22,10 +22,12 @@ module YARD
           comments.line_range
         end
         
-        alias first_line line
+        def first_line
+          source.split(/\n/).first
+        end
 
         def show
-          source.split(/\r?\n/).first
+          "\t#{line}: #{first_line}"
         end
       end
 
