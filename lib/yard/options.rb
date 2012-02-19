@@ -32,6 +32,12 @@ module YARD
   #       # ...
   #     end
   #   end
+  # @example Using +default_attr+ to create default attributes
+  #   class TemplateOptions < YARD::Options
+  #     default_attr :format, :html
+  #     default_attr :template, :default
+  #     default_attr :highlight, true
+  #   end
   # @example Deprecating an option while still supporting it
   #   class TemplateOptions < YARD::Options
   #     # @return [Boolean] if syntax highlighting should be performed on code blocks.
@@ -46,6 +52,25 @@ module YARD
   #     def no_highlight; !highlight end
   #   end
   class Options
+    # @macro [attach] yard.default_attr
+    #   @attribute $1
+    # Defines an attribute named +key+ and sets a default value for it
+    # 
+    # @example Defining a default option key
+    #   default_attr :name, 'Default Name'
+    #   default_attr :time, lambda { Time.now }
+    # @param [Symbol] key the option key name
+    # @param [Object, Proc] default the default object value. If the default
+    #   value is a proc, it is executed upon initialization.
+    def self.default_attr(key, default)
+      (@defaults ||= {})[key] = default
+      attr_accessor(key)
+    end
+    
+    def initialize
+      set_defaults
+    end
+    
     # Delegates calls with Hash syntax to actual method with key name
     # 
     # @example Calling on an option key with Hash syntax
@@ -97,6 +122,16 @@ module YARD
     
     unless defined? tap() # only for 1.8.6
       def tap(&block) yield(self); self end
+    end
+    
+    private
+    
+    def set_defaults
+      defaults = self.class.instance_variable_get("@defaults")
+      return unless defaults
+      defaults.each do |key, value|
+        self[key] = Proc === value ? value.call : value
+      end
     end
   end
 end

@@ -6,6 +6,22 @@ describe YARD::Options do
     def initialize; self.foo = "abc" end
   end
   
+  describe '.default_attr' do
+    it "should allow default attributes to be defined with symbols" do
+      class DefaultOptions1 < YARD::Options
+        default_attr :foo, 'HELLO'
+      end
+      DefaultOptions1.new.foo.should == 'HELLO'
+    end
+    
+    it "should call lambda if value is a Proc" do
+      class DefaultOptions2 < YARD::Options
+        default_attr :foo, lambda { 100 }
+      end
+      DefaultOptions2.new.foo.should == 100
+    end
+  end
+  
   describe '#[]' do
     it "should handle getting option values using hash syntax" do
       FooOptions.new[:foo].should == "abc"
