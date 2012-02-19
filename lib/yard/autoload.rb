@@ -250,6 +250,7 @@ module YARD
   autoload :Config,         __p('config')
   autoload :Docstring,      __p('docstring')
   autoload :Logger,         __p('logging')
+  autoload :Options,        __p('options')
   autoload :Registry,       __p('registry')
   autoload :RegistryStore,  __p('registry_store')
   autoload :StubProxy,      __p('serializers/yardoc_serializer')
