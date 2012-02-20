@@ -1,9 +1,6 @@
 module YARD
   # Generalized options class for passing around large amounts of options between objects.
   # 
-  # Although the options class allows for Hash-like access (+opts[:key]+), the recommended
-  # mechanism for accessing an option key will be via standard method calls on attributes
-  # 
   # The options class exists for better visibility and documentability of options being
   # passed through to other objects. Because YARD has parser and template architectures
   # that are heavily reliant on options, it is necessary to make these option keys easily
@@ -11,6 +8,23 @@ module YARD
   # basic Hash, the subclass can provide aliasing and convenience methods to simplify
   # option property access, and, if needed, support backward-compatibility for deprecated
   # key names.
+  # 
+  # == Hash and OpenStruct-like Access
+  #
+  # Although the options class allows for Hash-like access (+opts[:key]+), the recommended
+  # mechanism for accessing an option key will be via standard method calls on attributes
+  # 
+  # The options class can also act as an open ended key value storage structure (like a
+  # Hash or OpenStruct), and allows for setting and getting of unregistered option keys.
+  # This methodology is not recommended, however, and is only supported for backward
+  # compatibility inside YARD. Whenever possible, developers should define all keys used
+  # by an options class.
+  # 
+  # == Declaring Default Values
+  # 
+  # Note that the options class can contain default value definitions for certain options,
+  # but to initialize these defaults, {#reset_defaults} must be called manually after
+  # initialization; the options object is always created empty until defaults are applied.
   # 
   # @abstract Subclasses should define (and document) custom attributes that are expected
   #   to be made available as option keys.
