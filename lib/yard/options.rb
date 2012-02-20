@@ -98,9 +98,12 @@ module YARD
     # @return [Object] the value being set
     def []=(key, value) send("#{key}=", value) end
     
-    # Updates values from an options hash or object on this object
+    # Updates values from an options hash or options object on this object.
+    # All keys passed should be key names defined by attributes on the class.
     # 
-    # @param [Options, Hash] opts
+    # @example Updating a set of options on an Options object
+    #   opts.update(:template => :guide, :type => :fulldoc)
+    # @param [Hash, Options] opts
     # @return [self]
     def update(opts)
       opts = opts.to_hash if Options === opts
@@ -115,6 +118,7 @@ module YARD
     # 
     # @param [Options, Hash] opts
     # @return [Options] the newly created options object
+    # @see #update
     def merge(opts)
       dup.update(opts)
     end
