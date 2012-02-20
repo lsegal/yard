@@ -51,7 +51,7 @@ module YARD
             meth = meth.tag(:overload)
           end
 
-          type = options[:default_return] || ""
+          type = options.default_return || ""
           rmeth = meth
           if !rmeth.has_tag?(:return) && rmeth.respond_to?(:object)
             rmeth = meth.object
@@ -65,7 +65,7 @@ module YARD
               type = first + '+'
             elsif types.size > 2
               type = [first, '...'].join(', ')
-            elsif types == ['void'] && options[:hide_void_return]
+            elsif types == ['void'] && options.hide_void_return
               type = ""
             else
               type = types.join(", ")

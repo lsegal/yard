@@ -10,7 +10,7 @@ module YARD::Templates::Helpers
     #
     # @return [OpenStruct] a struct object that stores state
     # @since 0.6.0
-    def globals; options[:globals] end
+    def globals; options.globals end
 
     # @group Running the Verifier
 
@@ -21,7 +21,7 @@ module YARD::Templates::Helpers
     # @return [Array<CodeObjects::Base>] a list of code objects that match
     #   the verifier. If no verifier is supplied, all objects are returned.
     def run_verifier(list)
-      options[:verifier] ? options[:verifier].run(list) : list
+      options.verifier ? options.verifier.run(list) : list
     end
 
     # @group Escaping Text

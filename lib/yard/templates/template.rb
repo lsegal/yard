@@ -136,9 +136,9 @@ module YARD
         @sections, @options = [], opts.class.new
         add_options(opts)
 
-        extend(Helpers::HtmlHelper) if options[:format] == :html
-        extend(Helpers::TextHelper) if options[:format] == :text
-        extend(Helpers::UMLHelper) if options[:format] == :dot
+        extend(Helpers::HtmlHelper) if options.format == :html
+        extend(Helpers::TextHelper) if options.format == :text
+        extend(Helpers::UMLHelper) if options.format == :dot
         extend(*Template.extra_includes) unless Template.extra_includes.empty?
 
         init
@@ -151,8 +151,8 @@ module YARD
       # @param [Array<String, Symbol>] path the path of the template
       # @return [Template] the loaded template module
       def T(*path)
-        path.unshift(options[:template]) if options[:template]
-        path.push(options[:format]) if options[:format]
+        path.unshift(options.template) if options.template
+        path.push(options.format) if options.format
         self.class.T(*path)
       end
 
@@ -299,7 +299,7 @@ module YARD
       end
 
       def erb_with(content, filename = nil)
-        erb = ERB.new(content, nil, options[:format] == :text ? '<>' : nil)
+        erb = ERB.new(content, nil, options.format == :text ? '<>' : nil)
         erb.filename = filename if filename
         erb
       end

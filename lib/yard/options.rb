@@ -179,6 +179,7 @@ module YARD
     # @abstract Subclasses should override this method to perform custom
     #   value initialization if not using {default_attr}. Be sure to call
     #   +super+ so that default initialization can take place.
+    # @return [void]
     def reset_defaults
       names_set = {}
       self.class.ancestors.each do |klass| # look at all ancestors

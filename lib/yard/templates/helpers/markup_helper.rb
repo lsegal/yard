@@ -73,19 +73,19 @@ module YARD
       # found and exit the program.
       #
       # @return [Boolean] whether the markup provider was successfully loaded.
-      def load_markup_provider(type = options[:markup])
+      def load_markup_provider(type = options.markup)
         return true if MarkupHelper.markup_cache[type]
         MarkupHelper.markup_cache[type] ||= {}
 
         providers = MARKUP_PROVIDERS[type.to_sym]
         return true if providers && providers.empty?
-        if providers && options[:markup_provider]
-          providers = providers.select {|p| p[:lib] == options[:markup_provider] }
+        if providers && options.markup_provider
+          providers = providers.select {|p| p[:lib] == options.markup_provider }
         end
 
         if providers == nil || providers.empty?
           log.error "Invalid markup type '#{type}' or markup provider " +
-            "(#{options[:markup_provider]}) is not registered."
+            "(#{options.markup_provider}) is not registered."
           return false
         end
 
@@ -128,7 +128,7 @@ module YARD
         MARKUP_EXTENSIONS.each do |type, exts|
           return type if exts.include?(ext)
         end
-        options[:markup]
+        options.markup
       end
 
       # Strips any shebang lines on the file contents that pertain to
@@ -146,7 +146,7 @@ module YARD
       #
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Class] the markup class
-      def markup_class(type = options[:markup])
+      def markup_class(type = options.markup)
         load_markup_provider(type)
         MarkupHelper.markup_cache[type][:class]
       end
@@ -156,7 +156,7 @@ module YARD
       #
       # @param [Symbol] the markup type (:rdoc, :markdown, etc.)
       # @return [Symbol] the markup provider name (usually the gem name of the library)
-      def markup_provider(type = options[:markup])
+      def markup_provider(type = options.markup)
         MarkupHelper.markup_cache[type][:provider]
       end
     end

@@ -3,6 +3,6 @@ def init
 end
 
 def search
-  options[:breadcrumb_title] = h("Search for '#{@query}'")
+  options.breadcrumb_title = h("Search for '#{@query}'")
   yieldall :contents => erb(:search)
 end

@@ -80,10 +80,10 @@ module YARD
         # @return [String] the rendered template
         def render(options = {})
           options = set_default_options(options)
-          mod = template(options[:template], options[:type], options[:format])
+          mod = template(options.template, options.type, options.format)
 
-          if options[:serialize] != false
-            with_serializer(options[:object], options[:serializer]) { mod.run(options) }
+          if options.serialize != false
+            with_serializer(options.object, options.serializer) { mod.run(options) }
           else
             mod.run(options)
           end
@@ -99,9 +99,9 @@ module YARD
         # @return [void]
         def generate(objects, options = {})
           options = set_default_options(options)
-          options[:objects] = objects
-          options[:object] = Registry.root
-          template(options[:template], :fulldoc, options[:format]).run(options)
+          options.objects = objects
+          options.object = Registry.root
+          template(options.template, :fulldoc, options.format).run(options)
         end
 
         # Serializes the results of a block with a +serializer+ object.
@@ -137,10 +137,7 @@ module YARD
               o.update(options)
             end
           end
-          options[:globals] ||= OpenStruct.new
-          options[:format] ||= :text
-          options[:type] ||= options[:object].type if options[:object]
-          options[:template] ||= :default
+          options.type ||= options.object.type if options.object
           options
         end
 

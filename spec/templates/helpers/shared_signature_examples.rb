@@ -1,7 +1,9 @@
 shared_examples_for "signature" do
   before do
-    YARD::Registry.clear 
-    stub!(:options).and_return(:default_return => "Object")
+    YARD::Registry.clear
+    @options = Templates::TemplateOptions.new
+    @options.reset_defaults
+    stub!(:options).and_return(@options)
   end
 
   it "should show signature for regular instance method" do
@@ -10,13 +12,13 @@ shared_examples_for "signature" do
   end
 
   it "should allow default return type to be changed" do
-    stub!(:options).and_return(:default_return => "Hello")
+    @options.default_return = "Hello"
     YARD.parse_string "def foo; end"
     signature(Registry.at('#foo')).should == @results[:default_return]
   end
 
   it "should allow default return type to be omitted" do
-    stub!(:options).and_return(:default_return => "")
+    @options.default_return = ""
     YARD.parse_string "def foo; end"
     signature(Registry.at('#foo')).should == @results[:no_default_return]
   end
@@ -94,7 +96,7 @@ shared_examples_for "signature" do
   end
 
   it "should not show return for @return [void] if :hide_void_return is true" do
-    stub!(:options).and_return(:hide_void_return => true)
+    @options.hide_void_return = true
     YARD.parse_string <<-'eof'
       # @return [void]
       def foo; end

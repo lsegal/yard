@@ -7,7 +7,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper
   
-  def options; {} end
+  def options
+    Templates::TemplateOptions.new.tap do |o|
+      o.reset_defaults
+      o.default_return = nil
+    end
+  end
 
   describe '#h' do
     it "should use #h to escape HTML" do
@@ -473,7 +478,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
   describe '#html_syntax_highlight' do
     subject do
       obj = OpenStruct.new
-      obj.options = {:no_highlight => false}
+      obj.options = options
       obj.object = Registry.root
       obj.extend(Templates::Helpers::HtmlHelper)
       obj
@@ -517,8 +522,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       ).should == "foobar"
     end
     
-    it "should not highlight if :no_highlight option is true" do
-      subject.options[:no_highlight] = true
+    it "should not highlight if highlight option is false" do
+      subject.options.highlight = false
       subject.should_not_receive(:html_syntax_highlight_ruby)
       subject.html_syntax_highlight('def x; end').should == 'def x; end'
     end

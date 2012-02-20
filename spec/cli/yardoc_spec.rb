@@ -45,23 +45,23 @@ describe YARD::CLI::Yardoc do
     end
     
     it "should use rdoc as default markup type (but falls back on none)" do
-      @yardoc.options[:markup].should == :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
     
     it "should use default as default template" do
-      @yardoc.options[:template].should == :default
+      @yardoc.options.template.should == :default
     end
     
     it "should use HTML as default format" do
-      @yardoc.options[:format].should == :html
+      @yardoc.options.format.should == :html
     end
     
     it "should use 'Object' as default return type" do
-      @yardoc.options[:default_return].should == 'Object'
+      @yardoc.options.default_return.should == 'Object'
     end
     
     it "should not hide void return types by default" do
-      @yardoc.options[:hide_void_return].should == false
+      @yardoc.options.hide_void_return.should == false
     end
     
     it "should only show public visibility by default" do
@@ -177,7 +177,7 @@ describe YARD::CLI::Yardoc do
   describe 'Output options' do
     it "should accept --title" do
       @yardoc.parse_arguments('--title', 'hello world')
-      @yardoc.options[:title].should == 'hello world'
+      @yardoc.options.title.should == 'hello world'
     end
 
     it "should allow --title to have multiple spaces in .yardopts" do
@@ -185,38 +185,38 @@ describe YARD::CLI::Yardoc do
       @yardoc.options_file = "test"
       @yardoc.use_yardopts_file = true
       @yardoc.run
-      @yardoc.options[:title].should == "Foo Bar"
+      @yardoc.options.title.should == "Foo Bar"
     end
 
     it "should alias --main to the --readme flag" do
       readme = File.join(File.dirname(__FILE__),'..','..','README.md')
 
       @yardoc.parse_arguments('--main', readme)
-      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new(readme, '')
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new(readme, '')
     end
 
     it "should select a markup provider when --markup-provider or -mp is set" do
       @yardoc.parse_arguments("-M", "test")
-      @yardoc.options[:markup_provider].should == :test
+      @yardoc.options.markup_provider.should == :test
       @yardoc.parse_arguments("--markup-provider", "test2")
-      @yardoc.options[:markup_provider].should == :test2
+      @yardoc.options.markup_provider.should == :test2
     end
     
     it "should select a markup format when -m is set" do
       @yardoc.should_receive(:verify_markup_options).and_return(true)
       @yardoc.generate = true
       @yardoc.parse_arguments('-m', 'markdown')
-      @yardoc.options[:markup].should == :markdown
+      @yardoc.options.markup.should == :markdown
     end
 
     it "should accept --default-return" do
       @yardoc.parse_arguments *%w( --default-return XYZ )
-      @yardoc.options[:default_return].should == "XYZ"
+      @yardoc.options.default_return.should == "XYZ"
     end
 
     it "should allow --hide-void-return to be set" do
       @yardoc.parse_arguments *%w( --hide-void-return )
-      @yardoc.options[:hide_void_return].should be_true
+      @yardoc.options.hide_void_return.should be_true
     end
 
     it "should generate all objects with --use-cache" do
@@ -276,7 +276,7 @@ describe YARD::CLI::Yardoc do
           to = 'tmp_bar'
           full_to = File.join(File.dirname(__FILE__), to)
           FileUtils.mkdir_p(from)
-          @yardoc.options[:serializer].basepath = File.dirname(__FILE__)
+          @yardoc.options.serializer.basepath = File.dirname(__FILE__)
           @yardoc.run("--asset", "#{from}:#{to}")
           @yardoc.run("--asset", "#{from}:#{to}")
           File.directory?(full_to).should be_true
@@ -294,7 +294,7 @@ describe YARD::CLI::Yardoc do
       obj = mock(:object)
       obj.should_receive(:tag).ordered.with(:private).and_return(true)
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(obj).should == false
+      @yardoc.options.verifier.call(obj).should == false
     end
 
     it "should hide object if namespace is @private with --no-private" do
@@ -305,7 +305,7 @@ describe YARD::CLI::Yardoc do
       obj.stub!(:namespace).and_return(ns)
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(obj).should == false
+      @yardoc.options.verifier.call(obj).should == false
     end
 
     it "should not call #tag on namespace if namespace is proxy with --no-private" do
@@ -318,7 +318,7 @@ describe YARD::CLI::Yardoc do
       obj.stub!(:visibility).and_return(:public)
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(obj).should == true
+      @yardoc.options.verifier.call(obj).should == true
     end
 
     # @bug gh-197
@@ -328,12 +328,12 @@ describe YARD::CLI::Yardoc do
       foobar = Registry.at('Foo::Bar')
       foobar.namespace.type = :module
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(foobar).should == true
+      @yardoc.options.verifier.call(foobar).should == true
     end
     
     it "should not call #tag on proxy object" do # @bug gh-197
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(P('ProxyClass')).should == true
+      @yardoc.options.verifier.call(P('ProxyClass')).should == true
     end
 
     it "should hide methods inside a 'private' class/module with --no-private" do
@@ -345,8 +345,8 @@ describe YARD::CLI::Yardoc do
         end
       eof
       @yardoc.parse_arguments *%w( --no-private )
-      @yardoc.options[:verifier].call(Registry.at('ABC')).should be_false
-      @yardoc.options[:verifier].call(Registry.at('ABC#foo')).should be_false
+      @yardoc.options.verifier.call(Registry.at('ABC')).should be_false
+      @yardoc.options.verifier.call(Registry.at('ABC#foo')).should be_false
     end
   end
   
@@ -360,7 +360,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = false
       @yardoc.options_file = "test"
       @yardoc.run
-      @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
       @yardoc.files.should == ["FILE1", "FILE2"]
     end
 
@@ -375,7 +375,7 @@ describe YARD::CLI::Yardoc do
     it "should allow opts specified in command line to override yardopts file" do
       File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
       @yardoc.run("-o", "MYPATH", "FILE")
-      @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
       @yardoc.files.should == ["FILE"]
     end
 
@@ -384,7 +384,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = true
       @yardoc.stub!(:support_rdoc_document_file!).and_return(["FILE2", "FILE3"])
       @yardoc.run("-o", "MYPATH", "FILE1")
-      @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
       @yardoc.files.should == ["FILE2", "FILE3", "FILE1"]
     end
   end
@@ -400,12 +400,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_yardopts_file = true
       @yardoc.options_file = "test"
       @yardoc.run
-      @yardoc.options[:verifier].call(methobj).should be_true
+      @yardoc.options.verifier.call(methobj).should be_true
     end
 
     it "should accept a --query" do
       @yardoc.parse_arguments *%w( --query @return )
-      @yardoc.options[:verifier].should be_a(Verifier)
+      @yardoc.options.verifier.should be_a(Verifier)
     end
 
     it "should accept multiple --query arguments" do
@@ -413,8 +413,8 @@ describe YARD::CLI::Yardoc do
       obj.should_receive(:tag).ordered.with('return').and_return(true)
       obj.should_receive(:tag).ordered.with('tag').and_return(false)
       @yardoc.parse_arguments *%w( --query @return --query @tag )
-      @yardoc.options[:verifier].should be_a(Verifier)
-      @yardoc.options[:verifier].call(obj).should == false
+      @yardoc.options.verifier.should be_a(Verifier)
+      @yardoc.options.verifier.call(obj).should == false
     end
   end
   
@@ -427,7 +427,7 @@ describe YARD::CLI::Yardoc do
       File.should_receive(:read).with('extra_file2').and_return('')
       @yardoc.parse_arguments *%w( file1 file2 - extra_file1 extra_file2 )
       @yardoc.files.should == %w( file1 file2 )
-      @yardoc.options[:files].should == 
+      @yardoc.options.files.should == 
         [CodeObjects::ExtraFileObject.new('extra_file1', ''), 
           CodeObjects::ExtraFileObject.new('extra_file2', '')]
     end
@@ -436,7 +436,7 @@ describe YARD::CLI::Yardoc do
       Dir.should_receive(:glob).with('README*').and_return([])
       @yardoc.parse_arguments *%w( - LICENSE )
       @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
-      @yardoc.options[:files].should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
+      @yardoc.options.files.should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
     it "should accept globs as extra files" do
@@ -448,7 +448,7 @@ describe YARD::CLI::Yardoc do
       File.should_receive(:file?).with('b.txt').and_return(true)
       @yardoc.parse_arguments *%w( file1 file2 - *.txt )
       @yardoc.files.should == %w( file1 file2 )
-      @yardoc.options[:files].should == 
+      @yardoc.options.files.should == 
         [CodeObjects::ExtraFileObject.new('a.txt', ''), 
           CodeObjects::ExtraFileObject.new('b.txt', '')]
     end
@@ -468,14 +468,14 @@ describe YARD::CLI::Yardoc do
       Dir.should_receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
       File.should_receive(:read).with('lib/foo.rb').and_return('')
       @yardoc.parse_arguments *%w( --one-file lib/*.rb )
-      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
     end
     
     it "should use readme it exists when using --one-file" do
       Dir.should_receive(:glob).with('README*').and_return ['README']
       File.should_receive(:read).with('README').and_return('')
       @yardoc.parse_arguments *%w( --one-file lib/*.rb )
-      @yardoc.options[:readme].should == CodeObjects::ExtraFileObject.new('README', '')
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new('README', '')
     end
     
     it "should not allow US-ASCII charset when using --one-file" do
@@ -581,7 +581,7 @@ describe YARD::CLI::Yardoc do
 
     it "should not allow --query in safe mode" do
       @yardoc.run('--query', 'foo')
-      @yardoc.options[:verifier].expressions.should_not include("foo")
+      @yardoc.options.verifier.expressions.should_not include("foo")
     end
     
     it "should not allow modifying the template paths" do
@@ -595,12 +595,12 @@ describe YARD::CLI::Yardoc do
     it "should load rdoc markup if no markup is provided" do
       @yardoc.generate = true
       @yardoc.run
-      @yardoc.options[:markup].should == :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
     
     it "should load rdoc markup even when no output is specified" do
       @yardoc.parse_arguments('--no-output')
-      @yardoc.options[:markup].should == :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
     
     it "should warn if rdoc cannot be loaded and fallback to :none" do
@@ -608,9 +608,9 @@ describe YARD::CLI::Yardoc do
       mod.clear_markup_cache
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:rdoc).and_return([{:lib => 'INVALID'}])
       log.should_receive(:warn).with(/Could not load default RDoc formatter/)
-      @yardoc.stub(:generate) { @yardoc.options[:files] = []; true }
+      @yardoc.stub(:generate) { @yardoc.options.files = []; true }
       @yardoc.run
-      @yardoc.options[:markup].should == :none
+      @yardoc.options.markup.should == :none
       mod.clear_markup_cache
     end
 
@@ -620,7 +620,7 @@ describe YARD::CLI::Yardoc do
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
       log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
       files = [CodeObjects::ExtraFileObject.new('test.md', '')]
-      @yardoc.stub(:generate) { @yardoc.options[:files] = files; true }
+      @yardoc.stub(:generate) { @yardoc.options.files = files; true }
       @yardoc.run
       mod.clear_markup_cache
     end
@@ -631,7 +631,7 @@ describe YARD::CLI::Yardoc do
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
       log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
       files = [CodeObjects::ExtraFileObject.new('test', '# @markup markdown')]
-      @yardoc.stub(:generate) { @yardoc.options[:files] = files; true }
+      @yardoc.stub(:generate) { @yardoc.options.files = files; true }
       @yardoc.run
       mod.clear_markup_cache
     end

@@ -33,7 +33,7 @@ module YARD
       # @param [Symbol] markup examples are +:markdown+, +:textile+, +:rdoc+.
       #   To add a custom markup type, see {MarkupHelper}
       # @return [String] the HTML
-      def htmlify(text, markup = options[:markup])
+      def htmlify(text, markup = options.markup)
         markup_meth = "html_markup_#{markup}"
         return text unless respond_to?(markup_meth)
         return "" unless text
@@ -153,7 +153,7 @@ module YARD
       # @return [String] the highlighted source
       def html_syntax_highlight(source, type = nil)
         return "" unless source
-        return h(source) if options[:no_highlight]
+        return h(source) unless options.highlight
 
         new_type, source = parse_lang_for_codeblock(source)
         type ||= new_type || :ruby
@@ -231,7 +231,7 @@ module YARD
           file = CodeObjects::ExtraFileObject.new(file)
         end
         file.attributes[:markup] ||= markup_for_file('', file.filename)
-        htmlify(file.contents, file.attributes[:markup] || options[:markup])
+        htmlify(file.contents, file.attributes[:markup] || options.markup)
       end
 
       # (see BaseHelper#link_include_object)
@@ -337,7 +337,7 @@ module YARD
           fromobj = fromobj.namespace
         end
         from = serializer.serialized_path(fromobj)
-        if filename == options[:readme]
+        if filename == options.readme
           path = 'index.html'
         else
           path = serializer.serialized_path(filename)
@@ -391,7 +391,7 @@ module YARD
           meth = meth.object
         end
 
-        type = options[:default_return] || ""
+        type = options.default_return || ""
         if meth.tag(:return) && meth.tag(:return).types
           types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
           first = link ? h(types.first) : format_types([types.first], false)
@@ -401,7 +401,7 @@ module YARD
             type = first + '<sup>+</sup>'
           elsif types.size > 2
             type = [first, '...'].join(', ')
-          elsif types == ['void'] && options[:hide_void_return]
+          elsif types == ['void'] && options.hide_void_return
             type = ""
           else
             type = link ? h(types.join(", ")) : format_types(types, false)
@@ -533,7 +533,7 @@ module YARD
           language, _ = parse_lang_for_codeblock(string)
           language ||= $1 || $2 || object.source_type
 
-          unless options[:no_highlight]
+          if options.highlight
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')

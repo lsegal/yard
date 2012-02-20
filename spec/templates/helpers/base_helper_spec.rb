@@ -9,13 +9,13 @@ describe YARD::Templates::Helpers::BaseHelper do
       mock.should_receive(:call).with(1)
       mock.should_receive(:call).with(2)
       mock.should_receive(:call).with(3)
-      should_receive(:options).at_least(1).times.and_return(:verifier => mock)
+      should_receive(:options).at_least(1).times.and_return(Options.new.update(:verifier => mock))
       run_verifier [1, 2, 3]      
     end
     
     it "should prune list if lambda returns false and only false" do
       mock = Verifier.new
-      should_receive(:options).at_least(1).times.and_return(:verifier => mock)
+      should_receive(:options).at_least(1).times.and_return(Options.new.update(:verifier => mock))
       mock.should_receive(:call).with(1).and_return(false)
       mock.should_receive(:call).with(2).and_return(true)
       mock.should_receive(:call).with(3).and_return(nil)
@@ -24,7 +24,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
     
     it "should return list if no verifier exists" do
-      should_receive(:options).at_least(1).times.and_return({})
+      should_receive(:options).at_least(1).times.and_return(Options.new)
       run_verifier([1, 2, 3]).should == [1, 2, 3]
     end
   end
