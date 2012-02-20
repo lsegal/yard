@@ -33,6 +33,18 @@ module YARD
       # @return [Array<CodeObjects::Base>] the list of code objects to render
       #   the templates with.
       attr_accessor :objects
+      
+      # @return [Numeric] An index value for rendering sequentially related templates
+      attr_accessor :index
+      
+      # @return [CodeObjects::Base] an extra item to send to a template that is not
+      #   the main rendered object
+      attr_accessor :item
+      
+      # @return [CodeObjects::ExtraFileObject] the file object being rendered.
+      #   The +object+ key is not used so that a file may be rendered in the context
+      #   of an object's namespace (for generating links).
+      attr_accessor :file
     end
     
     # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
