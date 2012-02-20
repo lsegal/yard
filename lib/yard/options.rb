@@ -11,7 +11,7 @@ module YARD
   # 
   # == Hash and OpenStruct-like Access
   #
-  # Although the options class allows for Hash-like access (+opts[:key]+), the recommended
+  # Although the options class allows for Hash-like access (<tt>opts[:key]</tt>), the recommended
   # mechanism for accessing an option key will be via standard method calls on attributes
   # 
   # The options class can also act as an open ended key value storage structure (like a
@@ -159,6 +159,9 @@ module YARD
     
     # Handles setting and accessing of unregistered keys similar
     # to an OpenStruct object.
+    # 
+    # @note It is not recommended to set and access unregistered keys on
+    #   an Options object. Instead, register the attribute before using it.
     def method_missing(meth, *args, &block)
       if meth =~ /^(.+)=$/
         log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
