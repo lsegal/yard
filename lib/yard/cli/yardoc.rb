@@ -3,6 +3,38 @@ require 'fileutils'
 
 module YARD
   module CLI
+    # Default options used in +yard doc+ command.
+    class YardocOptions < Templates::TemplateOptions
+      # @return [Array<CodeObjects::ExtraFileObject>] 
+      #   the list of extra files rendered along with objects
+      default_attr :files, lambda { [] }
+      
+      # @return [String] the default title appended to each generated page
+      default_attr :title, "Documentation by YARD #{YARD::VERSION}"
+      
+      # @return [Verifier] the default verifier object to filter queries
+      default_attr :verifier, lambda { Verifier.new }
+      
+      # @return [Serializers::Base] the default serializer for generating output
+      #   to disk.
+      default_attr :serializer, lambda { Serializers::FileSystemSerializer.new }
+      
+      # @return [Symbol] the default output format (:html).
+      default_attr :format, :html
+      
+      # @return [Boolean] whether the data should be rendered in a single page,
+      #   if the template supports it.
+      default_attr :onefile, false
+      
+      # @return [CodeObjects::ExtraFileObject] the README file object rendered
+      #   along with objects 
+      attr_accessor :readme
+      
+      # @return [Array<CodeObjects::Base>] the list of code objects to render
+      #   the templates with.
+      attr_accessor :objects
+    end
+    
     # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
     # executable) used to generate and output (mainly) HTML documentation given
     # a set of source files.
@@ -158,19 +190,8 @@ module YARD
       # Creates a new instance of the commandline utility
       def initialize
         super
-        @options = SymbolHash.new(false)
-        @options.update(
-          :format => :html,
-          :template => :default,
-          :markup => :rdoc, # default is :rdoc but falls back on :none
-          :serializer => YARD::Serializers::FileSystemSerializer.new,
-          :default_return => "Object",
-          :hide_void_return => false,
-          :no_highlight => false,
-          :files => [],
-          :title => "Documentation by YARD #{YARD::VERSION}",
-          :verifier => Verifier.new
-        )
+        @options = YardocOptions.new
+        @options.reset_defaults
         @visibilities = [:public]
         @assets = {}
         @excluded = []
@@ -248,15 +269,15 @@ module YARD
         self.files = ['{lib,app}/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README*').first
-        readme ||= Dir.glob(files.first).first if options[:onefile]
-        options[:readme] ||= CodeObjects::ExtraFileObject.new(readme) if readme
-        options[:files].unshift(options[:readme]).uniq! if options[:readme]
+        readme ||= Dir.glob(files.first).first if options.onefile
+        options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
+        options.files.unshift(options.readme).uniq! if options.readme
 
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
         
         # US-ASCII is invalid encoding for onefile
-        if defined?(::Encoding) && options[:onefile] 
+        if defined?(::Encoding) && options.onefile
           if ::Encoding.default_internal == ::Encoding::US_ASCII
             log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
             ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
@@ -303,7 +324,7 @@ module YARD
         end
         Registry.load_all if use_cache
         objects = run_verifier(all_objects).reject do |object|
-          serialized = !options[:serializer] || options[:serializer].exists?(object)
+          serialized = !options.serializer || options.serializer.exists?(object)
           if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
             true
           else
@@ -322,17 +343,17 @@ module YARD
         result, lvl = false, has_markup ? log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
-        options[:files].each do |file|
+        options.files.each do |file|
           markup = file.attributes[:markup] || obj.markup_for_file('', file.filename)
           result = obj.load_markup_provider(markup)
           return false if !result && markup != :rdoc
         end
-        options[:markup] = :rdoc unless has_markup
+        options.markup = :rdoc unless has_markup
         log.enter_level(lvl) { result = obj.load_markup_provider }
         if !result && !has_markup
           log.warn "Could not load default RDoc formatter, " +
             "ignoring any markup (install RDoc to get default formatting)."
-          options[:markup] = :none
+          options.markup = :none
           true
         else
           result
@@ -343,8 +364,8 @@ module YARD
       # @return [void]
       # @since 0.6.0
       def copy_assets
-        return unless options[:serializer]
-        outpath = options[:serializer].basepath
+        return unless options.serializer
+        outpath = options.serializer.basepath
         assets.each do |from, to|
           to = File.join(outpath, to)
           log.debug "Copying asset '#{from}' to '#{to}'"
@@ -394,7 +415,7 @@ module YARD
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
           if File.file?(file)
-            options[:files] << CodeObjects::ExtraFileObject.new(file)
+            options.files << CodeObjects::ExtraFileObject.new(file)
           else
             log.warn "Could not find extra file: #{file}"
           end
@@ -432,12 +453,12 @@ module YARD
       # @since 0.5.6
       def add_visibility_verifier
         vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
-        options[:verifier].add_expressions(vis_expr)
+        options.verifier.add_expressions(vis_expr)
       end
 
       # (see Templates::Helpers::BaseHelper#run_verifier)
       def run_verifier(list)
-        options[:verifier] ? options[:verifier].run(list) : list
+        options.verifier ? options.verifier.run(list) : list
       end
 
       # @since 0.6.0
@@ -540,7 +561,7 @@ module YARD
         opts.separator "Output options:"
 
         opts.on('--one-file', 'Generates output as a single file') do
-          options[:onefile] = true
+          options.onefile = true
         end
 
         opts.on('--list', 'List objects to standard out (implies -n)') do |format|
@@ -561,37 +582,37 @@ module YARD
         end
 
         opts.on('--no-private', "Hide objects with @private tag") do
-          options[:verifier].add_expressions '!object.tag(:private) &&
+          options.verifier.add_expressions '!object.tag(:private) &&
             (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
         end
 
         opts.on('--no-highlight', "Don't highlight code blocks in output.") do
-          options[:no_highlight] = true
+          options.highlight = false
         end
 
         opts.on('--default-return TYPE', "Shown if method has no return type. ",
                                          "  (defaults to 'Object')") do |type|
-          options[:default_return] = type
+          options.default_return = type
         end
 
         opts.on('--hide-void-return', "Hides return types specified as 'void'. ",
                                       "  (default is shown)") do
-          options[:hide_void_return] = true
+          options.hide_void_return = true
         end
 
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
           next if YARD::Config.options[:safe_mode]
-          options[:verifier].add_expressions(query.taint)
+          options.verifier.add_expressions(query.taint)
         end
 
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
-          options[:title] = title
+          options.title = title
         end
 
         opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page',
                                                       '  of documentation.') do |readme|
           if File.file?(readme)
-            options[:readme] = CodeObjects::ExtraFileObject.new(readme)
+            options.readme = CodeObjects::ExtraFileObject.new(readme)
           else
             log.warn "Could not find readme file: #{readme}"
           end
@@ -616,20 +637,20 @@ module YARD
 
         opts.on('-o', '--output-dir PATH',
                 'The output directory. (defaults to ./doc)') do |dir|
-          options[:serializer].basepath = dir
+          options.serializer.basepath = dir
         end
 
         opts.on('-m', '--markup MARKUP',
                 'Markup style used in documentation, like textile, ',
                 '  markdown or rdoc. (defaults to rdoc)') do |markup|
           self.has_markup = true
-          options[:markup] = markup.to_sym
+          options.markup = markup.to_sym
         end
 
         opts.on('-M', '--markup-provider MARKUP_PROVIDER',
                 'Overrides the library used to process markup ', 
                 '  formatting (specify the gem name)') do |markup_provider|
-          options[:markup_provider] = markup_provider.to_sym
+          options.markup_provider = markup_provider.to_sym
         end
 
         opts.on('--charset ENC', 'Character set to use when parsing files ', 
@@ -645,7 +666,7 @@ module YARD
 
         opts.on('-t', '--template TEMPLATE',
                 'The template to use. (defaults to "default")') do |template|
-          options[:template] = template.to_sym
+          options.template = template.to_sym
         end
 
         opts.on('-p', '--template-path PATH',
@@ -658,7 +679,7 @@ module YARD
         opts.on('-f', '--format FORMAT',
                 'The output format for the template.',
                 '  (defaults to html)') do |format|
-          options[:format] = format.to_sym
+          options.format = format.to_sym
         end
 
         opts.on('--no-stats', 'Don\'t print statistics') do

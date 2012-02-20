@@ -131,9 +131,9 @@ module YARD
         end
       end
 
-      def initialize(opts = {})
+      def initialize(opts = TemplateOptions.new)
         @cache, @cache_filename = {}, {}
-        @sections, @options = [], {}
+        @sections, @options = [], opts.class.new
         add_options(opts)
 
         extend(Helpers::HtmlHelper) if options[:format] == :html

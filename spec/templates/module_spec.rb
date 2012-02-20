@@ -66,9 +66,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
   end
 
   it "should render html format correctly" do
-    html_equals(Registry.at('A').format(
-          :format => :html, :no_highlight => true, :hide_void_return => true,
-          :verifier => Verifier.new('object.type != :method || object.visibility == :public')),
+    html_equals(Registry.at('A').format(html_options(:hide_void_return => true,
+      :verifier => Verifier.new('object.type != :method || object.visibility == :public'))),
         :module001)
   end
 
@@ -79,7 +78,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
       end
     eof
 
-    text_equals(Registry.at('A').format, :module001)
+    text_equals(Registry.at('A').format(text_options), :module001)
   end
   
   it "should render dot format correctly" do
@@ -104,7 +103,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
       end
     eof
     
-    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true), :module002)
+    html_equals(Registry.at('A').format(html_options), :module002)
   end
   
   it "should ignore overwritten/private attributes/constants from inherited list" do
@@ -125,7 +124,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
       end
     eof
     
-    html_equals(Registry.at('A').format(:format => :html, :no_highlight => true,
-      :verifier => Verifier.new('!@private')), :module003)
+    html_equals(Registry.at('A').format(html_options(
+      :verifier => Verifier.new('!@private'))), :module003)
   end
 end

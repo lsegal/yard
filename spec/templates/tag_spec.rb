@@ -33,7 +33,7 @@ describe YARD::Templates::Engine.template(:default, :tags) do
     end
 
     it "should render text format correctly" do
-      text_equals(Registry.at('#m').format, :tag001)
+      text_equals(Registry.at('#m').format(text_options), :tag001)
     end
   end
   
@@ -44,7 +44,7 @@ describe YARD::Templates::Engine.template(:default, :tags) do
         module Foo; end
       eof
       
-      proc = lambda { Registry.at('Foo').format(:format => :html) }
+      proc = lambda { Registry.at('Foo').format(html_options) }
       proc.should_not raise_error(NoMethodError)
     end
   end

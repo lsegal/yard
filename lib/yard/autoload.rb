@@ -241,10 +241,11 @@ module YARD
       autoload :UMLHelper,                  __p('templates/helpers/uml_helper')
     end
 
-    autoload :Engine,   __p('templates/engine')
-    autoload :ErbCache, __p('templates/erb_cache')
-    autoload :Section,  __p('templates/section')
-    autoload :Template, __p('templates/template')
+    autoload :Engine,          __p('templates/engine')
+    autoload :ErbCache,        __p('templates/erb_cache')
+    autoload :Section,         __p('templates/section')
+    autoload :Template,        __p('templates/template')
+    autoload :TemplateOptions, __p('templates/template_options')
   end
 
   autoload :Config,         __p('config')

@@ -10,7 +10,7 @@ module YARD::Templates::Helpers
     #
     # @return [OpenStruct] a struct object that stores state
     # @since 0.6.0
-    def globals; options[:__globals] end
+    def globals; options[:globals] end
 
     # @group Running the Verifier
 

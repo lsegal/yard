@@ -40,3 +40,33 @@ module YARD::Templates::Engine
     public :find_template_paths
   end
 end
+
+class TestHtmlTemplateOptions < Templates::TemplateOptions
+  default_attr :markup, :none
+  default_attr :default_return, ""
+  default_attr :format, :html
+  default_attr :highlight, false
+end
+
+class TestTextTemplateOptions < Templates::TemplateOptions
+  default_attr :markup, :none
+  default_attr :default_return, ""
+  default_attr :format, :text
+  default_attr :highlight, false
+end
+
+def html_options(opts = {})
+  template_options(opts, TestHtmlTemplateOptions)
+end
+
+def text_options(opts = {})
+  template_options(opts, TestTextTemplateOptions)
+end
+
+def template_options(opts, klass)
+  options = klass.new
+  options.reset_defaults
+  options.update(opts)
+  options
+end
+

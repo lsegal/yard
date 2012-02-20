@@ -79,7 +79,7 @@ module YARD
         # @option options [Symbol] :template (:default) the default template
         # @return [String] the rendered template
         def render(options = {})
-          set_default_options(options)
+          options = set_default_options(options)
           mod = template(options[:template], options[:type], options[:format])
 
           if options[:serialize] != false
@@ -98,7 +98,7 @@ module YARD
         # @param [Hash] options (see {render})
         # @return [void]
         def generate(objects, options = {})
-          set_default_options(options)
+          options = set_default_options(options)
           options[:objects] = objects
           options[:object] = Registry.root
           template(options[:template], :fulldoc, options[:format]).run(options)
@@ -131,10 +131,17 @@ module YARD
         # @option options [Symbol] :template (:default) the default template
         # @return [void]
         def set_default_options(options = {})
-          options[:__globals] ||= OpenStruct.new
+          if options.is_a?(Hash)
+            options = TemplateOptions.new.tap do |o|
+              o.reset_defaults
+              o.update(options)
+            end
+          end
+          options[:globals] ||= OpenStruct.new
           options[:format] ||= :text
           options[:type] ||= options[:object].type if options[:object]
           options[:template] ||= :default
+          options
         end
 
         # Searches through the registered {template_paths} and returns

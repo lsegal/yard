@@ -8,11 +8,11 @@ describe YARD::Templates::Engine.template(:default, :method) do
   
   shared_examples_for "all formats" do
     it "should render html format correctly" do
-      html_equals(Registry.at('#m').format(:format => :html, :no_highlight => true), @template)
+      html_equals(Registry.at('#m').format(html_options), @template)
     end
     
     it "should render text format correctly" do
-      text_equals(Registry.at('#m').format, @template)
+      text_equals(Registry.at('#m').format(text_options), @template)
     end
   end
   

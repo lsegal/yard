@@ -66,8 +66,11 @@ describe YARD::Templates::Engine do
   describe '.generate' do
     it "should generate with fulldoc template" do
       mod = mock(:template)
-      mod.should_receive(:run).with(:__globals => OpenStruct.new, :format => :text, 
-        :template => :default, :objects => [:a, :b, :c], :object => Registry.root)
+      options = TemplateOptions.new
+      options.reset_defaults
+      options.objects = [:a, :b, :c]
+      options.object = Registry.root
+      mod.should_receive(:run).with(options)
       Engine.should_receive(:template).with(:default, :fulldoc, :text).and_return(mod)
       Engine.generate([:a, :b, :c])
     end
@@ -83,47 +86,35 @@ describe YARD::Templates::Engine do
     end
     
     before do
+      @options = TemplateOptions.new
+      @options.reset_defaults
+      @options.object = @object
+      @options.type = @object.type
       @template = mock(:template)
       @template.stub!(:include)
+      @template.should_receive(:run).with(@options)
     end
   
     it "should accept method call with no parameters" do
       loads_template(:default, :method, :text)
-      @template.should_receive(:run).with :__globals => OpenStruct.new,
-                                          :type => :method,
-                                          :template => :default,
-                                          :format => :text,
-                                          :object => @object
       @object.format
     end
   
     it "should allow template key to be changed" do
       loads_template(:javadoc, :method, :text)
-      @template.should_receive(:run).with :__globals => OpenStruct.new,
-                                          :type => :method,
-                                          :template => :javadoc,
-                                          :format => :text,
-                                          :object => @object
+      @options.template = :javadoc
       @object.format(:template => :javadoc)
     end
 
     it "should allow type key to be changed" do
       loads_template(:default, :fulldoc, :text)
-      @template.should_receive(:run).with :__globals => OpenStruct.new,
-                                          :type => :fulldoc,
-                                          :template => :default,
-                                          :format => :text,
-                                          :object => @object
+      @options.type = :fulldoc
       @object.format(:type => :fulldoc)
     end
   
     it "should allow format key to be changed" do
       loads_template(:default, :method, :html)
-      @template.should_receive(:run).with :__globals => OpenStruct.new,
-                                          :type => :method,
-                                          :template => :default,
-                                          :format => :html,
-                                          :object => @object
+      @options.format = :html
       @object.format(:format => :html)
     end
   end

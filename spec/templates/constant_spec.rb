@@ -16,7 +16,7 @@ describe YARD::Templates::Engine.template(:default, :constant) do
           DEFAULT_SEARCH_PATHS = []
         end
       eof
-      text_equals(Registry.at('YARD::CLI::YRI::DEFAULT_SEARCH_PATHS').format, :constant001)
+      text_equals(Registry.at('YARD::CLI::YRI::DEFAULT_SEARCH_PATHS').format(text_options), :constant001)
     end
   end
   
@@ -26,7 +26,7 @@ describe YARD::Templates::Engine.template(:default, :constant) do
       YARD.parse_string <<-'eof'
         MYCONST = 'foo'
       eof
-      text_equals(Registry.at('MYCONST').format, :constant002)
+      text_equals(Registry.at('MYCONST').format(text_options), :constant002)
 
       # Long constant should show on multiple lines, indented
       YARD.parse_string <<-'eof'
@@ -34,7 +34,7 @@ describe YARD::Templates::Engine.template(:default, :constant) do
           M, N, O, P, Q, R, S, T, U, V, W,
           X, Y, Z]
       eof
-      text_equals(Registry.at('MYCONST').format, :constant003)
+      text_equals(Registry.at('MYCONST').format(text_options), :constant003)
     end
   end
 end
