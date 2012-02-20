@@ -11,14 +11,45 @@ describe YARD::Options do
       class DefaultOptions1 < YARD::Options
         default_attr :foo, 'HELLO'
       end
-      DefaultOptions1.new.foo.should == 'HELLO'
+      o = DefaultOptions1.new
+      o.reset_defaults
+      o.foo.should == 'HELLO'
     end
     
     it "should call lambda if value is a Proc" do
       class DefaultOptions2 < YARD::Options
         default_attr :foo, lambda { 100 }
       end
-      DefaultOptions2.new.foo.should == 100
+      o = DefaultOptions2.new
+      o.reset_defaults
+      o.foo.should == 100
+    end
+  end
+  
+  describe '#reset_defaults' do
+    it "should not define defaults until reset is called" do
+      class ResetDefaultOptions1 < YARD::Options
+        default_attr :foo, 'FOO'
+      end
+      ResetDefaultOptions1.new.foo.should be_nil
+      o = ResetDefaultOptions1.new
+      o.reset_defaults
+      o.foo.should == 'FOO'
+    end
+  end
+  
+  describe '#delete' do
+    it "should delete an option" do
+      o = FooOptions.new
+      o.delete(:foo)
+      o.to_hash.should == {}
+    end
+    
+    it "should not error if an option is deleted that does not exist" do
+      o = FooOptions.new
+      o.delete(:foo)
+      o.delete(:foo)
+      o.to_hash.should == {}
     end
   end
   
@@ -34,6 +65,31 @@ describe YARD::Options do
       o[:foo] = "xyz"
       o[:foo].should == "xyz"
     end
+    
+    it "should allow setting of unregistered keys" do
+      o = FooOptions.new
+      o[:bar] = "foo"
+      o[:bar].should == "foo"
+    end
+  end
+  
+  describe '#method_missing' do
+    it "should allow setting of unregistered keys" do
+      o = FooOptions.new
+      o.bar = 'foo'
+      o.bar.should == 'foo'
+    end
+    
+    it "should allow getting values of unregistered keys (return nil)" do
+      FooOptions.new.bar.should be_nil
+    end
+    
+    it "should print debugging messages about unregistered keys" do
+      log.should_receive(:debug).with("Attempting to access unregistered key bar on FooOptions")
+      FooOptions.new.bar
+      log.should_receive(:debug).with("Attempting to set unregistered key bar on FooOptions")
+      FooOptions.new.bar = 1
+    end
   end
   
   describe '#update' do
@@ -41,10 +97,10 @@ describe YARD::Options do
       FooOptions.new.update(:foo => "xyz").foo.should == "xyz"
     end
     
-    it "should ignore keys with no setter" do
+    it "should not ignore keys with no setter (OpenStruct behaviour)" do
       o = FooOptions.new
       o.update(:bar => "xyz")
-      o.to_hash.should == {:foo => "abc"}
+      o.to_hash.should == {:foo => "abc", :bar => "xyz"}
     end
   end
   
@@ -53,6 +109,12 @@ describe YARD::Options do
       o = FooOptions.new
       o.merge(:foo => "xyz").object_id.should_not == o.object_id
       o.merge(:foo => "xyz").to_hash.should == {:foo => "xyz"}
+    end
+    
+    it "should add in values from original object" do
+      o = FooOptions.new
+      o.update(:bar => "foo")
+      o.merge(:baz => 1).to_hash.should == {:foo => "abc", :bar => "foo", :baz => 1}
     end
   end
   
@@ -82,10 +144,10 @@ describe YARD::Options do
     it "should ignore ivars with no accessor" do
       class ToHashOptions3 < YARD::Options
         attr_accessor :foo
-        def initialize; @foo = 1; @bar = "IGNORE" end
+        def initialize; @foo = 1; @bar = "NOIGNORE" end
       end
       o = ToHashOptions3.new
-      o.to_hash.should == {:foo => 1}
+      o.to_hash.should == {:foo => 1, :bar => "NOIGNORE"}
     end
   end
   

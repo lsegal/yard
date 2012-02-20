@@ -24,7 +24,7 @@ module YARD
   #   end
   # @example Initializing default option values
   #   class TemplateOptions < YARD::Options
-  #     def initialize
+  #     def reset_defaults
   #       super
   #       self.format = :html
   #       self.template = :default
@@ -67,10 +67,6 @@ module YARD
       attr_accessor(key)
     end
     
-    def initialize
-      set_defaults
-    end
-    
     # Delegates calls with Hash syntax to actual method with key name
     # 
     # @example Calling on an option key with Hash syntax
@@ -95,7 +91,7 @@ module YARD
     def update(opts)
       opts = opts.to_hash if Options === opts
       opts.each do |key, value|
-        self[key] = value if respond_to?("#{key}=")
+        self[key] = value
       end
       self
     end
@@ -106,7 +102,7 @@ module YARD
     # @param [Options, Hash] opts
     # @return [Options] the newly created options object
     def merge(opts)
-      self.class.new.update(opts)
+      dup.update(opts)
     end
     
     # @return [Hash] Converts options object to an options hash. All keys
@@ -115,23 +111,84 @@ module YARD
       opts = {}
       instance_variables.each do |ivar|
         name = ivar.to_s.sub(/^@/, '')
-        opts[name.to_sym] = send(name) if respond_to?(name)
+        opts[name.to_sym] = send(name)
       end
       opts
     end
     
-    unless defined? tap() # only for 1.8.6
-      def tap(&block) yield(self); self end
+    # Yields over every option key and value
+    # @yield [key, value] every option key and value
+    # @yieldparam [Symbol] key the option key
+    # @yieldparam [Object] value the option value
+    # @return [void]
+    def each(&block)
+      instance_variables.each do |ivar|
+        name = ivar.to_s.sub(/^@/, '')
+        yield(name.to_sym, send(name))
+      end
     end
     
-    private
+    # Inspects the object
+    def inspect
+      "<#{self.class}: #{to_hash.inspect}>"
+    end
     
-    def set_defaults
-      defaults = self.class.instance_variable_get("@defaults")
-      return unless defaults
-      defaults.each do |key, value|
-        self[key] = Proc === value ? value.call : value
+    # @return [Boolean] whether another Options object equals the
+    #   keys and values of this options object
+    def ==(other)
+      case other
+      when Options; to_hash == other.to_hash
+      when Hash; to_hash == other
+      else false
       end
+    end
+    
+    # Handles setting and accessing of unregistered keys similar
+    # to an OpenStruct object.
+    def method_missing(meth, *args, &block)
+      if meth =~ /^(.+)=$/
+        log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
+        instance_variable_set("@#{$1}", args.first)
+      elsif args.size == 0
+        log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
+        instance_variable_get("@#{meth}")
+      else
+        super
+      end
+    end
+
+    # Resets all values to their defaults.
+    # 
+    # @abstract Subclasses should override this method to perform custom
+    #   value initialization if not using {default_attr}. Be sure to call
+    #   +super+ so that default initialization can take place.
+    def reset_defaults
+      names_set = {}
+      self.class.ancestors.each do |klass| # look at all ancestors
+        defaults = klass.instance_variable_get("@defaults")
+        return unless defaults
+        defaults.each do |key, value|
+          next if names_set[key]
+          names_set[key] = true
+          self[key] = Proc === value ? value.call : value
+        end
+      end
+    end
+    
+    # Deletes an option value for +key+
+    # 
+    # @param [Symbol, String] key the key to delete a value for
+    # @return [Object] the value that was deleted
+    def delete(key)
+      val = self[key]
+      if instance_variable_defined?("@#{key}")
+        remove_instance_variable("@#{key}")
+      end
+      val
+    end
+    
+    unless defined? tap() # only for 1.8.6
+      def tap(&block) yield(self); self end
     end
   end
 end
