@@ -163,7 +163,7 @@ module YARD
     # @note It is not recommended to set and access unregistered keys on
     #   an Options object. Instead, register the attribute before using it.
     def method_missing(meth, *args, &block)
-      if meth =~ /^(.+)=$/
+      if meth.to_s =~ /^(.+)=$/
         log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
         instance_variable_set("@#{$1}", args.first)
       elsif args.size == 0
