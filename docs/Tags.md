@@ -290,7 +290,7 @@ other methods. In such a case, it is more manageable to use the reference tag
 syntax. Consider the following example:
 
     class User
-      # @param [String] username the nam of the user to add
+      # @param [String] username the name of the user to add
       # @param [Numeric] uid the user ID
       # @param [Numeric] gid the group ID
       def initialize(username, uid, gid)
