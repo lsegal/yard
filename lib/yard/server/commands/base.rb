@@ -83,7 +83,7 @@ module YARD
         # @note This command should not be overridden by subclasses. Implement
         #   the callback method {#run} instead.
         # @param [Adapter Dependent] request the request object
-        # @return [Array(Number,Hash,Array<String>)] a Rack-style response
+        # @return [Array(Numeric,Hash,Array<String>)] a Rack-style response
         #   of status, headers, and body wrapped in an array.
         def call(request)
           self.request = request

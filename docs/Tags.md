@@ -291,8 +291,8 @@ syntax. Consider the following example:
 
     class User
       # @param [String] username the nam of the user to add
-      # @param [Number] uid the user ID
-      # @param [Number] gid the group ID
+      # @param [Numeric] uid the user ID
+      # @param [Numeric] gid the group ID
       def initialize(username, uid, gid)
       end
     end

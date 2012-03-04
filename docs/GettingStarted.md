@@ -169,7 +169,7 @@ so we can also specify duck-types or constant values. For example:
     # @param [true, false] argname only true or false
 
 Note the the latter example can be replaced by the meta-type "Boolean", and
-numeric types can be replaced by "Number". These meta-types are by convention
+numeric types can be replaced by "Numeric". These meta-types are by convention
 only, but are recommended.
 
 List types can be specified in the form `CollectionClass<ElementType, ...>`.
