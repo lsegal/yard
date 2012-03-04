@@ -13,7 +13,7 @@ The above example adds metadata under the name `tagname` to the Foo class object
 
 Tags are the best way to add arbitrary metadata when documenting an object in a
 way to access it later without having to parse the entire comment string. The
-rest of the document will describe the tag syntax, how to access the tag 
+rest of the document will describe the tag syntax, how to access the tag
 metadata and how to extend YARD to support custom tags or override existing tags.
 
 ## Tag Syntax
@@ -22,18 +22,18 @@ Tags begin with "@tagname" at the start of a comment line. Tags can span multipl
 lines if the subsequent lines are indented by more than one space. The following
 syntax is valid:
 
-    # @tagname This is 
+    # @tagname This is
     #   tag data
     # but this is not
-    
+
 In the above example, "@tagname" will have the text *"This is tag data"*.
 
 If a tag's data begins with `(see NAME)` it is considered a "reference tag".
 The syntax and semantics of a reference tag are discussed in the section below
 titled "[Reference Tags](#reftags)"
 
-Although custom tags can be parsed in any way, the built-in tags follow a few 
-common syntax structures by convention in order to simplify the syntax. The 
+Although custom tags can be parsed in any way, the built-in tags follow a few
+common syntax structures by convention in order to simplify the syntax. The
 following syntaxes are available:
 
 ### Freeform Data
@@ -43,7 +43,7 @@ data.
 
     !!!plain
     @tagname data here
-    
+
 ### Freeform Data With Title
 
 Occasionally a freeform tag may reserve the first line for a title (or some
@@ -54,7 +54,7 @@ first line is the method signature for the overload. Here is an example of both:
 
     @example Reverse a string
       "hello world".reverse
-      
+
     @overload request(method = :get, url = 'http://example.com')
       Performs a request on +url+
       @param [Symbol] method the request method
@@ -69,7 +69,7 @@ types or literal values. The following is a valid tag with type information:
 
     !!!plain
     @return [String, #read] a string or object that responds to #read
-    
+
 ### Data With Name and Optional Type Information
 
 A special case of the above data with optional type information is the case
@@ -84,7 +84,7 @@ Note that "url" in the above example is the key name. The syntax is of the form:
 
     !!!plain
     @tagname [types] <name> <description>
-    
+
 As mentioned, types are optional, so the following is also valid:
 
     !!!plain
@@ -102,30 +102,30 @@ YARD supplies the following built-in tags:
 
         !!!plain
         @abstract Subclass and override {#run} to implement a custom Threadable class.
-        
+
   * `@api`: Declares the API that the object belongs to. Does not display in
     output, but useful for performing queries (`yardoc --query`). Any text is
     allowable in this tag, and there are no predefined values(*).
 
         !!!plain
         @api freeform text
-        
-    (*) Note that the special name `@api private` does display a notice in 
+
+    (*) Note that the special name `@api private` does display a notice in
     documentation if it is listed, letting users know that the method is not
     to be used.
-      
+
   * `@attr`: Declares an attribute from the docstring of a class. Meant to be
     used on Struct classes only (classes that inherit Struct).
 
         !!!plain
         @attr [Types] attribute_name a full description of the attribute
-      
+
   * `@attr_reader`: Declares a readonly attribute from the docstring of a class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
 
         !!!plain
         @attr_reader [Types] name description of a readonly attribute
-      
+
   * `@attr_writer`: Declares a writeonly attribute from the docstring of class.
     Meant to be used on Struct classes only (classes that inherit Struct). See `@attr`.
 
@@ -133,7 +133,7 @@ YARD supplies the following built-in tags:
         @attr_writer [Types] name description of writeonly attribute
 
   * `@attribute`: Recognizes a DSL class method as an attribute with the given
-    name. Also accepts the r, w, or rw flag to signify that the attribute is 
+    name. Also accepts the r, w, or rw flag to signify that the attribute is
     readonly, writeonly, or readwrite (default). Only used with DSL methods.
 
         !!!plain
@@ -155,20 +155,20 @@ YARD supplies the following built-in tags:
 
         @example Reverse a string
           "mystring".reverse #=> "gnirtsym"
-          
+
   * `@macro`: Registers or expands a new macro. See the [Macros](#macros)
     section for more details. Note that the name parameter is never optional.
 
         !!!plain
         @macro [new|attached] macro_name
           The macro contents to expand
-          
+
   * `@method`: Recognizes a DSL class method as a method with the given name
     and optional signature. Only used with DSL methods.
 
         !!!plain
         @method method_signature(opts = {}, &block)
-  
+
   * `@note`: Creates an emphasized note for the users to read about the
     object.
 
@@ -177,16 +177,16 @@ YARD supplies the following built-in tags:
 
   * `@option`: Describe an options hash in a method. The tag takes the
     name of the options parameter first, followed by optional types,
-    the option key name, an optional default value for the key and a 
+    the option key name, an optional default value for the key and a
     description of the option.
 
         # @param [Hash] opts the options to create a message with.
         # @option opts [String] :subject The subject
         # @option opts [String] :from ('nobody') From address
         # @option opts [String] :to Recipient email
-        # @option opts [String] :body ('') The email's body 
+        # @option opts [String] :body ('') The email's body
         def send_email(opts = {})
-        end 
+        end
 
   * `@overload`: Describe that your method can be used in various
     contexts with various parameters or return types. The first
@@ -203,21 +203,21 @@ YARD supplies the following built-in tags:
         #   @param [Object] value describe value param
         def set(*args)
         end
-      
+
   * `@param`: Defines method parameters
 
         !!!plain
         @param [optional, types, ...] argname description
-      
+
   * `@private`: Defines an object as private. This exists for classes,
     modules and constants that do not obey Ruby's visibility rules. For
     instance, an inner class might be considered "private", though Ruby
     would make no such distinction. By declaring the @private tag, the
     class can be hidden from documentation by using the `--no-private`
     command-line switch to yardoc (see {file:README.md}).
-  
+
         @private
-        
+
   * `@raise`: Describes an Exception that a method may throw
 
         !!!plain
@@ -227,27 +227,27 @@ YARD supplies the following built-in tags:
 
         !!!plain
         @return [optional, types, ...] description
-  
+
   * `@scope`: Sets the scope of a DSL method. Only applicable to DSL method
     calls. Acceptable values are 'class' or 'instance'
-    
+
         @scope class|instance
-      
+
   * `@see`: "See Also" references for an object. Accepts URLs or
     other code objects with an optional description at the end.
 
         @see http://example.com Description of URL
         @see SomeOtherClass#method
-      
+
   * `@since`: Lists the version the feature/object was first added
 
         @since 1.2.4
-      
+
   * `@todo`: Marks a TODO note in the object being documented
 
         !!!plain
         @todo Add support for Jabberwocky service
-          There is an open source Jabberwocky library available 
+          There is an open source Jabberwocky library available
           at http://somesite.com that can be integrated easily
           into the project.
 
@@ -257,7 +257,7 @@ YARD supplies the following built-in tags:
 
   * `@visibility`: Sets the visibility of a DSL method. Only applicable to
     DSL method calls. Acceptable values are public, protected, or private.
-    
+
         @visibility public|protected|private
 
   * `@yield`: Describes the block. Use types to list the parameter
@@ -330,10 +330,10 @@ is an example of a simple macro declaration and expansion:
     # @macro [new] string_attr
     # @return [String] the attribute +$1+ as a String
     attr_accessor :foo
-    
+
     # @macro string_attr
     attr_accessor :bar
-    
+
 In the above example, both attributes `foo` and `bar` will get the docstring
 that includes a return tag "the attribute as a String". It would be equivalent
 to writing the following:
@@ -364,7 +364,7 @@ Or:
     # @macro [new] the_macro_name
     # Returns a string!
     def foo; end
-    
+
 You can also "attach" a macro to a method if it is in the class scope. In
 this case, you do not need to also provide the 'new' flag, using 'attach'
 is sufficient:
@@ -379,7 +379,7 @@ method object). Attaching macros is discussed below.
 
 Note that the name is never optional. Even if the macro is never re-used,
 it must be named.
-    
+
 ### Indenting the Macro Data
 
 If a macro tag has an indented body of macro data (shown below), it will be
@@ -389,7 +389,7 @@ the only portion of the docstring saved for re-use.
     #   The macro data is here.
     # This data is only used for the current object
     def method; end
-    
+
 In the above case, "The macro data is here." is the only portion that will be
 re-used if the macro is called again on another object. However, for the case
 of the above method, both the macro data and the local docstring will be
@@ -398,7 +398,7 @@ applied to the method, creating the docstring:
     # The macro data is here.
     # This data is only used for the current object.
     def method; end
-    
+
 You can therefore keep portions of docstrings local to objects even when
 creating a macro, by indenting the portion of the data that should be re-
 expanded, and listing the local docstring data above or below.
@@ -410,17 +410,17 @@ macro data. For instance,
     # The macro data is here.
     # This data is also used for all macros.
     def method; end
-    
+
 In the above case, the macro 'macro_name' will always show both lines of text
 when expanded on other objects.
 
 ### Attaching a Macro to a DSL (Class) Method
 
-Macros can be created on class level methods (or class level method calls) in 
-order to implicitly expand a macro whenever that method is subsequently called 
+Macros can be created on class level methods (or class level method calls) in
+order to implicitly expand a macro whenever that method is subsequently called
 in a class, or any class that mixes in or inherits the method. These macros
-are called "attached" and are declared with the `[attach]` flag. For instance, 
-a library that uses a class level method call `property` in its codebase can 
+are called "attached" and are declared with the `[attach]` flag. For instance,
+a library that uses a class level method call `property` in its codebase can
 document these declarations in any future call like so:
 
     class Resource
@@ -431,7 +431,7 @@ document these declarations in any future call like so:
       #   @return [$2] the $1 property
       def self.property(name, type) end
     end
-    
+
     class Post < Resource
       property :title, String
       property :view_count, Integer
@@ -483,7 +483,7 @@ so it would be safe to list `$1 $2 ... $10`, for example.
 
 #### Escaping Interpolation
 
-Interpolation can be escaped by prefixing the `$` with `\`, like so: 
+Interpolation can be escaped by prefixing the `$` with `\`, like so:
 
     # @macro foo
     #   I have \$2.00 USD.
@@ -500,7 +500,7 @@ methods, for example:
 
     # Using the Foo class object from above
     obj.tags(:tagname).first.text #=> "some data"
-    
+
 Because multiple tags can be stored with the same name, they are stored as a list
 of tags. The `#tag` method is an alias for the first item in the list of tags.
 Also note that the `#tag`, `#tags` and `#has_tag?` methods are all convenience
@@ -540,26 +540,26 @@ are:
 
   * Standard text: no parsing is done, but text is stripped of newlines and
     multiple spaces.
-    
+
   * Raw text: does no parsing at all, no stripping of newlines or spaces. This
     is best used for code snippets.
 
   * Raw text with title: does no parsing on the text but extracts the first line
     of the metadata as the "title", useful for tags such as `@example`:
-        
+
         # @example Inspect an element
         #   myobj.inspect #=> #<Object:0x123525>
 
   * Text with types: parses a list of types at the beginning of the text. Types
-    are optional. The standard syntax is in the form `[type1, type2, ...]`, 
+    are optional. The standard syntax is in the form `[type1, type2, ...]`,
     for example:
-        
+
         # @return [String, Symbol] a description here
         # @return description here with no types
-    
+
   * Text with types and a name: parses a list of types at the beginning of text
     followed by a name and extra descriptive text. For example:
-        
+
         # @param [String] str the string to reverse
         def reverse(str) '...' end
 
@@ -568,7 +568,7 @@ be swapped out for any factory. In some cases, a developer may want to change
 the type declaration syntax to be in the form:
 
     # @tagname name <Types, here> description
-    
+
 This can be done by simply implementing a new factory that parses the data in
 this form.
 
@@ -579,7 +579,7 @@ method where SUFFIX refers to the suffix added when declaring the tag. For examp
 a tag can also be declared as follows:
 
     YARD::Tags::Library.define_tag "Parameter", :param, :with_types
-    
+
 In such a case, the factory will be called with method `parse_tag_with_types`. In
 all cases, the method should return a new {YARD::Tags::Tag} object. Generally,
 the `parse_tag` methods take 2 or 3 parameters. A simple tag can be implemented
