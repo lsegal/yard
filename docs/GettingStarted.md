@@ -168,7 +168,7 @@ so we can also specify duck-types or constant values. For example:
     # @param [#to_s] argname any object that responds to `#to_s`
     # @param [true, false] argname only true or false
 
-Note the the latter example can be replaced by the meta-type "Boolean", and
+Note the latter example can be replaced by the meta-type "Boolean", and
 numeric types can be replaced by "Numeric". These meta-types are by convention
 only, but are recommended.
 
