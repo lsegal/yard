@@ -5,48 +5,48 @@ module YARD
   module CLI
     # Default options used in +yard doc+ command.
     class YardocOptions < Templates::TemplateOptions
-      # @return [Array<CodeObjects::ExtraFileObject>] 
+      # @return [Array<CodeObjects::ExtraFileObject>]
       #   the list of extra files rendered along with objects
       default_attr :files, lambda { [] }
-      
+
       # @return [String] the default title appended to each generated page
       default_attr :title, "Documentation by YARD #{YARD::VERSION}"
-      
+
       # @return [Verifier] the default verifier object to filter queries
       default_attr :verifier, lambda { Verifier.new }
-      
+
       # @return [Serializers::Base] the default serializer for generating output
       #   to disk.
       default_attr :serializer, lambda { Serializers::FileSystemSerializer.new }
-      
+
       # @return [Symbol] the default output format (:html).
       default_attr :format, :html
-      
+
       # @return [Boolean] whether the data should be rendered in a single page,
       #   if the template supports it.
       default_attr :onefile, false
-      
+
       # @return [CodeObjects::ExtraFileObject] the README file object rendered
-      #   along with objects 
+      #   along with objects
       attr_accessor :readme
-      
+
       # @return [Array<CodeObjects::Base>] the list of code objects to render
       #   the templates with.
       attr_accessor :objects
-      
+
       # @return [Numeric] An index value for rendering sequentially related templates
       attr_accessor :index
-      
+
       # @return [CodeObjects::Base] an extra item to send to a template that is not
       #   the main rendered object
       attr_accessor :item
-      
+
       # @return [CodeObjects::ExtraFileObject] the file object being rendered.
       #   The +object+ key is not used so that a file may be rendered in the context
       #   of an object's namespace (for generating links).
       attr_accessor :file
     end
-    
+
     # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
     # executable) used to generate and output (mainly) HTML documentation given
     # a set of source files.
@@ -194,7 +194,7 @@ module YARD
       # @return [Array<String>] a list of assets to copy after generation
       # @since 0.6.0
       attr_accessor :assets
-      
+
       # @return [Boolean] whether markup option was specified
       # @since 0.7.0
       attr_accessor :has_markup
@@ -287,7 +287,7 @@ module YARD
 
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
-        
+
         # US-ASCII is invalid encoding for onefile
         if defined?(::Encoding) && options.onefile
           if ::Encoding.default_internal == ::Encoding::US_ASCII
@@ -396,7 +396,7 @@ module YARD
           puts "#{item.file}:#{item.line}: #{item.path}"
         end
       end
-      
+
       # Parses out the yardopts/document options
       def parse_yardopts_options(*args)
         opts = OptionParser.new
@@ -547,10 +547,10 @@ module YARD
           self.excluded << path
         end
       end
-      
+
       # Adds --[no-]yardopts / --[no-]document
       def yardopts_options(opts)
-        opts.on('--[no-]yardopts [FILE]', 
+        opts.on('--[no-]yardopts [FILE]',
                 "If arguments should be read from FILE",
                 "  (defaults to yes, FILE defaults to .yardopts)") do |use_yardopts|
           if use_yardopts.is_a?(String)
@@ -660,12 +660,12 @@ module YARD
         end
 
         opts.on('-M', '--markup-provider MARKUP_PROVIDER',
-                'Overrides the library used to process markup ', 
+                'Overrides the library used to process markup ',
                 '  formatting (specify the gem name)') do |markup_provider|
           options.markup_provider = markup_provider.to_sym
         end
 
-        opts.on('--charset ENC', 'Character set to use when parsing files ', 
+        opts.on('--charset ENC', 'Character set to use when parsing files ',
                                  '  (default is system locale)') do |encoding|
           begin
             if defined?(Encoding) && Encoding.respond_to?(:default_external=)
