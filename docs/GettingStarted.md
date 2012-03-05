@@ -168,8 +168,9 @@ so we can also specify duck-types or constant values. For example:
     # @param [#to_s] argname any object that responds to `#to_s`
     # @param [true, false] argname only true or false
 
-Note the latter example can be replaced by the meta-type "Boolean", and
-numeric types can be replaced by "Numeric". These meta-types are by convention
+Note the latter example can be replaced by the meta-type "Boolean".
+Another meta-type is "void", which stands for "no meaningful value"
+and is used for return values. These meta-types are by convention
 only, but are recommended.
 
 List types can be specified in the form `CollectionClass<ElementType, ...>`.
