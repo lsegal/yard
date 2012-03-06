@@ -3,28 +3,24 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   handles :def, :defs
 
   process do
+    meth = statement.method_name(true).to_s
+    args = format_args
+    blk = statement.block
     nobj = namespace
     mscope = scope
     if statement.type == :defs
       if statement[0][0].type == :ident
         raise YARD::Parser::UndocumentableError, 'method defined on object instance'
       end
-      meth = statement[2][0]
       nobj = P(namespace, statement[0].source) if statement[0][0].type == :const
-      args = format_args(statement[3])
-      blk = statement[4]
       mscope = :class
-    else
-      meth = statement[0][0]
-      args = format_args(statement[1])
-      blk = statement[2]
     end
 
     nobj = P(namespace, nobj.value) while nobj.type == :constant
     obj = register MethodObject.new(nobj, meth, mscope) do |o|
       o.visibility = visibility
       o.source = statement.source
-      o.signature = method_signature(meth)
+      o.signature = method_signature
       o.explicit = true
       o.parameters = args
     end
@@ -75,8 +71,8 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     parse_block(blk, :owner => obj) # mainly for yield/exceptions
   end
 
-  def format_args(args)
-    args = args.jump(:params)
+  def format_args
+    args = statement.parameters
     params = []
     params += args.required_params.map {|a| [a.source, nil] } if args.required_params
     params += args.optional_params.map {|a| [a[0].source, a[1].source] } if args.optional_params
@@ -86,7 +82,8 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     params
   end
 
-  def method_signature(method_name)
+  def method_signature
+    method_name = statement.method_name(true)
     if statement.parameters.any? {|e| e }
       "def #{method_name}(#{statement.parameters.source})"
     else

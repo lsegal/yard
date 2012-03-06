@@ -402,6 +402,8 @@ module YARD
           include_block_param ? params : params[0...-1]
         end
 
+        alias block last
+
         private
 
         def index_adjust
