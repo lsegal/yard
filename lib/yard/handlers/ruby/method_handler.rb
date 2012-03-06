@@ -87,8 +87,8 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   end
 
   def method_signature(method_name)
-    if statement[1]
-      "def #{method_name}(#{statement[1].jump(:params).source})"
+    if statement.parameters.any? {|e| e }
+      "def #{method_name}(#{statement.parameters.source})"
     else
       "def #{method_name}"
     end

@@ -110,6 +110,8 @@ module YARD
             MethodCallNode
           when :if, :elsif, :if_mod, :unless, :unless_mod
             ConditionalNode
+          when :def, :defs
+            MethodDefinitionNode
           else
             if type.to_s =~ /_ref\Z/
               ReferenceNode
@@ -223,6 +225,11 @@ module YARD
 
         # @return [Boolean] whether the node is a method call
         def call?
+          false
+        end
+
+        # @return [Boolean] whether the node is a method definition
+        def def?
           false
         end
 
@@ -376,6 +383,29 @@ module YARD
 
         def call_has_paren?
           [:fcall, :call].include?(type)
+        end
+      end
+
+      class MethodDefinitionNode < AstNode
+        def kw?; true end
+        def def?; true end
+        def namespace; first if index_adjust > 0 end
+
+        def method_name(name_only = false)
+          name = self[index_adjust]
+          name_only ? name.jump(:ident).first.to_sym : name
+        end
+
+        def parameters(include_block_param = true)
+          params = self[1 + index_adjust]
+          params = params[0] if params.type == :paren
+          include_block_param ? params : params[0...-1]
+        end
+
+        private
+
+        def index_adjust
+          type == :defs ? 2 : 0
         end
       end
 
