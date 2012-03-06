@@ -118,6 +118,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     Registry.at('Baz#none').signature.should == 'def none(foo, bar)'
   end
   
+  it "should expand $N on method definitions" do
+    Registry.at('Foo#regular_meth').docstring.should == 'a b c'
+  end
+  
   it "should apply new macro docstrings on new objects" do
     obj = Registry.at('Foo#name')
     obj.should_not be_nil

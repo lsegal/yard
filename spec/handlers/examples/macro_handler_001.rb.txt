@@ -75,6 +75,10 @@ class Foo
   
   # @overload qux2(a, b, c)
   something
+  
+  # @macro [new] regular_meth
+  # $1 $2 $3
+  def regular_meth(a, b, c) end
 end
 
 class Bar

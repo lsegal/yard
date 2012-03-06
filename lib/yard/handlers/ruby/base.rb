@@ -140,13 +140,17 @@ module YARD
 
         def call_params
           return [] unless statement.respond_to?(:parameters)
-          statement.parameters(false).map do |param|
-            param.jump(:ident, :kw, :tstring_content).source
-          end
+          statement.parameters(false).compact.map do |param|
+            if param.type == :list
+              param.map {|n| n.jump(:ident, :kw, :tstring_content).source }
+            else
+              param.jump(:ident, :kw, :tstring_content).source
+            end
+          end.flatten
         end
 
         def caller_method
-          if statement.call?
+          if statement.call? || statement.def?
             statement.method_name(true).to_s
           elsif statement.type == :var_ref || statement.type == :vcall
             statement[0].jump(:ident, :kw).source
