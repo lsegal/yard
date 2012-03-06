@@ -2,7 +2,7 @@
 
 # Getting Started with YARD
 
-There are a few ways which YARD can be of use to you or your project. This 
+There are a few ways which YARD can be of use to you or your project. This
 document will cover the most common ways to use YARD:
 
 * [Documenting Code with YARD](#docing)
@@ -25,12 +25,12 @@ manner, YARD recommends declaring your parameters, return types, etc. with
 the `@tag` syntax, which makes outputting the documentation more consistent
 and easier to read. Consider the RDoc documentation for a method to_format:
 
-    # Converts the object into textual markup given a specific `format` 
+    # Converts the object into textual markup given a specific `format`
     # (defaults to `:html`)
     #
     # == Parameters:
     # format::
-    #   A Symbol declaring the format to convert the object to. This 
+    #   A Symbol declaring the format to convert the object to. This
     #   can be `:text` or `:html`.
     #
     # == Returns:
@@ -40,7 +40,7 @@ and easier to read. Consider the RDoc documentation for a method to_format:
     def to_format(format = :html)
       # format the object
     end
-    
+
 While this may seem easy enough to read and understand, it's hard for a machine
 to properly pull this data back out of our documentation. Also we've tied our
 markup to our content, and now our documentation becomes hard to maintain if
@@ -56,7 +56,7 @@ In YARD, we would simply define our method as:
     def to_format(format = :html)
       # format the object
     end
-    
+
 Using tags we can add semantic metadata to our code without worrying about
 presentation. YARD will handle presentation for us when we decide to generate
 documentation later.
@@ -64,17 +64,17 @@ documentation later.
 ## Which Markup Format?
 
 YARD does not impose a specific markup. The above example uses standard RDoc
-markup formatting, but YARD also supports textile and markdown via the 
+markup formatting, but YARD also supports textile and markdown via the
 command-line switch or `.yardopts` file (see below). This means that you are
 free to use whatever formatting you like. This guide is actually written
-using markdown. YARD, however, does add a few important syntaxes that are 
-processed no matter which markup formatting you use, such as tag support 
+using markdown. YARD, however, does add a few important syntaxes that are
+processed no matter which markup formatting you use, such as tag support
 and inter-document linking. These syntaxes are discussed below.
 
 ## Adding Tags to Documentation
 
-The tag syntax that YARD uses is the same @tag-style syntax you may have seen 
-if you've ever coded in Java, Python, PHP, Objective-C or a myriad of other 
+The tag syntax that YARD uses is the same @tag-style syntax you may have seen
+if you've ever coded in Java, Python, PHP, Objective-C or a myriad of other
 languages. The following tag adds an author tag to your class:
 
     # @author Loren Segal
@@ -89,11 +89,11 @@ lines following a tag as part of the tag data. For example:
     #   The new method accepts the same parameters.
     def mymethod
     end
-    
+
 ### List of Tags
 
-A list of tags can be found in {file:docs/Tags.md#taglist}    
-    
+A list of tags can be found in {file:docs/Tags.md#taglist}
+
 ### Reference Tags
 
 To reduce the amount of duplication in writing documentation for repetitive
@@ -112,7 +112,7 @@ from that docstring/tag into your current object. Consider the example:
       # (see #get)
       def post(request) "hello" end
     end
-    
+
 The above `#post` method takes the docstring and all tags (`param` and `return`)
 of the `#get` method. When you generate HTML documentation, you will see this
 duplication automatically, so you don't have to manually type it out. We can
@@ -122,14 +122,14 @@ whatever we write will be appended to the docstring:
     # (see #get)
     # @note This method may modify our application state!
     def post(request) self.state += 1; "hello" end
-    
+
 Here we added another tag, but we could have also added plain text. The
 text must be appended *after* the `(see ...)` statement, preferably on
 a separate line.
 
-Note that we don't have to "refer" the whole docstring. We can also link 
-individual tags instead. Since "get" and "post" actually have different 
-descriptions, a more accurate example would be to only refer our parameter 
+Note that we don't have to "refer" the whole docstring. We can also link
+individual tags instead. Since "get" and "post" actually have different
+descriptions, a more accurate example would be to only refer our parameter
 and return tags:
 
     class MyWebServer
@@ -137,14 +137,14 @@ and return tags:
       # @param [Request] request the request object
       # @return [String] the resulting webpage
       def get(request) "hello" end
-      
+
       # Handles a POST request
       # @note This method may modify our application state!
       # @param (see #get)
       # @return (see #get)
       def post(request) self.state += 1; "hello" end
     end
-    
+
 The above copies all of the param and return tags from `#get`. Note that you
 cannot copy individual tags of a specific type with this syntax.
 
@@ -157,32 +157,33 @@ with or without a types field.
     # @return [String, nil] the contents of our object or nil
     #   if the object has not been filled with data.
     def validate; end
-    
+
     # We don't care about the "type" here:
     # @return the object
     def to_obj; end
-    
+
 The list of types is in the form `[type1, type2, ...]` and is mostly free-form,
 so we can also specify duck-types or constant values. For example:
 
     # @param [#to_s] argname any object that responds to `#to_s`
     # @param [true, false] argname only true or false
-    
-Note the the latter example can be replaced by the meta-type "Boolean", and
-numeric types can be replaced by "Number". These meta-types are by convention
+
+Note the latter example can be replaced by the meta-type "Boolean".
+Another meta-type is "void", which stands for "no meaningful value"
+and is used for return values. These meta-types are by convention
 only, but are recommended.
-    
+
 List types can be specified in the form `CollectionClass<ElementType, ...>`.
 For instance, consider the following Array that holds a set of Strings and
 Symbols:
-  
+
     # @param [Array<String, Symbol>] list the list of strings and symbols.
-    
+
 We mentioned that these type fields are "mostly" free-form. In truth, they
 are defined "by convention". To view samples of common type specifications
-and recommended conventions for writing type specifications, see 
-[http://yardoc.org/types.html](http://yardoc.org/types.html). Note that these 
-conventions may change every now and then, although we are working on a more 
+and recommended conventions for writing type specifications, see
+[http://yardoc.org/types.html](http://yardoc.org/types.html). Note that these
+conventions may change every now and then, although we are working on a more
 "formal" type specification proposal.
 
 ## Documenting DSL Methods
@@ -197,17 +198,17 @@ a typed attribute for a database model. The code might look like:
 
     class Post
       include DataMapper::Resource
-      
+
       property :title, String
     end
-    
+
 As of version 0.7.0, YARD will automatically pick up on these basic methods if
 you document them with a docstring. Therefore, simply adding some comments to
 the code will cause it to generate documentation:
 
     class Post
       include DataMapper::Resource
-      
+
       # @return [String] the title property of the post
       property :title, String
     end
@@ -218,7 +219,7 @@ need to declare it manually. You can do so with the `@method` tag:
 
     # @method foo
     create_a_foo_method
-    
+
 The @method tag can also accept a full method signature with parameters:
 
     # @method foo(name, opts = {})
@@ -232,7 +233,7 @@ extra tags. The following adds documentation for a private class method:
     # @scope class
     # @visibility private
     create_a_private_foo_class_method
-    
+
 Finally, you can tag a method as an attribute by replacing the @method
 tag with @attribute. The @attribute tag allows for the flags [r], [w], or
 [rw] to declare a readonly, writeonly, or readwrite attribute, respectively.
@@ -240,10 +241,10 @@ tag with @attribute. The @attribute tag allows for the flags [r], [w], or
     # @attribute [w]
     # The writeonly foo attribute!
     a_writeonly_attribute :foo
-    
+
 (Note that if the name can be automatically detected, you do not need to
 specify it in the @method or @attribute tag)
-    
+
 However, you will notice a few drawbacks with this basic support:
 
 1. There is a fair bit of duplication in such documentation. Specifically, we
@@ -252,7 +253,7 @@ However, you will notice a few drawbacks with this basic support:
    If we do not write a comment, it is ignored.
 
 ### Macros
-   
+
 Fortunately YARD 0.7.0 also adds macros, a powerful way to add support for
 these DSL methods on the fly without writing extra plugins. Macros allow
 you to interpolate arguments from the method call inside the docstring,
@@ -261,7 +262,7 @@ using a macro, it might look like:
 
     class Post
       include DataMapper::Resource
-  
+
       # @macro dm.property
       # @return [$2] the $1 $0 of the post
       property :title, String
@@ -315,7 +316,7 @@ To link another "object" (class, method, module, etc.), use the format:
     {ObjectName#method OPTIONAL_TITLE}
     {Class::CONSTANT My constant's title}
     {#method_inside_current_namespace}
-    
+
 Without an explicit title, YARD will use the relative path to the object as
 the link name. Note that you can also use relative paths inside the object
 path to refer to an object inside the same namespace as your current docstring.
@@ -345,7 +346,7 @@ via the command-line. Consider the following examples:
 
     {file:docs/GettingStarted.md Getting Started}
     {file:mypage.html Name#anchor}
-    
+
 As shown, you can also add an optional `#anchor` if the page is an HTML link.
 
 ### Embedding Docstrings `{include:...}`
@@ -358,17 +359,17 @@ embed a docstring (minus tags) at a specific point in the text.
     # This class is cool
     # @abstract
     class Foo; end
-    
+
     # This is another class. {include:Foo} too!
     class Bar; end
-    
-The docstring for Bar becomes: 
+
+The docstring for Bar becomes:
 
     "This is another class. This class is cool too!"
 
 ### Embedding Files `{include:file:...}`
 
-You can embed the contents of files using `{include:file:path/to/file}`, 
+You can embed the contents of files using `{include:file:path/to/file}`,
 similar to the `{include:OBJECT}` tag above. If the file uses a specific markup
 type, it will be applied and embedded as marked up text. The following
 shows how the tag can be used inside of comments:
@@ -376,7 +377,7 @@ shows how the tag can be used inside of comments:
     # Here is an example of a highlighted Ruby file:
     #
     # {include:file:examples/test.rb}
-    
+
 ### Rendering Objects `{render:...}`
 
 Entire objects can also be rendered in place in documentation. This can be
@@ -386,16 +387,16 @@ the following documentation inside of a README file:
 
     !!!plain
     = igLatinPay!
-    
+
     This library adds pig latin methods to the string class, allowing you
     to transform sentences into pig latin.
-    
+
     {render:String#pig_latin}
-    
+
     You can also un-pig-latin-ify a word or sentence:
-    
+
     {render:String#de_pig_latin}
-    
+
 The above would render the methods in place inside the README document,
 allowing you to summarize a small library in a single file.
 
@@ -406,8 +407,8 @@ allowing you to summarize a small library in a single file.
 ### `yard` Executable
 
 YARD ships with a single executable aptly named `yard`. In addition to
-generating standard documentation for your project, you would use this tool 
-if you wanted to: 
+generating standard documentation for your project, you would use this tool
+if you wanted to:
 
 * Document all installed gems
 * Run a local documentation server
@@ -416,7 +417,7 @@ if you wanted to:
 * Diff your documentation
 * Analyze documentation statistics.
 
-The following commands are available in YARD 0.6.x (see `yard help` for a 
+The following commands are available in YARD 0.6.x (see `yard help` for a
 full list):
 
     Usage: yard <command> [options]
@@ -445,11 +446,11 @@ you run `yardoc` from) and contains all of arguments you would otherwise pass
 to the command-line tool. For instance, if you often type:
 
     yardoc --no-private --protected app/**/*.rb - README LEGAL COPYING
-    
+
 You can place the following into your `.yardopts`:
 
     --no-private --protected app/**/*.rb - README LEGAL COPYING
-    
+
 This way, you only need to type:
 
     yardoc
@@ -457,7 +458,7 @@ This way, you only need to type:
 Any extra switches passed to the command-line now will be appended to your
 `.yardopts` options.
 
-Note that options for `yardoc` are discussed in the {file:README.md README}, 
+Note that options for `yardoc` are discussed in the {file:README.md README},
 and a full overview of the `.yardopts` file can be found in {YARD::CLI::Yardoc}.
 
 ### Documenting Extra Files
@@ -470,13 +471,13 @@ which is automatically detected by YARD if found in the root of your project
 line (or in the `.yardopts` file) by listing them after the '-' separator:
 
     yardoc lib/**/*.rb ext/**/*.c - LICENSE.txt
-  
+
 Note that the README will automatically be picked up, so you do not need to
 specify it. If you don't want to modify the default file globs, you can ignore
 the first set of arguments:
 
     yardoc - LICENSE.txt
-    
+
 Below you can read about how to customize the look of these extra files, both
 with markup and pretty titles.
 
@@ -484,23 +485,23 @@ with markup and pretty titles.
 
 You can add YARD-style `@tag` metadata to the top of any extra file if prefixed
 by a `#` hash comment. YARD allows for arbitrary meta-data, but pays special
-attention to the tags `@markup`, `@encoding`, and `@title`. Note that there 
-cannot be any whitespace before the tags. Here is an example of some tag data 
+attention to the tags `@markup`, `@encoding`, and `@title`. Note that there
+cannot be any whitespace before the tags. Here is an example of some tag data
 in a README:
 
     # @markup markdown
     # @title The Best Library in the World!
     # @author The Author Name
-    
+
     This is the best library you will ever meet. Lipsum ...
 
 The `@markup` tag allows you to specify a markup format to use for the file,
-including "markdown", "textile", "rdoc", "ruby", "text", "html", or "none" 
+including "markdown", "textile", "rdoc", "ruby", "text", "html", or "none"
 (no markup). This can be used when the markup cannot be auto-detected using
 the extension of the filename, if the file has no extension, or if you want
 to override the auto-detection.
 
-By using `@encoding` you can specify a non-standard encoding. Note that 
+By using `@encoding` you can specify a non-standard encoding. Note that
 `yardoc --charset` sets the global encoding (for all comments / files),
 so if you are using unicode across all your files, you can specify it there.
 Using the `@encoding` tag might be used to override the default global
@@ -536,7 +537,7 @@ A sample configuration file might look like:
     :autoload_plugins:
       - my_autoload_plugin
     :safe_mode: false
-    
+
 You can also view and edit these configuration options from the commandline
 using the `yard config` command. To list your configuration, use `yard config --list`.
 To view a key, use `yard config ITEM`, and to set it, use `yard config ITEM VALUE`.
@@ -545,7 +546,7 @@ To view a key, use `yard config ITEM`, and to set it, use `yard config ITEM VALU
 
 ## Extending YARD
 
-There are many ways to extend YARD to support non-standard Ruby syntax (DSLs), 
+There are many ways to extend YARD to support non-standard Ruby syntax (DSLs),
 add new meta-data tags or programmatically access the intermediate metadata
 and documentation from code. An overview of YARD's full architecture can be
 found in the {file:docs/Overview.md} document.
@@ -571,7 +572,7 @@ document covers the basics of how YARD's templating system works.
 ## Plugin Support
 
 As of 0.4, YARD will automatically load any gem named with the prefix of
-`yard-` or `yard_`. You can use this to load a custom plugin that 
+`yard-` or `yard_`. You can use this to load a custom plugin that
 [extend](#extending) YARD's functionality. A good example of this
 is the [yard-rspec][yard-rspec] plugin, which adds [RSpec][rspec] specifications
 to your documentation (`yardoc` and `yri`). You can try it out by installing

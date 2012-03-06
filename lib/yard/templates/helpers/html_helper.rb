@@ -248,7 +248,14 @@ module YARD
         elsif otitle
           title = otitle.to_s
         elsif object.is_a?(CodeObjects::Base)
-          title = h(object.relative_path(obj))
+          # Check if we're linking to a class method in the current
+          # object. If we are, create a title in the format of
+          # "CurrentClass.method_name"
+          if obj.is_a?(CodeObjects::MethodObject) && obj.scope == :class && obj.parent == object
+            title = h([object.name, obj.sep, obj.name].join)
+          else
+            title = h(object.relative_path(obj))
+          end
         else
           title = h(obj.to_s)
         end
@@ -506,9 +513,9 @@ module YARD
 
       # Parses !!!lang out of codeblock, returning the codeblock language
       # followed by the source code.
-      # 
+      #
       # @param [String] source the source code whose language to determine
-      # @return [Array(String, String)] the language, if any, and the 
+      # @return [Array(String, String)] the language, if any, and the
       #   remaining source
       # @since 0.7.5
       def parse_lang_for_codeblock(source)
@@ -519,10 +526,10 @@ module YARD
 
         [type, source]
       end
-      
+
       # Parses code blocks out of html and performs syntax highlighting
       # on code inside of the blocks.
-      # 
+      #
       # @param [String] html the html to search for code in
       # @return [String] highlighted html
       # @see #html_syntax_highlight

@@ -48,7 +48,7 @@ module YARD
       # file through {Commands::StaticFileCommand} if no route is found.
       #
       # @param [Adapter Dependent] request the request object
-      # @return [Array(Number,Hash,Array)] the Rack-style server response data
+      # @return [Array(Numeric,Hash,Array)] the Rack-style server response data
       def call(request)
         self.request = request
         if result = (check_static_cache || route)
