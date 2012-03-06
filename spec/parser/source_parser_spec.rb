@@ -557,6 +557,7 @@ describe YARD::Parser::SourceParser do
   describe '#parse_statements' do
     it "should display a warning for invalid parser type" do
       log.should_receive(:warn).with(/unrecognized file/)
+      log.should_receive(:backtrace)
       YARD::Parser::SourceParser.parse_string("int main() { }", :d)
     end
     
@@ -564,6 +565,7 @@ describe YARD::Parser::SourceParser do
       it "should display a warning for a syntax error (with new parser)" do
         err_msg = "Syntax error in `(stdin)`:(1,3): syntax error, unexpected $undefined, expecting $end"
         log.should_receive(:warn).with(err_msg)
+        log.should_receive(:backtrace)
         YARD::Parser::SourceParser.parse_string("$$$", :ruby)
       end
     end
