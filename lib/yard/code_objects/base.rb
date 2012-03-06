@@ -494,8 +494,6 @@ module YARD
       # @return whether or not this object is a RootObject
       def root?; false end
 
-      protected
-
       # Override this method with a custom component separator. For instance,
       # {MethodObject} implements sep as '#' or '.' (depending on if the
       # method is instance or class respectively). {#path} depends on this
@@ -504,6 +502,8 @@ module YARD
       # @return [String] the component that separates the namespace path
       #   and the name (default is {NSEP})
       def sep; NSEP end
+
+      private
 
       # Formats source code by removing leading indentation
       #
