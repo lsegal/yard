@@ -194,9 +194,13 @@ module YARD
     
       # @return [Boolean] whether this macro is attached to a method
       def attached?; method_object ? true : false end
+
+      # Overrides {Base#path} so the macro path is ".macro.MACRONAME"
       def path; '.macro.' + name.to_s end
+
+      # Overrides the separator to be '.'
       def sep; '.' end
-      
+
       # Expands the macro using 
       # @param [Array<String>] call_params a list of tokens that are passed
       #   to the method call

@@ -137,8 +137,6 @@ module YARD::CodeObjects
       prefix ? (sep == ISEP ? "#{sep}#{super}" : super.to_s) : super
     end
 
-    protected
-
     # Override separator to differentiate between class and instance
     # methods.
     # @return [String] "#" for an instance method, "." for class
