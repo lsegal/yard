@@ -43,21 +43,45 @@ module YARD
         end
         
         def call_params
-          tokens = statement.tokens[1..-1]
-          tokval_list(tokens, :attr, :identifier, TkId).map do |value|
-            value.to_s
+          if statement.tokens.first.is_a?(TkDEF)
+            extract_method_details.last.map {|param| param.first }
+          else
+            tokens = statement.tokens[1..-1]
+            tokval_list(tokens, :attr, :identifier, TkId).map do |value|
+              value.to_s
+            end
           end
         end
 
         def caller_method
           if statement.tokens.first.is_a?(TkIDENTIFIER)
             statement.tokens.first.text
+          elsif statement.tokens.first.is_a?(TkDEF)
+            extract_method_details.first
           else
             nil
           end
         end
 
         private
+        
+        # Extracts method information for macro expansion only
+        # 
+        # @todo This is a duplicate implementation of {MethodHandler}. Refactor.
+        # @return [Array<String,Array<Array<String>>>] the method name followed by method
+        #   arguments (name and optional value)
+        def extract_method_details
+          if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
+            meth, args = $1, $2
+            meth.gsub!(/\s+/,'')
+            args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
+            args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
+            if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
+              meth = $`
+            end
+            return meth, args
+          end
+        end
 
         # The string value of a token. For example, the return value for the symbol :sym
         # would be :sym. The return value for a string +"foo #{ bar}"+ would be the literal
