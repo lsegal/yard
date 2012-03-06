@@ -506,9 +506,9 @@ module YARD
 
       # Parses !!!lang out of codeblock, returning the codeblock language
       # followed by the source code.
-      # 
+      #
       # @param [String] source the source code whose language to determine
-      # @return [Array(String, String)] the language, if any, and the 
+      # @return [Array(String, String)] the language, if any, and the
       #   remaining source
       # @since 0.7.5
       def parse_lang_for_codeblock(source)
@@ -519,10 +519,10 @@ module YARD
 
         [type, source]
       end
-      
+
       # Parses code blocks out of html and performs syntax highlighting
       # on code inside of the blocks.
-      # 
+      #
       # @param [String] html the html to search for code in
       # @return [String] highlighted html
       # @see #html_syntax_highlight
