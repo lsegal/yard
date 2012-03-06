@@ -214,6 +214,15 @@ describe YARD::Templates::Helpers::HtmlHelper do
       link_object("YARD").should =~ %r{>YARD</a>}
     end
 
+    it "should use Klass.foo when linking to class method in current namespace" do
+      root = CodeObjects::ModuleObject.new(:root, :Klass)
+      obj = CodeObjects::MethodObject.new(root, :foo, :class)
+      stub!(:object).and_return(root)
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      link_object("foo").should =~ %r{>Klass.foo</a>}
+    end
+
     it "should escape method name in title" do
       YARD.parse_string <<-'eof'
         class Array
