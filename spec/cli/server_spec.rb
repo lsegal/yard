@@ -40,6 +40,7 @@ describe YARD::CLI::Server do
       @adapter.should_receive(:start)
     end
     @cli.run(*args.flatten)
+    @cli = YARD::CLI::Server.new
   end
 
   it "should default to current dir if no library is specified" do

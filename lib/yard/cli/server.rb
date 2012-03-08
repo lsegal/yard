@@ -22,12 +22,9 @@ module YARD
       # @return [Array<String>] a list of template paths to register
       # @since 0.6.2
       attr_accessor :template_paths
-
-      def description
-        "Runs a local documentation server"
-      end
-
-      def run(*args)
+      
+      # Creates a new instance of the Server command line utility
+      def initialize
         self.scripts = []
         self.template_paths = []
         self.libraries = {}
@@ -36,6 +33,13 @@ module YARD
           :caching => false
         )
         self.server_options = {:Port => 8808}
+      end
+
+      def description
+        "Runs a local documentation server"
+      end
+
+      def run(*args)
         optparse(*args)
 
         select_adapter.setup
