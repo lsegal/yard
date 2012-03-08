@@ -25,6 +25,7 @@ module YARD
       
       # Creates a new instance of the Server command line utility
       def initialize
+        super
         self.scripts = []
         self.template_paths = []
         self.libraries = {}
