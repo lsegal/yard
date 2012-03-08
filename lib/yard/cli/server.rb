@@ -75,7 +75,7 @@ module YARD
           yardoc = File.expand_path(yardoc)
           if File.exist?(yardoc)
             libraries[library] ||= []
-            libraries[library] << YARD::Server::LibraryVersion.new(library, nil, yardoc)
+            libraries[library] |= [YARD::Server::LibraryVersion.new(library, nil, yardoc)]
           else
             log.warn "Cannot find yardoc db for #{library}: #{yardoc}"
           end
@@ -86,7 +86,7 @@ module YARD
         require 'rubygems'
         Gem.source_index.find_name('').each do |spec|
           libraries[spec.name] ||= []
-          libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)
+          libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
         end
       end
       
@@ -96,7 +96,7 @@ module YARD
         if File.exists?("#{gemfile}.lock")
           Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
             libraries[spec.name] ||= []
-            libraries[spec.name] << YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)
+            libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
           end
         else
           log.warn "Cannot find #{gemfile}.lock, ignoring --gemfile option"
