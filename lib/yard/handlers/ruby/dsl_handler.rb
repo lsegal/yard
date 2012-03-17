@@ -1,10 +1,10 @@
 module YARD
   module Handlers
     module Ruby
-      # Handles a macro (dsl-style method)
-      class MacroHandler < Base
+      # Handles automatic detection of dsl-style methods
+      class DSLHandler < Base
         include CodeObjects
-        include MacroHandlerMethods
+        include DSLHandlerMethods
         handles method_call
         namespace_only
         process { handle_comments }

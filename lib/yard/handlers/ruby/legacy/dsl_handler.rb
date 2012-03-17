@@ -2,10 +2,10 @@ module YARD
   module Handlers
     module Ruby
       module Legacy
-        # (see Ruby::MacroHandler)
-        class MacroHandler < Base
+        # (see Ruby::DSLHandler)
+        class DSLHandler < Base
           include CodeObjects
-          include MacroHandlerMethods
+          include DSLHandlerMethods
           handles TkIDENTIFIER
           namespace_only
           process { handle_comments }

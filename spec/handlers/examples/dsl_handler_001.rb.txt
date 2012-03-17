@@ -48,10 +48,10 @@ class Foo
   foo_bar
 
   # @macro property
-  # @method $1(${3-})
-  # A $0 that is awesome.
-  # @param $3 first parameter
-  # @return [$2] the property $1
+  #   @method $1(${3-})
+  #   A $0 that is awesome.
+  #   @param $3 first parameter
+  #   @return [$2] the property $1
   property :name, String, :a, :b, :c
   
   # @macro property
@@ -66,18 +66,18 @@ class Foo
   parser :c_parser
   
   # @macro [attach] none
-  # @method none(foo, bar)
+  #   @method none(foo, bar)
   none
   
   # @macro something
-  # @overload $1(a, b, c)
+  #   @method $1(a, b, c)
   something :qux
   
-  # @overload qux2(a, b, c)
+  # @method qux2(a, b, c)
   something
   
-  # @macro [new] regular_meth
-  # $1 $2 $3
+  # @macro
+  #   $1 $2 $3
   def regular_meth(a, b, c) end
 end
 

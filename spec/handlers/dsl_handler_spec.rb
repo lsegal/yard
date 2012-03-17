@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/spec_helper'
 require 'ostruct'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" do
-  before(:all) { parse_file :macro_handler_001, __FILE__ }
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
+  before(:all) { parse_file :dsl_handler_001, __FILE__ }
   
   it "should create a readable attribute when @attribute r is found" do
     obj = Registry.at('Foo#attr1')
@@ -63,30 +63,6 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MacroHandler" 
     obj.signature.should == 'def xyz(a, b, c)'
     obj.source.should == 'foo_bar'
     obj.docstring.should == 'The foo method'
-  end
-  
-  it "should create hidden overlaod tag when @method has signature" do
-    obj = Registry.at('Foo.xyz')
-    obj.docstring.tag(:overload).signature.should == 'xyz(a, b, c)'
-    obj.docstring.tag(:overload).object.should == obj
-  end
-  
-  it "should set the method name when using @overload" do
-    obj = Registry.at('Foo#qux2')
-    obj.should_not be_nil
-    obj.signature.should == 'def qux2(a, b, c)'
-    obj.source.should == 'something'
-    obj.docstring.tag(:overload).name.should == :qux2
-    obj.docstring.tag(:overload).object.should == obj
-  end
-
-  it "should set the method object when using @overload" do
-    obj = Registry.at('Foo#qux')
-    obj.should_not be_nil
-    obj.signature.should == 'def qux(a, b, c)'
-    obj.source.should == 'something :qux'
-    obj.docstring.tag(:overload).name.should == :qux
-    obj.docstring.tag(:overload).object.should == obj
   end
   
   it "should allow setting of @scope" do

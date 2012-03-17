@@ -170,7 +170,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   end
   
   it "should warn if the macro name is invalid" do
-    log.should_receive(:warn).with(/Invalid.+macro name.+Foo\.foo/)
+    log.should_receive(:warn).with(/Invalid directive.*@!macro/)
     YARD.parse_string "class Foo\n# @macro\ndef self.foo; end\nend"
   end
   
