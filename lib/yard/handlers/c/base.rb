@@ -31,8 +31,6 @@ module YARD
           type ? @statement_class = type : (@statement_class || Statement)
         end
         
-        protected
-        
         # @group Registering objects
         
         def register_docstring(object, docstring = nil, stmt = nil)

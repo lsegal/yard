@@ -24,8 +24,6 @@ module YARD
           end
         end
 
-        protected
-
         # Parses a statement's block with a set of state values. If the
         # statement has no block, nothing happens. A description of state
         # values can be found at {Handlers::Base#push_state}

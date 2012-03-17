@@ -297,8 +297,6 @@ module YARD
         raise NotImplementedError, "#{self} did not implement a #parse_block method for handling"
       end
 
-      protected
-
       # @return [Processor] the processor object that manages all global state
       #   during handling.
       attr_reader :parser
@@ -391,8 +389,8 @@ module YARD
           register_ensure_loaded(object)
           yield(object) if block_given?
           register_file_info(object)
-          register_docstring(object)
           register_source(object)
+          register_docstring(object)
           register_group(object)
           register_dynamic(object)
         end
@@ -428,20 +426,21 @@ module YARD
       # @return [void]
       # @since 0.8.0
       def register_docstring(object, docstring = statement.comments, stmt = statement)
-        case docstring
-        when String, Array
-          object.docstring = Docstring.new(docstring, object)
-        end
-
-        # Expand/create any @macro tags
-        expand_macro(object, find_or_create_macro(object))
-
-        # Add hash_flag/line_range
-        if docstring && stmt
-          object.docstring.hash_flag = stmt.comments_hash_flag
-          object.docstring.line_range = stmt.comments_range
-        end
+        docstring = docstring.join("\n") if Array === docstring
+        tag_parser = Tags::TagParser.new
+        tag_parser.parse(docstring || "", object, self)
         
+        if object && docstring
+          str = Docstring.new!(tag_parser.text, tag_parser.tags, object, docstring)
+          object.docstring = str
+
+          # Add hash_flag/line_range
+          if stmt
+            object.docstring.hash_flag = stmt.comments_hash_flag
+            object.docstring.line_range = stmt.comments_range
+          end
+        end
+
         register_transitive_tags(object)
       end
       
@@ -450,7 +449,7 @@ module YARD
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
-      def register_group(object, group = statement.group)
+      def register_group(object, group = extra_state.group)
         if group
           unless object.namespace.is_a?(Proxy)
             object.namespace.groups |= [group]
@@ -461,10 +460,11 @@ module YARD
       
       # Registers any transitive tags from the namespace on the object
       # 
-      # @param [CodeObjects::Base] object the object to register
+      # @param [CodeObjects::Base, nil] object the object to register
       # @return [void]
       # @since 0.8.0
       def register_transitive_tags(object)
+        return unless object
         Tags::Library.transitive_tags.each do |tag|
           next if object.namespace.is_a?(Proxy)
           next unless object.namespace.has_tag?(tag)
