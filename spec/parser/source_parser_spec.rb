@@ -391,6 +391,28 @@ describe YARD::Parser::SourceParser do
       Registry.at('Foo').docstring.to_raw.should ==  macro.macro_data
       Registry.at('Foo#foo').docstring.to_raw.should == macro.macro_data
     end
+    
+    it "should allow directives parsed on lone comments" do
+      YARD.parse_string(<<-eof).enumerator
+        class Foo
+          # @!method foo(a = "hello")
+          # @!scope class
+          # @!visibility private
+          # @param [String] a the name of the foo
+          # @return [Symbol] the symbolized foo
+          
+          # @!method bar(value)
+        end
+      eof
+      foo = Registry.at('Foo.foo')
+      bar = Registry.at('Foo#bar')
+      foo.should_not be_nil
+      foo.visibility.should == :private
+      foo.tag(:param).name.should == 'a'
+      foo.tag(:return).types.should == ['Symbol']
+      bar.should_not be_nil
+      bar.signature.should == 'def bar(value)'
+    end
   end
 
   describe '#parse' do

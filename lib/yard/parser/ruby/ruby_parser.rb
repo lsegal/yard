@@ -40,7 +40,6 @@ module YARD
           @ns_charno = 0
           @list = []
           @charno = 0
-          @groups = []
           @shebang_line = nil
           @encoding_line = nil
         end
@@ -526,14 +525,6 @@ module YARD
                 add_comment(line, nil, node)
               end
             end
-            
-            if node.type == :def || node.type == :defs || node.call?
-              @groups.each do |group|
-                if group.first < node.line
-                  break node.group = group.last
-                end
-              end
-            end
           end
           
           # insert all remaining comments
@@ -553,8 +544,12 @@ module YARD
               parent_node = before_node.parent
               idx = parent_node.index(before_node)
               parent_node.insert(idx, node)
+              parent_node.unfreeze
+              node.parent = parent_node
             else
-              root.children.push(node)
+              root.push(node)
+              root.unfreeze
+              node.parent = root
             end
           end
           node.docstring = comment

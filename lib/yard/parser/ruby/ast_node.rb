@@ -303,6 +303,13 @@ module YARD
           's(' + typeinfo + map(&:inspect).join(", ") + ')'
         end
 
+        # @group Managing node state
+
+        # Resets node state in tree
+        def unfreeze
+          @children = nil
+        end
+
         # @endgroup
 
         private
@@ -431,7 +438,10 @@ module YARD
       class CommentNode < AstNode
         def docstring; first end
         def docstring=(value) end
-        alias source docstring
+        alias comments docstring
+        
+        def source; "" end
+        def first_line; "" end
       end
     end
   end

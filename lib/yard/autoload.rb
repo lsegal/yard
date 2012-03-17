@@ -103,6 +103,7 @@ module YARD
       autoload :ClassHandler,             __p('handlers/ruby/class_handler')
       autoload :ClassConditionHandler,    __p('handlers/ruby/class_condition_handler')
       autoload :ClassVariableHandler,     __p('handlers/ruby/class_variable_handler')
+      autoload :CommentHandler,           __p('handlers/ruby/comment_handler')
       autoload :ConstantHandler,          __p('handlers/ruby/constant_handler')
       autoload :DSLHandler,               __p('handlers/ruby/dsl_handler')
       autoload :DSLHandlerMethods,        __p('handlers/ruby/dsl_handler_methods')

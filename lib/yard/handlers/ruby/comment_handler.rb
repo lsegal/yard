@@ -1,6 +1,6 @@
 # Handles any lone comment statement in a Ruby file
 class YARD::Handlers::Ruby::CommentHandler < YARD::Handlers::Ruby::Base
-  handles :comment
+  handles :comment, :void_stmt
   namespace_only
 
   process do
