@@ -426,6 +426,13 @@ module YARD
 
         def cmod?; type =~ /_mod$/ end
       end
+      
+      # Represents a lone comment block in source
+      class CommentNode < AstNode
+        def docstring; first end
+        def docstring=(value) end
+        alias source docstring
+      end
     end
   end
 end

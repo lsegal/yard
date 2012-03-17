@@ -378,8 +378,8 @@ describe YARD::Parser::SourceParser do
     it "should add macros on any object" do
       YARD.parse_string <<-eof
         # @macro [new] foo
-        # This is a macro
-        # @return [String] the string
+        #   This is a macro
+        #   @return [String] the string
         class Foo
           # @macro foo
           def foo; end
@@ -388,8 +388,8 @@ describe YARD::Parser::SourceParser do
       
       macro = CodeObjects::MacroObject.find('foo')
       macro.macro_data.should == "This is a macro\n@return [String] the string"
-      Registry.at('Foo').docstring.all.should ==  macro.macro_data
-      Registry.at('Foo#foo').docstring.all.should == macro.macro_data
+      Registry.at('Foo').docstring.to_raw.should ==  macro.macro_data
+      Registry.at('Foo#foo').docstring.to_raw.should == macro.macro_data
     end
   end
 
@@ -592,6 +592,29 @@ describe YARD::Parser::SourceParser do
       Registry.at('A#foo').group.should == "Group Name"
       Registry.at('A#foo2').group.should == "Group Name"
       Registry.at('A#baz').group.should == "Group 2"
+    end
+    
+    it "should find lone comments" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        class Foo
+          ##
+          # comment here
+          
+          
+          def foo; end
+          
+          # end comment
+        end
+      eof
+      comment = ast.first.last.first
+      comment.type.should == :comment
+      comment.docstring_hash_flag.should be_true
+      comment.docstring.strip.should == "comment here"
+      
+      ast.last.type.should == :comment
+      ast.last.docstring.should == "end comment"
+      ast.last.source.should == "end comment"
     end
   end
 end

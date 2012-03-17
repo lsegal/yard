@@ -57,22 +57,22 @@ describe YARD::Parser::Ruby::RubyParser do
     end
     
     it "should only look up to two lines back for comments" do
-      s = stmt <<-eof
+      s = stmts <<-eof
         # comments
 
         # comments
 
         def method; end
       eof
-      s.comments.should == "comments"
+      s[1].comments.should == "comments"
 
-      s = stmt <<-eof
+      s = stmts <<-eof
         # comments
 
 
         def method; end
       eof
-      s.comments.should == nil
+      s[1].comments.should == nil
 
       ss = stmts <<-eof
         # comments
@@ -83,8 +83,8 @@ describe YARD::Parser::Ruby::RubyParser do
         # hello
         def method2; end
       eof
-      ss[0].comments.should == nil
-      ss[1].comments.should == 'hello'
+      ss[1].comments.should == nil
+      ss[2].comments.should == 'hello'
     end
     
     it "should handle 1.9 lambda syntax with args" do

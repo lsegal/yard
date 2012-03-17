@@ -472,14 +472,6 @@ module YARD
             @last_ns_token = nil
             return
           end
-          case comment
-          when /\A#+ @group\s+(.+)\s*\Z/
-            @groups.unshift [lineno, $1]
-            return
-          when /\A#+ @endgroup\s*\Z/
-            @groups.unshift [lineno, nil]
-            return
-          end
 
           comment = comment.gsub(/^(\#+)\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
@@ -523,14 +515,18 @@ module YARD
             (node.line - 2).upto(node.line) do |line|
               comment = @comments[line]
               if comment && !comment.empty?
-                node.docstring_hash_flag = @comments_flags[line]
-                node.docstring = comment
-                node.docstring_range = ((line - comment.count("\n"))..line)
-                @comments.delete(line)
-                @comments_flags.delete(line)
+                add_comment(line, node)
                 break
               end
             end
+            
+            # insert any lone unadded comments before node
+            @comments.keys.each do |line|
+              if node.line > line
+                add_comment(line, nil, node)
+              end
+            end
+            
             if node.type == :def || node.type == :defs || node.call?
               @groups.each do |group|
                 if group.first < node.line
@@ -539,6 +535,33 @@ module YARD
               end
             end
           end
+          
+          # insert all remaining comments
+          @comments.each do |line, comment|
+            add_comment(line)
+          end
+          
+          @comments = {}
+        end
+        
+        def add_comment(line, node = nil, before_node = nil)
+          comment = @comments[line]
+          line_range = ((line - comment.count("\n"))..line)
+          if node.nil?
+            node = CommentNode.new(:comment, [comment], :listline => line_range)
+            if before_node
+              parent_node = before_node.parent
+              idx = parent_node.index(before_node)
+              parent_node.insert(idx, node)
+            else
+              root.children.push(node)
+            end
+          end
+          node.docstring = comment
+          node.docstring_hash_flag = @comments_flags[line]
+          node.docstring_range = line_range
+          @comments.delete(line)
+          @comments_flags.delete(line)
         end
 
         def freeze_tree(node = nil)
