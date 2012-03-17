@@ -34,6 +34,15 @@ module YARD
 
     # @group Creating a Docstring Object
 
+    def self.new!(text, tags = [], object = nil, raw_data = nil)
+      docstring = allocate
+      docstring.replace(text, false)
+      docstring.object = object
+      docstring.add_tag(*tags)
+      docstring.instance_variable_set("@all", raw_data) if raw_data
+      docstring
+    end
+
     # Creates a new docstring with the raw contents attached to an optional
     # object.
     #
@@ -68,11 +77,11 @@ module YARD
 
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
-    def replace(content)
+    def replace(content, parse = true)
       content = content.join("\n") if content.is_a?(Array)
       @tags, @ref_tags = [], []
       @all = content
-      super parse_comments(content)
+      super(parse ? parse_comments(content) : content)
     end
     alias all= replace
     
@@ -153,29 +162,6 @@ module YARD
 
     # @group Creating and Accessing Meta-data
 
-    # Creates a tag from the {Tags::DefaultFactory tag factory}.
-    # 
-    # To add an already created tag object, use {#add_tag}
-    #
-    # @param [String] tag_name the tag name
-    # @param [String] tag_buf the text attached to the tag with newlines removed.
-    # @return [Tags::Tag, Tags::RefTag] a tag
-    def create_tag(tag_name, tag_buf)
-      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
-        return create_ref_tag(tag_name, $1, $2)
-      end
-
-      tag_factory = Tags::Library.instance
-      tag_method = "#{tag_name.gsub('.', '_')}_tag"
-      if tag_name && tag_factory.respond_to?(tag_method)
-        add_tag(*[tag_factory.send(tag_method, tag_buf)].flatten)
-      else
-        log.warn "Unknown tag @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
-      end
-    rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
-    end
-
     # Adds a tag or reftag object to the tag list. If you want to parse
     # tag data based on the {Tags::DefaultFactory} tag factory, use {#create_tag}
     # instead.
@@ -188,7 +174,7 @@ module YARD
         when Tags::Tag
           tag.object = object
           @tags << tag
-        when Tags::RefTag
+        when Tags::RefTag, Tags::RefTagList
           @ref_tags << tag
         else
           raise ArgumentError, "expected Tag or RefTag, got #{tag.class} (at index #{i})"
@@ -270,11 +256,6 @@ module YARD
       list.map {|t| t.tags }.flatten
     end
 
-    # Creates a {Tags::RefTag}
-    def create_ref_tag(tag_name, name, object_name)
-      @ref_tags << Tags::RefTagList.new(tag_name, P(object, object_name), name)
-    end
-
     # Parses out comments split by newlines into a new code object
     #
     # @param [String] comments
@@ -284,48 +265,10 @@ module YARD
     # @return [String] the non-metadata portion of the comments to
     #   be used as a docstring
     def parse_comments(comments)
-      comments = comments.split(/\r?\n/) if comments.is_a?(String)
-      return '' if !comments || comments.empty?
-      docstring = ""
-
-      indent, last_indent = comments.first[/^\s*/].length, 0
-      orig_indent = 0
-      last_line = ""
-      tag_name, tag_klass, tag_buf = nil, nil, []
-
-      (comments+['']).each_with_index do |line, index|
-        indent = line[/^\s*/].length
-        empty = (line =~ /^\s*$/ ? true : false)
-        done = comments.size == index
-
-        if tag_name && (((indent < orig_indent && !empty) || done ||
-            (indent == 0 && !empty)) || (indent <= last_indent && line =~ META_MATCH))
-          create_tag(tag_name, tag_buf.join("\n"))
-          tag_name, tag_buf, = nil, []
-          orig_indent = 0
-        end
-
-        # Found a meta tag
-        if line =~ META_MATCH
-          tag_name, tag_buf = $1, [($2 || '')]
-        elsif tag_name && indent >= orig_indent && !empty
-          orig_indent = indent if orig_indent == 0
-          # Extra data added to the tag on the next line
-          last_empty = last_line =~ /^[ \t]*$/ ? true : false
-
-          tag_buf << '' if last_empty
-          tag_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
-        elsif !tag_name
-          # Regular docstring text
-          docstring << line << "\n"
-        end
-
-        last_indent = indent
-        last_line = line
-      end
-
-      # Remove trailing/leading whitespace / newlines
-      docstring.gsub!(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
+      tag_parser = Tags::TagParser.new
+      tag_parser.parse(comments, object)
+      add_tag(*tag_parser.tags)
+      tag_parser.text
     end
   end
 end

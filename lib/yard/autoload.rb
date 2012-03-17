@@ -212,15 +212,23 @@ module YARD
   end
 
   module Tags # Namespace for Tag components
-    autoload :DefaultFactory, __p('tags/default_factory')
-    autoload :DefaultTag,     __p('tags/default_tag')
-    autoload :Library,        __p('tags/library')
-    autoload :OptionTag,      __p('tags/option_tag')
-    autoload :OverloadTag,    __p('tags/overload_tag')
-    autoload :RefTag,         __p('tags/ref_tag')
-    autoload :RefTagList,     __p('tags/ref_tag_list')
-    autoload :Tag,            __p('tags/tag')
-    autoload :TagFormatError, __p('tags/tag_format_error')
+    autoload :AttributeDirective,  __p('tags/directives')
+    autoload :DefaultFactory,      __p('tags/default_factory')
+    autoload :DefaultTag,          __p('tags/default_tag')
+    autoload :EndGroupDirective,   __p('tags/directives')
+    autoload :GroupDirective,      __p('tags/directives')
+    autoload :Library,             __p('tags/library')
+    autoload :MacroDirective,      __p('tags/directives')
+    autoload :MethodDirective,     __p('tags/directives')
+    autoload :OptionTag,           __p('tags/option_tag')
+    autoload :OverloadTag,         __p('tags/overload_tag')
+    autoload :RefTag,              __p('tags/ref_tag')
+    autoload :RefTagList,          __p('tags/ref_tag_list')
+    autoload :ScopeDirective,      __p('tags/directives')
+    autoload :Tag,                 __p('tags/tag')
+    autoload :TagParser,           __p('tags/tag_parser')
+    autoload :TagFormatError,      __p('tags/tag_format_error')
+    autoload :VisibilityDirective, __p('tags/directives')
   end
 
   # Namespace for templating system
