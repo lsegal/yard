@@ -47,6 +47,22 @@ module YARD
         Tag.new(tag_name, text, types, name)
       end
 
+      # Parses tag text and creates a new tag with formally declared types, a title
+      # on the first line and descriptive text
+      #
+      # @param tag_name        the name of the tag to parse
+      # @param [String] text   the raw tag text
+      # @return [Tag]          a tag object with the tag_name, name, types and text values filled
+      def parse_tag_with_types_and_title(tag_name, text)
+        name, types, text = *extract_types_and_name_from_text_unstripped(text)
+        if name
+          title, desc = name, text
+        else
+          title, desc = *extract_title_and_desc_from_text(text)
+        end
+        Tag.new(tag_name, desc, types, title)
+      end
+
       def parse_tag_with_title_and_text(tag_name, text)
         title, desc = *extract_title_and_desc_from_text(text)
         Tag.new(tag_name, desc, nil, title)
@@ -105,6 +121,15 @@ module YARD
       #   list (or nil), followed by the type list parsed into an array of
       #   strings, followed by the text following the type list.
       def extract_types_and_name_from_text(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
+        before, list, text = *extract_types_and_name_from_text_unstripped(text, opening_types, closing_types)
+        if list.nil?
+          [nil, nil, text.strip]
+        else
+          [before ? before.strip : nil, list.map {|e| e.strip }, text.strip]
+        end
+      end
+      
+      def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
         s, e = 0, 0
         before = ''
         list, level, seen_space = [''], 0, false
@@ -129,11 +154,11 @@ module YARD
           end
         end
 
-        before = before.empty? ? nil : before.strip
+        before = before.empty? ? nil : before
         if list.size == 1 && list.first == ''
-          [nil, nil, text.strip]
+          [nil, nil, text]
         else
-          [before, list.map {|x| x.strip }, text[(e+1)..-1].strip]
+          [before, list, text[(e+1)..-1]]
         end
       end
     end
