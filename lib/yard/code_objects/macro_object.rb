@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module YARD
   module CodeObjects
     # A MacroObject represents a docstring defined through +@macro NAME+ and can be
@@ -42,6 +44,7 @@ module YARD
         end
     
         # Finds a macro using +macro_name+
+        # @param [#to_s] macro_name the name of the macro
         # @return [MacroObject] if a macro is found
         # @return [nil] if there is no registered macro by that name
         def find(macro_name)
@@ -56,6 +59,7 @@ module YARD
         # the macro name is searched and returned. If a macro is not found,
         # nil is returned.
         # 
+        # @param [#to_s] macro_name the name of the macro
         # @param [CodeObjects::Base] method_object an optional method to attach
         #   the macro to. Only used if the macro is being created, otherwise
         #   this argument is ignored.
@@ -63,15 +67,11 @@ module YARD
         #   on whether the @macro tag was a new tag or not.
         # @return [nil] if the +data+ has no macro tag or if the macro is
         #   not new and no macro by the macro name is found.
-        def find_or_create(data, method_object = nil)
-          docstring = Docstring === data ? data : Docstring.new(data)
-          return unless docstring.tag(:macro)
-          return unless name = macro_name(docstring)
-          if new_macro?(docstring)
-            method_object = nil unless attached_macro?(docstring, method_object)
-            create(name, macro_data(docstring), method_object)
+        def find_or_create(macro_name, data, method_object = nil)
+          if macro = find(name)
+            macro
           else
-            find(name)
+            create(macro_name, data, method_object)
           end
         end
         alias create_docstring find_or_create
@@ -118,8 +118,14 @@ module YARD
         # @macro macro.expand
         # @see find_or_create
         def apply(docstring, call_params = [], full_source = '', block_source = '', method_object = nil)
-          macro = find_or_create(docstring, method_object)
-          apply_macro(macro, docstring, call_params, full_source, block_source)
+          docstring = docstring.all if Docstring === docstring
+          tag_parser = Tags::TagParser.new
+          handler = OpenStruct.new
+          handler.call_params = call_params[1..-1]
+          handler.caller_method = call_params.first
+          handler.statement = OpenStruct.new(:source => full_source)
+          tag_parser.parse(docstring, nil, handler)
+          Docstring.new!(tag_parser.text, tag_parser.tags).to_raw
         end
 
         # Applies a macro to a docstring, interpolating the macro's data on the
@@ -129,59 +135,7 @@ module YARD
         # @param [MacroObject] macro the macro object
         # @macro macro.expand
         def apply_macro(macro, docstring, call_params = [], full_source = '', block_source = '')
-          docstring = Docstring.new(docstring) unless Docstring === docstring
-          data = []
-          data << macro.expand(call_params, full_source, block_source) if macro
-          if !macro && new_macro?(docstring)
-            data << expand(macro_data(docstring), call_params, full_source, block_source)
-          end
-          data << nonmacro_data(docstring)
-          data.join("\n").strip
-        end
-
-        private
-      
-        def new_macro?(docstring)
-          if docstring.tag(:macro) 
-            if types = docstring.tag(:macro).types
-              return true if types.include?('new') || types.include?('attach')
-            end
-            if docstring.all =~ MACRO_MATCH
-              return true
-            end
-          end
-          false
-        end
-        
-        def attached_macro?(docstring, method_object)
-          return false if method_object.nil?
-          return false if docstring.tag(:macro).types.nil?
-          docstring.tag(:macro).types.include?('attach')
-        end
-        
-        def macro_name(docstring)
-          docstring.tag(:macro).name
-        end
-        
-        def macro_data(docstring)
-          new_docstring = docstring.dup
-          new_docstring.delete_tags(:macro)
-          tag_text = docstring.tag(:macro).text
-          if !tag_text || tag_text.strip.empty?
-            new_docstring.to_raw.strip
-          else
-            tag_text
-          end
-        end
-        
-        def nonmacro_data(docstring)
-          if new_macro?(docstring)
-            text = docstring.tag(:macro).text
-            return '' if !text || text.strip.empty?
-          end
-          new_docstring = docstring.dup
-          new_docstring.delete_tags(:macro)
-          new_docstring.to_raw
+          apply(docstring, call_params, full_source, block_source)
         end
       end
     

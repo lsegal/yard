@@ -47,18 +47,13 @@ describe YARD::CodeObjects::MacroObject do
   describe '.find_or_create' do
     it "should look up name if @macro is present and find object" do
       macro1 = MacroObject.create('foo', 'FOO')
-      macro2 = MacroObject.find_or_create("@macro foo\na b c")
+      macro2 = MacroObject.find_or_create('foo', "a b c")
       macro1.should == macro2
     end
     
     it "should create new macro if macro by that name does not exist" do
-      MacroObject.find_or_create("@macro foo\n  @method $1\nEXTRA")
+      MacroObject.find_or_create('foo', "@method $1")
       MacroObject.find('foo').macro_data.should == "@method $1"
-    end
-    
-    it "should use full docstring if no text block is present in @macro" do
-      MacroObject.find_or_create("@macro foo\n@method $1\nEXTRA")
-      MacroObject.find('foo').macro_data.should == "EXTRA\n@method $1"
     end
   end
   
@@ -87,7 +82,6 @@ describe YARD::CodeObjects::MacroObject do
     
     it "should use only non macro data if docstring is an existing macro" do
       data = "@macro name\n  $3$2$1\nEXTRA"
-      MacroObject.find_or_create(data)
       result = MacroObject.apply(data, @args)
       result.should == "cba\nEXTRA"
       MacroObject.apply("@macro name\nFOO", @args).should == "cba\nFOO"
@@ -147,7 +141,7 @@ describe YARD::CodeObjects::MacroObject do
   
   describe '#expand' do
     it "should expand macro given its data" do
-      macro = MacroObject.create_docstring("@macro foo\n  $1 $2 THREE!")
+      macro = MacroObject.create_docstring('foo', '$1 $2 THREE!')
       macro.expand(['NAME', 'ONE', 'TWO']).should == "ONE TWO THREE!"
     end
   end
