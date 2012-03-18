@@ -300,10 +300,10 @@ describe YARD::CLI::Yardoc do
     it "should hide object if namespace is @private with --no-private" do
       ns = mock(:namespace)
       ns.stub!(:type).and_return(:module)
-      ns.should_receive(:tag).ordered.with(:private).and_return(true)
+      ns.should_receive(:tag).with(:private).and_return(true)
       obj = mock(:object)
       obj.stub!(:namespace).and_return(ns)
-      obj.should_receive(:tag).ordered.with(:private).and_return(false)
+      obj.should_receive(:tag).with(:private).and_return(false)
       @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options.verifier.call(obj).should == false
     end

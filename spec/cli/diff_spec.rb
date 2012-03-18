@@ -24,13 +24,16 @@ describe YARD::CLI::Diff do
     end
 
     def run(*args)
+      @all_call = -1
       @data = StringIO.new
       @objects1 ||= %w( C#fooey C#baz D.bar )
       @objects2 ||= %w( A A::B A::B::C A.foo A#foo B C.foo C.bar C#baz )
+      @objects = [@objects1, @objects2]
       @diff.should_receive(:load_gem_data).ordered.with('gem1').and_return(true)
       @diff.should_receive(:load_gem_data).ordered.with('gem2').and_return(true)
-      Registry.should_receive(:all).ordered.and_return(@objects1.map {|o| P(o) })
-      Registry.should_receive(:all).ordered.and_return(@objects2.map {|o| P(o) })
+      Registry.should_receive(:all).twice.and_return do
+        @objects[@all_call += 1].map {|o| P(o) }
+      end
       @diff.stub!(:print) {|data| @data << data }
       @diff.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
       @diff.run(*(args + ['gem1', 'gem2']))
