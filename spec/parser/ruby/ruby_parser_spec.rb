@@ -269,5 +269,27 @@ describe YARD::Parser::Ruby::RubyParser do
     it "should show source for unary exclamation" do
       stmt("X = !1").jump(:unary).source.should == '!1'
     end
+    
+    it "should find lone comments" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        class Foo
+          ##
+          # comment here
+          
+          
+          def foo; end
+          
+          # end comment
+        end
+      eof
+      comment = ast.first.last.first
+      comment.type.should == :comment
+      comment.docstring_hash_flag.should be_true
+      comment.docstring.strip.should == "comment here"
+      
+      ast.first.last.last.type.should == :comment
+      ast.first.last.last.docstring.should == "end comment"
+    end
   end
 end if HAVE_RIPPER
