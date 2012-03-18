@@ -233,6 +233,7 @@ module YARD
         #   match for a handler. If no file match is specified, returns true.
         # @since 0.6.2
         def matches_file?(filename)
+          @in_files ||= nil # avoid ruby warnings
           return true unless @in_files
           @in_files.any? do |in_file|
             case in_file
