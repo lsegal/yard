@@ -70,6 +70,7 @@ module YARD
       # @return [String] the yardoc filename
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
+      undef yardoc_file, yardoc_file=
       def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
       def yardoc_file
         Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE
@@ -321,6 +322,7 @@ module YARD
       # @return [Boolean, nil] if this value is set to nil, the storage
       #   adapter will decide how to store the data.
       attr_accessor :single_object_db
+      undef single_object_db, single_object_db=
       def single_object_db=(v) Thread.current[:__yard_single_db__] = v end
       def single_object_db; Thread.current[:__yard_single_db__] end
 

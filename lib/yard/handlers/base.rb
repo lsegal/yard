@@ -327,6 +327,7 @@ module YARD
       
       undef owner, owner=, namespace, namespace=
       undef visibility, visibility=, scope, scope=
+      undef globals, extra_state
 
       def owner; parser.owner end
       def owner=(v) parser.owner=(v) end

@@ -348,6 +348,7 @@ module YARD
         end
       end
 
+      undef docstring
       def docstring
         return @docstring if !@docstring_extra
         case @docstring

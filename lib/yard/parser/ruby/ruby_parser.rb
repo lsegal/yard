@@ -274,6 +274,9 @@ module YARD
         undef on_embdoc
         undef on_embdoc_end
         undef on_parse_error
+        undef on_bodystmt
+        undef on_top_const_ref
+        undef on_const_path_ref
 
         def on_program(*args)
           args.first
