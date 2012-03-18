@@ -7,11 +7,15 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     Handlers::Ruby::Base.stub!(:inherited)
     @processor = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby))
   end
-  
+
+  after(:all) do
+    Handlers::Base.clear_subclasses
+  end
+
   def valid(handler, stmt)
     @processor.find_handlers(stmt).should include(handler)
   end
-  
+
   def invalid(handler, stmt)
     @processor.find_handlers(stmt).should_not include(handler)
   end
@@ -36,7 +40,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     valid StringHandler, ast[0][0][0]
     invalid StringHandler, ast[0][1]
   end
-  
+
   it "should handle symbol input (matches AstNode#type)" do
     class SymbolHandler < Handlers::Ruby::Base
       handles :myNodeType
@@ -64,7 +68,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     valid ASTHandler, s(:vcall, s(:ident, "hello_world"))
     invalid ASTHandler, s(:vcall, s(:ident, "NOTHELLOWORLD"))
   end
-  
+
   it "should handle #method_call(:methname) on a valid AST" do
     class MethCallHandler < Handlers::Ruby::Base
       handles method_call(:meth)

@@ -185,7 +185,12 @@ module YARD
       # @return [void]
       def load_handlers
         return if @handlers_loaded[parser_type]
-        handler_base_namespace.constants.each {|c| handler_base_namespace.const_get(c) }
+        handler_base_namespace.constants.each do |c|
+          const = handler_base_namespace.const_get(c)
+          unless Handlers::Base.subclasses.include?(const)
+            Handlers::Base.subclasses << const
+          end
+        end
         @handlers_loaded[parser_type] = true
       end
     end
