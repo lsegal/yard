@@ -393,7 +393,7 @@ describe YARD::Parser::SourceParser do
     end
     
     it "should allow directives parsed on lone comments" do
-      YARD.parse_string(<<-eof).enumerator
+      YARD.parse_string(<<-eof)
         class Foo
           # @!method foo(a = "hello")
           # @!scope class
@@ -412,6 +412,19 @@ describe YARD::Parser::SourceParser do
       foo.tag(:return).types.should == ['Symbol']
       bar.should_not be_nil
       bar.signature.should == 'def bar(value)'
+    end
+    
+    it "should parse lone comments at end of blocks" do
+      YARD.parse_string(<<-eof)
+        class Foo
+          none
+          
+          # @!method foo(a = "hello")
+        end
+      eof
+      foo = Registry.at('Foo#foo')
+      foo.should_not be_nil
+      foo.signature.should == 'def foo(a = "hello")'
     end
   end
 
@@ -634,9 +647,8 @@ describe YARD::Parser::SourceParser do
       comment.docstring_hash_flag.should be_true
       comment.docstring.strip.should == "comment here"
       
-      ast.last.type.should == :comment
-      ast.last.docstring.should == "end comment"
-      ast.last.source.should == "end comment"
+      ast.first.last.last.type.should == :comment
+      ast.first.last.last.docstring.should == "end comment"
     end
   end
 end

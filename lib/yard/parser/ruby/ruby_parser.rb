@@ -33,6 +33,7 @@ module YARD
           @source = source
           @tokens = []
           @comments = {}
+          @comments_range = {}
           @comments_flags = {}
           @heredoc_tokens = nil
           @heredoc_state = nil
@@ -466,24 +467,30 @@ module YARD
             end
           end
 
+          ch = charno
           visit_ns_token(:comment, comment)
           if not_comment
             @last_ns_token = nil
             return
           end
 
+          source_range = ch..(charno-1)
           comment = comment.gsub(/^(\#+)\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
+          
           hash_flag = $1 == '##' ? true : false
 
           if append_comment && @comments_last_column == column
             @comments.delete(lineno - 1)
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
+            range = @comments_range.delete(lineno - 1)
+            source_range = range.first..source_range.last
             comment = append_comment + "\n" + comment
           end
 
           @comments[lineno] = comment
+          @comments_range[lineno] = source_range
           @comments_flags[lineno] = hash_flag if !append_comment
           @comments_last_column = column
         end
@@ -518,44 +525,62 @@ module YARD
                 break
               end
             end
-            
-            # insert any lone unadded comments before node
+
             @comments.keys.each do |line|
               if node.line > line
                 add_comment(line, nil, node)
               end
             end
           end
-          
+
+          # insert any lone unadded comments before node
+          root.traverse do |node|
+            next if node.type == :list || node.parent.type != :list
+            @comments.keys.each do |line|
+              if node.line_range.include?(line)
+                pick = nil
+                node.traverse do |subnode|
+                  next unless subnode.type == :list
+                  pick ||= subnode
+                  next unless subnode.line_range.include?(line)
+                  pick = subnode
+                end
+                add_comment(line, nil, pick, true) if pick
+              end
+            end
+          end if @comments.size > 0
+
           # insert all remaining comments
           @comments.each do |line, comment|
-            add_comment(line)
+            add_comment(line, nil, root, true)
           end
-          
+
           @comments = {}
         end
-        
-        def add_comment(line, node = nil, before_node = nil)
+
+        def add_comment(line, node = nil, before_node = nil, into = false)
           comment = @comments[line]
+          source_range = @comments_range[line]
           line_range = ((line - comment.count("\n"))..line)
           if node.nil?
-            node = CommentNode.new(:comment, [comment], :listline => line_range)
-            if before_node
+            node = CommentNode.new(:comment, [comment], :line => line_range, :char => source_range)
+            if into
+              before_node.push(node)
+              before_node.unfreeze
+              node.parent = before_node
+            elsif before_node
               parent_node = before_node.parent
               idx = parent_node.index(before_node)
               parent_node.insert(idx, node)
               parent_node.unfreeze
               node.parent = parent_node
-            else
-              root.push(node)
-              root.unfreeze
-              node.parent = root
             end
           end
           node.docstring = comment
           node.docstring_hash_flag = @comments_flags[line]
           node.docstring_range = line_range
           @comments.delete(line)
+          @comments_range.delete(line)
           @comments_flags.delete(line)
         end
 
