@@ -32,25 +32,25 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
       # Show their methods as well
       {:read => name, :write => "#{name}="}.each do |type, meth|
         if (type == :read ? read : write)
-          namespace.attributes[scope][name][type] = MethodObject.new(namespace, meth, scope) do |o|
-            if type == :write
-              o.parameters = [['value', nil]]
-              src = "def #{meth}(value)"
-              full_src = "#{src}\n  @#{name} = value\nend"
-              doc = "Sets the attribute #{name}\n@param value the value to set the attribute #{name} to."
-            else
-              src = "def #{meth}"
-              full_src = "#{src}\n  @#{name}\nend"
-              doc = "Returns the value of attribute #{name}"
-            end
-            o.source ||= full_src
-            o.signature ||= src
-            o.docstring = statement.comments.to_s.empty? ? doc : statement.comments
-            o.visibility = visibility
+          o = MethodObject.new(namespace, meth, scope)
+          if type == :write
+            o.parameters = [['value', nil]]
+            src = "def #{meth}(value)"
+            full_src = "#{src}\n  @#{name} = value\nend"
+            doc = "Sets the attribute #{name}\n@param value the value to set the attribute #{name} to."
+          else
+            src = "def #{meth}"
+            full_src = "#{src}\n  @#{name}\nend"
+            doc = "Returns the value of attribute #{name}"
           end
-
-          # Register the objects explicitly
-          register namespace.attributes[scope][name][type]
+          o.source ||= full_src
+          o.signature ||= src
+          register(o)
+          o.docstring = doc if o.docstring.blank?(false)
+          o.visibility = visibility
+          
+          # Regsiter the object explicitly
+          namespace.attributes[scope][name][type] = o
         elsif obj = namespace.children.find {|o| o.name == meth.to_sym && o.scope == scope }
           # register an existing method as attribute
           namespace.attributes[scope][name][type] = obj

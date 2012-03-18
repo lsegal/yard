@@ -47,9 +47,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
           o.source ||= full_src
           o.signature ||= src
           register(o)
-          if Docstring.new(statement.comments.to_s).blank?(false)
-            o.docstring = doc
-          end
+          o.docstring = doc if o.docstring.blank?(false)
           o.visibility = visibility
           
           # Regsiter the object explicitly

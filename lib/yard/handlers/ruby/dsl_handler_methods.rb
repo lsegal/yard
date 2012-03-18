@@ -18,6 +18,7 @@ module YARD
           return if IGNORE_METHODS[caller_method]
 
           @docstring = statement.comments || ""
+          @docstring = @docstring.join("\n") if @docstring.is_a?(Array)
           if macro = find_attached_macro
             @docstring += macro.expand([caller_method, *call_params], statement.source)
           elsif !statement.comments_hash_flag && !implicit_docstring?
