@@ -426,6 +426,13 @@ describe YARD::Parser::SourceParser do
       foo.should_not be_nil
       foo.signature.should == 'def foo(a = "hello")'
     end
+    
+    it "should handle lone comment with no code" do
+      YARD.parse_string '# @!method foo(a = "hello")'
+      foo = Registry.at('#foo')
+      foo.should_not be_nil
+      foo.signature.should == 'def foo(a = "hello")'
+    end
   end
 
   describe '#parse' do

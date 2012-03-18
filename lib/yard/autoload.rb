@@ -84,6 +84,7 @@ module YARD
         autoload :ClassHandler,           __p('handlers/ruby/legacy/class_handler')
         autoload :ClassConditionHandler,  __p('handlers/ruby/legacy/class_condition_handler')
         autoload :ClassVariableHandler,   __p('handlers/ruby/legacy/class_variable_handler')
+        autoload :CommentHandler,         __p('handlers/ruby/legacy/comment_handler')
         autoload :ConstantHandler,        __p('handlers/ruby/legacy/constant_handler')
         autoload :DSLHandler,             __p('handlers/ruby/legacy/dsl_handler')
         autoload :ExceptionHandler,       __p('handlers/ruby/legacy/exception_handler')

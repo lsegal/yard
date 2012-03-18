@@ -75,6 +75,10 @@ module YARD
             stmt.comments_hash_flag = @comments_hash_flag
           end
           stmt
+        elsif @comments
+          @statement << TkCOMMENT.new(@comments_line, 0)
+          @statement.first.set_text("# " + @comments.join("\n# "))
+          Statement.new(@statement, nil, @comments)
         else
           nil
         end
@@ -111,23 +115,6 @@ module YARD
         end
       end
 
-      def preprocess_token(tk)
-        if tk.is_a?(TkCOMMENT)
-          case tk.text
-          when /\A# @group\s+(.+)\s*\Z/
-            @group = $1
-            true
-          when /\A# @endgroup\s*\Z/
-            @group = nil
-            true
-          else
-            false
-          end
-        else
-          false
-        end
-      end
-
       # Processes a single token
       #
       # @param [RubyToken::Token] tk the token to process
@@ -135,7 +122,6 @@ module YARD
         # p tk.class, tk.text, @state, @level, @current_block, "<br/>"
         case @state
         when :first_statement
-          return if preprocess_token(tk)
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           @comments_last_line = nil
@@ -235,10 +221,17 @@ module YARD
             return
           end
         end
+
         return if !@statement.empty? && @comments
         return if @first_line && tk.line_no > @first_line
 
-        @comments = nil if @comments_last_line && @comments_last_line < tk.line_no - 1
+        if @comments_last_line && @comments_last_line < tk.line_no - 1
+          if @comments && @statement.empty?
+            @tokens.unshift(tk)
+            return @done = true
+          end
+          @comments = nil
+        end
         @comments_line = tk.line_no unless @comments
 
         # Remove the "#" and up to 1 space before the text
