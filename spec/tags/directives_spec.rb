@@ -135,7 +135,7 @@ describe YARD::Tags::MethodDirective do
       foo2.docstring.should == 'Docstring2'
       foo3.docstring.should == 'Docstring3'
     end
-    
+
     it "should define the method inside namespace if attached to namespace object" do
       YARD.parse_string <<-eof
         module Foo

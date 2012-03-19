@@ -11,10 +11,10 @@ module YARD
         self.tag_parser = tag_parser
         self.expanded_text = nil
       end
-      
+
       def object; tag_parser.object end
       def handler; tag_parser.handler end
-      
+
       def call; raise NotImplementedError end
       def after_parse; end
 
@@ -22,7 +22,7 @@ module YARD
 
       attr_accessor :tag_parser
     end
-    
+
     class EndGroupDirective < Directive
       def call
         return unless handler
@@ -51,7 +51,7 @@ module YARD
       private
 
       def new?
-        (tag.types && tag.types.include?('new')) || 
+        (tag.types && tag.types.include?('new')) ||
           (tag.text && !tag.text.strip.empty?)
       end
 
@@ -61,7 +61,7 @@ module YARD
       end
 
       def class_method?
-        object && object.is_a?(CodeObjects::MethodObject) && 
+        object && object.is_a?(CodeObjects::MethodObject) &&
           object.scope == :class
       end
 
@@ -77,11 +77,11 @@ module YARD
         all_params = ([caller_method] + call_params).compact
         CodeObjects::MacroObject.expand(macro_data, all_params, full_source)
       end
-      
+
       def find_or_create
         if new? || attach?
           if handler && attach?
-            obj = object ? object : 
+            obj = object ? object :
               P("#{handler.namespace}.#{handler.caller_method}")
           else
             obj = nil
@@ -94,10 +94,10 @@ module YARD
         else
           macro = CodeObjects::MacroObject.find(tag.name)
         end
-        
+
         macro ? macro.macro_data : nil
       end
-      
+
       def warn
         if object && handler
           log.warn "Invalid/missing macro name for " +
@@ -160,9 +160,9 @@ module YARD
         use_indented_text
         create_attribute_data(create_object)
       end
-      
+
       protected
-      
+
       def method_name
         name = tag.name || handler.call_params.first
         name += '=' unless readable?
@@ -178,7 +178,7 @@ module YARD
       end
 
       private
-      
+
       def create_attribute_data(object)
         return unless object
         clean_name = object.name.to_s.sub(/=$/, '')
@@ -192,7 +192,7 @@ module YARD
             writer = object
             writer.parameters = [['value', nil]]
           else
-            writer = CodeObjects::MethodObject.new(object.namespace, 
+            writer = CodeObjects::MethodObject.new(object.namespace,
               object.name.to_s + '=', object.scope)
             writer.signature = "def #{object.name}=(value)"
             writer.visibility = object.visibility
