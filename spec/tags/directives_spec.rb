@@ -123,6 +123,21 @@ describe YARD::Tags::MethodDirective do
       foo2.docstring.should == 'Docstring2'
       foo3.docstring.should == 'Docstring3'
     end
+    
+    it "should define the method inside namespace if attached to namespace object" do
+      YARD.parse_string <<-eof
+        module Foo
+          # @!method foo
+          #   Docstring1
+          # @!method bar
+          #   Docstring2
+          class Bar
+          end
+        end
+      eof
+      Registry.at('Foo::Bar#foo').docstring.should == 'Docstring1'
+      Registry.at('Foo::Bar#bar').docstring.should == 'Docstring2'
+    end
   end
 end
 
@@ -158,12 +173,29 @@ describe YARD::Tags::AttributeDirective do
       foo1 = Registry.at('Foo#foo1')
       foo2 = Registry.at('Foo#foo2=')
       foo3 = Registry.at('Foo.foo3')
-      foo1.is_attribute?.should == true
-      foo2.is_attribute?.should == true
-      foo3.is_attribute?.should == true
+      foo4 = Registry.at('Foo.foo3=')
+      foo1.should be_reader
+      foo2.should be_writer
+      foo3.should be_reader
       foo1.docstring.should == 'Docstring1'
       foo2.docstring.should == 'Docstring2'
       foo3.docstring.should == 'Docstring3'
+      foo4.should be_writer
+      foo1.attr_info[:write].should be_nil
+      foo2.attr_info[:read].should be_nil
+    end
+
+    it "should define the attr inside namespace if attached to namespace object" do
+      YARD.parse_string <<-eof
+        module Foo
+          # @!attribute [r] foo
+          # @!attribute [r] bar
+          class Bar
+          end
+        end
+      eof
+      Registry.at('Foo::Bar#foo').should be_reader
+      Registry.at('Foo::Bar#bar').should be_reader
     end
   end
 end

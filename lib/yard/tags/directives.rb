@@ -132,14 +132,16 @@ module YARD
       def use_indented_text
         return if tag.text.empty?
         handler = tag_parser.handler
+        object = tag_parser.object
         self.tag_parser = TagParser.new(tag_parser.library)
-        tag_parser.parse(tag.text, nil, handler)
+        tag_parser.parse(tag.text, object, handler)
       end
 
       def create_object
         scope = tag_parser.state.scope || handler.scope
         visibility = tag_parser.state.visibility || handler.visibility
-        obj = CodeObjects::MethodObject.new(handler.namespace, method_name, scope)
+        ns = CodeObjects::NamespaceObject === object ? object : handler.namespace
+        obj = CodeObjects::MethodObject.new(ns, method_name, scope)
         handler.register_file_info(obj)
         handler.register_source(obj)
         handler.register_group(obj)
@@ -180,7 +182,7 @@ module YARD
       def create_attribute_data(object)
         return unless object
         clean_name = object.name.to_s.sub(/=$/, '')
-        attrs = handler.namespace.attributes[object.scope]
+        attrs = object.namespace.attributes[object.scope]
         attrs[clean_name] ||= SymbolHash[:read => nil, :write => nil]
         if readable?
           attrs[clean_name][:read] = object
@@ -190,7 +192,7 @@ module YARD
             writer = object
             writer.parameters = [['value', nil]]
           else
-            writer = CodeObjects::MethodObject.new(handler.namespace, 
+            writer = CodeObjects::MethodObject.new(object.namespace, 
               object.name.to_s + '=', object.scope)
             writer.signature = "def #{object.name}=(value)"
             writer.visibility = object.visibility
