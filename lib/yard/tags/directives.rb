@@ -80,7 +80,7 @@ module YARD
       
       def find_or_create
         if new? || attach?
-          if attach?
+          if handler && attach?
             obj = object ? object : 
               P("#{handler.namespace}.#{handler.caller_method}")
           else

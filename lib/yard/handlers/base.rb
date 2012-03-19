@@ -433,8 +433,7 @@ module YARD
         tag_parser.parse(docstring || "", object, self)
         
         if object && docstring
-          str = Docstring.new!(tag_parser.text, tag_parser.tags, object, docstring)
-          object.docstring = str
+          object.docstring = tag_parser.to_docstring
 
           # Add hash_flag/line_range
           if stmt

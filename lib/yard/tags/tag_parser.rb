@@ -11,11 +11,11 @@ module YARD
       attr_reader :state
       attr_reader :object
       attr_reader :handler
-      
+
       attr_accessor :library
-      
+
       META_MATCH = /^@(!)?((?:\w\.?)+)(?:\s+(.*))?$/i
-      
+
       def initialize(library = Library.instance)
         @text = ""
         @raw_text = ""
@@ -26,7 +26,7 @@ module YARD
         @handler = nil
         @state = OpenStruct.new
       end
-      
+
       def parse(content, object = nil, handler = nil)
         @object = object
         @handler = handler
@@ -37,9 +37,13 @@ module YARD
         call_directives_after_parse
         self
       end
-      
+
+      def to_docstring
+        Docstring.new!(text, tags, object, raw_text)
+      end
+
       private
-      
+
       def parse_content(content)
         content = content.split(/\r?\n/) if content.is_a?(String)
         return '' if !content || content.empty?
