@@ -107,6 +107,8 @@ module YARD
     end
 
     class MethodDirective < Directive
+      SCOPE_MATCH = /\A\s*self\s*\.\s*/
+
       def call; end
 
       def after_parse
@@ -116,17 +118,27 @@ module YARD
       end
 
       protected
-      
+
       def method_name
-        if tag.name && tag.name =~ /^#{CodeObjects::METHODNAMEMATCH}(\s|\(|$)/
-          tag.name[/\A\s*([^\(; \t]+)/, 1]
+        sig = sanitized_tag_signature
+        if sig && sig =~ /^#{CodeObjects::METHODNAMEMATCH}(\s|\(|$)/
+          sig[/\A\s*([^\(; \t]+)/, 1]
         else
           handler.call_params.first
         end
       end
 
       def method_signature
-        "def #{tag.name || method_name}"
+        "def #{sanitized_tag_signature || method_name}"
+      end
+
+      def sanitized_tag_signature
+        if tag.name && tag.name =~ SCOPE_MATCH
+          tag_parser.state.scope = :class
+          $'
+        else
+          tag.name
+        end
       end
 
       def use_indented_text
@@ -138,17 +150,18 @@ module YARD
       end
 
       def create_object
+        name = method_name
         scope = tag_parser.state.scope || handler.scope
         visibility = tag_parser.state.visibility || handler.visibility
         ns = CodeObjects::NamespaceObject === object ? object : handler.namespace
-        obj = CodeObjects::MethodObject.new(ns, method_name, scope)
+        obj = CodeObjects::MethodObject.new(ns, name, scope)
         handler.register_file_info(obj)
         handler.register_source(obj)
         handler.register_group(obj)
         obj.dynamic = true
         obj.signature = method_signature
         obj.visibility = visibility
-        obj.docstring = Docstring.new!(tag_parser.text, tag_parser.tags, obj, 
+        obj.docstring = Docstring.new!(tag_parser.text, tag_parser.tags, obj,
           tag_parser.raw_text)
         obj
       end
@@ -164,7 +177,7 @@ module YARD
       protected
 
       def method_name
-        name = tag.name || handler.call_params.first
+        name = sanitized_tag_signature || handler.call_params.first
         name += '=' unless readable?
         name
       end

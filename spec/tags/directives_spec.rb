@@ -116,6 +116,23 @@ describe YARD::Tags::MethodDirective do
       foo.tag(:param).should be_nil
     end
 
+    it "should execute directives on object in indented block" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @!method foo(a)
+          #   @!scope class
+          #   @!visibility private
+          # @!method bar
+          #   Hello
+          # Ignore this
+        end
+      eof
+      foo = Registry.at('Foo.foo')
+      foo.visibility.should == :private
+      bar = Registry.at('Foo#bar')
+      bar.visibility.should == :public
+    end
+
     it "should be able to define multiple @methods in docstring" do
       YARD.parse_string <<-eof
         class Foo
@@ -149,6 +166,19 @@ describe YARD::Tags::MethodDirective do
       eof
       Registry.at('Foo::Bar#foo').docstring.should == 'Docstring1'
       Registry.at('Foo::Bar#bar').docstring.should == 'Docstring2'
+    end
+
+    it "should set scope to class if signature has 'self.' prefix" do
+      YARD.parse_string <<-eof
+        # @!method self.foo
+        # @!method self. bar
+        # @!method self.baz()
+        class Foo
+        end
+      eof
+      %w(foo bar baz).each do |name|
+        Registry.at("Foo.#{name}").should be_a(CodeObjects::MethodObject)
+      end
     end
   end
 end
@@ -220,6 +250,19 @@ describe YARD::Tags::AttributeDirective do
       eof
       Registry.at('Foo::Bar#foo').should be_reader
       Registry.at('Foo::Bar#bar').should be_reader
+    end
+  end
+
+  it "should set scope to class if signature has 'self.' prefix" do
+    YARD.parse_string <<-eof
+      # @!attribute self.foo
+      # @!attribute self. bar
+      # @!attribute self.baz
+      class Foo
+      end
+    eof
+    %w(foo bar baz).each do |name|
+      Registry.at("Foo.#{name}").should be_reader
     end
   end
 end
