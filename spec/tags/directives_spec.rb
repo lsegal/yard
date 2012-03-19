@@ -90,6 +90,18 @@ end
 
 describe YARD::Tags::MethodDirective do
   describe '#call' do
+    it "should use entire docstring if no indented data is found" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @!method foo
+          # @!method bar
+          # @!scope class
+        end
+      eof
+      Registry.at('Foo.foo').should be_a(CodeObjects::MethodObject)
+      Registry.at('Foo.bar').should be_a(CodeObjects::MethodObject)
+    end
+
     it "should handle indented block text in @!method" do
       YARD.parse_string <<-eof
         # @!method foo(a)
@@ -143,6 +155,18 @@ end
 
 describe YARD::Tags::AttributeDirective do
   describe '#call' do
+    it "should use entire docstring if no indented data is found" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @!attribute foo
+          # @!attribute bar
+          # @!scope class
+        end
+      eof
+      Registry.at('Foo.foo').should be_reader
+      Registry.at('Foo.bar').should be_reader
+    end
+
     it "should handle indented block in @!attribute" do
       YARD.parse_string <<-eof
         # @!attribute foo
