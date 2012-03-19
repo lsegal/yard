@@ -110,6 +110,7 @@ module YARD
 
       def after_parse
         return unless handler
+        use_indented_text
         create_object
       end
 
@@ -125,6 +126,13 @@ module YARD
 
       def method_signature
         "def #{tag.name || method_name}"
+      end
+
+      def use_indented_text
+        return if tag.text.empty?
+        handler = tag_parser.handler
+        self.tag_parser = TagParser.new(tag_parser.library)
+        tag_parser.parse(tag.text, nil, handler)
       end
 
       def create_object
@@ -146,6 +154,7 @@ module YARD
     class AttributeDirective < MethodDirective
       def after_parse
         return unless handler
+        use_indented_text
         create_attribute_data(create_object)
       end
       
