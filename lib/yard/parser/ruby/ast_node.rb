@@ -39,7 +39,12 @@ module YARD
       # the AstNode children of the node, use {#children}.
       class AstNode < Array
         attr_accessor :docstring_hash_flag
-        attr_accessor :docstring, :docstring_range, :source, :group
+        attr_accessor :docstring, :docstring_range, :source
+
+        # @deprecated Groups are now defined by directives
+        # @see Tags::GroupDirective
+        attr_accessor :group
+
         attr_writer :source_range, :line_range, :file, :full_source
         alias comments docstring
         alias comments_range docstring_range

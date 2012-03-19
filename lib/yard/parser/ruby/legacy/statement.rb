@@ -2,7 +2,12 @@ module YARD
   module Parser::Ruby::Legacy
     class Statement
       attr_reader :tokens, :comments, :block
-      attr_accessor :comments_range, :group
+      attr_accessor :comments_range
+
+      # @deprecated Groups are now defined by directives
+      # @see Tags::GroupDirective
+      attr_accessor :group
+
       attr_accessor :comments_hash_flag
 
       def initialize(tokens, block = nil, comments = nil)

@@ -14,7 +14,6 @@ module YARD
       #
       # @param [TokenList, String] content the tokens to create the list from
       def initialize(content)
-        @group = nil
         @shebang_line = nil
         @encoding_line = nil
         if content.is_a? TokenList
@@ -69,7 +68,6 @@ module YARD
           sanitize_block
           @statement.pop if [TkNL, TkSPACE, TkSEMICOLON].include?(@statement.last.class)
           stmt = Statement.new(@statement, @block, @comments)
-          stmt.group = @group
           if @comments && @comments_line
             stmt.comments_range = (@comments_line..(@comments_line + @comments.size - 1))
             stmt.comments_hash_flag = @comments_hash_flag

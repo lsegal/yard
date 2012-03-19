@@ -5,7 +5,11 @@ module YARD
         attr_accessor :source
         attr_accessor :line
         attr_accessor :file
+
+        # @deprecated Groups are now defined by directives
+        # @see Tags::GroupDirective
         attr_accessor :group
+
         attr_accessor :comments_hash_flag
 
         def initialize(source, file = nil, line = nil)
