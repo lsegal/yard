@@ -264,13 +264,13 @@ module YARD
       define_tag "Yield Parameters",   :yieldparam,  :with_types_and_name
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
-      define_directive :attribute, :with_types_and_name, AttributeDirective
-      define_directive :endgroup,                        EndGroupDirective
-      define_directive :group,                           GroupDirective
-      define_directive :macro, :with_types_and_title,    MacroDirective
-      define_directive :method, :with_title_and_text,    MethodDirective
-      define_directive :scope,                           ScopeDirective
-      define_directive :visibility,                      VisibilityDirective
+      define_directive :attribute, :with_types_and_title, AttributeDirective
+      define_directive :endgroup,                         EndGroupDirective
+      define_directive :group,                            GroupDirective
+      define_directive :macro, :with_types_and_title,     MacroDirective
+      define_directive :method, :with_title_and_text,     MethodDirective
+      define_directive :scope,                            ScopeDirective
+      define_directive :visibility,                       VisibilityDirective
 
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
         :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise,

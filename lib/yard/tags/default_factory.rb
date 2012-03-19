@@ -61,6 +61,8 @@ module YARD
           title, desc = *extract_title_and_desc_from_text(text)
         end
         Tag.new(tag_name, desc, types, title)
+      rescue TagFormatError
+        Tag.new(tag_name, '', types, nil)
       end
 
       def parse_tag_with_title_and_text(tag_name, text)
