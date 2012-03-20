@@ -44,7 +44,7 @@ module YARD
       include WEBrick::HTTPUtils
 
       # Responds to Rack requests and builds a response with the {Router}.
-      # @return [Array(Number,Hash,Array)] the Rack-style response
+      # @return [Array(Numeric,Hash,Array)] the Rack-style response
       def call(env)
         request = Rack::Request.new(env)
         request.path_info = unescape(request.path_info) # unescape things like %3F
