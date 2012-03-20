@@ -429,11 +429,11 @@ module YARD
       # @since 0.8.0
       def register_docstring(object, docstring = statement.comments, stmt = statement)
         docstring = docstring.join("\n") if Array === docstring
-        tag_parser = Tags::TagParser.new
-        tag_parser.parse(docstring || "", object, self)
-        
+        parser = DocstringParser.new
+        parser.parse(docstring || "", object, self)
+
         if object && docstring
-          object.docstring = tag_parser.to_docstring
+          object.docstring = parser.to_docstring
 
           # Add hash_flag/line_range
           if stmt

@@ -6,21 +6,21 @@ module YARD
       attr_accessor :tag
       attr_accessor :expanded_text
 
-      def initialize(tag, tag_parser)
+      def initialize(tag, parser)
         self.tag = tag
-        self.tag_parser = tag_parser
+        self.parser = parser
         self.expanded_text = nil
       end
 
-      def object; tag_parser.object end
-      def handler; tag_parser.handler end
+      def object; parser.object end
+      def handler; parser.handler end
 
       def call; raise NotImplementedError end
       def after_parse; end
 
       protected
 
-      attr_accessor :tag_parser
+      attr_accessor :parser
     end
 
     class EndGroupDirective < Directive
@@ -134,7 +134,7 @@ module YARD
 
       def sanitized_tag_signature
         if tag.name && tag.name =~ SCOPE_MATCH
-          tag_parser.state.scope = :class
+          parser.state.scope = :class
           $'
         else
           tag.name
@@ -143,16 +143,16 @@ module YARD
 
       def use_indented_text
         return if tag.text.empty?
-        handler = tag_parser.handler
-        object = tag_parser.object
-        self.tag_parser = TagParser.new(tag_parser.library)
-        tag_parser.parse(tag.text, object, handler)
+        handler = parser.handler
+        object = parser.object
+        self.parser = DocstringParser.new(parser.library)
+        parser.parse(tag.text, object, handler)
       end
 
       def create_object
         name = method_name
-        scope = tag_parser.state.scope || handler.scope
-        visibility = tag_parser.state.visibility || handler.visibility
+        scope = parser.state.scope || handler.scope
+        visibility = parser.state.visibility || handler.visibility
         ns = CodeObjects::NamespaceObject === object ? object : handler.namespace
         obj = CodeObjects::MethodObject.new(ns, name, scope)
         handler.register_file_info(obj)
@@ -161,8 +161,8 @@ module YARD
         obj.dynamic = true
         obj.signature = method_signature
         obj.visibility = visibility
-        obj.docstring = Docstring.new!(tag_parser.text, tag_parser.tags, obj,
-          tag_parser.raw_text)
+        obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
+          parser.raw_text)
         obj
       end
     end
@@ -234,7 +234,7 @@ module YARD
           if object
             object.scope = tag.text.to_sym
           else
-            tag_parser.state.scope = tag.text.to_sym
+            parser.state.scope = tag.text.to_sym
           end
         end
       end
@@ -246,7 +246,7 @@ module YARD
           if object
             object.visibility = tag.text.to_sym
           else
-            tag_parser.state.visibility = tag.text.to_sym
+            parser.state.visibility = tag.text.to_sym
           end
         end
       end

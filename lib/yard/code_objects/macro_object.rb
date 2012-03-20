@@ -119,13 +119,12 @@ module YARD
         # @see find_or_create
         def apply(docstring, call_params = [], full_source = '', block_source = '', method_object = nil)
           docstring = docstring.all if Docstring === docstring
-          tag_parser = Tags::TagParser.new
+          parser = DocstringParser.new
           handler = OpenStruct.new
           handler.call_params = call_params[1..-1]
           handler.caller_method = call_params.first
           handler.statement = OpenStruct.new(:source => full_source)
-          tag_parser.parse(docstring, nil, handler)
-          Docstring.new!(tag_parser.text, tag_parser.tags).to_raw
+          parser.parse(docstring, nil, handler).to_docstring.to_raw
         end
 
         # Applies a macro to a docstring, interpolating the macro's data on the

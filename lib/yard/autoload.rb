@@ -228,7 +228,6 @@ module YARD
     autoload :RefTagList,          __p('tags/ref_tag_list')
     autoload :ScopeDirective,      __p('tags/directives')
     autoload :Tag,                 __p('tags/tag')
-    autoload :TagParser,           __p('tags/tag_parser')
     autoload :TagFormatError,      __p('tags/tag_format_error')
     autoload :VisibilityDirective, __p('tags/directives')
   end
@@ -258,14 +257,15 @@ module YARD
     autoload :TemplateOptions, __p('templates/template_options')
   end
 
-  autoload :Config,         __p('config')
-  autoload :Docstring,      __p('docstring')
-  autoload :Logger,         __p('logging')
-  autoload :Options,        __p('options')
-  autoload :Registry,       __p('registry')
-  autoload :RegistryStore,  __p('registry_store')
-  autoload :StubProxy,      __p('serializers/yardoc_serializer')
-  autoload :Verifier,       __p('verifier')
+  autoload :Config,          __p('config')
+  autoload :Docstring,       __p('docstring')
+  autoload :DocstringParser, __p('docstring_parser')
+  autoload :Logger,          __p('logging')
+  autoload :Options,         __p('options')
+  autoload :Registry,        __p('registry')
+  autoload :RegistryStore,   __p('registry_store')
+  autoload :StubProxy,       __p('serializers/yardoc_serializer')
+  autoload :Verifier,        __p('verifier')
 end
 
 undef __p

@@ -265,10 +265,10 @@ module YARD
     # @return [String] the non-metadata portion of the comments to
     #   be used as a docstring
     def parse_comments(comments)
-      tag_parser = Tags::TagParser.new
-      tag_parser.parse(comments, object)
-      add_tag(*tag_parser.tags)
-      tag_parser.text
+      parser = DocstringParser.new
+      parser.parse(comments, object)
+      add_tag(*parser.tags)
+      parser.text
     end
   end
 end

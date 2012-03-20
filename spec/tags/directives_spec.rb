@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
 def tag_parse(content, object = nil, handler = nil)
-  @tag_parser = Tags::TagParser.new
-  @tag_parser.parse(content, object, handler)
-  @tag_parser
+  @parser = DocstringParser.new
+  @parser.parse(content, object, handler)
+  @parser
 end
 
 describe YARD::Tags::GroupDirective do
@@ -68,12 +68,12 @@ describe YARD::Tags::MacroDirective do
 
     it "should allow anonymous macros" do
       tag_parse("@macro\n  a b c", nil, handler)
-      @tag_parser.text.should == 'a b c'
+      @parser.text.should == 'a b c'
     end
 
     it "should expand call_params and caller_method using $N when handler is provided" do
       tag_parse("@macro\n  $1 $2 $3", nil, handler)
-      @tag_parser.text.should == 'a b c'
+      @parser.text.should == 'a b c'
     end
 
     it "should attach macro to method if one exists" do
@@ -271,7 +271,7 @@ describe YARD::Tags::ScopeDirective do
   describe '#call' do
     it "should set state on tag parser if object = nil" do
       tag_parse("@!scope class")
-      @tag_parser.state.scope.should == :class
+      @parser.state.scope.should == :class
     end
 
     it "should set scope on object if object != nil" do
@@ -283,14 +283,14 @@ describe YARD::Tags::ScopeDirective do
     %w(class instance).each do |type|
       it "should allow #{type} as value" do
         tag_parse("@!scope #{type}")
-        @tag_parser.state.scope.should == type.to_sym
+        @parser.state.scope.should == type.to_sym
       end
     end
     
     %w(invalid foo FOO CLASS INSTANCE).each do |type|
       it "should not allow #{type} as value" do
         tag_parse("@!scope #{type}")
-        @tag_parser.state.scope.should be_nil
+        @parser.state.scope.should be_nil
       end
     end
   end
@@ -300,7 +300,7 @@ describe YARD::Tags::VisibilityDirective do
   describe '#call' do
     it "should set visibility on tag parser if object = nil" do
       tag_parse("@!visibility private")
-      @tag_parser.state.visibility.should == :private
+      @parser.state.visibility.should == :private
     end
 
     it "should set visibility on object if object != nil" do
@@ -312,14 +312,14 @@ describe YARD::Tags::VisibilityDirective do
     %w(public private protected).each do |type|
       it "should allow #{type} as value" do
         tag_parse("@!visibility #{type}")
-        @tag_parser.state.visibility.should == type.to_sym
+        @parser.state.visibility.should == type.to_sym
       end
     end
     
     %w(invalid foo FOO PRIVATE INSTANCE).each do |type|
       it "should not allow #{type} as value" do
         tag_parse("@!visibility #{type}")
-        @tag_parser.state.visibility.should be_nil
+        @parser.state.visibility.should be_nil
       end
     end
   end

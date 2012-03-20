@@ -1,11 +1,11 @@
-require File.dirname(__FILE__) + "/../spec_helper"
+require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Tags::TagParser do
+describe YARD::DocstringParser do
   def parse(content, object = nil, handler = nil)
     @library ||= Tags::Library.instance
-    @tag_parser = Tags::TagParser.new(@library)
-    @tag_parser.parse(content, object, handler)
-    @tag_parser
+    @parser = DocstringParser.new(@library)
+    @parser.parse(content, object, handler)
+    @parser
   end
 
   def docstring(content, object = nil, handler = nil)
@@ -140,21 +140,21 @@ eof
       it "should handle non prefixed @#{tag} syntax as directive, not tag" do
         TestLibrary.define_directive(tag, Tags::ScopeDirective)
         parse("@#{tag}")
-        @tag_parser.directives.first.should be_a(Tags::ScopeDirective)
+        @parser.directives.first.should be_a(Tags::ScopeDirective)
       end
     end
 
     it "should handle directives with @! prefix syntax" do
       TestLibrary.define_directive('dir1', Tags::ScopeDirective)
       docstring("@!dir1 class")
-      @tag_parser.state.scope.should == :class
+      @parser.state.scope.should == :class
     end
   end
 
   describe '#text' do
     it "should only return text data" do
       parse("Foo\n@param foo x y z\nBar")
-      @tag_parser.text.should == "Foo\nBar"
+      @parser.text.should == "Foo\nBar"
     end
   end
 
@@ -162,7 +162,7 @@ eof
     it "should return the entire original data" do
       data = "Foo\n@param foo x y z\nBar"
       parse(data)
-      @tag_parser.raw_text.should == data
+      @parser.raw_text.should == data
     end
   end
 
@@ -170,8 +170,8 @@ eof
     it "should return the parsed tags" do
       data = "Foo\n@param foo x y z\nBar"
       parse(data)
-      @tag_parser.tags.size.should == 1
-      @tag_parser.tags.first.tag_name.should == 'param'
+      @parser.tags.size.should == 1
+      @parser.tags.first.tag_name.should == 'param'
     end
   end
 
@@ -179,7 +179,7 @@ eof
     it "should group all processed directives" do
       data = "Foo\n@!scope class\n@!visibility private\nBar"
       parse(data)
-      dirs = @tag_parser.directives
+      dirs = @parser.directives
       dirs.size == 2
       dirs[0].should be_a(Tags::ScopeDirective)
       dirs[0].tag.text.should == 'class'
@@ -191,7 +191,7 @@ eof
   describe '#state' do
     it "should handle modified state" do
       parse("@!scope class")
-      @tag_parser.state.scope.should == :class
+      @parser.state.scope.should == :class
     end
   end
 end

@@ -159,8 +159,8 @@ module YARD
             tag_meth, directive_tag_meth = nil, tag_meth
           end
           class_eval <<-eof, __FILE__, __LINE__
-            def #{directive_meth}(tag, tag_parser)
-              directive_call(tag, tag_parser)
+            def #{directive_meth}(tag, parser)
+              directive_call(tag, parser)
             end
           eof
           
@@ -201,14 +201,14 @@ module YARD
       end
 
       # @return [Directive]
-      def directive_call(tag, tag_parser)
+      def directive_call(tag, parser)
         meth = self.class.factory_method_for_directive(tag.tag_name)
         if meth <= Directive
-          meth = meth.new(tag, tag_parser)
+          meth = meth.new(tag, parser)
           meth.call
           meth
         else
-          meth.call(tag, tag_parser)
+          meth.call(tag, parser)
         end
       end
 
@@ -234,11 +234,11 @@ module YARD
       end
 
       # @return [Directive]
-      def directive_create(tag_name, tag_buf, tag_parser)
+      def directive_create(tag_name, tag_buf, parser)
         meth = self.class.factory_method_for(tag_name)
         tag = send_to_factory(tag_name, meth, tag_buf)
         meth = self.class.directive_method_name(tag_name)
-        send(meth, tag, tag_parser)
+        send(meth, tag, parser)
       end
 
       define_tag "Abstract",           :abstract
