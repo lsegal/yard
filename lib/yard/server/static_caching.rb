@@ -27,7 +27,7 @@ module YARD
       #   end
       #
       #   class YARD::Server::Router; include MemoryCaching; end
-      # @return [Array(Number,Hash,Array)] the Rack-style response
+      # @return [Array(Numeric,Hash,Array)] the Rack-style response
       # @return [nil] if no cache is available and routing should continue
       # @see Commands::Base#cache
       def check_static_cache
