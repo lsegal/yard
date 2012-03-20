@@ -248,7 +248,14 @@ module YARD
         elsif otitle
           title = otitle.to_s
         elsif object.is_a?(CodeObjects::Base)
-          title = h(object.relative_path(obj))
+          # Check if we're linking to a class method in the current
+          # object. If we are, create a title in the format of
+          # "CurrentClass.method_name"
+          if obj.is_a?(CodeObjects::MethodObject) && obj.scope == :class && obj.parent == object
+            title = h([object.name, obj.sep, obj.name].join)
+          else
+            title = h(object.relative_path(obj))
+          end
         else
           title = h(obj.to_s)
         end
