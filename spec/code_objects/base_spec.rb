@@ -331,4 +331,31 @@ describe YARD::CodeObjects::Base do
       o.files.should == [['filename', 12], ['filename', 40]]
     end
   end
+
+  describe '#copy_to' do
+    it "should copy all data to new object" do
+      YARD.parse_string <<-eof
+        private
+        # A docstring
+        # @return [String] a tag
+        def foo(a, b, c)
+          source_code_here
+        end
+      eof
+      foo_c = MethodObject.new(:root, :foo, :class)
+      Registry.at('#foo').copy_to(foo_c)
+      foo_c.scope.should == :class
+      foo_c.visibility.should == :private
+      foo_c.type.should == :method
+      foo_c.class.should == MethodObject
+      foo_c.path.should == '::foo'
+      foo_c.docstring.should == "A docstring"
+      foo_c.tag(:return).types.should == ['String']
+      foo_c.file.should == '(stdin)'
+      foo_c.line.should == 4
+      foo_c.source.should =~ /source_code_here/
+      foo_c.signature.should == 'def foo(a, b, c)'
+      foo_c.parameters.should == [['a', nil], ['b', nil], ['c', nil]]
+    end
+  end
 end

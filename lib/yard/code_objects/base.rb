@@ -224,6 +224,19 @@ module YARD
         yield(self) if block_given?
       end
 
+      # Copies all data in this object to another code object, except for
+      # uniquely identifying information (path, namespace, name, scope).
+      # 
+      # @param [Base] the object to copy data to
+      # @return [Base] the other object
+      def copy_to(other)
+        instance_variables.each do |ivar|
+          # copy everything but path, namespace, name, and scope
+          next if %w(@path @namespace @name @scope).include?(ivar.to_s)
+          other.instance_variable_set(ivar, instance_variable_get(ivar))
+        end
+      end
+
       # The name of the object
       # @param [Boolean] prefix whether to show a prefix. Implement
       #   this in a subclass to define how the prefix is showed.
