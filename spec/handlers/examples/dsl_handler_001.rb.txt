@@ -65,6 +65,9 @@ class Foo
   
   parser :c_parser
   
+  # Another docstring
+  parser :d_parser
+  
   # @!macro [attach] none
   #   @!method none(foo, bar)
   none
