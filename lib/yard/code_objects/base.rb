@@ -229,12 +229,14 @@ module YARD
       # 
       # @param [Base] the object to copy data to
       # @return [Base] the other object
+      # @since 0.8.0
       def copy_to(other)
-        instance_variables.each do |ivar|
-          # copy everything but path, namespace, name, and scope
-          next if %w(@path @namespace @name @scope).include?(ivar.to_s)
+        copyable_attributes.each do |ivar|
+          ivar = "@#{ivar}"
           other.instance_variable_set(ivar, instance_variable_get(ivar))
         end
+        other.docstring = docstring.to_raw
+        other
       end
 
       # The name of the object
@@ -516,6 +518,21 @@ module YARD
       # @return [String] the component that separates the namespace path
       #   and the name (default is {NSEP})
       def sep; NSEP end
+
+      protected
+
+      # Override this method if your code object subclass does not allow
+      # copying of certain attributes.
+      # 
+      # @return [Array<String>] the list of instance variable names (without
+      #   "@" prefix) that should be copied when {#copy_to} is called
+      # @see #copy_to
+      # @since 0.8.0
+      def copyable_attributes
+        vars = instance_variables.map {|ivar| ivar.to_s[1..-1] }
+        vars -= %w(docstring namespace name path)
+        vars
+      end
 
       private
 

@@ -158,5 +158,11 @@ module YARD::CodeObjects
         ISEP
       end
     end
+
+    protected
+
+    def copyable_attributes
+      super - %w(scope module_function)
+    end
   end
 end

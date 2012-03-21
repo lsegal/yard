@@ -357,5 +357,36 @@ describe YARD::CodeObjects::Base do
       foo_c.signature.should == 'def foo(a, b, c)'
       foo_c.parameters.should == [['a', nil], ['b', nil], ['c', nil]]
     end
+
+    it "should return copied object" do
+      YARD.parse_string 'def foo; end'
+      foo_c = MethodObject.new(:root, :foo, :class)
+      Registry.at('#foo').copy_to(foo_c).should == foo_c
+    end
+
+    it "should copy docstring and rewrite tags for new object" do
+      YARD.parse_string <<-eof
+        # @return [String] a tag
+        def foo; end
+      eof
+      foo_c = MethodObject.new(:root, :foo, :class)
+      foo_i = Registry.at('#foo')
+      foo_i.copy_to(foo_c)
+      foo_i.tags.should_not == foo_c.tags
+      foo_c.tags.first.object.should == foo_c
+    end
+
+    it "should only copy #copyable_attributes" do
+      foo = MethodObject.new(:root, :foo)
+      foo.should_receive(:copyable_attributes).and_return %w(a b c)
+      foo.should_receive(:instance_variable_get).with('@a').and_return(1)
+      foo.should_receive(:instance_variable_get).with('@b').and_return(2)
+      foo.should_receive(:instance_variable_get).with('@c').and_return(3)
+      bar = MethodObject.new(:root, :bar)
+      bar.should_receive(:instance_variable_set).with('@a', 1)
+      bar.should_receive(:instance_variable_set).with('@b', 2)
+      bar.should_receive(:instance_variable_set).with('@c', 3)
+      foo.copy_to(bar)
+    end
   end
 end
