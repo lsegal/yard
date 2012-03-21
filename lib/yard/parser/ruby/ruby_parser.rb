@@ -4,9 +4,9 @@ module YARD
   module Parser
     module Ruby
       # Ruby 1.9 parser
-      # @attr_reader encoding_line
-      # @attr_reader shebang_line
-      # @attr_reader enumerator
+      # @!attribute [r] encoding_line
+      # @!attribute [r] shebang_line
+      # @!attribute [r] enumerator
       class RubyParser < Parser::Base
         def initialize(source, filename)
           @parser = RipperParser.new(source, filename)

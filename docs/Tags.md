@@ -132,12 +132,12 @@ YARD supplies the following built-in tags:
         !!!plain
         @attr_writer [Types] name description of writeonly attribute
 
-  * `@attribute`: Recognizes a DSL class method as an attribute with the given
+  * `@!attribute`: Recognizes a DSL class method as an attribute with the given
     name. Also accepts the r, w, or rw flag to signify that the attribute is
     readonly, writeonly, or readwrite (default). Only used with DSL methods.
 
         !!!plain
-        @attribute [rw|r|w] NAME
+        @!attribute [rw|r|w] NAME
 
   * `@author`: List the author(s) of a class/method
 
@@ -156,18 +156,18 @@ YARD supplies the following built-in tags:
         @example Reverse a string
           "mystring".reverse #=> "gnirtsym"
 
-  * `@macro`: Registers or expands a new macro. See the [Macros](#macros)
+  * `@!macro`: Registers or expands a new macro. See the [Macros](#macros)
     section for more details. Note that the name parameter is never optional.
 
         !!!plain
-        @macro [new|attached] macro_name
+        @!macro [new|attached] macro_name
           The macro contents to expand
 
-  * `@method`: Recognizes a DSL class method as a method with the given name
+  * `@!method`: Recognizes a DSL class method as a method with the given name
     and optional signature. Only used with DSL methods.
 
         !!!plain
-        @method method_signature(opts = {}, &block)
+        @!method method_signature(opts = {}, &block)
 
   * `@note`: Creates an emphasized note for the users to read about the
     object.
@@ -228,10 +228,10 @@ YARD supplies the following built-in tags:
         !!!plain
         @return [optional, types, ...] description
 
-  * `@scope`: Sets the scope of a DSL method. Only applicable to DSL method
+  * `@!scope`: Sets the scope of a DSL method. Only applicable to DSL method
     calls. Acceptable values are 'class' or 'instance'
 
-        @scope class|instance
+        @!scope class|instance
 
   * `@see`: "See Also" references for an object. Accepts URLs or
     other code objects with an optional description at the end.
@@ -255,10 +255,10 @@ YARD supplies the following built-in tags:
 
         @version 1.0
 
-  * `@visibility`: Sets the visibility of a DSL method. Only applicable to
+  * `@!visibility`: Sets the visibility of a DSL method. Only applicable to
     DSL method calls. Acceptable values are public, protected, or private.
 
-        @visibility public|protected|private
+        @!visibility public|protected|private
 
   * `@yield`: Describes the block. Use types to list the parameter
     names the block yields.
@@ -324,14 +324,14 @@ directly during parsing by {YARD::Docstring}.
 
 Macros enable the documenter to write repetitive documentation once and then
 re-apply it to other objects. Macros are defined on docstrings using the
-`@macro` tag. The same `@macro` tag is used to expand them. The following
-is an example of a simple macro declaration and expansion:
+`@!macro` directive. The same `@!macro` syntax is used to expand them. The
+following is an example of a simple macro declaration and expansion:
 
-    # @macro [new] string_attr
-    # @return [String] the attribute +$1+ as a String
+    # @!macro [new] string_attr
+    #   @return [String] the attribute +$1+ as a String
     attr_accessor :foo
 
-    # @macro string_attr
+    # @!macro string_attr
     attr_accessor :bar
 
 In the above example, both attributes `foo` and `bar` will get the docstring
@@ -355,21 +355,21 @@ If the macro does not already exist, it will be created if:
 For instance, creating a new macro might look like (see the section on
 interpolation below for a description of the `$2` syntax):
 
-    # @macro the_macro_name
-    # @return [$2] the thing to return
+    # @!macro the_macro_name
+    #   @return [$2] the thing to return
     typed_attribute :foo, String
 
 Or:
 
-    # @macro [new] the_macro_name
-    # Returns a string!
+    # @!macro [new] the_macro_name
+    #   Returns a string!
     def foo; end
 
 You can also "attach" a macro to a method if it is in the class scope. In
 this case, you do not need to also provide the 'new' flag, using 'attach'
 is sufficient:
 
-    # @macro [attach] the_macro_name
+    # @!macro [attach] the_macro_name
     #   @return [String] the string value
     def self.foo; end
 
@@ -379,40 +379,6 @@ method object). Attaching macros is discussed below.
 
 Note that the name is never optional. Even if the macro is never re-used,
 it must be named.
-
-### Indenting the Macro Data
-
-If a macro tag has an indented body of macro data (shown below), it will be
-the only portion of the docstring saved for re-use.
-
-    # @macro [new] macro_name
-    #   The macro data is here.
-    # This data is only used for the current object
-    def method; end
-
-In the above case, "The macro data is here." is the only portion that will be
-re-used if the macro is called again on another object. However, for the case
-of the above method, both the macro data and the local docstring will be
-applied to the method, creating the docstring:
-
-    # The macro data is here.
-    # This data is only used for the current object.
-    def method; end
-
-You can therefore keep portions of docstrings local to objects even when
-creating a macro, by indenting the portion of the data that should be re-
-expanded, and listing the local docstring data above or below.
-
-If there is no indented macro data, the entire docstring is saved as the
-macro data. For instance,
-
-    # @macro [new] macro_name
-    # The macro data is here.
-    # This data is also used for all macros.
-    def method; end
-
-In the above case, the macro 'macro_name' will always show both lines of text
-when expanded on other objects.
 
 ### Attaching a Macro to a DSL (Class) Method
 
@@ -427,7 +393,7 @@ document these declarations in any future call like so:
       # Defines a new property
       # @param [String] name the property name
       # @param [Class] type the property's type
-      # @macro [attach] property
+      # @!macro [attach] property
       #   @return [$2] the $1 property
       def self.property(name, type) end
     end
@@ -443,8 +409,8 @@ Post class in our codebase, we could add the macro to the first usage of
 the `property` call:
 
     class Post < Resource
-      # @macro [attach] property
-      # @return [$2] the $1 property
+      # @!macro [attach] property
+      #   @return [$2] the $1 property
       property :title, String
       property :view_count, Integer
     end
@@ -466,9 +432,9 @@ a DSL method that creates a method using the first argument with argument
 names following, ending with the return type of the method. This could be
 documented as:
 
-    # @macro dsl_method
-    # @method $1(${2--2})
-    # @return [${-1}] the return value of $0
+    # @!macro dsl_method
+    #   @!method $1(${2--2})
+    #   @return [${-1}] the return value of $0
     create_method_with_args :foo, :a, :b, :c, String
 
 As described, the method is using the signature `foo(a, b, c)` and the return
@@ -485,7 +451,7 @@ so it would be safe to list `$1 $2 ... $10`, for example.
 
 Interpolation can be escaped by prefixing the `$` with `\`, like so:
 
-    # @macro foo
+    # @!macro foo
     #   I have \$2.00 USD.
 
 ## Programmatic API

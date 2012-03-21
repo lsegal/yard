@@ -2,8 +2,8 @@ require 'ostruct'
 
 module YARD
   module CodeObjects
-    # A MacroObject represents a docstring defined through +@macro NAME+ and can be
-    # reused by specifying the tag +@macro NAME+. You can also provide the
+    # A MacroObject represents a docstring defined through +@!macro NAME+ and can be
+    # reused by specifying the tag +@!macro NAME+. You can also provide the
     # +attached+ type flag to the macro definition to have it attached to the
     # specific DSL method so it will be implicitly reused.
     # 
@@ -11,17 +11,17 @@ module YARD
     # document.
     # 
     # @example Creating a basic named macro
-    #   # @macro prop
-    #   # @method $1(${3-})
-    #   # @return [$2] the value of the $0
+    #   # @!macro prop
+    #   #   @!method $1(${3-})
+    #   #   @return [$2] the value of the $0
     #   property :foo, String, :a, :b
     #   
-    #   # @macro prop
+    #   # @!macro prop
     #   property :bar, Numeric, :value
     # 
     # @example Creating a macro that is attached to the method call
-    #   # @macro [attach] prop2
-    #   # @method $1(value)
+    #   # @!macro [attach] prop2
+    #   #   @!method $1(value)
     #   property :foo
     #   
     #   # Extra data added to docstring
@@ -52,7 +52,7 @@ module YARD
         end
       
         # Parses a given docstring and determines if the macro is "new" or
-        # not. If the macro has $variable names or if it has a @macro tag
+        # not. If the macro has $variable names or if it has a @!macro tag
         # with the [new] or [attached] flag, it is considered new. 
         # 
         # If a new macro is found, the macro is created and registered. Otherwise
@@ -64,7 +64,7 @@ module YARD
         #   the macro to. Only used if the macro is being created, otherwise
         #   this argument is ignored.
         # @return [MacroObject] the newly created or existing macro, depending
-        #   on whether the @macro tag was a new tag or not.
+        #   on whether the @!macro tag was a new tag or not.
         # @return [nil] if the +data+ has no macro tag or if the macro is
         #   not new and no macro by the macro name is found.
         def find_or_create(macro_name, data, method_object = nil)
@@ -84,7 +84,7 @@ module YARD
         # * Also supports $!{N-M} ranges, as well as negative indexes on N or M
         # * Use \$ to escape the variable name in a macro.
         # 
-        # @macro [new] macro.expand
+        # @!macro [new] macro.expand
         #   @param [Array<String>] call_params the method name and parameters
         #     to the method call. These arguments will fill \$0-N
         #   @param [String] full_source the full source line (excluding block) 
@@ -115,7 +115,7 @@ module YARD
         # on the new macro object.
         # 
         # @param [Docstring] docstring the docstring to create a macro out of
-        # @macro macro.expand
+        # @!macro macro.expand
         # @see find_or_create
         def apply(docstring, call_params = [], full_source = '', block_source = '', method_object = nil)
           docstring = docstring.all if Docstring === docstring
@@ -132,7 +132,7 @@ module YARD
         # the original +docstring+ object.
         # 
         # @param [MacroObject] macro the macro object
-        # @macro macro.expand
+        # @!macro macro.expand
         def apply_macro(macro, docstring, call_params = [], full_source = '', block_source = '')
           apply(docstring, call_params, full_source, block_source)
         end

@@ -97,8 +97,8 @@ class D
 end
 
 class E
-  # @macro prop
-  #   @method $1(value)
+  # @!macro prop
+  #   @!method $1(value)
   #   $3
   #   @return [$2]
   def self.property(name, ret_type, docstring)
@@ -106,8 +106,8 @@ class E
   
   property :foo, String, "create a foo"
   
-  # @macro xyz
-  #   @method $1
+  # @!macro xyz
+  #   @!method $1
   def xyz; end
   
   xyz :a

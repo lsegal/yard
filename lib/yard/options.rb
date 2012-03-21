@@ -66,8 +66,8 @@ module YARD
   #     def no_highlight; !highlight end
   #   end
   class Options
-    # @macro [attach] yard.default_attr
-    #   @attribute $1
+    # @!macro [attach] yard.default_attr
+    #   @!attribute $1
     # Defines an attribute named +key+ and sets a default value for it
     # 
     # @example Defining a default option key

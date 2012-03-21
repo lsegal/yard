@@ -45,15 +45,15 @@ describe YARD::CodeObjects::MacroObject do
   end
   
   describe '.find_or_create' do
-    it "should look up name if @macro is present and find object" do
+    it "should look up name if @!macro is present and find object" do
       macro1 = MacroObject.create('foo', 'FOO')
       macro2 = MacroObject.find_or_create('foo', "a b c")
       macro1.should == macro2
     end
     
     it "should create new macro if macro by that name does not exist" do
-      MacroObject.find_or_create('foo', "@method $1")
-      MacroObject.find('foo').macro_data.should == "@method $1"
+      MacroObject.find_or_create('foo', "@!method $1")
+      MacroObject.find('foo').macro_data.should == "@!method $1"
     end
   end
   
@@ -71,30 +71,30 @@ describe YARD::CodeObjects::MacroObject do
     end
 
     it "should handle macro text inside block" do
-      apply("@macro name\n  foo$1$2$3\nfoobaz").should == "fooabc\nfoobaz"
+      apply("@!macro name\n  foo$1$2$3\nfoobaz").should == "fooabc\nfoobaz"
     end
     
     it "should append docstring to existing macro" do
       macro = MacroObject.create('name', '$3$2$1')
-      result = MacroObject.apply("@macro name\nfoobar", @args)
+      result = MacroObject.apply("@!macro name\nfoobar", @args)
       result.should == "cba\nfoobar"
     end
     
     it "should use only non macro data if docstring is an existing macro" do
-      data = "@macro name\n  $3$2$1\nEXTRA"
+      data = "@!macro name\n  $3$2$1\nEXTRA"
       result = MacroObject.apply(data, @args)
       result.should == "cba\nEXTRA"
-      MacroObject.apply("@macro name\nFOO", @args).should == "cba\nFOO"
+      MacroObject.apply("@!macro name\nFOO", @args).should == "cba\nFOO"
     end
     
     it "should create macros if they don't exist" do
-      result = MacroObject.apply("@macro name\n  foo!$1", @args)
+      result = MacroObject.apply("@!macro name\n  foo!$1", @args)
       result.should == "foo!a"
       MacroObject.find('name').macro_data.should == 'foo!$1'
     end
     
     it "should keep other tags" do
-      apply("@macro name\n  foo$1$2$3\n@param name foo\nfoo").should == 
+      apply("@!macro name\n  foo$1$2$3\n@param name foo\nfoo").should == 
         "fooabc\nfoo\n@param name\n  foo"
     end
   end

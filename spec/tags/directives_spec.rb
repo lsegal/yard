@@ -67,23 +67,23 @@ describe YARD::Tags::MacroDirective do
     end
 
     it "should allow anonymous macros" do
-      tag_parse("@macro\n  a b c", nil, handler)
+      tag_parse("@!macro\n  a b c", nil, handler)
       @parser.text.should == 'a b c'
     end
 
     it "should expand call_params and caller_method using $N when handler is provided" do
-      tag_parse("@macro\n  $1 $2 $3", nil, handler)
+      tag_parse("@!macro\n  $1 $2 $3", nil, handler)
       @parser.text.should == 'a b c'
     end
 
     it "should attach macro to method if one exists" do
-      tag_parse("@macro [attach] attached\n  $1 $2 $3", nil, handler)
+      tag_parse("@!macro [attach] attached\n  $1 $2 $3", nil, handler)
       macro = CodeObjects::MacroObject.find('attached')
       macro.method_object.should == P('Foo::Bar.foo')
     end
 
     it "should not attempt to expand macro values if handler = nil" do
-      tag_parse("@macro [attach] xyz\n  $1 $2 $3")
+      tag_parse("@!macro [attach] xyz\n  $1 $2 $3")
     end
   end
 end

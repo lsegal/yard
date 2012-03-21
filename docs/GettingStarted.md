@@ -215,35 +215,35 @@ the code will cause it to generate documentation:
 
 Note that YARD uses the first argument in the method call to determine the
 method name. In some cases, this would not be the method name, and you would
-need to declare it manually. You can do so with the `@method` tag:
+need to declare it manually. You can do so with the `@!method` directive:
 
-    # @method foo
+    # @!method foo
     create_a_foo_method
 
-The @method tag can also accept a full method signature with parameters:
+The @!method directive can also accept a full method signature with parameters:
 
-    # @method foo(name, opts = {})
+    # @!method foo(name, opts = {})
     create_a_foo_method
 
 You can also set visibility and scope, or modify the method signature with
 extra tags. The following adds documentation for a private class method:
 
-    # @method foo(opts = {})
+    # @!method foo(opts = {})
     # The foo method!
-    # @scope class
-    # @visibility private
+    # @!scope class
+    # @!visibility private
     create_a_private_foo_class_method
 
-Finally, you can tag a method as an attribute by replacing the @method
-tag with @attribute. The @attribute tag allows for the flags [r], [w], or
-[rw] to declare a readonly, writeonly, or readwrite attribute, respectively.
+Finally, you can tag a method as an attribute by replacing the @!method
+tag with @!attribute. The @!attribute directive allows for the flags [r], [w],
+or [rw] to declare a readonly, writeonly, or readwrite attribute, respectively.
 
-    # @attribute [w]
+    # @!attribute [w]
     # The writeonly foo attribute!
     a_writeonly_attribute :foo
 
 (Note that if the name can be automatically detected, you do not need to
-specify it in the @method or @attribute tag)
+specify it in the @!method or @!attribute directives)
 
 However, you will notice a few drawbacks with this basic support:
 
@@ -263,7 +263,7 @@ using a macro, it might look like:
     class Post
       include DataMapper::Resource
 
-      # @macro dm.property
+      # @!macro dm.property
       # @return [$2] the $1 $0 of the post
       property :title, String
     end
@@ -276,7 +276,7 @@ section. There is also some extra benefit to using this macro, in that we
 can re-apply it to any other property in our class by simply calling on
 the macro. The following:
 
-    # @macro dm.property
+    # @!macro dm.property
     property :view_count, Integer
 
 Would be equivalent to:
@@ -293,7 +293,7 @@ by using this snippet:
     class Post
       include DataMapper::Resource
 
-      # @macro [attach] dm.property
+      # @!macro [attach] dm.property
       # @return [$2] the $1 $0 of the post
       property :title, String
       property :view_count, Integer

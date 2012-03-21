@@ -4,7 +4,7 @@ require 'ostruct'
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   before(:all) { parse_file :dsl_handler_001, __FILE__ }
   
-  it "should create a readable attribute when @attribute r is found" do
+  it "should create a readable attribute when @!attribute r is found" do
     obj = Registry.at('Foo#attr1')
     obj.should_not be_nil
     obj.should be_reader
@@ -12,14 +12,14 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     Registry.at('Foo#attr1=').should be_nil
   end
 
-  it "should create a writable attribute when @attribute w is found" do
+  it "should create a writable attribute when @!attribute w is found" do
     obj = Registry.at('Foo#attr2=')
     obj.should_not be_nil
     obj.should be_writer
     Registry.at('Foo#attr2').should be_nil
   end
   
-  it "should default to readwrite @attribute" do
+  it "should default to readwrite @!attribute" do
     obj = Registry.at('Foo#attr3')
     obj.should_not be_nil
     obj.should be_reader
@@ -28,7 +28,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.should be_writer
   end
   
-  it "should allow @attribute to define alternate method name" do
+  it "should allow @!attribute to define alternate method name" do
     Registry.at('Foo#attr4').should be_nil
     Registry.at('Foo#custom').should_not be_nil
   end
@@ -57,7 +57,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.should be_nil
   end
   
-  it "should set the method name when using @method" do
+  it "should set the method name when using @!method" do
     obj = Registry.at('Foo.xyz')
     obj.should_not be_nil
     obj.signature.should == 'def xyz(a, b, c)'
@@ -124,7 +124,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   
   it "should use implicitly named macros" do
     macro = CodeObjects::MacroObject.find('parser')
-    macro.macro_data.should == "@method $1(opts = {})\n@return NOTHING!"
+    macro.macro_data.should == "@!method $1(opts = {})\n@return NOTHING!"
     macro.should_not be_nil
     macro.should be_attached
     macro.method_object.should == P('Foo.parser')

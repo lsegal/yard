@@ -149,7 +149,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   it "should add macros for class methods" do
     macro = CodeObjects::MacroObject.find('prop')
     macro.should_not be_nil
-    macro.macro_data.should == "@method $1(value)\n$3\n@return [$2]"
+    macro.macro_data.should == "@!method $1(value)\n$3\n@return [$2]"
     macro.method_object.should == Registry.at('E.property')
     macro.should be_attached
     obj = Registry.at('E#foo')
@@ -162,7 +162,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   it "should handle macros on any object" do
     macro = CodeObjects::MacroObject.find('xyz')
     macro.should_not be_nil
-    macro.macro_data.should == '@method $1'
+    macro.macro_data.should == '@!method $1'
   end
   
   it "should skip macros on instance methods" do
@@ -171,7 +171,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   
   it "should warn if the macro name is invalid" do
     log.should_receive(:warn).with(/Invalid directive.*@!macro/)
-    YARD.parse_string "class Foo\n# @macro\ndef self.foo; end\nend"
+    YARD.parse_string "class Foo\n# @!macro\ndef self.foo; end\nend"
   end
   
   it "should handle 'def end' methods" do

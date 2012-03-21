@@ -1,5 +1,7 @@
 # Helper methods to parse @attr_* tags on a class.
 #
+# @deprecated The use of +@attr+ tags are deprecated since 0.8.0 in favour of
+#   the +@!attribute+ directive. This module should not be relied on.
 # @since 0.5.6
 module YARD::Handlers::Ruby::StructHandlerMethods
   include YARD::CodeObjects

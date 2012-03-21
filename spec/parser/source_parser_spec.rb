@@ -377,11 +377,11 @@ describe YARD::Parser::SourceParser do
     
     it "should add macros on any object" do
       YARD.parse_string <<-eof
-        # @macro [new] foo
+        # @!macro [new] foo
         #   This is a macro
         #   @return [String] the string
         class Foo
-          # @macro foo
+          # @!macro foo
           def foo; end
         end
       eof
