@@ -127,6 +127,9 @@ module YARD
         # Convenience method to define a new tag using one of {Tag}'s factory methods, or the
         # regular {DefaultFactory#parse_tag} factory method if none is supplied.
         #
+        # @!macro [attach] yard.tag
+        #   @!method $2_tag
+        #   @yard.tag $2 [$3] $1
         # @param [#to_s] tag the tag name to create
         # @param [#to_s, Class<Tag>] meth the {Tag} factory method to call when
         #   creating the tag or the name of the class to directly create a tag for
@@ -241,18 +244,13 @@ module YARD
         send(meth, tag, parser)
       end
 
-      # @macro [attach] yard.tag
-      #   @method $2_tag
-      #   @visibility private
-      #   @yard.tag $2 [$3] $1
-      # 
       # Defines the abstract tag
-      # 
+      #
       # @example
       #   # @abstract
       #   class Foo; end
       define_tag "Abstract",           :abstract
-      
+
       define_tag "API Visibility",     :api
       define_tag "Attribute",          :attr,        :with_types_and_name
       define_tag "Attribute Getter",   :attr_reader, :with_types_and_name
