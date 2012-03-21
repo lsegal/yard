@@ -31,15 +31,18 @@ module YARD::CodeObjects
     # @param [String, Symbol] name the method name
     # @param [Symbol] scope +:instance+, +:class+, or +:module+
     def initialize(namespace, name, scope = :instance, &block)
+      @module_function = false
+      @scope = nil
+
       # handle module function
       if scope == :module
-        other = self.class.new(namespace, name, :instance, &block)
+        other = self.class.new(namespace, name, &block)
         other.visibility = :private
         scope = :class
+        @module_function = true
       end
 
-      @scope = nil
-      self.visibility = :public
+      @visibility = :public
       self.scope = scope
       self.parameters = []
 
@@ -50,15 +53,35 @@ module YARD::CodeObjects
     # @param [Symbol] v the new scope
     def scope=(v)
       reregister = @scope ? true : false
-      YARD::Registry.delete(self) if reregister
+
+      # handle module function
+      if v == :module
+        other = self.class.new(namespace, name)
+        other.visibility = :private
+        @visibility = :public
+        @module_function = true
+        @path = nil
+      end
+
+      YARD::Registry.delete(self)
       @path = nil
       @scope = v.to_sym
+      if @scope == :module
+        @scope = :class
+      end
       YARD::Registry.register(self) if reregister
     end
 
     # @return whether or not the method is the #initialize constructor method
     def constructor?
       name == :initialize && scope == :instance && namespace.is_a?(ClassObject)
+    end
+
+    # @return [Boolean] whether or not this method was created as a module 
+    #   function
+    # @since 0.8.0
+    def module_function?
+      @module_function
     end
 
     # Returns the read/writer info for the attribute if it is one

@@ -15,10 +15,7 @@ class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy:
     new_meth, old_meth = names[0].to_sym, names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
-      o.visibility = visibility
-      o.scope = scope
       o.add_file(parser.file, statement.tokens.first.line_no, statement.comments)
-      o.docstring = statement.comments
     end
 
     if old_obj

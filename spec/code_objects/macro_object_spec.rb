@@ -71,7 +71,7 @@ describe YARD::CodeObjects::MacroObject do
     end
 
     it "should handle macro text inside block" do
-      apply("@!macro name\n  foo$1$2$3\nfoobaz").should == "fooabc\nfoobaz"
+      apply("@!macro\n  foo$1$2$3\nfoobaz").should == "fooabc\nfoobaz"
     end
     
     it "should append docstring to existing macro" do
@@ -82,19 +82,19 @@ describe YARD::CodeObjects::MacroObject do
     
     it "should use only non macro data if docstring is an existing macro" do
       data = "@!macro name\n  $3$2$1\nEXTRA"
-      result = MacroObject.apply(data, @args)
+      result = MacroObject.apply(data, @args, 'SOURCE')
       result.should == "cba\nEXTRA"
       MacroObject.apply("@!macro name\nFOO", @args).should == "cba\nFOO"
     end
     
     it "should create macros if they don't exist" do
-      result = MacroObject.apply("@!macro name\n  foo!$1", @args)
+      result = MacroObject.apply("@!macro name\n  foo!$1", @args, 'SOURCE')
       result.should == "foo!a"
       MacroObject.find('name').macro_data.should == 'foo!$1'
     end
     
     it "should keep other tags" do
-      apply("@!macro name\n  foo$1$2$3\n@param name foo\nfoo").should == 
+      apply("@!macro\n  foo$1$2$3\n@param name foo\nfoo").should == 
         "fooabc\nfoo\n@param name\n  foo"
     end
   end

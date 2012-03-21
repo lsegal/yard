@@ -47,7 +47,6 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
           o.signature ||= src
           register(o)
           o.docstring = doc if o.docstring.blank?(false)
-          o.visibility = visibility
           
           # Regsiter the object explicitly
           namespace.attributes[scope][name][type] = o

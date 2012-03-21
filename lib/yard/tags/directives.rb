@@ -65,9 +65,14 @@ module YARD
           object.scope == :class
       end
 
+      def anonymous?
+        tag.name.nil? || tag.name.empty?
+      end
+
       def expand(macro_data)
         return if attach? && class_method?
-        return if new? && (!handler || handler.statement.source.empty?)
+        return if !anonymous? && new? &&
+          (!handler || handler.statement.source.empty?)
         call_params = []
         caller_method = nil
         full_source = ''
@@ -88,7 +93,7 @@ module YARD
           else
             obj = nil
           end
-          if tag.name.nil? || tag.name.empty? # anonymous macro
+          if anonymous? # anonymous macro
             return tag.text || ""
           else
             macro = CodeObjects::MacroObject.create(tag.name, tag.text, obj)
@@ -159,12 +164,12 @@ module YARD
         obj = CodeObjects::MethodObject.new(ns, name, scope)
         handler.register_file_info(obj)
         handler.register_source(obj)
+        handler.register_visibility(obj, visibility)
         handler.register_group(obj)
-        obj.dynamic = true
         obj.signature = method_signature
-        obj.visibility = visibility
         obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
           parser.raw_text)
+        handler.register_module_function(obj)
         obj
       end
     end
@@ -232,8 +237,8 @@ module YARD
 
     class ScopeDirective < Directive
       def call
-        if %w(class instance).include?(tag.text)
-          if object
+        if %w(class instance module).include?(tag.text)
+          if object.is_a?(CodeObjects::MethodObject)
             object.scope = tag.text.to_sym
           else
             parser.state.scope = tag.text.to_sym
@@ -245,7 +250,7 @@ module YARD
     class VisibilityDirective < Directive
       def call
         if %w(public protected private).include?(tag.text)
-          if object
+          if object.is_a?(CodeObjects::Base)
             object.visibility = tag.text.to_sym
           else
             parser.state.visibility = tag.text.to_sym

@@ -69,6 +69,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     Registry.at('Foo.xyz').scope.should == :class
   end
 
+  it "should create module function if @!scope is module" do
+    mod_c = Registry.at('Foo.modfunc1')
+    mod_i = Registry.at('Foo#modfunc1')
+    mod_c.scope.should == :class
+    mod_i.visibility.should == :private
+  end
+
   it "should allow setting of @!visibility" do
     Registry.at('Foo.xyz').visibility.should == :protected
   end
@@ -123,10 +130,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   end
 
   it "should know about method information on DSL with macro expansion" do
-    right = Registry.at('Foo#right_name')
-    wrong = Registry.at('Foo#wrong_name')
-    right.should_not be_nil
-    wrong.should be_nil
+    Registry.at('Foo#right_name').should_not be_nil
+    Registry.at('Foo#right_name').source.should ==
+      'implicit_with_different_method_name :wrong, :right'
+    Registry.at('Foo#wrong_name').should be_nil
   end
 
   it "should use attached macros" do

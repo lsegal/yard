@@ -27,9 +27,8 @@ module YARD
           end
 
           object = MethodObject.new(namespace, method_name, scope)
-          register(object)
-          object.dynamic = true
           object.signature = method_signature
+          register(object)
         end
 
         def register_docstring(object, docstring = @docstring, stmt = statement)

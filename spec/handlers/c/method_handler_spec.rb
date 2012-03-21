@@ -27,7 +27,33 @@ describe YARD::Handlers::C::MethodHandler do
     Registry.at('Foo.bar').should_not be_nil
     Registry.at('Foo.bar').visibility.should == :public
   end
-  
+
+  it "should register module functions" do
+    parse <<-eof
+      /* DOCSTRING
+       * @return [String] foo!
+      */
+      static VALUE bar(VALUE self) { x(); y(); z(); }
+
+      void Init_Foo() {
+        mFoo = rb_define_module("Foo");
+        rb_define_module_function(mFoo, "bar", bar, 0);
+      }
+    eof
+    bar_c = Registry.at('Foo.bar')
+    bar_i = Registry.at('Foo#bar')
+    bar_c.should be_module_function
+    bar_c.visibility.should == :public
+    bar_c.docstring.should == "DOCSTRING"
+    bar_c.tag(:return).object.should == bar_c
+    bar_c.source.should == "static VALUE bar(VALUE self) { x(); y(); z(); }"
+    bar_i.should_not be_module_function
+    bar_i.visibility.should == :private
+    bar_i.docstring.should == "DOCSTRING"
+    bar_i.tag(:return).object.should == bar_i
+    bar_i.source.should == bar_c.source
+  end
+
   it "should register global functions into Kernel" do
     parse_init 'rb_define_global_function("bar", bar, 0);'
     Registry.at('Kernel#bar').should_not be_nil

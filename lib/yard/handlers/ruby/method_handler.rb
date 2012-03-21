@@ -18,8 +18,6 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
 
     nobj = P(namespace, nobj.value) while nobj.type == :constant
     obj = register MethodObject.new(nobj, meth, mscope) do |o|
-      o.visibility = visibility
-      o.source = statement.source
       o.signature = method_signature
       o.explicit = true
       o.parameters = args

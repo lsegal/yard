@@ -34,7 +34,8 @@ module YARD
         def handle_method(scope, var_name, name, func_name, source_file = nil)
           visibility = :public
           case scope
-          when "singleton_method", "module_function"; scope = :class
+          when "singleton_method"; scope = :class
+          when "module_function"; scope = :module
           when "private_method"; scope = :instance; visibility = :private
           else; scope = :instance
           end
@@ -42,7 +43,7 @@ module YARD
           namespace = namespace_for_variable(var_name)
           return if namespace.nil? # XXX: raise UndocumentableError might be too noisy.
           register MethodObject.new(namespace, name, scope) do |obj|
-            obj.visibility = visibility
+            register_visibility(obj, visibility)
             find_method_body(obj, func_name)
             obj.docstring.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
           end
@@ -63,7 +64,7 @@ module YARD
           new_meth, old_meth = new_name.to_sym, old_name.to_sym
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
           new_obj = register MethodObject.new(namespace, new_meth, :instance) do |o|
-            o.visibility = visibility
+            register_visibility(o, visibility)
             register_file_info(o, statement.file, statement.line)
           end
 

@@ -45,6 +45,10 @@ module YARD
           super(object, source, type) if source
         end
         
+        def register_visibility(object, visibility = nil)
+          super(object, visibility) if visibility
+        end
+        
         # @group Looking up Symbol and Var Values
         
         def symbols

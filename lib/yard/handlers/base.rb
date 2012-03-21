@@ -392,9 +392,11 @@ module YARD
           yield(object) if block_given?
           register_file_info(object)
           register_source(object)
+          register_visibility(object)
           register_docstring(object)
           register_group(object)
           register_dynamic(object)
+          register_module_function(object)
         end
         objects.size == 1 ? objects.first : objects
       end
@@ -478,12 +480,36 @@ module YARD
       # @return [void]
       # @since 0.8.0
       def register_source(object, source = statement, type = parser.parser_type)
-        unless object.is_a?(NamespaceObject)
-          object.source ||= source
-          object.source_type = type
-        end
+        return unless object.is_a?(MethodObject)
+        object.source ||= source
+        object.source_type = type
       end
-      
+
+      # Registers visibility on a method object. If the object does not
+      # respond to setting visibility, nothing is done.
+      # 
+      # @param [#visibility=] object the object to register
+      # @param [Symbol] visibility the visibility to set on the object
+      # @since 0.8.0
+      def register_visibility(object, visibility = self.visibility)
+        return unless object.respond_to?(:visibility=)
+        object.visibility = visibility
+      end
+
+      # Registers the same method information on the module function, if
+      # the object was defined as a module function.
+      # 
+      # @param [CodeObjects::Base] object the possible module function object
+      #   to copy data for
+      # @since 0.8.0
+      def register_module_function(object)
+        return unless object.is_a?(MethodObject)
+        return unless object.module_function?
+        modobj = MethodObject.new(object.namespace, object.name)
+        object.copy_to(modobj)
+        modobj.visibility = :private
+      end
+
       # Registers the object as dynamic if the object is defined inside
       # a method or block (owner != namespace)
       # 

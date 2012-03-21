@@ -65,6 +65,10 @@ describe YARD::Tags::MacroDirective do
       tag_parse("@!macro [new] foo\n  foo").text.should_not == 'foo'
     end
 
+    it "should expand new anonymous macro even if docstring is unattached" do
+      tag_parse("@!macro\n  foo").text.should == 'foo'
+    end
+
     it "should allow multiple macros to be expanded" do
       tag_parse("@!macro [new] foo\n  foo")
       tag_parse("@!macro bar\n  bar")
@@ -104,6 +108,8 @@ end
 
 describe YARD::Tags::MethodDirective do
   describe '#call' do
+    after { Registry.clear }
+
     it "should use entire docstring if no indented data is found" do
       YARD.parse_string <<-eof
         class Foo
@@ -194,11 +200,31 @@ describe YARD::Tags::MethodDirective do
         Registry.at("Foo.#{name}").should be_a(CodeObjects::MethodObject)
       end
     end
+
+    it "should be able to define method with module scope (module function)" do
+      YARD.parse_string <<-eof
+        # @!method foo
+        #   @!scope module
+        #   This is a docstring
+        #   @return [Boolean] whether this is true
+        class Foo
+        end
+      eof
+      foo_c = Registry.at('Foo.foo')
+      foo_i = Registry.at('Foo#foo')
+      foo_c.should_not be_nil
+      foo_i.should_not be_nil
+      foo_c.should be_module_function
+      foo_c.docstring.should == foo_i.docstring
+      foo_c.tag(:return).text.should == foo_i.tag(:return).text
+    end
   end
 end
 
 describe YARD::Tags::AttributeDirective do
   describe '#call' do
+    after { Registry.clear }
+
     it "should use entire docstring if no indented data is found" do
       YARD.parse_string <<-eof
         class Foo
@@ -283,18 +309,27 @@ end
 
 describe YARD::Tags::ScopeDirective do
   describe '#call' do
+    after { Registry.clear }
+
     it "should set state on tag parser if object = nil" do
       tag_parse("@!scope class")
       @parser.state.scope.should == :class
     end
 
-    it "should set scope on object if object != nil" do
-      object = OpenStruct.new(:scope => nil)
+    it "should set state on tag parser if object is namespace" do
+      object = CodeObjects::ClassObject.new(:root, 'Foo')
+      tag_parse("@!scope class", object)
+      object[:scope].should be_nil
+      @parser.state.scope.should == :class
+    end
+
+    it "should set scope on object if object is a method object" do
+      object = CodeObjects::MethodObject.new(:root, 'foo')
       tag_parse("@!scope class", object)
       object.scope.should == :class
     end
 
-    %w(class instance).each do |type|
+    %w(class instance module).each do |type|
       it "should allow #{type} as value" do
         tag_parse("@!scope #{type}")
         @parser.state.scope.should == type.to_sym
@@ -312,15 +347,24 @@ end
 
 describe YARD::Tags::VisibilityDirective do
   describe '#call' do
+    after { Registry.clear }
+
     it "should set visibility on tag parser if object = nil" do
       tag_parse("@!visibility private")
       @parser.state.visibility.should == :private
     end
 
-    it "should set visibility on object if object != nil" do
-      object = OpenStruct.new(:visibility => nil)
-      tag_parse("@!scope class", object)
-      object.scope.should == :class
+    it "should set state on tag parser if object is namespace" do
+      object = CodeObjects::ClassObject.new(:root, 'Foo')
+      tag_parse("@!visibility protected", object)
+      object.visibility.should == :protected
+      @parser.state.visibility.should be_nil
+    end
+
+    it "should set visibility on object if object is a method object" do
+      object = CodeObjects::MethodObject.new(:root, 'foo')
+      tag_parse("@!visibility private", object)
+      object.visibility.should == :private
     end
 
     %w(public private protected).each do |type|

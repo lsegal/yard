@@ -88,6 +88,9 @@ class Foo
   
   # @!macro different
   implicit_with_different_method_name :wrong, :right
+  
+  # @!scope module
+  a_module_function :modfunc1
 end
 
 class Bar
