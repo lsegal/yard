@@ -122,7 +122,14 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.tag(:return).text.should == 'the property age'
   end
 
-  it "should use implicitly named macros" do
+  it "should know about method information on DSL with macro expansion" do
+    right = Registry.at('Foo#right_name')
+    wrong = Registry.at('Foo#wrong_name')
+    right.should_not be_nil
+    wrong.should be_nil
+  end
+
+  it "should use attached macros" do
     macro = CodeObjects::MacroObject.find('parser')
     macro.macro_data.should == "@!method $1(opts = {})\n@return NOTHING!"
     macro.should_not be_nil
@@ -135,7 +142,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.docstring.tag(:return).text.should == "NOTHING!"
   end
 
-  it "should append docstring on DSL method to implicit macro" do
+  it "should append docstring on DSL method to attached macro" do
     obj = Registry.at('Foo#d_parser')
     obj.should_not be_nil
     obj.docstring.should == "Another docstring"
@@ -143,7 +150,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.docstring.tag(:return).text.should == "NOTHING!"
   end
 
-  it "should only use implicit macros on methods defined in inherited hierarchy" do
+  it "should only use attached macros on methods defined in inherited hierarchy" do
     Registry.at('Bar#x_parser').should be_nil
     Registry.at('Baz#y_parser').should_not be_nil
   end

@@ -5,11 +5,6 @@ module YARD
         include CodeObjects
         include Parser
 
-        def implicit_docstring?
-          tags = %w(method attribute overload visibility scope return)
-          tags.any? {|tag| @docstring =~ /^@!?#{tag}/ }
-        end
-
         IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor 
           attr_reader attr_writer extend include public private protected 
           private_constant).map {|n| [n, true] }.flatten]
@@ -42,6 +37,11 @@ module YARD
         end
 
         private
+
+        def implicit_docstring?
+          tags = %w(method attribute overload visibility scope return)
+          tags.any? {|tag| @docstring =~ /^@!?#{tag}\b/ }
+        end
 
         def method_name
           name = call_params.first || ""

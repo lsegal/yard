@@ -82,6 +82,12 @@ class Foo
   # @!macro
   #   $1 $2 $3
   def regular_meth(a, b, c) end
+  
+  # @!macro [new] different
+  #   @!method $2_name(a = 1)
+  
+  # @!macro different
+  implicit_with_different_method_name :wrong, :right
 end
 
 class Bar
