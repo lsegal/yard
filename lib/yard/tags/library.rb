@@ -91,7 +91,7 @@ module YARD
         # @return [nil] if the tag is freeform text
         # @since 0.8.0
         def factory_method_for_directive(directive)
-          @directive_factory_methods[directive]
+          @directive_factory_classes[directive]
         end
 
         # Sets the list of tags to display when rendering templates. The order of
@@ -129,6 +129,7 @@ module YARD
         #
         # @!macro [attach] yard.tag
         #   @!method $2_tag
+        #   @!visibility private
         #   @yard.tag $2 [$3] $1
         # @param [#to_s] tag the tag name to create
         # @param [#to_s, Class<Tag>] meth the {Tag} factory method to call when
@@ -155,26 +156,35 @@ module YARD
           @factory_methods.update(tag => meth)
           tag
         end
-        
-        def define_directive(tag, tag_meth = nil, directive_tag_meth = nil)
+
+        # @macro [attach] yard.directive
+        #   @!method $2_directive
+        #   @!visibility private
+        #   @yard.directive $1 [$2] $3
+        # @overload define_directive(tag, tag_meth = nil, directive_class)
+        #   Convenience method to define a new directive using a {Tag} factory
+        #   method and {Directive} subclass that implements the directive
+        #   callbacks.
+        #   @see define_tag
+        def define_directive(tag, tag_meth = nil, directive_class = nil)
           directive_meth = directive_method_name(tag)
-          if directive_tag_meth.nil?
-            tag_meth, directive_tag_meth = nil, tag_meth
+          if directive_class.nil?
+            tag_meth, directive_class = nil, tag_meth
           end
           class_eval <<-eof, __FILE__, __LINE__
             def #{directive_meth}(tag, parser)
               directive_call(tag, parser)
             end
           eof
-          
+
           @factory_methods ||= SymbolHash.new(false)
           @factory_methods.update(tag => tag_meth)
-          @directive_factory_methods ||= SymbolHash.new(false)
-          @directive_factory_methods.update(tag => directive_tag_meth)
+          @directive_factory_classes ||= SymbolHash.new(false)
+          @directive_factory_classes.update(tag => directive_class)
 
           tag
         end
-        
+
         def tag_method_name(tag_name)
           tag_or_directive_method_name(tag_name)
         end

@@ -1,7 +1,17 @@
-<% @items.each do |item| %>
+<h2>Tag List</h2>
+
+<% all_tags.each do |tag| %>
 <div class="method_details">
-  <% tag = item.tag('yard.tag') %>
   <p class="signature" id="<%= h tag.name %>"><%= tag_signature tag %></p>
-  <%= yieldall :object => item %>
+  <%= yieldall :object => tag.object %>
+</div>
+<% end %>
+
+<h2>Directive List</h2>
+
+<% all_directives.each do |tag| %>
+<div class="method_details">
+  <p class="signature" id="<%= h tag.name %>"><%= tag_signature tag %></p>
+  <%= yieldall :object => tag.object %>
 </div>
 <% end %>

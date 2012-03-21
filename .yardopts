@@ -5,8 +5,10 @@
 --exclude /yard/rubygems/
 --asset docs/images:images
 --type-name-tag yard.tag:"YARD Tag"
+--type-name-tag yard.directive:"YARD Directive"
 --hide-tag yard.tag
---template-path ./docs/templates
+--hide-tag yard.directive
+--load ./docs/templates.rb
 -
 docs/WhatsNew.md
 docs/GettingStarted.md
