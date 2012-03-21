@@ -3,7 +3,7 @@ require 'ostruct'
 
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   before(:all) { parse_file :dsl_handler_001, __FILE__ }
-  
+
   it "should create a readable attribute when @!attribute r is found" do
     obj = Registry.at('Foo#attr1')
     obj.should_not be_nil
@@ -18,7 +18,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.should be_writer
     Registry.at('Foo#attr2').should be_nil
   end
-  
+
   it "should default to readwrite @!attribute" do
     obj = Registry.at('Foo#attr3')
     obj.should_not be_nil
@@ -27,7 +27,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.should_not be_nil
     obj.should be_writer
   end
-  
+
   it "should allow @!attribute to define alternate method name" do
     Registry.at('Foo#attr4').should be_nil
     Registry.at('Foo#custom').should_not be_nil
@@ -39,7 +39,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.docstring.should == "IMPLICIT METHOD!"
     obj.tag(:return).types.should == ['String']
   end
-  
+
   it "should recognize implicit docstring when it has scope tag" do
     obj = Registry.at("Foo.implicit1")
     obj.should_not be_nil
@@ -51,12 +51,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.should_not be_nil
     obj.visibility.should == :protected
   end
-  
+
   it "should not recognize implicit docstring with any other normal tag" do
     obj = Registry.at('Foo#implicit_invalid3')
     obj.should be_nil
   end
-  
+
   it "should set the method name when using @!method" do
     obj = Registry.at('Foo.xyz')
     obj.should_not be_nil
@@ -64,15 +64,15 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.source.should == 'foo_bar'
     obj.docstring.should == 'The foo method'
   end
-  
-  it "should allow setting of @scope" do
+
+  it "should allow setting of @!scope" do
     Registry.at('Foo.xyz').scope.should == :class
   end
-  
-  it "should allow setting of @visibility" do
+
+  it "should allow setting of @!visibility" do
     Registry.at('Foo.xyz').visibility.should == :protected
   end
-  
+
   it "should ignore DSL methods without tags" do
     Registry.at('Foo#implicit_invalid').should be_nil
   end
@@ -81,23 +81,23 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     Registry.at('Foo#implicit_valid').should_not be_nil
     Registry.at('Foo#implicit_invalid2').should be_nil
   end
- 
+
   it "should allow creation of macros" do
     macro = CodeObjects::MacroObject.find('property')
     macro.should_not be_nil
     macro.should_not be_attached
     macro.method_object.should be_nil
   end
-  
+
   it "should handle macros with no parameters to expand" do
     Registry.at('Foo#none').should_not be_nil
     Registry.at('Baz#none').signature.should == 'def none(foo, bar)'
   end
-  
+
   it "should expand $N on method definitions" do
     Registry.at('Foo#regular_meth').docstring.should == 'a b c'
   end
-  
+
   it "should apply new macro docstrings on new objects" do
     obj = Registry.at('Foo#name')
     obj.should_not be_nil
@@ -109,7 +109,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.tag(:return).types.should == ['String']
     obj.tag(:return).text.should == 'the property name'
   end
-  
+
   it "should allow reuse of named macros" do
     obj = Registry.at('Foo#age')
     obj.should_not be_nil
@@ -121,7 +121,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.tag(:return).types.should == ['Fixnum']
     obj.tag(:return).text.should == 'the property age'
   end
-  
+
   it "should use implicitly named macros" do
     macro = CodeObjects::MacroObject.find('parser')
     macro.macro_data.should == "@!method $1(opts = {})\n@return NOTHING!"
@@ -134,28 +134,28 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.signature.should == "def c_parser(opts = {})"
     obj.docstring.tag(:return).text.should == "NOTHING!"
   end
-  
+
   it "should only use implicit macros on methods defined in inherited hierarchy" do
     Registry.at('Bar#x_parser').should be_nil
     Registry.at('Baz#y_parser').should_not be_nil
   end
-  
+
   it "should handle top-level DSL methods" do
     obj = Registry.at('#my_other_method')
     obj.should_not be_nil
     obj.docstring.should == "Docstring for method"
   end
-  
+
   it "should handle Constant.foo syntax" do
     obj = Registry.at('#beep')
     obj.should_not be_nil
     obj.signature.should == 'def beep(a, b, c)'
   end
-  
+
   it "should not detect implicit macros with invalid method names" do
     undoc_error <<-eof
       ##
-      # IMPLICIT METHOD THAT SHOULD 
+      # IMPLICIT METHOD THAT SHOULD
       # NOT BE DETECTED
       dsl_method '/foo/bar'
     eof
