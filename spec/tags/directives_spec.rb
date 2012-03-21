@@ -61,6 +61,10 @@ describe YARD::Tags::MacroDirective do
       tag_parse("@!macro foo").text.should == 'foo'
     end
 
+    it "should not expand new macro if docstring is unattached" do
+      tag_parse("@!macro [new] foo\n  foo").text.should_not == 'foo'
+    end
+
     it "should allow multiple macros to be expanded" do
       tag_parse("@!macro [new] foo\n  foo")
       tag_parse("@!macro bar\n  bar")

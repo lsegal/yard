@@ -67,6 +67,7 @@ module YARD
 
       def expand(macro_data)
         return if attach? && class_method?
+        return if new? && (!handler || handler.statement.source.empty?)
         call_params = []
         caller_method = nil
         full_source = ''
