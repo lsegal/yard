@@ -5,8 +5,8 @@ module YARD
         include CodeObjects
         include Parser
 
-        IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor 
-          attr_reader attr_writer extend include public private protected 
+        IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor
+          attr_reader attr_writer extend include public private protected
           private_constant).map {|n| [n, true] }.flatten]
 
         def handle_comments
@@ -15,12 +15,12 @@ module YARD
           @docstring = statement.comments || ""
           @docstring = @docstring.join("\n") if @docstring.is_a?(Array)
           if macro = find_attached_macro
-            @docstring += "\n" + 
+            @docstring += "\n" +
               macro.expand([caller_method, *call_params], statement.source)
           elsif !statement.comments_hash_flag && !implicit_docstring?
             return register_docstring(nil)
           end
-          
+
           # ignore DSL definitions if @method/@attribute directive is used
           if @docstring =~ /^@!?(method|attribute)\b/
             return register_docstring(nil)
@@ -51,7 +51,7 @@ module YARD
             raise UndocumentableError, "method, missing name"
           end
         end
-        
+
         def method_signature
           "def #{method_name}"
         end
