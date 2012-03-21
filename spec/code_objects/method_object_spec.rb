@@ -42,7 +42,30 @@ describe YARD::CodeObjects::MethodObject do
     Registry.at("YARD.something").should be_nil
     Registry.at("YARD#something").should_not be_nil
   end
-  
+
+  it "should create object in :class scope if scope is :module" do
+    obj = MethodObject.new(@yard, :module_func, :module)
+    obj.scope.should == :class
+    obj.visibility.should == :public
+    Registry.at('YARD.module_func').should_not be_nil
+  end
+
+  it "should create second private instance method if scope is :module" do
+    MethodObject.new(@yard, :module_func, :module)
+    obj = Registry.at('YARD#module_func')
+    obj.should_not be_nil
+    obj.visibility.should == :private
+    obj.scope.should == :instance
+  end
+
+  it "should yield block to second method if scope is :module" do
+    MethodObject.new(@yard, :module_func, :module) do |o|
+      o.docstring = 'foo'
+    end
+    Registry.at('YARD.module_func').docstring.should == 'foo'
+    Registry.at('YARD#module_func').docstring.should == 'foo'
+  end
+
   describe '#name' do
     it "should show a prefix for an instance method when prefix=true" do
       obj = MethodObject.new(nil, :something)

@@ -23,10 +23,21 @@ module YARD::CodeObjects
     # Creates a new method object in +namespace+ with +name+ and an instance
     # or class +scope+
     #
+    # If scope is +:module+, this object is instantiated as a public
+    # method in +:class+ scope, but also creates a new (empty) method
+    # as a private +:instance+ method on the same class or module.
+    #
     # @param [NamespaceObject] namespace the namespace
     # @param [String, Symbol] name the method name
-    # @param [Symbol] scope +:instance+ or +:class+
-    def initialize(namespace, name, scope = :instance)
+    # @param [Symbol] scope +:instance+, +:class+, or +:module+
+    def initialize(namespace, name, scope = :instance, &block)
+      # handle module function
+      if scope == :module
+        other = self.class.new(namespace, name, :instance, &block)
+        other.visibility = :private
+        scope = :class
+      end
+
       @scope = nil
       self.visibility = :public
       self.scope = scope
