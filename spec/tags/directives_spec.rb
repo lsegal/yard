@@ -38,6 +38,7 @@ describe YARD::Tags::MacroDirective do
   def handler
     OpenStruct.new(:call_params => %w(a b c), 
                    :caller_method => 'foo',
+                   :scope => :instance, :visibility => :public,
                    :namespace => P('Foo::Bar'),
                    :statement => OpenStruct.new(:source => 'foo :a, :b, :c'))
   end
@@ -80,6 +81,15 @@ describe YARD::Tags::MacroDirective do
       tag_parse("@!macro [attach] attached\n  $1 $2 $3", nil, handler)
       macro = CodeObjects::MacroObject.find('attached')
       macro.method_object.should == P('Foo::Bar.foo')
+    end
+
+    it "should not expand new attached macro if defined on class method" do
+      baz = CodeObjects::MethodObject.new(P('Foo::Bar'), :baz, :class)
+      baz.visibility.should == :public
+      tag_parse("@!macro [attach] attached2\n  @!visibility private", baz, handler)
+      macro = CodeObjects::MacroObject.find('attached2')
+      macro.method_object.should == P('Foo::Bar.baz')
+      baz.visibility.should == :public
     end
 
     it "should not attempt to expand macro values if handler = nil" do

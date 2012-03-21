@@ -66,6 +66,7 @@ module YARD
       end
 
       def expand(macro_data)
+        return if attach? && class_method?
         call_params = []
         caller_method = nil
         full_source = ''
