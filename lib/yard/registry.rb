@@ -208,16 +208,15 @@ module YARD
       # @return [Array<CodeObjects::Base>] the list of objects found
       # @see CodeObjects::Base#type
       def all(*types)
-        thread_local_store.values.select do |obj|
-          if types.empty?
-            obj != root
-          else
-            obj != root &&
-              types.any? do |type|
-                type.is_a?(Symbol) ? obj.type == type : obj.is_a?(type)
-              end
+        if types.empty?
+          thread_local_store.values.select {|obj| obj != root }
+        else
+          list = []
+          types.each do |type|
+            list += thread_local_store.values_for_type(type)
           end
-        end + (types.include?(:root) ? [root] : [])
+          list
+        end
       end
 
       # Returns the paths of all of the objects in the registry.

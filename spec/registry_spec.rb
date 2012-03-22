@@ -165,7 +165,7 @@ describe YARD::Registry do
       o1 = ModuleObject.new(:root, :A)
       o2 = ClassObject.new(:root, :B)
       MethodObject.new(:root, :testing)
-      r = Registry.all(CodeObjects::NamespaceObject)
+      r = Registry.all.select {|t| NamespaceObject === t }
       r.should include(o1, o2)
     end
   

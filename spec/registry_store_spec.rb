@@ -5,6 +5,8 @@ describe YARD::RegistryStore do
     FileUtils.rm_rf("foo")
     @store = RegistryStore.new
     @serializer = Serializers::YardocSerializer.new('foo')
+    @foo = CodeObjects::MethodObject.new(nil, :foo)
+    @bar = CodeObjects::ClassObject.new(nil, :Bar)
     Serializers::YardocSerializer.stub!(:new).and_return(@serializer)
   end
   
@@ -13,10 +15,11 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
-      @serializer.should_receive(:deserialize).with('root').and_return({:root => 'foo', :A => 'bar'})
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
+      @serializer.should_receive(:deserialize).with('root').and_return({:root => @foo, :A => @bar})
       @store.load('foo').should == true
-      @store.root.should == 'foo'
-      @store.get('A').should == 'bar'
+      @store.root.should == @foo
+      @store.get('A').should == @bar
     end
     
     it "should load old yardoc format if .yardoc is a file" do
@@ -32,6 +35,7 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
 
       @store.load('foo').should == true
@@ -48,6 +52,7 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       @store.load('foo').should == true
     end
@@ -65,6 +70,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(true)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:readlines).with('foo/checksums').and_return([
         'file1 CHECKSUM1', '  file2 CHECKSUM2 '
       ])
@@ -76,6 +82,7 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(true)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:read_binary).with('foo/proxy_types').and_return(Marshal.dump({'a' => 'b'}))
       @store.load('foo').should == true
@@ -86,10 +93,11 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(true)
-      File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump('foo'))
+      File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump(@foo))
       @store.load('foo').should == true
-      @store.root.should == 'foo'
+      @store.root.should == @foo
     end
   end
   
@@ -110,7 +118,7 @@ describe YARD::RegistryStore do
     end
     
     def add_items(n)
-      n.times {|i| @store[i.to_s] = 'foo' }
+      n.times {|i| @store[i.to_s] = @foo }
     end
     
     def saves_to_multidb
@@ -151,31 +159,31 @@ describe YARD::RegistryStore do
   
   describe '#put' do
     it "should assign values" do
-      @store.put(:YARD, true)
-      @store.get(:YARD).should == true
+      @store.put(:YARD, @foo)
+      @store.get(:YARD).should == @foo
     end
     
     it "should treat '' as root" do
-      @store.put('', 'value')
-      @store.get(:root).should == 'value'
+      @store.put('', @foo)
+      @store.get(:root).should == @foo
     end
   end
   
   describe '#get' do
     it "should hit cache if object exists" do
-      @store.put(:YARD, true)
-      @store.get(:YARD).should == true
+      @store.put(:YARD, @foo)
+      @store.get(:YARD).should == @foo
     end
     
     it "should hit backstore on cache miss and cache is not fully loaded" do
       serializer = mock(:serializer)
-      serializer.should_receive(:deserialize).once.with(:YARD).and_return('foo')
+      serializer.should_receive(:deserialize).once.with(:YARD).and_return(@foo)
       @store.load('foo')
       @store.instance_variable_set("@loaded_objects", 0)
       @store.instance_variable_set("@available_objects", 100)
       @store.instance_variable_set("@serializer", serializer)
-      @store.get(:YARD).should == 'foo'
-      @store.get(:YARD).should == 'foo'
+      @store.get(:YARD).should == @foo
+      @store.get(:YARD).should == @foo
       @store.instance_variable_get("@loaded_objects").should == 1
     end
   end
@@ -197,15 +205,43 @@ describe YARD::RegistryStore do
       end
     end
   end
+
+  describe '#paths_for_type' do
+    it "should set all object types if not set by object_types" do
+      File.should_receive(:directory?).with('foo').and_return(true)
+      File.should_receive(:file?).with('foo/checksums').and_return(false)
+      File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
+      @serializer.should_receive(:deserialize).with('root').and_return({:'A#foo' => @foo, :A => @bar})
+      @store.load('foo')
+      @store.paths_for_type(:method).should == ['#foo']
+      @store.paths_for_type(:class).should == ['Bar']
+    end
+
+    it "should keep track of types when assigning values" do
+      @store.put(:abc, @foo)
+      @store.paths_for_type(@foo.type).should == ['abc']
+    end
+  end
+
+  describe '#values_for_type' do
+    it "should return all objects with type" do
+      @store.put(:abc, @foo)
+      @store.values_for_type(@foo.type).should == [@foo]
+    end
+  end
   
   describe '#load_all' do
     it "should load the entire database" do
       foomock = mock(:Foo)
       barmock = mock(:Bar)
+      foomock.stub!(:type).and_return(:class)
+      barmock.stub!(:type).and_return(:class)
       foomock.should_receive(:path).and_return('Foo')
       barmock.should_receive(:path).and_return('Bar')
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       @store.should_receive(:all_disk_objects).at_least(1).times.and_return(['foo/objects/foo', 'foo/objects/bar'])

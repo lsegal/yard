@@ -13,6 +13,7 @@ module YARD
       @checksums = {}
       @store = {}
       @proxy_types = {}
+      @object_types = {:root => [:root]}
       @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
@@ -48,9 +49,11 @@ module YARD
     # @return [CodeObjects::Base] returns +value+
     def put(key, value)
       if key == ''
+        @object_types[:root] = [:root]
         @store[:root] = value
       else
         @notfound.delete(key.to_sym)
+        (@object_types[value.type] ||= []) << key.to_s
         @store[key.to_sym] = value
       end
     end
@@ -76,6 +79,16 @@ module YARD
     # @return [Array<CodeObjects::Base>] all the code objects
     def values(reload = false) load_all if reload; @store.values end
 
+    def paths_for_type(type, reload = false)
+      load_all if reload
+      @object_types[type] || []
+    end
+
+    def values_for_type(type, reload = false)
+      load_all if reload
+      paths_for_type(type).map {|t| @store[t.to_sym] }
+    end
+
     # @return [CodeObjects::RootObject] the root object
     def root; @store[:root] end
 
@@ -85,6 +98,7 @@ module YARD
       @file = file
       @store = {}
       @proxy_types = {}
+      @object_types = {}
       @notfound = {}
       @serializer = Serializers::YardocSerializer.new(@file)
       load_yardoc
@@ -147,6 +161,7 @@ module YARD
         end
       end
       write_proxy_types
+      write_object_types
       write_checksums
       true
     end
@@ -186,6 +201,10 @@ module YARD
       @serializer.checksums_path
     end
 
+    def object_types_path
+      @serializer.object_types_path
+    end
+
     def load_yardoc
       return false unless @file
       if File.directory?(@file) # new format
@@ -194,6 +213,7 @@ module YARD
         load_proxy_types
         load_checksums
         load_root
+        load_object_types
         true
       elsif File.file?(@file) # old format
         load_yardoc_old
@@ -212,6 +232,16 @@ module YARD
     def load_proxy_types
       return unless File.file?(proxy_types_path)
       @proxy_types = Marshal.load(File.read_binary(proxy_types_path))
+    end
+
+    def load_object_types
+      if File.file?(object_types_path)
+        @object_types = Marshal.load(File.read_binary(object_types_path))
+      else # migrate db without object_types
+        values.each do |object|
+          (@object_types[object.type] ||= []) << object.path
+        end
+      end
     end
 
     def load_checksums
@@ -241,6 +271,10 @@ module YARD
 
     def write_proxy_types
       File.open!(proxy_types_path, 'wb') {|f| f.write(Marshal.dump(@proxy_types)) }
+    end
+
+    def write_object_types
+      File.open!(object_types_path, 'wb') {|f| f.write(Marshal.dump(@object_types)) }
     end
 
     def write_checksums
