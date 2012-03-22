@@ -14,8 +14,12 @@
     <span class="note title constructor">constructor</span>
   <% end %>
   <% if rw = @item.attr_info %>
-    <% if rw[:read] && !rw[:write] %><span class="note title readonly">readonly</span><% end %>
-    <% if rw[:write] && !rw[:read] %><span class="note title writeonly">writeonly</span><% end %>
+    <% if !run_verifier([rw[:read]].compact).empty? && run_verifier([rw[:write]].compact).empty? %>
+      <span class="note title readonly">readonly</span>
+    <% end %>
+    <% if !run_verifier([rw[:write]].compact).empty? && run_verifier([rw[:read]].compact).empty? %>
+      <span class="note title writeonly">writeonly</span>
+    <% end %>
   <% end %>
   <% if @item.visibility != :public %><span class="note title <%= @item.visibility %>"><%= @item.visibility %></span><% end %>
   <% if @item.has_tag?(:abstract) %><span class="abstract note title">abstract</span><% end %>

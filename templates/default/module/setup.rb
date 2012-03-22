@@ -51,10 +51,11 @@ def attr_listing
   @attrs = []
   [:class, :instance].each do |scope|
     object.attributes[scope].each do |name, rw|
-      @attrs << (rw[:read] || rw[:write])
+      attr = prune_method_listing(rw.values.compact, false).first
+      @attrs << attr if attr
     end
   end
-  @attrs = sort_listing(prune_method_listing(@attrs, false))
+  @attrs = sort_listing(@attrs)
 end
 
 def constant_listing
