@@ -51,7 +51,7 @@ def attr_listing
   @attrs = []
   [:class, :instance].each do |scope|
     object.attributes[scope].each do |name, rw|
-      attr = prune_method_listing(rw.values.compact, false).first
+      attr = prune_method_listing([rw[:read], rw[:write]].compact, false).first
       @attrs << attr if attr
     end
   end
