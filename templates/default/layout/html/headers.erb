@@ -8,10 +8,7 @@
 <% stylesheets.each do |stylesheet| %>
   <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" media="screen" charset="utf-8" />
 <% end %>
-<script type="text/javascript" charset="utf-8">
-  relpath = '<%= url_for('') %>';
-  if (relpath != '') relpath += '/';
-</script>
+<%= erb :script_setup %>
 <% javascripts.each do |javascript| %>
   <script type="text/javascript" charset="utf-8" src="<%= url_for(javascript) %>"></script>
 <% end %>

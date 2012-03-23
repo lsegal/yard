@@ -50,15 +50,15 @@ function fixBoxInfoHeights() {
 
 function searchFrameLinks() {
   $('#method_list_link').click(function() {
-    toggleSearchFrame(this, relpath + 'method_list.html');
+    toggleSearchFrame(this, relpath + methodListUrl);
   });
 
   $('#class_list_link').click(function() {
-    toggleSearchFrame(this, relpath + 'class_list.html');
+    toggleSearchFrame(this, relpath + classListUrl);
   });
 
   $('#file_list_link').click(function() {
-    toggleSearchFrame(this, relpath + 'file_list.html');
+    toggleSearchFrame(this, relpath + fileListUrl);
   });
 }
 
@@ -82,10 +82,13 @@ function linkSummaries() {
 }
 
 function framesInit() {
-  if (window.top.frames.main) {
+  if (hasFrames) {
     document.body.className = 'frames';
     $('#menu .noframes a').attr('href', document.location);
     $('html head title', window.parent.document).text($('html head title').text());
+  }
+  else {
+    $('#menu .noframes a').text('frames').attr('href', relpath + framesUrl);
   }
 }
 

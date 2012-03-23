@@ -229,7 +229,7 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 #menu .title { color: #555; }
 #menu a:link, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #menu a:hover { color: #05a; }
-#menu .noframes { display: none; }
+#menu .noframes { display: inline; }
 .frames #menu .noframes { display: inline; float: right; }
 
 #footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }

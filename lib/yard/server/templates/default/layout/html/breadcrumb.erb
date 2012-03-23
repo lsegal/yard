@@ -3,7 +3,7 @@
 </form>
 <script type="text/javascript" charset="utf-8">
   $(function() {
-    $('#search_box').autocomplete('/<%= base_path(router.search_prefix) %>', {
+    $('#search_box').autocomplete($('#search_box').parent().attr('action'), {
       width: document.body.className == 'frames' ? 250 : 340,
       formatItem: function(item) {
         var values = item[0].split(",");
