@@ -1,5 +1,5 @@
 <%= object.type %> <%= h object.name %>
-<% if options[:full] %>
+<% if options.full %>
 |
 <% object.attributes.each do |scope, list| %>
 <% list.sort_by {|name, rw| name.to_s }.each do |name, rw| %>

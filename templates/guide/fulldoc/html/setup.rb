@@ -11,7 +11,7 @@ end
 Template.extra_includes << OverrideFileLinks
 
 def init
-  class << options[:serializer]
+  class << options.serializer
     def serialized_path(object)
       if CodeObjects::ExtraFileObject === object
         super.sub(/^file\./, '')
@@ -19,12 +19,12 @@ def init
         super
       end
     end
-  end if options[:serializer]
+  end if options.serializer
   
   generate_assets
   options.delete(:objects)
-  options[:files].each {|file| serialize_file(file) }
-  serialize_file(options[:readme])
+  options.files.each {|file| serialize_file(file) }
+  serialize_file(options.readme)
 end
 
 def generate_assets
@@ -34,19 +34,19 @@ def generate_assets
 end
 
 def serialize_file(file)
-  index = options[:files].index(file)
+  index = options.files.index(file)
   outfile = file.name + '.html'
-  options[:file] = file
+  options.file = file
   if file.attributes[:namespace]
-    options[:object] = Registry.at(file.attributes[:namespace])
+    options.object = Registry.at(file.attributes[:namespace])
   end
-  options[:object] ||= Registry.root
+  options.object ||= Registry.root
 
-  if file == options[:readme]
+  if file == options.readme
     serialize_index(options)
   else
-    serialize_index(options) if !options[:readme] && index == 0
-    Templates::Engine.with_serializer(outfile, options[:serializer]) do
+    serialize_index(options) if !options.readme && index == 0
+    Templates::Engine.with_serializer(outfile, options.serializer) do
       T('layout').run(options)
     end
   end

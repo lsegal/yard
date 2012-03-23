@@ -343,7 +343,7 @@ describe YARD::Templates::Template do
       mod.sections :a, [:b]
       class << mod
         def a; "(" + yield(:x => "a") + ")" end
-        def b; options[:x] + @x end
+        def b; options.x + @x end
       end
 
       mod.run.should == "(aa)"

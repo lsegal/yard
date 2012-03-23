@@ -1,12 +1,12 @@
 include Helpers::ModuleHelper
 
 def init
-  options[:objects] = objects = run_verifier(options[:objects])
+  options.objects = objects = run_verifier(options.objects)
   
-  return serialize_onefile if options[:onefile]
+  return serialize_onefile if options.onefile
   generate_assets
   serialize('_index.html')
-  options[:files].each_with_index do |file, i| 
+  options.files.each_with_index do |file, i| 
     serialize_file(file, file.title) 
   end
 
@@ -17,7 +17,7 @@ def init
     begin
       serialize(object)
     rescue => e
-      path = options[:serializer].serialized_path(object)
+      path = options.serializer.serialized_path(object)
       log.error "Exception occurred while generating '#{path}'"
       log.backtrace(e)
     end
@@ -28,9 +28,9 @@ end
 # most of the objects found in the Registry.
 # @param [CodeObject] object to be saved to HTML
 def serialize(object)
-  options[:object] = object
-  serialize_index(options) if object == '_index.html' && options[:files].empty?
-  Templates::Engine.with_serializer(object, options[:serializer]) do
+  options.object = object
+  serialize_index(options) if object == '_index.html' && options.files.empty?
+  Templates::Engine.with_serializer(object, options.serializer) do
     T('layout').run(options)
   end
 end
@@ -40,9 +40,9 @@ end
 # depending on any additional files
 def serialize_onefile
   layout = Object.new.extend(T('layout'))
-  options[:css_data] = layout.stylesheets.map {|sheet| file(sheet,true) }.join("\n")
-  options[:js_data] = layout.javascripts.map {|script| file(script,true) }.join("")
-  Templates::Engine.with_serializer('index.html', options[:serializer]) do
+  options.css_data = layout.stylesheets.map {|sheet| file(sheet,true) }.join("\n")
+  options.js_data = layout.javascripts.map {|script| file(script,true) }.join("")
+  Templates::Engine.with_serializer('index.html', options.serializer) do
     T('onefile').run(options)
   end
 end
@@ -50,7 +50,7 @@ end
 # Generate the index document for the output
 # @params [Hash] options contains data and flags that influence the output 
 def serialize_index(options)
-  Templates::Engine.with_serializer('index.html', options[:serializer]) do
+  Templates::Engine.with_serializer('index.html', options.serializer) do
     T('layout').run(options)
   end
 end
@@ -63,12 +63,12 @@ end
 # 
 # @see layout#diskfile
 def serialize_file(file, title = nil)
-  options[:object] = Registry.root
-  options[:file] = file
+  options.object = Registry.root
+  options.file = file
   outfile = 'file.' + file.name + '.html'
 
-  serialize_index(options) if file == options[:readme]
-  Templates::Engine.with_serializer(outfile, options[:serializer]) do
+  serialize_index(options) if file == options.readme
+  Templates::Engine.with_serializer(outfile, options.serializer) do
     T('layout').run(options)
   end
   options.delete(:file)
@@ -85,7 +85,7 @@ end
 #   created.
 # @param [String] content the contents that are saved to the file.
 def asset(path, content)
-  options[:serializer].serialize(path, content) if options[:serializer]
+  options.serializer.serialize(path, content) if options.serializer
 end
 
 # @return [Array<String>] Stylesheet files that are additionally loaded for the 
@@ -144,7 +144,7 @@ end
 
 # Generate a searchable class list in the output
 def generate_class_list
-  @items = options[:objects] if options[:objects]
+  @items = options.objects if options.objects
   @list_title = "Class List"
   @list_type = "class"
   asset('class_list.html', erb(:full_list))
@@ -153,7 +153,7 @@ end
 # Generate a searchable file list in the output
 def generate_file_list
   @file_list = true
-  @items = options[:files]
+  @items = options.files
   @list_title = "File List"
   @list_type = "files"
   asset('file_list.html', erb(:full_list))

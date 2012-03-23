@@ -4,7 +4,7 @@ def init
     sections :layout
   elsif @file
     if @file.attributes[:namespace]
-      @object = options[:object] = Registry.at(@file.attributes[:namespace]) || Registry.root 
+      @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root 
     end
     @breadcrumb_title = "File: " + @file.title
     @page_title = @breadcrumb_title
@@ -14,7 +14,7 @@ def init
   else
     case object
     when '_index.html'
-      @page_title = options[:title]
+      @page_title = options.title
       sections :layout, [:index, [:listing, [:files, :objects]]]
     when CodeObjects::Base
       unless object.root?

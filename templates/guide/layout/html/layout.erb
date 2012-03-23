@@ -20,8 +20,8 @@
   <body>
 		<div id="top_nav">
 			<div id="inner_nav">
-				<% if options[:readme] != options[:file] && options[:title] %>
-					<span class="title"><strong><%= options[:title] %></strong>: <%= @page_title %></span>
+				<% if options.readme != options.file && options.title %>
+					<span class="title"><strong><%= options.title %></strong>: <%= @page_title %></span>
 					<small class="links">
 						<% links = [link_file('index.html', 'top'), 
 												@prevfile ? link_file(@prevfile, 'prev') : nil, 
@@ -36,11 +36,11 @@
 				<h2 class="toc">Table Of Contents</h2>
 				<div id="toc"></div>
 				
-				<% if options[:readme] != options[:file] %>
+				<% if options.readme != options.file %>
 				<h2>Related Topics</h2>
 				<div id="links">
 					<ol class="top">
-						<% if options[:readme] %>
+						<% if options.readme %>
 							<li><%= link_file("index.html", "Documentation Overview") %></li>
 						<% end %>
 						<ol>
@@ -65,7 +65,7 @@
 					<ol class="top">
 						<li><a href="#">Documentation Overview</a></li>
 						<ol>
-							<% options[:files].each do |file| %>
+							<% options.files.each do |file| %>
 							<li><%= link_file(file.filename, file.title) %></li>
 							<% end %>
 						</ol>

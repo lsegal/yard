@@ -5,7 +5,7 @@ def init
 end
 
 def dependencies
-  return unless options[:dependencies]
+  return unless options.dependencies
   erb(:dependencies)
 end
 

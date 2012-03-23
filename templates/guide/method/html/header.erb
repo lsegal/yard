@@ -1,5 +1,5 @@
 <div class="method_header">
-  <% if options[:in_module] %>
+  <% if options.in_module %>
     <% if object.constructor? %>
       <em>self.</em><span class="path"><strong>new</strong></span><big>(</big><%= format_args(object) %><big>)</big> <%= format_block(object) %>
     <% else %>
@@ -11,7 +11,7 @@
         <% else %><big>(</big><%= format_args(object) %><big>)</big> <%= format_block(object) %><% end %>
     <% end %>
   <% else %>
-    <em>def</em> <span class="path space"><%= options[:including_object].relative_path(object.namespace) %><big><%= object.send(:sep) %></big><strong><%= object.name %></strong></span><big>(</big><%= format_args(object) %><big>)</big> <%= format_block(object) %>
+    <em>def</em> <span class="path space"><%= options.including_object.relative_path(object.namespace) %><big><%= object.send(:sep) %></big><strong><%= object.name %></strong></span><big>(</big><%= format_args(object) %><big>)</big> <%= format_block(object) %>
   <% end %>
   <% if object.has_tag?(:since) && object.namespace.tag(:since) != object.tag(:since) %><span class="since">since <%= object.tag(:since).text %></span><% end %>
 </div>
