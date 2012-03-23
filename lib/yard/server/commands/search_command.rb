@@ -6,6 +6,7 @@ module YARD
       class SearchCommand < LibraryCommand
         include Templates::Helpers::BaseHelper
         include Templates::Helpers::ModuleHelper
+        include DocServerHelper
 
         attr_accessor :results, :query
 
@@ -14,7 +15,7 @@ module YARD
           self.query = request.query['q']
           redirect("/#{adapter.router.docs_prefix}/#{single_library ? library : ''}") if query.nil? || query =~ /\A\s*\Z/
           if found = Registry.at(query)
-            redirect(serializer.serialized_path(found))
+            redirect(url_for(found))
           end
           search_for_object
           request.xhr? ? serve_xhr : serve_normal
@@ -26,13 +27,18 @@ module YARD
 
         private
 
+        def url_for(object)
+          File.join('', base_path(router.docs_prefix), 
+            serializer.serialized_path(object))
+        end
+
         def serve_xhr
           self.headers['Content-Type'] = 'text/plain'
           self.body = visible_results.map {|o|
             [(o.type == :method ? o.name(true) : o.name).to_s,
              o.path,
              o.namespace.root? ? '' : o.namespace.path,
-             serializer.serialized_path(o)
+             url_for(o)
             ].join(",")
           }.join("\n")
         end
