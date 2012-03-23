@@ -49,6 +49,10 @@ module YARD
         request = Rack::Request.new(env)
         request.path_info = unescape(request.path_info) # unescape things like %3F
         router.call(request)
+      rescue StandardError => ex
+        log.backtrace(ex)
+        [500, {'Content-Type' => 'text/plain'}, 
+          ex.message + "\n" + ex.backtrace.join("\n")]
       end
 
       # Starts the +Rack::Server+. This method will pass control to the server and
