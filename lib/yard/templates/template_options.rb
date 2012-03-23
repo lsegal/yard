@@ -52,6 +52,9 @@ module YARD
       undef no_highlight
       def no_highlight; !highlight end
       def no_highlight=(value) self.highlight = !value end
+
+      # @return [String] the title of a given page
+      attr_accessor :page_title
     end
   end
 end

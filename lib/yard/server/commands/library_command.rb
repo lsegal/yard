@@ -3,6 +3,24 @@ require 'thread'
 module YARD
   module Server
     module Commands
+      class LibraryOptions < CLI::YardocOptions
+        def adapter; @command.adapter end
+        def library; @command.library end
+        def single_library; @command.single_library end
+        def serializer; @command.serializer end
+
+        attr_accessor :command
+        attr_accessor :main_url
+
+        def each(&block)
+          super(&block)
+          yield(:adapter, adapter)
+          yield(:library, library)
+          yield(:single_library, single_library)
+          yield(:serializer, serializer)
+        end
+      end
+
       # This is the base command for all commands that deal directly with libraries.
       # Some commands do not, but most (like {DisplayObjectCommand}) do. If your
       # command deals with libraries directly, subclass this class instead.
@@ -13,7 +31,7 @@ module YARD
         # @return [LibraryVersion] the object containing library information
         attr_accessor :library
 
-        # @return [Hash{Symbol => Object}] default options for the library
+        # @return [LibraryOptions] default options for the library
         attr_accessor :options
 
         # @return [Serializers::Base] the serializer used to perform file linking
@@ -36,15 +54,9 @@ module YARD
 
         def call(request)
           self.request = request
-          self.options = SymbolHash.new(false).update(
-            :serialize => false,
-            :serializer => serializer,
-            :library => library,
-            :adapter => adapter,
-            :single_library => single_library,
-            :markup => :rdoc,
-            :format => :html
-          )
+          self.options = LibraryOptions.new
+          self.options.reset_defaults
+          self.options.command = self
           setup_library
           super
         rescue LibraryNotPreparedError
