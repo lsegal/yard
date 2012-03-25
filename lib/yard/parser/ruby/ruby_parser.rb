@@ -43,6 +43,7 @@ module YARD
           @charno = 0
           @shebang_line = nil
           @encoding_line = nil
+          @file_encoding = nil
         end
 
         def parse
@@ -56,6 +57,15 @@ module YARD
 
         def enumerator
           ast.children
+        end
+
+        def file_encoding
+          return nil unless defined?(::Encoding)
+          return @file_encoding if @file_encoding
+          return Encoding.default_internal unless @encoding_line
+          if match = @encoding_line.match(SourceParser::ENCODING_LINE)
+            @file_encoding = match.captures.last
+          end
         end
 
         private
@@ -234,6 +244,11 @@ module YARD
             @tokens[-1] = [:symbol, ":" + data]
           elsif @heredoc_state == :started
             @heredoc_tokens << [token, data]
+
+            # fix ripper encoding of heredoc bug
+            # (see http://bugs.ruby-lang.org/issues/6200)
+            data.force_encoding(file_encoding) if file_encoding
+
             @heredoc_state = :ended if token == :heredoc_end
           elsif (token == :nl || token == :comment) && @heredoc_state == :ended
             @heredoc_tokens.unshift([token, data])

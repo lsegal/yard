@@ -433,6 +433,22 @@ describe YARD::Parser::SourceParser do
       foo.should_not be_nil
       foo.signature.should == 'def foo(a = "hello")'
     end
+
+    it "should handle non-ASCII encoding in heredoc" do
+      YARD.parse_string <<-eof
+        # encoding: utf-8
+      
+        heredoc <<-ending
+          foo\u{ffe2} bar.
+        ending
+        
+        # Hello \u{ffe2} world
+        class Foo < Bar
+          attr_accessor :foo
+        end
+      eof
+      Registry.at('Foo').superclass.should == P('Bar')
+    end
   end
 
   describe '#parse' do
