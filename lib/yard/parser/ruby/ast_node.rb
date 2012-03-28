@@ -115,8 +115,14 @@ module YARD
             MethodCallNode
           when :if, :elsif, :if_mod, :unless, :unless_mod
             ConditionalNode
+          when :for, :while, :while_mod, :until, :until_mod
+            LoopNode
           when :def, :defs
             MethodDefinitionNode
+          when :class, :sclass
+            ClassNode
+          when :module
+            ModuleNode
           else
             if type.to_s =~ /_ref\Z/
               ReferenceNode
@@ -241,6 +247,16 @@ module YARD
         # @return [Boolean] whether the node is a if/elsif/else condition
         def condition?
           false
+        end
+
+        # @return [Boolean] whether the node is a loop
+        def loop?
+          false
+        end
+
+        # @return [Boolean] whether the node has a block
+        def block?
+          respond_to?(:block) || condition?
         end
 
         # @group Getting Line Information
@@ -386,6 +402,7 @@ module YARD
         end
 
         def block_param; parameters.last end
+        alias block block_param
 
         private
 
@@ -438,7 +455,24 @@ module YARD
 
         def cmod?; type =~ /_mod$/ end
       end
-      
+
+      class ClassNode < KeywordNode
+        def class_name; first end
+        def superclass; type == :sclass ? nil : self[1] end
+        def block; last end
+      end
+
+      class ModuleNode < KeywordNode
+        def module_name; first end
+        def block; last end
+      end
+
+      class LoopNode < KeywordNode
+        def loop?; true end
+        def condition; type == :for ? s(self[0], self[1]) : first end
+        def block; last end
+      end
+
       # Represents a lone comment block in source
       class CommentNode < AstNode
         def docstring; first end
