@@ -402,7 +402,7 @@ module YARD
         end
 
         def block_param; parameters.last end
-        alias block block_param
+        def block; last end
 
         private
 
