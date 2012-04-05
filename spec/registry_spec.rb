@@ -139,6 +139,33 @@ describe YARD::Registry do
       Registry.resolve(yard, "class_hello", false).should be_nil
       Registry.resolve(yard, "class_hello", true).should == cmeth
     end
+
+    it "should resolve methods in Object when inheritance = true" do
+      YARD.parse_string <<-eof
+        class Object; def foo; end end
+        class MyObject; end
+      eof
+      
+      Registry.resolve(P('MyObject'), '#foo', true).should == P('Object#foo')
+    end
+
+    it "should resolve methods in BasicObject when inheritance = true" do
+      YARD.parse_string <<-eof
+        class BasicObject; def foo; end end
+        class MyObject; end
+      eof
+      
+      Registry.resolve(P('MyObject'), '#foo', true).should == P('BasicObject#foo')
+    end
+
+    it "should not resolve methods in Object if inheriting BasicObject when inheritance = true" do
+      YARD.parse_string <<-eof
+        class Object; def foo; end end
+        class MyObject < BasicObject; end
+      eof
+      
+      Registry.resolve(P('MyObject'), '#foo', true).should be_nil
+    end
     
     it "should only check 'Path' in lookup on root namespace" do
       Registry.should_receive(:at).once.with('Test').and_return(true)

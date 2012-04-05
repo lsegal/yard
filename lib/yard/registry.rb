@@ -284,7 +284,17 @@ module YARD
         else
           while namespace
             if namespace.is_a?(CodeObjects::NamespaceObject)
-              nss = inheritance ? namespace.inheritance_tree(true) : [namespace]
+              if inheritance
+                nss = namespace.inheritance_tree(true)
+                if namespace.respond_to?(:superclass)
+                  nss |= [namespace.superclass]
+                  if namespace.superclass == P('Object')
+                    nss |= [P('BasicObject')]
+                  end
+                end
+              else
+                nss = [namespace]
+              end
               nss.each do |ns|
                 next if ns.is_a?(CodeObjects::Proxy)
                 found = partial_resolve(ns, name)
