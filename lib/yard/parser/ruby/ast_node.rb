@@ -402,7 +402,9 @@ module YARD
         end
 
         def block_param; parameters.last end
-        def block; last end
+        def block
+          last.type == :do_block || last.type == :brace_block ? last : nil
+        end
 
         private
 
