@@ -287,10 +287,10 @@ module YARD
               if inheritance
                 nss = namespace.inheritance_tree(true)
                 if namespace.respond_to?(:superclass)
-                  nss |= [namespace.superclass]
-                  if namespace.superclass == P('Object')
-                    nss |= [P('BasicObject')]
+                  if namespace.superclass != P('BasicObject')
+                    nss |= [P('Object')]
                   end
+                  nss |= [P('BasicObject')]
                 end
               else
                 nss = [namespace]

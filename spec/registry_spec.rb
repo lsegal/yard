@@ -143,7 +143,8 @@ describe YARD::Registry do
     it "should resolve methods in Object when inheritance = true" do
       YARD.parse_string <<-eof
         class Object; def foo; end end
-        class MyObject; end
+        class A; end
+        class MyObject < A; end
       eof
       
       Registry.resolve(P('MyObject'), '#foo', true).should == P('Object#foo')
@@ -152,7 +153,8 @@ describe YARD::Registry do
     it "should resolve methods in BasicObject when inheritance = true" do
       YARD.parse_string <<-eof
         class BasicObject; def foo; end end
-        class MyObject; end
+        class A; end
+        class MyObject < A; end
       eof
       
       Registry.resolve(P('MyObject'), '#foo', true).should == P('BasicObject#foo')
