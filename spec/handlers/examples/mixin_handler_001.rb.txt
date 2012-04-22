@@ -19,6 +19,10 @@ module Y
   class << self; include A; end
 end
 
+module Z
+  include A, B
+end
+
 module ABC
   module FOO; end
   module DEF

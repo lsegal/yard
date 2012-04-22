@@ -32,6 +32,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
   it "should treat a mixed in Constant by taking its value as the real object name" do
     P(:Y).instance_mixins.should include(Registry.at('B::D'))
   end
+
+  it "should add includes in the correct order when include is given multiple arguments" do
+    P(:Z).instance_mixins.should == [P(:A), P(:B)]
+  end
   
   it "should avoid including self for unresolved mixins of the same name" do
     P("ABC::DEF::FOO").mixins.should == [P("ABC::FOO")]
