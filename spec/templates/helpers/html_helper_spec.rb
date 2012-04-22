@@ -390,6 +390,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :title => "foo bar"
       }
     end
+
+    it "should resolve links to methods whose names have been escaped" do
+      should_receive(:linkify).with('Object#<<', nil).and_return('')
+      resolve_links("{Object#&lt;&lt;}")
+    end
     
     it "should warn about missing reference at right file location for object" do
       YARD.parse_string <<-eof

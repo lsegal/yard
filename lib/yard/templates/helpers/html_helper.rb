@@ -196,6 +196,8 @@ module YARD
             title = nil if title.empty?
           end
 
+          name = CGI.unescapeHTML(name)
+
           if object.is_a?(String)
             object
           else
