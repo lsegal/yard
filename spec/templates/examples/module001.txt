@@ -16,7 +16,7 @@ Defined Under Namespace:
 Includes:
 ---------
 
-    A::B::C, F, E, D, B, BaseMod
+    D, E, F, A::B::C, B, BaseMod
 
 
 Class methods:
