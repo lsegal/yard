@@ -15,6 +15,7 @@ module YARD
     autoload :Stats,          __p('cli/stats')
     autoload :Yardoc,         __p('cli/yardoc')
     autoload :YRI,            __p('cli/yri')
+    autoload :I18n,           __p('cli/i18n')
   end
 
   # A "code object" is defined as any entity in the Ruby language.
