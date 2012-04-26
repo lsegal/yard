@@ -110,14 +110,18 @@ module YARD
         @search_paths.unshift(@cache[name]) if @cache[name]
         @search_paths.unshift(Registry.yardoc_file)
 
+        # Try to load it from in memory cache
+        log.debug "Searching for #{name} in memory"
+        if obj = try_load_object(name, nil)
+          return obj
+        end
+
         log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
           next unless File.exist?(path)
           log.debug "Searching for #{name} in #{path}..."
           Registry.load(path)
-          obj = Registry.at(name)
-          if obj
-            cache_object(name, path)
+          if obj = try_load_object(name, path)
             return obj
           end
         end
@@ -125,6 +129,23 @@ module YARD
       end
 
       private
+
+      # Tries to load the object with name. If successful, caches the object
+      # with the cache_path
+      # 
+      # @param [String] name the object path
+      # @param [String] cache_path the location of the yardoc 
+      #   db containing the object to cache for future lookups.
+      #   No caching is done if this is nil.
+      # @return [void]
+      def try_load_object(name, cache_path)
+        if obj = Registry.at(name)
+          if cache_path
+            cache_object(name, cache_path)
+          end
+          return obj
+        end
+      end
 
       # Loads {CACHE_FILE}
       # @return [void]

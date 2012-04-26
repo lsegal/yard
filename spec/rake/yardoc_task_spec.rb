@@ -10,6 +10,8 @@ describe YARD::Rake::YardocTask do
     Templates::Engine.stub!(:render)
     Templates::Engine.stub!(:generate)
     YARD.stub!(:parse)
+    Registry.stub!(:load)
+    Registry.stub!(:save)
     YARD::CLI::Yardoc.stub!(:new).and_return(@yardoc)
     ::Rake.application.clear
   end

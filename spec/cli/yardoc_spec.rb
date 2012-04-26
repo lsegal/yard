@@ -10,6 +10,8 @@ describe YARD::CLI::Yardoc do
     Templates::Engine.stub!(:render)
     Templates::Engine.stub!(:generate)
     YARD.stub!(:parse)
+    Registry.stub!(:load)
+    Registry.stub!(:save)
   end
   
   describe 'Defaults' do

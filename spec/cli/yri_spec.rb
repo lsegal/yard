@@ -16,7 +16,8 @@ describe YARD::CLI::YRI do
       File.should_receive(:exist?).with('.yardoc').and_return(false)
       File.should_receive(:exist?).with('bar.yardoc').and_return(true)
       Registry.should_receive(:load).with('bar.yardoc')
-      Registry.should_receive(:at).with('Foo').and_return('OBJ')
+      Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
+      Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
       @yri.find_object('Foo').should == 'OBJ'
     end
@@ -25,7 +26,8 @@ describe YARD::CLI::YRI do
       @yri.stub!(:cache_object)
       File.should_receive(:exist?).with('.yardoc').and_return(true)
       Registry.should_receive(:load).with('.yardoc')
-      Registry.should_receive(:at).with('Foo').and_return('OBJ')
+      Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
+      Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
       @yri.find_object('Foo').should == 'OBJ'
       @yri.instance_variable_get("@search_paths")[0].should == '.yardoc'
@@ -70,7 +72,7 @@ describe YARD::CLI::YRI do
       @yri.should_receive(:print_object).with(obj)
       @yri.run('Foo')
       Registry.clear
-    end unless ENV['CI'] # FIXME make this work on Travis CI
+    end
     
     it "should print usage if no object is provided" do
       @yri.should_receive(:print_usage)
