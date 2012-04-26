@@ -182,6 +182,7 @@ describe YARD::CLI::Server do
   end
   
   it "should warn if lockfile is not found (with -G)" do
+    bundler_required
     File.should_receive(:exists?).with('somefile.lock').and_return(false)
     log.should_receive(:warn).with(/Cannot find somefile.lock/)
     run '-G', 'somefile'
