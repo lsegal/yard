@@ -40,7 +40,8 @@ module YARD
         :list   => List,
         :ri     => YRI,
         :server => Server,
-        :stats  => Stats
+        :stats  => Stats,
+        :i18n   => I18n
       ]
 
       self.default_command = :doc
