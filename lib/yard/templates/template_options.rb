@@ -71,7 +71,7 @@ module YARD
       def embed_mixins_match?(mixin)
         return nil unless mixin.is_a?(CodeObjects::ModuleObject)
         embed_mixins.any? do |embed_mixin|
-          re = Regexp.new(Regexp.quote(embed_mixin).gsub('\*', '.*'))
+          re = /\A#{Regexp.quote(embed_mixin).gsub('\*', '.*')}\Z/
           matchstr = embed_mixin.include?("::") ? mixin.path : mixin.name
           re.match(matchstr.to_s)
         end

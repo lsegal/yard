@@ -137,8 +137,13 @@ describe YARD::Templates::Engine.template(:default, :module) do
 
         include Foo
         extend Bar
+        include BarFooBar
         include Baz::XYZ
         include Baz::ABC
+      end
+
+      module BarFooBar
+        def bar_foo_bar; end
       end
 
       module Foo
