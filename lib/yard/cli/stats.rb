@@ -75,7 +75,8 @@ module YARD
         max = objects.sort_by {|o| o.path.length }.last.path.length
         if @compact
           objects.each do |object|
-            puts("%-#{max}s     (%s)" % [object.path, object.file])
+            puts("%-#{max}s     (%s)" % [object.path, 
+              [object.file, object.line].compact.join(":")])
           end
         else
           last_file = nil

@@ -65,10 +65,10 @@ eof
     @output.string.should == <<-eof
 #{@main_stats}
 Undocumented Objects:
-B            ((stdin))
-A            ((stdin))
-A::CONST     ((stdin))
-A#foo        ((stdin))
+B            ((stdin):9)
+A            ((stdin):1)
+A::CONST     ((stdin):2)
+A#foo        ((stdin):4)
 eof
   end
   
