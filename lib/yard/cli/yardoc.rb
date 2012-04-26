@@ -26,27 +26,6 @@ module YARD
       #   if the template supports it.
       default_attr :onefile, false
 
-      # @example A list of mixin path names (including wildcards)
-      #   opts.embed_mixins #=> ['ClassMethods', '*Helper', 'YARD::*']
-      # @return [Array<String>] an array of module name wildcards to embed into
-      #   class documentation as if their methods were defined directly in the class.
-      #   Useful for modules like ClassMethods. If the name contains '::', the module
-      #   is matched against the full mixin path, otherwise only the module name is used.
-      default_attr :embed_mixins, lambda { [] }
-
-      # @param [CodeObjects::Base] mixin accepts any code object, but returns
-      #   nil unless the object is a module.
-      # @return [Boolean] whether a mixin matches the embed_mixins list
-      # @return [nil] if the mixin is not a module object
-      def embed_mixins_match?(mixin)
-        return nil unless mixin.is_a?(CodeObjects::ModuleObject)
-        embed_mixins.any? do |embed_mixin|
-          re = Regexp.new(Regexp.quote(embed_mixin).gsub('\*', '.*'))
-          matchstr = embed_mixin.include?("::") ? mixin.path : mixin.name
-          re.match(matchstr.to_s)
-        end
-      end
-
       # @return [CodeObjects::ExtraFileObject] the README file object rendered
       #   along with objects
       attr_accessor :readme

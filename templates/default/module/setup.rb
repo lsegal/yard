@@ -81,7 +81,7 @@ end
 def inherited_attr_list(&block)
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
-    next if options.embed_mixins.size > 0 && !options.embed_mixins_match?(superclass)
+    next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false
     attribs = superclass.attributes[:instance]
     attribs = attribs.reject {|name, rw| object.child(:scope => :instance, :name => name) != nil }
     attribs = attribs.sort_by {|args| args.first.to_s }.map {|n, m| m[:read] || m[:write] }
@@ -93,6 +93,7 @@ end
 def inherited_constant_list(&block)
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
+    next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false
     consts = superclass.constants(:included => false, :inherited => false)
     consts = consts.reject {|const| object.child(:type => :constant, :name => const.name) != nil }
     consts = consts.sort_by {|const| const.name.to_s }

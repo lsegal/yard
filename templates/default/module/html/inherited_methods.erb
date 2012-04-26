@@ -1,7 +1,7 @@
 <% found_method = false %>
 <% object.inheritance_tree(true)[1..-1].each do |superclass| %>
   <% next if superclass.is_a?(YARD::CodeObjects::Proxy) %>
-  <% next if options[:embed_mixins] && superclass.is_a?(YARD::CodeObjects::ModuleObject) %>
+  <% next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false %>
   <% meths = prune_method_listing(superclass.meths(:included => false, :inherited => false)) %>
   <% meths.reject! {|m| object.child(:scope => m.scope, :name => m.name) != nil } %>
   <% meths.reject! {|m| m.is_alias? || m.is_attribute? } %>

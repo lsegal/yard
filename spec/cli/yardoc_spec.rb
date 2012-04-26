@@ -75,7 +75,7 @@ describe YARD::CLI::Yardoc do
     end
     
     it "should not embed mixins by default" do
-      @yardoc.options[:embed_mixins].should be_false
+      @yardoc.options.embed_mixins.should be_empty
     end
   end
   
@@ -227,7 +227,12 @@ describe YARD::CLI::Yardoc do
     
     it "should accept --embed-mixins" do
       @yardoc.parse_arguments *%w( --embed-mixins )
-      @yardoc.options[:embed_mixins].should be_true
+      @yardoc.options.embed_mixins.should == ['*']
+    end
+
+    it "should accept --embed-mixin MODULE" do
+      @yardoc.parse_arguments *%w( --embed-mixin MyModule )
+      @yardoc.options.embed_mixins.should == ['MyModule']
     end
 
     it "should generate all objects with --use-cache" do
