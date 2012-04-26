@@ -33,11 +33,9 @@ module YARD
       def run(*args)
         parse_arguments(*args)
 
-        if parse
-          if use_cache
-            Registry.load!
-            checksums = Registry.checksums.dup
-          end
+        if use_cache
+          Registry.load!
+        elsif parse
           YARD.parse(files, excluded)
           Registry.save(use_cache) if save_yardoc
         end
