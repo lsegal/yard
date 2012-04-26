@@ -52,7 +52,7 @@ module YARD
       rescue StandardError => ex
         log.backtrace(ex)
         [500, {'Content-Type' => 'text/plain'}, 
-          ex.message + "\n" + ex.backtrace.join("\n")]
+          [ex.message + "\n" + ex.backtrace.join("\n")]]
       end
 
       # Starts the +Rack::Server+. This method will pass control to the server and
