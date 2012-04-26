@@ -163,8 +163,8 @@ module YARD
     # @group Creating and Accessing Meta-data
 
     # Adds a tag or reftag object to the tag list. If you want to parse
-    # tag data based on the {Tags::DefaultFactory} tag factory, use {#create_tag}
-    # instead.
+    # tag data based on the {Tags::DefaultFactory} tag factory, use 
+    # {DocstringParser} instead.
     # 
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
     # @return [void]

@@ -25,7 +25,7 @@ module YARD
       # of files to parse.
       # 
       # @note OrderedParser sets itself as the +ordered_parser+ key on 
-      #   global_state for later use in {Processor}.
+      #   global_state for later use in {Handlers::Processor}.
       # @param [OpenStruct] global_state a structure containing all global
       #   state during parsing
       # @param [Array<String>] files the list of files to parse
