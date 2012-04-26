@@ -5,7 +5,7 @@
       <% rw = meth.attr_info %>
       <span id="<%= anchor_for(rw[:write]) %>"></span>
       <span id="<%= anchor_for(rw[:read]) %>"></span>
-      <%= yieldall :object => meth, :index => i %>
+      <%= yieldall :object => meth, :owner => object, :index => i %>
     <% end %>
   </div>
 <% end %>

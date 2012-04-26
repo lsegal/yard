@@ -127,4 +127,34 @@ describe YARD::Templates::Engine.template(:default, :module) do
     html_equals(Registry.at('A').format(html_options(
       :verifier => Verifier.new('!@private'))), :module003)
   end
+  
+  it "should embed mixins with :embed_mixins = true" do
+    Registry.clear
+    YARD.parse_string <<-'eof'
+      class A
+        # This method is in A
+        def foo; end
+
+        include Foo
+        extend Bar
+      end
+
+      module Foo
+        # Docs for xyz
+        def xyz; end
+        # Docs for bar_attr
+        attr_accessor :bar_attr
+      end
+
+      module Bar
+        # @group Booya
+
+        # Docs for baz in Booya group
+        def baz; end
+      end
+    eof
+    
+    opts = {:format => :html, :embed_mixins => true, :no_highlight => true}
+    html_equals(Registry.at('A').format(opts), :module004)
+  end
 end

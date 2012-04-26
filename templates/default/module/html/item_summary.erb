@@ -10,6 +10,12 @@
       (also: <%= @item.aliases.map {|o| h(o.name(true)) }.join(", ") %>)
     <% end %>
   </span>
+  <% if object != @item.namespace %>
+    <span class="note title not_defined_here">
+      <%= @item.namespace.type == :class ? 'inherited' : (@item.scope == :class ? 'extended' : 'included') %>
+      from <%= linkify @item, object.relative_path(@item.namespace) %>
+    </span>
+  <% end %>
   <% if @item.constructor? %>
     <span class="note title constructor">constructor</span>
   <% end %>

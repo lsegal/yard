@@ -15,4 +15,11 @@
       "<span id='#{anchor_for(o)}'>" + h(o.name.to_s) + "</span>" }.join(", ") %></span>
     </span>
   <% end %>
+  
+  <% if owner != object.namespace %>
+    <span class="not_defined_here">
+      Originally defined in <%= object.namespace.type %> 
+        <%= linkify object, owner.relative_path(object.namespace) %>
+    </span>
+  <% end %>
 </p>

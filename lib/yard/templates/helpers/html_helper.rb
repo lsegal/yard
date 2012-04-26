@@ -322,7 +322,7 @@ module YARD
           fromobj = object
           if object.is_a?(CodeObjects::Base) &&
               !object.is_a?(CodeObjects::NamespaceObject)
-            fromobj = fromobj.namespace
+            fromobj = owner
           end
 
           from = serializer.serialized_path(fromobj)
@@ -458,7 +458,8 @@ module YARD
             link_title = "#{h name} (#{meth.type})"
           end
           obj = meth.respond_to?(:object) ? meth.object : meth
-          link_url(url_for(obj), title, :title => link_title) + extras_text
+          url = url_for(object, obj)
+          link_url(url, title, :title => link_title) + extras_text
         else
           title + extras_text
         end
