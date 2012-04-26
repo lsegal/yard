@@ -128,7 +128,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
       :verifier => Verifier.new('!@private'))), :module003)
   end
   
-  it "should embed mixins with :embed_mixins = ['*']" do
+  it "should embed mixins with :embed_mixins = ['Foo', 'Bar', 'Baz::A*']" do
     Registry.clear
     YARD.parse_string <<-'eof'
       class A
@@ -137,6 +137,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
 
         include Foo
         extend Bar
+        include Baz::XYZ
+        include Baz::ABC
       end
 
       module Foo
@@ -152,8 +154,19 @@ describe YARD::Templates::Engine.template(:default, :module) do
         # Docs for baz in Booya group
         def baz; end
       end
+
+      module Baz
+        module XYZ
+          # listed as inherited
+          def baz_xyz; end
+        end
+
+        module ABC
+          def baz_abc; end
+        end
+      end
     eof
     
-    html_equals(Registry.at('A').format(html_options(:embed_mixins => ['*'])), :module004)
+    html_equals(Registry.at('A').format(html_options(:embed_mixins => ['Foo', 'Bar', 'Baz::A*'])), :module004)
   end
 end
