@@ -5,7 +5,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
 
   process do
     errors = []
-    statement.tokens[1..-1].to_s.split(/\s*,\s*/).each do |mixin|
+    statement.tokens[1..-1].to_s.split(/\s*,\s*/).reverse.each do |mixin|
       mixin = mixin.strip
       begin
         process_mixin(mixin)
