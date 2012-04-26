@@ -4,7 +4,7 @@ class YARD::CLI::YRI
   public :optparse, :find_object, :cache_object
 end
 
-describe YARD::CLI::Yardoc do
+describe YARD::CLI::YRI do
   before do
     @yri = YARD::CLI::YRI.new
     Registry.stub!(:load)
