@@ -53,7 +53,7 @@ form.search input { margin-left: 5px; width: 250px; border: 1px solid #99f; -moz
 }
 
 .ac_loading {
-	background: white url('/images/loading.gif') right center no-repeat;
+	background: white url('/images/processing.gif') right center no-repeat;
 }
 
 .ac_even {
