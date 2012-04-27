@@ -93,6 +93,8 @@ As mentioned, types are optional, so the following is also valid:
 
 <a name="taglist"></a>
 
+{yard:include_tags}
+
 ## List of Available Tags
 
 YARD supplies the following built-in tags:
