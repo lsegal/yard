@@ -23,6 +23,7 @@ module YARD
         #   into any new template module
         attr_accessor :extra_includes
 
+        # @!parse extend ClassMethods
         # @private
         def included(klass)
           klass.extend(ClassMethods)

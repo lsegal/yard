@@ -1,5 +1,6 @@
 --protected
 --no-private
+--embed-mixin ClassMethods
 --exclude /server/templates/
 --exclude /yard/rubygems/
 --asset docs/images:images
