@@ -356,6 +356,23 @@ module YARD
         link
       end
 
+      # Returns the URL for a list type
+      # 
+      # @param [String, Symbol] type the list type to generate a URL for
+      # @return [String] the URL pointing to the list
+      # @since 0.8.0
+      def url_for_list(type)
+        url_for_file("#{type}_list.html")
+      end
+
+      # Returns the URL for the frameset page
+      # 
+      # @return [String] the URL pointing to the frames page
+      # @since 0.8.0
+      def url_for_frameset
+        url_for_file("frames.html")
+      end
+
       # @group Formatting Objects and Attributes
 
       # Formats a list of objects and links them

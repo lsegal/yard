@@ -49,16 +49,9 @@ function fixBoxInfoHeights() {
 }
 
 function searchFrameLinks() {
-  $('#method_list_link').click(function() {
-    toggleSearchFrame(this, relpath + methodListUrl);
-  });
-
-  $('#class_list_link').click(function() {
-    toggleSearchFrame(this, relpath + classListUrl);
-  });
-
-  $('#file_list_link').click(function() {
-    toggleSearchFrame(this, relpath + fileListUrl);
+  $('.full_list_link').click(function() {
+    toggleSearchFrame(this, $(this).attr('href'));
+    return false;
   });
 }
 
