@@ -158,9 +158,9 @@ module YARD
         end
 
         # @macro [attach] yard.directive
-        #   @!method $2_directive
+        #   @!method $1_directive
         #   @!visibility private
-        #   @yard.directive $1 [$2] $3
+        #   @yard.directive $1 [$2] $-1
         # @overload define_directive(tag, tag_meth = nil, directive_class)
         #   Convenience method to define a new directive using a {Tag} factory
         #   method and {Directive} subclass that implements the directive
