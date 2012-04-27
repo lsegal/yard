@@ -494,25 +494,3 @@ To load an additional menu item:
            # @note this file must be match the name of the type
            asset('feature_list.html', erb(:full_list))
          end
-
-
-  3. Define custom javascript to load the search fields and the keyboard shortcuts.
-  
-        function featureSearchFrameLinks() {
-            $('#feature_list_link').click(function() {
-                toggleSearchFrame(this, relpath + 'feature_list.html');
-            });
-        }
-
-        function featureKeyboardShortcuts() {
-          if (window.top.frames.main) return;
-          $(document).keypress(function(evt) {
-            if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
-            if (typeof evt.orignalTarget !== "undefined" &&  
-                (evt.originalTarget.nodeName == "INPUT" || 
-                evt.originalTarget.nodeName == "TEXTAREA")) return;
-            switch (evt.charCode) {
-              case 82: case 114: $('#feature_list_link').click(); break; // 'r'
-            }
-          });
-        }
