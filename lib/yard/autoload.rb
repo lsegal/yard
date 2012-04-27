@@ -227,6 +227,7 @@ module YARD
     autoload :MethodDirective,     __p('tags/directives')
     autoload :OptionTag,           __p('tags/option_tag')
     autoload :OverloadTag,         __p('tags/overload_tag')
+    autoload :ParseDirective,      __p('tags/directives')
     autoload :RefTag,              __p('tags/ref_tag')
     autoload :RefTagList,          __p('tags/ref_tag_list')
     autoload :ScopeDirective,      __p('tags/directives')

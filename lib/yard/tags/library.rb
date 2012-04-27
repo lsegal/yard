@@ -269,6 +269,7 @@ module YARD
       define_directive :group,                            GroupDirective
       define_directive :macro, :with_types_and_title,     MacroDirective
       define_directive :method, :with_title_and_text,     MethodDirective
+      define_directive :parse, :with_types,               ParseDirective
       define_directive :scope,                            ScopeDirective
       define_directive :visibility,                       VisibilityDirective
 

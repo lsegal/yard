@@ -6,6 +6,44 @@ def tag_parse(content, object = nil, handler = nil)
   @parser
 end
 
+describe YARD::Tags::ParseDirective do
+  describe '#call' do
+    after { Registry.clear }
+
+    it "should parse if handler=nil but use file=(stdin)" do
+      tag_parse %{@!parse
+        # Docstring here
+        def foo; end
+      }
+      Registry.at('#foo').docstring.should == "Docstring here"
+      Registry.at('#foo').file.should == '(stdin)'
+    end
+
+    it "should allow parser type to be specified in type" do
+      tag_parse %{@!parse [c]
+        void Init_Foo() {
+          rb_define_method(rb_cMyClass, "foo", foo, 1);
+        }
+      }
+      Registry.at('MyClass#foo').should_not be_nil
+    end
+
+    it "should parse code in context of current handler" do
+      src = <<-eof
+        class A
+          # @!parse
+          #   def foo; end
+          eval "def foo; end"
+        end
+      eof
+      parser = Parser::SourceParser.new
+      parser.file = "myfile.rb"
+      parser.parse(StringIO.new(src))
+      Registry.at('A#foo').file.should == 'myfile.rb'
+    end
+  end
+end
+
 describe YARD::Tags::GroupDirective do
   describe '#call' do
     it "should do nothing if handler=nil" do

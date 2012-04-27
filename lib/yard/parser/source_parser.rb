@@ -380,7 +380,7 @@ module YARD
       self.parser_type = :ruby
 
       # @return [String] the filename being parsed by the parser.
-      attr_reader :file
+      attr_accessor :file
 
       # @return [Symbol] the parser type associated with the parser instance.
       #   This should be set by the {#initialize constructor}.
