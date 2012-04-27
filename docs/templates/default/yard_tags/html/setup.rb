@@ -4,8 +4,7 @@ end
 
 def tag_signature(tag)
   types = tag.types || []
-  prefix = tag.tag_name == 'yard.directive' ? '@!' : '@'
-  signature = "<strong>#{prefix}#{tag.name}</strong> "
+  signature = "<strong>#{tag_link_name(tag)}</strong> "
   case types.first
   when 'with_name'
     signature += "name description"
