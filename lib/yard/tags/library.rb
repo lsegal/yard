@@ -254,26 +254,169 @@ module YARD
         send(meth, tag, parser)
       end
 
-      # Defines the abstract tag
+      # Marks a class/module/method as abstract with optional
+      # implementor information.
       #
       # @example
-      #   # @abstract
-      #   class Foo; end
+      #   # @abstract Subclass and override {#run} to implement 
+      #   #   a custom Threadable class.
+      #   class Runnable
+      #     def run; raise NotImplementedError end
+      #   end
       define_tag "Abstract",           :abstract
 
+      # Declares the API that the object belongs to. Does not display in
+      # output, but useful for performing queries (+yardoc --query+). Any text is
+      # allowable in this tag, and there are no predefined values.
+      #
+      # @note The special name +@api private+ does display a notice in
+      #   documentation if it is listed, letting users know that the 
+      #   method is not to be used by external components.
+      # @example
+      #   class Post
+      #     # @api private
+      #     def reset_table!; table.flush end
+      #   end
       define_tag "API Visibility",     :api
+
+      # Declares a readwrite attribute on a Struct or class.
+      #
+      # @note This attribute is only applicable on class docstrings
+      # @deprecated Use the more powerful {tag:!attribute} directive instead.
+      # @example
+      #   # @attr [String] name the name of the structure
+      #   # @attr [Fixnum] size the size of the structure
+      #   class MyStruct < Struct; end
       define_tag "Attribute",          :attr,        :with_types_and_name
+
+      # Declares a readonly attribute on a Struct or class.
+      #
+      # @note This attribute is only applicable on class docstrings
+      # @deprecated Use the more powerful {tag:!attribute} directive instead.
+      # @example
+      #   # @attr_reader [String] name the name of the structure
+      #   # @attr_reader [Fixnum] size the size of the structure
+      #   class MyStruct < Struct; end
       define_tag "Attribute Getter",   :attr_reader, :with_types_and_name
+
+      # Declares a writeonly attribute on a Struct or class.
+      #
+      # @note This attribute is only applicable on class docstrings
+      # @deprecated Use the more powerful {tag:!attribute} directive instead.
+      # @example
+      #   # @attr_reader [String] name the name of the structure
+      #   # @attr_reader [Fixnum] size the size of the structure
+      #   class MyStruct < Struct; end
       define_tag "Attribute Setter",   :attr_writer, :with_types_and_name
+
+      # List the author or authors of a class, module, or method.
+      #
+      # @example
+      #   # @author Foo Bar <foo@bar.com>
+      #   class MyClass; end
       define_tag "Author",             :author
+
+      # Marks a method/class as deprecated with an optional description.
+      # The description should be used to inform users of the recommended
+      # migration path, and/or any useful information about why the object
+      # was marked as deprecated.
+      #
+      # @example Deprecate a method with a replacement API
+      #   # @deprecated Use {#bar} instead.
+      #   def foo; end
+      # @example Deprecate a method with no replacement
+      #   class Thread
+      #     # @deprecated Exiting a thread in this way is not reliable and
+      #     #   can cause a program crash.
+      #     def kill; end
+      #   end
       define_tag "Deprecated",         :deprecated
+
+      # Show an example snippet of code for an object. The first line
+      # is an optional title.
+      #
+      # @example
+      #   @example Reverse a String
+      #     "mystring".reverse #=> "gnirtsym"
       define_tag "Example",            :example,     :with_title_and_text
+
+      # Adds an emphasized note at the top of the docstring for the object
+      # 
+      # @example
+      #   # @note This method should only be used in outer space.
+      #   def eject; end
       define_tag "Note",               :note
+
+      # Describe an options hash in a method. The tag takes the
+      # name of the options parameter first, followed by optional types,
+      # the option key name, an optional default value for the key and a
+      # description of the option.
+      #
+      # @example
+      #   # @param [Hash] opts the options to create a message with.
+      #   # @option opts [String] :subject The subject
+      #   # @option opts [String] :from ('nobody') From address
+      #   # @option opts [String] :to Recipient email
+      #   # @option opts [String] :body ('') The email's body
+      #   def send_email(opts = {}) end
       define_tag "Options Hash",       :option,      :with_options
+
+      # Describe that your method can be used in various
+      # contexts with various parameters or return types. The first
+      # line should declare the new method signature, and the following
+      # indented tag data will be a new documentation string with its
+      # own tags adding metadata for such an overload.
+      #
+      # @example
+      #   # @overload set(key, value)
+      #   #   Sets a value on key
+      #   #   @param [Symbol] key describe key param
+      #   #   @param [Object] value describe value param
+      #   # @overload set(value)
+      #   #   Sets a value on the default key `:foo`
+      #   #   @param [Object] value describe value param
+      #   def set(*args) end
       define_tag "Overloads",          :overload,    OverloadTag
+
+      # Documents a single method parameter with a given name, type
+      # and optional description.
+      #
+      # @example
+      #   # @param [String] the URL of the page to download
+      #   def load_page(url) end
       define_tag "Parameters",         :param,       :with_types_and_name
+
+      # Defines an object as private. This exists for classes,
+      # modules and constants that do not obey Ruby's visibility rules. For
+      # instance, an inner class might be considered "private", though Ruby
+      # would make no such distinction. By declaring the @private tag, the
+      # class can be hidden from documentation by using the +--no-private+
+      # command-line switch to yardoc (see {file:README.md}).
       define_tag "Private",            :private
+
+      # Describes that a method may raise a given exception, with
+      # an optional description of what it may mean.
+      #
+      # @example
+      #   # @raise [AccountBalanceError] if the account does not have
+      #   #   sufficient funds to perform the transaction
+      #   def withdraw(amount) end
       define_tag "Raises",             :raise,       :with_types
+
+      # Describes the return value (and type or types) of a method.
+      # You can list multiple return tags for a method in the case
+      # where a method has distinct return cases. In this case, each
+      # case should begin with "if ...".
+      #
+      # @example A regular return value
+      #   # @return [Fixnum] the size of the file
+      #   def size; @file.size end
+      # @example A method returns an Array or a single object
+      #   # @return [String] if a single object was returned
+      #   #   from the database.
+      #   # @return [Array<String>] if multiple objects were
+      #   #   returned.
+      #   def find(query) end
       define_tag "Returns",            :return,      :with_types
       define_tag "See Also",           :see,         :with_name
       define_tag "Since",              :since
@@ -283,6 +426,9 @@ module YARD
       define_tag "Yield Parameters",   :yieldparam,  :with_types_and_name
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
+      # Recognizes a DSL class method as an attribute with the given
+      # name. Also accepts the r, w, or rw flag to signify that the attribute is
+      # readonly, writeonly, or readwrite (default). Only used with DSL methods.
       define_directive :attribute, :with_types_and_title, AttributeDirective
       define_directive :endgroup,                         EndGroupDirective
       define_directive :group,                            GroupDirective
