@@ -108,8 +108,16 @@ describe YARD::Templates::Template do
       Template.extra_includes << MyModule
       template(:e).new.should be_kind_of(MyModule)
     end
+
+    it "should support lambdas in list" do
+      module MyModule2; end
+      Template.extra_includes << lambda {|opts| MyModule2 if opts.format == :html }
+      template(:f).new(:format => :html).should be_kind_of(MyModule2)
+      metaclass = (class << template(:g).new(:format => :text); self end)
+      metaclass.ancestors.should_not include(MyModule2)
+    end
   end
-  
+
   describe '.is_a?' do
     it "should be kind of Template" do
       template(:e).is_a?(Template).should == true

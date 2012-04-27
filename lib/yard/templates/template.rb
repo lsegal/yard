@@ -46,7 +46,7 @@ module YARD
         proc {|options| 
           { :html => Helpers::HtmlHelper, 
             :text => Helpers::TextHelper, 
-            :dot  => Helpers::UMLHelper }[options[:format]]
+            :dot  => Helpers::UMLHelper }[options.format]
         }
       ]
       
@@ -163,8 +163,10 @@ module YARD
       end
 
       def initialize(opts = TemplateOptions.new)
+        opts_class = opts.class
+        opts_class = TemplateOptions if opts_class == Hash
         @cache, @cache_filename = {}, {}
-        @sections, @options = [], opts.class.new
+        @sections, @options = [], opts_class.new
         add_options(opts)
         Template.include_extra(self, options)
         init
