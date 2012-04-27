@@ -18,7 +18,7 @@ module YARD
         # @example Adding in extra mixins to include on a template
         #   Template.extra_includes << MyHelper
         # @example Conditionally including a mixin if the format is html
-        #   Template.extra_includes << proc {|opts| MyHelper if opts[:format] == :html }
+        #   Template.extra_includes << proc {|opts| MyHelper if opts.format == :html }
         # @return [Array<Module, Proc>] a list of modules to be automatically included
         #   into any new template module
         attr_accessor :extra_includes
