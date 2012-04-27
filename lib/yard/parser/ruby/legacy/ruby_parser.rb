@@ -11,6 +11,7 @@ module YARD
 
           def parse
             @parse ||= StatementList.new(@source)
+            self
           end
 
           def tokenize

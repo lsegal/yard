@@ -237,14 +237,16 @@ module YARD
 
     class ParseDirective < Directive
       def call
-        lang = tag.types ? tag.types.first.to_sym : :ruby
+        lang = tag.types ? tag.types.first.to_sym :
+          (handler ? handler.parser.parser_type : :ruby)
         if handler && lang == handler.parser.parser_type
           pclass = Parser::SourceParser.parser_types[handler.parser.parser_type]
-          enum = pclass.new(tag.text, handler.statement.file).parse.enumerator
-          handler.parser.process(enum)
+          pobj = pclass.new(tag.text, handler.parser.file)
+          pobj.parse
+          handler.parser.process(pobj.enumerator)
         else # initialize a new parse chain
           src_parser = Parser::SourceParser.new(lang, handler ? handler.globals : nil)
-          src_parser.file = handler.statement.file if handler
+          src_parser.file = handler.parser.file if handler
           src_parser.parse(StringIO.new(tag.text))
         end
       end
