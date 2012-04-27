@@ -53,6 +53,7 @@ def attr_listing
   return @attrs if @attrs
   @attrs = []
   object.inheritance_tree(true).each do |superclass|
+    next if superclass.is_a?(CodeObjects::Proxy)
     next if options.embed_mixins.size > 0 && 
       options.embed_mixins_match?(superclass) == false
     [:class, :instance].each do |scope|
