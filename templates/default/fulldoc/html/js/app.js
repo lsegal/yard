@@ -81,7 +81,7 @@ function framesInit() {
     $('html head title', window.parent.document).text($('html head title').text());
   }
   else {
-    $('#menu .noframes a').text('frames').attr('href', relpath + framesUrl);
+    $('#menu .noframes a').text('frames').attr('href', framesUrl);
   }
 }
 
