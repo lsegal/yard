@@ -102,10 +102,10 @@ describe YARD::Templates::Helpers::BaseHelper do
     
     it "should call #link_include_object for include:ObjectName" do
       obj = CodeObjects::NamespaceObject.new(:root, :Foo)
-      should_receive(:link_include_object).with(obj)
-      linkify 'include:Foo'
+      should_receive(:link_include_object).with(obj, "a", "b")
+      linkify 'include:Foo', 'a', 'b'
     end
-    
+
     it "should call #link_include_file for include:file:path/to/file" do
       File.should_receive(:file?).with('path/to/file').and_return(true)
       File.should_receive(:read).with('path/to/file').and_return('FOO')
@@ -122,7 +122,73 @@ describe YARD::Templates::Helpers::BaseHelper do
       linkify('include:file:notexist').should == ''
     end
   end
-  
+
+  describe '#link_include_object' do
+    before do
+      @object = mock(:object)
+      @tag = mock(:tag)
+    end
+
+    it "should allow accessing of attribute on object" do
+      @object.should_receive(:value).and_return(100)
+      link_include_object(@object, "value").should == "100"
+    end
+
+    it "should warn and not expand if attribute is not whitelisted" do
+      @object.should_not_receive(:system)
+      log.should_receive(:warn).with(/Invalid attribute system/)
+      link_include_object(@object, "system").should == ""
+    end
+
+    it "should log when exception is raised within attribute" do
+      @object.should_receive(:value).and_raise(NoMethodError)
+      log.should_receive(:error).with(/NoMethodError while expanding/)
+      link_include_object(@object, "value").should == ""
+    end
+
+    it "should allow accessing tag text via @tag" do
+      @object.should_receive(:tags).with("foo").and_return([@tag, mock, mock])
+      @tag.should_receive(:text).and_return("FOO")
+      link_include_object(@object, "@foo").should == "FOO"
+    end
+
+    it "should allow accessing attributes via @tag.attr" do
+      @object.should_receive(:tags).with("foo").and_return([@tag, mock, mock])
+      @tag.should_receive(:name).and_return("FOO")
+      link_include_object(@object, "@foo", "name").should == "FOO"
+    end
+
+    it "should warn if tag attribute is not types, name or text" do
+      @tag.should_not_receive(:system)
+      log.should_receive(:warn).with(/Invalid attribute @foo.system/)
+      link_include_object(@object, "@foo", "system").should == ""
+    end
+
+    it "should allow accessing of indexed tag data via @tag[N]" do
+      @object.should_receive(:tags).with("foo").and_return([mock, @tag, mock])
+      @tag.should_receive(:text).and_return("FOO")
+      link_include_object(@object, "@foo[1]").should == "FOO"
+    end
+
+    it "should allow accessing of attributes on indexed tag data via @tag[N]" do
+      @object.should_receive(:tags).with("foo").and_return([mock, @tag, mock])
+      @tag.should_receive(:name).and_return("FOO")
+      link_include_object(@object, "@foo[1]", "name").should == "FOO"
+    end
+
+    it "should convert Array data into String" do
+      @object.should_receive(:tags).with("foo").and_return([mock, @tag, mock])
+      @tag.should_receive(:types).and_return(["String", "Array"])
+      link_include_object(@object, "@foo[1]", "types").should == "String, Array"
+    end
+
+    it "should allow accessing of tag attributes (type, name, text)" do
+      @object.should_not_receive(:system)
+      log.should_receive(:warn).with(/Invalid attribute system/)
+      link_include_object(@object, "system").should == ""
+    end
+  end
+
   describe '#format_types' do
     it "should return the list of types separated by commas surrounded by brackets" do
       format_types(['a', 'b', 'c']).should == '(a, b, c)'

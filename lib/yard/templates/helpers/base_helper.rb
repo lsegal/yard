@@ -71,7 +71,7 @@ module YARD::Templates::Helpers
         when /^include:(\S+)/
           path = $1
           if obj = YARD::Registry.resolve(object.namespace, path)
-            link_include_object(obj)
+            link_include_object(obj, args[1], args[2])
           else
             log.warn "Cannot find object at `#{path}' for inclusion"
             ""
@@ -95,12 +95,51 @@ module YARD::Templates::Helpers
       end
     end
 
-    # Includes an object's docstring into output.
+    # Includes an object's docstring or other attribute into output.
+    # If attribute begins with "@", the attribute is looked up against
+    # the first matching tag. You can also index tags using +@tag[N]+
+    # syntax.
+    #
     # @since 0.6.0
+    # @example Accessing the value of a constant
+    # @example Accessing the name of the 2nd +@param+ tag
+    #   link_include_object(obj, "@param[1]", "name")
     # @param [CodeObjects::Base] object the object to include
+    # @param [String] attribute the attribute on the object to access.
+    #   Use "@" for a tag attribute.
+    # @param [String] the tag attribute to access (only used if attribute
+    #   begins with "@")
     # @return [String] the object's docstring (no tags)
-    def link_include_object(object)
-      object.docstring
+    def link_include_object(object, attribute = nil, tag_attribute = nil)
+      valid_attrs = %w(file line source docstring scope 
+        visibility name sep group signature type path value)
+      attribute ||= "docstring"
+      tag_attribute ||= 'text'
+      data = nil
+      if attribute =~ /^@/
+        tag, index = attribute[1..-1], 0
+        if %w(text name types).include?(tag_attribute)
+          if tag =~ /^(.+)\[(\d+)\]\Z/
+            tag, index = $1, $2.to_i
+          end
+          if tag_obj = object.tags(tag)[index]
+            data = tag_obj.send(tag_attribute)
+          end
+        end
+      elsif valid_attrs.include?(attribute)
+        data = object.send(attribute)
+      end
+      if data
+        data.is_a?(Array) ? data.join(", ") : data.to_s
+      else
+        log.warn "Invalid attribute #{attribute} #{tag_attribute}" +
+          " on include:#{object}"
+        ""
+      end
+    rescue => e
+      log.error "#{e.message} while expanding {include:#{object} " +
+        "#{attribute} #{tag_attribute}}"
+      ""
     end
 
     # Include a file as a docstring in output

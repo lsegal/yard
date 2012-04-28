@@ -237,8 +237,8 @@ module YARD
       end
 
       # (see BaseHelper#link_include_object)
-      def link_include_object(obj)
-        htmlify(obj.docstring)
+      def link_include_object(*args)
+        h(super)
       end
 
       # (see BaseHelper#link_object)
