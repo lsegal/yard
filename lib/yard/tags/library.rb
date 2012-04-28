@@ -131,6 +131,7 @@ module YARD
         #   @!method $2_tag
         #   @!visibility private
         #   @yard.tag $2 [$3] $1
+        # @param [#to_s] label the label used when displaying the tag in templates
         # @param [#to_s] tag the tag name to create
         # @param [#to_s, Class<Tag>] meth the {Tag} factory method to call when
         #   creating the tag or the name of the class to directly create a tag for
@@ -165,6 +166,12 @@ module YARD
         #   Convenience method to define a new directive using a {Tag} factory
         #   method and {Directive} subclass that implements the directive
         #   callbacks.
+        #
+        #   @param [#to_s] tag the tag name of the directive
+        #   @param [#to_s] tag_meth the tag factory method to use when
+        #     parsing tag information
+        #   @param [Class<Directive>] the directive class that implements the
+        #     directive behaviour
         #   @see define_tag
         def define_directive(tag, tag_meth = nil, directive_class = nil)
           directive_meth = directive_method_name(tag)
