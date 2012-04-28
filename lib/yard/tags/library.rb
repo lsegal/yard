@@ -518,9 +518,18 @@ module YARD
       define_directive :endgroup,                         EndGroupDirective
       define_directive :group,                            GroupDirective
       define_directive :macro, :with_types_and_title,     MacroDirective
+      
+      # Recognizes a DSL class method as a method with the given name
+      # and optional signature. Only used with DSL methods.
       define_directive :method, :with_title_and_text,     MethodDirective
       define_directive :parse, :with_types,               ParseDirective
+
+      # Sets the scope of a DSL method. Only applicable to DSL method
+      # calls. Acceptable values are 'class' or 'instance'
       define_directive :scope,                            ScopeDirective
+
+      # Sets the visibility of a DSL method. Only applicable to
+      # DSL method calls. Acceptable values are public, protected, or private.
       define_directive :visibility,                       VisibilityDirective
 
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
