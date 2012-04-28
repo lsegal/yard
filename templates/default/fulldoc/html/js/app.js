@@ -151,19 +151,25 @@ function generateTOC() {
     show = true;
     var thisTag = parseInt(this.tagName[1], 10);
     if (this.id.length === 0) {
-      var proposedId = $(this).text().replace(/[^a-z0-9-]/ig, '_');
-      if ($('#' + proposedId).length > 0) { proposedId += counter; counter++; }
-      this.id = proposedId;
+      var proposedId = $(this).attr('toc-id');
+      if (typeof(proposedId) != "undefined") this.id = proposedId;
+      else {
+        var proposedId = $(this).text().replace(/[^a-z0-9-]/ig, '_');
+        if ($('#' + proposedId).length > 0) { proposedId += counter; counter++; }
+        this.id = proposedId;
+      }
     }
     if (thisTag > lastTag) { 
-      for (i = 0; i < thisTag - lastTag; i++) { 
+      for (i = 0; i < thisTag - lastTag; i++) {
         var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; 
-      } 
+      }
     }
-    if (thisTag < lastTag) { 
+    if (thisTag < lastTag) {
       for (i = 0; i < lastTag - thisTag; i++) toc = toc.parent(); 
     }
-    toc.append('<li><a href="#' + this.id + '">' + $(this).text() + '</a></li>');
+    var title = $(this).attr('toc-title');
+    if (typeof(title) == "undefined") title = $(this).text();
+    toc.append('<li><a href="#' + this.id + '">' + title + '</a></li>');
     lastTag = thisTag;
   });
   if (!show) return;
