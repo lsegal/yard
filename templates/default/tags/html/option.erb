@@ -2,7 +2,7 @@
   <% object.parameters.each do |param, default| %>
     <% tags = object.tags(:option).select {|x| x.name.to_s == param.to_s } %>
     <% next if tags.empty? %>
-    <h3>Options Hash (<tt><%= param %></tt>):</h3>
+    <p class="tag_title">Options Hash (<tt><%= param %></tt>):</p>
     <ul class="option">
       <% for tag in tags %>
         <li>

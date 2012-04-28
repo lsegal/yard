@@ -1,4 +1,4 @@
-<p class="signature <%= 'first' if @index == 0 %>" id="<%= anchor_for(object) %>">
+<h3 class="signature <%= 'first' if @index == 0 %>" id="<%= anchor_for(object) %>">
   <% if object.tags(:overload).size == 1 %>
     <%= signature(object.tag(:overload), false) %>
   <% elsif object.tags(:overload).size > 1 %>
@@ -22,4 +22,4 @@
         <%= linkify object, owner.relative_path(object.namespace) %>
     </span>
   <% end %>
-</p>
+</h3>

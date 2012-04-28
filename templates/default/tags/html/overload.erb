@@ -1,7 +1,7 @@
 <% if object.tags(:overload).size == 1 %>
   <%= yieldall :object => object.tag(:overload) %>
 <% elsif object.has_tag?(:overload) && object.tags(:overload).any? {|o| !o.docstring.blank? } %>
-  <h3>Overloads:</h3>
+  <p class="tag_title">Overloads:</p>
   <ul class="overload">
     <% object.tags(:overload).each do |overload| %>
       <% next if overload.docstring.blank? %>
