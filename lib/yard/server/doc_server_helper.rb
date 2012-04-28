@@ -12,6 +12,7 @@ module YARD
         return "/#{obj}" if String === obj
         File.join('', base_path(router.docs_prefix), super(obj, anchor, false))
       end
+
       # Modifies {Templates::Helpers::HtmlHelper#url_for_file} to return a URL instead
       # of a disk location.
       # @param (see Templates::Helpers::HtmlHelper#url_for_file)

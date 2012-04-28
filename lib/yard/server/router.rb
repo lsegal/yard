@@ -150,13 +150,7 @@ module YARD
       # @return (see #route_docs)
       def route_list(library, paths)
         return if paths.empty?
-        case paths.shift
-        when "class";   cmd = ListClassesCommand
-        when "methods"; cmd = ListMethodsCommand
-        when "files";   cmd = ListFilesCommand
-        else; return
-        end
-        cmd.new(final_options(library, paths)).call(request)
+        ListCommand.new(final_options(library, paths)).call(request)
       end
 
       # Routes requests from {#search_prefix} and calls the appropriate command

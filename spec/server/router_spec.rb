@@ -86,22 +86,22 @@ describe YARD::Server::Router do
     end
     
     it "should route /list/name/version/class" do
-      route_to('/mylist/foo/project/1.0.0/class', ListClassesCommand)
+      route_to('/mylist/foo/project/1.0.0/class', ListCommand)
       @command.library.should == @projects[0]
     end
 
     it "should route /list/name/version/methods" do
-      route_to('/mylist/foo/project/1.0.0/methods', ListMethodsCommand)
+      route_to('/mylist/foo/project/1.0.0/methods', ListCommand)
       @command.library.should == @projects[0]
     end
 
     it "should route /list/name/version/files" do
-      route_to('/mylist/foo/project/1.0.0/files', ListFilesCommand)
+      route_to('/mylist/foo/project/1.0.0/files', ListCommand)
       @command.library.should == @projects[0]
     end
     
     it "should route /list/name to latest version of library" do
-      route_to('/mylist/foo/project/class', ListClassesCommand)
+      route_to('/mylist/foo/project/class', ListCommand)
       @command.library.should == @projects[1]
     end
     
