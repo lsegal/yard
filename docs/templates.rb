@@ -23,6 +23,19 @@ module TagTemplateHelper
     h(prefix + tag.name)
   end
 
+  def url_for(*args)
+    if object.is_a?(CodeObjects::Base) &&
+          (object.tag('yard.tag') || object.tag('yard.directive'))
+        obj, self.object = object, Registry.root
+        url = super
+        self.object = obj
+        url
+    else
+      super
+    end
+  end
+  alias url_for_file url_for
+
   def linkify(*args)
     if args.first.is_a?(String)
       case args.first
