@@ -56,7 +56,7 @@ module YARD
         retry
       end
 
-      # Loads a Ruby script. If +Config.options[:safe_mode]+ is enabled,
+      # Loads a Ruby script. If <tt>Config.options[:safe_mode]</tt> is enabled,
       # this method will do nothing.
       #
       # @param [String] file the path to the script to load
