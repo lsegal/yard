@@ -25,6 +25,21 @@ module YARD
           (anchor ? "##{anchor}" : "")
       end
 
+      # Modifies {Templates::Helpers::HtmlHelper#url_for_list} to return a URL
+      # based on the list prefix instead of a HTML filename.
+      # @param (see Templates::Helpers::HtmlHelper#url_for_list)
+      # @return (see Templates::Helpers::HtmlHelper#url_for_list)
+      def url_for_list(type)
+        File.join('', base_path(router.list_prefix), type.to_s)
+      end
+
+      # Returns the frames URL for the page
+      # @return (see Templates::Helpers::HtmlHelper#url_for_frameset)
+      def url_for_frameset
+        url = url_for(object).gsub(%r{^/#{base_path(router.docs_prefix)}/}, '')
+        File.join('', base_path(router.docs_prefix), "frames", url)
+      end
+
       # @example The base path for a library 'foo'
       #   base_path('docs') # => 'docs/foo'
       # @param [String] path the path prefix for a base path URI

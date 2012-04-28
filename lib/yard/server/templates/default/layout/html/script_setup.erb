@@ -4,9 +4,5 @@
   docsPrefix = '<%= base_path(router.docs_prefix) %>';
   listPrefix = '<%= base_path(router.list_prefix) %>';
   searchPrefix = '<%= base_path(router.search_prefix) %>';
-  var match = window.location.toString().match(docsPrefix + '/(.+)');
-  framesUrl = docsPrefix + "/frames/" + (match ? match[1] : '');
-  methodListUrl = listPrefix + "/methods";
-  classListUrl = listPrefix + "/classes";
-  fileListUrl = listPrefix + "/files";
+  framesUrl = '<%= url_for_frameset %>';
 </script>
