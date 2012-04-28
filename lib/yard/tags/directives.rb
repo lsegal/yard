@@ -2,25 +2,76 @@ require 'ostruct'
 
 module YARD
   module Tags
+    # The base directive class. Subclass this class to create a custom
+    # directive, registering it with {Library.define_directive}. Directive
+    # classes are executed via the {#call} method, which perform all directive
+    # processing on the object.
+    #
+    # If processing occurs within a handler, the {#handler} attribute is
+    # available to access more information about parsing context and state.
+    # Handlers are only available when parsing from {Parser::SourceParser},
+    # not when parsing directly from {DocstringParser}. If the docstring is
+    # attached to an object declaration, {#object} will be set and available
+    # to modify the generated code object directly. Note that both of these
+    # attributes may be nil, and directives should test their existence
+    # before attempting to use them.
+    #
+    # @abstract Subclasses should implement {#call}.
+    # @see Library.define_directive
     class Directive
+      # @return [Tag] the meta-data tag containing data input to the directive
       attr_accessor :tag
+
+      # Set this field to replace the directive definition inside of a docstring
+      # with arbitrary text. For instance, the {MacroDirective} uses this field
+      # to expand its macro data in place of the call to a +@!macro+.
+      #
+      # @return [String] the text to expand in the original docstring in place
+      #   of this directive definition.
+      # @return [nil] if no expansion should take place for this directive
       attr_accessor :expanded_text
 
+      # @return [DocstringParser] the parser that is parsing all tag 
+      #   information out of the docstring
+      attr_accessor :parser
+
+      # @!attribute [r] object
+      # @return [CodeObjects::Base, nil] the object the parent docstring is
+      #   attached to. May be nil.
+      def object; parser.object end
+
+      # @!attribute [r] handler
+      # @return [Handlers::Base, nil] the handler object the docstring parser
+      #   might be attached to. May be nil. Only available when parsing
+      #   through {Parser::SourceParser}.
+      def handler; parser.handler end
+
+      # @!endgroup
+
+      # @param [Tag] the meta-data tag containing all input to the docstring
+      # @param [DocstringParser] the docstring parser object
       def initialize(tag, parser)
         self.tag = tag
         self.parser = parser
         self.expanded_text = nil
       end
 
-      def object; parser.object end
-      def handler; parser.handler end
+      # @!group Parser callbacks
 
+      # Called when processing the directive. Subclasses should implement
+      # this method to perform all functionality of the directive.
+      #
+      # @abstract implement this method to perform all data processing for
+      #   the directive.
+      # @return [void]
       def call; raise NotImplementedError end
+
+      # Called after parsing all directives and tags in the docstring. Used
+      # to perform any cleanup after all directives perform their main task.
+      # @return [void]
       def after_parse; end
 
-      protected
-
-      attr_accessor :parser
+      protected :parser
     end
 
     class EndGroupDirective < Directive
