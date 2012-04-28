@@ -345,6 +345,7 @@ module YARD
       # @example
       #   # @note This method should only be used in outer space.
       #   def eject; end
+      # @see tag:todo
       define_tag "Note",               :note
 
       # Describe an options hash in a method. The tag takes the
@@ -418,12 +419,96 @@ module YARD
       #   #   returned.
       #   def find(query) end
       define_tag "Returns",            :return,      :with_types
+
+      # "See Also" references for an object. Accepts URLs or
+      # other code objects with an optional description at the end.
+      # Note that the URL or object will be automatically linked by
+      # YARD and does not need to be formatted with markup.
+      #
+      # @example
+      #   # Synchronizes system time using NTP.
+      #   # @see http://ntp.org/documentation.html NTP Documentation
+      #   # @see NTPHelperMethods
+      #   class NTPUpdater; end
       define_tag "See Also",           :see,         :with_name
+
+      # Lists the version that the object was first added
+      #
+      # @example
+      #   # @since 1.2.4
+      #   def clear_routes; end
       define_tag "Since",              :since
+
+      # Marks a TODO note in the object being documented.
+      # For reference, objects with TODO items can be enumerated
+      # from the command line with a simple command:
+      #
+      #   !!!sh
+      #   mocker$ yard list --query '@todo'
+      #   lib/mocker/mocker.rb:15: Mocker
+      #   lib/mocker/report/html.rb:5: Mocker::Report::Html
+      #
+      # YARD can also be used to enumerate the TODO items from
+      # a short script:
+      #
+      #   !!!ruby
+      #   require 'yard'
+      #   YARD::Registry.load!.all.each do |o|
+      #     puts o.tag(:todo).text if o.tag(:todo)
+      #   end
+      #
+      # @example
+      #   # @todo Add support for Jabberwocky service.
+      #   #   There is an open source Jabberwocky library available
+      #   #   at http://jbrwcky.org that can be easily integrated.
+      #   class Wonderlander; end
+      # @see tag:note
       define_tag "Todo Item",          :todo
+
+      # Lists the version of a class, module or method. This is
+      # similar to a library version, but at finer granularity.
+      # In some cases, version of specific modules, classes, methods
+      # or generalized components might change independently between
+      # releases. A version tag is used to infer the API compatibility
+      # of a specific object.
+      #
+      # @example
+      #   # The public REST API for http://jbrwcky.org
+      #   # @version 2.0
+      #   class JabberwockyAPI; end
       define_tag "Version",            :version
+
+      # Describes what a method might yield to a given block.
+      # The types specifier list should not list types, but names
+      # of the parameters yielded to the block. If you define
+      # parameters with +@yieldparam+, you do not need to define
+      # the parameters in the type specification of +@yield+ as
+      # well.
+      #
+      # @example
+      #   # For a block {|a,b,c| ... }
+      #   # @yield [a, b, c] Gives 3 random numbers to the block
+      #   def provide3values(&block) yield(42, 42, 42) end
+      # @see tag:yieldparam
+      # @see tag:yieldreturn
       define_tag "Yields",             :yield,       :with_types
+
+      # Defines a parameter yielded by a block. If you define the
+      # parameters with +@yieldparam+, you do not need to define
+      # them via +@yield+ as well.
+      #
+      # @example
+      #   # @yieldparam [String] name the name that is yielded
+      #   def with_name(name) yield(name) end
       define_tag "Yield Parameters",   :yieldparam,  :with_types_and_name
+
+      # Documents the value and type that the block is expected
+      # to return to the method.
+      #
+      # @example
+      #   # @yieldreturn [Fixnum] the number to add 5 to.
+      #   def add5_block(&block) 5 + yield end
+      # @see tag:return
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
       # Recognizes a DSL class method as an attribute with the given
