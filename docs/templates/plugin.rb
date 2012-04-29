@@ -23,18 +23,22 @@ module TagTemplateHelper
     h(prefix + tag.name)
   end
 
-  def url_for(*args)
-    if object.is_a?(CodeObjects::Base) &&
-          (object.tag('yard.tag') || object.tag('yard.directive'))
-        obj, self.object = object, Registry.root
-        url = super
-        self.object = obj
-        url
-    else
-      super
+  # Wrap url_for and url_for_file to rewrite object when generating docs for
+  # yard.tag/directive objects.
+  %w(url_for, url_for_file).each do |meth|
+    self.class.send(:define_method, meth) do
+      if object.is_a?(CodeObjects::Base) &&
+            (object.tag('yard.tag') || object.tag('yard.directive') ||
+            (object.type == :class && object.superclass.name == :Directive))
+          obj, self.object = object, Registry.root
+          url = super
+          self.object = obj
+          url
+      else
+        super
+      end
     end
   end
-  alias url_for_file url_for
 
   def linkify(*args)
     if args.first.is_a?(String)
@@ -58,4 +62,4 @@ module TagTemplateHelper
 end
 
 Template.extra_includes << TagTemplateHelper
-Engine.register_template_path(File.dirname(__FILE__) + '/templates')
+Engine.register_template_path(File.dirname(__FILE__))
