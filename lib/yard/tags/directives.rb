@@ -74,6 +74,24 @@ module YARD
       protected :parser
     end
 
+    # Ends a group listing definition. Group definition automatically end
+    # when class or module blocks are closed, and defining a new group overrides
+    # the last group definition, but occasionally you need to end the current
+    # group to return to the default listing. Use {tag:!group} to begin a
+    # group listing.
+    #
+    # @example
+    #   class Controller
+    #     # @!group Callbacks
+    #
+    #     def before_filter; end
+    #     def after_filter; end
+    #
+    #     # @!endgroup
+    #
+    #     def index; end
+    #   end
+    # @see tag:!group
     class EndGroupDirective < Directive
       def call
         return unless handler
@@ -81,6 +99,21 @@ module YARD
       end
     end
 
+    # Defines a group listing. All methods (and attributes) seen after this
+    # directive are placed into a group with the given description as the
+    # group name. The group listing is used by templates to organize methods
+    # and attributes into respective logical groups. To end a group listing
+    # use {tag:!endgroup}.
+    #
+    # @note A group definition only applies to the scope it is defined in.
+    #   If a new class or module is opened after the directive, this directive
+    #   will not apply to methods in that class or module.
+    # @example
+    #   # @!group Callbacks
+    #
+    #   def before_filter; end
+    #   def after_filter; end
+    # @see tag:!endgroup
     class GroupDirective < Directive
       def call
         return unless handler
@@ -286,6 +319,29 @@ module YARD
       end
     end
 
+    # Parses a block of code as if it were present in the source file at that
+    # location. This directive is useful if a class has dynamic meta-programmed
+    # behaviour that cannot be recognized by YARD.
+    #
+    # You can specify the language of the code block using the types 
+    # specification list. By default, the code language is "ruby".
+    #
+    # @example Documenting dynamic module inclusion
+    #   class User
+    #     # includes "UserMixin" and extends "UserMixin::ClassMethods"
+    #     # using the UserMixin.included callback.
+    #     # @!parse include UserMixin
+    #     # @!parse extend UserMixin::ClassMethods
+    #   end
+    # @example Declaring a method as an attribute
+    #   # This should really be an attribute
+    #   # @!parse attr_reader :foo
+    #   def object; @parent.object end
+    # @example Parsing C code
+    #   # @!parse [c]
+    #   #   void Init_Foo() {
+    #   #     rb_define_method(rb_cFoo, "method", method, 0);
+    #   #   }
     class ParseDirective < Directive
       def call
         lang = tag.types ? tag.types.first.to_sym :

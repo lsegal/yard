@@ -343,8 +343,11 @@ module YARD
       # is an optional title.
       #
       # @example
-      #   @example Reverse a String
-      #     "mystring".reverse #=> "gnirtsym"
+      #   # @example Reverse a String
+      #   #   "mystring".reverse #=> "gnirtsym"
+      #   def reverse; end
+      # @yard.signature Optional title
+      #   Code block...
       define_tag "Example",            :example,     :with_title_and_text
 
       # Adds an emphasized note at the top of the docstring for the object
@@ -384,6 +387,8 @@ module YARD
       #   #   Sets a value on the default key `:foo`
       #   #   @param [Object] value describe value param
       #   def set(*args) end
+      # @yard.signature method_signature(...parameters...)
+      #   Indented docstring for overload method
       define_tag "Overloads",          :overload,    OverloadTag
 
       # Documents a single method parameter with a given name, type
@@ -400,6 +405,18 @@ module YARD
       # would make no such distinction. By declaring the @private tag, the
       # class can be hidden from documentation by using the +--no-private+
       # command-line switch to yardoc (see {file:README.md}).
+      #
+      # @note This method is not recommended for hiding undocumented or
+      #   "unimportant" methods. This tag should only be used to mark objects
+      #   private when Ruby visibility rules cannot do so. In Ruby 1.9.3, you
+      #   can use +private_constant+ to declare constants (like classes or
+      #   modules) as private, and should be used instead of +@private+.
+      # @note If +@private+ is applied to a class or module, all methods within
+      #   that namespace are also marked private.
+      # @example
+      #   # @private
+      #   class InteralImplementation; end
+      # @yard.signature
       define_tag "Private",            :private
 
       # Describes that a method may raise a given exception, with
@@ -498,6 +515,7 @@ module YARD
       #   def provide3values(&block) yield(42, 42, 42) end
       # @see tag:yieldparam
       # @see tag:yieldreturn
+      # @yard.signature [parameters] description
       define_tag "Yields",             :yield,       :with_types
 
       # Defines a parameter yielded by a block. If you define the
@@ -522,6 +540,8 @@ module YARD
       # name. Also accepts the r, w, or rw flag to signify that the attribute is
       # readonly, writeonly, or readwrite (default). Only used with DSL methods.
       define_directive :attribute, :with_types_and_title, AttributeDirective
+
+      # @yard.signature
       define_directive :endgroup,                         EndGroupDirective
       define_directive :group,                            GroupDirective
       define_directive :macro, :with_types_and_title,     MacroDirective
@@ -529,14 +549,18 @@ module YARD
       # Recognizes a DSL class method as a method with the given name
       # and optional signature. Only used with DSL methods.
       define_directive :method, :with_title_and_text,     MethodDirective
+
+      # @yard.signature [language] code
       define_directive :parse, :with_types,               ParseDirective
 
       # Sets the scope of a DSL method. Only applicable to DSL method
       # calls. Acceptable values are 'class' or 'instance'
+      # @yard.signature class | instance
       define_directive :scope,                            ScopeDirective
 
       # Sets the visibility of a DSL method. Only applicable to
       # DSL method calls. Acceptable values are public, protected, or private.
+      # @yard.signature public | protected | private
       define_directive :visibility,                       VisibilityDirective
 
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
