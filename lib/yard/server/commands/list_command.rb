@@ -13,29 +13,10 @@ module YARD
           tpl = fulldoc_template
           if tpl.respond_to?(meth)
             tpl.send(meth)
-            tpl.contents
+            cache(tpl.contents)
           else
             not_found
           end
-        end
-
-        private
-
-        # Hack to load a custom fulldoc template object that does
-        # not do any rendering/generation. We need this to access the
-        # generate_*_list methods.
-        def fulldoc_template
-          tplopts = [options.template, :fulldoc, options.format]
-          tplclass = Templates::Engine.template(*tplopts)
-          obj = Object.new.extend(tplclass)
-          class << obj; def init; end end
-          obj.class = tplclass
-          obj.send(:initialize, options)
-          class << obj
-            attr_reader :contents
-            def asset(file, contents) @contents = contents end
-          end
-          obj
         end
       end
     end

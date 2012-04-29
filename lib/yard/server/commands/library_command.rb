@@ -10,7 +10,7 @@ module YARD
         def serializer; @command.serializer end
 
         attr_accessor :command
-        attr_accessor :main_url
+        attr_accessor :frames
 
         def each(&block)
           super(&block)
@@ -58,6 +58,8 @@ module YARD
           self.options.reset_defaults
           self.options.command = self
           setup_library
+          self.options.title = "Documentation for #{library.name} " +
+            (library.version ? '(' + library.version + ')' : '')
           super
         rescue LibraryNotPreparedError
           not_prepared
@@ -103,6 +105,23 @@ module YARD
           self.caching = false
           options.update(:path => request.path, :template => :doc_server, :type => :processing)
           [202, {'Content-Type' => 'text/html'}, [render]]
+        end
+
+        # Hack to load a custom fulldoc template object that does
+        # not do any rendering/generation. We need this to access the
+        # generate_*_list methods.
+        def fulldoc_template
+          tplopts = [options.template, :fulldoc, options.format]
+          tplclass = Templates::Engine.template(*tplopts)
+          obj = Object.new.extend(tplclass)
+          class << obj; def init; end end
+          obj.class = tplclass
+          obj.send(:initialize, options)
+          class << obj
+            attr_reader :contents
+            def asset(file, contents) @contents = contents end
+          end
+          obj
         end
 
         # @private

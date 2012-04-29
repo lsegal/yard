@@ -36,8 +36,25 @@ module YARD
       # Returns the frames URL for the page
       # @return (see Templates::Helpers::HtmlHelper#url_for_frameset)
       def url_for_frameset
-        url = url_for(object).gsub(%r{^/#{base_path(router.docs_prefix)}/}, '')
+        url = options.file ? url_for_file(options.file) : url_for(object)
+        url = url.gsub(%r{^/#{base_path(router.docs_prefix)}/}, '')
         File.join('', base_path(router.docs_prefix), "frames", url)
+      end
+
+      # Returns the main URL, first checking a readme and then linking to the index
+      # @return (see Templates::Helpers::HtmlHelper#url_for_main)
+      def url_for_main
+        if options.frames && !options.command.path.empty?
+          File.join('', base_path(router.docs_prefix), options.command.path)
+        else
+          options.readme ? url_for_file(options.readme) : url_for_index
+        end
+      end
+
+      # Returns the URL for the alphabetic index page
+      # @return (see Templates::Helpers::HtmlHelper#url_for_index)
+      def url_for_index
+        File.join('', base_path(router.docs_prefix))
       end
 
       # @example The base path for a library 'foo'

@@ -9,7 +9,7 @@
 <script type="text/javascript" charset="utf-8">
 window.onload = function() {
   var match = window.location.hash.match(/^#!(.+)/);
-  var name = 'index.html';
+  var name = '<%= url_for_main %>';
   if (match) {
     name = unescape(match[1]);
   }
