@@ -4,11 +4,13 @@
 --exclude /server/templates/
 --exclude /yard/rubygems/
 --asset docs/images:images
+--tag yard.signature:"YARD Tag Signature"
 --type-name-tag yard.tag:"YARD Tag"
 --type-name-tag yard.directive:"YARD Directive"
 --hide-tag yard.tag
 --hide-tag yard.directive
---load ./docs/templates.rb
+--hide-tag yard.signature
+--load ./docs/templates/plugin.rb
 -
 docs/WhatsNew.md
 docs/GettingStarted.md
