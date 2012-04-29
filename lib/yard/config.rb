@@ -119,6 +119,7 @@ module YARD
       self.options = SymbolHash.new(false)
       options.update(DEFAULT_CONFIG_OPTIONS)
       options.update(read_config_file)
+      load_commandline_safemode
       add_ignored_plugins_file
       translate_plugin_names
       load_plugins
@@ -194,6 +195,15 @@ module YARD
         arguments.each_with_index do |arg, i|
           next unless arg == '--plugin'
           load_plugin(arguments[i+1])
+        end
+      end
+    end
+
+    # Check for command-line safe_mode switch in {#arguments}
+    def self.load_commandline_safemode
+      with_yardopts do
+        arguments.each_with_index do |arg, i|
+          options[:safe_mode] = true if arg == '--safe'
         end
       end
     end

@@ -34,6 +34,9 @@ module YARD
                             '  Always on in 1.8.x.') do
           YARD::Parser::SourceParser.parser_type = :ruby18
         end
+        opts.on('--safe', 'Enable safe mode for this instance') do
+          # Parsed in YARD::Config.load
+        end
         opts.on_tail('-q', '--quiet', 'Show no warnings.') { log.level = Logger::ERROR }
         opts.on_tail('--verbose', 'Show more information.') { log.level = Logger::INFO }
         opts.on_tail('--debug', 'Show debugging information.') { log.level = Logger::DEBUG }
