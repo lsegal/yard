@@ -78,7 +78,7 @@ function framesInit() {
   if (hasFrames) {
     document.body.className = 'frames';
     $('#menu .noframes a').attr('href', document.location);
-    $('html head title', window.parent.document).text($('html head title').text());
+    window.top.document.title = $('html head title').text();
   }
   else {
     $('#menu .noframes a').text('frames').attr('href', framesUrl);
