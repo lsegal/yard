@@ -347,7 +347,7 @@ module YARD
       #   #   "mystring".reverse #=> "gnirtsym"
       #   def reverse; end
       # @yard.signature Optional title
-      #   Code block...
+      #   Code block
       define_tag "Example",            :example,     :with_title_and_text
 
       # Adds an emphasized note at the top of the docstring for the object
@@ -387,7 +387,7 @@ module YARD
       #   #   Sets a value on the default key `:foo`
       #   #   @param [Object] value describe value param
       #   def set(*args) end
-      # @yard.signature method_signature(...parameters...)
+      # @yard.signature method_signature(parameters)
       #   Indented docstring for overload method
       define_tag "Overloads",          :overload,    OverloadTag
 
@@ -536,18 +536,21 @@ module YARD
       # @see tag:return
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
-      # Recognizes a DSL class method as an attribute with the given
-      # name. Also accepts the r, w, or rw flag to signify that the attribute is
-      # readonly, writeonly, or readwrite (default). Only used with DSL methods.
+      # @yard.signature [r | w | rw] attribute_name
+      #   Indented attribute docstring
       define_directive :attribute, :with_types_and_title, AttributeDirective
 
       # @yard.signature
       define_directive :endgroup,                         EndGroupDirective
+
       define_directive :group,                            GroupDirective
+
+      # @yard.signature [attach | new] optional_name
+      #   Optional macro expansion data
       define_directive :macro, :with_types_and_title,     MacroDirective
-      
-      # Recognizes a DSL class method as a method with the given name
-      # and optional signature. Only used with DSL methods.
+
+      # @yard.signature method_signature(parameters)
+      #   Indented method docstring
       define_directive :method, :with_title_and_text,     MethodDirective
 
       # @yard.signature [language] code
