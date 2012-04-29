@@ -319,6 +319,29 @@ module YARD
       end
     end
 
+    # Defines a method object with a given method signature, using indented
+    # block data as the method's docstring. The signature is similar to the
+    # {tag:overload} tag. The comment containing this directive does not need
+    # to be attached to any source, but if it is, that source code will be
+    # used as the method's source.
+    #
+    # To define an attribute method, see {tag:!attribute}
+    #
+    # @note For backwards compatibility support, you do not need to indent
+    #   the method's docstring text. If a +@!method+ directive is seen with
+    #   no indented block, the entire docstring is used as the new method's
+    #   docstring text.
+    # @example Defining a simple method
+    #   # @!method quit(username, message = "Quit")
+    #   #   Sends a quit message to the server for a +username+.
+    #   #   @param [String] username the username to quit
+    #   #   @param [String] message the quit message
+    #   quit_message_method
+    # @example Attaching multiple methods to the same source
+    #   # @!method method1
+    #   # @!method method2
+    #   create_methods :method1, :method2
+    # @see tag:!attribute
     class MethodDirective < Directive
       SCOPE_MATCH = /\A\s*self\s*\.\s*/
 
@@ -380,6 +403,26 @@ module YARD
       end
     end
 
+    # Defines an attribute with a given name, using indented block data as the
+    # attribute's docstring. If the type specifier is supplied with "r", "w", or
+    # "rw", the attribute is made readonly, writeonly or readwrite respectively.
+    # A readwrite attribute is the default, if no type is specified. The comment
+    # containing this directive does not need to be attached to any source, but
+    # if it is, that source code will be used as the method's source.
+    #
+    # To define an regular method, see {tag:!method}
+    #
+    # @note For backwards compatibility support, you do not need to indent
+    #   the attribute's docstring text. If an +@!attribute+ directive is seen with
+    #   no indented block, the entire docstring is used as the new attribute's
+    #   docstring text.
+    # @example Defining a simple readonly attribute
+    #   # @!attribute [r] count
+    #   #   @return [Fixnum] the size of the list
+    # @example Defining a simple readwrite attribute
+    #   # @!attribute name
+    #   #   @return [String] the name of the user
+    # @see tag:!method
     class AttributeDirective < MethodDirective
       def after_parse
         return unless handler
