@@ -147,6 +147,7 @@ function generateTOC() {
   for (i = 0; i < tags.length; i++) { tags[i] = '#filecontents ' + tags[i]; }
   var lastTag = parseInt(tags[0][1], 10);
   $(tags.join(', ')).each(function() {
+    if ($(this).parents('.method_details .docstring').length != 0) return;
     if (this.id == "filecontents") return;
     show = true;
     var thisTag = parseInt(this.tagName[1], 10);
