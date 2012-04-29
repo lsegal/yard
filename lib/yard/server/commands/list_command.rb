@@ -11,7 +11,12 @@ module YARD
           list_type = request.path.split('/').last
           meth = "generate_#{list_type}_list"
           tpl = fulldoc_template
-          tpl.respond_to?(meth) ? cache(tpl.send(meth)) : not_found
+          if tpl.respond_to?(meth)
+            tpl.send(meth)
+            tpl.contents
+          else
+            not_found
+          end
         end
 
         private
@@ -26,7 +31,10 @@ module YARD
           class << obj; def init; end end
           obj.class = tplclass
           obj.send(:initialize, options)
-          class << obj; def asset(file, contents) contents end end
+          class << obj
+            attr_reader :contents
+            def asset(file, contents) @contents = contents end
+          end
           obj
         end
       end
