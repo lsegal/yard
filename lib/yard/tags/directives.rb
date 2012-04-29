@@ -121,6 +121,128 @@ module YARD
       end
     end
 
+    # Defines a block of text to be expanded whenever the macro is called by name
+    # in subsequent docstrings. The macro data can be any arbitrary text data, be
+    # it regular documentation, meta-data tags or directives.
+    #
+    # == Defining a Macro
+    #
+    # A macro must first be defined in order to be used. Note that a macro is also
+    # expanded upon definition if it defined on an object (the docstring of a 
+    # method, class, module or constant object as opposed to a free standing
+    # comment). To define a macro, use the "new" or "attach" identifier in the
+    # types specifier list. A macro will also automatically be created if an
+    # indented macro data block is given, so the keywords are not strictly needed.
+    #
+    # === Anonymous Macros
+    #
+    # In addition to standard named macros, macros can be defined anonymously if
+    # no name is given. In this case, they can not be re-used in future docstrings,
+    # but they will expand in the first definition. This is useful when needing
+    # to take advantage of the macro expansion variables (described below).
+    #
+    # == Using a Macro
+    #
+    # To re-use a macro in another docstring after it is defined, simply use
+    # <tt>@!macro the_name</tt> with no indented block of macro data. The resulting
+    # data will be expanded in place.
+    #
+    # == Attaching a Macro to a DSL Method
+    #
+    # Macros can be defined to auto-expand on DSL-style class method calls. To
+    # define a macro to be auto expanded in this way, use the "attach" keyword
+    # in the type specifier list ("new" is implied).
+    #
+    # Attached macros can also be attached directly on the class method declaration
+    # that provides the DSL method to its subclasses. The syntax in either case
+    # is the same.
+    #
+    # == Macro Expansion Variables
+    #
+    # In the case of using macros on DSL-style method calls, a number of expansion
+    # variables can be used for interpolation inside of the macro data. The variables,
+    # similar in syntax to Ruby's global variables, are as follows:
+    #
+    # * $0 - the method name being called
+    # * $1, $2, $3, ... - the Nth argument in the method call
+    # * $& - the full source line
+    #
+    # The following example shows what the expansion variables might hold for a given
+    # DSL method call:
+    #
+    #   property :foo, :a, :b, :c, String
+    #   # $0 => "property"
+    #   # $1 => "foo"
+    #   # $2 => "a"
+    #   # $& => "property :foo, :a, :b, :c, String"
+    #
+    # === Ranges
+    #
+    # Ranges are also acceptable with the syntax `${N-M}`. Negative values on either
+    # N or M are valid, and refer to indexes from the end of the list. Consider
+    # a DSL method that creates a method using the first argument with argument
+    # names following, ending with the return type of the method. This could be
+    # documented as:
+    #
+    #     # @!macro dsl_method
+    #     #   @!method $1(${2--2})
+    #     #   @return [${-1}] the return value of $0
+    #     create_method_with_args :foo, :a, :b, :c, String
+    #
+    # As described, the method is using the signature `foo(a, b, c)` and the return
+    # type from the last argument, `String`. When using ranges, tokens are joined
+    # with commas. Note that this includes using $0:
+    #
+    #     !!!plain
+    #     $0-1 # => Interpolates to "create_method_with_args, foo"
+    #
+    # If you want to separate them with spaces, use `$1 $2 $3 $4 ...`. Note that
+    # if the token cannot be expanded, it will return the empty string (not an error),
+    # so it would be safe to list `$1 $2 ... $10`, for example.
+    #
+    # === Escaping Interpolation
+    #
+    # Interpolation can be escaped by prefixing the `$` with `\`, like so:
+    #
+    #     # @!macro foo
+    #     #   I have \$2.00 USD.
+    #
+    # @example Defining a simple macro
+    #   # @!macro [new] returnself
+    #   #   @return [self] returns itself
+    # @example Using a simple macro in multiple docstrings
+    #   # Documentation for map
+    #   # ...
+    #   # @macro returnself
+    #   def map; end
+    #
+    #   # Documentation for filter
+    #   # ...
+    #   # @macro returnself
+    #   def filter; end
+    # @example Attaching a macro to a class method (for DSL usage)
+    #     class Resource
+    #       # Defines a new property
+    #       # @param [String] name the property name
+    #       # @param [Class] type the property's type
+    #       # @!macro [attach] property
+    #       #   @return [$2] the $1 property
+    #       def self.property(name, type) end
+    #     end
+    # 
+    #     class Post < Resource
+    #       property :title, String
+    #       property :view_count, Integer
+    #     end
+    # @example Attaching a macro directly to a DSL method
+    #     class Post < Resource
+    #       # @!macro [attach] property
+    #       #   @return [$2] the $1 property
+    #       property :title, String
+    #
+    #       # Macro will expand on this definition too
+    #       property :view_count, Integer
+    #     end
     class MacroDirective < Directive
       def call
         raise TagFormatError if tag.name.nil? && tag.text.to_s.empty?
