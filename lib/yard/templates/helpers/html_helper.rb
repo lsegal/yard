@@ -357,7 +357,7 @@ module YARD
       end
 
       # Returns the URL for a list type
-      # 
+      #
       # @param [String, Symbol] type the list type to generate a URL for
       # @return [String] the URL pointing to the list
       # @since 0.8.0
@@ -366,11 +366,27 @@ module YARD
       end
 
       # Returns the URL for the frameset page
-      # 
+      #
       # @return [String] the URL pointing to the frames page
       # @since 0.8.0
       def url_for_frameset
         url_for_file("frames.html")
+      end
+
+      # Returns the URL for the main page (README or alphabetic index)
+      #
+      # @return [String] the URL pointing to the first main page the
+      #   user should see.
+      def url_for_main
+        url_for_file("index.html")
+      end
+
+      # Returns the URL for the alphabetic index page
+      #
+      # @return [String] the URL pointing to the first main page the
+      #   user should see.
+      def url_for_index
+        url_for_file("_index.html")
       end
 
       # @group Formatting Objects and Attributes

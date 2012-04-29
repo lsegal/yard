@@ -139,7 +139,7 @@ def generate_method_list
   @items = @items.sort_by {|m| m.name.to_s }
   @list_title = "Method List"
   @list_type = "methods"
-  asset('method_list.html', erb(:full_list))
+  generate_list_contents
 end
 
 # Generate a searchable class list in the output
@@ -147,7 +147,7 @@ def generate_class_list
   @items = options.objects if options.objects
   @list_title = "Class List"
   @list_type = "class"
-  asset('class_list.html', erb(:full_list))
+  generate_list_contents
 end
 
 # Generate a searchable file list in the output
@@ -155,16 +155,20 @@ def generate_file_list
   @file_list = true
   @items = options.files
   @list_title = "File List"
-  @list_type = "files"
-  asset('file_list.html', erb(:full_list))
+  @list_type = "file"
+  generate_list_contents
   @file_list = nil
+end
+
+def generate_list_contents
+  asset(url_for_list(@list_type), erb(:full_list))
 end
 
 # Generate the frame documentation in the output
 def generate_frameset
   @javascripts = javascripts_full_list
   @stylesheets = stylesheets_full_list
-  asset('frames.html', erb(:frames))
+  asset(url_for_frameset, erb(:frames))
 end
 
 # @return [String] HTML output of the classes to be displayed in the

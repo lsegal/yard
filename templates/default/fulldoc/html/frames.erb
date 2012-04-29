@@ -14,15 +14,15 @@ window.onload = function() {
     name = unescape(match[1]);
   }
   document.writeln('<frameset cols="20%,*">' +
-    '<frame name="list" src="class_list.html" />' +
+    '<frame name="list" src="<%= url_for_list('class') %>" />' +
     '<frame name="main" src="' + name + '" />' +
     '</frameset>');
 }
 </script>
 <noscript>
   <frameset cols="20%,*">
-    <frame name="list" src="class_list.html" />
-    <frame name="main" src="index.html" />
+    <frame name="list" src="<%= url_for_list('class') %>" />
+    <frame name="main" src="<%= url_for_main %>" />
   </frameset>
 </noscript>
 </html>
