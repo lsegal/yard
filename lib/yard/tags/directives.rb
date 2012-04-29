@@ -359,6 +359,22 @@ module YARD
       end
     end
 
+    # Modifies the current parsing scope (class or instance). If this
+    # directive is defined on a docstring attached to an object definition,
+    # it is applied only to that object. Otherwise, it applies the scope
+    # to all future objects in the namespace.
+    #
+    # @example Modifying the scope of a DSL method
+    #   # @!scope class
+    #   cattr_accessor :subclasses
+    # @example Modifying the scope of a set of methods
+    #   # @!scope class
+    #
+    #   # Documentation for method1
+    #   def method1; end
+    #
+    #   # Documentation for method2
+    #   def method2; end
     class ScopeDirective < Directive
       def call
         if %w(class instance module).include?(tag.text)
@@ -371,6 +387,23 @@ module YARD
       end
     end
 
+    # Modifies the current parsing visibility (public, protected, or private).
+    # If this directive is defined on a docstring attached to an object
+    # definition, it is applied only to that object. Otherwise, it applies
+    # the visibility to all future objects in the namespace.
+    #
+    # @example Modifying the visibility of a DSL method
+    #   # @!visibility private
+    #   cattr_accessor :subclasses
+    # @example Modifying the visibility of a set of methods
+    #   # Note that Ruby's "protected" is recommended over this directive
+    #   # @!visibility protected
+    #
+    #   # Documentation for method1
+    #   def method1; end
+    #
+    #   # Documentation for method2
+    #   def method2; end
     class VisibilityDirective < Directive
       def call
         if %w(public protected private).include?(tag.text)
