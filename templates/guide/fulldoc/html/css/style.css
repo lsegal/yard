@@ -9,7 +9,7 @@ strong { color: #000; }
 .method_header .path.space, .module_header .path.space { padding-left: 5px; }
 .method_header { font-size: 0.95em; }
 .method_body { margin-left: 2em; }
-.tags h3, .tags h4 { font-size: 0.9em; font-weight: bold; color: #3e4349; }
+.tags .tag_title, .tags .examples .inline p { font-size: 0.9em; font-weight: bold; color: #3e4349; }
 .tags .param .name { font-style: italic; }
 .tags .option .name { font-family: monospace; color: #000; font-size: 0.8em; }
 .tags .option .type, .tags .param .type { font-size: 10px; vertical-align: super; }

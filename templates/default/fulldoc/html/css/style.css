@@ -150,7 +150,7 @@ h3.signature .aliases .names { font-family: Monaco, Consolas, Courier, monospace
 .tags { margin-bottom: 12px; }
 
 .tags .examples .tag_title { margin-bottom: 10px; font-weight: bold; }
-.tags .examples .example_title { padding: 0; margin: 0; margin-left: 15px; font-weight: bold; font-size: 0.9em; }
+.tags .examples .inline p { padding: 0; margin: 0; margin-left: 15px; font-weight: bold; font-size: 0.9em; }
 
 .tags .overload .overload_item { list-style: none; margin-bottom: 25px; }
 .tags .overload .overload_item .signature { 
