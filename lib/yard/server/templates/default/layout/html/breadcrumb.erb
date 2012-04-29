@@ -31,13 +31,13 @@
   <% end %>
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>
     <% unless @single_library %>&raquo;<% end %>
-    <a href="/<%= base_path(router.docs_prefix) %>"><% if object.root? || object.type == :method %>Index<% else %>Index (<%= object.name.to_s[0] %>)<% end %></a> &raquo;
+    <a href="<%= url_for_index %>"><% if object.root? || object.type == :method %>Index<% else %>Index (<%= object.name.to_s[0] %>)<% end %></a> &raquo;
     <%= @breadcrumb.map {|obj| "<span class='title'>" + linkify(obj, obj.name) + "</span>" }.join(" &raquo; ") %>
     <%= @breadcrumb.size > 0 ? " &raquo; " : "" %>
     <span class='title'><%= object.root? ? "Top Level Namespace" : object.name(true) %></span>
   <% else %>
     <% if (@breadcrumb_title || object != '_index.html') && !@single_library %>&raquo; <% end %>
-    <% if object != '_index.html' %><a href="/<%= base_path(router.docs_prefix) %>">Index</a> &raquo; <% end %>
+    <% if object != '_index.html' %><a href="<%= url_for_index %>">Index</a> &raquo; <% end %>
     <span class='title'><%= @breadcrumb_title %></span>
   <% end %>
 

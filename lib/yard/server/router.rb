@@ -97,8 +97,8 @@ module YARD
       #
       # @return [Array(Numeric,Hash,Array<String>)] the Rack-style response
       # @return [nil] if no route is matched
-      def route
-        path = request.path.gsub(%r{//+}, '/').gsub(%r{^/|/$}, '')
+      def route(path = request.path)
+        path = path.gsub(%r{//+}, '/').gsub(%r{^/|/$}, '')
         return route_index if path.empty? || path == docs_prefix
         case path
         when /^(#{docs_prefix}|#{list_prefix}|#{search_prefix})(\/.*|$)/

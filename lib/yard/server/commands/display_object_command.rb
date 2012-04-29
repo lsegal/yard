@@ -3,8 +3,20 @@ module YARD
     module Commands
       # Displays documentation for a specific object identified by the path
       class DisplayObjectCommand < LibraryCommand
+        include DocServerHelper
+
         def run
-          return index if path.empty?
+          if path.empty?
+            if options.readme
+              url = url_for_file(options.readme)
+              self.status, self.headers, self.body = *router.send(:route, url)
+              cache(body.first)
+              return
+            else
+              self.path = 'index'
+            end
+          end
+          return index if path == 'index'
 
           if object = Registry.at(object_path)
             options.update(:type => :layout)
@@ -17,14 +29,9 @@ module YARD
         def index
           Registry.load_all
 
-          title = options[:title]
-          unless title
-            title = "Documentation for #{library.name} #{library.version ? '(' + library.version + ')' : ''}"
-          end
           options.update(
             :object => '_index.html',
             :objects => Registry.all(:module, :class),
-            :title => title,
             :type => :layout
           )
           render

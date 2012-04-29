@@ -9,6 +9,7 @@ module YARD
       # @return (see Templates::Helpers::HtmlHelper#url_for)
       def url_for(obj, anchor = nil, relative = false)
         return '' if obj.nil?
+        return url_for_index if obj == '_index.html'
         return "/#{obj}" if String === obj
         File.join('', base_path(router.docs_prefix), super(obj, anchor, false))
       end
@@ -54,7 +55,7 @@ module YARD
       # Returns the URL for the alphabetic index page
       # @return (see Templates::Helpers::HtmlHelper#url_for_index)
       def url_for_index
-        File.join('', base_path(router.docs_prefix))
+        File.join('', base_path(router.docs_prefix), 'index')
       end
 
       # @example The base path for a library 'foo'
