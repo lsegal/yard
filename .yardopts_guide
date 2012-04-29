@@ -7,13 +7,13 @@
 -
 docs/WhatsNew.md
 docs/GettingStarted.md
+docs/Tags.md
 docs/Overview.md
 docs/CodeObjects.md
-docs/Tags.md
 docs/Parser.md
 docs/Handlers.md
+docs/TagsArch.md
 docs/Templates.md
-docs/Glossary.md
 ChangeLog
 LICENSE
 LEGAL
