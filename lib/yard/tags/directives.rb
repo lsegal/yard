@@ -178,31 +178,31 @@ module YARD
     #
     # === Ranges
     #
-    # Ranges are also acceptable with the syntax `${N-M}`. Negative values on either
-    # N or M are valid, and refer to indexes from the end of the list. Consider
-    # a DSL method that creates a method using the first argument with argument
-    # names following, ending with the return type of the method. This could be
-    # documented as:
+    # Ranges are also acceptable with the syntax <tt>${N-M}</tt>. Negative values 
+    # on either N or M are valid, and refer to indexes from the end of the list.
+    # Consider a DSL method that creates a method using the first argument with
+    # argument names following, ending with the return type of the method. This
+    # could be documented as:
     #
     #     # @!macro dsl_method
     #     #   @!method $1(${2--2})
     #     #   @return [${-1}] the return value of $0
     #     create_method_with_args :foo, :a, :b, :c, String
     #
-    # As described, the method is using the signature `foo(a, b, c)` and the return
-    # type from the last argument, `String`. When using ranges, tokens are joined
+    # As described, the method is using the signature <tt>foo(a, b, c)</tt> and the return
+    # type from the last argument, +String+. When using ranges, tokens are joined
     # with commas. Note that this includes using $0:
     #
     #     !!!plain
     #     $0-1 # => Interpolates to "create_method_with_args, foo"
     #
-    # If you want to separate them with spaces, use `$1 $2 $3 $4 ...`. Note that
+    # If you want to separate them with spaces, use <tt>$1 $2 $3 $4 ...</tt>. Note that
     # if the token cannot be expanded, it will return the empty string (not an error),
-    # so it would be safe to list `$1 $2 ... $10`, for example.
+    # so it would be safe to list <tt>$1 $2 ... $10</tt>, for example.
     #
     # === Escaping Interpolation
     #
-    # Interpolation can be escaped by prefixing the `$` with `\`, like so:
+    # Interpolation can be escaped by prefixing the +$+ with +\+, like so:
     #
     #     # @!macro foo
     #     #   I have \$2.00 USD.

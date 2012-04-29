@@ -384,7 +384,7 @@ module YARD
       #   #   @param [Symbol] key describe key param
       #   #   @param [Object] value describe value param
       #   # @overload set(value)
-      #   #   Sets a value on the default key `:foo`
+      #   #   Sets a value on the default key +:foo+
       #   #   @param [Object] value describe value param
       #   def set(*args) end
       # @yard.signature method_signature(parameters)
