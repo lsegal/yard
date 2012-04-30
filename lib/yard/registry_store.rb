@@ -54,6 +54,9 @@ module YARD
       else
         @notfound.delete(key.to_sym)
         (@object_types[value.type] ||= []) << key.to_s
+        if @store[key.to_sym]
+          @object_types[@store[key.to_sym].type].delete(key.to_s)
+        end
         @store[key.to_sym] = value
       end
     end

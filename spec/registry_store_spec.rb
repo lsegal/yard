@@ -207,6 +207,8 @@ describe YARD::RegistryStore do
   end
 
   describe '#paths_for_type' do
+    after { Registry.clear }
+
     it "should set all object types if not set by object_types" do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
@@ -221,6 +223,18 @@ describe YARD::RegistryStore do
     it "should keep track of types when assigning values" do
       @store.put(:abc, @foo)
       @store.paths_for_type(@foo.type).should == ['abc']
+    end
+
+    it "should reassign path if type changes" do
+      foo = CodeObjects::ClassObject.new(:root, :Foo)
+      @store.put('Foo', foo)
+      @store.get('Foo').type.should == :class
+      @store.paths_for_type(:class).should == ["Foo"]
+      foo = CodeObjects::ModuleObject.new(:root, :Foo)
+      @store.put('Foo', foo)
+      @store.get('Foo').type.should == :module
+      @store.paths_for_type(:class).should == []
+      @store.paths_for_type(:module).should == ["Foo"]
     end
   end
 
