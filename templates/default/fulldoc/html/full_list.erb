@@ -24,7 +24,9 @@
       <h1 id="full_list_header"><%= @list_title %></h1>
       <div id="nav">
         <% menu_lists.each do |list| %>
-          <a target="_self" href="<%= url_for_list list[:type] %>"><%= list[:title] %></a>
+          <span><a target="_self" href="<%= url_for_list list[:type] %>">
+            <%= list[:title] %>
+          </a></span>
         <% end %>
       </div>
       <div id="search">Search: <input type="text" /></div>
