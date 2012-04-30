@@ -239,5 +239,31 @@ module YARD
         cb.call(self)
       end
     end
+
+    # Define a callback to check that @param tags are properly named
+    after_parse do |parser|
+      next unless parser.object
+      next unless parser.object.is_a?(CodeObjects::MethodObject)
+      next if parser.object.parameters.empty? # method has no params or
+                                                # YARD couldn't detect any.
+                                                # but don't warn user (?)
+      names = parser.object.parameters.map {|l| l.first.gsub(/\W/, '') }
+      seen_names = []
+      infile_info = "\n    in file `#{parser.object.file}' " +
+                    "near line #{parser.object.line}"
+      parser.tags.each do |tag|
+        next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
+        next unless tag.tag_name == "param"
+        if names.include?(tag.name)
+          seen_names << tag.name
+        elsif seen_names.include?(tag.name)
+          log.warn "@param tag has duplicate parameter name: " +
+            "#{tag.name} #{infile_info}"
+        else
+          log.warn "@param tag has unknown parameter name: " +
+            "#{tag.name} #{infile_info}"
+        end
+      end
+    end
   end
 end

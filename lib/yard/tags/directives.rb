@@ -49,8 +49,8 @@ module YARD
 
       # @!endgroup
 
-      # @param [Tag] the meta-data tag containing all input to the docstring
-      # @param [DocstringParser] the docstring parser object
+      # @param [Tag] tag the meta-data tag containing all input to the docstring
+      # @param [DocstringParser] parser the docstring parser object
       def initialize(tag, parser)
         self.tag = tag
         self.parser = parser

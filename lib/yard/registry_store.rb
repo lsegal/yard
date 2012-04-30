@@ -85,7 +85,7 @@ module YARD
     # @return [Array<CodeObjects::Base>] all the code objects
     def values(reload = false) load_all if reload; @store.values end
 
-    # @param [Symbol] the type to look for
+    # @param [Symbol] type the type to look for
     # @return [Array<String>] a list of object paths with a given
     #   {CodeObjects::Base#type}
     # @since 0.8.0
@@ -94,7 +94,7 @@ module YARD
       @object_types[type] || []
     end
 
-    # @param [Symbol] the type to look for
+    # @param [Symbol] type the type to look for
     # @return [Array<CodeObjects::Base>] a list of objects with a given
     #   {CodeObjects::Base#type}
     # @since 0.8.0

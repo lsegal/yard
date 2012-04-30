@@ -227,7 +227,7 @@ module YARD
       # Copies all data in this object to another code object, except for
       # uniquely identifying information (path, namespace, name, scope).
       #
-      # @param [Base] the object to copy data to
+      # @param [Base] other the object to copy data to
       # @return [Base] the other object
       # @since 0.8.0
       def copy_to(other)

@@ -40,8 +40,8 @@ module YARD
     # when creating the new docstring object.
     #
     # @param [String] text the textual portion of the docstring
-    # @param [Array<Tag>] the list of tag objects in the docstring
-    # @param [CodeObjects::Base, nil] the object associated with the
+    # @param [Array<Tag>] tags the list of tag objects in the docstring
+    # @param [CodeObjects::Base, nil] object the object associated with the
     #   docstring. May be nil.
     # @param [String] raw_data the complete docstring, including all
     #   original formatting and any unparsed tags/directives.

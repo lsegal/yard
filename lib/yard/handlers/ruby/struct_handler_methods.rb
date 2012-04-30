@@ -44,8 +44,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # Gets the return type for the member in a nicely formatted string. Used
   # to be injected into auto-generated docstrings.
   #
-  # @param [ClassObject] klass the class whose tags we're searching
-  # @param [String] member the name of the struct member whose return type we need
+  # @param [Tags::Tag] member_tag the tag object to check for types
   # @return [String] the user-declared type of the struct member, or [Object] if
   #   the user did not define a type for this member.
   def return_type_from_tag(member_tag)
