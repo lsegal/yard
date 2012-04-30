@@ -287,6 +287,9 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 Changelog
 ---------
 
+- **January.31.12**: 0.7.5 release
+    - Various minor bug fixes
+
 - **December.2.11**: 0.7.4 release
     - Redcarpet is now the default Markdown formatting library. GFM now works out-of-box (#404)
     - Fix server side searching for elements that are marked private (#420)
