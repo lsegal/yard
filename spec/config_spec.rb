@@ -39,6 +39,7 @@ describe YARD::Config do
       ARGV.replace(['--safe'])
       YARD::Config.load
       YARD::Config.options[:safe_mode].should be_true
+      ARGV.replace([''])
     end
   end
 
