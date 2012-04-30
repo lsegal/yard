@@ -32,7 +32,7 @@ describe YARD::Verifier do
       Verifier.new('@return', '@param').call(obj).should == false
     end
   end
-  
+
   describe '#o' do
     it "should alias object to o" do
       obj = mock(:object)
@@ -47,17 +47,17 @@ describe YARD::Verifier do
       obj.should_receive(:tag).and_return(nil)
       Verifier.new('@return.text').call(obj).should == false
     end
-    
+
     it "should not fail if no expressions were added" do
       lambda { Verifier.new.call(nil) }.should_not raise_error
     end
-    
+
     it "should always ignore proxy objects and return true" do
       v = Verifier.new('tag(:x)')
       lambda { v.call(P('foo')).should == true }.should_not raise_error
     end
   end
-  
+
   describe '#expressions' do
     it "should maintain a list of all unparsed expressions" do
       Verifier.new('@return.text', '@private').expressions.should == ['@return.text', '@private']
@@ -73,7 +73,7 @@ describe YARD::Verifier do
       v.call(obj)
     end
   end
-  
+
   describe '#add_expressions' do
     it "should add new expressions and recompile" do
       obj = mock(:object)

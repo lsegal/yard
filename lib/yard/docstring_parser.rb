@@ -114,11 +114,11 @@ module YARD
       if library.has_tag?(tag_name)
         @tags += [library.tag_create(tag_name, tag_buf)].flatten
       else
-        log.warn "Unknown tag @#{tag_name}" + 
+        log.warn "Unknown tag @#{tag_name}" +
           (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" + 
+      log.warn "Invalid tag format for @#{tag_name}" +
         (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
@@ -135,12 +135,12 @@ module YARD
           dir
         end
       else
-        log.warn "Unknown directive @!#{tag_name}" + 
+        log.warn "Unknown directive @!#{tag_name}" +
           (object ? " in file `#{object.file}` near line #{object.line}" : "")
         nil
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid directive format for @!#{tag_name}" + 
+      log.warn "Invalid directive format for @!#{tag_name}" +
         (object ? " in file `#{object.file}` near line #{object.line}" : "")
       nil
     end

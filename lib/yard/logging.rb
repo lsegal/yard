@@ -38,11 +38,11 @@ module YARD
       error "Stack trace:" +
         exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
     end
-    
+
     # Warns that the Ruby environment does not support continuations. Applies
     # to JRuby, Rubinius and MacRuby. This warning will only display once
     # per Ruby process.
-    # 
+    #
     # @deprecated Continuations are no longer needed by YARD 0.8.0+.
     # @return [void]
     def warn_no_continuations

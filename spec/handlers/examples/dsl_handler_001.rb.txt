@@ -12,10 +12,10 @@ class Foo
   # IMPLICIT METHOD3!
   # @!visibility protected
   just_a_method_for :implicit2
-  
+
   # Not recognized
   just_a_method_for :implicit_invalid
-  
+
   #
   ## IS NOT RECOGNIZED!
   just_a_method_for :implicit_invalid2
@@ -30,16 +30,16 @@ class Foo
   # @!attribute [r]
   # @return [Numeric] a number
   a_readable_attribute :attr1
-  
+
   # @!attribute [w]
   a_writable_attribute :attr2, 'bar'
 
   # @!attribute
   default_attribute :attr3
-  
+
   # @!attribute custom
   default_attribute :attr4
-  
+
   # @!method xyz(a, b, c)
   # The foo method
   # @param [String] a
@@ -53,42 +53,42 @@ class Foo
   #   @param $3 first parameter
   #   @return [$2] the property $1
   property :name, String, :a, :b, :c
-  
+
   # @!macro property
   property :age, Fixnum, :value
-  
+
   # This is just for x
   # @!macro [attach] parser
   #   @!method $1(opts = {})
   #   @return NOTHING!
   parser :x
-  
+
   parser :c_parser
-  
+
   # Another docstring
   parser :d_parser
-  
+
   # @!macro [attach] none
   #   @!method none(foo, bar)
   none
-  
+
   # @!macro something
   #   @!method $1(a, b, c)
   something :qux
-  
+
   # @!method qux2(a, b, c)
   something
-  
+
   # @!macro
   #   $1 $2 $3
   def regular_meth(a, b, c) end
-  
+
   # @!macro [new] different
   #   @!method $2_name(a = 1)
-  
+
   # @!macro different
   implicit_with_different_method_name :wrong, :right
-  
+
   # @!scope module
   a_module_function :modfunc1
 end

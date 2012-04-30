@@ -597,7 +597,7 @@ module YARD
           options.verifier.add_expressions '!object.tag(:private) &&
             (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
         end
-        
+
         opts.on('--embed-mixins', "Embeds mixin methods into class documentation") do
           options.embed_mixins << '*'
         end

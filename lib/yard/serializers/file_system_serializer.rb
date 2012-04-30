@@ -58,7 +58,7 @@ module YARD
             fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
           end
         end
-        
+
         File.join(encode_path_components(*fspath))
       end
 
@@ -69,9 +69,9 @@ module YARD
       def exists?(object)
         File.exist?(File.join(basepath, serialized_path(object)))
       end
-      
+
       private
-      
+
       # Remove special chars from filenames.
       # Windows disallows \ / : * ? " < > | but we will just remove any
       # non alphanumeric (plus period, underscore and dash).

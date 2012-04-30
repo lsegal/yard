@@ -7,10 +7,10 @@ describe YARD::Templates::Engine.template(:default, :constant) do
         class YARD::CLI::YRI
           # Default search paths that should be loaded dynamically into YRI. These paths
           # take precedence over all other paths ({SEARCH_PATHS_FILE} and RubyGems
-          # paths). To add a path, call: 
-          # 
+          # paths). To add a path, call:
+          #
           #   DEFAULT_SEARCH_PATHS.push("/path/to/.yardoc")
-          # 
+          #
           # @return [Array<String>] a list of extra search paths
           # @since 0.6.0
           DEFAULT_SEARCH_PATHS = []
@@ -19,7 +19,7 @@ describe YARD::Templates::Engine.template(:default, :constant) do
       text_equals(Registry.at('YARD::CLI::YRI::DEFAULT_SEARCH_PATHS').format(text_options), :constant001)
     end
   end
-  
+
   describe 'simple constant with no documentation' do
     it "should render text format correctly" do
       # Short constant should show on single line

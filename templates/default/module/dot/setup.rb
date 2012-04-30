@@ -1,6 +1,6 @@
 def init
   @modules = object.children.select {|o| o.type == :module }
-  @classes = object.children.select {|o| o.type == :class } 
+  @classes = object.children.select {|o| o.type == :class }
   sections :child, [:info], :classes, [T('class')], :header, [T('module')], :dependencies
 end
 

@@ -4,7 +4,7 @@ class YARD::Handlers::C::ModuleHandler < YARD::Handlers::C::Base
   handles MATCH1
   handles MATCH2
   statement_class BodyStatement
-  
+
   process do
     statement.source.scan(MATCH1) do |var_name, module_name|
       handle_module(var_name, module_name)

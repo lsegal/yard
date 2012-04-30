@@ -324,7 +324,7 @@ module YARD
 
       # (see Processor#extra_state)
       attr_reader :extra_state
-      
+
       undef owner, owner=, namespace, namespace=
       undef visibility, visibility=, scope, scope=
       undef globals, extra_state
@@ -400,10 +400,10 @@ module YARD
         end
         objects.size == 1 ? objects.first : objects
       end
-      
+
       # Ensures that the object's namespace is loaded before attaching it
       # to the namespace.
-      # 
+      #
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -414,18 +414,18 @@ module YARD
         rescue NamespaceMissingError
         end
       end
-      
+
       # Registers the file/line of the declaration with the object
-      # 
+      #
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
       def register_file_info(object, file = parser.file, line = statement.line, comments = statement.comments)
         object.add_file(file, line, comments)
       end
-      
+
       # Registers any docstring found for the object and expands macros
-      # 
+      #
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -446,9 +446,9 @@ module YARD
 
         register_transitive_tags(object)
       end
-      
+
       # Registers the object as being inside a specific group
-      # 
+      #
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -460,9 +460,9 @@ module YARD
           object.group = group
         end
       end
-      
+
       # Registers any transitive tags from the namespace on the object
-      # 
+      #
       # @param [CodeObjects::Base, nil] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -475,7 +475,7 @@ module YARD
           object.docstring.add_tag(*object.namespace.tags(tag))
         end
       end
-      
+
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -487,7 +487,7 @@ module YARD
 
       # Registers visibility on a method object. If the object does not
       # respond to setting visibility, nothing is done.
-      # 
+      #
       # @param [#visibility=] object the object to register
       # @param [Symbol] visibility the visibility to set on the object
       # @since 0.8.0
@@ -498,7 +498,7 @@ module YARD
 
       # Registers the same method information on the module function, if
       # the object was defined as a module function.
-      # 
+      #
       # @param [CodeObjects::Base] object the possible module function object
       #   to copy data for
       # @since 0.8.0
@@ -512,7 +512,7 @@ module YARD
 
       # Registers the object as dynamic if the object is defined inside
       # a method or block (owner != namespace)
-      # 
+      #
       # @param [CodeObjects::Base] object the object to register
       # @return [void]
       # @since 0.8.0
@@ -556,9 +556,9 @@ module YARD
         end
         object
       end
-      
+
       # @group Macro Support
-      
+
       # @abstract Implement this method to return the parameters in a method call
       #   statement. It should return an empty list if the statement is not a
       #   method call.
@@ -566,7 +566,7 @@ module YARD
       def call_params
         raise NotImplementedError
       end
-      
+
       # @abstract Implement this method to return the method being called in
       #   a method call. It should return nil if the statement is not a method
       #   call.

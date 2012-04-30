@@ -8,7 +8,7 @@ describe YARD::CLI::Diff do
     CLI::Gems.stub!(:run)
     @diff = CLI::Diff.new
   end
-  
+
   describe 'Argument handling' do
     it "should exit if there is only one gem name" do
       @diff.should_receive(:exit)
@@ -16,7 +16,7 @@ describe YARD::CLI::Diff do
       @diff.run
     end
   end
-  
+
   describe 'Diffing' do
     before do
       @objects1 = nil
@@ -81,12 +81,12 @@ eof
       end
     end
   end
-  
+
   describe 'File searching' do
     before do
       @diff.stub!(:generate_yardoc)
     end
-    
+
     it "should search for gem/.yardoc" do
       File.should_receive(:directory?).with('gem1/.yardoc').and_return(true)
       File.should_receive(:directory?).with('gem2/.yardoc').and_return(true)
@@ -94,7 +94,7 @@ eof
       Registry.should_receive(:load_yardoc).with('gem2/.yardoc')
       @diff.run('gem1', 'gem2')
     end
-    
+
     it "should search for argument as yardoc" do
       File.should_receive(:directory?).with('gem1/.yardoc').and_return(false)
       File.should_receive(:directory?).with('gem2/.yardoc').and_return(false)
@@ -128,7 +128,7 @@ eof
       Dir.stub!(:chdir)
       @diff.run('gem1-1.0.0.gem', 'gem2-1.0.0')
     end
-    
+
     it "should search for .gem file" do
       iomock = mock(:io)
       File.should_receive(:directory?).with('gem1/.yardoc').and_return(false)
@@ -146,7 +146,7 @@ eof
       FileUtils.should_receive(:rm_rf)
       @diff.run('gem1', 'gem2.gem')
     end
-    
+
     it "should search for .gem file on rubygems.org" do
       iomock = mock(:io)
       File.should_receive(:directory?).with('gem1/.yardoc').and_return(false)
@@ -164,7 +164,7 @@ eof
       FileUtils.should_receive(:rm_rf)
       @diff.run('gem1', 'gem2.gem')
     end
-    
+
     it "should error if gem is not found" do
       log.should_receive(:error).with("Cannot find gem gem1")
       log.should_receive(:error).with("Cannot find gem gem2.gem")

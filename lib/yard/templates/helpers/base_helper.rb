@@ -2,7 +2,7 @@ module YARD::Templates::Helpers
   # The base helper module included in all templates.
   module BaseHelper
     attr_accessor :object, :serializer
-    
+
     # @return [CodeObjects::Base] the object representing the current generated
     #   page. Might not be the current {#object} when inside sub-templates.
     attr_reader :owner

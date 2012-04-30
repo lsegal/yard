@@ -6,7 +6,7 @@ class StringSerializer < YARD::Serializers::Base
     @files = files
     @string = string
   end
-  
+
   def serialize(object, data)
     files << object
     string << data
@@ -28,7 +28,7 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
       Encoding.default_external = @eenc
     end
   end
-  
+
   def render
     @files = []
     @output = ''
@@ -37,15 +37,15 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
         # Foo method
         # @return [String]
         def foo; end
-        
+
         # Bar method
         # @return [Numeric]
         def bar; end
       end
     eof
-    readme = CodeObjects::ExtraFileObject.new('README', 
+    readme = CodeObjects::ExtraFileObject.new('README',
       "# This is a code comment\n\n# Top of file\n\n\nclass C; end")
-    Templates::Engine.generate Registry.all(:class), 
+    Templates::Engine.generate Registry.all(:class),
       :serializer => StringSerializer.new(@files, @output),
       :onefile => true, :format => :html, :readme => readme, :files => [readme,
         CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')

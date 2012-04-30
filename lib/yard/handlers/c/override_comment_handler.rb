@@ -2,7 +2,7 @@
 class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
   handles %r{.}
   statement_class Comment
-  
+
   process do
     return if statement.overrides.empty?
     statement.overrides.each do |type, name|

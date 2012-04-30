@@ -28,7 +28,7 @@ module YARD
         private
 
         def url_for(object)
-          File.join('', base_path(router.docs_prefix), 
+          File.join('', base_path(router.docs_prefix),
             serializer.serialized_path(object))
         end
 

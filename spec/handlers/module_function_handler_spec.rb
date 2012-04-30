@@ -26,7 +26,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', 'bar')
     assert_module_function('Foo', 'baz')
   end
-  
+
   it "should be able to set scope for duration of block without params" do
     YARD.parse_string <<-eof
       module Foo
@@ -42,7 +42,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', 'bar')
     assert_module_function('Foo', 'baz')
   end
-  
+
   it "should handle all method names in parameters" do
     YARD.parse_string <<-eof
       module Foo
@@ -56,7 +56,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', '==')
     assert_module_function('Foo', 'a?')
   end
-  
+
   it "should only accept strings and symbols" do
     YARD.parse_string <<-eof
       module Foo
@@ -69,7 +69,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     Registry.at('Foo#argument').should be_nil
     Registry.at('Foo#method_call').should be_nil
   end
-  
+
   it "should handle constants passed in as symbols" do
     YARD.parse_string <<-eof
       module Foo

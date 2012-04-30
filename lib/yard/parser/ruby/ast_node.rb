@@ -480,7 +480,7 @@ module YARD
         def docstring; first end
         def docstring=(value) end
         alias comments docstring
-        
+
         def source; "" end
         def first_line; "" end
       end

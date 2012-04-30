@@ -6,11 +6,11 @@
     <% stylesheets_full_list.each do |stylesheet| %>
       <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" media="screen" charset="utf-8" />
     <% end %>
-    
+
     <% javascripts_full_list.each do |javascript| %>
       <script type="text/javascript" charset="utf-8" src="<%= url_for(javascript) %>"></script>
     <% end %>
-    
+
     <base id="base_target" target="_parent" />
   </head>
   <body>

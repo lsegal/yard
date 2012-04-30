@@ -12,11 +12,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ExtendHandler"
     Registry.at(:C).class_mixins.should == [P(:C)]
     Registry.at(:C).instance_mixins.should be_empty
   end
-  
+
   it "should extend module with correct namespace" do
     Registry.at('Q::R::S').class_mixins.first.path.should == 'A'
   end
-  
+
   it "should not allow extending self if object is a class" do
     undoc_error "class Foo; extend self; end"
   end

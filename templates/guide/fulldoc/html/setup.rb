@@ -20,7 +20,7 @@ def init
       end
     end
   end if options.serializer
-  
+
   generate_assets
   options.delete(:objects)
   options.files.each {|file| serialize_file(file) }

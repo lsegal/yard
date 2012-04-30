@@ -2,18 +2,18 @@ include Helpers::ModuleHelper
 
 def init
   options.objects = objects = run_verifier(options.objects)
-  
+
   return serialize_onefile if options.onefile
   generate_assets
   serialize('_index.html')
-  options.files.each_with_index do |file, i| 
-    serialize_file(file, file.title) 
+  options.files.each_with_index do |file, i|
+    serialize_file(file, file.title)
   end
 
   options.delete(:objects)
   options.delete(:files)
-  
-  objects.each do |object| 
+
+  objects.each do |object|
     begin
       serialize(object)
     rescue => e
@@ -36,7 +36,7 @@ def serialize(object)
 end
 
 # Generate the documentation output in one file (--one-file) which will load the
-# contents of all the javascript and css and output the entire contents without 
+# contents of all the javascript and css and output the entire contents without
 # depending on any additional files
 def serialize_onefile
   layout = Object.new.extend(T('layout'))
@@ -48,7 +48,7 @@ def serialize_onefile
 end
 
 # Generate the index document for the output
-# @params [Hash] options contains data and flags that influence the output 
+# @params [Hash] options contains data and flags that influence the output
 def serialize_index(options)
   Templates::Engine.with_serializer('index.html', options.serializer) do
     T('layout').run(options)
@@ -57,10 +57,10 @@ end
 
 # Generate a single HTML file with the layout template applied. This is generally
 # the README file or files specified on the command-line.
-# 
+#
 # @param [File] file object to be saved to the output
 # @param [String] title currently unused
-# 
+#
 # @see layout#diskfile
 def serialize_file(file, title = nil)
   options.object = Registry.root
@@ -74,13 +74,13 @@ def serialize_file(file, title = nil)
   options.delete(:file)
 end
 
-# 
+#
 # Generates a file to the output with the specified contents.
-# 
+#
 # @example saving a custom html file to the documenation root
 #
 #   asset('my_custom.html','<html><body>Custom File</body></html>')
-# 
+#
 # @param [String] path relative to the document output where the file will be
 #   created.
 # @param [String] content the contents that are saved to the file.
@@ -88,14 +88,14 @@ def asset(path, content)
   options.serializer.serialize(path, content) if options.serializer
 end
 
-# @return [Array<String>] Stylesheet files that are additionally loaded for the 
+# @return [Array<String>] Stylesheet files that are additionally loaded for the
 #   searchable full lists, e.g., Class List, Method List, File List
 # @since 0.7.0
 def stylesheets_full_list
   %w(css/full_list.css css/common.css)
 end
 
-# @return [Array<String>] Javascript files that are additionally loaded for the 
+# @return [Array<String>] Javascript files that are additionally loaded for the
 #   searchable full lists, e.g., Class List, Method List, File List.
 # @since 0.7.0
 def javascripts_full_list
@@ -107,9 +107,9 @@ def menu_lists
 end
 
 # Generates all the javascript files, stylesheet files, menu lists
-# (i.e. class, method, and file) based on the the values returned from the 
+# (i.e. class, method, and file) based on the the values returned from the
 # layout's menu_list method, and the frameset in the documentation output
-# 
+#
 def generate_assets
   @object = Registry.root
 

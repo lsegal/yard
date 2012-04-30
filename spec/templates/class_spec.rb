@@ -16,24 +16,24 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
         def method_missing(*args) end
         # @deprecated
         def a; end
-        
+
         # constructor method!
         def initialize(test) end
       end
-      
+
       class C < A; end
-      
+
       class D
         # @private
         def initialize; end
       end
     eof
   end
-  
+
   it "should render html format correctly" do
     html_equals(Registry.at('A').format(html_options), :class001)
   end
-  
+
   it "should render text format correctly" do
     text_equals(Registry.at('A').format, :class001)
   end

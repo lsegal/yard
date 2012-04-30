@@ -259,7 +259,7 @@ module YARD
             @tokens << [token, data]
             if token == :heredoc_beg
               @heredoc_state = :started
-              @heredoc_tokens = [] 
+              @heredoc_tokens = []
             end
           end
         end
@@ -317,7 +317,7 @@ module YARD
         def on_assoclist_from_args(*args)
           args.first
         end
-        
+
         def on_unary(op, val)
           map = @map[op.to_s[0,1]]
           lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
@@ -358,7 +358,7 @@ module YARD
           end
           node
         end
-        
+
         def on_lbracket(tok)
           (@map[:lbracket] ||= []) << [lineno, charno]
           visit_ns_token(:lbracket, tok, false)
@@ -396,7 +396,7 @@ module YARD
             end
           eof
         end
-        
+
         def on_qwords_new(*args)
           node = LiteralNode.new(:qwords_literal, args)
           if @map[:qwords_beg]
@@ -406,7 +406,7 @@ module YARD
           end
           node
         end
-        
+
         def on_qwords_add(list, item)
           last = @source[@ns_charno,1] == "\n" ? @ns_charno - 1 : @ns_charno
           list.source_range = (list.source_range.first..last)
@@ -495,7 +495,7 @@ module YARD
           source_range = ch..(charno-1)
           comment = comment.gsub(/^(\#+)\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
-          
+
           hash_flag = $1 == '##' ? true : false
 
           if append_comment && @comments_last_column == column

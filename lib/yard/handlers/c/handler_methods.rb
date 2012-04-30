@@ -4,7 +4,7 @@ module YARD
       module HandlerMethods
         include Parser::C
         include CodeObjects
-        
+
         def handle_class(var_name, class_name, parent, in_module = nil)
           parent = nil if parent == "0"
           namespace = in_module ? namespace_for_variable(in_module) : Registry.root
@@ -22,7 +22,7 @@ module YARD
             register_file_info(obj, statement.file, statement.line)
           end
         end
-        
+
         def handle_module(var_name, module_name, in_module = nil)
           namespace = in_module ? namespace_for_variable(in_module) : Registry.root
           register ModuleObject.new(namespace, module_name) do |obj|
@@ -30,7 +30,7 @@ module YARD
             register_file_info(obj, statement.file, statement.line)
           end
         end
-        
+
         def handle_method(scope, var_name, name, func_name, source_file = nil)
           visibility = :public
           case scope
@@ -58,7 +58,7 @@ module YARD
             obj.namespace.attributes[:instance][name][type] = obj
           end
         end
-        
+
         def handle_alias(var_name, new_name, old_name)
           namespace = namespace_for_variable(var_name)
           new_meth, old_meth = new_name.to_sym, old_name.to_sym
@@ -79,7 +79,7 @@ module YARD
 
           namespace.aliases[new_obj] = old_meth
         end
-        
+
         def handle_constants(type, var_name, const_name, value)
           return unless type == 'const'
           namespace = namespace_for_variable(var_name)
@@ -90,12 +90,12 @@ module YARD
             find_constant_docstring(obj)
           end
         end
-        
+
         private
-        
+
         def find_constant_docstring(object)
           comment = nil
-          
+
           # look inside overrides for declaration value
           override_comments.each do |name, override_comment|
             next unless override_comment.file == statement.file
@@ -112,7 +112,7 @@ module YARD
             comment = statement.comments.source
             stmt = statement.comments
           end
-          
+
           # In the case of rb_define_const, the definition and comment are in
           # "/* definition: comment */" form.  The literal ':' and '\' characters
           # can be escaped with a backslash.

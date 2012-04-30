@@ -5,12 +5,12 @@ describe YARD::Handlers::C::ClassHandler do
     parse_init 'cFoo = rb_define_class("Foo", rb_cObject);'
     Registry.at('Foo').type.should == :class
   end
-  
+
   it "should register classes under namespaces" do
     parse_init 'cFoo = rb_define_class_under(cBar, "Foo", rb_cObject);'
     Registry.at('Bar::Foo').type.should == :class
   end
-  
+
   it "should remember symbol defined with class" do
     parse_init(<<-eof)
       cXYZ = rb_define_class("Foo", rb_cObject);
@@ -19,7 +19,7 @@ describe YARD::Handlers::C::ClassHandler do
     Registry.at('Foo').type.should == :class
     Registry.at('Foo#bar').should_not be_nil
   end
-  
+
   it "should lookup superclass symbol name" do
     parse_init(<<-eof)
       cXYZ = rb_define_class("Foo", rb_cObject);
@@ -27,7 +27,7 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     Registry.at('Bar').superclass.should == Registry.at('Foo')
   end
-  
+
   it "should user superclass symbol name as proxy if not found" do
     parse_init(<<-eof)
       // cXYZ = rb_define_class("Foo", rb_cObject);
@@ -35,7 +35,7 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     Registry.at('Bar').superclass.should == P('XYZ')
   end
-  
+
   it "should not associate declaration comments as class docstring" do
     parse_init(<<-eof)
       /* Docstring! */
@@ -43,7 +43,7 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     Registry.at('Foo').docstring.should be_blank
   end
-  
+
   it "should associate a file with the declaration" do
     parse_init(<<-eof)
       cFoo = rb_define_class("Foo", cObject);
@@ -51,7 +51,7 @@ describe YARD::Handlers::C::ClassHandler do
     Registry.at('Foo').file.should == '(stdin)'
     Registry.at('Foo').line.should == 2
   end
-  
+
   it "should properly handle Proxy superclasses" do
     parse_init <<-eof
       cFoo = rb_define_class_under(mFoo, "Bar", rb_cBar);

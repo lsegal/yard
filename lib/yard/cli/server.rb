@@ -22,7 +22,7 @@ module YARD
       # @return [Array<String>] a list of template paths to register
       # @since 0.6.2
       attr_accessor :template_paths
-      
+
       # Creates a new instance of the Server command line utility
       def initialize
         super
@@ -90,7 +90,7 @@ module YARD
           libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
         end
       end
-      
+
       def add_gems_from_gemfile(gemfile = nil)
         require 'bundler'
         gemfile ||= "Gemfile"

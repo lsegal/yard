@@ -66,7 +66,7 @@ module YARD::CodeObjects
       end
       data = data[cut_index..-1] if cut_index > 0
       self.contents = data.join("\n")
-      
+
       if contents.respond_to?(:force_encoding) && attributes[:encoding]
         begin
           contents.force_encoding(attributes[:encoding])

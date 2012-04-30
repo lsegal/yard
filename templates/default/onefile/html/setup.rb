@@ -2,7 +2,7 @@ include T('default/layout/html')
 include YARD::Parser::Ruby::Legacy
 
 def init
-  override_serializer  
+  override_serializer
   @object = YARD::Registry.root
   @files.shift
   @objects.delete(YARD::Registry.root)
@@ -34,7 +34,7 @@ def override_serializer
       return unless object == 'index.html'
       super
     end
-    
+
     def serialized_path(object)
       return object if object.is_a?(String)
       return 'index.html'

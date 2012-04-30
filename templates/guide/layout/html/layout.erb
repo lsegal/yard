@@ -4,9 +4,9 @@
   <head>
     <%= erb(:headers) %>
 		<script type="text/javascript" charset="utf-8">
-			$(function() { 
-				$('.object_link').each(function() { 
-					$(this).html($(this).find('a').html()) 
+			$(function() {
+				$('.object_link').each(function() {
+					$(this).html($(this).find('a').html())
 				});
 			});
 			$(function() {
@@ -23,8 +23,8 @@
 				<% if options.readme != options.file && options.title %>
 					<span class="title"><strong><%= options.title %></strong>: <%= @page_title %></span>
 					<small class="links">
-						<% links = [link_file('index.html', 'top'), 
-												@prevfile ? link_file(@prevfile, 'prev') : nil, 
+						<% links = [link_file('index.html', 'top'),
+												@prevfile ? link_file(@prevfile, 'prev') : nil,
 												@nextfile ? link_file(@nextfile, 'next') : nil].compact %>
 						(<%= links.join(", ") %>)
 					</small>
@@ -35,7 +35,7 @@
 			<div id="sidebar">
 				<h2 class="toc">Table Of Contents</h2>
 				<div id="toc"></div>
-				
+
 				<% if options.readme != options.file %>
 				<h2>Related Topics</h2>
 				<div id="links">

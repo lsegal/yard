@@ -265,7 +265,7 @@ module YARD
       # implementor information.
       #
       # @example
-      #   # @abstract Subclass and override {#run} to implement 
+      #   # @abstract Subclass and override {#run} to implement
       #   #   a custom Threadable class.
       #   class Runnable
       #     def run; raise NotImplementedError end
@@ -277,7 +277,7 @@ module YARD
       # allowable in this tag, and there are no predefined values.
       #
       # @note The special name +@api private+ does display a notice in
-      #   documentation if it is listed, letting users know that the 
+      #   documentation if it is listed, letting users know that the
       #   method is not to be used by external components.
       # @example
       #   class Post
@@ -351,7 +351,7 @@ module YARD
       define_tag "Example",            :example,     :with_title_and_text
 
       # Adds an emphasized note at the top of the docstring for the object
-      # 
+      #
       # @example
       #   # @note This method should only be used in outer space.
       #   def eject; end

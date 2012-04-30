@@ -1,7 +1,7 @@
 class YARD::Handlers::C::AttributeHandler < YARD::Handlers::C::Base
   MATCH = %r{rb_define_attr\s*\(\s*([\w\.]+),\s*"([^"]+)",\s*(0|1)\s*,\s*(0|1)\s*\)}
   handles MATCH
-  
+
   process do
     return if ToplevelStatement == statement
     return if Comment === statement && statement.type != :multi
@@ -9,5 +9,5 @@ class YARD::Handlers::C::AttributeHandler < YARD::Handlers::C::Base
       handle_attribute(var_name, name, read, write)
     end
   end
-  
+
 end

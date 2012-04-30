@@ -226,7 +226,7 @@ module YARD
 
       # Copies all data in this object to another code object, except for
       # uniquely identifying information (path, namespace, name, scope).
-      # 
+      #
       # @param [Base] the object to copy data to
       # @return [Base] the other object
       # @since 0.8.0
@@ -301,7 +301,7 @@ module YARD
 
       # @return [Integer] the object's hash value (for equality checking)
       def hash; path.hash end
-      
+
       # @return [nil] this object does not turn into an array
       def to_ary; nil end
 
@@ -523,7 +523,7 @@ module YARD
 
       # Override this method if your code object subclass does not allow
       # copying of certain attributes.
-      # 
+      #
       # @return [Array<String>] the list of instance variable names (without
       #   "@" prefix) that should be copied when {#copy_to} is called
       # @see #copy_to

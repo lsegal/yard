@@ -1,12 +1,12 @@
 include Helpers::ModuleHelper
 
 def init
-  sections :header, :box_info, :pre_docstring, T('docstring'), :children, 
-    :constant_summary, [T('docstring')], :inherited_constants, 
+  sections :header, :box_info, :pre_docstring, T('docstring'), :children,
+    :constant_summary, [T('docstring')], :inherited_constants,
     :attribute_summary, [:item_summary], :inherited_attributes,
     :method_summary, [:item_summary], :inherited_methods,
     :methodmissing, [T('method_details')],
-    :attribute_details, [T('method_details')], 
+    :attribute_details, [T('method_details')],
     :method_details_list, [T('method_details')]
 end
 
@@ -54,7 +54,7 @@ def attr_listing
   @attrs = []
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
-    next if options.embed_mixins.size > 0 && 
+    next if options.embed_mixins.size > 0 &&
       options.embed_mixins_match?(superclass) == false
     [:class, :instance].each do |scope|
       superclass.attributes[scope].each do |name, rw|
@@ -114,7 +114,7 @@ def docstring_full(obj)
   if docstring.summary.empty? && obj.tags(:return).size == 1 && obj.tag(:return).text
     docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }.strip)
   end
-  
+
   docstring
 end
 
@@ -142,7 +142,7 @@ def groups(list, type = "Method")
     end
     group_data.each {|group, items| yield(items, group) unless items.empty? }
   end
-  
+
   scopes(others) {|items, scope| yield(items, "#{scope.to_s.capitalize} #{type} Summary") }
 end
 
@@ -159,6 +159,6 @@ def mixed_into(object)
     list = run_verifier Registry.all(:class, :module)
     list.each {|o| o.mixins.each {|m| (globals.mixed_into[m.path] ||= []) << o } }
   end
-  
+
   globals.mixed_into[object.path] || []
 end

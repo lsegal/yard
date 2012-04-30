@@ -15,16 +15,16 @@ describe YARD::Server::Commands::LibraryCommand do
     @cmd.library = @library
     @cmd.stub!(:load_yardoc).and_return(nil)
   end
-  
+
   def call
     lambda { @cmd.call(@request) }.should raise_error(NotImplementedError)
   end
-  
+
   describe "#call" do
     it "should raise NotImplementedError" do
       call
     end
-    
+
     it "should set :rdoc as the default markup in incremental mode" do
       @cmd.incremental = true
       call

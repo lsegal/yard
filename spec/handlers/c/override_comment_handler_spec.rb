@@ -7,13 +7,13 @@ describe YARD::Handlers::C::OverrideCommentHandler do
         /* Document-#{type}: A
          * Foo bar baz
          */
-        void 
+        void
       eof
       Registry.at('A').type.should == type
       Registry.at('A').docstring.should == 'Foo bar baz'
     end
   end
-  
+
   it "should handle multiple class/module combinations" do
     parse(<<-eof)
       /* Document-class: A
@@ -27,13 +27,13 @@ describe YARD::Handlers::C::OverrideCommentHandler do
     Registry.at('C').docstring.should == 'Foo bar baz'
     Registry.at('C').type == :module
   end
-  
+
   it "should handle Document-class with inheritance" do
     parse(<<-eof)
       /* Document-class: A < B
        * Foo bar baz
        */
-      void 
+      void
     eof
     obj = Registry.at('A')
     obj.type.should == :class

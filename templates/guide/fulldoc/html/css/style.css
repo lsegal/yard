@@ -9,7 +9,7 @@ strong { color: #000; }
 .method_header .path.space, .module_header .path.space { padding-left: 5px; }
 .method_header { font-size: 0.95em; }
 .method_body { margin-left: 2em; }
-.tags .tag_title, .tags .examples .inline p { font-size: 0.9em; font-weight: bold; color: #3e4349; }
+.tags h3, .tags h4 { font-size: 0.9em; font-weight: bold; color: #3e4349; }
 .tags .param .name { font-style: italic; }
 .tags .option .name { font-family: monospace; color: #000; font-size: 0.8em; }
 .tags .option .type, .tags .param .type { font-size: 10px; vertical-align: super; }
@@ -56,8 +56,8 @@ a:hover { color: #060; background: #8e0; }
 #filecontents pre.code, .docstring pre.code, .source_code pre { font-family: monospace; }
 #filecontents pre.code, .docstring pre.code { display: block; }
 .source_code .lines { padding-right: 12px; color: #555; text-align: right; }
-#filecontents pre.code, .docstring pre.code, 
-.tags pre.example { 
+#filecontents pre.code, .docstring pre.code,
+.tags pre.example {
   font-size: 0.9em;
   padding: 7px 30px;
   margin: 15px -30px;
@@ -73,21 +73,21 @@ pre.code .tstring_content,
 pre.code .heredoc_beg, pre.code .heredoc_end,
 pre.code .qwords_beg, pre.code .qwords_end,
 pre.code .tstring, pre.code .dstring { color: #036A07; }
-pre.code .fid, pre.code .rubyid_new, pre.code .rubyid_to_s, 
-pre.code .rubyid_to_sym, pre.code .rubyid_to_f, 
+pre.code .fid, pre.code .rubyid_new, pre.code .rubyid_to_s,
+pre.code .rubyid_to_sym, pre.code .rubyid_to_f,
 pre.code .dot + pre.code .id,
 pre.code .rubyid_to_i pre.code .rubyid_each { color: #0085FF; }
 pre.code .comment { color: #0066FF; }
 pre.code .const, pre.code .constant { color: #585CF6; }
 pre.code .symbol { color: #C5060B; }
-pre.code .kw, 
+pre.code .kw,
 pre.code .label,
-pre.code .rubyid_require, 
+pre.code .rubyid_require,
 pre.code .rubyid_extend,
 pre.code .rubyid_include { color: #0000FF; }
 pre.code .ivar { color: #318495; }
-pre.code .gvar, 
-pre.code .rubyid_backref, 
+pre.code .gvar,
+pre.code .rubyid_backref,
 pre.code .rubyid_nth_ref { color: #6D79DE; }
 pre.code .regexp, .dregexp { color: #036A07; }
 pre.code a { border-bottom: 1px dotted #bbf; }

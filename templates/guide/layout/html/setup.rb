@@ -2,7 +2,7 @@ include T('default/layout/html')
 
 def init
   super
-  
+
   @topfile = options.readme
   @toptitle = options.readme.attributes[:title] || "Documentation Overview"
   if @file == options.readme

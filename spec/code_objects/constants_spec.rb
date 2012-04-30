@@ -32,7 +32,7 @@ describe YARD::CodeObjects, "METHODMATCH" do
     "A::B::C :: method"[CodeObjects::METHODMATCH].should == "A::B::C :: method"
     "SomeClass . method"[CodeObjects::METHODMATCH].should == "SomeClass . method"
   end
-  
+
   it "should match self.method" do
     "self :: method!"[CodeObjects::METHODMATCH].should == "self :: method!"
     "self.is_a?"[CodeObjects::METHODMATCH].should == "self.is_a?"
@@ -55,7 +55,7 @@ describe YARD::CodeObjects, "BUILTIN_CLASSES" do
       eval(name).should be_instance_of(Class)
     end
   end
-  
+
   it "should include all exceptions" do
     YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
       YARD::CodeObjects::BUILTIN_CLASSES.should include(name)
@@ -65,7 +65,7 @@ end
 
 describe YARD::CodeObjects, "BUILTIN_ALL" do
   it "should include classes modules and exceptions" do
-    a = YARD::CodeObjects::BUILTIN_ALL 
+    a = YARD::CodeObjects::BUILTIN_ALL
     b = YARD::CodeObjects::BUILTIN_CLASSES
     c = YARD::CodeObjects::BUILTIN_MODULES
     a.should == b+c

@@ -11,7 +11,7 @@ describe YARD::Handlers::C::AliasHandler do
         rb_define_alias(rb_cFoo, "bar", "foo");
       }
     eof
-    
+
     Registry.at('Foo#bar').should be_is_alias
     Registry.at('Foo#bar').docstring.should == 'FOO'
   end

@@ -347,7 +347,7 @@ module YARD
       # @return [Boolean] whether or not the current statement's parentheses and blocks
       #   are balanced after +tk+
       def balances?(tk)
-        unless [TkALIAS, TkDEF].include?(@last_ns_tk.class) || @before_last_ns_tk.class == TkALIAS 
+        unless [TkALIAS, TkDEF].include?(@last_ns_tk.class) || @before_last_ns_tk.class == TkALIAS
           if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
             @level += 1
           elsif OPEN_BLOCK_TOKENS.include?(tk.class)

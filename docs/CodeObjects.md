@@ -14,9 +14,9 @@ and non-namespace objects. A namespace object refers to any object in Ruby that 
 other objects defined inside of it. In the context of Ruby, this specifically means
 modules and classes (both of which are subclasses of `NamespaceObject`). These objects
 act like tree structures, maintaining a list of all of their direct children. All non
-namespace objects are simply subclasses of the Base class. The {YARD::CodeObjects::RootObject RootObject} 
+namespace objects are simply subclasses of the Base class. The {YARD::CodeObjects::RootObject RootObject}
 is a special kind of `NamespaceObject` which refers to the top level namespace in Ruby.
-Methods that accept a namespace object as a parameter should also accept the symbol 
+Methods that accept a namespace object as a parameter should also accept the symbol
 `:root` as a shortcut for the root object.
 
 The following is an overview of the classes within the `CodeObjects` namespace:
@@ -27,7 +27,7 @@ The following is an overview of the classes within the `CodeObjects` namespace:
 
 All CodeObjects are uniquely defined by their implementation of {YARD::CodeObjects::Base#path}.
 This path is used to locate or store a code object in the {YARD::Registry}. It is therefore
-essential that any Base subclass return a unique String value for #path so that the 
+essential that any Base subclass return a unique String value for #path so that the
 object may co-exist with other objects in the Registry.
 
 In practice, a path is simply the conventional Ruby representation of a class,
@@ -46,7 +46,7 @@ CodeObjects classes are coupled with the {YARD::Registry} class which keeps trac
 all instantiated code objects. This is an explicit design choice to allow objects
 to be fetched, cached, imported and exported from a centralized location. As mentioned
 above, this coupling is a result of the fact that each object is uniquely identified by
-its path, which is used to implement lookups. You can read more about the registry 
+its path, which is used to implement lookups. You can read more about the registry
 in the {YARD::Registry} class.
 
 ## Identity Map
@@ -57,7 +57,7 @@ allows developers to create a code object without checking if it already exists 
 the {YARD::Registry}. The following example will only create one object:
 
     id = ClassObject.new(:root, "MyClass").object_id #=> 13352
-    ClassObject.new(:root, "MyClass").object_id #=> 13352 
+    ClassObject.new(:root, "MyClass").object_id #=> 13352
 
 ## Proxy Objects
 
@@ -69,8 +69,8 @@ attributes of a proxy are accessed, it will immediately be resolved to the objec
 at its declared path. In the case where such an object exists, it will act as
 a delegate to the object. However, if the object does not exist, a warning will
 be raised. Whenever arbitrary code objects are used, care should be taken in
-order to make sure attributes are not accessed on unresolvable proxies. An 
-unresolvable proxy will return a class name of `Proxy` and #type of `:proxy`, 
+order to make sure attributes are not accessed on unresolvable proxies. An
+unresolvable proxy will return a class name of `Proxy` and #type of `:proxy`,
 for example:
 
     P(:InvalidObject).type == :proxy  #=> true
@@ -85,8 +85,8 @@ it is possible to simply do:
 
     object = MethodObject.new(:root, "my_method")
     object[:modified_at] = Time.now
-    
-This value can now be retrieved on this object both by the hash `[]` syntax as 
+
+This value can now be retrieved on this object both by the hash `[]` syntax as
 well as like any other method:
 
     object.modified_at #=> 2009-06-03 20:08:46 -0400
@@ -111,5 +111,5 @@ following is an implementation of the path for a hypothetical `FooObject`:
     end
 
 Note that if our FooObject is a `NamespaceObject`, meaning if it can have child
-FooObjects defined inside of it, you may need to verify that the prefix is only 
+FooObjects defined inside of it, you may need to verify that the prefix is only
 applied once.

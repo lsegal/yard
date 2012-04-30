@@ -34,7 +34,7 @@ eof
     s.tokens.to_s(true).should == "(foo; bar)"
     s.block.should be_nil
   end
-  
+
   it "should allow for non-block statements" do
     s = stmt "hello_world(1, 2, 3)"
     s.tokens.to_s.should == "hello_world(1, 2, 3)"
@@ -101,7 +101,7 @@ eof
     s.tokens.to_s(true).should == "foo do\n        ...\n      end"
     s.block.to_s.should == "puts 'hi'"
   end
-  
+
   it "should parse blocks with {}" do
     s = stmt "x { y }"
     s.tokens.to_s(true).should == "x { ... }"
@@ -111,16 +111,16 @@ eof
     s.tokens.to_s(true).should == "x() { ... }"
     s.block.to_s.should == "y"
   end
-  
+
   it "should parse blocks with begin/end" do
     s = stmt "begin xyz end"
     s.tokens.to_s(true).should == "begin ... end"
     s.block.to_s.should == "xyz"
   end
-  
+
   it "should parse nested blocks" do
     s = stmt "foo(:x) { baz(:y) { skippy } }"
-    
+
     s.tokens.to_s(true).should == "foo(:x) { ... }"
     s.block.to_s.should == "baz(:y) { skippy }"
   end
@@ -152,7 +152,7 @@ eof
     s.tokens.to_s(true).should == "[:foo, x {}]"
     s.block.to_s.should == ""
   end
-  
+
   it "should handle multiple methods" do
     s = stmt <<-eof
       def %; end
@@ -160,7 +160,7 @@ eof
     eof
     s.to_s.should == "def %; end"
   end
-  
+
   it "should handle nested methods" do
     s = stmt <<-eof
       def *(o) def +@; end
@@ -178,7 +178,7 @@ eof
     eof
     s[1].to_s.should == "def method1\n        def dynamic; end\n      end"
   end
-  
+
   it "should get comment line numbers" do
     s = stmt <<-eof
       # comment
@@ -220,68 +220,68 @@ eof
     s.comments.should == ["comment"]
     s.comments_range.should == (1..1)
   end
-  
+
   it "should only look up to two lines back for comments" do
     s = stmt <<-eof
       # comments
-      
+
       # comments
-      
+
       def method; end
     eof
     s.comments.should == ["comments"]
-    
+
     s = stmt <<-eof
       # comments
-      
-      
+
+
       def method; end
     eof
     s.comments.should == nil
 
     ss = stmts <<-eof
       # comments
-      
-      
+
+
       def method; end
-      
+
       # hello
       def method2; end
     eof
     ss[0].comments.should == nil
     ss[1].comments.should == ['hello']
   end
-  
+
   it "should handle CRLF (Windows) newlines" do
     s = stmts("require 'foo'\r\n\r\n# Test Test\r\n# \r\n# Example:\r\n#   example code\r\ndef test\r\nend\r\n")
     s[1].comments.should == ['Test Test', '', 'Example:', '  example code']
   end
-  
+
   it "should handle elsif blocks" do
     s = stmts(stmt("if 0\n  foo\nelsif 2\n  bar\nend\nbaz").block)
     s.size.should == 2
     s[1].tokens.to_s.should == "elsif 2"
     s[1].block.to_s.should == "bar"
   end
-  
+
   it "should handle else blocks" do
     s = stmts(stmt("if 0\n  foo\nelse\n  bar\nend\nbaz").block)
     s.size.should == 2
     s[1].tokens.to_s.should == "else"
     s[1].block.to_s.should == "bar"
   end
-  
+
   it "should allow aliasing keywords" do
     ['do x', 'x do', 'end begin', 'begin end'].each do |a|
       s = stmt("alias #{a}\ndef foo; end")
       s.tokens.to_s.should == "alias #{a}"
       s.block.should be_nil
     end
-    
+
     s = stmt("alias do x if 2 ==\n 2")
     s.tokens.to_s.should == "alias do x if 2 ==\n 2"
   end
-  
+
   it "should not open a block on an aliased keyword block opener" do
     s = stmts(<<-eof)
       class A; alias x do end
@@ -290,7 +290,7 @@ eof
     s[0].block.to_s.should == 'alias x do'
     s.size.should > 1
   end
-  
+
   it "should convert heredoc to string" do
     src = "<<-XML\n  foo\n\nXML"
     s = stmt(src)

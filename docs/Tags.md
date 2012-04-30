@@ -2,7 +2,7 @@
 
 # Tags Overview
 
-Tags represent meta-data as well as behavioural data that can be added to 
+Tags represent meta-data as well as behavioural data that can be added to
 documentation through the `@tag` style syntax. As mentioned, there are two
 basic types of tags in YARD, "meta-data tags" and "behavioural tags", the
 latter is more often known as "directives". These two tag types can be
@@ -68,7 +68,7 @@ is considered free-form data and can include any arbitrary textual data.
 
 ### Multi-line Tags
 
-Tags can span multiple lines if the subsequent lines are indented by more than 
+Tags can span multiple lines if the subsequent lines are indented by more than
 one space. The typical convention is to indent subsequent lines by 2 spaces.
 In the following example, `@tagname` will have the text *"This is indented tag data"*:
 
@@ -78,7 +78,7 @@ In the following example, `@tagname` will have the text *"This is indented tag d
 
 For most tags, newlines and indented data are not significant and do not impact
 the result of the tag. In other words, you can decide to span a tag onto multiple
-lines at any point by creating an indented block. However, some tags like 
+lines at any point by creating an indented block. However, some tags like
 {tag:example}, {tag:overload}, {tag:!macro}, {tag:!method}, and {tag:!attribute}
 rely on the first line for special information about the tag, and you cannot
 split this first line up. For instance, the {tag:example} tag uses the first line
@@ -193,7 +193,7 @@ that responds to the "read" method:
     # @param [#read] io the input object to read from
     def read(io) io.read end
 
-#### Hashes 
+#### Hashes
 
 Hashes can be specified either via the parametrized type discussed above,
 in the form `Hash<KeyType, ValueType>`, or using the hash specific syntax:

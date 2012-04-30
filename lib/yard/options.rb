@@ -1,6 +1,6 @@
 module YARD
   # Generalized options class for passing around large amounts of options between objects.
-  # 
+  #
   # The options class exists for better visibility and documentability of options being
   # passed through to other objects. Because YARD has parser and template architectures
   # that are heavily reliant on options, it is necessary to make these option keys easily
@@ -8,24 +8,24 @@ module YARD
   # basic Hash, the subclass can provide aliasing and convenience methods to simplify
   # option property access, and, if needed, support backward-compatibility for deprecated
   # key names.
-  # 
+  #
   # == Hash and OpenStruct-like Access
   #
   # Although the options class allows for Hash-like access (<tt>opts[:key]</tt>), the recommended
   # mechanism for accessing an option key will be via standard method calls on attributes
-  # 
+  #
   # The options class can also act as an open ended key value storage structure (like a
   # Hash or OpenStruct), and allows for setting and getting of unregistered option keys.
   # This methodology is not recommended, however, and is only supported for backward
   # compatibility inside YARD. Whenever possible, developers should define all keys used
   # by an options class.
-  # 
+  #
   # == Declaring Default Values
-  # 
+  #
   # Note that the options class can contain default value definitions for certain options,
   # but to initialize these defaults, {#reset_defaults} must be called manually after
   # initialization; the options object is always created empty until defaults are applied.
-  # 
+  #
   # @abstract Subclasses should define (and document) custom attributes that are expected
   #   to be made available as option keys.
   # @example Defining an Options class with custom option keys
@@ -57,7 +57,7 @@ module YARD
   #     # @return [Boolean] if syntax highlighting should be performed on code blocks.
   #     #   Defaults to true.
   #     attr_accessor :highlight
-  # 
+  #
   #     # @deprecated Use {#highlight} instead.
   #     # @return [Boolean] if no syntax highlighting should be performs on code blocks.
   #     #   Defaults to false.
@@ -69,7 +69,7 @@ module YARD
     # @!macro [attach] yard.default_attr
     #   @!attribute $1
     # Defines an attribute named +key+ and sets a default value for it
-    # 
+    #
     # @example Defining a default option key
     #   default_attr :name, 'Default Name'
     #   default_attr :time, lambda { Time.now }
@@ -80,9 +80,9 @@ module YARD
       (@defaults ||= {})[key] = default
       attr_accessor(key)
     end
-    
+
     # Delegates calls with Hash syntax to actual method with key name
-    # 
+    #
     # @example Calling on an option key with Hash syntax
     #   options[:format] # equivalent to: options.format
     # @param [Symbol, String] key the option name to access
@@ -90,17 +90,17 @@ module YARD
     def [](key) send(key) end
 
     # Delegates setter calls with Hash syntax to the attribute setter with the key name
-    # 
+    #
     # @example Setting an option with Hash syntax
     #   options[:format] = :html # equivalent to: options.format = :html
     # @param [Symbol, String] key the optin to set
     # @param [Object] value the value to set for the option
     # @return [Object] the value being set
     def []=(key, value) send("#{key}=", value) end
-    
+
     # Updates values from an options hash or options object on this object.
     # All keys passed should be key names defined by attributes on the class.
-    # 
+    #
     # @example Updating a set of options on an Options object
     #   opts.update(:template => :guide, :type => :fulldoc)
     # @param [Hash, Options] opts
@@ -112,17 +112,17 @@ module YARD
       end
       self
     end
-    
+
     # Creates a new options object and sets options hash or object value
     # onto that object.
-    # 
+    #
     # @param [Options, Hash] opts
     # @return [Options] the newly created options object
     # @see #update
     def merge(opts)
       dup.update(opts)
     end
-    
+
     # @return [Hash] Converts options object to an options hash. All keys
     #   will be symbolized.
     def to_hash
@@ -133,7 +133,7 @@ module YARD
       end
       opts
     end
-    
+
     # Yields over every option key and value
     # @yield [key, value] every option key and value
     # @yieldparam [Symbol] key the option key
@@ -145,12 +145,12 @@ module YARD
         yield(name.to_sym, send(name))
       end
     end
-    
+
     # Inspects the object
     def inspect
       "<#{self.class}: #{to_hash.inspect}>"
     end
-    
+
     # @return [Boolean] whether another Options object equals the
     #   keys and values of this options object
     def ==(other)
@@ -160,10 +160,10 @@ module YARD
       else false
       end
     end
-    
+
     # Handles setting and accessing of unregistered keys similar
     # to an OpenStruct object.
-    # 
+    #
     # @note It is not recommended to set and access unregistered keys on
     #   an Options object. Instead, register the attribute before using it.
     def method_missing(meth, *args, &block)
@@ -179,7 +179,7 @@ module YARD
     end
 
     # Resets all values to their defaults.
-    # 
+    #
     # @abstract Subclasses should override this method to perform custom
     #   value initialization if not using {default_attr}. Be sure to call
     #   +super+ so that default initialization can take place.
@@ -196,9 +196,9 @@ module YARD
         end
       end
     end
-    
+
     # Deletes an option value for +key+
-    # 
+    #
     # @param [Symbol, String] key the key to delete a value for
     # @return [Object] the value that was deleted
     def delete(key)
@@ -208,7 +208,7 @@ module YARD
       end
       val
     end
-    
+
     unless defined? tap() # only for 1.8.6
       def tap(&block) yield(self); self end
     end

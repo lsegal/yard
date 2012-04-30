@@ -18,11 +18,11 @@ def subclasses
   unless globals.subclasses
     globals.subclasses = {}
     list = run_verifier Registry.all(:class)
-    list.each do |o| 
+    list.each do |o|
       (globals.subclasses[o.superclass.path] ||= []) << o if o.superclass
     end
   end
-  
+
   @subclasses = globals.subclasses[object.path]
   return if @subclasses.nil? || @subclasses.empty?
   @subclasses = @subclasses.sort_by {|o| o.path }.map do |child|

@@ -25,14 +25,14 @@ describe YARD::Parser::C::CParser do
         obj.tags(:overload).size.should > 1
       end
     end
-    
+
     describe 'Source located in extra files' do
       before(:all) do
         @multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
         @extrafile = File.join(File.dirname(__FILE__), 'examples', 'extrafile.c.txt')
         @contents = File.read(@multifile)
       end
-      
+
       it "should look for methods in extra files (if 'in' comment is found)" do
         extra_contents = File.read(@extrafile)
         File.should_receive(:read).with('extra.c').and_return(extra_contents)
@@ -47,22 +47,22 @@ describe YARD::Parser::C::CParser do
         Registry.at('Multifile#extra').docstring.should == ''
       end
     end
-    
+
     describe 'Foo class' do
       it 'should not include comments in docstring source' do
         parse <<-eof
-          /* 
+          /*
            * Hello world
            */
           VALUE foo(VALUE x) {
             int value = x;
           }
-          
+
           void Init_Foo() {
             rb_define_method(rb_cFoo, "foo", foo, 1);
           }
         eof
-        Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should == 
+        Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should ==
           "VALUE foo(VALUE x) { int value = x;\n}"
       end
     end
@@ -93,7 +93,7 @@ describe YARD::Parser::C::CParser do
       override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
       @override_parser = YARD.parse_string(File.read(override_file), :c)
     end
-    
+
     it "should parse GMP::Z class" do
       z = YARD::Registry.at('GMP::Z')
       z.should_not be_nil

@@ -41,7 +41,7 @@ describe YARD::Server::DocServerHelper do
       @helper.url_for(P('A')).should == '/PREFIX/foo/bar/A'
     end
   end
-  
+
   describe '#url_for_file' do
     it "should properly link file objects using file/ prefix" do
       file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')

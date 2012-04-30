@@ -74,7 +74,7 @@ end
 
 describe YARD::Tags::MacroDirective do
   def handler
-    OpenStruct.new(:call_params => %w(a b c), 
+    OpenStruct.new(:call_params => %w(a b c),
                    :caller_method => 'foo',
                    :scope => :instance, :visibility => :public,
                    :namespace => P('Foo::Bar'),
@@ -373,7 +373,7 @@ describe YARD::Tags::ScopeDirective do
         @parser.state.scope.should == type.to_sym
       end
     end
-    
+
     %w(invalid foo FOO CLASS INSTANCE).each do |type|
       it "should not allow #{type} as value" do
         tag_parse("@!scope #{type}")
@@ -411,7 +411,7 @@ describe YARD::Tags::VisibilityDirective do
         @parser.state.visibility.should == type.to_sym
       end
     end
-    
+
     %w(invalid foo FOO PRIVATE INSTANCE).each do |type|
       it "should not allow #{type} as value" do
         tag_parse("@!visibility #{type}")

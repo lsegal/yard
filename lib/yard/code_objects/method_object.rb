@@ -77,7 +77,7 @@ module YARD::CodeObjects
       name == :initialize && scope == :instance && namespace.is_a?(ClassObject)
     end
 
-    # @return [Boolean] whether or not this method was created as a module 
+    # @return [Boolean] whether or not this method was created as a module
     #   function
     # @since 0.8.0
     def module_function?

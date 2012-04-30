@@ -9,12 +9,12 @@ module YARD
       class << self
         # Extra includes are mixins that are included after a template is created. These
         # mixins can be registered by plugins to operate on templates and override behaviour.
-        # 
+        #
         # Note that this array can be filled with modules or proc objects. If a proc object
         # is given, the proc will be called with the {Template#options} hash containing
         # relevant template information like the object, format, and more. The proc should
         # return a module or nil if there is none.
-        # 
+        #
         # @example Adding in extra mixins to include on a template
         #   Template.extra_includes << MyHelper
         # @example Conditionally including a mixin if the format is html
@@ -28,9 +28,9 @@ module YARD
         def included(klass)
           klass.extend(ClassMethods)
         end
-        
+
         # Includes the {extra_includes} modules into the template object.
-        # 
+        #
         # @param [Template] template the template object to mixin the extra includes.
         # @param [SymbolHash] options the options hash containing all template information
         # @return [void]
@@ -44,13 +44,13 @@ module YARD
       end
 
       self.extra_includes = [
-        proc {|options| 
-          { :html => Helpers::HtmlHelper, 
-            :text => Helpers::TextHelper, 
+        proc {|options|
+          { :html => Helpers::HtmlHelper,
+            :text => Helpers::TextHelper,
             :dot  => Helpers::UMLHelper }[options.format]
         }
       ]
-      
+
       include ErbCache
       include Helpers::BaseHelper
       include Helpers::MethodHelper

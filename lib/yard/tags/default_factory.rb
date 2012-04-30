@@ -130,7 +130,7 @@ module YARD
           [before ? before.strip : nil, list.map {|e| e.strip }, text.strip]
         end
       end
-      
+
       def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
         s, e = 0, 0
         before = ''

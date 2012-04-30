@@ -16,7 +16,7 @@ describe YARD::Parser::Ruby::AstNode do
       ast.jump(:params).object_id.should == ast.object_id
     end
   end
-  
+
   describe '#pretty_print' do
     it "should show a list of nodes" do
       obj = YARD::Parser::Ruby::RubyParser.parse("# x\nbye", "x").ast

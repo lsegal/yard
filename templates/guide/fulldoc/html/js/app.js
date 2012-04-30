@@ -16,13 +16,13 @@ function generateTOC() {
       if ($('#' + proposedId).length > 0) proposedId += counter++;
       this.id = proposedId;
     }
-    if (thisTag > lastTag) { 
-      for (var i = 0; i < thisTag - lastTag; i++) { 
-        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp; 
-      } 
+    if (thisTag > lastTag) {
+      for (var i = 0; i < thisTag - lastTag; i++) {
+        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp;
+      }
     }
-    if (thisTag < lastTag) { 
-      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent(); 
+    if (thisTag < lastTag) {
+      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent();
     }
     toc.append('<li><a href="#' + this.id + '">' + $(this).text() + '</a></li>');
     lastTag = thisTag;

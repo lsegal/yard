@@ -3,7 +3,7 @@ module YARD
     module C
       module CommentParser
         protected
-        
+
         def parse_comments(comments)
           @overrides = []
           spaces = nil
@@ -23,9 +23,9 @@ module YARD
           comments = parse_callseq(comments)
           comments.join("\n")
         end
-        
+
         private
-        
+
         def parse_overrides(comments)
           comments.map do |line|
             type, name = *line.scan(/^\s*Document-(class|module|method|const):\s*(\S.*)\s*$/).first

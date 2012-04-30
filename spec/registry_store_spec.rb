@@ -9,7 +9,7 @@ describe YARD::RegistryStore do
     @bar = CodeObjects::ClassObject.new(nil, :Bar)
     Serializers::YardocSerializer.stub!(:new).and_return(@serializer)
   end
-  
+
   describe '#load' do
     it "should load root.dat as full object list if it is a Hash" do
       File.should_receive(:directory?).with('foo').and_return(true)
@@ -21,7 +21,7 @@ describe YARD::RegistryStore do
       @store.root.should == @foo
       @store.get('A').should == @bar
     end
-    
+
     it "should load old yardoc format if .yardoc is a file" do
       File.should_receive(:directory?).with('foo').and_return(false)
       File.should_receive(:file?).with('foo').and_return(true)
@@ -30,7 +30,7 @@ describe YARD::RegistryStore do
 
       @store.load('foo')
     end
-    
+
     it "should load new yardoc format if .yardoc is a directory" do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
@@ -40,7 +40,7 @@ describe YARD::RegistryStore do
 
       @store.load('foo').should == true
     end
-    
+
     it "should return true if .yardoc is loaded (file)" do
       File.should_receive(:directory?).with('myyardoc').and_return(false)
       File.should_receive(:file?).with('myyardoc').and_return(true)
@@ -60,11 +60,11 @@ describe YARD::RegistryStore do
     it "should return false if .yardoc does not exist" do
       @store.load('NONEXIST').should == false
     end
-    
+
     it "should return false if there is no file to load" do
       @store.load(nil).should == false
     end
-    
+
     it "should load checksums if they exist" do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(true)
@@ -77,7 +77,7 @@ describe YARD::RegistryStore do
       @store.load('foo').should == true
       @store.checksums.should == {'file1' => 'CHECKSUM1', 'file2' => 'CHECKSUM2'}
     end
-    
+
     it "should load proxy_types if they exist" do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
@@ -100,46 +100,46 @@ describe YARD::RegistryStore do
       @store.root.should == @foo
     end
   end
-  
+
   describe '#save' do
     before do
       @store.stub!(:write_proxy_types)
       @store.stub!(:write_checksums)
       @store.stub!(:destroy)
     end
-    
+
     after do
       Registry.single_object_db = nil
     end
-    
+
     def saves_to_singledb
       @serializer.should_receive(:serialize).once.with(instance_of(Hash))
       @store.save(true, 'foo')
     end
-    
+
     def add_items(n)
       n.times {|i| @store[i.to_s] = @foo }
     end
-    
+
     def saves_to_multidb
       times = @store.keys.size
       @serializer.should_receive(:serialize).exactly(times).times
       @store.save(true, 'foo')
       @last = times
     end
-    
+
     it "should save as single object db if single_object_db is nil and there are less than 3000 objects" do
       Registry.single_object_db = nil
       add_items(100)
       saves_to_singledb
     end
-    
+
     it "should save as single object db if single_object_db is nil and there are more than 3000 objects" do
       Registry.single_object_db = nil
       add_items(5000)
       saves_to_singledb
     end
-    
+
     it "should save as single object db if single_object_db is true (and any amount of objects)" do
       Registry.single_object_db = true
       add_items(100)
@@ -147,7 +147,7 @@ describe YARD::RegistryStore do
       add_items(5000)
       saves_to_singledb
     end
-    
+
     it "should never save as single object db if single_object_db is false" do
       Registry.single_object_db = false
       add_items(100)
@@ -156,25 +156,25 @@ describe YARD::RegistryStore do
       saves_to_multidb
     end
   end
-  
+
   describe '#put' do
     it "should assign values" do
       @store.put(:YARD, @foo)
       @store.get(:YARD).should == @foo
     end
-    
+
     it "should treat '' as root" do
       @store.put('', @foo)
       @store.get(:root).should == @foo
     end
   end
-  
+
   describe '#get' do
     it "should hit cache if object exists" do
       @store.put(:YARD, @foo)
       @store.get(:YARD).should == @foo
     end
-    
+
     it "should hit backstore on cache miss and cache is not fully loaded" do
       serializer = mock(:serializer)
       serializer.should_receive(:deserialize).once.with(:YARD).and_return(@foo)
@@ -187,7 +187,7 @@ describe YARD::RegistryStore do
       @store.instance_variable_get("@loaded_objects").should == 1
     end
   end
-  
+
   [:keys, :values].each do |item|
     describe "##{item}" do
       it "should load entire database if reload=true" do
@@ -196,7 +196,7 @@ describe YARD::RegistryStore do
         @store.should_receive(:load_all)
         @store.send(item, true)
       end
-    
+
       it "should not load entire database if reload=false" do
         File.should_receive(:directory?).with('foo').and_return(true)
         @store.load('foo')
@@ -230,7 +230,7 @@ describe YARD::RegistryStore do
       @store.values_for_type(@foo.type).should == [@foo]
     end
   end
-  
+
   describe '#load_all' do
     it "should load the entire database" do
       foomock = mock(:Foo)
@@ -256,7 +256,7 @@ describe YARD::RegistryStore do
       @store[:Bar].should == barmock
     end
   end
-  
+
   describe '#destroy' do
     it "should destroy file ending in .yardoc when force=false" do
       File.should_receive(:file?).with('foo.yardoc').and_return(true)
@@ -280,7 +280,7 @@ describe YARD::RegistryStore do
       @store.instance_variable_set("@file", 'foo')
       @store.destroy.should == false
     end
-    
+
     it "should destroy any file/dir when force=true" do
       File.should_receive(:file?).with('foo').and_return(true)
       File.should_receive(:unlink).with('foo')

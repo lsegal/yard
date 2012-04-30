@@ -5,7 +5,7 @@ require "thread"
 
 describe YARD::Registry do
   before { Registry.clear }
-  
+
   describe '.yardoc_file_for_gem' do
     before do
       @gem = mock('gem')
@@ -13,37 +13,37 @@ describe YARD::Registry do
       @gem.stub!(:full_name).and_return('foo-1.0')
       @gem.stub!(:full_gem_path).and_return('/path/to/foo')
     end
-    
+
     it "should return nil if gem isn't found" do
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([])
       Registry.yardoc_file_for_gem('foo').should == nil
     end
-    
+
     it "should allow version to be specified" do
       Gem.source_index.should_receive(:find_name).with('foo', '= 2').and_return([])
       Registry.yardoc_file_for_gem('foo', '= 2').should == nil
     end
-    
+
     it "should return existing .yardoc path for gem when for_writing=false" do
       File.should_receive(:exist?).and_return(false)
       File.should_receive(:exist?).with('/path/to/foo/.yardoc').and_return(true)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo').should == '/path/to/foo/.yardoc'
     end
-    
+
     it "should return nil if no .yardoc path exists in gem when for_writing=false" do
       File.should_receive(:exist?).and_return(false)
       File.should_receive(:exist?).with('/path/to/foo/.yardoc').and_return(false)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo').should == nil
     end
-    
+
     it "should search local gem path first if for_writing=false" do
       File.should_receive(:exist?).and_return(true)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo').should =~ %r{/.yard/gem_index/foo-1.0.yardoc$}
     end
-    
+
     it "should return global .yardoc path for gem if for_writing=true and dir is writable" do
       File.should_receive(:writable?).with(@gem.full_gem_path).and_return(true)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
@@ -55,7 +55,7 @@ describe YARD::Registry do
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo', '>= 0', true).should =~ %r{/.yard/gem_index/foo-1.0.yardoc$}
     end
-    
+
     it "should return gem path if gem starts with yard-doc- and for_writing=false" do
       @gem.stub!(:name).and_return('yard-doc-core')
       @gem.stub!(:full_name).and_return('yard-doc-core-1.0')
@@ -64,7 +64,7 @@ describe YARD::Registry do
       File.should_receive(:exist?).with('/path/to/yard-doc-core/.yardoc').and_return(true)
       Registry.yardoc_file_for_gem('yard-doc-core').should == '/path/to/yard-doc-core/.yardoc'
     end
-    
+
     it "should return nil if gem starts with yard-doc- and for_writing=true" do
       @gem.stub!(:name).and_return('yard-doc-core')
       @gem.stub!(:full_name).and_return('yard-doc-core-1.0')
@@ -74,13 +74,13 @@ describe YARD::Registry do
       Registry.yardoc_file_for_gem('yard-doc-core', '>= 0', true).should == nil
     end
   end
-  
+
   describe '.root' do
     it "should have an empty path for root" do
       Registry.root.path.should == ""
     end
   end
-  
+
   describe '.resolve' do
     it "should resolve any existing namespace" do
       o1 = ModuleObject.new(:root, :A)
@@ -89,16 +89,16 @@ describe YARD::Registry do
       Registry.resolve(o1, "B::C").should == o3
       Registry.resolve(:root, "A::B::C")
     end
-  
+
     it "should resolve an object in the root namespace when prefixed with ::" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ModuleObject.new(o1, :B)
       o3 = ModuleObject.new(o2, :C)
       Registry.resolve(o3, "::A").should == o1
-    
+
       Registry.resolve(o3, "::String", false, true).should == P(:String)
     end
-  
+
     it "should resolve instance methods with # prefix" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ModuleObject.new(o1, :B)
@@ -108,12 +108,12 @@ describe YARD::Registry do
       Registry.resolve(o2, "C#methname").should == o4
       Registry.resolve(o3, "#methname").should == o4
     end
-  
+
     it "should resolve instance methods in the root without # prefix" do
       o = MethodObject.new(:root, :methname)
       Registry.resolve(:root, 'methname').should == o
     end
-  
+
     it "should resolve superclass methods when inheritance = true" do
       superyard = ClassObject.new(:root, :SuperYard)
       yard = ClassObject.new(:root, :YARD)
@@ -146,7 +146,7 @@ describe YARD::Registry do
         class A; end
         class MyObject < A; end
       eof
-      
+
       Registry.resolve(P('MyObject'), '#foo', true).should == P('Object#foo')
     end
 
@@ -156,7 +156,7 @@ describe YARD::Registry do
         class A; end
         class MyObject < A; end
       eof
-      
+
       Registry.resolve(P('MyObject'), '#foo', true).should == P('BasicObject#foo')
     end
 
@@ -165,22 +165,22 @@ describe YARD::Registry do
         class Object; def foo; end end
         class MyObject < BasicObject; end
       eof
-      
+
       Registry.resolve(P('MyObject'), '#foo', true).should be_nil
     end
-    
+
     it "should only check 'Path' in lookup on root namespace" do
       Registry.should_receive(:at).once.with('Test').and_return(true)
       Registry.resolve(Registry.root, "Test")
     end
-    
+
     it "should not perform lookup by joining namespace and name without separator" do
       yard = ClassObject.new(:root, :YARD)
       Registry.should_not_receive(:at).with('YARDB')
       Registry.resolve(yard, 'B')
     end
   end
-  
+
   describe '.all' do
     it "should return objects of types specified by arguments" do
       ModuleObject.new(:root, :A)
@@ -189,7 +189,7 @@ describe YARD::Registry do
       r = Registry.all(:method, :class)
       r.should include(o1, o2)
     end
-  
+
     it "should return code objects" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ClassObject.new(:root, :B)
@@ -197,7 +197,7 @@ describe YARD::Registry do
       r = Registry.all.select {|t| NamespaceObject === t }
       r.should include(o1, o2)
     end
-  
+
     it "should allow .all to omit list" do
       o1 = ModuleObject.new(:root, :A)
       o2 = ClassObject.new(:root, :B)
@@ -205,7 +205,7 @@ describe YARD::Registry do
       r.should include(o1, o2)
     end
   end
-  
+
   describe '.paths' do
     it "should return all object paths" do
       o1 = ModuleObject.new(:root, :A)
@@ -213,7 +213,7 @@ describe YARD::Registry do
       Registry.paths.should include('A', 'B')
     end
   end
-  
+
   describe '.load_yardoc' do
     it "should delegate load to RegistryStore" do
       store = RegistryStore.new
@@ -222,11 +222,11 @@ describe YARD::Registry do
       Registry.yardoc_file = 'foo'
       Registry.load_yardoc
     end
-    
+
     it "should return itself" do
       Registry.load_yardoc.should == Registry
     end
-    
+
     it "should maintain hash key equality on loaded objects" do
       Registry.clear
       Registry.load!(File.dirname(__FILE__) + '/serializers/data/serialized_yardoc')
@@ -235,7 +235,7 @@ describe YARD::Registry do
       Registry.at('Foo').aliases.has_key?(baz).should == true
     end
   end
-  
+
   ['load', 'load_all', 'load!'].each do |meth|
     describe('.' + meth) do
       it "should return itself" do
@@ -243,38 +243,38 @@ describe YARD::Registry do
       end
     end
   end
-  
+
   describe '.each' do
-    before do 
+    before do
       YARD.parse_string "def a; end; def b; end; def c; end"
     end
-    
+
     after { Registry.clear }
-    
+
     it "should iterate over .all" do
       items = []
       Registry.each {|x| items << x.path }
       items.sort.should == ['#a', '#b', '#c']
     end
-    
+
     it "should include Enumerable and allow for find, select" do
       Registry.find {|x| x.path == "#a" }.should be_a(CodeObjects::MethodObject)
     end
   end
-  
+
   describe '.instance' do
     it "should return itself" do
       Registry.instance.should == Registry
     end
   end
-  
+
   describe '.single_object_db' do
     it "should default to nil" do
       Registry.single_object_db.should == nil
       Thread.new { Registry.single_object_db.should == nil }.join
     end
   end
-  
+
   describe 'Thread local' do
     it "should maintain two Registries in separate threads" do
       barrier = 0
@@ -325,7 +325,7 @@ describe YARD::Registry do
       threads.each {|t| t.join }
       Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
     end
-    
+
     it "should automatically clear in new threads" do
       Thread.new { Registry.all.should be_empty }.join
     end

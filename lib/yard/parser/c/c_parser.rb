@@ -134,7 +134,7 @@ module YARD
           comment = ""
           advance_loop do
             comment << char
-            if type == :multi 
+            if type == :multi
               nextline if char == "\n"
               if char(2) == '*/'
                 if add_comment
@@ -185,7 +185,7 @@ module YARD
           end
           return @content[start...@index]
         end
-        
+
         def attach_comment(statement)
           if Comment === statement
             if @last_statement && @last_statement.line == statement.line

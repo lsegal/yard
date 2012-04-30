@@ -51,7 +51,7 @@ module YARD
         router.call(request)
       rescue StandardError => ex
         log.backtrace(ex)
-        [500, {'Content-Type' => 'text/plain'}, 
+        [500, {'Content-Type' => 'text/plain'},
           [ex.message + "\n" + ex.backtrace.join("\n")]]
       end
 

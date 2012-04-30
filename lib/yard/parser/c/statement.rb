@@ -17,15 +17,15 @@ module YARD
           @file = file
           @line = line
         end
-        
+
         def line_range
           line...(line + source.count("\n"))
         end
-        
+
         def comments_range
           comments.line_range
         end
-        
+
         def first_line
           source.split(/\n/).first
         end
@@ -38,24 +38,24 @@ module YARD
       class BodyStatement < Statement
         attr_accessor :comments
       end
-      
+
       class ToplevelStatement < Statement
         attr_accessor :block
         attr_accessor :declaration
         attr_accessor :comments
       end
-      
+
       class Comment < Statement
         include CommentParser
-        
+
         attr_accessor :type
         attr_accessor :overrides
         attr_accessor :statement
-        
+
         def initialize(source, file = nil, line = nil)
           super(parse_comments(source), file, line)
         end
-        
+
         def comments; self end
       end
     end

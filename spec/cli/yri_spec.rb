@@ -9,7 +9,7 @@ describe YARD::CLI::YRI do
     @yri = YARD::CLI::YRI.new
     Registry.stub!(:load)
   end
-  
+
   describe '#find_object' do
     it "should use cache if available" do
       @yri.stub!(:cache_object)
@@ -21,7 +21,7 @@ describe YARD::CLI::YRI do
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
       @yri.find_object('Foo').should == 'OBJ'
     end
-    
+
     it "should never use cache ahead of current directory's .yardoc" do
       @yri.stub!(:cache_object)
       File.should_receive(:exist?).with('.yardoc').and_return(true)
@@ -33,14 +33,14 @@ describe YARD::CLI::YRI do
       @yri.instance_variable_get("@search_paths")[0].should == '.yardoc'
     end
   end
-  
+
   describe '#cache_object' do
     it "should skip caching for Registry.yardoc_file" do
       File.should_not_receive(:open).with(CLI::YRI::CACHE_FILE, 'w')
       @yri.cache_object('Foo', Registry.yardoc_file)
     end
   end
-  
+
   describe '#initialize' do
     it "should load search paths" do
       path = %r{/\.yard/yri_search_paths$}
@@ -52,7 +52,7 @@ describe YARD::CLI::YRI do
       spaths.should include('line1')
       spaths.should include('line2')
     end
-    
+
     it "should use DEFAULT_SEARCH_PATHS prior to other paths" do
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.push('foo', 'bar')
       path = %r{/\.yard/yri_search_paths$}
@@ -65,7 +65,7 @@ describe YARD::CLI::YRI do
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
   end
-  
+
   describe '#run' do
     it "should search for objects and print their documentation" do
       obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
@@ -73,13 +73,13 @@ describe YARD::CLI::YRI do
       @yri.run('Foo')
       Registry.clear
     end
-    
+
     it "should print usage if no object is provided" do
       @yri.should_receive(:print_usage)
       @yri.should_receive(:exit).with(1)
       @yri.run('')
     end
-    
+
     it "should print no documentation exists for object if object is not found" do
       STDERR.should_receive(:puts).with("No documentation for `Foo'")
       @yri.should_receive(:exit).with(1)

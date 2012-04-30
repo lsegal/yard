@@ -39,7 +39,7 @@ module YARD
             end
           end
         end
-        
+
         def call_params
           if statement.tokens.first.is_a?(TkDEF)
             extract_method_details.last.map {|param| param.first }
@@ -62,9 +62,9 @@ module YARD
         end
 
         private
-        
+
         # Extracts method information for macro expansion only
-        # 
+        #
         # @todo This is a duplicate implementation of {MethodHandler}. Refactor.
         # @return [Array<String,Array<Array<String>>>] the method name followed by method
         #   arguments (name and optional value)

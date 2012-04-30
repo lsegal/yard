@@ -45,7 +45,7 @@ module YARD
             code_tags = 0
             text.gsub(/<(\/)?(pre|code|tt)|(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+/) do |str|
               closed, tag, first_text, type_text, pre_text, no_match = $1, $2, $3, $4, $`, $&
-              
+
               if tag
                 code_tags += (closed ? -1 : 1)
                 next str

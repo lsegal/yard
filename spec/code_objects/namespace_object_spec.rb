@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::CodeObjects::NamespaceObject do
   before { Registry.clear }
-  
+
   describe '#child' do
     it "should return the object matching the name passed in if argument is a Symbol" do
       obj = NamespaceObject.new(nil, :YARD)
@@ -19,7 +19,7 @@ describe YARD::CodeObjects::NamespaceObject do
       obj.child(:somevalue => 2).should == other
     end
   end
-  
+
   describe '#meths' do
     it "should return #meths even if parent is a Proxy" do
       obj = NamespaceObject.new(P(:String), :YARD)
@@ -84,7 +84,7 @@ describe YARD::CodeObjects::NamespaceObject do
       meths.should_not include(bmeth)
     end
   end
-  
+
   describe '#class_attributes' do
     it "should list class attributes" do
       a = NamespaceObject.new(nil, :Mod)
@@ -95,7 +95,7 @@ describe YARD::CodeObjects::NamespaceObject do
       a.class_attributes.keys.should_not include(:b)
     end
   end
-  
+
   describe '#instance_attributes' do
     it "should list instance attributes" do
       a = NamespaceObject.new(nil, :Mod)
@@ -106,7 +106,7 @@ describe YARD::CodeObjects::NamespaceObject do
       a.instance_attributes.keys.should include(:b)
     end
   end
-  
+
   describe '#constants/#included_constants' do
     before do
       Registry.clear
@@ -156,7 +156,7 @@ describe YARD::CodeObjects::NamespaceObject do
       consts.should_not include(P('A::CONST2'))
     end
   end
-  
+
   describe '#included_meths' do
     it "should return all included methods with :all = true" do
       YARD.parse_string <<-eof

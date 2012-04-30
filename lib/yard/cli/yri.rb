@@ -132,9 +132,9 @@ module YARD
 
       # Tries to load the object with name. If successful, caches the object
       # with the cache_path
-      # 
+      #
       # @param [String] name the object path
-      # @param [String] cache_path the location of the yardoc 
+      # @param [String] cache_path the location of the yardoc
       #   db containing the object to cache for future lookups.
       #   No caching is done if this is nil.
       # @return [void]

@@ -31,7 +31,7 @@ module YARD
       # @return [nil] if no expansion should take place for this directive
       attr_accessor :expanded_text
 
-      # @return [DocstringParser] the parser that is parsing all tag 
+      # @return [DocstringParser] the parser that is parsing all tag
       #   information out of the docstring
       attr_accessor :parser
 
@@ -128,7 +128,7 @@ module YARD
     # == Defining a Macro
     #
     # A macro must first be defined in order to be used. Note that a macro is also
-    # expanded upon definition if it defined on an object (the docstring of a 
+    # expanded upon definition if it defined on an object (the docstring of a
     # method, class, module or constant object as opposed to a free standing
     # comment). To define a macro, use the "new" or "attach" identifier in the
     # types specifier list. A macro will also automatically be created if an
@@ -178,7 +178,7 @@ module YARD
     #
     # === Ranges
     #
-    # Ranges are also acceptable with the syntax <tt>${N-M}</tt>. Negative values 
+    # Ranges are also acceptable with the syntax <tt>${N-M}</tt>. Negative values
     # on either N or M are valid, and refer to indexes from the end of the list.
     # Consider a DSL method that creates a method using the first argument with
     # argument names following, ending with the return type of the method. This
@@ -229,7 +229,7 @@ module YARD
     #       #   @return [$2] the $1 property
     #       def self.property(name, type) end
     #     end
-    # 
+    #
     #     class Post < Resource
     #       property :title, String
     #       property :view_count, Integer
@@ -488,7 +488,7 @@ module YARD
     # location. This directive is useful if a class has dynamic meta-programmed
     # behaviour that cannot be recognized by YARD.
     #
-    # You can specify the language of the code block using the types 
+    # You can specify the language of the code block using the types
     # specification list. By default, the code language is "ruby".
     #
     # @example Documenting dynamic module inclusion

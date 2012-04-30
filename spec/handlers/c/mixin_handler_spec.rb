@@ -15,7 +15,7 @@ describe YARD::Handlers::C::MixinHandler do
     bar.mixins(:instance).should == [foo]
     baz.mixins(:instance).should == [foo]
   end
-  
+
   it "should add include as proxy if symbol lookup fails" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");

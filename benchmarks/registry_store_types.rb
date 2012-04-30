@@ -6,7 +6,7 @@ def parse_and_select_objects
   YARD::Registry.load_all
   $paths = []
   4.times { $paths << YARD::Registry.paths[rand(YARD::Registry.paths.size)] }
-  
+
   $regular_registry = {}
   $types_registry = {}
   YARD::Registry.all.each do |object|
@@ -34,9 +34,9 @@ end
 
 __END__
 # Run on March 22 2012
-["YARD::Parser::Ruby::Legacy::RubyToken::TkUnknownChar#initialize", 
-  "YARD::Parser::C::CParser#enumerator", 
-  "YARD::CodeObjects::ClassObject#inherited_meths", 
+["YARD::Parser::Ruby::Legacy::RubyToken::TkUnknownChar#initialize",
+  "YARD::Parser::C::CParser#enumerator",
+  "YARD::CodeObjects::ClassObject#inherited_meths",
   "YARD::Parser::C::Statement#source="]
 Rehearsal ----------------------------------------------
 normal       0.180000   0.000000   0.180000 (  0.182640)

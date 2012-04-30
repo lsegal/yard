@@ -1,10 +1,10 @@
 def init
-  @breadcrumb = []  
+  @breadcrumb = []
   if @onefile
     sections :layout
   elsif @file
     if @file.attributes[:namespace]
-      @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root 
+      @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root
     end
     @breadcrumb_title = "File: " + @file.title
     @page_title = @breadcrumb_title
@@ -24,7 +24,7 @@ def init
           cur = cur.namespace
         end
       end
-    
+
       @page_title = format_object_title(object)
       type = object.root? ? :module : object.type
       sections :layout, [T(type)]
@@ -66,6 +66,6 @@ end
 # @since 0.7.0
 def menu_lists
 [ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
-  { :type => 'method', :title => 'Methods', :search_title => 'Method List' }, 
+  { :type => 'method', :title => 'Methods', :search_title => 'Method List' },
   { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
 end

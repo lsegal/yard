@@ -6,7 +6,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper
-  
+
   def options
     Templates::TemplateOptions.new.tap do |o|
       o.reset_defaults
@@ -19,14 +19,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
       h('Usage: foo "bar" <baz>').should == "Usage: foo &quot;bar&quot; &lt;baz&gt;"
     end
   end
-  
+
   describe '#charset' do
     it "should return foo if LANG=foo" do
       ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if RUBY18
       Encoding.default_external.should_receive(:name).and_return('shift_jis') if defined?(Encoding)
       charset.should == 'shift_jis'
     end
-    
+
     ['US-ASCII', 'ASCII-7BIT', 'ASCII-8BIT'].each do |type|
       it "should convert #{type} to iso-8859-1" do
         ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
@@ -34,14 +34,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
         charset.should == 'iso-8859-1'
       end
     end
-    
+
     it "should support utf8 as an encoding value for utf-8" do
       type = 'utf8'
       ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
       Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
       charset.should == 'utf-8'
     end
-    
+
     it "should take file encoding if there is a file" do
       @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
       # not the correct charset name, but good enough
@@ -53,7 +53,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       @file = OpenStruct.new(:contents => 'foo')
       charset.should == 'utf-8'
     end if RUBY18
-    
+
     if RUBY18
       it "should return utf-8 if no LANG env is set" do
         ENV.should_receive(:[]).with('LANG').and_return(nil)
@@ -66,7 +66,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
     end
   end
-  
+
   describe '#format_types' do
     it "should include brackets by default" do
       text = ["String"]
@@ -80,16 +80,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
       should_receive(:linkify).with("Symbol", "Symbol").and_return("Symbol")
       format_types(["String", "Symbol"], false).should == "<tt>String</tt>, <tt>Symbol</tt>"
     end
-    
-    { "String" => [["String"], 
-        "<tt><a href=''>String</a></tt>"], 
-      "A::B::C" => [["A::B::C"], 
+
+    { "String" => [["String"],
+        "<tt><a href=''>String</a></tt>"],
+      "A::B::C" => [["A::B::C"],
         "<tt><a href=''>A::B::C</a></tt>"],
-      "Array<String>" => [["Array", "String"], 
-        "<tt><a href=''>Array</a>&lt;<a href=''>String</a>&gt;</tt>"], 
-      "Array<String, Symbol>" => [["Array", "String", "Symbol"], 
+      "Array<String>" => [["Array", "String"],
+        "<tt><a href=''>Array</a>&lt;<a href=''>String</a>&gt;</tt>"],
+      "Array<String, Symbol>" => [["Array", "String", "Symbol"],
         "<tt><a href=''>Array</a>&lt;<a href=''>String</a>, <a href=''>Symbol</a>&gt;</tt>"],
-      "Array<{String => Array<Symbol>}>" => [["Array", "String", "Array", "Symbol"], 
+      "Array<{String => Array<Symbol>}>" => [["Array", "String", "Array", "Symbol"],
         "<tt><a href=''>Array</a>&lt;{<a href=''>String</a> =&gt; " +
         "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]
     }.each do |text, values|
@@ -101,13 +101,13 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
     end
   end
-  
+
   describe '#htmlify' do
     it "should not use hard breaks for textile markup (RedCloth specific)" do
       begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
       htmlify("A\nB", :textile).should_not include("<br")
     end
-    
+
     it "should use hard breaks for textile_strict markup (RedCloth specific)" do
       begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
       htmlify("A\nB", :textile_strict).should include("<br")
@@ -123,7 +123,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should return pre-formatted text with :pre markup" do
       htmlify("fo\no\n\nbar<>", :pre).should == "<pre>fo\no\n\nbar&lt;&gt;</pre>"
     end
-    
+
     it "should return regular text with :text markup" do
       htmlify("fo\no\n\nbar<>", :text).should == "fo<br/>o<br/><br/>bar&lt;&gt;"
     end
@@ -131,18 +131,18 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should return unmodified text with :none markup" do
       htmlify("fo\no\n\nbar<>", :none).should == "fo\no\n\nbar&lt;&gt;"
     end
-    
+
     it "should highlight ruby if markup is :ruby" do
       htmlify("class Foo; end", :ruby).should =~ /\A<pre class="code ruby"><span/
     end
-    
+
     it "should include file and htmlify it" do
       load_markup_provider(:rdoc)
       File.should_receive(:file?).with('foo.rdoc').and_return(true)
       File.should_receive(:read).with('foo.rdoc').and_return('HI')
       htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><p>HI</p></p>"
     end
-    
+
     it "should autolink URLs (markdown specific)" do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
@@ -150,7 +150,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/').should ==
         '<p><a href="http://example.com">http://example.com</a></p>'
     end
-    
+
     it "should not autolink URLs inside of {} (markdown specific)" do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
@@ -161,17 +161,17 @@ describe YARD::Templates::Helpers::HtmlHelper do
         %r{<p><a href="http://example.com".*>http://example.com</a></p>}
     end
   end
-  
+
   describe "#link_object" do
     before do
       stub!(:object).and_return(CodeObjects::NamespaceObject.new(nil, :YARD))
     end
-    
+
     it "should return the object path if there's no serializer and no title" do
       stub!(:serializer).and_return nil
       link_object(CodeObjects::NamespaceObject.new(nil, :YARD)).should == "YARD"
     end
-  
+
     it "should return the title if there's a title but no serializer" do
       stub!(:serializer).and_return nil
       link_object(CodeObjects::NamespaceObject.new(nil, :YARD), 'title').should == "title"
@@ -195,7 +195,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(obj)
       link_object("Bar#a").should =~ %r{href="Bar.html#a-instance_method"}
     end
-    
+
     it "should use relative path in title" do
       CodeObjects::ModuleObject.new(:root, :YARD)
       CodeObjects::ClassObject.new(P('YARD'), :Bar)
@@ -204,7 +204,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:serializer).and_return(serializer)
       link_object("Bar").should =~ %r{>Bar</a>}
     end
-    
+
     it "should use relative path to parent class in title" do
       root = CodeObjects::ModuleObject.new(:root, :YARD)
       obj = CodeObjects::ModuleObject.new(root, :SubModule)
@@ -240,31 +240,31 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
   describe '#url_for' do
     before { Registry.clear }
-  
+
     it "should return nil if serializer is nil" do
       stub!(:serializer).and_return nil
       stub!(:object).and_return Registry.root
       url_for(P("Mod::Class#meth")).should be_nil
     end
-  
+
     it "should return nil if serializer does not implement #serialized_path" do
       stub!(:serializer).and_return Serializers::Base.new
       stub!(:object).and_return Registry.root
       url_for(P("Mod::Class#meth")).should be_nil
     end
-  
+
     it "should link to a path/file for a namespace object" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
       stub!(:object).and_return Registry.root
-    
+
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
       url_for(yard).should == 'YARD.html'
     end
-  
+
     it "should link to the object's namespace path/file and use the object as the anchor" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
       stub!(:object).and_return Registry.root
-    
+
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
       meth = CodeObjects::MethodObject.new(yard, :meth)
       url_for(meth).should == 'YARD.html#meth-instance_method'
@@ -297,7 +297,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       end
       results
     end
-    
+
     it "should escape {} syntax with backslash (\\{foo bar})" do
       input  = '\{foo bar} \{XYZ} \{file:FOO} $\{N-M}'
       output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
@@ -325,7 +325,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :href => "file.TEST.html"
       }
     end
-  
+
     it "should create regular links with http:// or https:// prefixes" do
       parse_link(resolve_links("{http://example.com}")).should == {
         :inner_text => "http://example.com",
@@ -340,7 +340,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :title => "title"
       }
     end
-    
+
     it "should create mailto links with mailto: prefixes" do
       parse_link(resolve_links('{mailto:joanna@example.com}')).should == {
         :inner_text => 'mailto:joanna@example.com',
@@ -355,16 +355,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :title => 'Steve'
       }
     end
-    
+
     it "should ignore {links} that begin with |...|" do
       resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
     end
-    
+
     it "should gracefully ignore {} in links" do
       should_receive(:linkify).with('Foo', 'Foo').and_return('FOO')
       resolve_links("{} {} {Foo Foo}").should == '{} {} FOO'
     end
-    
+
     %w(tt code pre).each do |tag|
       it "should ignore links in <#{tag}>" do
         text = "<#{tag}>{Foo}</#{tag}>"
@@ -381,7 +381,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       should_receive(:link_file).with('TEST', nil, nil).and_return('')
       resolve_links("({file:TEST})")
     end
-    
+
     it "should resolve link with newline in title-part" do
       parse_link(resolve_links("{http://example.com foo\nbar}")).should == {
         :inner_text => "foo bar",
@@ -395,7 +395,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       should_receive(:linkify).with('Object#<<', nil).and_return('')
       resolve_links("{Object#&lt;&lt;}")
     end
-    
+
     it "should warn about missing reference at right file location for object" do
       YARD.parse_string <<-eof
         # Comments here
@@ -409,7 +409,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
-    
+
     it "should show ellipsis on either side if there is more on the line in a reference warning" do
       YARD.parse_string <<-eof
         # {InvalidObject1} beginning of line
@@ -431,7 +431,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
-    
+
     it "should warn about missing reference for file template (no object)" do
       @file = CodeObjects::ExtraFileObject.new('myfile.txt', '')
       logger = mock(:log)
@@ -467,12 +467,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
         :empty_overload => '- (String) <strong>foobar</strong>'
       }
     end
-    
+
     def format_types(types, brackets = false) types.join(", ") end
     def signature(obj, link = false) super(obj, link).strip end
-    
+
     it_should_behave_like "signature"
-    
+
     it "should link to regular method if overload name does not have the same method name" do
       YARD.parse_string <<-eof
         class Foo
@@ -484,7 +484,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       serializer.stub!(:serialized_path).with(Registry.at('Foo')).and_return('')
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(Registry.at('Foo'))
-      signature(Registry.at('Foo#foo').tag(:overload), true).should == 
+      signature(Registry.at('Foo#foo').tag(:overload), true).should ==
         "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">- <strong>bar</strong>(a, b, c) </a>"
     end
   end
@@ -497,32 +497,32 @@ describe YARD::Templates::Helpers::HtmlHelper do
       obj.extend(Templates::Helpers::HtmlHelper)
       obj
     end
-    
+
     it "should return empty string on nil input" do
       subject.html_syntax_highlight(nil).should == ''
     end
-    
+
     it "should call #html_syntax_highlight_ruby by default" do
       Registry.root.source_type = nil
       subject.should_receive(:html_syntax_highlight_ruby).with('def x; end')
       subject.html_syntax_highlight('def x; end')
     end
-    
+
     it "should call #html_syntax_highlight_NAME if there's an object with a #source_type" do
       subject.object = OpenStruct.new(:source_type => :NAME)
       subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
       subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       subject.should_receive(:html_syntax_highlight_NAME).and_return("foobar")
-      subject.htmlify('<pre><code>def x; end</code></pre>', :html).should == 
+      subject.htmlify('<pre><code>def x; end</code></pre>', :html).should ==
         '<pre class="code NAME"><code>foobar</code></pre>'
     end
-    
+
     it "should add !!!LANG to className in outputted pre tag" do
       subject.object = OpenStruct.new(:source_type => :LANG)
       subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
       subject.should_receive(:respond_to?).with('html_syntax_highlight_LANG').and_return(true)
       subject.should_receive(:html_syntax_highlight_LANG).and_return("foobar")
-      subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html).should == 
+      subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html).should ==
         '<pre class="code LANG"><code>foobar</code></pre>'
     end
 
@@ -535,46 +535,46 @@ describe YARD::Templates::Helpers::HtmlHelper do
       eof
       ).should == "foobar"
     end
-    
+
     it "should not highlight if highlight option is false" do
       subject.options.highlight = false
       subject.should_not_receive(:html_syntax_highlight_ruby)
       subject.html_syntax_highlight('def x; end').should == 'def x; end'
     end
-    
+
     it "should not highlight if there is no highlight method specified by !!!NAME" do
       subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
       subject.should_not_receive(:html_syntax_highlight_NAME)
       subject.html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
     end
-    
+
     it "should highlight as ruby if htmlify(text, :ruby) is called" do
       subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
       subject.htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
     end
-    
+
     it "should not prioritize object source type when called directly" do
       subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
       subject.object = OpenStruct.new(:source_type => :c)
       subject.html_syntax_highlight("def x; end").should == "x"
     end
-    
+
     it "shouldn't escape code snippets twice" do
-      subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should == 
+      subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should ==
         '<pre class="code foo"><code>{&quot;foo&quot; =&gt; 1}</code></pre>'
     end
-    
+
     it "should highlight source when matching a pre lang= tag" do
-      subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should == 
+      subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should ==
         '<pre class="code foo"><code>x = 1</code></pre>'
     end
-    
+
     it "should highlight source when matching a code class= tag" do
-      subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should == 
+      subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should ==
         '<pre class="code foo"><code>x = 1</code></pre>'
     end
   end
-  
+
   describe '#link_url' do
     it "should add target if scheme is provided" do
       link_url("http://url.com").should include(" target=\"_parent\"")

@@ -3,7 +3,7 @@ class YARD::Handlers::C::ConstantHandler < YARD::Handlers::C::Base
                 \s*\((?:\s*(\w+),)?\s*"(\w+)",\s*(.*?)\s*\)\s*;}xm
   handles MATCH
   statement_class BodyStatement
-  
+
   process do
     statement.source.scan(MATCH) do |type, var_name, const_name, value|
       handle_constants(type, var_name, const_name, value)

@@ -5,17 +5,17 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Templates::Engine.template(:default, :method) do
   before { Registry.clear }
-  
+
   shared_examples_for "all formats" do
     it "should render html format correctly" do
       html_equals(Registry.at('#m').format(html_options), @template)
     end
-    
+
     it "should render text format correctly" do
       text_equals(Registry.at('#m').format(text_options), @template)
     end
   end
-  
+
   describe 'regular (deprecated) method' do
     before do
       @template = :method001
@@ -32,10 +32,10 @@ describe YARD::Templates::Engine.template(:default, :method) do
         alias x m
       eof
     end
-    
+
     it_should_behave_like "all formats"
   end
-  
+
   describe 'method with 1 overload' do
     before do
       @template = :method002
@@ -48,10 +48,10 @@ describe YARD::Templates::Engine.template(:default, :method) do
         def m(x) end
       eof
     end
-    
+
     it_should_behave_like "all formats"
   end
-  
+
   describe 'method with 2 overloads' do
     before do
       @template = :method003
@@ -69,10 +69,10 @@ describe YARD::Templates::Engine.template(:default, :method) do
         def m(*args) end
       eof
     end
-    
+
     it_should_behave_like "all formats"
   end
-  
+
   describe 'method void return' do
     before do
       @template = :method004
@@ -84,7 +84,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
 
     it_should_behave_like "all formats"
   end
-  
+
   describe 'method void return in an overload' do
     before do
       @template = :method005
@@ -96,7 +96,7 @@ describe YARD::Templates::Engine.template(:default, :method) do
         def m(*args) end
       eof
     end
-    
+
     it_should_behave_like "all formats"
   end
 end

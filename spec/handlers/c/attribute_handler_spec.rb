@@ -7,13 +7,13 @@ describe YARD::Handlers::C::AttributeHandler do
       VALUE foo(VALUE x) { int value = x; }
       void Init_Foo() {
         rb_cFoo = rb_define_class("Foo", rb_cObject);
-        #{commented ? '/*' : ''} 
+        #{commented ? '/*' : ''}
           rb_define_attr(rb_cFoo, "foo", #{read}, #{write});
         #{commented ? '*/' : ''}
       }
     eof
   end
-  
+
   it "should handle readonly attribute (rb_define_attr)" do
     run(1, 0)
     Registry.at('Foo#foo').should be_reader

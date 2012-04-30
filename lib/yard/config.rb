@@ -45,14 +45,14 @@ module YARD
   # loaded with safe mode on, because plugins are properly namespaced with
   # a 'yard-' prefix, must be installed as a gem, and therefore cannot be
   # touched by the user. To specify safe mode, use the +safe_mode+ key.
-  # 
+  #
   # == Plugin Specific Configuration
-  # 
+  #
   # Additional settings can be defined within the configuration file
   # specifically to provide configuration for a plugin. A plugin that utilizes
   # the YARD configuration is strongly encouraged to utilize namespacing of
   # their configuration content.
-  # 
+  #
   #     !!!yaml
   #     load_plugins: true # Auto-load plugins when YARD starts
   #     ignored_plugins:
@@ -63,23 +63,23 @@ module YARD
   #     # Plugin Specific Configuration
   #     yard-sample-plugin:
   #       show-results-inline: true
-  # 
+  #
   # As the configuration is available system wide, it can be
   # accessed within the plugin code.
-  # 
-  # 
+  #
+  #
   #     if YARD::Config.options['yard-sample-plugin'] and
   #       YARD::Config.options['yard-sample-plugin']['show-results-inline']
   #       # ... perform the action that places the results inline ...
   #     else
   #       # ... do the default behavior of not showing the results inline ...
   #     end
-  # 
+  #
   # When accessing the configuration, be aware that this file is user managed
   # so configuration keys and values may not be present. Make no assumptions and
   # instead ensure that you check for the existence of keys before proceeding to
   # retrieve values.
-  # 
+  #
   # @since 0.6.2
   # @see options
   class Config

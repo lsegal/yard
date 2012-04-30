@@ -4,7 +4,7 @@ class YARD::Handlers::C::ClassHandler < YARD::Handlers::C::Base
                \s*"([\w:]+)",
                \s*(\w+|0)\s*
             \)/mx
-            
+
   MATCH2 = /([\w\.]+)\s* = \s*rb_define_class_under\s*
             \(
                \s*(\w+),
@@ -14,7 +14,7 @@ class YARD::Handlers::C::ClassHandler < YARD::Handlers::C::Base
   handles MATCH1
   handles MATCH2
   statement_class BodyStatement
-  
+
   process do
     statement.source.scan(MATCH1) do |var_name, class_name, parent|
       handle_class(var_name, class_name, parent)

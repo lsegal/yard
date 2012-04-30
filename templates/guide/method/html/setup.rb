@@ -11,7 +11,7 @@ def format_args(object)
         !object.tags(:param).any? {|t| t.name == param[0][1..-1] }
     end
   end
-  
+
   unless params.empty?
     args = params.map {|n, v| v ? "<em>#{h n}</em> = #{h v}" : "<em>" + n.to_s + "</em>" }.join(", ")
     args

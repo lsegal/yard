@@ -11,14 +11,14 @@ that tools like RDoc do not do. These components are:
 * [Data Storage Component](#storage)
 * [Post Processing & Templating System](#templates)
 
-This separation is a major goal of the project, and means that YARD is not *just* 
-a tool to generate HTML output. The expectation is that any subset of YARD's 
-major components may be used, extended or modified independently. YARD may be 
-used just as a data gathering tool (to parse and audit code), just as a data 
-source (a webserver containing raw unformatted data about code), or just as a 
+This separation is a major goal of the project, and means that YARD is not *just*
+a tool to generate HTML output. The expectation is that any subset of YARD's
+major components may be used, extended or modified independently. YARD may be
+used just as a data gathering tool (to parse and audit code), just as a data
+source (a webserver containing raw unformatted data about code), or just as a
 conventional HTML documentation generation tool (like RDoc).
 
-The important classes and dependencies of these components are shown in the 
+The important classes and dependencies of these components are shown in the
 following class diagram:
 
 ![Overview Class Diagram](images/overview-class-diagram.png)
@@ -37,7 +37,7 @@ tasks during the data gathering process (*note: the tag architecture is not*
   * {file:docs/Tags.md}
 
 The parser component reads source files and converts it into a set of statements
-which the handlers then process, creating code objects which in turn create tags 
+which the handlers then process, creating code objects which in turn create tags
 (meta-data) attached to the objects. These objects are all added to the {YARD::Registry},
 the data store component.
 

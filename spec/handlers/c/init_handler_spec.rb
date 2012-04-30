@@ -10,7 +10,7 @@ describe YARD::Handlers::C::InitHandler do
     eof
     Registry.at('A').docstring.should == 'Bar!'
   end
-  
+
   it "should not add documentation if ClassName is not created in Init" do
     parse(<<-eof)
       // Bar!
@@ -19,13 +19,13 @@ describe YARD::Handlers::C::InitHandler do
     eof
     Registry.at('A').should be_nil
   end
-  
+
   it "should not overwrite override comment" do
     parse(<<-eof)
       /* Document-class: A
        * Foo!
        */
-    
+
       // Bar!
       void Init_A() {
         rb_cA = rb_define_class("A", rb_cObject);

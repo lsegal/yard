@@ -12,13 +12,13 @@ describe YARD::Server::Adapter do
       a.libraries['yard'].should == [lib]
     end
   end
-  
+
   describe '#start' do
     it "should not implement #start" do
       lambda { Adapter.new({}).start }.should raise_error(NotImplementedError)
     end
   end
-  
+
   describe '.setup' do
     it 'should add template paths and helpers' do
       Adapter.setup
@@ -26,7 +26,7 @@ describe YARD::Server::Adapter do
       Templates::Engine.template_paths.should include(YARD::ROOT + '/yard/server/templates')
     end
   end
-  
+
   describe '.shutdown' do
     it 'should cleanup template paths and helpers' do
       Adapter.setup

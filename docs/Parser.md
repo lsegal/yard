@@ -7,7 +7,7 @@ that runs before any handling is done on the source. The parser is meant to tran
 the source into a set of statements that can be understood by the {file:docs/Handlers.md Handlers}
 that run immediately afterwards.
 
-The important classes are described in the class diagram of the entire parser 
+The important classes are described in the class diagram of the entire parser
 system below:
 
 ![Parser Class Diagram](images/parser-class-diagram.png)
@@ -23,7 +23,7 @@ to parsing methods). YARD supports Ruby and C source files, but custom parsers c
 be implemented and registered for various other languages by subclassing `Parser::Base`
 and registering the parser with {YARD::Parser::SourceParser.register_parser_type}.
 
-This factory class should always be used when parsing source files rather than 
+This factory class should always be used when parsing source files rather than
 the individual parser classes since it initiates the pipeline that runs the
 handlers on the parsed source. The parser used must also match the handlers,
 and this is coordinated by the `SourceParser` class as well.
@@ -36,36 +36,36 @@ array of file globs or a single file glob.
 
     YARD::Parser::SourceParser.parse('spec_*.rb')
     YARD::Parser::SourceParser.parse(['spec_*.rb', '*_helper.rb'])
-    
+
 This is equivalent to the convenience method {YARD.parse}:
 
     YARD.parse('lib/**/*.rb')
-    
+
 In some cases (ie. for testing), it may be more helpful to parse a string of input
 directly. In such a case, the method {YARD::Parser::SourceParser.parse_string} should be
 used:
 
     YARD::Parser::SourceParser.parse_string("def method(a, b) end")
-    
+
 You can also provide the parser type explicitly as the second argument:
 
     # Parses a string of C
     YARD::Parser::SourceParser.parse_string("int main() { }", :c)
-    
-Note that these two methods are aliased as {YARD.parse} and {YARD.parse_string} for 
+
+Note that these two methods are aliased as {YARD.parse} and {YARD.parse_string} for
 convenience.
-    
+
 ## Implementing and Registering a Custom Parser
 
 To implement a custom parser, subclass {YARD::Parser::Base}. Documentation on which
 abstract methods should be implemented are documented in that class. After the class
 is implemented, it is registered with the {YARD::Parser::SourceParser} factory class
 to be called when a file of the right extension needs to be parsed, or when a user
-selects that parser type explicitly. To register your new parser class, call the 
+selects that parser type explicitly. To register your new parser class, call the
 method {YARD::Parser::SourceParser.register_parser_type}:
 
     SourceParser.register_parser_type(:my_parser, MyParser, 'my_parser_ext')
-    
+
 The last argument can be a single extension, a list of extensions (Array), a single Regexp, or a
 list of Regexps. Do not include the '.' in the extension.
 
@@ -73,11 +73,11 @@ list of Regexps. Do not include the '.' in the extension.
 ## The Two Ruby Parser Types
 
 When parsing Ruby, the SourceParser can either instantiate the new {YARD::Parser::Ruby::RubyParser}
-class or the {YARD::Parser::Ruby::Legacy::StatementList} class. The first of the 
-two, although faster, more robust and more efficient, is only available for 
-Ruby 1.9. The legacy parser parser is available in both 1.8.x and 1.9, if 
-compatibility is required. The choice of parser will affect which handlers 
-ultimately get used, since new handlers can only use the new parser and the 
+class or the {YARD::Parser::Ruby::Legacy::StatementList} class. The first of the
+two, although faster, more robust and more efficient, is only available for
+Ruby 1.9. The legacy parser parser is available in both 1.8.x and 1.9, if
+compatibility is required. The choice of parser will affect which handlers
+ultimately get used, since new handlers can only use the new parser and the
 same requirement applies to the legacy parser & handlers.
 
 ## Switching to Legacy Parser
@@ -89,7 +89,7 @@ only the legacy handlers are implemented, the `SourceParser` class should force
 the use of the legacy parser by setting the `parser_type` attribute as such:
 
     YARD::Parser::SourceParser.parser_type = :ruby18
-    
+
 The default value is `:ruby`. Note that this cannot be forced the other way around,
 a parser type of `:ruby` cannot be set under Ruby 1.8.x as the new parser is not
 supported under 1.8.
@@ -114,12 +114,12 @@ by the `#type` method. The following examples show some of the basic uses of `As
     node.type  #=> :if_mod
     node[0]    #=> s(:int, "1")
     node[0][0] #=> "1"
-    
+
 (Note the `s()` syntax is shorthand for `AstNode.new(...)`. `s()` with no type
 is shorthand for a node of type `:list`)
 
-As shown, not all of the elements are AstNodes in themselves, some are String 
-objects containing values. A list of only the AstNodes within a node can be 
+As shown, not all of the elements are AstNodes in themselves, some are String
+objects containing values. A list of only the AstNodes within a node can be
 accessed via the {YARD::Parser::Ruby::AstNode#children #children} method. Using
 the sexp declared above, we can do:
 
@@ -127,23 +127,23 @@ the sexp declared above, we can do:
 
 ### AstNode#source and #line
 
-Every node defines the `#source` method which returns the source code that the 
-node represents. One of the most common things to do with a node is to grab its 
+Every node defines the `#source` method which returns the source code that the
+node represents. One of the most common things to do with a node is to grab its
 source. The following example shows how this can be done:
 
     source = "if 1 == 1 then\n  raise Exception\n end"
     ast = YARD::Parser::Ruby::RubyParser.parse(source).root
     ast[0].condition.source  #=> "1 == 1"
     ast[0].then_block.source #=> "raise Exception"
-    
+
 Note that this only works on source parsed from the RubyParser, not sexps
 declared using the `s()` syntax. This is because no source code is generated
 or stored by nodes. Instead, only the character ranges are stored, which are
 then looked up in the original full source string object. For example:
 
     # Following the code snippet above
-    ast[0].then_block.source_range #=> 17..31 
-    
+    ast[0].then_block.source_range #=> 17..31
+
 We can also get the line and line ranges in a similar fashion:
 
     ast[0].type       #=> :if
@@ -159,7 +159,7 @@ to quickly get at a node of a specific type in such a situation:
     # Get the first identifier in the statement
     ast = s(s(:int, "1"), s(s(:var_ref, s(:ident, "hello"))))
     ast.jump(:ident)[0] #=> "hello"
-    
+
 Multiple types can be searched for at once. If none are found, the original root
 node is returned so that it may be chained.
 
@@ -167,11 +167,11 @@ node is returned so that it may be chained.
 
 The goal of the legacy parser is much the same as the new parser, but it is far
 more simplistic. Instead of a full-blown AST, the legacy parser simply groups
-together lists of "statements" called a {YARD::Parser::Ruby::Legacy::StatementList}. 
+together lists of "statements" called a {YARD::Parser::Ruby::Legacy::StatementList}.
 These statement lists are made up of {YARD::Parser::Ruby::Legacy::Statement} objects.
-A statement is any method call condition, loop, or declaration. Each statement 
-may or may not have a block. In the case of a condition or loop, the block is 
-the inner list of statements; in the case of a method call, the block is a do 
+A statement is any method call condition, loop, or declaration. Each statement
+may or may not have a block. In the case of a condition or loop, the block is
+the inner list of statements; in the case of a method call, the block is a do
 block (if provided). The statements themselves are made up of tokens, so instead
 of being semantic in nature like the new parser, statements are tied directly
 to the lexical tokens that make them up. To convert a statement into source, you
@@ -185,7 +185,7 @@ but using the legacy parser it is only one statement:
     stmts = ARD::Parser::Ruby::Legacy::StatementList.new("hello if 1")
     stmts[0].block       #=> nil
     stmts[0].tokens.to_s #=> "hello if 1"
-    
+
 In addition, this means that most handling still needs to be done via string
 manipulation and regular expression matching, making it considerably more
 difficult to use in edge case scenarios.

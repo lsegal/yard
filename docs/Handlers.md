@@ -27,8 +27,8 @@ state about what is being processed. For instance, the processor is what keeps
 track of the current namespace (the module or class an object is being defined
 in), scope (class or instance), file and owner. The owner refers to the object
 that is most directly responsible for the source statement being processed. This
-is most often the same as the namespace, except when parsing the body of a method, 
-where the namespace would be the class/module the method is defined in and the 
+is most often the same as the namespace, except when parsing the body of a method,
+where the namespace would be the class/module the method is defined in and the
 owner would be the method object itself.
 
 ## Implementing a Handler
@@ -42,13 +42,13 @@ class method. A very simple handler that handles a module definition would be:
 
     class MyModuleHandler < YARD::Handlers::Ruby::Base
       handles :module
-      
+
       def process
         puts "Handling a module named #{statement[0].source}"
       end
     end
-    
-For details on what nodes are, and what node types are, see the 
+
+For details on what nodes are, and what node types are, see the
 {file:docs/Parser.md parser architecture document}.
 
 In this case the node type being handled is the `:module` type. More than one
@@ -66,32 +66,32 @@ call can be handled by declaring the following in a `handles` statement:
 
     class MyHandler < YARD::Handlers::Ruby::Base
       handles method_call(:describe)
-      
+
       def process
         # Process the method call
       end
     end
-    
-In this case we handle any of the method calls to method name `describe` with 
+
+In this case we handle any of the method calls to method name `describe` with
 the following syntaxes:
-    
+
     describe(something)
     describe arg1, arg2, arg3
     describe(something) { perform_a_block }
     describe "Something" do
       a_block
     end
-    
+
 ### Creating a new Code Object
 
 Usually (but not always) handling is performed to create new code objects to add
 to the registry (for information about code objects, see {file:docs/CodeObjects.md this document}).
 Code objects should simply be created and added to the existing `namespace`. This
-will be enough to add them to the registry. There is also a convenience 
+will be enough to add them to the registry. There is also a convenience
 {YARD::Handlers::Base#register register} method which quickly sets standard attributed
 on the newly created object, such as the file, line, source and docstring of the
 object. This method will be seen in the next example.
-    
+
 ### Handling an Inner Block
 
 By default, the parser gives the processor class a list of all the top level
@@ -107,7 +107,7 @@ the following commands:
 
     class YARD::Handlers::Ruby::ModuleHandler < YARD::Handlers::Ruby::Base
       handles :module
-  
+
       def process
         modname = statement[0].source
         mod = register ModuleObject.new(namespace, modname)
@@ -126,27 +126,27 @@ Because the legacy handler uses the legacy parser and therefore a different kind
 of AST, there are subtle differences in the handler API. Most importantly, the
 `handles` method usually deals with either lexical tokens or source code as a string
 or RegExp object. The statement object, similarly, is made up of lexical tokens instead
-of semantically parsed nodes (this is described in the {file:docs/Parser.md parser document}). 
+of semantically parsed nodes (this is described in the {file:docs/Parser.md parser document}).
 
 The module example above can be rewritten as a legacy handler as follows:
 
     class YARD::Handlers::Ruby::Legacy::ModuleHandler < YARD::Handlers::Ruby::Legacy::Base
       handles TkMODULE
-  
+
       def process
         modname = statement.tokens.to_s[/^module\s+(#{NAMESPACEMATCH})/, 1]
         mod = register ModuleObject.new(namespace, modname)
         parse_block(:namespace => mod)
       end
     end
-    
+
 A few notes on the differences:
 
   * We inherit from `Legacy::Base` instead of the standard Ruby Base handler class.
   * We exchange node type `:module` for `TkMODULE`, which represents the
-    first token in the statement. 
-  * We perform direct string manipulation to get the module name. 
-  * `parse_block` does not take a list of statements. In the old parser API, 
-    each statement has a `block` attribute which defines the list of 
-    statements within that statement, if any. Therefore, `parse_block` will 
+    first token in the statement.
+  * We perform direct string manipulation to get the module name.
+  * `parse_block` does not take a list of statements. In the old parser API,
+    each statement has a `block` attribute which defines the list of
+    statements within that statement, if any. Therefore, `parse_block` will
     always parse the `statement.block` if it exists.

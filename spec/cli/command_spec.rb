@@ -8,7 +8,7 @@ describe YARD::CLI::Command do
       @saw_foo = false
       @options.on('--foo') { @saw_foo = true }
     end
-    
+
     def parse(*args)
       CLI::Command.new.send(:parse_options, @options, args)
       args
@@ -20,13 +20,13 @@ describe YARD::CLI::Command do
       parse('--list', '--list2', '--foo')
       @saw_foo.should be_true
     end
-    
+
     it "should skip unrecognized options and any extra non-option arg that follows" do
       log.should_receive(:warn).with(/Unrecognized.*--list/)
       parse('--list', 'foo', '--foo')
       @saw_foo.should be_true
     end
-    
+
     it "should stop retrying to parse at non-switch argument" do
       log.should_receive(:warn).with(/Unrecognized.*--list/)
       args = parse('--list', 'foo', 'foo', 'foo')

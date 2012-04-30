@@ -17,7 +17,7 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
   handles MATCH1
   handles MATCH2
   statement_class BodyStatement
-  
+
   process do
     statement.source.scan(MATCH1) do |type, var_name, name, func_name, param_count|
       break if var_name == "ruby_top_self"
@@ -27,7 +27,7 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
       var_name = "rb_cObject" if var_name == "rb_mKernel"
       handle_method(type, var_name, name, func_name)
     end
-    
+
     statement.source.scan(MATCH2) do |name, func_name, param_count|
       handle_method("method", "rb_mKernel", name, func_name)
     end
