@@ -6,10 +6,10 @@ YARD: Yay! A Ruby Documentation Tool
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: See Contributors section below    
-**Copyright**:    2007-2011    
+**Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.7.4 (codename "Kennedy")    
-**Release Date**: December 2nd 2011    
+**Latest Version**: 0.8.0 (codename "Shave It")    
+**Release Date**: April 30th 2012    
 
 Synopsis
 --------
@@ -103,8 +103,7 @@ YARD will do all the work in re-generating the HTML. This makes writing
 documentation a much faster process.
 
 
-Installing
-----------
+## Installing
 
 To install YARD, use the following command:
 
@@ -122,8 +121,7 @@ If running `which rdoc` turns up empty, install RDoc by issuing:
     $ sudo apt-get install rdoc
 
 
-Usage
------
+## Usage
 
 There are a couple of ways to use YARD. The first is via command-line, and the
 second is the Rake task.
@@ -508,7 +506,7 @@ http://github.com/lsegal/yard/contributors
 Copyright
 ---------
 
-YARD &copy; 2007-2011 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
+YARD &copy; 2007-2012 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
 RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL}
 documents for more information.
