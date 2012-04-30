@@ -9,6 +9,25 @@ module YARD
   #   DocstringParser.new.parse("text here").to_docstring
   # @since 0.8.0
   class DocstringParser
+    # Creates a callback that is called after a docstring is successfully
+    # parsed. Use this method to perform sanity checks on a docstring's
+    # tag data, or add any extra tags automatically to a docstring.
+    #
+    # @yield [parser] a block to be called after a docstring is parsed
+    # @yieldparam [DocstringParser] parser the docstring parser object
+    #   with all directives and tags created.
+    # @yieldreturn [void]
+    # @return [void]
+    def self.after_parse(&block)
+      self.after_parse_callbacks << block
+    end
+
+    # @return [Array<Proc>] the {#after_parse} callback proc objects
+    # @private
+    def self.after_parse_callbacks
+      @after_parse_callbacks ||= []
+    end
+
     # @return [String] the parsed text portion of the docstring,
     #   with tags removed.
     attr_reader :text
@@ -83,6 +102,7 @@ module YARD
       # Remove trailing/leading whitespace / newlines
       @text = text.gsub(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
       call_directives_after_parse
+      call_after_parse_callbacks
       self
     end
 
@@ -211,6 +231,13 @@ module YARD
     def tag_is_directive?(tag_name)
       list = %w(attribute endgroup group macro method scope visibility)
       list.include?(tag_name)
+    end
+
+    # Calls all {after_parse} callbacks
+    def call_after_parse_callbacks
+      self.class.after_parse_callbacks.each do |cb|
+        cb.call(self)
+      end
     end
   end
 end

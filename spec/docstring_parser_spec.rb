@@ -194,4 +194,14 @@ eof
       @parser.state.scope.should == :class
     end
   end
+
+  describe 'after_parse' do
+    it "should allow specifying of callbacks" do
+      parser = DocstringParser.new
+      the_yielded_obj = nil
+      DocstringParser.after_parse {|obj| the_yielded_obj = obj }
+      parser.parse("Some text")
+      the_yielded_obj.should == parser
+    end
+  end
 end
