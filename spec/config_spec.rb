@@ -5,7 +5,7 @@ require 'yaml'
 describe YARD::Config do
   describe '.load' do
     before do
-      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
+      File.should_receive(:file?).twice.with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
     end
 
     it "should use default options if no ~/.yard/config is found" do
@@ -36,7 +36,6 @@ describe YARD::Config do
     it "should load safe_mode setting from --safe command line option" do
       File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
-      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
       ARGV.replace(['--safe'])
       YARD::Config.load
       YARD::Config.options[:safe_mode].should be_true
@@ -126,10 +125,10 @@ describe YARD::Config do
     end
     
     it "should load --plugin arguments from .yardopts" do
-      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).once.and_return(true)
+      File.should_receive(:file?).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).twice.and_return(true)
       File.should_receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(false)
       File.should_receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
-      File.should_receive(:read_binary).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).once.and_return('--plugin foo')
+      File.should_receive(:read_binary).with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).twice.and_return('--plugin foo')
       YARD::Config.should_receive(:load_plugin).with('foo')
       YARD::Config.load
     end
