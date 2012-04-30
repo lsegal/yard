@@ -66,7 +66,7 @@ module YARD
       # @since 0.6.2
       def load_script(file)
         return if YARD::Config.options[:safe_mode]
-        require(file.gsub(/\.rb$/, ''))
+        load(file)
       rescue LoadError => load_exception
         log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
         exit
