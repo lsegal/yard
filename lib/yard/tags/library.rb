@@ -381,8 +381,12 @@ module YARD
 
       # Describe an options hash in a method. The tag takes the
       # name of the options parameter first, followed by optional types,
-      # the option key name, an optional default value for the key and a
-      # description of the option.
+      # the option key name, a default value for the key and a
+      # description of the option. The default value should be placed within
+      # parentheses and is optional (can be omitted).
+      #
+      # Note that a +@param+ tag need not be defined for the options
+      # hash itself, though it is useful to do so for completeness.
       #
       # @example
       #   # @param [Hash] opts the options to create a message with.
@@ -391,6 +395,7 @@ module YARD
       #   # @option opts [String] :to Recipient email
       #   # @option opts [String] :body ('') The email's body
       #   def send_email(opts = {}) end
+      # @yard.signature name [Types] option_key (default_value) description
       define_tag "Options Hash",       :option,      :with_options
 
       # Describe that your method can be used in various
