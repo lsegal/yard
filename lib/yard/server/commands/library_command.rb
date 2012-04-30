@@ -53,6 +53,7 @@ module YARD
         end
 
         def call(request)
+          save_default_template_info
           self.request = request
           self.options = LibraryOptions.new
           self.options.reset_defaults
@@ -63,9 +64,21 @@ module YARD
           super
         rescue LibraryNotPreparedError
           not_prepared
+        ensure
+          restore_template_info
         end
 
         private
+
+        def save_default_template_info
+          @old_template_paths = Templates::Engine.template_paths
+          @old_extra_includes = Templates::Template.extra_includes
+        end
+
+        def restore_template_info
+          Templates::Engine.template_paths = @old_template_paths
+          Templates::Template.extra_includes = @old_extra_includes
+        end
 
         def setup_library
           library.prepare! if request.xhr? && request.query['process']
