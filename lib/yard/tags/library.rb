@@ -261,6 +261,11 @@ module YARD
         send(meth, tag, parser)
       end
 
+      # @!macro yard.tag.transitive
+      #   @note This tag is *transitive*. If this tag is applied on a
+      #     namespace (module or class), it will automatically be
+      #     applied to all children objects of that namespace.
+
       # Marks a class/module/method as abstract with optional
       # implementor information.
       #
@@ -276,6 +281,7 @@ module YARD
       # output, but useful for performing queries (+yardoc --query+). Any text is
       # allowable in this tag, and there are no predefined values.
       #
+      # @!macro yard.tag.transitive
       # @note The special name +@api private+ does display a notice in
       #   documentation if it is listed, letting users know that the
       #   method is not to be used by external components.
@@ -456,8 +462,9 @@ module YARD
       #   class NTPUpdater; end
       define_tag "See Also",           :see,         :with_name
 
-      # Lists the version that the object was first added
+      # Lists the version that the object was first added.
       #
+      # @!macro yard.tag.transitive
       # @example
       #   # @since 1.2.4
       #   def clear_routes; end
