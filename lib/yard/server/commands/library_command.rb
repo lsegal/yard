@@ -72,8 +72,8 @@ module YARD
         private
 
         def save_default_template_info
-          @old_template_paths = Templates::Engine.template_paths
-          @old_extra_includes = Templates::Template.extra_includes
+          @old_template_paths = Templates::Engine.template_paths.dup
+          @old_extra_includes = Templates::Template.extra_includes.dup
         end
 
         def restore_template_info
