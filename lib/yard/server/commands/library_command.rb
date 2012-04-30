@@ -110,13 +110,14 @@ module YARD
             return
           end
           Registry.clear
+          Templates::ErbCache.clear!
           Registry.load_yardoc(library.yardoc_file)
           Thread.current[:__yard_last_yardoc__] = library.yardoc_file
         end
 
         def not_prepared
           self.caching = false
-          options.update(:path => request.path, :template => :doc_server, :type => :processing)
+          options.update(:template => :doc_server, :type => :processing)
           [202, {'Content-Type' => 'text/html'}, [render]]
         end
 
