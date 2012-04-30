@@ -8,6 +8,7 @@ module YARD
         def library; @command.library end
         def single_library; @command.single_library end
         def serializer; @command.serializer end
+        default_attr :serialize, false
 
         attr_accessor :command
         attr_accessor :frames
