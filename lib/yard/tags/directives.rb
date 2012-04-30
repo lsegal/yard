@@ -18,6 +18,7 @@ module YARD
     #
     # @abstract Subclasses should implement {#call}.
     # @see Library.define_directive
+    # @since 0.8.0
     class Directive
       # @return [Tag] the meta-data tag containing data input to the directive
       attr_accessor :tag
@@ -92,6 +93,7 @@ module YARD
     #     def index; end
     #   end
     # @see tag:!group
+    # @since 0.6.0
     class EndGroupDirective < Directive
       def call
         return unless handler
@@ -114,6 +116,7 @@ module YARD
     #   def before_filter; end
     #   def after_filter; end
     # @see tag:!endgroup
+    # @since 0.6.0
     class GroupDirective < Directive
       def call
         return unless handler
@@ -243,6 +246,7 @@ module YARD
     #       # Macro will expand on this definition too
     #       property :view_count, Integer
     #     end
+    # @since 0.7.0
     class MacroDirective < Directive
       def call
         raise TagFormatError if tag.name.nil? && tag.text.to_s.empty?
@@ -342,6 +346,7 @@ module YARD
     #   # @!method method2
     #   create_methods :method1, :method2
     # @see tag:!attribute
+    # @since 0.7.0
     class MethodDirective < Directive
       SCOPE_MATCH = /\A\s*self\s*\.\s*/
 
@@ -423,6 +428,7 @@ module YARD
     #   # @!attribute name
     #   #   @return [String] the name of the user
     # @see tag:!method
+    # @since 0.7.0
     class AttributeDirective < MethodDirective
       def after_parse
         return unless handler
@@ -507,6 +513,7 @@ module YARD
     #   #   void Init_Foo() {
     #   #     rb_define_method(rb_cFoo, "method", method, 0);
     #   #   }
+    # @since 0.8.0
     class ParseDirective < Directive
       def call
         lang = tag.types ? tag.types.first.to_sym :
@@ -540,6 +547,7 @@ module YARD
     #
     #   # Documentation for method2
     #   def method2; end
+    # @since 0.7.0
     class ScopeDirective < Directive
       def call
         if %w(class instance module).include?(tag.text)
@@ -569,6 +577,7 @@ module YARD
     #
     #   # Documentation for method2
     #   def method2; end
+    # @since 0.7.0
     class VisibilityDirective < Directive
       def call
         if %w(public protected private).include?(tag.text)

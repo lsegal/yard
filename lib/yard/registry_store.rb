@@ -64,6 +64,9 @@ module YARD
     alias [] get
     alias []= put
 
+    # Deletes an object at a given path
+    # @param [#to_sym] key the key to delete
+    # @return [void]
     def delete(key) @store.delete(key.to_sym) end
 
     # Gets all path names from the store. Loads the entire database
@@ -82,11 +85,19 @@ module YARD
     # @return [Array<CodeObjects::Base>] all the code objects
     def values(reload = false) load_all if reload; @store.values end
 
+    # @param [Symbol] the type to look for
+    # @return [Array<String>] a list of object paths with a given
+    #   {CodeObjects::Base#type}
+    # @since 0.8.0
     def paths_for_type(type, reload = false)
       load_all if reload
       @object_types[type] || []
     end
 
+    # @param [Symbol] the type to look for
+    # @return [Array<CodeObjects::Base>] a list of objects with a given
+    #   {CodeObjects::Base#type}
+    # @since 0.8.0
     def values_for_type(type, reload = false)
       load_all if reload
       paths_for_type(type).map {|t| @store[t.to_sym] }
