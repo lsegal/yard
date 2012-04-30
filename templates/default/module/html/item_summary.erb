@@ -30,7 +30,7 @@
   <% if @item.visibility != :public %><span class="note title <%= @item.visibility %>"><%= @item.visibility %></span><% end %>
   <% if @item.has_tag?(:abstract) %><span class="abstract note title">abstract</span><% end %>
   <% if @item.has_tag?(:deprecated) %><span class="deprecated note title">deprecated</span><% end %>
-  <% if @item.has_tag?(:api) && @item.tag(:api).text == 'private' %><span class="private note title">Private</span><% end %>
+  <% if @item.has_tag?(:api) && @item.tag(:api).text == 'private' %><span class="private note title">private</span><% end %>
 
   <% if @item.has_tag?(:deprecated) %>
     <span class="summary_desc"><strong>Deprecated.</strong> <%= htmlify_line @item.tag(:deprecated).text %></span>
