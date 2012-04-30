@@ -260,6 +260,12 @@ module YARD
     autoload :TemplateOptions, __p('templates/template_options')
   end
 
+  # Namespace for internationalization (i18n)
+  module I18n
+    autoload :PotGenerator,    __p('i18n/pot_generator')
+    autoload :Text,            __p('i18n/text')
+  end
+
   autoload :Config,          __p('config')
   autoload :Docstring,       __p('docstring')
   autoload :DocstringParser, __p('docstring_parser')
