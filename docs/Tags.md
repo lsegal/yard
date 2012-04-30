@@ -82,7 +82,7 @@ lines at any point by creating an indented block. However, some tags like
 {tag:example}, {tag:overload}, {tag:!macro}, {tag:!method}, and {tag:!attribute}
 rely on the first line for special information about the tag, and you cannot
 split this first line up. For instance, the {tag:example} tag uses the first line
-to indicate the example's title
+to indicate the example's title.
 
 ### Common Tag Syntaxes
 
