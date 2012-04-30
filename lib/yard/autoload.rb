@@ -58,7 +58,9 @@ module YARD
   # parsing phase. This allows YARD as well as any custom extension to
   # analyze source and generate {CodeObjects} to be stored for later use.
   module Handlers
-    module C # CRuby Handlers
+    # CRuby Handlers
+    # @since 0.8.0
+    module C
       autoload :Base,                     __p('handlers/c/base')
 
       autoload :AliasHandler,             __p('handlers/c/alias_handler')

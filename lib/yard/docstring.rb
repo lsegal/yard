@@ -30,10 +30,21 @@ module YARD
     def hash_flag=(v) @hash_flag = v == nil ? false : v end
 
     # Matches a tag at the start of a comment line
-    META_MATCH = /^@((?:\w\.?)+)(?:\s+(.*))?$/i
+    # @deprecated Use {DocstringParser::META_MATCH}
+    META_MATCH = DocstringParser::META_MATCH
 
     # @group Creating a Docstring Object
 
+    # Creates a new docstring without performing any parsing through
+    # a {DocstringParser}. This method is called by +DocstringParser+
+    # when creating the new docstring object.
+    #
+    # @param [String] text the textual portion of the docstring
+    # @param [Array<Tag>] the list of tag objects in the docstring
+    # @param [CodeObjects::Base, nil] the object associated with the
+    #   docstring. May be nil.
+    # @param [String] raw_data the complete docstring, including all
+    #   original formatting and any unparsed tags/directives.
     def self.new!(text, tags = [], object = nil, raw_data = nil)
       docstring = allocate
       docstring.replace(text, false)
@@ -44,8 +55,14 @@ module YARD
     end
 
     # Creates a new docstring with the raw contents attached to an optional
-    # object.
+    # object. Parsing will be done by the {DocstringParser} class.
     #
+    # @note To properly parse directives with proper parser context within
+    #   handlers, you should not use this method to create a Docstring.
+    #   Instead, use {DocstringParser}, which takes a handler object that
+    #   can pass parser state onto directives. If a Docstring is created
+    #   with this method, directives do not have access to any parser
+    #   state, and may not function as expected.
     # @example
     #   Docstring.new("hello world\n@return Object return", someobj)
     #
