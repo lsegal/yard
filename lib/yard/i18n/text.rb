@@ -1,8 +1,6 @@
 module YARD
   module I18n
     # Provides some convenient features for translating a text.
-    #
-    # @since 0.8.0
     class Text
       # Creates a text object that has translation related features for
       # the input text.
@@ -17,7 +15,6 @@ module YARD
 
       # Extracts translation target messages from +@input+.
       #
-      # @return [void]
       # @yield [:attribute, name, value, line_no] the block that
       #   recieves extracted an attribute in header. It may called many
       #   times.
@@ -33,6 +30,7 @@ module YARD
       # @yieldparam [String] text the text of extracted paragraph.
       # @yieldparam [Integer] start_line_no the start line number of
       #   extracted paragraph.
+      # @return [void]
       def extract_messages
         paragraph = ""
         paragraph_start_line = 0

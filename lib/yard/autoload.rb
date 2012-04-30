@@ -130,6 +130,13 @@ module YARD
     autoload :Processor,                  __p('handlers/processor')
   end
 
+  # Namespace for internationalization (i18n)
+  # @since 0.8.0
+  module I18n
+    autoload :PotGenerator,    __p('i18n/pot_generator')
+    autoload :Text,            __p('i18n/text')
+  end
+
   # The parser namespace holds all parsing engines used by YARD.
   # Currently only Ruby and C (Ruby) parsers are implemented.
   module Parser
@@ -258,12 +265,6 @@ module YARD
     autoload :Section,         __p('templates/section')
     autoload :Template,        __p('templates/template')
     autoload :TemplateOptions, __p('templates/template_options')
-  end
-
-  # Namespace for internationalization (i18n)
-  module I18n
-    autoload :PotGenerator,    __p('i18n/pot_generator')
-    autoload :Text,            __p('i18n/text')
   end
 
   autoload :Config,          __p('config')

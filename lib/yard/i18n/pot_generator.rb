@@ -10,14 +10,11 @@ module YARD
     # POT is an acronym for "Portable Object Template". POT is a
     # template file to create PO file. The extension for POT is
     # ".pot". PO file is an acronym for "Portable Object". PO file has
-    # many paris of message ID (msgid) that is translation target
+    # many parts of message ID (msgid) that is translation target
     # message and message string (msgstr) that is translated message
     # of message ID. If you want to tranlsate "Hello" in English into
     # "Bonjour" in French, "Hello" is the msgid ID and "Bonjour" is
     # msgstr. The extension for PO is ".po".
-    #
-    # @see GNU gettext manual about details of PO file:
-    #   http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
     #
     # == How to extract msgids
     #
@@ -62,8 +59,8 @@ module YARD
     #   File.open(po_file_path, "w") do |pot_file|
     #     pot_file.print(pot)
     #   end
-    #
-    # @since 0.8.0
+    # @see http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
+    #   GNU gettext manual about details of PO file
     class PotGenerator
       # Extracted messages. Key is a translation target message and
       # value is properties of the translation target message. The
@@ -79,6 +76,7 @@ module YARD
       # +:comments+ is an array of comment. All comments are added to
       # the msgid entry for the translation target message.
       #
+      # @api private
       # @return [Hash{String => Hash{:locations => Array<Array[String, Integer]>, :comments => Array<String>}}]
       attr_reader :messages
 
@@ -95,7 +93,7 @@ module YARD
       end
 
       # Parses {CodeObjects::Base} objects and stores extracted msgids
-      # into +@messages+.
+      # into {#messages}
       #
       # @param [Array<CodeObjects::Base>] objects a list of
       #   {CodeObjects::Base} to be parsed.
@@ -107,7 +105,7 @@ module YARD
       end
 
       # Parses {CodeObjects::ExtraFileObject} objects and stores
-      # extracted msgids into +@messages+.
+      # extracted msgids into {#messages}.
       #
       # @param [Array<CodeObjects::ExtraFileObject>] files a list
       #   of {CodeObjects::ExtraFileObject} objects to be parsed.
