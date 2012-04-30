@@ -1,5 +1,250 @@
 # @title What's New?
 
+# What's New in 0.8.x?
+
+1. **Directives (new behavioural tag syntax)** (0.8.0)
+2. **Added `--embed-mixin(s)` to embed mixins into class docs** (0.8.0)
+3. **Internationalization (I18n) support for translating docs** (0.8.0)
+4. **New C parser / handlers architecture** (0.8.0)
+5. **YARD will now warn if `@param` name not in method params** (0.8.0)
+6. **Added support for `module_function` calls in Ruby code** (0.8.0)
+7. **Greatly improved tag documentation using custom template** (0.8.0)
+8. **Tags can now contain '.' for namespacing** (0.8.0)
+9. **Added "frames" links for non-framed pages for better nav** (0.8.0)
+10. **Added Gemfile support to YARD server for local gem sets** (0.8.0)
+11. **Server now displays README on index route like static docs** (0.8.0)
+12. **Added line numbers to `yard stats --list-undoc --compact`** (0.8.0)
+13. **Single object db now default (multi-object db unsupported)** (0.8.0)
+
+## Directives (new behavioural tag syntax) (0.8.0)
+
+<p class="note">
+  The tags {tag:!macro}, {tag:!method}, {tag:!attribute}, {tag:!group},
+  {tag:!endgroup}, {tag:!scope} and {tag:!visibility} have been changed
+  from meta-data tags to directives. This means they should now be called
+  with the "@!" prefix instead of "@". Note however that for <strong>
+  backward compatibility</strong>, the old "@macro", "@method", etc.,
+  syntax for all of these tags will still work and is supported.
+</p>
+
+<p class="note">
+  Some <strong>backwards incompatible</strong> changes were made to {tag:!macro} syntax.
+  Please read this section carefully if you are using this tag.
+</p>
+
+YARD 0.8.0 adds a new tag syntax called "directives" using the `@!`
+prefix. These directive tags can be used to modify parser state while
+processing objects, or even create new objects on the fly. A plugin
+API is available similar to tags, and directives should be registered
+in the {YARD::Tags::Library} class using {YARD::Tags::Library.define_directive}.
+
+To use a directive, simply call it the same way as any tag. Tag syntax
+is documented in {file:docs/Tags.md}.
+
+### Notable features of directives
+
+#### Directives do not need to be attached to object docstrings
+
+Unlike meta-data tags which apply to created objects, directives
+do not need to be attached to an object in order to be used. This
+means you can have free-standing comments with directives, such as:
+
+    # @macro mymacro
+    #   A new macro, not attached to any docstring
+
+    # ...other Ruby code here...
+
+    # Using the macro:
+    # @macro mymacro
+    def mymethod; end
+
+You can do the same to define methods and attributes, as discussed
+below.
+
+#### `@!method` and `@!attribute` directives improved
+
+The method and attribute directives can now be used to create multiple
+objects in a single docstring. Previously a `@method` or `@attribute`
+tag would only create one method per docstring. In 0.8.0, you could
+attach multiple methods to the same block of Ruby source, such as:
+
+    # @!method foo(a, b, c)
+    # @!method bar(x, y, z)
+    # Docstring for code
+    some_ruby_source
+
+The above creates #foo and #bar and the source listing for both will
+be `some_ruby_source` with "Docstring for code" as the docstring.
+
+The attribute directive can take advantage of this functionality as well.
+Note that these directives also do not need to be attached to a line of
+code to be recognized; they can be in free-standing comments if the
+methods are defined dynamically and not associated with any code.
+
+#### New `@!parse` directive to parse Ruby code
+
+A new {tag:!parse} directive was added that allows a developer to have
+YARD parse code that might not necessarily be parseable in its original
+form. This is useful when using `instance_eval` and other dynamic
+meta-programming techniques to define methods or perform functionality.
+For instance, a common case of the "self.included" callback in module
+to extend a module on a class might be in the form:
+
+    def self.included(mod)
+      mod.extend(self)
+    end
+
+Unfortunately, this does not get picked up by YARD, but on the original
+class, we can add:
+
+    class MyClass
+      # @!parse extend TheDynamicModule
+      include TheDynamicModule
+    end
+
+YARD will then parse the code `extend TheDynamicModule` as if
+it were in the source file.
+
+You can also use this technique to register regular methods as
+attributes, if you did not define them with `attr_*` methods:
+
+    def foo; @foo end
+    def foo=(v) @foo = v end
+
+    # Register them as methods:
+    # @!parse attr_accessor :foo
+
+### Backward incompatible changes to `@!macro` directive
+
+Unfortunately, in order to create the new directives architecture,
+some previously supported syntax in `@macro` tags are no longer supported.
+Specifically, macros can no longer expand text on an entire docstring.
+Instead, macros only expand the data that is indented inside of the tag
+text.
+
+This syntax is **no longer supported**:
+
+    # @macro mymacro
+    # Expanding text $1 $2 $3
+    property :a, :b, :c
+
+In 0.7.0 to 0.7.5, the above would have created a method with the docstring
+"Expanding text a b c". This will not work in 0.8.0. Instead, you must
+indent all the macro expansion data so that it is part of the `@macro`
+tag as follows:
+
+    # @!macro mymacro
+    #   Expanding text $1 $2 $3
+    property :a, :b, :c
+
+Note that we also use the recommended `@!macro` syntax, though `@macro`
+is still supported.
+
+## Added `--embed-mixin(s)` to embed mixins into class docs (0.8.0)
+
+Methods from mixins can now be embedded directly into the documentation
+output for a class by using `--embed-mixin ModuleName`, or `--embed-mixins`
+for all mixins. This enables a documentation writer to refactor methods
+into modules without worrying about them showing up in separate files
+in generated documentation. When mixin methods are embedded, they
+show up in both the original module page and the pages of the classes
+they are mixed into. A note is added to the method signature telling the
+user where the method comes from.
+
+The `--embed-mixin` command-line option can also take wildcard values
+in order to match specific namespaces. For instance, you can embed
+only mixins inside of a "Foo::Bar" namespace by doing:
+
+    !!!sh
+    $ yard doc --embed-mixin "Foo::Bar::*"
+
+## Internationalization (I18n) support for translating docs
+
+YARD now ships with the beginnings of internationalization support
+for translating documentation into multiple languages. The
+`yard i18n` command now allows you to generate ".pot" and ultimately
+".po" files for translation with [gettext](http://www.gnu.org/software/gettext).
+
+Note that this tool is a small step in the larger transition for
+proper I18n support in YARD. We still have to add proper gettext
+support to our templates for proper generation in multiple languages,
+but this tool allows you to get started in translating your
+documents. Improved I18n support will come throughout the 0.8.x series.
+
+## New C parser / handlers architecture (0.8.0)
+
+The C parser was completely rewritten to take advantage of YARD's
+parser and handler architecture. This means more YARD will be more robust
+when parsing failures occur, tags and directives will now work consistently
+across Ruby and CRuby files ({tag:!group} will now work, for instance),
+and developers can now write custom handlers that target CRuby source files.
+
+## YARD will now warn if `@param` name not in method params (0.8.0)
+
+YARD will now give you a warning if you use a `@param` tag in your
+source but give an invalid parameter name. This should catch a lot of
+common documentation errors and help keep your documentation consistent.
+
+## Added support for `module_function` calls in Ruby code (0.8.0)
+
+The `module_function` command in Ruby is now supported in Ruby files.
+It defines two separate methods, one class and one instance method,
+both having the exact same docstring, and marks the instance method
+as private.
+
+## Greatly improved tag documentation using custom template (0.8.0)
+
+We have completely revamped the {docs/Tags.md} to include documentation
+for each meta-data tag and directive with at least one useful example
+for each one. This was done using template customization and extension
+available within YARD.
+
+## Tags can now contain '.' for namespacing (0.8.0)
+
+Prior to 0.8.0, tags could only contain alphanumeric characters and
+underscore. YARD now allows the '.' character in tag names, and it
+is now recommended for namespacing project-specific custom tags.
+YARD has its own set of custom tags that are namespaced in this
+way (using the "yard.tagname" namespace). The namespace recommendation
+is to use "projectname.tagname", or "projectname.component.tagname".
+
+## Added "frames" links for non-framed pages for better nav (0.8.0)
+
+Frames navigation has always had a "(no frames)" link to get rid
+of the frameset. YARD 0.8.0 introduces a "(frames)" link on non-framed
+pages to reverse this, allowing you to navigate between framed and
+frameless pages seamlessly.
+
+## Added Gemfile support to YARD server for local gem sets (0.8.0)
+
+The `yard server` command now supports `--gemfile` to serve gems
+from a Gemfile.lock, instead of all system-wide gems.
+
+## Server now displays README on index route like static docs (0.8.0)
+
+The `yard server` command will now behave like static docs regarding
+the index action for a project, listing the README file if present
+before displaying the alphabetic index. Note that the route for
+the alphabetic index page has now moved to the explicit '/index' action.
+
+## Added line numbers to `yard stats --list-undoc --compact` (0.8.0)
+
+Line numbers are now listed in the compact listing of undocumented objects
+so that they can be more easily located in the files.
+
+## Single object db now default (multi-object db unsupported) (0.8.0)
+
+YARD previously would split the .yardoc db into multiple marshal files
+for load-time performance reasons if it grew past a specific number of
+objects. This check is now disabled, and YARD will never automatically
+switch to a multi-object DB. YARD will now always use the single object
+db unless explicitly set with `--no-single-db`. If YARD is taking a
+long time to load your .yardoc database, you can try using this
+option to split your database into multiple files, but note that this
+can cause problems with certain codebases (specifically, if you
+have class methods using the same name as a module/class).
+
+
 # What's New in 0.7.x?
 
 1. **Macro support and detection of DSL methods** (0.7.0)

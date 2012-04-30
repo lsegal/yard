@@ -284,8 +284,35 @@ More options can be seen by typing `yard graph --help`, but here is an example:
     $ yard graph --protected --full --dependencies
 
 
-Changelog
----------
+## Changelog
+
+- **April.30.12**: 0.8.0 release
+    - See {file:docs/WhatsNew.md} for a list of added features
+    - Over 20 bug fixes:
+      - Properly filter hidden setter/getter attributes (#394)
+      - Fix test failures in Linux environments (#397, #472, #473, #512, #513)
+      - Fix attribute inheritance and @private (#432)
+      - Fix attribute parsing (#435)
+      - Allow aliases for attributes (#436)
+      - Fix namespace fetching in `handle_alias()` (#437)
+      - Fix overwritten attributes marked as inherited (#442)
+      - Fix documenting constants defined from C code with `rb_define_const()` (#443)
+      - Do not escape snippets twice (#445)
+      - Ajax method/class search should not fire when a non-printable character is pressed (#446)
+      - Fix yard server crashing when RDoc is not installed (#456)
+      - Fix tags ignored when `(see #foo)` is used (#457)
+      - Fix three "Returns" for two `@overload` tags (#458)
+      - Do not auto-detect DSL methods as method objects if parameter name is not a valid method name (#464)
+      - Fix attaching of macros to Object (#465)
+      - Fix handling of `%w()` source in `[]/[]=` parsed context. (#461, pull in #468)
+      - Don't add default `@return` if `@overload` has `@return`. (#458, pull in #469)
+      - Don't discard tags by (see ...). (#457, pull in #470)
+      - Fix constants listed as inherited when overwritten (#474)
+      - Fix `yardoc --asset` behaving differently on first and subsequent calls. (#477)
+      - `!!!lang` code blocks should set the lang in `<pre>`'s class. (#478, #479)
+      - Fix "File List" search tab error. (#502)
+      - Fix search bar not redirecting to method page. (#509)
+      - Fix server returning exception message bodies as String (#518)
 
 - **January.31.12**: 0.7.5 release
     - Various minor bug fixes
@@ -498,16 +525,14 @@ Changelog
   power of YARD and what to expect from the syntax (Yardoc style meta tags).
 
 
-Contributors
-------------
+## Contributors
 
 Special thanks to all contributors for submitting patches. A full list of
 contributors including their patches can be found at:
 
 http://github.com/lsegal/yard/contributors
 
-Copyright
----------
+## Copyright
 
 YARD &copy; 2007-2012 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
