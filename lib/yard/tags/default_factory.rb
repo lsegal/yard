@@ -141,7 +141,7 @@ module YARD
             s = i if level == 0
             level += 1
           elsif closing_types.include?(c)
-            level -= 1 unless list.last[-1,1] == '='
+            level -= 1 unless list.last[-1,1] == '=' && c == '>'
             break e = i if level == 0
             list.last << c
           elsif c == ',' && level == 1

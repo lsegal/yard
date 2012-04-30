@@ -22,6 +22,14 @@ describe YARD::Tags::DefaultFactory do
       parse_types('[A, B, C]').should == [nil, ['A', 'B', 'C'], ""]
     end
 
+    it "should handle ducktypes" do
+      parse_types('[#foo]').should == [nil, ['#foo'], '']
+    end
+
+    it "should handle ducktypes with special method names" do
+      parse_types('[#foo=]').should == [nil, ['#foo='], '']
+    end
+
     it "should return the text before and after the type list" do
       parse_types(' b <String> description').should == ['b', ['String'], 'description']
       parse_types('b c <String> description (test)').should == [nil, nil, 'b c <String> description (test)']
