@@ -694,7 +694,7 @@ module YARD
                 'The template path to look for templates in.',
                 '  (used with -t).') do |path|
           next if YARD::Config.options[:safe_mode]
-          YARD::Templates::Engine.register_template_path(path)
+          YARD::Templates::Engine.register_template_path(File.expand_path(path))
         end
 
         opts.on('-f', '--format FORMAT',
