@@ -2,27 +2,125 @@ require "stringio"
 
 module YARD
   module I18n
-    # @private
+    # The +PotGenerator+ generates POT format string from
+    # {CodeObjects::Base} and {CodeObjects::ExtraFileObject}.
+    #
+    # == POT and PO
+    #
+    # POT is an acronym for "Portable Object Template". POT is a
+    # template file to create PO file. The extension for POT is
+    # ".pot". PO file is an acronym for "Portable Object". PO file has
+    # many paris of message ID (msgid) that is translation target
+    # message and message string (msgstr) that is translated message
+    # of message ID. If you want to tranlsate "Hello" in English into
+    # "Bonjour" in French, "Hello" is the msgid ID and "Bonjour" is
+    # msgstr. The extension for PO is ".po".
+    #
+    # @see GNU gettext manual about details of PO file:
+    #   http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
+    #
+    # == How to extract msgids
+    #
+    # The +PotGenerator+ has two parse methods:
+    #
+    # * {#parse_objects} for {CodeObjects::Base}
+    # * {#parse_files} for {CodeObjects::ExtraFileObject}
+    #
+    # {#parse_objects} extracts msgids from docstring and tags of
+    # {CodeObjects::Base} objects. The docstring of
+    # {CodeObjects::Base} object is parsed and a paragraph is
+    # extracted as a msgid. Tag name and tag text are extracted as
+    # msgids from a tag.
+    #
+    # {#parse_files} extracts msgids from
+    # {CodeObjects::ExtraFileObject} objects. The file content of
+    # {CodeObjects::ExtraFileObject} object is parsed and a paragraph
+    # is extracted as a msgid.
+    #
+    # == Usage
+    #
+    # To create a .pot file by +PotGenerator+, instantiate a
+    # +PotGenerator+ with a relative working directory path from a
+    # directory path that has created .pot file, parse
+    # {CodeObjects::Base} objects and {CodeObjects::ExtraFileObject}
+    # objects, generate a POT and write the generated POT to a .pot
+    # file. The relative working directory path is ".." when the
+    # working directory path is "."  and the POT is wrote into
+    # "po/yard.pot".
+    #
+    # @example Generate a .pot file
+    #   po_file_path = "po/yard.pot"
+    #   po_file_directory_pathname = Pathname.new(po_file_path).directory)
+    #   working_directory_pathname = Pathname.new(".")
+    #   relative_base_path = working_directory_pathname.relative_path_from(po_file_directory_pathname).to_s
+    #   # relative_base_path -> ".."
+    #   generator = YARD::I18n::PotGenerator.new(relative_base_path)
+    #   generator.parse_objects(objects)
+    #   generator.parse_files(files)
+    #   pot = generator.generate
+    #   po_file_directory_pathname.mkpath
+    #   File.open(po_file_path, "w") do |pot_file|
+    #     pot_file.print(pot)
+    #   end
+    #
+    # @since 0.8.0
     class PotGenerator
+      # Extracted messages. Key is a translation target message and
+      # value is properties of the translation target message. The
+      # properties are added to the msgid entry for the translation
+      # target message. The properties are +:locations+ and
+      # +:comments+.
+      #
+      # +:locations+ is an array of location. Location is an array of
+      # path and line number of the translation target message is
+      # appeared. Each location is prepended +:relative_base_path+
+      # that is passed on creating a +PotGenerator+ instance.
+      #
+      # +:comments+ is an array of comment. All comments are added to
+      # the msgid entry for the translation target message.
+      #
+      # @return [Hash{String => Hash{:locations => Array<Array[String, Integer]>, :comments => Array<String>}}]
       attr_reader :messages
+
+      # Creates a POT generator that uses +relative_base_path+ to
+      # generate locations for a msgid.
+      #
+      # @param [String] relative_base_path a relative working
+      #   directory path from a directory path that has created .pot
+      #   file.
       def initialize(relative_base_path)
         @relative_base_path = relative_base_path
         @extracted_objects = {}
         @messages = {}
       end
 
+      # Parses {CodeObjects::Base} objects and stores extracted msgids
+      # into +@messages+.
+      #
+      # @param [Array<CodeObjects::Base>] objects a list of
+      #   {CodeObjects::Base} to be parsed.
+      # @return [void]
       def parse_objects(objects)
         objects.each do |object|
           extract_documents(object)
         end
       end
 
+      # Parses {CodeObjects::ExtraFileObject} objects and stores
+      # extracted msgids into +@messages+.
+      #
+      # @param [Array<CodeObjects::ExtraFileObject>] files a list
+      #   of {CodeObjects::ExtraFileObject} objects to be parsed.
+      # @return [void]
       def parse_files(files)
         files.each do |file|
           extract_paragraphs(file)
         end
       end
 
+      # Generates POT from +@messages+.
+      #
+      # @return [String] POT format string
       def generate
         pot = header
         sorted_messages = @messages.sort_by do |message, options|
