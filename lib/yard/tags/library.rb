@@ -1,45 +1,60 @@
 module YARD
   module Tags
-    # Holds all the registered meta tags. If you want to extend YARD and add
-    # a new meta tag, you can do it in one of two ways.
+    # Keeps track of all the registered meta-data tags and directives.
+    # Also allows for defining of custom tags and customizing the tag parsing
+    # syntax.
     #
-    # == Method #1
-    # Use {Library.define_tag} to define a new tag by passing the tag name
-    # and the factory method to use when creating the tag. These definitions will
-    # be auto expanded into ruby code similar to what is shown in method #2. If you
-    # do not provide a factory method to use, it will default to {DefaultFactory#parse_tag}
-    # Example:
-    #   define_tag "Parameter", :param, :with_types_and_name
-    #   define_tag "Author", :author
+    # == Defining Custom Meta-Data Tags
     #
-    # The first line will expand to the code:
-    #   def param_tag(text) tag_factory.parse_tag_with_types_and_name(text) end
+    # To define a custom tag, use {define_tag}. You should pass the tag
+    # name and the factory method to use when creating the tag. If you do not
+    # provide a factory method to use, it will default to {DefaultFactory#parse_tag}
     #
-    # The second line will expand to:
-    #   def author_tag(text) tag_factory.parse_tag(text) end
+    # You can also define tag objects manually by simply implementing a "tagname_tag"
+    # method that returns a {Tag} object, but they will not take advantage of tag factory
+    # parsing:
     #
-    # Note that +tag_factory+ is the factory object used to parse tags. This value
-    # defaults to the {DefaultFactory} class and can be set by changing {Library.default_factory}.
-    #
-    # == Method #2
-    # Write your own +tagname_tag+ method that takes the raw text as a parameter.
-    # Example:
     #   def mytag_tag(text)
-    #     # parse your tag contents here
+    #     Tag.new(:mytag, text)
     #   end
     #
-    # This will allow you to use @mytag TEXT to add meta data to classes through
-    # the docstring. You can use the {Library#factory} object to help parse standard
-    # tag syntax.
+    # == Defining Custom Directives
+    #
+    # Directives can be defined by calling the {define_directive} method, taking
+    # the directive name, an optional tag factory parser method (to parse the
+    # data in the directive into a temporary {Tag} object) and a {Directive} subclass
+    # that performs the directive processing. For more information on creating a
+    # Directive subclass, see the {Directive} class documentation.
+    #
+    # Similar to tags, Directives can also be defined manually, in this case using
+    # the method name "mydirective_directive" and returning a new {Directive} object:
+    #
+    #   def mydirective_directive(tag, parser)
+    #     MyDirective.new(tag, parser)
+    #   end
+    #
+    # == Namespaced Tags
+    #
+    # In YARD 0.8.0+, tags can be namespaced using the '.' character. It is recommended
+    # to namespace project specific tags, like +@yard.tag_name+, so that tags do not
+    # collide with other plugins or new built-in tags.
     #
     # == Adding/Changing the Tag Syntax
+    #
     # If you have specialized tag parsing needs you can substitute the {#factory}
     # object with your own by setting {Library.default_factory= Library.default_factory}
     # to a new class with its own parsing methods before running YARD. This is useful
     # if you want to change the syntax of existing tags (@see, @since, etc.)
     #
+    # @example Defining a custom tag
+    #   define_tag "Parameter", :param, :with_types_and_name
+    #   define_tag "Author", :author
+    # @example Defining a custom directive
+    #   define_directive :method, :with_title_and_text, MethodDirective
     # @see DefaultFactory
-    # @see Library.define_tag
+    # @see define_tag
+    # @see define_directive
+    # @see Directive
     class Library
       class << self
         attr_reader :labels
