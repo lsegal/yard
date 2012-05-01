@@ -254,11 +254,11 @@ module YARD
       parser.tags.each do |tag|
         next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
-        if names.include?(tag.name)
-          seen_names << tag.name
-        elsif seen_names.include?(tag.name)
+        if seen_names.include?(tag.name)
           log.warn "@param tag has duplicate parameter name: " +
             "#{tag.name} #{infile_info}"
+        elsif names.include?(tag.name)
+          seen_names << tag.name
         else
           log.warn "@param tag has unknown parameter name: " +
             "#{tag.name} #{infile_info}"

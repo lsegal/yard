@@ -203,5 +203,22 @@ eof
       parser.parse("Some text")
       the_yielded_obj.should == parser
     end
+
+    it "should warn about invalid named parameters" do
+      log.should_receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param notaparam foo
+        def foo(a) end
+      eof
+    end
+
+    it "should warn about duplicate named parameters" do
+      log.should_receive(:warn).with(/@param tag has duplicate parameter name: a/)
+      YARD.parse_string <<-eof
+        # @param a foo
+        # @param a foo
+        def foo(a) end
+      eof
+    end
   end
 end
