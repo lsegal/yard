@@ -138,7 +138,7 @@ def generate_method_list
   @items = @items.reject {|m| m.name.to_s =~ /=$/ && m.is_attribute? }
   @items = @items.sort_by {|m| m.name.to_s }
   @list_title = "Method List"
-  @list_type = "methods"
+  @list_type = "method"
   generate_list_contents
 end
 
