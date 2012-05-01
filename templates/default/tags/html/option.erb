@@ -14,7 +14,9 @@
               <%= tag.pair.defaults.map {|t| "<tt>#{h t}</tt>" }.join(", ") %>
             <% end %>
           </span>
-          <%= "&mdash; " + htmlify_line(tag.pair.text) if tag.pair.text %>
+          <% if tag.pair.text && tag.pair.text =~ /\S/ %>
+            &mdash; <%= htmlify_line(tag.pair.text) %>
+          <% end %>
         </li>
       <% end %>
     </ul>
