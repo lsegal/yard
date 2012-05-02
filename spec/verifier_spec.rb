@@ -19,10 +19,24 @@ describe YARD::Verifier do
       Verifier.new('@@return').call(obj)
     end
 
-    it "should allow namespaced tags" do
+    it "should allow namespaced tag using @{} syntax" do
       obj = mock(:object)
       obj.should_receive(:tag).with('yard.return')
-      Verifier.new('@yard.return').call(obj)
+      Verifier.new('@{yard.return}').call(obj)
+    end
+
+    it "should allow namespaced tags using @{} syntax" do
+      obj = mock(:object)
+      obj.should_receive(:tags).with('yard.return')
+      Verifier.new('@@{yard.return}').call(obj)
+    end
+
+    it "should call methods on tag object" do
+      obj = mock(:object)
+      obj2 = mock(:tag)
+      obj.should_receive(:tag).with('return').and_return obj2
+      obj2.should_receive(:foo)
+      Verifier.new('@return.foo').call(obj)
     end
 
     it "should send any missing methods to object" do
