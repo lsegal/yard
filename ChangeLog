@@ -1,6 +1,72 @@
+2012-05-02  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb: Bump to 0.8.1, update
+  README, WhatsNew
+
+  * lib/yard/tags/library.rb: Update note about transitive tags to include info
+  about overriding
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add --no-api to allow
+  including of objects with undefined API
+
+  * lib/yard/i18n/message.rb: Fix typo, references #534
+
+  * lib/yard/i18n/message.rb, lib/yard/i18n/messages.rb: Various minor
+  documentation formatting and text fixes  References #534
+
+  * spec/i18n/messages_spec.rb: Sort results in I18n::Messages#each spec to fix
+  compare for 1.8.6
+
+  * spec/cli/yardoc_spec.rb: Fix spec errors in 1.8.x
+
+  * spec/cli/stats_spec.rb, spec/cli/yardoc_spec.rb: Allow verifier to treat
+  all objects as having visibility, so --no-public should hide constants too,
+  now
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add `--api` switch to
+  yardoc in order to generate docs for API tags without needing `--query`
+  syntax.  Multiple `--api` switches can be used to generate docs for multiple
+  APIs at once (they are logically OR'd together).  Closes #532
+
+  * lib/yard/verifier.rb, spec/verifier_spec.rb: Fix verifier supporting
+  namespaced tags with special @{tag} syntax
+
+  * lib/yard/cli/stats.rb: Show 0% documented if total == 0
+
+  * lib/yard/cli/list.rb, spec/cli/list_spec.rb: yard list command should use
+  cache by default  Closes #533
+
+  * lib/yard/verifier.rb, spec/verifier_spec.rb: Allow namespaced tags
+
+2012-05-01  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/macro_object.rb, lib/yard/docstring.rb,
+  lib/yard/docstring_parser.rb, lib/yard/handlers/base.rb,
+  lib/yard/tags/directives.rb: Add Docstring.default_parser and
+  Docstring.parser  Plugin developers can now specify custom parser classes to
+  be used when parsing docstrings. These classes must inherit from
+  DocstringParser.  This changeset also exposes public methods to
+  DocstringParser for better use with subclasses.  References #529
+
+  * lib/yard/tags/library.rb: Update documentation for `@private` tag
+
+  * lib/yard/tags/library.rb: Update Tags::Library documentation
+
+  * lib/yard/docstring_parser.rb, spec/docstring_parser_spec.rb: Add specs for
+  after_parse parameter checking and fix broken duplicate param tag
+  functionality
+
+  * templates/default/tags/html/option.erb: Remove trailing mdash from options
+  listing if no description is present  Closes #522
+
+  * .../default/fulldoc/html/full_list_method.erb,
+  .../default/fulldoc/html/full_list_methods.erb,
+  templates/default/fulldoc/html/setup.rb: Serialize method_list with proper
+  filename  Closes #528
+
 2012-04-30  Loren Segal <lsegal@soen.ca>
 
-  * ChangeLog, lib/yard.rb: Update ChangeLog
+  * ChangeLog, lib/yard.rb: Bump version to 0.8.0
 
   * README.md, docs/WhatsNew.md: Update README/WhatsNew
 

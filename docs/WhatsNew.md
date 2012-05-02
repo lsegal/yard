@@ -15,6 +15,7 @@
 11. **Server now displays README on index route like static docs** (0.8.0)
 12. **Added line numbers to `yard stats --list-undoc --compact`** (0.8.0)
 13. **Single object db now default (multi-object db unsupported)** (0.8.0)
+14. **Added `--api` tag to generate documentation for API sets** (0.8.1)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 
@@ -243,6 +244,39 @@ long time to load your .yardoc database, you can try using this
 option to split your database into multiple files, but note that this
 can cause problems with certain codebases (specifically, if you
 have class methods using the same name as a module/class).
+
+## Added `--api` tag to generate documentation for API sets (0.8.1)
+
+You can now use `yardoc --api APINAME` to generate documentation only
+for objects with the `@api APINAME` tag (or any parent namespace objects,
+since this tag is transitive). Multiple `--api` switches may be used to
+generate documentation for multiple APIs together. The following generates
+documentation for both the "public" and "developer" APIs, also including
+any objects with undefined API (via `--no-api`):
+
+    $ yard doc --api public --api developer --no-api
+
+Note that if you use `--api`, you must ensure that you also add `@api`
+tags to your namespace objects (modules and classes), not just your methods.
+If you do not want to do this, you can also include all objects with *no*
+`@api` tag by using `--no-api` as shown above.
+
+Remember that applying an `@api` tag to a class or module will apply it
+to all children that do not have this tag already defined, so you can
+declare an entire class public by applying it to the class itself. Note
+also that these tags can be overridden by child elements if the tag is
+re-applied to the individual object.
+
+This feature is a simplified version of the more powerful `--query`
+switch. The query to display the same API documentation as the
+above example would be:
+
+    $ yard doc --query '!@api || @api.text =~ /^(public|private)$/'
+
+But note that `--query` does not work when YARD is in "safe mode"
+due to security concerns, whereas `--api` works in either mode.
+This enables `--api` to function on remote documentation sites like
+[rubydoc.info](http://rubydoc.info).
 
 
 # What's New in 0.7.x?

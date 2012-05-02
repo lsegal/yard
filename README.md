@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.8.0 (codename "Shave It")    
-**Release Date**: April 30th 2012    
+**Latest Version**: 0.8.1 (codename "Shave It")    
+**Release Date**: May 2nd 2012    
 
 Synopsis
 --------
@@ -285,6 +285,12 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **May.2.12**: 0.8.1 release
+    - Added `--[no-]api` switch to generate docs for API sets (see {file:docs/WhatsNew.md} for details) (#532)
+    - The `yard list` command now uses cache by default (#533)
+    - Fix `yardoc` generating incorrectly named method list file (#528)
+    - Fix HTML output occasionally showing trailing mdash on options list (#522)
 
 - **April.30.12**: 0.8.0 release
     - See {file:docs/WhatsNew.md} for a list of added features
