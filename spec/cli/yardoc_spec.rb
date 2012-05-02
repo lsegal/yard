@@ -305,6 +305,44 @@ describe YARD::CLI::Yardoc do
     end
   end
 
+  describe '--api' do
+    before { Registry.clear }
+
+    it "should allow --api name" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        # @api public
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--api', 'private')
+      Registry.all.should == [P('Foo'), P('Bar'), P('Baz')]
+      @yardoc.options.verifier.run(Registry.all).should == [P('Foo')]
+    end
+
+    it "should allow multiple --api's to all be shown" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        # @api public
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--api', 'private', '--api', 'public')
+      Registry.all.should == [P('Foo'), P('Bar'), P('Baz')]
+      @yardoc.options.verifier.run(Registry.all).should == [P('Foo'), P('Bar')]
+    end
+
+    it "should ensure Ruby code cannot be used" do
+      [':symbol', '42', '"; exit'].each do |ruby|
+        @yardoc.options.verifier.expressions = []
+        @yardoc.run('--api', ruby)
+        @yardoc.options.verifier.expressions[1].should include(ruby.inspect)
+      end
+    end
+  end
+
   describe '--no-private option' do
     it "should accept --no-private" do
       obj = mock(:object)

@@ -183,6 +183,11 @@ module YARD
       # @since 0.5.6
       attr_accessor :visibilities
 
+      # Keep track of which APIs are to be shown
+      # @return [Array<String>] a list of APIs
+      # @since 0.8.1
+      attr_accessor :apis
+
       # @return [Array<Symbol>] a list of tags to hide from templates
       # @since 0.6.0
       attr_accessor :hidden_tags
@@ -205,6 +210,7 @@ module YARD
         @options = YardocOptions.new
         @options.reset_defaults
         @visibilities = [:public]
+        @apis = []
         @assets = {}
         @excluded = []
         @files = []
@@ -287,6 +293,7 @@ module YARD
 
         Tags::Library.visible_tags -= hidden_tags
         add_visibility_verifier
+        add_api_verifier
 
         # US-ASCII is invalid encoding for onefile
         if defined?(::Encoding) && options.onefile
@@ -464,8 +471,17 @@ module YARD
       # @return [void]
       # @since 0.5.6
       def add_visibility_verifier
-        vis_expr = "object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)"
+        vis_expr = "#{visibilities.uniq.inspect}.include?(object.visibility)"
         options.verifier.add_expressions(vis_expr)
+      end
+
+      # Adds verifier rule for APIs
+      # @return [void]
+      # @since 0.8.1
+      def add_api_verifier
+        return if apis.empty?
+        expr = "#{apis.uniq.inspect}.include?(@api.text)"
+        options.verifier.add_expressions(expr)
       end
 
       # (see Templates::Helpers::BaseHelper#run_verifier)
@@ -596,6 +612,11 @@ module YARD
         opts.on('--no-private', "Hide objects with @private tag") do
           options.verifier.add_expressions '!object.tag(:private) &&
             (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
+        end
+
+        opts.on('--api API', 'Generates documentation for a given API',
+                         '(objects which define the correct @api tag)') do |api|
+          apis.push(api)
         end
 
         opts.on('--embed-mixins', "Embeds mixin methods into class documentation") do
