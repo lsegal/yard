@@ -317,7 +317,7 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private')
-      Registry.all.should == [P('Foo'), P('Bar'), P('Baz')]
+      Registry.all.sort_by {|o| o.path }.should == [P('Bar'), P('Baz'), P('Foo')]
       @yardoc.options.verifier.run(Registry.all).should == [P('Foo')]
     end
 
@@ -330,8 +330,9 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private', '--api', 'public')
-      Registry.all.should == [P('Foo'), P('Bar'), P('Baz')]
-      @yardoc.options.verifier.run(Registry.all).should == [P('Foo'), P('Bar')]
+      Registry.all.sort_by {|o| o.path }.should == [P('Bar'), P('Baz'), P('Foo')]
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar'), P('Foo')]
     end
 
     it "should ensure Ruby code cannot be used" do
