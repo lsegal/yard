@@ -57,16 +57,17 @@ module YARD
     # @see Directive
     class Library
       class << self
+        # @return [SymbolHash{Symbol=>String}] the map of tag names and their
+        #   respective display labels.
         attr_reader :labels
 
+        # @!attribute instance
+        # @return [Library] the main Library instance object.
         def instance
           @instance ||= new
         end
 
-        def default_factory
-          @default_factory ||= DefaultFactory.new
-        end
-
+        # @!attribute default_factory
         # Replace the factory object responsible for parsing tags by setting
         # this to an object (or class) that responds to +parse_TAGNAME+ methods
         # where +TAGNAME+ is the name of the tag.
@@ -80,6 +81,10 @@ module YARD
         # @param [Class, Object] factory the factory that parses all tags
         #
         # @see DefaultFactory
+        def default_factory
+          @default_factory ||= DefaultFactory.new
+        end
+
         def default_factory=(factory)
           @default_factory = factory.is_a?(Class) ? factory.new : factory
         end
@@ -256,19 +261,32 @@ module YARD
         self.factory = factory
       end
 
+      # @param [#to_s] tag_name the name of the tag to look for
+      # @return [Boolean] whether a tag by the given name is registered in
+      #   the library.
       def has_tag?(tag_name)
         tag_name && respond_to?(self.class.tag_method_name(tag_name))
       end
 
+      # Creates a new {Tag} object with a given tag name and data
+      # @return [Tag] the newly created tag object
       def tag_create(tag_name, tag_buf)
         send(self.class.tag_method_name(tag_name), tag_buf)
       end
 
+      # @param [#to_s] tag_name the name of the tag to look for
+      # @return [Boolean] whether a directive by the given name is registered in
+      #   the library.
       def has_directive?(tag_name)
         tag_name && respond_to?(self.class.directive_method_name(tag_name))
       end
 
-      # @return [Directive]
+      # Creates a new directive with tag information and a docstring parser
+      # object.
+      # @param [String] tag_name the name of the tag
+      # @param [String] tag_buf the tag data
+      # @param [DocstringParser] parser the parser object parsing the docstring
+      # @return [Directive] the newly created directive
       def directive_create(tag_name, tag_buf, parser)
         meth = self.class.factory_method_for(tag_name)
         tag = send_to_factory(tag_name, meth, tag_buf)
