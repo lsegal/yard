@@ -28,7 +28,7 @@ module YARD
 
       # Adds location information for the message.
       #
-      # @param [String] path the path where the message appeareds.
+      # @param [String] path the path where the message appears.
       # @param [Integer] line the line number where the message appears.
       # @return [void]
       def add_location(path, line)
