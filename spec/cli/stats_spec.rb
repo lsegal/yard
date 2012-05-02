@@ -77,13 +77,13 @@ eof
     @output.string.should == @main_stats
   end
 
-  it "should not include public methods in stats with --no-public" do
+  it "should ignore everything with --no-public" do
     @stats.run('--no-public')
     @output.string.should ==
-      "Files:           1\n" +
-      "Modules:         1 (    1 undocumented)\n" +
-      "Classes:         1 (    1 undocumented)\n" +
-      "Constants:       1 (    1 undocumented)\n" +
+      "Files:           0\n" +
+      "Modules:         0 (    0 undocumented)\n" +
+      "Classes:         0 (    0 undocumented)\n" +
+      "Constants:       0 (    0 undocumented)\n" +
       "Methods:         0 (    0 undocumented)\n" +
       " 0.00% documented\n"
   end

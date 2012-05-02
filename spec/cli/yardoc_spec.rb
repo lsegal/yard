@@ -444,8 +444,12 @@ describe YARD::CLI::Yardoc do
   end
 
   describe 'Query options' do
-    before do
-      Registry.clear
+    after { Registry.clear }
+
+    it "should hide private constants in with default visibilities" do
+      classobj = CodeObjects::ClassObject.new(:root, :Foo) {|o| o.visibility = :private }
+      @yardoc.run
+      @yardoc.options.verifier.run([classobj]).should == []
     end
 
     it "should setup visibility rules as verifier" do
