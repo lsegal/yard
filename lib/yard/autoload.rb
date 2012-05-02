@@ -135,6 +135,8 @@ module YARD
   module I18n
     autoload :PotGenerator,    __p('i18n/pot_generator')
     autoload :Text,            __p('i18n/text')
+    autoload :Messages,        __p('i18n/messages')
+    autoload :Message,         __p('i18n/message')
   end
 
   # The parser namespace holds all parsing engines used by YARD.
