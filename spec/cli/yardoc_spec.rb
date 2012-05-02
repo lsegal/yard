@@ -305,7 +305,7 @@ describe YARD::CLI::Yardoc do
     end
   end
 
-  describe '--api' do
+  describe '--[no-]api' do
     before { Registry.clear }
 
     it "should allow --api name" do
@@ -317,7 +317,6 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private')
-      Registry.all.sort_by {|o| o.path }.should == [P('Bar'), P('Baz'), P('Foo')]
       @yardoc.options.verifier.run(Registry.all).should == [P('Foo')]
     end
 
@@ -330,9 +329,36 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private', '--api', 'public')
-      Registry.all.sort_by {|o| o.path }.should == [P('Bar'), P('Baz'), P('Foo')]
       @yardoc.options.verifier.run(Registry.all).
         sort_by {|o| o.path }.should == [P('Bar'), P('Foo')]
+    end
+
+    it "should allow --no-api to specify objects with no @api tag" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        # @api public
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--api', '')
+      @yardoc.options.verifier.run(Registry.all).should == [P('Baz')]
+      @yardoc.options.verifier = Verifier.new
+      @yardoc.run('--no-api')
+      @yardoc.options.verifier.run(Registry.all).should == [P('Baz')]
+    end
+
+    it "should allow --no-api to work with other --api switches" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        # @api public
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--no-api', '--api', 'public')
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar'), P('Baz')]
     end
 
     it "should ensure Ruby code cannot be used" do

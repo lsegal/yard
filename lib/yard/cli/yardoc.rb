@@ -480,7 +480,9 @@ module YARD
       # @since 0.8.1
       def add_api_verifier
         return if apis.empty?
+        no_api = true if apis.delete('')
         expr = "#{apis.uniq.inspect}.include?(@api.text)"
+        expr += " || !@api" if no_api
         options.verifier.add_expressions(expr)
       end
 
@@ -614,8 +616,11 @@ module YARD
             (object.namespace.is_a?(CodeObjects::Proxy) || !object.namespace.tag(:private))'
         end
 
-        opts.on('--api API', 'Generates documentation for a given API',
-                         '(objects which define the correct @api tag)') do |api|
+        opts.on('--[no-]api API', 'Generates documentation for a given API',
+                                  '(objects which define the correct @api tag).',
+                                  'If --no-api is given, displays objects with',
+                                  'no @api tag.') do |api|
+          api = '' if api == false
           apis.push(api)
         end
 
