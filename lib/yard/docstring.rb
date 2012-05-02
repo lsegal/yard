@@ -13,6 +13,32 @@ module YARD
   # Tags can be nested in a documentation string, though the {Tags::Tag}
   # itself is responsible for parsing the inner tags.
   class Docstring < String
+    class << self
+      # @note Plugin developers should make sure to reset this value
+      #   after parsing finishes. This can be done via the
+      #   {Parser::SourceParser.after_parse_list} callback. This will
+      #   ensure that YARD can properly parse multiple projects in
+      #   the same process.
+      # @return [Class<DocstringParser>] the parser class used to parse
+      #   text and optional meta-data from docstrings. Defaults to
+      #   {DocstringParser}.
+      # @see DocstringParser
+      # @see Parser::SourceParser.after_parse_list
+      attr_accessor :default_parser
+
+      # Creates a parser object using the current {default_parser}.
+      # Equivalent to:
+      #   Docstring.default_parser.new(*args)
+      # @param args arguments are passed to the {DocstringParser}
+      #   class. See {DocstringParser#initialize} for details on
+      #   arguments.
+      # @return [DocstringParser] the parser object used to parse a
+      #   docstring.
+      def parser(*args) default_parser.new(*args) end
+    end
+
+    self.default_parser = DocstringParser
+
     # @return [Array<Tags::RefTag>] the list of reference tags
     attr_reader :ref_tags
 
@@ -59,7 +85,7 @@ module YARD
     #
     # @note To properly parse directives with proper parser context within
     #   handlers, you should not use this method to create a Docstring.
-    #   Instead, use {DocstringParser}, which takes a handler object that
+    #   Instead, use the {parser}, which takes a handler object that
     #   can pass parser state onto directives. If a Docstring is created
     #   with this method, directives do not have access to any parser
     #   state, and may not function as expected.
@@ -282,7 +308,7 @@ module YARD
     # @return [String] the non-metadata portion of the comments to
     #   be used as a docstring
     def parse_comments(comments)
-      parser = DocstringParser.new
+      parser = self.class.parser
       parser.parse(comments, object)
       add_tag(*parser.tags)
       parser.text

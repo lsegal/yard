@@ -386,7 +386,7 @@ module YARD
         return if tag.text.empty?
         handler = parser.handler
         object = parser.object
-        self.parser = DocstringParser.new(parser.library)
+        self.parser = parser.class.new(parser.library)
         parser.parse(tag.text, object, handler)
       end
 

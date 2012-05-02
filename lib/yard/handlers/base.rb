@@ -431,7 +431,7 @@ module YARD
       # @since 0.8.0
       def register_docstring(object, docstring = statement.comments, stmt = statement)
         docstring = docstring.join("\n") if Array === docstring
-        parser = DocstringParser.new
+        parser = Docstring.parser
         parser.parse(docstring || "", object, self)
 
         if object && docstring

@@ -119,7 +119,7 @@ module YARD
         # @see find_or_create
         def apply(docstring, call_params = [], full_source = '', block_source = '', method_object = nil)
           docstring = docstring.all if Docstring === docstring
-          parser = DocstringParser.new
+          parser = Docstring.parser
           handler = OpenStruct.new
           handler.call_params = call_params[1..-1]
           handler.caller_method = call_params.first

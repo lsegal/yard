@@ -5,29 +5,28 @@ module YARD
   # for a {CodeObjects::Base}. To create a new docstring, you should initialize
   # the parser and call {#parse} followed by {#to_docstring}.
   #
+  # == Subclassing Notes
+  #
+  # The DocstringParser can be subclassed and subtituted during parsing by
+  # setting the {Docstring.default_parser} attribute with the name of the
+  # subclass. This allows developers to change the way docstrings are
+  # parsed, allowing for completely different docstring syntaxes.
+  #
   # @example Creating a Docstring with a DocstringParser
   #   DocstringParser.new.parse("text here").to_docstring
+  # @example Creating a Custom DocstringParser
+  #   # Parses docstrings backwards!
+  #   class ReverseDocstringParser
+  #     def parse_content(content)
+  #       super(content.reverse)
+  #     end
+  #   end
+  #
+  #   # Set the parser as default when parsing
+  #   YARD::Docstring.default_parser = ReverseDocstringParser
+  # @see #parse_content
   # @since 0.8.0
   class DocstringParser
-    # Creates a callback that is called after a docstring is successfully
-    # parsed. Use this method to perform sanity checks on a docstring's
-    # tag data, or add any extra tags automatically to a docstring.
-    #
-    # @yield [parser] a block to be called after a docstring is parsed
-    # @yieldparam [DocstringParser] parser the docstring parser object
-    #   with all directives and tags created.
-    # @yieldreturn [void]
-    # @return [void]
-    def self.after_parse(&block)
-      self.after_parse_callbacks << block
-    end
-
-    # @return [Array<Proc>] the {#after_parse} callback proc objects
-    # @private
-    def self.after_parse_callbacks
-      @after_parse_callbacks ||= []
-    end
-
     # @return [String] the parsed text portion of the docstring,
     #   with tags removed.
     attr_reader :text
@@ -67,6 +66,8 @@ module YARD
     # The regular expression to match the tag syntax
     META_MATCH = /^@(!)?((?:\w\.?)+)(?:\s+(.*))?$/i
 
+    # @!group Creation and Conversion Methods
+
     # Creates a new parser to parse docstring data
     #
     # @param [Tags::Library] library a tag library for recognizing
@@ -81,6 +82,14 @@ module YARD
       @handler = nil
       @state = OpenStruct.new
     end
+
+    # @return [Docstring] translates parsed text into
+    #   a Docstring object.
+    def to_docstring
+      Docstring.new!(text, tags, object, raw_text)
+    end
+
+    # @!group Parsing Methods
 
     # Parses all content and returns itself.
     #
@@ -106,15 +115,11 @@ module YARD
       self
     end
 
-    # @return [Docstring] translates parsed text into
-    #   a Docstring object.
-    def to_docstring
-      Docstring.new!(text, tags, object, raw_text)
-    end
-
-    private
-
-    # Parses all text and tags
+    # Parses a given block of text.
+    #
+    # @param [String] content the content to parse
+    # @note Subclasses can override this method to perform custom
+    #   parsing of content data.
     def parse_content(content)
       content = content.split(/\r?\n/) if content.is_a?(String)
       return '' if !content || content.empty?
@@ -168,7 +173,7 @@ module YARD
       docstring
     end
 
-    private
+    # @!group Tag Manipulation Methods
 
     # Creates a tag from the {Tags::DefaultFactory tag factory}.
     #
@@ -177,7 +182,7 @@ module YARD
     # @param [String] tag_name the tag name
     # @param [String] tag_buf the text attached to the tag with newlines removed.
     # @return [Tags::Tag, Tags::RefTag] a tag
-    def create_tag(tag_name, tag_buf)
+    def create_tag(tag_name, tag_buf = '')
       if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
         return create_ref_tag(tag_name, $1, $2)
       end
@@ -218,6 +223,17 @@ module YARD
       nil
     end
 
+    # Backward compatibility to detect old tags that should be specified
+    # as directives in 0.8 and onward.
+    def tag_is_directive?(tag_name)
+      list = %w(attribute endgroup group macro method scope visibility)
+      list.include?(tag_name)
+    end
+
+    private
+
+    # @!group Parser Callback Methods
+
     # Calls the {Directive#after_parse} callback on all the
     # created directives.
     def call_directives_after_parse
@@ -226,18 +242,31 @@ module YARD
       end
     end
 
-    # Backward compatibility to detect old tags that should be specified
-    # as directives in 0.8 and onward.
-    def tag_is_directive?(tag_name)
-      list = %w(attribute endgroup group macro method scope visibility)
-      list.include?(tag_name)
-    end
-
     # Calls all {after_parse} callbacks
     def call_after_parse_callbacks
       self.class.after_parse_callbacks.each do |cb|
         cb.call(self)
       end
+    end
+
+    public
+
+    # Creates a callback that is called after a docstring is successfully
+    # parsed. Use this method to perform sanity checks on a docstring's
+    # tag data, or add any extra tags automatically to a docstring.
+    #
+    # @yield [parser] a block to be called after a docstring is parsed
+    # @yieldparam [DocstringParser] parser the docstring parser object
+    #   with all directives and tags created.
+    # @yieldreturn [void]
+    # @return [void]
+    def self.after_parse(&block)
+      self.after_parse_callbacks << block
+    end
+
+    # @return [Array<Proc>] the {#after_parse} callback proc objects
+    def self.after_parse_callbacks
+      @after_parse_callbacks ||= []
     end
 
     # Define a callback to check that @param tags are properly named
