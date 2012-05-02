@@ -62,26 +62,15 @@ module YARD
     # @see http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
     #   GNU gettext manual about details of PO file
     class PotGenerator
-      # Extracted messages. Key is a translation target message and
-      # value is properties of the translation target message. The
-      # properties are added to the msgid entry for the translation
-      # target message. The properties are +:locations+ and
-      # +:comments+.
+      # Extracted messages.
       #
-      # +:locations+ is an array of location. Location is an array of
-      # path and line number of the translation target message is
-      # appeared. Each location is prepended +:relative_base_path+
-      # that is passed on creating a +PotGenerator+ instance.
-      #
-      # +:comments+ is an array of comment. All comments are added to
-      # the msgid entry for the translation target message.
-      #
-      # @api private
-      # @return [Hash{String => Hash{:locations => Array<Array[String, Integer]>, :comments => Array<String>}}]
+      # @return [Messages]
+      # @since 0.8.1
       attr_reader :messages
 
       # Creates a POT generator that uses +relative_base_path+ to
-      # generate locations for a msgid.
+      # generate locations for a msgid. +relative_base_path+ is
+      # prepended to all locations.
       #
       # @param [String] relative_base_path a relative working
       #   directory path from a directory path that has created .pot
@@ -89,7 +78,7 @@ module YARD
       def initialize(relative_base_path)
         @relative_base_path = relative_base_path
         @extracted_objects = {}
-        @messages = {}
+        @messages = Messages.new
       end
 
       # Parses {CodeObjects::Base} objects and stores extracted msgids
@@ -118,17 +107,27 @@ module YARD
 
       # Generates POT from +@messages+.
       #
+      # One PO file entry is generated from a +Message+ in
+      # +@messages+.
+      #
+      # Locations of the +Message+ are used to generate the reference
+      # line that is started with "#: ". +relative_base_path+ passed
+      # when the generater is created is prepended to each path in location.
+      #
+      # Comments of the +Message+ are used to generate the
+      # translater-comment line that is started with "# ".
+      #
       # @return [String] POT format string
       def generate
         pot = header
-        sorted_messages = @messages.sort_by do |message, options|
-          sorted_locations = (options[:locations] || []).sort_by do |location|
+        sorted_messages = @messages.sort_by do |message|
+          sorted_locations = message.locations.sort_by do |location|
             location
           end
           sorted_locations.first || []
         end
-        sorted_messages.each do |message, options|
-          generate_message(pot, message, options)
+        sorted_messages.each do |message|
+          generate_message(pot, message)
         end
         pot
       end
@@ -158,30 +157,30 @@ msgstr ""
 EOH
       end
 
-      def generate_message(pot, message, options)
-        options[:comments].compact.uniq.each do |comment|
+      def generate_message(pot, message)
+        message.comments.sort.each do |comment|
           pot << "# #{comment}\n" unless comment.empty?
         end
-        options[:locations].uniq.each do |path, line|
+        message.locations.sort.each do |path, line|
           pot << "#: #{@relative_base_path}/#{path}:#{line}\n"
         end
-        escaped_message = escape_message(message)
-        escaped_message = escaped_message.gsub(/\n/, "\\\\n\"\n\"")
-        pot << "msgid \"#{escaped_message}\"\n"
+        escaped_message_id = escape_message_id(message.id)
+        escaped_message_id = escaped_message_id.gsub(/\n/, "\\\\n\"\n\"")
+        pot << "msgid \"#{escaped_message_id}\"\n"
         pot << "msgstr \"\"\n"
         pot << "\n"
         pot
       end
 
-      def escape_message(message)
-        message.gsub(/(\\|")/) do
+      def escape_message_id(message_id)
+        message_id.gsub(/(\\|")/) do
           special_character = $1
           "\\#{special_character}"
         end
       end
 
-      def add_message(text)
-        @messages[text] ||= {:locations => [], :comments => []}
+      def register_message(id)
+        @messages.register(id)
       end
 
       def extract_documents(object)
@@ -196,11 +195,11 @@ EOH
         end
 
         if object.group
-          message = add_message(object.group)
+          message = register_message(object.group)
           object.files.each do |path, line|
-            message[:locations] << [path, line]
+            message.add_location(path, line)
           end
-          message[:comments] << object.path unless object.path.empty?
+          message.add_comment(object.path) unless object.path.empty?
         end
 
         docstring = object.docstring
@@ -210,11 +209,11 @@ EOH
             case type
             when :paragraph
               paragraph, line_no = *args
-              message = add_message(paragraph.rstrip)
+              message = register_message(paragraph.rstrip)
               object.files.each do |path, line|
-                message[:locations] << [path, (docstring.line || line) + line_no]
+                message.add_location(path, (docstring.line || line) + line_no)
               end
-              message[:comments] << object.path unless object.path.empty?
+              message.add_comment(object.path) unless object.path.empty?
             else
               raise "should not reach here: unexpected type: #{type}"
             end
@@ -234,26 +233,26 @@ EOH
         return if tag.name.nil?
         return if tag.name.is_a?(String) and tag.name.empty?
         key = "tag|#{tag.tag_name}|#{tag.name}"
-        message = add_message(key)
-        tag.object.files.each do |file|
-          message[:locations] << file
+        message = register_message(key)
+        tag.object.files.each do |path, line|
+          message.add_location(path, line)
         end
         tag_label = "@#{tag.tag_name}"
         tag_label << " [#{tag.types.join(', ')}]" if tag.types
-        message[:comments] << tag_label
+        message.add_comment(tag_label)
       end
 
       def extract_tag_text(tag)
         return if tag.text.nil?
         return if tag.text.empty?
-        message = add_message(tag.text)
-        tag.object.files.each do |file|
-          message[:locations] << file
+        message = register_message(tag.text)
+        tag.object.files.each do |path, line|
+          message.add_location(path, line)
         end
         tag_label = "@#{tag.tag_name}"
         tag_label << " [#{tag.types.join(', ')}]" if tag.types
         tag_label << " #{tag.name}" if tag.name
-        message[:comments] << tag_label
+        message.add_comment(tag_label)
       end
 
       def extract_paragraphs(file)
@@ -263,13 +262,13 @@ EOH
             case type
             when :attribute
               name, value, line_no = *args
-              message = add_message(value)
-              message[:locations] << [file.filename, line_no]
-              message[:comments] << name
+              message = register_message(value)
+              message.add_location(file.filename, line_no)
+              message.add_comment(name)
             when :paragraph
               paragraph, line_no = *args
-              message = add_message(paragraph.rstrip)
-              message[:locations] << [file.filename, line_no]
+              message = register_message(paragraph.rstrip)
+              message.add_location(file.filename, line_no)
             else
               raise "should not reach here: unexpected type: #{type}"
             end

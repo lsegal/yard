@@ -1,6 +1,24 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::I18n::PotGenerator do
+  def create_messages(messages)
+    yard_messages = YARD::I18n::Messages.new
+    add_messages(yard_messages, messages)
+    yard_messages
+  end
+
+  def add_messages(yard_messages, messages)
+    messages.each do |id, properties|
+      yard_message = yard_messages.register(id)
+      (properties[:locations] || []).each do |path, line|
+        yard_message.add_location(path, line)
+      end
+      (properties[:comments] || []).each do |comment|
+        yard_message.add_comment(comment)
+      end
+    end
+  end
+
   before do
     @generator = YARD::I18n::PotGenerator.new("..")
   end
@@ -32,14 +50,17 @@ eoh
 
     it "should generate messages in location order" do
       @generator.stub!(:header).and_return("HEADER\n\n")
-      @generator.messages["tag|see|Parser::SourceParser.parse"] = {
-        :locations => [["yard.rb", 14]],
-        :comments => ["@see"],
+      messages = {
+        "tag|see|Parser::SourceParser.parse" => {
+          :locations => [["yard.rb", 14]],
+          :comments => ["@see"],
+        },
+        "Parses a path or set of paths" => {
+          :locations => [["yard.rb", 12], ["yard/parser/source_parser.rb", 83]],
+          :comments => ["YARD.parse", "YARD::Parser::SourceParser.parse"],
+        }
       }
-      @generator.messages["Parses a path or set of paths"] = {
-        :locations => [["yard.rb", 12], ["yard/parser/source_parser.rb", 83]],
-        :comments => ["YARD.parse", "YARD::Parser::SourceParser.parse"],
-      }
+      add_messages(@generator.messages, messages)
       @generator.generate.should == <<-'eoh'
 HEADER
 
@@ -60,13 +81,10 @@ eoh
   end
 
   describe "Escape" do
-    def generate_message_pot(message)
+    def generate_message_pot(message_id)
       pot = ""
-      options = {
-        :comments => [],
-        :locations => [],
-      }
-      @generator.send(:generate_message, pot, message, options)
+      message = YARD::I18n::Message.new(message_id)
+      @generator.send(:generate_message, pot, message)
       pot
     end
 
@@ -107,12 +125,12 @@ eop
         o.docstring = "An alias to {Parser::SourceParser}'s parsing method"
       end
       @generator.parse_objects([object])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [],
           :comments => ["YARD.parse"],
         }
-      }
+      })
     end
 
     it "should extract location" do
@@ -121,12 +139,12 @@ eop
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [["yard.rb", 13]],
           :comments => ["YARD.parse"],
         }
-      }
+      })
     end
 
     it "should extract tag name" do
@@ -135,12 +153,12 @@ eop
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "tag|see|Parser::SourceParser.parse" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@see"],
         },
-      }
+      })
     end
 
     it "should extract tag text" do
@@ -152,7 +170,7 @@ eod
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "tag|example|Parse a glob of files" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@example"],
@@ -161,7 +179,7 @@ eod
           :locations => [["yard.rb", 12]],
           :comments => ["@example Parse a glob of files"],
         }
-      }
+      })
     end
 
     it "should extract tag types" do
@@ -173,7 +191,7 @@ eod
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "tag|param|paths" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@param [String, Array<String>]"],
@@ -182,7 +200,7 @@ eod
           :locations => [["yard.rb", 12]],
           :comments => ["@param [String, Array<String>] paths"],
         }
-      }
+      })
     end
   end
 
@@ -198,7 +216,7 @@ eor
       File.stub!(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)
       @generator.parse_files([file])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         "Getting Started Guide" => {
           :locations => [[path, 1]],
           :comments => ["title"],
@@ -207,7 +225,7 @@ eor
           :locations => [[path, 3]],
           :comments => [],
         }
-      }
+      })
     end
 
     it "should extract paragraphs" do
@@ -229,7 +247,7 @@ eot
       File.stub!(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)
       @generator.parse_files([file])
-      @generator.messages.should == {
+      @generator.messages.should == create_messages({
         paragraph1 => {
           :locations => [[path, 1]],
           :comments => [],
@@ -238,7 +256,7 @@ eot
           :locations => [[path, 4]],
           :comments => [],
         }
-      }
+      })
     end
   end
 end

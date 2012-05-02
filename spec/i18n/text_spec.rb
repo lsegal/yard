@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../spec_helper'
+
 describe YARD::I18n::Text do
   def extract_messages(input, options={})
     text = YARD::I18n::Text.new(StringIO.new(input), options)
