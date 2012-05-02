@@ -140,8 +140,8 @@ module YARD
     #
     # @return [String] the parsed expression
     def parse_expression(expr)
-      expr = expr.gsub(/@@(\w+)/, 'object.tags("\1")')
-      expr = expr.gsub(/@(\w+)/, 'object.tag("\1")')
+      expr = expr.gsub(/@@([\w\.]+)/, 'object.tags("\1")')
+      expr = expr.gsub(/@([\w\.]+)/, 'object.tag("\1")')
       expr
     end
   end
