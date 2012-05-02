@@ -59,7 +59,11 @@ module YARD
           end
         end
         meths.each {|m| send(m) }
-        total = (@total - @undocumented).to_f / @total.to_f * 100
+        if @total == 0
+          total = 0
+        else
+          total = (@total - @undocumented).to_f / @total.to_f * 100
+        end
         puts("% 3.2f%% documented" % total)
       end
 
