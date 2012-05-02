@@ -1,46 +1,45 @@
 module YARD
   module I18n
-    # +Messages+ is a container for +Message+s.
+    # Acts as a container for {Message} objects.
     #
     # @since 0.8.1
     class Messages
       include Enumerable
 
-      # Creates a +Message+ container.
+      # Creates a new container.
       def initialize
         @messages = {}
       end
 
-      # Enumerates each +Message+ in the container.
+      # Enumerates each {Message} in the container.
       #
+      # @yieldparam [Message] message the next message object in
+      #   the enumeration.
       # @return [void]
       def each(&block)
         @messages.each_value(&block)
       end
 
-      # Retrieves the registered +Message+, the message ID of which is
-      # +id+. If corresponding +Message+ isn't registered, +nil+ is
-      # returned.
-      #
-      # @param [String] id the message ID to be retrieved.
-      # @return [Message] the registered +Message+ or +nil+.
+      # @param [String] id the message ID to perform a lookup on.
+      # @return [Message, nil] a registered message for the given +id+,
+      #   or nil if no message for the ID is found.
       def [](id)
         @messages[id]
       end
 
-      # Registers a +Message+, the mssage ID of which is +id+. If
-      # corresponding +Message+ exists in the +Messages+, existent
-      # +Message+ is returned.
+      # Registers a {Message}, the mssage ID of which is +id+. If
+      # corresponding +Message+ is already registered, the previously
+      # registered object is returned.
       #
-      # @param [String] id the message ID to be registered.
+      # @param [String] id the ID of the message to be registered.
       # @return [Message] the registered +Message+.
       def register(id)
         @messages[id] ||= Message.new(id)
       end
 
-      # Compares equivalence between +self+ and +other+.
+      # Checks if this messages list is equal to another messages list.
       #
-      # @param [Messages] other the +Messages+ to be compared.
+      # @param [Messages] other the container to compare.
       # @return [Boolean] whether +self+ and +other+ is equivalence or not.
       def ==(other)
         other.is_a?(self.class) and
@@ -48,9 +47,9 @@ module YARD
       end
 
       protected
-      def messages
-        @messages
-      end
+
+      # @return [Hash{String=>Message}] the set of message objects
+      attr_reader :messages
     end
   end
 end

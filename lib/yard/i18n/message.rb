@@ -7,20 +7,14 @@ module YARD
     #
     # @since 0.8.1
     class Message
-      # The message ID of the trnslation target message.
-      #
-      # @return [String]
+      # @return [String] the message ID of the trnslation target message.
       attr_reader :id
 
-      # The array of locations. Location is an array of path and line
-      # number where the message is appered.
-      #
-      # @return [Set]
+      # @return [Set] the set of locations. Location is an array of 
+      # path and line number where the message is appered.
       attr_reader :locations
 
-      # The array of comments for the messages.
-      #
-      # @return [Set]
+      # @return [Set] the set of comments for the messages.
       attr_reader :comments
 
       # Creates a trasnlate target message for message ID +id+.
@@ -32,10 +26,10 @@ module YARD
         @comments = Set.new
       end
 
-      # Adds a location where the messasge is appeared.
+      # Adds location information for the message.
       #
-      # @param [String] path the path where the message is appeared.
-      # @param [Integer] line the line number where the message is appeared.
+      # @param [String] path the path where the message appeareds.
+      # @param [Integer] line the line number where the message appears.
       # @return [void]
       def add_location(path, line)
         @locations << [path, line]
@@ -49,10 +43,8 @@ module YARD
         @comments << comment unless comment.nil?
       end
 
-      # Compares equivalence between +self+ and +other+.
-      #
       # @param [Message] other the +Message+ to be compared.
-      # @return [Boolean] whether +self+ and +other+ is equivalence or not.
+      # @return [Boolean] checks whether this message is equal to another.
       def ==(other)
         other.is_a?(self.class) and
           @id == other.id and
