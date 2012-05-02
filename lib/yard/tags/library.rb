@@ -297,7 +297,8 @@ module YARD
       # @!macro yard.tag.transitive
       #   @note This tag is *transitive*. If it is applied on a
       #     namespace (module or class), it will automatically be
-      #     applied to all children objects of that namespace.
+      #     applied to all children objects of that namespace unless
+      #     it is redefined on the child object.
 
       # Marks a class/module/method as abstract with optional
       # implementor information.
