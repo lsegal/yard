@@ -14,7 +14,7 @@ module YARD
           puts "Usage: yard list [yardoc_options]"
           puts "Takes the same arguments as yardoc. See yardoc --help"
         else
-          Yardoc.run('--list', *args)
+          Yardoc.run('-c', '--list', *args)
         end
       end
     end
