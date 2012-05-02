@@ -295,7 +295,7 @@ module YARD
       end
 
       # @!macro yard.tag.transitive
-      #   @note This tag is *transitive*. If this tag is applied on a
+      #   @note This tag is *transitive*. If it is applied on a
       #     namespace (module or class), it will automatically be
       #     applied to all children objects of that namespace.
 
@@ -443,23 +443,31 @@ module YARD
       #   def load_page(url) end
       define_tag "Parameters",         :param,       :with_types_and_name
 
-      # Defines an object as private. This exists for classes,
-      # modules and constants that do not obey Ruby's visibility rules. For
-      # instance, an inner class might be considered "private", though Ruby
-      # would make no such distinction. By declaring the @private tag, the
-      # class can be hidden from documentation by using the +--no-private+
-      # command-line switch to yardoc (see {file:README.md}).
+      # Declares that the _logical_ visibility of an object is private.
+      # In other words, it specifies that this method should be marked
+      # private but cannot due to Ruby's visibility restrictions. This
+      # exists for classes, modules and constants that do not obey Ruby's
+      # visibility rules. For instance, an inner class might be considered
+      # "private", though Ruby would make no such distinction.
+      #
+      # This tag is meant to be used in conjunction with the +--no-private+
+      # command-line option, and is required to actually remove these objects
+      # from documentation output. See {file:README.md} for more information on
+      # switches.
+      #
+      # If you simply want to set the API visibility of a method, you should
+      # look at the {tag:api} tag instead.
       #
       # @note This method is not recommended for hiding undocumented or
       #   "unimportant" methods. This tag should only be used to mark objects
       #   private when Ruby visibility rules cannot do so. In Ruby 1.9.3, you
       #   can use +private_constant+ to declare constants (like classes or
       #   modules) as private, and should be used instead of +@private+.
-      # @note If +@private+ is applied to a class or module, all methods within
-      #   that namespace are also marked private.
+      # @macro yard.tag.transitive
       # @example
       #   # @private
       #   class InteralImplementation; end
+      # @see tag:api
       # @yard.signature
       define_tag "Private",            :private
 
