@@ -21,6 +21,7 @@ describe YARD::I18n::Messages do
       @messages.each do |message|
         enumerated_messages << message
       end
+      enumerated_messages = enumerated_messages.sort_by {|m| m.id }
       enumerated_messages.should == [message("Hello World!"), message("Title")]
     end
 
