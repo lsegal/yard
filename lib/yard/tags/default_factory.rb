@@ -134,14 +134,20 @@ module YARD
       def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
         s, e = 0, 0
         before = ''
-        list, level, seen_space = [''], 0, false
-        text.split(//).each_with_index do |c, i|
-          if opening_types.include?(c)
+        list, level, seen_space, i = [''], 0, false, 0
+        last_seen = ''
+        while i < text.length
+          c = text[i, 1]
+          if c == '#' && text[i+1..-1] =~ CodeObjects::METHODNAMEMATCH
+            list.last << c + $&
+            i += $&.length + 1
+            next
+          elsif opening_types.include?(c)
             list.last << c if level > 0
             s = i if level == 0
             level += 1
           elsif closing_types.include?(c)
-            level -= 1 unless list.last[-1,1] == '=' && c == '>'
+            level -= 1 unless last_seen == '=' && c == '>'
             break e = i if level == 0
             list.last << c
           elsif c == ',' && level == 1
@@ -154,6 +160,8 @@ module YARD
           elsif level >= 1
             list.last << c
           end
+          last_seen = c
+          i += 1
         end
 
         before = before.empty? ? nil : before

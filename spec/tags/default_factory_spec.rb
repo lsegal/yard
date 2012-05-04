@@ -26,8 +26,10 @@ describe YARD::Tags::DefaultFactory do
       parse_types('[#foo]').should == [nil, ['#foo'], '']
     end
 
-    it "should handle ducktypes with special method names" do
-      parse_types('[#foo=]').should == [nil, ['#foo='], '']
+    %w(#foo= #<< #<=> #>> #== #=== Array<#<=>> Array<#==>).each do |meth|
+      it "should handle ducktypes with special method name #{meth}" do
+        parse_types("[#{meth}]").should == [nil, [meth], '']
+      end
     end
 
     it "should return the text before and after the type list" do
