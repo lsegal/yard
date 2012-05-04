@@ -465,7 +465,7 @@ describe YARD::Parser::SourceParser do
     end
 
     it "should parse a set of absolute paths" do
-      Dir.should_not_receive(:[]).and_return([])
+      Dir.should_not_receive(:[])
       File.should_receive(:file?).with('/path/to/file').and_return(true)
       File.should_receive(:read_binary).with('/path/to/file').and_return("")
       YARD.parse('/path/to/file')
