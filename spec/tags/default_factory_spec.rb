@@ -32,6 +32,10 @@ describe YARD::Tags::DefaultFactory do
       end
     end
 
+    it "should only parse #ducktypes inside brackets" do
+      parse_types("#ducktype").should == [nil, nil, '#ducktype']
+    end
+
     it "should return the text before and after the type list" do
       parse_types(' b <String> description').should == ['b', ['String'], 'description']
       parse_types('b c <String> description (test)').should == [nil, nil, 'b c <String> description (test)']

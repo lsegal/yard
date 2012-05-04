@@ -138,7 +138,7 @@ module YARD
         last_seen = ''
         while i < text.length
           c = text[i, 1]
-          if c == '#' && text[i+1..-1] =~ CodeObjects::METHODNAMEMATCH
+          if level > 0 && c == '#' && text[i+1..-1] =~ CodeObjects::METHODNAMEMATCH
             list.last << c + $&
             i += $&.length + 1
             next
