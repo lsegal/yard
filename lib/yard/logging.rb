@@ -31,12 +31,13 @@ module YARD
     # Prints the backtrace +exc+ to the logger as error data.
     #
     # @param [Array<String>] exc the backtrace list
+    # @param [Symbol] level_meth the level to log backtrace at
     # @return [void]
-    def backtrace(exc)
+    def backtrace(exc, level_meth = :error)
       return unless show_backtraces
-      error "#{exc.class.class_name}: #{exc.message}"
-      error "Stack trace:" +
-        exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n"
+      send(level_meth, "#{exc.class.class_name}: #{exc.message}")
+      send(level_meth, "Stack trace:" +
+        exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n")
     end
 
     # Warns that the Ruby environment does not support continuations. Applies

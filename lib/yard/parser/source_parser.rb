@@ -446,10 +446,10 @@ module YARD
         @parser
       rescue ArgumentError, NotImplementedError => e
         log.warn("Cannot parse `#{file}': #{e.message}")
-        log.backtrace(e) if log.level >= Logger::DEBUG
+        log.backtrace(e, :warn)
       rescue ParserSyntaxError => e
         log.warn(e.message.capitalize)
-        log.backtrace(e) if log.level >= Logger::DEBUG
+        log.backtrace(e, :warn)
       end
 
       # Tokenizes but does not parse the block of code using the current {#parser_type}
