@@ -90,4 +90,20 @@ describe Gem::DocManager do
       lambda { install }.should raise_error(Gem::FilePermissionError)
     end
   end
+
+  describe '#install_rdoc_yard' do
+    def install
+      msg = "Installing YARD documentation for #{@spec.full_name}..."
+      @doc.should_receive(:say).with(msg)
+      @doc.install_rdoc_yard
+    end
+
+    it "should add -o outdir when generating docs" do
+      File.should_receive(:file?).with(@yardopts).and_return(true)
+      @spec.has_yardoc = true
+      doc_dir = File.join(@doc.instance_variable_get("@doc_dir"), 'rdoc')
+      runs.with('-o', doc_dir, '--quiet')
+      install
+    end
+  end
 end
