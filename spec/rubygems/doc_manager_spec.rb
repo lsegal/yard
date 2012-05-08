@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.join(YARD::ROOT, 'rubygems_plugin')
+require 'fileutils'
 
 describe Gem::DocManager do
   before do
