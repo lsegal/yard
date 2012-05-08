@@ -4,9 +4,11 @@ require 'fileutils'
 
 describe Gem::DocManager do
   before do
-    # stub all FileUtils methods so no accidental disk access occurs
-    FileUtils.methods.each {|meth| FileUtils.stub(meth) }
+    # Ensure filesystem integrity
+    FileUtils.stub(:mkdir_p)
+    FileUtils.stub(:rm_rf)
     Dir.stub(:chdir)
+
     YARD::CLI::Yardoc.stub(:run)
 
     @spec_file = File.join(YARD::ROOT, '../yard.gemspec')
