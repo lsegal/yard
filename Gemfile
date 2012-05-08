@@ -1,7 +1,7 @@
 source :rubygems
 
 group :development do
-  gem 'rspec'
+  gem 'rspec', '= 2.9.0'
   gem 'rake'
 end
 
