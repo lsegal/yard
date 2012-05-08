@@ -1,3 +1,4 @@
+require 'rubygems/user_interaction'
 require 'rubygems/doc_manager'
 
 class Gem::DocManager
