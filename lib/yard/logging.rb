@@ -9,7 +9,7 @@ module YARD
 
     # The logger instance
     # @return [Logger] the logger instance
-    def self.instance(pipe = STDERR)
+    def self.instance(pipe = STDOUT)
       @logger ||= new(pipe)
     end
 
