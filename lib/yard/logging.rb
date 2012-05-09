@@ -104,8 +104,8 @@ module YARD
     # @return [void]
     # @since 0.8.2
     def clear_progress
-      return if !io.tty? || level > WARN
-      self << "\e[?25h\e[2K" if io.tty?
+      return unless show_progress
+      self << "\e[?25h\e[2K"
       @progress_msg = nil
     end
 
