@@ -36,6 +36,9 @@ module YARD
       # @return [CodeObjects::Base] the main object being generated in the template
       attr_accessor :object
 
+      # @return [CodeObjects::Base] the owner of the generated object
+      attr_accessor :owner
+
       # @return [Symbol] the template type used to generate output
       attr_accessor :type
 
