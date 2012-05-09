@@ -347,7 +347,7 @@ module YARD
           if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
             true
           else
-            log.info "Re-generating object #{object.path}..."
+            log.debug "Re-generating object #{object.path}..."
             false
           end
         end
