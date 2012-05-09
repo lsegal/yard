@@ -594,13 +594,16 @@ describe YARD::Parser::SourceParser do
     end
 
     it "should attempt to parse files in order" do
-      msgs = []
-      log.should_receive(:debug) {|m| msgs << m }.at_least(:once)
-      in_order_parse 'parse_in_order_001', 'parse_in_order_002'
-      msgs[1].should =~ /Processing .+parse_in_order_001.+/
-      msgs[2].should =~ /Missing object MyModule/
-      msgs[3].should =~ /Processing .+parse_in_order_002.+/
-      msgs[4].should =~ /Re-processing .+parse_in_order_001.+/
+      log.enter_level(Logger::DEBUG) do
+        msgs = []
+        log.should_receive(:debug) {|m| msgs << m }.at_least(:once)
+        log.stub(:<<)
+        in_order_parse 'parse_in_order_001', 'parse_in_order_002'
+        msgs[1].should =~ /Parsing .+parse_in_order_001.+/
+        msgs[2].should =~ /Missing object MyModule/
+        msgs[3].should =~ /Parsing .+parse_in_order_002.+/
+        msgs[4].should =~ /Re-processing .+parse_in_order_001.+/
+      end
     end
 
     it "should attempt to order files by length (process toplevel files first)" do

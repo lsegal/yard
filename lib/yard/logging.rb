@@ -1,11 +1,33 @@
 require 'logger'
+require 'thread'
 
 module YARD
   # Handles console logging for info, warnings and errors.
   # Uses the stdlib Logger class in Ruby for all the backend logic.
   class Logger < ::Logger
-    attr_writer :show_backtraces
+    # The list of characters displayed beside the progress bar to indicate
+    # "movement".
+    # @since 0.8.2
+    PROGRESS_INDICATORS = ["\u230C", "\u230D", "\u230E", "\u230F"]
+
+    # @return [IO] the IO object being logged to
+    # @since 0.8.2
+    attr_accessor :io
+
+    # @return [Boolean] whether backtraces should be shown (by default
+    #   this is on).
     def show_backtraces; @show_backtraces || level == DEBUG end
+    attr_writer :show_backtraces
+
+    # @return [Boolean] whether progress indicators should be shown when
+    #   logging CLIs (by default this is off).
+    def show_progress
+      return false if RUBY18 # threading is too ineffective for progress support
+      return false unless io.tty? # no TTY support on IO
+      return false if level > WARN # no progress in verbose/debug modes
+      @show_progress
+    end
+    attr_writer :show_progress
 
     # The logger instance
     # @return [Logger] the logger instance
@@ -14,11 +36,15 @@ module YARD
     end
 
     # Creates a new logger
-    def initialize(*args)
-      super
+    def initialize(pipe, *args)
+      super(pipe, *args)
+      self.io = pipe
       self.show_backtraces = true
+      self.show_progress = false
       self.level = WARN
       self.formatter = method(:format_log)
+      @progress_indicator = 0
+      @mutex = Mutex.new
     end
 
     # Changes the debug level to DEBUG if $DEBUG is set
@@ -26,6 +52,70 @@ module YARD
     def debug(*args)
       self.level = DEBUG if $DEBUG
       super
+    end
+
+    # Captures the duration of a block of code for benchmark analysis. Also
+    # calls {#progress} on the message to display it to the user.
+    #
+    # @todo Implement capture storage for reporting of benchmarks
+    # @param [String] msg the message to display
+    # @param [Symbol, nil] nontty_log the level to log as if the output
+    #   stream is not a TTY. Use +nil+ for no alternate logging.
+    # @yield a block of arbitrary code to benchmark
+    # @return [void]
+    def capture(msg, nontty_log = :debug, &block)
+      progress(msg, nontty_log)
+      yield
+    ensure
+      clear_progress
+    end
+
+    # Displays a progress indicator for a given message. This progress report
+    # is only displayed on TTY displays, otherwise the message is passed to
+    # the +nontty_log+ level.
+    #
+    # @param [String] msg the message to log
+    # @param [Symbol, nil] nontty_log the level to log as if the output
+    #   stream is not a TTY. Use +nil+ for no alternate logging.
+    # @return [void]
+    # @since 0.8.2
+    def progress(msg, nontty_log = :debug)
+      send(nontty_log, msg) if nontty_log
+      return unless show_progress
+      icon = ""
+      if defined?(::Encoding)
+        icon = PROGRESS_INDICATORS[@progress_indicator] + " "
+      end
+      self << "\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r"
+      @mutex.synchronize do
+        @progress_msg = msg
+        @progress_indicator += 1
+        @progress_indicator %= PROGRESS_INDICATORS.size
+      end
+      Thread.new do
+        sleep(0.05)
+        @mutex.synchronize do
+          progress(msg + ".", nil) if @progress_msg == msg
+        end
+      end
+    end
+
+    # Clears the progress indicator in the TTY display.
+    # @return [void]
+    # @since 0.8.2
+    def clear_progress
+      return if !io.tty? || level > WARN
+      self << "\e[?25h\e[2K" if io.tty?
+      @progress_msg = nil
+    end
+
+    # Displays an unformatted line to the logger output stream. Similar to
+    # the +#<<+ method, but adds a newline.
+    # @param [String] msg the message to display
+    # @return [void]
+    # @since 0.8.2
+    def puts(msg)
+      self << "#{msg}\n"
     end
 
     # Prints the backtrace +exc+ to the logger as error data.

@@ -112,11 +112,18 @@ module YARD
         # @yieldreturn [String] the contents to serialize
         # @see Serializers::Base
         def with_serializer(object, serializer, &block)
-          serializer.before_serialize if serializer
-          output = yield
-          if serializer
-            serializer.serialize(object, output)
-            serializer.after_serialize(output)
+          output = nil
+          filename = serializer.serialized_path(object)
+          if serializer.respond_to?(:basepath)
+            filename = File.join(serializer.basepath, filename)
+          end
+          log.capture("Generating #{filename}", nil) do
+            serializer.before_serialize if serializer
+            output = yield
+            if serializer
+              serializer.serialize(object, output)
+              serializer.after_serialize(output)
+            end
           end
           output
         end

@@ -241,6 +241,7 @@ module YARD
       #   contains a single nil value, skip calling of {#parse_arguments}
       # @return [void]
       def run(*args)
+        log.show_progress = true
         if args.size == 0 || !args.first.nil?
           # fail early if arguments are not valid
           return unless parse_arguments(*args)
@@ -269,6 +270,8 @@ module YARD
         end
 
         true
+      ensure
+        log.show_progress = false
       end
 
       # Parses commandline arguments

@@ -85,7 +85,11 @@ end
 #   created.
 # @param [String] content the contents that are saved to the file.
 def asset(path, content)
-  options.serializer.serialize(path, content) if options.serializer
+  if options.serializer
+    log.capture("Generating asset #{path}") do
+      options.serializer.serialize(path, content)
+    end
+  end
 end
 
 # @return [Array<String>] Stylesheet files that are additionally loaded for the

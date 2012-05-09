@@ -40,8 +40,9 @@ module YARD
       # @see Processor#parse_remaining_files
       def parse
         while file = files.shift
-          log.debug("Processing #{file}...")
-          SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
+          log.capture("Parsing #{file}") do
+            SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
+          end
         end
       end
     end
