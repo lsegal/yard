@@ -3,6 +3,7 @@ source :rubygems
 group :development do
   gem 'rspec'
   gem 'rake'
+  gem 'rvm-tester'
 end
 
 group :markdown do

@@ -16,17 +16,18 @@ task :install => :gem do
   sh "#{SUDO} gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
 end
 
-desc 'Run spec suite'
-task :suite do
-  ['ruby186', 'ruby18', 'ruby19', 'ruby192', 'ruby193', 'jruby'].each do |ruby|
-    2.times do |legacy|
-      next if legacy == 1 && ruby =~ /^jruby|186/
-      puts "Running specs with #{ruby}#{legacy == 1 ? ' (in legacy mode)' : ''}"
-      cmd = "#{ruby} -S rake specs SUITE=1 #{legacy == 1 ? 'LEGACY=1' : ''}"
-      puts cmd
-      system(cmd)
-    end
-  end
+begin
+require 'rvm-tester'
+require 'yaml'
+RVM::Tester::TesterTask.new do |t|
+  # Use .travis.yml data
+  data = YAML.load_file(File.dirname(__FILE__) + '/.travis.yml')
+  t.rubies = data['rvm']
+  t.command = data['script']
+  t.env = {"CI" => "1", "SUITE" => "1"}
+  t.verbose = true
+end
+rescue LoadError
 end
 
 task :travis_ci do
