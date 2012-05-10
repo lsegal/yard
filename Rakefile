@@ -18,13 +18,8 @@ end
 
 begin
 require 'rvm-tester'
-require 'yaml'
 RVM::Tester::TesterTask.new do |t|
-  # Use .travis.yml data
-  data = YAML.load_file(File.dirname(__FILE__) + '/.travis.yml')
-  t.rubies = data['rvm']
-  t.command = data['script']
-  t.env = {"CI" => "1", "SUITE" => "1"}
+  t.bundle_install = false # don't need to do this all the time
   t.verbose = true
 end
 rescue LoadError
