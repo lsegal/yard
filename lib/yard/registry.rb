@@ -20,13 +20,14 @@ module YARD
   # the Registry thread local. This means all access to a registry for a specific
   # object set must occur in the originating thread.
   #
-  # @example Loading a Registry
+  # @example Loading the Registry
   #   Registry.load!('/path/to/yardocfile') # loads all objects into memory
   #   Registry.at('YARD::CodeObjects::Base').docstring
   #   # => "+Base+ is the superclass of all code objects ..."
-  # @example Performing a Search on a Registry
-  #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring')
-  #   # => <
+  # @example Getting an object by a specific path
+  #   Registry.at('YARD::CodeObjects::Base#docstring')
+  # @example Performing a lookup on a method anywhere in the inheritance tree
+  #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring', true)
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
