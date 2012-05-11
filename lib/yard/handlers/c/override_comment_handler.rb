@@ -16,7 +16,15 @@ class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
       when :module
         obj = YARD::CodeObjects::ModuleObject.new(:root, name)
       end
-      register_docstring(obj, statement.source, statement) if obj
+      register(obj)
     end
+  end
+
+  def register_docstring(object, docstring = statement.source, stmt = statement)
+    super
+  end
+
+  def register_file_info(object, file = parser.file, line = statement.line, comments = statement.comments)
+    super
   end
 end

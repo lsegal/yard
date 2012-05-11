@@ -4,6 +4,7 @@ describe YARD::Handlers::C::OverrideCommentHandler do
   [:class, :module].each do |type|
     it "should handle Document-#{type}" do
       parse(<<-eof)
+        void something;
         /* Document-#{type}: A
          * Foo bar baz
          */
@@ -11,6 +12,8 @@ describe YARD::Handlers::C::OverrideCommentHandler do
       eof
       Registry.at('A').type.should == type
       Registry.at('A').docstring.should == 'Foo bar baz'
+      Registry.at('A').file.should == '(stdin)'
+      Registry.at('A').line.should == 2
     end
   end
 
