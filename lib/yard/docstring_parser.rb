@@ -177,7 +177,7 @@ module YARD
 
     # Creates a tag from the {Tags::DefaultFactory tag factory}.
     #
-    # To add an already created tag object, use {#add_tag}
+    # To add an already created tag object, append it to {#tags}.
     #
     # @param [String] tag_name the tag name
     # @param [String] tag_buf the text attached to the tag with newlines removed.
@@ -264,7 +264,7 @@ module YARD
       self.after_parse_callbacks << block
     end
 
-    # @return [Array<Proc>] the {#after_parse} callback proc objects
+    # @return [Array<Proc>] the {after_parse} callback proc objects
     def self.after_parse_callbacks
       @after_parse_callbacks ||= []
     end
