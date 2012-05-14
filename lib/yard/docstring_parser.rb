@@ -29,25 +29,25 @@ module YARD
   class DocstringParser
     # @return [String] the parsed text portion of the docstring,
     #   with tags removed.
-    attr_reader :text
+    attr_accessor :text
 
     # @return [String] the complete input string to the parser.
-    attr_reader :raw_text
+    attr_accessor :raw_text
 
     # @return [Array<Tag>] the list of meta-data tags identified
     #   by the parser
-    attr_reader :tags
+    attr_accessor :tags
 
     # @return [Array<Directive>] a list of directives identified
     #   by the parser. This list will not be passed on to the
     #   Docstring object.
-    attr_reader :directives
+    attr_accessor :directives
 
     # @return [OpenStruct] any arbitrary state to be passed between
     #   tags during parsing. Mainly used by directives to coordinate
     #   behaviour (so that directives can be aware of other directives
     #   used in a docstring).
-    attr_reader :state
+    attr_accessor :state
 
     # @return [CodeObjects::Base, nil] the object associated with
     #   the docstring being parsed. May be nil if the docstring is
