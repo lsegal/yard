@@ -401,6 +401,7 @@ module YARD
         handler.register_visibility(obj, visibility)
         handler.register_group(obj)
         obj.signature = method_signature
+        obj.parameters = OverloadTag.new(:overload, method_signature).parameters
         obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
           parser.raw_text)
         handler.register_module_function(obj)

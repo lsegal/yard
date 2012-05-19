@@ -61,6 +61,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj = Registry.at('Foo.xyz')
     obj.should_not be_nil
     obj.signature.should == 'def xyz(a, b, c)'
+    obj.parameters.should == [[:a, nil], [:b, nil], [:c, nil]]
     obj.source.should == 'foo_bar'
     obj.docstring.should == 'The foo method'
   end

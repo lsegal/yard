@@ -239,6 +239,13 @@ describe YARD::Tags::MethodDirective do
       end
     end
 
+    it "should define parameters from signature" do
+      YARD.parse_string <<-eof
+        # @!method foo(a, b, c = nil)
+      eof
+      Registry.at('#foo').parameters.should == [[:a, nil], [:b, nil], [:c, 'nil']]
+    end
+
     it "should be able to define method with module scope (module function)" do
       YARD.parse_string <<-eof
         # @!method foo
