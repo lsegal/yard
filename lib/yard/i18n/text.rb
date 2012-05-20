@@ -45,6 +45,32 @@ module YARD
         end
       end
 
+      # Translates into +locale+.
+      #
+      # @param [Locale] locale the translation target locale.
+      # @return [String] translated text.
+      def translate(locale)
+        translated_text = ""
+        parse do |part|
+          case part[:type]
+          when :markup
+            translated_text << part[:line]
+          when :attribute
+            prefix = "#{part[:prefix]}#{part[:name]}#{part[:infix]}"
+            value = locale.translate(part[:value])
+            suffix = part[:suffix]
+            translated_text << "#{prefix}#{value}#{suffix}"
+          when :paragraph
+            translated_text << locale.translate(part[:paragraph])
+          when :empty_line
+            translated_text << part[:line]
+          else
+            raise "should not reach here: unexpected type: #{type}"
+          end
+        end
+        translated_text
+      end
+
       private
 
       def parse(&block)
@@ -77,11 +103,14 @@ module YARD
 
           case line
           when /^\s*$/
-            emit_empty_line_event(line, line_no, &block)
-            next if paragraph.empty?
-            emit_paragraph_event(paragraph, paragraph_start_line, line_no,
-                                 &block)
-            paragraph = ""
+            if paragraph.empty?
+              emit_empty_line_event(line, line_no, &block)
+            else
+              paragraph << line
+              emit_paragraph_event(paragraph, paragraph_start_line, line_no,
+                                   &block)
+              paragraph = ""
+            end
           else
             paragraph_start_line = line_no if paragraph.empty?
             paragraph << line

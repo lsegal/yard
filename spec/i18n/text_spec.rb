@@ -70,4 +70,111 @@ eot
       end
     end
   end
+
+  describe "#translate" do
+    def locale
+      locale = YARD::I18n::Locale.new("fr")
+      messages = locale.instance_variable_get(:@messages)
+      messages["markdown"] = "markdown (markdown in fr)"
+      messages["Hello"] = "Bonjour (Hello in fr)"
+      messages["Paragraph 1."] = "Paragraphe 1."
+      messages["Paragraph 2."] = "Paragraphe 2."
+      locale
+    end
+
+    def translate(input, options={})
+      text = YARD::I18n::Text.new(StringIO.new(input), options)
+      text.translate(locale)
+    end
+
+    describe "Header" do
+      it "should extract attribute" do
+        text = <<-eot
+# @title Hello
+
+# Getting Started with YARD
+
+Paragraph.
+eot
+        translate(text, :have_header => true).should == <<-eot
+# @title Bonjour (Hello in fr)
+
+# Getting Started with YARD
+
+Paragraph.
+eot
+      end
+
+      it "should ignore markup line" do
+        text = <<-eot
+#!markdown
+# @title Hello
+
+# Getting Started with YARD
+
+Paragraph.
+eot
+        translate(text, :have_header => true).should == <<-eot
+#!markdown
+# @title Bonjour (Hello in fr)
+
+# Getting Started with YARD
+
+Paragraph.
+eot
+      end
+    end
+
+    describe "Body" do
+      it "should split to paragraphs" do
+        paragraph1 = <<-eop.strip
+Paragraph 1.
+eop
+        paragraph2 = <<-eop.strip
+Paragraph 2.
+eop
+        text = <<-eot
+#{paragraph1}
+
+#{paragraph2}
+eot
+        translate(text).should == <<-eot
+Paragraphe 1.
+
+Paragraphe 2.
+eot
+      end
+
+      it "should not modified non-translated message" do
+        nonexistent_paragraph = <<-eop.strip
+Nonexsitent paragraph.
+eop
+        text = <<-eot
+#{nonexistent_paragraph}
+eot
+        translate(text).should == <<-eot
+#{nonexistent_paragraph}
+eot
+      end
+
+      it "should keep empty lines" do
+        text = <<-eot
+Paragraph 1.
+
+  
+	
+
+Paragraph 2.
+eot
+        translate(text).should == <<-eot
+Paragraphe 1.
+
+  
+	
+
+Paragraphe 2.
+eot
+      end
+    end
+  end
 end
