@@ -133,6 +133,7 @@ module YARD
   # Namespace for internationalization (i18n)
   # @since 0.8.0
   module I18n
+    autoload :Locale,          __p('i18n/locale')
     autoload :PotGenerator,    __p('i18n/pot_generator')
     autoload :Text,            __p('i18n/text')
     autoload :Messages,        __p('i18n/messages')
