@@ -32,6 +32,22 @@ module YARD
       #   extracted paragraph.
       # @return [void]
       def extract_messages
+        parse do |part|
+          line_no = part[:line_no]
+          case part[:type]
+          when :markup, :empty_line
+            # ignore
+          when :attribute
+            yield(:attribute, part[:name], part[:value], part[:line_no])
+          when :paragraph
+            yield(:paragraph, part[:paragraph], part[:line_no])
+          end
+        end
+      end
+
+      private
+
+      def parse(&block)
         paragraph = ""
         paragraph_start_line = 0
         line_no = 0
@@ -42,29 +58,85 @@ module YARD
           if in_header
             case line
             when /^#!\S+\s*$/
-              in_header = false unless line_no == 1
-            when /^\s*#\s*@(\S+)\s*(.+?)\s*$/
-              name, value = $1, $2
-              yield(:attribute, name, value, line_no)
+              if line_no == 1
+                emit_markup_event(line, line_no, &block)
+              else
+                in_header = false
+              end
+            when /^(\s*#\s*@)(\S+)(\s*)(.+?)(\s*)$/
+              emit_attribute_event(Regexp.last_match, line_no, &block)
             else
               in_header = false
-              next if line.chomp.empty?
+              if line.strip.empty?
+                emit_empty_line_event(line, line_no, &block)
+                next
+              end
             end
             next if in_header
           end
 
           case line
           when /^\s*$/
+            emit_empty_line_event(line, line_no, &block)
             next if paragraph.empty?
-            yield(:paragraph, paragraph.rstrip, paragraph_start_line)
+            emit_paragraph_event(paragraph, paragraph_start_line, line_no,
+                                 &block)
             paragraph = ""
           else
             paragraph_start_line = line_no if paragraph.empty?
             paragraph << line
           end
         end
+
         unless paragraph.empty?
-          yield(:paragraph, paragraph.rstrip, paragraph_start_line)
+          emit_paragraph_event(paragraph, paragraph_start_line, line_no, &block)
+        end
+      end
+
+      def emit_markup_event(line, line_no)
+        part = {
+          :type => :markup,
+          :line => line,
+          :line_no => line_no,
+        }
+        yield(part)
+      end
+
+      def emit_attribute_event(match_data, line_no)
+        part = {
+          :type => :attribute,
+          :prefix => match_data[1],
+          :name => match_data[2],
+          :infix => match_data[3],
+          :value => match_data[4],
+          :suffix => match_data[5],
+          :line_no => line_no,
+        }
+        yield(part)
+      end
+
+      def emit_empty_line_event(line, line_no)
+        part = {
+          :type => :empty_line,
+          :line => line,
+          :line_no => line_no,
+        }
+        yield(part)
+      end
+
+      def emit_paragraph_event(paragraph, paragraph_start_line, line_no, &block)
+        paragraph_part = {
+          :type => :paragraph,
+          :line_no => paragraph_start_line,
+        }
+        match_data = /(\s*)\z/.match(paragraph)
+        if match_data
+          paragraph_part[:paragraph] = match_data.pre_match
+          yield(paragraph_part)
+          emit_empty_line_event(match_data[1], line_no, &block)
+        else
+          paragraph_part[:paragraph] = paragraph
+          yield(paragraph_part)
         end
       end
     end
