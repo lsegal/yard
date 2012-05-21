@@ -1,5 +1,23 @@
 module YARD
   module CLI
+    # Options to pass to the {Graph} CLI.
+    class GraphOptions < Templates::TemplateOptions
+      # @return [:dot] the default output format
+      default_attr :format, :dot
+
+      # @return [Boolean] whether to list the full class diagram
+      attr_accessor :full
+
+      # @return [Boolean] whether to show the object dependencies
+      attr_accessor :dependencies
+
+      # @return [Verifier] the verifier object
+      attr_accessor :verifier
+
+      # @return [String] any contents to pass to the digraph
+      attr_accessor :contents
+    end
+
     # A command-line utility to generate Graphviz graphs from
     # a set of objects
     #
@@ -17,8 +35,9 @@ module YARD
       # Creates a new instance of the command-line utility
       def initialize
         super
-        @serializer = YARD::Serializers::StdoutSerializer.new
-        @options = SymbolHash[:format => :dot]
+        @options = GraphOptions.new
+        options.reset_defaults
+        options.serializer = YARD::Serializers::StdoutSerializer.new
       end
 
       def description
@@ -36,9 +55,9 @@ module YARD
         optparse(*args)
 
         contents = objects.map {|o| o.format(options) }.join("\n")
-        Templates::Engine.render(:format => :dot, :type => :layout,
-          :verifier => @verifier, :serializer => @serializer,
-          :contents => contents)
+        opts = {:serialize => true, :type => :layout, :contents => contents}
+        options.update(opts)
+        Templates::Engine.render(options)
       end
 
       private
@@ -80,18 +99,18 @@ module YARD
         opts.separator "Output options:"
 
         opts.on('--dot [OPTIONS]', 'Send the results directly to `dot` with optional arguments.') do |dotopts|
-          @serializer = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
+          options.serializer = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
         end
 
         opts.on('-f', '--file [FILE]', 'Writes output to a file instead of stdout.') do |file|
-          @serializer = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
-          @serializer.instance_eval "def serialized_path(object) #{file.inspect} end"
+          options.serializer = Serializers::FileSystemSerializer.new(:basepath => '.', :extension => nil)
+          options.serializer.instance_eval "def serialized_path(object) #{file.inspect} end"
         end
 
         common_options(opts)
         parse_options(opts, args)
 
-        @verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
+        options.verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
         if args.first
           @objects = args.map {|o| Registry.at(o) }.compact
         else
