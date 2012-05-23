@@ -17,7 +17,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
   end
 
   it "should set the type of non-existing modules to :module" do
-    P(:NOTEXIST).type.should == :module
+    o = Registry.at(:X).instance_mixins.find {|o| o.name == :NOTEXIST }
+    o.type.should == :module
   end
 
   it "should handle includes with multiple parameters" do

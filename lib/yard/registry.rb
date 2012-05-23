@@ -342,6 +342,7 @@ module YARD
       # The assumed types of a list of paths. This method is used by CodeObjects::Base
       # @return [{String => Symbol}] a set of unresolved paths and their assumed type
       # @private
+      # @deprecated The registry no longer globally tracks proxy types.
       def proxy_types
         thread_local_store.proxy_types
       end

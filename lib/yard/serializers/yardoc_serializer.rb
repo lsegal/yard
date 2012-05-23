@@ -32,6 +32,7 @@ module YARD
       end
 
       def objects_path; File.join(basepath, 'objects') end
+      # @deprecated The registry no longer tracks proxy types
       def proxy_types_path; File.join(basepath, 'proxy_types') end
       def checksums_path; File.join(basepath, 'checksums') end
       def object_types_path; File.join(basepath, 'object_types') end

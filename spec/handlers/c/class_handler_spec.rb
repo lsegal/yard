@@ -58,7 +58,6 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     Registry.at('Foo::Bar').type.should == :class
     Registry.at('Foo::Bar').superclass.should == P('Bar')
-    P('Bar').should be_a(CodeObjects::Proxy)
-    P('Bar').type.should == :class
+    Registry.at('Foo::Bar').superclass.type.should == :class
   end
 end

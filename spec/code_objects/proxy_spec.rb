@@ -78,9 +78,26 @@ describe YARD::CodeObjects::Proxy do
     obj.type.should == :class
   end
 
-  it "should retain a type change between Proxy objects" do
+  it "should NOT retain a type change between Proxy objects" do
     P("InvalidClass").type = :class
-    P("InvalidClass").type.should == :class
+    P("InvalidClass").type.should == :proxy
+  end
+
+  it "should use type to ensure resolved object is of intended type" do
+    YARD.parse_string <<-eof
+      module Foo
+        class Bar; end
+        def self.Bar; end
+      end
+    eof
+    proxy = Proxy.new(P('Foo'), 'Bar')
+    proxy.type = :method
+    proxy.path.should == 'Foo.Bar'
+  end
+
+  it "should allow type in initializer" do
+    Proxy.new(Registry.root, 'Foo', :method).type.should == :method
+    P(Registry.root, 'Foo', :method).type.should == :method
   end
 
   it "should never equal Registry.root" do
@@ -112,7 +129,6 @@ describe YARD::CodeObjects::Proxy do
     # Now it should resolve
     proxy.type.should == :module
   end
-
 
   it "should handle constant names in namespaces" do
     YARD.parse_string <<-eof

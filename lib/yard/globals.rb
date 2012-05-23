@@ -4,9 +4,9 @@
 #
 # @see YARD::CodeObjects::Proxy
 # @see YARD::Registry.resolve
-def P(namespace, name = nil)
+def P(namespace, name = nil, type = nil)
   namespace, name = nil, namespace if name.nil?
-  YARD::Registry.resolve(namespace, name, false, true)
+  YARD::Registry.resolve(namespace, name, false, true, type)
 end
 
 # The global {YARD::Logger} instance

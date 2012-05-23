@@ -6,7 +6,9 @@ module YARD
   # @see Registry
   # @see Serializers::YardocSerializer
   class RegistryStore
-    attr_reader :proxy_types, :file, :checksums
+    # @deprecated The registry no longer tracks proxy types
+    attr_reader :proxy_types
+    attr_reader :file, :checksums
 
     def initialize
       @file = nil
@@ -207,6 +209,7 @@ module YARD
       @serializer.objects_path
     end
 
+    # @deprecated The registry no longer tracks proxy types
     def proxy_types_path
       @serializer.proxy_types_path
     end
@@ -243,6 +246,7 @@ module YARD
       @store, @proxy_types = *Marshal.load(File.read_binary(@file))
     end
 
+    # @deprecated The registry no longer tracks proxy types
     def load_proxy_types
       return unless File.file?(proxy_types_path)
       @proxy_types = Marshal.load(File.read_binary(proxy_types_path))
@@ -283,6 +287,7 @@ module YARD
       Dir.glob(File.join(objects_path, '**/*')).select {|f| File.file?(f) }
     end
 
+    # @deprecated The registry no longer tracks proxy types
     def write_proxy_types
       File.open!(proxy_types_path, 'wb') {|f| f.write(Marshal.dump(@proxy_types)) }
     end

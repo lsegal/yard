@@ -25,7 +25,7 @@ module YARD
       #
       # @raise [ArgumentError] if namespace is not a NamespaceObject
       # @return [Proxy] self
-      def initialize(namespace, name)
+      def initialize(namespace, name, type = nil)
         namespace = Registry.root if !namespace || namespace == :root
 
         if name =~ /^#{NSEPQ}/
@@ -46,6 +46,7 @@ module YARD
         @namespace = namespace
         @obj = nil
         @imethod ||= nil
+        self.type = type
 
         if @namespace.is_a?(ConstantObject)
           @origname = nil # forget these for a constant
@@ -90,19 +91,7 @@ module YARD
         if obj = to_obj
           obj.path
         else
-          if @namespace.root?
-            (@imethod ? ISEP : "") + name.to_s
-          elsif @origname
-            if @origname =~ /^[A-Z]/
-              @origname
-            else
-              [namespace.path, @origname].join
-            end
-          elsif name.to_s =~ /^[A-Z]/ # const
-            name.to_s
-          else # class meth?
-            [namespace.path, name.to_s].join(CSEP)
-          end
+          proxy_path
         end
       end
       alias to_s path
@@ -168,14 +157,14 @@ module YARD
         if obj = to_obj
           obj.type
         else
-          Registry.proxy_types[path] || :proxy
+          @type || :proxy
         end
       end
 
       # Allows a parser to infer the type of the proxy by its path.
       # @param [#to_sym] type the proxy's inferred type
       # @return [void]
-      def type=(type) Registry.proxy_types[path] = type.to_sym end
+      def type=(type) @type = type ? type.to_sym : nil end
 
       # @return [Boolean]
       def instance_of?(klass)
@@ -235,7 +224,7 @@ module YARD
       # @return [Base, nil] the registered code object or nil
       def to_obj
         return @obj if @obj
-        if @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s)
+        if @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s, false, false, @type)
           if @origname && @origname.include?("::") && !@obj.path.include?(@origname)
             # the object's path should include the original proxy namespace,
             # otherwise it's (probably) not the right object.
@@ -246,6 +235,22 @@ module YARD
           end
         end
         @obj
+      end
+
+      def proxy_path
+        if @namespace.root?
+          (@imethod ? ISEP : "") + name.to_s
+        elsif @origname
+          if @origname =~ /^[A-Z]/
+            @origname
+          else
+            [namespace.path, @origname].join
+          end
+        elsif name.to_s =~ /^[A-Z]/ # const
+          name.to_s
+        else # class meth?
+          [namespace.path, name.to_s].join(CSEP)
+        end
       end
     end
   end
