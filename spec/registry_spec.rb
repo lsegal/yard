@@ -169,6 +169,24 @@ describe YARD::Registry do
       Registry.resolve(P('MyObject'), '#foo', true).should be_nil
     end
 
+    it "should allow type=:typename to ensure resolved object is of a certain type" do
+      YARD.parse_string "class Foo; end"
+      Registry.resolve(Registry.root, 'Foo').should == Registry.at('Foo')
+      Registry.resolve(Registry.root, 'Foo', false, false, :method).should be_nil
+    end
+
+    it "should allow keep trying to find obj where type equals object type" do
+      YARD.parse_string <<-eof
+        module Foo
+          class Bar; end
+          def self.Bar; end
+        end
+      eof
+      Registry.resolve(P('Foo'), 'Bar').should == Registry.at('Foo::Bar')
+      Registry.resolve(P('Foo'), 'Bar', false, false, :method).should == 
+        Registry.at('Foo.Bar')
+    end
+
     it "should only check 'Path' in lookup on root namespace" do
       Registry.should_receive(:at).once.with('Test').and_return(true)
       Registry.resolve(Registry.root, "Test")

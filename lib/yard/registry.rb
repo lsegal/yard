@@ -260,12 +260,14 @@ module YARD
       #   when performing name resolution if set to +true+.
       # @param [Boolean] proxy_fallback If +true+, returns a proxy representing
       #   the unresolved path (namespace + name) if no object is found.
+      # @param [Symbol, nil] type the {CodeObjects::Base#type} that the resolved
+      #   object must be equal to. No type checking if nil.
       # @return [CodeObjects::Base] the object if it is found
       # @return [CodeObjects::Proxy] a Proxy representing the object if
       #   +proxy_fallback+ is +true+.
       # @return [nil] if +proxy_fallback+ is +false+ and no object was found.
       # @see P
-      def resolve(namespace, name, inheritance = false, proxy_fallback = false)
+      def resolve(namespace, name, inheritance = false, proxy_fallback = false, type = nil)
         if namespace.is_a?(CodeObjects::Proxy)
           return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
         end
@@ -280,7 +282,8 @@ module YARD
         name = name.to_s
         if name =~ /^#{CodeObjects::NSEPQ}/
           [name, name[2..-1]].each do |n|
-            return at(n) if at(n)
+            found = at(n)
+            return found if found && (type.nil? || found.type == type)
           end
         else
           while namespace
@@ -298,7 +301,7 @@ module YARD
               end
               nss.each do |ns|
                 next if ns.is_a?(CodeObjects::Proxy)
-                found = partial_resolve(ns, name)
+                found = partial_resolve(ns, name, type)
                 return found if found
               end
             end
@@ -359,8 +362,11 @@ module YARD
       #
       # @param [CodeObjects::NamespaceObject] namespace the starting namespace
       # @param [String] name the name to look for
-      def partial_resolve(namespace, name)
-        return at(name) || at('#' + name) if namespace.root?
+      # @param [Symbol, nil] type the {CodeObjects::Base#type} that the resolved
+      #   object must be equal to
+      def partial_resolve(namespace, name, type = nil)
+        obj = at(name) || at('#' + name) if namespace.root?
+        return obj if obj && (type.nil? || obj.type == type)
         [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
           next if s.empty? && name =~ /^\w/
           path = name
@@ -368,7 +374,7 @@ module YARD
             path = [namespace.path, name].join(s)
           end
           found = at(path)
-          return found if found
+          return found if found && (type.nil? || found.type == type)
         end
         nil
       end
