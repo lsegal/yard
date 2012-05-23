@@ -27,13 +27,11 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
       raise YARD::Parser::UndocumentableError
     end
 
-    obj = Proxy.new(namespace, mixmatch)
-
-    case obj
-    when Proxy
-      obj.type = :module
+    case obj = Proxy.new(namespace, mixmatch)
     when ConstantObject # If a constant is included, use its value as the real object
-      obj = Proxy.new(namespace, obj.value)
+      obj = Proxy.new(namespace, obj.value, :module)
+    else
+      obj = Proxy.new(namespace, mixmatch, :module)
     end
 
     namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)

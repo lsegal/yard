@@ -25,10 +25,10 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     raise YARD::Parser::UndocumentableError if mixin.first.type == :ident
 
     case obj = Proxy.new(namespace, mixin.source)
-    when Proxy
-      obj.type = :module
     when ConstantObject # If a constant is included, use its value as the real object
-      obj = Proxy.new(namespace, obj.value)
+      obj = Proxy.new(namespace, obj.value, :module)
+    else
+      obj = Proxy.new(namespace, mixin.source, :module)
     end
 
     namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
