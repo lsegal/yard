@@ -269,7 +269,7 @@ module YARD
       # @see P
       def resolve(namespace, name, inheritance = false, proxy_fallback = false, type = nil)
         if namespace.is_a?(CodeObjects::Proxy)
-          return proxy_fallback ? CodeObjects::Proxy.new(namespace, name) : nil
+          return proxy_fallback ? CodeObjects::Proxy.new(namespace, name, type) : nil
         end
 
         if namespace == :root || !namespace
@@ -308,7 +308,7 @@ module YARD
             namespace = namespace.parent
           end
         end
-        proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name) : nil
+        proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name, type) : nil
       end
 
       # @group Managing Source File Checksums

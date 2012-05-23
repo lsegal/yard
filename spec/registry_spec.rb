@@ -187,6 +187,14 @@ describe YARD::Registry do
         Registry.at('Foo.Bar')
     end
 
+    it "should return proxy fallback with given type if supplied" do
+      YARD.parse_string "module Foo; end"
+      proxy = Registry.resolve(P('Foo'), 'Bar', false, true, :method)
+      proxy.type.should == :method
+      proxy = Registry.resolve(P('Qux'), 'Bar', false, true, :method)
+      proxy.type.should == :method
+    end
+
     it "should only check 'Path' in lookup on root namespace" do
       Registry.should_receive(:at).once.with('Test').and_return(true)
       Registry.resolve(Registry.root, "Test")
