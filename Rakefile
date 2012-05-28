@@ -13,7 +13,7 @@ end
 
 desc "Installs the gem"
 task :install => :gem do
-  sh "#{SUDO} gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
+  sh "gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
 end
 
 begin
