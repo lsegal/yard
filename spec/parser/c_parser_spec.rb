@@ -85,6 +85,42 @@ describe YARD::Parser::C::CParser do
         constant.docstring.should == "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
       end
     end
+
+    describe 'Macros' do
+      it "should handle param## inside of macros" do
+        thr = Thread.new do
+          parse <<-eof
+          void
+          Init_gobject_gparamspecs(void)
+          {
+              VALUE cParamSpec = GTYPE2CLASS(G_TYPE_PARAM);
+              VALUE c;
+
+          #define DEF_NUMERIC_PSPEC_METHODS(c, typename) \
+            G_STMT_START {\
+              rbg_define_method(c, "initialize", typename##_initialize, 7); \
+              rbg_define_method(c, "minimum", typename##_minimum, 0); \
+              rbg_define_method(c, "maximum", typename##_maximum, 0); \
+              rbg_define_method(c, "range", typename##_range, 0); \
+            } G_STMT_END
+
+          #if 0
+              rbg_define_method(c, "default_value", typename##_default_value, 0); \
+              rb_define_alias(c, "default", "default_value"); \
+
+          #endif
+
+              c = G_DEF_CLASS(G_TYPE_PARAM_CHAR, "Char", cParamSpec);
+              DEF_NUMERIC_PSPEC_METHODS(c, char);
+          eof
+        end
+        thr.join(5)
+        if thr.alive?
+          fail "Did not parse in time"
+          thr.kill
+        end
+      end
+    end
   end
 
   describe 'Override comments' do

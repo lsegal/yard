@@ -55,7 +55,7 @@ module YARD
         end
 
         def consume_directive
-          return unless @newline
+          return(advance) unless @newline
           @last_comment = nil
           @last_statement = nil
           advance_loop do
