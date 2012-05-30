@@ -51,8 +51,10 @@ module YARD
         Registry.load
         optparse(*args)
 
-        contents = objects.map {|o| o.format(options) }.join("\n")
-        opts = {:serialize => true, :type => :layout, :contents => contents}
+        contents = objects.map do |o|
+          o.format(options.merge(:serialize => false))
+        end.join("\n")
+        opts = {:type => :layout, :contents => contents}
         options.update(opts)
         Templates::Engine.render(options)
       end

@@ -82,7 +82,7 @@ module YARD
           options = set_default_options(options)
           mod = template(options.template, options.type, options.format)
 
-          if options.serialize != false
+          if options.serializer && options.serialize != false
             with_serializer(options.object, options.serializer) { mod.run(options) }
           else
             mod.run(options)

@@ -43,7 +43,7 @@ module YARD
       attr_accessor :type
 
       # @return [Boolean] whether serialization should be performed
-      default_attr :serialize, false
+      default_attr :serialize, true
 
       # @return [Serializers::Base] the serializer used to generate links and serialize
       #   output. Serialization output only occurs if {#serialize} is +true+.
