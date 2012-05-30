@@ -9,7 +9,7 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
     return if (ident = statement.jump(:ident)) == statement
     case statement.type
     when :var_ref, :vcall
-      self.visibility = ident.first
+      self.visibility = ident.first.to_sym
     when :fcall, :command
       statement[1].traverse do |node|
         case node.type

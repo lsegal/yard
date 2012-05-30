@@ -356,12 +356,13 @@ module YARD
         opts = {
           :namespace => namespace,
           :scope => :instance,
-          :owner => owner || namespace
+          :owner => owner || namespace,
+          :visibility => nil
         }.update(opts)
 
         ns, vis, sc, oo = namespace, visibility, scope, owner
         self.namespace = opts[:namespace]
-        self.visibility = :public
+        self.visibility = opts[:visibility] || :public
         self.scope = opts[:scope]
         self.owner = opts[:owner]
 

@@ -65,7 +65,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
 
   # @since 0.5.5
   def parse_then_block
-    parse_block
+    parse_block(:visibility => visibility)
   end
 
   # @since 0.5.5
@@ -74,7 +74,9 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     stmtlist = YARD::Parser::Ruby::Legacy::StatementList
     stmtlist.new(statement.block).each do |stmt|
       if TkELSE === stmt.tokens.first
-        parser.process(stmtlist.new(stmt.block))
+        push_state(:visibility => visibility) do
+          parser.process(stmtlist.new(stmt.block))
+        end
       end
     end
   end

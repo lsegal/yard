@@ -58,4 +58,12 @@ class A
   else
     def q; end
   end
+
+  private
+
+  if a == 1
+    def m; end
+  else
+    def mnot; end
+  end
 end

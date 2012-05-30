@@ -75,10 +75,12 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
   end
 
   def parse_then_block
-    parse_block(statement.then_block)
+    parse_block(statement.then_block, :visibility => visibility)
   end
 
   def parse_else_block
-    parse_block(statement.else_block) if statement.else_block
+    if statement.else_block
+      parse_block(statement.else_block, :visibility => visibility)
+    end
   end
 end

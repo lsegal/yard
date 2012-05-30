@@ -48,6 +48,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
     verify_method :n
   end
 
+  it "should maintain visibility and scope state inside condition" do
+    Registry.at('A#m').visibility.should == :private
+    Registry.at('A#mnot').visibility.should == :private
+  end
+
   it "should not fail on complex conditions" do
     log.should_not_receive(:warn)
     log.should_not_receive(:error)
