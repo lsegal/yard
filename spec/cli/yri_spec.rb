@@ -1,12 +1,14 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class YARD::CLI::YRI
+class TestYRI < YARD::CLI::YRI
   public :optparse, :find_object, :cache_object
+  def test_stub; end
+  def print_object(*args) test_stub; super end
 end
 
 describe YARD::CLI::YRI do
   before do
-    @yri = YARD::CLI::YRI.new
+    @yri = TestYRI.new
     Registry.stub!(:load)
   end
 
@@ -83,6 +85,14 @@ describe YARD::CLI::YRI do
     it "should print no documentation exists for object if object is not found" do
       STDERR.should_receive(:puts).with("No documentation for `Foo'")
       @yri.should_receive(:exit).with(1)
+      @yri.run('Foo')
+    end
+
+    it "should ensure output is serialized" do
+      obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
+      class << @yri
+        def test_stub; @serializer.should_receive(:serialize).once end
+      end
       @yri.run('Foo')
     end
   end
