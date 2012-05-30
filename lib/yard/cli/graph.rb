@@ -11,9 +11,6 @@ module YARD
       # @return [Boolean] whether to show the object dependencies
       attr_accessor :dependencies
 
-      # @return [Verifier] the verifier object
-      attr_accessor :verifier
-
       # @return [String] any contents to pass to the digraph
       attr_accessor :contents
     end

@@ -80,6 +80,9 @@ module YARD
           re.match(matchstr.to_s)
         end
       end
+
+      # @return [Verifier] the verifier object
+      attr_accessor :verifier
     end
   end
 end
