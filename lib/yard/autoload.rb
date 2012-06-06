@@ -133,10 +133,11 @@ module YARD
   # Namespace for internationalization (i18n)
   # @since 0.8.0
   module I18n
+    autoload :Locale,          __p('i18n/locale')
+    autoload :Message,         __p('i18n/message')
+    autoload :Messages,        __p('i18n/messages')
     autoload :PotGenerator,    __p('i18n/pot_generator')
     autoload :Text,            __p('i18n/text')
-    autoload :Messages,        __p('i18n/messages')
-    autoload :Message,         __p('i18n/message')
   end
 
   # The parser namespace holds all parsing engines used by YARD.
