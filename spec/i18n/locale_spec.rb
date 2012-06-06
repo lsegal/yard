@@ -1,5 +1,3 @@
-require "tmpdir"
-
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::I18n::Locale do
@@ -19,14 +17,12 @@ describe YARD::I18n::Locale do
 
   describe "#load" do
     it "should return false for nonexistent PO" do
-      @locale.load("nonexistent-locale-directory").should == false
+      File.should_receive(:exist?).with('foo/fr.po').and_return(false)
+      @locale.load('foo').should == false
     end
 
     it "should return true for existent PO" do
-      Dir.mktmpdir do |locale_directory|
-        po_path = "#{locale_directory}/fr.po"
-        File.open(po_path, "w") do |po|
-          po.puts(<<-eop)
+      data = <<-eop
 msgid ""
 msgstr ""
 "Language: fr\n"
@@ -37,9 +33,15 @@ msgstr ""
 msgid "Hello"
 msgstr "Bonjour"
 eop
-        end
-        @locale.load(locale_directory).should == true
+      parser = GetText::PoParser.new
+      File.should_receive(:exist?).with('foo/fr.po').and_return(true)
+      GetText::PoParser.should_receive(:new).and_return(parser)
+      parser.should_receive(:parse_file) do |file, hash|
+        file.should == 'foo/fr.po'
+        parser.parse(data, hash)
       end
+      @locale.load('foo').should == true
+      @locale.translate('Hello').should == "Bonjour"
     end
   end
 
