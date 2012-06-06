@@ -15,6 +15,8 @@ module YARD
         case object
         when CodeObjects::RootObject
           "toplevel"
+        when CodeObjects::ExtendedMethodObject
+          serialized_path(object.namespace) + ':' + escape(object.name.to_s)
         when CodeObjects::MethodObject
           serialized_path(object.namespace) +
             (object.scope == :instance ? ":" : ".") + escape(object.name.to_s)

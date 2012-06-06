@@ -3,8 +3,7 @@
     <h2><%= scope.to_s.capitalize %> Attribute Details</h2>
     <% list.each_with_index do |meth, i| %>
       <% rw = meth.attr_info %>
-      <span id="<%= anchor_for(rw[:write]) %>"></span>
-      <span id="<%= anchor_for(rw[:read]) %>"></span>
+      <span id="<%= anchor_for(rw[meth.reader? ? :write : :read]) %>"></span>
       <%= yieldall :object => meth, :owner => object, :index => i %>
     <% end %>
   </div>

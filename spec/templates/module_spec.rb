@@ -147,6 +147,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
       end
 
       module Foo
+        def self.not_included; end
+
         # Docs for xyz
         def xyz; end
         # Docs for bar_attr
@@ -154,6 +156,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
       end
 
       module Bar
+        def self.not_included; end
+
         # @group Booya
 
         # Docs for baz in Booya group
