@@ -3,7 +3,7 @@ require "gettext/runtime/mofile"
 
 module YARD
   module I18n
-    # +Locale+ is an unit of translation. It has {#name} and {#messages}.
+    # +Locale+ is a unit of translation. It has {#name} and {#messages}.
     #
     # @since 0.8.2
     class Locale
