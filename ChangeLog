@@ -1,3 +1,195 @@
+2012-06-07  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: Bump to version 0.8.2
+
+2012-06-06  Loren Segal <lsegal@soen.ca>
+
+  * spec/i18n/locale_spec.rb: Fix Locale spec to not use disk
+
+  * lib/yard/i18n/locale.rb: Update Locale documentation
+
+  * lib/yard/i18n/locale.rb: Fix documentation typo
+
+2012-06-05  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server/doc_server_serializer.rb,
+  .../templates/default/fulldoc/html/js/live.js,
+  .../default/method_details/html/permalink.erb,
+  .../templates/default/method_details/html/setup.rb,
+  spec/templates/examples/module001.html,
+  spec/templates/examples/module002.html,
+  spec/templates/examples/module003.html,
+  spec/templates/examples/module004.html, spec/templates/module_spec.rb,
+  .../default/module/html/attribute_details.erb: Make permalinks work for
+  embedded mixins  Fixes #540
+
+  * lib/yard/server/commands/base.rb: Ensure that server does not serialize
+  output to disk by default
+
+2012-05-30  Loren Segal <lsegal@soen.ca>
+
+  * spec/cli/yri_spec.rb: Add test to yri to ensure serialization occurs
+
+  * lib/yard/cli/graph.rb, lib/yard/templates/engine.rb,
+  lib/yard/templates/template_options.rb: Change TemplateOptions#serialize
+  default to true  Only serializer option is required to produce output. This
+  is pre-0.8.0 behaviour and is needed for backward compatibility.  References
+  #548
+
+  * lib/yard/cli/graph.rb, lib/yard/templates/template_options.rb: Move
+  verifier to TemplateOptions
+
+  * lib/yard/handlers/base.rb,
+  lib/yard/handlers/ruby/class_condition_handler.rb,
+  .../ruby/legacy/class_condition_handler.rb,
+  lib/yard/handlers/ruby/visibility_handler.rb,
+  spec/handlers/class_condition_handler_spec.rb,
+  .../examples/class_condition_handler_001.rb.txt: Accept visibility in
+  push_state and push visibility state in class condition handlers  Fixes #551
+
+2012-05-28  Loren Segal <lsegal@soen.ca>
+
+  * Rakefile: Remove sudo from install task
+
+  * lib/yard/handlers/c/handler_methods.rb, lib/yard/parser/c/c_parser.rb,
+  spec/parser/c_parser_spec.rb: Fix issue with C parser not properly parsing
+  macros with arg## syntax
+
+2012-05-22  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/ruby/legacy/mixin_handler.rb,
+  lib/yard/handlers/ruby/mixin_handler.rb: Ensure that Registry resolution
+  picks a module when parsing a mixin.  Fixes #545
+
+  * lib/yard/code_objects/proxy.rb, lib/yard/globals.rb, lib/yard/registry.rb,
+  lib/yard/registry_store.rb, lib/yard/serializers/yardoc_serializer.rb,
+  spec/code_objects/proxy_spec.rb, spec/handlers/c/class_handler_spec.rb,
+  spec/handlers/mixin_handler_spec.rb: Add type initializer to Proxy and P() to
+  constrain Proxy type  Also disconnects Registry.proxy_types from Proxy class,
+  since nothing was using this besides the Proxy#type attribute itself. This
+  change modifies a test and no longer allows two separate Proxy objects to
+  maintain the same type information. Proxy type information is stored locally
+  to the proxy object, and no longer tracked in the Registry.  Deprecates
+  proxy_types method and tracking in Registry and RegistryStore
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Ensure that resolve returns
+  proxy fallback with supplied type set
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: Add type verification to
+  Registry.resolve to ensure resolve returns object of intended type
+
+2012-05-21  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/graph.rb, spec/cli/graph_spec.rb: Refactor yard graph and fix
+  regression that broke output  Fixes #548
+
+2012-05-20  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/i18n/text.rb, spec/i18n/text_spec.rb: i18n: add
+  YARD::I18n::Text#translate
+
+  * spec/i18n/text_spec.rb: i18n: group existing specs for
+  YARD::I18n::Text#extract_messages
+
+  * lib/yard/i18n/text.rb: i18n: extract text parse code
+
+  * Gemfile, lib/yard/autoload.rb, lib/yard/i18n/locale.rb,
+  spec/i18n/locale_spec.rb: i18n: add YARD::I18n::Locale
+
+2012-05-19  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/c/init_handler.rb, spec/handlers/c/init_handler_spec.rb:
+  Check non-Init methods for object declarations in CRuby code  Closes #543
+
+  * templates/default/fulldoc/html/js/app.js: Collapse/expand all summary lists
+  when button on any list is clicked
+
+  * lib/yard/tags/directives.rb, spec/handlers/dsl_handler_spec.rb,
+  spec/tags/directives_spec.rb: Parse parameters from signature in method
+  directive
+
+2012-05-13  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/docstring_parser.rb: Make DocstringParser attributes writable
+
+2012-05-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/handlers/c/override_comment_handler.rb,
+  spec/handlers/c/override_comment_handler_spec.rb: Add proper file info to
+  CRuby override comments
+
+2012-05-10  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/template_options.rb: --embed-mixins should ignore
+  methods defined directly on a module
+
+  * lib/yard/registry.rb: Fix registry doc examples
+
+  * lib/yard/docstring_parser.rb: Fix doc references
+
+  * Rakefile: Remove manual loading of .travis.yml in suite task, rvm-tester
+  does this for us, now.
+
+2012-05-09  Loren Segal <lsegal@soen.ca>
+
+  * Gemfile, Rakefile: Use rvm-tester for suite task
+
+  * lib/yard/logging.rb: Only clear progress in show_progress mode
+
+  * lib/yard/cli/yardoc.rb, lib/yard/logging.rb,
+  lib/yard/parser/source_parser.rb, lib/yard/templates/engine.rb,
+  spec/parser/source_parser_spec.rb, templates/default/fulldoc/html/setup.rb:
+  Add log#progress and log#capture to log output using new progress indicator
+  in 1.9.x. Captures are not fully implemented, but will allow benchmarking of
+  data through a --time-report option in yardoc.
+
+  * lib/yard/templates/template_options.rb: Add #owner to template options
+
+  * Rakefile: No more sudo.
+
+  * lib/yard/logging.rb: Logging should be sent to STDOUT not STDERR
+
+  * lib/yard/cli/yardoc.rb: Re-generating message should be debug, not info
+
+  * Gemfile: Remove RSpec version lock in Gemfile again
+
+2012-05-08  Loren Segal <lsegal@soen.ca>
+
+  * spec/rubygems/doc_manager_spec.rb: Don't stub all FileUtils methods, just
+  important ones
+
+  * lib/yard/rubygems/doc_manager.rb: Require user_interaction since RubyGems
+  no longer does
+
+  * Gemfile: Re-lock Gemfile due to travis errors
+
+  * spec/rubygems/doc_manager_spec.rb: Require fileutils for specs
+
+  * Gemfile: Unlock rspec in Gemfile
+
+  * lib/yard/logging.rb, lib/yard/parser/source_parser.rb,
+  spec/logging_spec.rb: Parser backtraces should be logged in warn level 
+  Closes #541
+
+  * spec/rubygems/doc_manager_spec.rb: Add specs for yard doc installation
+
+  * lib/yard/rubygems/doc_manager.rb, spec/rubygems/doc_manager_spec.rb: Add
+  specs for rubygems plugin code and handle --backtrace and .yardopts files
+
+2012-05-04  Loren Segal <lsegal@soen.ca>
+
+  * spec/parser/source_parser_spec.rb: Remove and_return on
+  should_not_receive() to fix spec
+
+  * Gemfile: Update Gemfile to deal with RSpec regression rspec/rspec-mocks#132
+
+  * lib/yard/tags/default_factory.rb, spec/tags/default_factory_spec.rb: Fix
+  broken specs, references #535
+
+  * lib/yard/tags/default_factory.rb, spec/tags/default_factory_spec.rb: Fix
+  type parser to properly handle Ruby's operator and special method names 
+  Closes #535
+
 2012-05-02  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, docs/WhatsNew.md, lib/yard.rb: Bump to 0.8.1, update

@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.8.1 (codename "Shave It")    
-**Release Date**: May 2nd 2012    
+**Latest Version**: 0.8.2 (codename "Shave It")    
+**Release Date**: June 7th 2012    
 
 Synopsis
 --------
@@ -285,6 +285,13 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **June.7.12**: 0.8.2 release
+    - Embedded mixins should ignore methods defined on module (#539)
+    - Fixed permalinks for embedded mixins in `yard server` (#540)
+    - Improve parsing in CRuby code (#543)
+    - Ensure Registry.resolve picks module when parsing mixins (#545)
+    - Respect current visibility when parsing class conditions (#551)
 
 - **May.2.12**: 0.8.1 release
     - Added `--[no-]api` switch to generate docs for API sets (see {file:docs/WhatsNew.md} for details) (#532)

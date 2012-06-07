@@ -1,5 +1,5 @@
 module YARD
-  VERSION = "0.8.1"
+  VERSION = "0.8.2"
 
   # The root path for YARD source libraries
   ROOT = File.expand_path(File.dirname(__FILE__))
