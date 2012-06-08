@@ -287,10 +287,12 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 ## Changelog
 
 - **June.7.12**: 0.8.2 release
+    - Added progress style output in tty terminals
     - Embedded mixins should ignore methods defined on module (#539)
     - Fixed permalinks for embedded mixins in `yard server` (#540)
     - Improve parsing in CRuby code (#543)
     - Ensure Registry.resolve picks module when parsing mixins (#545)
+    - Fixed regression that caused various commands to not show output (#548)
     - Respect current visibility when parsing class conditions (#551)
 
 - **May.2.12**: 0.8.1 release
