@@ -136,12 +136,11 @@ module YARD
         #   receive +#options+ as an argument.
         # @return [String] the resulting output to display
         def render(object = nil)
-          opts = options.merge(:serialize => false)
           case object
           when CodeObjects::Base
-            cache object.format(opts)
+            cache object.format(options)
           when nil
-            cache Templates::Engine.render(opts)
+            cache Templates::Engine.render(options)
           else
             cache object
           end

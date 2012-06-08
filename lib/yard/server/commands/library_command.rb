@@ -8,7 +8,7 @@ module YARD
         def library; @command.library end
         def single_library; @command.single_library end
         def serializer; @command.serializer end
-        default_attr :serialize, false
+        def serialize; false end
 
         attr_accessor :command
         attr_accessor :frames
@@ -99,6 +99,7 @@ module YARD
               end
               yardoc.send(:verify_markup_options)
               yardoc.options.delete(:serializer)
+              yardoc.options.delete(:serialize)
               options.update(yardoc.options.to_hash)
             end
           end
