@@ -188,7 +188,7 @@ module YARD
       names_set = {}
       self.class.ancestors.each do |klass| # look at all ancestors
         defaults = klass.instance_variable_get("@defaults")
-        return unless defaults
+        next unless defaults
         defaults.each do |key, value|
           next if names_set[key]
           names_set[key] = true

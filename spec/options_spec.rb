@@ -36,6 +36,17 @@ describe YARD::Options do
       o.reset_defaults
       o.foo.should == 'FOO'
     end
+
+    it "should use defaults from superclass as well" do
+      class ResetDefaultOptions2 < YARD::Options
+        default_attr :foo, 'FOO'
+      end
+      class ResetDefaultOptions3 < ResetDefaultOptions2
+      end
+      o = ResetDefaultOptions3.new
+      o.reset_defaults
+      o.foo.should == 'FOO'
+    end
   end
 
   describe '#delete' do
