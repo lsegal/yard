@@ -1,3 +1,20 @@
+2012-06-10  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard.rb: Bump to 0.8.2.1
+
+2012-06-09  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/options.rb, spec/options_spec.rb: Ensure that defaults are
+  inherited from parent class
+
+2012-06-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/server/commands/base.rb,
+  lib/yard/server/commands/library_command.rb: Ensure that output is not
+  serialized in server templates
+
+  * README.md: Add changelog information that was omitted from release
+
 2012-06-07  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb: Bump to version 0.8.2

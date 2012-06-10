@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.8.2 (codename "Shave It")    
-**Release Date**: June 7th 2012    
+**Latest Version**: 0.8.2.1 (codename "Shave It")    
+**Release Date**: June 10th 2012    
 
 Synopsis
 --------
@@ -285,6 +285,9 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **June.9.12**: 0.8.2.1 release
+    - Fix a set of regressions in yard server search and dynamic generation
 
 - **June.7.12**: 0.8.2 release
     - Added progress style output in tty terminals
