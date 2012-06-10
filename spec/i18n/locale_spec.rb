@@ -21,7 +21,13 @@ describe YARD::I18n::Locale do
       @locale.load('foo').should == false
     end
 
-    it "should return true for existent PO" do
+    have_gettext_gem = true
+    begin
+      require "gettext/tools/poparser"
+    rescue LoadError
+      have_gettext_gem = false
+    end
+    it "should return true for existent PO", :if => have_gettext_gem do
       data = <<-eop
 msgid ""
 msgstr ""
