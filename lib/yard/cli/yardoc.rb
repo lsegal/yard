@@ -298,6 +298,8 @@ module YARD
         add_visibility_verifier
         add_api_verifier
 
+        apply_locale
+
         # US-ASCII is invalid encoding for onefile
         if defined?(::Encoding) && options.onefile
           if ::Encoding.default_internal == ::Encoding::US_ASCII
@@ -487,6 +489,15 @@ module YARD
         expr = "#{apis.uniq.inspect}.include?(@api.text)"
         expr += " || !@api" if no_api
         options.verifier.add_expressions(expr)
+      end
+
+      # Applies the specified locale to collected objects
+      # @return [void]
+      # @since 0.8.3
+      def apply_locale
+        options.files.each do |file|
+          file.locale = options.locale
+        end
       end
 
       # (see Templates::Helpers::BaseHelper#run_verifier)
@@ -734,6 +745,12 @@ module YARD
 
         opts.on('--no-stats', 'Don\'t print statistics') do
           self.statistics = false
+        end
+
+        opts.on('--locale LOCALE',
+                'The locale for generated documentation.',
+                '  (defaults to en)') do |locale|
+          options.locale = locale
         end
       end
 
