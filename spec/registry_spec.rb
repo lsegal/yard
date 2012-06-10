@@ -81,6 +81,15 @@ describe YARD::Registry do
     end
   end
 
+  describe '.locale' do
+    it "should load locale object" do
+      fr_locale = I18n::Locale.new("fr")
+      store = Registry.send(:thread_local_store)
+      store.should_receive(:locale).with("fr").and_return(fr_locale)
+      Registry.locale("fr").should == fr_locale
+    end
+  end
+
   describe '.resolve' do
     it "should resolve any existing namespace" do
       o1 = ModuleObject.new(:root, :A)

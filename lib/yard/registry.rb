@@ -239,6 +239,13 @@ module YARD
       # @return [CodeObjects::RootObject] the root object in the namespace
       def root; thread_local_store[:root] end
 
+      # @param [String] name the locale name.
+      # @return [I18n::Locale] the locale object for +name+.
+      # @since 0.8.3
+      def locale(name)
+        thread_local_store.locale(name)
+      end
+
       # Attempts to find an object by name starting at +namespace+, performing
       # a lookup similar to Ruby's method of resolving a constant in a namespace.
       #
