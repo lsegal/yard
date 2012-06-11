@@ -12,6 +12,7 @@ module YARD
         super
         @list_all = false
         @use_git = false
+        @compact = false
         @old_git_commit = nil
         @old_path = Dir.pwd
         log.show_backtraces = true
@@ -39,30 +40,55 @@ module YARD
 
         return if registry.size != 2
 
-        [   ["Added objects", registry[1] - registry[0]],
-            ["Removed objects", registry[0] - registry[1]]].each do |name, objects|
+        first_object = nil
+        [   ["Added objects", "A", registry[1] - registry[0]],
+            ["Removed objects", "D", registry[0] - registry[1]]].each do |name, short, objects|
           next if objects.empty?
           last_object = nil
           all_objects_notice = false
-          puts name + ":"
+          puts name + ":" unless @compact
           objects.sort.each do |object|
             if !@list_all && last_object && object =~ /#{Regexp.quote last_object}(::|\.|#)/
               print " (...)" unless all_objects_notice
               all_objects_notice = true
               next
+            elsif @compact
+              puts if first_object
             else
               puts
             end
             all_objects_notice = false
-            print "  " + object
+            print (@compact ? "#{short} " : "  ") + object
             last_object = object
+            first_object = true
           end
-          puts
-          puts
+          unless @compact
+            puts; puts
+          end
         end
+        puts if @compact
       end
 
       private
+
+      def added_objects(registry1, registry2)
+        registry2 - registry1
+      end
+
+      def modified_objects(registry1, registry2)
+        registry1.select do |obj|
+          case obj
+          when CodeObjects::MethodObject
+            registry2.find {|o| obj == o && o.source != obj.source }
+          when CodeObjects::ConstantObject
+            registry2.find {|o| obj == o && o.value != obj.value }
+          end
+        end.compact
+      end
+
+      def removed_objects(registry1, registry2)
+        registry1 - registry2
+      end
 
       def load_git_commit(commit)
         commit_path = 'git_commit' + commit.gsub(/\W/, '_')
@@ -184,6 +210,7 @@ module YARD
         opts.on('-a', '--all', 'List all objects, even if they are inside added/removed module/class') do
           @list_all = true
         end
+        opts.on('--compact', 'Show compact results') { @compact = true }
         opts.on('--git', 'Compare versions from two git commit/branches') do
           @use_git = true
         end

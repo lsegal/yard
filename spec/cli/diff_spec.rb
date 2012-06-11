@@ -57,6 +57,18 @@ Removed objects:
 eof
     end
 
+    it "should accept --compact" do
+      run('--compact')
+      @data.string.should == <<-eof
+A A (...)
+A B
+A C.bar
+A C.foo
+D C#fooey
+D D.bar
+eof
+    end
+
     it "should accept -a/--all" do
       ['-a', '--all'].each do |opt|
         run(opt)
@@ -79,6 +91,22 @@ Removed objects:
 
 eof
       end
+    end
+
+    it "should accept --compact and --all" do
+      run('--compact', '--all')
+      @data.string.should == <<-eof
+A A
+A A#foo
+A A.foo
+A A::B
+A A::B::C
+A B
+A C.bar
+A C.foo
+D C#fooey
+D D.bar
+eof
     end
   end
 
