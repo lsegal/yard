@@ -100,6 +100,7 @@ module YARD
         Dir.chdir(tmpdir)
         log.info("git says: " + `git reset --hard #{commit}`.chomp)
         generate_yardoc(tmpdir)
+      ensure
         Dir.chdir(@old_path)
         cleanup(commit_path)
       end
@@ -166,9 +167,9 @@ module YARD
 
       def generate_yardoc(dir)
         olddir = Dir.pwd
-        Dir.chdir(dir)
-        log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
-        Dir.chdir(olddir)
+        Dir.chdir(dir) do
+          log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
+        end
       end
 
       def expand_gem(gemfile, io)
