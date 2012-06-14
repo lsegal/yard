@@ -1,6 +1,6 @@
-module YARD
-  VERSION = "0.8.2.1"
+require File.expand_path('../yard/version.rb', __FILE__)
 
+module YARD
   # The root path for YARD source libraries
   ROOT = File.expand_path(File.dirname(__FILE__))
 
