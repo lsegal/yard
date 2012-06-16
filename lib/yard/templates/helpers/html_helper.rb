@@ -60,7 +60,8 @@ module YARD
         if provider.to_s == 'RDiscount'
           provider.new(text, :autolink).to_html
         elsif provider.to_s == 'RedcarpetCompat'
-          provider.new(text, :gh_blockcode, :fenced_code, :autolink).to_html
+          provider.new(text, :no_intraemphasis, :gh_blockcode,
+                             :fenced_code, :autolink).to_html
         else
           provider.new(text).to_html
         end
