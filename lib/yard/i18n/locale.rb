@@ -32,6 +32,8 @@ module YARD
           require "gettext/tools/poparser"
           require "gettext/runtime/mofile"
         rescue LoadError
+          log.warn "Need gettext gem for i18n feature:"
+          log.warn "  gem install gettext"
           return false
         end
 
