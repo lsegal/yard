@@ -364,5 +364,30 @@ describe YARD::Registry do
     it "should automatically clear in new threads" do
       Thread.new { Registry.all.should be_empty }.join
     end
+
+    it "should allow setting of po_dir in separate threads" do
+      barrier = 0
+      mutex   = Mutex.new
+      threads = []
+      threads << Thread.new do
+        Registry.po_dir.should == 'po'
+        Registry.po_dir = 'locale'
+        mutex.synchronize { barrier += 1 }
+        while barrier == 1 do
+          s = "barrier = 1, spinning"
+        end
+        Registry.po_dir.should == 'locale'
+      end
+      threads << Thread.new do
+        while barrier == 0 do
+          s = "barrier = 0, spinning"
+        end
+        Registry.po_dir.should == 'po'
+        mutex.synchronize { barrier += 1 }
+        Registry.po_dir = '.'
+      end
+      threads.each {|t| t.join }
+      Registry.po_dir = Registry::DEFAULT_PO_DIR
+    end
   end
 end

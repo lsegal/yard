@@ -326,6 +326,13 @@ describe YARD::CLI::Yardoc do
         @yardoc.run('--locale=fr', '-', 'extra_file1', 'extra_file2')
       end
     end
+
+    describe '--po-dir' do
+      it 'should set Registry.po_dir' do
+        Registry.should_receive(:po_dir=).with("locale")
+        @yardoc.run('--po-dir=locale')
+      end
+    end
   end
 
   describe '--[no-]api' do

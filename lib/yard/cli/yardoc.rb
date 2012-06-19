@@ -752,6 +752,12 @@ module YARD
                 '  (defaults to en)') do |locale|
           options.locale = locale
         end
+
+        opts.on('--po-dir DIR',
+                'The directory that has .po files.',
+                '  (defaults to #{YARD::Registry.po_dir})') do |dir|
+          YARD::Registry.po_dir = dir
+        end
       end
 
       # Adds tag options

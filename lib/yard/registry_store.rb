@@ -293,8 +293,7 @@ module YARD
 
     def load_locale(name)
       locale = I18n::Locale.new(name)
-      po_dir = "po"
-      locale.load(po_dir)
+      locale.load(Registry.po_dir)
       locale
     end
 

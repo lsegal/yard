@@ -31,6 +31,7 @@ module YARD
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
+    DEFAULT_PO_DIR = "po"
 
     extend Enumerable
 
@@ -352,6 +353,17 @@ module YARD
       # @deprecated The registry no longer globally tracks proxy types.
       def proxy_types
         thread_local_store.proxy_types
+      end
+
+      # @group I18n features
+
+      # Gets/sets the directory that has LANG.po files
+      # @return [String] the directory that has .po files
+      attr_accessor :po_dir
+      undef po_dir, po_dir=
+      def po_dir=(dir) Thread.current[:__yard_po_dir__] = dir end
+      def po_dir
+        Thread.current[:__yard_po_dir__] ||= DEFAULT_PO_DIR
       end
 
       # @group Legacy Methods
