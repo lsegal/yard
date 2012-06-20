@@ -347,33 +347,33 @@ field menus) generated from the base `layout` template:
   1. Define your own custom stylesheet and/or javascript file
      (default/ is the default template name inside of the /template root directory):
 
-        /template/default/:
-        |-- fulldoc
-        |   |-- html
-        |   |   |-- css
-        |   |   |   |-- custom.css
-        |   |   |-- js
-        |   |   |   |-- custom.js
+         /template/default/:
+         |-- fulldoc
+         |   |-- html
+         |   |   |-- css
+         |   |   |   |-- custom.css
+         |   |   |-- js
+         |   |   |   |-- custom.js
 
   2. Create a `setup.rb` in the `layout` template directory and override the methods
      `stylesheets` and `javascripts`. The path to the template would be:
 
-        /template/default/:
-        |-- layout
-        |   |-- html
-        |   |   |-- setup.rb
+         /template/default/:
+         |-- layout
+         |   |-- html
+         |   |   |-- setup.rb
 
-      And the code would look like:
+     And the code would look like:
 
-        def stylesheets
-          # Load the existing stylesheets while appending the custom one
-          super + %w(css/custom.css)
-        end
+         def stylesheets
+           # Load the existing stylesheets while appending the custom one
+           super + %w(css/custom.css)
+         end
 
-        def javascripts
-          # Load the existing javascripts while appending the custom one
-          super + %w(js/custom.js)
-        end
+         def javascripts
+           # Load the existing javascripts while appending the custom one
+           super + %w(js/custom.js)
+         end
 
 
 To load additional stylesheets and javascripts for the search menus loaded from
