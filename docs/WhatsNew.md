@@ -1055,7 +1055,7 @@ use this tag sparingly, as it is not meant to be an equivalent to RDoc's
 `:nodoc:` tag. Remember, YARD recommends documenting private objects too.
 This tag exists so that you can create a query (`--query !@private`) to
 ignore all of these private objects in your documentation. You can also
-use the new `--no-private` switch, which is a shortcut to the afformentioned
+use the new `--no-private` switch, which is a shortcut to the aforementioned
 query. You can read more about the new tags in the {file:docs/GettingStarted.md}
 guide.
 
