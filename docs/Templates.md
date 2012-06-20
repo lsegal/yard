@@ -138,7 +138,7 @@ Every template should have at least one `setup.rb` file that defines the
 {YARD::Templates::Template#init #init} method to set the
 {YARD::Templates::Template#sections #sections} used by the template. If
 a setup.rb is not defined in the template itself, there should be a template
-that is inherited (via parent directory or explcitly) that sets the sections
+that is inherited (via parent directory or explicitly) that sets the sections
 on a newly created template.
 
 A standard setup.rb file looks like:
