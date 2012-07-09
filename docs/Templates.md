@@ -138,7 +138,7 @@ Every template should have at least one `setup.rb` file that defines the
 {YARD::Templates::Template#init #init} method to set the
 {YARD::Templates::Template#sections #sections} used by the template. If
 a setup.rb is not defined in the template itself, there should be a template
-that is inherited (via parent directory or explcitly) that sets the sections
+that is inherited (via parent directory or explicitly) that sets the sections
 on a newly created template.
 
 A standard setup.rb file looks like:
@@ -347,33 +347,33 @@ field menus) generated from the base `layout` template:
   1. Define your own custom stylesheet and/or javascript file
      (default/ is the default template name inside of the /template root directory):
 
-        /template/default/:
-        |-- fulldoc
-        |   |-- html
-        |   |   |-- css
-        |   |   |   |-- custom.css
-        |   |   |-- js
-        |   |   |   |-- custom.js
+         /template/default/:
+         |-- fulldoc
+         |   |-- html
+         |   |   |-- css
+         |   |   |   |-- custom.css
+         |   |   |-- js
+         |   |   |   |-- custom.js
 
   2. Create a `setup.rb` in the `layout` template directory and override the methods
      `stylesheets` and `javascripts`. The path to the template would be:
 
-        /template/default/:
-        |-- layout
-        |   |-- html
-        |   |   |-- setup.rb
+         /template/default/:
+         |-- layout
+         |   |-- html
+         |   |   |-- setup.rb
 
-      And the code would look like:
+     And the code would look like:
 
-        def stylesheets
-          # Load the existing stylesheets while appending the custom one
-          super + %w(css/custom.css)
-        end
+         def stylesheets
+           # Load the existing stylesheets while appending the custom one
+           super + %w(css/custom.css)
+         end
 
-        def javascripts
-          # Load the existing javascripts while appending the custom one
-          super + %w(js/custom.js)
-        end
+         def javascripts
+           # Load the existing javascripts while appending the custom one
+           super + %w(js/custom.js)
+         end
 
 
 To load additional stylesheets and javascripts for the search menus loaded from
