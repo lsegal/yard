@@ -19,6 +19,7 @@ module YARD
       @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
+      @locales = {}
       @store[:root] = CodeObjects::RootObject.allocate
       @store[:root].send(:initialize, nil, :root)
     end
@@ -107,6 +108,13 @@ module YARD
 
     # @return [CodeObjects::RootObject] the root object
     def root; @store[:root] end
+
+    # @param [String] name the locale name.
+    # @return [I18n::Locale] the locale object for +name+.
+    # @since 0.8.3
+    def locale(name)
+      @locales[name] ||= load_locale(name)
+    end
 
     # @param [String, nil] file the name of the yardoc db to load
     # @return [Boolean] whether the database was loaded
@@ -281,6 +289,12 @@ module YARD
           @store[:root] = root
         end
       end
+    end
+
+    def load_locale(name)
+      locale = I18n::Locale.new(name)
+      locale.load(Registry.po_dir)
+      locale
     end
 
     def all_disk_objects
