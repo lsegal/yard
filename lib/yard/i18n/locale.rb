@@ -1,6 +1,3 @@
-require "gettext/tools/poparser"
-require "gettext/runtime/mofile"
-
 module YARD
   module I18n
     # +Locale+ is a unit of translation. It has {#name} and a set of
@@ -30,6 +27,15 @@ module YARD
       def load(locale_directory)
         po_file = File.join(locale_directory, "#{@name}.po")
         return false unless File.exist?(po_file)
+
+        begin
+          require "gettext/tools/poparser"
+          require "gettext/runtime/mofile"
+        rescue LoadError
+          log.warn "Need gettext gem for i18n feature:"
+          log.warn "  gem install gettext"
+          return false
+        end
 
         parser = GetText::PoParser.new
         parser.report_warning = false
