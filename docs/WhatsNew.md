@@ -1048,14 +1048,14 @@ New tags (@abstract, @private)
 
 Two new tags were added to the list of builtin meta-tags in YARD. `@abstract`
 marks a class/module/method as abstract while `@private` marks an object
-as "private". The latter tag is unsed in situations where an object is public
+as "private". The latter tag is used in situations where an object is public
 due to Ruby's own visibility limitations (constants, classes and modules
 can never be private) but not actually part of your public API. You should
 use this tag sparingly, as it is not meant to be an equivalent to RDoc's
 `:nodoc:` tag. Remember, YARD recommends documenting private objects too.
 This tag exists so that you can create a query (`--query !@private`) to
 ignore all of these private objects in your documentation. You can also
-use the new `--no-private` switch, which is a shortcut to the afformentioned
+use the new `--no-private` switch, which is a shortcut to the aforementioned
 query. You can read more about the new tags in the {file:docs/GettingStarted.md}
 guide.
 

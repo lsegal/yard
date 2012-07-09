@@ -11,7 +11,7 @@ module YARD
       attr_reader :id
 
       # @return [Set] the set of locations. Location is an array of 
-      # path and line number where the message is appered.
+      # path and line number where the message is appeared.
       attr_reader :locations
 
       # @return [Set] the set of comments for the messages.
