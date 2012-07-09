@@ -13,6 +13,8 @@ module YARD
         @list_all = false
         @use_git = false
         @compact = false
+        @modified = true
+        @verifier = Verifier.new
         @old_git_commit = nil
         @old_path = Dir.pwd
         log.show_backtraces = true
@@ -26,11 +28,11 @@ module YARD
         registry = optparse(*args).map do |gemfile|
           if @use_git
             load_git_commit(gemfile)
-            Registry.all.map {|o| o.path }
+            all_objects
           else
             if load_gem_data(gemfile)
               log.info "Found #{gemfile}"
-              Registry.all.map {|o| o.path }
+              all_objects
             else
               log.error "Cannot find gem #{gemfile}"
               nil
@@ -41,14 +43,16 @@ module YARD
         return if registry.size != 2
 
         first_object = nil
-        [   ["Added objects", "A", registry[1] - registry[0]],
-            ["Removed objects", "D", registry[0] - registry[1]]].each do |name, short, objects|
+        [   ["Added objects", "A", added_objects(*registry)],
+            ["Modified objects", "M", modified_objects(*registry)],
+            ["Removed objects", "D", removed_objects(*registry)]].each do |name, short, objects|
+          next if short == "M" && @modified == false
           next if objects.empty?
           last_object = nil
           all_objects_notice = false
           puts name + ":" unless @compact
-          objects.sort.each do |object|
-            if !@list_all && last_object && object =~ /#{Regexp.quote last_object}(::|\.|#)/
+          objects.sort_by {|o| o.path }.each do |object|
+            if !@list_all && last_object && object.parent == last_object
               print " (...)" unless all_objects_notice
               all_objects_notice = true
               next
@@ -58,7 +62,8 @@ module YARD
               puts
             end
             all_objects_notice = false
-            print (@compact ? "#{short} " : "  ") + object
+            print (@compact ? "#{short} " : "  ") +
+              object.path + " (#{object.file}:#{object.line})"
             last_object = object
             first_object = true
           end
@@ -71,8 +76,13 @@ module YARD
 
       private
 
+      def all_objects
+        return Registry.all if @verifier.expressions.empty?
+        @verifier.run(Registry.all)
+      end
+
       def added_objects(registry1, registry2)
-        registry2 - registry1
+        registry2.reject {|o| registry1.find {|o2| o2.path == o.path } }
       end
 
       def modified_objects(registry1, registry2)
@@ -87,7 +97,7 @@ module YARD
       end
 
       def removed_objects(registry1, registry2)
-        registry1 - registry2
+        registry1.reject {|o| registry2.find {|o2| o2.path == o.path } }
       end
 
       def load_git_commit(commit)
@@ -214,6 +224,12 @@ module YARD
         opts.on('--compact', 'Show compact results') { @compact = true }
         opts.on('--git', 'Compare versions from two git commit/branches') do
           @use_git = true
+        end
+        opts.on('--query QUERY', 'Only diff filtered objects') do |query|
+          @verifier.add_expressions(query)
+        end
+        opts.on('--no-modified', 'Ignore modified objects') do
+          @modified = false
         end
         common_options(opts)
         parse_options(opts, args)

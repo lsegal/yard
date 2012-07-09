@@ -29,10 +29,34 @@ describe YARD::CLI::Diff do
       @objects1 ||= %w( C#fooey C#baz D.bar )
       @objects2 ||= %w( A A::B A::B::C A.foo A#foo B C.foo C.bar C#baz )
       @objects = [@objects1, @objects2]
-      @diff.should_receive(:load_gem_data).ordered.with('gem1').and_return(true)
-      @diff.should_receive(:load_gem_data).ordered.with('gem2').and_return(true)
-      Registry.should_receive(:all).twice.and_return do
-        @objects[@all_call += 1].map {|o| P(o) }
+      @diff.should_receive(:load_gem_data).ordered.with('gem1') do
+        Registry.clear
+        YARD.parse_string <<-eof
+          class C
+            def fooey; end
+            def baz; FOO end
+          end
+          class D
+            def self.bar; end
+          end
+        eof
+      end
+      @diff.should_receive(:load_gem_data).ordered.with('gem2') do
+        Registry.clear
+        YARD.parse_string <<-eof
+          module A
+            module B
+              class C; end
+            end
+            def self.foo; end
+            def foo; end
+          end
+          class C
+            def self.foo; end
+            def self.bar; end
+            def baz; BAR end
+          end
+        eof
       end
       @diff.stub!(:print) {|data| @data << data }
       @diff.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
@@ -44,15 +68,19 @@ describe YARD::CLI::Diff do
       @data.string.should == <<-eof
 Added objects:
 
-  A (...)
-  B
-  C.bar
-  C.foo
+  A ((stdin):1) (...)
+  A::B::C ((stdin):3)
+  C.bar ((stdin):10)
+  C.foo ((stdin):9)
+
+Modified objects:
+
+  C#baz ((stdin):3)
 
 Removed objects:
 
-  C#fooey
-  D.bar
+  C#fooey ((stdin):2)
+  D ((stdin):5) (...)
 
 eof
     end
@@ -60,12 +88,13 @@ eof
     it "should accept --compact" do
       run('--compact')
       @data.string.should == <<-eof
-A A (...)
-A B
-A C.bar
-A C.foo
-D C#fooey
-D D.bar
+A A ((stdin):1) (...)
+A A::B::C ((stdin):3)
+A C.bar ((stdin):10)
+A C.foo ((stdin):9)
+M C#baz ((stdin):3)
+D C#fooey ((stdin):2)
+D D ((stdin):5) (...)
 eof
     end
 
@@ -75,19 +104,23 @@ eof
         @data.string.should == <<-eof
 Added objects:
 
-  A
-  A#foo
-  A.foo
-  A::B
-  A::B::C
-  B
-  C.bar
-  C.foo
+  A ((stdin):1)
+  A#foo ((stdin):6)
+  A.foo ((stdin):5)
+  A::B ((stdin):2)
+  A::B::C ((stdin):3)
+  C.bar ((stdin):10)
+  C.foo ((stdin):9)
+
+Modified objects:
+
+  C#baz ((stdin):3)
 
 Removed objects:
 
-  C#fooey
-  D.bar
+  C#fooey ((stdin):2)
+  D ((stdin):5)
+  D.bar ((stdin):6)
 
 eof
       end
@@ -96,16 +129,42 @@ eof
     it "should accept --compact and --all" do
       run('--compact', '--all')
       @data.string.should == <<-eof
-A A
-A A#foo
-A A.foo
-A A::B
-A A::B::C
-A B
-A C.bar
-A C.foo
-D C#fooey
-D D.bar
+A A ((stdin):1)
+A A#foo ((stdin):6)
+A A.foo ((stdin):5)
+A A::B ((stdin):2)
+A A::B::C ((stdin):3)
+A C.bar ((stdin):10)
+A C.foo ((stdin):9)
+M C#baz ((stdin):3)
+D C#fooey ((stdin):2)
+D D ((stdin):5)
+D D.bar ((stdin):6)
+eof
+    end
+
+    it "should accept --no-modified" do
+      run('--compact', '--no-modified')
+      @data.string.should == <<-eof
+A A ((stdin):1) (...)
+A A::B::C ((stdin):3)
+A C.bar ((stdin):10)
+A C.foo ((stdin):9)
+D C#fooey ((stdin):2)
+D D ((stdin):5) (...)
+eof
+    end
+
+    it "should accept --query" do
+      run('--compact', '--query', 'type == :method')
+      @data.string.should == <<-eof
+A A#foo ((stdin):6)
+A A.foo ((stdin):5)
+A C.bar ((stdin):10)
+A C.foo ((stdin):9)
+M C#baz ((stdin):3)
+D C#fooey ((stdin):2)
+D D.bar ((stdin):6)
 eof
     end
   end
