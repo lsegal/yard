@@ -77,6 +77,10 @@ describe YARD::CLI::Yardoc do
     it "should not embed mixins by default" do
       @yardoc.options.embed_mixins.should be_empty
     end
+
+    it "should not set any locale by default" do
+      @yardoc.options.locale.should be_nil
+    end
   end
 
   describe 'General options' do
@@ -301,6 +305,32 @@ describe YARD::CLI::Yardoc do
           FileUtils.rm_rf(from)
           FileUtils.rm_rf(full_to)
         end
+      end
+    end
+
+    describe '--locale' do
+      it 'should apply specified locale to all extra file objects' do
+        File.stub!(:read).with('extra_file1').and_return('')
+        File.stub!(:read).with('extra_file2').and_return('')
+
+        extra_file_object1 = CodeObjects::ExtraFileObject.new('extra_file1')
+        extra_file_object2 = CodeObjects::ExtraFileObject.new('extra_file2')
+        extra_file_object1.should_receive(:locale=).with('fr')
+        extra_file_object2.should_receive(:locale=).with('fr')
+
+        CodeObjects::ExtraFileObject.stub!(:new).with('extra_file1').and_return(extra_file_object1)
+        CodeObjects::ExtraFileObject.stub!(:new).with('extra_file2').and_return(extra_file_object2)
+        Dir.stub!(:glob).with('README*').and_return([])
+        File.stub!(:file?).with('extra_file1').and_return(true)
+        File.stub!(:file?).with('extra_file2').and_return(true)
+        @yardoc.run('--locale=fr', '-', 'extra_file1', 'extra_file2')
+      end
+    end
+
+    describe '--po-dir' do
+      it 'should set Registry.po_dir' do
+        Registry.should_receive(:po_dir=).with("locale")
+        @yardoc.run('--po-dir=locale')
       end
     end
   end

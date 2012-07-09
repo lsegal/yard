@@ -25,6 +25,8 @@ module YARD
       #   {#name}.po.
       # @return [Boolean] +true+ if PO file exists, +false+ otherwise.
       def load(locale_directory)
+        return false if @name.nil?
+
         po_file = File.join(locale_directory, "#{@name}.po")
         return false unless File.exist?(po_file)
 

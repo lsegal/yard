@@ -302,4 +302,14 @@ describe YARD::RegistryStore do
       @store.destroy(true).should == true
     end
   end
+
+  describe '#locale' do
+    it "should load ./po/LOCALE_NAME.po" do
+      fr_locale = I18n::Locale.new("fr")
+      I18n::Locale.should_receive(:new).with("fr").and_return(fr_locale)
+      Registry.should_receive(:po_dir).and_return("po")
+      fr_locale.should_receive(:load).with("po")
+      @store.locale("fr").should == fr_locale
+    end
+  end
 end

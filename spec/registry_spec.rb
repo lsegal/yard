@@ -81,6 +81,15 @@ describe YARD::Registry do
     end
   end
 
+  describe '.locale' do
+    it "should load locale object" do
+      fr_locale = I18n::Locale.new("fr")
+      store = Registry.send(:thread_local_store)
+      store.should_receive(:locale).with("fr").and_return(fr_locale)
+      Registry.locale("fr").should == fr_locale
+    end
+  end
+
   describe '.resolve' do
     it "should resolve any existing namespace" do
       o1 = ModuleObject.new(:root, :A)
@@ -354,6 +363,31 @@ describe YARD::Registry do
 
     it "should automatically clear in new threads" do
       Thread.new { Registry.all.should be_empty }.join
+    end
+
+    it "should allow setting of po_dir in separate threads" do
+      barrier = 0
+      mutex   = Mutex.new
+      threads = []
+      threads << Thread.new do
+        Registry.po_dir.should == 'po'
+        Registry.po_dir = 'locale'
+        mutex.synchronize { barrier += 1 }
+        while barrier == 1 do
+          s = "barrier = 1, spinning"
+        end
+        Registry.po_dir.should == 'locale'
+      end
+      threads << Thread.new do
+        while barrier == 0 do
+          s = "barrier = 0, spinning"
+        end
+        Registry.po_dir.should == 'po'
+        mutex.synchronize { barrier += 1 }
+        Registry.po_dir = '.'
+      end
+      threads.each {|t| t.join }
+      Registry.po_dir = Registry::DEFAULT_PO_DIR
     end
   end
 end

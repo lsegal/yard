@@ -114,6 +114,18 @@ describe YARD::CodeObjects::ExtraFileObject do
     end
   end
 
+  describe '#locale=' do
+    it "should translate contents" do
+      file = ExtraFileObject.new('file.txt', 'Hello')
+      file.locale = 'fr'
+      fr_locale = I18n::Locale.new('fr')
+      fr_messages = fr_locale.instance_variable_get(:@messages)
+      fr_messages["Hello"] = 'Bonjour'
+      Registry.should_receive(:locale).with('fr').and_return(fr_locale)
+      file.contents.should == 'Bonjour'
+    end
+  end
+
   describe '#==' do
     it "should define equality on filename alone" do
       file1 = ExtraFileObject.new('file.txt', 'A')
