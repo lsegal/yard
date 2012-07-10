@@ -99,6 +99,7 @@ module YARD
     def initialize(content = '', object = nil)
       @object = object
       @summary = nil
+      @localized = nil
       @hash_flag = false
 
       self.all = content
@@ -124,6 +125,7 @@ module YARD
       content = content.join("\n") if content.is_a?(Array)
       @tags, @ref_tags = [], []
       @all = content
+      @localized = nil
       super(parse ? parse_comments(content) : content)
     end
     alias all= replace
@@ -137,7 +139,7 @@ module YARD
     # @since 0.7.0
     def dup
       obj = super
-      %w(all summary tags ref_tags).each do |name|
+      %w(all summary localized tags ref_tags).each do |name|
         val = instance_variable_get("@#{name}")
         obj.instance_variable_set("@#{name}", val ? val.dup : nil)
       end
@@ -152,17 +154,20 @@ module YARD
       line_range ? line_range.first : nil
     end
 
-    # Gets the first line of a docstring to the period or the first paragraph.
-    # @return [String] The first line or paragraph of the docstring; always ends with a period.
+    # Gets the first line of a localized document to the period or the first paragraph.
+    # @return [String] The first line or paragraph of the localized document; always ends with a period.
     def summary
       return @summary if @summary
       open_parens = ['{', '(', '[']
       close_parens = ['}', ')', ']']
       num_parens = 0
-      idx = length.times do |index|
-        case self[index, 1]
-        when ".", "\r", "\n"
-          next_char = self[index + 1, 1].to_s
+      period = "."
+      localized_period = translate(period)
+      localized_document = localized
+      idx = localized_document.length.times do |index|
+        case localized_document[index, 1]
+        when period, localized_period, "\r", "\n"
+          next_char = localized_document[index + 1, 1].to_s
           if num_parens == 0 && next_char =~ /^\s*$/
             break index - 1
           end
@@ -172,9 +177,9 @@ module YARD
           num_parens -= 1
         end
       end
-      @summary = self[0..idx]
+      @summary = localized_document[0..idx]
       if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
-        @summary += '.'
+        @summary += localized_period
       end
       @summary
     end
@@ -210,6 +215,22 @@ module YARD
         tag_text
       end
       [strip, tag_data.join("\n")].reject {|l| l.empty? }.compact.join("\n")
+    end
+
+    # Gets a localized document. Use +to_s+ to get non-localized
+    # document.
+    #
+    # @return [String] the localized document.
+    def localized
+      return @localized if @localized
+      locale = locale_object
+      if locale.nil?
+        @localized = to_s
+      else
+        text = YARD::I18n::Text.new(self)
+        @localized = text.translate(locale)
+      end
+      @localized
     end
 
     # @group Creating and Accessing Meta-data
@@ -321,6 +342,27 @@ module YARD
       parser.parse(comments, object)
       add_tag(*parser.tags)
       parser.text
+    end
+
+    # @return [I18n::Locale, nil] the locale object of the docstring if
+    #   {#object} is set and {#object} has locale, +nil+ otherwise.
+    def locale_object
+      return nil if object.nil?
+
+      locale = object.locale
+      Registry.locale(locale)
+    end
+
+    # @param [String] message the message to be translated by
+    #   {#locale_object}
+    #
+    # @return [String] the translated message if {#locale_object} has
+    #   translated message for +message+, +message+ itself otherwise
+    def translate(message)
+      locale = locale_object
+      return message if locale.nil?
+
+      locale.translate(message)
     end
   end
 end

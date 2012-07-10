@@ -38,7 +38,7 @@ end
 def docstring_text
   text = ""
   unless object.tags(:overload).size == 1 && object.docstring.empty?
-    text = object.docstring
+    text = object.docstring.localized
   end
 
   if text.strip.empty? && object.tags(:return).size == 1 && object.tag(:return).text

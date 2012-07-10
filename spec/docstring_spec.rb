@@ -69,6 +69,34 @@ describe YARD::Docstring do
       o.summary.should == "DOCSTRING."
     end
 
+    it "should return the first sentence for localized text" do
+      object = Object.new
+      object.stub!(:locale).and_return("fr")
+      comment = "Hello.\n\nWorld."
+      fr_comment = "Bonjour.\n\nMonde."
+      fr_locale = I18n::Locale.new("fr")
+      fr_locale.stub!(:translate).with(".").and_return(".")
+      Registry.stub!(:locale).with("fr").and_return(fr_locale)
+      doc = Docstring.new(comment, object)
+      doc.stub!(:localized).and_return(fr_comment)
+      doc.summary.should == "Bonjour."
+    end
+
+    it "should detect the first sentence for localized period" do
+      object = Object.new
+      object.stub!(:locale).and_return("ja")
+      period_in_japanese = "\u3002"
+      comment = "Hello.\n\nWorld."
+      ja_comment = "Hello in Japanese#{period_in_japanese}\n\n" +
+        "World in Japanese#{period_in_japanese}"
+      ja_locale = I18n::Locale.new("ja")
+      ja_locale.stub!(:translate).with(".").and_return(period_in_japanese)
+      Registry.stub!(:locale).with("ja").and_return(ja_locale)
+      doc = Docstring.new(comment, object)
+      doc.stub!(:localized).and_return(ja_comment)
+      doc.summary.should == "Hello in Japanese#{period_in_japanese}"
+    end
+
     it "should not double the ending period" do
       o = Docstring.new("Returns a list of tags specified by +name+ or all tags if +name+ is not specified.\n\nTest")
       o.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
@@ -270,6 +298,18 @@ describe YARD::Docstring do
     end
   end
 
+  describe '#localized' do
+    it "should return a localized text" do
+      object = Object.new
+      object.stub!(:locale).and_return("fr")
+      fr_locale = I18n::Locale.new("fr")
+      fr_locale.stub!(:translate).with("Hello").and_return("Bonjour")
+      Registry.stub!(:locale).with("fr").and_return(fr_locale)
+      doc = Docstring.new("Hello", object)
+      doc.localized.should == "Bonjour"
+    end
+  end
+
   describe '#dup' do
     it "should duplicate docstring text" do
       doc = Docstring.new("foo")
@@ -288,6 +328,12 @@ describe YARD::Docstring do
     it "should preserve summary" do
       doc = Docstring.new("foo. bar")
       doc.dup.summary.should == doc.summary
+    end
+
+    it "should preserve localized text" do
+      doc = Docstring.new("Hello")
+      doc.instance_variable_set(:@localized, "Bonjour")
+      doc.dup.localized.should == "Bonjour"
     end
 
     it "should preserve hash_flag" do

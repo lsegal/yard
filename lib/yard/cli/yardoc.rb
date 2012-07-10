@@ -495,8 +495,8 @@ module YARD
       # @return [void]
       # @since 0.8.3
       def apply_locale
-        options.files.each do |file|
-          file.locale = options.locale
+        (all_objects + options.files).each do |object|
+          object.locale = options.locale
         end
       end
 

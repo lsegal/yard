@@ -30,4 +30,13 @@ describe YARD::CodeObjects::CodeObjectList do
     list << "Test"
     list.size.should == 2
   end
+
+  it "should set owner's locale to pushed object" do
+    obj = ModuleObject.new(nil, :YARD)
+    owner = P(:YARD)
+    owner.stub!(:locale).and_return("fr")
+    list = CodeObjectList.new(owner)
+    list << "Test"
+    list[0].locale.should == "fr"
+  end
 end

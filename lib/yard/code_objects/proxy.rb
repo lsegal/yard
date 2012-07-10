@@ -20,6 +20,8 @@ module YARD
 
       attr_reader :namespace
       alias_method :parent, :namespace
+      # @since 0.8.3
+      attr_accessor :locale
 
       # Creates a new Proxy
       #
@@ -41,6 +43,8 @@ module YARD
         else
           @orignamespace, @origname, @imethod = nil, nil, nil
         end
+
+        @locale = nil
 
         @name = name.to_sym
         @namespace = namespace

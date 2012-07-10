@@ -18,7 +18,10 @@ module YARD
       def push(value)
         value = Proxy.new(@owner, value) if value.is_a?(String) || value.is_a?(Symbol)
         if value.is_a?(CodeObjects::Base) || value.is_a?(Proxy)
-          super(value) unless include?(value)
+          unless include?(value)
+            value.locale = @owner.locale if @owner
+            super(value)
+          end
         else
           raise ArgumentError, "#{value.class} is not a valid CodeObject"
         end
@@ -157,6 +160,9 @@ module YARD
       undef visibility=
       def visibility=(v) @visibility = v.to_sym end
 
+      # @since 0.8.3
+      attr_reader :locale
+
       class << self
         # Allocates a new code object
         # @return [Base]
@@ -218,6 +224,7 @@ module YARD
         @source_type = :ruby
         @visibility = :public
         @tags = []
+        @locale = nil
         @docstring = Docstring.new('', self)
         @docstring_extra = nil
         @docstring_extra_tags = nil
@@ -363,6 +370,13 @@ module YARD
         else
           @source = format_source(statement.to_s)
         end
+      end
+
+      # @param [String] locale the locale name to be translated.
+      # @return [void]
+      # @since 0.8.3
+      def locale=(locale)
+        @locale = locale
       end
 
       undef docstring
