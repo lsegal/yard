@@ -43,6 +43,29 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', 'baz')
   end
 
+  # @bug gh-563
+  it "should copy tags to module function properly" do
+    YARD.parse_string <<-eof
+      module Foo
+        # @param [String] foo bar
+        # @option foo [String] bar (nil) baz
+        # @return [void]
+        def bar(foo); end
+        module_function :bar
+      end
+    eof
+    assert_module_function('Foo', 'bar')
+    o = Registry.at('Foo.bar')
+    o.tag(:param).types.should == ['String']
+    o.tag(:param).name.should == 'foo'
+    o.tag(:param).text.should == 'bar'
+    o.tag(:option).name.should == 'foo'
+    o.tag(:option).pair.types.should == ['String']
+    o.tag(:option).pair.defaults.should == ['nil']
+    o.tag(:option).pair.text.should == 'baz'
+    o.tag(:return).types.should == ['void']
+  end
+
   it "should handle all method names in parameters" do
     YARD.parse_string <<-eof
       module Foo
