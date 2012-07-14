@@ -83,6 +83,12 @@ describe YARD::Docstring do
       doc.summary.should == "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
     end
 
+    it "should not attach period if entire summary is include" do
+      YARD.parse_string "# docstring\ndef foo; end"
+      Docstring.new("{include:#foo}").summary.should == '{include:#foo}'
+      Registry.clear
+    end
+
     it "should handle references embedded in summary" do
       Docstring.new("Aliasing {Test.test}. Done.").summary.should == "Aliasing {Test.test}."
     end

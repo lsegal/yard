@@ -173,7 +173,9 @@ module YARD
         end
       end
       @summary = self[0..idx]
-      @summary += '.' unless @summary.empty?
+      if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
+        @summary += '.'
+      end
       @summary
     end
 
