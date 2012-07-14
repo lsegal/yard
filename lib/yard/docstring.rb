@@ -191,6 +191,13 @@ module YARD
           unless tag.docstring.blank?
             tag_text += "\n" + tag.docstring.all.gsub(/\r?\n/, "\n  ")
           end
+        when Tags::OptionTag
+          tag_text = "@#{tag.tag_name} #{tag.name}"
+          tag_text += ' [' + tag.pair.types.join(', ') + ']' if tag.pair.types
+          tag_text += ' ' + tag.pair.name.to_s if tag.pair.name
+          tag_text += "\n " if tag.name && tag.text
+          tag_text += ' (' + tag.pair.defaults.join(', ') + ')' if tag.pair.defaults
+          tag_text += " " + tag.pair.text.strip.gsub(/\n/, "\n  ") if tag.pair.text
         else
           tag_text = '@' + tag.tag_name
           tag_text += ' [' + tag.types.join(', ') + ']' if tag.types

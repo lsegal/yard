@@ -250,6 +250,18 @@ describe YARD::Docstring do
       doc = Docstring.new("123\n@param")
       doc.to_raw.should == doc.all
     end
+
+    # @bug gh-563
+    it "should handle full @option tags" do
+      doc = Docstring.new("@option foo [String] bar (nil) baz")
+      doc.to_raw.should == "@option foo [String] bar (nil) baz"
+    end
+
+    # @bug gh-563
+    it "should handle simple @option tags" do
+      doc = Docstring.new("@option foo :key bar")
+      doc.to_raw.should == "@option foo :key bar"
+    end
   end
 
   describe '#dup' do
