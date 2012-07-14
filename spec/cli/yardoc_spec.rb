@@ -681,6 +681,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments('--transitive-tag', 'foo')
       Tags::Library.transitive_tags.should include(:foo)
     end
+
+    it "should accept --non-transitive-tag" do
+      Tags::Library.transitive_tags |= [:foo]
+      @yardoc.parse_arguments('--non-transitive-tag', 'foo')
+      Tags::Library.transitive_tags.should_not include(:foo)
+    end
   end
 
   describe 'Safe mode' do

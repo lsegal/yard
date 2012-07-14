@@ -790,8 +790,12 @@ module YARD
           self.hidden_tags |= [tag.to_sym]
         end
 
-        opts.on('--transitive-tag TAG', 'Adds a transitive tag') do |tag|
-          Tags::Library.transitive_tags += [tag.to_sym]
+        opts.on('--transitive-tag TAG', 'Marks a tag as transitive') do |tag|
+          Tags::Library.transitive_tags |= [tag.to_sym]
+        end
+
+        opts.on('--non-transitive-tag TAG', 'Marks a tag as not transitive') do |tag|
+          Tags::Library.transitive_tags -= [tag.to_sym]
         end
       end
     end
