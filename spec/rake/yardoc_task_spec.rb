@@ -45,6 +45,15 @@ describe YARD::Rake::YardocTask do
       run
       @yardoc.visibilities.should == [:public, :private, :protected]
     end
+
+    it "should allow --api and --no-api" do
+      YARD::Rake::YardocTask.new do |t|
+        t.options = %w(--api public --no-api)
+      end
+      run
+      @yardoc.options.verifier.expressions.
+        should include('["public"].include?(@api.text) || !@api')
+    end
   end
 
   describe '#before' do
