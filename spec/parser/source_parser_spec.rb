@@ -606,12 +606,24 @@ describe YARD::Parser::SourceParser do
       end
     end
 
-    it "should attempt to order files by length (process toplevel files first)" do
-      %w(a a/b a/b/c).each do |file|
+    it "should attempt to order files by length for globs (process toplevel files first)" do
+      files = %w(a a/b a/b/c)
+      files.each do |file|
         File.should_receive(:file?).with(file).and_return(true)
         File.should_receive(:read_binary).with(file).ordered.and_return('')
       end
-      YARD.parse %w(a/b/c a/b a)
+      Dir.should_receive(:[]).with('a/**/*').and_return(files.reverse)
+      YARD.parse 'a/**/*'
+    end
+
+    it "should allow overriding of length sorting when single file is presented" do
+      files = %w(a/b/c a a/b)
+      files.each do |file|
+        File.should_receive(:file?).with(file).at_least(1).times.and_return(true)
+        File.should_receive(:read_binary).with(file).ordered.and_return('')
+      end
+      Dir.should_receive(:[]).with('a/**/*').and_return(files.reverse)
+      YARD.parse ['a/b/c', 'a/**/*']
     end
   end
 

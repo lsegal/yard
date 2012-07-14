@@ -100,7 +100,7 @@ module YARD
           end
           files = [paths].flatten.
             map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c}" : p }.
-            map {|p| p.include?("*") ? Dir[p] : p }.flatten.
+            map {|p| p.include?("*") ? Dir[p].sort_by {|f| f.length } : p }.flatten.
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
 
           log.enter_level(level) do
@@ -360,7 +360,6 @@ module YARD
         # @return [void]
         def parse_in_order(*files)
           global_state = OpenStruct.new
-          files = files.sort_by {|x| x.length if x }
 
           before_parse_list_callbacks.each do |cb|
             return if cb.call(files, global_state) == false
