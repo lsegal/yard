@@ -65,28 +65,28 @@ describe YARD::Rake::YardocTask do
       YARD::Rake::YardocTask.new {|t| t.after = proc }
       run
     end
+  end
 
-    describe '#verifier' do
-      it "should allow a verifier proc to be set" do
-        verifier = Verifier.new
-        @yardoc.should_receive(:run) do
-          @yardoc.options[:verifier].should == verifier
-        end
-        YARD::Rake::YardocTask.new {|t| t.verifier = verifier }
-        run
+  describe '#verifier' do
+    it "should allow a verifier proc to be set" do
+      verifier = Verifier.new
+      @yardoc.should_receive(:run) do
+        @yardoc.options[:verifier].should == verifier
       end
+      YARD::Rake::YardocTask.new {|t| t.verifier = verifier }
+      run
+    end
 
-      it "should override --query options" do
-        verifier = Verifier.new
-        @yardoc.should_receive(:run) do
-          @yardoc.options[:verifier].should == verifier
-        end
-        YARD::Rake::YardocTask.new do |t|
-          t.options += ['--query', '@return']
-          t.verifier = verifier
-        end
-        run
+    it "should override --query options" do
+      verifier = Verifier.new
+      @yardoc.should_receive(:run) do
+        @yardoc.options[:verifier].should == verifier
       end
+      YARD::Rake::YardocTask.new do |t|
+        t.options += ['--query', '@return']
+        t.verifier = verifier
+      end
+      run
     end
   end
 end
