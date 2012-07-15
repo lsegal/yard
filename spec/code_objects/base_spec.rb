@@ -28,6 +28,21 @@ describe YARD::CodeObjects::Base do
     YARD::Registry.at("MYMODULE").should be_instance_of(ClassObject)
   end
 
+  it "should simplify complex namespace paths" do
+    obj = ClassObject.new(:root, "A::B::C::D")
+    obj.name.should == :D
+    obj.path.should == "A::B::C::D"
+    obj.namespace.should == P("A::B::C")
+  end
+
+  # @bug gh-552
+  it "should simplify complex namespace paths when path starts with ::" do
+    obj = ClassObject.new(:root, "::A::B::C::D")
+    obj.name.should == :D
+    obj.path.should == "A::B::C::D"
+    obj.namespace.should == P("A::B::C")
+  end
+
   it "should recall the block if #new is called on an existing object" do
     o1 = ClassObject.new(:root, :Me) do |o|
       o.docstring = "DOCSTRING"
