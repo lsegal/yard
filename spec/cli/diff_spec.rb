@@ -12,7 +12,7 @@ describe YARD::CLI::Diff do
   describe 'Argument handling' do
     it "should exit if there is only one gem name" do
       @diff.should_receive(:exit)
-      @diff.should_receive(:puts).with(/Usage/)
+      log.should_receive(:puts).with(/Usage/)
       @diff.run
     end
   end
@@ -58,8 +58,8 @@ describe YARD::CLI::Diff do
           end
         eof
       end
-      @diff.stub!(:print) {|data| @data << data }
-      @diff.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
+      log.stub!(:print) {|data| @data << data }
+      log.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
       @diff.run(*(args + ['gem1', 'gem2']))
     end
 

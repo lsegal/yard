@@ -77,12 +77,12 @@ module YARD
       def commands; self.class.commands end
 
       def list_commands
-        puts "Usage: yard <command> [options]"
-        puts
-        puts "Commands:"
+        log.puts "Usage: yard <command> [options]"
+        log.puts
+        log.puts "Commands:"
         commands.keys.sort_by {|k| k.to_s }.each do |command_name|
           command = commands[command_name].new
-          puts "%-8s %s" % [command_name, command.description]
+          log.puts "%-8s %s" % [command_name, command.description]
         end
       end
     end

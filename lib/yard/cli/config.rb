@@ -61,13 +61,13 @@ module YARD
 
       def view_item
         log.debug "Viewing #{key}"
-        puts YARD::Config.options[key].inspect
+        log.puts YARD::Config.options[key].inspect
       end
 
       def list_configuration
         log.debug "Listing configuration"
         require 'yaml'
-        puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub(/\n\n/, "\n")
+        log.puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub(/\n\n/, "\n")
       end
 
       def encode_values

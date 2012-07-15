@@ -405,7 +405,7 @@ module YARD
         Registry.load_all
         run_verifier(Registry.all).
           sort_by {|item| [item.file || '', item.line || 0] }.each do |item|
-          puts "#{item.file}:#{item.line}: #{item.path}"
+          log.puts "#{item.file}:#{item.line}: #{item.path}"
         end
       end
 

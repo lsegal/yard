@@ -86,7 +86,7 @@ module YARD
       if defined?(::Encoding)
         icon = PROGRESS_INDICATORS[@progress_indicator] + " "
       end
-      self << "\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r"
+      print("\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r")
       @mutex.synchronize do
         @progress_msg = msg
         @progress_indicator += 1
@@ -105,18 +105,31 @@ module YARD
     # @since 0.8.2
     def clear_progress
       return unless show_progress
-      self << "\e[?25h\e[2K"
+      clear_line
       @progress_msg = nil
     end
 
-    # Displays an unformatted line to the logger output stream. Similar to
-    # the +#<<+ method, but adds a newline.
+    # Displays an unformatted line to the logger output stream, adding
+    # a newline.
     # @param [String] msg the message to display
     # @return [void]
     # @since 0.8.2
-    def puts(msg)
-      self << "#{msg}\n"
+    def puts(msg = '')
+      print("#{msg}\n")
     end
+
+    alias_method :print_no_newline, :<<
+    private :print_no_newline
+
+    # Displays an unformatted line to the logger output stream.
+    # @param [String] msg the message to display
+    # @return [void]
+    # @since 0.8.2
+    def print(msg = '')
+      clear_line if @progress_msg
+      print_no_newline(msg)
+    end
+    alias_method :<<, :print
 
     # Prints the backtrace +exc+ to the logger as error data.
     #
@@ -155,6 +168,10 @@ module YARD
     end
 
     private
+
+    def clear_line
+      print_no_newline("\e[?25h\e[2K")
+    end
 
     # Log format (from Logger implementation). Used by Logger internally
     def format_log(sev, time, prog, msg)

@@ -41,8 +41,8 @@ module YARD
         opts.on_tail('--verbose', 'Show more information.') { log.level = Logger::INFO }
         opts.on_tail('--debug', 'Show debugging information.') { log.level = Logger::DEBUG }
         opts.on_tail('--backtrace', 'Show stack traces') { log.show_backtraces = true }
-        opts.on_tail('-v', '--version', 'Show version.') { puts "yard #{YARD::VERSION}"; exit }
-        opts.on_tail('-h', '--help', 'Show this help.')  { puts opts; exit }
+        opts.on_tail('-v', '--version', 'Show version.') { log.puts "yard #{YARD::VERSION}"; exit }
+        opts.on_tail('-h', '--help', 'Show this help.')  { log.puts opts; exit }
       end
 
       # Parses the option and gracefully handles invalid switches

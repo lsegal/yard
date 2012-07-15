@@ -50,28 +50,28 @@ module YARD
           next if objects.empty?
           last_object = nil
           all_objects_notice = false
-          puts name + ":" unless @compact
+          log.puts name + ":" unless @compact
           objects.sort_by {|o| o.path }.each do |object|
             if !@list_all && last_object && object.parent == last_object
-              print " (...)" unless all_objects_notice
+              log.print " (...)" unless all_objects_notice
               all_objects_notice = true
               next
             elsif @compact
-              puts if first_object
+              log.puts if first_object
             else
-              puts
+              log.puts
             end
             all_objects_notice = false
-            print (@compact ? "#{short} " : "  ") +
+            log.print (@compact ? "#{short} " : "  ") +
               object.path + " (#{object.file}:#{object.line})"
             last_object = object
             first_object = true
           end
           unless @compact
-            puts; puts
+            log.puts; log.puts
           end
         end
-        puts if @compact
+        log.puts if @compact
       end
 
       private
@@ -234,7 +234,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
         unless args.size == 2
-          puts opts.banner
+          log.puts opts.banner
           exit(0)
         end
 

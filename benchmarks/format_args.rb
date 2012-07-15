@@ -21,9 +21,9 @@ end
 YARD::Registry.load
 $object = YARD::Registry.at('YARD::Generators::Base#G')
 
-puts "regex:  " + format_args_regex($object)
-puts "params: " + format_args_parameters($object)
-puts
+log.puts "regex:  " + format_args_regex($object)
+log.puts "params: " + format_args_parameters($object)
+log.puts
 
 TIMES = 100_000
 Benchmark.bmbm do |x|

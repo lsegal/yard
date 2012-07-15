@@ -72,8 +72,8 @@ module YARD
       # @return [void]
       # @since 0.5.6
       def print_usage
-        puts "Usage: yri [options] <Path to object>"
-        puts "See yri --help for more options."
+        log.puts "Usage: yri [options] <Path to object>"
+        log.puts "See yri --help for more options."
       end
 
       # Caches the .yardoc file where an object can be found in the {CACHE_FILE}

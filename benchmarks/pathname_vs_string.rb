@@ -7,7 +7,7 @@ strobj  = "a/b/c"
 
 TIMES = 1_000
 
-puts "join:"
+log.puts "join:"
 Benchmark.bmbm do |x|
   x.report("pathname") { TIMES.times { Pathname.new("a/b/c").join("d", "e", "f") } }
   x.report("string  ") { TIMES.times { File.join("a/b/c", "d", "e", "f") } }
@@ -15,9 +15,9 @@ Benchmark.bmbm do |x|
   x.report("string-sameobject  ") { TIMES.times { File.join(strobj, "d", "e", "f") } }
 end
 
-puts
-puts
-puts "cleanpath:"
+log.puts
+log.puts
+log.puts "cleanpath:"
 Benchmark.bmbm do |x|
   x.report("pathname") { TIMES.times { Pathname.new("a/b//.././c").cleanpath } }
   x.report("string  ") { TIMES.times { File.cleanpath("a/b//.././c") } }

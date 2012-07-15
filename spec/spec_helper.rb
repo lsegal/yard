@@ -96,7 +96,7 @@ module Kernel
     args.first
   end
 
-  def puts(str)
+  def puts(str = '')
     STDOUT.puts str + "<br/>\n"
     str
   end

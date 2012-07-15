@@ -64,30 +64,30 @@ module YARD
         else
           total = (@total - @undocumented).to_f / @total.to_f * 100
         end
-        puts("% 3.2f%% documented" % total)
+        log.puts("% 3.2f%% documented" % total)
       end
 
       # Prints list of undocumented objects
       def print_undocumented_objects
         return if !@undoc_list || @undoc_list.empty?
-        puts
-        puts "Undocumented Objects:"
+        log.puts
+        log.puts "Undocumented Objects:"
 
         objects = @undoc_list.sort_by {|o| o.file }
         max = objects.sort_by {|o| o.path.length }.last.path.length
         if @compact
           objects.each do |object|
-            puts("%-#{max}s     (%s)" % [object.path,
+            log.puts("%-#{max}s     (%s)" % [object.path,
               [object.file, object.line].compact.join(":")])
           end
         else
           last_file = nil
           objects.each do |object|
             if object.file != last_file
-              puts
-              puts "(in file: #{object.file})"
+              log.puts
+              log.puts "(in file: #{object.file})"
             end
-            puts object.path
+            log.puts object.path
             last_file = object.file
           end
         end
@@ -148,7 +148,7 @@ module YARD
         else
           data = "%5s" % data
         end
-        puts("%-12s %s" % [name + ":", data])
+        log.puts("%-12s %s" % [name + ":", data])
       end
 
       private
