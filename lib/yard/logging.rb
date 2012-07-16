@@ -105,7 +105,7 @@ module YARD
     # @since 0.8.2
     def clear_progress
       return unless show_progress
-      clear_line
+      print_no_newline("\e[?25h\e[2K")
       @progress_msg = nil
     end
 
@@ -126,7 +126,7 @@ module YARD
     # @return [void]
     # @since 0.8.2
     def print(msg = '')
-      clear_line if @progress_msg
+      clear_line
       print_no_newline(msg)
     end
     alias_method :<<, :print
@@ -169,8 +169,15 @@ module YARD
 
     private
 
+    # Override this internal Logger method to clear line
+    def add(*args)
+      clear_line
+      super(*args)
+    end
+
     def clear_line
-      print_no_newline("\e[?25h\e[2K")
+      return unless @progress_msg
+      print_no_newline("\e[2K\r")
     end
 
     # Log format (from Logger implementation). Used by Logger internally
