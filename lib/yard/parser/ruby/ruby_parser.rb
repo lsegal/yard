@@ -503,7 +503,7 @@ module YARD
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
             range = @comments_range.delete(lineno - 1)
-            source_range = range.first..source_range.last
+            source_range = range ? (range.first..source_range.last) : source_range
             comment = append_comment + "\n" + comment
           end
 
