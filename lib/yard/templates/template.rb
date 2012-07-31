@@ -59,10 +59,13 @@ module YARD
         attr_accessor :path, :full_path
 
         def full_paths
-          included_modules.inject([full_path]) do |paths, mod|
+          return @full_paths if defined? @cached_included_modules and
+            included_modules == @cached_included_modules
+          @cached_included_modules = included_modules
+          @full_paths = @cached_included_modules.inject([full_path]){ |paths, mod|
             paths |= mod.full_paths if mod.respond_to?(:full_paths)
             paths
-          end
+          }
         end
 
         def initialize(path, full_paths)
