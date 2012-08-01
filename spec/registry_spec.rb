@@ -252,9 +252,9 @@ describe YARD::Registry do
   describe '.load_yardoc' do
     it "should delegate load to RegistryStore" do
       store = RegistryStore.new
+      Registry.yardoc_file = 'foo'
       store.should_receive(:load).with('foo')
       RegistryStore.should_receive(:new).and_return(store)
-      Registry.yardoc_file = 'foo'
       Registry.load_yardoc
     end
 
