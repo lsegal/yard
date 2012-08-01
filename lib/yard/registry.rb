@@ -72,7 +72,13 @@ module YARD
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
       undef yardoc_file, yardoc_file=
-      def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
+      def yardoc_file=(v)
+        unless v == yardoc_file
+          Thread.current[:__yard_yardoc_file__] = v
+          load_yardoc
+        end
+        v
+      end
       def yardoc_file
         Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE
       end
