@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+require 'tmpdir'
 
 class Server::WebrickAdapter; def start; end end
 
 describe YARD::CLI::Server do
   before do
-    @no_verify_libraries = false
     @no_adapter_mock = false
     @libraries = {}
     @options = {:single_library => true, :caching => false}
@@ -31,34 +31,87 @@ describe YARD::CLI::Server do
       library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, File.expand_path('.yardoc'))
       @libraries = {library.name => [library]}
     end
-    unless @no_verify_libraries
-      @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(File.expand_path(lib.yardoc_file)).and_return(true) } }
-    end
     unless @no_adapter_mock
       @cli.stub!(:adapter).and_return(@adapter)
       @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
       @adapter.should_receive(:start)
     end
+
     @cli.run(*args.flatten)
+    assert_libraries @libraries, @cli.libraries
+
     @cli = YARD::CLI::Server.new
   end
 
-  it "should default to current dir if no library is specified" do
-    Dir.should_receive(:pwd).and_return('/path/to/foo')
-    @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('.yardoc'))]
-    run
+  def assert_libraries(expected_libs, actual_libs)
+    actual_libs.should == expected_libs
+    expected_libs.each { |name, libs|
+      libs.each_with_index { |expected,i|
+        actual = actual_libs[name][i]
+        [:source, :source_path, :yardoc_file].each {|m|
+          actual.send(m).should == expected.send(m)
+        }
+      }
+    }
   end
 
-  it "should use .yardoc as yardoc file is library list is odd" do
-    @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('.yardoc'))]
-    run 'a'
+  context '.yardopts file exists' do
+    around :each do |ex|
+      Dir.mktmpdir {|dir|
+        Dir.chdir(dir) {
+          Dir.mkdir 'blah'
+          Dir.mkdir 'hehe'
+          @name= File.basename(Dir.pwd)
+          ex.call
+        }
+      }
+    end
+
+    it "should use .yardoc as the yardoc db if .yardopts doesn't specify an alternate path" do
+      File.write '.yardopts', '--protected'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('.yardoc'))]
+      @libraries.values[0][0].source_path = Dir.pwd
+      run
+    end
+
+    it "should use the yardoc db location specified by .yardopts" do
+      File.write '.yardopts', '--db hehe'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('hehe'))]
+      @libraries.values[0][0].source_path = Dir.pwd
+      run
+    end
+
+    it "should parse .yardopts when the library list is odd" do
+      File.write '.yardopts', '--db hehe'
+      @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('hehe'))]
+      @libraries.values[0][0].source_path = Dir.pwd
+      run 'a'
+    end
   end
 
-  it "should force multi library if more than one library is listed" do
-    @options[:single_library] = false
-    @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('b'))]
-    @libraries['c'] = [Server::LibraryVersion.new('c', nil, File.expand_path('.yardoc'))]
-    run %w(a b c)
+  context ".yardots file doesn't exist" do
+    before :each do
+      File.should_receive(:exists?).at_least(:once).with(/^(.[\\\/])?\.yardopts$/).and_return(false)
+    end
+
+    it "should default to .yardoc if no library is specified" do
+      Dir.should_receive(:pwd).and_return('/path/to/foo')
+      @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('.yardoc'))]
+      run
+    end
+
+    it "should use .yardoc as yardoc file if library list is odd" do
+      @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('.yardoc'))]
+      run 'a'
+    end
+
+    it "should force multi library if more than one library is listed" do
+      File.should_receive(:exist?).at_least(:once).with(/^(b|\.yardoc)$/).at_least(:twice).and_return(true)
+      @options[:single_library] = false
+      @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('b'))]
+      @libraries['c'] = [Server::LibraryVersion.new('c', nil, File.expand_path('.yardoc'))]
+      run %w(a b c)
+    end
   end
 
   it "should accept -m, --multi-library" do
@@ -183,6 +236,7 @@ describe YARD::CLI::Server do
 
   it "should warn if lockfile is not found (with -G)" do
     bundler_required
+    File.should_receive(:exists?).with(/\.yardopts$/).at_least(:once).and_return(false)
     File.should_receive(:exists?).with('somefile.lock').and_return(false)
     log.should_receive(:warn).with(/Cannot find somefile.lock/)
     run '-G', 'somefile'

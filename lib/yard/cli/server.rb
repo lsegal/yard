@@ -1,3 +1,5 @@
+require_relative 'yardoc'
+
 module YARD
   module CLI
     # A local documentation server
@@ -71,15 +73,53 @@ module YARD
 
       def add_libraries(args)
         (0...args.size).step(2) do |index|
-          library, yardoc = args[index], args[index + 1]
-          yardoc ||= '.yardoc'
-          yardoc = File.expand_path(yardoc)
-          if File.exist?(yardoc)
-            libraries[library] ||= []
-            libraries[library] |= [YARD::Server::LibraryVersion.new(library, nil, yardoc)]
+          library, dir = args[index], args[index + 1]
+
+          libver = nil
+          if dir
+            # Provided dir contains a .yardopts file
+            libver = create_library_version_if_yardopts_exist(library, dir)
+
+            # Use provided dir directly
+            #libver ||= File.exist?(dir) && YARD::Server::LibraryVersion.new(library, nil, dir)
+            libver ||= (
+              raise "Yardoc db not found at #{dir}" unless File.exist?(dir)
+              YARD::Server::LibraryVersion.new(library, nil, dir)
+            )
           else
-            log.warn "Cannot find yardoc db for #{library}: #{yardoc}"
+            # Check if this dir contains a .yardopts file
+            libver = create_library_version_if_yardopts_exist(library, '.')
+
+            # Check default location
+            libver ||= File.exist?('.yardoc') && YARD::Server::LibraryVersion.new(library, nil, '.yardoc')
           end
+
+          # Register library
+          if libver
+            libver.yardoc_file = File.expand_path(libver.yardoc_file) if libver.yardoc_file
+            libver.source_path = File.expand_path(libver.source_path) if libver.source_path
+            libraries[library] ||= []
+            libraries[library] |= [libver]
+          else
+            log.warn "Cannot find yardoc db for #{library}: #{dir}"
+          end
+        end
+      end
+
+      # @param [String] library The library name.
+      # @param [nil, String] dir The argument provided on the CLI after the library name. Is supposed to point to either
+      #   a project directory with a Yard options file, or a yardoc db.
+      # @return [nil, LibraryVersion]
+      def create_library_version_if_yardopts_exist(library, dir)
+        if dir and File.exists? File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
+
+          # Found yardopts, create libver
+          YARD::Registry.yardoc_file = nil
+          CLI::Yardoc.new.parse_arguments
+          libver = YARD::Server::LibraryVersion.new(library, nil, YARD::Registry.yardoc_file)
+          libver.source_path = dir
+
+          libver
         end
       end
 
@@ -166,13 +206,20 @@ module YARD
         parse_options(opts, args)
 
         if args.empty? && libraries.empty?
-          if !File.exist? File.expand_path('.yardoc')
+          # No args - try to use current dir
+          add_libraries([File.basename(Dir.pwd), nil])
+
+          # Generate doc for first time
+          libver = libraries.empty? ? nil : libraries.values.first.first
+          if libver and !File.exist?(libver.yardoc_file)
             log.enter_level(Logger::INFO) do
-              log.info "No .yardoc file found in current directory, parsing source before starting server..."
+              yardoc_file = libver.yardoc_file.sub /^#{Regexp.quote Dir.pwd}[\\\/]+/, ''
+              log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
             end
-            Yardoc.run('-n')
+            Dir.chdir(libver.source_path) do
+              Yardoc.run('-n')
+            end
           end
-          add_libraries([File.basename(Dir.pwd), File.expand_path('.yardoc')])
         else
           add_libraries(args)
           options[:single_library] = false if libraries.size > 1
