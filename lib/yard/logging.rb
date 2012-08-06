@@ -22,7 +22,8 @@ module YARD
     # @return [Boolean] whether progress indicators should be shown when
     #   logging CLIs (by default this is off).
     def show_progress
-      return false if RUBY18 # threading is too ineffective for progress support
+      return false if YARD.ruby18? # threading is too ineffective for progress support
+      return false if YARD.windows? # windows has poor ANSI support
       return false unless io.tty? # no TTY support on IO
       return false if level > WARN # no progress in verbose/debug modes
       @show_progress
