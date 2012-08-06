@@ -3,7 +3,7 @@ require 'rubygems/doc_manager'
 
 class Gem::DocManager
   def self.load_yardoc
-    require File.dirname(__FILE__) + '/../../yard'
+    require File.expand_path(File.join(File.dirname(__FILE__), *%w(.. .. yard)))
   end
 
   def run_yardoc(*args)
