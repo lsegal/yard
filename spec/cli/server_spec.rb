@@ -32,7 +32,7 @@ describe YARD::CLI::Server do
       @libraries = {library.name => [library]}
     end
     unless @no_verify_libraries
-      @libraries.values.each {|libs| libs.each {|lib| File.should_receive(:exist?).at_least(1).times.with(File.expand_path(lib.yardoc_file)).and_return(true) } }
+      @libraries.values.each {|libs| libs.each {|lib| File.stub!(:exist?).with(File.expand_path(lib.yardoc_file)).and_return(true) } }
     end
     unless @no_adapter_mock
       @cli.stub!(:adapter).and_return(@adapter)
