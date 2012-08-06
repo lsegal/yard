@@ -156,7 +156,7 @@ eof
     end
 
     it "should accept --query" do
-      run('--compact', '--query', 'type == :method')
+      run('--compact', '--query', 'o.type == :method')
       @data.string.should == <<-eof
 A A#foo ((stdin):6)
 A A.foo ((stdin):5)
