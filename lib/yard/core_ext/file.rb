@@ -22,7 +22,7 @@ class File
       break if from[0] != to[0]
       from.shift; to.shift
     end
-    fname = from.pop
+    from.pop
     join(*(from.map { RELATIVE_PARENTDIR } + to))
   end
 
