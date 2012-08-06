@@ -11,7 +11,7 @@ describe Gem::DocManager do
 
     YARD::CLI::Yardoc.stub(:run)
 
-    @spec_file = File.join(YARD::ROOT, '../yard.gemspec')
+    @spec_file = File.join(YARD::ROOT, '..', 'yard.gemspec')
     @spec = Gem::SourceIndex.load_specification(@spec_file)
     @spec.has_yardoc = false # no yardoc docs for now
     @yardopts = File.join(@spec.full_gem_path, '.yardopts')
