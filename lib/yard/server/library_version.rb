@@ -162,7 +162,7 @@ module YARD
       def prepare!
         return if yardoc_file
         meth = "load_yardoc_from_#{source}"
-        send(meth) if respond_to?(meth)
+        send(meth) if respond_to?(meth, true)
       end
 
       # @return [Gem::Specification] a gemspec object for a given library. Used
@@ -220,7 +220,7 @@ module YARD
 
       def load_source_path
         meth = "source_path_for_#{source}"
-        send(meth) if respond_to?(meth)
+        send(meth) if respond_to?(meth, true)
       end
     end
   end
