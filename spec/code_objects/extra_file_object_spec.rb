@@ -71,7 +71,7 @@ describe YARD::CodeObjects::ExtraFileObject do
       data.force_encoding('binary')
       file = ExtraFileObject.new('file.txt', data)
       ['Shift_JIS', 'Windows-31J'].should include(file.contents.encoding.to_s)
-    end if RUBY19
+    end if YARD.ruby19?
 
     it "should warn if @encoding is invalid" do
       log.should_receive(:warn).with("Invalid encoding `INVALID' in file.txt")
@@ -79,12 +79,12 @@ describe YARD::CodeObjects::ExtraFileObject do
       encoding = data.encoding
       file = ExtraFileObject.new('file.txt', data)
       file.contents.encoding.should == encoding
-    end if RUBY19
+    end if YARD.ruby19?
 
     it "should ignore encoding in 1.8.x (or encoding-unaware platforms)" do
       log.should_not_receive(:warn)
       file = ExtraFileObject.new('file.txt', "# @encoding INVALID\nFOO")
-    end if RUBY18
+    end if YARD.ruby18?
 
     it "should attempt to re-parse data as 8bit ascii if parsing fails" do
       log.should_not_receive(:warn)

@@ -509,11 +509,12 @@ module YARD
       # @return [String] the current character set
       # @since 0.5.4
       def charset
-        if @file && RUBY19
+        has_encoding = defined?(::Encoding)
+        if @file && has_encoding
           lang = @file.contents.encoding.to_s
         else
-          return 'utf-8' unless RUBY19 || lang = ENV['LANG']
-          if RUBY19
+          return 'utf-8' unless has_encoding || lang = ENV['LANG']
+          if has_encoding
             lang = ::Encoding.default_external.name.downcase
           else
             lang = lang.downcase.split('.').last

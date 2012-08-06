@@ -75,7 +75,7 @@ end
 describe YARD::CodeObjects, "BUILTIN_MODULES" do
   it "should include all base modules" do
     YARD::CodeObjects::BUILTIN_MODULES.each do |name|
-      next if RUBY19 && ["Precision"].include?(name)
+      next if YARD.ruby19? && ["Precision"].include?(name)
       eval(name).should be_instance_of(Module)
     end
   end

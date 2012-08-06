@@ -546,7 +546,7 @@ describe YARD::Parser::SourceParser do
           parser = Parser::SourceParser.new
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
-          if HAVE_RIPPER && RUBY19
+          if HAVE_RIPPER && YARD.ruby19?
             ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
               result.enumerator[0].source.encoding.to_s))
           end
@@ -572,7 +572,7 @@ describe YARD::Parser::SourceParser do
           ['UTF-8'].send(msg, include(content.encoding.to_s))
         end
       end
-    end if RUBY19
+    end if YARD.ruby19?
 
     Parser::SourceParser::ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
       it "should understand #{encoding.upcase} BOM" do
@@ -584,7 +584,7 @@ describe YARD::Parser::SourceParser do
         Registry.all(:class).first.path.should == "FooBar"
         result.enumerator[0].source.encoding.to_s.downcase.should == encoding
       end
-    end if HAVE_RIPPER && RUBY19
+    end if HAVE_RIPPER && YARD.ruby19?
   end
 
   describe '#parse_in_order' do

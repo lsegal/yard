@@ -22,14 +22,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
   describe '#charset' do
     it "should return foo if LANG=foo" do
-      ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if RUBY18
+      ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if YARD.ruby18?
       Encoding.default_external.should_receive(:name).and_return('shift_jis') if defined?(Encoding)
       charset.should == 'shift_jis'
     end
 
     ['US-ASCII', 'ASCII-7BIT', 'ASCII-8BIT'].each do |type|
       it "should convert #{type} to iso-8859-1" do
-        ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
+        ENV.should_receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
         Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
         charset.should == 'iso-8859-1'
       end
@@ -37,7 +37,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should support utf8 as an encoding value for utf-8" do
       type = 'utf8'
-      ENV.should_receive(:[]).with('LANG').and_return(type) if RUBY18
+      ENV.should_receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
       Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
       charset.should == 'utf-8'
     end
@@ -46,15 +46,15 @@ describe YARD::Templates::Helpers::HtmlHelper do
       @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
       # not the correct charset name, but good enough
       ['Shift_JIS', 'Windows-31J'].should include(charset)
-    end if RUBY19
+    end if YARD.ruby19?
 
     it "should take file encoding if there is a file" do
-      ENV.stub!(:[]).with('LANG').and_return('utf-8') if RUBY18
+      ENV.stub!(:[]).with('LANG').and_return('utf-8') if YARD.ruby18?
       @file = OpenStruct.new(:contents => 'foo')
       charset.should == 'utf-8'
-    end if RUBY18
+    end if YARD.ruby18?
 
-    if RUBY18
+    if YARD.ruby18?
       it "should return utf-8 if no LANG env is set" do
         ENV.should_receive(:[]).with('LANG').and_return(nil)
         charset.should == 'utf-8'
