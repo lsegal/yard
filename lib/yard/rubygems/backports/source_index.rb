@@ -18,6 +18,15 @@ require 'rubygems/specification'
 #        YAMLized source index objects to load properly.
 
 class Gem::SourceIndex
+  # Undef old methods
+  alias old_initialize initialize
+  undef old_initialize
+  %w(all_gems prerelease_gems load_gems_in latest_specs prerelease_specs
+      released_specs add_spec add_specs remove_spec each specification
+      index_signature gem_signature size length find_name search released_gems
+      refresh! outdated == dump gems spec_dirs spec_dirs=).each do |meth|
+    undef_method(meth) if method_defined?(meth)
+  end
 
   include Enumerable
 
@@ -29,6 +38,14 @@ class Gem::SourceIndex
   attr_accessor :spec_dirs
 
   class << self
+    # Undef old methods
+    %w(from_installed_gems installed_spec_directories
+        from_gems_in load_specification).each do |meth|
+      if instance_methods(true).find {|m| m.to_s == meth }
+        undef_method(meth)
+      end
+    end
+
     ##
     # Factory method to construct a source index instance for a given
     # path.
