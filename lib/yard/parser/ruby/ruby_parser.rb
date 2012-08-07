@@ -539,8 +539,9 @@ module YARD
 
         def insert_comments
           root.traverse do |node|
-            next if node.type == :list || node.parent.type != :list
-            (node.line - 2).upto(node.line) do |line|
+            next if node.type == :comment || node.type == :list || node.parent.type != :list
+            # check upwards from line before node; check node's line at the end
+            ((node.line-1).downto(node.line-2).to_a + [node.line]).each  do |line|
               comment = @comments[line]
               if comment && !comment.empty?
                 add_comment(line, node)

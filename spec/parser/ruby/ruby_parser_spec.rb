@@ -87,6 +87,32 @@ describe YARD::Parser::Ruby::RubyParser do
       ss[2].comments.should == 'hello'
     end
 
+    it "should handle block comment followed by line comment" do
+      ss = stmts <<-eof
+# comments1
+
+=begin
+comments2
+=end
+# comments3
+def hello; end
+eof
+      ss.last.comments.should == "comments3"
+    end
+
+    it "should handle block comment followed by block comment" do
+      ss = stmts <<-eof
+=begin
+comments1
+=end
+=begin
+comments2
+=end
+def hello; end
+eof
+      ss.last.comments.strip.should == "comments2"
+    end
+
     it "should handle 1.9 lambda syntax with args" do
       src = "->(a,b,c=1,*args,&block) { hello_world }"
       stmt(src).source.should == src
