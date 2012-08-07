@@ -498,7 +498,7 @@ module YARD
 
           hash_flag = $1 == '##' ? true : false
 
-          if append_comment && @comments_last_column == column
+          if append_comment && @comments_last_column && @comments_last_column == column
             @comments.delete(lineno - 1)
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
@@ -515,6 +515,7 @@ module YARD
 
         def on_embdoc_beg(text)
           visit_ns_token(:embdoc_beg, text)
+          @embdoc_start = charno-text.length
           @embdoc = ""
         end
 
@@ -525,7 +526,10 @@ module YARD
 
         def on_embdoc_end(text)
           visit_ns_token(:embdoc_end, text)
+          @comments_last_column = nil
           @comments[lineno] = @embdoc
+          @comments_range[lineno] = @embdoc_start...charno
+          @embdoc_start = nil
           @embdoc = nil
         end
 
