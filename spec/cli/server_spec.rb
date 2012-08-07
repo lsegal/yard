@@ -1,17 +1,28 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require 'tmpdir'
 
 class Server::WebrickAdapter; def start; end end
 
 describe YARD::CLI::Server do
   before do
+    @no_verify_libraries = false
     @no_adapter_mock = false
     @libraries = {}
     @options = {:single_library => true, :caching => false}
     @server_options = {:Port => 8808}
     @adapter = mock(:adapter)
     @adapter.stub!(:setup)
+    new_cli
+
+    # Checking if a file/dir exists will return false unless a matching stub is setup to return true
+    File.stub!(:exist?).and_return(false)
+    File.stub!(:exists?).and_return(false)
+    Dir.stub!(:exist?).and_return(false)
+    Dir.stub!(:exists?).and_return(false)
+  end
+
+  def new_cli
     @cli = YARD::CLI::Server.new
+    @cli.stub!(:generate_doc_for_first_time)
   end
 
   def rack_required
@@ -31,6 +42,9 @@ describe YARD::CLI::Server do
       library = Server::LibraryVersion.new(File.basename(Dir.pwd), nil, File.expand_path('.yardoc'))
       @libraries = {library.name => [library]}
     end
+    unless @no_verify_libraries
+      @libraries.values.each {|libs| libs.each {|lib| mock_dir lib.yardoc_file }}
+    end
     unless @no_adapter_mock
       @cli.stub!(:adapter).and_return(@adapter)
       @adapter.should_receive(:new).with(@libraries, @options, @server_options).and_return(@adapter)
@@ -40,7 +54,7 @@ describe YARD::CLI::Server do
     @cli.run(*args.flatten)
     assert_libraries @libraries, @cli.libraries
 
-    @cli = YARD::CLI::Server.new
+    new_cli
   end
 
   def assert_libraries(expected_libs, actual_libs)
@@ -55,48 +69,66 @@ describe YARD::CLI::Server do
     }
   end
 
-  context '.yardopts file exists' do
-    around :each do |ex|
-      Dir.mktmpdir {|dir|
-        Dir.chdir(dir) {
-          Dir.mkdir 'blah'
-          Dir.mkdir 'hehe'
-          @name= File.basename(Dir.pwd)
-          ex.call
-        }
-      }
+  # Mocks the existance of a dir.
+  def mock_dir(dir)
+    File.stub!(:exist?).with(dir).and_return(true)
+    File.stub!(:exists?).with(dir).and_return(true)
+    Dir.stub!(:exist?).with(dir).and_return(true)
+    Dir.stub!(:exists?).with(dir).and_return(true)
+    dir_e = File.expand_path(dir)
+    mock_dir(dir_e) unless dir_e == dir
+  end
+
+  # Mocks the existance of a file.
+  def mock_file(filename, content=nil)
+    File.stub!(:exist?).with(filename).and_return(true)
+    File.stub!(:exists?).with(filename).and_return(true)
+    if content
+      #File.stub!(:read).with(filename).and_return(content)
+      File.stub!(:read_binary).with(filename).and_return(content)
+    end
+    filename_e = File.expand_path(filename)
+    mock_file(filename_e) unless filename_e == filename
+  end
+
+  describe 'when .yardopts file exists' do
+    before :each do
+      Dir.stub!(:pwd).and_return('/path/to/stuff')
+      @name= 'stuff'
     end
 
     it "should use .yardoc as the yardoc db if .yardopts doesn't specify an alternate path" do
-      File.write '.yardopts', '--protected'
-      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('.yardoc'))]
-      @libraries.values[0][0].source_path = Dir.pwd
+      mock_file '/path/to/stuff/.yardopts', '--protected'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, '/path/to/stuff/.yardoc')]
+      @libraries.values[0][0].source_path = '/path/to/stuff'
       run
     end
 
     it "should use the yardoc db location specified by .yardopts" do
-      File.write '.yardopts', '--db hehe'
-      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('hehe'))]
-      @libraries.values[0][0].source_path = Dir.pwd
+      mock_file '/path/to/stuff/.yardopts', '--db hehe'
+      mock_dir 'hehe'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, '/path/to/stuff/hehe')]
+      @libraries.values[0][0].source_path = '/path/to/stuff'
       run
     end
 
     it "should parse .yardopts when the library list is odd" do
-      File.write '.yardopts', '--db hehe'
-      @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('hehe'))]
-      @libraries.values[0][0].source_path = Dir.pwd
+      mock_file '/path/to/stuff/.yardopts', '--db hehe'
+      mock_dir 'hehe'
+      @libraries['a'] = [Server::LibraryVersion.new('a', nil, '/path/to/stuff/hehe')]
+      @libraries.values[0][0].source_path = '/path/to/stuff'
       run 'a'
     end
   end
 
-  context ".yardots file doesn't exist" do
+  describe "when .yardopts file doesn't exist" do
     before :each do
-      File.should_receive(:exists?).at_least(:once).with(/^(.[\\\/])?\.yardopts$/).and_return(false)
+      File.should_receive(:exists?).at_least(:once).with(/^(.*[\\\/])?\.yardopts$/).and_return(false)
     end
 
     it "should default to .yardoc if no library is specified" do
-      Dir.should_receive(:pwd).and_return('/path/to/foo')
-      @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('.yardoc'))]
+      Dir.should_receive(:pwd).at_least(:once).and_return('/path/to/foo')
+      @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '/path/to/foo/.yardoc')]
       run
     end
 
@@ -106,7 +138,8 @@ describe YARD::CLI::Server do
     end
 
     it "should force multi library if more than one library is listed" do
-      File.should_receive(:exist?).at_least(:once).with(/^(b|\.yardoc)$/).at_least(:twice).and_return(true)
+      mock_dir 'b'
+      mock_dir '.yardoc'
       @options[:single_library] = false
       @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('b'))]
       @libraries['c'] = [Server::LibraryVersion.new('c', nil, File.expand_path('.yardoc'))]

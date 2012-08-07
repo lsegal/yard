@@ -1,5 +1,3 @@
-require_relative 'yardoc'
-
 module YARD
   module CLI
     # A local documentation server
@@ -88,10 +86,11 @@ module YARD
             )
           else
             # Check if this dir contains a .yardopts file
-            libver = create_library_version_if_yardopts_exist(library, '.')
+            pwd = Dir.pwd
+            libver = create_library_version_if_yardopts_exist(library, pwd)
 
             # Check default location
-            libver ||= File.exist?('.yardoc') && YARD::Server::LibraryVersion.new(library, nil, '.yardoc')
+            libver ||= YARD::Server::LibraryVersion.new(library, nil, File.join(pwd,'.yardoc'))
           end
 
           # Register library
@@ -101,7 +100,7 @@ module YARD
             libraries[library] ||= []
             libraries[library] |= [libver]
           else
-            log.warn "Cannot find yardoc db for #{library}: #{dir}"
+            log.warn "Cannot find yardoc db for #{library}: #{dir.inspect}"
           end
         end
       end
@@ -111,15 +110,22 @@ module YARD
       #   a project directory with a Yard options file, or a yardoc db.
       # @return [nil, LibraryVersion]
       def create_library_version_if_yardopts_exist(library, dir)
-        if dir and File.exists? File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
+        if dir
+         options_file = File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
+         if File.exists? options_file
 
-          # Found yardopts, create libver
-          YARD::Registry.yardoc_file = nil
-          CLI::Yardoc.new.parse_arguments
-          libver = YARD::Server::LibraryVersion.new(library, nil, YARD::Registry.yardoc_file)
-          libver.source_path = dir
+            # Found yardopts, extract db path
+            YARD::Registry.yardoc_file = nil
+            y = CLI::Yardoc.new
+            y.options_file = options_file
+            y.parse_arguments
+            db = File.expand_path(YARD::Registry.yardoc_file, dir)
 
-          libver
+            # Create libver
+            libver = YARD::Server::LibraryVersion.new(library, nil, db)
+            libver.source_path = dir
+            libver
+         end
         end
       end
 
@@ -212,17 +218,21 @@ module YARD
           # Generate doc for first time
           libver = libraries.empty? ? nil : libraries.values.first.first
           if libver and !File.exist?(libver.yardoc_file)
-            log.enter_level(Logger::INFO) do
-              yardoc_file = libver.yardoc_file.sub /^#{Regexp.quote Dir.pwd}[\\\/]+/, ''
-              log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
-            end
-            Dir.chdir(libver.source_path) do
-              Yardoc.run('-n')
-            end
+            generate_doc_for_first_time(libver)
           end
         else
           add_libraries(args)
           options[:single_library] = false if libraries.size > 1
+        end
+      end
+
+      def generate_doc_for_first_time(libver)
+        log.enter_level(Logger::INFO) do
+          yardoc_file = libver.yardoc_file.sub /^#{Regexp.quote Dir.pwd}[\\\/]+/, ''
+          log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
+        end
+        Dir.chdir(libver.source_path) do
+          Yardoc.run('-n')
         end
       end
     end
