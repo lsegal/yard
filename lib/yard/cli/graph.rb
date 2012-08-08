@@ -26,7 +26,7 @@ module YARD
       #   :format => :dot
       attr_reader :options
 
-      # The set of objects to include in the graph.
+      # The set of objects to include in the graph.
       attr_reader :objects
 
       # Creates a new instance of the command-line utility
@@ -48,6 +48,7 @@ module YARD
       #   grapher.run('--private')
       # @param [Array<String>] args each tokenized argument
       def run(*args)
+        CLI::Yardoc.read_yardoc_db_from_options_file
         Registry.load
         optparse(*args)
 
@@ -72,6 +73,7 @@ module YARD
 
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
+          Registry.load
         end
 
         opts.on('--full', 'Full class diagrams (show methods and attributes).') do
