@@ -71,15 +71,59 @@ module YARD
 
       def add_libraries(args)
         (0...args.size).step(2) do |index|
-          library, yardoc = args[index], args[index + 1]
-          yardoc ||= '.yardoc'
-          yardoc = File.expand_path(yardoc)
-          if File.exist?(yardoc)
-            libraries[library] ||= []
-            libraries[library] |= [YARD::Server::LibraryVersion.new(library, nil, yardoc)]
+          library, dir = args[index], args[index + 1]
+
+          libver = nil
+          if dir
+            if File.exist?(dir)
+              # Provided dir contains a .yardopts file
+              libver = create_library_version_if_yardopts_exist(library, dir)
+              libver ||= YARD::Server::LibraryVersion.new(library, nil, dir)
+            end
           else
-            log.warn "Cannot find yardoc db for #{library}: #{yardoc}"
+            # Check if this dir contains a .yardopts file
+            pwd = Dir.pwd
+            libver = create_library_version_if_yardopts_exist(library, pwd)
+
+            # Check default location
+            yfile = File.join(pwd, '.yardoc')
+            libver ||= YARD::Server::LibraryVersion.new(library, nil, yfile)
           end
+
+          # Register library
+          if libver
+            libver.yardoc_file = File.expand_path(libver.yardoc_file) if libver.yardoc_file
+            libver.source_path = File.expand_path(libver.source_path) if libver.source_path
+            libraries[library] ||= []
+            libraries[library] |= [libver]
+          else
+            log.warn "Cannot find yardoc db for #{library}: #{dir.inspect}"
+          end
+        end
+      end
+
+      # @param [String] library The library name.
+      # @param [String, nil] dir The argument provided on the CLI after the
+      #   library name. Is supposed to point to either a project directory
+      #   with a Yard options file, or a yardoc db.
+      # @return [LibraryVersion, nil]
+      def create_library_version_if_yardopts_exist(library, dir)
+        if dir
+         options_file = File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
+         if File.exist?(options_file)
+           # Found yardopts, extract db path
+           old_yfile = Registry.yardoc_file
+           y = CLI::Yardoc.new
+           y.options_file = options_file
+           y.parse_arguments
+           db = File.expand_path(YARD::Registry.yardoc_file, dir)
+           YARD::Registry.yardoc_file = old_yfile
+
+           # Create libver
+           libver = YARD::Server::LibraryVersion.new(library, nil, db)
+           libver.source_path = dir
+           libver
+         end
         end
       end
 
@@ -94,7 +138,7 @@ module YARD
       def add_gems_from_gemfile(gemfile = nil)
         require 'bundler'
         gemfile ||= "Gemfile"
-        if File.exists?("#{gemfile}.lock")
+        if File.exist?("#{gemfile}.lock")
           Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
             libraries[spec.name] ||= []
             libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
@@ -166,16 +210,27 @@ module YARD
         parse_options(opts, args)
 
         if args.empty? && libraries.empty?
-          if !File.exist? File.expand_path('.yardoc')
-            log.enter_level(Logger::INFO) do
-              log.info "No .yardoc file found in current directory, parsing source before starting server..."
-            end
-            Yardoc.run('-n')
+          # No args - try to use current dir
+          add_libraries([File.basename(Dir.pwd), nil])
+
+          # Generate doc for first time
+          libver = libraries.empty? ? nil : libraries.values.first.first
+          if libver and !File.exist?(libver.yardoc_file)
+            generate_doc_for_first_time(libver)
           end
-          add_libraries([File.basename(Dir.pwd), File.expand_path('.yardoc')])
         else
           add_libraries(args)
           options[:single_library] = false if libraries.size > 1
+        end
+      end
+
+      def generate_doc_for_first_time(libver)
+        log.enter_level(Logger::INFO) do
+          yardoc_file = libver.yardoc_file.sub /^#{Regexp.quote Dir.pwd}[\\\/]+/, ''
+          log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
+        end
+        Dir.chdir(libver.source_path) do
+          Yardoc.run('-n')
         end
       end
     end

@@ -97,7 +97,7 @@ module YARD
       # @raise [ArgumentError] if files is not a String or Array
       def load(files = [], reparse = false)
         if files.is_a?(Array)
-          if File.exists?(yardoc_file) && !reparse
+          if File.exist?(yardoc_file) && !reparse
             load_yardoc
           else
             size = thread_local_store.keys.size
