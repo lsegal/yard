@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yardoc.org"
   s.platform      = Gem::Platform::RUBY
-  s.files         = Dir.glob("{docs,bin,lib,spec,templates,benchmarks}/**/*") + ['ChangeLog', 'LICENSE', 'LEGAL', 'README.md', 'Rakefile', '.yardopts']
+  s.files         = Dir.glob("{docs,bin,lib,spec,templates,benchmarks}/**/*") +
+    ['ChangeLog', 'LICENSE', 'LEGAL', 'README.md', 'Rakefile', '.yardopts', __FILE__]
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
