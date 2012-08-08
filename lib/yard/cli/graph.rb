@@ -48,7 +48,6 @@ module YARD
       #   grapher.run('--private')
       # @param [Array<String>] args each tokenized argument
       def run(*args)
-        Registry.load
         optparse(*args)
 
         contents = objects.map do |o|
@@ -109,6 +108,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
 
+        Registry.load
         options.verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
         if args.first
           @objects = args.map {|o| Registry.at(o) }.compact
