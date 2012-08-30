@@ -55,14 +55,19 @@ eop
     before do
       messages = @locale.instance_variable_get(:@messages)
       messages["Hello"] = "Bonjour"
+      messages["not translated"] = ""
     end
 
     it "should return translated string for existent string" do
-      @locale.translate("Hello") == "Bonjour"
+      @locale.translate("Hello").should == "Bonjour"
     end
 
     it "should return original string for nonexistent string" do
-      @locale.translate("nonexistent") == "nonexistent"
+      @locale.translate("nonexistent").should == "nonexistent"
+    end
+
+    it "should return original string for not translated string" do
+      @locale.translate("not translated").should == "not translated"
     end
   end
 end
