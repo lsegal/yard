@@ -1,5 +1,5 @@
 def javascripts
-  super + %w(js/autocomplete.js js/live.js)
+  super + %w(js/autocomplete.js)
 end
 
 def stylesheets
