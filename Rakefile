@@ -19,6 +19,7 @@ end
 begin
 require 'rvm-tester'
 RVM::Tester::TesterTask.new do |t|
+  t.rubies = %w(1.8.6 ree jruby 1.8.7 1.9.2 1.9.3)
   t.bundle_install = false # don't need to do this all the time
   t.verbose = true
 end
