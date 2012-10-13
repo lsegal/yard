@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::DocstringParser do
+  after(:all) do
+    YARD::Registry.clear
+  end
+
   def parse(content, object = nil, handler = nil)
     @library ||= Tags::Library.instance
     @parser = DocstringParser.new(@library)
