@@ -145,7 +145,9 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should autolink URLs (markdown specific)" do
       log.enter_level(Logger::FATAL) do
-        pending 'This test depends on markdown' unless markup_class(:markdown)
+        unless markup_class(:markdown).to_s == "RedcarpetCompat"
+          pending 'This test depends on a markdown engine that supports autolinking'
+        end
       end
       htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/').should ==
         '<p><a href="http://example.com">http://example.com</a></p>'
