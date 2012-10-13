@@ -7,7 +7,8 @@ group :development do
 end
 
 group :markdown do
-  gem 'redcarpet', '= 1.17.2'
+  gem 'redcarpet', '= 1.17.2', :platforms => :mri
+  gem 'kramdown', :platforms => :jruby
 end
 
 group :textile do
@@ -22,6 +23,7 @@ group :i18n do
   gem 'gettext', '>= 2.2.1'
 end
 
-#group :parser do
-# gem 'ripper' if RUBY_VERSION >= '1.8.7' && RUBY_PLATFORM != "java"
-#end
+# No way to specify 1.8.7 only
+# group :parser do
+#  gem 'ripper', :platforms => :mri_18
+# end

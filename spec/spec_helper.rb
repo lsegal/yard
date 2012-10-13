@@ -5,6 +5,12 @@ rescue LoadError
   require "spec"
 end
 
+begin
+  require 'bundler'
+  Bundler.setup
+rescue LoadError
+end
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 
 unless defined?(HAVE_RIPPER)
