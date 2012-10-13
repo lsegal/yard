@@ -16,6 +16,10 @@ describe YARD::CLI::Server do
     new_cli
   end
 
+  after(:all) do
+    Server::Adapter.shutdown
+  end
+
   def new_cli
     @cli = YARD::CLI::Server.new
   end
