@@ -490,6 +490,16 @@ describe YARD::CLI::Yardoc do
       @yardoc.files.should == ["FILE"]
     end
 
+    # @todo honestly I have no idea of how to get .yard/options found
+    # excecpt to use a different @yardoc object altogether.
+    it "should use alternate .yard/options file if found" do
+      @yardoc.options_file = ".yard/options"
+      File.should_receive(:read_binary).with(".yard/options").and_return("-o NOTMYPATH")
+      @yardoc.run("-o", "MYPATH", "FILE")
+      @yardoc.options[:serializer].options[:basepath].should == "MYPATH"
+      @yardoc.files.should == ["FILE"]
+    end
+
     it "should load the RDoc .document file if found" do
       File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
       @yardoc.use_document_file = true
