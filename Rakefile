@@ -27,67 +27,34 @@ rescue LoadError
 end
 
 task :travis_ci do
-  status = 0
   ENV['SUITE'] = '1'
   ENV['CI'] = '1'
-  system "bundle exec rake specs"
-  status = 1 if $?.to_i != 0
+  ENV['LEGACY'] = nil
+  Rake::Task['specs'].execute
   if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
     puts ""
     puts "Running specs with in legacy mode"
-    system "bundle exec rake specs LEGACY=1"
-    status = 1 if $?.to_i != 0
-  end
-  exit(status)
-end
-
-begin
-  hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
-  if YARD::Parser::SourceParser.parser_type == :ruby
-    hide += ',legacy\/.+_handler'
-  else
-    hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$'
-  end
-
-  require 'rspec'
-  require 'rspec/core/rake_task'
-
-  desc "Run all specs"
-  RSpec::Core::RakeTask.new("specs") do |t|
-    $DEBUG = true if ENV['DEBUG']
-    t.rspec_opts = ENV['SUITE'] ? [] : ['-c']
-    t.rspec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
-    t.rspec_opts += ['-I', YARD::ROOT]
-    t.pattern = "spec/**/*_spec.rb"
-    t.verbose = $DEBUG ? true : false
-
-    if ENV['RCOV']
-      t.rcov = true
-      t.rcov_opts = ['-x', hide]
-    end
-  end
-  task :spec => :specs
-rescue LoadError
-  begin # Try for rspec 1.x
-    require 'spec'
-    require 'spec/rake/spectask'
-
-    Spec::Rake::SpecTask.new("specs") do |t|
-      $DEBUG = true if ENV['DEBUG']
-      t.spec_opts = ["--format", "specdoc", "--colour"]
-      t.spec_opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
-      t.pattern = "spec/**/*_spec.rb"
-
-      if ENV['RCOV']
-        t.rcov = true
-        t.rcov_opts = ['-x', hide]
-      end
-    end
-    task :spec => :specs
-  rescue LoadError
-    warn "warn: RSpec tests not available. `gem install rspec` to enable them."
+    ENV['LEGACY'] = '1'
+    Rake::Task['specs'].execute
   end
 end
+
+desc "Run all specs"
+task :specs do
+  opts = ['rspec', '-c']
+  opts += ["--require", File.join(File.dirname(__FILE__), 'spec', 'spec_helper')]
+  opts += ['-I', YARD::ROOT]
+  if ENV['DEBUG']
+    $DEBUG = true
+    opts += ['-d']
+  end
+  opts += FileList["spec/**/*_spec.rb"].sort
+  cmd = opts.join(' ')
+  puts cmd if Rake.application.options.trace
+  system(cmd)
+  raise "Command failed with status (#{$?.to_i}): #{cmd}" if $?.to_i != 0
+end
+task :spec => :specs
 
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]

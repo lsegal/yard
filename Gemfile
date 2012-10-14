@@ -4,6 +4,7 @@ group :development do
   gem 'rspec'
   gem 'rake'
   gem 'rvm-tester'
+  gem 'simplecov'
 end
 
 group :markdown do
