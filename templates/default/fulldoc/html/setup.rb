@@ -186,7 +186,7 @@ def class_list(root = Registry.root)
   children.reject {|c| c.nil? }.sort_by {|child| child.path }.map do |child|
     if child.is_a?(CodeObjects::NamespaceObject)
       name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
-      has_children = child.children.any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
+      has_children = run_verifier(child.children).any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
       out << "<li>"
       out << "<a class='toggle'></a> " if has_children
       out << linkify(child, name)
