@@ -205,7 +205,7 @@ module YARD
     #
     # === Escaping Interpolation
     #
-    # Interpolation can be escaped by prefixing the +$+ with +\+, like so:
+    # Interpolation can be escaped by prefixing the +$+ with +\\\+, like so:
     #
     #     # @!macro foo
     #     #   I have \$2.00 USD.
