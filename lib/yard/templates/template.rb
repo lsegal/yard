@@ -58,14 +58,23 @@ module YARD
       module ClassMethods
         attr_accessor :path, :full_path
 
+        # @return [Array<String>] a list of full paths
+        # @note This method caches path results. Paths should not be modified
+        #   after this method is called; call {#reset_full_paths} to reset cache.
         def full_paths
-          return @full_paths if defined? @cached_included_modules and
-            included_modules == @cached_included_modules
+          reset_full_paths unless defined? @cached_included_modules
+          return @full_paths if included_modules == @cached_included_modules
+
           @cached_included_modules = included_modules
-          @full_paths = @cached_included_modules.inject([full_path]){ |paths, mod|
+          @full_paths = included_modules.inject([full_path]) do |paths, mod|
             paths |= mod.full_paths if mod.respond_to?(:full_paths)
             paths
-          }
+          end
+        end
+
+        # Resets cache for {#full_paths}
+        def reset_full_paths
+          @cached_included_modules = nil
         end
 
         def initialize(path, full_paths)
