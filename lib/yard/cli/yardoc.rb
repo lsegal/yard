@@ -138,10 +138,7 @@ module YARD
     #
     # @since 0.2.1
     # @see Verifier
-    class Yardoc < Command
-      # The configuration filename to load extra options from
-      DEFAULT_YARDOPTS_FILE = ".yardopts"
-
+    class Yardoc < YardoptsCommand
       # @return [Hash] the hash of options passed to the template.
       # @see Templates::Engine#render
       attr_reader :options
@@ -158,12 +155,6 @@ module YARD
       #   parse only changed files.
       attr_accessor :use_cache
 
-      # @return [Boolean] whether to parse options from .yardopts
-      attr_accessor :use_yardopts_file
-
-      # @return [Boolean] whether to parse options from .document
-      attr_accessor :use_document_file
-
       # @return [Boolean] whether objects should be serialized to .yardoc db
       attr_accessor :save_yardoc
 
@@ -173,10 +164,6 @@ module YARD
       # @return [Boolean] whether to print a list of objects
       # @since 0.5.5
       attr_accessor :list
-
-      # The options file name (defaults to {DEFAULT_YARDOPTS_FILE})
-      # @return [String] the filename to load extra options from
-      attr_accessor :options_file
 
       # Keep track of which visibilities are to be shown
       # @return [Array<Symbol>] a list of visibilities
@@ -216,10 +203,7 @@ module YARD
         @files = []
         @hidden_tags = []
         @use_cache = false
-        @use_yardopts_file = true
-        @use_document_file = true
         @generate = true
-        @options_file = DEFAULT_YARDOPTS_FILE
         @statistics = true
         @list = false
         @save_yardoc = true
@@ -279,12 +263,7 @@ module YARD
       # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
-        parse_yardopts_options(*args)
-
-        # Parse files and then command line arguments
-        optparse(*support_rdoc_document_file!) if use_document_file
-        optparse(*yardopts) if use_yardopts_file
-        optparse(*args)
+        super(*args)
 
         # Last minute modifications
         self.files = ['{lib,app}/**/*.rb', 'ext/**/*.c'] if self.files.empty?
@@ -322,15 +301,6 @@ module YARD
       # @return [Array<CodeObjects::Base>] a list of code objects to process
       def all_objects
         Registry.all(:root, :module, :class)
-      end
-
-      # Parses the .yardopts file for default yard options
-      # @return [Array<String>] an array of options parsed from .yardopts
-      def yardopts
-        return [] unless use_yardopts_file
-        File.read_binary(options_file).shell_split
-      rescue Errno::ENOENT
-        []
       end
 
       private
@@ -407,30 +377,6 @@ module YARD
           sort_by {|item| [item.file || '', item.line || 0] }.each do |item|
           log.puts "#{item.file}:#{item.line}: #{item.path}"
         end
-      end
-
-      # Parses out the yardopts/document options
-      def parse_yardopts_options(*args)
-        opts = OptionParser.new
-        opts.base.long.clear # HACK: why are --help and --version defined?
-        yardopts_options(opts)
-        begin
-          opts.parse(args)
-        rescue OptionParser::ParseError => err
-          idx = args.index(err.args.first)
-          args = args[(idx+1)..-1]
-          args.shift while args.first && args.first[0,1] != '-'
-          retry
-        end
-      end
-
-      # Reads a .document file in the directory to get source file globs
-      # @return [Array<String>] an array of files parsed from .document
-      def support_rdoc_document_file!
-        return [] unless use_document_file
-        File.read(".document").gsub(/^[ \t]*#.+/m, '').split(/\s+/)
-      rescue Errno::ENOENT
-        []
       end
 
       # Adds a set of extra documentation files to be processed
@@ -577,25 +523,6 @@ module YARD
 
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
           self.excluded << path
-        end
-      end
-
-      # Adds --[no-]yardopts / --[no-]document
-      def yardopts_options(opts)
-        opts.on('--[no-]yardopts [FILE]',
-                "If arguments should be read from FILE",
-                "  (defaults to yes, FILE defaults to .yardopts)") do |use_yardopts|
-          if use_yardopts.is_a?(String)
-            self.options_file = use_yardopts
-            self.use_yardopts_file = true
-          else
-            self.use_yardopts_file = (use_yardopts != false)
-          end
-        end
-
-        opts.on('--[no-]document', "If arguments should be read from .document file. ",
-                                   "  (defaults to yes)") do |use_document|
-          self.use_document_file = use_document
         end
       end
 

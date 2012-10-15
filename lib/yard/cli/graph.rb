@@ -20,7 +20,7 @@ module YARD
     #
     # @see Graph#run
     # @since 0.6.0
-    class Graph < Command
+    class Graph < YardoptsCommand
       # The options parsed out of the commandline.
       # Default options are:
       #   :format => :dot
@@ -32,6 +32,7 @@ module YARD
       # Creates a new instance of the command-line utility
       def initialize
         super
+        @use_document_file = false
         @options = GraphOptions.new
         options.reset_defaults
         options.serializer = YARD::Serializers::StdoutSerializer.new
@@ -48,8 +49,8 @@ module YARD
       #   grapher.run('--private')
       # @param [Array<String>] args each tokenized argument
       def run(*args)
+        parse_arguments(*args)
         Registry.load
-        optparse(*args)
 
         contents = objects.map do |o|
           o.format(options.merge(:serialize => false))
@@ -60,6 +61,8 @@ module YARD
       end
 
       private
+
+      def unrecognized_option(err) end
 
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument

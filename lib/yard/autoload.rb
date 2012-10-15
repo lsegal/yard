@@ -3,19 +3,20 @@ def __p(path) File.join(YARD::ROOT, 'yard', *path.split('/')); end
 
 module YARD
   module CLI # Namespace for command-line interface components
-    autoload :Command,        __p('cli/command')
-    autoload :CommandParser,  __p('cli/command_parser')
-    autoload :Config,         __p('cli/config')
-    autoload :Diff,           __p('cli/diff')
-    autoload :Gems,           __p('cli/gems')
-    autoload :Graph,          __p('cli/graph')
-    autoload :Help,           __p('cli/help')
-    autoload :List,           __p('cli/list')
-    autoload :Server,         __p('cli/server')
-    autoload :Stats,          __p('cli/stats')
-    autoload :Yardoc,         __p('cli/yardoc')
-    autoload :YRI,            __p('cli/yri')
-    autoload :I18n,           __p('cli/i18n')
+    autoload :Command,         __p('cli/command')
+    autoload :CommandParser,   __p('cli/command_parser')
+    autoload :Config,          __p('cli/config')
+    autoload :Diff,            __p('cli/diff')
+    autoload :Gems,            __p('cli/gems')
+    autoload :Graph,           __p('cli/graph')
+    autoload :Help,            __p('cli/help')
+    autoload :List,            __p('cli/list')
+    autoload :Server,          __p('cli/server')
+    autoload :Stats,           __p('cli/stats')
+    autoload :Yardoc,          __p('cli/yardoc')
+    autoload :YardoptsCommand, __p('cli/yardopts_command')
+    autoload :YRI,             __p('cli/yri')
+    autoload :I18n,            __p('cli/i18n')
   end
 
   # A "code object" is defined as any entity in the Ruby language.

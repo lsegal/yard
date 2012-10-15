@@ -54,7 +54,7 @@ module YARD
       def parse_options(opts, args)
         opts.parse!(args)
       rescue OptionParser::ParseError => err
-        log.warn "Unrecognized/#{err.message}"
+        unrecognized_option(err)
         args.shift if args.first && args.first[0,1] != '-'
         retry
       end
@@ -70,6 +70,14 @@ module YARD
       rescue LoadError => load_exception
         log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
         exit
+      end
+
+      # Callback when an unrecognize option is parsed
+      #
+      # @param [OptionParser::ParseError] err the exception raised by the
+      #   option parser
+      def unrecognized_option(err)
+        log.warn "Unrecognized/#{err.message}"
       end
     end
   end

@@ -21,7 +21,7 @@ describe YARD::CLI::Server do
   end
 
   def new_cli
-    @cli = YARD::CLI::Server.new
+    @cli = subject
   end
 
   def rack_required
@@ -85,6 +85,7 @@ describe YARD::CLI::Server do
 
   describe 'when .yardopts file exists' do
     before :each do
+      Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
       Dir.stub!(:pwd).and_return('/path/to/bar')
       @name = 'bar'
     end
