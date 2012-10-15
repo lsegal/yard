@@ -13,22 +13,29 @@ module YARD
         # extra path, use {YARD::Server.register_static_path} rather than
         # modifying this constant directly. Also note that files in the
         # document root will always take precedence over these paths.
-        STATIC_PATHS = [
-          File.join(YARD::TEMPLATE_ROOT, 'default', 'fulldoc', 'html'),
-          File.join(File.dirname(__FILE__), '..', 'templates', 'default', 'fulldoc', 'html')
-        ]
+        STATIC_PATHS = []
 
         def run
+          assets_template = Templates::Engine.template(:default, :fulldoc, :html)
           path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
+
+          file = nil
           ([adapter.document_root] + STATIC_PATHS.reverse).compact.each do |path_prefix|
             file = File.join(path_prefix, path)
-            if File.exist?(file)
-              ext = "." + (request.path[/\.(\w+)$/, 1] || "html")
-              headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
-              self.body = File.read(file)
-              return
-            end
+            break if File.exist?(file)
+            file = nil
           end
+
+          # Search in default/fulldoc/html template if nothing in static asset paths
+          file ||= assets_template.find_file(path)
+
+          if file
+            ext = "." + (request.path[/\.(\w+)$/, 1] || "html")
+            headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
+            self.body = File.read(file)
+            return
+          end
+
           favicon?
           self.status = 404
         end

@@ -24,10 +24,10 @@ describe YARD::Server::Commands::StaticFileCommand do
     end
 
     it "should return file contents if found" do
-      path = File.join(StaticFileCommand::STATIC_PATHS.last, '/path/to/file.txt')
+      tpl = Templates::Engine.template(:default, :fulldoc, :html)
       File.should_receive(:exist?).with('/c/path/to/file.txt').and_return(false)
-      File.should_receive(:exist?).with(path).and_return(true)
-      File.should_receive(:read).with(path).and_return('FOO')
+      tpl.should_receive(:find_file).with('/path/to/file.txt').and_return('/path/to/foo')
+      File.should_receive(:read).with('/path/to/foo').and_return('FOO')
       run('/path/to/file.txt', 200, 'FOO')
     end
 
