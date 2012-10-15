@@ -283,7 +283,7 @@ module YARD
 
         # Parse files and then command line arguments
         optparse(*support_rdoc_document_file!) if use_document_file
-        optparse(*yardopts) if use_yardopts_file
+        parse_options_file if use_yardopts_file
         optparse(*args)
 
         # Last minute modifications
@@ -331,6 +331,39 @@ module YARD
         File.read_binary(options_file).shell_split
       rescue Errno::ENOENT
         []
+      end
+
+      # Reads and parses the {#options_file}.
+      #
+      # @return (see #optparse)
+      def parse_options_file
+        optparse(*yardopts)
+      end
+
+      # Reads and parses a specified options file, usually +.yardopts+,
+      # and extracts the Yard DB file.
+      #
+      # @param [Boolean] use_discovered_yarddb Whether or not to set the
+      #   singleton Yard DB in {Registry#yardoc_file} to the yard db specified
+      #   in the options file.
+      # @param [String] options_file The file to parse that should contain Yard
+      #   doc options.
+      # @return [String] The full path of the yard db if specified, or the full
+      #   path to the default location (+.yardoc+) relative to the options file's
+      #   directory.
+      # @since 0.8.2.2
+      def self.read_yardoc_db_from_options_file(use_discovered_yarddb = true, options_file = DEFAULT_YARDOPTS_FILE)
+        old_yfile = Registry.yardoc_file
+        begin
+          Registry.yardoc_file = nil
+          y = CLI::Yardoc.new
+          y.options_file = options_file
+          y.parse_options_file
+          dir = File.dirname(options_file)
+          return File.expand_path(YARD::Registry.yardoc_file, dir)
+        ensure
+          YARD::Registry.yardoc_file = old_yfile unless use_discovered_yarddb
+        end
       end
 
       private
