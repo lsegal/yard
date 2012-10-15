@@ -16,6 +16,7 @@
 12. **Added line numbers to `yard stats --list-undoc --compact`** (0.8.0)
 13. **Single object db now default (multi-object db unsupported)** (0.8.0)
 14. **Added `--api` tag to generate documentation for API sets** (0.8.1)
+15. **Added `--non-transitive-tag` to disable transitive tag** (0.8.3)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 
@@ -277,6 +278,19 @@ But note that `--query` does not work when YARD is in "safe mode"
 due to security concerns, whereas `--api` works in either mode.
 This enables `--api` to function on remote documentation sites like
 [rubydoc.info](http://rubydoc.info).
+
+## Added `--non-transitive-tag` to disable transitive tag (0.8.3)
+
+You can now use `--non-transitive-tag` to disable transitivity on
+tags that are defined as transitive by default. For instance, in
+some cases you might not want the @api tag to apply to all methods
+when you define it on a class. Only the class itself has a specific
+@api tag. To do this, you can mark @api as non-transitive with:
+
+    $ yard doc --non-transitive-tag api --api some_api
+
+Which will avoid classifying treating @api as a transitive tag
+when parsing modules and classes.
 
 
 # What's New in 0.7.x?

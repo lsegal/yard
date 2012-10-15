@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2012    
 **License**:      MIT License    
-**Latest Version**: 0.8.2.1 (codename "Shave It")    
-**Release Date**: June 10th 2012    
+**Latest Version**: 0.8.3 (codename "Rainier")    
+**Release Date**: October 15th 2012    
 
 Synopsis
 --------
@@ -285,6 +285,16 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **October.14.12**: 0.8.3 release
+    - Add `--non-transitive-tag` to disable tag transitivity (#571)
+    - Support --db inside .yardopts for graph/server commands (#583, #586)
+    - Fix handling for =begin/=end docstrings (#577, #578)
+    - Parser only sorts file lists when a glob is provided (#572)
+    - Fix formatting in `{include:Object#method}` syntax (#569)
+    - Fix @option tag inside of module functions (#563)
+    - Fix to `--api` and `--no-api` support (#559)
+    - Fix class nesting issues when path starts with "::" (#552)
 
 - **June.9.12**: 0.8.2.1 release
     - Fix a set of regressions in yard server search and dynamic generation

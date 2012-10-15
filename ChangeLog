@@ -1,6 +1,252 @@
+2012-10-15  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, docs/WhatsNew.md, lib/yard/version.rb: Bump to
+  version 0.8.3
+
+  * lib/yard/server/commands/static_file_command.rb,
+  spec/server/commands/static_file_command_spec.rb: StaticFileCommand should
+  look in default/fulldoc/html for assets  Fixes #598
+
+  * lib/yard/cli/server.rb: Cleanup Server CLI to only parse options files for
+  --db  References #589
+
+  * lib/yard/autoload.rb, lib/yard/cli/command.rb, lib/yard/cli/graph.rb,
+  lib/yard/cli/yardoc.rb, lib/yard/cli/yardopts_command.rb,
+  spec/cli/graph_spec.rb, spec/cli/server_spec.rb: Add YardoptsCommand to
+  abstract commands that read .yardopts  Graph and Yardoc commands now subclass
+  YardoptsCommand. Moved all yardopts/document handling into that class.  Fixes
+  #583 Closes #585, #589
+
+2012-10-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/template.rb: Code formatting fixes and add cache reset
+  method  Closes #582
+
+2012-07-31  Nikolai Weibull <now@bitwi.se>
+
+  * lib/yard/templates/template.rb: Cache the result of
+  Templates::Template#full_paths  Templates::Template#full_paths gets called a
+  lot and caching its result shaves off a lot of the total run time of
+  documentation generation.
+
+2012-10-14  Loren Segal <lsegal@soen.ca>
+
+  * Gemfile, Rakefile, spec/spec_helper.rb: Replace rspec rake task and add
+  SimpleCov support  New specs task avoids printing the lengthy file list only
+  if tests fail (or if --trace is used), and sort the file list so there are no
+  more env-specific test failures related to file load order. Tests should no
+  longer fail due to the way the underlying file system returns globs to Ruby.
+
+2012-10-13  Loren Segal <lsegal@soen.ca>
+
+  * spec/docstring_parser_spec.rb: Cleanup after docstring parser spec
+
+  * .travis.yml, Rakefile: Travis no longer supports 1.8.6
+
+  * templates/default/fulldoc/html/frames.erb: Frames page should use charset
+
+  * spec/cli/server_spec.rb: Cleanup adapter mocking
+
+  * spec/templates/helpers/html_helper_spec.rb: Only perform autolinking test
+  in redcarpet
+
+  * Gemfile, spec/spec_helper.rb: Update Gemfile and load deps in tests if
+  Bundler is present
+
+2012-10-05  Loren Segal <lsegal@soen.ca>
+
+  * .../server/templates/default/layout/html/setup.rb: Remove reference to
+  live.js in template  Fixes #603
+
+2012-09-28  Anton <astyagun@gmail.com>
+
+  * lib/yard/tags/directives.rb: Fixed backslash escaping in documentation
+
+2012-09-12  Alexander Pepper <alexander.pepper@infopark.de>
+
+  * templates/default/fulldoc/html/setup.rb: [Bugfix] Only show toggle, when
+  visible children are present.
+
+2012-08-08  Loren Segal <lsegal@soen.ca>
+
+  * yard.gemspec: Package the gemspec file in the gem for tests.  Yo dawg, I
+  heard you like testing so I put a gemspec in your gemspec so you can test the
+  gem while you gem install.  Fixes #588
+
+2012-08-08  David Barri <japgolly@gmail.com>
+
+  * lib/yard/cli/server.rb, spec/cli/server_spec.rb: Updated Server CLI changes
+  based on feedback from lsegal. * Removed require_relative * RSpec context =>
+  describe * Completely mock out FS for testing
+
+2012-08-06  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/ruby/ruby_parser.rb, spec/parser/ruby/ruby_parser_spec.rb:
+  Properly insert comment nodes and check for attached comments in proper order
+
+  * lib/yard/parser/ruby/ruby_parser.rb: Properly handle embedded doc comments
+  (=begin/=end)  Fixes #577 Closes #578
+
+  * lib/yard/rubygems/backports/gem.rb: Undef source_index safely
+
+  * lib/yard/logging.rb: Disable progress indication in Windows (poor ANSI
+  support)
+
+  * lib/yard.rb, lib/yard/templates/helpers/html_helper.rb,
+  spec/code_objects/constants_spec.rb,
+  spec/code_objects/extra_file_object_spec.rb,
+  spec/parser/source_parser_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add YARD.windows?, YARD.ruby18?
+  and YARD.ruby19?  Deprecate RUBY18 and RUBY19 constant usage and replace
+  constants with ruby18? and ruby19? calls
+
+  * lib/yard/rubygems/backports/gem.rb,
+  lib/yard/rubygems/backports/source_index.rb: Cleanup warnings in RubyGems
+  backports
+
+  * lib/yard/core_ext/file.rb: Remove Ruby warning
+
+  * spec/rubygems/doc_manager_spec.rb: Attempt to load yard gemspec properly,
+  references #579
+
+  * lib/yard/cli/diff.rb, spec/cli/diff_spec.rb: Make diff code 1.8 compatible
+
+  * lib/yard/rubygems/doc_manager.rb: Remove 1.8 warning on loading yard from
+  rubygems
+
+  * spec/cli/server_spec.rb: Fix test failures in server specs  Fixes #576
+
+2012-08-02  David Barri <japgolly@gmail.com>
+
+  * lib/yard/cli/server.rb, spec/cli/server_spec.rb: Server CLI now reads
+  .yardopts files, and works with alternate yardoc db paths.
+
+2012-07-15  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/logging.rb: Clear progress lines when printing severity messages
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Handle
+  creation of objects with complex object paths when path starts with "::" 
+  Closes #552
+
+  * benchmarks/format_args.rb, benchmarks/pathname_vs_string.rb,
+  benchmarks/template_format.rb, lib/yard/cli/command.rb,
+  lib/yard/cli/command_parser.rb, lib/yard/cli/config.rb, lib/yard/cli/diff.rb,
+  lib/yard/cli/help.rb, lib/yard/cli/list.rb, lib/yard/cli/stats.rb,
+  lib/yard/cli/yardoc.rb, lib/yard/cli/yri.rb, lib/yard/logging.rb,
+  lib/yard/server/rack_adapter.rb, spec/cli/config_spec.rb,
+  spec/cli/diff_spec.rb, spec/cli/help_spec.rb, spec/cli/stats_spec.rb,
+  spec/spec_helper.rb: Centralize all printing through Logger so progress
+  indicator can be properly cleared.
+
+2012-07-15  Benoit Daloze <eregontp@gmail.com>
+
+  * lib/yard/server/library_version.rb: fix for ruby 2.0.0 with respond_to?
+  returning false for protected methods
+
+2012-07-14  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/parser/source_parser.rb, spec/parser/source_parser_spec.rb:
+  SourceParser should only sort file list on globs  Closes #572
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Add --non-transitive-tag
+  TAG to mark a tag as not transitive  Closes #571
+
+  * lib/yard/rake/yardoc_task.rb, spec/rake/yardoc_task_spec.rb: Only
+  parse_arguments one time in YardocTask  Closes #559
+
+  * spec/rake/yardoc_task_spec.rb: Fix formatting of specs in
+  yardoc_task_spec.rb
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Don't add period to summary
+  if entire summary is `{include:...}` expression.  Closes #569
+
+  * spec/handlers/module_function_handler_spec.rb: Test that module function
+  properly copies all tags  Fix based on
+  72de4e624b466b69b4f4f0a90e64b252cbe82174 Closes #563
+
+  * lib/yard/docstring.rb, spec/docstring_spec.rb: Fix Docstring#to_raw for
+  `@option` tags  Implementation by @ConradIrwin
+
+2012-07-08  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/diff.rb, spec/cli/diff_spec.rb: Add --query and --no-modified.
+  Diff now shows modified objects and allows queries
+
+2012-06-20  yuta yamada <yamada@clear-code.com>
+
+  * docs/Templates.md: Fix indentation for markdown
+
+  * docs/WhatsNew.md: Fix a typo (unsed -> used)
+
+  * lib/yard/i18n/message.rb: Fix a typo (appered -> appeared)
+
+  * docs/WhatsNew.md: Fix a typo (afformentioned -> aforementioned)
+
+  * docs/Templates.md: Fix a typo (explcitly -> explicity)
+
+  * : Add translated document for Japanese
+
+2012-06-19  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/cli/yardoc.rb, lib/yard/registry.rb, lib/yard/registry_store.rb,
+  spec/cli/yardoc_spec.rb, spec/registry_spec.rb, spec/registry_store_spec.rb:
+  i18n: add --po-dir option
+
+2012-06-10  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: i18n: add --locale option
+  to "yard doc"  It specifies generated document's locale. For now, extra files
+  are only translated with messages in po/#{locale}.po.
+
+  * lib/yard/code_objects/extra_file_object.rb,
+  spec/code_objects/extra_file_object_spec.rb: i18n: support ExtraFileObject
+  contents translation  Attributes are also translated.  Contents are parsed
+  lazy. You can change ExtraFileObject's locale by ExtraFileObject#locale=.
+
+  * lib/yard/registry.rb, spec/registry_spec.rb: i18n: add locale loading
+  feature to YARD::Registry
+
+  * lib/yard/registry_store.rb, spec/registry_store_spec.rb: i18n: add locale
+  loading feature to YARD::RegistryStore
+
+  * lib/yard/i18n/locale.rb: i18n: don't try load .po for the default locale
+  name  The default locale name is nil.
+
+2012-06-19  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/i18n/locale.rb: i18n: show help message to enable i18n feature
+
+2012-06-16  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/templates/helpers/html_helper.rb: Fix intra-emphasis for redcarpet
+   Closes #557
+
+2012-06-15  Andy Caldwell <andy.m.caldwell@googlemail.com>
+
+  * lib/yard/parser/ruby/ast_node.rb, yard.gemspec: Tidy up pull request
+
+2012-06-14  Andy Caldwell <andy.m.caldwell@googlemail.com>
+
+  * lib/yard.rb, lib/yard/parser/ruby/ast_node.rb, lib/yard/version.rb,
+  yard.gemspec: Allow yard to be launched by 'bundle exec' by separating
+  version from yard.rb
+
+2012-06-11  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/cli/diff.rb: Ensure dir switching is cleaned up properly in case
+  of exception
+
+  * lib/yard/cli/diff.rb, spec/cli/diff_spec.rb: Add --compact to yard diff
+
 2012-06-10  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, lib/yard.rb: Bump to 0.8.2.1
+
+2012-06-10  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/i18n/locale.rb, spec/i18n/locale_spec.rb: i18n: make gettext gem
+  optional  Require gettext related files lazy and ignore LoadError.
 
 2012-06-09  Loren Segal <lsegal@soen.ca>
 
