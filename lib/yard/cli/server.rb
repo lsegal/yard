@@ -181,10 +181,10 @@ module YARD
         opts.on('-d', '--daemon', 'Daemonizes the server process') do
           server_options[:daemonize] = true
         end
-        opts.on('-B HOST_NAME', '--bind', 'The host address to bind to') do |host|
+        opts.on('-B HOST', '--bind', 'The host address to bind to') do |host|
           server_options[:Host] = host.to_s
         end        
-        opts.on('-p PORT', '--port', 'Serves documentation on PORT') do |port|
+        opts.on('-p PORT', '--port', 'Serves documentation on PORT (test)') do |port|
           server_options[:Port] = port.to_i
         end
         opts.on('--docroot DOCROOT', 'Uses DOCROOT as document root') do |docroot|
