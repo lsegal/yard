@@ -181,7 +181,7 @@ module YARD
         opts.on('-d', '--daemon', 'Daemonizes the server process') do
           server_options[:daemonize] = true
         end
-        opts.on('-h HOST_NAME', '--host', 'The host address to bind to') do |port|
+        opts.on('-b HOST_NAME', '--bind', 'The host address to bind to') do |port|
           server_options[:Host] = host.to_s
         end        
         opts.on('-p PORT', '--port', 'Serves documentation on PORT') do |port|
