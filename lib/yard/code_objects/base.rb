@@ -136,9 +136,10 @@ module YARD
       # @return [String] a line of source
       attr_accessor :signature
 
-      # The documentation string associated with the object
+      # The not localized documentation string associated with the object
       # @return [Docstring] the documentation string
-      attr_reader :docstring
+      # @since 0.8.4
+      attr_reader :base_docstring
 
       # Marks whether or not the method is conditionally defined at runtime
       # @return [Boolean] true if the method is conditionally defined at runtime
@@ -218,7 +219,8 @@ module YARD
         @source_type = :ruby
         @visibility = :public
         @tags = []
-        @docstring = Docstring.new('', self)
+        @docstrings = {}
+        @base_docstring = Docstring.new('', self)
         @namespace = nil
         self.namespace = namespace
         yield(self) if block_given?
@@ -235,7 +237,7 @@ module YARD
           ivar = "@#{ivar}"
           other.instance_variable_set(ivar, instance_variable_get(ivar))
         end
-        other.docstring = docstring.to_raw
+        other.docstring = @base_docstring.to_raw
         other
       end
 
@@ -363,10 +365,25 @@ module YARD
         end
       end
 
-      undef docstring
-      def docstring
-        @docstring.resolve_reference
-        @docstring
+      # The documentation string associated with the object
+      #
+      # @param [String, I18n::Locale] locale (I18n::Locale.default)
+      #   the locale of the documentation string.
+      # @return [Docstring] the documentation string
+      def docstring(locale = I18n::Locale.default)
+        if locale.nil?
+          @base_docstring.resolve_reference
+          return @base_docstring
+        end
+
+        if locale.is_a?(String)
+          locale_name = locale
+          locale = nil
+        else
+          locale_name = locale.name
+        end
+        @docstrings[locale_name] ||=
+          translate_docstring(locale || Registry.locale(locale_name))
       end
 
       # Attaches a docstring to a code object by parsing the comments attached to the statement
@@ -376,10 +393,11 @@ module YARD
       #   the comments attached to the code object to be parsed
       #   into a docstring and meta tags.
       def docstring=(comments)
+        @docstrings.clear
         if Docstring === comments
-          @docstring = comments
+          @base_docstring = comments
         else
-          @docstring = Docstring.new(comments, self)
+          @base_docstring = Docstring.new(comments, self)
         end
       end
 
@@ -515,7 +533,7 @@ module YARD
       # @since 0.8.0
       def copyable_attributes
         vars = instance_variables.map {|ivar| ivar.to_s[1..-1] }
-        vars -= %w(docstring namespace name path)
+        vars -= %w(base_docstring docstrings namespace name path)
         vars
       end
 
@@ -530,6 +548,17 @@ module YARD
         last = source.split(/\r?\n/).last
         indent = last ? last[/^([ \t]*)/, 1].length : 0
         source.gsub(/^[ \t]{#{indent}}/, '')
+      end
+
+      def translate_docstring(locale)
+        @base_docstring.resolve_reference
+        return @base_docstring if locale.nil?
+
+        text = I18n::Text.new(@base_docstring)
+        localized_text = text.translate(locale)
+        docstring = Docstring.new(localized_text, self)
+        docstring.add_tag(*@base_docstring.tags)
+        docstring
       end
     end
   end
