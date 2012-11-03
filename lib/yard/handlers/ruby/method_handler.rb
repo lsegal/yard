@@ -31,18 +31,18 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
 
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
-        obj.docstring.add_tag(YARD::Tags::Tag.new(:return,
+        obj.add_tag(YARD::Tags::Tag.new(:return,
           "a new instance of #{namespace.name}", namespace.name.to_s))
       end
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included
         extended method_added method_removed method_undefined).include?(meth)
-      obj.docstring.add_tag(YARD::Tags::Tag.new(:private, nil))
+      obj.add_tag(YARD::Tags::Tag.new(:private, nil))
     elsif meth.to_s =~ /\?$/
       if obj.tag(:return) && (obj.tag(:return).types || []).empty?
         obj.tag(:return).types = ['Boolean']
       elsif obj.tag(:return).nil?
         unless obj.tags(:overload).any? {|overload| overload.tag(:return) }
-          obj.docstring.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+          obj.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
         end
       end
     end
@@ -53,7 +53,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
         expected_param = option.name
         unless obj.tags(:param).find {|x| x.name == expected_param }
           new_tag = YARD::Tags::Tag.new(:param, "a customizable set of options", "Hash", expected_param)
-          obj.docstring.add_tag(new_tag)
+          obj.add_tag(new_tag)
         end
       end
     end

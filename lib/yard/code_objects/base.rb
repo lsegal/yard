@@ -510,6 +510,14 @@ module YARD
       # @see Docstring#has_tag?
       def has_tag?(name); docstring.has_tag?(name) end
 
+      # Add tags to the {#docstring}
+      # @see Docstring#add_tag
+      # @since 0.8.4
+      def add_tag(*tags)
+        @docstrings.clear
+        @base_docstring.add_tag(*tags)
+      end
+
       # @return whether or not this object is a RootObject
       def root?; false end
 

@@ -7,6 +7,6 @@ class YARD::Handlers::Ruby::Legacy::ExceptionHandler < YARD::Handlers::Ruby::Leg
     return if owner.has_tag?(:raise)
 
     klass = statement.tokens.to_s[/^raise[\(\s]*(#{NAMESPACEMATCH})\s*(?:\)|,|\s(?:if|unless|until)|;|(?:(?:\.|\:\:)\s*)?new|$)/, 1]
-    owner.docstring.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
+    owner.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
   end
 end

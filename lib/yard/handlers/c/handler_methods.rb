@@ -45,7 +45,7 @@ module YARD
           register MethodObject.new(namespace, name, scope) do |obj|
             register_visibility(obj, visibility)
             find_method_body(obj, func_name)
-            obj.docstring.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
+            obj.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
           end
         end
 
