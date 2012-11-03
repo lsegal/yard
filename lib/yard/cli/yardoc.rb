@@ -441,6 +441,7 @@ module YARD
       # @return [void]
       # @since 0.8.3
       def apply_locale
+        YARD::I18n::Locale.default = options.locale
         options.files.each do |file|
           file.locale = options.locale
         end
