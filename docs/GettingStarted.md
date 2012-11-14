@@ -51,7 +51,7 @@ In YARD, we would simply define our method as:
 
     # Converts the object into textual markup given a specific format.
     #
-    # @param [Symbol] format the format type, `:text` or `:html`
+    # @param format [Symbol] the format type, `:text` or `:html`
     # @return [String] the object converted into the expected format.
     def to_format(format = :html)
       # format the object
@@ -105,7 +105,7 @@ from that docstring/tag into your current object. Consider the example:
 
     class MyWebServer
       # Handles a request
-      # @param [Request] request the request object
+      # @param request [Request] the request object
       # @return [String] the resulting webpage
       def get(request) "hello" end
 
@@ -134,7 +134,7 @@ and return tags:
 
     class MyWebServer
       # Handles a GET request
-      # @param [Request] request the request object
+      # @param request [Request] the request object
       # @return [String] the resulting webpage
       def get(request) "hello" end
 
@@ -165,8 +165,8 @@ with or without a types field.
 The list of types is in the form `[type1, type2, ...]` and is mostly free-form,
 so we can also specify duck-types or constant values. For example:
 
-    # @param [#to_s] argname any object that responds to `#to_s`
-    # @param [true, false] argname only true or false
+    # @param argname [#to_s] any object that responds to `#to_s`
+    # @param argname [true, false] only true or false
 
 Note the latter example can be replaced by the meta-type "Boolean".
 Another meta-type is "void", which stands for "no meaningful value"
@@ -177,7 +177,7 @@ List types can be specified in the form `CollectionClass<ElementType, ...>`.
 For instance, consider the following Array that holds a set of Strings and
 Symbols:
 
-    # @param [Array<String, Symbol>] list the list of strings and symbols.
+    # @param list [Array<String, Symbol>] the list of strings and symbols.
 
 We mentioned that these type fields are "mostly" free-form. In truth, they
 are defined "by convention". To view samples of common type specifications
