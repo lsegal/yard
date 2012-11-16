@@ -7,7 +7,7 @@ end
 
 def return
   if object.type == :method
-    return if object.name == :initialize && object.scope == :instance
+    return if object.constructor?
     return if object.tags(:return).size == 1 && object.tag(:return).types == ['void']
   end
   tag(:return)

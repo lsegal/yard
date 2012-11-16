@@ -29,7 +29,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       nobj.aliases.delete(aobj)
     end if nobj.is_a?(NamespaceObject)
 
-    if mscope == :instance && meth == "initialize"
+    if obj.constructor?
       unless obj.has_tag?(:return)
         obj.docstring.add_tag(YARD::Tags::Tag.new(:return,
           "a new instance of #{namespace.name}", namespace.name.to_s))
