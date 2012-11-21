@@ -112,6 +112,9 @@ module YARD
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process
+            rescue HandlerAborted => abort
+              log.debug "#{handler.to_s} cancelled from #{caller.last}"
+              log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr
               log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
               log.warn "If this class/method is part of your source tree, this will affect your documentation results."

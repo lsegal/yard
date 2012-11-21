@@ -40,6 +40,15 @@ describe YARD::Handlers::Base do
     end
   end
 
+  describe '#abort! (and HandlerAborted)' do
+    it 'should allow HandlerAborted to be raised' do
+      class AbortHandler1 < Handlers::Ruby::Base
+        process { abort! }
+      end
+      lambda { AbortHandler1.new(nil, nil).process }.should raise_error(HandlerAborted)
+    end
+  end
+
   describe 'transitive tags' do
     it "should add transitive tags to children" do
       Registry.clear

@@ -1,5 +1,11 @@
 module YARD
   module Handlers
+    # Raise this error when a handler should exit before completing.
+    # The exception will be silenced, allowing the next handler(s) in the
+    # queue to be executed.
+    # @since 0.8.4
+    class HandlerAborted < ::RuntimeError; end
+
     # Raised during processing phase when a handler needs to perform
     # an operation on an object's namespace but the namespace could
     # not be resolved.
@@ -339,6 +345,15 @@ module YARD
       def scope=(v); parser.scope=(v) end
       def globals; parser.globals end
       def extra_state; parser.extra_state end
+
+      # Aborts a handler by raising {Handlers::HandlerAborted}.
+      # An exception will only be logged in debugging mode for
+      # this kind of handler exit.
+      #
+      # @since 0.8.4
+      def abort!
+        raise Handlers::HandlerAborted
+      end
 
       # Executes a given block with specific state values for {#owner},
       # {#namespace} and {#scope}.

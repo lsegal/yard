@@ -127,6 +127,7 @@ module YARD
     end
 
     autoload :Base,                       __p('handlers/base')
+    autoload :HandlerAborted,             __p('handlers/base')
     autoload :NamespaceMissingError,      __p('handlers/base')
     autoload :Processor,                  __p('handlers/processor')
   end
