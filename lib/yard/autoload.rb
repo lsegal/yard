@@ -230,6 +230,7 @@ module YARD
     autoload :AttributeDirective,  __p('tags/directives')
     autoload :DefaultFactory,      __p('tags/default_factory')
     autoload :DefaultTag,          __p('tags/default_tag')
+    autoload :Directive,           __p('tags/directives')
     autoload :EndGroupDirective,   __p('tags/directives')
     autoload :GroupDirective,      __p('tags/directives')
     autoload :Library,             __p('tags/library')
