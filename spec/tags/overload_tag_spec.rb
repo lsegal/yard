@@ -12,7 +12,7 @@ describe YARD::Tags::OverloadTag do
 
   it "should parse the first line as a method signature" do
     @tag.signature.should == "def bar(a, b = 1, &block)"
-    @tag.parameters.should == [[:a, nil], [:b, "1"], [:"&block", nil]]
+    @tag.parameters.should == [['a', nil], ['b', "1"], ['&block', nil]]
   end
 
   it "should parse the rest of the text as a new Docstring" do

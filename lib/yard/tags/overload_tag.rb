@@ -55,7 +55,7 @@ module YARD
           # FIXME refactor this code to not make use of the Handlers::Base class (tokval_list should be moved)
           toks = YARD::Parser::Ruby::Legacy::TokenList.new(args)
           args = YARD::Handlers::Ruby::Legacy::Base.new(nil, nil).send(:tokval_list, toks, :all)
-          args.map! {|a| k, v = *a.split('=', 2); [k.strip.to_sym, (v ? v.strip : nil)] } if args
+          args.map! {|a| k, v = *a.split('=', 2); [k.strip.to_s, (v ? v.strip : nil)] } if args
           @name = meth.to_sym
           @parameters = args
         end
