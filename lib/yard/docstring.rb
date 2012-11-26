@@ -118,13 +118,23 @@ module YARD
       end
     end
 
+    def to_s
+      resolve_reference
+      super
+    end
+
     # Replaces the docstring with new raw content. Called by {#all=}.
     # @param [String] content the raw comments to be parsed
     def replace(content, parse = true)
       content = content.join("\n") if content.is_a?(Array)
       @tags, @ref_tags = [], []
-      @all = content
-      super(parse ? parse_comments(content) : content)
+      if parse
+        super(parse_comments(content))
+      else
+        @all = content
+        @unresolved_reference = nil
+        super(content)
+      end
     end
     alias all= replace
 
@@ -136,6 +146,7 @@ module YARD
     # @return [Docstring] a new copied docstring
     # @since 0.7.0
     def dup
+      resolve_reference
       obj = super
       %w(all summary tags ref_tags).each do |name|
         val = instance_variable_get("@#{name}")
@@ -155,6 +166,7 @@ module YARD
     # Gets the first line of a docstring to the period or the first paragraph.
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
+      resolve_reference
       return @summary if @summary
       open_parens = ['{', '(', '[']
       close_parens = ['}', ')', ']']
@@ -298,6 +310,26 @@ module YARD
 
     # @endgroup
 
+    # Resolves unresolved other docstring reference if there is
+    # unresolved reference. Does nothing if there is no unresolved
+    # reference.
+    #
+    # Normally, you don't need to call this method
+    # explicitly. Resolving unresolved reference is done implicitly.
+    #
+    # @return [void]
+    def resolve_reference
+      loop do
+        return if @unresolved_reference.nil?
+        return if CodeObjects::Proxy === @unresolved_reference
+
+        reference, @unresolved_reference = @unresolved_reference, nil
+        resolved_tags = reference.docstring.tags
+        self.all = [reference.docstring.all, @all].join("\n")
+        add_tag(*resolved_tags)
+      end
+    end
+
     private
 
     # Maps valid reference tags
@@ -319,6 +351,8 @@ module YARD
     def parse_comments(comments)
       parser = self.class.parser
       parser.parse(comments, object)
+      @all = parser.raw_text
+      @unresolved_reference = parser.reference
       add_tag(*parser.tags)
       parser.text
     end

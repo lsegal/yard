@@ -21,6 +21,6 @@ class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
       end
     end
 
-    owner.docstring.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
+    owner.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
   end
 end

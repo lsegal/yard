@@ -333,6 +333,37 @@ describe YARD::CodeObjects::Base do
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
       o.docstring.should == "FOO"
     end
+
+    describe 'localization' do
+      it "should return localized docstring" do
+        fr_locale = YARD::I18n::Locale.new('fr')
+        fr_locale.stub!(:translate).with('Hello').and_return('Bonjour')
+
+        o = ClassObject.new(:root, :Me)
+        o.docstring = 'Hello'
+        o.docstring.should == 'Hello'
+
+        Registry.stub!(:locale).with('fr').and_return(fr_locale)
+        o.docstring('fr').should == "Bonjour"
+      end
+
+      it "should return updated localized docstring" do
+        fr_locale = YARD::I18n::Locale.new('fr')
+        Registry.stub!(:locale).with('fr').and_return(fr_locale)
+
+        o = ClassObject.new(:root, :Me)
+        o.docstring = 'Hello'
+        o.docstring.should == 'Hello'
+
+        fr_locale.stub!(:translate).with('Hello').and_return('Bonjour')
+        o.docstring('fr').should == "Bonjour"
+
+        o.docstring = 'World'
+        fr_locale.stub!(:translate).with('World').and_return('Monde')
+        o.docstring('fr').should == "Monde"
+        o.docstring.should == 'World'
+      end
+    end
   end
 
   describe '#add_file' do

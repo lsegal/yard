@@ -5,6 +5,22 @@ module YARD
     #
     # @since 0.8.2
     class Locale
+      class << self
+        # @return [String, nil] the default locale name.
+        # @since 0.8.4
+        attr_accessor :default
+
+        undef default
+        def default
+          @@default ||= nil
+        end
+
+        undef default=
+        def default=(locale)
+          @@default = locale
+        end
+      end
+
       # @return [String] the name of the locale. It used IETF language
       #   tag format +[language[_territory][.codeset][@modifier]]+.
       # @see http://tools.ietf.org/rfc/bcp/bcp47.txt
