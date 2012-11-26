@@ -63,7 +63,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     return_type = return_type_from_tag(member_tag)
     getter_doc_text = member_tag ? member_tag.text : "Returns the value of attribute #{member}"
     new_method.docstring.replace(getter_doc_text)
-    new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the current value of #{member}", return_type)
+    new_method.add_tag YARD::Tags::Tag.new(:return, "the current value of #{member}", return_type)
   end
 
   # Creates the auto-generated docstring for the setter method of a struct's
@@ -78,8 +78,8 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     return_type = return_type_from_tag(member_tag)
     setter_doc_text = member_tag ? member_tag.text : "Sets the attribute #{member}"
     new_method.docstring.replace(setter_doc_text)
-    new_method.docstring.add_tag YARD::Tags::Tag.new(:param, "the value to set the attribute #{member} to.", return_type, "value")
-    new_method.docstring.add_tag YARD::Tags::Tag.new(:return, "the newly set value", return_type)
+    new_method.add_tag YARD::Tags::Tag.new(:param, "the value to set the attribute #{member} to.", return_type, "value")
+    new_method.add_tag YARD::Tags::Tag.new(:return, "the newly set value", return_type)
   end
 
   # Creates and registers a class object with the given name and superclass name.

@@ -54,6 +54,11 @@ module YARD
     #   not attached to any object.
     attr_accessor :object
 
+    # @return [CodeObjects::Base, nil] the object referenced by
+    #   the docstring being parsed. May be nil if the docstring doesn't
+    #   refer to any object.
+    attr_accessor :reference
+
     # @return [Handlers::Base, nil] the handler parsing this
     #   docstring. May be nil if this docstring parser is not
     #   initialized through
@@ -79,6 +84,7 @@ module YARD
       @directives = []
       @library = library
       @object = nil
+      @reference = nil
       @handler = nil
       @state = OpenStruct.new
     end
@@ -106,8 +112,8 @@ module YARD
     def parse(content, object = nil, handler = nil)
       @object = object
       @handler = handler
-      @raw_text = content
-      text = parse_content(content)
+      @reference, @raw_text = detect_reference(content)
+      text = parse_content(@raw_text)
       # Remove trailing/leading whitespace / newlines
       @text = text.gsub(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
       call_directives_after_parse
@@ -231,6 +237,23 @@ module YARD
     end
 
     private
+
+    def namespace
+      if object
+        object.namespace
+      else
+        nil
+      end
+    end
+
+    def detect_reference(content)
+      if content =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
+        path, extra = $1, $'
+        [CodeObjects::Proxy.new(namespace, path), extra]
+      else
+        [nil, content]
+      end
+    end
 
     # @!group Parser Callback Methods
 

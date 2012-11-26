@@ -13,11 +13,11 @@ class YARD::Handlers::Ruby::YieldHandler < YARD::Handlers::Ruby::Base
       statement.jump(:list).children.each do |item|
         if item == s(:var_ref, s(:kw, "self"))
           yieldtag.types << '_self'
-          owner.docstring.add_tag YARD::Tags::Tag.new(:yieldparam,
+          owner.add_tag YARD::Tags::Tag.new(:yieldparam,
             "the object that the method was called on", owner.namespace.path, '_self')
         elsif item == s(:zsuper)
           yieldtag.types << '_super'
-          owner.docstring.add_tag YARD::Tags::Tag.new(:yieldparam,
+          owner.add_tag YARD::Tags::Tag.new(:yieldparam,
             "the result of the method from the superclass", nil, '_super')
         else
           yieldtag.types << item.source
@@ -25,6 +25,6 @@ class YARD::Handlers::Ruby::YieldHandler < YARD::Handlers::Ruby::Base
       end
     end
 
-    owner.docstring.add_tag(yieldtag) unless yieldtag.types.empty?
+    owner.add_tag(yieldtag) unless yieldtag.types.empty?
   end
 end
