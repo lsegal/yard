@@ -173,6 +173,12 @@ describe YARD::CLI::Server do
       run '--daemon'
     end
 
+    it "should accept -B, --bind" do
+      @server_options[:Host] = 'example.com'
+      run '-B', 'example.com'
+      run '--bind', 'example.com'
+    end    
+
     it "should accept -p, --port" do
       @server_options[:Port] = 10
       run '-p', '10'
