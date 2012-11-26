@@ -136,7 +136,7 @@ module YARD
       # @return [String] a line of source
       attr_accessor :signature
 
-      # The not localized documentation string associated with the object
+      # The non-localized documentation string associated with the object
       # @return [Docstring] the documentation string
       # @since 0.8.4
       attr_reader :base_docstring
