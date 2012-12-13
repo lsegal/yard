@@ -172,7 +172,11 @@ module YARD
         instance_variable_set("@#{$1}", args.first)
       elsif args.size == 0
         log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
-        instance_variable_get("@#{meth}")
+        if instance_variable_defined?("@#{meth}")
+          instance_variable_get("@#{meth}")
+        else
+          nil
+        end
       else
         super
       end
@@ -187,6 +191,7 @@ module YARD
     def reset_defaults
       names_set = {}
       self.class.ancestors.each do |klass| # look at all ancestors
+        next unless klass.instance_variable_defined?("@defaults")
         defaults = klass.instance_variable_get("@defaults")
         next unless defaults
         defaults.each do |key, value|

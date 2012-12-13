@@ -20,46 +20,46 @@ describe YARD::Templates::Helpers::BaseHelper do
       mock.should_receive(:call).with(2).and_return(true)
       mock.should_receive(:call).with(3).and_return(nil)
       mock.should_receive(:call).with(4).and_return("value")
-      run_verifier([1, 2, 3, 4]).should == [2, 3, 4]
+      expect(run_verifier([1, 2, 3, 4])).to eq [2, 3, 4]
     end
 
     it "should return list if no verifier exists" do
       should_receive(:options).at_least(1).times.and_return(Options.new)
-      run_verifier([1, 2, 3]).should == [1, 2, 3]
+      expect(run_verifier([1, 2, 3])).to eq [1, 2, 3]
     end
   end
 
   describe '#h' do
     it "should return just the text" do
-      h("hello world").should == "hello world"
-      h(nil).should == nil
+      expect(h("hello world")).to eq "hello world"
+      expect(h(nil)).to eq nil
     end
   end
 
   describe '#link_object' do
     it "should return the title if provided" do
-      link_object(1, "title").should == "title"
-      link_object(Registry.root, "title").should == "title"
+      expect(link_object(1, "title")).to eq "title"
+      expect(link_object(Registry.root, "title")).to eq "title"
     end
 
     it "should return a path if argument is a Proxy or object" do
-      link_object(Registry.root).should == ""
-      link_object(P("Array")).should == "Array"
+      expect(link_object(Registry.root)).to eq ""
+      expect(link_object(P("Array"))).to eq "Array"
     end
 
     it "should should return path of Proxified object if argument is a String or Symbol" do
-      link_object("Array").should == "Array"
-      link_object(:"A::B").should == "A::B"
+      expect(link_object("Array")).to eq "Array"
+      expect(link_object(:"A::B")).to eq "A::B"
     end
 
     it "should return the argument if not an object, proxy, String or Symbol" do
-      link_object(1).should == 1
+                           expect(link_object(1)).to eq 1
     end
   end
 
   describe '#link_url' do
     it "should return the URL" do
-      link_url("http://url").should == "http://url"
+                           expect(link_url("http://url")).to eq "http://url"
     end
   end
 
@@ -91,7 +91,7 @@ describe YARD::Templates::Helpers::BaseHelper do
 
     it "should return empty string and warn if object does not exist" do
       log.should_receive(:warn).with(/Cannot find object .* for inclusion/)
-      linkify('include:NotExist').should == ''
+      expect(linkify('include:NotExist')).to eq ''
     end
 
     it "should pass off to #link_url if argument is recognized as a URL" do
@@ -109,32 +109,32 @@ describe YARD::Templates::Helpers::BaseHelper do
     it "should call #link_include_file for include:file:path/to/file" do
       File.should_receive(:file?).with('path/to/file').and_return(true)
       File.should_receive(:read).with('path/to/file').and_return('FOO')
-      linkify('include:file:path/to/file').should == 'FOO'
+      expect(linkify('include:file:path/to/file')).to eq 'FOO'
     end
 
     it "should not allow include:file for path above pwd" do
       log.should_receive(:warn).with("Cannot include file from path `a/b/../../../../file'")
-      linkify('include:file:a/b/../../../../file').should == ''
+      expect(linkify('include:file:a/b/../../../../file')).to eq ''
     end
 
     it "should warn if include:file:path does not exist" do
       log.should_receive(:warn).with(/Cannot find file .+ for inclusion/)
-      linkify('include:file:notexist').should == ''
+      expect(linkify('include:file:notexist')).to eq ''
     end
   end
 
   describe '#format_types' do
     it "should return the list of types separated by commas surrounded by brackets" do
-      format_types(['a', 'b', 'c']).should == '(a, b, c)'
+      expect(format_types(['a', 'b', 'c'])).to eq '(a, b, c)'
     end
 
     it "should return the list of types without brackets if brackets=false" do
-      format_types(['a', 'b', 'c'], false).should == 'a, b, c'
+      expect(format_types(['a', 'b', 'c'], false)).to eq 'a, b, c'
     end
 
     it "should should return an empty string if list is empty or nil" do
-      format_types(nil).should == ""
-      format_types([]).should == ""
+      expect(format_types(nil)).to eq ""
+      expect(format_types([])).to eq ""
     end
   end
 
@@ -143,33 +143,33 @@ describe YARD::Templates::Helpers::BaseHelper do
       obj = mock(:object)
       obj.stub!(:is_a?).with(YARD::CodeObjects::ClassObject).and_return(true)
       obj.stub!(:is_exception?).and_return(true)
-      format_object_type(obj).should == "Exception"
+      expect(format_object_type(obj)).to eq "Exception"
     end
 
     it "should return Class if type is Class" do
       obj = mock(:object)
       obj.stub!(:is_a?).with(YARD::CodeObjects::ClassObject).and_return(true)
       obj.stub!(:is_exception?).and_return(false)
-      format_object_type(obj).should == "Class"
+      expect(format_object_type(obj)).to eq "Class"
     end
 
     it "should return object type in other cases" do
       obj = mock(:object)
       obj.stub!(:type).and_return("value")
-      format_object_type(obj).should == "Value"
+      expect(format_object_type(obj)).to eq "Value"
     end
   end
 
   describe '#format_object_title' do
     it "should return Top Level Namespace for root object" do
-      format_object_title(Registry.root).should == "Top Level Namespace"
+      expect(format_object_title(Registry.root)).to eq "Top Level Namespace"
     end
 
     it "should return 'type: path' in other cases" do
       obj = mock(:object)
       obj.stub!(:type).and_return(:class)
       obj.stub!(:path).and_return("A::B::C")
-      format_object_title(obj).should == "Class: A::B::C"
+      expect(format_object_title(obj)).to eq "Class: A::B::C"
     end
   end
 end

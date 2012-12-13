@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class Server::WebrickAdapter; def start; end end
+class Server::WebrickAdapter
+  undef start
+  def start; end
+end
 
 describe YARD::CLI::Server do
   before do
@@ -64,12 +67,12 @@ describe YARD::CLI::Server do
   end
 
   def assert_libraries(expected_libs, actual_libs)
-    actual_libs.should == expected_libs
+    expect(actual_libs).to eq expected_libs
     expected_libs.each do |name, libs|
       libs.each_with_index do |expected,i|
         actual = actual_libs[name][i]
         [:source, :source_path, :yardoc_file].each do |m|
-          actual.send(m).should == expected.send(m)
+          expect(actual.send(m)).to eq expected.send(m)
         end
       end
     end
@@ -305,7 +308,7 @@ describe YARD::CLI::Server do
       unstub_adapter
       @cli.adapter = Server::WebrickAdapter
       run '-t', 'foo'
-      Templates::Engine.template_paths.last.should == 'foo'
+      expect(Templates::Engine.template_paths.last).to eq 'foo'
     end
 
     it "should load ruby code (-e) after adapter" do
@@ -317,7 +320,7 @@ describe YARD::CLI::Server do
           f.puts "YARD::Templates::Engine.register_template_path 'foo'"
           f.flush
           run '-e', f.path
-          Templates::Engine.template_paths.last.should == 'foo'
+          expect(Templates::Engine.template_paths.last).to eq 'foo'
         end
       ensure
         File.unlink(path)

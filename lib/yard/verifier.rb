@@ -126,8 +126,12 @@ module YARD
     # as Ruby code
     # @return [void]
     def create_method_from_expressions
+      if respond_to?("__execute")
+        instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+          undef __execute
+        eof
+      end
       expr = expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
-
       instance_eval(<<-eof, __FILE__, __LINE__ + 1)
         def __execute; #{expr}; end
       eof

@@ -10,8 +10,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     instance.should_not be_nil
     klass.should be_module_function
     instance.should_not be_module_function
-    klass.visibility.should == :public
-    instance.visibility.should == :private
+    expect(klass.visibility).to eq :public
+    expect(instance.visibility).to eq :private
   end
 
   it "should be able to create a module function with parameters" do
@@ -56,14 +56,14 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     eof
     assert_module_function('Foo', 'bar')
     o = Registry.at('Foo.bar')
-    o.tag(:param).types.should == ['String']
-    o.tag(:param).name.should == 'foo'
-    o.tag(:param).text.should == 'bar'
-    o.tag(:option).name.should == 'foo'
-    o.tag(:option).pair.types.should == ['String']
-    o.tag(:option).pair.defaults.should == ['nil']
-    o.tag(:option).pair.text.should == 'baz'
-    o.tag(:return).types.should == ['void']
+      expect(o.tag(:param).types).to eq ['String']
+      expect(o.tag(:param).name).to eq 'foo'
+      expect(o.tag(:param).text).to eq 'bar'
+      expect(o.tag(:option).name).to eq 'foo'
+      expect(o.tag(:option).pair.types).to eq ['String']
+      expect(o.tag(:option).pair.defaults).to eq ['nil']
+      expect(o.tag(:option).pair.text).to eq 'baz'
+      expect(o.tag(:return).types).to eq ['void']
   end
 
   it "should handle all method names in parameters" do

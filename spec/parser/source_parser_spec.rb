@@ -47,8 +47,8 @@ describe YARD::Parser::SourceParser do
 
     it "should handle basic callback support" do
       before_list do |files, globals|
-        files.should == ['foo.rb', 'bar.rb']
-        globals.should == OpenStruct.new
+        expect(files).to eq ['foo.rb', 'bar.rb']
+        expect(globals).to eq OpenStruct.new
       end
       parse_list ['foo.rb', 'foo!'], ['bar.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
@@ -60,7 +60,7 @@ describe YARD::Parser::SourceParser do
       before_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two]
+      expect(checks).to eq [:one, :two]
     end
 
     it "should cancel parsing if it returns false" do
@@ -70,7 +70,7 @@ describe YARD::Parser::SourceParser do
       before_list { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should be_nil
-      checks.should == [:one]
+      expect(checks).to eq [:one]
     end
 
     it "should not cancel on nil" do
@@ -80,14 +80,14 @@ describe YARD::Parser::SourceParser do
       before_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two]
+      expect(checks).to eq [:one, :two]
     end
 
     it "should pass in globals" do
       before_list {|f,g| g.x = 1 }
       before_list {|f,g| g.x += 1 }
       before_list {|f,g| g.x += 1 }
-      after_list {|f,g| g.x.should == 3 }
+      after_list {|f,g| expect(g.x).to eq 3 }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
     end
@@ -102,8 +102,8 @@ describe YARD::Parser::SourceParser do
     it "should handle basic callback support and maintain files/globals" do
       before_list do |f,g| g.foo = :bar end
       after_list do |files, globals|
-        files.should == ['foo.rb', 'bar.rb']
-        globals.foo.should == :bar
+      expect(files).to eq ['foo.rb', 'bar.rb']
+      expect(globals.foo).to eq :bar
       end
       parse_list ['foo.rb', 'foo!'], ['bar.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
@@ -115,7 +115,7 @@ describe YARD::Parser::SourceParser do
       after_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two]
+    expect(checks).to eq [:one, :two]
     end
 
     it "should not cancel parsing if it returns false" do
@@ -125,7 +125,7 @@ describe YARD::Parser::SourceParser do
       after_list { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :three]
+    expect(checks).to eq [:one, :three]
     end
   end
 
@@ -137,7 +137,7 @@ describe YARD::Parser::SourceParser do
 
     it "should handle basic callback support" do
       before_file do |parser|
-        parser.contents.should == 'class Foo; end'
+      expect(parser.contents).to eq 'class Foo; end'
         parser.file.should =~ /(foo|bar)\.rb/
       end
       parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
@@ -150,7 +150,7 @@ describe YARD::Parser::SourceParser do
       before_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two, :one, :two, :one, :two]
+    expect(checks).to eq [:one, :two, :one, :two, :one, :two]
     end
 
     it "should cancel parsing if it returns false" do
@@ -160,7 +160,7 @@ describe YARD::Parser::SourceParser do
       before_file { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should be_nil
-      checks.should == [:one, :one, :one]
+    expect(checks).to eq [:one, :one, :one]
     end
 
     it "should not cancel on nil" do
@@ -170,7 +170,7 @@ describe YARD::Parser::SourceParser do
       before_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two, :one, :two, :one, :two]
+    expect(checks).to eq [:one, :two, :one, :two, :one, :two]
     end
   end
 
@@ -182,7 +182,7 @@ describe YARD::Parser::SourceParser do
 
     it "should handle basic callback support" do
       after_file do |parser|
-        parser.contents.should == 'class Foo; end'
+      expect(parser.contents).to eq 'class Foo; end'
         parser.file.should =~ /(foo|bar)\.rb/
       end
       parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
@@ -195,7 +195,7 @@ describe YARD::Parser::SourceParser do
       after_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :two, :one, :two, :one, :two]
+    expect(checks).to eq [:one, :two, :one, :two, :one, :two]
     end
 
     it "should not cancel parsing if it returns false" do
@@ -205,7 +205,7 @@ describe YARD::Parser::SourceParser do
       after_file { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       Registry.at('Foo').should_not be_nil
-      checks.should == [:one, :three, :one, :three, :one, :three]
+    expect(checks).to eq [:one, :three, :one, :three, :one, :three]
     end
   end
 
@@ -231,27 +231,27 @@ describe YARD::Parser::SourceParser do
 
     it "should find an extension in a registered array of extensions" do
       Parser::SourceParser.register_parser_type(:my_parser, MyParser, ['a', 'b', 'd'])
-      Parser::SourceParser.parser_type_for_extension('a').should == :my_parser
-      Parser::SourceParser.parser_type_for_extension('b').should == :my_parser
-      Parser::SourceParser.parser_type_for_extension('d').should == :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('a')).to eq :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('b')).to eq :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('d')).to eq :my_parser
       Parser::SourceParser.parser_type_for_extension('c').should_not == :my_parser
     end
 
     it "should find an extension in a Regexp" do
       Parser::SourceParser.register_parser_type(:my_parser, MyParser, /abc$/)
-      Parser::SourceParser.parser_type_for_extension('dabc').should == :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('dabc')).to eq :my_parser
       Parser::SourceParser.parser_type_for_extension('dabcd').should_not == :my_parser
     end
 
     it "should find an extension in a list of Regexps" do
       Parser::SourceParser.register_parser_type(:my_parser, MyParser, [/ab$/, /abc$/])
-      Parser::SourceParser.parser_type_for_extension('dabc').should == :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('dabc')).to eq :my_parser
       Parser::SourceParser.parser_type_for_extension('dabcd').should_not == :my_parser
     end
 
     it "should find an extension in a String" do
       Parser::SourceParser.register_parser_type(:my_parser, MyParser, "abc")
-      Parser::SourceParser.parser_type_for_extension('abc').should == :my_parser
+    expect(Parser::SourceParser.parser_type_for_extension('abc')).to eq :my_parser
       Parser::SourceParser.parser_type_for_extension('abcd').should_not == :my_parser
     end
   end
@@ -267,10 +267,10 @@ describe YARD::Parser::SourceParser do
           end
         end
       eof
-      Registry.at(:Hello).should_not == nil
-      Registry.at("Hello::Hi#me").should_not == nil
-      Registry.at("Hello::Hi#me").docstring.should == "Docstring\nDocstring2"
-      Registry.at("Hello::Hi#me").docstring.line_range.should == (3..4)
+        expect(Registry.at(:Hello)).not_to eq nil
+        expect(Registry.at("Hello::Hi#me")).not_to eq nil
+        expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring\nDocstring2"
+        expect(Registry.at("Hello::Hi#me").docstring.line_range).to eq(3..4)
     end
 
     it "should parse Ruby code with metaclasses" do
@@ -284,9 +284,9 @@ describe YARD::Parser::SourceParser do
           end
         end
       eof
-      Registry.at(:Hello).should_not == nil
-      Registry.at("Hello::Hi.me").should_not == nil
-      Registry.at("Hello::Hi.me").docstring.should == "Docstring"
+        expect(Registry.at(:Hello)).not_to eq nil
+        expect(Registry.at("Hello::Hi.me")).not_to eq nil
+        expect(Registry.at("Hello::Hi.me").docstring).to eq "Docstring"
     end
 
     it "should only use prepended comments for an object" do
@@ -297,7 +297,7 @@ describe YARD::Parser::SourceParser do
         module Hello
         end # FAIL
       eof
-      Registry.at(:Hello).docstring.should == "PASS"
+        expect(Registry.at(:Hello).docstring).to eq "PASS"
     end
 
     it "should not add comments appended to last line of block" do
@@ -320,9 +320,9 @@ describe YARD::Parser::SourceParser do
         end
       eof
 
-      Registry.at(:Hello).docstring.should == "PASS"
-      Registry.at(:Hello2).docstring.should == "PASS"
-      Registry.at('Hello2#x').docstring.should == "ANOTHER PASS"
+        expect(Registry.at(:Hello).docstring).to eq "PASS"
+        expect(Registry.at(:Hello2).docstring).to eq "PASS"
+        expect(Registry.at('Hello2#x').docstring).to eq "ANOTHER PASS"
     end
 
     it "should take preceeding comments only if they exist" do
@@ -333,7 +333,7 @@ describe YARD::Parser::SourceParser do
         end
       eof
 
-      Registry.at(:Hello).docstring.should == "PASS"
+        expect(Registry.at(:Hello).docstring).to eq "PASS"
     end
 
     it "should strip all hashes prefixed on comment line" do
@@ -344,35 +344,35 @@ describe YARD::Parser::SourceParser do
         module Hello
         end
       eof
-      Registry.at(:Hello).docstring.should == "PASS\nPASS\nPASS"
+        expect(Registry.at(:Hello).docstring).to eq "PASS\nPASS\nPASS"
     end
 
     it "should handle =begin/=end style comments" do
       YARD.parse_string "=begin\nfoo\nbar\n=end\nclass Foo; end\n"
-      Registry.at(:Foo).docstring.should == "foo\nbar"
+        expect(Registry.at(:Foo).docstring).to eq "foo\nbar"
 
       YARD.parse_string "=begin\n\nfoo\nbar\n=end\nclass Foo; end\n"
-      Registry.at(:Foo).docstring.should == "foo\nbar"
+        expect(Registry.at(:Foo).docstring).to eq "foo\nbar"
 
       YARD.parse_string "=begin\nfoo\n\nbar\n=end\nclass Foo; end\n"
-      Registry.at(:Foo).docstring.should == "foo\n\nbar"
+        expect(Registry.at(:Foo).docstring).to eq "foo\n\nbar"
     end
 
     it "should know about docstrings starting with ##" do
       {'#' => false, '##' => true}.each do |hash, expected|
         YARD.parse_string "#{hash}\n# Foo bar\nclass Foo; end"
-        Registry.at(:Foo).docstring.hash_flag.should == expected
+          expect(Registry.at(:Foo).docstring.hash_flag).to eq expected
       end
     end
 
     it "should remove shebang from initial file comments" do
       YARD.parse_string "#!/bin/ruby\n# this is a comment\nclass Foo; end"
-      Registry.at(:Foo).docstring.should == "this is a comment"
+        expect(Registry.at(:Foo).docstring).to eq "this is a comment"
     end
 
     it "should remove encoding line from initial file comments" do
       YARD.parse_string "# encoding: utf-8\n# this is a comment\nclass Foo; end"
-      Registry.at(:Foo).docstring.should == "this is a comment"
+        expect(Registry.at(:Foo).docstring).to eq "this is a comment"
     end
 
     it "should add macros on any object" do
@@ -387,9 +387,9 @@ describe YARD::Parser::SourceParser do
       eof
 
       macro = CodeObjects::MacroObject.find('foo')
-      macro.macro_data.should == "This is a macro\n@return [String] the string"
-      Registry.at('Foo').docstring.to_raw.should ==  macro.macro_data
-      Registry.at('Foo#foo').docstring.to_raw.should == macro.macro_data
+        expect(macro.macro_data).to eq "This is a macro\n@return [String] the string"
+        expect(Registry.at('Foo').docstring.to_raw).to eq  macro.macro_data
+        expect(Registry.at('Foo#foo').docstring.to_raw).to eq macro.macro_data
     end
 
     it "should allow directives parsed on lone comments" do
@@ -407,11 +407,11 @@ describe YARD::Parser::SourceParser do
       foo = Registry.at('Foo.foo')
       bar = Registry.at('Foo#bar')
       foo.should_not be_nil
-      foo.visibility.should == :private
-      foo.tag(:param).name.should == 'a'
-      foo.tag(:return).types.should == ['Symbol']
+        expect(foo.visibility).to eq :private
+        expect(foo.tag(:param).name).to eq 'a'
+        expect(foo.tag(:return).types).to eq ['Symbol']
       bar.should_not be_nil
-      bar.signature.should == 'def bar(value)'
+        expect(bar.signature).to eq 'def bar(value)'
     end
 
     it "should parse lone comments at end of blocks" do
@@ -424,14 +424,14 @@ describe YARD::Parser::SourceParser do
       eof
       foo = Registry.at('Foo#foo')
       foo.should_not be_nil
-      foo.signature.should == 'def foo(a = "hello")'
+        expect(foo.signature).to eq 'def foo(a = "hello")'
     end
 
     it "should handle lone comment with no code" do
       YARD.parse_string '# @!method foo(a = "hello")'
       foo = Registry.at('#foo')
       foo.should_not be_nil
-      foo.signature.should == 'def foo(a = "hello")'
+        expect(foo.signature).to eq 'def foo(a = "hello")'
     end
 
     it "should handle non-ASCII encoding in heredoc" do
@@ -447,7 +447,7 @@ describe YARD::Parser::SourceParser do
           attr_accessor :foo
         end
       eof
-      Registry.at('Foo').superclass.should == P('Bar')
+        expect(Registry.at('Foo').superclass).to eq P('Bar')
     end
   end
 
@@ -456,7 +456,7 @@ describe YARD::Parser::SourceParser do
       parse_file :example1, __FILE__
       Registry.at(:Hello).should_not == nil
       Registry.at("Hello::Hi#me").should_not == nil
-      Registry.at("Hello::Hi#me").docstring.should == "Docstring"
+        expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring"
     end
 
     it "should parse a set of file globs" do
@@ -475,7 +475,7 @@ describe YARD::Parser::SourceParser do
       File.should_receive(:open).and_return("")
       parser = Parser::SourceParser.new(:ruby, true)
       parser.parse('a//b//c')
-      parser.file.should == 'a/b/c'
+        expect(parser.file).to eq 'a/b/c'
     end
 
     it "should parse files with '*' in them as globs and others as absolute paths" do
@@ -581,8 +581,8 @@ describe YARD::Parser::SourceParser do
         src.force_encoding('binary')
         File.should_receive(:read_binary).with('tmpfile').and_return(src)
         result = parser.parse('tmpfile')
-        Registry.all(:class).first.path.should == "FooBar"
-        result.enumerator[0].source.encoding.to_s.downcase.should == encoding
+          expect(Registry.all(:class).first.path).to eq "FooBar"
+          expect(result.enumerator[0].source.encoding.to_s.downcase).to eq encoding
       end
     end if HAVE_RIPPER && YARD.ruby19?
   end
@@ -660,11 +660,11 @@ describe YARD::Parser::SourceParser do
         end
       eof
 
-      Registry.at('A').groups.should == ['Group Name', 'Group 2']
+        expect(Registry.at('A').groups).to eq ['Group Name', 'Group 2']
       Registry.at('A#bar').group.should be_nil
-      Registry.at('A#foo').group.should == "Group Name"
-      Registry.at('A#foo2').group.should == "Group Name"
-      Registry.at('A#baz').group.should == "Group 2"
+        expect(Registry.at('A#foo').group).to eq "Group Name"
+        expect(Registry.at('A#foo2').group).to eq "Group Name"
+        expect(Registry.at('A#baz').group).to eq "Group 2"
     end
   end
 end

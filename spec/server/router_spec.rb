@@ -24,27 +24,27 @@ describe YARD::Server::Router do
     end
 
     it "should parse library and version name out of path" do
-      parse('project', '1.0.0').should == [@projects[0], []]
+      expect(parse('project', '1.0.0')).to eq [@projects[0], []]
       @request.version_supplied.should be_true
     end
 
     it "should parse library and use latest version if version is not supplied" do
-      parse('project').should == [@projects[1], []]
+      expect(parse('project')).to eq [@projects[1], []]
       @request.version_supplied.should be_false
     end
 
     it "should parse library and use latest version if next component is not a version" do
-      parse('project', 'notaversion').should == [@projects[1], ['notaversion']]
+      expect(parse('project', 'notaversion')).to eq [@projects[1], ['notaversion']]
       @request.version_supplied.should be_false
     end
 
     it "should return nil library if no library is found" do
-      parse('notproject').should == [nil, ['notproject']]
+      expect(parse('notproject')).to eq [nil, ['notproject']]
     end
 
     it "should not parse library or version if single_library == true" do
       @adapter.stub!(:options).and_return(:single_library => true)
-      parse('notproject').should == [@projects[0], ['notproject']]
+      expect(parse('notproject')).to eq [@projects[0], ['notproject']]
     end
   end
 
@@ -77,42 +77,42 @@ describe YARD::Server::Router do
 
     it "should route /docs/name/version" do
       route_to('/mydocs/foo/project/1.0.0', DisplayObjectCommand)
-      @command.library.should == @projects[0]
+      expect(@command.library).to eq @projects[0]
     end
 
     it "should route /docs/name/ to latest version of library" do
       route_to('/mydocs/foo/project', DisplayObjectCommand)
-      @command.library.should == @projects[1]
+      expect(@command.library).to eq @projects[1]
     end
 
     it "should route /list/name/version/class" do
       route_to('/mylist/foo/project/1.0.0/class', ListCommand)
-      @command.library.should == @projects[0]
+      expect(@command.library).to eq @projects[0]
     end
 
     it "should route /list/name/version/methods" do
       route_to('/mylist/foo/project/1.0.0/methods', ListCommand)
-      @command.library.should == @projects[0]
+      expect(@command.library).to eq @projects[0]
     end
 
     it "should route /list/name/version/files" do
       route_to('/mylist/foo/project/1.0.0/files', ListCommand)
-      @command.library.should == @projects[0]
+      expect(@command.library).to eq @projects[0]
     end
 
     it "should route /list/name to latest version of library" do
       route_to('/mylist/foo/project/class', ListCommand)
-      @command.library.should == @projects[1]
+      expect(@command.library).to eq @projects[1]
     end
 
     it "should route /search/name/version" do
       route_to('/mysearch/foo/project/1.0.0', SearchCommand)
-      @command.library.should == @projects[0]
+      expect(@command.library).to eq @projects[0]
     end
 
     it "should route /search/name to latest version of library" do
       route_to('/mysearch/foo/project', SearchCommand)
-      @command.library.should == @projects[1]
+      expect(@command.library).to eq @projects[1]
     end
 
     it "should search static files for non-existent library" do

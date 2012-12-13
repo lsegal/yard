@@ -9,7 +9,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   end
 
   it "should attach docstring" do
-    Registry.at("ModName::OtherModName").docstring.should == "Docstring"
+    expect(Registry.at("ModName::OtherModName").docstring).to eq "Docstring"
   end
 
   it "should handle any formatting" do
@@ -25,7 +25,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   end
 
   it "should list mixins in proper order" do
-    Registry.at('D').mixins.should == [P(:C), P(:B), P(:A)]
+    expect(Registry.at('D').mixins).to eq [P(:C), P(:B), P(:A)]
   end
 
   it "should create proper module when constant is in namespace" do

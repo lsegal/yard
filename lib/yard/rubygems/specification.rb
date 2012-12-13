@@ -22,6 +22,7 @@ class Gem::Specification
     overwrite_accessor(:has_rdoc) { @has_rdoc ||= true }
     overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   else
+    undef has_rdoc=
     attr_accessor :has_rdoc
   end
 

@@ -18,7 +18,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
 
   it "should set the type of non-existing modules to :module" do
     o = Registry.at(:X).instance_mixins.find {|o| o.name == :NOTEXIST }
-    o.type.should == :module
+    expect(o.type).to eq :module
   end
 
   it "should handle includes with multiple parameters" do
@@ -35,21 +35,21 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
   end
 
   it "should add includes in the correct order when include is given multiple arguments" do
-    P(:Z).instance_mixins.should == [P(:A), P(:B)]
+    expect(P(:Z).instance_mixins).to eq [P(:A), P(:B)]
   end
 
   it "should avoid including self for unresolved mixins of the same name" do
-    P("ABC::DEF::FOO").mixins.should == [P("ABC::FOO")]
-    P("ABC::DEF::BAR").mixins.should == [P("ABC::BAR")]
+    expect(P("ABC::DEF::FOO").mixins).to eq [P("ABC::FOO")]
+    expect(P("ABC::DEF::BAR").mixins).to eq [P("ABC::BAR")]
   end
 
   it "should raise undocumentable error if argument is variable" do
     undoc_error "module X; include invalid; end"
-    Registry.at('X').mixins.should == []
+    expect(Registry.at('X').mixins).to eq []
   end
 
   it "should parse all other arguments before erroring out on undocumentable error" do
     undoc_error "module X; include invalid, Y; end"
-    Registry.at('X').mixins.should == [P('Y')]
+    expect(Registry.at('X').mixins).to eq [P('Y')]
   end
 end

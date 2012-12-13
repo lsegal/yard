@@ -13,7 +13,7 @@ describe YARD::Options do
       end
       o = DefaultOptions1.new
       o.reset_defaults
-      o.foo.should == 'HELLO'
+      expect(o.foo).to eq 'HELLO'
     end
 
     it "should call lambda if value is a Proc" do
@@ -22,7 +22,7 @@ describe YARD::Options do
       end
       o = DefaultOptions2.new
       o.reset_defaults
-      o.foo.should == 100
+      expect(o.foo).to eq 100
     end
   end
 
@@ -34,7 +34,7 @@ describe YARD::Options do
       ResetDefaultOptions1.new.foo.should be_nil
       o = ResetDefaultOptions1.new
       o.reset_defaults
-      o.foo.should == 'FOO'
+      expect(o.foo).to eq 'FOO'
     end
 
     it "should use defaults from superclass as well" do
@@ -45,7 +45,7 @@ describe YARD::Options do
       end
       o = ResetDefaultOptions3.new
       o.reset_defaults
-      o.foo.should == 'FOO'
+      expect(o.foo).to eq 'FOO'
     end
   end
 
@@ -53,20 +53,20 @@ describe YARD::Options do
     it "should delete an option" do
       o = FooOptions.new
       o.delete(:foo)
-      o.to_hash.should == {}
+      expect(o.to_hash).to eq({})
     end
 
     it "should not error if an option is deleted that does not exist" do
       o = FooOptions.new
       o.delete(:foo)
       o.delete(:foo)
-      o.to_hash.should == {}
+      expect(o.to_hash).to eq({})
     end
   end
 
   describe '#[]' do
     it "should handle getting option values using hash syntax" do
-      FooOptions.new[:foo].should == "abc"
+      expect(FooOptions.new[:foo]).to eq "abc"
     end
   end
 
@@ -74,13 +74,13 @@ describe YARD::Options do
     it "should handle setting options using hash syntax" do
       o = FooOptions.new
       o[:foo] = "xyz"
-      o[:foo].should == "xyz"
+      expect(o[:foo]).to eq "xyz"
     end
 
     it "should allow setting of unregistered keys" do
       o = FooOptions.new
       o[:bar] = "foo"
-      o[:bar].should == "foo"
+      expect(o[:bar]).to eq "foo"
     end
   end
 
@@ -88,7 +88,7 @@ describe YARD::Options do
     it "should allow setting of unregistered keys" do
       o = FooOptions.new
       o.bar = 'foo'
-      o.bar.should == 'foo'
+      expect(o.bar).to eq 'foo'
     end
 
     it "should allow getting values of unregistered keys (return nil)" do
@@ -105,13 +105,13 @@ describe YARD::Options do
 
   describe '#update' do
     it "should allow updating of options" do
-      FooOptions.new.update(:foo => "xyz").foo.should == "xyz"
+      expect(FooOptions.new.update(:foo => "xyz").foo).to eq "xyz"
     end
 
     it "should not ignore keys with no setter (OpenStruct behaviour)" do
       o = FooOptions.new
       o.update(:bar => "xyz")
-      o.to_hash.should == {:foo => "abc", :bar => "xyz"}
+      expect(o.to_hash).to eq({:foo => "abc", :bar => "xyz"})
     end
   end
 
@@ -119,13 +119,13 @@ describe YARD::Options do
     it "should update a new object" do
       o = FooOptions.new
       o.merge(:foo => "xyz").object_id.should_not == o.object_id
-      o.merge(:foo => "xyz").to_hash.should == {:foo => "xyz"}
+      expect(o.merge(:foo => "xyz").to_hash).to eq({:foo => "xyz"})
     end
 
     it "should add in values from original object" do
       o = FooOptions.new
       o.update(:bar => "foo")
-      o.merge(:baz => 1).to_hash.should == {:foo => "abc", :bar => "foo", :baz => 1}
+      expect(o.merge(:baz => 1).to_hash).to eq({:foo => "abc", :bar => "foo", :baz => 1})
     end
   end
 
@@ -138,9 +138,9 @@ describe YARD::Options do
       o = ToHashOptions1.new
       hash = o.to_hash
       hash.keys.should include(:foo, :bar, :baz)
-      hash[:foo].should == 1
-      hash[:bar].should == 2
-      hash[:baz].should == "hello"
+      expect(hash[:foo]).to eq 1
+      expect(hash[:bar]).to eq 2
+      expect(hash[:baz]).to eq "hello"
     end
 
     it "should use accessor when converting values to hash" do
@@ -149,7 +149,7 @@ describe YARD::Options do
         def foo; "HELLO#{@foo}" end
       end
       o = ToHashOptions2.new
-      o.to_hash.should == {:foo => "HELLO1"}
+      expect(o.to_hash).to eq({:foo => "HELLO1"})
     end
 
     it "should ignore ivars with no accessor" do
@@ -158,14 +158,14 @@ describe YARD::Options do
         def initialize; @foo = 1; @bar = "NOIGNORE" end
       end
       o = ToHashOptions3.new
-      o.to_hash.should == {:foo => 1, :bar => "NOIGNORE"}
+      expect(o.to_hash).to eq({:foo => 1, :bar => "NOIGNORE"})
     end
   end
 
   describe '#tap' do
     it "should support #tap(&block) (even in 1.8.6)" do
       o = FooOptions.new.tap {|o| o.foo = :BAR }
-      o.to_hash.should == {:foo => :BAR}
+      expect(o.to_hash).to eq({:foo => :BAR})
     end
   end
 end

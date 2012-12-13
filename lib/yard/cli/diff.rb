@@ -176,7 +176,6 @@ module YARD
       end
 
       def generate_yardoc(dir)
-        olddir = Dir.pwd
         Dir.chdir(dir) do
           log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
         end

@@ -4,7 +4,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
   before(:all) { parse_file :alias_handler_001, __FILE__ }
 
   it "should throw alias into namespace object list" do
-    P(:A).aliases[P("A#b")].should == :a
+    expect(P(:A).aliases[P("A#b")]).to eq :a
   end
 
   ['c', 'd?', '[]', '[]=', '-@', '%', '*'].each do |a|
@@ -26,21 +26,21 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
   end
 
   it "should pull the method into the current class if it's from another one" do
-    P(:B).aliases[P("B#q")].should == :x
-    P(:B).aliases[P("B#r?")].should == :x
+    expect(P(:B).aliases[P("B#q")]).to eq :x
+    expect(P(:B).aliases[P("B#r?")]).to eq :x
   end
 
   it "should gracefully fail to pull a method in if the original method cannot be found" do
-    P(:B).aliases[P("B#s")].should == :to_s
+    expect(P(:B).aliases[P("B#s")]).to eq :to_s
   end
 
   it "should allow complex Ruby expressions after the alias parameters" do
-    P(:B).aliases[P("B#t")].should == :inspect
+    expect(P(:B).aliases[P("B#t")]).to eq :inspect
   end
 
   it "should show up in #is_alias? for method" do
-    P("B#t").is_alias?.should == true
-    P('B#r?').is_alias?.should == true
+    expect(P("B#t").is_alias?).to eq true
+    expect(P('B#r?').is_alias?).to eq true
   end
 
   it "should allow operators and keywords to be specified as symbols" do
@@ -49,23 +49,23 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
   end
 
   it "should handle keywords in alias names" do
-    P('B#do').is_alias?.should == true
-    P('B#x2').is_alias?.should == true
-    P(:B).aliases[P('B#do')].should == :x
-    P(:B).aliases[P('B#x2')].should == :do
+    expect(P('B#do').is_alias?).to eq true
+    expect(P('B#x2').is_alias?).to eq true
+    expect(P(:B).aliases[P('B#do')]).to eq :x
+    expect(P(:B).aliases[P('B#x2')]).to eq :do
   end
 
   it "should handle quoted symbols" do
     foo = Registry.at('A#foo')
     foo.should_not be_nil
     foo.should be_is_alias
-    Registry.at('A').aliases[foo].should == :a
+    expect(Registry.at('A').aliases[foo]).to eq :a
   end
 
   it "should prepend aliases object's docstring to comments" do
-    Registry.at('D#a').tag(:return).types.should == ['Numeric']
-    Registry.at('D#b').tag(:return).types.should == ['String']
-    Registry.at('D#b').docstring.should == "Foo bar"
+    expect(Registry.at('D#a').tag(:return).types).to eq ['Numeric']
+    expect(Registry.at('D#b').tag(:return).types).to eq ['String']
+    expect(Registry.at('D#b').docstring).to eq "Foo bar"
   end
 
   it "should raise an UndocumentableError if only one parameter is passed" do

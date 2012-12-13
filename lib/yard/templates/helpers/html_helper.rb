@@ -205,8 +205,8 @@ module YARD
             link = linkify(name, title)
             if (link == name || link == title) && (name+' '+link !~ /\A<a\s.*>/)
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
-              file = (@file ? @file.filename : object.file) || '(unknown)'
-              line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
+              file = ((instance_variable_defined?(:@file) && @file) ? @file.filename : object.file) || '(unknown)'
+              line = ((instance_variable_defined?(:@file) && @file) ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
               log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
               log.warn((match[1] ? '...' : '') + match[2].gsub("\n","") + (match[3] ? '...' : '')) if match
             end
@@ -510,7 +510,7 @@ module YARD
       # @since 0.5.4
       def charset
         has_encoding = defined?(::Encoding)
-        if @file && has_encoding
+        if instance_variable_defined?(:@file) && @file && has_encoding
           lang = @file.contents.encoding.to_s
         else
           return 'utf-8' unless has_encoding || lang = ENV['LANG']

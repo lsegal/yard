@@ -210,7 +210,13 @@ module YARD
         @has_markup = false
 
         if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
-          ::Encoding.default_external, ::Encoding.default_internal = 'utf-8', 'utf-8'
+          # The Encoding module gets a little too agressive in discouraging changing of the default encodings so we turn
+          # off warnings to keep it quiet while we make the change.
+          vo = $VERBOSE
+          $VERBOSE = false
+          ::Encoding.default_external = 'utf-8'
+          ::Encoding.default_internal = 'utf-8'
+          $VERBOSE = vo
         end
       end
 

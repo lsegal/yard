@@ -7,8 +7,8 @@ describe YARD::CodeObjects::NamespaceObject do
     it "should return the object matching the name passed in if argument is a Symbol" do
       obj = NamespaceObject.new(nil, :YARD)
       other = NamespaceObject.new(obj, :Other)
-      obj.child(:Other).should == other
-      obj.child('Other').should == other
+      expect(obj.child(:Other)).to eq other
+      expect(obj.child('Other')).to eq other
     end
 
     it "should look for attributes matching the object if the argument is a Hash" do
@@ -16,7 +16,7 @@ describe YARD::CodeObjects::NamespaceObject do
       NamespaceObject.new(obj, :NotOther)
       other = NamespaceObject.new(obj, :Other)
       other.somevalue = 2
-      obj.child(:somevalue => 2).should == other
+      expect(obj.child(:somevalue => 2)).to eq other
     end
   end
 
@@ -59,9 +59,9 @@ describe YARD::CodeObjects::NamespaceObject do
       c = NamespaceObject.new(nil, :YARD)
       c.class_mixins << b
 
-      [bmeth, bmeth2].each {|o| o.scope.should == :instance }
+      [bmeth, bmeth2].each {|o| expect(o.scope).to eq :instance }
       meths = c.included_meths(:scope => :class)
-      meths.each {|o| o.scope.should == :class }
+      meths.each {|o| expect(o.scope).to eq :class }
     end
 
     it "should not list methods overridden by another included module" do
@@ -164,7 +164,7 @@ describe YARD::CodeObjects::NamespaceObject do
         module C; def bar; end end
         class A; include B; include C; def foo; end; def bar; end end
       eof
-      Registry.at('A').included_meths(:all => true).should == [P('C#bar'), P('B#foo')]
+        expect(Registry.at('A').included_meths(:all => true)).to eq [P('C#bar'), P('B#foo')]
     end
   end
 end

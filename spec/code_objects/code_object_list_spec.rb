@@ -9,13 +9,13 @@ describe YARD::CodeObjects::CodeObjectList do
     list << "Test"
     list << :Test2
     list << ModuleObject.new(nil, :YARD)
-    list.size.should == 3
+    expect(list.size).to eq 3
   end
 
   it "added value should be a proxy if parameter was String or Symbol" do
     list = CodeObjectList.new(nil)
     list << "Test"
-    list.first.class.should == Proxy
+    expect(list.first.class).to eq Proxy
   end
 
   it "should contain a unique list of objects" do
@@ -24,10 +24,10 @@ describe YARD::CodeObjects::CodeObjectList do
 
     list << P(:YARD)
     list << obj
-    list.size.should == 1
+    expect(list.size).to eq 1
 
     list << :Test
     list << "Test"
-    list.size.should == 2
+    expect(list.size).to eq 2
   end
 end

@@ -8,22 +8,22 @@ describe YARD::CodeObjects::MethodObject do
 
   it "should have a path of testing for an instance method in the root" do
     meth = MethodObject.new(:root, :testing)
-    meth.path.should == "#testing"
+    expect(meth.path).to eq "#testing"
   end
 
   it "should have a path of YARD#testing for an instance method in YARD" do
     meth = MethodObject.new(@yard, :testing)
-    meth.path.should == "YARD#testing"
+    expect(meth.path).to eq "YARD#testing"
   end
 
   it "should have a path of YARD.testing for a class method in YARD" do
     meth = MethodObject.new(@yard, :testing, :class)
-    meth.path.should == "YARD.testing"
+    expect(meth.path).to eq "YARD.testing"
   end
 
   it "should have a path of ::testing (note the ::) for a class method added to root namespace" do
     meth = MethodObject.new(:root, :testing, :class)
-    meth.path.should == "::testing"
+    expect(meth.path).to eq "::testing"
   end
 
   it "should exist in the registry after successful creation" do
@@ -45,8 +45,8 @@ describe YARD::CodeObjects::MethodObject do
 
   it "should create object in :class scope if scope is :module" do
     obj = MethodObject.new(@yard, :module_func, :module)
-    obj.scope.should == :class
-    obj.visibility.should == :public
+    expect(obj.scope).to eq :class
+    expect(obj.visibility).to eq :public
     Registry.at('YARD.module_func').should_not be_nil
   end
 
@@ -54,28 +54,28 @@ describe YARD::CodeObjects::MethodObject do
     MethodObject.new(@yard, :module_func, :module)
     obj = Registry.at('YARD#module_func')
     obj.should_not be_nil
-    obj.visibility.should == :private
-    obj.scope.should == :instance
+    expect(obj.visibility).to eq :private
+    expect(obj.scope).to eq :instance
   end
 
   it "should yield block to second method if scope is :module" do
     MethodObject.new(@yard, :module_func, :module) do |o|
       o.docstring = 'foo'
     end
-    Registry.at('YARD.module_func').docstring.should == 'foo'
-    Registry.at('YARD#module_func').docstring.should == 'foo'
+    expect(Registry.at('YARD.module_func').docstring).to eq 'foo'
+    expect(Registry.at('YARD#module_func').docstring).to eq 'foo'
   end
 
   describe '#name' do
     it "should show a prefix for an instance method when prefix=true" do
       obj = MethodObject.new(nil, :something)
-      obj.name(true).should == "#something"
+      expect(obj.name(true)).to eq "#something"
     end
 
     it "should never show a prefix for a class method" do
       obj = MethodObject.new(nil, :something, :class)
-      obj.name.should == :"something"
-      obj.name(true).should == "something"
+      expect(obj.name).to eq :"something"
+      expect(obj.name(true)).to eq "something"
     end
   end
 
@@ -92,16 +92,16 @@ describe YARD::CodeObjects::MethodObject do
     it "should return attribute info if namespace is available" do
       obj = MethodObject.new(@yard, :foo)
       @yard.attributes[:instance][:foo] = {:read => obj, :write => nil}
-      obj.attr_info.should == @yard.attributes[:instance][:foo]
+        expect(obj.attr_info).to eq @yard.attributes[:instance][:foo]
     end
 
     it "should return nil if namespace is proxy" do
-      obj = MethodObject.new(P(:ProxyClass), :foo)
-      MethodObject.new(@yard, :foo).attr_info.should == nil
+      MethodObject.new(P(:ProxyClass), :foo)
+      expect(MethodObject.new(@yard, :foo).attr_info).to eq nil
     end
 
     it "should return nil if meth is not an attribute" do
-      MethodObject.new(@yard, :notanattribute).attr_info.should == nil
+        expect(MethodObject.new(@yard, :notanattribute).attr_info).to eq nil
     end
   end
 
@@ -109,8 +109,8 @@ describe YARD::CodeObjects::MethodObject do
     it "should return true if method is a writer attribute" do
       obj = MethodObject.new(@yard, :foo=)
       @yard.attributes[:instance][:foo] = {:read => nil, :write => obj}
-      obj.writer?.should == true
-      MethodObject.new(@yard, :NOTfoo=).writer?.should == false
+        expect(obj.writer?).to eq true
+        expect(MethodObject.new(@yard, :NOTfoo=).writer?).to eq false
     end
   end
 
@@ -118,8 +118,8 @@ describe YARD::CodeObjects::MethodObject do
     it "should return true if method is a reader attribute" do
       obj = MethodObject.new(@yard, :foo)
       @yard.attributes[:instance][:foo] = {:read => obj, :write => nil}
-      obj.reader?.should == true
-      MethodObject.new(@yard, :NOTfoo).reader?.should == false
+        expect(obj.reader?).to eq true
+        expect(MethodObject.new(@yard, :NOTfoo).reader?).to eq false
     end
   end
 
@@ -148,7 +148,7 @@ describe YARD::CodeObjects::MethodObject do
         class A; def foo; end end
         class B < A; include C; def foo; end end
       eof
-      Registry.at('B#foo').overridden_method.should == Registry.at('C#foo')
+        expect(Registry.at('B#foo').overridden_method).to eq Registry.at('C#foo')
     end
 
     it "should return overridden method from superclass" do
@@ -156,7 +156,7 @@ describe YARD::CodeObjects::MethodObject do
         class A; def foo; end end
         class B < A; def foo; end end
       eof
-      Registry.at('B#foo').overridden_method.should == Registry.at('A#foo')
+        expect(Registry.at('B#foo').overridden_method).to eq Registry.at('A#foo')
     end
 
     it "should return nil if none is found" do

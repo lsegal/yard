@@ -15,8 +15,8 @@ describe YARD::Tags::ParseDirective do
         # Docstring here
         def foo; end
       }
-      Registry.at('#foo').docstring.should == "Docstring here"
-      Registry.at('#foo').file.should == '(stdin)'
+      expect(Registry.at('#foo').docstring).to eq "Docstring here"
+      expect(Registry.at('#foo').file).to eq '(stdin)'
     end
 
     it "should allow parser type to be specified in type" do
@@ -39,7 +39,7 @@ describe YARD::Tags::ParseDirective do
       parser = Parser::SourceParser.new
       parser.file = "myfile.rb"
       parser.parse(StringIO.new(src))
-      Registry.at('A#foo').file.should == 'myfile.rb'
+        expect(Registry.at('A#foo').file).to eq 'myfile.rb'
     end
   end
 end
@@ -53,7 +53,7 @@ describe YARD::Tags::GroupDirective do
     it "should set group value in parser state (with handler)" do
       handler = OpenStruct.new(:extra_state => OpenStruct.new)
       tag_parse("@!group foo", nil, handler)
-      handler.extra_state.group.should == 'foo'
+        expect(handler.extra_state.group).to eq 'foo'
     end
   end
 end
@@ -86,17 +86,17 @@ describe YARD::Tags::MacroDirective do
   describe '#call' do
     it "should define new macro when [new] is provided" do
       tag_parse("@!macro [new] foo\n  foo")
-      CodeObjects::MacroObject.find('foo').macro_data.should == 'foo'
+      expect(CodeObjects::MacroObject.find('foo').macro_data).to eq 'foo'
     end
 
     it "should define new macro if text block is provided" do
       tag_parse("@!macro bar\n  bar")
-      CodeObjects::MacroObject.find('bar').macro_data.should == 'bar'
+      expect(CodeObjects::MacroObject.find('bar').macro_data).to eq 'bar'
     end
 
     it "should expand macros and return #expanded_text to tag parser" do
       tag_parse("@!macro [new] foo\n  foo")
-      tag_parse("@!macro foo").text.should == 'foo'
+      expect(tag_parse("@!macro foo").text).to eq 'foo'
     end
 
     it "should not expand new macro if docstring is unattached" do
@@ -104,38 +104,38 @@ describe YARD::Tags::MacroDirective do
     end
 
     it "should expand new anonymous macro even if docstring is unattached" do
-      tag_parse("@!macro\n  foo").text.should == 'foo'
+      expect(tag_parse("@!macro\n  foo").text).to eq 'foo'
     end
 
     it "should allow multiple macros to be expanded" do
       tag_parse("@!macro [new] foo\n  foo")
       tag_parse("@!macro bar\n  bar")
-      tag_parse("@!macro foo\n@!macro bar").text.should == "foo\nbar"
+      expect(tag_parse("@!macro foo\n@!macro bar").text).to eq "foo\nbar"
     end
 
     it "should allow anonymous macros" do
       tag_parse("@!macro\n  a b c", nil, handler)
-      @parser.text.should == 'a b c'
+      expect(@parser.text).to eq 'a b c'
     end
 
     it "should expand call_params and caller_method using $N when handler is provided" do
       tag_parse("@!macro\n  $1 $2 $3", nil, handler)
-      @parser.text.should == 'a b c'
+      expect(@parser.text).to eq 'a b c'
     end
 
     it "should attach macro to method if one exists" do
       tag_parse("@!macro [attach] attached\n  $1 $2 $3", nil, handler)
       macro = CodeObjects::MacroObject.find('attached')
-      macro.method_object.should == P('Foo::Bar.foo')
+      expect(macro.method_object).to eq P('Foo::Bar.foo')
     end
 
     it "should not expand new attached macro if defined on class method" do
       baz = CodeObjects::MethodObject.new(P('Foo::Bar'), :baz, :class)
-      baz.visibility.should == :public
+      expect(baz.visibility).to eq :public
       tag_parse("@!macro [attach] attached2\n  @!visibility private", baz, handler)
       macro = CodeObjects::MacroObject.find('attached2')
-      macro.method_object.should == P('Foo::Bar.baz')
-      baz.visibility.should == :public
+      expect(macro.method_object).to eq P('Foo::Bar.baz')
+      expect(baz.visibility).to eq :public
     end
 
     it "should not attempt to expand macro values if handler = nil" do
@@ -169,7 +169,7 @@ describe YARD::Tags::MethodDirective do
         # @param [String] a
       eof
       foo = Registry.at('#foo')
-      foo.docstring.should == "Docstring here"
+        expect(foo.docstring).to eq "Docstring here"
       foo.docstring.tag(:return).should_not be_nil
       foo.tag(:param).should be_nil
     end
@@ -186,9 +186,9 @@ describe YARD::Tags::MethodDirective do
         end
       eof
       foo = Registry.at('Foo.foo')
-      foo.visibility.should == :private
+        expect(foo.visibility).to eq :private
       bar = Registry.at('Foo#bar')
-      bar.visibility.should == :public
+        expect(bar.visibility).to eq :public
     end
 
     it "should be able to define multiple @methods in docstring" do
@@ -206,9 +206,9 @@ describe YARD::Tags::MethodDirective do
       foo1 = Registry.at('Foo#foo1')
       foo2 = Registry.at('Foo#foo2')
       foo3 = Registry.at('Foo.foo3')
-      foo1.docstring.should == 'Docstring1'
-      foo2.docstring.should == 'Docstring2'
-      foo3.docstring.should == 'Docstring3'
+        expect(foo1.docstring).to eq 'Docstring1'
+        expect(foo2.docstring).to eq 'Docstring2'
+        expect(foo3.docstring).to eq 'Docstring3'
     end
 
     it "should define the method inside namespace if attached to namespace object" do
@@ -222,8 +222,8 @@ describe YARD::Tags::MethodDirective do
           end
         end
       eof
-      Registry.at('Foo::Bar#foo').docstring.should == 'Docstring1'
-      Registry.at('Foo::Bar#bar').docstring.should == 'Docstring2'
+        expect(Registry.at('Foo::Bar#foo').docstring).to eq 'Docstring1'
+        expect(Registry.at('Foo::Bar#bar').docstring).to eq 'Docstring2'
     end
 
     it "should set scope to class if signature has 'self.' prefix" do
@@ -243,7 +243,7 @@ describe YARD::Tags::MethodDirective do
       YARD.parse_string <<-eof
         # @!method foo(a, b, c = nil)
       eof
-      Registry.at('#foo').parameters.should == [['a', nil], ['b', nil], ['c', 'nil']]
+        expect(Registry.at('#foo').parameters).to eq [['a', nil], ['b', nil], ['c', 'nil']]
     end
 
     it "should be able to define method with module scope (module function)" do
@@ -260,8 +260,8 @@ describe YARD::Tags::MethodDirective do
       foo_c.should_not be_nil
       foo_i.should_not be_nil
       foo_c.should be_module_function
-      foo_c.docstring.should == foo_i.docstring
-      foo_c.tag(:return).text.should == foo_i.tag(:return).text
+        expect(foo_c.docstring).to eq foo_i.docstring
+        expect(foo_c.tag(:return).text).to eq foo_i.tag(:return).text
     end
   end
 end
@@ -291,8 +291,8 @@ describe YARD::Tags::AttributeDirective do
         # @param [String] a
       eof
       foo = Registry.at('#foo')
-      foo.is_attribute?.should == true
-      foo.docstring.should == "Docstring here"
+        expect(foo.is_attribute?).to eq true
+        expect(foo.docstring).to eq "Docstring here"
       foo.docstring.tag(:return).should_not be_nil
       foo.tag(:param).should be_nil
     end
@@ -316,9 +316,9 @@ describe YARD::Tags::AttributeDirective do
       foo1.should be_reader
       foo2.should be_writer
       foo3.should be_reader
-      foo1.docstring.should == 'Docstring1'
-      foo2.docstring.should == 'Docstring2'
-      foo3.docstring.should == 'Docstring3'
+        expect(foo1.docstring).to eq 'Docstring1'
+        expect(foo2.docstring).to eq 'Docstring2'
+        expect(foo3.docstring).to eq 'Docstring3'
       foo4.should be_writer
       foo1.attr_info[:write].should be_nil
       foo2.attr_info[:read].should be_nil
@@ -358,26 +358,26 @@ describe YARD::Tags::ScopeDirective do
 
     it "should set state on tag parser if object = nil" do
       tag_parse("@!scope class")
-      @parser.state.scope.should == :class
+        expect(@parser.state.scope).to eq :class
     end
 
     it "should set state on tag parser if object is namespace" do
       object = CodeObjects::ClassObject.new(:root, 'Foo')
       tag_parse("@!scope class", object)
       object[:scope].should be_nil
-      @parser.state.scope.should == :class
+        expect(@parser.state.scope).to eq :class
     end
 
     it "should set scope on object if object is a method object" do
       object = CodeObjects::MethodObject.new(:root, 'foo')
       tag_parse("@!scope class", object)
-      object.scope.should == :class
+        expect(object.scope).to eq :class
     end
 
     %w(class instance module).each do |type|
       it "should allow #{type} as value" do
         tag_parse("@!scope #{type}")
-        @parser.state.scope.should == type.to_sym
+          expect(@parser.state.scope).to eq type.to_sym
       end
     end
 
@@ -396,26 +396,26 @@ describe YARD::Tags::VisibilityDirective do
 
     it "should set visibility on tag parser if object = nil" do
       tag_parse("@!visibility private")
-      @parser.state.visibility.should == :private
+        expect(@parser.state.visibility).to eq :private
     end
 
     it "should set state on tag parser if object is namespace" do
       object = CodeObjects::ClassObject.new(:root, 'Foo')
       tag_parse("@!visibility protected", object)
-      object.visibility.should == :protected
+        expect(object.visibility).to eq :protected
       @parser.state.visibility.should be_nil
     end
 
     it "should set visibility on object if object is a method object" do
       object = CodeObjects::MethodObject.new(:root, 'foo')
       tag_parse("@!visibility private", object)
-      object.visibility.should == :private
+        expect(object.visibility).to eq :private
     end
 
     %w(public private protected).each do |type|
       it "should allow #{type} as value" do
         tag_parse("@!visibility #{type}")
-        @parser.state.visibility.should == type.to_sym
+          expect(@parser.state.visibility).to eq type.to_sym
       end
     end
 

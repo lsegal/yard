@@ -178,7 +178,7 @@ module YARD
         end
 
         REV_MAPPINGS.select {|k,v| k.is_a?(Symbol) }.each do |pair|
-          event, value = *pair
+          event = pair[0]
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end

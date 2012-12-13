@@ -38,8 +38,7 @@ describe YARD::Server::Commands::Base do
   describe '#redirect' do
     it "should return a valid redirection" do
       cmd = MyProcCommand.new { redirect '/foo' }
-      cmd.call(mock_request('/foo')).should ==
-        [302, {"Content-Type" => "text/html", "Location" => "/foo"}, [""]]
+      expect(cmd.call(mock_request('/foo'))).to eq [302, {"Content-Type" => "text/html", "Location" => "/foo"}, [""]]
     end
   end
 
@@ -47,41 +46,49 @@ describe YARD::Server::Commands::Base do
     it "should handle a NotFoundError and use message as body" do
       cmd = MyProcCommand.new { raise NotFoundError, "hello world" }
       s, h, b = *cmd.call(mock_request('/foo'))
-      s.should == 404
-      b.should == ["hello world"]
+      expect(s).to eq 404
+      expect(h).not_to eq nil
+      expect(b).to eq ["hello world"]
     end
 
     it "should not use message as body if not provided in NotFoundError" do
       cmd = MyProcCommand.new { raise NotFoundError }
       s, h, b = *cmd.call(mock_request('/foo'))
-      s.should == 404
-      b.should == ["Not found: /foo"]
+      expect(s).to eq 404
+      expect(h).not_to eq nil
+      expect(b).to eq ["Not found: /foo"]
     end
 
     it "should handle 404 status code from #run" do
       cmd = MyProcCommand.new { self.status = 404 }
       s, h, b = *cmd.call(mock_request('/foo'))
-      s.should == 404
-      b.should == ["Not found: /foo"]
+      expect(s).to eq 404
+      expect(h).not_to eq nil
+      expect(b).to eq ["Not found: /foo"]
     end
 
     it "should not override body if status is 404 and body is defined" do
       cmd = MyProcCommand.new { self.body = "foo"; self.status = 404 }
       s, h, b = *cmd.call(mock_request('/bar'))
-      s.should == 404
-      b.should == ['foo']
+      expect(s).to eq 404
+      expect(h).not_to eq nil
+      expect(b).to eq ['foo']
     end
 
     it "should handle body as Array" do
       cmd = MyProcCommand.new { self.body = ['a', 'b', 'c'] }
       s, h, b = *cmd.call(mock_request('/foo'))
-      b.should == %w(a b c)
+      expect(s).not_to eq nil
+      expect(h).not_to eq nil
+      expect(b).to eq(%w(a b c))
     end
 
     it "should allow headers to be defined" do
       cmd = MyProcCommand.new { self.headers['Foo'] = 'BAR' }
       s, h, b = *cmd.call(mock_request('/foo'))
-      h['Foo'].should == 'BAR'
+      expect(s).not_to eq nil
+      expect(h['Foo']).to eq 'BAR'
+      expect(b).not_to eq nil
     end
   end
 end

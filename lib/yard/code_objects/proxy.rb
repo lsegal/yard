@@ -33,7 +33,7 @@ module YARD
           name = name[2..-1]
         end
 
-        if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
+        if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ.squeeze}#{ISEPQ}#{CSEPQ}]+)$/
           @orignamespace, @origname = namespace, name
           @imethod = true if name.include? ISEP
           namespace = Proxy.new(namespace, $`) unless $`.empty?

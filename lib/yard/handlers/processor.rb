@@ -112,7 +112,7 @@ module YARD
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process
-            rescue HandlerAborted => abort
+            rescue HandlerAborted
               log.debug "#{handler.to_s} cancelled from #{caller.last}"
               log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr

@@ -4,15 +4,15 @@ describe YARD::CodeObjects::Proxy do
   before { Registry.clear }
 
   it "should return the object if it's in the Registry" do
-    pathobj = ModuleObject.new(:root, :YARD)
+    ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
-    proxyobj.type.should == :module
+    expect(proxyobj.type).to eq :module
     Proxy.should_not === proxyobj
   end
 
   it "should handle complex string namespaces" do
     ModuleObject.new(:root, :A)
-    pathobj = ModuleObject.new(P(nil, :A), :B)
+    ModuleObject.new(P(nil, :A), :B)
     P(:root, "A::B").should be_instance_of(ModuleObject)
   end
 
@@ -33,54 +33,54 @@ describe YARD::CodeObjects::Proxy do
   end
 
   it "should respond_to respond_to?" do
-    obj = ClassObject.new(:root, :Object)
-    yardobj = ModuleObject.new(:root, :YARD)
-    P(:YARD).respond_to?(:children).should == true
-    P(:NOTYARD).respond_to?(:children).should == false
+    ClassObject.new(:root, :Object)
+    ModuleObject.new(:root, :YARD)
+    expect(P(:YARD).respond_to?(:children)).to eq true
+    expect(P(:NOTYARD).respond_to?(:children)).to eq false
 
-    P(:YARD).respond_to?(:initialize).should == false
-    P(:YARD).respond_to?(:initialize, true).should == true
-    P(:NOTYARD).respond_to?(:initialize).should == false
-    P(:NOTYARD).respond_to?(:initialize, true).should == true
+    expect(P(:YARD).respond_to?(:initialize)).to eq false
+    expect(P(:YARD).respond_to?(:initialize, true)).to eq true
+    expect(P(:NOTYARD).respond_to?(:initialize)).to eq false
+    expect(P(:NOTYARD).respond_to?(:initialize, true)).to eq true
   end
 
   it "should make itself obvious that it's a proxy" do
     pathobj = P(:root, :YARD)
-    pathobj.class.should == Proxy
-    (Proxy === pathobj).should == true
+    expect(pathobj.class).to eq Proxy
+    expect((Proxy === pathobj)).to eq true
   end
 
   it "should pretend it's the object's type if it can resolve" do
-    pathobj = ModuleObject.new(:root, :YARD)
+    ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
     proxyobj.should be_instance_of(ModuleObject)
   end
 
   it "should handle instance method names" do
     obj = P(nil, '#test')
-    obj.name.should == :test
-    obj.path.should == "#test"
-    obj.namespace.should == Registry.root
+    expect(obj.name).to eq :test
+    expect(obj.path).to eq "#test"
+    expect(obj.namespace).to eq Registry.root
   end
 
   it "should handle instance method names under a namespace" do
     pathobj = ModuleObject.new(:root, :YARD)
     obj = P(pathobj, "A::B#test")
-    obj.name.should == :test
-    obj.path.should == "A::B#test"
+    expect(obj.name).to eq :test
+    expect(obj.path).to eq "A::B#test"
   end
 
   it "should allow type to be changed" do
     obj = P("InvalidClass")
-    obj.type.should == :proxy
+    expect(obj.type).to eq(:proxy)
     Proxy.should === obj
     obj.type = :class
-    obj.type.should == :class
+    expect(obj.type).to eq(:class)
   end
 
   it "should NOT retain a type change between Proxy objects" do
     P("InvalidClass").type = :class
-    P("InvalidClass").type.should == :proxy
+    expect(P("InvalidClass").type).to eq(:proxy)
   end
 
   it "should use type to ensure resolved object is of intended type" do
@@ -92,42 +92,42 @@ describe YARD::CodeObjects::Proxy do
     eof
     proxy = Proxy.new(P('Foo'), 'Bar')
     proxy.type = :method
-    proxy.path.should == 'Foo.Bar'
+    expect(proxy.path).to eq 'Foo.Bar'
   end
 
   it "should allow type in initializer" do
-    Proxy.new(Registry.root, 'Foo', :method).type.should == :method
-    P(Registry.root, 'Foo', :method).type.should == :method
+      expect(Proxy.new(Registry.root, 'Foo', :method).type).to eq(:method)
+      expect(P(Registry.root, 'Foo', :method).type).to eq(:method)
   end
 
   it "should never equal Registry.root" do
-    P("MYPROXY").should_not == Registry.root
-    P("X::A").should_not == Registry.root
+    expect(P("MYPROXY")).not_to eq Registry.root
+    expect(P("X::A")).not_to eq Registry.root
   end
 
   it "should reset namespace and name when object is resolved" do
     obj1 = ModuleObject.new(:root, :YARD)
     obj2 = ModuleObject.new(:root, :NOTYARD)
     resolved = Proxy.new(obj2, :YARD)
-    resolved.should == obj1
-    resolved.namespace.should == Registry.root
-    resolved.name.should == :YARD
+    expect(resolved).to eq obj1
+    expect(resolved.namespace).to eq Registry.root
+    expect(resolved.name).to eq :YARD
   end
 
   it "should ensure that the correct object was resolved" do
     foo = ModuleObject.new(:root, :Foo)
     foobar = ModuleObject.new(foo, :Bar)
-    foobaz = ClassObject.new(foo, :Baz)
+    ClassObject.new(foo, :Baz)
 
     # Remember, we're looking for Qux::Bar, not just 'Bar'
     proxy = Proxy.new(foobar, 'Foo::Qux::Bar')
-    proxy.type.should == :proxy
+    expect(proxy.type).to eq(:proxy)
 
     qux = ModuleObject.new(foo, :Qux)
-    quxbar = ModuleObject.new(qux, :Bar)
+    ModuleObject.new(qux, :Bar)
 
     # Now it should resolve
-    proxy.type.should == :module
+    expect(proxy.type).to eq(:module)
   end
 
   it "should handle constant names in namespaces" do
@@ -135,6 +135,6 @@ describe YARD::CodeObjects::Proxy do
       module A; end; B = A
       module B::C; def foo; end end
     eof
-    Proxy.new(:root, 'B::C').should == Registry.at('A::C')
+      expect(Proxy.new(:root, 'B::C')).to eq Registry.at('A::C')
   end
 end

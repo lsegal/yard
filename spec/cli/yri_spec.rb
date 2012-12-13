@@ -21,7 +21,7 @@ describe YARD::CLI::YRI do
       Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
       Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
-      @yri.find_object('Foo').should == 'OBJ'
+      expect(@yri.find_object('Foo')).to eq 'OBJ'
     end
 
     it "should never use cache ahead of current directory's .yardoc" do
@@ -31,8 +31,8 @@ describe YARD::CLI::YRI do
       Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
       Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
-      @yri.find_object('Foo').should == 'OBJ'
-      @yri.instance_variable_get("@search_paths")[0].should == '.yardoc'
+      expect(@yri.find_object('Foo')).to eq 'OBJ'
+      expect(@yri.instance_variable_get("@search_paths")[0]).to eq '.yardoc'
     end
   end
 
@@ -63,7 +63,7 @@ describe YARD::CLI::YRI do
       File.should_receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
-      spaths[0,4].should == %w(foo bar line1 line2)
+      expect(spaths[0,4]).to eq(%w(foo bar line1 line2))
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
   end
@@ -89,7 +89,7 @@ describe YARD::CLI::YRI do
     end
 
     it "should ensure output is serialized" do
-      obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
+      YARD::CodeObjects::ClassObject.new(:root, 'Foo')
       class << @yri
         def test_stub; @serializer.should_receive(:serialize).once end
       end
