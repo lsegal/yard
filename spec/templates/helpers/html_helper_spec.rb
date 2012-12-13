@@ -115,7 +115,10 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should handle various encodings" do
       stub!(:object).and_return(Registry.root)
+      vo = $VERBOSE
+      $VERBOSE = false
       Encoding.default_internal = 'utf-8' if defined?(Encoding)
+      $VERBOSE = vo
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
     end
@@ -189,8 +192,6 @@ describe YARD::Templates::Helpers::HtmlHelper do
         end
       eof
       obj = Registry.at('Foo::Baz#a').tag(:overload)
-      foobar = Registry.at('Foo::Bar')
-      foobaz = Registry.at('Foo::Baz')
       serializer = Serializers::FileSystemSerializer.new
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(obj)
@@ -217,7 +218,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should use Klass.foo when linking to class method in current namespace" do
       root = CodeObjects::ModuleObject.new(:root, :Klass)
-      obj = CodeObjects::MethodObject.new(root, :foo, :class)
+      CodeObjects::MethodObject.new(root, :foo, :class)
       stub!(:object).and_return(root)
       serializer = Serializers::FileSystemSerializer.new
       stub!(:serializer).and_return(serializer)

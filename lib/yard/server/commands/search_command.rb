@@ -55,7 +55,7 @@ module YARD
         end
 
         def search_for_object
-          splitquery = query.split(/\s+/).map {|c| c.downcase }.reject {|m| m.empty? }
+          #splitquery = query.split(/\s+/).map {|c| c.downcase }.reject {|m| m.empty? }
           self.results = run_verifier(Registry.all).select {|o|
               o.path.downcase.include?(query.downcase)
             }.reject {|o|

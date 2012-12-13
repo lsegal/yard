@@ -289,7 +289,7 @@ module YARD
           objs.unshift(type) if type && type != :list
 
           options = []
-          if @docstring
+          if instance_variable_defined?(:@docstring) && @docstring
             options << ['docstring', docstring]
           end
           if @source_range || @line_range

@@ -454,9 +454,9 @@ describe YARD::Parser::SourceParser do
   describe '#parse' do
     it "should parse a basic Ruby file" do
       parse_file :example1, __FILE__
-      Registry.at(:Hello).should_not == nil
-      Registry.at("Hello::Hi#me").should_not == nil
-        expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring"
+      expect(Registry.at(:Hello)).not_to eq nil
+      expect(Registry.at("Hello::Hi#me")).not_to eq nil
+      expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring"
     end
 
     it "should parse a set of file globs" do

@@ -20,10 +20,10 @@ describe YARD::Serializers::YardocSerializer do
     it "should maintain object equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
       newfoo.should equal(@foo)
-      newfoo.should == @foo
+      expect(newfoo).to eq @foo
       @foo.should equal(newfoo)
-      @foo.should == newfoo
-      newfoo.hash.should == @foo.hash
+      expect(@foo).to eq newfoo
+      expect(newfoo.hash).to eq @foo.hash
     end
 
     it "should maintain hash key equality when loading a dumped object" do

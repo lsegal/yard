@@ -685,7 +685,7 @@ module YARD
           if @lex_state != EXPR_END && @lex_state != EXPR_CLASS &&
              (@lex_state != EXPR_ARG || @space_seen)
             c = peek(0)
-            tk = identify_here_document if /[-\w_\"\'\`]/ =~ c
+            tk = identify_here_document if /[-\w\"\'\`]/ =~ c
           end
           if !tk
             @lex_state = EXPR_BEG
@@ -937,7 +937,7 @@ module YARD
         end
 
         @OP.def_rule('@') do
-          if peek(0) =~ /[@\w_]/
+          if peek(0) =~ /[@\w]/
             ungetc
             identify_identifier
           else
@@ -963,7 +963,7 @@ module YARD
           printf "MATCH: start %s: %s\n", op, io.inspect if RubyLex.debug?
           if peek(0) =~ /[0-9]/
             t = identify_number("")
-          elsif peek(0) =~ /[\w_]/
+          elsif peek(0) =~ /[\w]/
             t = identify_identifier
           end
           printf "MATCH: end %s: %s\n", op, io.inspect if RubyLex.debug?

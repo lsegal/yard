@@ -52,9 +52,9 @@ describe YARD::Server::Router do
     def route_to(route, command, *args)
       req = mock_request(route)
       router = MyRouterSpecRouter.new(@adapter)
-      command.should_receive(:new).and_return do |*args|
+      command.should_receive(:new).and_return do |*a|
         @command = command.allocate
-        @command.send(:initialize, *args)
+        @command.send(:initialize, *a)
         class << @command; def call(req); self end end
         @command
       end

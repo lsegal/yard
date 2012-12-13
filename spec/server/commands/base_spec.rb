@@ -1,7 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 class MyProcCommand < Base
-  def initialize(&block) self.class.send(:define_method, :run, &block) end
+  def initialize(&block)
+    undef run if self.class.method_defined?(:run)
+    self.class.send(:define_method, :run, &block)
+  end
 end
 
 class MyCacheCommand < Base

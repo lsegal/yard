@@ -118,7 +118,7 @@ describe YARD::Options do
   describe '#merge' do
     it "should update a new object" do
       o = FooOptions.new
-      o.merge(:foo => "xyz").object_id.should_not == o.object_id
+      expect(o.merge(:foo => "xyz").object_id).not_to eq o.object_id
       expect(o.merge(:foo => "xyz").to_hash).to eq({:foo => "xyz"})
     end
 
@@ -164,7 +164,7 @@ describe YARD::Options do
 
   describe '#tap' do
     it "should support #tap(&block) (even in 1.8.6)" do
-      o = FooOptions.new.tap {|o| o.foo = :BAR }
+      o = FooOptions.new.tap {|o2| o2.foo = :BAR }
       expect(o.to_hash).to eq({:foo => :BAR})
     end
   end

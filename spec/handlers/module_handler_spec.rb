@@ -4,8 +4,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "should parse a module block" do
-    Registry.at(:ModName).should_not == nil
-    Registry.at("ModName::OtherModName").should_not == nil
+    expect(Registry.at(:ModName)).not_to eq nil
+    expect(Registry.at("ModName::OtherModName")).not_to eq nil
   end
 
   it "should attach docstring" do
@@ -13,11 +13,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   end
 
   it "should handle any formatting" do
-    Registry.at(:StressTest).should_not == nil
+    expect(Registry.at(:StressTest)).not_to eq nil
   end
 
   it "should handle complex module names" do
-    Registry.at("A::B").should_not == nil
+    expect(Registry.at("A::B")).not_to eq nil
   end
 
   it "should handle modules in the form ::ModName" do

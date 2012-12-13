@@ -595,10 +595,13 @@ describe YARD::CLI::Yardoc do
       eenc = Encoding.default_external
       log.should_receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
       @yardoc.parse_arguments(*%w( --one-file --charset us-ascii ))
-        expect(Encoding.default_internal.name).to eq 'ASCII-8BIT'
-        expect(Encoding.default_external.name).to eq 'ASCII-8BIT'
+      expect(Encoding.default_internal.name).to eq 'ASCII-8BIT'
+      expect(Encoding.default_external.name).to eq 'ASCII-8BIT'
+      vo = $VERBOSE
+      $VERBOSE = false
       Encoding.default_internal = ienc
       Encoding.default_external = eenc
+      $VERBOSE = vo
     end if defined?(::Encoding)
   end
 

@@ -37,14 +37,14 @@ describe YARD::Parser::C::CParser do
         extra_contents = File.read(@extrafile)
         File.should_receive(:read).with('extra.c').and_return(extra_contents)
         parse(@contents)
-        Registry.at('Multifile#extra').docstring.should == 'foo'
+        expect(Registry.at('Multifile#extra').docstring).to eq 'foo'
       end
 
       it "should stop searching for extra source file gracefully if file is not found" do
         File.should_receive(:read).with('extra.c').and_raise(Errno::ENOENT)
         log.should_receive(:warn).with("Missing source file `extra.c' when parsing Multifile#extra")
         parse(@contents)
-        Registry.at('Multifile#extra').docstring.should == ''
+        expect(Registry.at('Multifile#extra').docstring).to eq ''
       end
     end
 
@@ -62,8 +62,7 @@ describe YARD::Parser::C::CParser do
             rb_define_method(rb_cFoo, "foo", foo, 1);
           }
         eof
-        Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should ==
-          "VALUE foo(VALUE x) { int value = x;\n}"
+        expect(Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ')).to eq "VALUE foo(VALUE x) { int value = x;\n}"
       end
     end
 
@@ -81,8 +80,8 @@ describe YARD::Parser::C::CParser do
           }
         eof
         constant = Registry.at('Mask::DEADBEEF')
-        constant.value.should == '0xdeadbeef'
-        constant.docstring.should == "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
+        expect(constant.value).to eq '0xdeadbeef'
+        expect(constant.docstring).to eq "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
       end
     end
 
