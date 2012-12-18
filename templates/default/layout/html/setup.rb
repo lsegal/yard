@@ -1,15 +1,15 @@
 def init
   @breadcrumb = []
-  if @onefile
+  if instance_variable_defined?(:@onefile) && @onefile
     sections :layout
-  elsif @file
+  elsif instance_variable_defined?(:@file) && @file
     if @file.attributes[:namespace]
       @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root
     end
     @breadcrumb_title = "File: " + @file.title
     @page_title = @breadcrumb_title
     sections :layout, [:diskfile]
-  elsif @contents
+  elsif contents
     sections :layout, [:contents]
   else
     case object
@@ -33,7 +33,7 @@ def init
 end
 
 def contents
-  @contents
+  instance_variable_defined?(:@contents) ? @contents : nil
 end
 
 def index
