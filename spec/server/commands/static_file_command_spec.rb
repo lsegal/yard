@@ -42,6 +42,7 @@ describe YARD::Server::Commands::StaticFileCommand do
 
     it "should not use registered path before docroot" do
       Server.register_static_path '/foo'
+      path = '/foo/path/to/file.txt'
       File.should_receive(:exist?).with('/c/path/to/file.txt').and_return(true)
       File.should_receive(:read).with('/c/path/to/file.txt').and_return('FOO')
       run('/c/path/to/file.txt', 200, 'FOO')
@@ -59,9 +60,7 @@ describe YARD::Server::Commands::StaticFileCommand do
       File.should_receive(:exist?).with('/c/file').and_return(true)
       File.should_receive(:read).with('/c/file')
       s, h, b = *run('/file')
-      expect(s).not_to eq nil
-      expect(h['Content-Type']).to eq 'text/html'
-      expect(b).not_to eq nil
+      h['Content-Type'].should == 'text/html'
     end
 
     {
@@ -78,9 +77,7 @@ describe YARD::Server::Commands::StaticFileCommand do
         File.should_receive(:exist?).with('/c/file.' + ext).and_return(true)
         File.should_receive(:read).with('/c/file.' + ext)
         s, h, b = *run('/file.' + ext)
-        expect(s).not_to eq nil
-        expect(h['Content-Type']).to eq mime
-        expect(b).not_to eq nil
+        h['Content-Type'].should == mime
       end
     end
   end

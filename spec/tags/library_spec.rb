@@ -7,17 +7,17 @@ describe YARD::Tags::Library do
 
   describe '#see_tag' do
     it "should take a URL" do
-      expect(tag("@see http://example.com").name).to eq "http://example.com"
+      tag("@see http://example.com").name.should == "http://example.com"
     end
 
     it "should take an object path" do
-      expect(tag("@see String#reverse").name).to eq "String#reverse"
+      tag("@see String#reverse").name.should == "String#reverse"
     end
 
     it "should take a description after the url/object" do
       tag = tag("@see http://example.com An Example Site")
-      expect(tag.name).to eq "http://example.com"
-      expect(tag.text).to eq "An Example Site"
+      tag.name.should == "http://example.com"
+      tag.text.should == "An Example Site"
     end
   end
 
@@ -27,8 +27,8 @@ describe YARD::Tags::Library do
       Tags::Library.define_tag("foo2", 'x.y.zz', Tags::OverloadTag)
       Tags::Library.instance.method(:x_y_z_tag).should_not be_nil
       Tags::Library.instance.method(:x_y_zz_tag).should_not be_nil
-      expect(tag('@x.y.z foo bar').text).to eq 'foo bar'
-      expect(tag('@x.y.zz foo(bar)').signature).to eq 'foo(bar)'
+      tag('@x.y.z foo bar').text.should == 'foo bar'
+      tag('@x.y.zz foo(bar)').signature.should == 'foo(bar)'
     end
   end
 end

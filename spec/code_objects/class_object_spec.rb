@@ -20,11 +20,11 @@ describe YARD::CodeObjects::ClassObject do
     end
 
     it "should show the proper inheritance tree" do
-      expect(@yard.inheritance_tree).to eq [@yard, @superyard, P(:String)]
+      @yard.inheritance_tree.should == [@yard, @superyard, P(:String)]
     end
 
     it "should show proper inheritance tree when mixins are included" do
-      expect(@yard.inheritance_tree(true)).to eq [@yard, @mixin, @superyard, @mixin4, @mixin2, @mixin3, P(:String)]
+      @yard.inheritance_tree(true).should == [@yard, @mixin, @superyard, @mixin4, @mixin2, @mixin3, P(:String)]
     end
 
     it "should not modify the object's mixin list when mixins are included" do
@@ -33,14 +33,14 @@ describe YARD::CodeObjects::ClassObject do
       @class2.superclass = @class1
 
       @class2.inheritance_tree(true)
-      expect(@class2.mixins).to eq []
+      @class2.mixins.should == []
     end
 
     it "should list class mixins in inheritance tree" do
       mod = ModuleObject.new(:root, :ClassMethods)
       klass = ClassObject.new(:root, :ReceivingClass)
       klass.class_mixins << mod
-      expect(klass.inheritance_tree(true)).to eq [klass, mod]
+      klass.inheritance_tree(true).should == [klass, mod]
     end
   end
 
@@ -174,7 +174,7 @@ describe YARD::CodeObjects::ClassObject do
 
     it "should not set a superclass on BasicObject class" do
       o = ClassObject.new(:root, :Object)
-        expect(o.superclass).to eq P(:BasicObject)
+      o.superclass.should == P(:BasicObject)
     end
 
     it "should set superclass of Object to BasicObject" do
@@ -184,7 +184,7 @@ describe YARD::CodeObjects::ClassObject do
 
     it "should raise ArgumentError if superclass == self" do
       lambda do
-        ClassObject.new(:root, :Object) do |o|
+        o = ClassObject.new(:root, :Object) do |o|
           o.superclass = :Object
         end
       end.should raise_error(ArgumentError)
@@ -196,26 +196,27 @@ describe YARD::CodeObjects::ClassObject do
       o2.superclass = :SystemCallError
       o3 = ClassObject.new(:root, :StandardError)
       o3.superclass = :Object
+      o4 = ClassObject.new(:root, :Object)
 
       o.superclass = :Object
-        expect(o.is_exception?).to eq false
+      o.is_exception?.should == false
 
       o.superclass = :Exception
-        expect(o.is_exception?).to eq true
+      o.is_exception?.should == true
 
       o.superclass = :NoMethodError
-        expect(o.is_exception?).to eq true
+      o.is_exception?.should == true
 
       o.superclass = o2
-        expect(o.is_exception?).to eq true
+      o.is_exception?.should == true
 
       o.superclass = o3
-        expect(o.is_exception?).to eq true
+      o.is_exception?.should == true
     end
 
     it "should not raise ArgumentError if superclass is proxy in different namespace" do
       lambda do
-        ClassObject.new(:root, :X) do |o|
+        o = ClassObject.new(:root, :X) do |o|
           o.superclass = P('OTHER::X')
         end
       end.should_not raise_error(ArgumentError)

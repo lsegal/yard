@@ -17,21 +17,15 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
   before do
     Registry.clear
     if defined?(::Encoding)
-      vo = $VERBOSE
-      $VERBOSE = false
       @eenc, Encoding.default_external = Encoding.default_external, 'ascii-8bit'
       @ienc, Encoding.default_internal = Encoding.default_internal, 'ascii-8bit'
-      $VERBOSE = vo
     end
   end
 
   after do
     if defined?(::Encoding)
-      vo = $VERBOSE
-      $VERBOSE = false
       Encoding.default_internal = @ienc
       Encoding.default_external = @eenc
-      $VERBOSE = vo
     end
   end
 
@@ -60,7 +54,7 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
 
   it "should render html" do
     render
-      expect(@files).to eq ['index.html']
+    @files.should == ['index.html']
     @output.should include("This is a code comment")
     @output.should include("This is a license!")
     @output.should include("Class: A")

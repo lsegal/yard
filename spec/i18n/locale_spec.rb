@@ -11,14 +11,14 @@ describe YARD::I18n::Locale do
 
   describe "#name" do
     it "should return name" do
-      expect(locale("fr").name).to eq "fr"
+      locale("fr").name.should == "fr"
     end
   end
 
   describe "#load" do
     it "should return false for nonexistent PO" do
       File.should_receive(:exist?).with('foo/fr.po').and_return(false)
-      expect(@locale.load('foo')).to eq false
+      @locale.load('foo').should == false
     end
 
     have_gettext_gem = true
@@ -43,11 +43,11 @@ eop
       File.should_receive(:exist?).with('foo/fr.po').and_return(true)
       GetText::PoParser.should_receive(:new).and_return(parser)
       parser.should_receive(:parse_file) do |file, hash|
-        expect(file).to eq 'foo/fr.po'
+        file.should == 'foo/fr.po'
         parser.parse(data, hash)
       end
-      expect(@locale.load('foo')).to eq true
-      expect(@locale.translate('Hello')).to eq "Bonjour"
+      @locale.load('foo').should == true
+      @locale.translate('Hello').should == "Bonjour"
     end
   end
 

@@ -3,50 +3,50 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe File do
   describe ".relative_path" do
     it "should return the relative path between two files" do
-      expect(File.relative_path('a/b/c/d.html', 'a/b/d/q.html')).to eq '../d/q.html'
+      File.relative_path('a/b/c/d.html', 'a/b/d/q.html').should == '../d/q.html'
     end
 
     it "should return the relative path between two directories" do
-      expect(File.relative_path('a/b/c/d/', 'a/b/d/')).to eq '../d'
+      File.relative_path('a/b/c/d/', 'a/b/d/').should == '../d'
     end
 
     it "should return only the to file if from file is in the same directory as the to file" do
-      expect(File.relative_path('a/b/c/d', 'a/b/c/e')).to eq 'e'
+      File.relative_path('a/b/c/d', 'a/b/c/e').should == 'e'
     end
 
     it "should handle non-normalized paths" do
-      expect(File.relative_path('Hello/./I/Am/Fred', 'Hello/Fred')).to eq '../../Fred'
-      expect(File.relative_path('A//B/C', 'Q/X')).to eq '../../Q/X'
+      File.relative_path('Hello/./I/Am/Fred', 'Hello/Fred').should == '../../Fred'
+      File.relative_path('A//B/C', 'Q/X').should == '../../Q/X'
     end
   end
 
   describe '.cleanpath' do
     it "should clean double brackets" do
-      expect(File.cleanpath('A//B/C')).to eq "A/B/C"
+      File.cleanpath('A//B/C').should == "A/B/C"
     end
 
     it "should clean a path with ." do
-      expect(File.cleanpath('Hello/./I/.Am/Fred')).to eq "Hello/I/.Am/Fred"
+      File.cleanpath('Hello/./I/.Am/Fred').should == "Hello/I/.Am/Fred"
     end
 
     it "should clean a path with .." do
-      expect(File.cleanpath('Hello/../World')).to eq "World"
+      File.cleanpath('Hello/../World').should == "World"
     end
 
     it "should clean a path with multiple .." do
-      expect(File.cleanpath('A/B/C/../../D')).to eq "A/D"
+      File.cleanpath('A/B/C/../../D').should == "A/D"
     end
 
     it "should clean a path ending in .." do
-      expect(File.cleanpath('A/B/C/D/..')).to eq "A/B/C"
+      File.cleanpath('A/B/C/D/..').should == "A/B/C"
     end
 
     it "should pass the initial directory" do
-      expect(File.cleanpath('C/../../D')).to eq "../D"
+      File.cleanpath('C/../../D').should == "../D"
     end
 
     it "should not remove multiple '../' at the beginning" do
-      expect(File.cleanpath('../../A/B')).to eq '../../A/B'
+      File.cleanpath('../../A/B').should == '../../A/B'
     end
   end
 

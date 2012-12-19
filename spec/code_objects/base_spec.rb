@@ -11,7 +11,7 @@ describe YARD::CodeObjects::Base do
   it "should return a unique instance of any registered object" do
     obj = ClassObject.new(:root, :Me)
     obj2 = ClassObject.new(:root, :Me)
-    expect(obj.object_id).to eq obj2.object_id
+    obj.object_id.should == obj2.object_id
 
     obj3 = ModuleObject.new(obj, :Too)
     obj4 = CodeObjects::Base.new(obj3, :Hello)
@@ -30,17 +30,17 @@ describe YARD::CodeObjects::Base do
 
   it "should simplify complex namespace paths" do
     obj = ClassObject.new(:root, "A::B::C::D")
-    expect(obj.name).to eq :D
-    expect(obj.path).to eq "A::B::C::D"
-    expect(obj.namespace).to eq P("A::B::C")
+    obj.name.should == :D
+    obj.path.should == "A::B::C::D"
+    obj.namespace.should == P("A::B::C")
   end
 
   # @bug gh-552
   it "should simplify complex namespace paths when path starts with ::" do
     obj = ClassObject.new(:root, "::A::B::C::D")
-    expect(obj.name).to eq :D
-    expect(obj.path).to eq "A::B::C::D"
-    expect(obj.namespace).to eq P("A::B::C")
+    obj.name.should == :D
+    obj.path.should == "A::B::C::D"
+    obj.namespace.should == P("A::B::C")
   end
 
   it "should recall the block if #new is called on an existing object" do
@@ -52,32 +52,32 @@ describe YARD::CodeObjects::Base do
       o.docstring = "NOT_DOCSTRING"
     end
 
-    expect(o1.object_id).to eq o2.object_id
-    expect(o1.docstring).to eq "NOT_DOCSTRING"
-    expect(o2.docstring).to eq "NOT_DOCSTRING"
+    o1.object_id.should == o2.object_id
+    o1.docstring.should == "NOT_DOCSTRING"
+    o2.docstring.should == "NOT_DOCSTRING"
   end
 
   it "should allow complex name and convert that to namespace" do
     obj = CodeObjects::Base.new(nil, "A::B")
-    expect(obj.namespace.path).to eq "A"
-    expect(obj.name).to eq :B
+    obj.namespace.path.should == "A"
+    obj.name.should == :B
   end
 
   it "should allow namespace to be nil and not register in the Registry" do
     obj = CodeObjects::Base.new(nil, :Me)
-    expect(obj.namespace).to eq nil
-    expect(Registry.at(:Me)).to eq nil
+    obj.namespace.should == nil
+    Registry.at(:Me).should == nil
   end
 
   it "should allow namespace to be a NamespaceObject" do
     ns = ModuleObject.new(:root, :Name)
     obj = CodeObjects::Base.new(ns, :Me)
-    expect(obj.namespace).to eq ns
+    obj.namespace.should == ns
   end
 
   it "should allow :root to be the shorthand namespace of `Registry.root`" do
     obj = CodeObjects::Base.new(:root, :Me)
-    expect(obj.namespace).to eq Registry.root
+    obj.namespace.should == Registry.root
   end
 
   it "should not allow any other types as namespace" do
@@ -86,31 +86,31 @@ describe YARD::CodeObjects::Base do
 
   it "should register itself in the registry if namespace is supplied" do
     obj = ModuleObject.new(:root, :Me)
-    expect(Registry.at(:Me)).to eq obj
+    Registry.at(:Me).should == obj
 
     obj2 = ModuleObject.new(obj, :Too)
-    expect(Registry.at(:"Me::Too")).to eq obj2
+    Registry.at(:"Me::Too").should == obj2
   end
 
   it "should set any attribute using #[]=" do
     obj = ModuleObject.new(:root, :YARD)
     obj[:some_attr] = "hello"
-                       expect(obj[:some_attr]).to eq "hello"
+    obj[:some_attr].should == "hello"
   end
 
   it "#[]= should use the accessor method if available" do
     obj = CodeObjects::Base.new(:root, :YARD)
     obj[:source] = "hello"
-                       expect(obj.source).to eq "hello"
+    obj.source.should == "hello"
     obj.source = "unhello"
-                       expect(obj[:source]).to eq "unhello"
+    obj[:source].should == "unhello"
   end
 
   it "should set attributes via attr= through method_missing" do
     obj = CodeObjects::Base.new(:root, :YARD)
     obj.something = 2
-                         expect(obj.something).to eq 2
-                         expect(obj[:something]).to eq 2
+    obj.something.should == 2
+    obj[:something].should == 2
   end
 
   it "should exist in the parent's #children after creation" do
@@ -131,7 +131,7 @@ describe YARD::CodeObjects::Base do
         end
       end
     eof
-      expect(obj.source).to eq "def mymethod\n  if x == 2 &&\n      5 == 5\n    3\n  else\n    1\n  end\nend"
+    obj.source.should == "def mymethod\n  if x == 2 &&\n      5 == 5\n    3\n  else\n    1\n  end\nend"
 
     Registry.clear
     Parser::SourceParser.parse_string <<-eof
@@ -139,7 +139,7 @@ describe YARD::CodeObjects::Base do
         super(key)
       end
     eof
-      expect(Registry.at('#key?').source).to eq "def key?(key)\n  super(key)\nend"
+    Registry.at('#key?').source.should == "def key?(key)\n  super(key)\nend"
 
     Registry.clear
     Parser::SourceParser.parse_string <<-eof
@@ -151,7 +151,7 @@ describe YARD::CodeObjects::Base do
           end
         end
     eof
-        expect(Registry.at('#key?').source).to eq "def key?(key)\n  if x == 2\n    puts key\n  else\n    exit\n  end\nend"
+    Registry.at('#key?').source.should == "def key?(key)\n  if x == 2\n    puts key\n  else\n    exit\n  end\nend"
   end
 
   it "should not add newlines to source when parsing sub blocks" do
@@ -166,21 +166,21 @@ describe YARD::CodeObjects::Base do
         end
       end
     eof
-      expect(Registry.at('XYZ::ZYX::ABC#msg').source).to eq "def msg\n  hello_world\nend"
+    Registry.at('XYZ::ZYX::ABC#msg').source.should == "def msg\n  hello_world\nend"
   end
 
   it "should handle source for 'def x; end'" do
     Registry.clear
     Parser::SourceParser.parse_string "def x; 2 end"
-      expect(Registry.at('#x').source).to eq "def x; 2 end"
+    Registry.at('#x').source.should == "def x; 2 end"
   end
 
   it "should set file and line information" do
     Parser::SourceParser.parse_string <<-eof
       class X; end
     eof
-      expect(Registry.at(:X).file).to eq '(stdin)'
-      expect(Registry.at(:X).line).to eq 1
+    Registry.at(:X).file.should == '(stdin)'
+    Registry.at(:X).line.should == 1
   end
 
   it "should maintain all file associations when objects are defined multiple times in one file" do
@@ -190,9 +190,9 @@ describe YARD::CodeObjects::Base do
       class X; end
     eof
 
-      expect(Registry.at(:X).file).to eq '(stdin)'
-      expect(Registry.at(:X).line).to eq 1
-      expect(Registry.at(:X).files).to eq [['(stdin)', 1], ['(stdin)', 2], ['(stdin)', 3]]
+    Registry.at(:X).file.should == '(stdin)'
+    Registry.at(:X).line.should == 1
+    Registry.at(:X).files.should == [['(stdin)', 1], ['(stdin)', 2], ['(stdin)', 3]]
   end
 
   it "should maintain all file associations when objects are defined multiple times in multiple files" do
@@ -201,9 +201,9 @@ describe YARD::CodeObjects::Base do
       Parser::SourceParser.new.parse("file#{i+1}.rb")
     end
 
-      expect(Registry.at(:X).file).to eq 'file1.rb'
-      expect(Registry.at(:X).line).to eq 1
-      expect(Registry.at(:X).files).to eq [['file1.rb', 1], ['file2.rb', 1], ['file3.rb', 1]]
+    Registry.at(:X).file.should == 'file1.rb'
+    Registry.at(:X).line.should == 1
+    Registry.at(:X).files.should == [['file1.rb', 1], ['file2.rb', 1], ['file3.rb', 1]]
   end
 
   it "should prioritize the definition with a docstring when returning #file" do
@@ -214,9 +214,9 @@ describe YARD::CodeObjects::Base do
       class X; end
     eof
 
-      expect(Registry.at(:X).file).to eq '(stdin)'
-      expect(Registry.at(:X).line).to eq 4
-      expect(Registry.at(:X).files).to eq [['(stdin)', 4], ['(stdin)', 1], ['(stdin)', 2]]
+    Registry.at(:X).file.should == '(stdin)'
+    Registry.at(:X).line.should == 4
+    Registry.at(:X).files.should == [['(stdin)', 4], ['(stdin)', 1], ['(stdin)', 2]]
   end
 
   describe '#format' do
@@ -230,61 +230,62 @@ describe YARD::CodeObjects::Base do
   describe '#source_type' do
     it "should default source_type to :ruby" do
       object = MethodObject.new(:root, :method)
-        expect(object.source_type).to eq :ruby
+      object.source_type.should == :ruby
     end
   end
 
   describe '#relative_path' do
     it "should accept a string" do
       YARD.parse_string "module A; class B; end; class C; end; end"
-        expect(Registry.at('A::B').relative_path(Registry.at('A::C'))).to eq Registry.at('A::B').relative_path('A::C')
+      Registry.at('A::B').relative_path(Registry.at('A::C')).should ==
+        Registry.at('A::B').relative_path('A::C')
     end
 
     it "should return full class name when objects share a common class prefix" do
       YARD.parse_string "module User; end; module UserManager; end"
-        expect(Registry.at('User').relative_path('UserManager')).to eq 'UserManager'
-        expect(Registry.at('User').relative_path(Registry.at('UserManager'))).to eq 'UserManager'
+      Registry.at('User').relative_path('UserManager').should == 'UserManager'
+      Registry.at('User').relative_path(Registry.at('UserManager')).should == 'UserManager'
     end
 
     it "should return the relative path when they share a common namespace" do
       YARD.parse_string "module A; class B; end; class C; end; end"
-        expect(Registry.at('A::B').relative_path(Registry.at('A::C'))).to eq 'C'
+      Registry.at('A::B').relative_path(Registry.at('A::C')).should == 'C'
       YARD.parse_string "module Foo; module A; end; module B; def foo; end end end"
-        expect(Registry.at('Foo::A').relative_path(Registry.at('Foo::B#foo'))).to eq 'B#foo'
+      Registry.at('Foo::A').relative_path(Registry.at('Foo::B#foo')).should == 'B#foo'
     end
 
     it "should return the full path if they don't have a common namespace" do
       YARD.parse_string "module A; class B; end; end; module D; class C; end; end"
-        expect(Registry.at('A::B').relative_path('D::C')).to eq 'D::C'
+      Registry.at('A::B').relative_path('D::C').should == 'D::C'
       YARD.parse_string 'module C::B::C; module Apple; end; module Ant; end end'
-        expect(Registry.at('C::B::C::Apple').relative_path('C::B::C::Ant')).to eq 'Ant'
+      Registry.at('C::B::C::Apple').relative_path('C::B::C::Ant').should == 'Ant'
       YARD.parse_string 'module OMG::ABC; end; class Object; end'
-        expect(Registry.at('OMG::ABC').relative_path('Object')).to eq "Object"
+      Registry.at('OMG::ABC').relative_path('Object').should == "Object"
       YARD.parse_string("class YARD::Config; MYCONST = 1; end")
-        expect(Registry.at('YARD::Config').relative_path('YARD::Config::MYCONST')).to eq "MYCONST"
+      Registry.at('YARD::Config').relative_path('YARD::Config::MYCONST').should == "MYCONST"
     end
 
     it "should return a relative path for class methods" do
       YARD.parse_string "module A; def self.b; end; def self.c; end; end"
-        expect(Registry.at('A.b').relative_path('A.c')).to eq 'c'
-        expect(Registry.at('A').relative_path('A.c')).to eq 'c'
+      Registry.at('A.b').relative_path('A.c').should == 'c'
+      Registry.at('A').relative_path('A.c').should == 'c'
     end
 
     it "should return a relative path for instance methods" do
       YARD.parse_string "module A; def b; end; def c; end; end"
-        expect(Registry.at('A#b').relative_path('A#c')).to eq '#c'
-        expect(Registry.at('A').relative_path('A#c')).to eq '#c'
+      Registry.at('A#b').relative_path('A#c').should == '#c'
+      Registry.at('A').relative_path('A#c').should == '#c'
     end
 
     it "should return full path if relative path is to parent namespace" do
       YARD.parse_string "module A; module B; end end"
-        expect(Registry.at('A::B').relative_path('A')).to eq 'A'
+      Registry.at('A::B').relative_path('A').should == 'A'
     end
 
     it "should only return name for relative path to self" do
       YARD.parse_string("class A::B::C; def foo; end end")
-        expect(Registry.at('A::B::C').relative_path('A::B::C')).to eq 'C'
-        expect(Registry.at('A::B::C#foo').relative_path('A::B::C#foo')).to eq '#foo'
+      Registry.at('A::B::C').relative_path('A::B::C').should == 'C'
+      Registry.at('A::B::C#foo').relative_path('A::B::C#foo').should == '#foo'
     end
   end
 
@@ -299,21 +300,21 @@ describe YARD::CodeObjects::Base do
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
       o = ClassObject.new(:root, :Me)
       o.docstring = '(see AnotherObject)'
-        expect(o.docstring).to eq "FOO"
+      o.docstring.should == "FOO"
     end
 
     it "should not copy docstring mid-docstring" do
       doc = "Hello.\n(see file.rb)\nmore documentation"
       o = ClassObject.new(:root, :Me)
       o.docstring = doc
-        expect(o.docstring).to eq doc
+      o.docstring.should == doc
     end
 
     it "should allow extra docstring after (see Path)" do
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
       o = ClassObject.new(:root, :Me)
       o.docstring = Docstring.new("(see AnotherObject)\n\nEXTRA\n@api private", o)
-        expect(o.docstring).to eq "FOO\n\nEXTRA"
+      o.docstring.should == "FOO\n\nEXTRA"
       o.docstring.should have_tag(:api)
     end
   end
@@ -322,46 +323,15 @@ describe YARD::CodeObjects::Base do
     it "should return empty string if docstring was '(see Path)' and Path is not resolved" do
       o = ClassObject.new(:root, :Me)
       o.docstring = '(see AnotherObject)'
-        expect(o.docstring).to eq ""
+      o.docstring.should == ""
     end
 
     it "should return docstring when object is resolved" do
       o = ClassObject.new(:root, :Me)
       o.docstring = '(see AnotherObject)'
-        expect(o.docstring).to eq ""
+      o.docstring.should == ""
       ClassObject.new(:root, :AnotherObject) {|x| x.docstring = "FOO" }
-        expect(o.docstring).to eq "FOO"
-    end
-
-    describe 'localization' do
-      it "should return localized docstring" do
-        fr_locale = YARD::I18n::Locale.new('fr')
-        fr_locale.stub!(:translate).with('Hello').and_return('Bonjour')
-
-        o = ClassObject.new(:root, :Me)
-        o.docstring = 'Hello'
-          expect(o.docstring).to eq 'Hello'
-
-        Registry.stub!(:locale).with('fr').and_return(fr_locale)
-          expect(o.docstring('fr')).to eq "Bonjour"
-      end
-
-      it "should return updated localized docstring" do
-        fr_locale = YARD::I18n::Locale.new('fr')
-        Registry.stub!(:locale).with('fr').and_return(fr_locale)
-
-        o = ClassObject.new(:root, :Me)
-        o.docstring = 'Hello'
-          expect(o.docstring).to eq 'Hello'
-
-        fr_locale.stub!(:translate).with('Hello').and_return('Bonjour')
-          expect(o.docstring('fr')).to eq "Bonjour"
-
-        o.docstring = 'World'
-        fr_locale.stub!(:translate).with('World').and_return('Monde')
-          expect(o.docstring('fr')).to eq "Monde"
-          expect(o.docstring).to eq 'World'
-      end
+      o.docstring.should == "FOO"
     end
   end
 
@@ -369,11 +339,11 @@ describe YARD::CodeObjects::Base do
     it "should only add a file/line combination once" do
       o = ClassObject.new(:root, :Me)
       o.add_file('filename', 12)
-        expect(o.files).to eq [['filename', 12]]
+      o.files.should == [['filename', 12]]
       o.add_file('filename', 12)
-        expect(o.files).to eq [['filename', 12]]
+      o.files.should == [['filename', 12]]
       o.add_file('filename', 40) # different line
-        expect(o.files).to eq [['filename', 12], ['filename', 40]]
+      o.files.should == [['filename', 12], ['filename', 40]]
     end
   end
 
@@ -389,24 +359,24 @@ describe YARD::CodeObjects::Base do
       eof
       foo_c = MethodObject.new(:root, :foo, :class)
       Registry.at('#foo').copy_to(foo_c)
-        expect(foo_c.scope).to eq :class
-        expect(foo_c.visibility).to eq :private
-        expect(foo_c.type).to eq :method
-        expect(foo_c.class).to eq MethodObject
-        expect(foo_c.path).to eq '::foo'
-        expect(foo_c.docstring).to eq "A docstring"
-        expect(foo_c.tag(:return).types).to eq ['String']
-        expect(foo_c.file).to eq '(stdin)'
-        expect(foo_c.line).to eq 4
+      foo_c.scope.should == :class
+      foo_c.visibility.should == :private
+      foo_c.type.should == :method
+      foo_c.class.should == MethodObject
+      foo_c.path.should == '::foo'
+      foo_c.docstring.should == "A docstring"
+      foo_c.tag(:return).types.should == ['String']
+      foo_c.file.should == '(stdin)'
+      foo_c.line.should == 4
       foo_c.source.should =~ /source_code_here/
-        expect(foo_c.signature).to eq 'def foo(a, b, c)'
-        expect(foo_c.parameters).to eq [['a', nil], ['b', nil], ['c', nil]]
+      foo_c.signature.should == 'def foo(a, b, c)'
+      foo_c.parameters.should == [['a', nil], ['b', nil], ['c', nil]]
     end
 
     it "should return copied object" do
       YARD.parse_string 'def foo; end'
       foo_c = MethodObject.new(:root, :foo, :class)
-        expect(Registry.at('#foo').copy_to(foo_c)).to eq foo_c
+      Registry.at('#foo').copy_to(foo_c).should == foo_c
     end
 
     it "should copy docstring and rewrite tags for new object" do
@@ -417,8 +387,8 @@ describe YARD::CodeObjects::Base do
       foo_c = MethodObject.new(:root, :foo, :class)
       foo_i = Registry.at('#foo')
       foo_i.copy_to(foo_c)
-      expect(foo_i.tags).not_to eq foo_c.tags
-      expect(foo_c.tags.first.object).to eq foo_c
+      foo_i.tags.should_not == foo_c.tags
+      foo_c.tags.first.object.should == foo_c
     end
 
     it "should only copy #copyable_attributes" do

@@ -26,7 +26,7 @@ describe YARD::Handlers::Base do
       class TestHandler1 < Handlers::Base
         handles :a, :b, :c
       end
-      expect(TestHandler1.handlers).to eq [:a, :b, :c]
+      TestHandler1.handlers.should == [:a, :b, :c]
     end
 
     it "should allow multiple handles calls" do
@@ -36,7 +36,7 @@ describe YARD::Handlers::Base do
         handles :b
         handles :c
       end
-      expect(TestHandler2.handlers).to eq [:a, :b, :c]
+      TestHandler2.handlers.should == [:a, :b, :c]
     end
   end
 
@@ -61,9 +61,9 @@ describe YARD::Handlers::Base do
           def bar; end
         end
       eof
-        expect(Registry.at('A').tag(:since).text).to eq "1.0"
-        expect(Registry.at('A#foo').tag(:since).text).to eq "1.0"
-        expect(Registry.at('A#bar').tag(:since).text).to eq "1.1"
+      Registry.at('A').tag(:since).text.should == "1.0"
+      Registry.at('A#foo').tag(:since).text.should == "1.0"
+      Registry.at('A#bar').tag(:since).text.should == "1.1"
       Registry.at('A#bar').tag(:author).should be_nil
     end
   end
@@ -84,8 +84,8 @@ describe YARD::Handlers::Base do
 
       2.times do
         YARD.parse_string 'class Foo; end; def foo; end'
-        expect(GlobalStateHandler1.state).to eq nil
-        expect(GlobalStateHandler2.state).to eq :bar
+        GlobalStateHandler1.state.should == nil
+        GlobalStateHandler2.state.should == :bar
       end
     end
   end if HAVE_RIPPER

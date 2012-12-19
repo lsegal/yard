@@ -4,20 +4,20 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "should parse a module block" do
-    expect(Registry.at(:ModName)).not_to eq nil
-    expect(Registry.at("ModName::OtherModName")).not_to eq nil
+    Registry.at(:ModName).should_not == nil
+    Registry.at("ModName::OtherModName").should_not == nil
   end
 
   it "should attach docstring" do
-    expect(Registry.at("ModName::OtherModName").docstring).to eq "Docstring"
+    Registry.at("ModName::OtherModName").docstring.should == "Docstring"
   end
 
   it "should handle any formatting" do
-    expect(Registry.at(:StressTest)).not_to eq nil
+    Registry.at(:StressTest).should_not == nil
   end
 
   it "should handle complex module names" do
-    expect(Registry.at("A::B")).not_to eq nil
+    Registry.at("A::B").should_not == nil
   end
 
   it "should handle modules in the form ::ModName" do
@@ -25,7 +25,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   end
 
   it "should list mixins in proper order" do
-    expect(Registry.at('D').mixins).to eq [P(:C), P(:B), P(:A)]
+    Registry.at('D').mixins.should == [P(:C), P(:B), P(:A)]
   end
 
   it "should create proper module when constant is in namespace" do

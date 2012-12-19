@@ -19,15 +19,15 @@ describe YARD::CLI::I18n do
     end
 
     it "should read .yardopts by default" do
-      expect(@i18n.use_yardopts_file).to eq true
+      @i18n.use_yardopts_file.should == true
     end
 
     it "should use {lib,app}/**/*.rb and ext/**/*.c as default file glob" do
-      expect(@i18n.files).to eq ['{lib,app}/**/*.rb', 'ext/**/*.c']
+      @i18n.files.should == ['{lib,app}/**/*.rb', 'ext/**/*.c']
     end
 
     it "should only show public visibility by default" do
-      expect(@i18n.visibilities).to eq [:public]
+      @i18n.visibilities.should == [:public]
     end
   end
 
@@ -47,9 +47,9 @@ describe YARD::CLI::I18n do
       @i18n.use_document_file = false
       @i18n.should_receive(:yardopts).at_least(1).times.and_return([])
       @i18n.parse_arguments(arg)
-      expect(@i18n.use_yardopts_file).to eq true
+      @i18n.use_yardopts_file.should == true
       @i18n.parse_arguments('--no-yardopts', arg)
-      expect(@i18n.use_yardopts_file).to eq true
+      @i18n.use_yardopts_file.should == true
     end
 
     should_accept('--yardopts with filename') do |arg|
@@ -57,8 +57,8 @@ describe YARD::CLI::I18n do
       File.should_receive(:read_binary).with('.yardopts_i18n').and_return('')
       @i18n.use_document_file = false
       @i18n.parse_arguments('--yardopts', '.yardopts_i18n')
-      expect(@i18n.use_yardopts_file).to eq true
-      expect(@i18n.options_file).to eq '.yardopts_i18n'
+      @i18n.use_yardopts_file.should == true
+      @i18n.options_file.should == '.yardopts_i18n'
     end
 
     should_accept('--no-yardopts') do |arg|
@@ -66,9 +66,9 @@ describe YARD::CLI::I18n do
       @i18n.use_document_file = false
       @i18n.should_not_receive(:yardopts)
       @i18n.parse_arguments(arg)
-      expect(@i18n.use_yardopts_file).to eq false
+      @i18n.use_yardopts_file.should == false
       @i18n.parse_arguments('--yardopts', arg)
-      expect(@i18n.use_yardopts_file).to eq false
+      @i18n.use_yardopts_file.should == false
     end
 
     should_accept('--exclude') do |arg|
@@ -88,7 +88,7 @@ describe YARD::CLI::I18n do
       @i18n.options_file = "test"
       File.should_receive(:open!).with(File.expand_path("MYPATH"), "wb")
       @i18n.run
-      expect(@i18n.files).to eq ["FILE1", "FILE2"]
+      @i18n.files.should == ["FILE1", "FILE2"]
     end
   end
 

@@ -17,9 +17,9 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       @serializer.should_receive(:deserialize).with('root').and_return({:root => @foo, :A => @bar})
-      expect(@store.load('foo')).to eq true
-      expect(@store.root).to eq @foo
-      expect(@store.get('A')).to eq @bar
+      @store.load('foo').should == true
+      @store.root.should == @foo
+      @store.get('A').should == @bar
     end
 
     it "should load old yardoc format if .yardoc is a file" do
@@ -38,14 +38,14 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
 
-      expect(@store.load('foo')).to eq true
+      @store.load('foo').should == true
     end
 
     it "should return true if .yardoc is loaded (file)" do
       File.should_receive(:directory?).with('myyardoc').and_return(false)
       File.should_receive(:file?).with('myyardoc').and_return(true)
       File.should_receive(:read_binary).with('myyardoc').and_return(Marshal.dump(''))
-      expect(@store.load('myyardoc')).to eq true
+      @store.load('myyardoc').should == true
     end
 
     it "should return true if .yardoc is loaded (directory)" do
@@ -54,15 +54,15 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
-      expect(@store.load('foo')).to eq true
+      @store.load('foo').should == true
     end
 
     it "should return false if .yardoc does not exist" do
-      expect(@store.load('NONEXIST')).to eq false
+      @store.load('NONEXIST').should == false
     end
 
     it "should return false if there is no file to load" do
-      expect(@store.load(nil)).to eq false
+      @store.load(nil).should == false
     end
 
     it "should load checksums if they exist" do
@@ -74,8 +74,8 @@ describe YARD::RegistryStore do
       File.should_receive(:readlines).with('foo/checksums').and_return([
         'file1 CHECKSUM1', '  file2 CHECKSUM2 '
       ])
-      expect(@store.load('foo')).to eq true
-      expect(@store.checksums).to eq({'file1' => 'CHECKSUM1', 'file2' => 'CHECKSUM2'})
+      @store.load('foo').should == true
+      @store.checksums.should == {'file1' => 'CHECKSUM1', 'file2' => 'CHECKSUM2'}
     end
 
     it "should load proxy_types if they exist" do
@@ -85,8 +85,8 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:read_binary).with('foo/proxy_types').and_return(Marshal.dump({'a' => 'b'}))
-      expect(@store.load('foo')).to eq true
-      expect(@store.proxy_types).to eq({'a' => 'b'})
+      @store.load('foo').should == true
+      @store.proxy_types.should == {'a' => 'b'}
     end
 
     it "should load root object if it exists" do
@@ -96,8 +96,8 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(true)
       File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump(@foo))
-      expect(@store.load('foo')).to eq true
-      expect(@store.root).to eq @foo
+      @store.load('foo').should == true
+      @store.root.should == @foo
     end
   end
 
@@ -160,19 +160,19 @@ describe YARD::RegistryStore do
   describe '#put' do
     it "should assign values" do
       @store.put(:YARD, @foo)
-      expect(@store.get(:YARD)).to eq @foo
+      @store.get(:YARD).should == @foo
     end
 
     it "should treat '' as root" do
       @store.put('', @foo)
-      expect(@store.get(:root)).to eq @foo
+      @store.get(:root).should == @foo
     end
   end
 
   describe '#get' do
     it "should hit cache if object exists" do
       @store.put(:YARD, @foo)
-      expect(@store.get(:YARD)).to eq @foo
+      @store.get(:YARD).should == @foo
     end
 
     it "should hit backstore on cache miss and cache is not fully loaded" do
@@ -182,9 +182,9 @@ describe YARD::RegistryStore do
       @store.instance_variable_set("@loaded_objects", 0)
       @store.instance_variable_set("@available_objects", 100)
       @store.instance_variable_set("@serializer", serializer)
-      expect(@store.get(:YARD)).to eq @foo
-      expect(@store.get(:YARD)).to eq @foo
-      expect(@store.instance_variable_get("@loaded_objects")).to eq 1
+      @store.get(:YARD).should == @foo
+      @store.get(:YARD).should == @foo
+      @store.instance_variable_get("@loaded_objects").should == 1
     end
   end
 
@@ -216,32 +216,32 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/object_types').and_return(false)
       @serializer.should_receive(:deserialize).with('root').and_return({:'A#foo' => @foo, :A => @bar})
       @store.load('foo')
-      expect(@store.paths_for_type(:method)).to eq ['#foo']
-      expect(@store.paths_for_type(:class)).to eq ['Bar']
+      @store.paths_for_type(:method).should == ['#foo']
+      @store.paths_for_type(:class).should == ['Bar']
     end
 
     it "should keep track of types when assigning values" do
       @store.put(:abc, @foo)
-      expect(@store.paths_for_type(@foo.type)).to eq ['abc']
+      @store.paths_for_type(@foo.type).should == ['abc']
     end
 
     it "should reassign path if type changes" do
       foo = CodeObjects::ClassObject.new(:root, :Foo)
       @store.put('Foo', foo)
-      expect(@store.get('Foo').type).to eq :class
-      expect(@store.paths_for_type(:class)).to eq ["Foo"]
+      @store.get('Foo').type.should == :class
+      @store.paths_for_type(:class).should == ["Foo"]
       foo = CodeObjects::ModuleObject.new(:root, :Foo)
       @store.put('Foo', foo)
-      expect(@store.get('Foo').type).to eq :module
-      expect(@store.paths_for_type(:class)).to eq []
-      expect(@store.paths_for_type(:module)).to eq ["Foo"]
+      @store.get('Foo').type.should == :module
+      @store.paths_for_type(:class).should == []
+      @store.paths_for_type(:module).should == ["Foo"]
     end
   end
 
   describe '#values_for_type' do
     it "should return all objects with type" do
       @store.put(:abc, @foo)
-      expect(@store.values_for_type(@foo.type)).to eq [@foo]
+      @store.values_for_type(@foo.type).should == [@foo]
     end
   end
 
@@ -264,10 +264,10 @@ describe YARD::RegistryStore do
       serializer.should_receive(:deserialize).with('foo/objects/foo', true).and_return(foomock)
       serializer.should_receive(:deserialize).with('foo/objects/bar', true).and_return(barmock)
       @store.send(:load_all)
-      expect(@store.instance_variable_get("@available_objects")).to eq 2
-      expect(@store.instance_variable_get("@loaded_objects")).to eq 2
-      expect(@store[:Foo]).to eq foomock
-      expect(@store[:Bar]).to eq barmock
+      @store.instance_variable_get("@available_objects").should == 2
+      @store.instance_variable_get("@loaded_objects").should == 2
+      @store[:Foo].should == foomock
+      @store[:Bar].should == barmock
     end
   end
 
@@ -276,14 +276,14 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo.yardoc').and_return(true)
       File.should_receive(:unlink).with('foo.yardoc')
       @store.instance_variable_set("@file", 'foo.yardoc')
-      expect(@store.destroy).to eq true
+      @store.destroy.should == true
     end
 
     it "should destroy dir ending in .yardoc when force=false" do
       File.should_receive(:directory?).with('foo.yardoc').and_return(true)
       FileUtils.should_receive(:rm_rf).with('foo.yardoc')
       @store.instance_variable_set("@file", 'foo.yardoc')
-      expect(@store.destroy).to eq true
+      @store.destroy.should == true
     end
 
     it "should not destroy file/dir not ending in .yardoc when force=false" do
@@ -292,14 +292,14 @@ describe YARD::RegistryStore do
       File.should_not_receive(:unlink).with('foo')
       FileUtils.should_not_receive(:rm_rf).with('foo')
       @store.instance_variable_set("@file", 'foo')
-      expect(@store.destroy).to eq false
+      @store.destroy.should == false
     end
 
     it "should destroy any file/dir when force=true" do
       File.should_receive(:file?).with('foo').and_return(true)
       File.should_receive(:unlink).with('foo')
       @store.instance_variable_set("@file", 'foo')
-      expect(@store.destroy(true)).to eq true
+      @store.destroy(true).should == true
     end
   end
 
@@ -309,7 +309,7 @@ describe YARD::RegistryStore do
       I18n::Locale.should_receive(:new).with("fr").and_return(fr_locale)
       Registry.should_receive(:po_dir).and_return("po")
       fr_locale.should_receive(:load).with("po")
-      expect(@store.locale("fr")).to eq fr_locale
+      @store.locale("fr").should == fr_locale
     end
   end
 end

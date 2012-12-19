@@ -20,7 +20,7 @@ describe YARD::CLI::Config do
       log.should_receive(:puts).twice.with("bar\nbaz")
       run
       run('--list')
-      expect(YARD::Config.options).to eq opts
+      YARD::Config.options.should == opts
     end
   end
 
@@ -29,7 +29,7 @@ describe YARD::CLI::Config do
       YARD::Config.options[:foo] = 'bar'
       log.should_receive(:puts).with('"bar"')
       run 'foo'
-      expect(YARD::Config.options[:foo]).to eq 'bar'
+      YARD::Config.options[:foo].should == 'bar'
     end
   end
 
@@ -37,51 +37,51 @@ describe YARD::CLI::Config do
     it "should accept --reset to set value" do
       YARD::Config.options[:load_plugins] = 'foo'
       run('--reset', 'load_plugins')
-      expect(YARD::Config.options[:load_plugins]).to eq false
+      YARD::Config.options[:load_plugins].should == false
     end
 
     it "should accept --as-list to force single item as list" do
       run('--as-list', 'foo', 'bar')
-      expect(YARD::Config.options[:foo]).to eq ['bar']
+      YARD::Config.options[:foo].should == ['bar']
     end
 
     it "should accept --append to append values to existing key" do
       YARD::Config.options[:foo] = ['bar']
       run('--append', 'foo', 'baz', 'quux')
-      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz', 'quux']
+      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux']
       run('-a', 'foo', 'last')
-      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz', 'quux', 'last']
+      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux', 'last']
     end
 
     it "should turn key into list if --append is used on single item" do
       YARD::Config.options[:foo] = 'bar'
       run('-a', 'foo', 'baz')
-      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz']
+      YARD::Config.options[:foo].should == ['bar', 'baz']
     end
 
     it "should modify item if value is given" do
       run('foo', 'xxx')
-      expect(YARD::Config.options[:foo]).to eq 'xxx'
+      YARD::Config.options[:foo].should == 'xxx'
     end
 
     it "should turn list of values into array of values" do
       run('foo', 'a', 'b', '1', 'true', 'false')
-      expect(YARD::Config.options[:foo]).to eq ['a', 'b', 1, true, false]
+      YARD::Config.options[:foo].should == ['a', 'b', 1, true, false]
     end
 
     it "should turn number into numeric Ruby type" do
       run('foo', '1')
-      expect(YARD::Config.options[:foo]).to eq 1
+      YARD::Config.options[:foo].should == 1
     end
 
     it "should turn true into TrueClass" do
       run('foo', 'true')
-      expect(YARD::Config.options[:foo]).to eq true
+      YARD::Config.options[:foo].should == true
     end
 
     it "should turn false into FalseClass" do
       run('foo', 'false')
-      expect(YARD::Config.options[:foo]).to eq false
+      YARD::Config.options[:foo].should == false
     end
 
     it "should save on modification" do

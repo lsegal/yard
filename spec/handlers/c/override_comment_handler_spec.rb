@@ -10,10 +10,10 @@ describe YARD::Handlers::C::OverrideCommentHandler do
          */
         void
       eof
-      expect(Registry.at('A').type).to eq type
-      expect(Registry.at('A').docstring).to eq 'Foo bar baz'
-      expect(Registry.at('A').file).to eq '(stdin)'
-      expect(Registry.at('A').line).to eq 2
+      Registry.at('A').type.should == type
+      Registry.at('A').docstring.should == 'Foo bar baz'
+      Registry.at('A').file.should == '(stdin)'
+      Registry.at('A').line.should == 2
     end
   end
 
@@ -25,9 +25,9 @@ describe YARD::Handlers::C::OverrideCommentHandler do
        * Foo bar baz
        */
     eof
-    expect(Registry.at('A').docstring).to eq 'Foo bar baz'
-    expect(Registry.at('B').docstring).to eq 'Foo bar baz'
-    expect(Registry.at('C').docstring).to eq 'Foo bar baz'
+    Registry.at('A').docstring.should == 'Foo bar baz'
+    Registry.at('B').docstring.should == 'Foo bar baz'
+    Registry.at('C').docstring.should == 'Foo bar baz'
     Registry.at('C').type == :module
   end
 
@@ -39,8 +39,8 @@ describe YARD::Handlers::C::OverrideCommentHandler do
       void
     eof
     obj = Registry.at('A')
-    expect(obj.type).to eq :class
-    expect(obj.docstring).to eq 'Foo bar baz'
-    expect(obj.superclass).to eq P('B')
+    obj.type.should == :class
+    obj.docstring.should == 'Foo bar baz'
+    obj.superclass.should == P('B')
   end
 end

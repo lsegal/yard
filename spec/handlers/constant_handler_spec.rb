@@ -4,7 +4,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   before(:all) { parse_file :constant_handler_001, __FILE__ }
 
   it "should not parse constants inside methods" do
-    expect(Registry.at("A::B::SOMECONSTANT").source).to eq "SOMECONSTANT= \"hello\""
+    Registry.at("A::B::SOMECONSTANT").source.should == "SOMECONSTANT= \"hello\""
   end
 
   it "should only parse valid constants" do
@@ -12,7 +12,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   end
 
   it "should maintain newlines" do
-    expect(Registry.at("A::B::MYCONSTANT").value.gsub("\r", "")).to eq "A +\nB +\nC +\nD"
+    Registry.at("A::B::MYCONSTANT").value.gsub("\r", "").should == "A +\nB +\nC +\nD"
   end
 
   it "should turn Const = Struct.new(:sym) into class Const with attr :sym" do
@@ -48,14 +48,14 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   it "should maintain docstrings on structs defined via constants" do
     obj = Registry.at("DocstringStruct")
     obj.should_not be_nil
-    expect(obj.docstring).to eq "A crazy struct."
+    obj.docstring.should == "A crazy struct."
     obj.attributes[:instance].should_not be_empty
     a1 = Registry.at("DocstringStruct#bar")
     a2 = Registry.at("DocstringStruct#baz")
-    expect(a1.docstring).to eq "An attr"
-    expect(a1.tag(:return).types).to eq ["String"]
-    expect(a2.docstring).to eq "Another attr"
-    expect(a2.tag(:return).types).to eq ["Number"]
+    a1.docstring.should == "An attr"
+    a1.tag(:return).types.should == ["String"]
+    a2.docstring.should == "Another attr"
+    a2.tag(:return).types.should == ["Number"]
   end
 
   it "should raise undocumentable error in 1.9 parser for Struct.new assignment to non-const" do

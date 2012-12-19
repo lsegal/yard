@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 include YARD::Templates
 
-$COPY = nil
-
 def only_copy?(result, example, type)
   if $COPY == :all || $COPY == example
     puts(result) unless $COPYT && $COPYT != type

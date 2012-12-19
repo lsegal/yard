@@ -4,13 +4,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateConstan
   before(:all) { parse_file :private_constant_handler_001, __FILE__ }
 
   it "should handle private_constant statement" do
-    expect(Registry.at('A::Foo').visibility).to eq :private
-    expect(Registry.at('A::B').visibility).to eq :private
-    expect(Registry.at('A::C').visibility).to eq :private
+    Registry.at('A::Foo').visibility.should == :private
+    Registry.at('A::B').visibility.should == :private
+    Registry.at('A::C').visibility.should == :private
   end
 
   it "should make all other constants public" do
-    expect(Registry.at('A::D').visibility).to eq :public
+    Registry.at('A::D').visibility.should == :public
   end
 
   it "should fail if parameter is not String, Symbol or Constant" do

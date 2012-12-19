@@ -49,8 +49,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
   end
 
   it "should maintain visibility and scope state inside condition" do
-    expect(Registry.at('A#m').visibility).to eq :private
-    expect(Registry.at('A#mnot').visibility).to eq :private
+    Registry.at('A#m').visibility.should == :private
+    Registry.at('A#mnot').visibility.should == :private
   end
 
   it "should not fail on complex conditions" do

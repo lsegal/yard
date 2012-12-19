@@ -5,7 +5,7 @@ describe YARD::Tags::DefaultFactory do
 
   describe '#parse_tag' do
     it "should not have trailing whitespace on a regular freeform tag" do
-      expect(@f.parse_tag('api', 'private     ').text).to eq "private"
+      @f.parse_tag('api', 'private     ').text.should == "private"
     end
   end
 
@@ -15,30 +15,30 @@ describe YARD::Tags::DefaultFactory do
     end
 
     it "should handle one type" do
-      expect(parse_types('[A]')).to eq [nil, ['A'], ""]
+      parse_types('[A]').should == [nil, ['A'], ""]
     end
 
     it "should handle a list of types" do
-      expect(parse_types('[A, B, C]')).to eq [nil, ['A', 'B', 'C'], ""]
+      parse_types('[A, B, C]').should == [nil, ['A', 'B', 'C'], ""]
     end
 
     it "should handle ducktypes" do
-      expect(parse_types('[#foo]')).to eq [nil, ['#foo'], '']
+      parse_types('[#foo]').should == [nil, ['#foo'], '']
     end
 
     %w(#foo= #<< #<=> #>> #== #=== Array<#<=>> Array<#==>).each do |meth|
       it "should handle ducktypes with special method name #{meth}" do
-        expect(parse_types("[#{meth}]")).to eq [nil, [meth], '']
+        parse_types("[#{meth}]").should == [nil, [meth], '']
       end
     end
 
     it "should only parse #ducktypes inside brackets" do
-      expect(parse_types("#ducktype")).to eq [nil, nil, '#ducktype']
+      parse_types("#ducktype").should == [nil, nil, '#ducktype']
     end
 
     it "should return the text before and after the type list" do
-      expect(parse_types(' b <String> description')).to eq ['b', ['String'], 'description']
-      expect(parse_types('b c <String> description (test)')).to eq [nil, nil, 'b c <String> description (test)']
+      parse_types(' b <String> description').should == ['b', ['String'], 'description']
+      parse_types('b c <String> description (test)').should == [nil, nil, 'b c <String> description (test)']
     end
 
     it "should handle a complex list of types" do
@@ -51,20 +51,20 @@ describe YARD::Tags::DefaultFactory do
       b = parse_types('<a,b,c>')
       c = parse_types('(a,b,c)')
       d = parse_types('{a,b,c}')
-      expect(a).to eq b
-      expect(b).to eq c
-      expect(c).to eq d
+      a.should == b
+      b.should == c
+      c.should == d
       a.should include(['a','b','c'])
     end
 
     it "should return the text before the type list as the last element" do
-      expect(parse_types('b[x, y, z]')).to eq ['b', ['x', 'y', 'z'], '']
-      expect(parse_types('  ! <x>')).to eq ["!", ['x'], '']
+      parse_types('b[x, y, z]').should == ['b', ['x', 'y', 'z'], '']
+      parse_types('  ! <x>').should == ["!", ['x'], '']
     end
 
     it "should return text unparsed if there is no type list" do
-      expect(parse_types('')).to eq [nil, nil, '']
-      expect(parse_types('[]')).to eq [nil, nil, '[]']
+      parse_types('').should == [nil, nil, '']
+      parse_types('[]').should == [nil, nil, '[]']
     end
 
     it "should allow A => B syntax" do
@@ -136,17 +136,17 @@ describe YARD::Tags::DefaultFactory do
 
     it "should have a name before tag info" do
       t = parse_options("xyz key [Types] (default) description")
-      expect(t.tag_name).to eq 'option'
-      expect(t.name).to eq 'xyz'
+      t.tag_name.should == 'option'
+      t.name.should == 'xyz'
     end
 
     it "should parse the rest of the tag like DefaultTag" do
       t = parse_options("xyz key [Types] (default) description")
       t.pair.should be_instance_of(Tags::DefaultTag)
-      expect(t.pair.types).to eq ["Types"]
-      expect(t.pair.name).to eq "key"
-      expect(t.pair.defaults).to eq ["default"]
-      expect(t.pair.text).to eq "description"
+      t.pair.types.should == ["Types"]
+      t.pair.name.should == "key"
+      t.pair.defaults.should == ["default"]
+      t.pair.text.should == "description"
     end
   end
 end

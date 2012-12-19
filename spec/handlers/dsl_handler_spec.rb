@@ -8,7 +8,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj = Registry.at('Foo#attr1')
     obj.should_not be_nil
     obj.should be_reader
-    expect(obj.tag(:return).types).to eq ['Numeric']
+    obj.tag(:return).types.should == ['Numeric']
     Registry.at('Foo#attr1=').should be_nil
   end
 
@@ -36,20 +36,20 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   it "should default to creating an instance method for any DSL method with special tags" do
     obj = Registry.at('Foo#implicit0')
     obj.should_not be_nil
-    expect(obj.docstring).to eq "IMPLICIT METHOD!"
-    expect(obj.tag(:return).types).to eq ['String']
+    obj.docstring.should == "IMPLICIT METHOD!"
+    obj.tag(:return).types.should == ['String']
   end
 
   it "should recognize implicit docstring when it has scope tag" do
     obj = Registry.at("Foo.implicit1")
     obj.should_not be_nil
-    expect(obj.scope).to eq :class
+    obj.scope.should == :class
   end
 
   it "should recognize implicit docstring when it has visibility tag" do
     obj = Registry.at("Foo#implicit2")
     obj.should_not be_nil
-    expect(obj.visibility).to eq :protected
+    obj.visibility.should == :protected
   end
 
   it "should not recognize implicit docstring with any other normal tag" do
@@ -60,25 +60,25 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   it "should set the method name when using @!method" do
     obj = Registry.at('Foo.xyz')
     obj.should_not be_nil
-    expect(obj.signature).to eq 'def xyz(a, b, c)'
-    expect(obj.parameters).to eq [['a', nil], ['b', nil], ['c', nil]]
-    expect(obj.source).to eq 'foo_bar'
-    expect(obj.docstring).to eq 'The foo method'
+    obj.signature.should == 'def xyz(a, b, c)'
+    obj.parameters.should == [[:a, nil], [:b, nil], [:c, nil]]
+    obj.source.should == 'foo_bar'
+    obj.docstring.should == 'The foo method'
   end
 
   it "should allow setting of @!scope" do
-    expect(Registry.at('Foo.xyz').scope).to eq :class
+    Registry.at('Foo.xyz').scope.should == :class
   end
 
   it "should create module function if @!scope is module" do
     mod_c = Registry.at('Foo.modfunc1')
     mod_i = Registry.at('Foo#modfunc1')
-    expect(mod_c.scope).to eq :class
-    expect(mod_i.visibility).to eq :private
+    mod_c.scope.should == :class
+    mod_i.visibility.should == :private
   end
 
   it "should allow setting of @!visibility" do
-    expect(Registry.at('Foo.xyz').visibility).to eq :protected
+    Registry.at('Foo.xyz').visibility.should == :protected
   end
 
   it "should ignore DSL methods without tags" do
@@ -99,62 +99,63 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
 
   it "should handle macros with no parameters to expand" do
     Registry.at('Foo#none').should_not be_nil
-    expect(Registry.at('Baz#none').signature).to eq 'def none(foo, bar)'
+    Registry.at('Baz#none').signature.should == 'def none(foo, bar)'
   end
 
   it "should expand $N on method definitions" do
-    expect(Registry.at('Foo#regular_meth').docstring).to eq 'a b c'
+    Registry.at('Foo#regular_meth').docstring.should == 'a b c'
   end
 
   it "should apply new macro docstrings on new objects" do
     obj = Registry.at('Foo#name')
     obj.should_not be_nil
-    expect(obj.source).to eq 'property :name, String, :a, :b, :c'
-    expect(obj.signature).to eq 'def name(a, b, c)'
-    expect(obj.docstring).to eq 'A property that is awesome.'
-    expect(obj.tag(:param).name).to eq 'a'
-    expect(obj.tag(:param).text).to eq 'first parameter'
-    expect(obj.tag(:return).types).to eq ['String']
-    expect(obj.tag(:return).text).to eq 'the property name'
+    obj.source.should == 'property :name, String, :a, :b, :c'
+    obj.signature.should == 'def name(a, b, c)'
+    obj.docstring.should == 'A property that is awesome.'
+    obj.tag(:param).name.should == 'a'
+    obj.tag(:param).text.should == 'first parameter'
+    obj.tag(:return).types.should == ['String']
+    obj.tag(:return).text.should == 'the property name'
   end
 
   it "should allow reuse of named macros" do
     obj = Registry.at('Foo#age')
     obj.should_not be_nil
-    expect(obj.source).to eq 'property :age, Fixnum, :value'
-    expect(obj.signature).to eq 'def age(value)'
-    expect(obj.docstring).to eq 'A property that is awesome.'
-    expect(obj.tag(:param).name).to eq 'value'
-    expect(obj.tag(:param).text).to eq 'first parameter'
-    expect(obj.tag(:return).types).to eq ['Fixnum']
-    expect(obj.tag(:return).text).to eq 'the property age'
+    obj.source.should == 'property :age, Fixnum, :value'
+    obj.signature.should == 'def age(value)'
+    obj.docstring.should == 'A property that is awesome.'
+    obj.tag(:param).name.should == 'value'
+    obj.tag(:param).text.should == 'first parameter'
+    obj.tag(:return).types.should == ['Fixnum']
+    obj.tag(:return).text.should == 'the property age'
   end
 
   it "should know about method information on DSL with macro expansion" do
     Registry.at('Foo#right_name').should_not be_nil
-    expect(Registry.at('Foo#right_name').source).to eq 'implicit_with_different_method_name :wrong, :right'
+    Registry.at('Foo#right_name').source.should ==
+      'implicit_with_different_method_name :wrong, :right'
     Registry.at('Foo#wrong_name').should be_nil
   end
 
   it "should use attached macros" do
     macro = CodeObjects::MacroObject.find('parser')
-    expect(macro.macro_data).to eq "@!method $1(opts = {})\n@return NOTHING!"
+    macro.macro_data.should == "@!method $1(opts = {})\n@return NOTHING!"
     macro.should_not be_nil
     macro.should be_attached
-    expect(macro.method_object).to eq P('Foo.parser')
+    macro.method_object.should == P('Foo.parser')
     obj = Registry.at('Foo#c_parser')
     obj.should_not be_nil
-    expect(obj.docstring).to eq ""
-    expect(obj.signature).to eq "def c_parser(opts = {})"
-    expect(obj.docstring.tag(:return).text).to eq "NOTHING!"
+    obj.docstring.should == ""
+    obj.signature.should == "def c_parser(opts = {})"
+    obj.docstring.tag(:return).text.should == "NOTHING!"
   end
 
   it "should append docstring on DSL method to attached macro" do
     obj = Registry.at('Foo#d_parser')
     obj.should_not be_nil
-    expect(obj.docstring).to eq "Another docstring"
-    expect(obj.signature).to eq "def d_parser(opts = {})"
-    expect(obj.docstring.tag(:return).text).to eq "NOTHING!"
+    obj.docstring.should == "Another docstring"
+    obj.signature.should == "def d_parser(opts = {})"
+    obj.docstring.tag(:return).text.should == "NOTHING!"
   end
 
   it "should only use attached macros on methods defined in inherited hierarchy" do
@@ -165,13 +166,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   it "should handle top-level DSL methods" do
     obj = Registry.at('#my_other_method')
     obj.should_not be_nil
-    expect(obj.docstring).to eq "Docstring for method"
+    obj.docstring.should == "Docstring for method"
   end
 
   it "should handle Constant.foo syntax" do
     obj = Registry.at('#beep')
     obj.should_not be_nil
-    expect(obj.signature).to eq 'def beep(a, b, c)'
+    obj.signature.should == 'def beep(a, b, c)'
   end
 
   it "should not detect implicit macros with invalid method names" do

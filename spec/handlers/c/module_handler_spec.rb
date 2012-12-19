@@ -3,12 +3,12 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe YARD::Handlers::C::ClassHandler do
   it "should register modules" do
     parse_init 'mFoo = rb_define_module("Foo");'
-    expect(Registry.at('Foo').type).to eq :module
+    Registry.at('Foo').type.should == :module
   end
 
   it "should register classes under namespaces" do
     parse_init 'mFoo = rb_define_module_under(mBar, "Foo");'
-    expect(Registry.at('Bar::Foo').type).to eq :module
+    Registry.at('Bar::Foo').type.should == :module
   end
 
   it "should remember symbol defined with class" do
@@ -16,7 +16,7 @@ describe YARD::Handlers::C::ClassHandler do
       cXYZ = rb_define_module("Foo");
       rb_define_method(cXYZ, "bar", bar, 0);
     eof
-    expect(Registry.at('Foo').type).to eq :module
+    Registry.at('Foo').type.should == :module
     Registry.at('Foo#bar').should_not be_nil
   end
 
@@ -32,7 +32,7 @@ describe YARD::Handlers::C::ClassHandler do
     parse_init(<<-eof)
       mFoo = rb_define_module("Foo");
     eof
-    expect(Registry.at('Foo').file).to eq '(stdin)'
-    expect(Registry.at('Foo').line).to eq 2
+    Registry.at('Foo').file.should == '(stdin)'
+    Registry.at('Foo').line.should == 2
   end
 end

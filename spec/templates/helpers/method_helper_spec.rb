@@ -10,7 +10,7 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yield blah
         def foo(&block); end
       eof
-        expect(format_args(Registry.at('#foo'))).to eq ''
+      format_args(Registry.at('#foo')).should == ''
     end
 
     it "should not show &blockarg if no @param tag and has @yieldparam" do
@@ -18,7 +18,7 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yieldparam blah test
         def foo(&block); end
       eof
-        expect(format_args(Registry.at('#foo'))).to eq ''
+      format_args(Registry.at('#foo')).should == ''
     end
 
     it "should show &blockarg if @param block is documented (even with @yield)" do
@@ -28,7 +28,7 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @param block test
         def foo(&block) end
       eof
-        expect(format_args(Registry.at('#foo'))).to eq '(&block)'
+      format_args(Registry.at('#foo')).should == '(&block)'
     end
   end
 
@@ -39,7 +39,7 @@ describe YARD::Templates::Helpers::MethodHelper do
       YARD.parse_string <<-'eof'
         def foo; yield(a, b, c) end
       eof
-        expect(format_block(Registry.at('#foo'))).to eq "{|a, b, c| ... }"
+      format_block(Registry.at('#foo')).should == "{|a, b, c| ... }"
     end
 
     it "should show block for method with @yieldparam tags" do
@@ -47,7 +47,7 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yieldparam _self me!
         def foo; end
       eof
-        expect(format_block(Registry.at('#foo'))).to eq "{|_self| ... }"
+      format_block(Registry.at('#foo')).should == "{|_self| ... }"
     end
 
     it "should show block for method with @yield but no types" do
@@ -59,8 +59,8 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yield blah
         def foo2; end
       eof
-        expect(format_block(Registry.at('#foo'))).to eq "{|a| ... }"
-        expect(format_block(Registry.at('#foo2'))).to eq "{ ... }"
+      format_block(Registry.at('#foo')).should == "{|a| ... }"
+      format_block(Registry.at('#foo2')).should == "{ ... }"
     end
 
     it "should show block for method with @yield and types" do
@@ -69,7 +69,7 @@ describe YARD::Templates::Helpers::MethodHelper do
         # @yieldparam a
         def foo; end
       eof
-        expect(format_block(Registry.at('#foo'))).to eq "{|a, b, c| ... }"
+      format_block(Registry.at('#foo')).should == "{|a, b, c| ... }"
     end
   end
 end

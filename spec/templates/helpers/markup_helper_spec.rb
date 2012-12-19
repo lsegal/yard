@@ -26,26 +26,26 @@ describe YARD::Templates::Helpers::MarkupHelper do
 
     it "should exit on an invalid markup type" do
       @gen.options.markup = :invalid
-      expect(@gen.load_markup_provider).to eq false
+      @gen.load_markup_provider.should == false
     end
 
     it "should fail on when an invalid markup provider is specified" do
       @gen.options.update(:markup => :markdown, :markup_provider => :invalid)
-      expect(@gen.load_markup_provider).to eq false
-      expect(@gen.markup_class).to eq nil
+      @gen.load_markup_provider.should == false
+      @gen.markup_class.should == nil
     end
 
     it "should load RDocMarkup if rdoc is specified and it is installed" do
       @gen.options.markup = :rdoc
-      expect(@gen.load_markup_provider).to eq true
-      expect(@gen.markup_class).to eq YARD::Templates::Helpers::Markup::RDocMarkup
+      @gen.load_markup_provider.should == true
+      @gen.markup_class.should == YARD::Templates::Helpers::Markup::RDocMarkup
     end
 
     it "should fail if RDoc cannot be loaded" do
       @gen.options.markup = :rdoc
       @gen.should_receive(:eval).with('::YARD::Templates::Helpers::Markup::RDocMarkup').and_raise(NameError)
-      expect(@gen.load_markup_provider).to eq false
-      expect(@gen.markup_provider).to eq nil
+      @gen.load_markup_provider.should == false
+      @gen.markup_provider.should == nil
     end
 
     it "should search through available markup providers for the markup type if none is set" do
@@ -56,8 +56,8 @@ describe YARD::Templates::Helpers::MarkupHelper do
       # this only raises an exception because we mock out require to avoid
       # loading any libraries but our implementation tries to return the library
       # name as a constant
-      expect(@gen.load_markup_provider).to eq true
-      expect(@gen.markup_provider).to eq :redcarpet
+      @gen.load_markup_provider.should == true
+      @gen.markup_provider.should == :redcarpet
     end
 
     it "should continue searching if some of the providers are unavailable" do
@@ -73,7 +73,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
       # loading any libraries but our implementation tries to return the library
       # name as a constant
       @gen.load_markup_provider.should rescue nil
-      expect(@gen.markup_provider).to eq :"rpeg-markdown"
+      @gen.markup_provider.should == :"rpeg-markdown"
     end
 
     it "should override the search if `:markup_provider` is set in options" do
@@ -81,7 +81,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
       @gen.should_receive(:eval).with('::RDiscount').and_return(true)
       @gen.options.update(:markup => :markdown, :markup_provider => :rdiscount)
       @gen.load_markup_provider.should rescue nil
-        expect(@gen.markup_provider).to eq :rdiscount
+      @gen.markup_provider.should == :rdiscount
     end
 
     it "should fail if no provider is found" do
@@ -89,22 +89,22 @@ describe YARD::Templates::Helpers::MarkupHelper do
         @gen.should_receive(:require).with(p[:lib].to_s).and_raise(LoadError)
       end
       @gen.options.markup = :markdown
-        expect(@gen.load_markup_provider).to eq false
-        expect(@gen.markup_provider).to eq nil
+      @gen.load_markup_provider.should == false
+      @gen.markup_provider.should == nil
     end
 
     it "should fail if overridden provider is not found" do
       @gen.should_receive(:require).with('rdiscount').and_raise(LoadError)
       @gen.options.update(:markup => :markdown, :markup_provider => :rdiscount)
-        expect(@gen.load_markup_provider).to eq false
-        expect(@gen.markup_provider).to eq nil
+      @gen.load_markup_provider.should == false
+      @gen.markup_provider.should == nil
     end
 
     it "should fail if the markup type is not found" do
       log.should_receive(:error).with(/Invalid markup/)
       @gen.options.markup = :xxx
-        expect(@gen.load_markup_provider).to eq false
-        expect(@gen.markup_provider).to eq nil
+      @gen.load_markup_provider.should == false
+      @gen.markup_provider.should == nil
     end
   end
 
@@ -112,22 +112,22 @@ describe YARD::Templates::Helpers::MarkupHelper do
     include YARD::Templates::Helpers::MarkupHelper
 
     it "should look for a shebang line" do
-        expect(markup_for_file("#!text\ntext here", 'file.rdoc')).to eq :text
+      markup_for_file("#!text\ntext here", 'file.rdoc').should == :text
     end
 
     it "should return the default markup type if no shebang is found or no valid ext is found" do
       stub!(:options).and_return(Options.new.update(:markup => :default_type))
-        expect(markup_for_file('', 'filename')).to eq :default_type
+      markup_for_file('', 'filename').should == :default_type
     end
 
     it "should look for a file extension if no shebang is found" do
-        expect(markup_for_file('', 'filename.MD')).to eq :markdown
+      markup_for_file('', 'filename.MD').should == :markdown
     end
 
     Templates::Helpers::MarkupHelper::MARKUP_EXTENSIONS.each do |type, exts|
       exts.each do |ext|
         it "should recognize .#{ext} as #{type} markup type" do
-          expect(markup_for_file('', "filename.#{ext}")).to eq type
+          markup_for_file('', "filename.#{ext}").should == type
         end
       end
     end

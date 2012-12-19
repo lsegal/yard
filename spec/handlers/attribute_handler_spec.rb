@@ -8,18 +8,18 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandl
     if read
       Registry.at(rname).should be_instance_of(CodeObjects::MethodObject)
     else
-      expect(Registry.at(rname)).to eq nil
+      Registry.at(rname).should == nil
     end
 
     if write
       Registry.at(wname).should be_kind_of(CodeObjects::MethodObject)
     else
-      expect(Registry.at(wname)).to eq nil
+      Registry.at(wname).should == nil
     end
 
     attrs = Registry.at(namespace).attributes[scope][name]
-    expect(attrs[:read]).to eq(read ? Registry.at(rname) : nil)
-    expect(attrs[:write]).to eq(write ? Registry.at(wname) : nil)
+    attrs[:read].should == (read ? Registry.at(rname) : nil)
+    attrs[:write].should == (write ? Registry.at(wname) : nil)
   end
 
   it "should parse attributes inside modules too" do
@@ -55,24 +55,24 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandl
   end
 
   it "should set the correct docstring if one is supplied" do
-    expect(Registry.at("B#b").docstring).to eq "Docstring"
-    expect(Registry.at("B#c").docstring).to eq "Docstring"
-    expect(Registry.at("B#d").docstring).to eq "Docstring"
+    Registry.at("B#b").docstring.should == "Docstring"
+    Registry.at("B#c").docstring.should == "Docstring"
+    Registry.at("B#d").docstring.should == "Docstring"
   end
 
   it "should be able to differentiate between class and instance attributes" do
-    expect(P('B').class_attributes[:z][:read].scope).to eq :class
-    expect(P('B').instance_attributes[:z][:read].scope).to eq :instance
+    P('B').class_attributes[:z][:read].scope.should == :class
+    P('B').instance_attributes[:z][:read].scope.should == :instance
   end
 
   it "should respond true in method's #is_attribute?" do
-    expect(P('B#a').is_attribute?).to eq true
-    expect(P('B#a=').is_attribute?).to eq true
+    P('B#a').is_attribute?.should == true
+    P('B#a=').is_attribute?.should == true
   end
 
   it "should not return true for #is_explicit? in created methods" do
     Registry.at(:B).meths.each do |meth|
-      expect(meth.is_explicit?).to eq false
+      meth.is_explicit?.should == false
     end
   end
 
@@ -81,14 +81,14 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandl
   end
 
   it "should add existing reader method as part of attr_writer combo" do
-    expect(Registry.at('C#foo=').attr_info[:read]).to eq Registry.at('C#foo')
+    Registry.at('C#foo=').attr_info[:read].should == Registry.at('C#foo')
   end
 
   it "should add existing writer method as part of attr_reader combo" do
-    expect(Registry.at('C#foo').attr_info[:write]).to eq Registry.at('C#foo=')
+    Registry.at('C#foo').attr_info[:write].should == Registry.at('C#foo=')
   end
 
   it "should maintain visibility for attr_reader" do
-    expect(Registry.at('D#parser').visibility).to eq :protected
+    Registry.at('D#parser').visibility.should == :protected
   end
 end

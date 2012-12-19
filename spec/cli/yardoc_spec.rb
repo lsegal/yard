@@ -23,55 +23,55 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should use cache by default" do
-      expect(@yardoc.use_cache).to eq false
+      @yardoc.use_cache.should == false
     end
 
     it "print statistics by default" do
-      expect(@yardoc.statistics).to eq true
+      @yardoc.statistics.should == true
     end
 
     it "should generate output by default" do
-      expect(@yardoc.generate).to eq true
+      @yardoc.generate.should == true
     end
 
     it "should read .yardopts by default" do
-      expect(@yardoc.use_yardopts_file).to eq true
+      @yardoc.use_yardopts_file.should == true
     end
 
     it "should read .document by default" do
-      expect(@yardoc.use_document_file).to eq true
+      @yardoc.use_document_file.should == true
     end
 
     it "should use {lib,app}/**/*.rb and ext/**/*.c as default file glob" do
-      expect(@yardoc.files).to eq ['{lib,app}/**/*.rb', 'ext/**/*.c']
+      @yardoc.files.should == ['{lib,app}/**/*.rb', 'ext/**/*.c']
     end
 
     it "should use rdoc as default markup type (but falls back on none)" do
-      expect(@yardoc.options.markup).to eq :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
 
     it "should use default as default template" do
-      expect(@yardoc.options.template).to eq :default
+      @yardoc.options.template.should == :default
     end
 
     it "should use HTML as default format" do
-      expect(@yardoc.options.format).to eq :html
+      @yardoc.options.format.should == :html
     end
 
     it "should use 'Object' as default return type" do
-      expect(@yardoc.options.default_return).to eq 'Object'
+      @yardoc.options.default_return.should == 'Object'
     end
 
     it "should not hide void return types by default" do
-      expect(@yardoc.options.hide_void_return).to eq false
+      @yardoc.options.hide_void_return.should == false
     end
 
     it "should only show public visibility by default" do
-      expect(@yardoc.visibilities).to eq [:public]
+      @yardoc.visibilities.should == [:public]
     end
 
     it "should not list objects by default" do
-      expect(@yardoc.list).to eq false
+      @yardoc.list.should == false
     end
 
     it "should not embed mixins by default" do
@@ -96,24 +96,24 @@ describe YARD::CLI::Yardoc do
 
     should_accept('--single-db') do |arg|
       @yardoc.parse_arguments(arg)
-      expect(Registry.single_object_db).to eq true
+      Registry.single_object_db.should == true
       Registry.single_object_db = nil
     end
 
     should_accept('--no-single-db') do |arg|
       @yardoc.parse_arguments(arg)
-      expect(Registry.single_object_db).to eq false
+      Registry.single_object_db.should == false
       Registry.single_object_db = nil
     end
 
     should_accept('-c', '--use-cache') do |arg|
       @yardoc.parse_arguments(arg)
-      expect(@yardoc.use_cache).to eq true
+      @yardoc.use_cache.should == true
     end
 
     should_accept('--no-cache') do |arg|
       @yardoc.parse_arguments(arg)
-      expect(@yardoc.use_cache).to eq false
+      @yardoc.use_cache.should == false
     end
 
     should_accept('--yardopts') do |arg|
@@ -121,9 +121,9 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = false
       @yardoc.should_receive(:yardopts).at_least(1).times.and_return([])
       @yardoc.parse_arguments(arg)
-      expect(@yardoc.use_yardopts_file).to eq true
+      @yardoc.use_yardopts_file.should == true
       @yardoc.parse_arguments('--no-yardopts', arg)
-      expect(@yardoc.use_yardopts_file).to eq true
+      @yardoc.use_yardopts_file.should == true
     end
 
     should_accept('--yardopts with filename') do |arg|
@@ -131,8 +131,8 @@ describe YARD::CLI::Yardoc do
       File.should_receive(:read_binary).with('.foobar').and_return('')
       @yardoc.use_document_file = false
       @yardoc.parse_arguments('--yardopts', '.foobar')
-      expect(@yardoc.use_yardopts_file).to eq true
-      expect(@yardoc.options_file).to eq '.foobar'
+      @yardoc.use_yardopts_file.should == true
+      @yardoc.options_file.should == '.foobar'
     end
 
     should_accept('--no-yardopts') do |arg|
@@ -140,9 +140,9 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = false
       @yardoc.should_not_receive(:yardopts)
       @yardoc.parse_arguments(arg)
-      expect(@yardoc.use_yardopts_file).to eq false
+      @yardoc.use_yardopts_file.should == false
       @yardoc.parse_arguments('--yardopts', arg)
-      expect(@yardoc.use_yardopts_file).to eq false
+      @yardoc.use_yardopts_file.should == false
     end
 
     should_accept('--document') do |arg|
@@ -150,7 +150,7 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_yardopts_file = false
       @yardoc.should_receive(:support_rdoc_document_file!).and_return([])
       @yardoc.parse_arguments('--no-document', arg)
-      expect(@yardoc.use_document_file).to eq true
+      @yardoc.use_document_file.should == true
     end
 
     should_accept('--no-document') do |arg|
@@ -158,12 +158,12 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_yardopts_file = false
       @yardoc.should_not_receive(:support_rdoc_document_file!)
       @yardoc.parse_arguments('--document', arg)
-      expect(@yardoc.use_document_file).to eq false
+      @yardoc.use_document_file.should == false
     end
 
     should_accept('-b', '--db') do |arg|
       @yardoc.parse_arguments(arg, 'test')
-      expect(Registry.yardoc_file).to eq 'test'
+      Registry.yardoc_file.should == 'test'
       Registry.yardoc_file = '.yardoc'
     end
 
@@ -187,7 +187,7 @@ describe YARD::CLI::Yardoc do
   describe 'Output options' do
     it "should accept --title" do
       @yardoc.parse_arguments('--title', 'hello world')
-      expect(@yardoc.options.title).to eq 'hello world'
+      @yardoc.options.title.should == 'hello world'
     end
 
     it "should allow --title to have multiple spaces in .yardopts" do
@@ -195,48 +195,48 @@ describe YARD::CLI::Yardoc do
       @yardoc.options_file = "test"
       @yardoc.use_yardopts_file = true
       @yardoc.run
-      expect(@yardoc.options.title).to eq "Foo Bar"
+      @yardoc.options.title.should == "Foo Bar"
     end
 
     it "should alias --main to the --readme flag" do
       readme = File.join(File.dirname(__FILE__),'..','..','README.md')
 
       @yardoc.parse_arguments('--main', readme)
-      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new(readme, '')
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new(readme, '')
     end
 
     it "should select a markup provider when --markup-provider or -mp is set" do
       @yardoc.parse_arguments("-M", "test")
-      expect(@yardoc.options.markup_provider).to eq :test
+      @yardoc.options.markup_provider.should == :test
       @yardoc.parse_arguments("--markup-provider", "test2")
-      expect(@yardoc.options.markup_provider).to eq :test2
+      @yardoc.options.markup_provider.should == :test2
     end
 
     it "should select a markup format when -m is set" do
       @yardoc.should_receive(:verify_markup_options).and_return(true)
       @yardoc.generate = true
       @yardoc.parse_arguments('-m', 'markdown')
-      expect(@yardoc.options.markup).to eq :markdown
+      @yardoc.options.markup.should == :markdown
     end
 
     it "should accept --default-return" do
-      @yardoc.parse_arguments(*%w( --default-return XYZ ))
-      expect(@yardoc.options.default_return).to eq "XYZ"
+      @yardoc.parse_arguments *%w( --default-return XYZ )
+      @yardoc.options.default_return.should == "XYZ"
     end
 
     it "should allow --hide-void-return to be set" do
-      @yardoc.parse_arguments(*%w( --hide-void-return ))
+      @yardoc.parse_arguments *%w( --hide-void-return )
       @yardoc.options.hide_void_return.should be_true
     end
 
     it "should accept --embed-mixins" do
-      @yardoc.parse_arguments(*%w( --embed-mixins ))
-      expect(@yardoc.options.embed_mixins).to eq ['*']
+      @yardoc.parse_arguments *%w( --embed-mixins )
+      @yardoc.options.embed_mixins.should == ['*']
     end
 
     it "should accept --embed-mixin MODULE" do
-      @yardoc.parse_arguments(*%w( --embed-mixin MyModule ))
-      expect(@yardoc.options.embed_mixins).to eq ['MyModule']
+      @yardoc.parse_arguments *%w( --embed-mixin MyModule )
+      @yardoc.options.embed_mixins.should == ['MyModule']
     end
 
     it "should generate all objects with --use-cache" do
@@ -244,13 +244,13 @@ describe YARD::CLI::Yardoc do
       Registry.should_receive(:load)
       Registry.should_receive(:load_all)
       @yardoc.stub!(:generate).and_return(true)
-      @yardoc.run(*%w( --use-cache ))
+      @yardoc.run *%w( --use-cache )
     end
 
     it "should not print statistics with --no-stats" do
       @yardoc.stub!(:statistics).and_return(false)
       CLI::Stats.should_not_receive(:new)
-      @yardoc.run(*%w( --no-stats ))
+      @yardoc.run *%w( --no-stats )
     end
 
     describe '--asset' do
@@ -261,33 +261,33 @@ describe YARD::CLI::Yardoc do
 
       it "should copy assets to output directory" do
         FileUtils.should_receive(:cp_r).with('a', 'doc/a')
-        @yardoc.run(*%w( --asset a ))
-        expect(@yardoc.assets).to eq({'a' => 'a'})
+        @yardoc.run *%w( --asset a )
+        @yardoc.assets.should == {'a' => 'a'}
       end
 
       it "should allow multiple --asset options" do
         FileUtils.should_receive(:cp_r).with('a', 'doc/a')
         FileUtils.should_receive(:cp_r).with('b', 'doc/b')
-        @yardoc.run(*%w( --asset a --asset b ))
-        expect(@yardoc.assets).to eq({'a' => 'a', 'b' => 'b'})
+        @yardoc.run *%w( --asset a --asset b )
+        @yardoc.assets.should == {'a' => 'a', 'b' => 'b'}
       end
 
       it "should not allow from or to to refer to a path above current path" do
         log.should_receive(:warn).exactly(4).times.with(/invalid/i)
-        @yardoc.run(*%w( --asset ../../../etc/passwd ))
+        @yardoc.run *%w( --asset ../../../etc/passwd )
         @yardoc.assets.should be_empty
-        @yardoc.run(*%w( --asset a/b/c/d/../../../../../../etc/passwd ))
+        @yardoc.run *%w( --asset a/b/c/d/../../../../../../etc/passwd )
         @yardoc.assets.should be_empty
-        @yardoc.run(*%w( --asset /etc/passwd ))
+        @yardoc.run *%w( --asset /etc/passwd )
         @yardoc.assets.should be_empty
-        @yardoc.run(*%w( --asset normal:/etc/passwd ))
+        @yardoc.run *%w( --asset normal:/etc/passwd )
         @yardoc.assets.should be_empty
       end
 
       it "should allow from:to syntax" do
         FileUtils.should_receive(:cp_r).with('foo', 'doc/bar')
-        @yardoc.run(*%w( --asset foo:bar ))
-        expect(@yardoc.assets).to eq({'foo' => 'bar'})
+        @yardoc.run *%w( --asset foo:bar )
+        @yardoc.assets.should == {'foo' => 'bar'}
       end
 
       it "should not put from inside of to/ if from is a directory" do
@@ -347,7 +347,7 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private')
-        expect(@yardoc.options.verifier.run(Registry.all)).to eq([P('Foo')])
+      @yardoc.options.verifier.run(Registry.all).should == [P('Foo')]
     end
 
     it "should allow multiple --api's to all be shown" do
@@ -359,7 +359,8 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', 'private', '--api', 'public')
-        expect(@yardoc.options.verifier.run(Registry.all).sort_by {|o| o.path }).to eq([P('Bar'), P('Foo')])
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar'), P('Foo')]
     end
 
     it "should allow --no-api to specify objects with no @api tag" do
@@ -371,10 +372,10 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--api', '')
-        expect(@yardoc.options.verifier.run(Registry.all)).to eq([P('Baz')])
+      @yardoc.options.verifier.run(Registry.all).should == [P('Baz')]
       @yardoc.options.verifier = Verifier.new
       @yardoc.run('--no-api')
-        expect(@yardoc.options.verifier.run(Registry.all)).to eq([P('Baz')])
+      @yardoc.options.verifier.run(Registry.all).should == [P('Baz')]
     end
 
     it "should allow --no-api to work with other --api switches" do
@@ -386,7 +387,8 @@ describe YARD::CLI::Yardoc do
         class Baz; end
       eof
       @yardoc.run('--no-api', '--api', 'public')
-        expect(@yardoc.options.verifier.run(Registry.all).sort_by {|o| o.path }).to eq([P('Bar'), P('Baz')])
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar'), P('Baz')]
     end
 
     it "should ensure Ruby code cannot be used" do
@@ -402,8 +404,8 @@ describe YARD::CLI::Yardoc do
     it "should accept --no-private" do
       obj = mock(:object)
       obj.should_receive(:tag).ordered.with(:private).and_return(true)
-      @yardoc.parse_arguments(*%w( --no-private ))
-        expect(@yardoc.options.verifier.call(obj)).to eq false
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options.verifier.call(obj).should == false
     end
 
     it "should hide object if namespace is @private with --no-private" do
@@ -413,8 +415,8 @@ describe YARD::CLI::Yardoc do
       obj = mock(:object)
       obj.stub!(:namespace).and_return(ns)
       obj.should_receive(:tag).with(:private).and_return(false)
-      @yardoc.parse_arguments(*%w( --no-private ))
-        expect(@yardoc.options.verifier.call(obj)).to eq false
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options.verifier.call(obj).should == false
     end
 
     it "should not call #tag on namespace if namespace is proxy with --no-private" do
@@ -426,8 +428,8 @@ describe YARD::CLI::Yardoc do
       obj.stub!(:namespace).and_return(ns)
       obj.stub!(:visibility).and_return(:public)
       obj.should_receive(:tag).ordered.with(:private).and_return(false)
-      @yardoc.parse_arguments(*%w( --no-private ))
-        expect(@yardoc.options.verifier.call(obj)).to eq true
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options.verifier.call(obj).should == true
     end
 
     # @bug gh-197
@@ -436,13 +438,13 @@ describe YARD::CLI::Yardoc do
       YARD.parse_string "module Qux; class Foo::Bar; end; end"
       foobar = Registry.at('Foo::Bar')
       foobar.namespace.type = :module
-      @yardoc.parse_arguments(*%w( --no-private ))
-        expect(@yardoc.options.verifier.call(foobar)).to eq true
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options.verifier.call(foobar).should == true
     end
 
     it "should not call #tag on proxy object" do # @bug gh-197
-      @yardoc.parse_arguments(*%w( --no-private ))
-        expect(@yardoc.options.verifier.call(P('ProxyClass'))).to eq true
+      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.options.verifier.call(P('ProxyClass')).should == true
     end
 
     it "should hide methods inside a 'private' class/module with --no-private" do
@@ -453,7 +455,7 @@ describe YARD::CLI::Yardoc do
           def foo; end
         end
       eof
-      @yardoc.parse_arguments(*%w( --no-private ))
+      @yardoc.parse_arguments *%w( --no-private )
       @yardoc.options.verifier.call(Registry.at('ABC')).should be_false
       @yardoc.options.verifier.call(Registry.at('ABC#foo')).should be_false
     end
@@ -469,8 +471,8 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = false
       @yardoc.options_file = "test"
       @yardoc.run
-        expect(@yardoc.options.serializer.options[:basepath]).to eq "MYPATH"
-        expect(@yardoc.files).to eq ["FILE1", "FILE2"]
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
+      @yardoc.files.should == ["FILE1", "FILE2"]
     end
 
     it "should use String#shell_split to split .yardopts tokens" do
@@ -484,8 +486,8 @@ describe YARD::CLI::Yardoc do
     it "should allow opts specified in command line to override yardopts file" do
       File.should_receive(:read_binary).with(".yardopts").and_return("-o NOTMYPATH")
       @yardoc.run("-o", "MYPATH", "FILE")
-        expect(@yardoc.options.serializer.options[:basepath]).to eq "MYPATH"
-        expect(@yardoc.files).to eq ["FILE"]
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
+      @yardoc.files.should == ["FILE"]
     end
 
     it "should load the RDoc .document file if found" do
@@ -493,8 +495,8 @@ describe YARD::CLI::Yardoc do
       @yardoc.use_document_file = true
       @yardoc.stub!(:support_rdoc_document_file!).and_return(["FILE2", "FILE3"])
       @yardoc.run("-o", "MYPATH", "FILE1")
-        expect(@yardoc.options.serializer.options[:basepath]).to eq "MYPATH"
-        expect(@yardoc.files).to eq ["FILE2", "FILE3", "FILE1"]
+      @yardoc.options.serializer.options[:basepath].should == "MYPATH"
+      @yardoc.files.should == ["FILE2", "FILE3", "FILE1"]
     end
   end
 
@@ -504,7 +506,7 @@ describe YARD::CLI::Yardoc do
     it "should hide private constants in with default visibilities" do
       classobj = CodeObjects::ClassObject.new(:root, :Foo) {|o| o.visibility = :private }
       @yardoc.run
-        expect(@yardoc.options.verifier.run([classobj])).to eq []
+      @yardoc.options.verifier.run([classobj]).should == []
     end
 
     it "should setup visibility rules as verifier" do
@@ -517,7 +519,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should accept a --query" do
-      @yardoc.parse_arguments(*%w( --query @return ))
+      @yardoc.parse_arguments *%w( --query @return )
       @yardoc.options.verifier.should be_a(Verifier)
     end
 
@@ -525,9 +527,9 @@ describe YARD::CLI::Yardoc do
       obj = mock(:object)
       obj.should_receive(:tag).ordered.with('return').and_return(true)
       obj.should_receive(:tag).ordered.with('tag').and_return(false)
-      @yardoc.parse_arguments(*%w( --query @return --query @tag ))
+      @yardoc.parse_arguments *%w( --query @return --query @tag )
       @yardoc.options.verifier.should be_a(Verifier)
-        expect(@yardoc.options.verifier.call(obj)).to eq false
+      @yardoc.options.verifier.call(obj).should == false
     end
   end
 
@@ -538,18 +540,18 @@ describe YARD::CLI::Yardoc do
       File.should_receive(:file?).with('extra_file2').and_return(true)
       File.should_receive(:read).with('extra_file1').and_return('')
       File.should_receive(:read).with('extra_file2').and_return('')
-      @yardoc.parse_arguments(*%w( file1 file2 - extra_file1 extra_file2 ))
-        expect(@yardoc.files).to eq(%w( file1 file2 ))
-        expect(@yardoc.options.files).to eq(
-                                            [CodeObjects::ExtraFileObject.new('extra_file1', ''),
-                                             CodeObjects::ExtraFileObject.new('extra_file2', '')])
+      @yardoc.parse_arguments *%w( file1 file2 - extra_file1 extra_file2 )
+      @yardoc.files.should == %w( file1 file2 )
+      @yardoc.options.files.should ==
+        [CodeObjects::ExtraFileObject.new('extra_file1', ''),
+          CodeObjects::ExtraFileObject.new('extra_file2', '')]
     end
 
     it "should accept files section only containing extra files" do
       Dir.should_receive(:glob).with('README*').and_return([])
-      @yardoc.parse_arguments(*%w( - LICENSE ))
-        expect(@yardoc.files).to eq %w( {lib,app}/**/*.rb ext/**/*.c )
-        expect(@yardoc.options.files).to eq([CodeObjects::ExtraFileObject.new('LICENSE', '')])
+      @yardoc.parse_arguments *%w( - LICENSE )
+      @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
+      @yardoc.options.files.should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
     it "should accept globs as extra files" do
@@ -559,56 +561,54 @@ describe YARD::CLI::Yardoc do
       File.should_receive(:read).with('b.txt').and_return('')
       File.should_receive(:file?).with('a.txt').and_return(true)
       File.should_receive(:file?).with('b.txt').and_return(true)
-      @yardoc.parse_arguments(*%w( file1 file2 - *.txt ))
-        expect(@yardoc.files).to eq(%w( file1 file2 ))
-        expect(@yardoc.options.files).to eq([CodeObjects::ExtraFileObject.new('a.txt', ''),
-                                             CodeObjects::ExtraFileObject.new('b.txt', '')])
+      @yardoc.parse_arguments *%w( file1 file2 - *.txt )
+      @yardoc.files.should == %w( file1 file2 )
+      @yardoc.options.files.should ==
+        [CodeObjects::ExtraFileObject.new('a.txt', ''),
+          CodeObjects::ExtraFileObject.new('b.txt', '')]
     end
 
     it "should warn if extra file is not found" do
       log.should_receive(:warn).with(/Could not find extra file: UNKNOWN/)
-      @yardoc.parse_arguments(*%w( - UNKNOWN ))
+      @yardoc.parse_arguments *%w( - UNKNOWN )
     end
 
     it "should warn if readme file is not found" do
       log.should_receive(:warn).with(/Could not find readme file: UNKNOWN/)
-      @yardoc.parse_arguments(*%w( -r UNKNOWN ))
+      @yardoc.parse_arguments *%w( -r UNKNOWN )
     end
 
     it "should use first file as readme if no readme is specified when using --one-file" do
       Dir.should_receive(:glob).with('README*').and_return []
       Dir.should_receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
       File.should_receive(:read).with('lib/foo.rb').and_return('')
-      @yardoc.parse_arguments(*%w( --one-file lib/*.rb ))
-        expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
+      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
     end
 
     it "should use readme it exists when using --one-file" do
       Dir.should_receive(:glob).with('README*').and_return ['README']
       File.should_receive(:read).with('README').and_return('')
-      @yardoc.parse_arguments(*%w( --one-file lib/*.rb ))
-        expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
+      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new('README', '')
     end
 
     it "should not allow US-ASCII charset when using --one-file" do
       ienc = Encoding.default_internal
       eenc = Encoding.default_external
       log.should_receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
-      @yardoc.parse_arguments(*%w( --one-file --charset us-ascii ))
-      expect(Encoding.default_internal.name).to eq 'ASCII-8BIT'
-      expect(Encoding.default_external.name).to eq 'ASCII-8BIT'
-      vo = $VERBOSE
-      $VERBOSE = false
+      @yardoc.parse_arguments *%w( --one-file --charset us-ascii )
+      Encoding.default_internal.name.should == 'ASCII-8BIT'
+      Encoding.default_external.name.should == 'ASCII-8BIT'
       Encoding.default_internal = ienc
       Encoding.default_external = eenc
-      $VERBOSE = vo
     end if defined?(::Encoding)
   end
 
   describe 'Source file arguments' do
     it "should accept no params and parse {lib,app}/**/*.rb ext/**/*.c" do
       @yardoc.parse_arguments
-        expect(@yardoc.files).to eq %w( {lib,app}/**/*.rb ext/**/*.c )
+      @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
     end
   end
 
@@ -648,7 +648,7 @@ describe YARD::CLI::Yardoc do
       Tags::Library.stub!(:visible_tags).and_return([:foo])
       Tags::Library.stub!(:visible_tags=) {|value| visible_tags = value }
       @yardoc.parse_arguments('--tag', 'foo', '--tag', 'foo')
-      expect(visible_tags).to eq [:foo]
+      visible_tags.should == [:foo]
     end
 
     it "should accept --type-tag" do
@@ -716,12 +716,12 @@ describe YARD::CLI::Yardoc do
     it "should load rdoc markup if no markup is provided" do
       @yardoc.generate = true
       @yardoc.run
-      expect(@yardoc.options.markup).to eq :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
 
     it "should load rdoc markup even when no output is specified" do
       @yardoc.parse_arguments('--no-output')
-      expect(@yardoc.options.markup).to eq :rdoc
+      @yardoc.options.markup.should == :rdoc
     end
 
     it "should warn if rdoc cannot be loaded and fallback to :none" do
@@ -731,7 +731,7 @@ describe YARD::CLI::Yardoc do
       log.should_receive(:warn).with(/Could not load default RDoc formatter/)
       @yardoc.stub(:generate) { @yardoc.options.files = []; true }
       @yardoc.run
-      expect(@yardoc.options.markup).to eq :none
+      @yardoc.options.markup.should == :none
       mod.clear_markup_cache
     end
 

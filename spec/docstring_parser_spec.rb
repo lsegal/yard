@@ -29,12 +29,12 @@ describe YARD::DocstringParser do
   right here.
       eof
       tags = doc.tags(:param)
-      expect(tags[0].name).to eq "name"
-      expect(tags[0].text).to eq "Hello world\nhow are you?"
-      expect(tags[1].name).to eq "name2"
-      expect(tags[1].text).to eq "this is a new line"
-      expect(tags[2].name).to eq "name3"
-      expect(tags[2].text).to eq "and this\nis a new paragraph:\n\nright here."
+      tags[0].name.should == "name"
+      tags[0].text.should == "Hello world\nhow are you?"
+      tags[1].name.should == "name2"
+      tags[1].text.should == "this is a new line"
+      tags[2].name.should == "name3"
+      tags[2].text.should == "and this\nis a new paragraph:\n\nright here."
     end
 
     it "should end parsing a tag on de-dent" do
@@ -43,8 +43,8 @@ describe YARD::DocstringParser do
   one two three
 rest of docstring
       eof
-      expect(doc.tag(:note).text).to eq "test\none two three"
-      expect(doc).to eq "rest of docstring"
+      doc.tag(:note).text.should == "test\none two three"
+      doc.should == "rest of docstring"
     end
 
     it "should parse examples embedded in doc" do
@@ -59,8 +59,8 @@ test string here
 
 more stuff
 eof
-  expect(doc).to eq "test string here\nmore stuff"
-  expect(doc.tag(:example).text).to eq "\ndef foo(x, y, z)\nend\n\nclass A; end"
+      doc.should == "test string here\nmore stuff"
+      doc.tag(:example).text.should == "\ndef foo(x, y, z)\nend\n\nclass A; end"
     end
 
     it "should remove only original indentation from beginning of line in tags" do
@@ -70,7 +70,7 @@ eof
   foo bar
    baz
 eof
-  expect(doc.tag(:param).text).to eq "some value\nfoo bar\n baz"
+      doc.tag(:param).text.should == "some value\nfoo bar\n baz"
     end
 
     it "should allow numbers in tags" do
@@ -82,8 +82,8 @@ eof
 @foo2 bar2
 @foo3 bar3
 eof
-  expect(doc.tag(:foo1).text).to eq "bar1"
-  expect(doc.tag(:foo2).text).to eq "bar2"
+      doc.tag(:foo1).text.should == "bar1"
+      doc.tag(:foo2).text.should == "bar2"
     end
 
     it "should end tag on newline if next line is not indented" do
@@ -92,8 +92,8 @@ eof
 @api bar2
 Hello world
 eof
-  expect(doc.tag(:author).text).to eq "bar1"
-  expect(doc.tag(:api).text).to eq "bar2"
+      doc.tag(:author).text.should == "bar1"
+      doc.tag(:api).text.should == "bar2"
     end
 
     it "should warn about unknown tag" do
@@ -103,7 +103,7 @@ eof
 
     it "should not add trailing whitespace to freeform tags" do
       doc = docstring("@api private   \t   ")
-  expect(doc.tag(:api).text).to eq "private"
+      doc.tag(:api).text.should == "private"
     end
   end
 
@@ -117,21 +117,21 @@ eof
       valid.each do |tag|
         TestLibrary.define_tag("Tag", tag)
         doc = docstring('@' + tag + ' foo bar')
-        expect(doc.tag(tag).text).to eq 'foo bar'
+        doc.tag(tag).text.should == 'foo bar'
       end
     end
 
     it "should not parse invalid tag names" do
       invalid = %w( @ @return@ @param, @x-y @.x.y.z )
       invalid.each do |tag|
-        expect(docstring(tag + ' foo bar')).to eq tag + ' foo bar'
+        docstring(tag + ' foo bar').should == tag + ' foo bar'
       end
     end
 
     it "should allow namespaced tags in the form @x.y.z" do
       TestLibrary.define_tag("Tag", 'x.y.z')
       doc = docstring("@x.y.z foo bar")
-      expect(doc.tag('x.y.z').text).to eq 'foo bar'
+      doc.tag('x.y.z').text.should == 'foo bar'
     end
 
     it "should ignore new directives without @! prefix syntax" do
@@ -151,14 +151,14 @@ eof
     it "should handle directives with @! prefix syntax" do
       TestLibrary.define_directive('dir1', Tags::ScopeDirective)
       docstring("@!dir1 class")
-      expect(@parser.state.scope).to eq :class
+      @parser.state.scope.should == :class
     end
   end
 
   describe '#text' do
     it "should only return text data" do
       parse("Foo\n@param foo x y z\nBar")
-      expect(@parser.text).to eq "Foo\nBar"
+      @parser.text.should == "Foo\nBar"
     end
   end
 
@@ -166,7 +166,7 @@ eof
     it "should return the entire original data" do
       data = "Foo\n@param foo x y z\nBar"
       parse(data)
-      expect(@parser.raw_text).to eq data
+      @parser.raw_text.should == data
     end
   end
 
@@ -174,8 +174,8 @@ eof
     it "should return the parsed tags" do
       data = "Foo\n@param foo x y z\nBar"
       parse(data)
-      expect(@parser.tags.size).to eq 1
-      expect(@parser.tags.first.tag_name).to eq 'param'
+      @parser.tags.size.should == 1
+      @parser.tags.first.tag_name.should == 'param'
     end
   end
 
@@ -184,18 +184,18 @@ eof
       data = "Foo\n@!scope class\n@!visibility private\nBar"
       parse(data)
       dirs = @parser.directives
-      #dirs.size == 2 # PCO - does nothing
+      dirs.size == 2
       dirs[0].should be_a(Tags::ScopeDirective)
-      expect(dirs[0].tag.text).to eq 'class'
+      dirs[0].tag.text.should == 'class'
       dirs[1].should be_a(Tags::VisibilityDirective)
-      expect(dirs[1].tag.text).to eq 'private'
+      dirs[1].tag.text.should == 'private'
     end
   end
 
   describe '#state' do
     it "should handle modified state" do
       parse("@!scope class")
-      expect(@parser.state.scope).to eq :class
+      @parser.state.scope.should == :class
     end
   end
 
@@ -205,7 +205,7 @@ eof
       the_yielded_obj = nil
       DocstringParser.after_parse {|obj| the_yielded_obj = obj }
       parser.parse("Some text")
-      expect(the_yielded_obj).to eq parser
+      the_yielded_obj.should == parser
     end
 
     it "should warn about invalid named parameters" do

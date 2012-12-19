@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class Server::WebrickAdapter
-  undef start
-  def start; end
-end
+class Server::WebrickAdapter; def start; end end
 
 describe YARD::CLI::Server do
   before do
@@ -67,12 +64,12 @@ describe YARD::CLI::Server do
   end
 
   def assert_libraries(expected_libs, actual_libs)
-    expect(actual_libs).to eq expected_libs
+    actual_libs.should == expected_libs
     expected_libs.each do |name, libs|
       libs.each_with_index do |expected,i|
         actual = actual_libs[name][i]
         [:source, :source_path, :yardoc_file].each do |m|
-          expect(actual.send(m)).to eq expected.send(m)
+          actual.send(m).should == expected.send(m)
         end
       end
     end
@@ -175,24 +172,6 @@ describe YARD::CLI::Server do
       run '-d'
       run '--daemon'
     end
-
-    it "should accept -B, --bind" do
-      @server_options[:Host] = 'example.com'
-      run '-B', 'example.com'
-      run '--bind', 'example.com'
-    end    
-
-    it "should bind address with WebRick adapter" do
-      @server_options[:Host] = 'example.com'
-      run '-B', 'example.com', '-a', 'webrick'
-      run '--bind', 'example.com', '-a', 'webrick'
-    end  
-
-    it "should bind address with Rack adapter" do
-      @server_options[:Host] = 'example.com'
-      run '-B', 'example.com', '-a', 'rack'
-      run '--bind', 'example.com', '-a', 'rack'
-    end          
 
     it "should accept -p, --port" do
       @server_options[:Port] = 10
@@ -308,7 +287,7 @@ describe YARD::CLI::Server do
       unstub_adapter
       @cli.adapter = Server::WebrickAdapter
       run '-t', 'foo'
-      expect(Templates::Engine.template_paths.last).to eq 'foo'
+      Templates::Engine.template_paths.last.should == 'foo'
     end
 
     it "should load ruby code (-e) after adapter" do
@@ -320,7 +299,7 @@ describe YARD::CLI::Server do
           f.puts "YARD::Templates::Engine.register_template_path 'foo'"
           f.flush
           run '-e', f.path
-          expect(Templates::Engine.template_paths.last).to eq 'foo'
+          Templates::Engine.template_paths.last.should == 'foo'
         end
       ensure
         File.unlink(path)

@@ -16,7 +16,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
   describe '#h' do
     it "should use #h to escape HTML" do
-      expect(h('Usage: foo "bar" <baz>')).to eq "Usage: foo &quot;bar&quot; &lt;baz&gt;"
+      h('Usage: foo "bar" <baz>').should == "Usage: foo &quot;bar&quot; &lt;baz&gt;"
     end
   end
 
@@ -24,14 +24,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should return foo if LANG=foo" do
       ENV.should_receive(:[]).with('LANG').and_return('shift_jis') if YARD.ruby18?
       Encoding.default_external.should_receive(:name).and_return('shift_jis') if defined?(Encoding)
-      expect(charset).to eq 'shift_jis'
+      charset.should == 'shift_jis'
     end
 
     ['US-ASCII', 'ASCII-7BIT', 'ASCII-8BIT'].each do |type|
       it "should convert #{type} to iso-8859-1" do
         ENV.should_receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
         Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
-        expect(charset).to eq 'iso-8859-1'
+        charset.should == 'iso-8859-1'
       end
     end
 
@@ -39,7 +39,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       type = 'utf8'
       ENV.should_receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
       Encoding.default_external.should_receive(:name).and_return(type) if defined?(Encoding)
-      expect(charset).to eq 'utf-8'
+      charset.should == 'utf-8'
     end
 
     it "should take file encoding if there is a file" do
@@ -51,18 +51,18 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should take file encoding if there is a file" do
       ENV.stub!(:[]).with('LANG').and_return('utf-8') if YARD.ruby18?
       @file = OpenStruct.new(:contents => 'foo')
-      expect(charset).to eq 'utf-8'
+      charset.should == 'utf-8'
     end if YARD.ruby18?
 
     if YARD.ruby18?
       it "should return utf-8 if no LANG env is set" do
         ENV.should_receive(:[]).with('LANG').and_return(nil)
-        expect(charset).to eq 'utf-8'
+        charset.should == 'utf-8'
       end
 
       it "should only return charset part of lang" do
         ENV.should_receive(:[]).with('LANG').and_return('en_US.UTF-8')
-        expect(charset).to eq 'utf-8'
+        charset.should == 'utf-8'
       end
     end
   end
@@ -71,14 +71,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should include brackets by default" do
       text = ["String"]
       should_receive(:linkify).at_least(1).times.with("String", "String").and_return("String")
-      expect(format_types(text)).to eq format_types(text, true)
-      expect(format_types(text)).to eq "(<tt>String</tt>)"
+      format_types(text).should == format_types(text, true)
+      format_types(text).should == "(<tt>String</tt>)"
     end
 
     it "should avoid brackets if brackets=false" do
       should_receive(:linkify).with("String", "String").and_return("String")
       should_receive(:linkify).with("Symbol", "Symbol").and_return("Symbol")
-      expect(format_types(["String", "Symbol"], false)).to eq "<tt>String</tt>, <tt>Symbol</tt>"
+      format_types(["String", "Symbol"], false).should == "<tt>String</tt>, <tt>Symbol</tt>"
     end
 
     { "String" => [["String"],
@@ -97,7 +97,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
         should_receive(:h).with('<').at_least(text.count('<')).times.and_return("&lt;")
         should_receive(:h).with('>').at_least(text.count('>')).times.and_return("&gt;")
         values[0].each {|v| should_receive(:linkify).with(v, v).and_return("<a href=''>#{v}</a>") }
-        expect(format_types([text], false)).to eq values[1]
+        format_types([text], false).should == values[1]
       end
     end
   end
@@ -115,24 +115,21 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should handle various encodings" do
       stub!(:object).and_return(Registry.root)
-      vo = $VERBOSE
-      $VERBOSE = false
       Encoding.default_internal = 'utf-8' if defined?(Encoding)
-      $VERBOSE = vo
       htmlify("\xB0\xB1", :text)
       # TODO: add more encoding tests
     end
 
     it "should return pre-formatted text with :pre markup" do
-      expect(htmlify("fo\no\n\nbar<>", :pre)).to eq "<pre>fo\no\n\nbar&lt;&gt;</pre>"
+      htmlify("fo\no\n\nbar<>", :pre).should == "<pre>fo\no\n\nbar&lt;&gt;</pre>"
     end
 
     it "should return regular text with :text markup" do
-      expect(htmlify("fo\no\n\nbar<>", :text)).to eq "fo<br/>o<br/><br/>bar&lt;&gt;"
+      htmlify("fo\no\n\nbar<>", :text).should == "fo<br/>o<br/><br/>bar&lt;&gt;"
     end
 
     it "should return unmodified text with :none markup" do
-      expect(htmlify("fo\no\n\nbar<>", :none)).to eq "fo\no\n\nbar&lt;&gt;"
+      htmlify("fo\no\n\nbar<>", :none).should == "fo\no\n\nbar&lt;&gt;"
     end
 
     it "should highlight ruby if markup is :ruby" do
@@ -143,7 +140,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       load_markup_provider(:rdoc)
       File.should_receive(:file?).with('foo.rdoc').and_return(true)
       File.should_receive(:read).with('foo.rdoc').and_return('HI')
-      expect(htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '')).to eq "<p><p>HI</p></p>"
+      htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '').should == "<p><p>HI</p></p>"
     end
 
     it "should autolink URLs (markdown specific)" do
@@ -152,7 +149,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
           pending 'This test depends on a markdown engine that supports autolinking'
         end
       end
-      expect(htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq '<p><a href="http://example.com">http://example.com</a></p>'
+      htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/').should ==
+        '<p><a href="http://example.com">http://example.com</a></p>'
     end
 
     it "should not autolink URLs inside of {} (markdown specific)" do
@@ -173,12 +171,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should return the object path if there's no serializer and no title" do
       stub!(:serializer).and_return nil
-      expect(link_object(CodeObjects::NamespaceObject.new(nil, :YARD))).to eq "YARD"
+      link_object(CodeObjects::NamespaceObject.new(nil, :YARD)).should == "YARD"
     end
 
     it "should return the title if there's a title but no serializer" do
       stub!(:serializer).and_return nil
-      expect(link_object(CodeObjects::NamespaceObject.new(nil, :YARD), 'title')).to eq "title"
+      link_object(CodeObjects::NamespaceObject.new(nil, :YARD), 'title').should == "title"
     end
 
     it "should link objects from overload tag" do
@@ -192,6 +190,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
         end
       eof
       obj = Registry.at('Foo::Baz#a').tag(:overload)
+      foobar = Registry.at('Foo::Bar')
+      foobaz = Registry.at('Foo::Baz')
       serializer = Serializers::FileSystemSerializer.new
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(obj)
@@ -218,7 +218,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should use Klass.foo when linking to class method in current namespace" do
       root = CodeObjects::ModuleObject.new(:root, :Klass)
-      CodeObjects::MethodObject.new(root, :foo, :class)
+      obj = CodeObjects::MethodObject.new(root, :foo, :class)
       stub!(:object).and_return(root)
       serializer = Serializers::FileSystemSerializer.new
       stub!(:serializer).and_return(serializer)
@@ -260,7 +260,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:object).and_return Registry.root
 
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
-        expect(url_for(yard)).to eq 'YARD.html'
+      url_for(yard).should == 'YARD.html'
     end
 
     it "should link to the object's namespace path/file and use the object as the anchor" do
@@ -269,7 +269,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
       yard = CodeObjects::ModuleObject.new(:root, :YARD)
       meth = CodeObjects::MethodObject.new(yard, :meth)
-        expect(url_for(meth)).to eq 'YARD.html#meth-instance_method'
+      url_for(meth).should == 'YARD.html#meth-instance_method'
     end
 
     it "should properly urlencode methods with punctuation in links" do
@@ -278,14 +278,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
       serializer.stub!(:serialized_path).and_return("file.html")
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(obj)
-        expect(url_for(obj)).to eq "#%2F-instance_method"
+      url_for(obj).should == "#%2F-instance_method"
     end
   end
 
   describe '#anchor_for' do
     it "should not urlencode data when called directly" do
       obj = CodeObjects::MethodObject.new(nil, :/)
-        expect(anchor_for(obj)).to eq "/-instance_method"
+      anchor_for(obj).should == "/-instance_method"
     end
   end
 
@@ -303,74 +303,74 @@ describe YARD::Templates::Helpers::HtmlHelper do
     it "should escape {} syntax with backslash (\\{foo bar})" do
       input  = '\{foo bar} \{XYZ} \{file:FOO} $\{N-M}'
       output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
-      expect(resolve_links(input)).to eq output
+      resolve_links(input).should == output
     end
 
     it "should escape {} syntax with ! (!{foo bar})" do
       input  = '!{foo bar} !{XYZ} !{file:FOO} $!{N-M}'
       output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
-      expect(resolve_links(input)).to eq output
+      resolve_links(input).should == output
     end
 
     it "should link static files with file: prefix" do
       stub!(:serializer).and_return Serializers::FileSystemSerializer.new
       stub!(:object).and_return Registry.root
 
-      expect(parse_link(resolve_links("{file:TEST.txt#abc}"))).to eq({
+      parse_link(resolve_links("{file:TEST.txt#abc}")).should == {
         :inner_text => "TEST",
         :title => "TEST",
         :href => "file.TEST.html#abc"
-      })
-      expect(parse_link(resolve_links("{file:TEST.txt title}"))).to eq({
+      }
+      parse_link(resolve_links("{file:TEST.txt title}")).should == {
         :inner_text => "title",
         :title => "title",
         :href => "file.TEST.html"
-      })
+      }
     end
 
     it "should create regular links with http:// or https:// prefixes" do
-      expect(parse_link(resolve_links("{http://example.com}"))).to eq({
+      parse_link(resolve_links("{http://example.com}")).should == {
         :inner_text => "http://example.com",
         :target => "_parent",
         :href => "http://example.com",
         :title => "http://example.com"
-      })
-      expect(parse_link(resolve_links("{http://example.com title}"))).to eq({
+      }
+      parse_link(resolve_links("{http://example.com title}")).should == {
         :inner_text => "title",
         :target => "_parent",
         :href => "http://example.com",
         :title => "title"
-      })
+      }
     end
 
     it "should create mailto links with mailto: prefixes" do
-      expect(parse_link(resolve_links('{mailto:joanna@example.com}'))).to eq({
+      parse_link(resolve_links('{mailto:joanna@example.com}')).should == {
         :inner_text => 'mailto:joanna@example.com',
         :target => '_parent',
         :href => 'mailto:joanna@example.com',
         :title => 'mailto:joanna@example.com'
-      })
-      expect(parse_link(resolve_links('{mailto:steve@example.com Steve}'))).to eq({
+      }
+      parse_link(resolve_links('{mailto:steve@example.com Steve}')).should == {
         :inner_text => 'Steve',
         :target => '_parent',
         :href => 'mailto:steve@example.com',
         :title => 'Steve'
-      })
+      }
     end
 
     it "should ignore {links} that begin with |...|" do
-      expect(resolve_links("{|x|x == 1}")).to eq "{|x|x == 1}"
+      resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
     end
 
     it "should gracefully ignore {} in links" do
       should_receive(:linkify).with('Foo', 'Foo').and_return('FOO')
-      expect(resolve_links("{} {} {Foo Foo}")).to eq '{} {} FOO'
+      resolve_links("{} {} {Foo Foo}").should == '{} {} FOO'
     end
 
     %w(tt code pre).each do |tag|
       it "should ignore links in <#{tag}>" do
         text = "<#{tag}>{Foo}</#{tag}>"
-        expect(resolve_links(text)).to eq text
+        resolve_links(text).should == text
       end
     end
 
@@ -385,12 +385,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should resolve link with newline in title-part" do
-      expect(parse_link(resolve_links("{http://example.com foo\nbar}"))).to eq({
+      parse_link(resolve_links("{http://example.com foo\nbar}")).should == {
         :inner_text => "foo bar",
         :target => "_parent",
         :href => "http://example.com",
         :title => "foo bar"
-      })
+      }
     end
 
     it "should resolve links to methods whose names have been escaped" do
@@ -486,7 +486,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       serializer.stub!(:serialized_path).with(Registry.at('Foo')).and_return('')
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(Registry.at('Foo'))
-        expect(signature(Registry.at('Foo#foo').tag(:overload), true)).to eq "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">- <strong>bar</strong>(a, b, c) </a>"
+      signature(Registry.at('Foo#foo').tag(:overload), true).should ==
+        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">- <strong>bar</strong>(a, b, c) </a>"
     end
   end
 
@@ -500,7 +501,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should return empty string on nil input" do
-        expect(subject.html_syntax_highlight(nil)).to eq ''
+      subject.html_syntax_highlight(nil).should == ''
     end
 
     it "should call #html_syntax_highlight_ruby by default" do
@@ -514,7 +515,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
       subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       subject.should_receive(:html_syntax_highlight_NAME).and_return("foobar")
-        expect(subject.htmlify('<pre><code>def x; end</code></pre>', :html)).to eq '<pre class="code NAME"><code>foobar</code></pre>'
+      subject.htmlify('<pre><code>def x; end</code></pre>', :html).should ==
+        '<pre class="code NAME"><code>foobar</code></pre>'
     end
 
     it "should add !!!LANG to className in outputted pre tag" do
@@ -522,52 +524,56 @@ describe YARD::Templates::Helpers::HtmlHelper do
       subject.should_receive(:respond_to?).with('html_markup_html').and_return(true)
       subject.should_receive(:respond_to?).with('html_syntax_highlight_LANG').and_return(true)
       subject.should_receive(:html_syntax_highlight_LANG).and_return("foobar")
-        expect(subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html)).to eq '<pre class="code LANG"><code>foobar</code></pre>'
+      subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html).should ==
+        '<pre class="code LANG"><code>foobar</code></pre>'
     end
 
     it "should call html_syntax_highlight_NAME if source starts with !!!NAME" do
       subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(true)
       subject.should_receive(:html_syntax_highlight_NAME).and_return("foobar")
-        expect(subject.html_syntax_highlight(<<-eof
+      subject.html_syntax_highlight(<<-eof
         !!!NAME
         def x; end
       eof
-        )).to eq "foobar"
+      ).should == "foobar"
     end
 
     it "should not highlight if highlight option is false" do
       subject.options.highlight = false
       subject.should_not_receive(:html_syntax_highlight_ruby)
-        expect(subject.html_syntax_highlight('def x; end')).to eq 'def x; end'
+      subject.html_syntax_highlight('def x; end').should == 'def x; end'
     end
 
     it "should not highlight if there is no highlight method specified by !!!NAME" do
       subject.should_receive(:respond_to?).with('html_syntax_highlight_NAME').and_return(false)
       subject.should_not_receive(:html_syntax_highlight_NAME)
-        expect(subject.html_syntax_highlight("!!!NAME\ndef x; end")).to eq "def x; end"
+      subject.html_syntax_highlight("!!!NAME\ndef x; end").should == "def x; end"
     end
 
     it "should highlight as ruby if htmlify(text, :ruby) is called" do
       subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
-        expect(subject.htmlify('def x; end', :ruby)).to eq '<pre class="code ruby">x</pre>'
+      subject.htmlify('def x; end', :ruby).should == '<pre class="code ruby">x</pre>'
     end
 
     it "should not prioritize object source type when called directly" do
       subject.should_receive(:html_syntax_highlight_ruby).with('def x; end').and_return('x')
       subject.object = OpenStruct.new(:source_type => :c)
-        expect(subject.html_syntax_highlight("def x; end")).to eq "x"
+      subject.html_syntax_highlight("def x; end").should == "x"
     end
 
     it "shouldn't escape code snippets twice" do
-        expect(subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html)).to eq '<pre class="code foo"><code>{&quot;foo&quot; =&gt; 1}</code></pre>'
+      subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html).should ==
+        '<pre class="code foo"><code>{&quot;foo&quot; =&gt; 1}</code></pre>'
     end
 
     it "should highlight source when matching a pre lang= tag" do
-        expect(subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html)).to eq '<pre class="code foo"><code>x = 1</code></pre>'
+      subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html).should ==
+        '<pre class="code foo"><code>x = 1</code></pre>'
     end
 
     it "should highlight source when matching a code class= tag" do
-        expect(subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html)).to eq '<pre class="code foo"><code>x = 1</code></pre>'
+      subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html).should ==
+        '<pre class="code foo"><code>x = 1</code></pre>'
     end
   end
 

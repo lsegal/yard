@@ -4,22 +4,22 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
   before(:all) { parse_file :visibility_handler_001, __FILE__ }
 
   it "should be able to set visibility to public" do
-    expect(Registry.at("Testing#pub").visibility).to eq :public
-    expect(Registry.at("Testing#pub2").visibility).to eq :public
+    Registry.at("Testing#pub").visibility.should == :public
+    Registry.at("Testing#pub2").visibility.should == :public
   end
 
   it "should be able to set visibility to private" do
-    expect(Registry.at("Testing#priv").visibility).to eq :private
+    Registry.at("Testing#priv").visibility.should == :private
   end
 
   it "should be able to set visibility to protected" do
-    expect(Registry.at("Testing#prot").visibility).to eq :protected
+    Registry.at("Testing#prot").visibility.should == :protected
   end
 
   it "should support parameters and only set visibility on those methods" do
-    expect(Registry['Testing#notpriv'].visibility).to eq :protected
-    expect(Registry['Testing#notpriv2'].visibility).to eq :protected
-    expect(Registry['Testing#notpriv?'].visibility).to eq :protected
+    Registry['Testing#notpriv'].visibility.should == :protected
+    Registry['Testing#notpriv2'].visibility.should == :protected
+    Registry['Testing#notpriv?'].visibility.should == :protected
   end
 
   it "should only accept strings and symbols" do
@@ -29,6 +29,6 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
   end
 
   it "should handle constants passed in as symbols" do
-    expect(Registry.at('Testing#Foo').visibility).to eq :private
+    Registry.at('Testing#Foo').visibility.should == :private
   end
 end
