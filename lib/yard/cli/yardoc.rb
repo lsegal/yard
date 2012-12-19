@@ -26,15 +26,6 @@ module YARD
       #   if the template supports it.
       default_attr :onefile, false
 
-      default_attr :list_class, nil
-      default_attr :label, nil
-      default_attr :name, nil
-      default_attr :no_names, nil
-      default_attr :no_types, nil
-      default_attr :contents, nil
-      default_attr :file, nil
-
-
       # @return [CodeObjects::ExtraFileObject] the README file object rendered
       #   along with objects
       attr_accessor :readme

@@ -1,5 +1,5 @@
 <div id="menu">
-  <% if (instance_variable_defined?(:@contents) && @contents) || (instance_variable_defined?(:@file) && @file) %>
+  <% if @contents || @file %>
     <% if object != '_index.html' %><a href="<%= url_for_index %>">Index</a> &raquo; <% end %>
     <span class="title"><%= @breadcrumb_title %></span>
   <% elsif object.is_a?(CodeObjects::Base) %>

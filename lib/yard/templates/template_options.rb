@@ -33,6 +33,13 @@ module YARD
       default_attr :globals, lambda { OpenStruct.new }
       alias __globals globals
 
+      default_attr :list_class, nil
+      default_attr :label, nil
+      default_attr :name, nil
+      default_attr :no_names, nil
+      default_attr :no_types, nil
+      default_attr :contents, nil
+
       # @return [CodeObjects::Base] the main object being generated in the template
       attr_accessor :object
 

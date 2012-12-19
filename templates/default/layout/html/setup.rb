@@ -1,4 +1,6 @@
 def init
+  @file = nil unless instance_variable_defined?(:@file)
+
   @breadcrumb = []
   if instance_variable_defined?(:@onefile) && @onefile
     sections :layout
