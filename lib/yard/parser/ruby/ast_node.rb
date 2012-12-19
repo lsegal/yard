@@ -157,6 +157,7 @@ module YARD
           @fallback_line = opts[:listline]
           @fallback_source = opts[:listchar]
           @token = true if opts[:token]
+          @docstring = nil
         end
 
         # @return [Boolean] whether the node is equal to another by checking
@@ -289,7 +290,7 @@ module YARD
           objs.unshift(type) if type && type != :list
 
           options = []
-          if instance_variable_defined?(:@docstring) && @docstring
+          if @docstring
             options << ['docstring', docstring]
           end
           if @source_range || @line_range

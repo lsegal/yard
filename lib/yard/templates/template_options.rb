@@ -39,6 +39,7 @@ module YARD
       default_attr :no_names, nil
       default_attr :no_types, nil
       default_attr :contents, nil
+      default_attr :title, nil
 
       # @return [CodeObjects::Base] the main object being generated in the template
       attr_accessor :object

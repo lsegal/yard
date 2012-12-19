@@ -1,10 +1,11 @@
 def init
   @file = nil unless instance_variable_defined?(:@file)
+  @onefile = nil unless instance_variable_defined?(:@onefile)
 
   @breadcrumb = []
-  if instance_variable_defined?(:@onefile) && @onefile
+  if @onefile
     sections :layout
-  elsif instance_variable_defined?(:@file) && @file
+  elsif @file
     if @file.attributes[:namespace]
       @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root
     end

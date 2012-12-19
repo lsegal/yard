@@ -205,6 +205,7 @@ module YARD
             link = linkify(name, title)
             if (link == name || link == title) && (name+' '+link !~ /\A<a\s.*>/)
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
+              # since the @file variable may not be defined in the class including this module we check for it first
               file = ((instance_variable_defined?(:@file) && @file) ? @file.filename : object.file) || '(unknown)'
               line = ((instance_variable_defined?(:@file) && @file) ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
               log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
@@ -510,6 +511,7 @@ module YARD
       # @since 0.5.4
       def charset
         has_encoding = defined?(::Encoding)
+        # since the @file variable may not be defined in the class including this module we check for it first
         if instance_variable_defined?(:@file) && @file && has_encoding
           lang = @file.contents.encoding.to_s
         else

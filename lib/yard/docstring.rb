@@ -77,6 +77,7 @@ module YARD
       docstring.object = object
       docstring.add_tag(*tags)
       docstring.instance_variable_set("@all", raw_data) if raw_data
+      docstring.instance_variable_set(:@summary, nil)
       docstring
     end
 
@@ -167,7 +168,7 @@ module YARD
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
       resolve_reference
-      return @summary if instance_variable_defined?(:@summary) && @summary
+      return @summary if @summary
       num_parens = 0
       idx = length.times do |index|
         case self[index, 1]
