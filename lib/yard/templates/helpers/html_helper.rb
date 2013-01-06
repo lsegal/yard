@@ -582,7 +582,7 @@ module YARD
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')
-          %Q{<pre class="#{classes}"><code>#{string}</code></pre>}
+          %Q{<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>}
         end
       end
     end
