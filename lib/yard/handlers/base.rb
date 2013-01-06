@@ -509,6 +509,7 @@ module YARD
       # @since 0.8.0
       def register_visibility(object, visibility = self.visibility)
         return unless object.respond_to?(:visibility=)
+        return if object.is_a?(NamespaceObject)
         object.visibility = visibility
       end
 

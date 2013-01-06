@@ -31,4 +31,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
   it "should handle constants passed in as symbols" do
     Registry.at('Testing#Foo').visibility.should == :private
   end
+
+  it 'should not register classes with visibility' do
+    Registry.at('Testing::Bar').visibility.should == :public
+    Registry.at('Testing::Baz').visibility.should == :public
+  end
 end

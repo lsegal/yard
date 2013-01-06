@@ -24,4 +24,9 @@ class Testing
 
   def Foo; end
   private :Foo
+
+  private
+
+  class Bar; end
+  module Baz; end
 end
