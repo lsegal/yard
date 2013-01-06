@@ -23,10 +23,10 @@
 				<% if options.readme != options.file && options.title %>
 					<span class="title"><strong><%= options.title %></strong>: <%= @page_title %></span>
 					<small class="links">
-						<% links = [link_file('index.html', 'top'),
-												@prevfile ? link_file(@prevfile, 'prev') : nil,
-												@nextfile ? link_file(@nextfile, 'next') : nil].compact %>
-						(<%= links.join(", ") %>)
+						<% links = [@prevfile ? link_file(@prevfile, '&larr;') : nil,
+						            link_file('index.html', '&uarr;'),
+									@nextfile ? link_file(@nextfile, '&rarr;') : nil].compact %>
+						<%= links.join(" ") %>
 					</small>
 				<% end %>
 			</div>
