@@ -2,6 +2,9 @@ body { color: #3e4349; font-family: Georgia, serif; font-size: 17px; margin: 0; 
 h1, h2, h3, h4, h5, h6 { font-weight: normal; color: #000; font-family: Georgia, serif; }
 h1 { color: #040; }
 h2 { color: #060; }
+h3 { color: #070; }
+h4 { color: #080; }
+h5 { color: #090; }
 #sidebar h2 { color: #2f2; }
 strong { color: #000; }
 .object_link, tt, code { font-family: 'Consolas', 'BitStream Vera Sans Mono', monospace; font-size: 14px; }
@@ -26,22 +29,26 @@ ul { list-style: square; }
 .docstring h1 { font-size: 1.2em; }
 .docstring h2 { font-size: 1.1em; }
 .docstring h3 { font-size: 1.1em; }
+.docstring h4 { font-size: 1.0em; font-weight: bold; }
+.docstring h5 { font-size: 1.0em; font-weight: bold; }
+.docstring h6 { font-size: 1.0em; font-weight: bold; }
 #filecontents strong { font-weight: normal; color: #000; }
 .readonly { font-size: 0.75em; color: #888; vertical-align: super; }
 .rdoc-term { padding-right: 25px; font-weight: bold; }
 .rdoc-list p { margin: 0; padding: 0; margin-bottom: 4px; }
 
 #page { width: 940px; margin: 0px auto; }
-#top_nav { background: #8e0; padding: 4px 8px; }
+#top_nav { background: #7d0; padding: 8px 12px; }
 #inner_nav { width: 940px; margin: 0px auto; }
 #inner_nav a { border: 0; text-decoration: none; color: #777; }
-#inner_nav a:hover { color: #eee; }
+#inner_nav a:hover { color: #222; }
 #top_nav .links { display: block; float: right; }
 #content { margin-left: 30px; width: 660px; float: left; }
 #sidebar { float: left; width: 200px; float: left; padding: 18px 10px; padding-top: 0; }
 #sidebar h2 { font-weight: 100; color: #3e4349; font-size: 1.45em; }
-#sidebar ol { padding-left: 19px; margin-left: 0; list-style: square; }
-#sidebar a { color: #777; }
+#sidebar ol { padding-left: 16px; margin-left: 0; list-style: square; }
+#sidebar a { color: #468; text-decoration: none; }
+#sidebar a:hover { color: #000; background: #8e0; padding: 4px; }
 #sidebar ol.top { padding-left: 0; margin-left: 0; list-style: none; }
 #sidebar a { font-size: 0.9em; }
 #footer { margin: 0 auto; width: 940px; text-align: center; margin-top: 30px; padding: 20px 0; color: #888; font-size: 0.8em; border-top: 1px dotted #bbb; }
@@ -49,7 +56,7 @@ ul { list-style: square; }
 #links strong { font-size: 0.95em; font-weight: normal; color: #000; }
 
 a { color: #268; text-decoration: none; }
-a:hover { color: #060; background: #8e0; }
+a:hover { color: #6ae; }
 
 /* syntax highlighting */
 .source_code { display: none; padding: 3px 8px; border-left: 8px solid #ddd; margin-top: 5px; }
