@@ -34,7 +34,7 @@ end
 
 def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
-  return @meths if @meths
+  return @meths if instance_variable_defined?(:@meths) && @meths
   @meths = object.meths(:inherited => false, :included => !options.embed_mixins.empty?)
   if options.embed_mixins.size > 0
     @meths = @meths.reject {|m| options.embed_mixins_match?(m.namespace) == false }
@@ -50,7 +50,7 @@ def special_method?(meth)
 end
 
 def attr_listing
-  return @attrs if @attrs
+  return @attrs if instance_variable_defined?(:@attrs) && @attrs
   @attrs = []
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
@@ -68,7 +68,7 @@ def attr_listing
 end
 
 def constant_listing
-  return @constants if @constants
+  return @constants if instance_variable_defined?(:@constants) && @constants
   @constants = object.constants(:included => false, :inherited => false)
   @constants += object.cvars
   @constants = run_verifier(@constants)

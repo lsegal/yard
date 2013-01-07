@@ -28,6 +28,7 @@ module YARD
         end
 
         def self.statement_class(type = nil)
+          @statement_class = nil unless instance_variable_defined?(:@statement_class)
           type ? @statement_class = type : (@statement_class || Statement)
         end
 

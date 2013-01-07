@@ -115,7 +115,7 @@ module YARD
       @reference, @raw_text = detect_reference(content)
       text = parse_content(@raw_text)
       # Remove trailing/leading whitespace / newlines
-      @text = text.gsub(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
+      @text = text.gsub(/\A[\s]+|[\s]+\Z/, '')
       call_directives_after_parse
       call_after_parse_callbacks
       self
@@ -135,7 +135,7 @@ module YARD
       orig_indent = 0
       directive = false
       last_line = ""
-      tag_name, tag_klass, tag_buf = nil, nil, []
+      tag_name, tag_buf = nil, []
 
       (content+['']).each_with_index do |line, index|
         indent = line[/^\s*/].length

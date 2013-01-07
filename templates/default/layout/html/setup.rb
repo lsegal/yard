@@ -1,4 +1,7 @@
 def init
+  @file = nil unless instance_variable_defined?(:@file)
+  @onefile = nil unless instance_variable_defined?(:@onefile)
+
   @breadcrumb = []
   if @onefile
     sections :layout
@@ -9,7 +12,7 @@ def init
     @breadcrumb_title = "File: " + @file.title
     @page_title = @breadcrumb_title
     sections :layout, [:diskfile]
-  elsif @contents
+  elsif contents
     sections :layout, [:contents]
   else
     case object
@@ -33,7 +36,7 @@ def init
 end
 
 def contents
-  @contents
+  instance_variable_defined?(:@contents) ? @contents : nil
 end
 
 def index

@@ -1,6 +1,6 @@
 # (see Ruby::ExceptionHandler)
 class YARD::Handlers::Ruby::Legacy::ExceptionHandler < YARD::Handlers::Ruby::Legacy::Base
-  handles /\Araise(\s|\(|\Z)/
+  handles(/\Araise(\s|\(|\Z)/)
 
   process do
     return unless owner.is_a?(MethodObject) # Only methods yield

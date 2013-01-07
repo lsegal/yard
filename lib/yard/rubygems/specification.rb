@@ -10,7 +10,7 @@ class Gem::Specification
     @has_rdoc == 'yard'
   end
 
-  undef has_rdoc?
+#  undef has_rdoc? if method_defined?(:has_rdoc?)
   def has_rdoc?
     (@has_rdoc ||= true) && @has_rdoc != 'yard'
   end
@@ -22,6 +22,7 @@ class Gem::Specification
     overwrite_accessor(:has_rdoc) { @has_rdoc ||= true }
     overwrite_accessor(:has_rdoc=) {|v| @has_rdoc = v }
   else
+    undef has_rdoc=
     attr_accessor :has_rdoc
   end
 

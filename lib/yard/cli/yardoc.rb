@@ -210,7 +210,12 @@ module YARD
         @has_markup = false
 
         if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
-          ::Encoding.default_external, ::Encoding.default_internal = 'utf-8', 'utf-8'
+          # The Encoding module gets a little too agressive in discouraging changing of the default encodings so we turn
+          # off warnings to keep it quiet while we make the change.
+          vo = $VERBOSE
+          $VERBOSE = false
+          Encoding.default_external, Encoding.default_internal = 'utf-8', 'utf-8'
+          $VERBOSE = vo
         end
       end
 
@@ -283,7 +288,10 @@ module YARD
         if defined?(::Encoding) && options.onefile
           if ::Encoding.default_internal == ::Encoding::US_ASCII
             log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
+            vo = $VERBOSE
+            $VERBOSE = false
             ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
+            $VERBOSE = vo
           end
         end
 
@@ -646,7 +654,10 @@ module YARD
                                  '  (default is system locale)') do |encoding|
           begin
             if defined?(Encoding) && Encoding.respond_to?(:default_external=)
+              vo = $VERBOSE
+              $VERBOSE = false
               Encoding.default_external, Encoding.default_internal = encoding, encoding
+              $VERBOSE = vo
             end
           rescue ArgumentError => e
             raise OptionParser::InvalidOption, e

@@ -248,6 +248,7 @@ module YARD
       # @return [String] if prefix is true, prefix + the name as a String.
       #   This must be implemented by the subclass.
       def name(prefix = false)
+        @name = nil unless instance_variable_defined?(:@name)
         prefix ? @name.to_s : @name
       end
 

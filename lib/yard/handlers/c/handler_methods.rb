@@ -96,6 +96,7 @@ module YARD
 
         def find_constant_docstring(object)
           comment = nil
+          stmt = nil
 
           # look inside overrides for declaration value
           override_comments.each do |name, override_comment|

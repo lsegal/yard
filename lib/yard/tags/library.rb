@@ -157,18 +157,20 @@ module YARD
         #   creating the tag or the name of the class to directly create a tag for
         def define_tag(label, tag, meth = nil)
           tag_meth = tag_method_name(tag)
-          if meth.is_a?(Class) && Tag > meth
-            class_eval <<-eof, __FILE__, __LINE__
-              def #{tag_meth}(text)
-                #{meth}.new(#{tag.inspect}, text)
-              end
-            eof
-          else
-            class_eval <<-eof, __FILE__, __LINE__
-              def #{tag_meth}(text)
-                send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
-              end
-            eof
+          unless method_defined?(tag_meth)
+            if meth.is_a?(Class) && Tag > meth
+              class_eval <<-eof, __FILE__, __LINE__
+                def #{tag_meth}(text)
+                  #{meth}.new(#{tag.inspect}, text)
+                end
+              eof
+            else
+              class_eval <<-eof, __FILE__, __LINE__
+                def #{tag_meth}(text)
+                  send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
+                end
+              eof
+            end
           end
 
           @labels ||= SymbolHash.new(false)
@@ -233,7 +235,6 @@ module YARD
         meth = meth.to_s
         send_name = "parse_tag" + (meth.empty? ? "" : "_" + meth)
         if @factory.respond_to?(send_name)
-          arity = @factory.method(send_name).arity
           @factory.send(send_name, tag_name, text)
         else
           raise NoMethodError, "Factory #{@factory.class_name} does not implement factory method :#{meth}."

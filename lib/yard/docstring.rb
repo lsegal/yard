@@ -77,6 +77,7 @@ module YARD
       docstring.object = object
       docstring.add_tag(*tags)
       docstring.instance_variable_set("@all", raw_data) if raw_data
+      docstring.instance_variable_set(:@summary, nil)
       docstring
     end
 
@@ -168,8 +169,6 @@ module YARD
     def summary
       resolve_reference
       return @summary if @summary
-      open_parens = ['{', '(', '[']
-      close_parens = ['}', ')', ']']
       num_parens = 0
       idx = length.times do |index|
         case self[index, 1]
@@ -320,6 +319,7 @@ module YARD
     # @return [void]
     def resolve_reference
       loop do
+        @unresolved_reference = nil unless instance_variable_defined?(:@unresolved_reference)
         return if @unresolved_reference.nil?
         return if CodeObjects::Proxy === @unresolved_reference
 
