@@ -26,7 +26,7 @@ module YARD
       #   :format => :dot
       attr_reader :options
 
-      # The set of objects to include in the graph.
+      # The set of objects to include in the graph.
       attr_reader :objects
 
       # Creates a new instance of the command-line utility
@@ -50,7 +50,6 @@ module YARD
       # @param [Array<String>] args each tokenized argument
       def run(*args)
         parse_arguments(*args)
-        Registry.load
 
         contents = objects.map do |o|
           o.format(options.merge(:serialize => false))
@@ -111,6 +110,8 @@ module YARD
 
         common_options(opts)
         parse_options(opts, args)
+
+        Registry.load
 
         options.verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
         if args.first
