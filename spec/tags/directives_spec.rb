@@ -138,6 +138,13 @@ describe YARD::Tags::MacroDirective do
       baz.visibility.should == :public
     end
 
+    it "should expand macro if defined on class method and there is no data block" do
+      tag_parse("@!macro [new] attached3\n  expanded_data")
+      baz = CodeObjects::MethodObject.new(P('Foo::Bar'), :baz, :class)
+      doc = DocstringParser.new.parse('@!macro attached3', baz, handler).to_docstring
+      doc.should == 'expanded_data'
+    end
+
     it "should not attempt to expand macro values if handler = nil" do
       tag_parse("@!macro [attach] xyz\n  $1 $2 $3")
     end

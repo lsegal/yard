@@ -266,8 +266,9 @@ module YARD
       end
 
       def attach?
-         class_method? || # always attach to class methods
-          (tag.types && tag.types.include?('attach'))
+        new? && # must have data or there is nothing to attach
+        class_method? || # always attach to class methods
+        (tag.types && tag.types.include?('attach'))
       end
 
       def class_method?
