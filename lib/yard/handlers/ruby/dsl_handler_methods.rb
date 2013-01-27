@@ -59,7 +59,7 @@ module YARD
           Registry.all(:macro).each do |macro|
             next unless macro.method_object
             next unless macro.method_object.name.to_s == caller_method.to_s
-            (namespace.inheritance_tree + [P('Object')]).each do |obj|
+            (namespace.inheritance_tree(true) + [P('Object')]).each do |obj|
               return macro if obj == macro.method_object.namespace
             end
           end

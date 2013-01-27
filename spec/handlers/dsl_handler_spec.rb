@@ -163,6 +163,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     Registry.at('Baz#y_parser').should_not be_nil
   end
 
+  it "should look through mixins for attached macros" do
+    meth = Registry.at('Baz#mixin_method')
+    meth.should_not be_nil
+    meth.docstring.should == 'DSL method mixin_method'
+  end
+
   it "should handle top-level DSL methods" do
     obj = Registry.at('#my_other_method')
     obj.should_not be_nil

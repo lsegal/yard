@@ -93,13 +93,21 @@ class Foo
   a_module_function :modfunc1
 end
 
+module MyMixin
+  # @!macro [attach] special
+  #   DSL method $1
+  def defined_by_mixin; end
+end
+
 class Bar
   parser :x_parser
 end
 
 class Baz < Foo
+  extend MyMixin
   parser :y_parser
   none { }
+  defined_by_mixin :mixin_method
 end
 
 # @!method my_other_method
