@@ -301,6 +301,9 @@ module YARD
            # Or we might be at the beginning of an argument list
            (@current_block == TkDEF && tk.class == TkRPAREN))
 
+        # Continue line ending on . or ::
+        return if @last_tk && [EXPR_DOT].include?(@last_tk.lex_state)
+
         # Continue a possible existing new statement unless we just finished an expression...
         return unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
           # Or we've opened a block and are ready to move into the body

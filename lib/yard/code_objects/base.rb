@@ -50,7 +50,7 @@ module YARD
     CONSTANTMATCH = /[A-Z]\w*/
 
     # Regular expression to match namespaces (const A or complex path A::B)
-    NAMESPACEMATCH = /(?:(?:#{NSEPQ})?#{CONSTANTMATCH})+/
+    NAMESPACEMATCH = /(?:(?:#{NSEPQ}\s*)?#{CONSTANTMATCH})+/
 
     # Regular expression to match a method name
     METHODNAMEMATCH = /[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|<=>|[<>]=?|\*\*|[-\/+%^&*~`|]|\[\]=?/

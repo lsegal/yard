@@ -9,12 +9,13 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       classname = $1
       superclass_def = $2
       superclass = parse_superclass($2)
+      classname = classname.gsub(/\s/, '')
       if superclass == "Struct"
         is_a_struct = true
         superclass = struct_superclass_name(superclass_def)
         create_struct_superclass(superclass, superclass_def)
       end
-      undocsuper = $2 && superclass.nil?
+      undocsuper = superclass_def && superclass.nil?
 
       klass = register ClassObject.new(namespace, classname) do |o|
         o.superclass = superclass if superclass
@@ -30,8 +31,8 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       if undocsuper
         raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
       end
-    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:]+)/
-      classname = $1
+    elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:\s]+)/
+      classname = $1.gsub(/\s/, '')
       proxy = Proxy.new(namespace, classname)
 
       # Allow constants to reference class names

@@ -5,8 +5,8 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   namespace_only
 
   process do
+    classname = statement[0].source.gsub(/\s/, '')
     if statement.type == :class
-      classname = statement[0].source
       superclass = parse_superclass(statement[1])
       if superclass == "Struct"
         is_a_struct = true
@@ -32,7 +32,6 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       if statement[0] == s(:var_ref, s(:kw, "self"))
         parse_block(statement[1], :namespace => namespace, :scope => :class)
       else
-        classname = statement[0].source
         proxy = Proxy.new(namespace, classname)
 
         # Allow constants to reference class names

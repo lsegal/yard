@@ -628,6 +628,10 @@ describe YARD::Parser::SourceParser do
   end
 
   describe '#parse_statements' do
+    before do
+      Registry.clear
+    end
+
     it "should display a warning for invalid parser type" do
       log.should_receive(:warn).with(/unrecognized file/)
       log.should_receive(:backtrace)
@@ -644,7 +648,6 @@ describe YARD::Parser::SourceParser do
     end
 
     it "should handle groups" do
-      Registry.clear
       YARD.parse_string <<-eof
         class A
           # @group Group Name
@@ -665,6 +668,26 @@ describe YARD::Parser::SourceParser do
       Registry.at('A#foo').group.should == "Group Name"
       Registry.at('A#foo2').group.should == "Group Name"
       Registry.at('A#baz').group.should == "Group 2"
+    end
+
+    it 'handles multi-line class/module references' do
+      YARD.parse_string <<-eof
+        class A::
+          B::C; end
+      eof
+      Registry.all.should == [P('A::B::C')]
+    end
+
+    it 'handles sclass definitions of multi-line class/module references' do
+      YARD.parse_string <<-eof
+        class << A::
+          B::C
+          def foo; end
+        end
+      eof
+      Registry.all.size.should == 2
+      Registry.at('A::B::C').should_not be_nil
+      Registry.at('A::B::C.foo').should_not be_nil
     end
   end
 end
