@@ -1,5 +1,8 @@
-require 'rubygems/user_interaction'
-require 'rubygems/doc_manager'
+begin
+  require 'rubygems/user_interaction'
+  require 'rubygems/doc_manager'
+rescue LoadError
+end
 
 class Gem::DocManager
   def self.load_yardoc
@@ -34,7 +37,7 @@ class Gem::DocManager
     Dir.chdir(old_pwd)
   end
 
-  undef setup_rdoc
+  begin undef setup_rdoc; rescue NameError; end
   def setup_rdoc
     if File.exist?(@doc_dir) && !File.writable?(@doc_dir) then
       raise Gem::FilePermissionError.new(@doc_dir)
@@ -64,8 +67,11 @@ class Gem::DocManager
     say "Building YARD (yri) index for #{@spec.full_name}..."
     run_yardoc '-c', '-n'
   end
-  alias install_ri_yard_orig install_ri
-  alias install_ri install_ri_yard
+
+  begin
+    alias install_ri_yard_orig install_ri
+    alias install_ri install_ri_yard
+  rescue NameError; end
 
   def install_rdoc_yard
     if @spec.has_rdoc?
@@ -74,6 +80,9 @@ class Gem::DocManager
       install_yardoc
     end
   end
-  alias install_rdoc_yard_orig install_rdoc
-  alias install_rdoc install_rdoc_yard
+
+  begin
+    alias install_rdoc_yard_orig install_rdoc
+    alias install_rdoc install_rdoc_yard
+  rescue NameError; end
 end
