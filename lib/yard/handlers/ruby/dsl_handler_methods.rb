@@ -14,6 +14,12 @@ module YARD
 
           @docstring = statement.comments || ""
           @docstring = @docstring.join("\n") if @docstring.is_a?(Array)
+
+          if @docstring =~ /^@!?macro\s+\[[^\]]*attach/
+            register_docstring(nil)
+            @docstring = ""
+          end
+
           if macro = find_attached_macro
             @docstring += "\n" +
               macro.expand([caller_method, *call_params], statement.source)

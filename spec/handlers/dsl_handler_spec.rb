@@ -181,6 +181,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     obj.signature.should == 'def beep(a, b, c)'
   end
 
+  it "should expand attached macros in first DSL method" do
+    Registry.at('DSLMethods#foo').docstring.should == "Returns String for foo"
+    Registry.at('DSLMethods#bar').docstring.should == "Returns Integer for bar"
+  end
+
   it "should not detect implicit macros with invalid method names" do
     undoc_error <<-eof
       ##

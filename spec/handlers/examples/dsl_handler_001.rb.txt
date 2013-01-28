@@ -116,3 +116,10 @@ method_that_makes_a_method
 
 # @!macro something
 foobarbaz :beep
+
+module DSLMethods
+  # @macro [attach] dsl_method
+  #   Returns $2 for $1
+  dsl_method :foo, String
+  dsl_method :bar, Integer
+end
