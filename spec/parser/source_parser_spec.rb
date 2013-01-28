@@ -689,5 +689,19 @@ describe YARD::Parser::SourceParser do
       Registry.at('A::B::C').should_not be_nil
       Registry.at('A::B::C.foo').should_not be_nil
     end
+
+    it 'handles lone comment blocks at the end of a namespace' do
+      YARD.parse_string <<-eof
+        module A
+          class B
+            def c; end
+
+            # @!method d
+          end
+        end
+      eof
+      Registry.at('A#d').should be_nil
+      Registry.at('A::B#d').should_not be_nil
+    end
   end
 end

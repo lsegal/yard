@@ -23,11 +23,11 @@ module YARD
             output << "<span class='tstring'>" if [:tstring_beg, :regexp_beg].include?(s[0])
             case s.first
             when :nl, :ignored_nl, :sp
-              output << h(s.last)
+              output << h(s[1])
             when :ident
-              output << "<span class='id identifier rubyid_#{h(s.last)}'>#{h(s.last)}</span>"
+              output << "<span class='id identifier rubyid_#{h(s[1])}'>#{h(s[1])}</span>"
             else
-              output << "<span class='#{s.first}'>#{h(s.last)}</span>"
+              output << "<span class='#{s.first}'>#{h(s[1])}</span>"
             end
             output << "</span>" if [:tstring_end, :regexp_end].include?(s[0])
           end

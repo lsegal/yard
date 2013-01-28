@@ -296,6 +296,19 @@ eof
       stmt("X = !1").jump(:unary).source.should == '!1'
     end
 
+    it "should have the correct line range for class/modules" do
+      s = stmt(<<-eof)
+        class Foo
+          def foo; end
+
+
+
+          # Ending comment
+        end
+      eof
+      s.jump(:class).line_range.should == (1..7)
+    end
+
     it "should find lone comments" do
       Registry.clear
       ast = YARD.parse_string(<<-eof).enumerator

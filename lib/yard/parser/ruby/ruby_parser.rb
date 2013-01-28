@@ -217,6 +217,11 @@ module YARD
           lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
+          if node.respond_to?(:block)
+            sr, lr = node.block.source_range, node.block.line_range
+            node.block.source_range = Range.new(sr.first, @tokens.last[2][1])
+            node.block.line_range = Range.new(lr.first, @tokens.last[2][0])
+          end
           node
         end
 
@@ -241,9 +246,9 @@ module YARD
 
         def add_token(token, data)
           if @tokens.last && @tokens.last[0] == :symbeg
-            @tokens[-1] = [:symbol, ":" + data]
+            @tokens[-1] = [:symbol, ":" + data, @tokens.last[2]]
           elsif @heredoc_state == :started
-            @heredoc_tokens << [token, data]
+            @heredoc_tokens << [token, data, [lineno, charno]]
 
             # fix ripper encoding of heredoc bug
             # (see http://bugs.ruby-lang.org/issues/6200)
@@ -251,12 +256,12 @@ module YARD
 
             @heredoc_state = :ended if token == :heredoc_end
           elsif (token == :nl || token == :comment) && @heredoc_state == :ended
-            @heredoc_tokens.unshift([token, data])
+            @heredoc_tokens.unshift([token, data, [lineno, charno]])
             @tokens += @heredoc_tokens
             @heredoc_tokens = nil
             @heredoc_state = nil
           else
-            @tokens << [token, data]
+            @tokens << [token, data, [lineno, charno]]
             if token == :heredoc_beg
               @heredoc_state = :started
               @heredoc_tokens = []
