@@ -259,6 +259,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
       url_for(P("Mod::Class#meth")).should be_nil
     end
 
+    it "should return nil if object is hidden" do
+      yard = CodeObjects::ModuleObject.new(:root, :YARD)
+
+      stub!(:serializer).and_return Serializers::FileSystemSerializer.new
+      stub!(:object).and_return Registry.root
+      stub!(:options).and_return OpenStruct.new(:verifier => Verifier.new('false'))
+
+      url_for(yard).should be_nil
+    end
+
     it "should return nil if serializer does not implement #serialized_path" do
       stub!(:serializer).and_return Serializers::Base.new
       stub!(:object).and_return Registry.root

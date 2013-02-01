@@ -22,6 +22,8 @@ class MockDocServerHelper
     @serializer = YARD::Server::DocServerSerializer.new
     @object = YARD::Registry.root
   end
+
+  def options; OpenStruct.new end
 end
 
 describe YARD::Server::DocServerHelper do

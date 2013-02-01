@@ -312,6 +312,7 @@ module YARD
       def url_for(obj, anchor = nil, relative = true)
         link = nil
         return link unless serializer
+        return link if obj.is_a?(CodeObjects::Base) && run_verifier([obj]).empty?
 
         if obj.is_a?(CodeObjects::Base) && !obj.is_a?(CodeObjects::NamespaceObject)
           # If the obj is not a namespace obj make it the anchor.
