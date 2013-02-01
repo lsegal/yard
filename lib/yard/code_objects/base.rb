@@ -427,6 +427,16 @@ module YARD
       end
       alias_method :to_s, :path
 
+      # @note
+      #   Override this method if your object has a special title that does
+      #   not match the {#path} attribute value. This title will be used
+      #   when linking or displaying the object.
+      # @return [String] the display title for an object
+      # @see 0.8.4
+      def title
+        path
+      end
+
       # @param [Base, String] other another code object (or object path)
       # @return [String] the shortest relative path from this object to +other+
       # @since 0.5.3

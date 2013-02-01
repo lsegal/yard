@@ -207,6 +207,16 @@ describe YARD::Templates::Helpers::HtmlHelper do
       link_object("Bar").should =~ %r{>Bar</a>}
     end
 
+    it "should use #title if overridden" do
+      CodeObjects::ModuleObject.new(:root, :YARD)
+      CodeObjects::ClassObject.new(P('YARD'), :Bar)
+      Registry.at('YARD::Bar').stub(:title).and_return('TITLE!')
+      stub!(:object).and_return(Registry.at('YARD::Bar'))
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      link_object("Bar").should =~ %r{>TITLE!</a>}
+    end
+
     it "should use relative path to parent class in title" do
       root = CodeObjects::ModuleObject.new(:root, :YARD)
       obj = CodeObjects::ModuleObject.new(root, :SubModule)

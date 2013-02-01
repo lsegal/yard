@@ -96,6 +96,7 @@ module YARD
       end
       alias to_s path
       alias to_str path
+      alias title path
 
       # @return [Boolean]
       def is_a?(klass)

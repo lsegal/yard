@@ -256,6 +256,8 @@ module YARD
           # "CurrentClass.method_name"
           if obj.is_a?(CodeObjects::MethodObject) && obj.scope == :class && obj.parent == object
             title = h([object.name, obj.sep, obj.name].join)
+          elsif obj.title != obj.path
+            title = h(obj.title)
           else
             title = h(object.relative_path(obj))
           end
@@ -266,7 +268,7 @@ module YARD
         return title if obj.is_a?(CodeObjects::Proxy)
 
         link = url_for(obj, anchor, relative)
-        link = link ? link_url(link, title, :title => h("#{obj.path} (#{obj.type})")) : title
+        link = link ? link_url(link, title, :title => h("#{obj.title} (#{obj.type})")) : title
         "<span class='object_link'>" + link + "</span>"
       end
 
