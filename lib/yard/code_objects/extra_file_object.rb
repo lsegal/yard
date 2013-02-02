@@ -58,7 +58,7 @@ module YARD::CodeObjects
     end
     alias to_s inspect
 
-    def type; 'extra_file' end
+    def type; :extra_file end
 
     def ==(other)
       return false unless self.class === other
