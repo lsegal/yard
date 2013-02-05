@@ -309,6 +309,69 @@ describe YARD::Registry do
       Thread.new { Registry.single_object_db.should == nil }.join
     end
   end
+  
+  describe '.register_link' do
+    it "should reject an invalid keyword" do
+      lambda { Registry.register_link(nil, :class) }.should raise_error(ArgumentError)
+      lambda { Registry.register_link('', :class) }.should raise_error(ArgumentError)
+    end
+    
+    it "should reject an invalid type" do
+      lambda { Registry.register_link('Class: ', 'Class') }.should raise_error(ArgumentError)
+    end
+    
+    it "should register a link between a type and a keyword" do
+      Registry.links.count.should == 0
+      lambda { Registry.register_link('Class: ', :class) }.should_not raise_error
+      Registry.links.count.should == 1
+    end
+        
+    it "should map multiple keywords to the same type" do
+      Registry.links.count.should == 0
+      lambda { Registry.register_link('Class: ', :class) }.should_not raise_error
+      lambda { Registry.register_link('Module: ', :class) }.should_not raise_error
+      Registry.links.count.should == 2
+    end
+    
+    it "should not register a link between a type and a keyword more than once" do
+      Registry.links.count.should == 0
+      Registry.register_link('Class: ', :class)
+      Registry.register_link('Class: ', :class)
+      Registry.links.count.should == 1
+    end
+    
+    it "should not override an entry" do
+      Registry.register_link('ABC', :class)
+      Registry.links['ABC'].should == :class
+      lambda { Registry.register_link('ABC', :method) }.should raise_error(ArgumentError)
+      Registry.links['ABC'].should == :class
+    end
+    
+  end
+  
+  describe '.delete_link' do
+    it "should remove a link" do
+      Registry.register_link('Class: ', :class)
+      Registry.links.count.should == 1
+      Registry.delete_link(:class)
+      Registry.links.count.should == 0
+    end
+    
+    it "should gracefully handle removing of a non-registered link" do
+      Registry.links.count.should == 0
+      lambda { Registry.delete_link(:class) }.should_not raise_error
+      Registry.links.count.should == 0
+    end
+  end
+  
+  describe '.clear' do
+    it "should delete all registered links" do
+      Registry.register_link('Class:', :class)
+      Registry.links.count.should == 1
+      Registry.clear
+      Registry.links.count.should == 0
+    end
+  end
 
   describe 'Thread local' do
     it "should maintain two Registries in separate threads" do

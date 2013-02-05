@@ -16,6 +16,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       @serializer.should_receive(:deserialize).with('root').and_return({:root => @foo, :A => @bar})
       @store.load('foo').should == true
       @store.root.should == @foo
@@ -36,6 +37,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
 
       @store.load('foo').should == true
@@ -53,6 +55,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       @store.load('foo').should == true
     end
@@ -71,6 +74,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:readlines).with('foo/checksums').and_return([
         'file1 CHECKSUM1', '  file2 CHECKSUM2 '
       ])
@@ -83,6 +87,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(true)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       File.should_receive(:read_binary).with('foo/proxy_types').and_return(Marshal.dump({'a' => 'b'}))
       @store.load('foo').should == true
@@ -94,6 +99,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(true)
       File.should_receive(:read_binary).with('foo/objects/root.dat').and_return(Marshal.dump(@foo))
       @store.load('foo').should == true
@@ -214,6 +220,7 @@ describe YARD::RegistryStore do
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       @serializer.should_receive(:deserialize).with('root').and_return({:'A#foo' => @foo, :A => @bar})
       @store.load('foo')
       @store.paths_for_type(:method).should == ['#foo']
@@ -256,6 +263,7 @@ describe YARD::RegistryStore do
       File.should_receive(:directory?).with('foo').and_return(true)
       File.should_receive(:file?).with('foo/proxy_types').and_return(false)
       File.should_receive(:file?).with('foo/object_types').and_return(false)
+      File.should_receive(:file?).with('foo/object_links').and_return(false)
       File.should_receive(:file?).with('foo/checksums').and_return(false)
       File.should_receive(:file?).with('foo/objects/root.dat').and_return(false)
       @store.should_receive(:all_disk_objects).at_least(1).times.and_return(['foo/objects/foo', 'foo/objects/bar'])

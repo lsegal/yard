@@ -213,6 +213,36 @@ module YARD
       # This class is never a root object
       def root?; false end
 
+      # Does this Proxy represent a link to another object?
+      #
+      # @return [TrueClass] when #to_s returns a keyword registered as a link identifier
+      #
+      # @see Registry.type_from_link
+      def object_link?
+        Registry.type_from_link(to_s)
+      end
+
+      # Attempts to locate a CodeObject instance for which a link has been
+      # registered using the given title.
+      #
+      # @param [String] title the title that will be passed to CodeObjects::Base#linked_by?
+      #  to identify the object
+      #
+      # @return [CodeObjects::Base] if an object was located
+      # @return nil otherwise
+      #
+      # @see Registry#register_link
+      # @see CodeObjects::Base#linked_by?
+      def resolve_link(title)
+        return if !title || title.empty?
+
+        if klass = object_link?
+          return Registry.all(klass.to_sym).select { |o| o.linked_by?(title) }.first
+        end
+
+        nil
+      end
+      
       private
 
       # @note this method fixes a bug in 1.9.2: http://gist.github.com/437136

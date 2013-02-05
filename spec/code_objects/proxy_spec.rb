@@ -137,4 +137,68 @@ describe YARD::CodeObjects::Proxy do
     eof
     Proxy.new(:root, 'B::C').should == Registry.at('A::C')
   end
+  
+  describe "link resolution" do
+    before do
+      Registry.clear
+      Registry.links.empty?.should be_true
+      
+      eval <<-'eof'
+        module CodeObjects
+          class ClassObject < NamespaceObject
+            def linked_by?(title)
+              title.to_s == @name.to_s
+            end
+          end
+        end
+      eof
+    end
+    
+    after do
+      eval <<-'eof'
+        module CodeObjects
+          class ClassObject < NamespaceObject
+            def linked_by?(title)
+              super
+            end
+          end
+        end      
+      eof
+    end
+    
+    it "should resolve a link to a linkable object using a keyword" do
+      Registry.register_link('Class:', :class)
+      
+      YARD.parse_string 'class Foo; end'
+      
+      P('Class:').resolve_link('Foo').should == Registry.at('Foo')
+      P('Class:').resolve_link('Foo').should be_true
+    end
+    
+    it "should resolve a link to a linkable object using multiple keywords" do
+      Registry.register_link('Class:', :class)
+      Registry.register_link('Module:', :class)
+      
+      YARD.parse_string 'class Foo; end'
+      
+      P('Class:').resolve_link('Foo').should == Registry.at('Foo')
+      P('Module:').resolve_link('Foo').should == Registry.at('Foo')
+    end
+    
+    it "should gracefully attempt to resolve a non-linkable object" do
+      YARD.parse_string 'class Foo; end'
+      
+      P('Class:').resolve_link('Foo').should == nil
+      P('Module:').resolve_link('Foo').should == nil
+    end
+    
+    it "should gracefully reject an empty object link" do
+      Registry.register_link('Class:', :class)
+      
+      YARD.parse_string 'class Foo; end'
+      
+      P('Class:').resolve_link(nil).should == nil
+    end
+    
+  end
 end

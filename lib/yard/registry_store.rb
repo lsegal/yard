@@ -16,6 +16,7 @@ module YARD
       @store = {}
       @proxy_types = {}
       @object_types = {:root => [:root]}
+      @object_links = {}
       @notfound = {}
       @loaded_objects = 0
       @available_objects = 0
@@ -63,6 +64,34 @@ module YARD
         @store[key.to_sym] = value
       end
     end
+    
+    # Associates a keyword with an object type to form a "link" that can
+    # be used in docstrings to reference objects using attributes other than paths.
+    #
+    # Keywords are unique; a keyword can be used to identify a single object
+    # type. However, multiple keywords can point to the same object type.
+    #
+    # @param [Symbol] type the type to link against (should be usable in Registry.all(:type))
+    # @param [String] keyword a single word to be used as a keyword for the link
+    #
+    # @see Registry.register_link
+    def put_link(keyword, type)
+      keyword = keyword.to_s.strip
+      
+      # not registered yet?
+      unless @object_links[keyword]
+        @object_links[keyword] = type.to_sym
+        log.debug "CodeObject #{type.to_sym} can now be linked by '#{keyword.to_s.strip}'"
+      else
+        # overriding entries is not allowed
+        if type != @object_links[keyword]
+          raise ArgumentError.new %Q[
+            Link keyword '#{keyword}' is already mapped to
+            '#{@object_links[keyword]}', can not map to '#{type}' too!
+          ].gsub(/ +|\n/, ' ').strip
+        end
+      end
+    end
 
     alias [] get
     alias []= put
@@ -71,6 +100,17 @@ module YARD
     # @param [#to_sym] key the key to delete
     # @return [void]
     def delete(key) @store.delete(key.to_sym) end
+    
+    # Removes a link entry(ies) for the given type.
+    #
+    # @param [Symbol] type the object type for which the links should be removed
+    # @param [String] keyword when passed, only the link with the matching keyword
+    #  will be removed, otherwise all the object links will be
+    #
+    # @see Registry.delete_link
+    def delete_link(type, keyword = nil)
+      @object_links.delete_if { |k, t| t == type && (keyword ? k == keyword : true) }
+    end
 
     # Gets all path names from the store. Loads the entire database
     # if +reload+ is +true+
@@ -105,6 +145,21 @@ module YARD
       load_all if reload
       paths_for_type(type).map {|t| @store[t.to_sym] }
     end
+    
+    def links(reload = false) load_all if reload; @object_links end
+    
+    # @return [Symbol] the code object type that's linked to the given keyword
+    # @return nil if the keyword was not registered as a link to any type
+    #
+    # @note While you shouldn't need to use this as it is internally used by CodeObjects::Proxy,
+    #  the accessor lies in Registry.type_from_link instead.
+    #
+    # @see Registry.register_link
+    # @see Registry.type_from_link
+    # @see CodeObjects::Proxy#resolve_link
+    def type_from_link(keyword)
+      @object_links[keyword.to_s.strip]
+    end
 
     # @return [CodeObjects::RootObject] the root object
     def root; @store[:root] end
@@ -123,6 +178,7 @@ module YARD
       @store = {}
       @proxy_types = {}
       @object_types = {}
+      @object_links = {}
       @notfound = {}
       @serializer = Serializers::YardocSerializer.new(@file)
       load_yardoc
@@ -186,6 +242,7 @@ module YARD
       end
       write_proxy_types
       write_object_types
+      write_object_links
       write_checksums
       true
     end
@@ -229,6 +286,10 @@ module YARD
     def object_types_path
       @serializer.object_types_path
     end
+    
+    def object_links_path
+      @serializer.object_links_path
+    end
 
     def load_yardoc
       return false unless @file
@@ -239,6 +300,7 @@ module YARD
         load_checksums
         load_root
         load_object_types
+        load_object_links
         true
       elsif File.file?(@file) # old format
         load_yardoc_old
@@ -267,6 +329,12 @@ module YARD
         values.each do |object|
           (@object_types[object.type] ||= []) << object.path
         end
+      end
+    end
+
+    def load_object_links
+      if File.file?(object_links_path)
+        @object_links = Marshal.load(File.read_binary(object_links_path))
       end
     end
 
@@ -314,6 +382,10 @@ module YARD
       File.open!(checksums_path, 'w') do |f|
         @checksums.each {|k, v| f.puts("#{k} #{v}") }
       end
+    end
+    
+    def write_object_links
+      File.open!(object_links_path, 'wb') { |f| f.write(Marshal.dump(@object_links)) }
     end
   end
 end

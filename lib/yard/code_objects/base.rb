@@ -540,6 +540,23 @@ module YARD
       #   and the name (default is {NSEP})
       def sep; NSEP end
 
+      # Override this method if you've registered a link keyword to refer to this
+      # object. The method should return whether the passed title identifies this
+      # instance.
+      #
+      # @param [String] title the component after the registered keyword
+      # @return [Boolean] whether this object is indeed identified by the passed title
+      #
+      # @abstract Should be defined in the subclass that wants to be linked by keywords.
+      #
+      # @note This method is invoked internally by a Proxy object when resolving a link.
+      #
+      # @see Registry#register_link
+      # @see Proxy#resolve_link
+      def linked_by?(title)
+        false
+      end
+
       protected
 
       # Override this method if your code object subclass does not allow

@@ -217,6 +217,55 @@ describe YARD::Templates::Helpers::HtmlHelper do
       link_object("Bar").should =~ %r{>TITLE!</a>}
     end
 
+    it "should use custom links if defined" do
+      eval <<-'eof'
+        class LinkableSpec < YARD::CodeObjects::Base
+          def type; :linkable_spec end
+          def title; "Spec: #{name}" end
+          def path; ".#{type}.#{namespace.path}.#{@name.to_s.gsub(/\s/, '_')}" end
+          def linked_by?(text)
+            @name.to_s == text.to_s
+          end
+        end
+      eof
+      
+      docstr = <<-'eof'
+        # Some class.
+        #
+        # @see Spec: it should succeed
+        # @see .linkable_spec.Foo.it_should_succeed
+        class Foo
+        end
+      eof
+      
+      YARD.parse_string docstr
+      Registry.register_link('Spec:', :linkable_spec)
+      
+      stub!(:object).and_return(Registry.at('Foo'))
+      LinkableSpec.new(P('Foo'), "it should succeed")
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)       
+      implicit = link_object("Spec: ", "it should succeed")
+      explicit = link_object(P(".linkable_spec.Foo.it_should_succeed"))
+      
+      implicit.should == explicit
+      
+      Registry.clear
+      
+      # now we try the original behaviour by un-registering the linkage keyword
+      Registry.delete_link(:linkable_spec, 'Spec:')
+      
+      YARD.parse_string docstr
+      
+      stub!(:object).and_return(Registry.at('Foo'))
+      LinkableSpec.new(P('Foo'), "it should succeed")
+      serializer = Serializers::FileSystemSerializer.new
+      stub!(:serializer).and_return(serializer)
+      implicit = link_object("Spec: ", "it should succeed")
+      explicit = link_object(P(".linkable_spec.Foo.it_should_succeed"))
+      implicit.should_not == explicit
+    end
+
     it "should use relative path to parent class in title" do
       root = CodeObjects::ModuleObject.new(:root, :YARD)
       obj = CodeObjects::ModuleObject.new(root, :SubModule)

@@ -176,12 +176,88 @@ module YARD
         return if object.is_a?(CodeObjects::Proxy)
         thread_local_store[object.path] = object
       end
+      
+      # Registers a link between a keyword and an object type found in the Registry.
+      #
+      # Links provide the means to link to objects in a docstring using arbitrary strings
+      # instead of paths. This is mostly useful for custom CodeObject implementations where
+      # the path is usually not human-readable.
+      #
+      # For example, to link to a custom SpecObject whose path might be `.specs.suite.should_do_something`,
+      # you can register a link that accepts a 'Spec: ' keyword, followed by the spec's description.
+      #
+      # The resolving of links is done in CodeObjects::Proxy#resolve_link which uses
+      # CodeObjects::Base#linked_by? to locate the link target.
+      #
+      # @example Linking to custom SpecObject instances using `Spec: spec title` syntax
+      #  class SpecObject < YARD::CodeObjects::Base
+      #    def type
+      #      :spec
+      #    end
+      #    
+      #    def linked_by?(title)
+      #      @my_spec_name.to_s == title # you can use any attribute here to identify the object
+      #    end
+      #  end
+      #
+      #  Registry.register_link('Spec:', :spec)
+      #
+      #  # A method that's supposed to do something.
+      #  # @see Spec: should do something
+      #  def method_that_does_something() end
+      #
+      # @example Registering multiple keywords to the same type
+      #  Registry.register_link('Spec:', :spec)
+      #  Registry.register_link('Test:', :spec)
+      #
+      # @param [String] keyword the first token in the docstring that identifies the link,
+      #  must be unique and contain no spaces (ie: 'Spec:', 'Appendix', 'Class:')
+      # @param [Symbol, CodeObjects::Base, CodeObjects::Proxy] type the type of objects
+      #  to be linked to (ie: :spec, :class, :module, :method)
+      #
+      # @return [void]
+      #
+      # @see CodeObjects::Base#linked_by?
+      # @see CodeObjects::Proxy#resolve_link
+      def register_link(keyword, type)
+        unless keyword.is_a?(String) && !keyword.empty?
+          raise ArgumentError.new "keyword must be a valid string!"
+        end
+        
+        unless type.is_a?(Symbol) || type.is_a?(CodeObjects::Base) || type.is_a?(CodeObjects::Proxy)
+          raise ArgumentError.new "type must be a Symbol or a CodeObject" 
+        end
+        
+        type = type.type unless Symbol === type
+        
+        thread_local_store.put_link(keyword, type)
+      end
 
       # Deletes an object from the registry
       # @param [CodeObjects::Base] object the object to remove
       # @return [void]
       def delete(object)
         thread_local_store.delete(object.path)
+      end
+      
+      # Deletes the registered links for the given type.
+      #
+      # If keyword is specified, only that keyword entry will be deleted. Otherwise,
+      # all the type link entries will be deleted.
+      #
+      # @param [Symbol, CodeObjects::Base, CodeObjects::Proxy] type the type of
+      #  objects in the Registry that will be identified via this link
+      # @param [String] keyword the keyword that identifies the link
+      #
+      # @return [void]
+      def delete_link(type, keyword = nil)
+        unless type.is_a?(Symbol) || type.is_a?(CodeObjects::Base) || type.is_a?(CodeObjects::Proxy)
+          raise ArgumentError.new "type must be a Symbol or a CodeObject" 
+        end
+                
+        type = type.type unless Symbol === type
+        
+        thread_local_store.delete_link(type, keyword)
       end
 
       # Clears the registry
@@ -226,6 +302,21 @@ module YARD
       # @return [Array<String>] all of the paths in the registry.
       def paths(reload = false)
         thread_local_store.keys(reload).map {|k| k.to_s }
+      end
+      
+      def links(reload = false)
+        thread_local_store.links(reload)
+      end
+      
+      # @return [Symbol] the code object type that's linked to the given keyword
+      # @return nil if the keyword was not registered as a link to any type
+      #
+      # @note Used internally by CodeObjects::Proxy when resolving a link.
+      #
+      # @see Registry.register_link
+      # @see CodeObjects::Proxy#resolve_link      
+      def type_from_link(keyword)
+        thread_local_store.type_from_link(keyword)
       end
 
       # Returns the object at a specific path.
