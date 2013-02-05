@@ -140,6 +140,8 @@ module YARD
       # @return [Docstring] the documentation string
       # @since 0.8.4
       attr_reader :base_docstring
+      undef base_docstring
+      def base_docstring; @docstring end
 
       # Marks whether or not the method is conditionally defined at runtime
       # @return [Boolean] true if the method is conditionally defined at runtime
@@ -220,7 +222,7 @@ module YARD
         @visibility = :public
         @tags = []
         @docstrings = {}
-        @base_docstring = Docstring.new('', self)
+        @docstring = Docstring.new('', self)
         @namespace = nil
         self.namespace = namespace
         yield(self) if block_given?
@@ -237,7 +239,7 @@ module YARD
           ivar = "@#{ivar}"
           other.instance_variable_set(ivar, instance_variable_get(ivar))
         end
-        other.docstring = @base_docstring.to_raw
+        other.docstring = @docstring.to_raw
         other
       end
 
@@ -372,8 +374,8 @@ module YARD
       # @return [Docstring] the documentation string
       def docstring(locale = I18n::Locale.default)
         if locale.nil?
-          @base_docstring.resolve_reference
-          return @base_docstring
+          @docstring.resolve_reference
+          return @docstring
         end
 
         if locale.is_a?(String)
@@ -395,9 +397,9 @@ module YARD
       def docstring=(comments)
         @docstrings.clear
         if Docstring === comments
-          @base_docstring = comments
+          @docstring = comments
         else
-          @base_docstring = Docstring.new(comments, self)
+          @docstring = Docstring.new(comments, self)
         end
       end
 
@@ -525,7 +527,7 @@ module YARD
       # @since 0.8.4
       def add_tag(*tags)
         @docstrings.clear
-        @base_docstring.add_tag(*tags)
+        @docstring.add_tag(*tags)
       end
 
       # @return whether or not this object is a RootObject
@@ -551,7 +553,7 @@ module YARD
       # @since 0.8.0
       def copyable_attributes
         vars = instance_variables.map {|ivar| ivar.to_s[1..-1] }
-        vars -= %w(base_docstring docstrings namespace name path)
+        vars -= %w(docstring docstrings namespace name path)
         vars
       end
 
@@ -569,13 +571,13 @@ module YARD
       end
 
       def translate_docstring(locale)
-        @base_docstring.resolve_reference
-        return @base_docstring if locale.nil?
+        @docstring.resolve_reference
+        return @docstring if locale.nil?
 
-        text = I18n::Text.new(@base_docstring)
+        text = I18n::Text.new(@docstring)
         localized_text = text.translate(locale)
         docstring = Docstring.new(localized_text, self)
-        docstring.add_tag(*@base_docstring.tags)
+        docstring.add_tag(*@docstring.tags)
         docstring
       end
     end
