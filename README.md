@@ -6,10 +6,10 @@ YARD: Yay! A Ruby Documentation Tool
 **Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
 **Author**:       Loren Segal  
 **Contributors**: See Contributors section below    
-**Copyright**:    2007-2012    
+**Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.3 (codename "Rainier")    
-**Release Date**: October 15th 2012    
+**Latest Version**: 0.8.4
+**Release Date**: February 4th 2013    
 
 Synopsis
 --------
@@ -285,6 +285,17 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **February.4.13**: 0.8.4 release
+    - Add `-B/--bind` switch to yard server (#593, #608)
+    - Add CodeObjects::Base#title for plugins to customize how object
+      links display (#646)
+    - Disable linking objects filtered out by verifiers (#645)
+    - Allow macro expansion on class methods (#632)
+    - Expand newly attached macro on first DSL method call (#631)
+    - Disable RubyGems plugin in Ruby 2.0 (#627)
+    - Fix line range for class/module node bodies (#626)
+    - Search extended modules for attached DSL macros (#553)
 
 - **October.14.12**: 0.8.3 release
     - Add `--non-transitive-tag` to disable tag transitivity (#571)
@@ -562,7 +573,7 @@ http://github.com/lsegal/yard/contributors
 
 ## Copyright
 
-YARD &copy; 2007-2012 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
+YARD &copy; 2007-2013 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
 RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL}
 documents for more information.

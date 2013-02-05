@@ -17,6 +17,7 @@
 13. **Single object db now default (multi-object db unsupported)** (0.8.0)
 14. **Added `--api` tag to generate documentation for API sets** (0.8.1)
 15. **Added `--non-transitive-tag` to disable transitive tag** (0.8.3)
+16. **Added `-B/--bind` to bind to a port in yard server** (0.8.4)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 
@@ -292,6 +293,10 @@ when you define it on a class. Only the class itself has a specific
 Which will avoid classifying treating @api as a transitive tag
 when parsing modules and classes.
 
+## Added `-B/--bind` to bind to a port in yard server (0.8.4)
+
+You can now bind the `yard server` command to a given local port
+with `yard server -B PORT` or `yard server --bind PORT`.
 
 # What's New in 0.7.x?
 

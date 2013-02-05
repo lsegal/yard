@@ -1,3 +1,162 @@
+2013-02-04  Loren Segal <lsegal@amazon.com>
+
+  * LICENSE, README.md, docs/WhatsNew.md, lib/yard/version.rb: Bump to 0.8.4
+
+2013-02-01  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/code_objects/extra_file_object.rb: Make ExtraFileObject type a
+  symbol
+
+  * .travis.yml: Disable ree on Travis CI
+
+  * templates/default/module/html/box_info.erb: Filter out hidden modules from
+  mixin listing  References #645
+
+  * lib/yard/templates/helpers/html_helper.rb,
+  spec/server/doc_server_helper_spec.rb,
+  spec/templates/helpers/html_helper_spec.rb: Disable linking objects filtered
+  out by verifier  Fixes #645
+
+  * lib/yard/code_objects/base.rb, lib/yard/code_objects/proxy.rb,
+  lib/yard/templates/helpers/html_helper.rb,
+  spec/templates/helpers/html_helper_spec.rb: Add CodeObjects::Base#title and
+  use this for links  Resolves #646
+
+2013-01-28  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/handlers/ruby/dsl_handler_methods.rb,
+  spec/handlers/dsl_handler_spec.rb,
+  spec/handlers/examples/dsl_handler_001.rb.txt: Expand new attached macro on
+  first DSL method call  Fixes #631
+
+2013-01-27  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/parser/ruby/ruby_parser.rb,
+  .../helpers/html_syntax_highlight_helper.rb,
+  spec/parser/ruby/ruby_parser_spec.rb, spec/parser/source_parser_spec.rb: Fix
+  line_range for class/module node bodies  Node bodies now properly return
+  range to "end" token.  Requires change to tokens structure, which now keeps
+  track of line and char position of each token value.  Fixes #626
+
+  * lib/yard/handlers/ruby/dsl_handler_methods.rb,
+  spec/handlers/dsl_handler_spec.rb,
+  spec/handlers/examples/dsl_handler_001.rb.txt: Search extended modules for
+  attached DSL macros  Fixes #553
+
+  * lib/yard/tags/directives.rb, spec/tags/directives_spec.rb: Allow macro
+  expansion on class methods  Fixes #632
+
+  * lib/yard/rubygems/doc_manager.rb: Future proof loading of Gem::DocManager
+  Fixes #627
+
+2013-01-26  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/ruby/class_handler.rb,
+  lib/yard/handlers/ruby/legacy/class_handler.rb,
+  lib/yard/parser/ruby/legacy/statement_list.rb,
+  spec/parser/source_parser_spec.rb: Fix handling of multiline class/module
+  definitions  Fixes #642
+
+2013-01-20  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/cli/graph.rb: Grab root object after Registry.load in graph CLI
+  Otherwise the root object will have changed.  Fixes #618
+
+2013-01-06  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/handlers/base.rb, .../examples/visibility_handler_001.rb.txt,
+  spec/handlers/visibility_handler_spec.rb: Don't #register_visibility on
+  class/modules  Closes #636
+
+  * .travis.yml: Disable JRuby testing due to bugs in JRuby
+
+  * spec/templates/helpers/html_helper_spec.rb: Update code block tests
+
+  * templates/guide/layout/html/layout.erb: Update guide template to properly
+  link to prev/index/next
+
+  * templates/guide/fulldoc/html/css/style.css: CSS updates
+
+  * lib/yard/templates/helpers/html_helper.rb: Add lang to code block for
+  syntax highlighting scripts like highlight.js
+
+2012-12-24  imageoptimiser <skattyadz+imageoptimiser@gmail.com>
+
+  * docs/images/code-objects-class-diagram.png,
+  docs/images/handlers-class-diagram.png,
+  docs/images/overview-class-diagram.png, docs/images/parser-class-diagram.png,
+  docs/images/tags-class-diagram.png,
+  .../default/fulldoc/html/images/processing.gif: Optimised images
+
+2012-11-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/code_objects/base.rb: Fix typo in documentation
+
+2012-10-16  Tsyren Ochirov <tsyren@kupibilet.ru>
+
+  * lib/yard/cli/server.rb, spec/cli/server_spec.rb: Add -B/--bind parameter to
+  `yard server` command  Closes #608, #615
+
+2012-11-25  Loren Segal <lsegal@soen.ca>
+
+  * lib/yard/tags/overload_tag.rb, spec/handlers/dsl_handler_spec.rb,
+  spec/handlers/method_handler_spec.rb, spec/tags/directives_spec.rb,
+  spec/tags/overload_tag_spec.rb: OverloadTag#parameters should use String
+  values  This is consistent with #parameters set by MethodHandlers  Fixes #620
+
+2012-11-21  Loren Segal <lsegal@amazon.com>
+
+  * lib/yard/autoload.rb, lib/yard/handlers/base.rb,
+  lib/yard/handlers/processor.rb, spec/handlers/base_spec.rb,
+  spec/handlers/processor_spec.rb: Add HandlerAborted exception and
+  Handlers::Base#abort! to silently exit from handler.
+
+  * lib/yard/autoload.rb: Autoload Tags::Directive class
+
+2012-11-16  Loren Segal <lsegal@amazon.com>
+
+  * templates/default/tags/html/example.erb: Add code block around example tags
+
+  * lib/yard/handlers/ruby/method_handler.rb, templates/default/class/setup.rb,
+  templates/default/tags/setup.rb: Perform proper constructor checks on methods
+
+2012-11-14  Loren Segal <lsegal@amazon.com>
+
+  * .travis.yml: Disable 1.9.2 on travis... sigh
+
+  * lib/yard/code_objects/base.rb: Don't split CodeObjects::Base#type by NSEP,
+  it should be hardcoded to ::
+
+2012-11-13  Kostas Karachalios <kostas.karachalios@me.com>
+
+  * docs/GettingStarted.md: Change syntax of @param examples in
+  GettingStarted.md  Changed to the syntax referenced in Tags.md
+
+2012-11-03  Kouhei Sutou <kou@clear-code.com>
+
+  * lib/yard/code_objects/base.rb, lib/yard/handlers/base.rb,
+  lib/yard/handlers/c/handler_methods.rb,
+  lib/yard/handlers/ruby/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/exception_handler.rb,
+  lib/yard/handlers/ruby/legacy/method_handler.rb,
+  lib/yard/handlers/ruby/legacy/yield_handler.rb,
+  lib/yard/handlers/ruby/method_handler.rb,
+  lib/yard/handlers/ruby/struct_handler_methods.rb,
+  lib/yard/handlers/ruby/yield_handler.rb: Add CodeObject::Base#add_tag and use
+  it in handlers
+
+  * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Keep
+  localized docstrings in CodeObjects::Base
+
+  * lib/yard/cli/yardoc.rb: --locale set the default locale
+
+  * lib/yard/i18n/locale.rb: Add YARD::I18n::Locale#default and #default=  It
+  provides default locale name.
+
+  * lib/yard/code_objects/base.rb, lib/yard/docstring.rb,
+  lib/yard/docstring_parser.rb: Move "(see XXX)" parsing to Docstring from
+  CodeObjects::Base
+
 2012-10-15  Loren Segal <lsegal@soen.ca>
 
   * ChangeLog, README.md, docs/WhatsNew.md, lib/yard/version.rb: Bump to
@@ -126,7 +285,7 @@
   * lib/yard/logging.rb: Clear progress lines when printing severity messages
 
   * lib/yard/code_objects/base.rb, spec/code_objects/base_spec.rb: Handle
-  creation of objects with complex object paths when path starts with "::" 
+  creation of objects with complex object paths when path starts with "::"
   Closes #552
 
   * benchmarks/format_args.rb, benchmarks/pathname_vs_string.rb,
@@ -431,7 +590,7 @@
   * Gemfile: Unlock rspec in Gemfile
 
   * lib/yard/logging.rb, lib/yard/parser/source_parser.rb,
-  spec/logging_spec.rb: Parser backtraces should be logged in warn level 
+  spec/logging_spec.rb: Parser backtraces should be logged in warn level
   Closes #541
 
   * spec/rubygems/doc_manager_spec.rb: Add specs for yard doc installation
@@ -450,7 +609,7 @@
   broken specs, references #535
 
   * lib/yard/tags/default_factory.rb, spec/tags/default_factory_spec.rb: Fix
-  type parser to properly handle Ruby's operator and special method names 
+  type parser to properly handle Ruby's operator and special method names
   Closes #535
 
 2012-05-02  Loren Segal <lsegal@soen.ca>
@@ -879,7 +1038,7 @@
   * lib/yard/server/commands/display_object_command.rb,
   lib/yard/server/doc_server_helper.rb, lib/yard/server/router.rb,
   .../templates/default/layout/html/breadcrumb.erb: Server displays README on
-  index route if available.  Renames the index route to /docs/[library/]index. 
+  index route if available.  Renames the index route to /docs/[library/]index.
   Closes #385
 
   * lib/yard/server/commands/frames_command.rb,
@@ -972,7 +1131,7 @@
 
   * lib/yard/autoload.rb, lib/yard/parser/source_parser.rb,
   lib/yard/tags/directives.rb, lib/yard/tags/library.rb,
-  spec/tags/directives_spec.rb: Add @!parse directive to parse arbitrary code 
+  spec/tags/directives_spec.rb: Add @!parse directive to parse arbitrary code
   Blocks are parsed in the context of where they are called, and you can
   specify the code language using the type specifier:  class A # @!parse #   #
   A dynamic foo method #   def foo; end  # @!parse def foo2; end  # @!parse [c]
@@ -1163,7 +1322,7 @@
   Add support for module_function calls in Ruby.  Also supports
   rb_define_module_function() in CRuby.  Allows instantiation of MethodObjects
   using :module scope. This creates the method object in the class scope but
-  also creates a blank instance method of the same name and makes it private. 
+  also creates a blank instance method of the same name and makes it private.
   Allows @!scope directive to specify module scope for creation of module
   functions using directive syntax.  Some refactoring was done to `register_`
   methods in Handlers::Base to more easily set object visibility.  Closes #378
@@ -1644,7 +1803,7 @@
   now be registered as 'foo.bar' to namespace tags for a 'foo' library or
   plugin. Note that the registered tag methods in the Library will use
   underscores in place of the '.', so calling:  Tags::Library.define_tag
-  'Description', 'foo.bar', :with_types  Will register the method: 
+  'Description', 'foo.bar', :with_types  Will register the method:
   Tags::Library#foo_bar_tag(text)  Closes #452
 
   * templates/default/module/html/item_summary.erb: Note titles should be
@@ -1652,7 +1811,7 @@
 
   * spec/templates/examples/module003.html, spec/templates/module_spec.rb,
   .../default/module/html/inherited_attributes.erb,
-  templates/default/module/setup.rb: Run verifier on inherited attributes list 
+  templates/default/module/setup.rb: Run verifier on inherited attributes list
   Closes #432
 
 2012-01-10  Loren Segal <lsegal@soen.ca>
@@ -1828,7 +1987,7 @@
 2012-01-05  Sergey Avseyev <sergey.avseyev@gmail.com>
 
   * lib/yard/templates/helpers/html_helper.rb,
-  spec/templates/helpers/html_helper_spec.rb: Do not escape snippets twice 
+  spec/templates/helpers/html_helper_spec.rb: Do not escape snippets twice
   Markup helpers aleardy done escaping. This is actually partial revert of
   414e53424c28129625d743e41b15556f150fe083
 
@@ -1915,7 +2074,7 @@
 
   * lib/yard/server/commands/search_command.rb: Prune search results according
   to verifiers (no-private, etc.)  This should ensure that the server side
-  search results are in sync with the statically generated class/method lists. 
+  search results are in sync with the statically generated class/method lists.
   Closes #420
 
   * lib/yard/parser/c_parser.rb, spec/parser/c_parser_spec.rb: Add support for
@@ -1924,7 +2083,7 @@
   * lib/yard/templates/helpers/html_helper.rb,
   lib/yard/templates/helpers/markup_helper.rb,
   spec/templates/helpers/html_helper_spec.rb: Re-organize markup types text,
-  none, and add type 'pre'.  The new behaviour for the types are as follows: 
+  none, and add type 'pre'.  The new behaviour for the types are as follows:
   pre: Pre-formatted text, wrapping input inside <pre> tags. text: No
   formatting except for replacing newlines with <br> tags. none: No formatting
   at all.  In all cases, HTML is escaped. Note that syntax highlighting does
@@ -1958,7 +2117,7 @@
 
 2011-12-01  Mark Morga <markmorga@gmail.com>
 
-  * lib/yard/rake/yardoc_task.rb: Documentation improvements in YardocTask. 
+  * lib/yard/rake/yardoc_task.rb: Documentation improvements in YardocTask.
   Fixed attr :options to indicate that it should be an Array<String> rather
   than Hash. Added an example for attr :files to show correct use of "-" for
   extra files.
@@ -2026,7 +2185,7 @@
   * lib/yard/cli/yardoc.rb, spec/cli/yardoc_spec.rb: Error early if files have
   markup formats that are not available on the system
 
-  * lib/yard/code_objects/base.rb: Remove unused self.line setting method. 
+  * lib/yard/code_objects/base.rb: Remove unused self.line setting method.
   This method was initiating a dispatch to method_missing, since the method did
   not exist, and was silently setting an attribute on the object that is never
   used.
@@ -2080,7 +2239,7 @@
 
 2011-10-14  Dirkjan Bussink <d.bussink@gmail.com>
 
-  * lib/yard/verifier.rb: Use remove_method instead of undef_method 
+  * lib/yard/verifier.rb: Use remove_method instead of undef_method
   undef_method has very different semantics. It prevents the class from
   responding to the named method. This means that also original methods on
   super classes won't be called. This for example results in weird behavior on
@@ -2169,7 +2328,7 @@
 2011-08-18  Kouhei Sutou <kou@clear-code.com>
 
   * lib/yard/templates/helpers/html_helper.rb: escape HTML meta characters in
-  text for HTML output.  Here is an example text file.  hello.txt:  Hello >_<! 
+  text for HTML output.  Here is an example text file.  hello.txt:  Hello >_<!
   Here is a command to generate HTML:  % yardoc - hello.txt  It generates the
   following HTML:  ... ...<pre>Hello >_<!</pre>... ...  We should escape ">",
   "<" and so on in text to output valid HTML.
@@ -2193,7 +2352,7 @@
   * .../default/fulldoc/html/full_list_methods.erb: [template][html] add
   missing escape in object link label.  This problem can be reproducable by the
   following steps:  1. Create the following script:  class Array def &(other)
-  end end  2. Genreate documents from the above script:  % yardoc array-amp.rb 
+  end end  2. Genreate documents from the above script:  % yardoc array-amp.rb
   3. Find link markup in method_list.html:  % grep '#&' method_list.html <span
   class='object_link'><a href="Array.html#%26-instance_method" title="Array#&
   (method)">#&</a></span>  '>#&</a' should be '>#&amp;</a'.
@@ -2261,7 +2420,7 @@
 
   * lib/yard/templates/helpers/html_helper.rb,
   spec/templates/helpers/html_helper_spec.rb: Support YARD style `{http://...
-  title}` links when using markdown provider that performs URL autolinking. 
+  title}` links when using markdown provider that performs URL autolinking.
   Closes #353
 
 2011-06-13  Loren Segal <lsegal@soen.ca>
@@ -2380,7 +2539,7 @@
   spec/templates/helpers/html_helper_spec.rb: Handles the valid 'utf8' locale
   value as 'utf-8'  Supporting #317
 
-  * spec/templates/helpers/html_helper_spec.rb: Stub ENV for charset test 
+  * spec/templates/helpers/html_helper_spec.rb: Stub ENV for charset test
   Closes #317
 
 2011-05-21  Loren Segal <lsegal@soen.ca>
@@ -2845,7 +3004,7 @@
   attaching the command macro to the `command` method call. This can be done by
   adding `[attach]` to the initial @macro definition:  # @macro [attach]
   command # ... command :create_file, ...  The next use of `command` will
-  automatically use this macro, even without any explicit docstring or tags: 
+  automatically use this macro, even without any explicit docstring or tags:
   command :foobar, String, "this will be in my docs!"  Note that the `command`
   must come from a class that is in the same inheritance tree as the initially
   defined macro. That is, if `command` is used in another class, it will not be
@@ -3081,7 +3240,7 @@
   templates/default/fulldoc/html/setup.rb,
   templates/default/layout/html/headers.erb,
   templates/default/layout/html/search.erb,
-  templates/default/layout/html/setup.rb: Customizable JS, CSS, and menus 
+  templates/default/layout/html/setup.rb: Customizable JS, CSS, and menus
   provided methods to override or add to Javascript, CSS, and the search
   fields.
 
@@ -3143,7 +3302,7 @@
   for titles
 
   * lib/yard/templates/helpers/base_helper.rb: Add {render:Object} syntax to
-  templating syntax. Inserts the formatted object in line to the call site. 
+  templating syntax. Inserts the formatted object in line to the call site.
   Closes #277
 
   * README.md, docs/GettingStarted.md: Fix formatting in readme / doc files
@@ -3253,7 +3412,7 @@
   * lib/yard/core_ext/hash.rb: Fix RDoc failure in lib/yard/core_ext/hash.rb at
   or around line 13 column 11  Before reporting this, could you check that the
   file you're documenting compiles cleanly--RDoc is not a full Ruby parser, and
-  gets confused easily if fed invalid programs.  The internal error was: 
+  gets confused easily if fed invalid programs.  The internal error was:
   ERROR:  While generating documentation for yard-0.6.5 ... MESSAGE:   Name or
   symbol expected (got #<RubyToken::TkfLBRACK:0x1025e40e0>) ... RDOC args: --ri
   --op /Users/akzhanabdulin/.rvm/gems/ree-1.8.7-2011.03/doc/yard-0.6.5/ri
@@ -3360,7 +3519,7 @@
 
 2011-02-27  Guten <ywzhaifei@gmail.com>
 
-  * templates/default/fulldoc/html/css/style.css: add css style to list 
+  * templates/default/fulldoc/html/css/style.css: add css style to list
   support <ul> <dl>
 
 2011-02-26  Loren Segal <lsegal@soen.ca>
@@ -3524,7 +3683,7 @@
   lib/yard/parser/ruby/ast_node.rb, lib/yard/parser/ruby/legacy/statement.rb,
   lib/yard/parser/ruby/legacy/statement_list.rb,
   lib/yard/parser/ruby/ruby_parser.rb, spec/parser/source_parser_spec.rb: Add
-  Docstring#hash_flag to denote when a docstring comment started with '##' 
+  Docstring#hash_flag to denote when a docstring comment started with '##'
   Closes gh-230
 
   * lib/yard/tags/default_factory.rb, spec/docstring_spec.rb,
@@ -3980,7 +4139,7 @@
   * lib/yard/cli/gems.rb: Require 'rubygems' in yard gems command for 1.8.x
   compat
 
-  * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration. 
+  * lib/yard/cli/gems.rb: Replace #each_slice with 1.8.6 compatible iteration.
   Closes gh-178
 
 2010-09-27  srawlins <sam.rawlins@gmail.com>
@@ -4058,7 +4217,7 @@
 
   * lib/yard/handlers/base.rb, lib/yard/handlers/processor.rb,
   spec/handlers/base_spec.rb: Add Handlers::Base.in_file to declare that a
-  handler should only process certain files by string/regex match.  Example: 
+  handler should only process certain files by string/regex match.  Example:
   class MyHandler < Handlers::Ruby::Base handles method_call(:foo) in_file
   %r{/templates/}  def process # Only process "foo" calls inside the
   /templates/ directory end end
@@ -4275,7 +4434,7 @@
   `coding=ENC` encoding comment format (previously only supported `coding:ENC`)
    Closes gh-159
 
-  * templates/default/fulldoc/html/js/full_list.js: Fix inline searching JS 
+  * templates/default/fulldoc/html/js/full_list.js: Fix inline searching JS
   Closes gh-161
 
   * templates/default/fulldoc/html/js/jquery.js: Update jQuery to 1.4.2
@@ -4286,7 +4445,7 @@
   * templates/default/fulldoc/html/css/style.css: Remove webkit gradients on
   search links
 
-  * templates/default/fulldoc/html/js/app.js: Fix undefined links in TOC 
+  * templates/default/fulldoc/html/js/app.js: Fix undefined links in TOC
   Closes gh-160
 
   * lib/yard/registry.rb: Fix bug in Registry refactoring that broke .yardoc
@@ -4364,7 +4523,7 @@
   objects (yri)  Closes gh-150
 
   * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Add `YRI::DEFAULT_SEARCH_PATHS`
-  to add extra search paths at runtime to be searched before all other paths. 
+  to add extra search paths at runtime to be searched before all other paths.
   Closes gh-151
 
   * lib/yard/code_objects/base.rb,
@@ -4870,7 +5029,7 @@
   problematic when multiple plugins overload the same template (because the
   numeric index is not guaranteed).  This change also adds Insertion#before_any
   and Insertion#after_any to insert an object before any section no matter how
-  deeply nested it is.  [1,[2,[3]]].place(4).after_any(3) #=> [1, [2, [3, 4]]] 
+  deeply nested it is.  [1,[2,[3]]].place(4).after_any(3) #=> [1, [2, [3, 4]]]
   The above template could be refactored as:  def init sections :a, :b, :c,
   [:sub1, :sub2] sections.place(:sub3).after_any(:sub1) end  Closes gh-58
 
@@ -5163,7 +5322,7 @@
   templates/default/layout/html/setup.rb: Better support for file shebangs and
   better markup support in general. Adds two new markup types "text" and "html"
   which can be used in shebangs as well as a markup type (-m switch to yardoc).
-   Can now implement htmlify for custom markup types by implementing 
+   Can now implement htmlify for custom markup types by implementing
   YARD::Templates::Helpers::HtmlHelper#html_markup_MARKUPTYPE  Where MARKUPTYPE
   is the markup type name. A provider must also be added to
   MarkupHelper::MARKUP_PROVIDERS, though it can be a blank list of libraries.
@@ -5240,7 +5399,7 @@
   * README.md: Add special installation instructions for some Ubuntu/Debian
   installations. It is impossible to add rdoc as a dependency, since this will
   force the RDoc gem to be installed rather than the Ruby stdlib package. It is
-  therefore preferable to install rdoc locally with apt-get on such an OS. 
+  therefore preferable to install rdoc locally with apt-get on such an OS.
   Closes gh-109
 
 2010-06-16  Loren Segal <lsegal@soen.ca>
@@ -5754,7 +5913,7 @@
   * spec/templates/examples/module001.html, spec/templates/module_spec.rb,
   templates/default/fulldoc/html/css/style.css,
   templates/default/module/html/constant_summary.erb,
-  templates/default/module/setup.rb: Show full docstrings for constants. 
+  templates/default/module/setup.rb: Show full docstrings for constants.
   Closes gh-89 Closes gh-90
 
   * lib/yard/docstring.rb, spec/docstring_spec.rb: Finish parsing @tag when
@@ -6142,7 +6301,7 @@
 
   * lib/yard/cli/yri.rb, spec/cli/yri_spec.rb: Allow user to specify
   ~/.yard/yri_search_paths file listing extra yardoc dbs to search.  File
-  format should just be newline separated .yardoc files/directories: 
+  format should just be newline separated .yardoc files/directories:
   /path/to/.yardoc /path/to/other.yardoc ...
 
   * lib/yard/cli/yardoc.rb: Improve behaviour of re-generating changed objects
@@ -8115,7 +8274,7 @@
 2009-08-12  Loren Segal <lsegal@soen.ca>
 
   * lib/yard/registry.rb, spec/registry_spec.rb: Explicitly define all of
-  Registry's instance methods as singleton methods delegated to instance. 
+  Registry's instance methods as singleton methods delegated to instance.
   Closes gh-26
 
 2009-08-11  Loren Segal <lsegal@soen.ca>
@@ -8668,7 +8827,7 @@
   * lib/yard/generators/tags_generator.rb,
   templates/default/tags/html/todo.erb: Add @todo to output generation
 
-  * lib/yard/generators/tags_generator.rb: Add @yield to output generation. 
+  * lib/yard/generators/tags_generator.rb: Add @yield to output generation.
   Closes gh-15
 
   * lib/yard/generators/class_generator.rb,
@@ -9048,7 +9207,7 @@
 2009-05-16  Nathan Weizenbaum <nex342@gmail.com>
 
   * templates/default/attributes/html/header.erb,
-  templates/default/fulldoc/html/style.css: Display aliases of attributes. 
+  templates/default/fulldoc/html/style.css: Display aliases of attributes.
   Closes gh-2
 
 2009-05-23  Loren Segal <lsegal@soen.ca>
@@ -10943,7 +11102,7 @@
   aliases for the method object
 
   * lib/yard/generators/base.rb: Add extra_opts to initialize so generators can
-  be initialized without updating the options hash that's passed in: 
+  be initialized without updating the options hash that's passed in:
   MethodGenerator.new(options, :other => :options)
 
   * lib/yard/generators/constants_generator.rb: Update documentation
