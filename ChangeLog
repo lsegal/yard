@@ -1,6 +1,21 @@
+2013-02-05  Loren Segal <lsegal@soen.ca>
+
+  * ChangeLog, README.md, lib/yard/version.rb: Bump to 0.8.4.1
+
+  * lib/yard/code_objects/base.rb: Fix regression in loading codeobjects from
+  db  An instance variable in CodeObjects::Base was renamed (@docstring to
+  @base_docstring). Although this did not affect newly generated projects, it
+  broke the ability to properly load up yardoc databases generated with
+  versions prior to 0.8.4.  For backwards compatibility, this ivar has been
+  named back so that existing databases can still be loaded via YARD.  Fixes
+  #648
+
 2013-02-04  Loren Segal <lsegal@amazon.com>
 
-  * LICENSE, README.md, docs/WhatsNew.md, lib/yard/version.rb: Bump to 0.8.4
+  * README.md: Fix README formatting
+
+  * ChangeLog, LICENSE, README.md, docs/WhatsNew.md, lib/yard/version.rb: Bump
+  to 0.8.4
 
 2013-02-01  Loren Segal <lsegal@amazon.com>
 
