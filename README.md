@@ -8,7 +8,7 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.4
+**Latest Version**: 0.8.4    
 **Release Date**: February 4th 2013    
 
 Synopsis
