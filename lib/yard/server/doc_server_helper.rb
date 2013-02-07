@@ -11,7 +11,9 @@ module YARD
         return '' if obj.nil?
         return url_for_index if obj == '_index.html'
         return "/#{obj}" if String === obj
-        File.join('', base_path(router.docs_prefix), super(obj, anchor, false))
+        url = super(obj, anchor, false)
+        return unless url
+        File.join('', base_path(router.docs_prefix), url)
       end
 
       # Modifies {Templates::Helpers::HtmlHelper#url_for_file} to return a URL instead
