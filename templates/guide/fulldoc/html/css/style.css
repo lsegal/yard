@@ -24,6 +24,14 @@ ul { list-style: square; }
 .inline { display: inline; }
 .inline p:first-child { display: inline; }
 .inline p { font-family: Georgia, serif; font-size: 16px; color: #3e4349; }
+#filecontents table, .docstring table { border-collapse: collapse; }
+#filecontents table th, #filecontents table td,
+.docstring table th, .docstring table td { border: 1px solid #ccc; padding: 8px; padding-right: 17px; }
+#filecontents table tr:nth-child(odd),
+.docstring table tr:nth-child(odd) { background: #eee; }
+#filecontents table tr:nth-child(even),
+.docstring table tr:nth-child(even) { background: #fff; }
+#filecontents table th, .docstring table th { background: #fff; }
 .docstring .note { margin: 1em 0; }
 .docstring h1, .docstring h2, .docstring h3, .docstring h4 { padding: 0; border: 0; border-bottom: 1px dotted #bbb; }
 .docstring h1 { font-size: 1.2em; }
