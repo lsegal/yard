@@ -8,8 +8,8 @@ YARD: Yay! A Ruby Documentation Tool
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.4.1    
-**Release Date**: February 5th 2013    
+**Latest Version**: 0.8.5    
+**Release Date**: February 24th 2013    
 
 Synopsis
 --------
@@ -285,6 +285,10 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **February.24.13**: 0.8.5 release
+    - Basic support for Ruby 2.0 (fix compat issues in RDoc 4.0, RubyGems 2.0)
+    - Add CSS styling for tables in default HTML template
 
 - **February.5.13**: 0.8.4.1 release
     - Fix regression that broke loading of existing yardoc dbs (#648)

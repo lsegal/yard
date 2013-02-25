@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.has_rdoc      = 'yard'
   s.rubyforge_project = 'yard'
+  s.license = 'MIT' if s.respond_to?(:license=)
 end
