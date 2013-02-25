@@ -378,9 +378,15 @@ module YARD
       class ParameterNode < AstNode
         def required_params; self[0] end
         def required_end_params; self[3] end
-        def optional_params; self[1] end
         def splat_param; self[2] ? self[2][0] : nil end
-        def block_param; self[4] ? self[4][0] : nil end
+        def block_param; self[-1] ? self[-1][0] : nil end
+        def optional_params
+          optional = self[1]
+          if self[-2] && self[-2][0] && self[-2][0].type == :default_arg
+            optional += self[-2]
+          end
+          optional
+        end
       end
 
       class MethodCallNode < AstNode
