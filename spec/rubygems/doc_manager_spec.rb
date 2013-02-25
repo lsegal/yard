@@ -109,4 +109,4 @@ describe Gem::DocManager do
       install
     end
   end
-end
+end if Gem::VERSION < '2.0.0'
