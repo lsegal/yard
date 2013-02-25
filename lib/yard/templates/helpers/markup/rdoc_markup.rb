@@ -1,3 +1,5 @@
+require 'thread'
+
 module YARD
   module Templates
     module Helpers
@@ -7,7 +9,11 @@ module YARD
           require 'rdoc/markup'
           require 'rdoc/markup/to_html'
           class RDocMarkup; MARKUP = RDoc::Markup end
-          class RDocMarkupToHtml < RDoc::Markup::ToHtml; end
+          class RDocMarkupToHtml < RDoc::Markup::ToHtml
+            if defined? RDoc::VERSION && RDoc::VERSION >= '4.0.0'
+              def initialize; super(RDoc::Options.new) end
+            end
+          end
         rescue LoadError
           begin
             require 'rdoc/markup/simple_markup'
@@ -22,15 +28,24 @@ module YARD
         class RDocMarkup
           attr_accessor :from_path
 
+          @@formatter = nil
+          @@markup = nil
+          @@mutex = nil
+
           def initialize(text)
             @text = text
-            @markup = MARKUP.new
+
+            @@formatter ||= RDocMarkupToHtml.new
+            @@markup ||= MARKUP.new
+            @@mutex ||= Mutex.new
           end
 
           def to_html
-            formatter = RDocMarkupToHtml.new
-            formatter.from_path = from_path
-            html = @markup.convert(@text, formatter)
+            html = nil
+            @@mutex.synchronize do
+              @@formatter.from_path = from_path
+              html = @@markup.convert(@text, @@formatter)
+            end
             html = fix_dash_dash(html)
             html = fix_typewriter(html)
             html
