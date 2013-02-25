@@ -186,7 +186,7 @@ module YARD
         tmpdir = File.join(Dir.tmpdir, gemfile)
         log.info "Expanding #{gemfile} to #{tmpdir}..."
         FileUtils.mkdir_p(tmpdir)
-        Gem::Package.open(io) do |pkg|
+        Gem::Package.send(:open, io) do |pkg|
           pkg.each do |entry|
             pkg.extract_entry(tmpdir, entry)
           end
