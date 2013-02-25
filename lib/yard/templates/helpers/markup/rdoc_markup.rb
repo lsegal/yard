@@ -10,7 +10,9 @@ module YARD
           require 'rdoc/markup/to_html'
           class RDocMarkup; MARKUP = RDoc::Markup end
           class RDocMarkupToHtml < RDoc::Markup::ToHtml
-            if defined? RDoc::VERSION && RDoc::VERSION >= '4.0.0'
+            if defined?(RDoc::VERSION) && RDoc::VERSION >= '4.0.0' &&
+               defined?(RDoc::Options)
+            then
               def initialize; super(RDoc::Options.new) end
             end
           end
