@@ -88,10 +88,13 @@ describe YARD::CodeObjects::ExtraFileObject do
 
     it "should attempt to re-parse data as 8bit ascii if parsing fails" do
       log.should_not_receive(:warn)
-      str = "\xB0"
-      str.force_encoding('utf-8') if str.respond_to?(:force_encoding)
+      str, out = *(["\xB0"] * 2)
+      if str.respond_to?(:force_encoding)
+        str.force_encoding('utf-8')
+        out.force_encoding('binary')
+      end
       file = ExtraFileObject.new('file.txt', str)
-      file.contents.should == "\xB0"
+      file.contents.should == out
     end
   end
 

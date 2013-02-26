@@ -115,8 +115,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should handle various encodings" do
       stub!(:object).and_return(Registry.root)
-      Encoding.default_internal = 'utf-8' if defined?(Encoding)
-      htmlify("\xB0\xB1", :text)
+      text = "\xB0\xB1"
+      if defined?(Encoding)
+        Encoding.default_internal = 'utf-8'
+        text = text.force_encoding('binary')
+      end
+      htmlify(text, :text)
       # TODO: add more encoding tests
     end
 
