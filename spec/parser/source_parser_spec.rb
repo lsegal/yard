@@ -547,8 +547,13 @@ describe YARD::Parser::SourceParser do
           File.should_receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
           if HAVE_RIPPER && YARD.ruby19?
-            ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
-              result.enumerator[0].source.encoding.to_s))
+            if msg == :should_not
+              default_encoding = YARD.ruby2? ? 'UTF-8' : 'US-ASCII'
+              result.enumerator[0].source.encoding.to_s.should eq(default_encoding)
+            else
+              ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
+                result.enumerator[0].source.encoding.to_s))
+            end
           end
           result.encoding_line.send(msg) == src.split("\n").last
         end
