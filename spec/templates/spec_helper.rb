@@ -26,6 +26,7 @@ end
 def html_equals_string(result, expected)
   [expected, result].each do |value|
     value.gsub!(/(>)\s+|\s+(<)/, '\1\2')
+    value.gsub!(/&#39;/, "'")
     value.strip!
   end
   text_equals_string(result, expected)
