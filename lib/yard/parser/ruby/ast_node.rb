@@ -381,12 +381,13 @@ module YARD
         def splat_param; self[2] ? self[2][0] : nil end
         def block_param; self[-1] ? self[-1][0] : nil end
         def optional_params
-          optional = self[1]
-          if self[-2] && self[-2][0] && self[-2][0].type == :default_arg
-            optional += self[-2]
+          optional = self[1] || []
+          if self[-3] && self[-3][0] && self[-3][0].type == :default_arg
+            optional += self[-3]
           end
-          optional
+          optional.empty? ? nil : optional
         end
+        def keyword_param; YARD.ruby2? ? self[-2] : nil end
       end
 
       class MethodCallNode < AstNode

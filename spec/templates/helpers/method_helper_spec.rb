@@ -5,6 +5,13 @@ describe YARD::Templates::Helpers::MethodHelper do
   include YARD::Templates::Helpers::MethodHelper
 
   describe '#format_args' do
+    it "should display keyword arguments" do
+      params = [['a:', '1'], ['b:', '2'], ['**kwargs', nil]]
+      YARD.parse_string 'def foo; end'
+      Registry.at('#foo').stub(:parameters) { params }
+      format_args(Registry.at('#foo')).should == '(a: 1, b: 2, **kwargs)'
+    end
+
     it "should not show &blockarg if no @param tag and has @yield" do
       YARD.parse_string <<-'eof'
         # @yield blah

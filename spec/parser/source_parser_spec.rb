@@ -707,5 +707,11 @@ describe YARD::Parser::SourceParser do
       Registry.at('A#d').should be_nil
       Registry.at('A::B#d').should_not be_nil
     end
+
+    it 'supports keyword arguments' do
+      YARD.parse_string 'def foo(a: 1, b: 2, **kwargs) end'
+      args = [['a:', '1'], ['b:', '2'], ['**kwargs', nil]]
+      Registry.at('#foo').parameters.should eq(args)
+    end if YARD.ruby2?
   end
 end
