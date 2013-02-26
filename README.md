@@ -1,5 +1,4 @@
-YARD: Yay! A Ruby Documentation Tool
-====================================
+# YARD: Yay! A Ruby Documentation Tool
 
 **Homepage**:     [http://yardoc.org](http://yardoc.org)   
 **IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/yard)    
@@ -11,8 +10,7 @@ YARD: Yay! A Ruby Documentation Tool
 **Latest Version**: 0.8.5.1    
 **Release Date**: February 25th 2013    
 
-Synopsis
---------
+## Synopsis
 
 YARD is a documentation generation tool for the Ruby programming language.
 It enables the user to generate consistent, usable documentation that can be
@@ -21,8 +19,7 @@ custom Ruby constructs such as custom class level definitions. Below is a
 summary of some of YARD's notable features.
 
 
-Feature List
-------------
+## Feature List
 
 **1. RDoc/SimpleMarkup Formatting Compatibility**: YARD is made to be compatible
 with RDoc formatting. In fact, YARD does no processing on RDoc documentation
