@@ -28,6 +28,7 @@ module YARD
           {:lib => :bluecloth, :const => 'BlueCloth'},
           {:lib => :maruku, :const => 'Maruku'},
           {:lib => :'rpeg-markdown', :const => 'PEGMarkdown'},
+          {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkdown'},
         ],
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'},
