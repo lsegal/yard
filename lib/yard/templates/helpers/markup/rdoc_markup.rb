@@ -13,7 +13,11 @@ module YARD
             if defined?(RDoc::VERSION) && RDoc::VERSION >= '4.0.0' &&
                defined?(RDoc::Options)
             then
-              def initialize; super(RDoc::Options.new) end
+              def initialize
+                options = RDoc::Options.new
+                options.pipe = true
+                super(options)
+              end
             end
           end
         rescue LoadError
