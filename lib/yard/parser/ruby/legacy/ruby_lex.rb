@@ -200,6 +200,7 @@ module YARD
         [:TkINTEGER,    TkVal],
         [:TkFLOAT,      TkVal],
         [:TkSYMBOL,     TkVal],
+        [:TkLABEL,      TkVal],
         [:TkSTRING,     TkVal],
         [:TkXSTRING,    TkVal],
         [:TkREGEXP,     TkVal],

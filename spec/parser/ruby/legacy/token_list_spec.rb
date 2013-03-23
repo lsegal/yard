@@ -33,6 +33,14 @@ describe YARD::Parser::Ruby::Legacy::TokenList do
       x[4].class.should == TkDSTRING
       x.to_s.should == 'x = "hello #{world}"' + "\n"
     end
+
+    it 'handles label syntax' do
+      x = TokenList.new('a:1,b:2')
+      x[0].class.should == TkLABEL
+      x[0].text.should == 'a:'
+      x[3].class.should == TkLABEL
+      x[3].text.should == 'b:'
+    end
   end
 
   describe '#to_s' do
