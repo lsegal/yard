@@ -10,7 +10,14 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
       meth, args = $1, $2
       meth.gsub!(/\s+/,'')
       args = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(args), :all)
-      args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
+      args.map! do |a|
+        k, v, r = *a.split(/(:)|=/, 2)
+        if r
+          k += v
+          v = r
+        end
+        [k.strip, (v ? v.strip : nil)]
+      end if args
     else
       raise YARD::Parser::UndocumentableError, "method: invalid name"
     end
