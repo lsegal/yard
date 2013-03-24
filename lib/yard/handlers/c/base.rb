@@ -85,7 +85,7 @@ module YARD
         # @group Processing other files
 
         def process_file(file, object)
-          file = File.cleanpath(File.relative_path(statement.file, file))
+          file = File.cleanpath(file)
           return if processed_files[file]
           processed_files[file] = file
           begin

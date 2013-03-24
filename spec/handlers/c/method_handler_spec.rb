@@ -184,16 +184,17 @@ describe YARD::Handlers::C::MethodHandler do
        * Foo bar!
        */
     eof
-    File.should_receive(:read).with('other.c').and_return(other)
-    parse <<-eof
+    File.should_receive(:read).with('foo/bar/other.c').and_return(other)
+    src = <<-eof
       void Init_Foo() {
         mFoo = rb_define_module("Foo");
-        rb_define_method(mFoo, "foo", foo, 0); // in other.c
-        rb_define_method(mFoo, "initialize", foo, 0); // in other.c
-        mBar = rb_define_module_under(mFoo, "Bar"); // in other.c
-        rb_define_method(mBar, "baz", foo, 0); // in other.c
+        rb_define_method(mFoo, "foo", foo, 0); // in foo/bar/other.c
+        rb_define_method(mFoo, "initialize", foo, 0); // in foo/bar/other.c
+        mBar = rb_define_module_under(mFoo, "Bar"); // in foo/bar/other.c
+        rb_define_method(mBar, "baz", foo, 0); // in foo/bar/other.c
       }
     eof
+    parse(src, 'foo/bar/baz/init.c')
     Registry.at('Foo#foo').docstring.should == 'Foo bar!'
     Registry.at('Foo#initialize').docstring.should == 'Foo bar!'
     Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
