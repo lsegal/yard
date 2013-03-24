@@ -548,7 +548,7 @@ describe YARD::Parser::SourceParser do
           result = parser.parse("tmpfile")
           if HAVE_RIPPER && YARD.ruby19?
             if msg == :should_not
-              default_encoding = YARD.ruby2? ? 'UTF-8' : 'US-ASCII'
+              default_encoding = 'UTF-8'
               result.enumerator[0].source.encoding.to_s.should eq(default_encoding)
             else
               ['Shift_JIS', 'Windows-31J', 'UTF-8'].send(msg, include(
