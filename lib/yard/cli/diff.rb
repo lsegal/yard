@@ -101,6 +101,7 @@ module YARD
       end
 
       def load_git_commit(commit)
+        Registry.clear
         commit_path = 'git_commit' + commit.gsub(/\W/, '_')
         tmpdir = File.join(Dir.tmpdir, commit_path)
         log.info "Expanding #{commit} to #{tmpdir}..."
