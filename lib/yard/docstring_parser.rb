@@ -92,7 +92,7 @@ module YARD
     # @return [Docstring] translates parsed text into
     #   a Docstring object.
     def to_docstring
-      Docstring.new!(text, tags, object, raw_text)
+      Docstring.new!(text, tags, object, raw_text, reference)
     end
 
     # @!group Parsing Methods

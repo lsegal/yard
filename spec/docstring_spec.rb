@@ -302,4 +302,19 @@ describe YARD::Docstring do
       doc.dup.line_range.should == doc.line_range
     end
   end
+
+  describe 'reference docstrings' do
+    it 'allows for construction of docstring with ref object' do
+      YARD.parse_string <<-eof
+        class A
+          # Docstring
+          def a; end
+          # (see #a)
+          def b; end
+        end
+      eof
+      YARD::Registry.at('A#b').docstring.should == 'Docstring'
+      YARD::Registry.clear
+    end
+  end
 end

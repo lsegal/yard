@@ -404,7 +404,7 @@ module YARD
         obj.signature = method_signature
         obj.parameters = OverloadTag.new(:overload, method_signature).parameters
         obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
-          parser.raw_text)
+          parser.raw_text, parser.reference)
         handler.register_module_function(obj)
         obj
       end

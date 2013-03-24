@@ -71,11 +71,14 @@ module YARD
     #   docstring. May be nil.
     # @param [String] raw_data the complete docstring, including all
     #   original formatting and any unparsed tags/directives.
-    def self.new!(text, tags = [], object = nil, raw_data = nil)
+    # @param [CodeObjects::Base, nil] A reference object used for the base set
+    #   of documentation / tag information.
+    def self.new!(text, tags = [], object = nil, raw_data = nil, ref_object = nil)
       docstring = allocate
       docstring.replace(text, false)
       docstring.object = object
       docstring.add_tag(*tags)
+      docstring.instance_variable_set("@unresolved_reference", ref_object)
       docstring.instance_variable_set("@all", raw_data) if raw_data
       docstring
     end
