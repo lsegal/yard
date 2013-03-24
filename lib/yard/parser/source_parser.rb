@@ -470,7 +470,6 @@ module YARD
         if content =~ ENCODING_LINE
           content.force_encoding($1)
         else
-          old_encoding = content.encoding
           content.force_encoding('binary')
           ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
             bom.force_encoding('binary')
@@ -479,7 +478,7 @@ module YARD
               return content
             end
           end
-          content.force_encoding(old_encoding)
+          content.force_encoding('utf-8') # UTF-8 is default encoding
           content
         end
       end
