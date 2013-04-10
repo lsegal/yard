@@ -171,13 +171,14 @@ module YARD
     def summary
       resolve_reference
       return @summary if @summary
+      stripped = self.gsub(/<.+?>/m, '').strip
       open_parens = ['{', '(', '[']
       close_parens = ['}', ')', ']']
       num_parens = 0
       idx = length.times do |index|
-        case self[index, 1]
+        case stripped[index, 1]
         when ".", "\r", "\n"
-          next_char = self[index + 1, 1].to_s
+          next_char = stripped[index + 1, 1].to_s
           if num_parens == 0 && next_char =~ /^\s*$/
             break index - 1
           end
@@ -187,7 +188,7 @@ module YARD
           num_parens -= 1
         end
       end
-      @summary = self[0..idx]
+      @summary = stripped[0..idx]
       if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
         @summary += '.'
       end

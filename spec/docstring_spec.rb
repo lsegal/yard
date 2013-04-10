@@ -52,6 +52,11 @@ describe YARD::Docstring do
       5.times { o1.summary.should == "Hello." }
     end
 
+    it "should strip HTML before summarizing" do
+      doc = Docstring.new("<p>Hello <b>world</b></p>.")
+      doc.summary.should == 'Hello world.'
+    end
+
     it "should return the first sentence" do
       o = Docstring.new("DOCSTRING. Another sentence")
       o.summary.should == "DOCSTRING."
