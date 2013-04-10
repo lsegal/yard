@@ -7,6 +7,10 @@ group :development do
   gem 'simplecov'
 end
 
+group :asciidoc do
+  gem 'asciidoctor'
+end
+
 group :markdown do
   gem 'redcarpet', '= 1.17.2', :platforms => :mri
   gem 'kramdown', :platforms => :jruby

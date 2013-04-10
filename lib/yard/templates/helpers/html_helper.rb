@@ -67,6 +67,13 @@ module YARD
         end
       end
 
+      # Converts Asciidoc to HTML
+      # @param [String] text input Asciidoc text
+      # @return [String] output HTML
+      def html_markup_asciidoc(text)
+        markup_class(:asciidoc).render(text)
+      end
+
       # Converts Textile to HTML
       # @param [String] text the input Textile text
       # @return [String] output HTML
