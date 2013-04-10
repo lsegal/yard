@@ -39,6 +39,9 @@ module YARD
         :rdoc => [
           {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
         ],
+        :asciidoc => [
+          {:lib => :asciidoctor, :const => 'Asciidoctor'}
+        ],
         :ruby => [],
         :text => [],
         :pre  => [],
@@ -54,6 +57,7 @@ module YARD
         :html => ['htm', 'html', 'shtml'],
         :text => ['txt'],
         :textile => ['textile', 'txtile'],
+        :asciidoc => ['asciidoc'],
         :markdown => ['markdown', 'md', 'mdown', 'mkd'],
         :rdoc => ['rdoc'],
         :ruby => ['rb', 'ru']
