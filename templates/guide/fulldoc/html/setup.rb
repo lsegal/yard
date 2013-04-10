@@ -22,7 +22,7 @@ def init
   class << options.serializer
     def serialized_path(object)
       if CodeObjects::ExtraFileObject === object
-        super.sub(/^file\./, '')
+        super.sub(/^file\./, '').downcase
       else
         super
       end
