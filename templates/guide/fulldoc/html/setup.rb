@@ -6,6 +6,14 @@ module OverrideFileLinks
     log.enter_level(Logger::ERROR) { result = super }
     result
   end
+
+  def url_for(object, *args)
+    if CodeObjects::ExtraFileObject === object && object == options.readme
+      'index.html'
+    else
+      super
+    end
+  end
 end
 
 Template.extra_includes << OverrideFileLinks
