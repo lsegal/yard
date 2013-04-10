@@ -43,7 +43,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
 
     it "should return a path if argument is a Proxy or object" do
-      link_object(Registry.root).should == ""
+      link_object(Registry.root).should == "Top Level Namespace"
       link_object(P("Array")).should == "Array"
     end
 
