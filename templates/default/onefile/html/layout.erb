@@ -4,12 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<%= charset %>" />
     <title><%= @title %></title>
-    <style type="text/css" media="screen">
-      <%= @css_data %>
-    </style>
-    <script type="text/javascript" charset="utf-8">
-      <%= @js_data %>
-    </script>
+    <%= erb(:headers) %>
   </head>
   <body>
     <div id="content">
