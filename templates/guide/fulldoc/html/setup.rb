@@ -29,6 +29,8 @@ def init
     end
   end if options.serializer
 
+  return serialize_onefile if options.onefile
+
   generate_assets
   options.delete(:objects)
   options.files.each {|file| serialize_file(file) }
@@ -59,4 +61,13 @@ def serialize_file(file)
     end
   end
   options.delete(:file)
+end
+
+def serialize_onefile
+  layout = Object.new.extend(T('layout'))
+  options.css_data = layout.stylesheets.map {|sheet| file(sheet,true) }.join("\n")
+  options.js_data = layout.javascripts.map {|script| file(script,true) }.join("")
+  Templates::Engine.with_serializer('onefile.html', options.serializer) do
+    T('onefile').run(options)
+  end
 end
