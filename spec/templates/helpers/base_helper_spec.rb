@@ -165,10 +165,10 @@ describe YARD::Templates::Helpers::BaseHelper do
       format_object_title(Registry.root).should == "Top Level Namespace"
     end
 
-    it "should return 'type: path' in other cases" do
+    it "should return 'type: title' in other cases" do
       obj = mock(:object)
       obj.stub!(:type).and_return(:class)
-      obj.stub!(:path).and_return("A::B::C")
+      obj.stub!(:title).and_return("A::B::C")
       format_object_title(obj).should == "Class: A::B::C"
     end
   end

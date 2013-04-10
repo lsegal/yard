@@ -192,11 +192,7 @@ def class_list(root = Registry.root)
       out << linkify(child, name)
       out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
       out << "<small class='search_info'>"
-      if !child.namespace || child.namespace.root?
-        out << "Top Level Namespace"
-      else
-        out << child.namespace.path
-      end
+      out << child.namespace.title
       out << "</small>"
       out << "</li>"
       out << "<ul>#{class_list(child)}</ul>" if has_children

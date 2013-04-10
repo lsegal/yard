@@ -7,5 +7,5 @@ def init
 end
 
 def format_object_title(object)
-  "Class: #{object.path} < #{object.superclass.path}"
+  "Class: #{object.title} < #{object.superclass.title}"
 end

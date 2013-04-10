@@ -246,9 +246,7 @@ module YARD
       def link_object(obj, otitle = nil, anchor = nil, relative = true)
         return otitle if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
-        if !otitle && obj.root?
-          title = "Top Level Namespace"
-        elsif otitle
+        if otitle
           title = otitle.to_s
         elsif object.is_a?(CodeObjects::Base)
           # Check if we're linking to a class method in the current

@@ -121,9 +121,9 @@ module YARD::Templates::Helpers
 
       case object
       when YARD::CodeObjects::Base, YARD::CodeObjects::Proxy
-        object.path
+        object.title
       when String, Symbol
-        P(object).path
+        P(object).title
       else
         object
       end
@@ -195,7 +195,7 @@ module YARD::Templates::Helpers
       when YARD::CodeObjects::RootObject
         "Top Level Namespace"
       else
-        format_object_type(object) + ": " + object.path
+        format_object_type(object) + ": " + object.title
       end
     end
 
