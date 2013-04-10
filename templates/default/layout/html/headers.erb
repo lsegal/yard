@@ -6,7 +6,7 @@
   <% end %>
 </title>
 <% stylesheets.each do |stylesheet| %>
-  <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" charset="utf-8" />
 <% end %>
 <%= erb :script_setup %>
 <% javascripts.each do |javascript| %>
