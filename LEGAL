@@ -4,14 +4,6 @@ LEGAL NOTICE INFORMATION
 All the files in this distribution are covered under either the MIT
 license (see the file LICENSE) except some files mentioned below.
 
-lib/parser/c_parser.rb:
-
-  This file includes code from the RDoc distribution. It is under the Ruby
-  license but adds the following copyright:
-
-    RDoc is copyrighted free software by Dave Thomas, Eric Hodel, and others.
-    It is licensed under the same terms as Ruby
-
 lib/parser/ruby/legacy/ruby_lex.rb:
 
   This file is under the Ruby license. YARD uses a modified version of it.
