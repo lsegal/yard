@@ -33,6 +33,7 @@ module YARD
       self.commands = SymbolHash[
         :config  => Config,
         :diff    => Diff,
+        :display => Display,
         :doc     => Yardoc,
         :gems    => Gems,
         :graph   => Graph,
