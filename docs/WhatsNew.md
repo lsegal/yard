@@ -18,6 +18,9 @@
 14. **Added `--api` tag to generate documentation for API sets** (0.8.1)
 15. **Added `--non-transitive-tag` to disable transitive tag** (0.8.3)
 16. **Added `-B/--bind` to bind to a port in yard server** (0.8.4)
+17. **Added `asciidoc` markup type support** (0.8.6)
+18. **Added `yard markups` command to list available markup types** (0.8.6)
+18. **Added `yard display` command to display formatted objects** (0.8.6)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 
@@ -297,6 +300,41 @@ when parsing modules and classes.
 
 You can now bind the `yard server` command to a given local port
 with `yard server -B PORT` or `yard server --bind PORT`.
+
+## Added `asciidoc` markup type support (0.8.6)
+
+Support for the AsciiDoc markup type is now introduced using the `asciidoc`
+markup type (`yard doc -m asciidoc`). Requires the
+[asciidoctor](http://rubygems.org/gems/asciidoctor) RubyGem library to be
+installed before running YARD.
+
+## Added `yard markups` command to list available markup types (0.8.6)
+
+You can now list all available markup types and their respective providers by
+typing `yard markups`. This list also includes the file extensions used to
+auto-identify markup types for extra files and READMEs. To use a markup in
+the list, call `yard doc` with `-m MARKUP_TYPE`. To select a specific markup
+provider library, pass the `-M PROVIDER_NAME` option.
+
+## Added `yard display` command to display formatted objects (0.8.6)
+
+<p class="note">This feature requires the .yardoc registry to have already been
+  generated. To generate the registry, run <code>yard doc -n</code>.</p>
+
+You can now display a single object (or a list of objects) in the YARD registry
+using the `yard display OBJECT ...` command. For example, to display the
+`YARD::CodeObjects` module as text (the way it is displayed in `yri`), type:
+
+    $ yard display YARD::CodeObjects
+
+You can also format individual objects as HTML. For example, you can format
+the above object as HTML and pipe the contents into a file readable by a
+web browser:
+
+    $ yard display -f html YARD::CodeObjects > codeobjects.html
+
+Custom templating options from `yard doc` can also be used, see
+`yard display --help` for more options.
 
 # What's New in 0.7.x?
 

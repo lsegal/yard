@@ -7,8 +7,8 @@
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.5.2    
-**Release Date**: February 26th 2013    
+**Latest Version**: 0.8.6    
+**Release Date**: April 13th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,13 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **April.13.13**: 0.8.6 release
+    - Various fixes and improved Ruby 2.x compatibility support
+    - Added support for `asciidoc` markup type
+    - Added `yard markups` command to list available markup types
+    - Added `yard display` command to display and format an individual object
+    - See {file:docs/WhatsNew.md} for more information on added features.
 
 - **February.26.13**: 0.8.5.2 release
     - Support new keyword argument syntax in method signatures (Ruby 2.x)
