@@ -1,6 +1,7 @@
 module YARD
   module CLI
     # Display one object
+    # @since 0.8.6
     class Display < Yardoc
       def description; 'Displays a formatted object' end
 

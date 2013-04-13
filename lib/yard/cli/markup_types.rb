@@ -1,6 +1,7 @@
 module YARD
   module CLI
     # Lists all markup types
+    # @since 0.8.6
     class MarkupTypes < Command
       def description; 'Lists all available markup types and libraries' end
 
