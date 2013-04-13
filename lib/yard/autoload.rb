@@ -11,6 +11,7 @@ module YARD
     autoload :Graph,           __p('cli/graph')
     autoload :Help,            __p('cli/help')
     autoload :List,            __p('cli/list')
+    autoload :MarkupTypes,     __p('cli/markup_types')
     autoload :Server,          __p('cli/server')
     autoload :Stats,           __p('cli/stats')
     autoload :Yardoc,          __p('cli/yardoc')

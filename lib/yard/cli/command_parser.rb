@@ -31,17 +31,18 @@ module YARD
       end
 
       self.commands = SymbolHash[
-        :config => Config,
-        :diff   => Diff,
-        :doc    => Yardoc,
-        :gems   => Gems,
-        :graph  => Graph,
-        :help   => Help,
-        :list   => List,
-        :ri     => YRI,
-        :server => Server,
-        :stats  => Stats,
-        :i18n   => I18n
+        :config  => Config,
+        :diff    => Diff,
+        :doc     => Yardoc,
+        :gems    => Gems,
+        :graph   => Graph,
+        :help    => Help,
+        :list    => List,
+        :markups => MarkupTypes,
+        :ri      => YRI,
+        :server  => Server,
+        :stats   => Stats,
+        :i18n    => I18n
       ]
 
       self.default_command = :doc
