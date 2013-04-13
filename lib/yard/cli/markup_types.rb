@@ -14,7 +14,7 @@ module YARD
         log.puts
         types = Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS
         exts = Templates::Helpers::MarkupHelper::MARKUP_EXTENSIONS
-        types.each do |name, providers|
+        types.sort_by {|name, _| name.to_s }.each do |name, providers|
           log.puts "[#{name}]"
           libs = providers.map {|p| p[:lib] }.compact
           if libs.size > 0
