@@ -12,7 +12,8 @@ module YARD
 
     # @return [IO] the IO object being logged to
     # @since 0.8.2
-    attr_accessor :io
+    def io; @logdev end
+    def io=(pipe) @logdev = pipe end
 
     # @return [Boolean] whether backtraces should be shown (by default
     #   this is on).

@@ -121,4 +121,8 @@ module Kernel
   end
 end if ENV['TM_APP_PATH']
 
+RSpec.configure do |config|
+  config.before(:each) { log.io = StringIO.new }
+end
+
 include YARD
