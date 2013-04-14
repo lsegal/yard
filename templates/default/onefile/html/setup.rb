@@ -14,9 +14,27 @@ def all_objects
   @objects.map {|obj| obj.format(options) }.join("\n")
 end
 
+def layout
+  fulldoc = Object.new.extend(T('fulldoc'))
+  layout = Object.new.extend(T('layout'))
+  @css_data = layout.stylesheets.map {|sheet| read_asset(sheet) }.join("\n")
+  @js_data = layout.javascripts.map {|script| read_asset(script) }.join("")
+
+  erb(:layout)
+end
+
+def read_asset(file)
+  return unless file = T('fulldoc').find_file(file)
+  data = File.read(file)
+  superfile = self.class.find_nth_file('fulldoc', 2)
+  data.gsub!('{{{__super__}}}', superfile ? IO.read(superfile) : "")
+  data
+end
+
 private
 
 def parse_top_comments_from_file
+  return unless @readme
   return @readme.contents unless @readme.filename =~ /\.rb$/
   data = ""
   tokens = TokenList.new(@readme.contents)

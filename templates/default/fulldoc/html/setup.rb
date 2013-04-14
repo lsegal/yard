@@ -39,9 +39,6 @@ end
 # contents of all the javascript and css and output the entire contents without
 # depending on any additional files
 def serialize_onefile
-  layout = Object.new.extend(T('layout'))
-  options.css_data = layout.stylesheets.map {|sheet| file(sheet,true) }.join("\n")
-  options.js_data = layout.javascripts.map {|script| file(script,true) }.join("")
   Templates::Engine.with_serializer('index.html', options.serializer) do
     T('onefile').run(options)
   end
