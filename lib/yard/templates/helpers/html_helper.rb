@@ -250,11 +250,11 @@ module YARD
       end
 
       # (see BaseHelper#link_object)
-      def link_object(obj, otitle = nil, anchor = nil, relative = true)
-        return otitle if obj.nil?
+      def link_object(obj, title = nil, anchor = nil, relative = true)
+        return title if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
-        if otitle
-          title = otitle.to_s
+        if title
+          title = title.to_s
         elsif object.is_a?(CodeObjects::Base)
           # Check if we're linking to a class method in the current
           # object. If we are, create a title in the format of

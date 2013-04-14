@@ -97,10 +97,10 @@ module YARD::Templates::Helpers
 
     # Includes an object's docstring into output.
     # @since 0.6.0
-    # @param [CodeObjects::Base] object the object to include
+    # @param [CodeObjects::Base] obj the object to include
     # @return [String] the object's docstring (no tags)
-    def link_include_object(object)
-      object.docstring
+    def link_include_object(obj)
+      obj.docstring
     end
 
     # Include a file as a docstring in output
@@ -113,19 +113,19 @@ module YARD::Templates::Helpers
 
     # Links to an object with an optional title
     #
-    # @param [CodeObjects::Base] object the object to link to
+    # @param [CodeObjects::Base] obj the object to link to
     # @param [String] title the title to use for the link
     # @return [String] the linked object
-    def link_object(object, title = nil)
+    def link_object(obj, title = nil)
       return title if title
 
-      case object
+      case obj
       when YARD::CodeObjects::Base, YARD::CodeObjects::Proxy
-        object.title
+        obj.title
       when String, Symbol
-        P(object).title
+        P(obj).title
       else
-        object
+        obj
       end
     end
 
