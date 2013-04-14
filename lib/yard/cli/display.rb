@@ -8,6 +8,8 @@ module YARD
       def initialize(*args)
         super
         options.format = :text # default for this command
+        @layout = nil
+        @objects = []
       end
 
       # Runs the commandline utility, parsing arguments and displaying an object
@@ -17,9 +19,25 @@ module YARD
       # @return [void]
       def run(*args)
         return unless parse_arguments(*args)
-        @objects.each do |obj|
-          log.puts obj.format(options)
-        end
+        log.puts wrap_layout(format_objects)
+      end
+
+      # @return [String] the output data for all formatted objects
+      def format_objects
+        @objects.inject([]) do |arr, obj|
+          arr.push obj.format(options)
+        end.join("\n")
+      end
+
+      def wrap_layout(contents)
+        return contents unless @layout
+        opts = options.merge(
+          :contents => contents,
+          :object => @objects.first,
+          :objects => @objects
+        )
+        args = [options.template, @layout, options.format]
+        Templates::Engine.template(*args).run(opts)
       end
 
       # Parses commandline options.
@@ -37,6 +55,13 @@ module YARD
         # validation
         return false if @objects.any? {|o| o.nil? }
         verify_markup_options
+      end
+
+      def output_options(opts)
+        super(opts)
+        opts.on('-l', '--layout [LAYOUT]', 'Wraps output in layout template (good for HTML)') do |layout|
+          @layout = layout || 'layout'
+        end
       end
     end
   end
