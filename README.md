@@ -7,8 +7,8 @@
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.6    
-**Release Date**: April 13th 2013    
+**Latest Version**: 0.8.6.1    
+**Release Date**: April 14th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,11 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **April.14.13**: 0.8.6.1 release
+    - Fixed broken links in File menu on default HTML template
+    - Added --layout switch to `yard display` to wrap output in layout template.
+    - See {file:docs/WhatsNew.md} for more information on added features.
 
 - **April.13.13**: 0.8.6 release
     - Various fixes and improved Ruby 2.x compatibility support

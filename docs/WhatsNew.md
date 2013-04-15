@@ -20,7 +20,8 @@
 16. **Added `-B/--bind` to bind to a port in yard server** (0.8.4)
 17. **Added `asciidoc` markup type support** (0.8.6)
 18. **Added `yard markups` command to list available markup types** (0.8.6)
-18. **Added `yard display` command to display formatted objects** (0.8.6)
+19. **Added `yard display` command to display formatted objects** (0.8.6)
+20. **Added `--layout` to `yard display` command** (0.8.6.1)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 
@@ -319,7 +320,8 @@ provider library, pass the `-M PROVIDER_NAME` option.
 ## Added `yard display` command to display formatted objects (0.8.6)
 
 <p class="note">This feature requires the .yardoc registry to have already been
-  generated. To generate the registry, run <code>yard doc -n</code>.</p>
+  generated. To generate the registry, run <code>yard doc -n</code>.
+</p>
 
 You can now display a single object (or a list of objects) in the YARD registry
 using the `yard display OBJECT ...` command. For example, to display the
@@ -335,6 +337,25 @@ web browser:
 
 Custom templating options from `yard doc` can also be used, see
 `yard display --help` for more options.
+
+## Added `--layout` to `yard display` command (0.8.6.1)
+
+The `yard display` command now accepts `--layout` to wrap content in a layout
+template. Currently the `layout` and `onefile` layout templates are supported,
+though any template can be used. If no parameter is specified, the layout will
+default to the `layout` template. Example usage:
+
+    $ yard display --layout onefile -f html YARD::CodeObjects > codeobjects.html
+
+The above generates a `codeobjects.html` file that is self-contained with
+CSS stylesheets and JavaScript code. This is similar to calling
+`yard doc --one-file` with only the YARD::CodeObjects object in the registry.
+
+Note that even though this uses the onefile template, the README file will not
+be auto-included the way it is with the `yard doc` command. To include the
+README text at the top of the onefile template, pass the --readme switch:
+
+    $ yard display --layout onefile -f html --readme README.md OBJECT > out.html
 
 # What's New in 0.7.x?
 
