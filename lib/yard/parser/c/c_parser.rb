@@ -80,7 +80,9 @@ module YARD
           stmts = nil
           if prevchar == '{'
             stmts = consume_body_statements
-            consume_until(';') if decl =~ /\A(typedef|enum|class|struct|union)\b/
+            if decl =~ /\A(typedef|enum|class|#{struct}|union)/
+              consume_until(';')
+            end
           end
           statement.source = @content[start..@index]
           statement.block = stmts
@@ -219,6 +221,10 @@ module YARD
         def char(num = 1) @content[@index, num] end
         def prevchar(num = 1) @content[@index - 1, num] end
         def nextchar(num = 1) @content[@index + 1, num] end
+
+        def struct
+          /struct\s[:alnum:]+\s\{/
+        end
       end
     end
   end

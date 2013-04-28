@@ -46,6 +46,11 @@ describe YARD::Parser::C::CParser do
         parse(@contents)
         Registry.at('Multifile#extra').docstring.should == ''
       end
+
+      it "should differentiate between a struct and a pointer to a struct retval" do
+        parse(@contents)
+        Registry.at('Multifile#hello_mars').docstring.should == 'Hello Mars'
+      end
     end
 
     describe 'Foo class' do
