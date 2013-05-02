@@ -52,8 +52,7 @@ describe YARD::Templates::Helpers::Markup::RDocMarkup do
 
     it "should use #fix_typewriter to convert +text+ to <tt>text</tt>" do
       fix_typewriter("Some +typewriter text <+.").should ==
-        "Some <tt>typewriter" +
-        " text &lt;</tt>."
+        "Some <tt>typewriter text &lt;</tt>."
       fix_typewriter("Not +typewriter text.").should ==
         "Not +typewriter text."
       fix_typewriter("Alternating +type writer+ text +here+.").should ==
