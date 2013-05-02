@@ -45,19 +45,28 @@ describe YARD::Templates::Helpers::Markup::RDocMarkup do
     end
   end
 
+  describe '#to_html' do
+    def to_html(text)
+      YARD::Templates::Helpers::Markup::RDocMarkup.new(text).to_html.strip
+    end
+
+    it 'handles typewriter text' do
+      to_html('Hello +<code>+').should == '<p>Hello <tt>&lt;code&gt;</tt></p>'
+    end
+  end
+
   describe '#fix_typewriter' do
     def fix_typewriter(text)
       YARD::Templates::Helpers::Markup::RDocMarkup.new('').send(:fix_typewriter, text)
     end
 
     it "should use #fix_typewriter to convert +text+ to <tt>text</tt>" do
-      fix_typewriter("Some +typewriter text <+.").should ==
+      fix_typewriter("Some +typewriter text &lt;+.").should ==
         "Some <tt>typewriter text &lt;</tt>."
       fix_typewriter("Not +typewriter text.").should ==
         "Not +typewriter text."
       fix_typewriter("Alternating +type writer+ text +here+.").should ==
-        "Alternating <tt>type writer" +
-        "</tt> text <tt>here</tt>."
+        "Alternating <tt>type writer</tt> text <tt>here</tt>."
       fix_typewriter("No ++problem.").should ==
         "No ++problem."
       fix_typewriter("Math + stuff +is ok+").should ==

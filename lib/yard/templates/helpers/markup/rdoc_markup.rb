@@ -72,7 +72,7 @@ module YARD
                 next str
               end
               next str unless code_tags == 0
-              first_text + '<tt>' + CGI.escapeHTML(type_text) + '</tt>'
+              first_text + '<tt>' + type_text + '</tt>'
             end
           end
 
