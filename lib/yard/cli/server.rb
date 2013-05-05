@@ -1,8 +1,13 @@
+require File.expand_path("../../server/authenticator", __FILE__)
+
 module YARD
   module CLI
     # A local documentation server
     # @since 0.6.0
     class Server < Command
+
+      DEFAULT_REALM = 'Yard Documentation Server'
+
       # @return [Hash] a list of options to pass to the doc server
       attr_accessor :options
 
@@ -23,6 +28,18 @@ module YARD
       # @since 0.6.2
       attr_accessor :template_paths
 
+      # @return [String] if specified, the expected user name for basic auth
+      # @since 0.8.6.2
+      attr_accessor :username
+
+      # @return [String] if specified, the expected password for basic auth
+      # @since 0.8.6.2
+      attr_accessor :password
+
+      # @return [String] if specified, the custom title for the Yard server in the login dialog
+      # @since 0.8.6.2
+      attr_accessor :realm
+
       # Creates a new instance of the Server command line utility
       def initialize
         super
@@ -40,13 +57,38 @@ module YARD
         "Runs a local documentation server"
       end
 
+      # Configure a new Rack::Server from the command line arguments and start it.
+      # @params args the command line arguments
       def run(*args)
+        server = setup(*args)
+        start(server)
+      end
+
+      # Set up the server.
+      # @return [Rack::Server] the rack server that will serve the Yard documentation
+      def setup(*args)
         optparse(*args)
 
         select_adapter.setup
         load_scripts
         load_template_paths
-        adapter.new(libraries, options, server_options).start
+        adapter.new(libraries, options, server_options)
+      end
+
+      # Start the server in either public or private mode
+      # If there is a specified username and/or password, then set up in private mode using Rack::Auth::Basic,
+      # else make the document server publicly accessible.
+      # @param [Rack::Server] server the YARD document server.
+      def start(server)
+        username = server_options[:username]
+        password = server_options[:password]
+
+        if (username || password)
+          authenticator = ::YARD::Server::Authenticator.new(username, password, server_options[:realm])
+          Rack::Server.start :app => authenticator.authorized_server(server), :Port => server_options[:Port]
+        else
+          server.start
+        end
       end
 
       private
@@ -201,6 +243,18 @@ module YARD
         end
         opts.on('-s', '--server TYPE', 'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|
           server_options[:server] = type
+        end
+        opts.on('--username USER_NAME',
+                'If specified, users must enter USER_NAME to open doc server pages') do |username|
+          server_options[:username] = username.strip
+        end
+        opts.on('--password PASSWORD',
+                'If specified, users must enter PASSWORD to open doc server pages') do |password|
+          server_options[:password] = password.strip
+        end
+        opts.on('--realm REALM',
+                "If specified, REALM is the server name in the login dialog (default: '#{DEFAULT_REALM}')") do |realm|
+          server_options[:realm] = (realm.nil? || realm.strip.length <= 0) ? DEFAULT_REALM : realm
         end
         common_options(opts)
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|

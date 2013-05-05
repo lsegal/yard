@@ -63,6 +63,23 @@ describe YARD::CLI::Server do
     new_cli
   end
 
+  def check_option(*args)
+    server = YARD::CLI::Server.new
+    server.libraries.stub!(:empty?).and_return(true)
+    server.setup(*args)
+    command_line_arg = args[0]
+    key              = convert_arg_to_key(command_line_arg)
+    server.server_options[key].should == (args[1])
+  end
+
+  # Remove hyphens from the front of the command line arg
+  # @param [string] command_line_arg the command line argument to strip hyphens
+  # @return [Symbol] the command line argument with leading hyphens removed.
+  def convert_arg_to_key(command_line_arg)
+    command_line_arg =~ /\-+(\w+)/
+    $1.to_sym
+  end
+
   def assert_libraries(expected_libs, actual_libs)
     actual_libs.should == expected_libs
     expected_libs.each do |name, libs|
@@ -144,6 +161,57 @@ describe YARD::CLI::Server do
     end
   end
 
+  describe 'Authentication' do
+
+    before(:each) do
+      @server = YARD::CLI::Server.new
+    end
+
+    def verify_whether_rack_server_should_receive_start_for(keywords)
+      rack_server = @server.setup([])
+      keywords.each do |key|
+        @server.server_options[key] = ''
+      end
+      if (keywords.include?(:username) || keywords.include?(:password))
+        Rack::Server.should_receive(:start).with(any_args())
+        rack_server.should_not_receive(:start)
+      else
+        Rack::Server.should_not_receive(:start).with(any_args())
+        rack_server.should_receive(:start)
+      end
+      @server.start(rack_server)
+    end
+
+    describe 'should be enforced' do
+
+      it 'when there is a user name' do
+        verify_whether_rack_server_should_receive_start_for([:username])
+      end
+
+      it 'when there is a password' do
+        verify_whether_rack_server_should_receive_start_for([:password])
+      end
+
+      it 'when there is both a user name and a password' do
+        verify_whether_rack_server_should_receive_start_for([:username, :password])
+      end
+
+    end
+
+    describe 'should not be enforced' do
+
+      it 'when there is neither a user name nor a password' do
+        verify_whether_rack_server_should_receive_start_for([])
+      end
+
+      it 'when there is some other command line argument' do
+        verify_whether_rack_server_should_receive_start_for([:Port])
+      end
+
+    end
+
+  end
+
   describe 'General options' do
     before do
       File.stub(:exist?).with(/\.yardopts$/).and_return(false)
@@ -177,19 +245,31 @@ describe YARD::CLI::Server do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com'
       run '--bind', 'example.com'
-    end    
+    end
+
+    it "should accept --username" do
+      check_option '--username', 'example_username'
+    end
+
+    it "should accept --password" do
+      check_option '--password', 'example_password'
+    end
+
+    it "should accept --realm" do
+      check_option '--realm', 'example_realm'
+    end
 
     it "should bind address with WebRick adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'webrick'
       run '--bind', 'example.com', '-a', 'webrick'
-    end  
+    end
 
     it "should bind address with Rack adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'rack'
       run '--bind', 'example.com', '-a', 'rack'
-    end          
+    end
 
     it "should accept -p, --port" do
       @server_options[:Port] = 10
