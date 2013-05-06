@@ -45,7 +45,7 @@ end
 
 def serialize_file(file)
   index = options.files.index(file)
-  outfile = file.name + '.html'
+  outfile = file.name.downcase + '.html'
   options.file = file
   if file.attributes[:namespace]
     options.object = Registry.at(file.attributes[:namespace])
