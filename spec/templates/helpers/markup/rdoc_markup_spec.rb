@@ -47,7 +47,8 @@ describe YARD::Templates::Helpers::Markup::RDocMarkup do
 
   describe '#to_html' do
     def to_html(text)
-      YARD::Templates::Helpers::Markup::RDocMarkup.new(text).to_html.strip
+      html = YARD::Templates::Helpers::Markup::RDocMarkup.new(text).to_html
+      html.strip.gsub(/\r?\n/, '')
     end
 
     it 'handles typewriter text' do
