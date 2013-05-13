@@ -99,6 +99,9 @@ document your code and immediately preview the results by refreshing the page;
 YARD will do all the work in re-generating the HTML. This makes writing
 documentation a much faster process.
 
+If you want to protect your documentation server from "outside eyes", you can
+run YARD server under `Rack::Auth::Basic` authentication.
+
 
 ## Installing
 
@@ -248,6 +251,15 @@ RubyGems. To serve documentation for a project you are working on, simply run:
 
 And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at [http://localhost:8808](http://localhost:8808).
+
+You can launch the server with `Rack::Auth::Basic` authentication by optionally launching
+with a specified username and/or password:
+
+    $ yard server [--username USER_NAME] [--password PASSWORD] [--realm REALM]
+
+In this scenario, users will need to authenticate before gaining access to the documentation server.
+If `REALM` is specified, then it becomes the title for the server in the login dialog; otherwise
+it defaults to 'Yard Documentation Server'.
 
 ### Live Reloading
 
