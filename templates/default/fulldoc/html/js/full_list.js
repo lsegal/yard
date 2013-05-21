@@ -111,11 +111,11 @@ clicked = null;
 function linkList() {
   $('#full_list li, #full_list li a:last').click(function(evt) {
     if ($(this).hasClass('toggle')) return true;
-    if ($(this).find('.object_link a').length === 0) {
-      $(this).children('a.toggle').click();
-      return false;
-    }
     if (this.tagName.toLowerCase() == "li") {
+      if ($(this).find('.object_link a').length === 0) {
+        $(this).children('a.toggle').click();
+        return false;
+      }
       var toggle = $(this).children('a.toggle');
       if (toggle.size() > 0 && evt.pageX < toggle.offset().left) {
         toggle.click();
@@ -125,7 +125,7 @@ function linkList() {
     if (clicked) clicked.removeClass('clicked');
     var win = window.top.frames.main ? window.top.frames.main : window.parent;
     if (this.tagName.toLowerCase() == "a") {
-      clicked = $(this).parent('li').addClass('clicked');
+      clicked = $(this).parents('li').addClass('clicked');
       win.location = this.href;
     }
     else {
