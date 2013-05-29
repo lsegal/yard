@@ -9,4 +9,4 @@ Gemfile.lock
 /doc
 /doc_guide
 /coverage
-
+.rspec
