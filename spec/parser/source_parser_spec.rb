@@ -647,7 +647,7 @@ describe YARD::Parser::SourceParser do
       it "should display a warning for a syntax error (with new parser)" do
         log.should_receive(:warn).with(/Syntax error in/)
         log.should_receive(:backtrace)
-        YARD::Parser::SourceParser.parse_string("$$$", :ruby)
+        YARD::Parser::SourceParser.parse_string("%!!!", :ruby)
       end
     end
 
