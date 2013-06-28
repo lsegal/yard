@@ -66,7 +66,7 @@ module YARD
       # Parses commandline options.
       # @param [Array<String>] args each tokenized argument
       def optparse(*args)
-        visibilities = []
+        visibilities = [:public]
         opts = OptionParser.new
 
         opts.separator ""
@@ -113,7 +113,8 @@ module YARD
 
         Registry.load
 
-        options.verifier = Verifier.new("object.type != :method || #{visibilities.uniq.inspect}.include?(object.visibility)")
+        expression = "#{visibilities.uniq.inspect}.include?(object.visibility)"
+        options.verifier = Verifier.new(expression)
         if args.first
           @objects = args.map {|o| Registry.at(o) }.compact
         else
