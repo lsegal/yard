@@ -7,8 +7,8 @@
 **Contributors**: See Contributors section below    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.6.1    
-**Release Date**: April 14th 2013    
+**Latest Version**: 0.8.6.2    
+**Release Date**: June 27th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,9 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **June.27.13**: 0.8.6.2 release
+    - Fixed issue where `yard graph` was not displaying methods
 
 - **April.14.13**: 0.8.6.1 release
     - Fixed broken links in File menu on default HTML template
