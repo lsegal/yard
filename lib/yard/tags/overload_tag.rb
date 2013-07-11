@@ -16,6 +16,7 @@ module YARD
       def object=(value)
         super(value)
         docstring.object = value
+        docstring.tags.each {|tag| tag.object = value }
       end
 
       def name(prefix = false)
