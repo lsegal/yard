@@ -42,7 +42,9 @@ def docstring_text
   end
 
   if text.strip.empty? && object.tags(:return).size == 1 && object.tag(:return).text
-    text = object.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }
+    text = object.tag(:return).text.gsub(/\A([a-z])/) {|x| x.downcase }
+    text = "Returns #{text}" unless text.empty? || text =~ /^\s*return/i
+    text = text.gsub(/\A([a-z])/) {|x| x.upcase }
   end
 
   text.strip
