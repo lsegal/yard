@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec'
+  gem 'rspec', '= 2.12'
   gem 'rake'
   gem 'rvm-tester'
   gem 'simplecov'
