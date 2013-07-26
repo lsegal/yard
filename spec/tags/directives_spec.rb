@@ -448,6 +448,6 @@ describe YARD::Tags::VisibilityDirective do
       %w(foo bar baz).each do |name|
         Registry.at("Foo##{name}").visibility.should == :private
       end
-    end if YARD.ruby19?
+    end if YARD::Parser::SourceParser.parser_type == :ruby
   end
 end
