@@ -434,6 +434,7 @@ describe YARD::Tags::VisibilityDirective do
     end
 
     it "updates visibility on future methods" do
+      Registry.clear
       YARD.parse_string <<-eof
         class Foo
           # @!visibility private
@@ -447,6 +448,6 @@ describe YARD::Tags::VisibilityDirective do
       %w(foo bar baz).each do |name|
         Registry.at("Foo##{name}").visibility.should == :private
       end
-    end
+    end if YARD.ruby19?
   end
 end
