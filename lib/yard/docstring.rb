@@ -171,7 +171,7 @@ module YARD
     def summary
       resolve_reference
       return @summary if @summary
-      stripped = self.gsub(/<.+?>/m, '').strip
+      stripped = self.gsub(/<.+?>/m, '').gsub(/[\r\n](?![\r\n])/, ' ').strip
       open_parens = ['{', '(', '[']
       close_parens = ['}', ')', ']']
       num_parens = 0

@@ -57,6 +57,11 @@ describe YARD::Docstring do
       doc.summary.should == 'Hello world.'
     end
 
+    it "should strip newlines in first paragraph before summarizing" do
+      doc = Docstring.new("Foo\n<code>==</code> bar.")
+      doc.summary.should == 'Foo == bar.'
+    end
+
     it "should return the first sentence" do
       o = Docstring.new("DOCSTRING. Another sentence")
       o.summary.should == "DOCSTRING."
