@@ -318,12 +318,17 @@ describe YARD::Docstring do
       YARD.parse_string <<-eof
         class A
           # Docstring
+          # @return [Boolean]
           def a; end
           # (see #a)
           def b; end
         end
       eof
-      YARD::Registry.at('A#b').docstring.should == 'Docstring'
+
+      object = YARD::Registry.at('A#b')
+      object.docstring.should == 'Docstring'
+      object.tags.map {|x| x.tag_name }.should == ['return']
+
       YARD::Registry.clear
     end
   end

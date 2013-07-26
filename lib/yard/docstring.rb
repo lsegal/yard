@@ -328,9 +328,7 @@ module YARD
         return if CodeObjects::Proxy === @unresolved_reference
 
         reference, @unresolved_reference = @unresolved_reference, nil
-        resolved_tags = reference.docstring.tags
         self.all = [reference.docstring.all, @all].join("\n")
-        add_tag(*resolved_tags)
       end
     end
 
