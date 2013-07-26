@@ -432,5 +432,21 @@ describe YARD::Tags::VisibilityDirective do
         @parser.state.visibility.should be_nil
       end
     end
+
+    it "updates visibility on future methods" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @!visibility private
+
+
+          def foo; end
+          def bar; end
+          def baz; end
+        end
+      eof
+      %w(foo bar baz).each do |name|
+        Registry.at("Foo##{name}").visibility.should == :private
+      end
+    end
   end
 end

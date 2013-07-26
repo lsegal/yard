@@ -388,7 +388,9 @@ module YARD
         handler = parser.handler
         object = parser.object
         self.parser = parser.class.new(parser.library)
+        parser.state.inside_directive = true
         parser.parse(tag.text, object, handler)
+        parser.state.inside_directive = false
       end
 
       def create_object
@@ -585,6 +587,8 @@ module YARD
         if %w(public protected private).include?(tag.text)
           if object.is_a?(CodeObjects::Base)
             object.visibility = tag.text.to_sym
+          elsif handler && !parser.state.inside_directive
+            handler.visibility = tag.text.to_sym
           else
             parser.state.visibility = tag.text.to_sym
           end
