@@ -1,14 +1,14 @@
 # YARD: Yay! A Ruby Documentation Tool
 
-**Homepage**:     [http://yardoc.org](http://yardoc.org)   
+**Homepage**:     http://yardoc.org   
 **IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/yard)    
-**Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   
+**Git**:          http://github.com/lsegal/yard   
 **Author**:       Loren Segal  
-**Contributors**: See Contributors section below    
+**Contributors**: http://github.com/lsegal/yard/contributors    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.6.2    
-**Release Date**: June 27th 2013    
+**Latest Version**: 0.8.6.3    
+**Release Date**: July 26th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,11 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **July.26.13**: 0.8.6.3 release
+    - Fixed issue that caused ref tags to be added to a docstring twice (#678).
+    - Fixed formatting issue in docstring summaries (#686)
+    - Added "Returns ...." prefix to summary when a lone @return tag is used.
 
 - **June.27.13**: 0.8.6.2 release
     - Fixed issue where `yard graph` was not displaying methods
@@ -588,13 +593,6 @@ More options can be seen by typing `yard graph --help`, but here is an example:
   code styles to fit into a sane amount of test cases. It also demonstrates the
   power of YARD and what to expect from the syntax (Yardoc style meta tags).
 
-
-## Contributors
-
-Special thanks to all contributors for submitting patches. A full list of
-contributors including their patches can be found at:
-
-http://github.com/lsegal/yard/contributors
 
 ## Copyright
 
