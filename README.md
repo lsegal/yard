@@ -7,7 +7,7 @@
 **Contributors**: http://github.com/lsegal/yard/contributors    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.6.3    
+**Latest Version**: 0.8.7    
 **Release Date**: July 26th 2013    
 
 ## Synopsis
@@ -283,10 +283,11 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 ## Changelog
 
-- **July.26.13**: 0.8.6.3 release
+- **July.26.13**: 0.8.7 release
+    - Added `--hide-api API` option to hide objects with a given `@api` tag (#685).
+    - Added "Returns ...." prefix to summary when a lone @return tag is used.
     - Fixed issue that caused ref tags to be added to a docstring twice (#678).
     - Fixed formatting issue in docstring summaries (#686)
-    - Added "Returns ...." prefix to summary when a lone @return tag is used.
 
 - **June.27.13**: 0.8.6.2 release
     - Fixed issue where `yard graph` was not displaying methods

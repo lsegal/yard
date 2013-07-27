@@ -177,7 +177,7 @@ module YARD
 
       # Keep track of which APIs are to be hidden
       # @return [Array<String>] a list of APIs to be hidden
-      # @since 0.8.6.3
+      # @since 0.8.7
       attr_accessor :hidden_apis
 
       # @return [Array<Symbol>] a list of tags to hide from templates
