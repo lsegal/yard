@@ -175,6 +175,11 @@ module YARD
       # @since 0.8.1
       attr_accessor :apis
 
+      # Keep track of which APIs are to be hidden
+      # @return [Array<String>] a list of APIs to be hidden
+      # @since 0.8.6.3
+      attr_accessor :hidden_apis
+
       # @return [Array<Symbol>] a list of tags to hide from templates
       # @since 0.6.0
       attr_accessor :hidden_tags
@@ -198,6 +203,7 @@ module YARD
         @options.reset_defaults
         @visibilities = [:public]
         @apis = []
+        @hidden_apis = []
         @assets = {}
         @excluded = []
         @files = []
@@ -430,11 +436,22 @@ module YARD
       # @return [void]
       # @since 0.8.1
       def add_api_verifier
-        return if apis.empty?
         no_api = true if apis.delete('')
-        expr = "#{apis.uniq.inspect}.include?(@api.text)"
-        expr += " || !@api" if no_api
-        options.verifier.add_expressions(expr)
+        exprs = []
+
+        if apis.size > 0
+          exprs << "#{apis.uniq.inspect}.include?(@api.text)"
+        end
+
+        if hidden_apis.size > 0
+          exprs << "!#{hidden_apis.uniq.inspect}.include?(@api.text)"
+        end
+
+        exprs = exprs.size > 0 ? [exprs.join(' && ')] : []
+        exprs << "!@api" if no_api
+
+        expr = exprs.join(' || ')
+        options.verifier.add_expressions(expr) unless expr.empty?
       end
 
       # Applies the specified locale to collected objects
@@ -564,6 +581,10 @@ module YARD
                                   'no @api tag.') do |api|
           api = '' if api == false
           apis.push(api)
+        end
+
+        opts.on('--hide-api API', 'Hides given @api tag from documentation') do |api|
+          hidden_apis.push(api)
         end
 
         opts.on('--embed-mixins', "Embeds mixin methods into class documentation") do

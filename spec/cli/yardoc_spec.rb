@@ -400,6 +400,33 @@ describe YARD::CLI::Yardoc do
     end
   end
 
+  describe '--hide-api option' do
+    it "should allow --hide-api to hide objects with api tags" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--hide-api', 'private')
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar'), P('Baz')]
+    end
+
+    it "should allow --hide-api to work with --api" do
+      YARD.parse_string <<-eof
+        # @api private
+        class Foo; end
+        # @api public
+        class Bar; end
+        class Baz; end
+      eof
+      @yardoc.run('--api', 'public', '--hide-api', 'private')
+      @yardoc.options.verifier.run(Registry.all).
+        sort_by {|o| o.path }.should == [P('Bar')]
+    end
+  end
+
   describe '--no-private option' do
     it "should accept --no-private" do
       obj = mock(:object)
