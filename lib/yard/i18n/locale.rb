@@ -47,17 +47,17 @@ module YARD
         return false unless File.exist?(po_file)
 
         begin
-          require "gettext/tools/poparser"
-          require "gettext/runtime/mofile"
+          require "gettext/po_parser"
+          require "gettext/mo"
         rescue LoadError
-          log.warn "Need gettext gem for i18n feature:"
+          log.warn "Need gettext gem 3.0.0 or later for i18n feature:"
           log.warn "  gem install gettext"
           return false
         end
 
-        parser = GetText::PoParser.new
+        parser = GetText::POParser.new
         parser.report_warning = false
-        data = GetText::MoFile.new
+        data = GetText::MO.new
         parser.parse_file(po_file, data)
         @messages.merge!(data)
         true
