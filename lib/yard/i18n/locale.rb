@@ -46,20 +46,12 @@ module YARD
         po_file = File.join(locale_directory, "#{@name}.po")
         return false unless File.exist?(po_file)
 
-        begin
-          require "gettext/po_parser"
-          require "gettext/mo"
-        rescue LoadError
-          log.warn "Need gettext gem 3.0.0 or later for i18n feature:"
-          log.warn "  gem install gettext"
-          return false
-        end
+        require "yard/i18n/po_parser"
+        return false unless POParser.available?
 
-        parser = GetText::POParser.new
-        parser.report_warning = false
-        data = GetText::MO.new
-        parser.parse_file(po_file, data)
-        @messages.merge!(data)
+        po_parser = POParser.new
+        @messages.merge!(po_parser.parse(po_file))
+
         true
       end
 

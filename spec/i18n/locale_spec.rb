@@ -22,11 +22,24 @@ describe YARD::I18n::Locale do
     end
 
     have_gettext_gem = true
-    begin
-      require "gettext/po_parser"
-    rescue LoadError
-      have_gettext_gem = false
+    if RUBY_VERSION < "1.9"
+      begin
+        require "gettext/tools/poparser"
+      rescue LoadError
+        have_gettext_gem = false
+      end
+    else
+      begin
+        require "gettext/po_parser"
+      rescue LoadError
+        begin
+          require "gettext/tools/poparser"
+        rescue LoadError
+          have_gettext_gem = false
+        end
+      end
     end
+
     it "should return true for existent PO", :if => have_gettext_gem do
       data = <<-eop
 msgid ""
