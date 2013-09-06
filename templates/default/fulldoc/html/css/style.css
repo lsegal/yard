@@ -302,6 +302,7 @@ li.r2 { background: #fafafa; }
 #toc ol ol > ol { padding-left: 2.3em; }
 #toc ol + li { margin-top: 0.3em; }
 #toc.hidden { padding: 10px; background: #f6f6f6; -webkit-box-shadow: none; -moz-box-shadow: none; }
+#toc{ overflow : auto; }
 #filecontents h1 + #toc.nofloat { margin-top: 0; }
 
 /* syntax highlighting */
