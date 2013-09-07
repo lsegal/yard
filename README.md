@@ -48,7 +48,7 @@ following method documented with YARD formatting:
      # @param [String, #read] contents the contents to reverse
      # @return [String] the contents reversed lexically
      def reverse(contents)
-       contents = contents.read if respond_to? :read
+       contents = contents.read if contents.respond_to? :read
        contents.reverse
      end
 
