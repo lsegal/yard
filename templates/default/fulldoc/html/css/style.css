@@ -221,7 +221,7 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 .showAll ul.fullTree { display: block; }
 .showAll .inheritName { display: none; }
 
-#search { position: absolute; right: 16px; top: 0px; }
+#search { position: absolute; right: 14px; top: 0px; }
 #search a:link, #search a:visited {
   display: block; float: left; margin-right: 8px;
   padding: 8px 10px; text-decoration: none; color: #05a;
