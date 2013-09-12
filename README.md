@@ -7,8 +7,8 @@
 **Contributors**: http://github.com/lsegal/yard/contributors    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.7    
-**Release Date**: July 26th 2013    
+**Latest Version**: 0.8.7.1    
+**Release Date**: September 11th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,10 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **September.11.13**: 0.8.7.1 release
+    - Fix potential XSS issue with frame anchor support.
+    - Add support for gettext 3.x gem.
 
 - **July.26.13**: 0.8.7 release
     - Added `--hide-api API` option to hide objects with a given `@api` tag (#685).
