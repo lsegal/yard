@@ -22,11 +22,24 @@ describe YARD::I18n::Locale do
     end
 
     have_gettext_gem = true
-    begin
-      require "gettext/tools/poparser"
-    rescue LoadError
-      have_gettext_gem = false
+    if RUBY_VERSION < "1.9"
+      begin
+        require "gettext/tools/poparser"
+      rescue LoadError
+        have_gettext_gem = false
+      end
+    else
+      begin
+        require "gettext/po_parser"
+      rescue LoadError
+        begin
+          require "gettext/tools/poparser"
+        rescue LoadError
+          have_gettext_gem = false
+        end
+      end
     end
+
     it "should return true for existent PO", :if => have_gettext_gem do
       data = <<-eop
 msgid ""
@@ -39,9 +52,9 @@ msgstr ""
 msgid "Hello"
 msgstr "Bonjour"
 eop
-      parser = GetText::PoParser.new
+      parser = GetText::POParser.new
       File.should_receive(:exist?).with('foo/fr.po').and_return(true)
-      GetText::PoParser.should_receive(:new).and_return(parser)
+      GetText::POParser.should_receive(:new).and_return(parser)
       parser.should_receive(:parse_file) do |file, hash|
         file.should == 'foo/fr.po'
         parser.parse(data, hash)
