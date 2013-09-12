@@ -8,14 +8,11 @@
 </head>
 <script type="text/javascript" charset="utf-8">
 window.onload = function() {
-  var match = window.location.hash.match(/^#!(.+)/);
-  var name = '<%= url_for_main %>';
-  if (match) {
-    name = unescape(match[1]);
-  }
+  var match = unescape(window.location.hash).match(/^#!(.+)/);
+  var name = match ? match[1] : '<%= url_for_main %>';
   document.writeln('<frameset cols="20%,*">' +
     '<frame name="list" src="<%= url_for_list('class') %>" />' +
-    '<frame name="main" src="' + name + '" />' +
+    '<frame name="main" src="' + escape(name) + '" />' +
     '</frameset>');
 }
 </script>
