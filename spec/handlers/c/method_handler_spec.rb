@@ -226,4 +226,14 @@ describe YARD::Handlers::C::MethodHandler do
     foo = Registry.at('Foo#foo?')
     foo.tag(:return).types.should == ['String']
   end
+
+  it "should handle casted method names" do
+    parse_init <<-eof
+      mFoo = rb_define_module("Foo");
+      rb_define_method(mFoo, "bar", (METHOD)bar, 0);
+      rb_define_global_function("baz", (METHOD)baz, 0);
+    eof
+    Registry.at('Foo#bar').should_not be_nil
+    Registry.at('Kernel#baz').should_not be_nil
+  end
 end

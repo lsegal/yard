@@ -8,11 +8,11 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
                  )
                  \s*\(\s*([\w\.]+),
                    \s*"([^"]+)",
-                   \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
+                   \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
                    \s*(-?\w+)\s*\)}xm
   MATCH2 = %r{rb_define_global_function\s*\(
                 \s*"([^"]+)",
-                \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\()?(\w+)\)?,
+                \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
                 \s*(-?\w+)\s*\)}xm
   handles MATCH1
   handles MATCH2
