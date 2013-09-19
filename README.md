@@ -7,8 +7,8 @@
 **Contributors**: http://github.com/lsegal/yard/contributors    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.7.1    
-**Release Date**: September 11th 2013    
+**Latest Version**: 0.8.7.2    
+**Release Date**: September 18th 2013    
 
 ## Synopsis
 
@@ -282,6 +282,10 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **September.18.13**: 0.8.7.2 release
+    - Disallow absolute URLs when using frame anchor support.
+    - Support casted functions in CRuby method declarations (#697)
 
 - **September.11.13**: 0.8.7.1 release
     - Fix potential XSS issue with frame anchor support.
