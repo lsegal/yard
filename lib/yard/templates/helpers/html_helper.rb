@@ -7,6 +7,13 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
 
+      DEFAULT_REDCARPET_EXTS = %w[
+        no_intraemphasis
+        gh_blockcode
+        fenced_code
+        autolink
+      ].freeze
+
       # @group Escaping Template Data
 
       # Escapes HTML entities
@@ -60,8 +67,9 @@ module YARD
         if provider.to_s == 'RDiscount'
           provider.new(text, :autolink).to_html
         elsif provider.to_s == 'RedcarpetCompat'
-          provider.new(text, :no_intraemphasis, :gh_blockcode,
-                             :fenced_code, :autolink).to_html
+          redcarpet_exts = DEFAULT_REDCARPET_EXTS + options.redcarpet_exts
+          redcarpet_exts.map! { |name| name.to_sym }
+          provider.new(text, *redcarpet_exts.uniq).to_html
         else
           provider.new(text).to_html
         end
