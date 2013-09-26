@@ -45,6 +45,10 @@ module YARD
       #   The +object+ key is not used so that a file may be rendered in the context
       #   of an object's namespace (for generating links).
       attr_accessor :file
+
+      # @return [Array<String>] List of additional RedCarpet extensions to be loaded.
+      #   List of additional RedCarpet extensions to be loaded.
+      default_attr :redcarpet_exts, lambda { [] }
     end
 
     # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
@@ -706,6 +710,12 @@ module YARD
                 'The directory that has .po files.',
                 "  (defaults to #{YARD::Registry.po_dir})") do |dir|
           YARD::Registry.po_dir = dir
+        end
+
+        opts.on('--redcarpet-ext EXT',
+                'RedCarpet extension(s), separated by comma.',
+                "  (no_intraemphasis, gh_blockcode, fenced_code, autolink extensions added by default and should not be listed).") do |ext|
+          options.redcarpet_exts = ext.split(/\s*,\s*/)
         end
       end
 
