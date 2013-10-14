@@ -132,6 +132,7 @@ module YARD
     # @return [void]
     def self.save
       require 'yaml'
+      Dir.mkdir(CONFIG_DIR) unless File.directory?(CONFIG_DIR)
       File.open(CONFIG_FILE, 'w') {|f| f.write(YAML.dump(options)) }
     end
 
