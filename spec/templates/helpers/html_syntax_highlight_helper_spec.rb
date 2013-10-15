@@ -44,5 +44,10 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
       should_receive(:options).and_return(Options.new.update(:highlight => true))
       html_syntax_highlight("def &x; ... end").should == "def &amp;x; ... end"
     end if HAVE_RIPPER
+
+    it "should return escaped unhighlighted source if a syntax error is found (ripper)" do
+      should_receive(:options).and_return(Options.new.update(:highlight => true))
+      html_syntax_highlight("$ git clone http://url").should == "$ git clone http://url"
+    end if HAVE_RIPPER
   end
 end

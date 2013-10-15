@@ -18,6 +18,7 @@ module YARD
 
         def html_syntax_highlight_ruby_ripper(source)
           tokenlist = Parser::Ruby::RubyParser.parse(source, "(syntax_highlight)").tokens
+          raise Parser::ParserSyntaxError if tokenlist.empty? && !source.empty?
           output = ""
           tokenlist.each do |s|
             output << "<span class='tstring'>" if [:tstring_beg, :regexp_beg].include?(s[0])
