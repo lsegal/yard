@@ -7,9 +7,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" 
     P(:A).aliases[P("A#b")].should == :a
   end
 
-  ['c', 'd?', '[]', '[]=', '-@', '%', '*'].each do |a|
+  ['c', 'd?', '[]', '[]=', '-@', '%', '*', 'cstrkey', 'cstrmeth'].each do |a|
     it "should handle the Ruby 'alias' keyword syntax for method ##{a}" do
       P('A#' + a).should be_instance_of(CodeObjects::MethodObject)
+      P('A#' + a).is_alias?.should be_true
     end
   end
 

@@ -10,7 +10,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     elsif statement.call?
       statement.parameters(false).each do |obj|
         case obj.type
-        when :symbol_literal
+        when :symbol_literal, :dyna_symbol
           names << obj.jump(:ident, :op, :kw, :const).source
         when :string_literal
           names << obj.jump(:string_content).source

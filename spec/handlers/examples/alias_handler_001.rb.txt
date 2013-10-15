@@ -1,9 +1,11 @@
 module A
   def a; end
   alias_method :b, :a
+  alias_method :"cstrmeth", :"a"
 
   # Handle keyword syntax too
   alias :c :a
+  alias :"cstrkey" :a
   alias d? a
   alias [] a
   alias []= a
