@@ -57,7 +57,7 @@ module YARD
         :html => ['htm', 'html', 'shtml'],
         :text => ['txt'],
         :textile => ['textile', 'txtile'],
-        :asciidoc => ['asciidoc'],
+        :asciidoc => ['asciidoc', 'ad', 'adoc', 'asc'],
         :markdown => ['markdown', 'md', 'mdown', 'mkd'],
         :rdoc => ['rdoc'],
         :ruby => ['rb', 'ru']
