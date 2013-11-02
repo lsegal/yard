@@ -7,8 +7,8 @@
 **Contributors**: http://github.com/lsegal/yard/contributors    
 **Copyright**:    2007-2013    
 **License**:      MIT License    
-**Latest Version**: 0.8.7.2    
-**Release Date**: September 18th 2013    
+**Latest Version**: 0.8.7.3    
+**Release Date**: November 1st 2013    
 
 ## Synopsis
 
@@ -282,6 +282,15 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 
 ## Changelog
+
+- **November.1.13**: 0.8.7.3 release
+    - Handle Unicode method/class/file names in server URL encoding (lsegal/rubydoc.info#69).
+    - Style keyword style hashes with same symbol color in code highlighting (#707).
+    - Fix broken JS when visiting docs in file:// scheme (#706).
+    - Add support for new AsciiDoc file extensions (#704).
+    - Fix issues where non-Ruby code blocks would not display in Ruby 2 (#702).
+    - Add support for extra Ruby 2 symbol types in Ripper (#701).
+    - Ensure config directory exists before saving config file (#700).
 
 - **September.18.13**: 0.8.7.2 release
     - Disallow absolute URLs when using frame anchor support.
