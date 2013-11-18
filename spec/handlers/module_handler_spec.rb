@@ -4,31 +4,31 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler"
   before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "should parse a module block" do
-    Registry.at(:ModName).should_not == nil
-    Registry.at("ModName::OtherModName").should_not == nil
+    expect(Registry.at(:ModName)).to_not eq nil
+    expect(Registry.at("ModName::OtherModName")).to_not eq nil
   end
 
   it "should attach docstring" do
-    Registry.at("ModName::OtherModName").docstring.should == "Docstring"
+    expect(Registry.at("ModName::OtherModName").docstring).to eq "Docstring"
   end
 
   it "should handle any formatting" do
-    Registry.at(:StressTest).should_not == nil
+    expect(Registry.at(:StressTest)).to_not eq nil
   end
 
   it "should handle complex module names" do
-    Registry.at("A::B").should_not == nil
+    expect(Registry.at("A::B")).to_not eq nil
   end
 
   it "should handle modules in the form ::ModName" do
-    Registry.at("Kernel").should_not be_nil
+    expect(Registry.at("Kernel")).to_not be_nil
   end
 
   it "should list mixins in proper order" do
-    Registry.at('D').mixins.should == [P(:C), P(:B), P(:A)]
+    expect(Registry.at('D').mixins).to eq [P(:C), P(:B), P(:A)]
   end
 
   it "should create proper module when constant is in namespace" do
-    Registry.at('Q::FOO::A').should_not be_nil
+    expect(Registry.at('Q::FOO::A')).to_not be_nil
   end
 end

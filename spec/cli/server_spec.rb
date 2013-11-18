@@ -52,9 +52,9 @@ describe YARD::CLI::Server do
     end
     unless @no_adapter_mock
       @cli.stub!(:adapter).and_return(@adapter)
-      @adapter.should_receive(:new).
+      expect(@adapter).to receive(:new).
         with(@libraries, @options, @server_options).and_return(@adapter)
-      @adapter.should_receive(:start)
+      expect(@adapter).to receive(:start)
     end
 
     @cli.run(*args.flatten)
@@ -64,12 +64,12 @@ describe YARD::CLI::Server do
   end
 
   def assert_libraries(expected_libs, actual_libs)
-    actual_libs.should == expected_libs
+    expect(actual_libs).to eq expected_libs
     expected_libs.each do |name, libs|
       libs.each_with_index do |expected,i|
         actual = actual_libs[name][i]
         [:source, :source_path, :yardoc_file].each do |m|
-          actual.send(m).should == expected.send(m)
+          expect(actual.send(m)).to eq expected.send(m)
         end
       end
     end
@@ -118,7 +118,7 @@ describe YARD::CLI::Server do
     end
 
     it "should default to .yardoc if no library is specified" do
-      Dir.should_receive(:pwd).at_least(:once).and_return('/path/to/foo')
+      expect(Dir).to receive(:pwd).at_least(:once).and_return('/path/to/foo')
       @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '/path/to/foo/.yardoc')]
       run
     end
@@ -139,7 +139,7 @@ describe YARD::CLI::Server do
     it "should fail if specified directory does not exist" do
       @set_libraries = false
       File.stub(:exist?).with('b').and_return(false)
-      log.should_receive(:warn).with(/Cannot find yardoc db for a: "b"/)
+      expect(log).to receive(:warn).with(/Cannot find yardoc db for a: "b"/)
       run %w(a b)
     end
   end
@@ -177,19 +177,19 @@ describe YARD::CLI::Server do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com'
       run '--bind', 'example.com'
-    end    
+    end
 
     it "should bind address with WebRick adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'webrick'
       run '--bind', 'example.com', '-a', 'webrick'
-    end  
+    end
 
     it "should bind address with Rack adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'rack'
       run '--bind', 'example.com', '-a', 'rack'
-    end          
+    end
 
     it "should accept -p, --port" do
       @server_options[:Port] = 10
@@ -203,28 +203,28 @@ describe YARD::CLI::Server do
     end
 
     it "should accept -a webrick to create WEBrick adapter" do
-      @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
+      expect(@cli).to receive(:adapter=).with(YARD::Server::WebrickAdapter)
       run '-a', 'webrick'
     end
 
     it "should accept -a rack to create Rack adapter" do
       rack_required
-      @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
+      expect(@cli).to receive(:adapter=).with(YARD::Server::RackAdapter)
       run '-a', 'rack'
     end
 
     it "should default to Rack adapter if exists on system" do
       rack_required
-      @cli.should_receive(:require).with('rubygems').and_return(false)
-      @cli.should_receive(:require).with('rack').and_return(true)
-      @cli.should_receive(:adapter=).with(YARD::Server::RackAdapter)
+      expect(@cli).to receive(:require).with('rubygems').and_return(false)
+      expect(@cli).to receive(:require).with('rack').and_return(true)
+      expect(@cli).to receive(:adapter=).with(YARD::Server::RackAdapter)
       @cli.send(:select_adapter)
     end
 
     it "should fall back to WEBrick adapter if Rack is not on system" do
-      @cli.should_receive(:require).with('rubygems').and_return(false)
-      @cli.should_receive(:require).with('rack').and_raise(LoadError)
-      @cli.should_receive(:adapter=).with(YARD::Server::WebrickAdapter)
+      expect(@cli).to receive(:require).with('rubygems').and_return(false)
+      expect(@cli).to receive(:require).with('rack').and_raise(LoadError)
+      expect(@cli).to receive(:adapter=).with(YARD::Server::WebrickAdapter)
       @cli.send(:select_adapter)
     end
 
@@ -277,27 +277,27 @@ describe YARD::CLI::Server do
       lockfile_parser.stub!(:specs).and_return([gem1, gem2])
       Bundler::LockfileParser.stub!(:new).and_return(lockfile_parser)
 
-      File.should_receive(:exist?).at_least(2).times.with("Gemfile.lock").and_return(true)
+      expect(File).to receive(:exist?).at_least(2).times.with("Gemfile.lock").and_return(true)
       File.stub!(:read)
 
       run '-G'
       run '--gemfile'
 
-      File.should_receive(:exist?).with("different_name.lock").and_return(true)
+      expect(File).to receive(:exist?).with("different_name.lock").and_return(true)
       run '--gemfile', 'different_name'
     end
 
     it "should warn if lockfile is not found (with -G)" do
       bundler_required
-      File.should_receive(:exist?).with(/\.yardopts$/).at_least(:once).and_return(false)
-      File.should_receive(:exist?).with('somefile.lock').and_return(false)
-      log.should_receive(:warn).with(/Cannot find somefile.lock/)
+      expect(File).to receive(:exist?).with(/\.yardopts$/).at_least(:once).and_return(false)
+      expect(File).to receive(:exist?).with('somefile.lock').and_return(false)
+      expect(log).to receive(:warn).with(/Cannot find somefile.lock/)
       run '-G', 'somefile'
     end
 
     it "should error if Bundler not available (with -G)" do
-      @cli.should_receive(:require).with('bundler').and_raise(LoadError)
-      log.should_receive(:error).with(/Bundler not available/)
+      expect(@cli).to receive(:require).with('bundler').and_raise(LoadError)
+      expect(log).to receive(:error).with(/Bundler not available/)
       run '-G'
     end
 
@@ -305,7 +305,7 @@ describe YARD::CLI::Server do
       unstub_adapter
       @cli.adapter = Server::WebrickAdapter
       run '-t', 'foo'
-      Templates::Engine.template_paths.last.should == 'foo'
+      expect(Templates::Engine.template_paths.last).to eq 'foo'
     end
 
     it "should load ruby code (-e) after adapter" do
@@ -317,7 +317,7 @@ describe YARD::CLI::Server do
           f.puts "YARD::Templates::Engine.register_template_path 'foo'"
           f.flush
           run '-e', f.path
-          Templates::Engine.template_paths.last.should == 'foo'
+          expect(Templates::Engine.template_paths.last).to eq 'foo'
         end
       ensure
         File.unlink(path)

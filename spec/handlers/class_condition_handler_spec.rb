@@ -4,12 +4,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
   before(:all) { parse_file :class_condition_handler_001, __FILE__ }
 
   def verify_method(*names)
-    names.each {|name| Registry.at("A##{name}").should_not be_nil }
-    names.each {|name| Registry.at("A##{name}not").should be_nil }
+    names.each {|name| expect(Registry.at("A##{name}")).to_not be_nil }
+    names.each {|name| expect(Registry.at("A##{name}not")).to be_nil }
   end
 
   def no_undoc_error(code)
-    lambda { StubbedSourceParser.parse_string(code) }.should_not raise_error
+    expect{ StubbedSourceParser.parse_string(code) }.to_not raise_error
   end
 
   it "should parse all unless blocks for complex conditions" do
@@ -49,19 +49,19 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
   end
 
   it "should maintain visibility and scope state inside condition" do
-    Registry.at('A#m').visibility.should == :private
-    Registry.at('A#mnot').visibility.should == :private
+    expect(Registry.at('A#m').visibility).to eq :private
+    expect(Registry.at('A#mnot').visibility).to eq :private
   end
 
   it "should not fail on complex conditions" do
-    log.should_not_receive(:warn)
-    log.should_not_receive(:error)
+    expect(log).to_not receive(:warn)
+    expect(log).to_not receive(:error)
     no_undoc_error "if defined?(A) && defined?(B); puts 'hi' end"
     no_undoc_error(<<-eof)
       (<<-TEST) unless defined?(ABCD_MODEL_TEST)
         'String'
       TEST
     eof
-    no_undoc_error "if caller.none? { |l| l =~ %r{lib/rails/generators\\.rb:(\\d+):in `lookup!'$} }; end"
+    no_undoc_error "if caller.none? { |l| l.match( %r{lib/rails/generators\\.rb:(\\d+):in `lookup!'$} ) }; end"
   end
 end

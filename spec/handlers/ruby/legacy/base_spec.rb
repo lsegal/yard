@@ -25,7 +25,7 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
       handles "hello"
     end
     Handlers::Base.stub!(:subclasses).and_return [IgnoredHandler, NotIgnoredHandlerLegacy]
-    @processor.find_handlers(stmt("hello world")).should == [NotIgnoredHandlerLegacy]
+    expect(@processor.find_handlers(stmt("hello world"))).to eq [NotIgnoredHandlerLegacy]
   end
 
   it "should handle a string input" do
@@ -33,8 +33,8 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
       handles "hello"
     end
 
-    TestStringHandler.handles?(stmt("hello world")).should be_true
-    TestStringHandler.handles?(stmt("nothello world")).should be_false
+    expect(TestStringHandler.handles?(stmt("hello world"))).to be_true
+    expect(TestStringHandler.handles?(stmt("nothello world"))).to be_false
   end
 
   it "should handle regex input" do
@@ -42,8 +42,8 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
       handles /^nothello$/
     end
 
-    TestRegexHandler.handles?(stmt("nothello")).should be_true
-    TestRegexHandler.handles?(stmt("not hello hello")).should be_false
+    expect(TestRegexHandler.handles?(stmt("nothello"))).to be_true
+    expect(TestRegexHandler.handles?(stmt("not hello hello"))).to be_false
   end
 
   it "should handle token input" do
@@ -51,8 +51,8 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
       handles TkMODULE
     end
 
-    TestTokenHandler.handles?(stmt("module")).should be_true
-    TestTokenHandler.handles?(stmt("if")).should be_false
+    expect(TestTokenHandler.handles?(stmt("module"))).to be_true
+    expect(TestTokenHandler.handles?(stmt("if"))).to be_false
   end
 
   it "should parse a do/end or { } block with #parse_block" do
@@ -73,10 +73,10 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
     Handlers::Base.stub!(:subclasses).and_return [MyBlockHandler, MyBlockInnerHandler]
     Parser::SourceParser.parser_type = :ruby18
     Parser::SourceParser.parse_string "myMethod do inner end"
-    MyBlockInnerHandler.should be_reached
+    expect(MyBlockInnerHandler).to be_reached
     MyBlockInnerHandler.reset
     Parser::SourceParser.parse_string "myMethod { inner }"
-    MyBlockInnerHandler.should be_reached
+    expect(MyBlockInnerHandler).to be_reached
     Parser::SourceParser.parser_type = :ruby
   end
 end

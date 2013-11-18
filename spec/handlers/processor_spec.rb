@@ -6,19 +6,19 @@ describe YARD::Handlers::Processor do
   end
 
   it "should start with public visibility" do
-    @proc.visibility.should == :public
+    expect(@proc.visibility).to eq :public
   end
 
   it "should start in instance scope" do
-    @proc.scope.should == :instance
+    expect(@proc.scope).to eq :instance
   end
 
   it "should start in root namespace" do
-    @proc.namespace.should == Registry.root
+    expect(@proc.namespace).to eq Registry.root
   end
 
   it "should have a globals structure" do
-    @proc.globals.should be_a(OpenStruct)
+    expect(@proc.globals).to be_a(OpenStruct)
   end
 
   it 'should ignore HandlerAborted exceptions (but print debug info)' do
@@ -27,8 +27,8 @@ describe YARD::Handlers::Processor do
     end
     stmt = OpenStruct.new(:line => 1, :show => 'SOURCE')
     @proc.stub!(:find_handlers).and_return([AbortHandlerProcessor])
-    log.should_receive(:debug).with(/AbortHandlerProcessor cancelled from/)
-    log.should_receive(:debug).with("\tin file '(stdin)':1:\n\nSOURCE\n")
+    expect(log).to receive(:debug).with(/AbortHandlerProcessor cancelled from/)
+    expect(log).to receive(:debug).with("\tin file '(stdin)':1:\n\nSOURCE\n")
     @proc.process([stmt])
   end
 end

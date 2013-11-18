@@ -8,12 +8,12 @@ describe YARD::Parser::Ruby::AstNode do
   describe "#jump" do
     it "should jump to the first specific inner node if found" do
       ast = s(:paren, s(:paren, s(:params, s(s(:ident, "hi"), s(:ident, "bye")))))
-      ast.jump(:params)[0][0].type.should equal(:ident)
+      expect(ast.jump(:params)[0][0].type).to equal(:ident)
     end
 
     it "should return the original ast if no inner node is found" do
       ast = s(:paren, s(:list, s(:list, s(s(:ident, "hi"), s(:ident, "bye")))))
-      ast.jump(:params).object_id.should == ast.object_id
+      expect(ast.jump(:params).object_id).to eq ast.object_id
     end
   end
 
@@ -23,7 +23,7 @@ describe YARD::Parser::Ruby::AstNode do
       out = StringIO.new
       PP.pp(obj, out)
       vcall = RUBY_VERSION >= '1.9.3' ? 'vcall' : 'var_ref'
-      out.string.should == "s(s(:#{vcall},\n" +
+      expect(out.string).to eq "s(s(:#{vcall},\n" +
         "      s(:ident, \"bye\", line: 2..2, source: 4..6),\n" +
         "      docstring: \"x\",\n" +
         "      line: 2..2,\n" +

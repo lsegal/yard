@@ -16,25 +16,25 @@ describe YARD::Handlers::C::AttributeHandler do
 
   it "should handle readonly attribute (rb_define_attr)" do
     run(1, 0)
-    Registry.at('Foo#foo').should be_reader
-    Registry.at('Foo#foo=').should be_nil
+    expect(Registry.at('Foo#foo')).to be_reader
+    expect(Registry.at('Foo#foo=')).to be_nil
   end
 
   it "should handle writeonly attribute (rb_define_attr)" do
     run(0, 1)
-    Registry.at('Foo#foo').should be_nil
-    Registry.at('Foo#foo=').should be_writer
+    expect(Registry.at('Foo#foo')).to be_nil
+    expect(Registry.at('Foo#foo=')).to be_writer
   end
 
   it "should handle readwrite attribute (rb_define_attr)" do
     run(1, 1)
-    Registry.at('Foo#foo').should be_reader
-    Registry.at('Foo#foo=').should be_writer
+    expect(Registry.at('Foo#foo')).to be_reader
+    expect(Registry.at('Foo#foo=')).to be_writer
   end
 
   it "should handle commented writeonly attribute (/* rb_define_attr */)" do
     run(1, 1, true)
-    Registry.at('Foo#foo').should be_reader
-    Registry.at('Foo#foo=').should be_writer
+    expect(Registry.at('Foo#foo')).to be_reader
+    expect(Registry.at('Foo#foo=')).to be_writer
   end
 end

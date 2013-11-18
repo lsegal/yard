@@ -9,7 +9,7 @@ describe YARD::Handlers::C::StructHandler do
           "Range", rb_cFoo, range_alloc,
           "begin", "end", "excl", NULL);
     eof
-    Registry.at('Range').type.should == :class
-    Registry.at('Range').superclass.should == P(:Foo)
+    expect(Registry.at('Range').type).to eq :class
+    expect(Registry.at('Range').superclass).to eq P(:Foo)
   end
 end

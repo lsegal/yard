@@ -99,7 +99,7 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
     exs.text.split(/\n/).each do |ex|
       begin
         hash = eval("{ #{ex} }")
-        hash.keys.first.should == hash.values.first
+        expect(hash.keys.first).to eq hash.values.first
       rescue => e
         raise e, "#{e.message}\nInvalid spec example in #{objname}:\n\n\t#{ex}\n"
       end

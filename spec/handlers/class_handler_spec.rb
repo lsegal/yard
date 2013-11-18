@@ -4,60 +4,60 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
   before(:all) { parse_file :class_handler_001, __FILE__ }
 
   it "should parse a class block with docstring" do
-    P("A").docstring.should == "Docstring"
+    expect(P("A").docstring).to eq "Docstring"
   end
 
   it "should handle complex class names" do
-    P("A::B::C").should_not == nil
+    expect(P("A::B::C")).to_not eq nil
   end
 
   it "should handle the subclassing syntax" do
-    P("A::B::C").superclass.should == P(:String)
-    P("A::X").superclass.should == Registry.at("A::B::C")
+    expect(P("A::B::C").superclass).to eq P(:String)
+    expect(P("A::X").superclass).to eq Registry.at("A::B::C")
   end
 
   it "should interpret class << self as a class level block" do
-    P("A.classmethod1").should_not == nil
+    expect(P("A.classmethod1")).to_not eq nil
   end
 
   it "should interpret class << ClassName as a class level block in ClassName's namespace" do
-    P("A::B::C.Hello").should be_instance_of(CodeObjects::MethodObject)
+    expect(P("A::B::C.Hello")).to be_instance_of(CodeObjects::MethodObject)
   end
 
   it "should make visibility public when parsing a block" do
-    P("A::B::C#method1").visibility.should == :public
+    expect(P("A::B::C#method1").visibility).to eq :public
   end
 
   it "should set superclass type to :class if it is a Proxy" do
-    P("A::B::C").superclass.type.should == :class
+    expect(P("A::B::C").superclass.type).to eq :class
   end
 
   it "should look for a superclass before creating the class if it shares the same name" do
-    P('B::A').superclass.should == P('A')
+    expect(P('B::A').superclass).to eq P('A')
   end
 
   it "should handle class definitions in the form ::ClassName" do
-    Registry.at("MyRootClass").should_not be_nil
+    expect(Registry.at("MyRootClass")).to_not be_nil
   end
 
   it "should handle superclass as a constant-style method (camping style < R /path/)" do
-    P('Test1').superclass.should == P(:R)
-    P('Test2').superclass.should == P(:R)
-    P('Test6').superclass.should == P(:NotDelegateClass)
+    expect(P('Test1').superclass).to eq P(:R)
+    expect(P('Test2').superclass).to eq P(:R)
+    expect(P('Test6').superclass).to eq P(:NotDelegateClass)
   end
 
   it "should handle superclass with OStruct.new or Struct.new syntax (superclass should be OStruct/Struct)" do
-    P('Test3').superclass.should == P(:Struct)
-    P('Test4').superclass.should == P(:OStruct)
+    expect(P('Test3').superclass).to eq P(:Struct)
+    expect(P('Test4').superclass).to eq P(:OStruct)
   end
 
   it "should handle DelegateClass(CLASSNAME) superclass syntax" do
-    P('Test5').superclass.should == P(:Array)
+    expect(P('Test5').superclass).to eq P(:Array)
   end
 
   it "should handle a superclass of the same name in the form ::ClassName" do
-    P('Q::Logger').superclass.should == P(:Logger)
-    P('Q::Foo').superclass.should_not == P('Q::Logger')
+    expect(P('Q::Logger').superclass).to eq P(:Logger)
+    expect(P('Q::Foo').superclass).to_not eq P('Q::Logger')
   end
 
   ["CallMethod('test')", "VSD^#}}", 'not.aclass', 'self'].each do |klass|
@@ -68,9 +68,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
 
   ['@@INVALID', 'hi', '$MYCLASS', 'AnotherClass.new'].each do |klass|
     it "should raise an UndocumentableError for invalid superclass '#{klass}' but it should create the class." do
-      YARD::CodeObjects::ClassObject.should_receive(:new).with(Registry.root, 'A')
+      expect(YARD::CodeObjects::ClassObject).to receive(:new).with(Registry.root, 'A')
       with_parser(:ruby18) { undoc_error "class A < #{klass}; end" }
-      Registry.at('A').superclass.should == P(:Object)
+      expect(Registry.at('A').superclass).to eq P(:Object)
     end
   end
 
@@ -82,16 +82,16 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
           class << CONST; end
         eof
       end
-      Registry.at(klass).should be_nil
+      expect(Registry.at(klass)).to be_nil
     end
   end
 
   it "should document 'class << SomeConstant' by using SomeConstant's value as a reference to the real class name" do
-    Registry.at('String.classmethod').should_not be_nil
+    expect(Registry.at('String.classmethod')).to_not be_nil
   end
 
   it "should allow class << SomeRubyClass to create the class if it does not exist" do
-    Registry.at('Symbol.toString').should_not be_nil
+    expect(Registry.at('Symbol.toString')).to_not be_nil
   end
 
   it "should document 'class Exception' without running into superclass issues" do
@@ -99,80 +99,80 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
       class Exception
       end
     eof
-    Registry.at(:Exception).should_not be_nil
+    expect(Registry.at(:Exception)).to_not be_nil
   end
 
   it "should document 'class RT < XX::RT' with proper superclass even if XX::RT is a proxy" do
-    Registry.at(:RT).should_not be_nil
-    Registry.at(:RT).superclass.should == P('XX::RT')
+    expect(Registry.at(:RT)).to_not be_nil
+    expect(Registry.at(:RT).superclass).to eq P('XX::RT')
   end
 
   it "should not overwrite docstring with an empty one" do
-    Registry.at(:Zebra).docstring.should == "Docstring 2"
+    expect(Registry.at(:Zebra).docstring).to eq "Docstring 2"
   end
 
   it "should turn 'class Const < Struct.new(:sym)' into class Const with attr :sym" do
     obj = Registry.at("Point")
-    obj.should be_kind_of(CodeObjects::ClassObject)
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
     [:x, :y, :z].each do |key|
-      attrs.should have_key(key)
-      attrs[key][:read].should_not be_nil
-      attrs[key][:write].should_not be_nil
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).to_not be_nil
+      expect(attrs[key][:write]).to_not be_nil
     end
   end
 
   it "should turn 'class Const < Struct.new('Name', :sym)' into class Const with attr :sym" do
     obj = Registry.at("AnotherPoint")
-    obj.should be_kind_of(CodeObjects::ClassObject)
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
     [:a, :b, :c].each do |key|
-      attrs.should have_key(key)
-      attrs[key][:read].should_not be_nil
-      attrs[key][:write].should_not be_nil
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).to_not be_nil
+      expect(attrs[key][:write]).to_not be_nil
     end
 
-    Registry.at("XPoint").should be_nil
+    expect(Registry.at("XPoint")).to be_nil
   end
 
   it "should create a Struct::Name class when class Const < Struct.new('Name', :sym) is found" do
     obj = Registry.at("Struct::XPoint")
-    obj.should_not be_nil
+    expect(obj).to_not be_nil
   end
 
   it "should attach attribtues to the generated Struct::Name class when Struct.new('Name') is used" do
     obj = Registry.at("Struct::XPoint")
     attrs = obj.attributes[:instance]
     [:a, :b, :c].each do |key|
-      attrs.should have_key(key)
-      attrs[key][:read].should_not be_nil
-      attrs[key][:write].should_not be_nil
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).to_not be_nil
+      expect(attrs[key][:write]).to_not be_nil
     end
   end
 
   it "should use @attr to set attribute descriptions on Struct subclasses" do
     obj = Registry.at("DoccedStruct#input")
-    obj.docstring.should == "the input stream"
+    expect(obj.docstring).to eq "the input stream"
   end
 
   it "should use @attr to set attribute types on Struct subclasses" do
     obj = Registry.at("DoccedStruct#someproc")
-    obj.should_not be_nil
-    obj.tag(:return).should_not be_nil
-    obj.tag(:return).types.should == ["Proc", "#call"]
+    expect(obj).to_not be_nil
+    expect(obj.tag(:return)).to_not be_nil
+    expect(obj.tag(:return).types).to eq ["Proc", "#call"]
   end
 
   it "should default types unspecified by @attr to Object on Struct subclasses" do
     obj = Registry.at("DoccedStruct#mode")
-    obj.should_not be_nil
-    obj.tag(:return).should_not be_nil
-    obj.tag(:return).types.should == ["Object"]
+    expect(obj).to_not be_nil
+    expect(obj.tag(:return)).to_not be_nil
+    expect(obj.tag(:return).types).to eq ["Object"]
   end
 
   it "should create parameters for writers of Struct subclass's attributes" do
     obj = Registry.at("DoccedStruct#input=")
-    obj.tags(:param).size.should == 1
-    obj.tag(:param).types.should == ["IO"]
+    expect(obj.tags(:param).size).to eq 1
+    expect(obj.tag(:param).types).to eq ["IO"]
   end
 
   ["SemiDoccedStruct", "NotAStruct"].each do |struct|
@@ -180,67 +180,67 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
       it "defines both readers and writers when @attr is used on Structs" do
         obj = Registry.at(struct)
         attrs = obj.attributes[:instance]
-        attrs[:first][:read].should_not be_nil
-        attrs[:first][:write].should_not be_nil
+        expect(attrs[:first][:read]).to_not be_nil
+        expect(attrs[:first][:write]).to_not be_nil
       end
 
       it "defines only a reader when only @attr_reader is used on Structs" do
         obj = Registry.at(struct)
         attrs = obj.attributes[:instance]
-        attrs[:second][:read].should_not be_nil
-        attrs[:second][:write].should be_nil
+        expect(attrs[:second][:read]).to_not be_nil
+        expect(attrs[:second][:write]).to be_nil
       end
 
       it "defines only a writer when only @attr_writer is used on Structs" do
         obj = Registry.at(struct)
         attrs = obj.attributes[:instance]
-        attrs[:third][:read].should be_nil
-        attrs[:third][:write].should_not be_nil
+        expect(attrs[:third][:read]).to be_nil
+        expect(attrs[:third][:write]).to_not be_nil
       end
 
       it "defines a reader with correct return types when @attr_reader is used on Structs" do
         obj = Registry.at("#{struct}#second")
-        obj.tag(:return).types.should == ["Fixnum"]
+        expect(obj.tag(:return).types).to eq ["Fixnum"]
       end
 
       it "defines a writer with correct parameter types when @attr_writer is used on Structs" do
         obj = Registry.at("#{struct}#third=")
-        obj.tag(:param).types.should == ["Array"]
+        expect(obj.tag(:param).types).to eq ["Array"]
       end
 
       it "defines a reader and a writer when both @attr_reader and @attr_writer are used" do
         obj = Registry.at(struct)
         attrs = obj.attributes[:instance]
-        attrs[:fourth][:read].should_not be_nil
-        attrs[:fourth][:write].should_not be_nil
+        expect(attrs[:fourth][:read]).to_not be_nil
+        expect(attrs[:fourth][:write]).to_not be_nil
       end
 
       it "uses @attr_reader for the getter when both @attr_reader and @attr_writer are given" do
         obj = Registry.at("#{struct}#fourth")
-        obj.tag(:return).types.should == ["#read"]
+        expect(obj.tag(:return).types).to eq ["#read"]
       end
 
       it "uses @attr_writer for the setter when both @attr_reader and @attr_writer are given" do
         obj = Registry.at("#{struct}#fourth=")
-        obj.tag(:param).types.should == ["IO"]
+        expect(obj.tag(:param).types).to eq ["IO"]
       end
 
       it "extracts text from @attr_reader" do
-        Registry.at("#{struct}#fourth").docstring.should == "returns a proc that reads"
+        expect(Registry.at("#{struct}#fourth").docstring).to eq "returns a proc that reads"
       end
 
       it "extracts text from @attr_writer" do
-        Registry.at("#{struct}#fourth=").docstring.should == "sets the proc that writes stuff"
+        expect(Registry.at("#{struct}#fourth=").docstring).to eq "sets the proc that writes stuff"
       end
     end
   end
 
   it "should inherit from a regular struct" do
-    Registry.at('RegularStruct').superclass.should == P(:Struct)
-    Registry.at('RegularStruct2').superclass.should == P(:Struct)
+    expect(Registry.at('RegularStruct').superclass).to eq P(:Struct)
+    expect(Registry.at('RegularStruct2').superclass).to eq P(:Struct)
   end
 
   it "should handle inheritance from 'self'" do
-    Registry.at('Outer1::Inner1').superclass.should == Registry.at('Outer1')
+    expect(Registry.at('Outer1::Inner1').superclass).to eq Registry.at('Outer1')
   end
 end

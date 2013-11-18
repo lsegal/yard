@@ -33,7 +33,7 @@ describe YARD::CLI::Stats do
 
   it "should list undocumented objects with --list-undoc" do
     @stats.run('--list-undoc')
-    @output.string.should == <<-eof
+    expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
 
@@ -52,7 +52,7 @@ eof
       def foo; end
     eof
     @stats.run('--list-undoc')
-    @output.string.should ==  "Files:           1\n" +
+    expect(@output.string).to eq  "Files:           1\n" +
                               "Modules:         0 (    0 undocumented)\n" +
                               "Classes:         0 (    0 undocumented)\n" +
                               "Constants:       0 (    0 undocumented)\n" +
@@ -62,7 +62,7 @@ eof
 
   it "should list undocumented objects in compact mode with --list-undoc --compact" do
     @stats.run('--list-undoc', '--compact')
-    @output.string.should == <<-eof
+    expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
 B            ((stdin):9)
@@ -74,12 +74,12 @@ eof
 
   it "should still list stats with --quiet" do
     @stats.run('--quiet')
-    @output.string.should == @main_stats
+    expect(@output.string).to eq @main_stats
   end
 
   it "should ignore everything with --no-public" do
     @stats.run('--no-public')
-    @output.string.should ==
+    expect(@output.string).to eq \
       "Files:           0\n" +
       "Modules:         0 (    0 undocumented)\n" +
       "Classes:         0 (    0 undocumented)\n" +

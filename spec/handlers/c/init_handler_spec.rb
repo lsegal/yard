@@ -8,7 +8,7 @@ describe YARD::Handlers::C::InitHandler do
         rb_cA = rb_define_class("A", rb_cObject);
       }
     eof
-    Registry.at('A').docstring.should == 'Bar!'
+    expect(Registry.at('A').docstring).to eq 'Bar!'
   end
 
   it "should not add documentation if ClassName is not created in Init" do
@@ -17,7 +17,7 @@ describe YARD::Handlers::C::InitHandler do
       void Init_A() {
       }
     eof
-    Registry.at('A').should be_nil
+    expect(Registry.at('A')).to be_nil
   end
 
   it "should not overwrite override comment" do
@@ -31,7 +31,7 @@ describe YARD::Handlers::C::InitHandler do
         rb_cA = rb_define_class("A", rb_cObject);
       }
     eof
-    Registry.at('A').docstring.should == 'Foo!'
+    expect(Registry.at('A').docstring).to eq 'Foo!'
   end
 
   it "should check non-Init methods for declarations too" do
@@ -41,7 +41,7 @@ describe YARD::Handlers::C::InitHandler do
         rb_define_method(rb_cB, "foo", foo_impl, 0);
       }
     eof
-    Registry.at('B').should be_a(CodeObjects::ClassObject)
-    Registry.at('B#foo').should be_a(CodeObjects::MethodObject)
+    expect(Registry.at('B')).to be_a(CodeObjects::ClassObject)
+    expect(Registry.at('B#foo')).to be_a(CodeObjects::MethodObject)
   end
 end

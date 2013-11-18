@@ -17,7 +17,7 @@ describe YARD::Server::Commands::LibraryCommand do
   end
 
   def call
-    lambda { @cmd.call(@request) }.should raise_error(NotImplementedError)
+    expect{ @cmd.call(@request) }.to raise_error(NotImplementedError)
   end
 
   describe "#call" do
@@ -28,12 +28,12 @@ describe YARD::Server::Commands::LibraryCommand do
     it "should set :rdoc as the default markup in incremental mode" do
       @cmd.incremental = true
       call
-      @cmd.options[:markup].should == :rdoc
+      expect(@cmd.options[:markup]).to eq :rdoc
     end
 
     it "should set :rdoc as the default markup in regular mode" do
       call
-      @cmd.options[:markup].should == :rdoc
+      expect(@cmd.options[:markup]).to eq :rdoc
     end
   end
 end

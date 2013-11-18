@@ -82,7 +82,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
   end
 
   it "should render dot format correctly" do
-    Registry.at('A').format(:format => :dot, :dependencies => true, :full => true).should == example_contents(:module001, 'dot')
+    expect(Registry.at('A').format(:format => :dot, :dependencies => true, :full => true)).to eq example_contents(:module001, 'dot')
   end
 
   it "should render groups correctly in html" do

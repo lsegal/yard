@@ -45,7 +45,7 @@ describe YARD::Templates::Engine.template(:default, :tags) do
       eof
 
       proc = lambda { Registry.at('Foo').format(html_options) }
-      proc.should_not raise_error(NoMethodError)
+      expect(proc).to_not raise_error(NoMethodError)
     end
   end
 end

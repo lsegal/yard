@@ -10,7 +10,7 @@ describe YARD::Handlers::Base do
     end
 
     it "should keep track of subclasses" do
-      Handlers::Base.should_receive(:inherited).once
+      expect(Handlers::Base).to receive(:inherited).once
       class TestHandler < Handlers::Base; end
     end
 
@@ -18,25 +18,25 @@ describe YARD::Handlers::Base do
       class TestNotImplementedHandler < Handlers::Base
       end
 
-      lambda { TestNotImplementedHandler.new(0, 0).process }.should raise_error(NotImplementedError)
+      expect{ TestNotImplementedHandler.new(0, 0).process }.to raise_error(NotImplementedError)
     end
 
     it "should allow multiple handles arguments" do
-      Handlers::Base.should_receive(:inherited).once
+      expect(Handlers::Base).to receive(:inherited).once
       class TestHandler1 < Handlers::Base
         handles :a, :b, :c
       end
-      TestHandler1.handlers.should == [:a, :b, :c]
+      expect(TestHandler1.handlers).to eq [:a, :b, :c]
     end
 
     it "should allow multiple handles calls" do
-      Handlers::Base.should_receive(:inherited).once
+      expect(Handlers::Base).to receive(:inherited).once
       class TestHandler2 < Handlers::Base
         handles :a
         handles :b
         handles :c
       end
-      TestHandler2.handlers.should == [:a, :b, :c]
+      expect(TestHandler2.handlers).to eq [:a, :b, :c]
     end
   end
 
@@ -45,7 +45,7 @@ describe YARD::Handlers::Base do
       class AbortHandler1 < Handlers::Ruby::Base
         process { abort! }
       end
-      lambda { AbortHandler1.new(nil, nil).process }.should raise_error(HandlerAborted)
+      expect{ AbortHandler1.new(nil, nil).process }.to raise_error(HandlerAborted)
     end
   end
 
@@ -61,10 +61,10 @@ describe YARD::Handlers::Base do
           def bar; end
         end
       eof
-      Registry.at('A').tag(:since).text.should == "1.0"
-      Registry.at('A#foo').tag(:since).text.should == "1.0"
-      Registry.at('A#bar').tag(:since).text.should == "1.1"
-      Registry.at('A#bar').tag(:author).should be_nil
+      expect(Registry.at('A').tag(:since).text).to eq "1.0"
+      expect(Registry.at('A#foo').tag(:since).text).to eq "1.0"
+      expect(Registry.at('A#bar').tag(:since).text).to eq "1.1"
+      expect(Registry.at('A#bar').tag(:author)).to be_nil
     end
   end
 
@@ -84,8 +84,8 @@ describe YARD::Handlers::Base do
 
       2.times do
         YARD.parse_string 'class Foo; end; def foo; end'
-        GlobalStateHandler1.state.should == nil
-        GlobalStateHandler2.state.should == :bar
+        expect(GlobalStateHandler1.state).to eq nil
+        expect(GlobalStateHandler2.state).to eq :bar
       end
     end
   end if HAVE_RIPPER
@@ -162,11 +162,11 @@ describe YARD::Handlers::Base do
 
     def test_handler(file, stmts, creates = true, parser_type = :ruby)
       Registry.clear
-      Registry.at('#FOO').should be_nil
+      expect(Registry.at('#FOO')).to be_nil
       create_handler(stmts, parser_type)
       parse(file, parser_type)
       Registry.at('#FOO').send(creates ? :should_not : :should, be_nil)
-      Handlers::Base.subclasses.delete_if {|k,v| k.to_s =~ /^InFileHandler/ }
+      Handlers::Base.subclasses.delete_if {|k,v| k.to_s.match( /^InFileHandler/ ) }
     end
 
     [:ruby, :ruby18].each do |parser_type|
