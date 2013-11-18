@@ -19,17 +19,17 @@ describe YARD::Serializers::YardocSerializer do
   describe '#dump' do
     it "should maintain object equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
-      newfoo.should equal(@foo)
-      newfoo.should == @foo
-      @foo.should equal(newfoo)
-      @foo.should == newfoo
-      newfoo.hash.should == @foo.hash
+      expect(newfoo).to equal(@foo)
+      expect(newfoo).to eq @foo
+      expect(@foo).to equal(newfoo)
+      expect(@foo).to eq newfoo
+      expect(newfoo.hash).to eq @foo.hash
     end
 
     it "should maintain hash key equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
-      {@foo => 1}.should have_key(newfoo)
-      {newfoo => 1}.should have_key(@foo)
+      expect({@foo => 1}).to have_key(newfoo)
+      expect({newfoo => 1}).to have_key(@foo)
     end
   end
 
@@ -38,8 +38,8 @@ describe YARD::Serializers::YardocSerializer do
       data = {:root => Registry.root}
       marshaldata = Marshal.dump(data)
       filemock = mock(:file)
-      filemock.should_receive(:write).with(marshaldata)
-      File.should_receive(:open!).with('.yardoc/objects/root.dat', 'wb').and_yield(filemock)
+      expect(filemock).to receive(:write).with(marshaldata)
+      expect(File).to receive(:open!).with('.yardoc/objects/root.dat', 'wb').and_yield(filemock)
       @serializer.serialize(data)
     end
   end

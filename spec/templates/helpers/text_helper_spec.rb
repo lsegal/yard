@@ -33,12 +33,12 @@ describe YARD::Templates::Helpers::TextHelper do
   describe '#align_right' do
     it "should align text right" do
       text = "Method: #some_method (SomeClass)"
-      align_right(text).should == ' ' * 40 + text
+      expect(align_right(text)).to eq ' ' * 40 + text
     end
 
     it "should truncate text that is longer than allowed width" do
       text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
-      align_right(text).should == ' ' + text[0,68] + '...'
+      expect(align_right(text)).to eq ' ' + text[0,68] + '...'
     end
   end
 end

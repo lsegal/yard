@@ -18,9 +18,9 @@ describe YARD::I18n::Text do
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to match_array(
           [[:attribute, "title", "Getting Started Guide", 1],
-           [:paragraph, "# Getting Started with YARD", 3]]
+           [:paragraph, "# Getting Started with YARD", 3]] )
       end
 
       it "should ignore markup line" do
@@ -30,9 +30,9 @@ eot
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to match_array(
           [[:attribute, "title", "Getting Started Guide", 2],
-           [:paragraph, "# Getting Started with YARD", 4]]
+           [:paragraph, "# Getting Started with YARD", 4]] )
       end
 
       it "should terminate header block by markup line not at the first line" do
@@ -42,10 +42,10 @@ eot
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to match_array(
           [[:attribute, "title", "Getting Started Guide", 1],
            [:paragraph, "#!markdown", 2],
-           [:paragraph, "# Getting Started with YARD", 4]]
+           [:paragraph, "# Getting Started with YARD", 4]] )
       end
     end
 
@@ -64,9 +64,9 @@ eop
 
 #{paragraph2}
 eot
-        extract_messages(text).should ==
+        expect(extract_messages(text)).to match_array(
           [[:paragraph, paragraph1, 1],
-           [:paragraph, paragraph2, 4]]
+           [:paragraph, paragraph2, 4]] )
       end
     end
   end
@@ -96,7 +96,7 @@ eot
 
 Paragraph.
 eot
-        translate(text, :have_header => true).should == <<-eot
+        expect(translate(text, :have_header => true)).to eq <<-eot
 # @title Bonjour (Hello in fr)
 
 # Getting Started with YARD
@@ -114,7 +114,7 @@ eot
 
 Paragraph.
 eot
-        translate(text, :have_header => true).should == <<-eot
+        expect(translate(text, :have_header => true)).to eq <<-eot
 #!markdown
 # @title Bonjour (Hello in fr)
 
@@ -138,7 +138,7 @@ eop
 
 #{paragraph2}
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 Paragraphe 1.
 
 Paragraphe 2.
@@ -152,7 +152,7 @@ eop
         text = <<-eot
 #{nonexistent_paragraph}
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 #{nonexistent_paragraph}
 eot
       end
@@ -161,16 +161,16 @@ eot
         text = <<-eot
 Paragraph 1.
 
-  
-	
+
+
 
 Paragraph 2.
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 Paragraphe 1.
 
-  
-	
+
+
 
 Paragraphe 2.
 eot

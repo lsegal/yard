@@ -23,7 +23,7 @@ describe YARD::Rake::YardocTask do
   describe '#initialize' do
     it "should allow separate rake task name to be set" do
       YARD::Rake::YardocTask.new(:notyardoc)
-      ::Rake.application.tasks[0].name.should == "notyardoc"
+      expect(::Rake.application.tasks[0].name).to eq "notyardoc"
     end
   end
 
@@ -33,7 +33,7 @@ describe YARD::Rake::YardocTask do
         t.files = ['a', 'b', 'c']
       end
       run
-      @yardoc.files.should == %w(a b c)
+      expect(@yardoc.files).to eq %w(a b c)
     end
   end
 
@@ -43,7 +43,7 @@ describe YARD::Rake::YardocTask do
         t.options = ['--private', '--protected']
       end
       run
-      @yardoc.visibilities.should == [:public, :private, :protected]
+      expect(@yardoc.visibilities).to eq [:public, :private, :protected]
     end
 
     it "should allow --api and --no-api" do
@@ -59,8 +59,8 @@ describe YARD::Rake::YardocTask do
   describe '#before' do
     it "should allow before callback" do
       proc = lambda { }
-      proc.should_receive(:call)
-      @yardoc.should_receive(:run)
+      expect(proc).to receive(:call)
+      expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.before = proc }
       run
     end
@@ -69,8 +69,8 @@ describe YARD::Rake::YardocTask do
   describe '#after' do
     it "should allow after callback" do
       proc = lambda { }
-      proc.should_receive(:call)
-      @yardoc.should_receive(:run)
+      expect(proc).to receive(:call)
+      expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.after = proc }
       run
     end
@@ -79,8 +79,8 @@ describe YARD::Rake::YardocTask do
   describe '#verifier' do
     it "should allow a verifier proc to be set" do
       verifier = Verifier.new
-      @yardoc.should_receive(:run) do
-        @yardoc.options[:verifier].should == verifier
+      expect(@yardoc).to receive(:run) do
+        expect(@yardoc.options[:verifier]).to eq verifier
       end
       YARD::Rake::YardocTask.new {|t| t.verifier = verifier }
       run
@@ -88,8 +88,8 @@ describe YARD::Rake::YardocTask do
 
     it "should override --query options" do
       verifier = Verifier.new
-      @yardoc.should_receive(:run) do
-        @yardoc.options[:verifier].should == verifier
+      expect(@yardoc).to receive(:run) do
+        expect(@yardoc.options[:verifier]).to eq verifier
       end
       YARD::Rake::YardocTask.new do |t|
         t.options += ['--query', '@return']

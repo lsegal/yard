@@ -7,23 +7,23 @@ describe YARD::Server::Adapter do
     it "should add a library" do
       lib = LibraryVersion.new('yard')
       a = Adapter.new({})
-      a.libraries.should be_empty
+      expect(a.libraries).to be_empty
       a.add_library(lib)
-      a.libraries['yard'].should == [lib]
+      expect(a.libraries['yard']).to eq [lib]
     end
   end
 
   describe '#start' do
     it "should not implement #start" do
-      lambda { Adapter.new({}).start }.should raise_error(NotImplementedError)
+      expect{ Adapter.new({}).start }.to raise_error(NotImplementedError)
     end
   end
 
   describe '.setup' do
     it 'should add template paths and helpers' do
       Adapter.setup
-      Templates::Template.extra_includes.should include(DocServerHelper)
-      Templates::Engine.template_paths.should include(YARD::ROOT + '/yard/server/templates')
+      expect(Templates::Template.extra_includes).to include(DocServerHelper)
+      expect(Templates::Engine.template_paths).to include(YARD::ROOT + '/yard/server/templates')
     end
   end
 
@@ -31,8 +31,8 @@ describe YARD::Server::Adapter do
     it 'should cleanup template paths and helpers' do
       Adapter.setup
       Adapter.shutdown
-      Templates::Template.extra_includes.should_not include(DocServerHelper)
-      Templates::Engine.template_paths.should_not include(YARD::ROOT + '/yard/server/templates')
+      expect(Templates::Template.extra_includes).to_not include(DocServerHelper)
+      expect(Templates::Engine.template_paths).to_not include(YARD::ROOT + '/yard/server/templates')
     end
   end
 end

@@ -5,7 +5,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassVariableH
 
   it "should not parse class variables inside methods" do
     obj = Registry.at("A::B::@@somevar")
-    obj.source.should == "@@somevar = \"hello\""
-    obj.value.should == '"hello"'
+    expect(obj.source).to eq "@@somevar = \"hello\""
+    expect(obj.value).to eq '"hello"'
   end
 end

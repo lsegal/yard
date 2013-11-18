@@ -6,16 +6,16 @@ describe YARD::CLI::MarkupTypes do
     data = log.io.string
     exts = YARD::Templates::Helpers::MarkupHelper::MARKUP_EXTENSIONS
     YARD::Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS.each do |name, providers|
-      data.should match(/\b#{name}\b/)
+      expect(data).to match(/\b#{name}\b/)
 
       # Match all extensions
       exts[name].each do |ext|
-        data.should include(".#{ext}")
+        expect(data).to include(".#{ext}")
       end if exts[name]
 
       # Match all provider libs
       providers.each do |provider|
-        data.should match(/\b#{provider[:lib]}\b/)
+        expect(data).to match(/\b#{provider[:lib]}\b/)
       end
     end
   end

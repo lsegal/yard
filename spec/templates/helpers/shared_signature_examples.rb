@@ -8,24 +8,24 @@ shared_examples_for "signature" do
 
   it "should show signature for regular instance method" do
     YARD.parse_string "def foo; end"
-    signature(Registry.at('#foo')).should == @results[:regular]
+    expect(signature(Registry.at('#foo'))).to eq @results[:regular]
   end
 
   it "should allow default return type to be changed" do
     @options.default_return = "Hello"
     YARD.parse_string "def foo; end"
-    signature(Registry.at('#foo')).should == @results[:default_return]
+    expect(signature(Registry.at('#foo'))).to eq @results[:default_return]
   end
 
   it "should allow default return type to be omitted" do
     @options.default_return = ""
     YARD.parse_string "def foo; end"
-    signature(Registry.at('#foo')).should == @results[:no_default_return]
+    expect(signature(Registry.at('#foo'))).to eq @results[:no_default_return]
   end
 
   it "should show signature for private class method" do
     YARD.parse_string "class A; private; def self.foo; end end"
-    signature(Registry.at('A.foo')).should == @results[:private_class]
+    expect(signature(Registry.at('A.foo'))).to eq @results[:private_class]
   end
 
   it "should show return type for single type" do
@@ -33,7 +33,7 @@ shared_examples_for "signature" do
       # @return [String]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:single]
+    expect(signature(Registry.at('#foo'))).to eq @results[:single]
   end
 
   it "should show return type for 2 types" do
@@ -41,7 +41,7 @@ shared_examples_for "signature" do
       # @return [String, Symbol]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:two_types]
+    expect(signature(Registry.at('#foo'))).to eq @results[:two_types]
   end
 
   it "should show return type for 2 types over multiple tags" do
@@ -50,7 +50,7 @@ shared_examples_for "signature" do
       # @return [Symbol]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:two_types_multitag]
+    expect(signature(Registry.at('#foo'))).to eq @results[:two_types_multitag]
   end
 
   it "should show 'Type?' if return types are [Type, nil]" do
@@ -58,7 +58,7 @@ shared_examples_for "signature" do
       # @return [Type, nil]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:type_nil]
+    expect(signature(Registry.at('#foo'))).to eq @results[:type_nil]
   end
 
   it "should show 'Type?' if return types are [Type, nil, nil] (extra nil)" do
@@ -67,7 +67,7 @@ shared_examples_for "signature" do
       # @return [nil]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:type_nil]
+    expect(signature(Registry.at('#foo'))).to eq @results[:type_nil]
   end
 
   it "should show 'Type+' if return types are [Type, Array<Type>]" do
@@ -75,7 +75,7 @@ shared_examples_for "signature" do
       # @return [Type, <Type>]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:type_array]
+    expect(signature(Registry.at('#foo'))).to eq @results[:type_array]
   end
 
   it "should (Type, ...) for more than 2 return types" do
@@ -84,7 +84,7 @@ shared_examples_for "signature" do
       # @return [AnotherType]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:multitype]
+    expect(signature(Registry.at('#foo'))).to eq @results[:multitype]
   end
 
   it "should show (void) for @return [void] by default" do
@@ -92,7 +92,7 @@ shared_examples_for "signature" do
       # @return [void]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:void]
+    expect(signature(Registry.at('#foo'))).to eq @results[:void]
   end
 
   it "should not show return for @return [void] if :hide_void_return is true" do
@@ -101,14 +101,14 @@ shared_examples_for "signature" do
       # @return [void]
       def foo; end
     eof
-    signature(Registry.at('#foo')).should == @results[:hide_void]
+    expect(signature(Registry.at('#foo'))).to eq @results[:hide_void]
   end
 
   it "should show block for method with yield" do
     YARD.parse_string <<-'eof'
       def foo; yield(a, b, c) end
     eof
-    signature(Registry.at('#foo')).should == @results[:block]
+    expect(signature(Registry.at('#foo'))).to eq @results[:block]
   end
 
   it "should use regular return tag if the @overload is empty" do
@@ -118,6 +118,6 @@ shared_examples_for "signature" do
       # @return [String]
       def foo; end
     eof
-    signature(Registry.at('#foo').tag(:overload)).should == @results[:empty_overload]
+    expect(signature(Registry.at('#foo').tag(:overload))).to eq @results[:empty_overload]
   end
 end

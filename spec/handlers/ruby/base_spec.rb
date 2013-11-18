@@ -13,11 +13,11 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
   end
 
   def valid(handler, stmt)
-    @processor.find_handlers(stmt).should include(handler)
+    expect(@processor.find_handlers(stmt)).to include(handler)
   end
 
   def invalid(handler, stmt)
-    @processor.find_handlers(stmt).should_not include(handler)
+    expect(@processor.find_handlers(stmt)).to_not include(handler)
   end
 
   it "should only handle Handlers inherited from Ruby::Base class" do
@@ -28,7 +28,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles :list
     end
     Handlers::Base.stub!(:subclasses).and_return [IgnoredHandler, NotIgnoredHandler]
-    @processor.find_handlers(s()).should == [NotIgnoredHandler]
+    expect(@processor.find_handlers(s())).to eq( [NotIgnoredHandler] )
   end
 
   it "should handle string input (matches AstNode#source)" do

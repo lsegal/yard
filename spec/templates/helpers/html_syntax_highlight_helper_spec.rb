@@ -12,7 +12,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
 
     it "should not highlight source if options.highlight is false" do
       should_receive(:options).and_return(Options.new.update(:highlight => false))
-      html_syntax_highlight("def x\nend").should == "def x\nend"
+      expect(html_syntax_highlight("def x\nend")).to eq "def x\nend"
     end
 
     it "should highlight source (legacy)" do
@@ -42,12 +42,12 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
 
     it "should return escaped unhighlighted source if a syntax error is found (ripper)" do
       should_receive(:options).and_return(Options.new.update(:highlight => true))
-      html_syntax_highlight("def &x; ... end").should == "def &amp;x; ... end"
+      expect(html_syntax_highlight("def &x; ... end")).to eq "def &amp;x; ... end"
     end if HAVE_RIPPER
 
     it "should return escaped unhighlighted source if a syntax error is found (ripper)" do
       should_receive(:options).and_return(Options.new.update(:highlight => true))
-      html_syntax_highlight("$ git clone http://url").should == "$ git clone http://url"
+      expect(html_syntax_highlight("$ git clone http://url")).to eq "$ git clone http://url"
     end if HAVE_RIPPER
   end
 end

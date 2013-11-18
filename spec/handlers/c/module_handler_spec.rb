@@ -3,12 +3,12 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe YARD::Handlers::C::ClassHandler do
   it "should register modules" do
     parse_init 'mFoo = rb_define_module("Foo");'
-    Registry.at('Foo').type.should == :module
+    expect(Registry.at('Foo').type).to eq :module
   end
 
   it "should register classes under namespaces" do
     parse_init 'mFoo = rb_define_module_under(mBar, "Foo");'
-    Registry.at('Bar::Foo').type.should == :module
+    expect(Registry.at('Bar::Foo').type).to eq :module
   end
 
   it "should remember symbol defined with class" do
@@ -16,8 +16,8 @@ describe YARD::Handlers::C::ClassHandler do
       cXYZ = rb_define_module("Foo");
       rb_define_method(cXYZ, "bar", bar, 0);
     eof
-    Registry.at('Foo').type.should == :module
-    Registry.at('Foo#bar').should_not be_nil
+    expect(Registry.at('Foo').type).to eq :module
+    expect(Registry.at('Foo#bar')).to_not be_nil
   end
 
   it "should not associate declaration comments as module docstring" do
@@ -25,14 +25,14 @@ describe YARD::Handlers::C::ClassHandler do
       /* Docstring! */
       mFoo = rb_define_module("Foo");
     eof
-    Registry.at('Foo').docstring.should be_blank
+    expect(Registry.at('Foo').docstring).to be_blank
   end
 
   it "should associate a file with the declaration" do
     parse_init(<<-eof)
       mFoo = rb_define_module("Foo");
     eof
-    Registry.at('Foo').file.should == '(stdin)'
-    Registry.at('Foo').line.should == 2
+    expect(Registry.at('Foo').file).to eq '(stdin)'
+    expect(Registry.at('Foo').line).to eq 2
   end
 end

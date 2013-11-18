@@ -11,7 +11,7 @@ describe YARD::I18n::Message do
 
   describe "#id" do
     it "should return ID" do
-      message("Hello World!").id.should == "Hello World!"
+      expect(message("Hello World!").id).to eq "Hello World!"
     end
   end
 
@@ -19,7 +19,7 @@ describe YARD::I18n::Message do
     it "should add some locations" do
       @message.add_location("hello.rb", 10)
       @message.add_location("message.rb", 5)
-      @message.locations.should == Set.new([["hello.rb", 10], ["message.rb", 5]])
+      expect(@message.locations).to eq Set.new([["hello.rb", 10], ["message.rb", 5]])
     end
   end
 
@@ -27,7 +27,7 @@ describe YARD::I18n::Message do
     it "should add some comments" do
       @message.add_comment("YARD.title")
       @message.add_comment("Hello#message")
-      @message.comments.should == Set.new(["YARD.title", "Hello#message"])
+      expect(@message.comments).to eq Set.new(["YARD.title", "Hello#message"])
     end
   end
 
@@ -46,7 +46,7 @@ describe YARD::I18n::Message do
         other_message.add_comment(comment)
       end
 
-      @message.should == other_message
+      expect(@message).to eq other_message
     end
   end
 end

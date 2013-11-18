@@ -12,8 +12,8 @@ describe YARD::Handlers::C::MixinHandler do
     foo = Registry.at('Foo')
     bar = Registry.at('Bar')
     baz = Registry.at('Baz')
-    bar.mixins(:instance).should == [foo]
-    baz.mixins(:instance).should == [foo]
+    expect(bar.mixins(:instance)).to eq [foo]
+    expect(baz.mixins(:instance)).to eq [foo]
   end
 
   it "should add include as proxy if symbol lookup fails" do
@@ -22,6 +22,6 @@ describe YARD::Handlers::C::MixinHandler do
       rb_include_module(mFoo, mXYZ);
     eof
     foo = Registry.at('Foo')
-    foo.mixins(:instance).should == [P('XYZ')]
+    expect(foo.mixins(:instance)).to eq [P('XYZ')]
   end
 end

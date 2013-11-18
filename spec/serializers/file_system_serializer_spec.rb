@@ -11,14 +11,14 @@ describe YARD::Serializers::FileSystemSerializer do
   describe '#basepath' do
     it "should default the base path to the 'doc/'" do
       obj = Serializers::FileSystemSerializer.new
-      obj.basepath.should == 'doc'
+      expect(obj.basepath).to eq 'doc'
     end
   end
 
   describe '#extension' do
     it "should default the file extension to .html" do
       obj = Serializers::FileSystemSerializer.new
-      obj.extension.should == "html"
+      expect(obj.extension).to eq "html"
     end
   end
 
@@ -26,17 +26,17 @@ describe YARD::Serializers::FileSystemSerializer do
     it "should allow no extension to be used" do
       obj = Serializers::FileSystemSerializer.new :extension => nil
       yard = CodeObjects::ClassObject.new(nil, :FooBar)
-      obj.serialized_path(yard).should == 'FooBar'
+      expect(obj.serialized_path(yard)).to eq 'FooBar'
     end
 
     it "should serialize to top-level-namespace for root" do
       obj = Serializers::FileSystemSerializer.new :extension => nil
-      obj.serialized_path(Registry.root).should == "top-level-namespace"
+      expect(obj.serialized_path(Registry.root)).to eq "top-level-namespace"
     end
 
     it "should return serialized_path for a String" do
       s = Serializers::FileSystemSerializer.new(:basepath => 'foo', :extension => 'txt')
-      s.serialized_path('test.txt').should == 'test.txt'
+      expect(s.serialized_path('test.txt')).to eq 'test.txt'
     end
 
     it "should remove special chars from path" do
@@ -60,21 +60,21 @@ describe YARD::Serializers::FileSystemSerializer do
         :=~ => '_3D_7E_i.html'
       }.each do |meth, value|
         m.stub!(:name).and_return(meth)
-        s.serialized_path(m).should == value
+        expect(s.serialized_path(m)).to eq value
       end
     end
 
     it "should handle ExtraFileObject's" do
       s = Serializers::FileSystemSerializer.new
       e = CodeObjects::ExtraFileObject.new('filename.txt', '')
-      s.serialized_path(e).should == 'file.filename.html'
+      expect(s.serialized_path(e)).to eq 'file.filename.html'
     end
 
     it "should differentiate instance and class methods from serialized path" do
       s = Serializers::FileSystemSerializer.new
       m1 = CodeObjects::MethodObject.new(nil, 'meth')
       m2 = CodeObjects::MethodObject.new(nil, 'meth', :class)
-      s.serialized_path(m1).should_not == s.serialized_path(m2)
+      expect(s.serialized_path(m1)).to_not eq s.serialized_path(m2)
     end
 
     it "should serialize path from overload tag" do
@@ -87,7 +87,7 @@ describe YARD::Serializers::FileSystemSerializer do
 
       serializer = Serializers::FileSystemSerializer.new
       object = Registry.at('Foo#bar').tag(:overload)
-      serializer.serialized_path(object).should == "Foo/bar_i.html"
+      expect(serializer.serialized_path(object)).to eq "Foo/bar_i.html"
     end
   end
 
@@ -101,8 +101,8 @@ describe YARD::Serializers::FileSystemSerializer do
         'foo/FooBar/baz_i.txt' => meth2,
         'foo/FooBar.txt' => yard }.each do |path, obj|
         io = StringIO.new
-        File.should_receive(:open).with(path, 'wb').and_yield(io)
-        io.should_receive(:write).with("data")
+        expect(File).to receive(:open).with(path, 'wb').and_yield(io)
+        expect(io).to receive(:write).with("data")
 
         s = Serializers::FileSystemSerializer.new(:basepath => 'foo', :extension => 'txt')
         s.serialize(obj, "data")
@@ -115,7 +115,7 @@ describe YARD::Serializers::FileSystemSerializer do
       o3 = CodeObjects::ClassObject.new(o2, :PathName)
       obj = CodeObjects::MethodObject.new(o3, :foo)
 
-      FileUtils.should_receive(:mkdir_p).once.with('doc/Really/Long/PathName')
+      expect(FileUtils).to receive(:mkdir_p).once.with('doc/Really/Long/PathName')
 
       s = Serializers::FileSystemSerializer.new
       s.serialize(obj, "data")

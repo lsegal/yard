@@ -4,52 +4,52 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
   before(:all) { parse_file :mixin_handler_001, __FILE__ }
 
   it "should handle includes from classes or modules" do
-    Registry.at(:X).instance_mixins.should include(P(:A))
-    Registry.at(:Y).instance_mixins.should include(P(:A))
+    expect(Registry.at(:X).instance_mixins).to include(P(:A))
+    expect(Registry.at(:Y).instance_mixins).to include(P(:A))
   end
 
   it "should handle includes in class << self" do
-    Registry.at(:Y).class_mixins.should include(P(:A))
+    expect(Registry.at(:Y).class_mixins).to include(P(:A))
   end
 
   it "should handle includes for modules that don't yet exist" do
-    Registry.at(:X).instance_mixins.should include(P(nil, :NOTEXIST))
+    expect(Registry.at(:X).instance_mixins).to include(P(nil, :NOTEXIST))
   end
 
   it "should set the type of non-existing modules to :module" do
     o = Registry.at(:X).instance_mixins.find {|o| o.name == :NOTEXIST }
-    o.type.should == :module
+    expect(o.type).to eq :module
   end
 
   it "should handle includes with multiple parameters" do
-    Registry.at(:X).should_not be_nil
+    expect(Registry.at(:X)).to_not be_nil
   end
 
   it "should handle complex include statements" do
-    P(:Y).instance_mixins.should include(P('B::C'))
-    P(:Y).instance_mixins.should include(P(:B))
+    expect(P(:Y).instance_mixins).to include(P('B::C'))
+    expect(P(:Y).instance_mixins).to include(P(:B))
   end
 
   it "should treat a mixed in Constant by taking its value as the real object name" do
-    P(:Y).instance_mixins.should include(Registry.at('B::D'))
+    expect(P(:Y).instance_mixins).to include(Registry.at('B::D'))
   end
 
   it "should add includes in the correct order when include is given multiple arguments" do
-    P(:Z).instance_mixins.should == [P(:A), P(:B)]
+    expect(P(:Z).instance_mixins).to eq [P(:A), P(:B)]
   end
 
   it "should avoid including self for unresolved mixins of the same name" do
-    P("ABC::DEF::FOO").mixins.should == [P("ABC::FOO")]
-    P("ABC::DEF::BAR").mixins.should == [P("ABC::BAR")]
+    expect(P("ABC::DEF::FOO").mixins).to eq [P("ABC::FOO")]
+    expect(P("ABC::DEF::BAR").mixins).to eq [P("ABC::BAR")]
   end
 
   it "should raise undocumentable error if argument is variable" do
     undoc_error "module X; include invalid; end"
-    Registry.at('X').mixins.should == []
+    expect(Registry.at('X').mixins).to eq []
   end
 
   it "should parse all other arguments before erroring out on undocumentable error" do
     undoc_error "module X; include invalid, Y; end"
-    Registry.at('X').mixins.should == [P('Y')]
+    expect(Registry.at('X').mixins).to eq [P('Y')]
   end
 end
