@@ -59,8 +59,6 @@ describe YARD::CLI::Server do
 
     @cli.run(*args.flatten)
     assert_libraries @libraries, @cli.libraries
-
-    new_cli
   end
 
   def assert_libraries(expected_libs, actual_libs)
