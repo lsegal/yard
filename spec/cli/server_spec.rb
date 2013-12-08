@@ -92,22 +92,22 @@ describe YARD::CLI::Server do
 
     it "should use .yardoc as the yardoc db if .yardopts doesn't specify an alternate path" do
       mock_file '/path/to/bar/.yardopts', '--protected'
-      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, '/path/to/bar/.yardoc')]
-      @libraries.values[0][0].source_path = '/path/to/bar'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('/path/to/bar/.yardoc'))]
+      @libraries.values[0][0].source_path = File.expand_path('/path/to/bar')
       run
     end
 
     it "should use the yardoc db location specified by .yardopts" do
       mock_file '/path/to/bar/.yardopts', '--db foo'
-      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, '/path/to/bar/foo')]
-      @libraries.values[0][0].source_path = '/path/to/bar'
+      @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('/path/to/bar/foo'))]
+      @libraries.values[0][0].source_path = File.expand_path('/path/to/bar')
       run
     end
 
     it "should parse .yardopts when the library list is odd" do
       mock_file '/path/to/bar/.yardopts', '--db foo'
-      @libraries['a'] = [Server::LibraryVersion.new('a', nil, '/path/to/bar/foo')]
-      @libraries.values[0][0].source_path = '/path/to/bar'
+      @libraries['a'] = [Server::LibraryVersion.new('a', nil, File.expand_path('/path/to/bar/foo'))]
+      @libraries.values[0][0].source_path = File.expand_path('/path/to/bar')
       run 'a'
     end
   end
@@ -118,8 +118,8 @@ describe YARD::CLI::Server do
     end
 
     it "should default to .yardoc if no library is specified" do
-      Dir.should_receive(:pwd).at_least(:once).and_return('/path/to/foo')
-      @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, '/path/to/foo/.yardoc')]
+      Dir.should_receive(:pwd).at_least(:once).and_return(File.expand_path('/path/to/foo'))
+      @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('/path/to/foo/.yardoc'))]
       run
     end
 
