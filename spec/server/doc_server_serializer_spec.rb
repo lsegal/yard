@@ -44,7 +44,11 @@ describe YARD::Server::DocServerSerializer do
 
     it "should handle unicode data" do
       file = CodeObjects::ExtraFileObject.new("test\u0160", '')
-      @serializer.serialized_path(file).should == 'file/test_C5A0'
+      if file.name.encoding == Encoding.find("Windows-1252")
+        @serializer.serialized_path(file).should == 'file/test_8A'
+      else
+        @serializer.serialized_path(file).should == 'file/test_C5A0'
+      end
     end if defined?(::Encoding)
   end
 end
