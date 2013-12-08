@@ -33,7 +33,7 @@ module YARD
     return @windows if defined? @windows
     require 'rbconfig'
     if ::RbConfig::CONFIG['host_os'] =~ /mingw|win32|cygwin/
-      @wnidows = true
+      @windows = true
     else
       @windows = false
     end
