@@ -60,7 +60,7 @@ module YARD
       # Defines the rake task
       # @return [void]
       def define
-        desc "Generate YARD Documentation"
+        desc "Generate YARD Documentation" unless ::Rake.application.last_comment
         task(name) do
           before.call if before.is_a?(Proc)
           yardoc = YARD::CLI::Yardoc.new
