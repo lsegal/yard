@@ -84,7 +84,7 @@ module YARD
       @generate_yri = generate_yri
 
       @yard_dir = spec.doc_dir('yard')
-      @yri_dir = spec.doc_dir('yri')
+      @yri_dir = spec.doc_dir('.yardoc')
     end
 
     def run_yardoc(*args)
@@ -121,6 +121,8 @@ module YARD
     end
 
     def install_yri
+      FileUtils.rm_rf @yri_dir
+
       say "Building YARD (yri) index for #{@spec.full_name}..."
       run_yardoc '-c', '-n', '--db', @yri_dir
     end
