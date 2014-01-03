@@ -12,6 +12,8 @@ describe YARD::Registry do
       @gem.stub!(:name).and_return('foo')
       @gem.stub!(:full_name).and_return('foo-1.0')
       @gem.stub!(:full_gem_path).and_return('/path/to/foo')
+      @gem.stub!(:doc_dir).and_return('/path/to/foo/doc')
+      @gem.stub!(:doc_dir).with('.yardoc').and_return('/path/to/foo/doc/.yardoc')
     end
 
     it "should return nil if gem isn't found" do
@@ -25,14 +27,21 @@ describe YARD::Registry do
     end
 
     it "should return existing .yardoc path for gem when for_writing=false" do
-      File.should_receive(:exist?).and_return(false)
+      File.should_receive(:exist?).twice.and_return(false)
       File.should_receive(:exist?).with('/path/to/foo/.yardoc').and_return(true)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo').should == '/path/to/foo/.yardoc'
     end
 
+    it "should return new existing .yardoc path for gem when for_writing=false" do
+      File.should_receive(:exist?).once.and_return(false)
+      File.should_receive(:exist?).with('/path/to/foo/doc/.yardoc').and_return(true)
+      Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      Registry.yardoc_file_for_gem('foo').should == '/path/to/foo/doc/.yardoc'
+    end
+
     it "should return nil if no .yardoc path exists in gem when for_writing=false" do
-      File.should_receive(:exist?).and_return(false)
+      File.should_receive(:exist?).twice.and_return(false)
       File.should_receive(:exist?).with('/path/to/foo/.yardoc').and_return(false)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo').should == nil
@@ -45,12 +54,20 @@ describe YARD::Registry do
     end
 
     it "should return global .yardoc path for gem if for_writing=true and dir is writable" do
+      File.should_receive(:writable?).with(@gem.doc_dir).and_return(false)
       File.should_receive(:writable?).with(@gem.full_gem_path).and_return(true)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo', '>= 0', true).should == '/path/to/foo/.yardoc'
     end
 
+    it "should return new global .yardoc path for gem if for_writing=true and dir is writable" do
+      File.should_receive(:writable?).with(@gem.doc_dir).and_return(true)
+      Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      Registry.yardoc_file_for_gem('foo', '>= 0', true).should == '/path/to/foo/doc/.yardoc'
+    end
+
     it "should return local .yardoc path for gem if for_writing=true and dir is not writable" do
+      File.should_receive(:writable?).with(@gem.doc_dir).and_return(false)
       File.should_receive(:writable?).with(@gem.full_gem_path).and_return(false)
       Gem.source_index.should_receive(:find_name).with('foo', '>= 0').and_return([@gem])
       Registry.yardoc_file_for_gem('foo', '>= 0', true).should =~ %r{/.yard/gem_index/foo-1.0.yardoc$}
