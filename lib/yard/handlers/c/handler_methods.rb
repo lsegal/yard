@@ -118,7 +118,8 @@ module YARD
           # "/* definition: comment */" form.  The literal ':' and '\' characters
           # can be escaped with a backslash.
           if comment
-            comment.scan(/\A\s*(.*?[^\s\\]):\s*(.+)/m) do |new_value, new_comment|
+            comment.scan(/\A\s*(?:(.*?[^\s\\])|):\s*(.+)/m) do |new_value, new_comment|
+              new_value ||= ''
               object.value = new_value.gsub(/\\:/, ':')
               comment = new_comment
             end
