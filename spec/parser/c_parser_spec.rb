@@ -90,23 +90,6 @@ describe YARD::Parser::C::CParser do
         constant.docstring.should == "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
       end
 
-      it 'should allow escaped colons in value of docstring' do
-        parse <<-eof
-          #define MSK_DEADBEEF 0xdeadbeef
-          void
-          Init_Mask(void)
-          {
-              rb_cMask  = rb_define_class("Mask", rb_cObject);
-              /* DEAD\\:\\:BEEF: This constant is frequently used to indicate a
-               * software crash or deadlock in embedded systems. */
-              rb_define_const(rb_cMask, "DEADBEEF", INT2FIX(MSK_DEADBEEF));
-          }
-        eof
-        constant = Registry.at('Mask::DEADBEEF')
-        constant.value.should == 'DEAD::BEEF'
-        constant.docstring.should == "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
-      end
-
       it 'should allow an empty value in docstring' do
         parse <<-eof
           #define MSK_DEADBEEF 0xdeadbeef
