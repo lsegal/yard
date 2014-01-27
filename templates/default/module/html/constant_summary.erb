@@ -6,7 +6,7 @@
         <dt id="<%= anchor_for(cnst) %>" class="<%= cnst.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= cnst.name %> =
           <%= yieldall :object => cnst %>
         </dt>
-        <% if ! format_constant cnst.value.empty? %>
+        <% if ! cnst.value.empty? %>
           <dd><pre class="code"><%= format_constant cnst.value %></pre></dd>
         <% end %>
       <% end %>
