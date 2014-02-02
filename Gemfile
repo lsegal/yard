@@ -5,6 +5,7 @@ group :development do
   gem 'rake'
   gem 'rvm-tester'
   gem 'simplecov'
+  gem 'samus'
 end
 
 group :asciidoc do
