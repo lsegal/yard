@@ -134,7 +134,7 @@ module YARD
 
       private
       def header
-        <<-'EOH'
+        <<-EOH
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -143,18 +143,26 @@ module YARD
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: PACKAGE VERSION\\n"
+"Report-Msgid-Bugs-To: \\n"
+"POT-Creation-Date: #{generate_pot_creation_date_value}\\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
+"Language-Team: LANGUAGE <LL@li.org>\\n"
+"Language: \\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
 
 EOH
+      end
+
+      def current_time
+        @current_time ||= Time.now
+      end
+
+      def generate_pot_creation_date_value
+        current_time.strftime("%Y-%m-%d %H:%M%z")
       end
 
       def generate_message(pot, message)
