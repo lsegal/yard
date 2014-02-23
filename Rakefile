@@ -8,14 +8,7 @@ task :default => :specs
 
 desc "Builds the gem"
 task :gem do
-  spec_path = 'yard.gemspec'
-  spec = eval(File.read(spec_path), TOPLEVEL_BINDING, spec_path)
-  if Gem.const_defined?(:Builder)
-    Gem::Builder.new(spec).build
-  else
-    require "rubygems/package"
-    Gem::Package.build(spec)
-  end
+  sh "gem build yard.gemspec"
 end
 
 desc "Installs the gem"
