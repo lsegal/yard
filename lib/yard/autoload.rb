@@ -122,6 +122,7 @@ module YARD
       autoload :MixinHandler,             __p('handlers/ruby/mixin_handler')
       autoload :ModuleHandler,            __p('handlers/ruby/module_handler')
       autoload :ModuleFunctionHandler,    __p('handlers/ruby/module_function_handler')
+      autoload :PrivateClassMethodHandler, __p('handlers/ruby/private_class_method_handler')
       autoload :PrivateConstantHandler,   __p('handlers/ruby/private_constant_handler')
       autoload :StructHandlerMethods,     __p('handlers/ruby/struct_handler_methods')
       autoload :VisibilityHandler,        __p('handlers/ruby/visibility_handler')
