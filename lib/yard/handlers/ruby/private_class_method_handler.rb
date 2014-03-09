@@ -26,6 +26,8 @@ class YARD::Handlers::Ruby::PrivateClassMethodHandler < YARD::Handlers::Ruby::Ba
       method = Proxy.new(namespace, node[0][0][0], :method)
       ensure_loaded!(method)
       method.visibility = :private
+    else
+      raise UndocumentableError, "invalid argument to private_class_method: #{node.source}"
     end
   rescue NamespaceMissingError
     raise UndocumentableError, "private visibility set on unrecognized method: #{node[0]}"
