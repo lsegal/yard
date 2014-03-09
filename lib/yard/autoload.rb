@@ -99,6 +99,7 @@ module YARD
         autoload :MixinHandler,           __p('handlers/ruby/legacy/mixin_handler')
         autoload :ModuleHandler,          __p('handlers/ruby/legacy/module_handler')
         autoload :ModuleFunctionHandler,  __p('handlers/ruby/legacy/module_function_handler')
+        autoload :PrivateClassMethodHandler, __p('handlers/ruby/legacy/private_class_method_handler')
         autoload :PrivateConstantHandler, __p('handlers/ruby/legacy/private_constant_handler')
         autoload :VisibilityHandler,      __p('handlers/ruby/legacy/visibility_handler')
         autoload :YieldHandler,           __p('handlers/ruby/legacy/yield_handler')
