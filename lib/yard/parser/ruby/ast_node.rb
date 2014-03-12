@@ -376,14 +376,20 @@ module YARD
       end
 
       class ParameterNode < AstNode
-        def required_params; self[0] end
+        def required_params
+          required = self[0] || []
+          if self[-3] && self[-3][0] && self[-3][0].type == :default_arg && self[-3][0][1] == false
+            required += self[-3].select { |param| param[1] == false }
+          end
+          required.empty? ? nil : required
+        end
         def required_end_params; self[3] end
         def splat_param; self[2] ? self[2][0] : nil end
         def block_param; self[-1] ? self[-1][0] : nil end
         def optional_params
           optional = self[1] || []
           if self[-3] && self[-3][0] && self[-3][0].type == :default_arg
-            optional += self[-3]
+            optional += self[-3].reject { |param| param[1] == false}
           end
           optional.empty? ? nil : optional
         end
