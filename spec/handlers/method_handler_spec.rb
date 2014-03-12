@@ -46,10 +46,6 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     P('Foo#optsmeth').parameters.should == [['x', nil], ['opts', '{}']]
   end
 
-  it "should handle required and optional keyword arguments" do
-    P('Foo#kwargsmeth').parameters.should == [['required:', nil], ['optional:', 'nil']]
-  end
-
   it "should handle &block as parameter" do
     P('Foo#blockmeth').parameters.should == [['x', nil], ['&block', nil]]
   end
