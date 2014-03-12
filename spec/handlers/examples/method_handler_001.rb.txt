@@ -50,6 +50,7 @@ end
 
   def optsmeth(x, opts = {}) end
   def blockmeth(x, &block) end
+  def kwargsmeth(required:, optional: nil) end
 
   # @param a [Fixnum]
   # @overload def bar(a, b = 1)
