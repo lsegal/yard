@@ -718,6 +718,6 @@ describe YARD::Parser::SourceParser do
       YARD.parse_string 'def foo(a:, b:, c: 3, **kwargs) end'
       args = [['a:', nil], ['b:', nil], ['c:', '3'], ['**kwargs', nil]]
       Registry.at('#foo').parameters.should eq(args)
-    end if YARD.ruby21?
+    end if YARD.ruby21? && HAVE_RIPPER
   end
 end
