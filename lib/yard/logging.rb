@@ -88,17 +88,15 @@ module YARD
       if defined?(::Encoding)
         icon = PROGRESS_INDICATORS[@progress_indicator] + " "
       end
-      print("\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r")
       @mutex.synchronize do
+        print("\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r")
         @progress_msg = msg
         @progress_indicator += 1
         @progress_indicator %= PROGRESS_INDICATORS.size
       end
       Thread.new do
         sleep(0.05)
-        @mutex.synchronize do
-          progress(msg + ".", nil) if @progress_msg == msg
-        end
+        progress(msg + ".", nil) if @progress_msg == msg
       end
     end
 
