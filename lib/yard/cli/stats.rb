@@ -59,7 +59,9 @@ module YARD
           end
         end
         meths.each {|m| send(m) }
-        if @total == 0
+        if number_of_files == 0
+          total = 100
+        elsif @total == 0
           total = 0
         else
           total = (@total - @undocumented).to_f / @total.to_f * 100
@@ -100,11 +102,16 @@ module YARD
         @all_objects ||= run_verifier Registry.all
       end
 
-      # Statistics for files
-      def stats_for_files
+      # Number of files
+      def number_of_files
         files = []
         all_objects.each {|o| files |= [o.file] }
-        output "Files", files.size
+        files.size
+      end
+
+      # Statistics for files
+      def stats_for_files
+        output "Files", number_of_files
       end
 
       # Statistics for modules

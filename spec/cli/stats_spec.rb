@@ -85,6 +85,6 @@ eof
       "Classes:         0 (    0 undocumented)\n" +
       "Constants:       0 (    0 undocumented)\n" +
       "Methods:         0 (    0 undocumented)\n" +
-      " 0.00% documented\n"
+      " 100.00% documented\n"
   end
 end
