@@ -118,6 +118,7 @@ module YARD
     # @return [void]
     def unmodify_nilclass
       NILCLASS_METHODS.each do |meth|
+        next unless nil.respond_to?(meth)
         NilClass.send(:remove_method, meth)
       end
     end
