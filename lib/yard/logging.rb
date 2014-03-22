@@ -95,9 +95,12 @@ module YARD
         @progress_indicator %= PROGRESS_INDICATORS.size
       end
       Thread.new do
-        sleep(0.05)
-        @mutex.synchronize do
-          progress(msg + ".", nil) if @progress_msg == msg
+        begin
+          sleep(0.05)
+          @mutex.synchronize do
+            progress(msg + ".", nil) if @progress_msg == msg
+          end
+        rescue ThreadError
         end
       end
     end
