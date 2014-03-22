@@ -44,7 +44,7 @@ describe YARD::Handlers::C::ClassHandler do
         }
       eof
     end
-  end
+  end unless ENV['LEGACY']
 
   it "should raise undoc error if a module is defined under a namespace that cannot be resolved" do
     with_parser(:c) do
@@ -54,5 +54,5 @@ describe YARD::Handlers::C::ClassHandler do
         }
       eof
     end
-  end
+  end unless ENV['LEGACY']
 end
