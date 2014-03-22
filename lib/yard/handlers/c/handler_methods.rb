@@ -7,8 +7,12 @@ module YARD
 
         def handle_class(var_name, class_name, parent, in_module = nil)
           parent = nil if parent == "0"
-          namespace = namespace_for_variable(in_module) if in_module
-          namespace ||= Registry.root
+          namespace = in_module ? namespace_for_variable(in_module) : Registry.root
+          if namespace.nil?
+            raise Parser::UndocumentableError, "class #{class_name}. " +
+              "Cannot find definition for parent namespace."
+          end
+
           register ClassObject.new(namespace, class_name) do |obj|
             if parent
               parent_class = namespace_for_variable(parent)
@@ -25,8 +29,12 @@ module YARD
         end
 
         def handle_module(var_name, module_name, in_module = nil)
-          namespace = namespace_for_variable(in_module) if in_module
-          namespace ||= Registry.root
+          namespace = in_module ? namespace_for_variable(in_module) : Registry.root
+          if namespace.nil?
+            raise Parser::UndocumentableError, "module #{module_name}. " +
+              "Cannot find definition for parent namespace."
+          end
+
           register ModuleObject.new(namespace, module_name) do |obj|
             namespaces[var_name] = obj
             register_file_info(obj, statement.file, statement.line)

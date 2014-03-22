@@ -35,4 +35,24 @@ describe YARD::Handlers::C::ClassHandler do
     Registry.at('Foo').file.should == '(stdin)'
     Registry.at('Foo').line.should == 2
   end
+
+  it "should raise undoc error if a class is defined under a namespace that cannot be resolved" do
+    with_parser(:c) do
+      undoc_error <<-eof
+        void Init_Foo() {
+          mFoo = rb_define_class_under(invalid, "Foo", rb_cObject);
+        }
+      eof
+    end
+  end
+
+  it "should raise undoc error if a module is defined under a namespace that cannot be resolved" do
+    with_parser(:c) do
+      undoc_error <<-eof
+        void Init_Foo() {
+          mFoo = rb_define_module_under(invalid, "Foo");
+        }
+      eof
+    end
+  end
 end
