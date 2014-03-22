@@ -223,7 +223,7 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 
 #search { position: absolute; right: 14px; top: 0px; }
 #search a:link, #search a:visited {
-  display: block; float: left; margin-right: 8px;
+  display: block; float: left; margin-right: 4px;
   padding: 8px 10px; text-decoration: none; color: #05a;
   border: 1px solid #d8d8e5;
   -moz-border-radius-bottomleft: 3px; -moz-border-radius-bottomright: 3px;
@@ -291,6 +291,7 @@ li.r2 { background: #fafafa; }
   -moz-box-shadow: -2px 2px 6px #bbb;
   z-index: 5000;
   position: relative;
+  overflow-x: auto;
 }
 #toc.nofloat { float: none; max-width: none; border: none; padding: 0; margin: 20px 0; -webkit-box-shadow: none; -moz-box-shadow: none; }
 #toc.nofloat.hidden { padding: 0; background: 0; margin-bottom: 5px; }
@@ -302,7 +303,6 @@ li.r2 { background: #fafafa; }
 #toc ol ol > ol { padding-left: 2.3em; }
 #toc ol + li { margin-top: 0.3em; }
 #toc.hidden { padding: 10px; background: #f6f6f6; -webkit-box-shadow: none; -moz-box-shadow: none; }
-#toc{ overflow : auto; }
 #filecontents h1 + #toc.nofloat { margin-top: 0; }
 
 /* syntax highlighting */
