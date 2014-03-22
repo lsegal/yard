@@ -71,6 +71,11 @@ describe YARD::Tags::DefaultFactory do
       v = parse_types(' [Test, Array<String, Hash{A => {B => C}}, C>, String]')
       v.should include(["Test", "Array<String, Hash{A => {B => C}}, C>", "String"])
     end
+
+    it "should handle quoted values" do
+      v = parse_types(' ["foo, bar", \'baz, qux\', in"them,iddle"]')
+      v.should include(["\"foo, bar\"", "'baz, qux'", 'in"them,iddle"'])
+    end
   end
 
   describe '#parse_tag_with_types' do
