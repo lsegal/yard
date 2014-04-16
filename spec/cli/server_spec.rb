@@ -137,7 +137,7 @@ describe YARD::CLI::Server do
     it "should fail if specified directory does not exist" do
       @set_libraries = false
       File.stub(:exist?).with('b').and_return(false)
-      log.should_receive(:warn).with(/Cannot find yardoc db for a: "b"/)
+      YARD.log.should_receive(:warn).with(/Cannot find yardoc db for a: "b"/)
       run %w(a b)
     end
   end
@@ -289,13 +289,13 @@ describe YARD::CLI::Server do
       bundler_required
       File.should_receive(:exist?).with(/\.yardopts$/).at_least(:once).and_return(false)
       File.should_receive(:exist?).with('somefile.lock').and_return(false)
-      log.should_receive(:warn).with(/Cannot find somefile.lock/)
+      YARD.log.should_receive(:warn).with(/Cannot find somefile.lock/)
       run '-G', 'somefile'
     end
 
     it "should error if Bundler not available (with -G)" do
       @cli.should_receive(:require).with('bundler').and_raise(LoadError)
-      log.should_receive(:error).with(/Bundler not available/)
+      YARD.log.should_receive(:error).with(/Bundler not available/)
       run '-G'
     end
 

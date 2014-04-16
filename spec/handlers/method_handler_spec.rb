@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler" do
   before(:all) do
-    log.enter_level(Logger::ERROR) do
+    YARD.log.enter_level(Logger::ERROR) do
       parse_file :method_handler_001, __FILE__
     end
   end
@@ -170,7 +170,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
   end
 
   it "should warn if the macro name is invalid" do
-    log.should_receive(:warn).with(/Invalid directive.*@!macro/)
+    YARD.log.should_receive(:warn).with(/Invalid directive.*@!macro/)
     YARD.parse_string "class Foo\n# @!macro\ndef self.foo; end\nend"
   end
 

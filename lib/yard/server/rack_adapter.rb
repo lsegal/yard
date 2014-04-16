@@ -50,7 +50,7 @@ module YARD
         request.path_info = unescape(request.path_info) # unescape things like %3F
         router.call(request)
       rescue StandardError => ex
-        log.backtrace(ex)
+        YARD.log.backtrace(ex)
         [500, {'Content-Type' => 'text/plain'},
           [ex.message + "\n" + ex.backtrace.join("\n")]]
       end
@@ -69,12 +69,12 @@ module YARD
 
       def print_start_message(server)
         opts = server.default_options.merge(server.options)
-        log.puts ">> YARD #{YARD::VERSION} documentation server at http://#{opts[:Host]}:#{opts[:Port]}"
+        YARD.log.puts ">> YARD #{YARD::VERSION} documentation server at http://#{opts[:Host]}:#{opts[:Port]}"
 
         # Only happens for Mongrel
         return unless server.server.to_s == "Rack::Handler::Mongrel"
-        log.puts ">> #{server.server.class_name} web server (running on Rack)"
-        log.puts ">> Listening on #{opts[:Host]}:#{opts[:Port]}, CTRL+C to stop"
+        YARD.log.puts ">> #{server.server.class_name} web server (running on Rack)"
+        YARD.log.puts ">> Listening on #{opts[:Host]}:#{opts[:Port]}, CTRL+C to stop"
       end
     end
   end

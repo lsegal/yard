@@ -97,7 +97,7 @@ module YARD
             libraries[library] ||= []
             libraries[library] |= [libver]
           else
-            log.warn "Cannot find yardoc db for #{library}: #{dir.inspect}"
+            YARD.log.warn "Cannot find yardoc db for #{library}: #{dir.inspect}"
           end
         end
       end
@@ -140,10 +140,10 @@ module YARD
             libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
           end
         else
-          log.warn "Cannot find #{gemfile}.lock, ignoring --gemfile option"
+          YARD.log.warn "Cannot find #{gemfile}.lock, ignoring --gemfile option"
         end
       rescue LoadError
-        log.error "Bundler not available, ignoring --gemfile option"
+        YARD.log.error "Bundler not available, ignoring --gemfile option"
       end
 
       def optparse(*args)
@@ -224,9 +224,9 @@ module YARD
       end
 
       def generate_doc_for_first_time(libver)
-        log.enter_level(Logger::INFO) do
+        YARD.log.enter_level(Logger::INFO) do
           yardoc_file = libver.yardoc_file.sub /^#{Regexp.quote Dir.pwd}[\\\/]+/, ''
-          log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
+          YARD.log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
         end
         Dir.chdir(libver.source_path) do
           Yardoc.run('-n')

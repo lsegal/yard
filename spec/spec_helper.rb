@@ -36,7 +36,7 @@ unless defined?(HAVE_RIPPER)
   end if ENV['LEGACY']
 end
 
-def parse_file(file, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
+def parse_file(file, thisfile = __FILE__, log_level = YARD.log.level, ext = '.rb.txt')
   Registry.clear
   path = File.join(File.dirname(thisfile), 'examples', file.to_s + ext)
   YARD::Parser::SourceParser.parse(path, [], log_level)
@@ -122,7 +122,7 @@ module Kernel
 end if ENV['TM_APP_PATH']
 
 RSpec.configure do |config|
-  config.before(:each) { log.io = StringIO.new }
+  config.before(:each) { YARD.log.io = StringIO.new }
 end
 
 include YARD

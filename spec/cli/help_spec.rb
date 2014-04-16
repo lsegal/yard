@@ -15,7 +15,7 @@ describe YARD::CLI::Help do
     it "should show all commands if command isn't found" do
       CLI::CommandParser.should_receive(:run).with('--help')
       help = CLI::Help.new
-      log.should_receive(:puts).with(/not found/)
+      YARD.log.should_receive(:puts).with(/not found/)
       help.run('unknown')
     end
   end

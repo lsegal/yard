@@ -124,8 +124,8 @@ module YARD
       translate_plugin_names
       load_plugins
     rescue => e
-      log.error "Invalid configuration file, using default options."
-      log.backtrace(e)
+      YARD.log.error "Invalid configuration file, using default options."
+      YARD.log.backtrace(e)
       options.update(DEFAULT_CONFIG_OPTIONS)
     end
 
@@ -157,7 +157,7 @@ module YARD
       name = translate_plugin_name(name)
       return false if options[:ignored_plugins].include?(name)
       return false if name =~ /^yard-doc-/
-      log.debug "Loading plugin '#{name}'..."
+      YARD.log.debug "Loading plugin '#{name}'..."
       require name
       true
     rescue LoadError => e
@@ -182,7 +182,7 @@ module YARD
       end
       result
     rescue LoadError
-      log.debug "RubyGems is not present, skipping plugin loading"
+      YARD.log.debug "RubyGems is not present, skipping plugin loading"
       false
     end
 
@@ -213,8 +213,8 @@ module YARD
     # Print a warning if the plugin failed to load
     # @return [false]
     def self.load_plugin_failed(name, exception)
-      log.warn "Error loading plugin '#{name}'"
-      log.backtrace(exception) if $DEBUG
+      YARD.log.warn "Error loading plugin '#{name}'"
+      YARD.log.backtrace(exception) if $DEBUG
       false
     end
 

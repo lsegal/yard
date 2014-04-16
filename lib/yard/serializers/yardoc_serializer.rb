@@ -73,10 +73,10 @@ module YARD
       def deserialize(path, is_path = false)
         path = File.join(basepath, serialized_path(path)) unless is_path
         if File.file?(path)
-          log.debug "Deserializing #{path}..."
+          YARD.log.debug "Deserializing #{path}..."
           Marshal.load(File.read_binary(path))
         else
-          log.debug "Could not find #{path}"
+          YARD.log.debug "Could not find #{path}"
           nil
         end
       end

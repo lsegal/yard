@@ -30,14 +30,14 @@ module YARD
           ver = "= #{spec.version}"
           dir = Registry.yardoc_file_for_gem(spec.name, ver)
           if dir && File.directory?(dir) && !@rebuild
-            log.debug "#{spec.name} index already exists at '#{dir}'"
+            YARD.log.debug "#{spec.name} index already exists at '#{dir}'"
           else
             yfile = Registry.yardoc_file_for_gem(spec.name, ver, true)
             next unless yfile
             next unless File.directory?(spec.full_gem_path)
             Registry.clear
             Dir.chdir(spec.full_gem_path)
-            log.info "Building yardoc index for gem: #{spec.full_name}"
+            YARD.log.info "Building yardoc index for gem: #{spec.full_name}"
             Yardoc.run('--no-stats', '-n', '-b', yfile)
           end
         end
@@ -48,7 +48,7 @@ module YARD
           gem, ver_require = gems[index], gems[index + 1] || ">= 0"
           specs = Gem.source_index.find_name(gem, ver_require)
           if specs.empty?
-            log.warn "#{gem} #{ver_require} could not be found in RubyGems index"
+            YARD.log.warn "#{gem} #{ver_require} could not be found in RubyGems index"
           else
             @gems += specs
           end
@@ -73,7 +73,7 @@ module YARD
 
 
         if !args.empty? && @gems.empty?
-          log.error "No specified gems could be found for command"
+          YARD.log.error "No specified gems could be found for command"
         elsif @gems.empty?
           @gems += Gem.source_index.find_name('') if @gems.empty?
         end

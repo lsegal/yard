@@ -28,7 +28,7 @@ describe YARD::CLI::Stats do
     @stats = CLI::Stats.new(false)
     @stats.stub!(:support_rdoc_document_file!).and_return([])
     @stats.stub!(:yardopts).and_return([])
-    log.stub!(:puts) {|*args| @output << args.join("\n") << "\n" }
+    YARD.log.stub!(:puts) {|*args| @output << args.join("\n") << "\n" }
   end
 
   it "should list undocumented objects with --list-undoc" do

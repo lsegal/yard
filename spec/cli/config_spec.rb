@@ -17,7 +17,7 @@ describe YARD::CLI::Config do
     it "should accept --list" do
       opts = YARD::Config.options
       YAML.should_receive(:dump).twice.and_return("--- foo\nbar\nbaz")
-      log.should_receive(:puts).twice.with("bar\nbaz")
+      YARD.log.should_receive(:puts).twice.with("bar\nbaz")
       run
       run('--list')
       YARD::Config.options.should == opts
@@ -27,7 +27,7 @@ describe YARD::CLI::Config do
   describe 'Viewing an item' do
     it "should view item if no value is given" do
       YARD::Config.options[:foo] = 'bar'
-      log.should_receive(:puts).with('"bar"')
+      YARD.log.should_receive(:puts).with('"bar"')
       run 'foo'
       YARD::Config.options[:foo].should == 'bar'
     end

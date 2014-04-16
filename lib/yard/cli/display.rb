@@ -19,7 +19,7 @@ module YARD
       # @return [void]
       def run(*args)
         return unless parse_arguments(*args)
-        log.puts wrap_layout(format_objects)
+        YARD.log.puts wrap_layout(format_objects)
       end
 
       # @return [String] the output data for all formatted objects

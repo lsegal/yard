@@ -145,7 +145,7 @@ describe YARD::Handlers::C::MethodHandler do
   end
 
   it "should warn if other file can't be found" do
-    log.should_receive(:warn).with(/Missing source file `other.c' when parsing Foo#foo/)
+    YARD.log.should_receive(:warn).with(/Missing source file `other.c' when parsing Foo#foo/)
     parse <<-eof
       void Init_Foo() {
         mFoo = rb_define_module("Foo");

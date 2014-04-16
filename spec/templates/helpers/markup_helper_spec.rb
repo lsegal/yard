@@ -19,7 +19,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
 
   describe '#load_markup_provider' do
     before do
-      log.stub!(:error)
+      YARD.log.stub!(:error)
       @gen = GeneratorMock.new
       @gen.options.reset_defaults
     end
@@ -101,7 +101,7 @@ describe YARD::Templates::Helpers::MarkupHelper do
     end
 
     it "should fail if the markup type is not found" do
-      log.should_receive(:error).with(/Invalid markup/)
+      YARD.log.should_receive(:error).with(/Invalid markup/)
       @gen.options.markup = :xxx
       @gen.load_markup_provider.should == false
       @gen.markup_provider.should == nil

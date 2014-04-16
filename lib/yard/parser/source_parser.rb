@@ -40,7 +40,7 @@ module YARD
       # @see Processor#parse_remaining_files
       def parse
         while file = files.shift
-          log.capture("Parsing #{file}") do
+          YARD.log.capture("Parsing #{file}") do
             SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
           end
         end
@@ -90,8 +90,8 @@ module YARD
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
         # @return [void]
-        def parse(paths = ["{lib,app}/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
-          log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
+        def parse(paths = ["{lib,app}/**/*.rb", "ext/**/*.c"], excluded = [], level = YARD.log.level)
+          YARD.log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
             case path
             when Regexp; path
@@ -103,7 +103,7 @@ module YARD
             map {|p| p.include?("*") ? Dir[p].sort_by {|f| f.length } : p }.flatten.
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
 
-          log.enter_level(level) do
+          YARD.log.enter_level(level) do
             parse_in_order(*files.uniq)
           end
         end
@@ -421,7 +421,7 @@ module YARD
           return if Registry.checksums[file] == checksum
 
           if Registry.checksums.has_key?(file)
-            log.info "File '#{file}' was modified, re-processing..."
+            YARD.log.info "File '#{file}' was modified, re-processing..."
           end
           Registry.checksums[@file] = checksum
           self.parser_type = parser_type_for_filename(file)
@@ -445,11 +445,11 @@ module YARD
 
         @parser
       rescue ArgumentError, NotImplementedError => e
-        log.warn("Cannot parse `#{file}': #{e.message}")
-        log.backtrace(e, :warn)
+        YARD.log.warn("Cannot parse `#{file}': #{e.message}")
+        YARD.log.backtrace(e, :warn)
       rescue ParserSyntaxError => e
-        log.warn(e.message.capitalize)
-        log.backtrace(e, :warn)
+        YARD.log.warn(e.message.capitalize)
+        YARD.log.backtrace(e, :warn)
       end
 
       # Tokenizes but does not parse the block of code using the current {#parser_type}

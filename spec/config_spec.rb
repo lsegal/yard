@@ -56,7 +56,7 @@ describe YARD::Config do
   describe '.load_plugin' do
     it "should load a plugin by 'name' as 'yard-name'" do
       YARD::Config.should_receive(:require).with('yard-foo')
-      log.should_receive(:debug).with(/Loading plugin 'yard-foo'/).once
+      YARD.log.should_receive(:debug).with(/Loading plugin 'yard-foo'/).once
       YARD::Config.load_plugin('foo').should == true
     end
 
@@ -68,20 +68,20 @@ describe YARD::Config do
 
     it "should load plugin by 'yard-name' as 'yard-name'" do
       YARD::Config.should_receive(:require).with('yard-foo')
-      log.should_receive(:debug).with(/Loading plugin 'yard-foo'/).once
+      YARD.log.should_receive(:debug).with(/Loading plugin 'yard-foo'/).once
       YARD::Config.load_plugin('yard-foo').should == true
     end
 
     it "should load plugin by 'yard_name' as 'yard_name'" do
       YARD::Config.should_receive(:require).with('yard_foo')
-      log.should_receive(:debug).with(/Loading plugin 'yard_foo'/).once
-      log.show_backtraces = false
+      YARD.log.should_receive(:debug).with(/Loading plugin 'yard_foo'/).once
+      YARD.log.show_backtraces = false
       YARD::Config.load_plugin('yard_foo').should == true
     end
 
     it "should log error if plugin is not found" do
       YARD::Config.should_receive(:require).with('yard-foo').and_raise(LoadError)
-      log.should_receive(:warn).with(/Error loading plugin 'yard-foo'/).once
+      YARD.log.should_receive(:warn).with(/Error loading plugin 'yard-foo'/).once
       YARD::Config.load_plugin('yard-foo').should == false
     end
 
@@ -169,7 +169,7 @@ describe YARD::Config do
       source_mock.should_receive(:find_name).with('').and_return(plugins.values)
       Gem.should_receive(:source_index).and_return(source_mock)
       YARD::Config.should_receive(:load_plugin).with('yard-plugin').and_raise(Gem::LoadError)
-      log.should_receive(:warn).with(/Error loading plugin 'yard-plugin'/)
+      YARD.log.should_receive(:warn).with(/Error loading plugin 'yard-plugin'/)
       YARD::Config.load_plugins.should == false
     end
   end

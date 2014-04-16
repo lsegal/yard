@@ -90,7 +90,7 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
 
     it "should return empty string and warn if object does not exist" do
-      log.should_receive(:warn).with(/Cannot find object .* for inclusion/)
+      YARD.log.should_receive(:warn).with(/Cannot find object .* for inclusion/)
       linkify('include:NotExist').should == ''
     end
 
@@ -113,12 +113,12 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
 
     it "should not allow include:file for path above pwd" do
-      log.should_receive(:warn).with("Cannot include file from path `a/b/../../../../file'")
+      YARD.log.should_receive(:warn).with("Cannot include file from path `a/b/../../../../file'")
       linkify('include:file:a/b/../../../../file').should == ''
     end
 
     it "should warn if include:file:path does not exist" do
-      log.should_receive(:warn).with(/Cannot find file .+ for inclusion/)
+      YARD.log.should_receive(:warn).with(/Cannot find file .+ for inclusion/)
       linkify('include:file:notexist').should == ''
     end
   end

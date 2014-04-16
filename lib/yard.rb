@@ -49,6 +49,14 @@ module YARD
 
   # @return [Boolean] whether YARD is being run in Ruby 2.0
   def self.ruby2?; @ruby2 ||= (RUBY_VERSION >= '2.0.0') end
+
+  # The global {YARD::Logger} instance
+  #
+  # @return [YARD::Logger] the global {YARD::Logger} instance
+  # @see YARD::Logger
+  def self.log
+    YARD::Logger.instance
+  end
 end
 
 # Keep track of Ruby version for compatibility code

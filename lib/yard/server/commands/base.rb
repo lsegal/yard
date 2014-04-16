@@ -161,7 +161,7 @@ module YARD
             path = File.join(adapter.document_root, request.path.sub(/\.html$/, '') + '.html')
             path = path.sub(%r{/\.html$}, '.html')
             FileUtils.mkdir_p(File.dirname(path))
-            log.debug "Caching data to #{path}"
+            YARD.log.debug "Caching data to #{path}"
             File.open(path, 'wb') {|f| f.write(data) }
           end
           self.body = data

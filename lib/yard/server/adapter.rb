@@ -76,9 +76,9 @@ module YARD
         self.document_root = server_options[:DocumentRoot]
         self.router = (options[:router] || Router).new(self)
         options[:adapter] = self
-        log.debug "Serving libraries using #{self.class}: #{libraries.keys.join(', ')}"
-        log.debug "Caching on" if options[:caching]
-        log.debug "Document root: #{document_root}" if document_root
+        YARD.log.debug "Serving libraries using #{self.class}: #{libraries.keys.join(', ')}"
+        YARD.log.debug "Caching on" if options[:caching]
+        YARD.log.debug "Document root: #{document_root}" if document_root
       end
 
       # Adds a library to the {#libraries} mapping for a given library object.

@@ -59,15 +59,15 @@ describe YARD::CLI::Gems do
       build_specs(@gem2)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
       Gem.source_index.should_receive(:find_name).with(@gem2.name, '>= 0').and_return([@gem2])
-      log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
+      YARD.log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
       CLI::Gems.run(@gem1.name, '>= 2.0', @gem2.name)
     end
 
     it "should fail if specified gem(s) is/are not found" do
       CLI::Yardoc.should_not_receive(:run)
       Gem.source_index.should_receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
-      log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
-      log.should_receive(:error).with(/No specified gems could be found/)
+      YARD.log.should_receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
+      YARD.log.should_receive(:error).with(/No specified gems could be found/)
       CLI::Gems.run(@gem1.name, '>= 2.0')
     end
 

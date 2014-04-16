@@ -72,8 +72,8 @@ module YARD
       # @return [void]
       # @since 0.5.6
       def print_usage
-        log.puts "Usage: yri [options] <Path to object>"
-        log.puts "See yri --help for more options."
+        YARD.log.puts "Usage: yri [options] <Path to object>"
+        YARD.log.puts "See yri --help for more options."
       end
 
       # Caches the .yardoc file where an object can be found in the {CACHE_FILE}
@@ -111,15 +111,15 @@ module YARD
         @search_paths.unshift(Registry.yardoc_file)
 
         # Try to load it from in memory cache
-        log.debug "Searching for #{name} in memory"
+        YARD.log.debug "Searching for #{name} in memory"
         if obj = try_load_object(name, nil)
           return obj
         end
 
-        log.debug "Searching for #{name} in search paths"
+        YARD.log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
           next unless File.exist?(path)
-          log.debug "Searching for #{name} in #{path}..."
+          YARD.log.debug "Searching for #{name} in #{path}..."
           Registry.load(path)
           if obj = try_load_object(name, path)
             return obj

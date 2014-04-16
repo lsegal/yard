@@ -231,7 +231,7 @@ module YARD
       #   contains a single nil value, skip calling of {#parse_arguments}
       # @return [void]
       def run(*args)
-        log.show_progress = true
+        YARD.log.show_progress = true
         if args.size == 0 || !args.first.nil?
           # fail early if arguments are not valid
           return unless parse_arguments(*args)
@@ -252,16 +252,16 @@ module YARD
           print_list
         end
 
-        if !list && statistics && log.level < Logger::ERROR
+        if !list && statistics && YARD.log.level < Logger::ERROR
           Registry.load_all
-          log.enter_level(Logger::ERROR) do
+          YARD.log.enter_level(Logger::ERROR) do
             Stats.new(false).run(*args)
           end
         end
 
         true
       ensure
-        log.show_progress = false
+        YARD.log.show_progress = false
       end
 
       # Parses commandline arguments
@@ -288,7 +288,7 @@ module YARD
         # US-ASCII is invalid encoding for onefile
         if defined?(::Encoding) && options.onefile
           if ::Encoding.default_internal == ::Encoding::US_ASCII
-            log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
+            YARD.log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
             ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
           end
         end
@@ -328,7 +328,7 @@ module YARD
           if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
             true
           else
-            log.debug "Re-generating object #{object.path}..."
+            YARD.log.debug "Re-generating object #{object.path}..."
             false
           end
         end
@@ -340,7 +340,7 @@ module YARD
       #
       # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
       def verify_markup_options
-        result, lvl = false, has_markup ? log.level : Logger::FATAL
+        result, lvl = false, has_markup ? YARD.log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
         options.files.each do |file|
@@ -349,9 +349,9 @@ module YARD
           return false if !result && markup != :rdoc
         end
         options.markup = :rdoc unless has_markup
-        log.enter_level(lvl) { result = obj.load_markup_provider }
+        YARD.log.enter_level(lvl) { result = obj.load_markup_provider }
         if !result && !has_markup
-          log.warn "Could not load default RDoc formatter, " +
+          YARD.log.warn "Could not load default RDoc formatter, " +
             "ignoring any markup (install RDoc to get default formatting)."
           options.markup = :none
           true
@@ -368,7 +368,7 @@ module YARD
         outpath = options.serializer.basepath
         assets.each do |from, to|
           to = File.join(outpath, to)
-          log.debug "Copying asset '#{from}' to '#{to}'"
+          YARD.log.debug "Copying asset '#{from}' to '#{to}'"
           from += '/.' if File.directory?(from)
           FileUtils.cp_r(from, to)
         end
@@ -381,7 +381,7 @@ module YARD
         Registry.load_all
         run_verifier(Registry.all).
           sort_by {|item| [item.file || '', item.line || 0] }.each do |item|
-          log.puts "#{item.file}:#{item.line}: #{item.path}"
+          YARD.log.puts "#{item.file}:#{item.line}: #{item.path}"
         end
       end
 
@@ -393,7 +393,7 @@ module YARD
           if File.file?(file)
             options.files << CodeObjects::ExtraFileObject.new(file)
           else
-            log.warn "Could not find extra file: #{file}"
+            YARD.log.warn "Could not find extra file: #{file}"
           end
         end
       end
@@ -624,7 +624,7 @@ module YARD
           if File.file?(readme)
             options.readme = CodeObjects::ExtraFileObject.new(readme)
           else
-            log.warn "Could not find readme file: #{readme}"
+            YARD.log.warn "Could not find readme file: #{readme}"
           end
         end
 
@@ -639,7 +639,7 @@ module YARD
           from, to = *asset.split(':').map {|f| File.cleanpath(f) }
           to ||= from
           if from =~ re || to =~ re
-            log.warn "Invalid file '#{asset}'"
+            YARD.log.warn "Invalid file '#{asset}'"
           else
             assets[from] = to
           end
