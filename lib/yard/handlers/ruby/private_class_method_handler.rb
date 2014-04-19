@@ -25,11 +25,18 @@ class YARD::Handlers::Ruby::PrivateClassMethodHandler < YARD::Handlers::Ruby::Ba
     if node.literal?
       method = Proxy.new(namespace, node[0][0][0], :method)
       
-      # method won't respond to #visibility if the method was inherited, like :new.
-      if method.respond_to? :visibility
-        ensure_loaded!(method)
-        method.visibility = :private
-      end
+      # Proxy will not have a #visibility method when handling inherited class methods
+      # like :new, yet "private_class_method :new" is valid Ruby syntax. Therefore
+      # if Proxy doesn't respond to #visibility, the object should be skipped.
+      # 
+      # However, it is important to note that classes can be reopened, and
+      # private_class_method can be called inside these reopened classes.
+      # Therefore when encountering private_class_method, all of the files need
+      # to be parsed before checking if Proxy responds to #visibility. If this
+      # is not done, it is possible that class methods may be incorrectly marked
+      # public/private.
+      parser.parse_remaining_files
+      method.visibility = :private if method.respond_to? :visibility
     else
       raise UndocumentableError, "invalid argument to private_class_method: #{node.source}"
     end
