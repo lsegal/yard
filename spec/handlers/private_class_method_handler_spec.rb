@@ -10,16 +10,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
   end
 
   it "should fail if parameter is not String or Symbol" do
-    # undoc_error 'class Foo; private_class_method "x"; end'
     undoc_error 'class Foo; X = 1; private_class_method X.new("hi"); end'
     undoc_error 'class Foo; X = 1; private_class_method 123; end'
   end unless LEGACY_PARSER
 
-  # This test is inacurate, as it doesn't account for inherited methods.
-  it "should fail if method can't be recognized" do
-    # undoc_error 'class Foo2; private_class_method :x; end'
-  end
-  
   # Issue #760
   # https://github.com/lsegal/yard/issues/760
   it "should handle singleton classes" do
