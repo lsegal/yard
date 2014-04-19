@@ -24,8 +24,12 @@ class YARD::Handlers::Ruby::PrivateClassMethodHandler < YARD::Handlers::Ruby::Ba
   def privatize_class_method(node)
     if node.literal?
       method = Proxy.new(namespace, node[0][0][0], :method)
-      ensure_loaded!(method)
-      method.visibility = :private
+      
+      # method won't respond to #visibility if the method was inherited, like :new.
+      if method.respond_to? :visibility
+        ensure_loaded!(method)
+        method.visibility = :private
+      end
     else
       raise UndocumentableError, "invalid argument to private_class_method: #{node.source}"
     end

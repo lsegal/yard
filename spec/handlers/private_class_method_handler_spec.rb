@@ -6,15 +6,18 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
   it "should handle private_class_method statement" do
     Registry.at('A.c').visibility.should == :private
     Registry.at('A.d').visibility.should == :private
+    Registry.at('A.e').visibility.should == :private
   end
 
   it "should fail if parameter is not String or Symbol" do
-    undoc_error 'class Foo; private_class_method "x"; end'
+    # undoc_error 'class Foo; private_class_method "x"; end'
     undoc_error 'class Foo; X = 1; private_class_method X.new("hi"); end'
+    undoc_error 'class Foo; X = 1; private_class_method 123; end'
   end unless LEGACY_PARSER
 
+  # This test is inacurate, as it doesn't account for inherited methods.
   it "should fail if method can't be recognized" do
-    undoc_error 'class Foo2; private_class_method :x; end'
+    # undoc_error 'class Foo2; private_class_method :x; end'
   end
   
   # Issue #760
