@@ -16,4 +16,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
   it "should fail if method can't be recognized" do
     undoc_error 'class Foo2; private_class_method :x; end'
   end
+  
+  # Issue #760
+  # https://github.com/lsegal/yard/issues/760
+  it "should handle singleton classes" do
+    # Note: It's important to def a method within the singleton class or
+    #       the bug may not trigger.
+    code = 'class SingletonClass; private_class_method :new; def self.foo; "foo"end; end'
+    StubbedSourceParser.parse_string(code) # Should be successful.
+  end
 end
