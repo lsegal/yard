@@ -21,7 +21,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
     #       the bug may not trigger.
     code = 'class SingletonClass; private_class_method :new; def self.foo; "foo"end; end'
     StubbedSourceParser.parse_string(code) # Should be successful.
-  end
+  end unless LEGACY_PARSER
   
   
   describe "should handle reopened class" do
@@ -49,6 +49,6 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
       Registry.at('SingletonClass.bat').visibility.should eq :public
     end
     
-  end # reopened class
-  
+  end unless LEGACY_PARSER # reopened class
+   
 end
