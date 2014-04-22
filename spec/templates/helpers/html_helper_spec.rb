@@ -169,7 +169,9 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "should create tables (markdown specific)" do
       log.enter_level(Logger::FATAL) do
-        pending 'This test depends on markdown' unless markup_class(:markdown)
+        unless markup_class(:markdown).to_s == "RedcarpetCompat"
+          pending 'This test depends on a markdown engine that supports tables'
+        end
       end
 
       markdown = <<-EOF.strip
