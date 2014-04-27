@@ -166,6 +166,26 @@ describe YARD::Templates::Helpers::HtmlHelper do
       htmlify('{http://example.com}', :markdown).chomp.should =~
         %r{<p><a href="http://example.com".*>http://example.com</a></p>}
     end
+
+    it "should create tables (markdown specific)" do
+      log.enter_level(Logger::FATAL) do
+        unless markup_class(:markdown).to_s == "RedcarpetCompat"
+          pending 'This test depends on a markdown engine that supports tables'
+        end
+      end
+
+      markdown = <<-EOF.strip
+        City    | State | Country
+        --------|-------|--------
+        Raleigh | NC    | US
+        Seattle | WA    | US
+      EOF
+
+      html = htmlify(markdown, :markdown)
+      html.should =~ %r{<table>}
+      html.should =~ %r{<td>City</td>}
+      html.should =~ %r{<td>NC</td>}
+    end
   end
 
   describe "#link_object" do
