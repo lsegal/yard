@@ -118,11 +118,11 @@ module YARD
         end
 
         def not_prepared
+          options.update(:template => :doc_server, :type => :processing)
           self.caching = false
           self.status = 202
           self.body = render
           self.headers = {'Content-Type' => 'text/html'}
-          options.update(:template => :doc_server, :type => :processing)
           [status, headers, [body]]
         end
 
