@@ -119,8 +119,11 @@ module YARD
 
         def not_prepared
           self.caching = false
+          self.status = 202
+          self.body = render
+          self.headers = {'Content-Type' => 'text/html'}
           options.update(:template => :doc_server, :type => :processing)
-          [202, {'Content-Type' => 'text/html'}, [render]]
+          [status, headers, [body]]
         end
 
         # Hack to load a custom fulldoc template object that does
