@@ -71,13 +71,41 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
 
   def format_args
     args = statement.parameters
+
     params = []
-    params += args.required_params.map {|a| [a.source, nil] } if args.required_params
-    params += args.optional_params.map {|a| [a[0].source, a[1].source] } if args.optional_params
-    params << ["*" + args.splat_param.source, nil] if args.splat_param
-    params << ["**" + args.keyword_param.source, nil] if args.keyword_param
-    params += args.required_end_params.map {|a| [a.source, nil] } if args.required_end_params
-    params << ["&" + args.block_param.source, nil] if args.block_param
+
+    if args.unnamed_required_params
+      params += args.unnamed_required_params.map {|a| [a.source, nil] }
+    end
+
+    if args.unnamed_optional_params
+      params += args.unnamed_optional_params.map do |a|
+        [a[0].source, a[1].source]
+      end
+    end
+
+    if args.splat_param
+      params << ["*" + args.splat_param.source, nil]
+    end
+
+    if args.unnamed_end_params
+      params += args.unnamed_end_params.map {|a| [a.source, nil] }
+    end
+
+    if args.named_params
+      params += args.named_params.map do |a|
+        [a[0].source, a[1] ? a[1].source : nil]
+      end
+    end
+
+    if args.double_splat_param
+      params << ["**" + args.double_splat_param.source, nil]
+    end
+
+    if args.block_param
+      params << ["&" + args.block_param.source, nil]
+    end
+
     params
   end
 
