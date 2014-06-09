@@ -452,21 +452,23 @@ module YARD
 
         def on_params(*args)
           args.map! do |arg|
-            if arg.class == Array
-              if arg.first.class == Array
-                arg.map! do |sub_arg|
-                  if sub_arg.class == Array
-                    AstNode.new(:default_arg, sub_arg, :listline => lineno..lineno, :listchar => charno..charno)
-                  else
-                    sub_arg
-                  end
+            next arg unless arg.class == Array
+
+            if arg.first.class == Array
+              arg.map! do |sub_arg|
+                next sub_arg unless sub_arg.class == Array
+                if sub_arg[0].type == :label
+                  type = :named_arg
+                else
+                  type = :unnamed_optional_arg
                 end
+                AstNode.new(type, sub_arg, :listline => lineno..lineno, :listchar => charno..charno)
               end
-              AstNode.new(:list, arg, :listline => lineno..lineno, :listchar => charno..charno)
-            else
-              arg
             end
+
+            AstNode.new(:list, arg, :listline => lineno..lineno, :listchar => charno..charno)
           end
+
           ParameterNode.new(:params, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
 
