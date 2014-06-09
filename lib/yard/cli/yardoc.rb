@@ -274,7 +274,7 @@ module YARD
         # Last minute modifications
         self.files = ['{lib,app}/**/*.rb', 'ext/**/*.c'] if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
-        readme = Dir.glob('README*').first
+        readme = Dir.glob('README{,*[^~]}').first
         readme ||= Dir.glob(files.first).first if options.onefile
         options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
         options.files.unshift(options.readme).uniq! if options.readme
