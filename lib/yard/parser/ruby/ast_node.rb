@@ -376,18 +376,41 @@ module YARD
       end
 
       class ParameterNode < AstNode
-        def required_params; self[0] end
-        def required_end_params; self[3] end
-        def splat_param; self[2] ? self[2][0] : nil end
-        def block_param; self[-1] ? self[-1][0] : nil end
-        def optional_params
-          optional = self[1] || []
-          if self[-3] && self[-3][0] && self[-3][0].type == :default_arg
-            optional += self[-3]
-          end
-          optional.empty? ? nil : optional
+        def unnamed_required_params
+          self[0]
         end
-        def keyword_param; YARD.ruby2? ? self[-2] : nil end
+
+        def unnamed_optional_params
+          @unnamed_optional_params ||= begin
+            params = self[1] || []
+            if self[-3] && self[-3][0] && self[-3][0].type == :unnamed_optional_arg
+              params += self[-3]
+            end
+            params.empty? ? nil : params
+          end
+        end
+
+        def named_params
+          @named_params ||= begin
+            self[-3] if self[-3] && self[-3][0] && self[-3][0].type == :named_arg
+          end
+        end
+
+        def splat_param
+          self[2] ? self[2][0] : nil
+        end
+
+        def unnamed_end_params
+          self[3]
+        end
+
+        def double_splat_param
+          YARD.ruby2? ? self[-2] : nil
+        end
+
+        def block_param
+          self[-1] ? self[-1][0] : nil
+        end
       end
 
       class MethodCallNode < AstNode
