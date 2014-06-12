@@ -183,8 +183,20 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
       html = htmlify(markdown, :markdown)
       html.should =~ %r{<table>}
-      html.should =~ %r{<td>City</td>}
+      html.should =~ %r{<th>City</th>}
       html.should =~ %r{<td>NC</td>}
+    end
+
+    it 'should handle fenced code blocks (Redcarpet specific)' do
+      log.enter_level(Logger::FATAL) do
+        unless markup_class(:markdown).to_s == 'RedcarpetCompat'
+          pending 'This test is Redcarpet specific'
+        end
+      end
+
+      markdown = "Introduction:\n```ruby\nputs\n\nputs\n```"
+      html = htmlify(markdown, :markdown)
+      html.should =~ %r{^<p>Introduction:</p>.*<code class="ruby">}m
     end
   end
 

@@ -61,7 +61,8 @@ module YARD
           provider.new(text, :autolink).to_html
         elsif provider.to_s == 'RedcarpetCompat'
           provider.new(text, :no_intraemphasis, :gh_blockcode,
-                             :fenced_code, :autolink, :tables).to_html
+                             :fenced_code, :autolink, :tables,
+                             :lax_spacing).to_html
         else
           provider.new(text).to_html
         end

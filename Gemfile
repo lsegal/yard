@@ -13,7 +13,7 @@ group :asciidoc do
 end
 
 group :markdown do
-  gem 'redcarpet', '= 1.17.2', :platforms => :mri
+  gem 'redcarpet', '= 2.3.0', :platforms => :mri
   gem 'kramdown', :platforms => :jruby
 end
 
