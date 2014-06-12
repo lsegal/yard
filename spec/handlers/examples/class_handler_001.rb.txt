@@ -118,3 +118,6 @@ class NotAStruct; end
 class Outer1
   class Inner1 < self; end
 end
+
+# Docstring
+ClassAssignment = Class.new
