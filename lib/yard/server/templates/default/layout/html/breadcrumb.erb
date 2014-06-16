@@ -1,5 +1,5 @@
 <form class="search" method="get" action="/<%= base_path(router.search_prefix) %>">
-  Search: <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= @query %>" />
+  Search: <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= h @query %>" />
 </form>
 <script type="text/javascript" charset="utf-8">
   $(function() {
