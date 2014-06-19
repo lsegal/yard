@@ -299,7 +299,7 @@ module YARD
       next if parser.object.parameters.empty? # method has no params or
                                                 # YARD couldn't detect any.
                                                 # but don't warn user (?)
-      names = parser.object.parameters.map {|l| l.first.gsub(/\W/, '') }
+      names = parser.object.parameters.map {|l| l.first.gsub(/[^\w:]/, '') }
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " +
                     "near line #{parser.object.line}"

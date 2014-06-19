@@ -49,6 +49,9 @@ module YARD
 
   # @return [Boolean] whether YARD is being run in Ruby 2.0
   def self.ruby2?; @ruby2 ||= (RUBY_VERSION >= '2.0.0') end
+
+  # @return [Boolean] whether YARD is being run in Ruby 2.1
+  def self.ruby21?; @ruby21 ||= (RUBY_VERSION >= '2.1.0') end
 end
 
 # Keep track of Ruby version for compatibility code
