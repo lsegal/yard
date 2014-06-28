@@ -318,7 +318,7 @@ module YARD
 
       def warn
         if object && handler
-          log.warn "Invalid/missing macro name for " +
+          YARD.log.warn "Invalid/missing macro name for " +
             "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
         end
       end

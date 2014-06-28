@@ -168,10 +168,10 @@ module YARD
     #   an Options object. Instead, register the attribute before using it.
     def method_missing(meth, *args, &block)
       if meth.to_s =~ /^(.+)=$/
-        log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
+        YARD.log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
         instance_variable_set("@#{$1}", args.first)
       elsif args.size == 0
-        log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
+        YARD.log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
         instance_variable_get("@#{meth}")
       else
         super

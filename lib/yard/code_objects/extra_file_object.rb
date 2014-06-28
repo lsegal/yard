@@ -105,14 +105,14 @@ module YARD::CodeObjects
         begin
           contents.force_encoding(attributes[:encoding])
         rescue ArgumentError
-          log.warn "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
+          YARD.log.warn "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
         end
       end
       contents
     rescue ArgumentError => e
       if retried && e.message =~ /invalid byte sequence/
         # This should never happen.
-        log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
+        YARD.log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
         return ''
       end
       data.force_encoding('binary') if data.respond_to?(:force_encoding)

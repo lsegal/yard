@@ -37,12 +37,12 @@ module YARD
         opts.on('--safe', 'Enable safe mode for this instance') do
           # Parsed in YARD::Config.load
         end
-        opts.on_tail('-q', '--quiet', 'Show no warnings.') { log.level = Logger::ERROR }
-        opts.on_tail('--verbose', 'Show more information.') { log.level = Logger::INFO }
-        opts.on_tail('--debug', 'Show debugging information.') { log.level = Logger::DEBUG }
-        opts.on_tail('--backtrace', 'Show stack traces') { log.show_backtraces = true }
-        opts.on_tail('-v', '--version', 'Show version.') { log.puts "yard #{YARD::VERSION}"; exit }
-        opts.on_tail('-h', '--help', 'Show this help.')  { log.puts opts; exit }
+        opts.on_tail('-q', '--quiet', 'Show no warnings.') { YARD.log.level = Logger::ERROR }
+        opts.on_tail('--verbose', 'Show more information.') { YARD.log.level = Logger::INFO }
+        opts.on_tail('--debug', 'Show debugging information.') { YARD.log.level = Logger::DEBUG }
+        opts.on_tail('--backtrace', 'Show stack traces') { YARD.log.show_backtraces = true }
+        opts.on_tail('-v', '--version', 'Show version.') { YARD.log.puts "yard #{YARD::VERSION}"; exit }
+        opts.on_tail('-h', '--help', 'Show this help.')  { YARD.log.puts opts; exit }
       end
 
       # Parses the option and gracefully handles invalid switches
@@ -68,7 +68,7 @@ module YARD
         return if YARD::Config.options[:safe_mode]
         load(file)
       rescue LoadError => load_exception
-        log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
+        YARD.log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
         exit
       end
 
@@ -77,7 +77,7 @@ module YARD
       # @param [OptionParser::ParseError] err the exception raised by the
       #   option parser
       def unrecognized_option(err)
-        log.warn "Unrecognized/#{err.message}"
+        YARD.log.warn "Unrecognized/#{err.message}"
       end
     end
   end

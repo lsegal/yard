@@ -149,7 +149,7 @@ module YARD
     def load_all
       return unless @file
       return if @loaded_objects >= @available_objects
-      log.debug "Loading entire database: #{@file} ..."
+      YARD.log.debug "Loading entire database: #{@file} ..."
       objects = []
 
       all_disk_objects.sort_by {|x| x.size }.each do |path|
@@ -161,7 +161,7 @@ module YARD
         put(obj.path, obj)
       end
       @loaded_objects += objects.size
-      log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
+      YARD.log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
     end
 
     # Saves the database to disk
@@ -282,7 +282,7 @@ module YARD
       if root = @serializer.deserialize('root')
         @loaded_objects += 1
         if root.is_a?(Hash) # single object db
-          log.debug "Loading single object DB from .yardoc"
+          YARD.log.debug "Loading single object DB from .yardoc"
           @loaded_objects += (root.keys.size - 1)
           @store = root
         else # just the root object

@@ -599,10 +599,10 @@ describe YARD::Parser::SourceParser do
     end
 
     it "should attempt to parse files in order" do
-      log.enter_level(Logger::DEBUG) do
+      YARD.log.enter_level(Logger::DEBUG) do
         msgs = []
-        log.should_receive(:debug) {|m| msgs << m }.at_least(:once)
-        log.stub(:<<)
+        YARD.log.should_receive(:debug) {|m| msgs << m }.at_least(:once)
+        YARD.log.stub(:<<)
         in_order_parse 'parse_in_order_001', 'parse_in_order_002'
         msgs[1].should =~ /Parsing .+parse_in_order_001.+/
         msgs[2].should =~ /Missing object MyModule/
@@ -638,15 +638,15 @@ describe YARD::Parser::SourceParser do
     end
 
     it "should display a warning for invalid parser type" do
-      log.should_receive(:warn).with(/unrecognized file/)
-      log.should_receive(:backtrace)
+      YARD.log.should_receive(:warn).with(/unrecognized file/)
+      YARD.log.should_receive(:backtrace)
       YARD::Parser::SourceParser.parse_string("int main() { }", :d)
     end
 
     if HAVE_RIPPER
       it "should display a warning for a syntax error (with new parser)" do
-        log.should_receive(:warn).with(/Syntax error in/)
-        log.should_receive(:backtrace)
+        YARD.log.should_receive(:warn).with(/Syntax error in/)
+        YARD.log.should_receive(:backtrace)
         YARD::Parser::SourceParser.parse_string("%!!!", :ruby)
       end
     end

@@ -17,7 +17,7 @@ module YARD
         @verifier = Verifier.new
         @old_git_commit = nil
         @old_path = Dir.pwd
-        log.show_backtraces = true
+        YARD.log.show_backtraces = true
       end
 
       def description
@@ -31,10 +31,10 @@ module YARD
             all_objects
           else
             if load_gem_data(gemfile)
-              log.info "Found #{gemfile}"
+              YARD.log.info "Found #{gemfile}"
               all_objects
             else
-              log.error "Cannot find gem #{gemfile}"
+              YARD.log.error "Cannot find gem #{gemfile}"
               nil
             end
           end
@@ -50,28 +50,28 @@ module YARD
           next if objects.empty?
           last_object = nil
           all_objects_notice = false
-          log.puts name + ":" unless @compact
+          YARD.log.puts name + ":" unless @compact
           objects.sort_by {|o| o.path }.each do |object|
             if !@list_all && last_object && object.parent == last_object
-              log.print " (...)" unless all_objects_notice
+              YARD.log.print " (...)" unless all_objects_notice
               all_objects_notice = true
               next
             elsif @compact
-              log.puts if first_object
+              YARD.log.puts if first_object
             else
-              log.puts
+              YARD.log.puts
             end
             all_objects_notice = false
-            log.print "" + (@compact ? "#{short} " : "  ") +
+            YARD.log.print "" + (@compact ? "#{short} " : "  ") +
               object.path + " (#{object.file}:#{object.line})"
             last_object = object
             first_object = true
           end
           unless @compact
-            log.puts; log.puts
+            YARD.log.puts; YARD.log.puts
           end
         end
-        log.puts if @compact
+        YARD.log.puts if @compact
       end
 
       private
@@ -104,12 +104,12 @@ module YARD
         Registry.clear
         commit_path = 'git_commit' + commit.gsub(/\W/, '_')
         tmpdir = File.join(Dir.tmpdir, commit_path)
-        log.info "Expanding #{commit} to #{tmpdir}..."
+        YARD.log.info "Expanding #{commit} to #{tmpdir}..."
         Dir.chdir(@old_path)
         FileUtils.mkdir_p(tmpdir)
         FileUtils.cp_r('.', tmpdir)
         Dir.chdir(tmpdir)
-        log.info("git says: " + `git reset --hard #{commit}`.chomp)
+        YARD.log.info("git says: " + `git reset --hard #{commit}`.chomp)
         generate_yardoc(tmpdir)
       ensure
         Dir.chdir(@old_path)
@@ -122,7 +122,7 @@ module YARD
 
         # First check for argument as .yardoc file
         [File.join(gemfile, '.yardoc'), gemfile].each do |yardoc|
-          log.info "Searching for .yardoc db at #{yardoc}"
+          YARD.log.info "Searching for .yardoc db at #{yardoc}"
           if File.directory?(yardoc)
             Registry.load_yardoc(yardoc)
             Registry.load_all
@@ -132,14 +132,14 @@ module YARD
 
         # Next check installed RubyGems
         gemfile_without_ext = gemfile.sub(/\.gem$/, '')
-        log.info "Searching for installed gem #{gemfile_without_ext}"
+        YARD.log.info "Searching for installed gem #{gemfile_without_ext}"
         Gem.source_index.find_name('').find do |spec|
           if spec.full_name == gemfile_without_ext
             if yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
               Registry.load_yardoc(yardoc)
               Registry.load_all
             else
-              log.enter_level(Logger::ERROR) do
+              YARD.log.enter_level(Logger::ERROR) do
                 olddir = Dir.pwd
                 Gems.run(spec.name, spec.version.to_s)
                 Dir.chdir(olddir)
@@ -151,7 +151,7 @@ module YARD
 
         # Look for local .gem file
         gemfile += '.gem' unless gemfile =~ /\.gem$/
-        log.info "Searching for local gem file #{gemfile}"
+        YARD.log.info "Searching for local gem file #{gemfile}"
         if File.exist?(gemfile)
           File.open(gemfile, 'rb') do |io|
             expand_and_parse(gemfile, io)
@@ -161,7 +161,7 @@ module YARD
 
         # Remote gemfile from rubygems.org
         url = "http://rubygems.org/downloads/#{gemfile}"
-        log.info "Searching for remote gem file #{url}"
+        YARD.log.info "Searching for remote gem file #{url}"
         begin
           open(url) {|io| expand_and_parse(gemfile, io) }
           return true
@@ -179,14 +179,14 @@ module YARD
       def generate_yardoc(dir)
         olddir = Dir.pwd
         Dir.chdir(dir) do
-          log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
+          YARD.log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
         end
       end
 
       def expand_gem(gemfile, io)
         tmpdir = File.join(Dir.tmpdir, gemfile)
         FileUtils.mkdir_p(tmpdir)
-        log.info "Expanding #{gemfile} to #{tmpdir}..."
+        YARD.log.info "Expanding #{gemfile} to #{tmpdir}..."
 
         if Gem::VERSION >= '2.0.0'
           require 'rubygems/package/tar_reader'
@@ -223,13 +223,13 @@ module YARD
         require 'rubygems'
         require 'rubygems/package'
       rescue LoadError => e
-        log.error "Missing RubyGems, cannot run this command."
+        YARD.log.error "Missing RubyGems, cannot run this command."
         raise(e)
       end
 
       def cleanup(gemfile)
         dir = File.join(Dir.tmpdir, gemfile)
-        log.info "Cleaning up #{dir}..."
+        YARD.log.info "Cleaning up #{dir}..."
         FileUtils.rm_rf(dir)
       end
 
@@ -259,7 +259,7 @@ module YARD
         common_options(opts)
         parse_options(opts, args)
         unless args.size == 2
-          log.puts opts.banner
+          YARD.log.puts opts.banner
           exit(0)
         end
 

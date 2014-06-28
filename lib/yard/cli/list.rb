@@ -11,8 +11,8 @@ module YARD
       # @return [void]
       def run(*args)
         if args.include?('--help')
-          log.puts "Usage: yard list [yardoc_options]"
-          log.puts "Takes the same arguments as yardoc. See yardoc --help"
+          YARD.log.puts "Usage: yard list [yardoc_options]"
+          YARD.log.puts "Takes the same arguments as yardoc. See yardoc --help"
         else
           Yardoc.run('-c', '--list', *args)
         end

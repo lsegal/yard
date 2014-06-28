@@ -97,7 +97,7 @@ eof
     end
 
     it "should warn about unknown tag" do
-      log.should_receive(:warn).with(/Unknown tag @hello$/)
+      YARD.log.should_receive(:warn).with(/Unknown tag @hello$/)
       docstring("@hello world")
     end
 
@@ -136,7 +136,7 @@ eof
 
     it "should ignore new directives without @! prefix syntax" do
       TestLibrary.define_directive('dir1', Tags::ScopeDirective)
-      log.should_receive(:warn).with(/@dir1/)
+      YARD.log.should_receive(:warn).with(/@dir1/)
       docstring("@dir1")
     end
 
@@ -209,7 +209,7 @@ eof
     end
 
     it "should warn about invalid named parameters" do
-      log.should_receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.log.should_receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
         # @param notaparam foo
         def foo(a) end
@@ -217,7 +217,7 @@ eof
     end
 
     it "should warn about duplicate named parameters" do
-      log.should_receive(:warn).with(/@param tag has duplicate parameter name: a/)
+      YARD.log.should_receive(:warn).with(/@param tag has duplicate parameter name: a/)
       YARD.parse_string <<-eof
         # @param a foo
         # @param a foo

@@ -12,7 +12,7 @@ describe YARD::CLI::Diff do
   describe 'Argument handling' do
     it "should exit if there is only one gem name" do
       @diff.should_receive(:exit)
-      log.should_receive(:puts).with(/Usage/)
+      YARD.log.should_receive(:puts).with(/Usage/)
       @diff.run
     end
   end
@@ -58,8 +58,8 @@ describe YARD::CLI::Diff do
           end
         eof
       end
-      log.stub!(:print) {|data| @data << data }
-      log.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
+      YARD.log.stub!(:print) {|data| @data << data }
+      YARD.log.stub!(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
       @diff.run(*(args + ['gem1', 'gem2']))
     end
 
@@ -251,8 +251,8 @@ eof
     end
 
     it "should error if gem is not found" do
-      log.should_receive(:error).with("Cannot find gem gem1")
-      log.should_receive(:error).with("Cannot find gem gem2.gem")
+      YARD.log.should_receive(:error).with("Cannot find gem gem1")
+      YARD.log.should_receive(:error).with("Cannot find gem gem2.gem")
       @diff.stub!(:load_gem_data).and_return(false)
       @diff.run('gem1', 'gem2.gem')
     end

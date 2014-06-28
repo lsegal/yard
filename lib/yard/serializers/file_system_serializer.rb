@@ -35,7 +35,7 @@ module YARD
       # @return [String] the written data (for chaining)
       def serialize(object, data)
         path = File.join(basepath, serialized_path(object))
-        log.debug "Serializing to #{path}"
+        YARD.log.debug "Serializing to #{path}"
         File.open!(path, "wb") {|f| f.write data }
       end
 

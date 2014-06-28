@@ -113,20 +113,20 @@ module YARD
             begin
               handler.new(self, stmt).process
             rescue HandlerAborted => abort
-              log.debug "#{handler.to_s} cancelled from #{caller.last}"
-              log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
+              YARD.log.debug "#{handler.to_s} cancelled from #{caller.last}"
+              YARD.log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr
-              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
-              log.warn "If this class/method is part of your source tree, this will affect your documentation results."
-              log.warn "You can correct this issue by loading the source file for this object before `#{file}'"
-              log.warn
+              YARD.log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
+              YARD.log.warn "If this class/method is part of your source tree, this will affect your documentation results."
+              YARD.log.warn "You can correct this issue by loading the source file for this object before `#{file}'"
+              YARD.log.warn
             rescue Parser::UndocumentableError => undocerr
-              log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
-              log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
+              YARD.log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
+              YARD.log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
-              log.error "Unhandled exception in #{handler.to_s}:"
-              log.error "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
-              log.backtrace(e)
+              YARD.log.error "Unhandled exception in #{handler.to_s}:"
+              YARD.log.error "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+              YARD.log.backtrace(e)
             end
           end
         end
@@ -141,7 +141,7 @@ module YARD
       def parse_remaining_files
         if globals.ordered_parser
           globals.ordered_parser.parse
-          log.debug("Re-processing #{@file}...")
+          YARD.log.debug("Re-processing #{@file}...")
         end
       end
 

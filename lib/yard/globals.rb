@@ -8,11 +8,3 @@ def P(namespace, name = nil, type = nil)
   namespace, name = nil, namespace if name.nil?
   YARD::Registry.resolve(namespace, name, false, true, type)
 end
-
-# The global {YARD::Logger} instance
-#
-# @return [YARD::Logger] the global {YARD::Logger} instance
-# @see YARD::Logger
-def log
-  YARD::Logger.instance
-end

@@ -48,10 +48,10 @@ module YARD
 
       def modify_item
         if reset
-          log.debug "Resetting #{key}"
+          YARD.log.debug "Resetting #{key}"
           YARD::Config.options[key] = YARD::Config::DEFAULT_CONFIG_OPTIONS[key]
         else
-          log.debug "Setting #{key} to #{values.inspect}"
+          YARD.log.debug "Setting #{key} to #{values.inspect}"
           items, current_items = encode_values, YARD::Config.options[key]
           items = [current_items].flatten + [items].flatten if append
           YARD::Config.options[key] = items
@@ -60,14 +60,14 @@ module YARD
       end
 
       def view_item
-        log.debug "Viewing #{key}"
-        log.puts YARD::Config.options[key].inspect
+        YARD.log.debug "Viewing #{key}"
+        YARD.log.puts YARD::Config.options[key].inspect
       end
 
       def list_configuration
-        log.debug "Listing configuration"
+        YARD.log.debug "Listing configuration"
         require 'yaml'
-        log.puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub(/\n\n/, "\n")
+        YARD.log.puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub(/\n\n/, "\n")
       end
 
       def encode_values

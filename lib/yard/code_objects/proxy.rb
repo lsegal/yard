@@ -193,15 +193,15 @@ module YARD
         if obj = to_obj
           obj.__send__(meth, *args, &block)
         else
-          log.warn "Load Order / Name Resolution Problem on #{path}:"
-          log.warn "-"
-          log.warn "Something is trying to call #{meth} on object #{path} before it has been recognized."
-          log.warn "This error usually means that you need to modify the order in which you parse files"
-          log.warn "so that #{path} is parsed before methods or other objects attempt to access it."
-          log.warn "-"
-          log.warn "YARD will recover from this error and continue to parse but you *may* have problems"
-          log.warn "with your generated documentation. You should probably fix this."
-          log.warn "-"
+          YARD.log.warn "Load Order / Name Resolution Problem on #{path}:"
+          YARD.log.warn "-"
+          YARD.log.warn "Something is trying to call #{meth} on object #{path} before it has been recognized."
+          YARD.log.warn "This error usually means that you need to modify the order in which you parse files"
+          YARD.log.warn "so that #{path} is parsed before methods or other objects attempt to access it."
+          YARD.log.warn "-"
+          YARD.log.warn "YARD will recover from this error and continue to parse but you *may* have problems"
+          YARD.log.warn "with your generated documentation. You should probably fix this."
+          YARD.log.warn "-"
           begin
             super
           rescue NoMethodError

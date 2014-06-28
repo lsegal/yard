@@ -148,7 +148,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should autolink URLs (markdown specific)" do
-      log.enter_level(Logger::FATAL) do
+      YARD.log.enter_level(Logger::FATAL) do
         unless markup_class(:markdown).to_s == "RedcarpetCompat"
           pending 'This test depends on a markdown engine that supports autolinking'
         end
@@ -158,7 +158,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should not autolink URLs inside of {} (markdown specific)" do
-      log.enter_level(Logger::FATAL) do
+      YARD.log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
       htmlify('{http://example.com Title}', :markdown).chomp.should =~
@@ -451,7 +451,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       logger = mock(:log)
       logger.should_receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject from text:")
       logger.should_receive(:warn).ordered.with("...{InvalidObject}")
-      stub!(:log).and_return(logger)
+      YARD.stub!(:log).and_return(logger)
       stub!(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
@@ -473,7 +473,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       logger.should_receive(:warn).ordered.with("...{InvalidObject3}...")
       logger.should_receive(:warn).ordered.with("In file `(stdin)':4: Cannot resolve link to InvalidObject4 from text:")
       logger.should_receive(:warn).ordered.with("{InvalidObject4}")
-      stub!(:log).and_return(logger)
+      YARD.stub!(:log).and_return(logger)
       stub!(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
@@ -483,7 +483,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       logger = mock(:log)
       logger.should_receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:")
       logger.should_receive(:warn).ordered.with("...{InvalidObject Some Title}")
-      stub!(:log).and_return(logger)
+      YARD.stub!(:log).and_return(logger)
       stub!(:object).and_return(Registry.root)
       resolve_links(<<-eof)
         Hello world

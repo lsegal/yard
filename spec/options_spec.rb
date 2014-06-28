@@ -96,9 +96,9 @@ describe YARD::Options do
     end
 
     it "should print debugging messages about unregistered keys" do
-      log.should_receive(:debug).with("Attempting to access unregistered key bar on FooOptions")
+      YARD.log.should_receive(:debug).with("Attempting to access unregistered key bar on FooOptions")
       FooOptions.new.bar
-      log.should_receive(:debug).with("Attempting to set unregistered key bar on FooOptions")
+      YARD.log.should_receive(:debug).with("Attempting to set unregistered key bar on FooOptions")
       FooOptions.new.bar = 1
     end
   end

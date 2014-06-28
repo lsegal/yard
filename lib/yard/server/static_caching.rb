@@ -35,7 +35,7 @@ module YARD
         cache_path = File.join(adapter.document_root, request.path.sub(/\.html$/, '') + '.html')
         cache_path = cache_path.sub(%r{/\.html$}, '.html')
         if File.file?(cache_path)
-          log.debug "Loading cache from disk: #{cache_path}"
+          YARD.log.debug "Loading cache from disk: #{cache_path}"
           return [200, {'Content-Type' => 'text/html'}, [File.read_binary(cache_path)]]
         end
         nil

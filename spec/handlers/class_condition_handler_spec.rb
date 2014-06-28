@@ -54,8 +54,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
   end
 
   it "should not fail on complex conditions" do
-    log.should_not_receive(:warn)
-    log.should_not_receive(:error)
+    YARD.log.should_not_receive(:warn)
+    YARD.log.should_not_receive(:error)
     no_undoc_error "if defined?(A) && defined?(B); puts 'hi' end"
     no_undoc_error(<<-eof)
       (<<-TEST) unless defined?(ABCD_MODEL_TEST)

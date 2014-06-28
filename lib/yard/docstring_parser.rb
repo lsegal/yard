@@ -196,11 +196,11 @@ module YARD
       if library.has_tag?(tag_name)
         @tags += [library.tag_create(tag_name, tag_buf)].flatten
       else
-        log.warn "Unknown tag @#{tag_name}" +
+        YARD.log.warn "Unknown tag @#{tag_name}" +
           (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" +
+      YARD.log.warn "Invalid tag format for @#{tag_name}" +
         (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
@@ -219,12 +219,12 @@ module YARD
           dir
         end
       else
-        log.warn "Unknown directive @!#{tag_name}" +
+        YARD.log.warn "Unknown directive @!#{tag_name}" +
           (object ? " in file `#{object.file}` near line #{object.line}" : "")
         nil
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid directive format for @!#{tag_name}" +
+      YARD.log.warn "Invalid directive format for @!#{tag_name}" +
         (object ? " in file `#{object.file}` near line #{object.line}" : "")
       nil
     end
@@ -307,12 +307,12 @@ module YARD
         next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
         if seen_names.include?(tag.name)
-          log.warn "@param tag has duplicate parameter name: " +
+          YARD.log.warn "@param tag has duplicate parameter name: " +
             "#{tag.name} #{infile_info}"
         elsif names.include?(tag.name)
           seen_names << tag.name
         else
-          log.warn "@param tag has unknown parameter name: " +
+          YARD.log.warn "@param tag has unknown parameter name: " +
             "#{tag.name} #{infile_info}"
         end
       end

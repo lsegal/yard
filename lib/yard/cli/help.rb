@@ -9,7 +9,7 @@ module YARD
         if args.first && cmd = CommandParser.commands[args.first.to_sym]
           cmd.run('--help')
         else
-          log.puts "Command #{args.first} not found." if args.first
+          YARD.log.puts "Command #{args.first} not found." if args.first
           CommandParser.run('--help')
         end
       end

@@ -53,7 +53,7 @@ module YARD
       def self.run(*args) new.run(*args) end
 
       def initialize
-        log.show_backtraces = false
+        YARD.log.show_backtraces = false
       end
 
       # Runs the {Command} object matching the command name of the first
@@ -79,12 +79,12 @@ module YARD
       def commands; self.class.commands end
 
       def list_commands
-        log.puts "Usage: yard <command> [options]"
-        log.puts
-        log.puts "Commands:"
+        YARD.log.puts "Usage: yard <command> [options]"
+        YARD.log.puts
+        YARD.log.puts "Commands:"
         commands.keys.sort_by {|k| k.to_s }.each do |command_name|
           command = commands[command_name].new
-          log.puts "%-8s %s" % [command_name, command.description]
+          YARD.log.puts "%-8s %s" % [command_name, command.description]
         end
       end
     end

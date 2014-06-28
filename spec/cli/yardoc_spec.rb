@@ -273,7 +273,7 @@ describe YARD::CLI::Yardoc do
       end
 
       it "should not allow from or to to refer to a path above current path" do
-        log.should_receive(:warn).exactly(4).times.with(/invalid/i)
+        YARD.log.should_receive(:warn).exactly(4).times.with(/invalid/i)
         @yardoc.run *%w( --asset ../../../etc/passwd )
         @yardoc.assets.should be_empty
         @yardoc.run *%w( --asset a/b/c/d/../../../../../../etc/passwd )
@@ -596,12 +596,12 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should warn if extra file is not found" do
-      log.should_receive(:warn).with(/Could not find extra file: UNKNOWN/)
+      YARD.log.should_receive(:warn).with(/Could not find extra file: UNKNOWN/)
       @yardoc.parse_arguments *%w( - UNKNOWN )
     end
 
     it "should warn if readme file is not found" do
-      log.should_receive(:warn).with(/Could not find readme file: UNKNOWN/)
+      YARD.log.should_receive(:warn).with(/Could not find readme file: UNKNOWN/)
       @yardoc.parse_arguments *%w( -r UNKNOWN )
     end
 
@@ -623,7 +623,7 @@ describe YARD::CLI::Yardoc do
     it "should not allow US-ASCII charset when using --one-file" do
       ienc = Encoding.default_internal
       eenc = Encoding.default_external
-      log.should_receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
+      YARD.log.should_receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
       @yardoc.parse_arguments *%w( --one-file --charset us-ascii )
       Encoding.default_internal.name.should == 'ASCII-8BIT'
       Encoding.default_external.name.should == 'ASCII-8BIT'
@@ -755,7 +755,7 @@ describe YARD::CLI::Yardoc do
       mod = YARD::Templates::Helpers::MarkupHelper
       mod.clear_markup_cache
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:rdoc).and_return([{:lib => 'INVALID'}])
-      log.should_receive(:warn).with(/Could not load default RDoc formatter/)
+      YARD.log.should_receive(:warn).with(/Could not load default RDoc formatter/)
       @yardoc.stub(:generate) { @yardoc.options.files = []; true }
       @yardoc.run
       @yardoc.options.markup.should == :none
@@ -766,7 +766,7 @@ describe YARD::CLI::Yardoc do
       mod = YARD::Templates::Helpers::MarkupHelper
       mod.clear_markup_cache
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
-      log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
+      YARD.log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
       files = [CodeObjects::ExtraFileObject.new('test.md', '')]
       @yardoc.stub(:generate) { @yardoc.options.files = files; true }
       @yardoc.run
@@ -777,7 +777,7 @@ describe YARD::CLI::Yardoc do
       mod = YARD::Templates::Helpers::MarkupHelper
       mod.clear_markup_cache
       mod.const_get(:MARKUP_PROVIDERS).should_receive(:[]).with(:markdown).and_return([{:lib => 'INVALID'}])
-      log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
+      YARD.log.should_receive(:error).with(/Missing 'INVALID' gem for Markdown formatting/)
       files = [CodeObjects::ExtraFileObject.new('test', '# @markup markdown')]
       @yardoc.stub(:generate) { @yardoc.options.files = files; true }
       @yardoc.run

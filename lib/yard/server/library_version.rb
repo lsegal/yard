@@ -195,7 +195,7 @@ module YARD
         unless yardoc_file && File.directory?(yardoc_file)
           Thread.new do
             # Build gem docs on demand
-            log.debug "Building gem docs for #{to_s(false)}"
+            YARD.log.debug "Building gem docs for #{to_s(false)}"
             CLI::Gems.run(name, ver)
             self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
             FileUtils.touch(File.join(yardoc_file, 'complete'))

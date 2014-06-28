@@ -117,7 +117,7 @@ module YARD
           if serializer.respond_to?(:basepath)
             filename = File.join(serializer.basepath, filename)
           end
-          log.capture("Generating #{filename}", nil) do
+          YARD.log.capture("Generating #{filename}", nil) do
             serializer.before_serialize if serializer
             output = yield
             if serializer
