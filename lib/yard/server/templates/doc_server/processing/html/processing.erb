@@ -8,7 +8,8 @@
     <script type="text/javascript" charset="utf-8" src="/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8">
       function checkPage(process) {
-        $.ajax({cache: false, url: "<%= router.request.path %>" + (process ? "?process=true" : ""), statusCode: { 200: function() { window.location = "<%= @path %>"; } } });
+        $.ajax({cache: false, url: "<%= router.request.path %>" + (process ? "?process=true" : ""),
+          statusCode: { 200: function() { window.location = "<%= router.request.path %>"; } } });
         setTimeout('checkPage()', 2000);
       }
       function setFade() {
