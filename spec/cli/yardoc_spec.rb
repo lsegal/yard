@@ -320,7 +320,7 @@ describe YARD::CLI::Yardoc do
 
         CodeObjects::ExtraFileObject.stub!(:new).with('extra_file1').and_return(extra_file_object1)
         CodeObjects::ExtraFileObject.stub!(:new).with('extra_file2').and_return(extra_file_object2)
-        Dir.stub!(:glob).with('README*').and_return([])
+        Dir.stub!(:glob).with('README{,*[^~]}').and_return([])
         File.stub!(:file?).with('extra_file1').and_return(true)
         File.stub!(:file?).with('extra_file2').and_return(true)
         @yardoc.run('--locale=fr', '-', 'extra_file1', 'extra_file2')
@@ -562,7 +562,7 @@ describe YARD::CLI::Yardoc do
 
   describe 'Extra file arguments' do
     it "should accept extra files if specified after '-' with source files" do
-      Dir.should_receive(:glob).with('README*').and_return([])
+      Dir.should_receive(:glob).with('README{,*[^~]}').and_return([])
       File.should_receive(:file?).with('extra_file1').and_return(true)
       File.should_receive(:file?).with('extra_file2').and_return(true)
       File.should_receive(:read).with('extra_file1').and_return('')
@@ -575,14 +575,14 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should accept files section only containing extra files" do
-      Dir.should_receive(:glob).with('README*').and_return([])
+      Dir.should_receive(:glob).with('README{,*[^~]}').and_return([])
       @yardoc.parse_arguments *%w( - LICENSE )
       @yardoc.files.should == %w( {lib,app}/**/*.rb ext/**/*.c )
       @yardoc.options.files.should == [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
     it "should accept globs as extra files" do
-      Dir.should_receive(:glob).with('README*').and_return []
+      Dir.should_receive(:glob).with('README{,*[^~]}').and_return []
       Dir.should_receive(:glob).with('*.txt').and_return ['a.txt', 'b.txt']
       File.should_receive(:read).with('a.txt').and_return('')
       File.should_receive(:read).with('b.txt').and_return('')
@@ -606,7 +606,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should use first file as readme if no readme is specified when using --one-file" do
-      Dir.should_receive(:glob).with('README*').and_return []
+      Dir.should_receive(:glob).with('README{,*[^~]}').and_return []
       Dir.should_receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
       File.should_receive(:read).with('lib/foo.rb').and_return('')
       @yardoc.parse_arguments *%w( --one-file lib/*.rb )
@@ -614,7 +614,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "should use readme it exists when using --one-file" do
-      Dir.should_receive(:glob).with('README*').and_return ['README']
+      Dir.should_receive(:glob).with('README{,*[^~]}').and_return ['README']
       File.should_receive(:read).with('README').and_return('')
       @yardoc.parse_arguments *%w( --one-file lib/*.rb )
       @yardoc.options.readme.should == CodeObjects::ExtraFileObject.new('README', '')
