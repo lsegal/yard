@@ -708,10 +708,20 @@ describe YARD::Parser::SourceParser do
       Registry.at('A::B#d').should_not be_nil
     end
 
-    it 'supports keyword arguments' do
-      YARD.parse_string 'def foo(a: 1, b: 2, **kwargs) end'
-      args = [['a:', '1'], ['b:', '2'], ['**kwargs', nil]]
-      Registry.at('#foo').parameters.should eq(args)
-    end if YARD.ruby2?
+    if YARD.ruby2?
+      it 'supports named arguments with default values' do
+        YARD.parse_string 'def foo(a, b = 1, *c, d, e: 3, **f, &g) end'
+        args = [['a', nil], ['b', '1'], ['*c', nil], ['d', nil], ['e:', '3'], ['**f', nil], ['&g', nil]]
+        Registry.at('#foo').parameters.should eq(args)
+      end
+    end
+
+    if NAMED_OPTIONAL_ARGUMENTS && !LEGACY_PARSER
+      it 'supports named arguments without default values' do
+        YARD.parse_string 'def foo(a, b = 1, *c, d, e: 3, f:, **g, &h) end'
+        args = [['a', nil], ['b', '1'], ['*c', nil], ['d', nil], ['e:', '3'], ['f:', nil], ['**g', nil], ['&h', nil]]
+        Registry.at('#foo').parameters.should eq(args)
+      end
+    end
   end
 end

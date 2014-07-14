@@ -36,6 +36,8 @@ unless defined?(HAVE_RIPPER)
   end if ENV['LEGACY']
 end
 
+NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
+
 def parse_file(file, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
   Registry.clear
   path = File.join(File.dirname(thisfile), 'examples', file.to_s + ext)

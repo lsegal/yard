@@ -178,11 +178,40 @@ eof
       ast.jump(:class).line_range.should == (2..4)
     end
 
+    it 'should handle defs with unnamed argument with default values' do
+      ast = stmt('def hello(one, two = 2, three = 3) end').jump(:params)
+      ast.source.should == 'one, two = 2, three = 3'
+    end
+
+    it 'should handle defs with splats' do
+      ast = stmt('def hello(one, *two) end').jump(:params)
+      ast.source.should == 'one, *two'
+    end
+
+    if YARD.ruby2?
+      it 'should handle defs with named arguments with default values' do
+        ast = stmt('def hello(one, two: 2, three: 3) end').jump(:params)
+        ast.source.should == 'one, two: 2, three: 3'
+      end
+    end
+
+    if NAMED_OPTIONAL_ARGUMENTS
+      it 'should handle defs with named arguments without default values' do
+        ast = stmt('def hello(one, two:, three:) end').jump(:params)
+        ast.source.should == 'one, two:, three:'
+      end
+
+      it 'should handle defs with double splats' do
+        ast = stmt('def hello(one, **two) end').jump(:params)
+        ast.source.should == 'one, **two'
+      end
+    end
+
     it "should end source properly on array reference" do
       ast = stmt("AS[0, 1 ]   ")
       ast.source.should == 'AS[0, 1 ]'
 
-      ast = stmt("def x(a = S[1]) end").jump(:default_arg)
+      ast = stmt('def x(a = S[1]) end').jump(:params)
       ast.source.should == 'a = S[1]'
     end
 
