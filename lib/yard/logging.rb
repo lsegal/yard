@@ -26,7 +26,7 @@ module YARD
       return false if YARD.ruby18? # threading is too ineffective for progress support
       return false if YARD.windows? # windows has poor ANSI support
       return false unless io.tty? # no TTY support on IO
-      return false if level > WARN # no progress in verbose/debug modes
+      return false unless level > INFO # no progress in verbose/debug modes
       @show_progress
     end
     attr_writer :show_progress
