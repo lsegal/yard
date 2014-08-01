@@ -76,19 +76,19 @@ module YARD
         log.puts
         log.puts "Undocumented Objects:"
 
-        objects = @undoc_list.sort_by {|o| o.file }
+        objects = @undoc_list.sort_by {|o| o.file.to_s }
         max = objects.sort_by {|o| o.path.length }.last.path.length
         if @compact
           objects.each do |object|
             log.puts("%-#{max}s     (%s)" % [object.path,
-              [object.file, object.line].compact.join(":")])
+              [object.file || "-unknown-", object.line].compact.join(":")])
           end
         else
           last_file = nil
           objects.each do |object|
             if object.file != last_file
               log.puts
-              log.puts "(in file: #{object.file})"
+              log.puts "(in file: #{object.file || "-unknown-"})"
             end
             log.puts object.path
             last_file = object.file
