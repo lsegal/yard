@@ -38,3 +38,8 @@ env: "CI=1 SUITE=1 "
 # Disable email notifications
 #notifications:
 #  disabled: true
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/c6dbb9323007dfcf81df
