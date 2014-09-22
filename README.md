@@ -209,11 +209,13 @@ adding the following to your `Rakefile`:
     YARD::Rake::YardocTask.new do |t|
       t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
       t.options = ['--any', '--extra', '--opts'] # optional
+      t.stats_options = ['--list-undoc']         # optional
     end
 
-both the `files` and `options` settings are optional. `files` will default to
-`lib/**/*.rb` and `options` will represents any options you might want
-to add. Again, a full list of options is available by typing `yardoc --help`
+All the settings: `files`, `options` and `stats_options` are optional. `files` will default to
+`lib/**/*.rb`, `options` will represents any options you might want
+to add and `stats_options` will pass extra options to the stats command.
+Again, a full list of options is available by typing `yardoc --help`
 in a shell. You can also override the options at the Rake command-line with the
 OPTS environment variable:
 
