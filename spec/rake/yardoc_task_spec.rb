@@ -56,6 +56,33 @@ describe YARD::Rake::YardocTask do
     end
   end
 
+  describe '#stats_options' do
+    before do
+      @yard_stats = Object.new
+      @yard_stats.stub!(:run)
+      YARD::CLI::Stats.stub!(:new).and_return(@yard_stats)
+    end
+
+    it "should not invoke stats" do
+      @yard_stats.should_not_receive(:run)
+      @yardoc.statistics = true
+      YARD::Rake::YardocTask.new do |t|
+      end
+      run
+      @yardoc.statistics.should == true
+    end
+
+    it "should invoke stats" do
+      @yard_stats.should_receive(:run).with('--list-undoc', '--use-cache')
+      @yardoc.statistics = true
+      YARD::Rake::YardocTask.new do |t|
+        t.stats_options = %w(--list-undoc)
+      end
+      run
+      @yardoc.statistics.should == false
+    end
+  end
+
   describe '#before' do
     it "should allow before callback" do
       proc = lambda { }

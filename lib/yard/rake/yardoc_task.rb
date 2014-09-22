@@ -14,6 +14,10 @@ module YARD
       # @return [Array<String>] the options passed to the commandline utility
       attr_accessor :options
 
+      # Options to pass to {CLI::Stats}
+      # @return [Array<String>] the options passed to the stats utility
+      attr_accessor :stats_options
+
       # The Ruby source files (and any extra documentation files separated by '-')
       # to process.
       # @example Task files assignment
@@ -46,11 +50,13 @@ module YARD
       def initialize(name = :yard)
         @name = name
         @options = []
+        @stats_options = []
         @files = []
 
         yield self if block_given?
         self.options +=  ENV['OPTS'].split(/[ ,]/) if ENV['OPTS']
         self.files   += ENV['FILES'].split(/[ ,]/) if ENV['FILES']
+        self.options << '--no-stats' unless self.stats_options.empty?
 
         define
       end
@@ -66,6 +72,7 @@ module YARD
           yardoc = YARD::CLI::Yardoc.new
           yardoc.options[:verifier] = verifier if verifier
           yardoc.run *(options + files)
+          YARD::CLI::Stats.run(*(stats_options + ['--use-cache'])) unless stats_options.empty?
           after.call if after.is_a?(Proc)
         end
       end
