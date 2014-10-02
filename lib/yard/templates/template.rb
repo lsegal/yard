@@ -314,11 +314,11 @@ module YARD
 
       # Calls the ERB file from the last inherited template with {#section}.erb
       #
-      # @param [Symbol, String] section if provided, uses a specific section name
+      # @param [Symbol, String] sect if provided, uses a specific section name
       # @return [String] the rendered ERB file in any of the inherited template
       #   paths.
-      def superb(section = section, &block)
-        filename = self.class.find_nth_file(erb_file_for(section), 2)
+      def superb(sect = section, &block)
+        filename = self.class.find_nth_file(erb_file_for(sect), 2)
         return "" unless filename
         method_name = ErbCache.method_for(filename) { erb_with(IO.read(filename), filename) }
         send(method_name, &block)
