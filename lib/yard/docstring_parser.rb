@@ -296,9 +296,6 @@ module YARD
     after_parse do |parser|
       next unless parser.object
       next unless parser.object.is_a?(CodeObjects::MethodObject)
-      next if parser.object.parameters.empty? # method has no params or
-                                                # YARD couldn't detect any.
-                                                # but don't warn user (?)
       names = parser.object.parameters.map {|l| l.first.gsub(/\W/, '') }
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " +
