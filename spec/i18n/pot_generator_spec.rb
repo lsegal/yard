@@ -205,6 +205,36 @@ eod
         }
       })
     end
+
+    it "should extract overload tag recursively" do
+      object = YARD::CodeObjects::MethodObject.new(@yard, :parse, :module) do |o|
+        o.docstring = <<-eod
+@overload foo(i)
+  docstring foo(i)
+  @param [Integer] i integer parameter
+eod
+      end
+
+      @generator.parse_objects([object])
+      @generator.messages.should == create_messages({
+        "tag|overload|foo" => {
+          :locations => [],
+          :comments => ["@overload"]
+        },
+        "docstring foo(i)" => {
+          :locations => [],
+          :comments => ["YARD.parse"]
+        },
+        "tag|param|i" => {
+          :locations => [],
+          :comments => ["@param [Integer]"]
+        },
+        "integer parameter" => {
+          :locations => [],
+          :comments => ["@param [Integer] i"]
+        },
+      })
+    end
   end
 
   describe "File" do
