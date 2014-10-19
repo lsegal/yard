@@ -8,7 +8,7 @@ module YARD
       # printed.
       #
       # @see #print_statistics
-      STATS_ORDER = [:files, :modules, :classes, :constants, :methods]
+      STATS_ORDER = [:files, :modules, :classes, :constants, :attributes, :methods]
 
       # @return [Boolean] whether to parse and load registry
       attr_accessor :parse
@@ -124,11 +124,19 @@ module YARD
       def stats_for_constants
         output "Constants", *type_statistics(:constant)
       end
-
+      # Statistics for attributes
+      def stats_for_attributes
+        objs = all_objects.select {|m| m.type == :method && m.is_attribute? }
+        objs.uniq! {|m| m.name.to_s.gsub(/=$/, '') }
+        undoc = objs.select {|m| m.docstring.blank? }
+        @undoc_list |= undoc if @undoc_list
+        output "Attributes", objs.size, undoc.size
+      end
       # Statistics for methods
       def stats_for_methods
         objs = all_objects.select {|m| m.type == :method }
         objs.reject! {|m| m.is_alias? }
+        objs.reject! {|m| m.is_attribute? }
         undoc = objs.select {|m| m.docstring.blank? }
         @undoc_list |= undoc if @undoc_list
         output "Methods", objs.size, undoc.size
