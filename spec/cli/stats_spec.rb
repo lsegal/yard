@@ -21,6 +21,7 @@ describe YARD::CLI::Stats do
       "Modules:         1 (    1 undocumented)\n" +
       "Classes:         1 (    1 undocumented)\n" +
       "Constants:       1 (    1 undocumented)\n" +
+      "Attributes:      0 (    0 undocumented)\n" +
       "Methods:         2 (    1 undocumented)\n" +
       " 20.00% documented\n"
 
@@ -56,6 +57,7 @@ eof
                               "Modules:         0 (    0 undocumented)\n" +
                               "Classes:         0 (    0 undocumented)\n" +
                               "Constants:       0 (    0 undocumented)\n" +
+                              "Attributes:      0 (    0 undocumented)\n" +
                               "Methods:         1 (    0 undocumented)\n" +
                               " 100.00% documented\n"
   end
@@ -84,6 +86,7 @@ eof
       "Modules:         0 (    0 undocumented)\n" +
       "Classes:         0 (    0 undocumented)\n" +
       "Constants:       0 (    0 undocumented)\n" +
+      "Attributes:      0 (    0 undocumented)\n" +
       "Methods:         0 (    0 undocumented)\n" +
       " 100.00% documented\n"
   end
