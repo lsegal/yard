@@ -65,6 +65,7 @@ module YARD
           {:read => name, :write => "#{name}="}.each do |type, meth_name|
             next unless values[type] > 0
             obj = handle_method(:instance, var_name, meth_name, nil)
+            register_file_info(obj, statement.file, statement.line)
             obj.namespace.attributes[:instance][name] ||= SymbolHash[:read => nil, :write => nil]
             obj.namespace.attributes[:instance][name][type] = obj
           end
