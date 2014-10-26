@@ -39,6 +39,22 @@
           "credentials": "lsegal.rubygems"
         }
       ]
+    },
+    {
+      "action": "changelog-parse",
+      "files": ["CHANGELOG.md"],
+      "publish": [
+        {
+          "action": "github-release",
+          "credentials": "lsegal.github",
+          "files": [],
+          "arguments": {
+            "repository": "lsegal/yard",
+            "tag": "v$version",
+            "changelog": "CHANGELOG.md"
+          }
+        }
+      ]
     }
   ]
 }
