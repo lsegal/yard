@@ -12,6 +12,7 @@
 --hide-tag yard.signature
 --load ./docs/templates/plugin.rb
 -
+CHANGELOG.md
 docs/WhatsNew.md
 docs/GettingStarted.md
 docs/Tags.md

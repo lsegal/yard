@@ -5,6 +5,7 @@
 --exclude /yard/rubygems/
 --asset docs/images:images
 -
+CHANGELOG.md
 docs/WhatsNew.md
 docs/GettingStarted.md
 docs/Tags.md
@@ -14,6 +15,5 @@ docs/Parser.md
 docs/Handlers.md
 docs/TagsArch.md
 docs/Templates.md
-ChangeLog
 LICENSE
 LEGAL
