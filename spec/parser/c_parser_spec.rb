@@ -126,6 +126,24 @@ describe YARD::Parser::C::CParser do
         end
       end
     end
+
+    describe 'C macros in declaration' do
+      it "should handle C macros in method declaration" do
+        Registry.clear
+        parse <<-eof
+        // docstring
+        FOOBAR VALUE func() { }
+
+        void
+        Init_mod(void)
+        {
+          rb_define_method(rb_cFoo, "func", func, 0); \
+        }
+        eof
+
+        Registry.at('Foo#func').docstring.should == "docstring"
+      end
+    end
   end
 
   describe 'Override comments' do
