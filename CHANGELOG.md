@@ -1,3 +1,7 @@
+# HEAD
+
+- Support using `@option` tag on keyword arg splat parameter. (#729)
+
 # 0.8.7.5 - October 26, 2014
 
 - Fix linking of methods in top level namespace in method listing. (#776)
