@@ -1,14 +1,13 @@
 # YARD: Yay! A Ruby Documentation Tool
 
-**Homepage**:     http://yardoc.org   
-**IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/yard)    
-**Git**:          http://github.com/lsegal/yard   
-**Author**:       Loren Segal  
-**Contributors**: http://github.com/lsegal/yard/contributors    
-**Copyright**:    2007-2014    
-**License**:      MIT License    
-**Latest Version**: 0.8.7.5    
-**Release Date**: October 26, 2014    
+[![Homepage](http://img.shields.io/badge/home-yardoc.org-blue.svg)](http://yardoc.org)
+[![GitHub](http://img.shields.io/badge/github-lsegal/yard-blue.svg)](http://github.com/lsegal/yard)
+[![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://rubydoc.org/gems/yard/frames)
+[![Gitter Chat](http://img.shields.io/badge/chat-gitter.im-orange.svg)](https://gitter.im/lsegal/yard)
+
+[![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
+[![Build Status](https://travis-ci.org/lsegal/yard.svg?branch=master)](https://travis-ci.org/lsegal/yard)
+[![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 ## Synopsis
 
@@ -285,7 +284,7 @@ More options can be seen by typing `yard graph --help`, but here is an example:
 
 See {file:CHANGELOG.md} for a list of changes.
 
-## Copyright
+## License
 
 YARD &copy; 2007-2014 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
