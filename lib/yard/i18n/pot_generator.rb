@@ -235,6 +235,8 @@ EOH
       def extract_tag_documents(tag)
         extract_tag_name(tag)
         extract_tag_text(tag)
+
+        extract_documents(tag) if Tags::OverloadTag === tag
       end
 
       def extract_tag_name(tag)
