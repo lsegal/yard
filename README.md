@@ -5,10 +5,10 @@
 **Git**:          http://github.com/lsegal/yard   
 **Author**:       Loren Segal  
 **Contributors**: http://github.com/lsegal/yard/contributors    
-**Copyright**:    2007-2013    
+**Copyright**:    2007-2014    
 **License**:      MIT License    
-**Latest Version**: 0.8.7.3    
-**Release Date**: November 1st 2013    
+**Latest Version**: 0.8.7.5    
+**Release Date**: October 26, 2014    
 
 ## Synopsis
 
@@ -287,7 +287,7 @@ See {file:CHANGELOG.md} for a list of changes.
 
 ## Copyright
 
-YARD &copy; 2007-2013 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
+YARD &copy; 2007-2014 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
 RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL}
 documents for more information.
