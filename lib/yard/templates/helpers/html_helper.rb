@@ -328,6 +328,7 @@ module YARD
         objpath = serializer.serialized_path(obj)
         return link unless objpath
 
+        relative = false if object == Registry.root
         if relative
           fromobj = object
           if object.is_a?(CodeObjects::Base) &&
