@@ -268,7 +268,7 @@ module YARD
             title = h(object.relative_path(obj))
           end
         else
-          title = h(obj.to_s)
+          title = h(obj.title)
         end
         return title unless serializer
         return title if obj.is_a?(CodeObjects::Proxy)
