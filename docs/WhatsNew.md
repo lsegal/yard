@@ -22,7 +22,7 @@
 18. **Added `yard markups` command to list available markup types** (0.8.6)
 19. **Added `yard display` command to display formatted objects** (0.8.6)
 20. **Added `--layout` to `yard display` command** (0.8.6.1)
-21. **Added `stats_options` for the rake task** (0.8.7.5)
+21. **Added `stats_options` for the rake task** (0.8.7.6)
 
 ## Directives (new behavioural tag syntax) (0.8.0)
 

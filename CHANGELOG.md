@@ -1,6 +1,7 @@
 # HEAD
 
 - Support using `@option` tag on keyword arg splat parameter. (#729)
+- Add `.stats_options` for `YardocTask`. (#800, #801)
 
 # 0.8.7.5 - October 26, 2014
 
@@ -10,7 +11,6 @@
   are preceded by code. (#798)
 - Handle anonymous lambda calls in toplevel scope. (#774)
 - Support I18n in `@overload` tags. (#794)
-- Add `.stats_options` for `YardocTask`. (#800)
 - Support `yard stats` for objects with no file property. (#792)
 - Support for named arguments in Ruby >= 2.1. (#785)
 - Exclude README backup files from YARD generation. (#790)
