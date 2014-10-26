@@ -1,4 +1,4 @@
-# HEAD
+# 0.8.7.6 - October 26, 2014
 
 - Support using `@option` tag on keyword arg splat parameter. (#729)
 - Add `.stats_options` for `YardocTask`. (#800, #801)
