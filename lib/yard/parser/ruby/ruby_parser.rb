@@ -505,7 +505,8 @@ module YARD
 
           hash_flag = $1 == '##' ? true : false
 
-          if append_comment && @comments_last_column && @comments_last_column == column
+          if append_comment && @comments_last_column &&
+              @comments_last_column == column && comment_starts_line?(ch)
             @comments.delete(lineno - 1)
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
@@ -542,6 +543,15 @@ module YARD
 
         def on_parse_error(msg)
           raise ParserSyntaxError, "syntax error in `#{file}`:(#{lineno},#{column}): #{msg}"
+        end
+
+        def comment_starts_line?(charno)
+          (charno-1).downto(0) do |i|
+            ch = @source[i]
+            break if ch == "\n"
+            return false if ch != " " && ch != "\t"
+          end
+          true
         end
 
         def insert_comments

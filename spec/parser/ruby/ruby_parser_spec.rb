@@ -359,5 +359,17 @@ eof
       ast.first.last.last.type.should == :comment
       ast.first.last.last.docstring.should == "end comment"
     end
+
+    it "should not group comments if they don't begin the line" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        class Foo
+          CONST1 = 1 # Comment here
+          CONST2 = 2 # Another comment here
+        end
+      eof
+      Registry.at("Foo::CONST1").docstring.should == "Comment here"
+      Registry.at("Foo::CONST2").docstring.should == "Another comment here"
+    end
   end
 end if HAVE_RIPPER
