@@ -424,7 +424,13 @@ module YARD
 
         def method_name(name_only = false)
           name = self[index_adjust]
-          name_only ? name.jump(:ident).first.to_sym : name
+          if name == :call
+            nil
+          elsif name_only && Array === name
+            name.jump(:ident).first.to_sym
+          else
+            name
+          end
         end
 
         def parameters(include_block_param = true)
