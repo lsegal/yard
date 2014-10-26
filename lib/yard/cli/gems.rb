@@ -23,7 +23,6 @@ module YARD
       private
 
       # Builds .yardoc files for all non-existing gems
-      # @param [Array] gems
       def build_gems
         require 'rubygems'
         @gems.each do |spec|

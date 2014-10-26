@@ -78,8 +78,6 @@ module YARD
         # @example
         #   YARD::Tags::Library.default_factory = MyFactory
         #
-        # @param [Class, Object] factory the factory that parses all tags
-        #
         # @see DefaultFactory
         def default_factory
           @default_factory ||= DefaultFactory.new
