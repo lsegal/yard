@@ -44,7 +44,11 @@ module YARD
       # @return [CodeObjects::ExtraFileObject] the file object being rendered.
       #   The +object+ key is not used so that a file may be rendered in the context
       #   of an object's namespace (for generating links).
-      attr_accessor :file
+      attr_reader :file
+      def file=(v) @file = v end
+
+      # @return [String] the current locale
+      attr_accessor :locale
     end
 
     # Yardoc is the default YARD CLI command (+yard doc+ and historic +yardoc+
