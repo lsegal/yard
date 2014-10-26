@@ -1,6 +1,9 @@
 {
   "actions": [
     {
+      "action": "rake-task"
+    },
+    {
       "action": "fs-sedfiles",
       "files": ["lib/*/version.rb"],
       "arguments": {
