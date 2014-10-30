@@ -44,6 +44,7 @@ body {
   cursor: col-resize;
 }
 #main {
+  outline: none;
   position: relative;
   display: inline-block;
   background: #fff;
