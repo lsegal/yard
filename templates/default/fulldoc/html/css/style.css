@@ -31,7 +31,7 @@ body {
   background: #fff;
 }
 
-@media (max-width: 920px) or (max-device-width: 320px) {
+@media (max-width: 920px) {
   .nav_wrap { display: none; }
   #main { margin-left: 0 !important; }
 }
