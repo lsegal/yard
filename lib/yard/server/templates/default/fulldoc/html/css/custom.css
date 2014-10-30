@@ -18,7 +18,7 @@ form.search {
 }
 #menu { float: left; }
 
-@media (max-width: 920px) {
+@media (max-width: 920px) or (max-device-width: 320px) {
   form.search {
     position: absolute;
     color: #fff;
