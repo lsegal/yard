@@ -56,13 +56,12 @@ function fullListSearch() {
       searchIndex = 0;
       lastRowClass = '';
       $('#full_list, #content').addClass('insearch');
-      $('#noresults').text('');
+      $('#noresults').text('').hide();
       searchItem();
     }
   });
 
-  $('#search input').focus();
-  $('#full_list').after("<div id='noresults'></div>");
+  $('#full_list').after("<div id='noresults' style='display:none'></div>");
 }
 
 var lastRowClass = '';
@@ -100,7 +99,7 @@ function searchDone() {
     $('#noresults').text('No results were found.').hide().fadeIn();
   }
   else {
-    $('#noresults').text('');
+    $('#noresults').text('').hide();
   }
   $('#content').removeClass('insearch');
   clearTimeout(inSearch);
