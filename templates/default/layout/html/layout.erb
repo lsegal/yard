@@ -6,7 +6,7 @@
   <body>
     <div class="nav_wrap">
       <iframe id="nav" src="<%= url_for_list(!@file || options.index ? 'class' : 'file') %>"></iframe>
-      <% unless String === object %>
+      <% if object && !object.is_a?(String) %>
         <%
         if @file
           path = @file.path
