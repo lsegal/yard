@@ -230,7 +230,24 @@ function navResizer() {
   }
 }
 
+function navExpander() {
+  var done = false, timer = setTimeout(postMessage, 500);
+  function postMessage() {
+    if (done) return;
+    clearTimeout(timer);
+    var opts = { action: 'expand', path: pathId };
+    document.getElementById('nav').contentWindow.postMessage(opts, '*');
+    done = true;
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data === 'navReady') postMessage();
+    return false;
+  }, false);
+}
+
 $(navResizer);
+$(navExpander);
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);
