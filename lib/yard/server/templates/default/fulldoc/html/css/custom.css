@@ -46,6 +46,9 @@ form.search {
     margin-top: 3px;
     color: #eaf0ff;
   }
+  #search a.active {
+    background: #048; border: 0;
+  }
 }
 
 @media (min-width: 920px) {
