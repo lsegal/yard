@@ -211,8 +211,7 @@ function navResizeFn(e) {
     return;
   }
   sessionStorage.navWidth = e.pageX.toString();
-  $('#main').css('margin-left', e.pageX);
-  $('.nav_wrap').css('width', e.pageX);
+  $('.nav_wrap').css('max-width', e.pageX);
 }
 
 function navResizeFnStop() {
@@ -254,6 +253,10 @@ function navExpander() {
   }, false);
 }
 
+function mainFocus() {
+  $('#content').focus();
+}
+
 $(navResizer);
 $(navExpander);
 $(createSourceLinks);
@@ -266,3 +269,5 @@ $(keyboardShortcuts);
 $(summaryToggle);
 $(fixOutsideWorldLinks);
 $(generateTOC);
+$(mainFocus);
+
