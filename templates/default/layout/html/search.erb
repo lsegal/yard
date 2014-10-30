@@ -1,8 +1,6 @@
 <div id="search">
-  <% menu_lists.each do |field| %>
+  <% [menu_lists.first].each do |field| %>
     <a class="full_list_link" id="<%= field[:type] %>_list_link"
-        href="<%= url_for_list(field[:type]) %>">
-      <%= field[:search_title] %>
-    </a>
+        href="<%= url_for_list(field[:type]) %>">&#9776;</a>
   <% end %>
 </div>

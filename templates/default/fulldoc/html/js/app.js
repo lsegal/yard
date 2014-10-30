@@ -48,10 +48,17 @@ function fixBoxInfoHeights() {
     });
 }
 
-function searchFrameLinks() {
+function searchFrameButtons() {
   $('.full_list_link').click(function() {
     toggleSearchFrame(this, $(this).attr('href'));
     return false;
+  });
+  window.addEventListener('message', function(e) {
+    if (e.data === 'navEscape') {
+      $('#search_frame').slideUp(100);
+      $('#search a').removeClass('active inactive');
+      $(window).focus();
+    }
   });
 }
 
@@ -72,22 +79,6 @@ function linkSummaries() {
   $('.summary_signature').click(function() {
     document.location = $(this).find('a').attr('href');
   });
-}
-
-function framesInit() {
-  if (hasFrames) {
-    document.body.className = 'frames';
-    $('#menu .noframes a').attr('href', document.location);
-    try {
-      window.top.document.title = $('html head title').text();
-    } catch(error) {
-      // some browsers will not allow this when serving from file://
-      // but we don't want to stop the world.
-    }
-  }
-  else {
-    $('#menu .noframes a').text('frames').attr('href', framesUrl);
-  }
 }
 
 function keyboardShortcuts() {
@@ -206,12 +197,45 @@ function generateTOC() {
   });
 }
 
-$(framesInit);
+function navResizeFn(e) {
+  if (e.which !== 1) {
+    navResizeFnStop();
+    return;
+  }
+  sessionStorage.navWidth = e.pageX.toString();
+  $('#main').css('margin-left', e.pageX);
+  $('.nav_wrap').css('width', e.pageX);
+}
+
+function navResizeFnStop() {
+  window.removeEventListener('mousemove', navResizeFn, false);
+  window.removeEventListener('message', navMessageFn, false);
+}
+
+function navMessageFn(e) {
+  if (e.data.action === 'mousemove') navResizeFn(e.data.event);
+  if (e.data.action === 'mouseup') navResizeFnStop();
+}
+
+function navResizer() {
+  $('#resizer').mousedown(function(e) {
+    e.preventDefault();
+    window.addEventListener('mousemove', navResizeFn, false);
+    window.addEventListener('message', navMessageFn, false);
+  });
+  $(window).mouseup(navResizeFnStop);
+
+  if (sessionStorage.navWidth) {
+    navResizeFn({which: 1, pageX: parseInt(sessionStorage.navWidth, 10)});
+  }
+}
+
+$(navResizer);
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);
 $(fixBoxInfoHeights);
-$(searchFrameLinks);
+$(searchFrameButtons);
 $(linkSummaries);
 $(keyboardShortcuts);
 $(summaryToggle);

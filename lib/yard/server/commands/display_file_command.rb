@@ -5,6 +5,8 @@ module YARD
       #
       # @todo Implement better support for detecting binary (image) filetypes
       class DisplayFileCommand < LibraryCommand
+        attr_accessor :index
+
         def run
           ppath = library.source_path
           filename = File.cleanpath(File.join(library.source_path, path))
@@ -14,7 +16,10 @@ module YARD
             render IO.read(filename)
           else
             file = CodeObjects::ExtraFileObject.new(filename)
-            options.update(:object => Registry.root, :type => :layout, :file => file)
+            options.update :object => Registry.root,
+                           :type => :layout,
+                           :file => file,
+                           :index => index ? true : false
             render
           end
         end

@@ -1,20 +1,55 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
   <head>
     <%= erb(:headers) %>
   </head>
   <body>
-    <div id="header">
-      <%= erb(:breadcrumb) %>
-      <%= erb(:search) %>
-      <div class="clear"></div>
+    <div class="nav_wrap">
+      <iframe id="nav" src="<%= url_for_list(!@file || options.index ? 'class' : 'file') %>"></iframe>
+      <% unless String === object %>
+        <%
+        if @file
+          path = @file.path
+        elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
+          path = object.parent.path
+        else
+          path = object.path
+        end
+        %>
+        <script type="text/javascript">
+        $(function() {
+          var timer = setTimeout(postMessage, 500);
+          function postMessage() {
+            clearTimeout(timer);
+            document.getElementById('nav').contentWindow.postMessage({
+              action: 'expand',
+              path: '<%= path.gsub("'", "\\'") %>'
+            }, '*');
+          }
+
+          window.addEventListener('message', function(event) {
+            if (event.data === 'navReady') postMessage();
+            return false;
+          }, false);
+        });
+        </script>
+      <% end %>
+
+      <div id="resizer"></div>
     </div>
 
-    <iframe id="search_frame"></iframe>
+    <div id="main">
+      <div id="header">
+        <%= erb(:breadcrumb) %>
+        <%= erb(:search) %>
+        <div class="clear"></div>
+      </div>
 
-    <div id="content"><%= yieldall %></div>
+      <iframe id="search_frame"></iframe>
 
-    <%= erb(:footer) %>
+      <div id="content"><%= yieldall %></div>
+
+      <%= erb(:footer) %>
+    </div>
   </body>
 </html>
