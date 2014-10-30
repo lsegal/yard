@@ -60,6 +60,14 @@ function searchFrameButtons() {
       $(window).focus();
     }
   });
+
+  $(window).resize(function() {
+    if ($('#search:visible').length === 0) {
+      $('#search_frame').slideUp(100);
+      $('#search a').removeClass('active inactive');
+      $(window).focus();
+    }
+  });
 }
 
 function toggleSearchFrame(id, link) {
