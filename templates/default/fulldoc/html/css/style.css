@@ -1,9 +1,47 @@
 body {
-  padding: 0 20px;
+  padding: 0 5px;
   font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif;
   font-size: 13px;
+  height: 100%;
 }
-body.frames { padding: 0 5px; }
+
+#nav {
+  width: 99%;
+  height: 100%;
+  border: 0;
+  border-right: 1px dotted #eee;
+  overflow: scroll;
+}
+.nav_wrap {
+  width: 20%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+#resizer {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+@media (max-width: 920px) {
+  .nav_wrap { display: none; }
+  #main { margin-left: 0 !important; }
+}
+
+@media (min-width: 920px) {
+  #main {
+    position: relative;
+    margin-left: 21%
+  }
+  #search { display: none; }
+  #search_frame { display: none; }
+}
+
 h1 { font-size: 25px; margin: 1em 0 0.5em; padding-top: 4px; border-top: 1px dotted #d5d5d5; }
 h1.noborder { border-top: 0px; margin-top: 0; padding-top: 4px; }
 h1.title { margin-bottom: 10px; }
@@ -221,8 +259,8 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 .showAll ul.fullTree { display: block; }
 .showAll .inheritName { display: none; }
 
-#search { position: absolute; right: 14px; top: 0px; }
-#search a:link, #search a:visited {
+#search { position: absolute; right: 12px; top: 0px; }
+#search a {
   display: block; float: left; margin-right: 4px;
   padding: 8px 10px; text-decoration: none; color: #05a;
   border: 1px solid #d8d8e5;
@@ -238,7 +276,6 @@ ul.fullTree li:last-child { padding-bottom: 0; }
   -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;
 }
 #search a.inactive { color: #999; }
-.frames #search { display: none; }
 .inheritanceTree, .toggleDefines { float: right; }
 
 #menu { font-size: 1.3em; color: #bbb; top: -5px; position: relative; }
@@ -247,8 +284,6 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 #menu .title { color: #555; }
 #menu a:link, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #menu a:hover { color: #05a; }
-#menu .noframes { display: inline; }
-.frames #menu .noframes { display: inline; float: right; }
 
 #footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
 #footer a:link, #footer a:visited { color: #444; text-decoration: none; border-bottom: 1px dotted #bbd; }
@@ -269,7 +304,7 @@ li.r2 { background: #fafafa; }
   display: none;
   position: absolute;
   top: 36px;
-  right: 18px;
+  right: 16px;
   width: 500px;
   height: 80%;
   overflow-y: scroll;

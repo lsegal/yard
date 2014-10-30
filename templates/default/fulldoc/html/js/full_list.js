@@ -123,17 +123,13 @@ function linkList() {
       }
     }
     if (clicked) clicked.removeClass('clicked');
-    var win;
-    try {
-      win = window.top.frames.main ? window.top.frames.main : window.parent;
-    } catch (e) { win = window.parent; }
     if (this.tagName.toLowerCase() == "a") {
       clicked = $(this).parents('li').addClass('clicked');
-      win.location = this.href;
+      window.top.location = this.href;
     }
     else {
       clicked = $(this).addClass('clicked');
-      win.location = $(this).find('a:last').attr('href');
+      window.top.location = $(this).find('a:last').attr('href');
     }
     return false;
   });
@@ -168,13 +164,54 @@ function highlight(no_padding) {
 function escapeShortcut() {
   $(document).keydown(function(evt) {
     if (evt.which == 27) {
-      $('#search_frame', window.top.document).slideUp(100);
-      $('#search a', window.top.document).removeClass('active inactive');
-      $(window.top).focus();
+      window.parent.postMessage('navEscape', '*');
     }
   });
 }
 
+function expandTo(path) {
+  var id = 'object_' + path;
+  var rootEl = $(document.getElementById(id));
+  var el = rootEl;
+  if (el.length == 0) return;
+
+  clicked = el.addClass('clicked');
+  while (el[0].id != 'full_list') {
+    if (el[0].tagName === "UL") el = el.prev();
+    var toggle = el.children('a.toggle');
+    if (el.hasClass('collapsed') && toggle.length > 0) toggle.click();
+    el = el.parent();
+  }
+
+  window.scrollTo(window.scrollX, rootEl.offset().top - 250);
+}
+
+function windowEvents(event) {
+  var msg = event.data;
+  if (msg.action === "expand") {
+    expandTo(msg.path);
+  }
+  return false;
+}
+
+function navReady() {
+  window.parent.postMessage("navReady", "*");
+}
+
+function navResizer() {
+  $(window).mousemove(function(e) {
+    window.parent.postMessage({
+      action: 'mousemove', event: {pageX: e.pageX, which: e.which}
+    }, '*');
+  }).mouseup(function(e) {
+    window.parent.postMessage({action: 'mouseup'}, '*');
+  });
+}
+
+window.addEventListener("message", windowEvents, false);
+
+$(navResizer);
+$(navReady);
 $(escapeShortcut);
 $(fullListSearch);
 $(linkList);

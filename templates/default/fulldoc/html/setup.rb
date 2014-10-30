@@ -48,7 +48,7 @@ end
 # @params [Hash] options contains data and flags that influence the output
 def serialize_index(options)
   Templates::Engine.with_serializer('index.html', options.serializer) do
-    T('layout').run(options)
+    T('layout').run(options.merge(:index => true))
   end
 end
 
@@ -184,7 +184,7 @@ def class_list(root = Registry.root)
     if child.is_a?(CodeObjects::NamespaceObject)
       name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
       has_children = run_verifier(child.children).any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
-      out << "<li>"
+      out << "<li id='object_#{child.path}'>"
       out << "<a class='toggle'></a> " if has_children
       out << linkify(child, name)
       out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass

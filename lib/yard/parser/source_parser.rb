@@ -147,16 +147,12 @@ module YARD
         # @return [Hash{Symbol=>Object}] a list of registered parser types
         # @private
         # @since 0.5.6
-        attr_reader :parser_types
-        undef parser_types
         def parser_types; @@parser_types ||= {} end
         def parser_types=(value) @@parser_types = value end
 
         # @return [Hash] a list of registered parser type extensions
         # @private
         # @since 0.5.6
-        attr_reader :parser_type_extensions
-        undef parser_type_extensions
         def parser_type_extensions; @@parser_type_extensions ||= {} end
         def parser_type_extensions=(value) @@parser_type_extensions = value end
 

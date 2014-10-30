@@ -1,10 +1,10 @@
 <form class="search" method="get" action="/<%= base_path(router.search_prefix) %>">
-  Search: <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= h @query %>" />
+  <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= h @query %>" />
 </form>
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $('#search_box').autocomplete($('#search_box').parent().attr('action'), {
-      width: document.body.className == 'frames' ? 250 : 340,
+      width: 200,
       formatItem: function(item) {
         var values = item[0].split(",");
         return values[0] + (values[1] == '' ? "" : " <small>(" + values[1] + ")</small>");
@@ -17,12 +17,6 @@
     });
   });
 </script>
-<style>
-  .frames form.search { position: absolute; right: 14px; top: -6px; padding-top: 10px; }
-  .frames #menu .noframes { float: none; }
-  .frames #menu { float: left; }
-  .frames #content h1 { margin-top: 15px; }
-</style>
 
 <div id="menu">
   <% unless @single_library %>
@@ -40,7 +34,5 @@
     <% if object != '_index.html' %><a href="<%= url_for_index %>">Index</a> &raquo; <% end %>
     <span class='title'><%= @breadcrumb_title %></span>
   <% end %>
-
-  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
 </div>
 
