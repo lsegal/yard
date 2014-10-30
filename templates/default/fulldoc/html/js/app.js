@@ -254,7 +254,7 @@ function navExpander() {
 }
 
 function mainFocus() {
-  $('#content').focus();
+  $('#main')[0].focus();
 }
 
 $(navResizer);
