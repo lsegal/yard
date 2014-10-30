@@ -59,6 +59,9 @@ module YARD
       # @return [String] the title of a given page
       attr_accessor :page_title
 
+      # @return [Boolean] whether the page is the "index"
+      attr_accessor :index
+
       # @example A list of mixin path names (including wildcards)
       #   opts.embed_mixins #=> ['ClassMethods', '*Helper', 'YARD::*']
       # @return [Array<String>] an array of module name wildcards to embed into

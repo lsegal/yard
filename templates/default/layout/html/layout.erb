@@ -5,36 +5,7 @@
   </head>
   <body>
     <div class="nav_wrap">
-      <iframe id="nav" src="<%= url_for_list(!@file || options.index ? 'class' : 'file') %>"></iframe>
-      <% if object && !object.is_a?(String) %>
-        <%
-        if @file
-          path = @file.path
-        elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
-          path = object.parent.path
-        else
-          path = object.path
-        end
-        %>
-        <script type="text/javascript">
-        $(function() {
-          var timer = setTimeout(postMessage, 500);
-          function postMessage() {
-            clearTimeout(timer);
-            document.getElementById('nav').contentWindow.postMessage({
-              action: 'expand',
-              path: '<%= path.gsub("'", "\\'") %>'
-            }, '*');
-          }
-
-          window.addEventListener('message', function(event) {
-            if (event.data === 'navReady') postMessage();
-            return false;
-          }, false);
-        });
-        </script>
-      <% end %>
-
+      <iframe id="nav" src="<%= @nav_url %>"></iframe>
       <div id="resizer"></div>
     </div>
 
