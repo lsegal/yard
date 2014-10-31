@@ -16,7 +16,7 @@ function createDefineLinks() {
     $('.defines').after(" <a href='#' class='toggleDefines'>more...</a>");
     $('.toggleDefines').toggle(function() {
         tHeight = $(this).parent().prev().height();
-        $(this).prev().show();
+        $(this).prev().css('display', 'inline');
         $(this).parent().prev().height($(this).parent().height());
         $(this).text("(less)");
     },
