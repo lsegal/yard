@@ -1,13 +1,14 @@
 <h1>Method: <%= object.path %></h1>
-<dl class="box">
-  <dt class="r1 last">Defined in:</dt>
-  <dd class="r1 last">
+<div class="box_info">
+  <dl>
+    <dt class="">Defined in:</dt>
+    <dd class="">
     <%= object.file %><% if object.files.size > 1 %><span class="defines">,<br />
       <%= object.files[1..-1].map {|f| f.first }.join(",<br /> ") %></div>
     <% end %>
-  </dd>
-</dl>
-<div class="clear"></div>
+    </dd>
+  </dl>
+</div>
 
 <div class="method_details_list">
   <div id="method_details">
