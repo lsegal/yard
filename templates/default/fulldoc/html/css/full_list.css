@@ -35,7 +35,7 @@ li.clicked { background: #05a; color: #ccc; }
 li.clicked a:link, li.clicked a:visited { color: #eee; }
 li.clicked a.toggle { opacity: 0.5; background-position: bottom right; }
 li.collapsed.clicked a.toggle { background-position: top right; }
-#search input { border: 1px solid #bbb; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+#search input { border: 1px solid #bbb; border-radius: 3px; }
 #full_list_nav { margin-left: 10px; font-size: 0.9em; display: block; color: #aaa; }
 #full_list_nav a:link, #nav a:visited { color: #358; }
 #full_list_nav a:hover { background: transparent; color: #5af; }
