@@ -298,17 +298,26 @@ ul.fullTree li:last-child { padding-bottom: 0; }
   border-top-left-radius: 5px; border-top-right-radius: 5px;
 }
 #search a.inactive { color: #999; fill: #999; }
-.inheritanceTree, .toggleDefines { float: right; }
+.inheritanceTree, .toggleDefines {
+  float: right;
+  border-left: 1px solid #aaa;
+  position: absolute; top: 0; right: 0;
+  height: 100%;
+  background: #f6f6f6;
+  padding: 5px;
+  min-width: 55px;
+  text-align: center;
+}
 
 #menu { font-size: 1.3em; color: #bbb; }
 #menu .title, #menu a { font-size: 0.7em; }
 #menu .title a { font-size: 1em; }
 #menu .title { color: #555; }
-#menu a:link, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
+#menu a, #menu a:visited { color: #333; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #menu a:hover { color: #05a; }
 
 #footer { margin-top: 15px; border-top: 1px solid #ccc; text-align: center; padding: 7px 0; color: #999; }
-#footer a:link, #footer a:visited { color: #444; text-decoration: none; border-bottom: 1px dotted #bbd; }
+#footer a, #footer a:visited { color: #444; text-decoration: none; border-bottom: 1px dotted #bbd; }
 #footer a:hover { color: #05a; }
 
 #listing ul.alpha { font-size: 1.1em; }
@@ -337,7 +346,7 @@ li.r2 { background: #fafafa; }
   border-radius: 2px;
 }
 
-#content ul.summary li.deprecated .summary_signature a:link,
+#content ul.summary li.deprecated .summary_signature a,
 #content ul.summary li.deprecated .summary_signature a:visited { text-decoration: line-through; font-style: italic; }
 
 #toc {
