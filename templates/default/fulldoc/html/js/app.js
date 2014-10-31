@@ -100,7 +100,8 @@ function keyboardShortcuts() {
 }
 
 function summaryToggle() {
-  $('.summary_toggle').click(function() {
+  $('.summary_toggle').click(function(e) {
+    e.preventDefault();
     if (localStorage) {
       localStorage.summaryCollapsed = $(this).text();
     }
