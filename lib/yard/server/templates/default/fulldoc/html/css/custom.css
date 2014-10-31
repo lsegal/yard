@@ -39,7 +39,7 @@ form.search {
     box-shadow: none;
     margin-top: 4px;
     padding-bottom: 5px;
-    color: #eaf0ff;
+    color: #eaf0ff; fill: #eaf0ff;
   }
   #search a.active {
     background: #048; border: 0;
