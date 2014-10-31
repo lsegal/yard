@@ -1,8 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" charset="utf-8" />
     <link rel="stylesheet" href="/css/custom.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8" src="/js/jquery.js"></script>
@@ -28,7 +27,8 @@
       $(setFade);
     </script>
     <style type="text/css" media="screen">
-      body { overflow: hidden; }
+      body { overflow: hidden; margin: 12px; display: block; }
+      #menu { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
     <title>Processing <%= @library.to_s(false) %></title>
   </head>
