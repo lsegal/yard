@@ -284,20 +284,20 @@ ul.fullTree li:last-child { padding-bottom: 0; }
 
 #search { position: absolute; right: 12px; top: 0px; z-index: 9000; }
 #search a {
-  font-size: 1.5em;
   display: block; float: left;
-  padding: 4px 8px; text-decoration: none; color: #05a;
+  padding: 4px 8px; text-decoration: none; color: #05a; fill: #05a;
   border: 1px solid #d8d8e5;
   border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;
   background: #eaf0ff;
   box-shadow: -1px 1px 3px #ddd;
 }
-#search a:hover { background: #f5faff; color: #06b; }
+#search a:hover { background: #f5faff; color: #06b; fill: #06b; }
 #search a.active {
-  background: #568; padding-bottom: 20px; color: #fff; border: 1px solid #457;
+  background: #568; padding-bottom: 20px; color: #fff; fill: #fff;
+  border: 1px solid #457;
   border-top-left-radius: 5px; border-top-right-radius: 5px;
 }
-#search a.inactive { color: #999; }
+#search a.inactive { color: #999; fill: #999; }
 .inheritanceTree, .toggleDefines { float: right; }
 
 #menu { font-size: 1.3em; color: #bbb; }
@@ -325,7 +325,7 @@ li.r2 { background: #fafafa; }
   background: #fff;
   display: none;
   position: absolute;
-  top: 36px;
+  top: 40px;
   right: 12px;
   width: 500px;
   max-width: 80%;
