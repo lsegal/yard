@@ -42,12 +42,6 @@ function createFullTreeLinks() {
     });
 }
 
-function fixBoxInfoHeights() {
-    $('dl.box dd.r1, dl.box dd.r2').each(function() {
-       $(this).prev().height($(this).height());
-    });
-}
-
 function searchFrameButtons() {
   $('.full_list_link').click(function() {
     toggleSearchFrame(this, $(this).attr('href'));
@@ -262,7 +256,6 @@ $(navExpander);
 $(createSourceLinks);
 $(createDefineLinks);
 $(createFullTreeLinks);
-$(fixBoxInfoHeights);
 $(searchFrameButtons);
 $(linkSummaries);
 $(keyboardShortcuts);
