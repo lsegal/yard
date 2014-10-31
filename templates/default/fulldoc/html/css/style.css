@@ -44,16 +44,16 @@ body {
   cursor: col-resize;
 }
 #main {
+  flex-grow: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex: 1;
   outline: none;
   position: relative;
   display: inline-block;
   background: #fff;
-  width: 100%;
-  -ms-flex-align: stretch;
   overflow: auto;
   padding: 1.2em;
   padding-top: 0.2em;
-  -ms-flex: 1 0 76%;
 }
 
 @media (max-width: 920px) {
