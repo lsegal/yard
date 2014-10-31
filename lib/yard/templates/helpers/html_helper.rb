@@ -462,7 +462,7 @@ module YARD
         elsif !type.empty?
           type = link ? h(type) : format_types([type], false)
         end
-        type = "(#{type}) " unless type.empty?
+        type = "#{type} " unless type.empty?
         type
       end
 
@@ -479,7 +479,8 @@ module YARD
         meth = convert_method_to_overload(meth)
 
         type = signature_types(meth, link)
-        scope = meth.scope == :class ? "+" : "-"
+        type = "&#x21d2; #{type}" if type && !type.empty?
+        scope = meth.scope == :class ? "." : "#"
         name = full_attr_name ? meth.name : meth.name.to_s.gsub(/^(\w+)=$/, '\1')
         blk = format_block(meth)
         args = !full_attr_name && meth.writer? ? "" : format_args(meth)
@@ -494,7 +495,7 @@ module YARD
           extras << meth.visibility if meth.visibility != :public
           extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
         end
-        title = "%s %s<strong>%s</strong>%s %s" % [scope, type, h(name), args, blk]
+        title = "%s<strong>%s</strong>%s %s %s" % [scope, h(name), args, blk, type]
         if link
           if meth.is_a?(YARD::CodeObjects::MethodObject)
             link_title = "#{h meth.name(true)} (#{meth.scope} #{meth.type})"
