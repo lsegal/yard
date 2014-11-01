@@ -1,5 +1,9 @@
 (function() {
 
+var localStorage = null, sessionStorage = null;
+try { localStorage = window.localStorage; } catch (e) { }
+try { sessionStorage = window.sessionStorage; } catch (e) { }
+
 function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
@@ -185,7 +189,9 @@ function navResizeFn(e) {
     navResizeFnStop();
     return;
   }
-  sessionStorage.navWidth = e.pageX.toString();
+  if (sessionStorage) {
+    sessionStorage.navWidth = e.pageX.toString();
+  }
   $('.nav_wrap').css('max-width', e.pageX);
 }
 
