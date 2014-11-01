@@ -3,34 +3,47 @@
 #search_results ul { list-style-position: inside; padding-left: 0; list-style: none; }
 #search_results ul li { padding: 7px 15px; font-size: 1.1em; }
 
-#search_frame { z-index: 9999; }
-
 form.search {
   z-index: 8000;
   position: absolute;
   color: #fff;
-  padding: 6px; border: 1px solid #99f; width: 210px; background: #05a;
+  border: 1px solid #99f; width: 210px; background: #05a;
   border-radius: 4px; border-top-left-radius: 0; border-top-right-radius: 0;
 }
-#menu { float: left; }
+form.search input {
+  height: 25px;
+  padding: 0;
+  padding-left: 4px;
+  margin: 4px;
+  margin-right: 0;
+  width: 202px;
+  border: 1px solid #99f;
+  border-radius: 3px;
+  font-size: 1.1em;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
 
 @media (max-width: 920px) {
   form.search {
     position: absolute;
     color: #fff;
     width: 100%;
-    padding: 7px;
     margin-top: 0;
     background: #05a;
     border-radius: 0;
     border: 0;
     margin-bottom: 10px;
-    padding-top: 9px;
-    padding-bottom: 11px;
     left: 0;
     top: 0;
   }
-  form.search input { border: 1px solid #eaf0ff; height: 25px; padding: 0; padding-left: 0.5em; margin: 0; }
+  form.search input {
+    margin-top: 9px;
+    margin-bottom: 11px;
+    margin-left: 12px;
+    padding-left: 6px;
+    border: 1px solid #eaf0ff;
+  }
   #menu { margin-top: 41px; }
   #search a {
     border-top-left-radius: 3px; border-top-right-radius: 3px;
@@ -48,13 +61,6 @@ form.search {
 
 @media (min-width: 920px) {
   form.search { right: 12px; top: 0; }
-}
-
-form.search input {
-  -webkit-appearance: none;
-  margin-left: 5px; width: 200px; border: 1px solid #99f;
-  border-radius: 3px;
-  font-size: 1.1em;
 }
 
 #menu { padding-top: 5px; }
