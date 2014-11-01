@@ -29,7 +29,6 @@ body {
   width: 20%;
   height: 100%;
   position: relative;
-  display: inline-block;
   display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -50,9 +49,9 @@ body {
   flex: 5 1;
   -webkit-flex: 5 1;
   -ms-flex: 5 1;
+  height: 100%;
   outline: none;
   position: relative;
-  display: inline-block;
   background: #fff;
   overflow: auto;
   padding: 1.2em;
@@ -61,6 +60,8 @@ body {
 
 @media (max-width: 920px) {
   .nav_wrap { display: none; }
+  body { height: initial; display: block; overflow: auto; }
+  #main { height: initial; }
 }
 
 @media (min-width: 920px) {
