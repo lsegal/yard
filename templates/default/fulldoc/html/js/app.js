@@ -1,3 +1,5 @@
+(function() {
+
 function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
@@ -252,16 +254,19 @@ function mainFocus() {
   $('#main')[0].focus();
 }
 
-$(navResizer);
-$(navExpander);
-$(createSourceLinks);
-$(createDefineLinks);
-$(createFullTreeLinks);
-$(searchFrameButtons);
-$(linkSummaries);
-$(keyboardShortcuts);
-$(summaryToggle);
-$(fixOutsideWorldLinks);
-$(generateTOC);
-$(mainFocus);
+$(document).ready(function() {
+  navResizer();
+  navExpander();
+  createSourceLinks();
+  createDefineLinks();
+  createFullTreeLinks();
+  searchFrameButtons();
+  linkSummaries();
+  keyboardShortcuts();
+  summaryToggle();
+  fixOutsideWorldLinks();
+  generateTOC();
+  mainFocus();
+});
 
+})();
