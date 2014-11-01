@@ -42,6 +42,7 @@ body {
   width: 10px;
   height: 100%;
   cursor: col-resize;
+  z-index: 9999;
 }
 #main {
   flex-grow: 1;
