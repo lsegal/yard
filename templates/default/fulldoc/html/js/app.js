@@ -158,7 +158,7 @@ function generateTOC() {
     lastTag = thisTag;
   });
   if (!show) return;
-  html = '<div id="toc"><p class="title"><a class="hide_toc" href="#"><strong>Table of Contents</strong></a> <small>(<a href="#" class="float_toc">left</a>)</small></p></div>';
+  html = '<div id="toc"><p class="title hide_toc"><a href="#"><strong>Table of Contents</strong></a></p></div>';
   $('#content').prepend(html);
   $('#toc').append(_toc);
   $('#toc .hide_toc').toggle(function() {
@@ -169,13 +169,6 @@ function generateTOC() {
     $('#toc .top').slideDown('fast');
     $('#toc').toggleClass('hidden');
     $('#toc .title small').toggle();
-  });
-  $('#toc .float_toc').toggle(function() {
-    $(this).text('float');
-    $('#toc').toggleClass('nofloat');
-  }, function() {
-    $(this).text('left');
-    $('#toc').toggleClass('nofloat');
   });
 }
 
