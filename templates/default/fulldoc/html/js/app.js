@@ -85,22 +85,6 @@ function linkSummaries() {
   });
 }
 
-function keyboardShortcuts() {
-  if (window.top.frames.main) return;
-  $(document).keypress(function(evt) {
-    if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
-    if (typeof evt.target !== "undefined" &&
-        (evt.target.nodeName == "INPUT" ||
-        evt.target.nodeName == "TEXTAREA")) return;
-    switch (evt.charCode) {
-      case 67: case 99:  $('#class_list_link').click(); break;  // 'c'
-      case 77: case 109: $('#method_list_link').click(); break; // 'm'
-      case 70: case 102: $('#file_list_link').click(); break;   // 'f'
-      default: break;
-    }
-  });
-}
-
 function summaryToggle() {
   $('.summary_toggle').click(function(e) {
     e.preventDefault();
@@ -262,7 +246,6 @@ $(document).ready(function() {
   createFullTreeLinks();
   searchFrameButtons();
   linkSummaries();
-  keyboardShortcuts();
   summaryToggle();
   fixOutsideWorldLinks();
   generateTOC();
