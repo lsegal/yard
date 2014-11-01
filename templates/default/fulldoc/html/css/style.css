@@ -24,16 +24,18 @@ body {
   overflow: auto;
 }
 .nav_wrap {
-  width: 100%;
-  max-width: 20%;
   margin: 0;
   padding: 0;
+  width: 20%;
   height: 100%;
   position: relative;
   display: inline-block;
   display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex: 1 0;
 }
 #resizer {
   position: absolute;
@@ -45,9 +47,9 @@ body {
   z-index: 9999;
 }
 #main {
-  flex-grow: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex: 1;
+  flex: 5 1;
+  -webkit-flex: 5 1;
+  -ms-flex: 5 1;
   outline: none;
   position: relative;
   display: inline-block;

@@ -186,11 +186,12 @@ function navResizeFn(e) {
   }
 
   sessionStorage.navWidth = e.pageX.toString();
-  $('.nav_wrap').css('max-width', e.pageX);
+  $('.nav_wrap').css('width', e.pageX);
+  $('.nav_wrap').css('-ms-flex', 'inherit');
 }
 
 function navResizeFnStop() {
-  window.removeEventListener('mousemove', navResizeFn, false);
+  $(window).unbind('mousemove', navResizeFn);
   window.removeEventListener('message', navMessageFn, false);
 }
 
@@ -202,7 +203,7 @@ function navMessageFn(e) {
 function navResizer() {
   $('#resizer').mousedown(function(e) {
     e.preventDefault();
-    window.addEventListener('mousemove', navResizeFn, false);
+    $(window).mousemove(navResizeFn);
     window.addEventListener('message', navMessageFn, false);
   });
   $(window).mouseup(navResizeFnStop);
