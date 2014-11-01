@@ -73,13 +73,14 @@ function searchFrameButtons() {
 function toggleSearchFrame(id, link) {
   var frame = $('#search_frame');
   $('#search a').removeClass('active').addClass('inactive');
-  if (frame.attr('src') == link && frame.css('display') != "none") {
+  if (frame.attr('src') === link && frame.css('display') !== "none") {
     frame.slideUp(100);
     $('#search a').removeClass('active inactive');
   }
   else {
     $(id).addClass('active').removeClass('inactive');
-    frame.attr('src', link).slideDown(100);
+    if (frame.attr('src') !== link) frame.attr('src', link);
+    frame.slideDown(100);
   }
 }
 
