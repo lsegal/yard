@@ -213,7 +213,7 @@ function navResizer() {
   });
   $(window).mouseup(navResizeFnStop);
 
-  if (sessionStorage.navWidth) {
+  if (sessionStorage && sessionStorage.navWidth) {
     navResizeFn({which: 1, pageX: parseInt(sessionStorage.navWidth, 10)});
   }
 }
