@@ -1,3 +1,5 @@
+(function() {
+
 var inSearch = null;
 var searchIndex = 0;
 var searchCache = [];
@@ -209,9 +211,13 @@ function navResizer() {
 
 window.addEventListener("message", windowEvents, false);
 
-$(navResizer);
-$(navReady);
-$(escapeShortcut);
-$(fullListSearch);
-$(linkList);
-$(collapse);
+$(document).ready(function() {
+  navResizer();
+  navReady();
+  escapeShortcut();
+  fullListSearch();
+  linkList();
+  collapse();
+});
+
+})();
