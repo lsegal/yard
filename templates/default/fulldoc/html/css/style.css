@@ -92,7 +92,7 @@ h2 small a {
 .clear { clear: both; }
 .inline { display: inline; }
 .inline p:first-child { display: inline; }
-.docstring, .tags { font-size: 15px; line-height: 1.5145em; }
+.docstring, .tags, #filecontents { font-size: 15px; line-height: 1.5145em; }
 .docstring p > code, .docstring p > tt, .tags p > code, .tags p > tt {
   color: #c7254e; background: #f9f2f4; padding: 2px 4px; font-size: 1em;
   border-radius: 4px;
