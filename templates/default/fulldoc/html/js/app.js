@@ -120,12 +120,6 @@ function summaryToggle() {
   }
 }
 
-function fixOutsideWorldLinks() {
-  $('a').each(function() {
-    if (window.location.host != this.host) this.target = '_parent';
-  });
-}
-
 function generateTOC() {
   if ($('#filecontents').length === 0) return;
   var _toc = $('<ol class="top"></ol>');
@@ -247,7 +241,6 @@ $(document).ready(function() {
   searchFrameButtons();
   linkSummaries();
   summaryToggle();
-  fixOutsideWorldLinks();
   generateTOC();
   mainFocus();
 });
