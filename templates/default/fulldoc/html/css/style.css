@@ -143,6 +143,7 @@ h2 small a {
 .note.todo { background: #ffffc5; border-color: #ececaa; }
 .note.returns_void { background: #efefef; }
 .note.deprecated { background: #ffe5e5; border-color: #e9dada; }
+.note.title.deprecated { background: #ffe5e5; border-color: #e9dada; }
 .note.private { background: #ffffc5; border-color: #ececaa; }
 .note.title { padding: 3px 6px; font-size: 0.9em; font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; display: inline; }
 .summary_signature + .note.title { margin-left: 7px; }
