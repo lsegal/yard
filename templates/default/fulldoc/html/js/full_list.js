@@ -92,7 +92,7 @@ function searchItem() {
       searchIndex++;
     }
   }
-  inSearch = setTimeout('searchItem()', 0);
+  inSearch = setTimeout(searchItem, 0);
 }
 
 function searchDone() {
