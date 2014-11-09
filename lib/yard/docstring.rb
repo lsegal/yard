@@ -207,7 +207,7 @@ module YARD
         when Tags::OverloadTag
           tag_text = "@#{tag.tag_name} #{tag.signature}\n"
           unless tag.docstring.blank?
-            tag_text += "\n" + tag.docstring.all.gsub(/\r?\n/, "\n  ")
+            tag_text += "\n  " + tag.docstring.all.gsub(/\r?\n/, "\n  ")
           end
         when Tags::OptionTag
           tag_text = "@#{tag.tag_name} #{tag.name}"
