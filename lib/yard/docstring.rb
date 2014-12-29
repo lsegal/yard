@@ -172,15 +172,20 @@ module YARD
       resolve_reference
       return @summary if @summary
       stripped = self.gsub(/<.+?>/m, '').gsub(/[\r\n](?![\r\n])/, ' ').strip
-      open_parens = ['{', '(', '[']
-      close_parens = ['}', ')', ']']
       num_parens = 0
       idx = length.times do |index|
         case stripped[index, 1]
-        when ".", "\r", "\n"
+        when "."
           next_char = stripped[index + 1, 1].to_s
-          if num_parens == 0 && next_char =~ /^\s*$/
-            break index - 1
+          break index - 1 if num_parens <= 0 && next_char =~ /^\s*$/
+        when "\r", "\n"
+          next_char = stripped[index + 1, 1].to_s
+          if next_char =~ /^\s*$/
+            if stripped[index - 1, 1] == '.'
+              break index - 2
+            else
+              break index - 1
+            end
           end
         when "{", "(", "["
           num_parens += 1

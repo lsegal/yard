@@ -113,6 +113,13 @@ describe YARD::Docstring do
       Docstring.new("hello... me").summary.should == "hello..."
       Docstring.new("hello.").summary.should == "hello."
     end
+
+    it "should return summary if there is a newline and parentheses count doesn't match" do
+      Docstring.new("Happy method call :-)\n\nCall any time.").summary.should == "Happy method call :-)."
+      Docstring.new("Sad method call :-(\n\nCall any time.").summary.should == "Sad method call :-(."
+      Docstring.new("Hello (World. Forget to close.\n\nNew text").summary.should == "Hello (World. Forget to close."
+      Docstring.new("Hello (World. Forget to close\n\nNew text").summary.should == "Hello (World. Forget to close."
+    end
   end
 
   describe '#ref_tags' do
