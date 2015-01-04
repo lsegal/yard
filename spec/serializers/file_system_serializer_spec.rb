@@ -43,8 +43,7 @@ describe YARD::Serializers::FileSystemSerializer do
       m = CodeObjects::MethodObject.new(nil, 'a')
       s = Serializers::FileSystemSerializer.new
 
-      { :/ => '_2F_i.html',
-        :gsub! => 'gsub_21_i.html',
+      { :gsub! => 'gsub_21_i.html',
         :ask? => 'ask_3F_i.html',
         :=== => '_3D_3D_3D_i.html',
         :+ => '_2B_i.html',
