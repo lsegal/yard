@@ -22,4 +22,7 @@ MyEmptyStruct = Struct.new
 #
 # @attr [String] bar An attr
 # @attr [Number] baz Another attr
-DocstringStruct = Struct.new(:bar, :baz)
+# @!attribute new_syntax
+#   Attribute defined with the new syntax
+#   @return [Symbol] something usefull
+DocstringStruct = Struct.new(:bar, :baz, :new_syntax)

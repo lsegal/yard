@@ -56,6 +56,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
     a1.tag(:return).types.should == ["String"]
     a2.docstring.should == "Another attr"
     a2.tag(:return).types.should == ["Number"]
+    a3 = Registry.at("DocstringStruct#new_syntax")
+    a3.docstring.should == "Attribute defined with the new syntax"
+    a3.tag(:return).types.should == ["Symbol"]
   end
 
   it "should raise undocumentable error in 1.9 parser for Struct.new assignment to non-const" do

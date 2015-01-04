@@ -133,6 +133,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   def create_attributes(klass, members)
     # For each parameter, add reader and writers
     members.each do |member|
+      next if klass.attributes[:instance][member]
       klass.attributes[:instance][member] = SymbolHash[:read => nil, :write => nil]
       create_writer klass, member if create_member_method?(klass, member, :write)
       create_reader klass, member if create_member_method?(klass, member, :read)
