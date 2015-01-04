@@ -1,3 +1,12 @@
+# Enables Travis to use their new container-based infrastructure
+sudo: false
+
+# Build for Ruby
+language: ruby
+
+# Enables caching for bundler
+cache: bundler
+
 # Passes arguments to bundle install (http://gembundler.com/man/bundle-install.1.html)
 # bundler_args:
 
