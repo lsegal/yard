@@ -424,11 +424,11 @@ module YARD
       # @example
       #   # @overload set(key, value)
       #   #   Sets a value on key
-      #   #   @param [Symbol] key describe key param
-      #   #   @param [Object] value describe value param
+      #   #   @param key [Symbol] describe key param
+      #   #   @param value [Object] describe value param
       #   # @overload set(value)
       #   #   Sets a value on the default key +:foo+
-      #   #   @param [Object] value describe value param
+      #   #   @param value [Object] describe value param
       #   def set(*args) end
       # @yard.signature method_signature(parameters)
       #   Indented docstring for overload method
@@ -438,7 +438,7 @@ module YARD
       # and optional description.
       #
       # @example
-      #   # @param [String] the URL of the page to download
+      #   # @param url [String] the URL of the page to download
       #   def load_page(url) end
       define_tag "Parameters",         :param,       :with_types_and_name
 
