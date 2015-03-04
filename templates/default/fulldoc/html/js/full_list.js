@@ -1,12 +1,12 @@
 (function() {
 
 var $clicked = $(null);
+var searchTimeout = null;
 var searchCache = [];
 var caseSensitiveMatch = false;
 var ignoreKeyCodeMin = 8;
 var ignoreKeyCodeMax = 46;
 var commandKey = 91;
-var $items = $('#full_list > li');
 
 RegExp.escape = function(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -29,6 +29,11 @@ function navResizer() {
     window.parent.postMessage({action: 'mouseup'}, '*');
   });
   window.parent.postMessage("navReady", "*");
+}
+
+function clearSearchTimeout() {
+  clearTimeout(searchTimeout);
+  searchTimeout = null;
 }
 
 function enableLinks() {
@@ -93,25 +98,27 @@ function ignoredKeyPress(event) {
 }
 
 function clearSearch() {
+  clearSearchTimeout();
   $('#full_list .found').removeClass('found').each(function() {
     var $link = $(this).find('.object_link a');
     $link.text($link.text());
   });
   $('#full_list, #content').removeClass('insearch');
-  $clicked.parents.removeClass('collapsed');
+  $clicked.parents().removeClass('collapsed');
   highlight();
 }
 
 function performSearch(searchString) {
+  clearSearchTimeout();
   $('#full_list, #content').addClass('insearch');
   $('#noresults').text('').hide();
-  searchItem(searchString);
+  partialSearch(searchString, 0);
 }
 
-function searchItem(searchString) {
-  $items.detach();
+function partialSearch(searchString, offset) {
   var lastRowClass = '';
-  for (var i = 0; i < searchCache.length; i++) {
+  var i = null;
+  for (i = offset; i < Math.min(offset + 50, searchCache.length); i++) {
     var item = searchCache[i];
     var searchName = (searchString.indexOf('::') != -1 ? item.fullName : item.name);
     var matchString = buildMatchString(searchString);
@@ -127,20 +134,24 @@ function searchItem(searchString) {
       item.link.html(item.name.replace(matchRegexp, "<strong>$&</strong>"));
     }
   }
-  searchDone();
+  if(i == searchCache.length) {
+    searchDone();
+  } else {
+    searchTimeout = setTimeout(function() {
+      partialSearch(searchString, i);
+    }, 0);
+  }
 }
 
 function searchDone() {
-  $('#full_list').append($items);
+  searchTimeout = null;
   highlight();
   if ($('#full_list li:visible').size() === 0) {
     $('#noresults').text('No results were found.').hide().fadeIn();
-  }
-  else {
+  } else {
     $('#noresults').text('').hide();
   }
-  // without a short delay, the progress element doesn't render
-  setTimeout(function() { $('#content').removeClass('insearch'); },10);
+  $('#content').removeClass('insearch');
 }
 
 function buildMatchString(searchString, event) {
