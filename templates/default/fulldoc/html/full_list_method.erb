@@ -1,8 +1,10 @@
-<% n = 1 %>
+<% even_odd = 'odd'  %>
 <% @items.each do |item| %>
-  <li class="r<%= n %> <%= item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
-    <%= linkify item, h(item.name(true)) %>
-    <small><%= item.namespace.title %></small>
+  <li class="<%= even_odd %> <%= item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
+    <div class="item">
+      <%= linkify item, h(item.name(true)) %>
+      <small><%= item.namespace.title %></small>
+    </div>
   </li>
-  <% n = n == 2 ? 1 : 2 %>
+  <% even_odd = (even_odd == 'even' ? 'odd' : 'even') %>
 <% end %>
