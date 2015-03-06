@@ -46,6 +46,7 @@ module YARD
     autoload :BUILTIN_MODULES,      __p('code_objects/base')
     autoload :BUILTIN_EXCEPTIONS,   __p('code_objects/base')
     autoload :CONSTANTMATCH,        __p('code_objects/base')
+    autoload :CONSTANTSTART,        __p('code_objects/base')
     autoload :METHODMATCH,          __p('code_objects/base')
     autoload :METHODNAMEMATCH,      __p('code_objects/base')
     autoload :NAMESPACEMATCH,       __p('code_objects/base')

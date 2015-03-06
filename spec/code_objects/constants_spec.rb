@@ -8,6 +8,14 @@ describe YARD::CodeObjects, "CONSTANTMATCH" do
   end
 end
 
+describe YARD::CodeObjects, "CONSTANTSTART" do
+  it "should match a constant" do
+    "Constant"[CodeObjects::CONSTANTSTART].should == "C"
+    "identifier"[CodeObjects::CONSTANTSTART].should be_nil
+    "File.new"[CodeObjects::CONSTANTSTART].should == "F"
+  end
+end
+
 describe YARD::CodeObjects, "NAMESPACEMATCH" do
   it "should match a namespace (multiple constants with ::)" do
     "Constant"[CodeObjects::NAMESPACEMATCH].should == "Constant"
