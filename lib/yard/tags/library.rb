@@ -405,6 +405,8 @@ module YARD
       # Note that a +@param+ tag need not be defined for the options
       # hash itself, though it is useful to do so for completeness.
       #
+      # @note For keyword parameters, use +@param+, not +@option+.
+      #
       # @example
       #   # @param [Hash] opts the options to create a message with.
       #   # @option opts [String] :subject The subject
@@ -434,12 +436,13 @@ module YARD
       #   Indented docstring for overload method
       define_tag "Overloads",          :overload,    OverloadTag
 
-      # Documents a single method parameter with a given name, type
+      # Documents a single method parameter (either regular or keyword) with a given name, type
       # and optional description.
       #
       # @example
       #   # @param url [String] the URL of the page to download
-      #   def load_page(url) end
+      #   # @param directory [String] the name of the directory to save to
+      #   def load_page(url, directory: 'pages') end
       define_tag "Parameters",         :param,       :with_types_and_name
 
       # Declares that the _logical_ visibility of an object is private.
