@@ -242,12 +242,12 @@ module YARD
         if @namespace.root?
           (@imethod ? ISEP : "") + name.to_s
         elsif @origname
-          if @origname =~ /^[A-Z]/
+          if @origname =~ CONSTANTSTART
             @origname
           else
             [namespace.path, @origname].join
           end
-        elsif name.to_s =~ /^[A-Z]/ # const
+        elsif name.to_s =~ CONSTANTSTART
           name.to_s
         else # class meth?
           [namespace.path, name.to_s].join(CSEP)

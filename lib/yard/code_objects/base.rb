@@ -49,6 +49,9 @@ module YARD
     # Regular expression to match constant name
     CONSTANTMATCH = /[A-Z]\w*/
 
+    # Regular expression to match the beginning of a constant
+    CONSTANTSTART = /^[A-Z]/
+
     # Regular expression to match namespaces (const A or complex path A::B)
     NAMESPACEMATCH = /(?:(?:#{NSEPQ}\s*)?#{CONSTANTMATCH})+/
 
