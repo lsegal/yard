@@ -91,7 +91,7 @@ module YARD
     end
 
     # The location where YARD stores user-specific settings
-    CONFIG_DIR = File.expand_path('~/.yard')
+    CONFIG_DIR = File.expand_path('~/.yard') rescue '/tmp/.yard'
 
     # The main configuration YAML file.
     CONFIG_FILE = File.join(CONFIG_DIR, 'config')

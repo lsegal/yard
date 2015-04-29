@@ -7,9 +7,6 @@ module YARD
   # The root path for YARD builtin templates
   TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
 
-  # @deprecated Use {Config::CONFIG_DIR}
-  CONFIG_DIR = File.expand_path('~/.yard')
-
   # An alias to {Parser::SourceParser}'s parsing method
   #
   # @example Parse a glob of files
