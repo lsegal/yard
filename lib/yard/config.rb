@@ -1,3 +1,4 @@
+require 'etc'
 module YARD
   # This class maintains all system-wide configuration for YARD and handles
   # the loading of plugins. To access options call {options}, and to load
@@ -91,7 +92,7 @@ module YARD
     end
 
     # The location where YARD stores user-specific settings
-    CONFIG_DIR = File.expand_path('~/.yard') rescue '/tmp/.yard'
+    CONFIG_DIR = File.expand_path('~/.yard') rescue Etc.getpwuid.dir
 
     # The main configuration YAML file.
     CONFIG_FILE = File.join(CONFIG_DIR, 'config')
