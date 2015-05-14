@@ -12,16 +12,11 @@ cache: bundler
 
 # Specify which ruby versions you wish to run your tests on, each version will be used
 rvm:
-  - 1.8.7
-  - 1.9.3
   - 2.0
   - 2.1
 # - 2.2 - re-enable after https://bugs.ruby-lang.org/issues/10693 is fixed
 #  - jruby      # see http://jira.codehaus.org/browse/JRUBY-7007
 #  - ruby-head  # RedCloth does not compile on head
-#  - 1.8.6      # Does not work on travis-ci
-#  - 1.9.1      # Does not work on travis-ci
-#  - 1.9.2      # Does not work on travis-ci ..really?
 #  - ree        # Does not work on travis-ci ..really?
 
 # Define how to run your tests (defaults to `bundle exec rake` or `rake` depending on whether you have a `Gemfile`)
