@@ -1,7 +1,9 @@
-<% n = 1 %>
+<% even_odd = 'odd'  %>
 <% collect_tags.each do |tag| %>
-  <li class="r<%= n %> <%= tag.object.has_tag?(:deprecated) ? 'deprecated' : '' %>">
-    <span class="object_link"><%= tag_link(tag) %></span>
+  <li class="<%= even_odd %> <%= tag.object.has_tag?(:deprecated) ? 'deprecated' : '' %>">
+    <div class="item">
+      <span class="object_link"><%= tag_link(tag) %></span>
+    </div>
   </li>
-  <% n = n == 2 ? 1 : 2 %>
+  <% even_odd = (even_odd == 'even' ? 'odd' : 'even') %>
 <% end %>
