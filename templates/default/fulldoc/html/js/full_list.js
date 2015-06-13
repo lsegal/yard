@@ -39,12 +39,17 @@ function clearSearchTimeout() {
 function enableLinks() {
   // load the target page in the parent window
   $('#full_list li').on('click', function(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    $clicked.removeClass('clicked');
+    $('#full_list li').removeClass('clicked');
     $clicked = $(this);
     $clicked.addClass('clicked');
-    window.top.location = $clicked.find('> .item .object_link a').attr('href');
+
+    if (evt.target.tagName === 'A') return true;
+
+    var elem = $clicked.find('> .item .object_link a')[0];
+    var e = evt.originalEvent;
+    var newEvent = new MouseEvent(evt.originalEvent.type);
+    newEvent.initMouseEvent(e.type, e.canBubble, e.cancelable, e.view, e.detail, e.screenX, e.screenY, e.clientX, e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.button, e.relatedTarget);
+    elem.dispatchEvent(newEvent);
   });
 }
 
@@ -53,7 +58,7 @@ function enableToggles() {
   $('#full_list a.toggle').on('click', function(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    $(this).parent().parent().toggleClass('collapsed')
+    $(this).parent().parent().toggleClass('collapsed');
     highlight();
   });
 }
