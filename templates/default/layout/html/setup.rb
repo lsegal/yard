@@ -44,6 +44,22 @@ def index
   erb(:index)
 end
 
+def layout
+  @nav_url = url_for_list(!@file || options.index ? 'class' : 'file')
+
+  if !object || object.is_a?(String)
+    @path = nil
+  elsif @file
+    @path = @file.path
+  elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
+    @path = object.parent.path
+  else
+    @path = object.path
+  end
+
+  erb(:layout)
+end
+
 def diskfile
   @file.attributes[:markup] ||= markup_for_file('', @file.filename)
   data = htmlify(@file.contents, @file.attributes[:markup])

@@ -8,9 +8,13 @@ module YARD
         def run
           if path.empty?
             if options.readme
-              url = url_for_file(options.readme)
-              self.status, self.headers, self.body = *router.send(:route, url)
-              cache(body.first)
+              filename = options.readme.filename
+              opts = adapter.options.merge(
+                :index => true, :library => library,
+                :path => filename.sub(%r{^#{library.source_path.to_s}/}, ''))
+              self.status, self.headers, self.body =
+                *DisplayFileCommand.new(opts).call(request)
+              cache(self.body)
               return
             else
               self.path = 'index'

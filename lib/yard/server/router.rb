@@ -124,7 +124,7 @@ module YARD
         case paths.first
         when "frames"
           paths.shift
-          cmd = FramesCommand
+          cmd = DisplayObjectCommand
         when "file"
           paths.shift
           cmd = DisplayFileCommand

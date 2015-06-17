@@ -1,5 +1,4 @@
 <script type="text/javascript" charset="utf-8">
-  hasFrames = window.top.frames.main ? true : false;
+  pathId = <%= @path ? @path.inspect : 'null' %>;
   relpath = '<%= u = url_for(''); u + (u != '' ? '/' : '') %>';
-  framesUrl = "<%= url_for_frameset %>#!<%= url_for(@file || @object, nil, false) %>";
 </script>

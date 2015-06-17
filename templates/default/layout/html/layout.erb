@@ -1,20 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
   <head>
     <%= erb(:headers) %>
   </head>
   <body>
-    <div id="header">
-      <%= erb(:breadcrumb) %>
-      <%= erb(:search) %>
-      <div class="clear"></div>
+    <div class="nav_wrap">
+      <iframe id="nav" src="<%= @nav_url %>"></iframe>
+      <div id="resizer"></div>
     </div>
 
-    <iframe id="search_frame"></iframe>
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <%= erb(:breadcrumb) %>
+        <%= erb(:search) %>
+        <div class="clear"></div>
+      </div>
 
-    <div id="content"><%= yieldall %></div>
+      <iframe id="search_frame" src="<%= @nav_url %>"></iframe>
 
-    <%= erb(:footer) %>
+      <div id="content"><%= yieldall %></div>
+
+      <%= erb(:footer) %>
+    </div>
   </body>
 </html>

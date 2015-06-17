@@ -508,21 +508,22 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
   describe '#signature' do
     before do
+      arrow = "&#x21d2;"
       @results = {
-        :regular => "- (Object) <strong>foo</strong>",
-        :default_return => "- (Hello) <strong>foo</strong>",
-        :no_default_return => "- <strong>foo</strong>",
-        :private_class => "+ (Object) <strong>foo</strong>  <span class=\"extras\">(private)</span>",
-        :single => "- (String) <strong>foo</strong>",
-        :two_types => "- (String, Symbol) <strong>foo</strong>",
-        :two_types_multitag => "- (String, Symbol) <strong>foo</strong>",
-        :type_nil => "- (Type<sup>?</sup>) <strong>foo</strong>",
-        :type_array => "- (Type<sup>+</sup>) <strong>foo</strong>",
-        :multitype => "- (Type, ...) <strong>foo</strong>",
-        :void => "- (void) <strong>foo</strong>",
-        :hide_void => "- <strong>foo</strong>",
-        :block => "- (Object) <strong>foo</strong> {|a, b, c| ... }",
-        :empty_overload => '- (String) <strong>foobar</strong>'
+        :regular => "#<strong>foo</strong> #{arrow} Object",
+        :default_return => "#<strong>foo</strong> #{arrow} Hello",
+        :no_default_return => "#<strong>foo</strong>",
+        :private_class => ".<strong>foo</strong> #{arrow} Object <span class=\"extras\">(private)</span>",
+        :single => "#<strong>foo</strong> #{arrow} String",
+        :two_types => "#<strong>foo</strong> #{arrow} String, Symbol",
+        :two_types_multitag => "#<strong>foo</strong> #{arrow} String, Symbol",
+        :type_nil => "#<strong>foo</strong> #{arrow} Type<sup>?</sup>",
+        :type_array => "#<strong>foo</strong> #{arrow} Type<sup>+</sup>",
+        :multitype => "#<strong>foo</strong> #{arrow} Type, ...",
+        :void => "#<strong>foo</strong> #{arrow} void",
+        :hide_void => "#<strong>foo</strong>",
+        :block => "#<strong>foo</strong> {|a, b, c| ... } #{arrow} Object",
+        :empty_overload => "#<strong>foobar</strong> #{arrow} String"
       }
     end
 
@@ -543,7 +544,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       stub!(:serializer).and_return(serializer)
       stub!(:object).and_return(Registry.at('Foo'))
       signature(Registry.at('Foo#foo').tag(:overload), true).should ==
-        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">- <strong>bar</strong>(a, b, c) </a>"
+        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">#<strong>bar</strong>(a, b, c)  </a>"
     end
   end
 
