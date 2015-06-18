@@ -1,4 +1,3 @@
-require 'etc'
 module YARD
   # This class maintains all system-wide configuration for YARD and handles
   # the loading of plugins. To access options call {options}, and to load
@@ -92,7 +91,19 @@ module YARD
     end
 
     # The location where YARD stores user-specific settings
-    CONFIG_DIR = File.expand_path('~/.yard') rescue Etc.getpwuid.dir
+
+    HOME_DIR = begin
+                 Dir.home
+               rescue ArgumentError => e
+                 require 'tmpdir'
+                 dir = Dir.tmpdir
+                 STDERR.puts(e)
+                 STDERR.puts("Warning! It appears something is unusual with your HOME environmental variable.")
+                 STDERR.puts("Please consider setting HOME to an absolute path.")
+                 STDERR.puts("Falling back to temp directory '#{dir}' for HOME.")
+                 dir
+               end
+    CONFIG_DIR = File.join(HOME_DIR, '.yard')
 
     # The main configuration YAML file.
     CONFIG_FILE = File.join(CONFIG_DIR, 'config')
