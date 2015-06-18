@@ -90,10 +90,9 @@ module YARD
       attr_accessor :options
     end
 
-    # The location where YARD stores user-specific settings
 
     HOME_DIR = begin
-                 Dir.home
+                 File.expand_path('~')
                rescue ArgumentError => e
                  require 'tmpdir'
                  dir = Dir.tmpdir
@@ -103,6 +102,7 @@ module YARD
                  STDERR.puts("Falling back to temp directory '#{dir}' for HOME.")
                  dir
                end
+    # The location where YARD stores user-specific settings
     CONFIG_DIR = File.join(HOME_DIR, '.yard')
 
     # The main configuration YAML file.
