@@ -13,7 +13,7 @@ end
 
 desc "Installs the gem"
 task :install => :gem do
-  sh "gem install yard-#{YARD::VERSION}.gem --no-rdoc --no-ri"
+  sh "gem install yard-#{YARD::VERSION}.gem --no-document"
 end
 
 begin
