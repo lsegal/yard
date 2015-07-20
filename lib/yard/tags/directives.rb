@@ -479,6 +479,7 @@ module YARD
             writer.source = object.source
             writer.group = object.group
             writer.parameters = [['value', nil]]
+            writer.docstring = object.base_docstring
             handler.register_file_info(writer)
           end
           attrs[clean_name][:write] = writer
