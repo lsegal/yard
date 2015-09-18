@@ -236,4 +236,29 @@ describe YARD::Handlers::C::MethodHandler do
     Registry.at('Foo#bar').should_not be_nil
     Registry.at('Kernel#baz').should_not be_nil
   end
+
+  it "should extract regular method parameters from C function signatures" do
+    parse <<-eof
+      static VALUE noargs_func(VALUE self) { return Qnil; }
+      static VALUE twoargs_func(VALUE self, VALUE a, VALUE b) { return a; }
+      void Init_Foo() {
+        mFoo = rb_define_module("Foo");
+        rb_define_method(mFoo, "noargs", noargs_func, 0);
+        rb_define_method(mFoo, "twoargs", twoargs_func, 2);
+      }
+    eof
+    Registry.at('Foo#noargs').parameters.should be_empty
+    Registry.at('Foo#twoargs').parameters.should == [['a', nil], ['b', nil]]
+  end
+
+  it "should extract varargs method parameters from C function signatures" do
+    parse <<-eof
+      static VALUE varargs_func(int argc, VALUE *argv, VALUE self) { return self; }
+      void Init_Foo() {
+        mFoo = rb_define_module("Foo");
+        rb_define_method(mFoo, "varargs", varargs_func, -1);
+      }
+    eof
+    Registry.at('Foo#varargs').parameters.should == [['*args', nil]]
+  end
 end
