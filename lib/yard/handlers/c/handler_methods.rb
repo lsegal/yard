@@ -158,10 +158,15 @@ module YARD
           # so look in overrides
           override_comments.each do |name, override_comment|
             next unless override_comment.file == file
-            name = name.gsub(/::([^:]+?)\Z/, '.\1')
-            just_method_name = name.gsub(/\A.+(#|::|\.)/, '')
-            just_method_name = 'initialize' if just_method_name == 'new'
-            if object.path == name || object.name.to_s == just_method_name
+            name = name.gsub(/::([^:\.#]+?)\Z/, '.\1')
+
+            path = if name =~ /\.|#/ # explicit namespace in override comment
+              object.path
+            else
+              object.name.to_s
+            end
+
+            if path == name || path == name.sub(/new$/, 'initialize') || path == name.sub('.', '#')
               register_docstring(object, override_comment.source, override_comment)
               return
             end

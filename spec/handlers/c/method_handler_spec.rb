@@ -268,4 +268,42 @@ describe YARD::Handlers::C::MethodHandler do
     Registry.at('Foo#varargs').parameters.should == [['*args', nil]]
     Registry.at('Foo#varargs2').parameters.should == [['*args', nil]]
   end
+
+  it "should not be too strict or too loose about matching override comments to methods" do
+    parse <<-eof
+      /* Document-method: Foo::foo
+       * Document-method: new
+       * Document-method: Foo::Bar#baz
+       * Foo bar!
+       */
+
+      void Init_Foo() {
+        mFoo = rb_define_module("Foo");
+        mBar = rb_define_module_under(mFoo, "Bar");
+
+        rb_define_method(mFoo, "foo", foo, 0);
+        rb_define_singleton_method(mFoo, "foo", foo, 0);
+        rb_define_method(mBar, "foo", foo, 0);
+        rb_define_singleton_method(mBar, "foo", foo, 0);
+
+        rb_define_method(mFoo, "initialize", foo, 0);
+        rb_define_method(mBar, "initialize", foo, 0);
+
+        rb_define_method(mFoo, "baz", foo, 0);
+        rb_define_singleton_method(mFoo, "baz", foo, 0);
+        rb_define_method(mBar, "baz", foo, 0);
+        rb_define_singleton_method(mBar, "baz", foo, 0);
+      }
+    eof
+    Registry.at('Foo#foo').docstring.should == 'Foo bar!'
+    Registry.at('Foo.foo').docstring.should == 'Foo bar!'
+    Registry.at('Foo::Bar#foo').docstring.should be_empty
+    Registry.at('Foo::Bar.foo').docstring.should be_empty
+    Registry.at('Foo#initialize').docstring.should == 'Foo bar!'
+    Registry.at('Foo::Bar#initialize').docstring.should == 'Foo bar!'
+    Registry.at('Foo#baz').docstring.should be_empty
+    Registry.at('Foo.baz').docstring.should be_empty
+    Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
+    Registry.at('Foo::Bar.baz').docstring.should be_empty
+  end
 end
