@@ -231,7 +231,6 @@ module YARD
         meth = meth.to_s
         send_name = "parse_tag" + (meth.empty? ? "" : "_" + meth)
         if @factory.respond_to?(send_name)
-          arity = @factory.method(send_name).arity
           @factory.send(send_name, tag_name, text)
         else
           raise NoMethodError, "Factory #{@factory.class_name} does not implement factory method :#{meth}."
