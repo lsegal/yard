@@ -254,11 +254,18 @@ describe YARD::Handlers::C::MethodHandler do
   it "should extract varargs method parameters from C function signatures" do
     parse <<-eof
       static VALUE varargs_func(int argc, VALUE *argv, VALUE self) { return self; }
+      /* let's see if parser is robust in the face of strange spacing */
+      static VALUE varargs_func2(	int 	argc ,	VALUE
+	* 	 argv  ,VALUE  self	)
+
+      {return self;}
       void Init_Foo() {
         mFoo = rb_define_module("Foo");
         rb_define_method(mFoo, "varargs", varargs_func, -1);
+        rb_define_method(	mFoo	,"varargs2",varargs_func2		,-1);
       }
     eof
     Registry.at('Foo#varargs').parameters.should == [['*args', nil]]
+    Registry.at('Foo#varargs2').parameters.should == [['*args', nil]]
   end
 end

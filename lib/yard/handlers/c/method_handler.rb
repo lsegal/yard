@@ -6,9 +6,9 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
                     module_function  |
                     private_method
                  )
-                 \s*\(\s*([\w\.]+),
-                   \s*"([^"]+)",
-                   \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
+                 \s*\(\s*([\w\.]+)\s*,
+                   \s*"([^"]+)"\s*,
+                   \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?\s*,
                    \s*(-?\w+)\s*\)}xm
   MATCH2 = %r{rb_define_global_function\s*\(
                 \s*"([^"]+)",
