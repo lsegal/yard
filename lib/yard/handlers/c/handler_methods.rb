@@ -147,6 +147,7 @@ module YARD
           if src_stmt = symbols[symbol]
             register_file_info(object, src_stmt.file, src_stmt.line, true)
             register_source(object, src_stmt)
+            record_parameters(object, symbol, src_stmt)
             unless src_stmt.comments.nil? || src_stmt.comments.source.empty?
               register_docstring(object, src_stmt.comments.source, src_stmt)
               return # found docstring
@@ -169,6 +170,20 @@ module YARD
           # use any comments on this statement as a last resort
           if !in_file && statement.comments && statement.comments.source =~ /\S/
             register_docstring(object, statement.comments.source, statement)
+          end
+        end
+
+        def record_parameters(object, symbol, src)
+          # use regex to extract comma-delimited list of parameters from cfunc definition
+          if src.source =~ /VALUE\s+#{symbol}\(([^)]*)\)\s*\{/m
+            params = $~[1].split(/\s*,\s*/)
+            # cfunc for a "varargs" method has params "int argc, VALUE *argv"
+            if params[0] =~ /int\s+argc/ && params[1] =~ /VALUE\s*\*\s*argv/
+              object.parameters = [['*args', nil]]
+            else
+              # the first cfunc argument is the 'self' argument, we don't need that
+              object.parameters = params.drop(1).map { |s| [s[/VALUE\s+(\S+)/, 1], nil] }
+            end
           end
         end
       end
