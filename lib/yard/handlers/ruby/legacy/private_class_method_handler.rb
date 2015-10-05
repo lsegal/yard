@@ -15,7 +15,7 @@ class YARD::Handlers::Ruby::Legacy::PrivateClassMethodHandler < YARD::Handlers::
     method = Proxy.new(namespace, name)
     ensure_loaded!(method)
     method.visibility = :private
-  rescue NamespaceMissingError
+  rescue YARD::Handlers::NamespaceMissingError
     raise UndocumentableError, "private visibility set on unrecognized method: #{name}"
   end
 end
