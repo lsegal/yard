@@ -40,6 +40,27 @@ module YARD::Templates::Helpers
 
     # @group Linking Objects and URLs
 
+    # Resolves any text in the form of +{Name}+ to the object specified by
+    # Name. Also supports link titles in the form +{Name title}+.
+    #
+    # @example Linking to an instance method
+    #   resolve_links("{MyClass#method}") # => "MyClass#method"
+    # @example Linking to a class with a title
+    #   resolve_links("{A::B::C the C class}") # => "the c class"
+    # @param [String] text the text to resolve links in
+    # @return [String] Text with resolved references
+    def resolve_links(text)
+      text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W<]|.+<\/|$)/m) do |str|
+        escape, name, title, match = $1, $2, $3, $&
+
+        next(match[1..-1]) if escape
+
+        next(match) if name[0,1] == '|'
+
+        linkify(name, title)
+      end
+    end
+
     # Links objects or URLs. This method will delegate to the correct +link_+
     # method depending on the arguments passed in.
     #

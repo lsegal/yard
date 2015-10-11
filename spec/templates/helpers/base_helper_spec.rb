@@ -123,6 +123,62 @@ describe YARD::Templates::Helpers::BaseHelper do
     end
   end
 
+  describe '#resolve_links' do
+    it "should escape {} syntax with backslash (\\{foo bar})" do
+      input  = '\{foo bar} \{XYZ} \{file:FOO} $\{N-M}'
+      output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
+      resolve_links(input).should == output
+    end
+
+    it "should escape {} syntax with ! (!{foo bar})" do
+      input  = '!{foo bar} !{XYZ} !{file:FOO} $!{N-M}'
+      output = '{foo bar} {XYZ} {file:FOO} ${N-M}'
+      resolve_links(input).should == output
+    end
+
+    it "should link static files with file: prefix" do
+      stub!(:serializer).and_return Serializers::FileSystemSerializer.new
+      stub!(:object).and_return Registry.root
+
+      resolve_links("{file:TEST.txt#abc}").should == "TEST.txt"
+
+      resolve_links("{file:TEST.txt title}").should == "TEST.txt"
+    end
+
+    it "should create regular links with http:// or https:// prefixes" do
+      resolve_links("{http://example.com}").should == "http://example.com"
+      resolve_links("{http://example.com title}").should == "http://example.com"
+    end
+
+    it "should create mailto links with mailto: prefixes" do
+      resolve_links('{mailto:joanna@example.com}').should == 'mailto:joanna@example.com'
+      resolve_links('{mailto:steve@example.com Steve}').should == 'mailto:steve@example.com'
+    end
+
+    it "should ignore {links} that begin with |...|" do
+      resolve_links("{|x|x == 1}").should == "{|x|x == 1}"
+    end
+
+    it "should gracefully ignore {} in links" do
+      should_receive(:linkify).with('Foo', 'Foo').and_return('FOO')
+      resolve_links("{} {} {Foo Foo}").should == '{} {} FOO'
+    end
+
+    it "should resolve {Name}" do
+      should_receive(:link_file).with('TEST', nil, nil).and_return('')
+      resolve_links("{file:TEST}")
+    end
+
+    it "should resolve ({Name})" do
+      should_receive(:link_file).with('TEST', nil, nil).and_return('')
+      resolve_links("({file:TEST})")
+    end
+
+    it "should resolve link with newline in title-part" do
+      resolve_links("{http://example.com foo\nbar}").should == "http://example.com"
+    end
+  end
+
   describe '#format_types' do
     it "should return the list of types separated by commas surrounded by brackets" do
       format_types(['a', 'b', 'c']).should == '(a, b, c)'
