@@ -447,7 +447,7 @@ li.r2 { background: #fafafa; }
   overflow-x: auto;
   line-height: 1.2em;
 }
-pre.code { color: #000; }
+pre.code { color: #000; tab-size: 2; }
 pre.code .info.file { color: #555; }
 pre.code .val { color: #036A07; }
 pre.code .tstring_content,
