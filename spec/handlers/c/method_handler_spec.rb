@@ -305,6 +305,7 @@ describe YARD::Handlers::C::MethodHandler do
     Registry.at('Foo.baz').docstring.should be_empty
     Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
     Registry.at('Foo::Bar.baz').docstring.should be_empty
+  end
 
   it "should recognize core Ruby classes and modules provided by ruby.h" do
     parse_init <<-eof
