@@ -305,5 +305,19 @@ describe YARD::Handlers::C::MethodHandler do
     Registry.at('Foo.baz').docstring.should be_empty
     Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
     Registry.at('Foo::Bar.baz').docstring.should be_empty
+
+  it "should recognize core Ruby classes and modules provided by ruby.h" do
+    parse_init <<-eof
+      rb_define_method(rb_cFixnum, "popcount", fix_popcount, 0);
+      rb_define_private_method(rb_mKernel, "pp", obj_pp, 0);
+      rb_define_method(rb_mEnumerable, "to_hash", enum_to_hash, 0);
+    eof
+    Registry.at('Fixnum').type.should == :class
+    Registry.at('Fixnum#popcount').type.should == :method
+    Registry.at('Object').type.should == :class
+    # Methods defined on Kernel are treated as if they were defined on Object
+    Registry.at('Object#pp').type.should == :method
+    Registry.at('Enumerable').type.should == :module
+    Registry.at('Enumerable#to_hash').type.should == :method
   end
 end

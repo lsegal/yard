@@ -51,6 +51,16 @@ module YARD
           end
 
           namespace = namespace_for_variable(var_name)
+
+          # Is this method being defined on a core Ruby class or module?
+          if namespace.is_a?(Proxy)
+            if var_name =~ /^rb_c(\w+)/ && YARD::CodeObjects::BUILTIN_CLASSES.include?($1)
+              namespace = namespaces[var_name] = YARD::CodeObjects::ClassObject.new(:root, $1)
+            elsif var_name =~ /^rb_m(\w+)/ && YARD::CodeObjects::BUILTIN_MODULES.include?($1)
+              namespace = namespaces[var_name] = YARD::CodeObjects::ModuleObject.new(:root, $1)
+            end
+          end
+
           return if namespace.nil? # XXX: raise UndocumentableError might be too noisy.
           register MethodObject.new(namespace, name, scope) do |obj|
             register_visibility(obj, visibility)
