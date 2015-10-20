@@ -30,15 +30,15 @@ describe YARD::Templates::Engine.template(:default, :docstring) do
     eof
   end
 
-  it "should render html format correctly" do
+  it "renders html format correctly" do
     html_equals(Registry.at('A').format(html_options), :class001)
   end
 
-  it "should render text format correctly" do
+  it "renders text format correctly" do
     text_equals(Registry.at('A').format, :class001)
   end
 
-  it "should hide private constructors" do
+  it "hides private constructors" do
     html_equals(Registry.at('D').format(html_options(:verifier => Verifier.new("!@private"))), :class002)
   end
 end

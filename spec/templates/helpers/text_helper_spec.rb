@@ -5,7 +5,7 @@ describe YARD::Templates::Helpers::TextHelper do
   include YARD::Templates::Helpers::TextHelper
   include YARD::Templates::Helpers::MethodHelper
 
-  describe '#signature' do
+  describe "#signature" do
     before do
       @results = {
         :regular => "root.foo -> Object",
@@ -30,15 +30,15 @@ describe YARD::Templates::Helpers::TextHelper do
     it_should_behave_like "signature"
   end
 
-  describe '#align_right' do
-    it "should align text right" do
+  describe "#align_right" do
+    it "aligns text right" do
       text = "Method: #some_method (SomeClass)"
-      align_right(text).should == ' ' * 40 + text
+      expect(align_right(text)).to eq ' ' * 40 + text
     end
 
-    it "should truncate text that is longer than allowed width" do
+    it "truncates text that is longer than allowed width" do
       text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
-      align_right(text).should == ' ' + text[0,68] + '...'
+      expect(align_right(text)).to eq ' ' + text[0,68] + '...'
     end
   end
 end
