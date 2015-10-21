@@ -3,30 +3,30 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe YARD::CodeObjects::NamespaceObject do
   before { Registry.clear }
 
-  describe '#child' do
-    it "should return the object matching the name passed in if argument is a Symbol" do
+  describe "#child" do
+    it "returns the object matching the name passed in if argument is a Symbol" do
       obj = NamespaceObject.new(nil, :YARD)
       other = NamespaceObject.new(obj, :Other)
-      obj.child(:Other).should == other
-      obj.child('Other').should == other
+      expect(obj.child(:Other)).to eq other
+      expect(obj.child('Other')).to eq other
     end
 
-    it "should look for attributes matching the object if the argument is a Hash" do
+    it "looks for attributes matching the object if the argument is a Hash" do
       obj = NamespaceObject.new(nil, :YARD)
       NamespaceObject.new(obj, :NotOther)
       other = NamespaceObject.new(obj, :Other)
       other.somevalue = 2
-      obj.child(:somevalue => 2).should == other
+      expect(obj.child(:somevalue => 2)).to eq other
     end
   end
 
-  describe '#meths' do
-    it "should return #meths even if parent is a Proxy" do
+  describe "#meths" do
+    it "returns #meths even if parent is a Proxy" do
       obj = NamespaceObject.new(P(:String), :YARD)
-      obj.meths.should be_empty
+      expect(obj.meths).to be_empty
     end
 
-    it "should not list included methods that are already defined in the namespace using #meths" do
+    it "does not list included methods that are already defined in the namespace using #meths" do
       a = ModuleObject.new(nil, :Mod1)
       ameth = MethodObject.new(a, :testing)
       b = ModuleObject.new(nil, :Mod2)
@@ -38,33 +38,33 @@ describe YARD::CodeObjects::NamespaceObject do
       c.class_mixins << b
 
       meths = c.meths
-      meths.should include(bmeth)
-      meths.should include(cmeth)
-      meths.should include(cmeth2)
-      meths.should_not include(ameth)
+      expect(meths).to include(bmeth)
+      expect(meths).to include(cmeth)
+      expect(meths).to include(cmeth2)
+      expect(meths).not_to include(ameth)
 
       meths = c.included_meths
-      meths.should include(bmeth)
-      meths.should_not include(ameth)
-      meths.should_not include(cmeth)
-      meths.should_not include(cmeth2)
+      expect(meths).to include(bmeth)
+      expect(meths).not_to include(ameth)
+      expect(meths).not_to include(cmeth)
+      expect(meths).not_to include(cmeth2)
     end
   end
 
-  describe '#included_meths' do
-    it "should list methods mixed into the class scope as class methods" do
+  describe "#included_meths" do
+    it "lists methods mixed into the class scope as class methods" do
       b = ModuleObject.new(nil, :Mod2)
       bmeth = MethodObject.new(b, :foo)
       bmeth2 = MethodObject.new(b, :foo2)
       c = NamespaceObject.new(nil, :YARD)
       c.class_mixins << b
 
-      [bmeth, bmeth2].each {|o| o.scope.should == :instance }
+      [bmeth, bmeth2].each { |o| expect(o.scope).to eq :instance }
       meths = c.included_meths(:scope => :class)
-      meths.each {|o| o.scope.should == :class }
+      meths.each { |o| expect(o.scope).to eq :class }
     end
 
-    it "should not list methods overridden by another included module" do
+    it "does not list methods overridden by another included module" do
       a = ModuleObject.new(nil, :Mod)
       ameth = MethodObject.new(a, :testing)
       b = ModuleObject.new(nil, :Mod2)
@@ -76,38 +76,38 @@ describe YARD::CodeObjects::NamespaceObject do
       c.class_mixins.unshift a
 
       meths = c.included_meths(:scope => :instance)
-      meths.should_not include(ameth)
-      meths.should include(bmeth)
+      expect(meths).not_to include(ameth)
+      expect(meths).to include(bmeth)
 
       meths = c.included_meths(:scope => :class)
-      meths.should include(ameth)
-      meths.should_not include(bmeth)
+      expect(meths).to include(ameth)
+      expect(meths).not_to include(bmeth)
     end
   end
 
-  describe '#class_attributes' do
-    it "should list class attributes" do
+  describe "#class_attributes" do
+    it "lists class attributes" do
       a = NamespaceObject.new(nil, :Mod)
       a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
       a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
       a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
-      a.class_attributes.keys.should include(:a)
-      a.class_attributes.keys.should_not include(:b)
+      expect(a.class_attributes.keys).to include(:a)
+      expect(a.class_attributes.keys).not_to include(:b)
     end
   end
 
-  describe '#instance_attributes' do
-    it "should list instance attributes" do
+  describe "#instance_attributes" do
+    it "lists instance attributes" do
       a = NamespaceObject.new(nil, :Mod)
       a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
       a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
       a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
-      a.instance_attributes.keys.should include(:a)
-      a.instance_attributes.keys.should include(:b)
+      expect(a.instance_attributes.keys).to include(:a)
+      expect(a.instance_attributes.keys).to include(:b)
     end
   end
 
-  describe '#constants/#included_constants' do
+  describe "#constants/#included_constants" do
     before do
       Registry.clear
 
@@ -132,39 +132,39 @@ describe YARD::CodeObjects::NamespaceObject do
       eof
     end
 
-    it "should list all included constants by default" do
+    it "lists all included constants by default" do
       consts = P(:C).constants
-      consts.should include(P('A::CONST1'))
-      consts.should include(P('C::CONST4'))
+      expect(consts).to include(P('A::CONST1'))
+      expect(consts).to include(P('C::CONST4'))
     end
 
-    it "should allow :included to be set to false to ignore included constants" do
+    it "allows :included to be set to false to ignore included constants" do
       consts = P(:C).constants(:included => false)
-      consts.should_not include(P('A::CONST1'))
-      consts.should include(P('C::CONST4'))
+      expect(consts).not_to include(P('A::CONST1'))
+      expect(consts).to include(P('C::CONST4'))
     end
 
-    it "should not list an included constant if it is defined in the object" do
+    it "does not list an included constant if it is defined in the object" do
       consts = P(:C).constants
-      consts.should include(P('C::CONST3'))
-      consts.should_not include(P('B::CONST3'))
+      expect(consts).to include(P('C::CONST3'))
+      expect(consts).not_to include(P('B::CONST3'))
     end
 
-    it "should not list an included constant if it is shadowed by another included constant" do
+    it "does not list an included constant if it is shadowed by another included constant" do
       consts = P(:C).included_constants
-      consts.should include(P('B::CONST2'))
-      consts.should_not include(P('A::CONST2'))
+      expect(consts).to include(P('B::CONST2'))
+      expect(consts).not_to include(P('A::CONST2'))
     end
   end
 
-  describe '#included_meths' do
-    it "should return all included methods with :all = true" do
+  describe "#included_meths" do
+    it "returns all included methods with :all = true" do
       YARD.parse_string <<-eof
         module B; def foo; end end
         module C; def bar; end end
         class A; include B; include C; def foo; end; def bar; end end
       eof
-      Registry.at('A').included_meths(:all => true).should == [P('C#bar'), P('B#foo')]
+      expect(Registry.at('A').included_meths(:all => true)).to eq [P('C#bar'), P('B#foo')]
     end
   end
 end
