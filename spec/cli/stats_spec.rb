@@ -26,14 +26,14 @@ describe YARD::CLI::Stats do
 
     @output = StringIO.new
     @stats = CLI::Stats.new(false)
-    @stats.stub!(:support_rdoc_document_file!).and_return([])
-    @stats.stub!(:yardopts).and_return([])
-    log.stub!(:puts) {|*args| @output << args.join("\n") << "\n" }
+    allow(@stats).to receive(:support_rdoc_document_file!).and_return([])
+    allow(@stats).to receive(:yardopts).and_return([])
+    allow(log).to receive(:puts) {|*args| @output << args.join("\n") << "\n" }
   end
 
-  it "should list undocumented objects with --list-undoc" do
+  it "lists undocumented objects with --list-undoc when there are undocumented objects" do
     @stats.run('--list-undoc')
-    @output.string.should == <<-eof
+    expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
 
@@ -45,14 +45,14 @@ A#foo
 eof
   end
 
-  it "should list no undocumented objects with --list-undoc when objects are undocumented" do
+  it "lists no undocumented objects with --list-undoc when there is nothing undocumented" do
     Registry.clear
     YARD.parse_string <<-eof
       # documentation
       def foo; end
     eof
     @stats.run('--list-undoc')
-    @output.string.should ==  "Files:           1\n" +
+    expect(@output.string).to eq "Files:           1\n" +
                               "Modules:         0 (    0 undocumented)\n" +
                               "Classes:         0 (    0 undocumented)\n" +
                               "Constants:       0 (    0 undocumented)\n" +
@@ -60,9 +60,9 @@ eof
                               " 100.00% documented\n"
   end
 
-  it "should list undocumented objects in compact mode with --list-undoc --compact" do
+  it "lists undocumented objects in compact mode with --list-undoc --compact" do
     @stats.run('--list-undoc', '--compact')
-    @output.string.should == <<-eof
+    expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
 B            ((stdin):9)
@@ -72,19 +72,19 @@ A#foo        ((stdin):4)
 eof
   end
 
-  it "should still list stats with --quiet" do
+  it "still lists stats with --quiet" do
     @stats.run('--quiet')
-    @output.string.should == @main_stats
+    expect(@output.string).to eq @main_stats
   end
 
-  it "should ignore everything with --no-public" do
+  it "ignores everything with --no-public" do
     @stats.run('--no-public')
-    @output.string.should ==
+    expect(@output.string).to eq(
       "Files:           0\n" +
       "Modules:         0 (    0 undocumented)\n" +
       "Classes:         0 (    0 undocumented)\n" +
       "Constants:       0 (    0 undocumented)\n" +
       "Methods:         0 (    0 undocumented)\n" +
-      " 100.00% documented\n"
+      " 100.00% documented\n")
   end
 end
