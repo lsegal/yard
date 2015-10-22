@@ -7,12 +7,12 @@ describe YARD::Rake::YardocTask do
     @yardoc.use_document_file = false
     @yardoc.use_yardopts_file = false
     @yardoc.generate = false
-    Templates::Engine.stub!(:render)
-    Templates::Engine.stub!(:generate)
-    YARD.stub!(:parse)
-    Registry.stub!(:load)
-    Registry.stub!(:save)
-    YARD::CLI::Yardoc.stub!(:new).and_return(@yardoc)
+    allow(Templates::Engine).to receive(:render)
+    allow(Templates::Engine).to receive(:generate)
+    allow(YARD).to receive(:parse)
+    allow(Registry).to receive(:load)
+    allow(Registry).to receive(:save)
+    allow(YARD::CLI::Yardoc).to receive(:new).and_return(@yardoc)
     ::Rake.application.clear
   end
 
@@ -20,103 +20,102 @@ describe YARD::Rake::YardocTask do
     ::Rake.application.tasks[0].invoke
   end
 
-  describe '#initialize' do
-    it "should allow separate rake task name to be set" do
+  describe "#initialize" do
+    it "allows separate rake task name to be set" do
       YARD::Rake::YardocTask.new(:notyardoc)
-      ::Rake.application.tasks[0].name.should == "notyardoc"
+      expect(::Rake.application.tasks[0].name).to eq "notyardoc"
     end
   end
 
-  describe '#files' do
-    it "should allow files to be set" do
+  describe "#files" do
+    it "allows files to be set" do
       YARD::Rake::YardocTask.new do |t|
         t.files = ['a', 'b', 'c']
       end
       run
-      @yardoc.files.should == %w(a b c)
+      expect(@yardoc.files).to eq %w(a b c)
     end
   end
 
-  describe '#options' do
-    it "should allow extra options to be set" do
+  describe "#options" do
+    it "allows extra options to be set" do
       YARD::Rake::YardocTask.new do |t|
         t.options = ['--private', '--protected']
       end
       run
-      @yardoc.visibilities.should == [:public, :private, :protected]
+      expect(@yardoc.visibilities).to eq [:public, :private, :protected]
     end
 
-    it "should allow --api and --no-api" do
+    it "allows --api and --no-api" do
       YARD::Rake::YardocTask.new do |t|
         t.options = %w(--api public --no-api)
       end
       run
-      @yardoc.options.verifier.expressions.
-        should include('["public"].include?(@api.text) || !@api')
+      expect(@yardoc.options.verifier.expressions).to include('["public"].include?(@api.text) || !@api')
     end
   end
 
-  describe '#stats_options' do
+  describe "#stats_options" do
     before do
       @yard_stats = Object.new
-      @yard_stats.stub!(:run)
-      YARD::CLI::Stats.stub!(:new).and_return(@yard_stats)
+      allow(@yard_stats).to receive(:run)
+      allow(YARD::CLI::Stats).to receive(:new).and_return(@yard_stats)
     end
 
-    it "should not invoke stats" do
-      @yard_stats.should_not_receive(:run)
+    it "does not invoke stats" do
+      expect(@yard_stats).not_to receive(:run)
       @yardoc.statistics = true
       YARD::Rake::YardocTask.new do |t|
       end
       run
-      @yardoc.statistics.should == true
+      expect(@yardoc.statistics).to be true
     end
 
-    it "should invoke stats" do
-      @yard_stats.should_receive(:run).with('--list-undoc', '--use-cache')
+    it "invokes stats" do
+      expect(@yard_stats).to receive(:run).with('--list-undoc', '--use-cache')
       @yardoc.statistics = true
       YARD::Rake::YardocTask.new do |t|
         t.stats_options = %w(--list-undoc)
       end
       run
-      @yardoc.statistics.should == false
+      expect(@yardoc.statistics).to be false
     end
   end
 
-  describe '#before' do
-    it "should allow before callback" do
+  describe "#before" do
+    it "allows before callback" do
       proc = lambda { }
-      proc.should_receive(:call)
-      @yardoc.should_receive(:run)
+      expect(proc).to receive(:call)
+      expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.before = proc }
       run
     end
   end
 
-  describe '#after' do
-    it "should allow after callback" do
+  describe "#after" do
+    it "allows after callback" do
       proc = lambda { }
-      proc.should_receive(:call)
-      @yardoc.should_receive(:run)
+      expect(proc).to receive(:call)
+      expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.after = proc }
       run
     end
   end
 
-  describe '#verifier' do
-    it "should allow a verifier proc to be set" do
+  describe "#verifier" do
+    it "allows a verifier proc to be set" do
       verifier = Verifier.new
-      @yardoc.should_receive(:run) do
-        @yardoc.options[:verifier].should == verifier
+      expect(@yardoc).to receive(:run) do
+        expect(@yardoc.options[:verifier]).to eq verifier
       end
       YARD::Rake::YardocTask.new {|t| t.verifier = verifier }
       run
     end
 
-    it "should override --query options" do
+    it "overrides --query options" do
       verifier = Verifier.new
-      @yardoc.should_receive(:run) do
-        @yardoc.options[:verifier].should == verifier
+      expect(@yardoc).to receive(:run) do
+        expect(@yardoc.options[:verifier]).to eq verifier
       end
       YARD::Rake::YardocTask.new do |t|
         t.options += ['--query', '@return']
