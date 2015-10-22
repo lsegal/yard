@@ -61,7 +61,7 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#tokval" do
     expect(tokval('methodname?', :identifier)).to eq "methodname?"
   end
 
-  #it "should obey documentation expectations" do docspec end
+  #it "obeys documentation expectations" do docspec end
 end
 
 describe YARD::Handlers::Base, "#tokval_list" do
