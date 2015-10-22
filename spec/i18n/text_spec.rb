@@ -12,45 +12,45 @@ describe YARD::I18n::Text do
     end
 
     describe "Header" do
-      it "should extract attribute" do
+      it "extracts at attribute" do
         text = <<-eot
 # @title Getting Started Guide
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
-           [:paragraph, "# Getting Started with YARD", 3]]
+           [:paragraph, "# Getting Started with YARD", 3]])
       end
 
-      it "should ignore markup line" do
+      it "ignores markup line" do
         text = <<-eot
 #!markdown
 # @title Getting Started Guide
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 2],
-           [:paragraph, "# Getting Started with YARD", 4]]
+           [:paragraph, "# Getting Started with YARD", 4]])
       end
 
-      it "should terminate header block by markup line not at the first line" do
+      it "terminates header block by markup line not at the first line" do
         text = <<-eot
 # @title Getting Started Guide
 #!markdown
 
 # Getting Started with YARD
 eot
-        extract_messages(text, :have_header => true).should ==
+        expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
            [:paragraph, "#!markdown", 2],
-           [:paragraph, "# Getting Started with YARD", 4]]
+           [:paragraph, "# Getting Started with YARD", 4]])
       end
     end
 
     describe "Body" do
-      it "should split to paragraphs" do
+      it "splits to paragraphs" do
         paragraph1 = <<-eop.strip
 Note that class methods must not be referred to with the "::" namespace
 separator. Only modules, classes and constants should use "::".
@@ -64,9 +64,9 @@ eop
 
 #{paragraph2}
 eot
-        extract_messages(text).should ==
+        expect(extract_messages(text)).to eq(
           [[:paragraph, paragraph1, 1],
-           [:paragraph, paragraph2, 4]]
+           [:paragraph, paragraph2, 4]])
       end
     end
   end
@@ -88,7 +88,7 @@ eot
     end
 
     describe "Header" do
-      it "should extract attribute" do
+      it "extracts at attribute" do
         text = <<-eot
 # @title Hello
 
@@ -96,7 +96,7 @@ eot
 
 Paragraph.
 eot
-        translate(text, :have_header => true).should == <<-eot
+        expect(translate(text, :have_header => true)).to eq <<-eot
 # @title Bonjour (Hello in fr)
 
 # Getting Started with YARD
@@ -105,7 +105,7 @@ Paragraph.
 eot
       end
 
-      it "should ignore markup line" do
+      it "ignores markup line" do
         text = <<-eot
 #!markdown
 # @title Hello
@@ -114,7 +114,7 @@ eot
 
 Paragraph.
 eot
-        translate(text, :have_header => true).should == <<-eot
+        expect(translate(text, :have_header => true)).to eq <<-eot
 #!markdown
 # @title Bonjour (Hello in fr)
 
@@ -126,7 +126,7 @@ eot
     end
 
     describe "Body" do
-      it "should split to paragraphs" do
+      it "splits to paragraphs" do
         paragraph1 = <<-eop.strip
 Paragraph 1.
 eop
@@ -138,26 +138,26 @@ eop
 
 #{paragraph2}
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 Paragraphe 1.
 
 Paragraphe 2.
 eot
       end
 
-      it "should not modified non-translated message" do
+      it "does not modify non-translated message" do
         nonexistent_paragraph = <<-eop.strip
 Nonexsitent paragraph.
 eop
         text = <<-eot
 #{nonexistent_paragraph}
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 #{nonexistent_paragraph}
 eot
       end
 
-      it "should keep empty lines" do
+      it "keeps empty lines" do
         text = <<-eot
 Paragraph 1.
 
@@ -166,7 +166,7 @@ Paragraph 1.
 
 Paragraph 2.
 eot
-        translate(text).should == <<-eot
+        expect(translate(text)).to eq <<-eot
 Paragraphe 1.
 
   
