@@ -125,6 +125,15 @@ end if ENV['TM_APP_PATH']
 
 RSpec.configure do |config|
   config.before(:each) { log.io = StringIO.new }
+
+  # isolate environment of each test
+  # any other global settings which might be modified by a test should also
+  # be saved and restored here
+  config.around(:each) do |example|
+    saved_level = log.level
+    example.run
+    log.level = saved_level
+  end
 end
 
 include YARD
