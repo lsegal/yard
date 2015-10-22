@@ -31,23 +31,23 @@ describe YARD::Server::DocServerHelper do
     @helper = MockDocServerHelper.new
   end
 
-  describe '#url_for' do
-    it "should not link to /library/ if single_library = true" do
+  describe "#url_for" do
+    it "does not link to /library/ if single_library = true" do
       @helper.single_library = true
-      @helper.url_for(Registry.root).should == "/PREFIX/toplevel"
+      expect(@helper.url_for(Registry.root)).to eq "/PREFIX/toplevel"
     end
 
-    it "should return /PREFIX/foo/version if foo has a version" do
+    it "returns /PREFIX/foo/version if foo has a version" do
       @helper.library = LibraryVersion.new('foo', 'bar')
       @helper.adapter.router.request.version_supplied = true
-      @helper.url_for(P('A')).should == '/PREFIX/foo/bar/A'
+      expect(@helper.url_for(P('A'))).to eq '/PREFIX/foo/bar/A'
     end
   end
 
-  describe '#url_for_file' do
-    it "should properly link file objects using file/ prefix" do
+  describe "#url_for_file" do
+    it "properly links file objects using file/ prefix" do
       file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
-      @helper.url_for_file(file).should == '/PREFIX/foo/file/a/b/FooBar.md'
+      expect(@helper.url_for_file(file)).to eq '/PREFIX/foo/file/a/b/FooBar.md'
     end
   end
 end
