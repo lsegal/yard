@@ -3,20 +3,20 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMethodHandler" do
   before(:all) { parse_file :private_class_method_handler_001, __FILE__ }
 
-  it "should handle private_class_method statement" do
-    Registry.at('A.c').visibility.should eq :private
-    Registry.at('A.d').visibility.should eq :private
-    Registry.at('A.e').visibility.should eq :private
+  it "handles private_class_method statement" do
+    expect(Registry.at('A.c').visibility).to eq :private
+    expect(Registry.at('A.d').visibility).to eq :private
+    expect(Registry.at('A.e').visibility).to eq :private
   end
 
-  it "should fail if parameter is not String or Symbol" do
+  it "fails if parameter is not String or Symbol" do
     undoc_error 'class Foo; X = 1; private_class_method X.new("hi"); end'
     undoc_error 'class Foo; X = 1; private_class_method 123; end'
   end unless LEGACY_PARSER
 
   # Issue #760
   # https://github.com/lsegal/yard/issues/760
-  it "should handle singleton classes" do
+  it "handles singleton classes" do
     # Note: It's important to def a method within the singleton class or
     #       the bug may not trigger.
     code = 'class SingletonClass; private_class_method :new; def self.foo; "foo"end; end'
@@ -24,7 +24,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
   end unless LEGACY_PARSER
   
   
-  describe "should handle reopened class" do
+  describe "handles reopened class" do
     
     # Modified #parse_file from '/spec/spec_helper.rb' because the second example
     # file was overwriting the data from the first example when trying to reopen
@@ -43,12 +43,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMe
     }
     
     specify do
-      Registry.at('SingletonClass.foo').visibility.should eq :public
-      Registry.at('SingletonClass.bar').visibility.should eq :private
-      Registry.at('SingletonClass.baz').visibility.should eq :private
-      Registry.at('SingletonClass.bat').visibility.should eq :public
+      expect(Registry.at('SingletonClass.foo').visibility).to eq :public
+      expect(Registry.at('SingletonClass.bar').visibility).to eq :private
+      expect(Registry.at('SingletonClass.baz').visibility).to eq :private
+      expect(Registry.at('SingletonClass.bat').visibility).to eq :public
     end
     
   end unless LEGACY_PARSER # reopened class
-   
 end

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Handlers::C::AliasHandler do
-  it "should allow defining of aliases (rb_define_alias)" do
+  it "allows defining of aliases (rb_define_alias)" do
     parse <<-eof
       /* FOO */
       VALUE foo(VALUE x) { int value = x; }
@@ -12,11 +12,11 @@ describe YARD::Handlers::C::AliasHandler do
       }
     eof
 
-    Registry.at('Foo#bar').should be_is_alias
-    Registry.at('Foo#bar').docstring.should == 'FOO'
+    expect(Registry.at('Foo#bar')).to be_is_alias
+    expect(Registry.at('Foo#bar').docstring).to eq 'FOO'
   end
 
-  it "should allow defining of aliases (rb_define_alias) of attributes" do
+  it "allows defining of aliases (rb_define_alias) of attributes" do
     parse <<-eof
       /* FOO */
       VALUE foo(VALUE x) { int value = x; }
@@ -27,7 +27,7 @@ describe YARD::Handlers::C::AliasHandler do
       }
     eof
 
-    Registry.at('Foo#foo').should be_reader
-    Registry.at('Foo#foo?').should be_is_alias
+    expect(Registry.at('Foo#foo')).to be_reader
+    expect(Registry.at('Foo#foo?')).to be_is_alias
   end
 end
