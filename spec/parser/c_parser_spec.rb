@@ -1,60 +1,60 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe YARD::Parser::C::CParser do
-  describe '#parse' do
+  describe "#parse" do
     def parse(contents)
       Registry.clear
       YARD.parse_string(contents, :c)
     end
 
-    describe 'Array class' do
+    describe "Array class" do
       before(:all) do
         file = File.join(File.dirname(__FILE__), 'examples', 'array.c.txt')
         parse(File.read(file))
       end
 
-      it "should parse Array class" do
+      it "parses Array class" do
         obj = YARD::Registry.at('Array')
-        obj.should_not be_nil
-        obj.docstring.should_not be_blank
+        expect(obj).not_to be nil
+        expect(obj.docstring).not_to be_blank
       end
 
-      it "should parse method" do
+      it "parses method" do
         obj = YARD::Registry.at('Array#initialize')
-        obj.docstring.should_not be_blank
-        obj.tags(:overload).size.should > 1
+        expect(obj.docstring).not_to be_blank
+        expect(obj.tags(:overload).size).to be > 1
       end
     end
 
-    describe 'Source located in extra files' do
+    describe "Source located in extra files" do
       before(:all) do
         @multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
         @extrafile = File.join(File.dirname(__FILE__), 'examples', 'extrafile.c.txt')
         @contents = File.read(@multifile)
       end
 
-      it "should look for methods in extra files (if 'in' comment is found)" do
+      it "looks for methods in extra files (if 'in' comment is found)" do
         extra_contents = File.read(@extrafile)
-        File.should_receive(:read).with('extra.c').and_return(extra_contents)
+        expect(File).to receive(:read).with('extra.c').and_return(extra_contents)
         parse(@contents)
-        Registry.at('Multifile#extra').docstring.should == 'foo'
+        expect(Registry.at('Multifile#extra').docstring).to eq 'foo'
       end
 
-      it "should stop searching for extra source file gracefully if file is not found" do
-        File.should_receive(:read).with('extra.c').and_raise(Errno::ENOENT)
-        log.should_receive(:warn).with("Missing source file `extra.c' when parsing Multifile#extra")
+      it "stops searching for extra source file gracefully if file is not found" do
+        expect(File).to receive(:read).with('extra.c').and_raise(Errno::ENOENT)
+        expect(log).to receive(:warn).with("Missing source file `extra.c' when parsing Multifile#extra")
         parse(@contents)
-        Registry.at('Multifile#extra').docstring.should == ''
+        expect(Registry.at('Multifile#extra').docstring).to eq ''
       end
 
-      it "should differentiate between a struct and a pointer to a struct retval" do
+      it "differentiates between a struct and a pointer to a struct retval" do
         parse(@contents)
-        Registry.at('Multifile#hello_mars').docstring.should == 'Hello Mars'
+        expect(Registry.at('Multifile#hello_mars').docstring).to eq 'Hello Mars'
       end
     end
 
-    describe 'Foo class' do
-      it 'should not include comments in docstring source' do
+    describe "Foo class" do
+      it "does not include comments in docstring source" do
         parse <<-eof
           /*
            * Hello world
@@ -67,13 +67,13 @@ describe YARD::Parser::C::CParser do
             rb_define_method(rb_cFoo, "foo", foo, 1);
           }
         eof
-        Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ').should ==
-          "VALUE foo(VALUE x) { int value = x;\n}"
+        expect(Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ')).to eq(
+          "VALUE foo(VALUE x) { int value = x;\n}")
       end
     end
 
-    describe 'Constant' do
-      it 'should not truncate docstring' do
+    describe "Constant" do
+      it "does not truncate docstring" do
         parse <<-eof
           #define MSK_DEADBEEF 0xdeadbeef
           void
@@ -86,13 +86,13 @@ describe YARD::Parser::C::CParser do
           }
         eof
         constant = Registry.at('Mask::DEADBEEF')
-        constant.value.should == '0xdeadbeef'
-        constant.docstring.should == "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
+        expect(constant.value).to eq '0xdeadbeef'
+        expect(constant.docstring).to eq "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
       end
     end
 
-    describe 'Macros' do
-      it "should handle param## inside of macros" do
+    describe "Macros" do
+      it "handles param## inside of macros" do
         thr = Thread.new do
           parse <<-eof
           void
@@ -127,8 +127,8 @@ describe YARD::Parser::C::CParser do
       end
     end
 
-    describe 'C macros in declaration' do
-      it "should handle C macros in method declaration" do
+    describe "C macros in declaration" do
+      it "handles C macros in method declaration" do
         Registry.clear
         parse <<-eof
         // docstring
@@ -141,49 +141,49 @@ describe YARD::Parser::C::CParser do
         }
         eof
 
-        Registry.at('Foo#func').docstring.should == "docstring"
+        expect(Registry.at('Foo#func').docstring).to eq "docstring"
       end
     end
   end
 
-  describe 'Override comments' do
+  describe "Override comments" do
     before(:all) do
       Registry.clear
       override_file = File.join(File.dirname(__FILE__), 'examples', 'override.c.txt')
       @override_parser = YARD.parse_string(File.read(override_file), :c)
     end
 
-    it "should parse GMP::Z class" do
+    it "parses GMP::Z class" do
       z = YARD::Registry.at('GMP::Z')
-      z.should_not be_nil
-      z.docstring.should_not be_blank
+      expect(z).not_to be nil
+      expect(z.docstring).not_to be_blank
     end
 
-    it "should parse GMP::Z methods w/ bodies" do
+    it "parses GMP::Z methods w/ bodies" do
       add = YARD::Registry.at('GMP::Z#+')
-      add.docstring.should_not be_blank
-      add.source.should_not be_nil
-      add.source.should_not be_empty
+      expect(add.docstring).not_to be_blank
+      expect(add.source).not_to be nil
+      expect(add.source).not_to be_empty
 
       add_self = YARD::Registry.at('GMP::Z#+')
-      add_self.docstring.should_not be_blank
-      add_self.source.should_not be_nil
-      add_self.source.should_not be_empty
+      expect(add_self.docstring).not_to be_blank
+      expect(add_self.source).not_to be nil
+      expect(add_self.source).not_to be_empty
 
       sqrtrem = YARD::Registry.at('GMP::Z#+')
-      sqrtrem.docstring.should_not be_blank
-      sqrtrem.source.should_not be_nil
-      sqrtrem.source.should_not be_empty
+      expect(sqrtrem.docstring).not_to be_blank
+      expect(sqrtrem.source).not_to be nil
+      expect(sqrtrem.source).not_to be_empty
     end
 
-    it "should parse GMP::Z methods w/o bodies" do
+    it "parses GMP::Z methods w/o bodies" do
       neg = YARD::Registry.at('GMP::Z#neg')
-      neg.docstring.should_not be_blank
-      neg.source.should be_nil
+      expect(neg.docstring).not_to be_blank
+      expect(neg.source).to be nil
 
       neg_self = YARD::Registry.at('GMP::Z#neg')
-      neg_self.docstring.should_not be_blank
-      neg_self.source.should be_nil
+      expect(neg_self.docstring).not_to be_blank
+      expect(neg_self.source).to be nil
     end
   end
 end
