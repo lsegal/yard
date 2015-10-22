@@ -88,6 +88,15 @@ describe YARD::Serializers::FileSystemSerializer do
       object = Registry.at('Foo#bar').tag(:overload)
       serializer.serialized_path(object).should == "Foo/bar_i.html"
     end
+
+    it "should map matching case sensitive object names to different files on disk" do
+      Registry.clear
+      o1 = CodeObjects::ClassObject.new(:root, "AB")
+      o2 = CodeObjects::ClassObject.new(:root, "Ab")
+      s = Serializers::FileSystemSerializer.new
+      s.serialized_path(o1).should == "AB.html"
+      s.serialized_path(o2).should == "Ab2.html"
+    end
   end
 
   describe '#serialize' do
