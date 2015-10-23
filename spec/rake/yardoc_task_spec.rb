@@ -62,15 +62,6 @@ describe YARD::Rake::YardocTask do
       allow(YARD::CLI::Stats).to receive(:new).and_return(@yard_stats)
     end
 
-    it "does not invoke stats" do
-      expect(@yard_stats).not_to receive(:run)
-      @yardoc.statistics = true
-      YARD::Rake::YardocTask.new do |t|
-      end
-      run
-      expect(@yardoc.statistics).to be true
-    end
-
     it "invokes stats" do
       expect(@yard_stats).to receive(:run).with('--list-undoc', '--use-cache')
       @yardoc.statistics = true
