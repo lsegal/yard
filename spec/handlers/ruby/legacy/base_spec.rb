@@ -5,7 +5,9 @@ include Parser::Ruby::Legacy
 describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
   before do
     allow(Handlers::Ruby::Legacy::Base).to receive(:inherited)
-    allow(Handlers::Ruby::Legacy::MixinHandler).to receive(:inherited) # fixes a Ruby1.9 issue
+    if RUBY_VERSION > '1.8.7'
+      allow(Handlers::Ruby::Legacy::MixinHandler).to receive(:inherited) # fixes a Ruby1.9 issue
+    end
     @processor = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby18))
   end
 
