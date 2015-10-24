@@ -16,30 +16,30 @@ describe YARD::Serializers::YardocSerializer do
     @bar = CodeObjects::MethodObject.new(@foo, :bar)
   end
 
-  describe '#dump' do
-    it "should maintain object equality when loading a dumped object" do
+  describe "#dump" do
+    it "maintains object equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
-      newfoo.should equal(@foo)
-      newfoo.should == @foo
-      @foo.should equal(newfoo)
-      @foo.should == newfoo
-      newfoo.hash.should == @foo.hash
+      expect(newfoo).to equal(@foo)
+      expect(newfoo).to eq @foo
+      expect(@foo).to equal(newfoo)
+      expect(@foo).to eq newfoo
+      expect(newfoo.hash).to eq @foo.hash
     end
 
-    it "should maintain hash key equality when loading a dumped object" do
+    it "maintains hash key equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
-      {@foo => 1}.should have_key(newfoo)
-      {newfoo => 1}.should have_key(@foo)
+      expect({@foo => 1}).to have_key(newfoo)
+      expect({newfoo => 1}).to have_key(@foo)
     end
   end
 
-  describe '#serialize' do
-    it "should accept a hash of codeobjects (and write to root)" do
+  describe "#serialize" do
+    it "accepts a hash of codeobjects (and write to root)" do
       data = {:root => Registry.root}
       marshaldata = Marshal.dump(data)
-      filemock = mock(:file)
-      filemock.should_receive(:write).with(marshaldata)
-      File.should_receive(:open!).with('.yardoc/objects/root.dat', 'wb').and_yield(filemock)
+      filemock = double(:file)
+      expect(filemock).to receive(:write).with(marshaldata)
+      expect(File).to receive(:open!).with('.yardoc/objects/root.dat', 'wb').and_yield(filemock)
       @serializer.serialize(data)
     end
   end

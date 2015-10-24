@@ -4,39 +4,39 @@ require File.dirname(__FILE__) + '/../spec_helper'
 #described_in_docs String, '#underscore'
 
 describe String do
-  describe '#shell_split' do
-    it "should split simple non-quoted text" do
-      "a b c".shell_split.should == %w(a b c)
+  describe "#shell_split" do
+    it "splits simple non-quoted text" do
+      expect("a b c".shell_split).to eq %w(a b c)
     end
 
-    it "should split double quoted text into single token" do
-      'a "b c d" e'.shell_split.should == ["a", "b c d", "e"]
+    it "splits double quoted text into single token" do
+      expect('a "b c d" e'.shell_split).to eq ["a", "b c d", "e"]
     end
 
-    it "should split single quoted text into single token" do
-      "a 'b c d' e".shell_split.should == ["a", "b c d", "e"]
+    it "splits single quoted text into single token" do
+      expect("a 'b c d' e".shell_split).to eq ["a", "b c d", "e"]
     end
 
-    it "should handle escaped quotations in quotes" do
-      "'a \\' b'".shell_split.should == ["a ' b"]
+    it "handles escaped quotations in quotes" do
+      expect("'a \\' b'".shell_split).to eq ["a ' b"]
     end
 
-    it "should handle escaped quotations outside quotes" do
-      "\\'a 'b'".shell_split.should == %w('a b)
+    it "handles escaped quotations outside quotes" do
+      expect("\\'a 'b'".shell_split).to eq %w('a b)
     end
 
-    it "should handle escaped backslash" do
-      "\\\\'a b c'".shell_split.should == ['\a b c']
+    it "handles escaped backslash" do
+      expect("\\\\'a b c'".shell_split).to eq ['\a b c']
     end
 
-    it "should handle any whitespace as space" do
+    it "handles any whitespace as space" do
       text = "foo\tbar\nbaz\r\nfoo2 bar2"
-      text.shell_split.should == %w(foo bar baz foo2 bar2)
+      expect(text.shell_split).to eq %w(foo bar baz foo2 bar2)
     end
 
-    it "should handle complex input" do
+    it "handles complex input" do
       text = "hello \\\"world \"1 2\\\" 3\" a 'b \"\\\\\\'' c"
-      text.shell_split.should == ["hello", "\"world", "1 2\" 3", "a", "b \"\\'", "c"]
+      expect(text.shell_split).to eq ["hello", "\"world", "1 2\" 3", "a", "b \"\\'", "c"]
     end
   end
 end

@@ -6,86 +6,86 @@ describe YARD::CLI::Config do
   before do
     @config = YARD::CLI::Config.new
     YARD::Config.options = YARD::Config::DEFAULT_CONFIG_OPTIONS.dup
-    YARD::Config.stub!(:save)
+    allow(YARD::Config).to receive(:save)
   end
 
   def run(*args)
     @config.run(*args)
   end
 
-  describe 'Listing configuration' do
-    it "should accept --list" do
+  describe "Listing configuration" do
+    it "accepts --list" do
       opts = YARD::Config.options
-      YAML.should_receive(:dump).twice.and_return("--- foo\nbar\nbaz")
-      log.should_receive(:puts).twice.with("bar\nbaz")
+      expect(YAML).to receive(:dump).twice.and_return("--- foo\nbar\nbaz")
+      expect(log).to receive(:puts).twice.with("bar\nbaz")
       run
       run('--list')
-      YARD::Config.options.should == opts
+      expect(YARD::Config.options).to eq opts
     end
   end
 
-  describe 'Viewing an item' do
-    it "should view item if no value is given" do
+  describe "Viewing an item" do
+    it "views item if no value is given" do
       YARD::Config.options[:foo] = 'bar'
-      log.should_receive(:puts).with('"bar"')
+      expect(log).to receive(:puts).with('"bar"')
       run 'foo'
-      YARD::Config.options[:foo].should == 'bar'
+      expect(YARD::Config.options[:foo]).to eq 'bar'
     end
   end
 
-  describe 'Modifying an item' do
-    it "should accept --reset to set value" do
+  describe "Modifying an item" do
+    it "accepts --reset to set value" do
       YARD::Config.options[:load_plugins] = 'foo'
       run('--reset', 'load_plugins')
-      YARD::Config.options[:load_plugins].should == false
+      expect(YARD::Config.options[:load_plugins]).to be false
     end
 
-    it "should accept --as-list to force single item as list" do
+    it "accepts --as-list to force single item as list" do
       run('--as-list', 'foo', 'bar')
-      YARD::Config.options[:foo].should == ['bar']
+      expect(YARD::Config.options[:foo]).to eq ['bar']
     end
 
-    it "should accept --append to append values to existing key" do
+    it "accepts --append to append values to existing key" do
       YARD::Config.options[:foo] = ['bar']
       run('--append', 'foo', 'baz', 'quux')
-      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux']
+      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz', 'quux']
       run('-a', 'foo', 'last')
-      YARD::Config.options[:foo].should == ['bar', 'baz', 'quux', 'last']
+      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz', 'quux', 'last']
     end
 
-    it "should turn key into list if --append is used on single item" do
+    it "turns key into list if --append is used on single item" do
       YARD::Config.options[:foo] = 'bar'
       run('-a', 'foo', 'baz')
-      YARD::Config.options[:foo].should == ['bar', 'baz']
+      expect(YARD::Config.options[:foo]).to eq ['bar', 'baz']
     end
 
-    it "should modify item if value is given" do
+    it "modifies item if value is given" do
       run('foo', 'xxx')
-      YARD::Config.options[:foo].should == 'xxx'
+      expect(YARD::Config.options[:foo]).to eq 'xxx'
     end
 
-    it "should turn list of values into array of values" do
+    it "turns list of values into array of values" do
       run('foo', 'a', 'b', '1', 'true', 'false')
-      YARD::Config.options[:foo].should == ['a', 'b', 1, true, false]
+      expect(YARD::Config.options[:foo]).to eq ['a', 'b', 1, true, false]
     end
 
-    it "should turn number into numeric Ruby type" do
+    it "turns number into numeric Ruby type" do
       run('foo', '1')
-      YARD::Config.options[:foo].should == 1
+      expect(YARD::Config.options[:foo]).to eq 1
     end
 
-    it "should turn true into TrueClass" do
+    it "turns true into TrueClass" do
       run('foo', 'true')
-      YARD::Config.options[:foo].should == true
+      expect(YARD::Config.options[:foo]).to be true
     end
 
-    it "should turn false into FalseClass" do
+    it "turns false into FalseClass" do
       run('foo', 'false')
-      YARD::Config.options[:foo].should == false
+      expect(YARD::Config.options[:foo]).to be false
     end
 
-    it "should save on modification" do
-      YARD::Config.should_receive(:save)
+    it "saves on modification" do
+      expect(YARD::Config).to receive(:save)
       run('foo', 'true')
     end
   end

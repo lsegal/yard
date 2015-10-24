@@ -14,7 +14,7 @@ describe YARD::I18n::Messages do
   end
 
   describe "#each" do
-    it "should enumerate Message" do
+    it "enumerates messages" do
       @messages.register("Hello World!")
       @messages.register("Title")
       enumerated_messages = []
@@ -22,46 +22,46 @@ describe YARD::I18n::Messages do
         enumerated_messages << message
       end
       enumerated_messages = enumerated_messages.sort_by {|m| m.id }
-      enumerated_messages.should == [message("Hello World!"), message("Title")]
+      expect(enumerated_messages).to eq [message("Hello World!"), message("Title")]
     end
 
-    it "should not any Message for empty messages" do
+    it "does not yield any message if there are none" do
       enumerated_messages = []
       @messages.each do |message|
         enumerated_messages << message
       end
-      enumerated_messages.should == []
+      expect(enumerated_messages).to eq []
     end
   end
 
   describe "#[]" do
-    it "should return registered message" do
+    it "returns registered message" do
       @messages.register("Hello World!")
-      @messages["Hello World!"].should == message("Hello World!")
+      expect(@messages["Hello World!"]).to eq message("Hello World!")
     end
 
-    it "should return for nonexistent message ID" do
-      @messages["Hello World!"].should == nil
+    it "returns nil for nonexistent message ID" do
+      expect(@messages["Hello World!"]).to eq nil
     end
   end
 
   describe "#register" do
-    it "should return registered message" do
-      @messages.register("Hello World!").should == message("Hello World!")
+    it "returns registered message" do
+      expect(@messages.register("Hello World!")).to eq message("Hello World!")
     end
 
-    it "should return existent message" do
+    it "returns existent message" do
       message = @messages.register("Hello World!")
-      @messages.register("Hello World!").object_id.should == message.object_id
+      expect(@messages.register("Hello World!").object_id).to eq message.object_id
     end
   end
 
   describe "#==" do
-    it "should return true for same value messages" do
+    it "returns true for same value messages" do
       @messages.register("Hello World!")
       other_messages = messages
       other_messages.register("Hello World!")
-      @messages.should == other_messages
+      expect(@messages).to eq other_messages
     end
   end
 end

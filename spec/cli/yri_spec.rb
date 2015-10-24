@@ -9,89 +9,89 @@ end
 describe YARD::CLI::YRI do
   before do
     @yri = TestYRI.new
-    Registry.stub!(:load)
+    allow(Registry).to receive(:load)
   end
 
-  describe '#find_object' do
-    it "should use cache if available" do
-      @yri.stub!(:cache_object)
-      File.should_receive(:exist?).with('.yardoc').and_return(false)
-      File.should_receive(:exist?).with('bar.yardoc').and_return(true)
-      Registry.should_receive(:load).with('bar.yardoc')
-      Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
-      Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
+  describe "#find_object" do
+    it "uses cache if available" do
+      allow(@yri).to receive(:cache_object)
+      expect(File).to receive(:exist?).with('.yardoc').and_return(false)
+      expect(File).to receive(:exist?).with('bar.yardoc').and_return(true)
+      expect(Registry).to receive(:load).with('bar.yardoc')
+      expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
+      expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
-      @yri.find_object('Foo').should == 'OBJ'
+      expect(@yri.find_object('Foo')).to eq 'OBJ'
     end
 
-    it "should never use cache ahead of current directory's .yardoc" do
-      @yri.stub!(:cache_object)
-      File.should_receive(:exist?).with('.yardoc').and_return(true)
-      Registry.should_receive(:load).with('.yardoc')
-      Registry.should_receive(:at).ordered.with('Foo').and_return(nil)
-      Registry.should_receive(:at).ordered.with('Foo').and_return('OBJ')
+    it "never uses cache ahead of current directory's .yardoc" do
+      allow(@yri).to receive(:cache_object)
+      expect(File).to receive(:exist?).with('.yardoc').and_return(true)
+      expect(Registry).to receive(:load).with('.yardoc')
+      expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
+      expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
       @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
-      @yri.find_object('Foo').should == 'OBJ'
-      @yri.instance_variable_get("@search_paths")[0].should == '.yardoc'
+      expect(@yri.find_object('Foo')).to eq 'OBJ'
+      expect(@yri.instance_variable_get("@search_paths")[0]).to eq '.yardoc'
     end
   end
 
-  describe '#cache_object' do
-    it "should skip caching for Registry.yardoc_file" do
-      File.should_not_receive(:open).with(CLI::YRI::CACHE_FILE, 'w')
+  describe "#cache_object" do
+    it "skips caching for Registry.yardoc_file" do
+      expect(File).not_to receive(:open).with(CLI::YRI::CACHE_FILE, 'w')
       @yri.cache_object('Foo', Registry.yardoc_file)
     end
   end
 
-  describe '#initialize' do
-    it "should load search paths" do
+  describe "#initialize" do
+    it "loads search paths" do
       path = %r{/\.yard/yri_search_paths$}
-      File.should_receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
-      File.should_receive(:file?).with(path).and_return(true)
-      File.should_receive(:readlines).with(path).and_return(%w(line1 line2))
+      expect(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      expect(File).to receive(:file?).with(path).and_return(true)
+      expect(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
-      spaths.should include('line1')
-      spaths.should include('line2')
+      expect(spaths).to include('line1')
+      expect(spaths).to include('line2')
     end
 
-    it "should use DEFAULT_SEARCH_PATHS prior to other paths" do
+    it "uses DEFAULT_SEARCH_PATHS prior to other paths" do
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.push('foo', 'bar')
       path = %r{/\.yard/yri_search_paths$}
-      File.should_receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
-      File.should_receive(:file?).with(path).and_return(true)
-      File.should_receive(:readlines).with(path).and_return(%w(line1 line2))
+      expect(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      expect(File).to receive(:file?).with(path).and_return(true)
+      expect(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
-      spaths[0,4].should == %w(foo bar line1 line2)
+      expect(spaths[0,4]).to eq %w(foo bar line1 line2)
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
   end
 
-  describe '#run' do
-    it "should search for objects and print their documentation" do
+  describe "#run" do
+    it "searches for objects and print their documentation" do
       obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
-      @yri.should_receive(:print_object).with(obj)
+      expect(@yri).to receive(:print_object).with(obj)
       @yri.run('Foo')
       Registry.clear
     end
 
-    it "should print usage if no object is provided" do
-      @yri.should_receive(:print_usage)
-      @yri.should_receive(:exit).with(1)
+    it "prints usage if no object is provided" do
+      expect(@yri).to receive(:print_usage)
+      expect(@yri).to receive(:exit).with(1)
       @yri.run('')
     end
 
-    it "should print no documentation exists for object if object is not found" do
-      STDERR.should_receive(:puts).with("No documentation for `Foo'")
-      @yri.should_receive(:exit).with(1)
+    it "prints 'no documentation exists for object' if object is not found" do
+      expect(STDERR).to receive(:puts).with("No documentation for `Foo'")
+      expect(@yri).to receive(:exit).with(1)
       @yri.run('Foo')
     end
 
-    it "should ensure output is serialized" do
+    it "ensures output is serialized" do
       obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
-      class << @yri
-        def test_stub; @serializer.should_receive(:serialize).once end
+      allow(@yri).to receive(:test_stub) do
+        expect(@yri.instance_variable_get(:@serializer)).to receive(:serialize).once
       end
       @yri.run('Foo')
     end

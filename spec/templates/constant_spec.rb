@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Templates::Engine.template(:default, :constant) do
-  describe 'fully dressed constant' do
-    it "should render text format correctly" do
+  describe "fully dressed constant" do
+    it "renders text format correctly" do
       YARD.parse_string <<-'eof'
         class YARD::CLI::YRI
           # Default search paths that should be loaded dynamically into YRI. These paths
@@ -20,8 +20,8 @@ describe YARD::Templates::Engine.template(:default, :constant) do
     end
   end
 
-  describe 'simple constant with no documentation' do
-    it "should render text format correctly" do
+  describe "simple constant with no documentation" do
+    it "renders text format correctly" do
       # Short constant should show on single line
       YARD.parse_string <<-'eof'
         MYCONST = 'foo'

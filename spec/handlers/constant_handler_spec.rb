@@ -3,65 +3,65 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandler" do
   before(:all) { parse_file :constant_handler_001, __FILE__ }
 
-  it "should not parse constants inside methods" do
-    Registry.at("A::B::SOMECONSTANT").source.should == "SOMECONSTANT= \"hello\""
+  it "does not parse constants inside methods" do
+    expect(Registry.at("A::B::SOMECONSTANT").source).to eq "SOMECONSTANT= \"hello\""
   end
 
-  it "should only parse valid constants" do
-    Registry.at("A::B::notaconstant").should be_nil
+  it "only parses valid constants" do
+    expect(Registry.at("A::B::notaconstant")).to be nil
   end
 
-  it "should maintain newlines" do
-    Registry.at("A::B::MYCONSTANT").value.gsub("\r", "").should == "A +\nB +\nC +\nD"
+  it "maintains newlines" do
+    expect(Registry.at("A::B::MYCONSTANT").value.gsub("\r", "")).to eq "A +\nB +\nC +\nD"
   end
 
-  it "should turn Const = Struct.new(:sym) into class Const with attr :sym" do
+  it "turns Const = Struct.new(:sym) into class Const with attr :sym" do
     obj = Registry.at("MyClass")
-    obj.should be_kind_of(CodeObjects::ClassObject)
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
     [:a, :b, :c].each do |key|
-      attrs.should have_key(key)
-      attrs[key][:read].should_not be_nil
-      attrs[key][:write].should_not be_nil
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).not_to be nil
     end
   end
 
-  it "should turn Const = Struct.new('Name', :sym) into class Const with attr :sym" do
+  it "turns Const = Struct.new('Name', :sym) into class Const with attr :sym" do
     obj = Registry.at("NotMyClass")
-    obj.should be_kind_of(CodeObjects::ClassObject)
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
     [:b, :c].each do |key|
-      attrs.should have_key(key)
-      attrs[key][:read].should_not be_nil
-      attrs[key][:write].should_not be_nil
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).not_to be nil
     end
 
-    Registry.at("NotMyClass2").should be_nil
+    expect(Registry.at("NotMyClass2")).to be nil
   end
 
-  it "should turn Const = Struct.new into empty struct" do
+  it "turns Const = Struct.new into empty struct" do
     obj = Registry.at("MyEmptyStruct")
-    obj.should_not be_nil
-    obj.attributes[:instance].should be_empty
+    expect(obj).not_to be nil
+    expect(obj.attributes[:instance]).to be_empty
   end
 
-  it "should maintain docstrings on structs defined via constants" do
+  it "maintains docstrings on structs defined via constants" do
     obj = Registry.at("DocstringStruct")
-    obj.should_not be_nil
-    obj.docstring.should == "A crazy struct."
-    obj.attributes[:instance].should_not be_empty
+    expect(obj).not_to be nil
+    expect(obj.docstring).to eq "A crazy struct."
+    expect(obj.attributes[:instance]).not_to be_empty
     a1 = Registry.at("DocstringStruct#bar")
     a2 = Registry.at("DocstringStruct#baz")
-    a1.docstring.should == "An attr"
-    a1.tag(:return).types.should == ["String"]
-    a2.docstring.should == "Another attr"
-    a2.tag(:return).types.should == ["Number"]
+    expect(a1.docstring).to eq "An attr"
+    expect(a1.tag(:return).types).to eq ["String"]
+    expect(a2.docstring).to eq "Another attr"
+    expect(a2.tag(:return).types).to eq ["Number"]
     a3 = Registry.at("DocstringStruct#new_syntax")
-    a3.docstring.should == "Attribute defined with the new syntax"
-    a3.tag(:return).types.should == ["Symbol"]
+    expect(a3.docstring).to eq "Attribute defined with the new syntax"
+    expect(a3.tag(:return).types).to eq ["Symbol"]
   end
 
-  it "should raise undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
+  it "raises undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
     undoc_error "nonconst = Struct.new"
   end unless LEGACY_PARSER
 end

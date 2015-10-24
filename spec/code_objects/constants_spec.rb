@@ -1,90 +1,92 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects, "CONSTANTMATCH" do
-  it "should match a constant" do
-    "Constant"[CodeObjects::CONSTANTMATCH].should == "Constant"
-    "identifier"[CodeObjects::CONSTANTMATCH].should be_nil
-    "File.new"[CodeObjects::CONSTANTMATCH].should == "File"
-  end
-end
-
-describe YARD::CodeObjects, "CONSTANTSTART" do
-  it "should match a constant" do
-    "Constant"[CodeObjects::CONSTANTSTART].should == "C"
-    "identifier"[CodeObjects::CONSTANTSTART].should be_nil
-    "File.new"[CodeObjects::CONSTANTSTART].should == "F"
-  end
-end
-
-describe YARD::CodeObjects, "NAMESPACEMATCH" do
-  it "should match a namespace (multiple constants with ::)" do
-    "Constant"[CodeObjects::NAMESPACEMATCH].should == "Constant"
-    "A::B::C.new"[CodeObjects::NAMESPACEMATCH].should == "A::B::C"
-  end
-end
-
-describe YARD::CodeObjects, "METHODNAMEMATCH" do
-  it "should match a method name" do
-    "method"[CodeObjects::METHODNAMEMATCH].should == "method"
-    "[]()"[CodeObjects::METHODNAMEMATCH].should == "[]"
-    "-@"[CodeObjects::METHODNAMEMATCH].should == "-@"
-    "method?"[CodeObjects::METHODNAMEMATCH].should == "method?"
-    "method!!"[CodeObjects::METHODNAMEMATCH].should == "method!"
-  end
-end
-
-describe YARD::CodeObjects, "METHODMATCH" do
-  it "should match a full class method path" do
-    "method"[CodeObjects::METHODMATCH].should == "method"
-    "A::B::C.method?"[CodeObjects::METHODMATCH].should == "A::B::C.method?"
-    "A::B::C :: method"[CodeObjects::METHODMATCH].should == "A::B::C :: method"
-    "SomeClass . method"[CodeObjects::METHODMATCH].should == "SomeClass . method"
-  end
-
-  it "should match self.method" do
-    "self :: method!"[CodeObjects::METHODMATCH].should == "self :: method!"
-    "self.is_a?"[CodeObjects::METHODMATCH].should == "self.is_a?"
-  end
-end
-
-describe YARD::CodeObjects, "BUILTIN_EXCEPTIONS" do
-  it "should include all base exceptions" do
-    YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
-      eval(name).should <= Exception
-    end
-  end
-end
-
-describe YARD::CodeObjects, "BUILTIN_CLASSES" do
-  it "should include all base classes" do
-    YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
-      next if name == "MatchingData" && !defined?(::MatchingData)
-      next if name == "Continuation"
-      eval(name).should be_instance_of(Class)
+describe YARD::CodeObjects do
+  describe :CONSTANTMATCH do
+    it "matches a constant" do
+      expect("Constant"[CodeObjects::CONSTANTMATCH]).to eq "Constant"
+      expect("identifier"[CodeObjects::CONSTANTMATCH]).to be nil
+      expect("File.new"[CodeObjects::CONSTANTMATCH]).to eq "File"
     end
   end
 
-  it "should include all exceptions" do
-    YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
-      YARD::CodeObjects::BUILTIN_CLASSES.should include(name)
+  describe :CONSTANTSTART do
+    it "matches a constant" do
+      expect("Constant"[CodeObjects::CONSTANTSTART]).to eq "C"
+      expect("identifier"[CodeObjects::CONSTANTSTART]).to be nil
+      expect("File.new"[CodeObjects::CONSTANTSTART]).to eq "F"
     end
   end
-end
 
-describe YARD::CodeObjects, "BUILTIN_ALL" do
-  it "should include classes modules and exceptions" do
-    a = YARD::CodeObjects::BUILTIN_ALL
-    b = YARD::CodeObjects::BUILTIN_CLASSES
-    c = YARD::CodeObjects::BUILTIN_MODULES
-    a.should == b+c
+  describe :NAMESPACEMATCH do
+    it "matches a namespace (multiple constants with ::)" do
+      expect("Constant"[CodeObjects::NAMESPACEMATCH]).to eq "Constant"
+      expect("A::B::C.new"[CodeObjects::NAMESPACEMATCH]).to eq "A::B::C"
+    end
   end
-end
 
-describe YARD::CodeObjects, "BUILTIN_MODULES" do
-  it "should include all base modules" do
-    YARD::CodeObjects::BUILTIN_MODULES.each do |name|
-      next if YARD.ruby19? && ["Precision"].include?(name)
-      eval(name).should be_instance_of(Module)
+  describe :METHODNAMEMATCH do
+    it "matches a method name" do
+      expect("method"[CodeObjects::METHODNAMEMATCH]).to eq "method"
+      expect("[]()"[CodeObjects::METHODNAMEMATCH]).to eq "[]"
+      expect("-@"[CodeObjects::METHODNAMEMATCH]).to eq "-@"
+      expect("method?"[CodeObjects::METHODNAMEMATCH]).to eq "method?"
+      expect("method!!"[CodeObjects::METHODNAMEMATCH]).to eq "method!"
+    end
+  end
+
+  describe :METHODMATCH do
+    it "matches a full class method path" do
+      expect("method"[CodeObjects::METHODMATCH]).to eq "method"
+      expect("A::B::C.method?"[CodeObjects::METHODMATCH]).to eq "A::B::C.method?"
+      expect("A::B::C :: method"[CodeObjects::METHODMATCH]).to eq "A::B::C :: method"
+      expect("SomeClass . method"[CodeObjects::METHODMATCH]).to eq "SomeClass . method"
+    end
+
+    it "matches self.method" do
+      expect("self :: method!"[CodeObjects::METHODMATCH]).to eq "self :: method!"
+      expect("self.is_a?"[CodeObjects::METHODMATCH]).to eq "self.is_a?"
+    end
+  end
+
+  describe :BUILTIN_EXCEPTIONS do
+    it "includes all base exceptions" do
+      YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
+        expect(eval(name)).to be <= Exception
+      end
+    end
+  end
+
+  describe :BUILTIN_CLASSES do
+    it "includes all base classes" do
+      YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
+        next if name == "MatchingData" && !defined?(::MatchingData)
+        next if name == "Continuation"
+        expect(eval(name)).to be_instance_of(Class)
+      end
+    end
+
+    it "includes all exceptions" do
+      YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
+        expect(YARD::CodeObjects::BUILTIN_CLASSES).to include(name)
+      end
+    end
+  end
+
+  describe :BUILTIN_ALL do
+    it "includes classes, modules, and exceptions" do
+      a = YARD::CodeObjects::BUILTIN_ALL
+      b = YARD::CodeObjects::BUILTIN_CLASSES
+      c = YARD::CodeObjects::BUILTIN_MODULES
+      expect(a).to eq b+c
+    end
+  end
+
+  describe :BUILTIN_MODULES do
+    it "includes all base modules" do
+      YARD::CodeObjects::BUILTIN_MODULES.each do |name|
+        next if YARD.ruby19? && ["Precision"].include?(name)
+        expect(eval(name)).to be_instance_of(Module)
+      end
     end
   end
 end

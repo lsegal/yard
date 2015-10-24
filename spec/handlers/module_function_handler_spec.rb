@@ -6,15 +6,15 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
   def assert_module_function(namespace, name)
     klass = Registry.at("#{namespace}.#{name}")
     instance = Registry.at("#{namespace}##{name}")
-    klass.should_not be_nil
-    instance.should_not be_nil
-    klass.should be_module_function
-    instance.should_not be_module_function
-    klass.visibility.should == :public
-    instance.visibility.should == :private
+    expect(klass).not_to be nil
+    expect(instance).not_to be nil
+    expect(klass).to be_module_function
+    expect(instance).not_to be_module_function
+    expect(klass.visibility).to eq :public
+    expect(instance.visibility).to eq :private
   end
 
-  it "should be able to create a module function with parameters" do
+  it "is able to create a module function with parameters" do
     YARD.parse_string <<-eof
       module Foo
         def bar; end
@@ -27,7 +27,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', 'baz')
   end
 
-  it "should be able to set scope for duration of block without params" do
+  it "is able to set scope for duration of block without params" do
     YARD.parse_string <<-eof
       module Foo
         def qux; end
@@ -38,13 +38,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
         def baz; end
       end
     eof
-    Registry.at('Foo.qux').should be_nil
+    expect(Registry.at('Foo.qux')).to be nil
     assert_module_function('Foo', 'bar')
     assert_module_function('Foo', 'baz')
   end
 
   # @bug gh-563
-  it "should copy tags to module function properly" do
+  it "copies tags to module function properly" do
     YARD.parse_string <<-eof
       module Foo
         # @param [String] foo bar
@@ -56,17 +56,17 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     eof
     assert_module_function('Foo', 'bar')
     o = Registry.at('Foo.bar')
-    o.tag(:param).types.should == ['String']
-    o.tag(:param).name.should == 'foo'
-    o.tag(:param).text.should == 'bar'
-    o.tag(:option).name.should == 'foo'
-    o.tag(:option).pair.types.should == ['String']
-    o.tag(:option).pair.defaults.should == ['nil']
-    o.tag(:option).pair.text.should == 'baz'
-    o.tag(:return).types.should == ['void']
+    expect(o.tag(:param).types).to eq ['String']
+    expect(o.tag(:param).name).to eq 'foo'
+    expect(o.tag(:param).text).to eq 'bar'
+    expect(o.tag(:option).name).to eq 'foo'
+    expect(o.tag(:option).pair.types).to eq ['String']
+    expect(o.tag(:option).pair.defaults).to eq ['nil']
+    expect(o.tag(:option).pair.text).to eq 'baz'
+    expect(o.tag(:return).types).to eq ['void']
   end
 
-  it "should handle all method names in parameters" do
+  it "handles all method names in parameters" do
     YARD.parse_string <<-eof
       module Foo
         def -(t); end
@@ -80,7 +80,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     assert_module_function('Foo', 'a?')
   end
 
-  it "should only accept strings and symbols" do
+  it "only accepts strings and symbols" do
     YARD.parse_string <<-eof
       module Foo
         module_function name
@@ -88,12 +88,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
         module_function *(method_call)
       end
     eof
-    Registry.at('Foo#name').should be_nil
-    Registry.at('Foo#argument').should be_nil
-    Registry.at('Foo#method_call').should be_nil
+    expect(Registry.at('Foo#name')).to be nil
+    expect(Registry.at('Foo#argument')).to be nil
+    expect(Registry.at('Foo#method_call')).to be nil
   end
 
-  it "should handle constants passed in as symbols" do
+  it "handles constants passed in as symbols" do
     YARD.parse_string <<-eof
       module Foo
         def Foo; end

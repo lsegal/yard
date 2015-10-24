@@ -101,7 +101,7 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
     exs.text.split(/\n/).each do |ex|
       begin
         hash = eval("{ #{ex} }")
-        hash.keys.first.should == hash.values.first
+        expect(hash.keys.first).to eq hash.values.first
       rescue => e
         raise e, "#{e.message}\nInvalid spec example in #{objname}:\n\n\t#{ex}\n"
       end
@@ -125,6 +125,15 @@ end if ENV['TM_APP_PATH']
 
 RSpec.configure do |config|
   config.before(:each) { log.io = StringIO.new }
+
+  # isolate environment of each test
+  # any other global settings which might be modified by a test should also
+  # be saved and restored here
+  config.around(:each) do |example|
+    saved_level = log.level
+    example.run
+    log.level = saved_level
+  end
 end
 
 include YARD

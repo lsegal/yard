@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../spec_helper"
 require 'optparse'
 
 describe YARD::CLI::Command do
-  describe '#parse_options' do
+  describe "#parse_options" do
     before do
       @options = OptionParser.new
       @saw_foo = false
@@ -14,23 +14,23 @@ describe YARD::CLI::Command do
       args
     end
 
-    it "should skip unrecognized options but continue to next option" do
-      log.should_receive(:warn).with(/Unrecognized.*--list/)
-      log.should_receive(:warn).with(/Unrecognized.*--list2/)
+    it "skips unrecognized options but continue to next option" do
+      expect(log).to receive(:warn).with(/Unrecognized.*--list/)
+      expect(log).to receive(:warn).with(/Unrecognized.*--list2/)
       parse('--list', '--list2', '--foo')
-      @saw_foo.should be_true
+      expect(@saw_foo).to be true
     end
 
-    it "should skip unrecognized options and any extra non-option arg that follows" do
-      log.should_receive(:warn).with(/Unrecognized.*--list/)
+    it "skips unrecognized options and any extra non-option arg that follows" do
+      expect(log).to receive(:warn).with(/Unrecognized.*--list/)
       parse('--list', 'foo', '--foo')
-      @saw_foo.should be_true
+      expect(@saw_foo).to be true
     end
 
-    it "should stop retrying to parse at non-switch argument" do
-      log.should_receive(:warn).with(/Unrecognized.*--list/)
+    it "stops retrying to parse at non-switch argument" do
+      expect(log).to receive(:warn).with(/Unrecognized.*--list/)
       args = parse('--list', 'foo', 'foo', 'foo')
-      args.should == %w(foo foo)
+      expect(args).to eq %w(foo foo)
     end
   end
 end

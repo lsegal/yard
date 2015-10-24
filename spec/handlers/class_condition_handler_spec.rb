@@ -4,58 +4,58 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCondition
   before(:all) { parse_file :class_condition_handler_001, __FILE__ }
 
   def verify_method(*names)
-    names.each {|name| Registry.at("A##{name}").should_not be_nil }
-    names.each {|name| Registry.at("A##{name}not").should be_nil }
+    names.each {|name| expect(Registry.at("A##{name}")).not_to be nil }
+    names.each {|name| expect(Registry.at("A##{name}not")).to be nil }
   end
 
   def no_undoc_error(code)
-    lambda { StubbedSourceParser.parse_string(code) }.should_not raise_error
+    expect { StubbedSourceParser.parse_string(code) }.not_to raise_error
   end
 
-  it "should parse all unless blocks for complex conditions" do
+  it "parses all unless blocks for complex conditions" do
     verify_method :g
   end
 
-  it "should not parse conditionals inside methods" do
+  it "does not parse conditionals inside methods" do
     verify_method :h
   end
 
-  it "should only parse then block if condition is literal value `true`" do
+  it "only parses then block if condition is literal value `true`" do
     verify_method :p
   end
 
-  it "should only parse then block if condition is literal integer != 0" do
+  it "only parses then block if condition is literal integer != 0" do
     verify_method :o
   end
 
-  it "should invert block to parse for literal condition if it's an unless block" do
+  it "inverts block to parse for literal condition if it's an unless block" do
     verify_method :e
   end
 
-  it "should handle conditions such as 'defined? VALUE'" do
+  it "handles conditions such as 'defined? VALUE'" do
     verify_method :j, :k
   end
 
-  it "should parse all if/elsif blocks for complex conditions" do
+  it "parses all if/elsif blocks for complex conditions" do
     verify_method :a, :b, :c, :d
   end
 
-  it "should only parse else block if condition is literal value `false`" do
+  it "parses else block if condition is literal value `false`" do
     verify_method :q
   end
 
-  it "should only parse else block if condition is literal integer == 0" do
+  it "only parses else block if condition is literal integer == 0" do
     verify_method :n
   end
 
-  it "should maintain visibility and scope state inside condition" do
-    Registry.at('A#m').visibility.should == :private
-    Registry.at('A#mnot').visibility.should == :private
+  it "maintains visibility and scope state inside condition" do
+    expect(Registry.at('A#m').visibility).to eq :private
+    expect(Registry.at('A#mnot').visibility).to eq :private
   end
 
-  it "should not fail on complex conditions" do
-    log.should_not_receive(:warn)
-    log.should_not_receive(:error)
+  it "does not fail on complex conditions" do
+    expect(log).not_to receive(:warn)
+    expect(log).not_to receive(:error)
     no_undoc_error "if defined?(A) && defined?(B); puts 'hi' end"
     no_undoc_error(<<-eof)
       (<<-TEST) unless defined?(ABCD_MODEL_TEST)
