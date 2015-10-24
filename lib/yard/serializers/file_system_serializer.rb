@@ -85,9 +85,10 @@ module YARD
         YARD::Registry.all.each do |object|
           lpath = object.path.to_s.downcase
           @name_map[lpath] ||= {}
-          @name_map[lpath][object.name] = object.name.to_s
+
           size = @name_map[lpath].size
-          @name_map[lpath][object.name] += size.to_s if size > 1
+          name = "#{object.name}#{size > 0 ? "_" * size : ""}"
+          @name_map[lpath][object.name] = name
         end
       end
 

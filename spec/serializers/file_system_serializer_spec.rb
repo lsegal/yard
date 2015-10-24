@@ -94,15 +94,8 @@ describe YARD::Serializers::FileSystemSerializer do
       o1 = CodeObjects::ClassObject.new(:root, "AB")
       o2 = CodeObjects::ClassObject.new(:root, "Ab")
       s = Serializers::FileSystemSerializer.new
-      if RUBY_VERSION > '1.8.7'
-        expect(s.serialized_path(o1)).to eq "AB.html"
-        expect(s.serialized_path(o2)).to eq "Ab2.html"
-      else
-        # Ruby 1.8 does not have a defined order for iterating over objects in a Hash
-        # which means that either "AB" or "Ab" may be counted as "second" by FileSystemSerializer
-        expect([["AB2.html", "Ab.html"], ["AB.html", "Ab2.html"]]).to include(
-          [s.serialized_path(o1), s.serialized_path(o2)])
-      end
+      expect([["AB_.html", "Ab.html"], ["AB.html", "Ab_.html"]]).to include(
+        [s.serialized_path(o1), s.serialized_path(o2)])
     end
   end
 
