@@ -490,7 +490,7 @@ describe YARD::Parser::SourceParser do
     end
 
     it "converts directories into globs" do
-      expect(Dir).to receive(:[]).with('foo/**/*.{rb,c}').and_return(['foo/a.rb', 'foo/bar/b.rb'])
+      expect(Dir).to receive(:[]).with('foo/**/*.{rb,c,cc,cxx,cpp}').and_return(['foo/a.rb', 'foo/bar/b.rb'])
       expect(File).to receive(:directory?).with('foo').and_return(true)
       expect(File).to receive(:file?).with('foo/a.rb').and_return(true)
       expect(File).to receive(:file?).with('foo/bar/b.rb').and_return(true)

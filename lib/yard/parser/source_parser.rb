@@ -63,6 +63,10 @@ module YARD
       SHEBANG_LINE  = /\A\s*#!\S+/
       ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*(?:#+|\/\*+|\/\/+).*coding\s*[:=]{1,2}\s*([a-z\d_\-]+)/i
 
+      # The default glob of files to be parsed.
+      # @since 0.9.0
+      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.rb", "ext/**/*.{c,cc,cxx,cpp}"]
+
       # Byte order marks for various encodings
       # @since 0.7.0
       ENCODING_BYTE_ORDER_MARKS = {
@@ -90,7 +94,7 @@ module YARD
         # @param [Fixnum] level the logger level to use during parsing. See
         #   {YARD::Logger}
         # @return [void]
-        def parse(paths = ["{lib,app}/**/*.rb", "ext/**/*.c"], excluded = [], level = log.level)
+        def parse(paths = DEFAULT_PATH_GLOB, excluded = [], level = log.level)
           log.debug("Parsing #{paths.inspect} with `#{parser_type}` parser")
           excluded = excluded.map do |path|
             case path
@@ -99,7 +103,7 @@ module YARD
             end
           end
           files = [paths].flatten.
-            map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c}" : p }.
+            map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c,cc,cxx,cpp}" : p }.
             map {|p| p.include?("*") ? Dir[p].sort_by {|f| f.length } : p }.flatten.
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
 
