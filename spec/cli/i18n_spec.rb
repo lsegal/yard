@@ -22,10 +22,6 @@ describe YARD::CLI::I18n do
       expect(@i18n.use_yardopts_file).to be true
     end
 
-    it "uses {lib,app}/**/*.rb and ext/**/*.c as default file glob" do
-      expect(@i18n.files).to eq ['{lib,app}/**/*.rb', 'ext/**/*.c']
-    end
-
     it "only shows public visibility by default" do
       expect(@i18n.visibilities).to eq [:public]
     end

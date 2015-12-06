@@ -42,8 +42,8 @@ describe YARD::CLI::Yardoc do
       expect(@yardoc.use_document_file).to be true
     end
 
-    it "uses {lib,app}/**/*.rb and ext/**/*.c as default file glob" do
-      expect(@yardoc.files).to eq ['{lib,app}/**/*.rb', 'ext/**/*.c']
+    it "uses lib, app, and ext as default file glob paths" do
+      expect(@yardoc.files).to eq Parser::SourceParser::DEFAULT_PATH_GLOB
     end
 
     it "uses rdoc as default markup type (but falls back on none)" do
@@ -572,7 +572,7 @@ describe YARD::CLI::Yardoc do
     it "accepts files section only containing extra files" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return([])
       @yardoc.parse_arguments *%w( - LICENSE )
-      expect(@yardoc.files).to eq %w( {lib,app}/**/*.rb ext/**/*.c )
+      expect(@yardoc.files).to eq Parser::SourceParser::DEFAULT_PATH_GLOB
       expect(@yardoc.options.files).to eq [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
 
@@ -630,7 +630,7 @@ describe YARD::CLI::Yardoc do
   describe "Source file arguments" do
     it "accepts no params and parse {lib,app}/**/*.rb ext/**/*.c" do
       @yardoc.parse_arguments
-      expect(@yardoc.files).to eq %w( {lib,app}/**/*.rb ext/**/*.c )
+      expect(@yardoc.files).to eq Parser::SourceParser::DEFAULT_PATH_GLOB
     end
   end
 
