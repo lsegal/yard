@@ -13,7 +13,8 @@ module YARD
           raise NotFoundError if !File.file?(filename)
           if filename =~ /\.(jpe?g|gif|png|bmp)$/i
             headers['Content-Type'] = StaticFileCommand::DefaultMimeTypes[$1.downcase] || 'text/html'
-            render IO.read(filename)
+#            render IO.read(filename)
+            self.body = File.binread(filename)
           else
             file = CodeObjects::ExtraFileObject.new(filename)
             options.update :object => Registry.root,
