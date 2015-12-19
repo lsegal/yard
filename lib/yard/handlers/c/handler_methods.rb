@@ -51,6 +51,16 @@ module YARD
           end
 
           namespace = namespace_for_variable(var_name)
+
+          # Is this method being defined on a core Ruby class or module?
+          if namespace.is_a?(Proxy)
+            if var_name =~ /^rb_c(\w+)/ && YARD::CodeObjects::BUILTIN_CLASSES.include?($1)
+              namespace = namespaces[var_name] = YARD::CodeObjects::ClassObject.new(:root, $1)
+            elsif var_name =~ /^rb_m(\w+)/ && YARD::CodeObjects::BUILTIN_MODULES.include?($1)
+              namespace = namespaces[var_name] = YARD::CodeObjects::ModuleObject.new(:root, $1)
+            end
+          end
+
           return if namespace.nil? # XXX: raise UndocumentableError might be too noisy.
           register MethodObject.new(namespace, name, scope) do |obj|
             register_visibility(obj, visibility)
@@ -158,10 +168,15 @@ module YARD
           # so look in overrides
           override_comments.each do |name, override_comment|
             next unless override_comment.file == file
-            name = name.gsub(/::([^:]+?)\Z/, '.\1')
-            just_method_name = name.gsub(/\A.+(#|::|\.)/, '')
-            just_method_name = 'initialize' if just_method_name == 'new'
-            if object.path == name || object.name.to_s == just_method_name
+            name = name.gsub(/::([^:\.#]+?)\Z/, '.\1')
+
+            path = if name =~ /\.|#/ # explicit namespace in override comment
+              object.path
+            else
+              object.name.to_s
+            end
+
+            if path == name || path == name.sub(/new$/, 'initialize') || path == name.sub('.', '#')
               register_docstring(object, override_comment.source, override_comment)
               return
             end

@@ -7,178 +7,178 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     end
   end
 
-  it "should add methods to parent's #meths list" do
-    P(:Foo).meths.should include(P("Foo#method1"))
+  it "adds methods to parent's #meths list" do
+    expect(P(:Foo).meths).to include(P("Foo#method1"))
   end
 
-  it "should parse/add class methods (self.method2)" do
-    P(:Foo).meths.should include(P("Foo.method2"))
+  it "parses and adds class methods (self.method2)" do
+    expect(P(:Foo).meths).to include(P("Foo.method2"))
   end
 
-  it "should parse/add class methods from other namespaces (String.hello)" do
-    P("String.hello").should be_instance_of(CodeObjects::MethodObject)
+  it "parses and adds class methods from other namespaces (String.hello)" do
+    expect(P("String.hello")).to be_instance_of(CodeObjects::MethodObject)
   end
 
   [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^', :-@, :+@, :'~@'].each do |name|
-    it "should allow valid method #{name}" do
-      Registry.at("Foo##{name}").should_not be_nil
+    it "allows valid method #{name}" do
+      expect(Registry.at("Foo##{name}")).not_to be nil
     end
   end
 
-  it "should allow self.methname" do
-    Registry.at("Foo.new").should_not be_nil
+  it "allows self.methname" do
+    expect(Registry.at("Foo.new")).not_to be nil
   end
 
-  it "should mark dynamic methods as such" do
-    P('Foo#dynamic').dynamic?.should == true
+  it "marks dynamic methods as such" do
+    expect(P('Foo#dynamic').dynamic?).to be true
   end
 
-  it "should show that a method is explicitly defined (if it was originally defined implicitly by attribute)" do
-    P('Foo#method1').is_explicit?.should == true
+  it "shows that a method is explicitly defined (if it was originally defined implicitly by attribute)" do
+    expect(P('Foo#method1').is_explicit?).to be true
   end
 
-  it "should handle parameters" do
-    P('Foo#[]').parameters.should == [['key', "'default'"]]
-    P('Foo#/').parameters.should == [['x', "File.new('x', 'w')"], ['y', '2']]
+  it "handles parameters" do
+    expect(P('Foo#[]').parameters).to eq [['key', "'default'"]]
+    expect(P('Foo#/').parameters).to eq [['x', "File.new('x', 'w')"], ['y', '2']]
   end
 
-  it "should handle opts = {} as parameter" do
-    P('Foo#optsmeth').parameters.should == [['x', nil], ['opts', '{}']]
+  it "handles opts = {} as parameter" do
+    expect(P('Foo#optsmeth').parameters).to eq [['x', nil], ['opts', '{}']]
   end
 
-  it "should handle &block as parameter" do
-    P('Foo#blockmeth').parameters.should == [['x', nil], ['&block', nil]]
+  it "handles &block as parameter" do
+    expect(P('Foo#blockmeth').parameters).to eq [['x', nil], ['&block', nil]]
   end
 
-  it "should handle overloads" do
+  it "handles overloads" do
     meth = P('Foo#foo')
 
     o1 = meth.tags(:overload).first
-    o1.name.should == :bar
-    o1.parameters.should == [['a', nil], ['b', "1"]]
-    o1.tag(:return).type.should == "String"
+    expect(o1.name).to eq :bar
+    expect(o1.parameters).to eq [['a', nil], ['b', "1"]]
+    expect(o1.tag(:return).type).to eq "String"
 
     o2 = meth.tags(:overload)[1]
-    o2.name.should == :baz
-    o2.parameters.should == [['b', nil], ['c', nil]]
-    o2.tag(:return).type.should == "Fixnum"
+    expect(o2.name).to eq :baz
+    expect(o2.parameters).to eq [['b', nil], ['c', nil]]
+    expect(o2.tag(:return).type).to eq "Fixnum"
 
     o3 = meth.tags(:overload)[2]
-    o3.name.should == :bang
-    o3.parameters.should == [['d', nil], ['e', nil]]
-    o3.docstring.should be_empty
-    o3.docstring.should be_blank
+    expect(o3.name).to eq :bang
+    expect(o3.parameters).to eq [['d', nil], ['e', nil]]
+    expect(o3.docstring).to be_empty
+    expect(o3.docstring).to be_blank
   end
 
-  it "should set a return tag if not set on #initialize" do
+  it "sets a return tag if not set on #initialize" do
     meth = P('Foo#initialize')
 
-    meth.should have_tag(:return)
-    meth.tag(:return).types.should == ["Foo"]
-    meth.tag(:return).text.should == "a new instance of Foo"
+    expect(meth).to have_tag(:return)
+    expect(meth.tag(:return).types).to eq ["Foo"]
+    expect(meth.tag(:return).text).to eq "a new instance of Foo"
   end
 
   %w(inherited included method_added method_removed method_undefined).each do |meth|
-    it "should set @private tag on #{meth} callback method if no docstring is set" do
-      P('Foo.' + meth).should have_tag(:private)
+    it "sets @private tag on #{meth} callback method if no docstring is set" do
+      expect(P('Foo.' + meth)).to have_tag(:private)
     end
   end
 
-  it "should not set @private tag on extended callback method since docstring is set" do
-    P('Foo.extended').should_not have_tag(:private)
+  it "does not set @private tag on extended callback method since docstring is set" do
+    expect(P('Foo.extended')).not_to have_tag(:private)
   end
 
-  it "should add @return [Boolean] tag to methods ending in ? without return types" do
+  it "adds @return [Boolean] tag to methods ending in ? without return types" do
     meth = P('Foo#boolean?')
-    meth.should have_tag(:return)
-    meth.tag(:return).types.should == ['Boolean']
+    expect(meth).to have_tag(:return)
+    expect(meth.tag(:return).types).to eq ['Boolean']
   end
 
-  it "should add Boolean type to return tag without types" do
+  it "adds Boolean type to return tag without types" do
     meth = P('Foo#boolean2?')
-    meth.should have_tag(:return)
-    meth.tag(:return).types.should == ['Boolean']
+    expect(meth).to have_tag(:return)
+    expect(meth.tag(:return).types).to eq ['Boolean']
   end
 
-  it "should not change return type for method ending in ? with return types set" do
+  it "does not change return type for method ending in ? with return types set" do
     meth = P('Foo#boolean3?')
-    meth.should have_tag(:return)
-    meth.tag(:return).types.should == ['NotBoolean', 'nil']
+    expect(meth).to have_tag(:return)
+    expect(meth.tag(:return).types).to eq ['NotBoolean', 'nil']
   end
 
-  it "should not change return type for method ending in ? with return types set by @overload" do
+  it "does not change return type for method ending in ? with return types set by @overload" do
     meth = P('Foo#rainy?')
-    meth.should have_tag(:overload)
-    meth.tag(:overload).should have_tag(:return)
-    meth.should_not have_tag(:return)
+    expect(meth).to have_tag(:overload)
+    expect(meth.tag(:overload)).to have_tag(:return)
+    expect(meth).not_to have_tag(:return)
   end
 
-  it "should add method writer to existing attribute" do
-    Registry.at('Foo#attr_name').should be_reader
-    Registry.at('Foo#attr_name=').should be_writer
+  it "adds method writer to existing attribute" do
+    expect(Registry.at('Foo#attr_name')).to be_reader
+    expect(Registry.at('Foo#attr_name=')).to be_writer
   end
 
-  it "should add method reader to existing attribute" do
-    Registry.at('Foo#attr_name2').should be_reader
-    Registry.at('Foo#attr_name2=').should be_writer
+  it "adds method reader to existing attribute" do
+    expect(Registry.at('Foo#attr_name2')).to be_reader
+    expect(Registry.at('Foo#attr_name2=')).to be_writer
   end
 
-  it "should generate an options parameter if @option refers to an undocumented parameter" do
+  it "generates an options parameter if @option refers to an undocumented parameter" do
     meth = P('Foo#auto_opts')
-    meth.should have_tag(:param)
-    meth.tag(:param).name.should == "opts"
-    meth.tag(:param).types.should == ["Hash"]
+    expect(meth).to have_tag(:param)
+    expect(meth.tag(:param).name).to eq "opts"
+    expect(meth.tag(:param).types).to eq ["Hash"]
   end
 
-  it "should raise an undocumentable error when a method is defined on an object instance" do
+  it "raises an undocumentable error when a method is defined on an object instance" do
     undoc_error "error = Foo; def error.at(foo) end"
-    Registry.at('error').should be_nil
+    expect(Registry.at('error')).to be nil
   end
 
-  it "should allow class method to be defined on constant reference object" do
-    Registry.at('Foo.meth_on_const').should_not be_nil
-    Registry.at('Foo.meth2_on_const').should_not be_nil
+  it "allows class method to be defined on constant reference object" do
+    expect(Registry.at('Foo.meth_on_const')).not_to be nil
+    expect(Registry.at('Foo.meth2_on_const')).not_to be nil
   end
 
-  it "should copy alias information on method (re-)definition to new method" do
-    Registry.at('D').aliases.should be_empty
-    Registry.at('D#b').is_alias?.should == false
-    Registry.at('D#a').is_alias?.should == false
+  it "copies alias information on method (re-)definition to new method" do
+    expect(Registry.at('D').aliases).to be_empty
+    expect(Registry.at('D#b').is_alias?).to be false
+    expect(Registry.at('D#a').is_alias?).to be false
   end
 
-  it "should add macros for class methods" do
+  it "adds macros for class methods" do
     macro = CodeObjects::MacroObject.find('prop')
-    macro.should_not be_nil
-    macro.macro_data.should == "@!method $1(value)\n$3\n@return [$2]"
-    macro.method_object.should == Registry.at('E.property')
-    macro.should be_attached
+    expect(macro).not_to be nil
+    expect(macro.macro_data).to eq "@!method $1(value)\n$3\n@return [$2]"
+    expect(macro.method_object).to eq Registry.at('E.property')
+    expect(macro).to be_attached
     obj = Registry.at('E#foo')
-    obj.should_not be_nil
-    obj.docstring.should == 'create a foo'
-    obj.signature.should == 'def foo(value)'
-    obj.tag(:return).types.should == ['String']
+    expect(obj).not_to be nil
+    expect(obj.docstring).to eq 'create a foo'
+    expect(obj.signature).to eq 'def foo(value)'
+    expect(obj.tag(:return).types).to eq ['String']
   end
 
-  it "should handle macros on any object" do
+  it "handles macros on any object" do
     macro = CodeObjects::MacroObject.find('xyz')
-    macro.should_not be_nil
-    macro.macro_data.should == '@!method $1'
+    expect(macro).not_to be nil
+    expect(macro.macro_data).to eq '@!method $1'
   end
 
-  it "should skip macros on instance methods" do
-    Registry.at('E#a').should be_nil
+  it "skips macros on instance methods" do
+    expect(Registry.at('E#a')).to be nil
   end
 
-  it "should warn if the macro name is invalid" do
-    log.should_receive(:warn).with(/Invalid directive.*@!macro/)
+  it "warns if the macro name is invalid" do
+    expect(log).to receive(:warn).with(/Invalid directive.*@!macro/)
     YARD.parse_string "class Foo\n# @!macro\ndef self.foo; end\nend"
   end
 
-  it "should handle 'def end' methods" do
+  it "handles 'def end' methods" do
     obj = Registry.at('F::A#foo')
-    obj.should_not be_nil
+    expect(obj).not_to be nil
     obj = Registry.at('F::A#bar')
-    obj.should_not be_nil
-    obj.docstring.should == 'PASS'
+    expect(obj).not_to be nil
+    expect(obj.docstring).to eq 'PASS'
   end
 end

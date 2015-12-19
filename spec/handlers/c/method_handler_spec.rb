@@ -1,34 +1,34 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Handlers::C::MethodHandler do
-  it "should register methods" do
+  it "registers methods" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");
       rb_define_method(mFoo, "bar", bar, 0);
     eof
-    Registry.at('Foo#bar').should_not be_nil
-    Registry.at('Foo#bar').visibility.should == :public
+    expect(Registry.at('Foo#bar')).not_to be nil
+    expect(Registry.at('Foo#bar').visibility).to eq :public
   end
 
-  it "should register private methods" do
+  it "registers private methods" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");
       rb_define_private_method(mFoo, "bar", bar, 0);
     eof
-    Registry.at('Foo#bar').should_not be_nil
-    Registry.at('Foo#bar').visibility.should == :private
+    expect(Registry.at('Foo#bar')).not_to be nil
+    expect(Registry.at('Foo#bar').visibility).to eq :private
   end
 
-  it "should register singleton methods" do
+  it "registers singleton methods" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");
       rb_define_singleton_method(mFoo, "bar", bar, 0);
     eof
-    Registry.at('Foo.bar').should_not be_nil
-    Registry.at('Foo.bar').visibility.should == :public
+    expect(Registry.at('Foo.bar')).not_to be nil
+    expect(Registry.at('Foo.bar').visibility).to eq :public
   end
 
-  it "should register module functions" do
+  it "registers module functions" do
     parse <<-eof
       /* DOCSTRING
        * @return [String] foo!
@@ -42,24 +42,24 @@ describe YARD::Handlers::C::MethodHandler do
     eof
     bar_c = Registry.at('Foo.bar')
     bar_i = Registry.at('Foo#bar')
-    bar_c.should be_module_function
-    bar_c.visibility.should == :public
-    bar_c.docstring.should == "DOCSTRING"
-    bar_c.tag(:return).object.should == bar_c
-    bar_c.source.should == "static VALUE bar(VALUE self) { x(); y(); z(); }"
-    bar_i.should_not be_module_function
-    bar_i.visibility.should == :private
-    bar_i.docstring.should == "DOCSTRING"
-    bar_i.tag(:return).object.should == bar_i
-    bar_i.source.should == bar_c.source
+    expect(bar_c).to be_module_function
+    expect(bar_c.visibility).to eq :public
+    expect(bar_c.docstring).to eq "DOCSTRING"
+    expect(bar_c.tag(:return).object).to eq bar_c
+    expect(bar_c.source).to eq "static VALUE bar(VALUE self) { x(); y(); z(); }"
+    expect(bar_i).not_to be_module_function
+    expect(bar_i.visibility).to eq :private
+    expect(bar_i.docstring).to eq "DOCSTRING"
+    expect(bar_i.tag(:return).object).to eq bar_i
+    expect(bar_i.source).to eq bar_c.source
   end
 
-  it "should register global functions into Kernel" do
+  it "registers global functions into Kernel" do
     parse_init 'rb_define_global_function("bar", bar, 0);'
-    Registry.at('Kernel#bar').should_not be_nil
+    expect(Registry.at('Kernel#bar')).not_to be nil
   end
 
-  it "should look for symbol containing method source" do
+  it "looks for symbol containing method source" do
     parse <<-eof
       static VALUE foo(VALUE self) { x(); y(); z(); }
       VALUE bar() { a(); b(); c(); }
@@ -71,15 +71,15 @@ describe YARD::Handlers::C::MethodHandler do
     eof
     foo = Registry.at('Foo#foo')
     bar = Registry.at('Foo#bar')
-    foo.source.should == "static VALUE foo(VALUE self) { x(); y(); z(); }"
-    foo.file.should == '(stdin)'
-    foo.line.should == 1
-    bar.source.should == "VALUE bar() { a(); b(); c(); }"
-    bar.file.should == '(stdin)'
-    bar.line.should == 2
+    expect(foo.source).to eq "static VALUE foo(VALUE self) { x(); y(); z(); }"
+    expect(foo.file).to eq '(stdin)'
+    expect(foo.line).to eq 1
+    expect(bar.source).to eq "VALUE bar() { a(); b(); c(); }"
+    expect(bar.file).to eq '(stdin)'
+    expect(bar.line).to eq 2
   end
 
-  it "should find docstrings attached to method symbols" do
+  it "finds docstrings attached to method symbols" do
     parse <<-eof
       /* DOCSTRING */
       static VALUE foo(VALUE self) { x(); y(); z(); }
@@ -89,10 +89,10 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     foo = Registry.at('Foo#foo')
-    foo.docstring.should == 'DOCSTRING'
+    expect(foo.docstring).to eq 'DOCSTRING'
   end
 
-  it "should use declaration comments as docstring if there are no others" do
+  it "uses declaration comments as docstring if there are no others" do
     parse <<-eof
       static VALUE foo(VALUE self) { x(); y(); z(); }
       void Init_Foo() {
@@ -104,17 +104,17 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     foo = Registry.at('Foo#foo')
-    foo.docstring.should == 'DOCSTRING'
+    expect(foo.docstring).to eq 'DOCSTRING'
     bar = Registry.at('Foo#bar')
-    bar.docstring.should == 'DOCSTRING!'
+    expect(bar.docstring).to eq 'DOCSTRING!'
   end
 
-  it "should look for symbols in other file" do
+  it "looks for symbols in other file" do
     other = <<-eof
       /* DOCSTRING! */
       static VALUE foo() { x(); }
     eof
-    File.should_receive(:read).with('other.c').and_return(other)
+    expect(File).to receive(:read).with('other.c').and_return(other)
     parse <<-eof
       void Init_Foo() {
         mFoo = rb_define_module("Foo");
@@ -122,14 +122,14 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     foo = Registry.at('Foo#foo')
-    foo.docstring.should == 'DOCSTRING!'
-    foo.file.should == 'other.c'
-    foo.line.should == 2
-    foo.source.should == 'static VALUE foo() { x(); }'
+    expect(foo.docstring).to eq 'DOCSTRING!'
+    expect(foo.file).to eq 'other.c'
+    expect(foo.line).to eq 2
+    expect(foo.source).to eq 'static VALUE foo() { x(); }'
   end
 
-  it "should allow extra file to include /'s and other filename characters" do
-    File.should_receive(:read).at_least(1).times.with('ext/a-file.c').and_return(<<-eof)
+  it "allows extra file to include /'s and other filename characters" do
+    expect(File).to receive(:read).at_least(1).times.with('ext/a-file.c').and_return(<<-eof)
       /* FOO */
       VALUE foo(VALUE x) { int value = x; }
 
@@ -140,12 +140,12 @@ describe YARD::Handlers::C::MethodHandler do
       rb_define_method(rb_cFoo, "foo", foo, 1); /* in ext/a-file.c */
       rb_define_global_function("bar", bar, 1); /* in ext/a-file.c */
     eof
-    Registry.at('Foo#foo').docstring.should == 'FOO'
-    Registry.at('Kernel#bar').docstring.should == 'BAR'
+    expect(Registry.at('Foo#foo').docstring).to eq 'FOO'
+    expect(Registry.at('Kernel#bar').docstring).to eq 'BAR'
   end
 
-  it "should warn if other file can't be found" do
-    log.should_receive(:warn).with(/Missing source file `other.c' when parsing Foo#foo/)
+  it "warns if other file can't be found" do
+    expect(log).to receive(:warn).with(/Missing source file `other.c' when parsing Foo#foo/)
     parse <<-eof
       void Init_Foo() {
         mFoo = rb_define_module("Foo");
@@ -154,7 +154,7 @@ describe YARD::Handlers::C::MethodHandler do
     eof
   end
 
-  it "should look at override comments for docstring" do
+  it "looks at override comments for docstring" do
     parse <<-eof
       /* Document-method: Foo::foo
        * Document-method: new
@@ -171,12 +171,12 @@ describe YARD::Handlers::C::MethodHandler do
         rb_define_method(mBar, "baz", foo, 0);
       }
     eof
-    Registry.at('Foo#foo').docstring.should == 'Foo bar!'
-    Registry.at('Foo#initialize').docstring.should == 'Foo bar!'
-    Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
+    expect(Registry.at('Foo#foo').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo#initialize').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo::Bar#baz').docstring).to eq 'Foo bar!'
   end
 
-  it "should look at overrides in other files" do
+  it "looks at overrides in other files" do
     other = <<-eof
       /* Document-method: Foo::foo
        * Document-method: new
@@ -184,7 +184,7 @@ describe YARD::Handlers::C::MethodHandler do
        * Foo bar!
        */
     eof
-    File.should_receive(:read).with('foo/bar/other.c').and_return(other)
+    expect(File).to receive(:read).with('foo/bar/other.c').and_return(other)
     src = <<-eof
       void Init_Foo() {
         mFoo = rb_define_module("Foo");
@@ -195,12 +195,12 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     parse(src, 'foo/bar/baz/init.c')
-    Registry.at('Foo#foo').docstring.should == 'Foo bar!'
-    Registry.at('Foo#initialize').docstring.should == 'Foo bar!'
-    Registry.at('Foo::Bar#baz').docstring.should == 'Foo bar!'
+    expect(Registry.at('Foo#foo').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo#initialize').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo::Bar#baz').docstring).to eq 'Foo bar!'
   end
 
-  it "should add return tag on methods ending in '?'" do
+  it "adds return tag on methods ending in '?'" do
     parse <<-eof
       /* DOCSTRING */
       static VALUE foo(VALUE self) { x(); y(); z(); }
@@ -210,11 +210,11 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     foo = Registry.at('Foo#foo?')
-    foo.docstring.should == 'DOCSTRING'
-    foo.tag(:return).types.should == ['Boolean']
+    expect(foo.docstring).to eq 'DOCSTRING'
+    expect(foo.tag(:return).types).to eq ['Boolean']
   end
 
-  it "should not add return tag if return tags exist" do
+  it "does not add return tag if return tags exist" do
     parse <<-eof
       // @return [String] foo
       static VALUE foo(VALUE self) { x(); y(); z(); }
@@ -224,20 +224,20 @@ describe YARD::Handlers::C::MethodHandler do
       }
     eof
     foo = Registry.at('Foo#foo?')
-    foo.tag(:return).types.should == ['String']
+    expect(foo.tag(:return).types).to eq ['String']
   end
 
-  it "should handle casted method names" do
+  it "handles casted method names" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");
       rb_define_method(mFoo, "bar", (METHOD)bar, 0);
       rb_define_global_function("baz", (METHOD)baz, 0);
     eof
-    Registry.at('Foo#bar').should_not be_nil
-    Registry.at('Kernel#baz').should_not be_nil
+    expect(Registry.at('Foo#bar')).not_to be nil
+    expect(Registry.at('Kernel#baz')).not_to be nil
   end
 
-  it "should extract regular method parameters from C function signatures" do
+  it "extracts at regular method parameters from C function signatures" do
     parse <<-eof
       static VALUE noargs_func(VALUE self) { return Qnil; }
       static VALUE twoargs_func(VALUE self, VALUE a, VALUE b) { return a; }
@@ -247,11 +247,11 @@ describe YARD::Handlers::C::MethodHandler do
         rb_define_method(mFoo, "twoargs", twoargs_func, 2);
       }
     eof
-    Registry.at('Foo#noargs').parameters.should be_empty
-    Registry.at('Foo#twoargs').parameters.should == [['a', nil], ['b', nil]]
+    expect(Registry.at('Foo#noargs').parameters).to be_empty
+    expect(Registry.at('Foo#twoargs').parameters).to eq [['a', nil], ['b', nil]]
   end
 
-  it "should extract varargs method parameters from C function signatures" do
+  it "extracts at varargs method parameters from C function signatures" do
     parse <<-eof
       static VALUE varargs_func(int argc, VALUE *argv, VALUE self) { return self; }
       /* let's see if parser is robust in the face of strange spacing */
@@ -265,7 +265,60 @@ describe YARD::Handlers::C::MethodHandler do
         rb_define_method(	mFoo	,"varargs2",varargs_func2		,-1);
       }
     eof
-    Registry.at('Foo#varargs').parameters.should == [['*args', nil]]
-    Registry.at('Foo#varargs2').parameters.should == [['*args', nil]]
+    expect(Registry.at('Foo#varargs').parameters).to eq [['*args', nil]]
+    expect(Registry.at('Foo#varargs2').parameters).to eq [['*args', nil]]
+  end
+
+  it "is not too strict or too loose about matching override comments to methods" do
+    parse <<-eof
+      /* Document-method: Foo::foo
+       * Document-method: new
+       * Document-method: Foo::Bar#baz
+       * Foo bar!
+       */
+
+      void Init_Foo() {
+        mFoo = rb_define_module("Foo");
+        mBar = rb_define_module_under(mFoo, "Bar");
+
+        rb_define_method(mFoo, "foo", foo, 0);
+        rb_define_singleton_method(mFoo, "foo", foo, 0);
+        rb_define_method(mBar, "foo", foo, 0);
+        rb_define_singleton_method(mBar, "foo", foo, 0);
+
+        rb_define_method(mFoo, "initialize", foo, 0);
+        rb_define_method(mBar, "initialize", foo, 0);
+
+        rb_define_method(mFoo, "baz", foo, 0);
+        rb_define_singleton_method(mFoo, "baz", foo, 0);
+        rb_define_method(mBar, "baz", foo, 0);
+        rb_define_singleton_method(mBar, "baz", foo, 0);
+      }
+    eof
+    expect(Registry.at('Foo#foo').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo.foo').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo::Bar#foo').docstring).to be_empty
+    expect(Registry.at('Foo::Bar.foo').docstring).to be_empty
+    expect(Registry.at('Foo#initialize').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo::Bar#initialize').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo#baz').docstring).to be_empty
+    expect(Registry.at('Foo.baz').docstring).to be_empty
+    expect(Registry.at('Foo::Bar#baz').docstring).to eq 'Foo bar!'
+    expect(Registry.at('Foo::Bar.baz').docstring).to be_empty
+  end
+
+  it "recognizes core Ruby classes and modules provided by ruby.h" do
+    parse_init <<-eof
+      rb_define_method(rb_cFixnum, "popcount", fix_popcount, 0);
+      rb_define_private_method(rb_mKernel, "pp", obj_pp, 0);
+      rb_define_method(rb_mEnumerable, "to_hash", enum_to_hash, 0);
+    eof
+    expect(Registry.at('Fixnum').type).to eq :class
+    expect(Registry.at('Fixnum#popcount').type).to eq :method
+    expect(Registry.at('Object').type).to eq :class
+    # Methods defined on Kernel are treated as if they were defined on Object
+    expect(Registry.at('Object#pp').type).to eq :method
+    expect(Registry.at('Enumerable').type).to eq :module
+    expect(Registry.at('Enumerable#to_hash').type).to eq :method
   end
 end

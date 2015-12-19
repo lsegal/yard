@@ -3,37 +3,37 @@ require 'ostruct'
 
 describe YARD::Server::Commands::LibraryCommand do
   before do
-    Templates::Engine.stub!(:render)
-    Templates::Engine.stub!(:generate)
-    YARD.stub!(:parse)
-    Registry.stub!(:load)
-    Registry.stub!(:save)
+    allow(Templates::Engine).to receive(:render)
+    allow(Templates::Engine).to receive(:generate)
+    allow(YARD).to receive(:parse)
+    allow(Registry).to receive(:load)
+    allow(Registry).to receive(:save)
 
     @cmd = LibraryCommand.new(:adapter => mock_adapter)
     @request = OpenStruct.new(:xhr? => false, :path => "/foo")
     @library = OpenStruct.new(:source_path => '.')
     @cmd.library = @library
-    @cmd.stub!(:load_yardoc).and_return(nil)
+    allow(@cmd).to receive(:load_yardoc).and_return(nil)
   end
 
   def call
-    lambda { @cmd.call(@request) }.should raise_error(NotImplementedError)
+    expect { @cmd.call(@request) }.to raise_error(NotImplementedError)
   end
 
   describe "#call" do
-    it "should raise NotImplementedError" do
+    it "raises NotImplementedError" do
       call
     end
 
-    it "should set :rdoc as the default markup in incremental mode" do
+    it "sets :rdoc as the default markup in incremental mode" do
       @cmd.incremental = true
       call
-      @cmd.options[:markup].should == :rdoc
+      expect(@cmd.options[:markup]).to eq :rdoc
     end
 
-    it "should set :rdoc as the default markup in regular mode" do
+    it "sets :rdoc as the default markup in regular mode" do
       call
-      @cmd.options[:markup].should == :rdoc
+      expect(@cmd.options[:markup]).to eq :rdoc
     end
   end
 end

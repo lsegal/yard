@@ -26,6 +26,7 @@ module YARD
       #   path filename. If this is set to the empty string, no extension is used.
       def initialize(opts = {})
         super
+        @name_map = nil
         @basepath = (options[:basepath] || 'doc').to_s
         @extension = (options.has_key?(:extension) ? options[:extension] : 'html').to_s
       end
@@ -51,7 +52,7 @@ module YARD
         if object.is_a?(CodeObjects::ExtraFileObject)
           fspath = ['file.' + object.name + (extension.empty? ? '' : ".#{extension}")]
         else
-          objname = object != YARD::Registry.root ? object.name.to_s : "top-level-namespace"
+          objname = object != YARD::Registry.root ? mapped_name(object) : "top-level-namespace"
           objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
           fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
           if object.namespace && object.namespace.path != ""
@@ -71,6 +72,32 @@ module YARD
       end
 
       private
+
+      # Builds a filename mapping from object paths to filesystem path names.
+      # Needed to handle case sensitive YARD objects mapped into a case
+      # insensitive filesystem. Uses with {#mapped_name} to determine the
+      # mapping name for a given object.
+      #
+      # @note In order to use filesystem name mapping, you must initialize
+      #   the serializer object after preparing the {YARD::Registry}.
+      def build_filename_map
+        @name_map = {}
+        YARD::Registry.all.each do |object|
+          lpath = object.path.to_s.downcase
+          @name_map[lpath] ||= {}
+
+          size = @name_map[lpath].size
+          name = "#{object.name}#{size > 0 ? "_" * size : ""}"
+          @name_map[lpath][object.name] = name
+        end
+      end
+
+      # @return [String] the filesystem mapped name of a given object.
+      def mapped_name(object)
+        build_filename_map if !@name_map
+        map = @name_map[object.path.downcase]
+        return map && map[object.name] ? map[object.name] : object.name.to_s
+      end
 
       # Remove special chars from filenames.
       # Windows disallows \ / : * ? " < > | but we will just remove any

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe YARD::Templates::Engine.template(:default, :tags) do
   before { Registry.clear }
 
-  describe 'all known tags' do
+  describe "all known tags" do
     before do
       YARD.parse_string <<-'eof'
         # Comments
@@ -32,20 +32,20 @@ describe YARD::Templates::Engine.template(:default, :tags) do
       eof
     end
 
-    it "should render text format correctly" do
+    it "renders text format correctly" do
       text_equals(Registry.at('#m').format(text_options), :tag001)
     end
   end
 
-  describe 'param tags on non-methods' do
-    it 'should not display @param tags on non-method objects' do
+  describe "param tags on non-methods" do
+    it "does not display @param tags on non-method objects" do
       YARD.parse_string <<-'eof'
         # @param [#to_s] name the name
         module Foo; end
       eof
 
       proc = lambda { Registry.at('Foo').format(html_options) }
-      proc.should_not raise_error(NoMethodError)
+      expect(proc).not_to raise_error
     end
   end
 end

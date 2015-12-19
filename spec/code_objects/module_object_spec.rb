@@ -37,65 +37,65 @@ describe YARD::CodeObjects::ModuleObject do
       @yard.class_mixins << @another
     end
 
-    it "should list all methods (including mixin methods) via #meths" do
+    it "lists all methods (including mixin methods) via #meths" do
       meths = @yard.meths
-      meths.should include(P("YARD#foo"))
-      meths.should include(P("YARD#foo2"))
-      meths.should include(P("YARD.bar"))
-      meths.should include(P("SomeMod#mixmethod"))
-      meths.should include(P("AnotherMod#fizz"))
+      expect(meths).to include(P("YARD#foo"))
+      expect(meths).to include(P("YARD#foo2"))
+      expect(meths).to include(P("YARD.bar"))
+      expect(meths).to include(P("SomeMod#mixmethod"))
+      expect(meths).to include(P("AnotherMod#fizz"))
     end
 
-    it "should allow :visibility to be set" do
+    it "allows :visibility to be set" do
       meths = @yard.meths(:visibility => :public)
-      meths.should_not include(P("YARD.bar"))
+      expect(meths).not_to include(P("YARD.bar"))
       meths = @yard.meths(:visibility => [:public, :private])
-      meths.should include(P("YARD#foo"))
-      meths.should include(P("YARD.bar"))
-      meths.should_not include(P("YARD#foo2"))
+      expect(meths).to include(P("YARD#foo"))
+      expect(meths).to include(P("YARD.bar"))
+      expect(meths).not_to include(P("YARD#foo2"))
     end
 
-    it "should only display class methods for :scope => :class" do
+    it "only displays class methods for :scope => :class" do
       meths = @yard.meths(:scope => :class)
-      meths.should_not include(P("YARD#foo"))
-      meths.should_not include(P("YARD#foo2"))
-      meths.should_not include(P("SomeMod#mixmethod"))
-      meths.should_not include(P("SomeMod.baz"))
-      meths.should_not include(P("AnotherMod#fazz"))
-      meths.should include(P("YARD.bar"))
-      meths.should include(P("AnotherMod#fizz"))
+      expect(meths).not_to include(P("YARD#foo"))
+      expect(meths).not_to include(P("YARD#foo2"))
+      expect(meths).not_to include(P("SomeMod#mixmethod"))
+      expect(meths).not_to include(P("SomeMod.baz"))
+      expect(meths).not_to include(P("AnotherMod#fazz"))
+      expect(meths).to include(P("YARD.bar"))
+      expect(meths).to include(P("AnotherMod#fizz"))
     end
 
-    it "should only display instance methods for :scope => :class" do
+    it "only displays instance methods for :scope => :class" do
       meths = @yard.meths(:scope => :instance)
-      meths.should include(P("YARD#foo"))
-      meths.should include(P("YARD#foo2"))
-      meths.should include(P("SomeMod#mixmethod"))
-      meths.should_not include(P("YARD.bar"))
-      meths.should_not include(P("AnotherMod#fizz"))
+      expect(meths).to include(P("YARD#foo"))
+      expect(meths).to include(P("YARD#foo2"))
+      expect(meths).to include(P("SomeMod#mixmethod"))
+      expect(meths).not_to include(P("YARD.bar"))
+      expect(meths).not_to include(P("AnotherMod#fizz"))
     end
 
-    it "should allow :included to be set" do
+    it "allows :included to be set" do
       meths = @yard.meths(:included => false)
-      meths.should_not include(P("SomeMod#mixmethod"))
-      meths.should_not include(P("AnotherMod#fizz"))
-      meths.should include(P("YARD#foo"))
-      meths.should include(P("YARD#foo2"))
-      meths.should include(P("YARD.bar"))
+      expect(meths).not_to include(P("SomeMod#mixmethod"))
+      expect(meths).not_to include(P("AnotherMod#fizz"))
+      expect(meths).to include(P("YARD#foo"))
+      expect(meths).to include(P("YARD#foo2"))
+      expect(meths).to include(P("YARD.bar"))
     end
 
-    it "should choose the method defined in the class over an included module" do
+    it "chooses the method defined in the class over an included module" do
       meths = @yard.meths
-      meths.should_not include(P("SomeMod#xyz"))
-      meths.should include(P("YARD#xyz"))
-      meths.should_not include(P("AnotherMod#bar"))
-      meths.should include(P("YARD.bar"))
+      expect(meths).not_to include(P("SomeMod#xyz"))
+      expect(meths).to include(P("YARD#xyz"))
+      expect(meths).not_to include(P("AnotherMod#bar"))
+      expect(meths).to include(P("YARD.bar"))
 
       meths = @other.meths
-      meths.should include(P("SomeMod#xyz"))
+      expect(meths).to include(P("SomeMod#xyz"))
 
       meths = @another.meths
-      meths.should include(P("AnotherMod#bar"))
+      expect(meths).to include(P("AnotherMod#bar"))
     end
   end
 
@@ -118,24 +118,24 @@ describe YARD::CodeObjects::ModuleObject do
       @mod5.instance_mixins << @proxy
     end
 
-    it "should show only itself for an inheritance tree without included modules" do
-      @mod1.inheritance_tree.should == [@mod1]
+    it "shows only itself for an inheritance tree without included modules" do
+      expect(@mod1.inheritance_tree).to eq [@mod1]
     end
 
-    it "should show proper inheritance three when modules are included" do
-      @mod1.inheritance_tree(true).should == [@mod1, @mod2, @mod3, @mod4]
+    it "shows proper inheritance tree when modules are included" do
+      expect(@mod1.inheritance_tree(true)).to eq [@mod1, @mod2, @mod3, @mod4]
     end
 
-    it "should not list inheritance tree of proxy objects in inheritance tree" do
-      @proxy.should_not_receive(:inheritance_tree)
-      @mod5.instance_mixins.should == [@proxy]
+    it "does not list inheritance tree of proxy objects in inheritance tree" do
+      expect(@proxy).not_to receive(:inheritance_tree)
+      expect(@mod5.instance_mixins).to eq [@proxy]
     end
 
-    it "should list class mixins in inheritance tree" do
+    it "lists class mixins in inheritance tree" do
       mod = ModuleObject.new(:root, :ClassMethods)
       recvmod = ModuleObject.new(:root, :ReceivingModule)
       recvmod.class_mixins << mod
-      recvmod.inheritance_tree(true).should == [recvmod, mod]
+      expect(recvmod.inheritance_tree(true)).to eq [recvmod, mod]
     end
   end
 end

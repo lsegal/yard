@@ -276,7 +276,7 @@ module YARD
         super(*args)
 
         # Last minute modifications
-        self.files = ['{lib,app}/**/*.rb', 'ext/**/*.c'] if self.files.empty?
+        self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README{,*[^~]}').first
         readme ||= Dir.glob(files.first).first if options.onefile

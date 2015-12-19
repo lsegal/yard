@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Handlers::C::OverrideCommentHandler do
   [:class, :module].each do |type|
-    it "should handle Document-#{type}" do
+    it "handles Document-#{type}" do
       parse(<<-eof)
         void something;
         /* Document-#{type}: A
@@ -10,14 +10,14 @@ describe YARD::Handlers::C::OverrideCommentHandler do
          */
         void
       eof
-      Registry.at('A').type.should == type
-      Registry.at('A').docstring.should == 'Foo bar baz'
-      Registry.at('A').file.should == '(stdin)'
-      Registry.at('A').line.should == 2
+      expect(Registry.at('A').type).to eq type
+      expect(Registry.at('A').docstring).to eq 'Foo bar baz'
+      expect(Registry.at('A').file).to eq '(stdin)'
+      expect(Registry.at('A').line).to eq 2
     end
   end
 
-  it "should handle multiple class/module combinations" do
+  it "handles multiple class/module combinations" do
     parse(<<-eof)
       /* Document-class: A
        * Document-class: B
@@ -25,13 +25,13 @@ describe YARD::Handlers::C::OverrideCommentHandler do
        * Foo bar baz
        */
     eof
-    Registry.at('A').docstring.should == 'Foo bar baz'
-    Registry.at('B').docstring.should == 'Foo bar baz'
-    Registry.at('C').docstring.should == 'Foo bar baz'
-    Registry.at('C').type == :module
+    expect(Registry.at('A').docstring).to eq 'Foo bar baz'
+    expect(Registry.at('B').docstring).to eq 'Foo bar baz'
+    expect(Registry.at('C').docstring).to eq 'Foo bar baz'
+    expect(Registry.at('C').type).to eq :module
   end
 
-  it "should handle Document-class with inheritance" do
+  it "handles Document-class with inheritance" do
     parse(<<-eof)
       /* Document-class: A < B
        * Foo bar baz
@@ -39,8 +39,8 @@ describe YARD::Handlers::C::OverrideCommentHandler do
       void
     eof
     obj = Registry.at('A')
-    obj.type.should == :class
-    obj.docstring.should == 'Foo bar baz'
-    obj.superclass.should == P('B')
+    expect(obj.type).to eq :class
+    expect(obj.docstring).to eq 'Foo bar baz'
+    expect(obj.superclass).to eq P('B')
   end
 end

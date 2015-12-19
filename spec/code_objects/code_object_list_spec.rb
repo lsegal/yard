@@ -3,31 +3,33 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe YARD::CodeObjects::CodeObjectList do
   before { Registry.clear }
 
-  it "pushing a value should only allow CodeObjects::Base, String or Symbol" do
-    list = CodeObjectList.new(nil)
-    lambda { list.push(:hash => 1) }.should raise_error(ArgumentError)
-    list << "Test"
-    list << :Test2
-    list << ModuleObject.new(nil, :YARD)
-    list.size.should == 3
+  describe "#push" do
+    it "only allows CodeObjects::Base, String or Symbol" do
+      list = CodeObjectList.new(nil)
+      expect { list.push(:hash => 1) }.to raise_error(ArgumentError)
+      list << "Test"
+      list << :Test2
+      list << ModuleObject.new(nil, :YARD)
+      expect(list.size).to eq 3
+    end
   end
 
   it "added value should be a proxy if parameter was String or Symbol" do
     list = CodeObjectList.new(nil)
     list << "Test"
-    list.first.class.should == Proxy
+    expect(list.first.class).to eq Proxy
   end
 
-  it "should contain a unique list of objects" do
+  it "contains a unique list of objects" do
     obj = ModuleObject.new(nil, :YARD)
     list = CodeObjectList.new(nil)
 
     list << P(:YARD)
     list << obj
-    list.size.should == 1
+    expect(list.size).to eq 1
 
     list << :Test
     list << "Test"
-    list.size.should == 2
+    expect(list.size).to eq 2
   end
 end

@@ -164,6 +164,7 @@ module YARD
     def enter_level(new_level = level, &block)
       old_level, self.level = level, new_level
       yield
+    ensure
       self.level = old_level
     end
 

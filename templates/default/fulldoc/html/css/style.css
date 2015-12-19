@@ -245,7 +245,6 @@ p.signature, h3.signature {
   font-size: 1.1em; font-weight: normal; font-family: Monaco, Consolas, Courier, monospace;
   padding: 6px 10px; margin-top: 1em;
   background: #E8F4FF; border: 1px solid #d8d8e5; border-radius: 5px;
-  line-height:2.2em;
 }
 p.signature tt,
 h3.signature tt { font-family: Monaco, Consolas, Courier, monospace; }

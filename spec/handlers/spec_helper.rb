@@ -4,7 +4,7 @@ require 'stringio'
 include Handlers
 
 def undoc_error(code)
-  lambda { StubbedSourceParser.parse_string(code) }.should raise_error(Parser::UndocumentableError)
+  expect { StubbedSourceParser.parse_string(code) }.to raise_error(Parser::UndocumentableError)
 end
 
 def with_parser(parser_type, &block)

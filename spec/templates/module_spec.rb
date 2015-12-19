@@ -65,13 +65,13 @@ describe YARD::Templates::Engine.template(:default, :module) do
     eof
   end
 
-  it "should render html format correctly" do
+  it "renders html format correctly" do
     html_equals(Registry.at('A').format(html_options(:hide_void_return => true,
       :verifier => Verifier.new('object.type != :method || object.visibility == :public'))),
         :module001)
   end
 
-  it "should render text format correctly" do
+  it "renders text format correctly" do
     YARD.parse_string <<-'eof'
       module A
         include D, E, F, A::B::C
@@ -81,11 +81,11 @@ describe YARD::Templates::Engine.template(:default, :module) do
     text_equals(Registry.at('A').format(text_options), :module001)
   end
 
-  it "should render dot format correctly" do
-    Registry.at('A').format(:format => :dot, :dependencies => true, :full => true).should == example_contents(:module001, 'dot')
+  it "renders dot format correctly" do
+    expect(Registry.at('A').format(:format => :dot, :dependencies => true, :full => true)).to eq example_contents(:module001, 'dot')
   end
 
-  it "should render groups correctly in html" do
+  it "renders groups correctly in html" do
     Registry.clear
     YARD.parse_string <<-'eof'
       module A
@@ -106,7 +106,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
     html_equals(Registry.at('A').format(html_options), :module002)
   end
 
-  it "should ignore overwritten/private attributes/constants from inherited list" do
+  it "ignores overwritten/private attributes/constants from inherited list" do
     Registry.clear
     YARD.parse_string <<-'eof'
       module B
@@ -128,7 +128,7 @@ describe YARD::Templates::Engine.template(:default, :module) do
       :verifier => Verifier.new('!@private'))), :module003)
   end
 
-  it "should embed mixins with :embed_mixins = ['Foo', 'Bar', 'Baz::A*']" do
+  it "embeds mixins with :embed_mixins = ['Foo', 'Bar', 'Baz::A*']" do
     Registry.clear
     YARD.parse_string <<-'eof'
       class A

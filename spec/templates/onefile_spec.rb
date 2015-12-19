@@ -52,13 +52,13 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
       ]
   end
 
-  it "should render html" do
+  it "renders html" do
     render
-    @files.should == ['index.html']
-    @output.should include("This is a code comment")
-    @output.should include("This is a license!")
-    @output.should include("Class: A")
-    @output.should include("Foo method")
-    @output.should include("Bar method")
+    expect(@files).to eq ['index.html']
+    expect(@output).to include("This is a code comment")
+    expect(@output).to include("This is a license!")
+    expect(@output).to include("Class: A")
+    expect(@output).to include("Foo method")
+    expect(@output).to include("Bar method")
   end
 end

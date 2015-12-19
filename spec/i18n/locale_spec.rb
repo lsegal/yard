@@ -10,15 +10,15 @@ describe YARD::I18n::Locale do
   end
 
   describe "#name" do
-    it "should return name" do
-      locale("fr").name.should == "fr"
+    it "returns name" do
+      expect(locale("fr").name).to eq "fr"
     end
   end
 
   describe "#load" do
-    it "should return false for nonexistent PO" do
-      File.should_receive(:exist?).with('foo/fr.po').and_return(false)
-      @locale.load('foo').should == false
+    it "returns false for nonexistent PO" do
+      expect(File).to receive(:exist?).with('foo/fr.po').and_return(false)
+      expect(@locale.load('foo')).to be false
     end
 
     have_gettext_gem = true
@@ -40,7 +40,7 @@ describe YARD::I18n::Locale do
       end
     end
 
-    it "should return true for existent PO", :if => have_gettext_gem do
+    it "returns true for existent PO", :if => have_gettext_gem do
       data = <<-eop
 msgid ""
 msgstr ""
@@ -53,14 +53,14 @@ msgid "Hello"
 msgstr "Bonjour"
 eop
       parser = GetText::POParser.new
-      File.should_receive(:exist?).with('foo/fr.po').and_return(true)
-      GetText::POParser.should_receive(:new).and_return(parser)
-      parser.should_receive(:parse_file) do |file, hash|
-        file.should == 'foo/fr.po'
+      expect(File).to receive(:exist?).with('foo/fr.po').and_return(true)
+      expect(GetText::POParser).to receive(:new).and_return(parser)
+      expect(parser).to receive(:parse_file) do |file, hash|
+        expect(file).to eq 'foo/fr.po'
         parser.parse(data, hash)
       end
-      @locale.load('foo').should == true
-      @locale.translate('Hello').should == "Bonjour"
+      expect(@locale.load('foo')).to be true
+      expect(@locale.translate('Hello')).to eq "Bonjour"
     end
   end
 
@@ -70,12 +70,12 @@ eop
       messages["Hello"] = "Bonjour"
     end
 
-    it "should return translated string for existent string" do
-      @locale.translate("Hello") == "Bonjour"
+    it "returns translated string for existent string" do
+      expect(@locale.translate("Hello")) == "Bonjour"
     end
 
-    it "should return original string for nonexistent string" do
-      @locale.translate("nonexistent") == "nonexistent"
+    it "returns original string for nonexistent string" do
+      expect(@locale.translate("nonexistent")) == "nonexistent"
     end
   end
 end

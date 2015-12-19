@@ -15,7 +15,7 @@ def text_equals(result, expected_example)
 end
 
 def text_equals_string(result, expected)
-  result.should == expected
+  expect(result).to eq expected
 end
 
 def html_equals(result, expected_example)

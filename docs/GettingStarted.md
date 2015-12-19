@@ -186,7 +186,62 @@ and recommended conventions for writing type specifications, see
 conventions may change every now and then, although we are working on a more
 "formal" type specification proposal.
 
-## Documenting DSL Methods
+## Documenting Attributes
+
+To document a Ruby attribute, add documentation text above the attribute
+definition.
+
+    # Controls the amplitude of the waveform.
+    # @return [Numeric] the amplitude of the waveform
+    attr_accessor :amplitude
+
+As a short-hand syntax for declaring reader and writer attribute pairs,
+YARD will automatically wire up the correct method types and information
+by simply defining documentation in the `@return` tag. For example,
+the following declaration will show the correct information for the
+`waveform` attribute, both for the getter's return type and the
+setter's value parameter type: 
+
+    # @return [Numeric] the amplitude of the waveform
+    attr_accessor :amplitude
+
+In this case, the most important details for the attribute are the
+object type declaration and its descriptive text.
+
+### Documentation for a Separate Attribute Writer
+
+Usually an attribute will get and set a value using the same syntax,
+so there is no reason to have separate documentation for an attribute
+writer. In the above `amplitude` case, the `Numeric` type is both used
+for the getter and setter types.
+
+Sometimes, however, you might want to have separate documentation
+for the getter and setter. In this case, you would still add
+the documentation text to the getter declaration (or `attr_accessor`)
+and use `@overload` tags to declare the separate docstrings. For example:
+
+    # @overload amplitude
+    #   Gets the current waveform amplitude.
+    #   @return [Numeric] the amplitude of the waveform
+    # @overload amplitude=(value)
+    #   Sets the new amplitude.
+    #   @param value [Numeric] the new amplitude value
+    #   @note The new amplitude will only take effect if {#restart}
+    #     is called on the stream.
+
+Note that by default, YARD exposes the reader portion of the attribute
+in HTML output. If you have separate `attr_reader` and `attr_writer`
+declarations, make sure to put your documentation (for both reader
+and writer methods) on the reader declaration using `@overload`
+tags as described above. For example:
+
+    # @overload ...documentation here...
+    attr_reader :amplitude
+
+    # This documentation will be ignored by YARD.
+    attr_writer :amplitude
+
+## Documenting Custom DSL Methods
 
 Application code in Ruby often makes use of DSL style metaprogrammed methods.
 The most common is the `attr_accessor` method, which of course has built-in
