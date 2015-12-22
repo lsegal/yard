@@ -42,6 +42,7 @@ function enableLinks() {
     $('#full_list li').removeClass('clicked');
     $clicked = $(this);
     $clicked.addClass('clicked');
+    evt.stopPropagation();
 
     if (evt.target.tagName === 'A') return true;
 
@@ -51,7 +52,6 @@ function enableLinks() {
     newEvent.initMouseEvent(e.type, e.canBubble, e.cancelable, e.view, e.detail, e.screenX, e.screenY, e.clientX, e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.button, e.relatedTarget);
     elem.dispatchEvent(newEvent);
     evt.preventDefault();
-    evt.stopPropagation();
     return false;
   });
 }
