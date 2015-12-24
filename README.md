@@ -44,7 +44,7 @@ following method documented with YARD formatting:
 
      # Reverses the contents of a String or IO object.
      #
-     # @param [String, #read] contents the contents to reverse
+     # @param [String, #read] contains the contents to reverse
      # @return [String] the contents reversed lexically
      def reverse(contents)
        contents = contents.read if contents.respond_to? :read
