@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 require File.dirname(__FILE__) + '/class_method_handler_shared_examples'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PrivateClassMethodHandler" do
+describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PublicClassMethodHandler" do
   before { Registry.clear }
 
-  let(:visibility) { :private }
+  let(:visibility) { :public }
 
   include_examples "class method visibility decorator"
 end

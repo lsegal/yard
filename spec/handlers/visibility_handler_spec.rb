@@ -17,9 +17,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
   end
 
   it "supports parameters and only set visibility on those methods" do
-    expect(Registry['Testing#notpriv'].visibility).to eq :protected
-    expect(Registry['Testing#notpriv2'].visibility).to eq :protected
-    expect(Registry['Testing#notpriv?'].visibility).to eq :protected
+    expect(Registry.at('Testing#notpriv').visibility).to eq :protected
+    expect(Registry.at('Testing#notpriv2').visibility).to eq :protected
+    expect(Registry.at('Testing#notpriv?').visibility).to eq :protected
   end
 
   it "only accepts strings and symbols" do
@@ -36,4 +36,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     expect(Registry.at('Testing::Bar').visibility).to eq :public
     expect(Registry.at('Testing::Baz').visibility).to eq :public
   end
+  
+  it "can decorate a method definition" do
+    expect(Registry.at('Testing#decpriv').visibility).to eq :private
+  end unless LEGACY_PARSER
 end
