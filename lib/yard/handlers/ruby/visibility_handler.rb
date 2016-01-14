@@ -13,6 +13,11 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
     when :fcall, :command
       statement[1].traverse do |node|
         case node.type
+        when :list
+          # handle 2.1-style visibility where the def statement returns a symbol.
+          if node.parent.first.type == :ident
+            source = node.parent.first.source
+          end
         when :symbol; source = node.first.source
         when :string_content; source = node.source
         else next
