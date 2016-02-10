@@ -65,6 +65,25 @@ module YARD
           var.empty? ? nil : P(var)
         end
 
+        def ensure_variable_defined!(var, max_retries = 1)
+          retries, object = 0, nil
+
+          loop do
+            object = namespace_for_variable(var)
+            break unless object.is_a?(Proxy)
+
+            if retries <= max_retries
+              log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
+              parser.parse_remaining_files
+            else
+              raise NamespaceMissingError, object
+            end
+            retries += 1
+          end
+
+          object
+        end
+
         def namespaces
           globals.cruby_namespaces ||= {}
         end

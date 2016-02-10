@@ -7,7 +7,10 @@ describe YARD::Handlers::C::ClassHandler do
   end
 
   it "registers classes under namespaces" do
-    parse_init 'cFoo = rb_define_class_under(cBar, "Foo", rb_cObject);'
+    parse_init <<-EOF
+      cBar = rb_define_class("Bar", rb_cObject);
+      cFoo = rb_define_class_under(cBar, "Foo", rb_cObject);
+    EOF
     expect(Registry.at('Bar::Foo').type).to eq :class
   end
 
@@ -54,10 +57,20 @@ describe YARD::Handlers::C::ClassHandler do
 
   it "properly handles Proxy superclasses" do
     parse_init <<-eof
-      cFoo = rb_define_class_under(mFoo, "Bar", rb_cBar);
+      mFoo = rb_define_module("Foo");
+      cBar = rb_define_class_under(mFoo, "Bar", rb_cBar);
     eof
     expect(Registry.at('Foo::Bar').type).to eq :class
     expect(Registry.at('Foo::Bar').superclass).to eq P('Bar')
     expect(Registry.at('Foo::Bar').superclass.type).to eq :class
+  end
+
+  it "resolves namespace variable names across multiple files" do
+    parse_multi_file_init(
+      'cBar = rb_define_class_under(cFoo, "Bar", rb_cObject);',
+      'cFoo = rb_define_class("Foo", rb_cObject);'
+    )
+
+    expect(Registry.at('Foo::Bar').type).to eq :class
   end
 end
