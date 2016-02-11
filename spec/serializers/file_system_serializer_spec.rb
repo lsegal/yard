@@ -97,6 +97,18 @@ describe YARD::Serializers::FileSystemSerializer do
       expect([["AB_.html", "Ab.html"], ["AB.html", "Ab_.html"]]).to include(
         [s.serialized_path(o1), s.serialized_path(o2)])
     end
+
+    it "handles case sensitivity of nested paths for objects with matching names" do
+      Registry.clear
+      YARD.parse_string <<-eof
+        class Abc; class D; end end
+        class ABC; class D; end end
+      eof
+
+      s = Serializers::FileSystemSerializer.new
+      expect(s.serialized_path(Registry.at('ABC::D'))).to eq "ABC/D.html"
+      expect(s.serialized_path(Registry.at('Abc::D'))).to eq "Abc/D.html"
+    end
   end
 
   describe "#serialize" do

@@ -83,9 +83,14 @@ module YARD
       def build_filename_map
         @name_map = {}
         YARD::Registry.all.each do |object|
-          lpath = object.path.to_s.downcase
-          @name_map[lpath] ||= {}
+          lpath = nil
+          if object.parent && object.parent.type != :root
+            lpath = object.parent.path + "::" + object.name.to_s.downcase
+          else
+            lpath = object.path.downcase
+          end
 
+          @name_map[lpath] ||= {}
           size = @name_map[lpath].size
           name = "#{object.name}#{size > 0 ? "_" * size : ""}"
           @name_map[lpath][object.name] = name
