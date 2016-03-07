@@ -34,20 +34,20 @@ describe YARD::Server::DocServerHelper do
   describe "#url_for" do
     it "does not link to /library/ if single_library = true" do
       @helper.single_library = true
-      expect(@helper.url_for(Registry.root)).to eq "/PREFIX/toplevel"
+      expect(@helper.url_for(Registry.root)).to eq "/script/name/PREFIX/toplevel"
     end
 
-    it "returns /PREFIX/foo/version if foo has a version" do
+    it "returns /script/name/PREFIX/foo/version if foo has a version" do
       @helper.library = LibraryVersion.new('foo', 'bar')
       @helper.adapter.router.request.version_supplied = true
-      expect(@helper.url_for(P('A'))).to eq '/PREFIX/foo/bar/A'
+      expect(@helper.url_for(P('A'))).to eq '/script/name/PREFIX/foo/bar/A'
     end
   end
 
   describe "#url_for_file" do
     it "properly links file objects using file/ prefix" do
       file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
-      expect(@helper.url_for_file(file)).to eq '/PREFIX/foo/file/a/b/FooBar.md'
+      expect(@helper.url_for_file(file)).to eq '/script/name/PREFIX/foo/file/a/b/FooBar.md'
     end
   end
 end

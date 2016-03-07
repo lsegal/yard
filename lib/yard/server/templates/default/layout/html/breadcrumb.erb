@@ -1,4 +1,4 @@
-<form class="search" method="get" action="/<%= base_path(router.search_prefix) %>">
+<form class="search" method="get" action="<%= site_abs_path(base_path(router.search_prefix)) %>">
   <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= h @query %>" />
 </form>
 <script type="text/javascript" charset="utf-8">
@@ -20,7 +20,7 @@
 
 <div id="menu">
   <% unless @single_library %>
-    <a href="/<%= router.docs_prefix %>" target="_top">Libraries</a> &raquo;
+    <a href="<%= site_abs_path(router.docs_prefix) %>" target="_top">Libraries</a> &raquo;
     <span class="title"><%= @library.name %> <% if @library.version %><small>(<%= @library.version %>)</small><% end %></span>
   <% end %>
   <% if object.is_a?(CodeObjects::Base) && @file.nil? %>

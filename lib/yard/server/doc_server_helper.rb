@@ -10,10 +10,10 @@ module YARD
       def url_for(obj, anchor = nil, relative = false)
         return '' if obj.nil?
         return url_for_index if obj == '_index.html'
-        return "/#{obj}" if String === obj
+        return site_abs_path("#{obj}") if String === obj
         url = super(obj, anchor, false)
         return unless url
-        File.join('', base_path(router.docs_prefix), url)
+        site_abs_path(base_path(router.docs_prefix), url)
       end
 
       # Modifies {Templates::Helpers::HtmlHelper#url_for_file} to return a URL instead
@@ -24,8 +24,10 @@ module YARD
         if filename.is_a?(CodeObjects::ExtraFileObject)
           filename = filename.filename
         end
-        "/#{base_path(router.docs_prefix)}/file/" + filename.sub(%r{^#{@library.source_path.to_s}/}, '') +
-          (anchor ? "##{anchor}" : "")
+        site_abs_path(
+          base_path(router.docs_prefix),
+          "file",
+          filename.sub(%r{^#{@library.source_path.to_s}/}, '') + (anchor ? "##{anchor}" : ""))
       end
 
       # Modifies {Templates::Helpers::HtmlHelper#url_for_list} to return a URL
@@ -33,7 +35,7 @@ module YARD
       # @param (see Templates::Helpers::HtmlHelper#url_for_list)
       # @return (see Templates::Helpers::HtmlHelper#url_for_list)
       def url_for_list(type)
-        File.join('', base_path(router.list_prefix), type.to_s)
+        site_abs_path(base_path(router.list_prefix), type.to_s)
       end
 
       # Returns the frames URL for the page
@@ -51,7 +53,13 @@ module YARD
       # Returns the URL for the alphabetic index page
       # @return (see Templates::Helpers::HtmlHelper#url_for_index)
       def url_for_index
-        File.join('', base_path(router.docs_prefix), 'index')
+        site_abs_path(base_path(router.docs_prefix), 'index')
+      end
+
+      # Prepends `request.script_name` in order to determine the absolute path.
+      # @return [String] the absolute path for the given path components.
+      def site_abs_path(*path_components)
+        File.join(router.request.script_name, *path_components)
       end
 
       # @example The base path for a library 'foo'

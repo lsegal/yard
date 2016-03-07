@@ -1,4 +1,4 @@
 <script>
 $(document.getElementById("<%= anchor_for(object) %>")).prepend(
-  '<a class="permalink" href="/<%= base_path(router.docs_prefix) %>/<%= urlencode serializer.serialized_path(object) %>">permalink</a>');
+  '<a class="permalink" href="<%= site_abs_path(base_path(router.docs_prefix)) %>/<%= urlencode serializer.serialized_path(object) %>">permalink</a>');
 </script>
