@@ -13,7 +13,7 @@ describe YARD::Server::StaticCaching do
     end
 
     it "reads a file from document root if path matches file on system" do
-      request.path = '/hello/world.html'
+      request.path_info = '/hello/world.html'
       expect(File).to receive(:file?).with('/public/hello/world.html').and_return(true)
       expect(File).to receive(:open).with('/public/hello/world.html', anything).and_return('body')
       s, h, b = *check_static_cache
@@ -22,7 +22,7 @@ describe YARD::Server::StaticCaching do
     end
 
     it "reads a file if path matches file on system + .html" do
-      request.path = '/hello/world'
+      request.path_info = '/hello/world'
       expect(File).to receive(:file?).with('/public/hello/world.html').and_return(true)
       expect(File).to receive(:open).with('/public/hello/world.html', anything).and_return('body')
       s, h, b = *check_static_cache
@@ -31,7 +31,7 @@ describe YARD::Server::StaticCaching do
     end
 
     it "returns nil if no matching file is found" do
-      request.path = '/hello/foo'
+      request.path_info = '/hello/foo'
       expect(File).to receive(:file?).with('/public/hello/foo.html').and_return(false)
       expect(check_static_cache).to eq nil
     end

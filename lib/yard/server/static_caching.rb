@@ -17,7 +17,7 @@ module YARD
       #   module MemoryCaching
       #     def check_static_cache
       #       # $memory_cache is filled by {Commands::Base#cache}
-      #       cached_data = $memory_cache[request.path]
+      #       cached_data = $memory_cache[request.path_info]
       #       if cached_data
       #         [200, {'Content-Type' => 'text/html'}, [cached_data]]
       #       else
@@ -32,7 +32,7 @@ module YARD
       # @see Commands::Base#cache
       def check_static_cache
         return nil unless adapter.document_root
-        cache_path = File.join(adapter.document_root, request.path.sub(/\.html$/, '') + '.html')
+        cache_path = File.join(adapter.document_root, request.path_info.sub(/\.html$/, '') + '.html')
         cache_path = cache_path.sub(%r{/\.html$}, '.html')
         if File.file?(cache_path)
           log.debug "Loading cache from disk: #{cache_path}"

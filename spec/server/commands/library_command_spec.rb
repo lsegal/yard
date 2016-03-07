@@ -10,7 +10,7 @@ describe YARD::Server::Commands::LibraryCommand do
     allow(Registry).to receive(:save)
 
     @cmd = LibraryCommand.new(:adapter => mock_adapter)
-    @request = OpenStruct.new(:xhr? => false, :path => "/foo")
+    @request = mock_request("/foo", :xhr? => false)
     @library = OpenStruct.new(:source_path => '.')
     @cmd.library = @library
     allow(@cmd).to receive(:load_yardoc).and_return(nil)

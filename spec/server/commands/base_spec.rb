@@ -12,7 +12,7 @@ describe YARD::Server::Commands::Base do
   describe "#cache" do
     before do
       @command = MyCacheCommand.new(:adapter => mock_adapter, :caching => true)
-      @command.request = OpenStruct.new
+      @command.request = mock_request(nil)
     end
 
     it "does not cache if caching == false" do
@@ -30,7 +30,7 @@ describe YARD::Server::Commands::Base do
     it "caches to path/to/file.html and create directories" do
       expect(FileUtils).to receive(:mkdir_p).with('/public/path/to')
       expect(File).to receive(:open).with('/public/path/to/file.html', anything)
-      @command.request.path = '/path/to/file.html'
+      @command.request.path_info = '/path/to/file.html'
       @command.run
     end
   end

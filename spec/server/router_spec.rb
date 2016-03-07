@@ -17,7 +17,7 @@ describe YARD::Server::Router do
 
   describe "#parse_library_from_path" do
     def parse(*args)
-      @request.path = '/' + args.join('/')
+      @request.path_info = '/' + args.join('/')
       @router = MyRouterSpecRouter.new(@adapter)
       @router.request = @request
       @router.parse_library_from_path(args.flatten)

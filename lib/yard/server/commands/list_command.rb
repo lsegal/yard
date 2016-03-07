@@ -8,7 +8,7 @@ module YARD
         def run
           Registry.load_all
           options.update(:objects => run_verifier(Registry.all(:class, :module)))
-          list_type = request.path.split('/').last
+          list_type = request.path_info.split('/').last
           meth = "generate_#{list_type}_list"
           tpl = fulldoc_template
           if tpl.respond_to?(meth)

@@ -17,7 +17,7 @@ module YARD
 
         def run
           assets_template = Templates::Engine.template(:default, :fulldoc, :html)
-          path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
+          path = File.cleanpath(request.path_info).gsub(%r{^(../)+}, '')
 
           file = nil
           ([adapter.document_root] + STATIC_PATHS.reverse).compact.each do |path_prefix|
@@ -30,7 +30,7 @@ module YARD
           file ||= assets_template.find_file(path)
 
           if file
-            ext = "." + (request.path[/\.(\w+)$/, 1] || "html")
+            ext = "." + (request.path_info[/\.(\w+)$/, 1] || "html")
             headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
             self.body = File.read(file)
             return
@@ -45,7 +45,7 @@ module YARD
         # Return an empty favicon.ico if it does not exist so that
         # browsers don't complain.
         def favicon?
-          return unless request.path == '/favicon.ico'
+          return unless request.path_info == '/favicon.ico'
           self.headers['Content-Type'] = 'image/png'
           self.status = 200
           self.body = ''
