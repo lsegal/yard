@@ -5,8 +5,10 @@ describe YARD::Handlers::C::ConstantHandler do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");
       rb_define_const(mFoo, "FOO", ID2SYM(100));
+      rb_define_global_const("BAR", ID2SYM(100));
     eof
    expect( Registry.at('Foo::FOO').type).to eq :constant
+   expect( Registry.at('BAR').type).to eq :constant
   end
 
   it "looks for override comments" do
