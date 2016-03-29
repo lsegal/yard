@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'rspec', '~> 3.3'
-  gem 'rake'
+  gem 'rake', '~> 10.0'
   gem 'rvm-tester'
   gem 'simplecov'
   gem 'samus'
