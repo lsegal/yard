@@ -103,8 +103,12 @@ module YARD
         end
 
         def handle_constants(type, var_name, const_name, value)
-          return unless type == 'const'
-          namespace = namespace_for_variable(var_name)
+          return unless type =~ /^const$|^global_const$/
+          if type == 'global_const'
+            namespace = :root
+          else
+            namespace = namespace_for_variable(var_name)
+          end
           register ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
