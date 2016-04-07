@@ -7,7 +7,10 @@ describe YARD::Handlers::C::ClassHandler do
   end
 
   it "registers classes under namespaces" do
-    parse_init 'mFoo = rb_define_module_under(mBar, "Foo");'
+    parse_init <<-EOF
+      mBar = rb_define_module("Bar");
+      mFoo = rb_define_module_under(mBar, "Foo");
+    EOF
     expect(Registry.at('Bar::Foo').type).to eq :module
   end
 
@@ -34,6 +37,15 @@ describe YARD::Handlers::C::ClassHandler do
     eof
     expect(Registry.at('Foo').file).to eq '(stdin)'
     expect(Registry.at('Foo').line).to eq 2
+  end
+
+  it "resolves namespace variable names across multiple files" do
+    parse_multi_file_init(
+      'mBar = rb_define_module_under(mFoo, "Bar");',
+      'mFoo = rb_define_module("Foo");'
+    )
+
+    expect(Registry.at('Foo::Bar').type).to eq :module
   end
 
   it "raises undoc error if a class is defined under a namespace that cannot be resolved" do

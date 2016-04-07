@@ -32,7 +32,7 @@ unless defined?(HAVE_RIPPER)
   LEGACY_PARSER = !HAVE_RIPPER
 
   class YARD::Parser::SourceParser
-    def self.parser_type; :ruby18 end
+    def self.parser_type; @parser_type == :ruby ? :ruby18 : @parser_type end
   end if ENV['LEGACY']
 end
 

@@ -120,7 +120,6 @@ describe YARD::Templates::Template do
 
   describe ".is_a?" do
     it "is kind of Template" do
-      p template(:e).class.ancestors
       expect(template(:e).is_a?(Template)).to be true
     end
   end
