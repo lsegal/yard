@@ -117,8 +117,7 @@ h2 small a {
 .docstring table tr:nth-child(odd) { background: #eee; }
 #filecontents table tr:nth-child(even),
 .docstring table tr:nth-child(even) { background: #fff; }
-#filecontents table th,       .docstring table th       { background: #fff; font-weight: bold;}
-#filecontents table thead td, .docstring table thead td { background: #fff; font-weight: bold;}
+#filecontents table th, .docstring table th { background: #fff; }
 
 /* style for <ul> */
 #filecontents li > p, .docstring li > p { margin: 0px; }
