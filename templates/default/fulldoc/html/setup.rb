@@ -29,7 +29,7 @@ end
 # @param [CodeObject] object to be saved to HTML
 def serialize(object)
   options.object = object
-  serialize_index(options) if object == '_index.html' && options.files.empty?
+  serialize_index(options) if object == '_index.html' && options.readme.nil?
   Templates::Engine.with_serializer(object, options.serializer) do
     T('layout').run(options)
   end
