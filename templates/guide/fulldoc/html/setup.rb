@@ -34,7 +34,7 @@ def init
   generate_assets
   options.delete(:objects)
   options.files.each {|file| serialize_file(file) }
-  serialize_file(options.readme)
+  serialize_file(options.readme) if options.readme
 end
 
 def generate_assets
