@@ -216,8 +216,7 @@ p.inherited {
 
 ul.toplevel { list-style: none; padding-left: 0; font-size: 1.1em; }
 .index_inline_list { padding-left: 0; font-size: 1.1em; }
-.index_inline_list li { list-style: none; display: inline-block; line-height: 100%;
-                         padding: 7px 12px; margin-bottom: 4px; }
+.index_inline_list li { list-style: none; display: inline-block; padding: 0.5em 0.7em; margin-bottom: 0.3em; }
 
 dl.constants { margin-left: 10px; }
 dl.constants dt { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
