@@ -351,7 +351,7 @@ eof
           # end comment
         end
       eof
-      comment = ast.first.last.first
+      comment = ast.first.last.jump(:comment)
       expect(comment.type).to eq :comment
       expect(comment.docstring_hash_flag).to be true
       expect(comment.docstring.strip).to eq "comment here"
