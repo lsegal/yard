@@ -338,6 +338,16 @@ eof
       expect(s.jump(:class).line_range).to eq (1..7)
     end
 
+    it "has the correct line range for blocks" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        module A
+          some_method
+        end
+      eof
+      expect(ast.first.block.source.strip).to eq "some_method"
+    end
+
     it "finds lone comments" do
       Registry.clear
       ast = YARD.parse_string(<<-eof).enumerator
