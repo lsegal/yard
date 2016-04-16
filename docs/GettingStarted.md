@@ -626,16 +626,32 @@ document covers the basics of how YARD's templating system works.
 
 ## Plugin Support
 
-As of 0.4, YARD will automatically load any gem named with the prefix of
-`yard-` or `yard_`. You can use this to load a custom plugin that
+YARD will allow any RubyGem installed on your system (or in your Gemfile)
+to be loaded as a plugin provided it has a name with the prefix of
+`yard-` or `yard_`. In order to load a plugin, use the `--plugin`
+switch with the short-name (name minus the `yard-` prefix) or full-name
+of the gem:
+
+    $ gem install yard-custom-plugin
+    ...
+    $ yard doc --plugin custom-plugin
+    or
+    $ yard doc --plugin yard-custom-plugin
+
+Note: you can also put this switch in your `.yardopts` file. See the
+      `.yardopts` section above for more information.
+
+You can use this functionality to load a custom plugin that
 [extend](#extending) YARD's functionality. A good example of this
 is the [yard-rspec][yard-rspec] plugin, which adds [RSpec][rspec] specifications
 to your documentation (`yardoc` and `yri`). You can try it out by installing
 the gem or cloning the project and trying the example:
 
-    $ gem install yard-rspec -s http://gemcutter.org
-    or
-    $ git clone git://github.com/lsegal/yard-spec-plugin
+    $ gem install yard-rspec
+
+ You can then load the plugin with:
+
+    $ yard doc --plugin rspec
 
 YARD also provides a way to temporarily disable plugins on a per-user basis.
 To disable a plugin create the file `~/.yard/ignored_plugins` with a list
