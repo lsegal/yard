@@ -626,8 +626,8 @@ document covers the basics of how YARD's templating system works.
 
 ## Plugin Support
 
-As of 0.4, YARD will automatically load any gem named with the prefix of
-`yard-` or `yard_`. You can use this to load a custom plugin that
+As of 0.6.2, use --plugin to load a plugin. (YARD will no longer automatically load any gem named with the prefix of
+`yard-` or `yard_`). You can use this to load a custom plugin that
 [extend](#extending) YARD's functionality. A good example of this
 is the [yard-rspec][yard-rspec] plugin, which adds [RSpec][rspec] specifications
 to your documentation (`yardoc` and `yri`). You can try it out by installing
