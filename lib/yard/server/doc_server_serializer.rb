@@ -1,12 +1,10 @@
-require 'webrick/httputils'
+require 'cgi'
 
 module YARD
   module Server
     # A custom {Serializers::Base serializer} which returns resource URLs instead of
     # static relative paths to files on disk.
     class DocServerSerializer < Serializers::FileSystemSerializer
-      include WEBrick::HTTPUtils
-
       def initialize(command = nil)
         super(:basepath => '', :extension => '')
       end
@@ -36,7 +34,7 @@ module YARD
         if name.respond_to?(:force_encoding)
           name = name.dup.force_encoding('binary')
         end
-        escape(name)
+        CGI.escape(name)
       end
     end
   end

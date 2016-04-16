@@ -42,6 +42,11 @@ describe YARD::Server::DocServerSerializer do
       expect(@serializer.serialized_path(file)).to eq 'file/FooBar'
     end
 
+    it "escapes special characters" do
+      obj = CodeObjects::MethodObject.new(:root, :method?)
+      expect(@serializer.serialized_path(obj)).to eq 'toplevel:method%3F'
+    end
+
     it "handles unicode data" do
       file = CodeObjects::ExtraFileObject.new("test\u0160", '')
       if file.name.encoding == Encoding.find("Windows-1252")
