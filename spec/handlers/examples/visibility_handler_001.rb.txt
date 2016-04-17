@@ -29,4 +29,6 @@ class Testing
 
   class Bar; end
   module Baz; end
+
+  private :not_exist!
 end

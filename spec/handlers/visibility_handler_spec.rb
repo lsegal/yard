@@ -36,4 +36,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     expect(Registry.at('Testing::Bar').visibility).to eq :public
     expect(Registry.at('Testing::Baz').visibility).to eq :public
   end
+
+  it "does not create method if it did not exist" do
+    expect(Registry.at('Testing#not_exist!')).to be nil
+  end
 end

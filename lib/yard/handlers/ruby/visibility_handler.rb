@@ -17,7 +17,16 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
         when :string_content; source = node.source
         else next
         end
-        MethodObject.new(namespace, source, scope) {|o| o.visibility = ident.first }
+
+        begin
+          prefix = scope == :instance ? YARD::CodeObjects::ISEP : YARD::CodeObjects::CSEP
+          obj = P(namespace, prefix + source, :method)
+          ensure_loaded!(obj)
+          MethodObject.new(namespace, source, scope) {|o| o.visibility = ident.first }
+        rescue YARD::Handlers::NamespaceMissingError
+          log.debug "Visibility handler failed to change visibility of non-existent " +
+                    "method '#{obj}' (#{statement.file}:#{statement.line})"
+        end
       end
     end
   end
