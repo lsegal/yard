@@ -39,5 +39,5 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
 
   it "does not create method if it did not exist" do
     expect(Registry.at('Testing#not_exist!')).to be nil
-  end
+  end unless LEGACY_PARSER
 end
