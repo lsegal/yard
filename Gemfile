@@ -18,7 +18,7 @@ group :markdown do
 end
 
 group :textile do
-  gem 'RedCloth', :platforms => [:ruby, :jruby]
+  gem 'RedCloth', :platforms => :ruby
 end
 
 group :server do
