@@ -575,6 +575,17 @@ might not be descriptive enough, so YARD allows you to specify a full title:
 Currently all other meta-data is hidden from view, though accessible
 programmatically using the {YARD::CodeObjects::ExtraFileObject} class.
 
+You can wrap the meta data section in an HTML comment to prevent it
+from being displayed in rendered markdown on GitHub:
+
+    <!--
+    # @markup markdown
+    # @title The Best Library in the World!
+    # @author The Author Name
+    -->
+
+    This is the best library you will ever meet. Lipsum ...
+
 <a name="config"></a>
 
 ## Configuring YARD

@@ -34,6 +34,18 @@ describe YARD::CodeObjects::ExtraFileObject do
       expect(file.contents).to eq "FOO BAR"
     end
 
+    it "allows the attributes section to be wrapped in an HTML comment" do
+      file = ExtraFileObject.new('file.txt', "<!--\n# @title X\n-->\nFOO BAR")
+      expect(file.attributes[:title]).to eq "X"
+      expect(file.contents).to eq "FOO BAR"
+    end
+
+    it "allows whitespace around ignored HTML comment" do
+      file = ExtraFileObject.new('file.txt', " \t <!-- \n# @title X\n \t --> \nFOO BAR")
+      expect(file.attributes[:title]).to eq "X"
+      expect(file.contents).to eq "FOO BAR"
+    end
+
     it "parses out old-style #!markup shebang format" do
       file = ExtraFileObject.new('file.txt', "#!foobar\nHello")
       expect(file.attributes[:markup]).to eq "foobar"
