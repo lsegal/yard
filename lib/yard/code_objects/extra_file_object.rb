@@ -93,6 +93,8 @@ module YARD::CodeObjects
           end
         when /^\s*#\s*@(\S+)\s*(.+?)\s*$/
           attributes[$1] = $2
+        when /^\s*<!--\s*$/, /^\s*-->\s*$/
+          # Ignore HTML comments
         else
           cut_index = index
           break
