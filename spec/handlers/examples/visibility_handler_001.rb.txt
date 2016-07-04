@@ -25,6 +25,8 @@ class Testing
   def Foo; end
   private :Foo
 
+  private def decpriv; end
+
   private
 
   class Bar; end

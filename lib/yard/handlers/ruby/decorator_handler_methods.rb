@@ -1,0 +1,134 @@
+# Helper methods to assist with processing decorators.
+module YARD::Handlers::Ruby::DecoratorHandlerMethods
+
+  # To be used in a handler's process block.
+  # Takes care of parsing method definitions passed to decorators
+  # as parameters, as well as parsing chained decorators.
+  #
+  # @yieldparam method [YARD::CodeObjects::MethodObject] Method being decorated.
+  # @yieldparam node [YARD::Parser::Ruby::AstNode] AST node of the decorated method.
+  # @yieldparam name [Symbol] Name of the decorated method.
+  #
+  # @return [Array<Hash>] Array of hashes containing :method, :node, :name.
+  #   See yield params.
+  #
+  # @param nodes [YARD::Parser::Ruby::AstNode] AST nodes that refer to decorated
+  #   methods, like indexes of statement.parameter. Defaults to all parameters.
+  #   Pass nil to specify zero parameters.
+  #
+  # @option opts [:instance, :class] :scope Scope to use for each MethodObject.
+  #   Defaults to :instance.
+  #
+  # @option opts [true, false] :transfer_docstring Set false to disable
+  #   transferring the decorator docstring to method definitions passed to the
+  #   decorator as parameters.
+  #
+  # @option opts [true, false] :transfer_source Set false to disable
+  #   transferring the decorator source code string to method definitions
+  #   passed to the decorator as parameters.
+  #
+  # @example
+  #   # Simply pass the method docs through to the method definition.
+  #   process do
+  #     process_decorator
+  #   end
+  #
+  # @example
+  #   # Set the decorated method's visibility to private.
+  #   process do
+  #     process_decorator :scope => :class do |method|
+  #       method.visibility = :private if method.respond_to? :visibility
+  #     end
+  #   end
+  #
+  # @!method process_decorator(*nodes, opts={}, &block)
+  def process_decorator(*nodes, &block)
+    opts = nodes.last.is_a?(Hash) ? nodes.pop : {}
+
+    all_nodes = statement.parameters.select do |p|
+      p.is_a? YARD::Parser::Ruby::AstNode
+    end
+
+    # Parse decorator parameters (decorator chain).
+    all_nodes.each do |param|
+      parse_block param if param.call? or param.def?
+    end
+
+    selected_nodes =
+      if nodes.empty?
+        all_nodes
+      elsif (nodes.count == 1 and nodes.first == nil)
+        []
+      else
+        nodes
+      end
+
+    decorated_methods = selected_nodes.map { |param|
+      process_decorator_parameter param, opts, &block
+    }.flatten
+
+    # Store method nodes in decorator node.
+    statement.define_singleton_method :decorators do
+      decorated_methods.map { |h| h[:node] }
+    end
+
+    decorated_methods
+  end
+
+  private
+
+  def process_decorator_parameter(node, opts={}, &block)
+    scope              = opts.fetch :scope, :instance
+    transfer_docstring = opts.fetch :transfer_docstring, true
+    transfer_source    = opts.fetch :transfer_source, true
+
+    name = nil
+
+    if node.call?
+      if node.respond_to? :decorators
+        return node.decorators.map do |n|
+          process_decorator_parameter n, opts, &block
+        end
+      end
+    elsif node.def?
+      name = node.jump(:def).method_name.source
+    else
+      name = node.jump(:ident, :string_content, :const).source
+    end
+
+    method = YARD::CodeObjects::Proxy.new(
+      namespace,
+      (scope == :instance ? '#' : '.') + name.to_s,
+      :method
+    )
+
+    # Transfer source to methods passed to the helper as parameters.
+    method.source = statement.source if transfer_source and node.def?
+
+    # Tag decorator on decorated method.
+    if method.respond_to? :add_tag
+      method.add_tag YARD::Tags::Tag.new(
+        :decorator,
+        statement.jump(:command).jump(:ident).source
+      )
+    end
+
+    # Transfer decorator docstring to methods passed to the helper as parameters.
+    if transfer_docstring \
+      and node.def? \
+      and statement.docstring \
+      and method.docstring.empty?
+        tags = method.tags if method.respond_to? :tags
+        tags ||= []
+
+        method.docstring = statement.docstring
+
+        tags.each { |t| method.add_tag t }
+    end
+
+    block.call method, node, name.to_sym if block_given?
+
+    [{:method => method, :node => node, :name => name.to_sym}]
+  end
+
+end
