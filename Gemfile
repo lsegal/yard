@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 group :development do
   gem 'rspec', '~> 3.3'
   gem 'rake', '~> 10.0'
+  gem 'json', '~> 1.8'
   gem 'rvm-tester'
   gem 'simplecov'
   gem 'samus'
@@ -22,7 +23,7 @@ group :textile do
 end
 
 group :server do
-  gem 'rack'
+  gem 'rack', '~> 1.6'
 end
 
 group :i18n do
