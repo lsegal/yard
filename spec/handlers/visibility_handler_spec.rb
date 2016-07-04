@@ -32,6 +32,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHand
     expect(Registry.at('Testing#Foo').visibility).to eq :private
   end
 
+  it "handles post-2.1 method visibility" do
+    expect(Registry.at('Testing#foo2').visibility).to eq :private
+  end
+
   it "does not register classes with visibility" do
     expect(Registry.at('Testing::Bar').visibility).to eq :public
     expect(Registry.at('Testing::Baz').visibility).to eq :public

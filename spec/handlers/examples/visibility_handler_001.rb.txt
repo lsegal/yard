@@ -24,6 +24,7 @@ class Testing
 
   def Foo; end
   private :Foo
+  private def foo2; end
 
   private
 
