@@ -27,7 +27,7 @@ describe YARD::Handlers::C::InitHandler do
        */
 
       // Bar!
-      void Init_A() {
+      static SWIGEXPORT void Init_A() {
         rb_cA = rb_define_class("A", rb_cObject);
       }
     eof
