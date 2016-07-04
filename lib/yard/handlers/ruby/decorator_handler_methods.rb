@@ -1,47 +1,45 @@
 # Helper methods to assist with processing decorators.
 module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
-  # To be used in a handler's process block.
-  # Takes care of parsing method definitions passed to decorators
-  # as parameters, as well as parsing chained decorators.
+  # @overload process_decorator(*nodes, opts = {}, &block)
+  #   Takes care of parsing method definitions passed to decorators
+  #   as parameters, as well as parsing chained decorators.
   #
-  # @yieldparam method [YARD::CodeObjects::MethodObject] Method being decorated.
-  # @yieldparam node [YARD::Parser::Ruby::AstNode] AST node of the decorated method.
-  # @yieldparam name [Symbol] Name of the decorated method.
+  #   Use this in a handler's process block.
   #
-  # @return [Array<Hash>] Array of hashes containing :method, :node, :name.
-  #   See yield params.
+  #   @yieldparam method [YARD::CodeObjects::MethodObject] Method being decorated.
+  #   @yieldparam node [YARD::Parser::Ruby::AstNode] AST node of the decorated method.
+  #   @yieldparam name [Symbol] Name of the decorated method.
+  #   @return [Array<Hash>] Array of hashes containing :method, :node, :name.
+  #     See yield params.
   #
-  # @param nodes [YARD::Parser::Ruby::AstNode] AST nodes that refer to decorated
-  #   methods, like indexes of statement.parameter. Defaults to all parameters.
-  #   Pass nil to specify zero parameters.
+  #   @param nodes [YARD::Parser::Ruby::AstNode] AST nodes that refer to decorated
+  #     methods, like indexes of statement.parameter. Defaults to all parameters.
+  #     Pass nil to specify zero parameters.
   #
-  # @option opts [:instance, :class] :scope Scope to use for each MethodObject.
-  #   Defaults to :instance.
+  #   @option opts [:instance, :class] :scope (:instance) Scope to use for each
+  #     MethodObject.
   #
-  # @option opts [true, false] :transfer_docstring Set false to disable
-  #   transferring the decorator docstring to method definitions passed to the
-  #   decorator as parameters.
+  #   @option opts [true, false] :transfer_docstring Set false to disable
+  #     transferring the decorator docstring to method definitions passed to the
+  #     decorator as parameters.
   #
-  # @option opts [true, false] :transfer_source Set false to disable
-  #   transferring the decorator source code string to method definitions
-  #   passed to the decorator as parameters.
+  #   @option opts [true, false] :transfer_source Set false to disable
+  #     transferring the decorator source code string to method definitions
+  #     passed to the decorator as parameters.
   #
-  # @example
-  #   # Simply pass the method docs through to the method definition.
-  #   process do
-  #     process_decorator
-  #   end
-  #
-  # @example
-  #   # Set the decorated method's visibility to private.
-  #   process do
-  #     process_decorator :scope => :class do |method|
-  #       method.visibility = :private if method.respond_to? :visibility
+  #   @example Basic Usage
+  #     # Simply pass the method docs through to the method definition.
+  #     process do
+  #       process_decorator
   #     end
-  #   end
   #
-  # @!method process_decorator(*nodes, opts={}, &block)
+  #   @example Setting a method's visibility to private.
+  #     process do
+  #       process_decorator :scope => :class do |method|
+  #         method.visibility = :private if method.respond_to? :visibility
+  #       end
+  #     end
   def process_decorator(*nodes, &block)
     opts = nodes.last.is_a?(Hash) ? nodes.pop : {}
 
