@@ -1,7 +1,7 @@
 <li class="<%= @item.visibility %> <%= @item.has_tag?(:deprecated) ? 'deprecated' : '' %>">
   <span class="summary_signature">
     <% if @item.tags(:overload).size == 1 %>
-      <%= signature(@item.tag(:overload), true, !@item.attr_info) %>
+      <%= signature(@item.tag(:overload), true, false, !@item.attr_info) %>
     <% else %>
       <%= signature(@item, true, false, !@item.attr_info) %>
     <% end %>
