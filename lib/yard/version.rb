@@ -1,3 +1,3 @@
 module YARD
-  VERSION = '0.8.7.6'
+  VERSION = '0.9.0'
 end

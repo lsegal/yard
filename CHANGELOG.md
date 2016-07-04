@@ -1,3 +1,22 @@
+# 0.9.0 - July 4th, 2016
+
+Special thanks to Alex Dowad, MSP-Greg, and Alex McLain for their extended
+contributions to this version.
+
+- (Breaking Change): Replaced default template with an updated "frameless" version.
+  This change may affect backward compatibility if custom templates made modifications
+  to `default/fulldoc/html`, specifically the index or navigation lists.
+- Added support for Ruby 2.1+ decorator style method declaration syntax. YARD now
+  supports:
+    private def foo(x, y) end
+- Metadata headers in extra files can now be escaped from rendering by enclosing them
+  in HTML comment blocks (`<!--\n @metadata here... \n-->`). Ensure that the opening
+  comment tag is alone on the first line of the file to use this functionality.
+- Improved parsing of various CRuby coding styles.
+- Fixed issue with binary image assets when using `yard server`.
+- Fixed deprecation warnings from Rake 10.x.
+- Tests updated for RSpec 3.
+
 # 0.8.7.6 - October 26, 2014
 
 - Support using `@option` tag on keyword arg splat parameter. (#729)
