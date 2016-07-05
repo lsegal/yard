@@ -1,10 +1,20 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Templates::Engine do
+  before { @paths = Engine.template_paths }
+  after { Engine.template_paths = @paths }
+
   describe ".register_template_path" do
     it "registers a String path" do
       Engine.register_template_path('.')
       expect(Engine.template_paths.pop).to eq '.'
+    end
+
+    it "does not duplicate paths" do
+      Engine.template_paths = []
+      Engine.register_template_path('foo')
+      Engine.register_template_path('foo')
+      expect(Engine.template_paths).to eq ['foo']
     end
   end
 

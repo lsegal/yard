@@ -18,7 +18,7 @@ module YARD
         # @param [String] path a new template path
         # @return [void]
         def register_template_path(path)
-          template_paths.push path
+          template_paths.push(path) unless template_paths.include?(path)
         end
 
         # Creates a template module representing the path. Searches on disk

@@ -5,7 +5,8 @@ module YARD
     # @return [void]
     # @since 0.6.2
     def self.register_static_path(path)
-      Commands::StaticFileCommand::STATIC_PATHS.push(path)
+      static_paths = Commands::StaticFileCommand::STATIC_PATHS
+      static_paths.push(path) unless static_paths.include?(path)
     end
   end
 end
