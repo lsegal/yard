@@ -28,7 +28,7 @@ module YARD
 
         def parse_overrides(comments)
           comments.map do |line|
-            type, name = *line.scan(/^\s*Document-(class|module|method|const):\s*(\S.*)\s*$/).first
+            type, name = *line.scan(/^\s*Document-(class|module|method|attr|const):\s*(\S.*)\s*$/).first
             if type
               @overrides << [type.to_sym, name]
               nil
