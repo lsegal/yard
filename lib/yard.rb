@@ -1,4 +1,5 @@
 require File.expand_path('../yard/version.rb', __FILE__)
+require File.expand_path('../yard/config.rb', __FILE__)
 
 module YARD
   # The root path for YARD source libraries
@@ -8,7 +9,7 @@ module YARD
   TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
 
   # @deprecated Use {Config::CONFIG_DIR}
-  CONFIG_DIR = File.expand_path('~/.yard')
+  CONFIG_DIR = ::YARD::Config::CONFIG_DIR
 
   # An alias to {Parser::SourceParser}'s parsing method
   #

@@ -90,8 +90,20 @@ module YARD
       attr_accessor :options
     end
 
+
+    HOME_DIR = begin
+                 File.expand_path('~')
+               rescue ArgumentError => e
+                 require 'tmpdir'
+                 dir = Dir.tmpdir
+                 STDERR.puts(e)
+                 STDERR.puts("Warning! It appears something is unusual with your HOME environmental variable.")
+                 STDERR.puts("Please consider setting HOME to an absolute path.")
+                 STDERR.puts("Falling back to temp directory '#{dir}' for HOME.")
+                 dir
+               end
     # The location where YARD stores user-specific settings
-    CONFIG_DIR = File.expand_path('~/.yard')
+    CONFIG_DIR = File.join(HOME_DIR, '.yard')
 
     # The main configuration YAML file.
     CONFIG_FILE = File.join(CONFIG_DIR, 'config')
