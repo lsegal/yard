@@ -4,6 +4,7 @@ group :development do
   gem 'rspec', '~> 3.3'
   gem 'rake', '~> 10.0'
   gem 'json', '~> 1.8'
+  gem 'rdoc', '~> 4.2'
   gem 'rvm-tester'
   gem 'simplecov'
   gem 'samus'
