@@ -6,12 +6,12 @@ module YARD
     class YRI < Command
       # The location in {YARD::CONFIG_DIR} where the YRI cache file is loaded
       # from.
-      CACHE_FILE = File.expand_path('~/.yard/yri_cache')
+      CACHE_FILE = File.expand_path(File.join(YARD::Config::CONFIG_DIR, 'yri_cache'))
 
       # A file containing all paths, delimited by newlines, to search for
       # yardoc databases.
       # @since 0.5.1
-      SEARCH_PATHS_FILE = File.expand_path('~/.yard/yri_search_paths')
+      SEARCH_PATHS_FILE = File.expand_path(File.join(YARD::Config::CONFIG_DIR, 'yri_search_paths'))
 
       # Default search paths that should be loaded dynamically into YRI. These paths
       # take precedence over all other paths ({SEARCH_PATHS_FILE} and RubyGems

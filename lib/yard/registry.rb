@@ -30,7 +30,7 @@ module YARD
   #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring', true)
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
-    LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
+    LOCAL_YARDOC_INDEX = File.expand_path(File.join(Config::CONFIG_DIR, 'gem_index'))
     DEFAULT_PO_DIR = "po"
 
     extend Enumerable

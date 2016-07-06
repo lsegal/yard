@@ -1,14 +1,15 @@
-require File.expand_path('../yard/version.rb', __FILE__)
-
 module YARD
   # The root path for YARD source libraries
   ROOT = File.expand_path(File.dirname(__FILE__))
+
+  require File.join(YARD::ROOT, 'yard', 'version')
+  require File.join(YARD::ROOT, 'yard', 'autoload')
 
   # The root path for YARD builtin templates
   TEMPLATE_ROOT = File.join(ROOT, '..', 'templates')
 
   # @deprecated Use {Config::CONFIG_DIR}
-  CONFIG_DIR = File.expand_path('~/.yard')
+  CONFIG_DIR = Config::CONFIG_DIR
 
   # An alias to {Parser::SourceParser}'s parsing method
   #
@@ -63,9 +64,7 @@ end
 # Backport RubyGems SourceIndex and other classes
 require File.join(YARD::ROOT, 'yard', 'rubygems', 'backports')
 
-['autoload', 'globals'].each do |file|
-  require File.join(YARD::ROOT, 'yard', file)
-end
+require File.join(YARD::ROOT, 'yard', 'globals')
 
 # Load YARD configuration options (and plugins)
 YARD::Config.load
