@@ -47,7 +47,6 @@ module YARD
     def self.generation_hook(installer, specs)
       start = Time.now
       types = installer.document
-      puts types.inspect
 
       generate_yard = types.include?('yardoc') || types.include?('yard')
       generate_yri = types.include? 'yri'
