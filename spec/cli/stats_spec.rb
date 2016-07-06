@@ -10,9 +10,7 @@ describe YARD::CLI::Stats do
 
         def foo; end
 
-        attr_accessor :fooattr
-        attr_reader :fooattr_r
-        attr_writer :fooattr_w
+        attr_reader :fooattr
 
         # Documented
         def bar; end
@@ -25,9 +23,9 @@ describe YARD::CLI::Stats do
       "Modules:         1 (    1 undocumented)\n" +
       "Classes:         1 (    1 undocumented)\n" +
       "Constants:       1 (    1 undocumented)\n" +
-      "Attributes:      3 (    0 undocumented)\n" +
+      "Attributes:      1 (    0 undocumented)\n" +
       "Methods:         2 (    1 undocumented)\n" +
-      " 50.00% documented\n"
+      " 33.33% documented\n"
 
     @output = StringIO.new
     @stats = CLI::Stats.new(false)
@@ -71,7 +69,7 @@ eof
     expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
-B            ((stdin):13)
+B            ((stdin):11)
 A            ((stdin):1)
 A::CONST     ((stdin):2)
 A#foo        ((stdin):4)
