@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
 
 describe YARD::Templates::Helpers::TextHelper do
+  include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::TextHelper
   include YARD::Templates::Helpers::MethodHelper
 
@@ -39,6 +40,25 @@ describe YARD::Templates::Helpers::TextHelper do
     it "truncates text that is longer than allowed width" do
       text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
       expect(align_right(text)).to eq ' ' + text[0,68] + '...'
+    end
+  end
+
+  describe "#h" do
+    let(:object) do
+      o = YARD::CodeObjects::MethodObject.new(:root, :foo, :instance)
+      o.tap {|o| o.docstring = "test" }
+    end
+
+    it "resolves links" do
+      expect(h("{include:#foo} 1 2 3").strip).to eq "test 1 2 3"
+    end
+
+    it "uses title when present" do
+      expect(h("{A b}").strip).to eq "b"
+    end
+
+    it "uses object name when no title is present" do
+      expect(h("{A}").strip).to eq "A"
     end
   end
 end

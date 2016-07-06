@@ -6,6 +6,7 @@ module YARD
         # @return [String] escapes text
         def h(text)
           out = ""
+          text = resolve_links(text)
           text = text.split(/\n/)
           text.each_with_index do |line, i|
             out <<
@@ -88,6 +89,17 @@ module YARD
           extras_text = '(' + extras.join(", ") + ')' unless extras.empty?
           title = "%s%s%s %s%s%s" % [scope, name, args, blk, type, extras_text]
           title.gsub(/\s+/, ' ')
+        end
+
+        private
+
+        def resolve_links(text)
+          text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W]|$)/m) do |str|
+            escape, name, title, match = $1, $2, $3, $&
+            next(match[1..-1]) if escape
+            next(match) if name[0,1] == '|'
+            linkify(name, title)
+          end
         end
       end
     end

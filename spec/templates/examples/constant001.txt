@@ -5,8 +5,8 @@ DEFAULT_SEARCH_PATHS = []
 ------------------------------------------------------------------------
 
     Default search paths that should be loaded dynamically into YRI.
-    These paths take precedence over all other paths
-    ({SEARCH_PATHS_FILE} and RubyGems paths). To add a path, call: 
+    These paths take precedence over all other paths (SEARCH_PATHS_FILE
+    and RubyGems paths). To add a path, call: 
     
       DEFAULT_SEARCH_PATHS.push("/path/to/.yardoc")
 
