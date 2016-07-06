@@ -9,6 +9,7 @@ module YARD
         # @return [Array<CodeObjects::Base>] a pruned list of methods
         def prune_method_listing(list, hide_attributes = true)
           list = run_verifier(list)
+          list = list.reject {|o| run_verifier([o.parent]).empty? }
           list = list.reject {|o| o.is_alias? unless CodeObjects::Proxy === o.namespace }
           list = list.reject {|o| o.is_attribute? unless CodeObjects::Proxy === o.namespace } if hide_attributes
           list
