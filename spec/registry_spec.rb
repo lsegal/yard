@@ -12,6 +12,8 @@ describe YARD::Registry do
       allow(@gem).to receive(:name).and_return('foo')
       allow(@gem).to receive(:full_name).and_return('foo-1.0')
       allow(@gem).to receive(:full_gem_path).and_return('/path/to/foo')
+      allow(@gem).to receive(:doc_dir).and_return('/path/to/foo/doc')
+      allow(@gem).to receive(:doc_dir).with('.yardoc').and_return('/path/to/foo/doc/.yardoc')
     end
 
     it "returns nil if gem isn't found" do
@@ -25,14 +27,21 @@ describe YARD::Registry do
     end
 
     it "returns existing .yardoc path for gem when for_writing=false" do
-      expect(File).to receive(:exist?).and_return(false)
+      expect(File).to receive(:exist?).twice.and_return(false)
       expect(File).to receive(:exist?).with('/path/to/foo/.yardoc').and_return(true)
       expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq '/path/to/foo/.yardoc'
     end
 
+    it "returns new existing .yardoc path for gem when for_writing=false" do
+      expect(File).to receive(:exist?).once.and_return(false)
+      expect(File).to receive(:exist?).with('/path/to/foo/doc/.yardoc').and_return(true)
+      expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      expect(Registry.yardoc_file_for_gem('foo')).to eq '/path/to/foo/doc/.yardoc'
+    end
+
     it "returns nil if no .yardoc path exists in gem when for_writing=false" do
-      expect(File).to receive(:exist?).and_return(false)
+      expect(File).to receive(:exist?).twice.and_return(false)
       expect(File).to receive(:exist?).with('/path/to/foo/.yardoc').and_return(false)
       expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq nil
@@ -45,12 +54,20 @@ describe YARD::Registry do
     end
 
     it "returns global .yardoc path for gem if for_writing=true and dir is writable" do
+      expect(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       expect(File).to receive(:writable?).with(@gem.full_gem_path).and_return(true)
       expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/.yardoc'
     end
 
+    it "returns new global .yardoc path for gem if for_writing=true and dir is writable" do
+      expect(File).to receive(:writable?).with(@gem.doc_dir).and_return(true)
+      expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/doc/.yardoc'
+    end
+
     it "returns local .yardoc path for gem if for_writing=true and dir is not writable" do
+      expect(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       expect(File).to receive(:writable?).with(@gem.full_gem_path).and_return(false)
       expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to match %r{/.yard/gem_index/foo-1.0.yardoc$}

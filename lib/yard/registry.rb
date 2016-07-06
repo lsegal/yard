@@ -61,10 +61,12 @@ module YARD
 
         if for_writing
           global_yardoc_file(spec, for_writing) ||
+            old_global_yardoc_file(spec, for_writing) ||
             local_yardoc_file(spec, for_writing)
         else
           local_yardoc_file(spec, for_writing) ||
-            global_yardoc_file(spec, for_writing)
+            global_yardoc_file(spec, for_writing) ||
+            old_global_yardoc_file(spec, for_writing)
         end
       end
 
@@ -402,6 +404,16 @@ module YARD
       # @group Retrieving yardoc File Locations
 
       def global_yardoc_file(spec, for_writing = false)
+        path = spec.doc_dir
+        yfile = spec.doc_dir(DEFAULT_YARDOC_FILE)
+        if for_writing && File.writable?(path)
+          return yfile
+        elsif !for_writing && File.exist?(yfile)
+          return yfile
+        end
+      end
+
+      def old_global_yardoc_file(spec, for_writing = false)
         path = spec.full_gem_path
         yfile = File.join(path, DEFAULT_YARDOC_FILE)
         if for_writing && File.writable?(path)
