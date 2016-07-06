@@ -226,6 +226,14 @@ describe YARD::CodeObjects::Base do
       expect(Templates::Engine).to receive(:render).with(:x => 1, :object => object, :type => object.type)
       object.format :x => 1
     end
+
+    it "does not change options object class" do
+      opts = YARD::Templates::TemplateOptions.new
+      opts.type = "test"
+      object = MethodObject.new(:root, :method)
+      expect(Templates::Engine).to receive(:render).with kind_of(YARD::Templates::TemplateOptions)
+      object.format(opts)
+    end
   end
 
   describe "#source_type" do

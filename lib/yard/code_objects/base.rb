@@ -479,7 +479,8 @@ module YARD
       # @return [String] the rendered template
       # @see Templates::Engine#render
       def format(options = {})
-        options = {:type => type}.merge(options.merge(:object => self))
+        options = options.merge(:object => self)
+        options = options.merge(:type => type) if !options[:type]
         Templates::Engine.render(options)
       end
 
