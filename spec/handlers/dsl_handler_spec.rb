@@ -198,12 +198,12 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   #   not work until macro lookups can be done by caller_method directly.
   # @todo optimize MacroObject lookup to work by caller name, not macro name.
   it "cannot attach a macro on alias of attached macro" do
-    expect(Registry.at('AliasTest#main_foo1').docstring).to eq "Success main_foo1"
+    expect(Registry.at('AliasTest#main_foo1')).not_to be nil
     expect(Registry.at('AliasTest#alt_foo1')).to be nil
   end
 
   it "searches attached macro's aliases for caller method match" do
-    expect(Registry.at('AliasTest#main_foo2').docstring).to eq "Success main_foo2"
+    expect(Registry.at('AliasTest#main_foo2')).not_to be nil
     expect(Registry.at('AliasTest#alt_foo2')).to be nil
   end
 end
