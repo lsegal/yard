@@ -242,12 +242,17 @@ module YARD
           file = CodeObjects::ExtraFileObject.new(file)
         end
         file.attributes[:markup] ||= markup_for_file('', file.filename)
-        htmlify(file.contents, file.attributes[:markup] || options.markup)
+        insert_include(file.contents, file.attributes[:markup] || options.markup)
       end
 
       # (see BaseHelper#link_include_object)
       def link_include_object(obj)
-        htmlify(obj.docstring)
+        insert_include(obj.docstring)
+      end
+
+      # Inserts an include link while respecting inlining
+      def insert_include(text, markup = options.markup)
+        htmlify(text, markup).gsub(/\A\s*<p>|<\/p>\s*\Z/, '')
       end
 
       # (see BaseHelper#link_object)

@@ -148,7 +148,14 @@ describe YARD::Templates::Helpers::HtmlHelper do
       load_markup_provider(:rdoc)
       expect(File).to receive(:file?).with('foo.rdoc').and_return(true)
       expect(File).to receive(:read).with('foo.rdoc').and_return('HI')
-      expect(htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '')).to eq "<p><p>HI</p></p>"
+      expect(htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/\s+/, '')).to eq "<p>HI</p>"
+    end
+
+    it "allows inline includes for {include:} in the middle of a line" do
+      load_markup_provider(:rdoc)
+      expect(File).to receive(:file?).with('foo.rdoc').and_return(true)
+      expect(File).to receive(:read).with('foo.rdoc').and_return('HI')
+      expect(htmlify("test {include:file:foo.rdoc}", :rdoc).gsub(/[\r?\n]+/, '')).to eq '<p>test HI</p>'
     end
 
     it "autolinks URLs (markdown specific)" do
