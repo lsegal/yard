@@ -28,7 +28,9 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     if old_obj
       new_obj.signature = old_obj.signature
       new_obj.source = old_obj.source
-      new_obj.docstring = old_obj.docstring + YARD::Docstring.new(statement.comments)
+      comments = [old_obj.docstring.to_raw, statement.comments].join("\n")
+      doc = Docstring.parser.parse(comments, new_obj, self)
+      new_obj.docstring = doc.to_docstring
       new_obj.docstring.line_range = statement.comments_range
       new_obj.docstring.hash_flag = statement.comments_hash_flag
       new_obj.docstring.object = new_obj

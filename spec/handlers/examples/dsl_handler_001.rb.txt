@@ -123,3 +123,23 @@ module DSLMethods
   dsl_method :foo, String
   dsl_method :bar, Integer
 end
+
+class AliasTest
+  class << self
+    # @!macro alias_main
+    #   @!method main_$1
+    #     Success main_$1
+    def main; end
+
+    # TODO: currently unsupported behavior
+    # @!macro alias_alt
+    #   @!method alias_$1
+    #     Success alias_$1
+    alias alt main
+
+    alias alt2 main
+  end
+
+  alt  :foo1
+  alt2 :foo2
+end

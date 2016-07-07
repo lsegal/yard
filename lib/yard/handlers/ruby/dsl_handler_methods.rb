@@ -64,12 +64,23 @@ module YARD
         def find_attached_macro
           Registry.all(:macro).each do |macro|
             next unless macro.method_object
-            next unless macro.method_object.name.to_s == caller_method.to_s
+            next unless macro_name_matches(macro)
             (namespace.inheritance_tree(true) + [P('Object')]).each do |obj|
               return macro if obj == macro.method_object.namespace
             end
           end
           nil
+        end
+
+        # @return [Boolean] whether caller method matches a macro or
+        #   its alias names.
+        def macro_name_matches(macro)
+          objs = [macro.method_object]
+          if objs.first.type != :proxy && objs.first.respond_to?(:aliases)
+            objs.push(*objs.first.aliases)
+          end
+
+          objs.any? {|obj| obj.name.to_s == caller_method.to_s }
         end
       end
     end
