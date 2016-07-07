@@ -200,10 +200,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   it "cannot attach a macro on alias of attached macro" do
     expect(Registry.at('AliasTest#main_foo1')).not_to be nil
     expect(Registry.at('AliasTest#alt_foo1')).to be nil
-  end
+  end if HAVE_RIPPER
 
   it "searches attached macro's aliases for caller method match" do
     expect(Registry.at('AliasTest#main_foo2')).not_to be nil
     expect(Registry.at('AliasTest#alt_foo2')).to be nil
-  end
+  end if HAVE_RIPPER
 end
