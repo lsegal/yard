@@ -117,7 +117,7 @@ module YARD
       # Remove trailing/leading whitespace / newlines
       @text = text.gsub(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
       call_directives_after_parse
-      call_after_parse_callbacks
+      post_process
       self
     end
 
@@ -177,6 +177,17 @@ module YARD
       end
 
       docstring
+    end
+
+    # @!group Parser Callback Methods
+
+    # Call post processing callbacks on parser.
+    # This is called implicitly by parser. Use this when
+    # manually configuring a {Docstring} object.
+    #
+    # @return [void]
+    def post_process
+      call_after_parse_callbacks
     end
 
     # @!group Tag Manipulation Methods

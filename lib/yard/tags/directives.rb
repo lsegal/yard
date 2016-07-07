@@ -408,6 +408,10 @@ module YARD
         obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
           parser.raw_text, parser.reference)
         handler.register_module_function(obj)
+        old_obj = parser.object
+        parser.object = obj
+        parser.post_process
+        parser.object = old_obj
         obj
       end
     end

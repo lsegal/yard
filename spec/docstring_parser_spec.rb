@@ -216,6 +216,15 @@ eof
       eof
     end
 
+    it "warns about invalid named parameters on @!method directives" do
+      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @!method foo(a)
+        #   @param notaparam foo
+        test
+      eof
+    end
+
     it "warns about duplicate named parameters" do
       expect(log).to receive(:warn).with(/@param tag has duplicate parameter name: a/)
       YARD.parse_string <<-eof
