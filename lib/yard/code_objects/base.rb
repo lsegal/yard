@@ -225,7 +225,7 @@ module YARD
         @visibility = :public
         @tags = []
         @docstrings = {}
-        @docstring = Docstring.new('', self)
+        @docstring = Docstring.new!('', [], self)
         @namespace = nil
         self.namespace = namespace
         yield(self) if block_given?
