@@ -199,7 +199,7 @@ eof
     end
   end
 
-  describe "after_parse" do
+  describe "after_parse (param)" do
     it "allows specifying of callbacks" do
       parser = DocstringParser.new
       the_yielded_obj = nil
@@ -241,6 +241,23 @@ eof
         def foo(a) end
         alias bar foo
       eof
+    end
+  end
+
+  describe "after_parse (see)" do
+    it "does not warn on valid see tag" do
+      expect(log).to_not receive(:warn)
+      YARD.parse_string "# @see valid\nclass Foo;end"
+    end
+
+    it "warns if {} wraps single name" do
+      expect(log).to receive(:warn).with(/@see tag \(#1\) should not be wrapped in \{\}/)
+      YARD.parse_string "# @see {invalid}\nclass Foo;end"
+    end
+
+    it "warns if {} wraps across name and text" do
+      expect(log).to receive(:warn).with(/@see tag \(#1\) should not be wrapped in \{\}/)
+      YARD.parse_string "# @see {invalid tag}\nclass Foo;end"
     end
   end
 end
