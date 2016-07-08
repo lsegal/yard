@@ -52,14 +52,9 @@ describe YARD::Docstring do
       5.times { expect(o1.summary).to eq "Hello." }
     end
 
-    it "strips HTML before summarizing" do
-      doc = Docstring.new("<p>Hello <b>world</b></p>.")
-      expect(doc.summary).to eq 'Hello world.'
-    end
-
     it "strips newlines in first paragraph before summarizing" do
       doc = Docstring.new("Foo\n<code>==</code> bar.")
-      expect(doc.summary).to eq 'Foo == bar.'
+      expect(doc.summary).to eq 'Foo <code>==</code> bar.'
     end
 
     it "returns the first sentence" do
