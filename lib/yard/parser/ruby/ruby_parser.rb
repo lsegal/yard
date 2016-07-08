@@ -390,7 +390,7 @@ module YARD
           ReferenceNode.new(:const_path_ref, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
 
-        [:if_mod, :unless_mod, :while_mod].each do |kw|
+        [:if_mod, :unless_mod, :while_mod, :until_mod].each do |kw|
           node_class = AstNode.node_class_for(kw)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{kw}; rescue NameError; end
