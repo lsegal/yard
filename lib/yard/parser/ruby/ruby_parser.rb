@@ -565,6 +565,12 @@ module YARD
         def insert_comments
           root.traverse do |node|
             next if node.type == :comment || node.type == :list || node.parent.type != :list
+
+            # never attach comments to if/unless mod nodes
+            if node.type == :if_mod || node.type == :unless_mod
+              node = node.then_block
+            end
+
             # check upwards from line before node; check node's line at the end
             ((node.line-1).downto(node.line-2).to_a + [node.line]).each  do |line|
               comment = @comments[line]

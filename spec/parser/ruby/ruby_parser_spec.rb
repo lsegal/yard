@@ -402,6 +402,18 @@ eof
         expect(Registry.at("Foo::Bar").docstring).to eq "Docstring"
         expect(Registry.at("Foo::Bar#foo").docstring).to eq "Docstring2"
       end
+
+      it "does not add comment blocks to #{type}_mod nodes" do
+        Registry.clear
+        ast = YARD.parse_string(<<-eof).enumerator
+          class Foo
+            # Docstring
+            def bar; end if true
+          end
+        eof
+
+        expect(Registry.at("Foo#bar").docstring).to eq "Docstring"
+      end
     end
   end
 end if HAVE_RIPPER
