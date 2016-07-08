@@ -24,6 +24,7 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
       o.add_file(parser.file, statement.line)
     end
+    namespace.aliases[new_obj] = old_meth
 
     if old_obj
       new_obj.signature = old_obj.signature
@@ -37,7 +38,5 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     else
       new_obj.signature = "def #{new_meth}" # this is all we know.
     end
-
-    namespace.aliases[new_obj] = old_meth
   end
 end

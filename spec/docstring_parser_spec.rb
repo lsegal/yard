@@ -233,5 +233,14 @@ eof
         def foo(a) end
       eof
     end
+
+    it "does not warn on aliases" do
+      expect(log).to_not receive(:warn)
+      YARD.parse_string <<-eof
+        # @param a foo
+        def foo(a) end
+        alias bar foo
+      eof
+    end
   end
 end
