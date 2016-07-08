@@ -246,7 +246,7 @@ module YARD
           @last_ns_token = [token, data]
           @charno += data.length
           @ns_charno = charno
-          @newline = token == :semicolon
+          @newline = [:semicolon, :comment, :kw, :op].include?(token)
           if ast_token
             AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno-1, :token => true)
           end
