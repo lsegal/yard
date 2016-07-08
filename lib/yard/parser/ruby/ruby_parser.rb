@@ -194,7 +194,8 @@ module YARD
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               unless @last_ns_token == [:kw, "def"] ||
-                  (@tokens.last && @tokens.last[0] == :symbeg)
+                  (@tokens.last && @tokens.last[0] == :symbeg) ||
+                  (!@newline && %w(if while until unless).include?(tok))
                 (@map[tok] ||= []) << [lineno, charno]
               end
               visit_ns_token(:#{event}, tok, true)
@@ -202,14 +203,20 @@ module YARD
           eof
         end
 
-        [:sp, :nl, :ignored_nl].each do |event|
+        [:nl, :ignored_nl].each do |event|
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               add_token(:#{event}, tok)
+              @newline = true
               @charno += tok.length
             end
           eof
+        end
+
+        def on_sp(tok)
+          add_token(:sp, tok)
+          @charno += tok.length
         end
 
         def visit_event(node)
@@ -239,6 +246,7 @@ module YARD
           @last_ns_token = [token, data]
           @charno += data.length
           @ns_charno = charno
+          @newline = token == :semicolon
           if ast_token
             AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno-1, :token => true)
           end

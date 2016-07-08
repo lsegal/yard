@@ -381,5 +381,27 @@ eof
       expect(Registry.at("Foo::CONST1").docstring).to eq "Comment here"
       expect(Registry.at("Foo::CONST2").docstring).to eq "Another comment here"
     end
+
+    %w(if unless).each do |type|
+      it "does not get confused by modifier '#{type}' statements" do
+        Registry.clear
+        ast = YARD.parse_string(<<-eof).enumerator
+          module Foo
+            #{type} test?
+              # Docstring
+              class Bar
+                # Docstring2
+                def foo
+                  x #{type} true
+                end
+              end
+            end
+          end
+        eof
+
+        expect(Registry.at("Foo::Bar").docstring).to eq "Docstring"
+        expect(Registry.at("Foo::Bar#foo").docstring).to eq "Docstring2"
+      end
+    end
   end
 end if HAVE_RIPPER
