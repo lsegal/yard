@@ -15,14 +15,20 @@ module YARD
           @docstring = statement.comments || ""
           @docstring = @docstring.join("\n") if @docstring.is_a?(Array)
 
+          attaching = false
           if @docstring =~ /^@!?macro\s+\[[^\]]*attach/
             register_docstring(nil)
             @docstring = ""
+            attaching = true
           end
 
           if macro = find_attached_macro
-            @docstring += "\n" +
-              macro.expand([caller_method, *call_params], statement.source)
+            txt = macro.expand([caller_method, *call_params], statement.source)
+            @docstring += "\n" + txt
+
+            if !attaching && txt.match(/^\s*@!/) # macro has a directive
+              return register_docstring(nil)
+            end
           elsif !statement.comments_hash_flag && !implicit_docstring?
             return register_docstring(nil)
           end

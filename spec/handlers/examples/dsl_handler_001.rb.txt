@@ -143,3 +143,12 @@ class AliasTest
   alt  :foo1
   alt2 :foo2
 end
+
+class DirectiveMethods
+  # @!macro with_directive
+  #   @!parse
+  #     include $1
+  def self.attach(x) end
+
+  attach Bar
+end

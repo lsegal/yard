@@ -206,4 +206,9 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     expect(Registry.at('AliasTest#main_foo2')).not_to be nil
     expect(Registry.at('AliasTest#alt_foo2')).to be nil
   end if HAVE_RIPPER
+
+  it "does not create method object if directive data detected in expanded macro" do
+    expect(Registry.at('DirectiveMethods#Bar')).to be nil
+    expect(Registry.at('DirectiveMethods').mixins).to include P(:Bar)
+  end
 end
