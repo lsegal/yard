@@ -24,4 +24,20 @@ describe YARD::Handlers::C::MixinHandler do
     foo = Registry.at('Foo')
     expect(foo.mixins(:instance)).to eq [P('XYZ')]
   end
+
+  it "fails if mixin variable cannot be detected" do
+    with_parser(:c) do
+      undoc_error <<-eof
+        void Init_Foo() {
+          VALUE noprefix;
+
+          mFoo = rb_define_module("Foo");
+          // YARD doesn't understand this
+          noprefix = rb_const_get(rb_cObject, rb_intern("Observable"));
+
+          rb_include_module(mFoo, noprefix);
+        }
+      eof
+    end
+  end
 end

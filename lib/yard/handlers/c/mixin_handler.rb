@@ -7,7 +7,13 @@ class YARD::Handlers::C::MixinHandler < YARD::Handlers::C::Base
     statement.source.scan(MATCH) do |klass_var, mixin_var|
       namespace = namespace_for_variable(klass_var)
       ensure_loaded!(namespace)
-      namespace.mixins(:instance) << namespace_for_variable(mixin_var)
+
+      if var = namespace_for_variable(mixin_var)
+        namespace.mixins(:instance) << var
+      else
+        raise YARD::Parser::UndocumentableError,
+          "CRuby mixin for unrecognized variable '#{mixin_var}'"
+      end
     end
   end
 end
