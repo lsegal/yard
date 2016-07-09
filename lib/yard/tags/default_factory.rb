@@ -162,10 +162,12 @@ module YARD
           elsif c =~ /\S/ && level == 0
             break e = i if seen_space && list == ['']
             before << c
-          elsif c =~ /\s/ && level == 0 && !before.empty?
+          elsif c =~ /[ \t]/ && level == 0 && !before.empty?
             seen_space = true
           elsif level >= 1
             list.last << c
+          elsif level == 0 && c == "\n"
+            break e = i
           end
           last_seen = c
           i += 1

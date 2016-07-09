@@ -41,6 +41,11 @@ describe YARD::Tags::DefaultFactory do
       expect(parse_types('b c <String> description (test)')).to eq [nil, nil, 'b c <String> description (test)']
     end
 
+    it "does not allow types to start after a newline" do
+      v = parse_types("   \n   [X]")
+      expect(v).to eq [nil, nil, "[X]"]
+    end
+
     it "handles a complex list of types" do
       v = parse_types(' [Test, Array<String, Hash, C>, String]')
       expect(v).to include(["Test", "Array<String, Hash, C>", "String"])
