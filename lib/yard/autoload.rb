@@ -216,6 +216,7 @@ module YARD
       autoload :ListCommand,          __p('server/commands/list_command')
       autoload :LibraryCommand,       __p('server/commands/library_command')
       autoload :LibraryIndexCommand,  __p('server/commands/library_index_command')
+      autoload :RootRequestCommand,   __p('server/commands/root_request_command')
       autoload :SearchCommand,        __p('server/commands/search_command')
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')
     end

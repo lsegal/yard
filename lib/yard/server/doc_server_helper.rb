@@ -10,7 +10,7 @@ module YARD
       def url_for(obj, anchor = nil, relative = false)
         return '' if obj.nil?
         return url_for_index if obj == '_index.html'
-        return "/#{obj}" if String === obj
+        return "/#{base_path(router.static_prefix)}/#{obj}" if String === obj
         url = super(obj, anchor, false)
         return unless url
         File.join('', base_path(router.docs_prefix), url)

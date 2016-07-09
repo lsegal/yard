@@ -45,7 +45,7 @@ module YARD
       end
 
       # Perform routing on a specific request, serving the request as a static
-      # file through {Commands::StaticFileCommand} if no route is found.
+      # file through {Commands::RootRequestCommand} if no route is found.
       #
       # @param [Adapter Dependent] request the request object
       # @return [Array(Numeric,Hash,Array)] the Rack-style server response data
@@ -54,7 +54,7 @@ module YARD
         if result = (check_static_cache || route)
           result
         else
-          StaticFileCommand.new(adapter.options).call(request)
+          RootRequestCommand.new(adapter.options).call(request)
         end
       end
 
@@ -68,6 +68,9 @@ module YARD
 
       # @return [String] the URI prefix for all search requests
       def search_prefix; 'search' end
+
+      # @return [String] the URI prefix for all static assets (templates)
+      def static_prefix; 'static' end
 
       # @group Routing Methods
 
@@ -101,7 +104,7 @@ module YARD
         path = path.gsub(%r{//+}, '/').gsub(%r{^/|/$}, '')
         return route_index if path.empty? || path == docs_prefix
         case path
-        when /^(#{docs_prefix}|#{list_prefix}|#{search_prefix})(\/.*|$)/
+        when /^(#{docs_prefix}|#{list_prefix}|#{search_prefix}|#{static_prefix})(\/.*|$)/
           prefix = $1
           paths = $2.gsub(%r{^/|/$}, '').split('/')
           library, paths = *parse_library_from_path(paths)
@@ -110,6 +113,7 @@ module YARD
           when docs_prefix;   route_docs(library, paths)
           when list_prefix;   route_list(library, paths)
           when search_prefix; route_search(library, paths)
+          when static_prefix; route_static(library, paths)
           end
         end
         nil
@@ -161,6 +165,10 @@ module YARD
         SearchCommand.new(final_options(library, paths)).call(request)
       end
 
+      def route_static(library, paths)
+        StaticFileCommand.new(final_options(library, paths)).call(request)
+      end
+
       # @group Utility Methods
 
       # Adds extra :library/:path option keys to the adapter options.
@@ -169,7 +177,8 @@ module YARD
       # @param (see #route_docs)
       # @return [Hash] finalized options
       def final_options(library, paths)
-        adapter.options.merge(:library => library, :path => paths.join('/'))
+        path = File.cleanpath(paths.join('/')).gsub(%r{^(../)+}, '')
+        adapter.options.merge(:library => library, :path => path)
       end
     end
   end

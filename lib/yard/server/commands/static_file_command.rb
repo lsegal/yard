@@ -4,7 +4,7 @@ module YARD
   module Server
     module Commands
       # Serves static content when no other router matches a request
-      class StaticFileCommand < Base
+      class StaticFileCommand < LibraryCommand
         include WEBrick::HTTPUtils
 
         DefaultMimeTypes['js'] = 'text/javascript'
@@ -17,7 +17,6 @@ module YARD
 
         def run
           assets_template = Templates::Engine.template(:default, :fulldoc, :html)
-          path = File.cleanpath(request.path).gsub(%r{^(../)+}, '')
 
           file = nil
           ([adapter.document_root] + STATIC_PATHS.reverse).compact.each do |path_prefix|
@@ -30,26 +29,14 @@ module YARD
           file ||= assets_template.find_file(path)
 
           if file
-            ext = "." + (request.path[/\.(\w+)$/, 1] || "html")
+            ext = "." + (path[/\.(\w+)$/, 1] || "html")
             headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
             self.body = File.read(file)
             return
           end
 
-          favicon?
+          self.body = "Could not find: #{request.path}"
           self.status = 404
-        end
-
-        private
-
-        # Return an empty favicon.ico if it does not exist so that
-        # browsers don't complain.
-        def favicon?
-          return unless request.path == '/favicon.ico'
-          self.headers['Content-Type'] = 'image/png'
-          self.status = 200
-          self.body = ''
-          raise FinishRequest
         end
       end
     end

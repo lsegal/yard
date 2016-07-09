@@ -116,7 +116,7 @@ describe YARD::Server::Router do
     end
 
     it "searches static files for non-existent library" do
-      route_to('/mydocs/foo/notproject', StaticFileCommand)
+      route_to('/mydocs/foo/notproject', RootRequestCommand)
     end
   end
 end
