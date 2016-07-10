@@ -55,7 +55,7 @@ def attr_listing
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
     next if options.embed_mixins.size > 0 &&
-      options.embed_mixins_match?(superclass) == false
+      !options.embed_mixins_match?(superclass)
     [:class, :instance].each do |scope|
       superclass.attributes[scope].each do |name, rw|
         attr = prune_method_listing([rw[:read], rw[:write]].compact, false).first
