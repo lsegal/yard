@@ -209,7 +209,7 @@ module YARD
             def on_#{event}(tok)
               add_token(:#{event}, tok)
               @newline = true
-              @charno += tok.length
+              @charno += tok ? tok.length : 1
             end
           eof
         end
