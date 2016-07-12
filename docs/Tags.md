@@ -97,11 +97,12 @@ following syntaxes are available:
   Note that for extensibility, other bracket types are allowed, such as `<>`,
   `()` and `{}`. The contents of the list are discussed in detail below.
 3. **Freeform data with a name and types specifier list** &mdash; freeform
-  data beginning with an *optional* types list, as well as a name key. The
-  name key is *required*. Note that for extensibility, the name can be placed
-  *before* the types list, like: `name [Types] description`. In this case,
-  a separating space is not required between the name and types, and you
-  can still use any of the other brackets that the type specifier list allows.
+  data beginning with an *optional* types list, as well as a name key, placed
+  either before or after the types list. The name key is *required*. Note that
+  for extensibility, the name can be placed *before* the types list, like:
+  `name [Types] description`. In this case, a separating space is not required
+  between the name and types, and you can still use any of the other brackets
+  that the type specifier list allows.
 4. **Freeform data with title** &mdash; freeform data where the first line cannot
   be split into multiple lines. The first line must also always refer to the
   "title" portion, and therefore, if there is no title, the first line must
@@ -190,7 +191,7 @@ The following example shows a method that takes a parameter of any type
 that responds to the "read" method:
 
     # Reads from any I/O object.
-    # @param [#read] io the input object to read from
+    # @param io [#read] the input object to read from
     def read(io) io.read end
 
 #### Hashes
@@ -238,9 +239,9 @@ A reference tag literally copies the tag data by the given tag name from the
 specified OBJECT. For instance, a method may copy all {tag:param} tags from
 a given object using the reference tag syntax:
 
-    # @param [String] user the username for the operation
-    # @param [String] host the host that this user is associated with
-    # @param [Time] time the time that this operation took place
+    # @param user [String] the username for the operation
+    # @param host [String] the host that this user is associated with
+    # @param time [Time] the time that this operation took place
     def clean(user, host, time = Time.now) end
 
     # @param (see #clean)
