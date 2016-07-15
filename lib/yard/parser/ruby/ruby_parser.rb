@@ -5,6 +5,7 @@ module YARD
     module Ruby
       # Ruby 1.9 parser
       # @!attribute [r] encoding_line
+      # @!attribute [r] frozen_string_line
       # @!attribute [r] shebang_line
       # @!attribute [r] enumerator
       class RubyParser < Parser::Base
@@ -17,13 +18,14 @@ module YARD
         def enumerator; @parser.enumerator end
         def shebang_line; @parser.shebang_line end
         def encoding_line; @parser.encoding_line end
+        def frozen_string_line; @parser.frozen_string_line end
       end
 
       # Internal parser class
       # @since 0.5.6
       class RipperParser < Ripper
         attr_reader :ast, :charno, :comments, :file, :tokens
-        attr_reader :shebang_line, :encoding_line
+        attr_reader :shebang_line, :encoding_line, :frozen_string_line
         alias root ast
 
         def initialize(source, filename, *args)
@@ -43,6 +45,7 @@ module YARD
           @charno = 0
           @shebang_line = nil
           @encoding_line = nil
+          @frozen_string_line = nil
           @file_encoding = nil
         end
 
@@ -496,6 +499,9 @@ module YARD
               not_comment = true
             elsif comment =~ SourceParser::ENCODING_LINE
               @encoding_line = comment
+              not_comment = true
+            elsif comment =~ SourceParser::FROZEN_STRING_LINE
+              @frozen_string_line = comment
               not_comment = true
             end
           end
