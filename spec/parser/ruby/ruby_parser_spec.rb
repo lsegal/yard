@@ -415,5 +415,13 @@ eof
         expect(Registry.at("Foo#bar").docstring).to eq "Docstring"
       end
     end
+
+    it "removes frozen string line from initial file comments" do
+      YARD.parse_string "# frozen_string_literal: true\n# this is a comment\nclass Foo; end"
+      YARD.parse_string "# Frozen-string-literal: true\n# this is a comment\nclass Bar; end"
+
+      expect(Registry.at(:Foo).docstring).to eq "this is a comment"
+      expect(Registry.at(:Bar).docstring).to eq "this is a comment"
+    end
   end
 end if HAVE_RIPPER

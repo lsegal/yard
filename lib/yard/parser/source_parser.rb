@@ -62,6 +62,7 @@ module YARD
     class SourceParser
       SHEBANG_LINE  = /\A\s*#!\S+/
       ENCODING_LINE = /\A(?:\s*#*!.*\r?\n)?\s*(?:#+|\/\*+|\/\/+).*coding\s*[:=]{1,2}\s*([a-z\d_\-]+)/i
+      FROZEN_STRING_LINE = /frozen(-|_)string(-|_)literal: true/i
 
       # The default glob of files to be parsed.
       # @since 0.9.0
