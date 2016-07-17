@@ -36,6 +36,7 @@ module YARD
     autoload :MacroObject,          __p('code_objects/macro_object')
     autoload :MethodObject,         __p('code_objects/method_object')
     autoload :ModuleObject,         __p('code_objects/module_object')
+    autoload :NamespaceMapper,      __p('code_objects/namespace_mapper')
     autoload :NamespaceObject,      __p('code_objects/namespace_object')
     autoload :Proxy,                __p('code_objects/proxy')
     autoload :ProxyMethodError,     __p('code_objects/proxy')
@@ -282,15 +283,16 @@ module YARD
     autoload :TemplateOptions, __p('templates/template_options')
   end
 
-  autoload :Config,          __p('config')
-  autoload :Docstring,       __p('docstring')
-  autoload :DocstringParser, __p('docstring_parser')
-  autoload :Logger,          __p('logging')
-  autoload :Options,         __p('options')
-  autoload :Registry,        __p('registry')
-  autoload :RegistryStore,   __p('registry_store')
-  autoload :StubProxy,       __p('serializers/yardoc_serializer')
-  autoload :Verifier,        __p('verifier')
+  autoload :Config,           __p('config')
+  autoload :Docstring,        __p('docstring')
+  autoload :DocstringParser,  __p('docstring_parser')
+  autoload :Logger,           __p('logging')
+  autoload :Options,          __p('options')
+  autoload :Registry,         __p('registry')
+  autoload :RegistryResolver, __p('registry_resolver')
+  autoload :RegistryStore,    __p('registry_store')
+  autoload :StubProxy,        __p('serializers/yardoc_serializer')
+  autoload :Verifier,         __p('verifier')
 end
 
 undef __p

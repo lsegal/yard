@@ -140,6 +140,18 @@ describe YARD::Registry do
       expect(Registry.resolve(:root, 'methname')).to eq o
     end
 
+    it "does lexical lookup on the initial namespace" do
+      YARD.parse_string <<-eof
+        module A
+          module B; module C; end end
+          module D; module E; end end
+        end
+      eof
+
+      d = Registry.at('A::B::C')
+      expect(Registry.resolve(d, 'D::E')).to eq Registry.at('A::D::E')
+    end
+
     it "resolves superclass methods when inheritance = true" do
       superyard = ClassObject.new(:root, :SuperYard)
       yard = ClassObject.new(:root, :YARD)
@@ -193,6 +205,20 @@ describe YARD::Registry do
       eof
 
       expect(Registry.resolve(P('MyObject'), '#foo', true)).to be nil
+    end
+
+    it "performs lookups on each individual namespace when inheritance = true" do
+      YARD.parse_string <<-eof
+        module A
+          module B; include A::D end
+          module C; extend A::D end
+          module D; def bar; end end
+        end
+      eof
+
+      r = Registry.root
+      expect(Registry.resolve(r, 'A::B#bar', true)).to eq Registry.at('A::D#bar')
+      expect(Registry.resolve(r, 'A::C.bar', true)).to eq Registry.at('A::D#bar')
     end
 
     it "allows type=:typename to ensure resolved object is of a certain type" do

@@ -1,4 +1,7 @@
 module YARD::CodeObjects
+  register_separator CSEP, :method
+  register_separator ISEP, :method
+
   # Represents a Ruby method in source
   class MethodObject < Base
     # The scope of the method (+:class+ or +:instance+)

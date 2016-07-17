@@ -1,4 +1,7 @@
 module YARD::CodeObjects
+  register_separator NSEP, :namespace
+  default_separator NSEP
+
   # A "namespace" is any object that can store other objects within itself.
   # The two main Ruby objects that can act as namespaces are modules
   # ({ModuleObject}) and classes ({ClassObject}).

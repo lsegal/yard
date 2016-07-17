@@ -1,4 +1,6 @@
 module YARD::CodeObjects
+  register_separator NSEP, :class
+
   # A ClassObject represents a Ruby class in source code. It is a {ModuleObject}
   # with extra inheritance semantics through the superclass.
   class ClassObject < NamespaceObject

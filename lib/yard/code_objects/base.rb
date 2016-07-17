@@ -27,6 +27,7 @@ module YARD
       alias_method :<<, :push
     end
 
+    extend NamespaceMapper
 
     # Namespace separator
     NSEP = '::'

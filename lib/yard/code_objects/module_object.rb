@@ -1,4 +1,6 @@
 module YARD::CodeObjects
+  register_separator NSEP, :module
+
   # Represents a Ruby module.
   class ModuleObject < NamespaceObject
     # Returns the inheritance tree of mixins.

@@ -1,4 +1,6 @@
 module YARD::CodeObjects
+  register_separator NSEP, :constant
+
   # A +ConstantObject+ represents a Ruby constant (not a module or class).
   # To access the constant's (source code) value, use {#value}.
   class ConstantObject < Base

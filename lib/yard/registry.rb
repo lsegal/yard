@@ -278,47 +278,9 @@ module YARD
       # @return [nil] if +proxy_fallback+ is +false+ and no object was found.
       # @see P
       def resolve(namespace, name, inheritance = false, proxy_fallback = false, type = nil)
-        if namespace.is_a?(CodeObjects::Proxy)
-          return proxy_fallback ? CodeObjects::Proxy.new(namespace, name, type) : nil
-        end
-
-        if namespace == :root || !namespace
-          namespace = root
-        else
-          namespace = namespace.parent until namespace.is_a?(CodeObjects::NamespaceObject)
-        end
-        orignamespace = namespace
-
-        name = name.to_s
-        if name =~ /^#{CodeObjects::NSEPQ}/
-          [name, name[2..-1]].each do |n|
-            found = at(n)
-            return found if found && (type.nil? || found.type == type)
-          end
-        else
-          while namespace
-            if namespace.is_a?(CodeObjects::NamespaceObject)
-              if inheritance
-                nss = namespace.inheritance_tree(true)
-                if namespace.respond_to?(:superclass)
-                  if namespace.superclass != P('BasicObject')
-                    nss |= [P('Object')]
-                  end
-                  nss |= [P('BasicObject')]
-                end
-              else
-                nss = [namespace]
-              end
-              nss.each do |ns|
-                next if ns.is_a?(CodeObjects::Proxy)
-                found = partial_resolve(ns, name, type)
-                return found if found
-              end
-            end
-            namespace = namespace.parent
-          end
-        end
-        proxy_fallback ? CodeObjects::Proxy.new(orignamespace, name, type) : nil
+        thread_local_resolver.lookup_by_path name,
+          :namespace => namespace, :inheritance => inheritance,
+          :proxy_fallback => proxy_fallback, :type => type
       end
 
       # @group Managing Source File Checksums
@@ -444,6 +406,11 @@ module YARD
       # @since 0.6.5
       def thread_local_store=(value)
         Thread.current[:__yard_registry__] = value
+      end
+
+      # @since 0.9.1
+      def thread_local_resolver
+        Thread.current[:__yard_resolver__] ||= RegistryResolver.new
       end
     end
   end
