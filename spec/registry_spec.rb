@@ -234,7 +234,7 @@ describe YARD::Registry do
           def self.Bar; end
         end
       eof
-      expect(Registry.resolve(P('Foo'), 'Bar')).to eq Registry.at('Foo::Bar')
+      expect(Registry.resolve(P('Foo'), 'Bar', false, false, :class)).to eq Registry.at('Foo::Bar')
       expect(Registry.resolve(P('Foo'), 'Bar', false, false, :method)).to eq(
         Registry.at('Foo.Bar'))
     end
