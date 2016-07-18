@@ -1,7 +1,8 @@
-# Sets visibility of a constant (class, module, const)
 module YARD
   module Handlers
     module Ruby
+
+      # Sets visibility of a constant (class, module, const)
       class PrivateConstantHandler < YARD::Handlers::Ruby::Base
         handles method_call(:private_constant)
         namespace_only
