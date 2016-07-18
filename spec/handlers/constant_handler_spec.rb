@@ -64,4 +64,13 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   it "raises undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
     undoc_error "nonconst = Struct.new"
   end unless LEGACY_PARSER
+
+  %w(module class).each do |type|
+    it "does not allow #{type} to be redefined as constant" do
+      undoc_error <<-eof
+        #{type} Foo; end
+        Foo = "value"
+      eof
+    end
+  end unless LEGACY_PARSER
 end
