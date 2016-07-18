@@ -1,3 +1,35 @@
+# Master branch (no release)
+
+- Improve object resolution logic in `{Foo::Bar}` syntax and {YARD::Registry.resolve}.
+  New resolution logic should now more accurately support resolving compound paths
+  across namespaces and through the inheritance tree (as Ruby does).
+- The `frozen_string_literal: true` comment line in Ruby source files will now be
+  excluded from docstrings.
+- Added a workaround for https://bugs.ruby-lang.org/issues/11485
+- Added `/static/*` routing for library-specific routing. This enables static
+  template files to be served on a per-library basis instead of globally shared
+  across the `yard server`.
+- Fixed an issue where type using a docstring reference on an `@!attribute` macro
+  would be incorrectly parsed as a type specifier. This change updates the tag
+  parser to disallow newlines between the tag name and opening bracket of the
+  type specification.
+- Fixed an issue where `--embed-mixins` would improperly embed methods from
+  inherited classes instead of modules.
+- Fixed various parsing errors and YARD exceptions.
+- Reverted stripping of HTML in {YARD::Docstring#summary}.
+- Added support for inlining of `{include:*}` syntax. Using this syntax in
+  the middle of a docstring paragraph will no longer create a separate paragraph
+  for the included text.
+- Added optimization to remove initial docstring parse on newly created code objects.
+- {YARD::CodeObjects::Base#format} now passes the :type parameter to templates.
+- Added support for resolving `{}` syntax in text templates, specifically for
+  use in `{include:*}` syntax.
+- Hide methods with filtered namespaces in Method Listing.
+- Added "Attributes" section to `yard stats`.
+- Added support for RubyGems 2.x `--document=yri,yard` flags. You can now run
+  YARD documentation generation against installed gems by running:
+  `gem install mygem --document=yard,yri`.
+
 # 0.9.0 - July 4th, 2016
 
 Special thanks to Alex Dowad, MSP-Greg, and Alex McLain for their extended
