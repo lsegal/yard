@@ -2,7 +2,11 @@ module YARD
   module CodeObjects
     # This module controls registration and accessing of namespace separators
     # for {Registry} lookup.
+    #
+    # @since 0.9.1
     module NamespaceMapper
+      # @!group Registering a Separator for a Namespace
+
       # Registers a separator with an optional set of valid types that
       # must follow the separator lexically.
       #
@@ -25,28 +29,6 @@ module YARD
 
         NamespaceMapper.map[sep] ||= []
         NamespaceMapper.map[sep] += valid_types
-      end
-
-      # @return [Array<String>] all of the registered separators
-      def separators
-        NamespaceMapper.map.keys
-      end
-
-      # @return [Regexp] the regexp match of all separators
-      def separators_match
-        NamespaceMapper.map_match
-      end
-
-      # @param sep [String] the separator to return types for
-      # @return [Array<Symbol>] a list of types registered to a separator
-      def types_for_separator(sep)
-        NamespaceMapper.map[sep]
-      end
-
-      # @param type [String] the type to return separators for
-      # @return [Array<Symbol>] a list of separators registered to a type
-      def separators_for_type(type)
-        NamespaceMapper.rev_map[type]
       end
 
       # Clears the map of separators.
@@ -73,10 +55,34 @@ module YARD
         end
       end
 
+      # @!group Separator and Type Lookup Helpers
+
+      # @return [Array<String>] all of the registered separators
+      def separators
+        NamespaceMapper.map.keys
+      end
+
+      # @return [Regexp] the regexp match of all separators
+      def separators_match
+        NamespaceMapper.map_match
+      end
+
+      # @param sep [String] the separator to return types for
+      # @return [Array<Symbol>] a list of types registered to a separator
+      def types_for_separator(sep)
+        NamespaceMapper.map[sep]
+      end
+
+      # @param type [String] the type to return separators for
+      # @return [Array<Symbol>] a list of separators registered to a type
+      def separators_for_type(type)
+        NamespaceMapper.rev_map[type]
+      end
+
       # Internal methods to act as a singleton registry
-      #
-      # @api private
       class << self
+        # @!visibility private
+
         # @return [Hash] a mapping of types to separators
         def map
           @map ||= {}

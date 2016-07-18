@@ -106,12 +106,20 @@ module YARD
     # though a DSL might create a custom {NamespaceObject} to describe a
     # specific set of objects.
     #
+    # == Separators
+    # Custom classes with different separator tokens should define their own
+    # separators using the {NamespaceMapper.register_separator} method. The
+    # standard Ruby separators have already been defined ('::', '#', '.', etc).
+    #
     # @abstract This class should not be used directly. Instead, create a
-    #   subclass that implements {#path}, {#sep} or {#type}.
+    #   subclass that implements {#path}, {#sep} or {#type}. You might also
+    #   need to register custom separators if {#sep} uses alternate separator
+    #   tokens.
     # @see Registry
     # @see #path
     # @see #[]=
     # @see NamespaceObject
+    # @see NamespaceMapper.register_separator
     class Base
       # The files the object was defined in. To add a file, use {#add_file}.
       # @return [Array<String>] a list of files
