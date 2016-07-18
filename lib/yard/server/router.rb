@@ -8,8 +8,8 @@ module YARD
     # options through {Adapter#initialize} or by directly modifying {Adapter#router}.
     #
     # The most general customization is to change the URL prefixes recognized by
-    # routing, which can be done by overriding {#docs_prefix}, {#list_prefix}
-    # and {#search_prefix}.
+    # routing, which can be done by overriding {#docs_prefix}, {#list_prefix},
+    # {#static_prefix}, and {#search_prefix}.
     #
     # == Implementing Custom Caching
     # By default, the Router class performs static disk-based caching on all
@@ -22,6 +22,7 @@ module YARD
     #   class MyRouter < YARD::Server::Router
     #     def docs_prefix; 'mydocs' end
     #     def list_prefix; 'mylist' end
+    #     def static_prefix; 'mystatic' end
     #     def search_prefix; 'mysearch' end
     #   end
     #
@@ -177,7 +178,7 @@ module YARD
       # @param (see #route_docs)
       # @return [Hash] finalized options
       def final_options(library, paths)
-        path = File.cleanpath(paths.join('/')).gsub(%r{^(../)+}, '')
+        path = File.cleanpath(paths.join('/')).gsub(%r{^(\.\./)+}, '')
         adapter.options.merge(:library => library, :path => path)
       end
     end
