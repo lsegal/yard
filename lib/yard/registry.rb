@@ -50,24 +50,31 @@ module YARD
       # @return [nil] if +for_writing+ is set to false and no yardoc file
       #   is found, returns nil.
       def yardoc_file_for_gem(gem, ver_require = ">= 0", for_writing = false)
-        spec = Gem.source_index.find_name(gem, ver_require)
-        return if spec.empty?
-        spec = spec.first
+        specs = Gem.source_index.find_name(gem, ver_require)
+        return if specs.empty?
 
-        if gem =~ /^yard-doc-/
-          path = File.join(spec.full_gem_path, DEFAULT_YARDOC_FILE)
-          return File.exist?(path) && !for_writing ? path : nil
+        result = nil
+        specs.reverse.each do |spec|
+          if gem =~ /^yard-doc-/
+            path = File.join(spec.full_gem_path, DEFAULT_YARDOC_FILE)
+            result = File.exist?(path) && !for_writing ? path : nil
+            result ? break : next
+          end
+
+          if for_writing
+            result = global_yardoc_file(spec, for_writing) ||
+              old_global_yardoc_file(spec, for_writing) ||
+              local_yardoc_file(spec, for_writing)
+          else
+            result = local_yardoc_file(spec, for_writing) ||
+              global_yardoc_file(spec, for_writing) ||
+              old_global_yardoc_file(spec, for_writing)
+          end
+
+          break if result
         end
 
-        if for_writing
-          global_yardoc_file(spec, for_writing) ||
-            old_global_yardoc_file(spec, for_writing) ||
-            local_yardoc_file(spec, for_writing)
-        else
-          local_yardoc_file(spec, for_writing) ||
-            global_yardoc_file(spec, for_writing) ||
-            old_global_yardoc_file(spec, for_writing)
-        end
+        result
       end
 
       # Gets/sets the yardoc filename

@@ -1,3 +1,8 @@
+# Master branch (no release)
+
+- YRI will now search across all gem versions (latest first) for the .yardoc
+  database.
+
 # 0.9.1 - July 18th, 2016
 
 - Added "Attributes" section to `yard stats`.
