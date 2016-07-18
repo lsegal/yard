@@ -4,7 +4,7 @@ require 'rbconfig'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 
-task :default => :specs
+task :default => :travis_ci
 
 desc "Builds the gem"
 task :gem do
