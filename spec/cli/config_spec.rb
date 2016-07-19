@@ -89,4 +89,61 @@ describe YARD::CLI::Config do
       run('foo', 'true')
     end
   end
+
+  describe "RubyGems hooks" do
+    require 'rubygems'
+
+    class FakeGemConfig < Hash
+      attr_accessor :written
+      def write; @written = true end
+      def path; nil end
+    end
+
+    before do
+      allow(Gem).to receive(:configuration).and_return(FakeGemConfig.new)
+    end
+
+    it "accepts --gem-install-yri" do
+      @config.send(:optparse, '--gem-install-yri')
+      expect(@config.gem_install_cmd).to eq 'yri'
+    end
+
+    it "accepts --gem-install-yard" do
+      @config.send(:optparse, '--gem-install-yard')
+      expect(@config.gem_install_cmd).to eq 'yard'
+    end
+
+    it "does not change back to yri if yard was specified" do
+      @config.send(:optparse, '--gem-install-yard', '--gem-install-yri')
+      expect(@config.gem_install_cmd).to eq 'yard'
+    end
+
+    it "ignores actual config options" do
+      run('--gem-install-yri', 'foo', 'true')
+      expect(YARD::Config).not_to receive(:save)
+    end
+
+    it "updates configuration as :gem if no configuration exists" do
+      run('--gem-install-yri')
+      expect(Gem.configuration[:gem]).to eq "--document=yri"
+      expect(Gem.configuration.written).to eq true
+    end
+
+    [:install, "install", :gem, "gem"].each do |type|
+      it "finds existing config in #{type.inspect} and updates that line without changing anything else" do
+        Gem.configuration[type] = "--opts x"
+        run('--gem-install-yri')
+        expect(Gem.configuration[type]).to eq "--opts x --document=yri"
+        ([:install, "install", :gem, "gem"] - [type]).each do |other|
+          expect(Gem.configuration[other]).to eq nil
+        end
+      end
+    end
+
+    it "scrubs --document values from existing config" do
+      Gem.configuration["gem"] = "--document=yri,ri --no-document --opts x"
+      run('--gem-install-yri')
+      expect(Gem.configuration["gem"]).to eq "--opts x --document=yri"
+    end
+  end
 end

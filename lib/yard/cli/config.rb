@@ -18,6 +18,10 @@ module YARD
       # @return [Boolean] whether to append values to existing key
       attr_accessor :append
 
+      # @return [String, nil] command to use when configuring ~/.gemrc file.
+      #   If the string is nil, configuration should not occur.
+      attr_accessor :gem_install_cmd
+
       def initialize
         super
         self.key = nil
@@ -25,6 +29,7 @@ module YARD
         self.reset = false
         self.append = false
         self.as_list = false
+        self.gem_install_cmd = nil
       end
 
       def description
@@ -33,7 +38,9 @@ module YARD
 
       def run(*args)
         optparse(*args)
-        if key
+        if gem_install_cmd
+          configure_gemrc
+        elsif key
           if reset || values.size > 0
             modify_item
           else
@@ -45,6 +52,27 @@ module YARD
       end
 
       private
+
+      def configure_gemrc
+        return unless gem_install_cmd
+
+        require 'rubygems'
+
+        ['install', :install, 'gem', :gem].find do |cmd|
+          conf = Gem.configuration[cmd] || ""
+          next if conf.empty? && cmd != :gem
+
+          conf = conf.split(/\s+/)
+          conf.delete_if {|c| c =~ /^--(no-)?document\b/ } # scrub doc args
+          conf |= ["--document=#{gem_install_cmd}"]
+          conf = conf.join(' ')
+
+          Gem.configuration[cmd] = conf
+          Gem.configuration.write
+          log.puts "Updated #{Gem.configuration.path || '~/.gemrc'}: '#{cmd}: #{conf}'"
+          true
+        end
+      end
 
       def modify_item
         if reset
@@ -104,6 +132,28 @@ module YARD
         opts.separator ""
         opts.separator "Note that `true` and `false` are reserved words."
         opts.separator ""
+        opts.separator "---------------------------------------------------------"
+        opts.separator ""
+        opts.separator "Configuring RubyGems support:"
+        opts.separator ""
+        opts.separator "YARD can automatically generate the YRI index or HTML"
+        opts.separator "documentation in a `gem install` by adding the following"
+        opts.separator "to your ~/.gemrc file:"
+        opts.separator ""
+        opts.separator "    gem: \"--document=yri\""
+        opts.separator ""
+        opts.separator "Note: you can add 'yard' to also generate HTML docs."
+        opts.separator "  You can also add 'ri' to continue generating RDoc."
+        opts.separator ""
+        opts.separator "You can also run the following command to configure this"
+        opts.separator "behavior automatically:"
+        opts.separator ""
+        opts.separator "    $ yard config --gem-install-yri"
+        opts.separator ""
+        opts.separator "Add --gem-install-yard to also generate HTML."
+        opts.separator ""
+        opts.separator "---------------------------------------------------------"
+        opts.separator ""
         opts.separator "General options:"
 
         opts.on('-l', '--list', 'List current configuration') do
@@ -121,6 +171,17 @@ module YARD
         end
         opts.on('--as-list', 'Forces the value(s) to be wrapped in an array') do
           self.as_list = true
+        end
+
+        opts.separator ""
+        opts.separator "Add RubyGems install hook:"
+
+        opts.on('--gem-install-yri', 'Configures ~/.gemrc to run yri on a gem install') do
+          self.gem_install_cmd = 'yri' if gem_install_cmd != 'yard'
+        end
+
+        opts.on('--gem-install-yard', 'Configures ~/.gemrc to run yard on a gem install') do
+          self.gem_install_cmd = 'yard'
         end
 
         common_options(opts)

@@ -52,7 +52,16 @@ module YARD
       generate_yri = types.include? 'yri'
 
       specs.each do |spec|
-        new(spec, generate_yard, generate_yri).generate
+        gen_yard, gen_yri = generate_yard, generate_yri
+        gen_yri = false if gen_yard # never generate both, no need
+        if types.size > 0 # --no-document is not in effect
+          # look at spec.metadata['yard.run'] for override
+          run_yard = spec.metadata['yard.run']
+          gen_yard = true if run_yard && run_yard != 'yri'
+          gen_yri = true if run_yard == 'yri'
+        end
+
+        new(spec, gen_yard, gen_yri).generate
       end
 
       return unless generate_yard or generate_yri
@@ -116,7 +125,7 @@ module YARD
       FileUtils.rm_rf @yard_dir
 
       say "Installing YARD documentation for #{@spec.full_name}..."
-      run_yardoc '--no-progress', '-o', @yard_dir
+      run_yardoc '--no-progress', '--db', @yri_dir, '-o', @yard_dir
     end
 
     def install_yri
