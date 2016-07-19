@@ -1,4 +1,4 @@
-# Master branch (no release)
+# 0.9.2 - July 19th, 2016
 
 - Added `yard config --gem-install-[yri|yard]` commands which auto-configure
   your `~/.gemrc` file to run yri/yard instead of ri/rdoc on a `gem install`.
