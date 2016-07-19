@@ -191,7 +191,7 @@ module YARD
       options[:autoload_plugins].each {|name| load_plugin(name) }
     end
 
-    # Load plugins from {#arguments}
+    # Load plugins from {arguments}
     def self.load_commandline_plugins
       with_yardopts do
         arguments.each_with_index do |arg, i|
@@ -201,7 +201,7 @@ module YARD
       end
     end
 
-    # Check for command-line safe_mode switch in {#arguments}
+    # Check for command-line safe_mode switch in {arguments}
     def self.load_commandline_safemode
       with_yardopts do
         arguments.each_with_index do |arg, i|
