@@ -165,6 +165,11 @@ describe YARD::Registry do
       expect(Registry.resolve(yard, "class_hello", true)).to eq cmeth
     end
 
+    it "does not look at superclass proxies when inheritance = true" do
+      YARD.parse_string "class A::B; end"
+      expect(Registry.resolve(Registry.at('A::B'), "#bar", true)).to eq nil
+    end
+
     it "resolves mixin methods when inheritance = true" do
       yard = ClassObject.new(:root, :YARD)
       mixin = ModuleObject.new(:root, :Mixin)

@@ -155,7 +155,7 @@ module YARD
 
     # Collects and returns all inherited namespaces for a given object
     def collect_namespaces(object)
-      return [] if !object
+      return [] unless object.respond_to?(:inheritance_tree)
 
       nss = object.inheritance_tree(true)
       if object.respond_to?(:superclass)
