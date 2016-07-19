@@ -700,6 +700,10 @@ module YARD
           self.statistics = false
         end
 
+        opts.on('--no-progress', 'Don\'t show progress bar') do
+          log.show_progress = false
+        end
+
         opts.on('--locale LOCALE',
                 'The locale for generated documentation.',
                 '  (defaults to en)') do |locale|

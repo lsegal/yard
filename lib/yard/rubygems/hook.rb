@@ -116,14 +116,14 @@ module YARD
       FileUtils.rm_rf @yard_dir
 
       say "Installing YARD documentation for #{@spec.full_name}..."
-      run_yardoc '-o', @yard_dir
+      run_yardoc '--no-progress', '-o', @yard_dir
     end
 
     def install_yri
       FileUtils.rm_rf @yri_dir
 
       say "Building YARD (yri) index for #{@spec.full_name}..."
-      run_yardoc '-c', '-n', '--db', @yri_dir
+      run_yardoc '--no-progress', '-c', '-n', '--db', @yri_dir
     end
 
     ##

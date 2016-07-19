@@ -253,6 +253,14 @@ describe YARD::CLI::Yardoc do
       @yardoc.run *%w( --no-stats )
     end
 
+    it "disables progress bar with --no-progress" do
+      old = log.show_progress
+      log.show_progress = true
+      @yardoc.run *%w( --no-progress )
+      expect(log.show_progress).to eq false
+      log.show_progress = old
+    end
+
     describe "--asset" do
       before do
         @yardoc.generate = true
