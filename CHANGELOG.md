@@ -1,5 +1,6 @@
 # Master branch (no release)
 
+- Fix resolution error for compound proxy namespaces.
 - YRI will now search across all gem versions (latest first) for the .yardoc
   database.
 
