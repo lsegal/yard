@@ -4,6 +4,7 @@ module YARD
   # directly.
   #
   # @see Registry.resolve
+  # @since 0.9.1
   class RegistryResolver
     include CodeObjects::NamespaceMapper
 
