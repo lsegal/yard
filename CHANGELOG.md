@@ -4,6 +4,7 @@
   your `~/.gemrc` file to run yri/yard instead of ri/rdoc on a `gem install`.
 - Added support for gemspec metadata key `"yard.run"`, which can be either
   `"yard"` or `"yri"` to run the respective commands on a `gem install`.
+- Added `yard doc --no-progress` to hide the progress bar.
 - Fix resolution error for compound proxy namespaces.
 - YRI will now search across all gem versions (latest first) for the .yardoc
   database.
