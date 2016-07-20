@@ -26,7 +26,7 @@ module YARD
             options.update(:type => :layout)
             render(object)
           else
-            self.status = 404
+            not_found
           end
         end
 

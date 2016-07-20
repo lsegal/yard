@@ -96,9 +96,12 @@ module YARD
           rescue FinishRequest
           rescue NotFoundError => e
             self.body = e.message if e.message != e.class.to_s
-            self.status = 404
+            not_found
           end
+
+          # keep this to support commands setting status manually.
           not_found if status == 404
+
           [status, headers, body.is_a?(Array) ? body : [body]]
         end
 
@@ -167,11 +170,12 @@ module YARD
           self.body = data
         end
 
-        # Sets the body and headers (but not status) for a 404 response. Does
-        # nothing if the body is already set.
+        # Sets the body and headers for a 404 response. Does not modify the
+        # body if already set.
         #
         # @return [void]
         def not_found
+          self.status = 404
           return unless body.empty?
           self.body = "Not found: #{request.path}"
           self.headers['Content-Type'] = 'text/plain'
