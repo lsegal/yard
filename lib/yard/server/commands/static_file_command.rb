@@ -1,11 +1,9 @@
-require 'webrick/httputils'
-
 module YARD
   module Server
     module Commands
       # Serves static content when no other router matches a request
       class StaticFileCommand < LibraryCommand
-        include WEBrick::HTTPUtils
+        include StaticFileHelpers
 
         DefaultMimeTypes['js'] = 'text/javascript'
 
@@ -16,27 +14,7 @@ module YARD
         STATIC_PATHS = []
 
         def run
-          assets_template = Templates::Engine.template(:default, :fulldoc, :html)
-
-          file = nil
-          ([adapter.document_root] + STATIC_PATHS.reverse).compact.each do |path_prefix|
-            file = File.join(path_prefix, path)
-            break if File.exist?(file)
-            file = nil
-          end
-
-          # Search in default/fulldoc/html template if nothing in static asset paths
-          file ||= assets_template.find_file(path)
-
-          if file
-            ext = "." + (path[/\.(\w+)$/, 1] || "html")
-            headers['Content-Type'] = mime_type(ext, DefaultMimeTypes)
-            self.body = File.read(file)
-            return
-          end
-
-          self.body = "Could not find: #{request.path}"
-          self.status = 404
+          static_template_file? || not_found
         end
       end
     end

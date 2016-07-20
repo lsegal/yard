@@ -220,6 +220,7 @@ module YARD
       autoload :RootRequestCommand,   __p('server/commands/root_request_command')
       autoload :SearchCommand,        __p('server/commands/search_command')
       autoload :StaticFileCommand,    __p('server/commands/static_file_command')
+      autoload :StaticFileHelpers,    __p('server/commands/static_file_helpers')
     end
 
     autoload :Adapter,                __p('server/adapter')
