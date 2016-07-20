@@ -12,6 +12,11 @@ def mock_adapter(opts = {})
   OpenStruct.new(opts)
 end
 
-def mock_request(path = '/')
-  OpenStruct.new(:path => path)
+class MockRequest < OpenStruct
+  def path; "#{script_name}#{path_info}" end
+end
+
+def mock_request(path_info = '/', script_name = '', extra_env = {})
+  opts = { :path_info => path_info, :script_name => script_name }
+  MockRequest.new(extra_env.merge(opts))
 end

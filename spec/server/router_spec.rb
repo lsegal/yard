@@ -17,7 +17,7 @@ describe YARD::Server::Router do
 
   describe "#parse_library_from_path" do
     def parse(*args)
-      @request.path = '/' + args.join('/')
+      @request.path_info = '/' + args.join('/')
       @router = MyRouterSpecRouter.new(@adapter)
       @router.request = @request
       @router.parse_library_from_path(args.flatten)
@@ -49,8 +49,8 @@ describe YARD::Server::Router do
   end
 
   describe "#route" do
-    def route_to(route, command, *args)
-      req = mock_request(route)
+    def route_to(route, command, script_name = '')
+      req = mock_request(route, script_name)
       router = MyRouterSpecRouter.new(@adapter)
       expect(command).to receive(:new) do |*args|
         @command = command.allocate

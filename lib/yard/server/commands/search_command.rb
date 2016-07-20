@@ -13,7 +13,7 @@ module YARD
         def run
           Registry.load_all
           self.query = request.query['q']
-          redirect("/#{adapter.router.docs_prefix}/#{single_library ? library : ''}") if query.nil? || query =~ /\A\s*\Z/
+          redirect(abs_url(adapter.router.docs_prefix, single_library ? library : '')) if query.nil? || query =~ /\A\s*\Z/
           if found = Registry.at(query)
             redirect(url_for(found))
           end
@@ -28,7 +28,7 @@ module YARD
         private
 
         def url_for(object)
-          File.join('', base_path(router.docs_prefix),
+          abs_url(base_path(router.docs_prefix),
             serializer.serialized_path(object))
         end
 
