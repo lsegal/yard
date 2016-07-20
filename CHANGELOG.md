@@ -1,3 +1,11 @@
+# 0.9.3 - July 20th, 2016
+
+- Added support for {YARD::Server::RackAdapter} to be mounted under prefix URIs.
+- Fixed regression in `yard server -g` that caused static file assets on index
+  page to return 404 errors.
+- Fixed regression in `yard server -g` index page that disabled scrolling and
+  caused other HTML rendering glitches.
+
 # 0.9.2 - July 19th, 2016
 
 - Added `yard config --gem-install-[yri|yard]` commands which auto-configure
