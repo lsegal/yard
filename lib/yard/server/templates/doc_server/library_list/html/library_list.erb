@@ -5,8 +5,10 @@
     <%= erb(:headers) %>
   </head>
   <body>
-    <div id="content">
-      <%= yieldall %>
+    <div id="main">
+      <div id="content">
+        <%= yieldall %>
+      </div>
     </div>
   </body>
 </html>
