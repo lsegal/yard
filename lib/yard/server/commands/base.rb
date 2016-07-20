@@ -87,7 +87,7 @@ module YARD
         #   of status, headers, and body wrapped in an array.
         def call(request)
           self.request = request
-          self.path ||= request.path[1..-1]
+          self.path ||= request.path_info[1..-1]
           self.headers = {'Content-Type' => 'text/html'}
           self.body = ''
           self.status = 200
@@ -158,7 +158,7 @@ module YARD
         # @see StaticCaching
         def cache(data)
           if caching && adapter.document_root
-            path = File.join(adapter.document_root, request.path.sub(/\.html$/, '') + '.html')
+            path = File.join(adapter.document_root, request.path_info.sub(/\.html$/, '') + '.html')
             path = path.sub(%r{/\.html$}, '.html')
             FileUtils.mkdir_p(File.dirname(path))
             log.debug "Caching data to #{path}"

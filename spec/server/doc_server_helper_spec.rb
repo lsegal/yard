@@ -42,12 +42,30 @@ describe YARD::Server::DocServerHelper do
       @helper.adapter.router.request.version_supplied = true
       expect(@helper.url_for(P('A'))).to eq '/PREFIX/foo/bar/A'
     end
+
+    it "uses script name prefix if set" do
+      @helper.adapter.router.request.script_name = '/mount/point' 
+      @helper.library = LibraryVersion.new('foo', 'bar')
+      @helper.adapter.router.request.version_supplied = true
+      expect(@helper.url_for(P('A'))).to eq '/mount/point/PREFIX/foo/bar/A'
+    end
   end
 
   describe "#url_for_file" do
     it "properly links file objects using file/ prefix" do
       file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
       expect(@helper.url_for_file(file)).to eq '/PREFIX/foo/file/a/b/FooBar.md'
+    end
+
+    it "properly links anchor portion" do
+      file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
+      expect(@helper.url_for_file(file, 'anchor')).to eq '/PREFIX/foo/file/a/b/FooBar.md#anchor'
+    end
+
+    it "uses script name prefix if set" do
+      @helper.adapter.router.request.script_name = '/mount/point' 
+      file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
+      expect(@helper.url_for_file(file)).to eq '/mount/point/PREFIX/foo/file/a/b/FooBar.md'
     end
   end
 end
