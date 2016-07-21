@@ -43,4 +43,35 @@ describe YARD::Serializers::YardocSerializer do
       @serializer.serialize(data)
     end
   end
+
+  describe "#lock_for_writing" do
+    it "creates a lock file during writing and cleans up" do
+      expect(File).to receive(:open!).with(@serializer.processing_path, 'w')
+      expect(File).to receive(:exist?).with(@serializer.processing_path).exactly(1).times.and_return(true)
+      expect(File).to receive(:unlink).with(@serializer.processing_path)
+      @serializer.lock_for_writing do
+        expect(@serializer.locked_for_writing?).to eq true
+      end
+    end
+  end
+
+  describe "#complete?" do
+    it "returns false if complete file does not exist" do
+      allow(File).to receive(:exist?).with(@serializer.complete_lock_path).and_return(false)
+      allow(File).to receive(:exist?).with(@serializer.processing_path).and_return(false)
+      expect(@serializer.complete?).to eq false
+    end
+
+    it "returns false if processing file exists" do
+      allow(File).to receive(:exist?).with(@serializer.complete_lock_path).and_return(true)
+      allow(File).to receive(:exist?).with(@serializer.processing_path).and_return(true)
+      expect(@serializer.complete?).to eq false
+    end
+
+    it "returns true if complete file exists with no processing file" do
+      allow(File).to receive(:exist?).with(@serializer.complete_lock_path).and_return(true)
+      allow(File).to receive(:exist?).with(@serializer.processing_path).and_return(false)
+      expect(@serializer.complete?).to eq true
+    end
+  end
 end

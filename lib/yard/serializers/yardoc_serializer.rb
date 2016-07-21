@@ -36,6 +36,25 @@ module YARD
       def proxy_types_path; File.join(basepath, 'proxy_types') end
       def checksums_path; File.join(basepath, 'checksums') end
       def object_types_path; File.join(basepath, 'object_types') end
+      def complete_lock_path; File.join(basepath, 'complete') end
+      def processing_path; File.join(basepath, 'processing') end
+
+      def complete?
+        File.exist?(complete_lock_path) && !locked_for_writing?
+      end
+
+      # Locks the yardoc db is locked for writing during block execution
+      def lock_for_writing(&block)
+        File.open!(processing_path, 'w') {}
+        yield
+      ensure
+        File.unlink(processing_path)
+      end
+
+      # @return [Boolean] whether the yardoc db is locked for writing
+      def locked_for_writing?
+        File.exist?(processing_path)
+      end
 
       def serialized_path(object)
         path = case object
