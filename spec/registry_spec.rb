@@ -66,6 +66,14 @@ describe YARD::Registry do
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/doc/.yardoc'
     end
 
+    it "returns new global .yardoc path for gem if for_writing=true and parent dir is writable (but dir does not exist)" do
+      expect(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
+      expect(File).to receive(:directory?).with(@gem.doc_dir).and_return(false)
+      expect(File).to receive(:writable?).with(File.dirname(@gem.doc_dir)).and_return(true)
+      expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/doc/.yardoc'
+    end
+
     it "returns local .yardoc path for gem if for_writing=true and dir is not writable" do
       expect(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       expect(File).to receive(:writable?).with(@gem.full_gem_path).and_return(false)

@@ -375,8 +375,11 @@ module YARD
       def global_yardoc_file(spec, for_writing = false)
         path = spec.doc_dir
         yfile = spec.doc_dir(DEFAULT_YARDOC_FILE)
-        if for_writing && File.writable?(path)
-          return yfile
+        if for_writing
+          if File.writable?(path) ||
+              (!File.directory?(path) && File.writable?(File.dirname(path)))
+            return yfile
+          end
         elsif !for_writing && File.exist?(yfile)
           return yfile
         end
