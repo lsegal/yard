@@ -1,3 +1,7 @@
+# 0.9.4 - July 21st, 2016
+
+- Minor Ruby file parsing and CSS bug fixes.
+
 # 0.9.3 - July 20th, 2016
 
 - Added support for {YARD::Server::RackAdapter} to be mounted under prefix URIs.
