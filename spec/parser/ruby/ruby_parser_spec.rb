@@ -403,6 +403,20 @@ eof
         expect(Registry.at("Foo::Bar#foo").docstring).to eq "Docstring2"
       end
 
+      it "can handle complex non-modifier '#{type}' statements" do
+        Registry.clear
+        YARD.parse_string <<-eof
+          class Foo
+            def initialize(data, options = Hash.new)
+              #{type} true; raise "error" end
+              @x = ( #{type} 1; true end ) # This line should not blow up
+            end
+          end
+        eof
+
+        expect(Registry.at('Foo#initialize')).not_to eq nil
+      end
+
       it "does not add comment blocks to #{type}_mod nodes" do
         Registry.clear
         ast = YARD.parse_string(<<-eof).enumerator
