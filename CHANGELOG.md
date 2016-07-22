@@ -6,6 +6,8 @@
 - Added support for on-demand generation of LibraryVersion objects using the
   `:disk` source type. LibraryVersion objects pointing to a .yardoc database
   directory will now auto-generate if there is a `source_path` attached.
+- Added warning for macros attached to non-method objects.
+- Fixed a few more parsing errors.
 
 # 0.9.4 - July 21st, 2016
 
