@@ -47,6 +47,7 @@ module YARD
           @encoding_line = nil
           @frozen_string_line = nil
           @file_encoding = nil
+          @newline = true
         end
 
         def parse

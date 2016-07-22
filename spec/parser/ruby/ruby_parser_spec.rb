@@ -403,6 +403,18 @@ eof
         expect(Registry.at("Foo::Bar#foo").docstring).to eq "Docstring2"
       end
 
+      it "supports #{type} statements at start of source" do
+        Registry.clear
+        YARD.parse_string <<-eof
+          #{type} condition?
+            class Foo; def bar; #{type} true; end end end
+          end
+        eof
+
+        expect(log.io.string).to eq ""
+        expect(Registry.at('Foo#bar')).not_to eq nil
+      end
+
       it "can handle complex non-modifier '#{type}' statements" do
         Registry.clear
         YARD.parse_string <<-eof
@@ -414,6 +426,7 @@ eof
           end
         eof
 
+        expect(log.io.string).to eq ""
         expect(Registry.at('Foo#initialize')).not_to eq nil
       end
 
