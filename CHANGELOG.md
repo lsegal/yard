@@ -1,4 +1,4 @@
-# Master branch (unreleased)
+# 0.9.5 - July 22nd, 2016
 
 - `yard doc` will now generate `.yardoc/processing` and `.yardoc/complete` files
   to allow other tools to properly detect when YARD is in the middle of parsing
