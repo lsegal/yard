@@ -35,9 +35,10 @@ module YARD
             next unless yfile
             next unless File.directory?(spec.full_gem_path)
             Registry.clear
-            Dir.chdir(spec.full_gem_path)
-            log.info "Building yardoc index for gem: #{spec.full_name}"
-            Yardoc.run('--no-stats', '-n', '-b', yfile)
+            Dir.chdir(spec.full_gem_path) do
+              log.info "Building yardoc index for gem: #{spec.full_name}"
+              Yardoc.run('--no-stats', '-n', '-b', yfile)
+            end
           end
         end
       end
