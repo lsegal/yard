@@ -194,6 +194,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     eof
   end
 
+  it "warns on unparseable DSL statements" do
+    undoc_error "private(*foo(bar))"
+  end if HAVE_RIPPER
+
   # @note Currently unsupported behavior. Overriding a macro on an alias will
   #   not work until macro lookups can be done by caller_method directly.
   # @todo optimize MacroObject lookup to work by caller name, not macro name.
