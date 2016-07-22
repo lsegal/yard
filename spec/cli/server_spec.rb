@@ -119,6 +119,7 @@ describe YARD::CLI::Server do
     end
 
     it "defaults to .yardoc if no library is specified" do
+      allow(Dir).to receive(:chdir).and_yield
       expect(Dir).to receive(:pwd).at_least(:once).and_return(File.expand_path('/path/to/foo'))
       @libraries['foo'] = [Server::LibraryVersion.new('foo', nil, File.expand_path('/path/to/foo/.yardoc'))]
       run

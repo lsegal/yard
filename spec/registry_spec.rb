@@ -34,7 +34,7 @@ describe YARD::Registry do
     end
 
     it "returns new existing .yardoc path for gem when for_writing=false" do
-      expect(File).to receive(:exist?).once.and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
       expect(File).to receive(:exist?).with('/path/to/foo/doc/.yardoc').and_return(true)
       expect(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq '/path/to/foo/doc/.yardoc'
