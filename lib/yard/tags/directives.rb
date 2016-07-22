@@ -299,8 +299,14 @@ module YARD
       def find_or_create
         if new? || attach?
           if handler && attach?
-            obj = object ? object :
-              P("#{handler.namespace}.#{handler.caller_method}")
+            if object && object.is_a?(CodeObjects::NamespaceObject)
+              log.warn "Attaching macros to non-methods is unsupported, ignoring: " +
+                "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
+              obj = nil
+            else
+              obj = object ? object :
+                P("#{handler.namespace}.#{handler.caller_method}")
+            end
           else
             obj = nil
           end

@@ -78,6 +78,7 @@ describe YARD::Tags::MacroDirective do
                    :caller_method => 'foo',
                    :scope => :instance, :visibility => :public,
                    :namespace => P('Foo::Bar'),
+                   :parser => OpenStruct.new(:file => "(stdin)", :line => 1),
                    :statement => OpenStruct.new(:source => 'foo :a, :b, :c'))
   end
 
@@ -143,6 +144,15 @@ describe YARD::Tags::MacroDirective do
       baz = CodeObjects::MethodObject.new(P('Foo::Bar'), :baz, :class)
       doc = DocstringParser.new.parse('@!macro attached3', baz, handler).to_docstring
       expect(doc).to eq 'expanded_data'
+    end
+
+    it "does not attach macros to class/modules but creates macro" do
+      YARD::Registry.clear
+      YARD.parse_string "module Foo; end"
+      tag_parse("@!macro [attach] attached4\n  $1 $2 $3", YARD::Registry.at('Foo'), handler)
+      macro = CodeObjects::MacroObject.find('attached4')
+      expect(macro.method_object).to eq nil
+      expect(log.io.string).to match(/Attaching macros to non-methods is unsupported/)
     end
 
     it "does not attempt to expand macro values if handler = nil" do
