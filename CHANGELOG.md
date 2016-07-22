@@ -1,3 +1,12 @@
+# Master branch (unreleased)
+
+- `yard doc` will now generate `.yardoc/processing` and `.yardoc/complete` files
+  to allow other tools to properly detect when YARD is in the middle of parsing
+  source files, and when it has completed writing the database.
+- Added support for on-demand generation of LibraryVersion objects using the
+  `:disk` source type. LibraryVersion objects pointing to a .yardoc database
+  directory will now auto-generate if there is a `source_path` attached.
+
 # 0.9.4 - July 21st, 2016
 
 - Minor Ruby file parsing and CSS bug fixes.
