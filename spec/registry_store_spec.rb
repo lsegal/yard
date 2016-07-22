@@ -132,6 +132,7 @@ describe YARD::RegistryStore do
       Registry.single_object_db = nil
       add_items(100)
       saves_to_singledb
+      expect(@serializer.complete?).to eq true
     end
 
     it "saves as single object db if single_object_db is nil and there are more than 3000 objects" do

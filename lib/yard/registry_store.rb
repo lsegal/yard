@@ -187,7 +187,20 @@ module YARD
       write_proxy_types
       write_object_types
       write_checksums
+      write_complete_lock
       true
+    end
+
+    # (see Serializers::YardocSerializer#lock_for_writing)
+    # @param file [String] if supplied, the path to the database
+    def lock_for_writing(file = nil, &block)
+      Serializers::YardocSerializer.new(file || @file).lock_for_writing(&block)
+    end
+
+    # (see Serializers::YardocSerializer#locked_for_writing?)
+    # @param file [String] if supplied, the path to the database
+    def locked_for_writing?(file = nil)
+      Serializers::YardocSerializer.new(file || @file).locked_for_writing?
     end
 
     # Deletes the .yardoc database on disk
@@ -314,6 +327,10 @@ module YARD
       File.open!(checksums_path, 'w') do |f|
         @checksums.each {|k, v| f.puts("#{k} #{v}") }
       end
+    end
+
+    def write_complete_lock
+      File.open!(@serializer.complete_lock_path, 'w') {}
     end
   end
 end

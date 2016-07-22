@@ -199,6 +199,20 @@ module YARD
         self.thread_local_store = RegistryStore.new
       end
 
+      # Creates a pessmistic transactional lock on the database for writing.
+      # Use with {YARD.parse} to ensure the database is not written multiple
+      # times.
+      #
+      # @see locked_for_writing?
+      def lock_for_writing(file = yardoc_file, &block)
+        thread_local_store.lock_for_writing(file, &block)
+      end
+
+      # (see Serializers::YardocSerializer#locked_for_writing?)
+      def locked_for_writing?(file = yardoc_file)
+        thread_local_store.locked_for_writing?(file)
+      end
+
       # @group Accessing Objects in the Registry
 
       # Iterates over {all} with no arguments

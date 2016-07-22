@@ -43,15 +43,19 @@ module YARD
         File.exist?(complete_lock_path) && !locked_for_writing?
       end
 
-      # Locks the yardoc db is locked for writing during block execution
+      # Creates a pessmistic transactional lock on the database for writing.
+      # Use with {YARD.parse} to ensure the database is not written multiple
+      # times.
+      #
+      # @see #locked_for_writing?
       def lock_for_writing(&block)
         File.open!(processing_path, 'w') {}
         yield
       ensure
-        File.unlink(processing_path)
+        File.unlink(processing_path) if File.exist?(processing_path)
       end
 
-      # @return [Boolean] whether the yardoc db is locked for writing
+      # @return [Boolean] whether the database is currently locked for writing
       def locked_for_writing?
         File.exist?(processing_path)
       end

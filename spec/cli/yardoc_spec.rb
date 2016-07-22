@@ -12,6 +12,7 @@ describe YARD::CLI::Yardoc do
     allow(YARD).to receive(:parse)
     allow(Registry).to receive(:load)
     allow(Registry).to receive(:save)
+    allow(File).to receive(:open!)
   end
 
   describe "Defaults" do
@@ -802,6 +803,16 @@ describe YARD::CLI::Yardoc do
     it "does not parse arguments if run(nil) is called" do
       expect(@yardoc).not_to receive(:parse_arguments)
       @yardoc.run(nil)
+    end
+
+    it "creates processing lock if saving" do
+      expect(Registry).to receive(:lock_for_writing).and_yield
+      @yardoc.run
+    end
+
+    it "does not create processing lock if not saving" do
+      expect(Registry).not_to receive(:lock_for_writing)
+      @yardoc.run('--no-save')
     end
   end
 end

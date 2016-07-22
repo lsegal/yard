@@ -19,11 +19,11 @@ describe YARD::CLI::Gems do
 
   def build_specs(*specs)
     specs.each do |themock|
-      expect(Registry).to receive(:yardoc_file_for_gem).with(themock.name, "= #{themock.version}").and_return(themock.yardoc_file)
-      expect(File).to receive(:directory?).with(themock.yardoc_file).and_return(@rebuild)
-      expect(File).to receive(:directory?).with(themock.full_gem_path).and_return(true)
-      expect(Registry).to receive(:yardoc_file_for_gem).with(themock.name, "= #{themock.version}", true).and_return(themock.yardoc_file)
-      expect(Dir).to receive(:chdir).with(themock.full_gem_path)
+      allow(Registry).to receive(:yardoc_file_for_gem).with(themock.name, "= #{themock.version}").and_return(themock.yardoc_file)
+      allow(File).to receive(:directory?).with(themock.yardoc_file).and_return(@rebuild)
+      allow(File).to receive(:directory?).with(themock.full_gem_path).and_return(true)
+      allow(Registry).to receive(:yardoc_file_for_gem).with(themock.name, "= #{themock.version}", true).and_return(themock.yardoc_file)
+      expect(Dir).to receive(:chdir).with(themock.full_gem_path).and_yield
     end
     expect(Registry).to receive(:clear).exactly(specs.size).times
     expect(CLI::Yardoc).to receive(:run).exactly(specs.size).times

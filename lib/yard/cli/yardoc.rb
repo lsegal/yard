@@ -246,8 +246,15 @@ module YARD
           Registry.load
           checksums = Registry.checksums.dup
         end
-        YARD.parse(files, excluded)
-        Registry.save(use_cache) if save_yardoc
+
+        if save_yardoc
+          Registry.lock_for_writing do
+            YARD.parse(files, excluded)
+            Registry.save(use_cache)
+          end
+        else
+          YARD.parse(files, excluded)
+        end
 
         if generate
           run_generate(checksums)
