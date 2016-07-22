@@ -108,6 +108,9 @@ h2 small a {
 }
 .rdoc-term { padding-right: 25px; font-weight: bold; }
 .rdoc-list p { margin: 0; padding: 0; margin-bottom: 4px; }
+.summary_desc pre.code .object_link a, .docstring pre.code .object_link a {
+  padding: 0px; background: inherit; color: inherit; border-radius: inherit;
+}
 
 /* style for <table> */
 #filecontents table, .docstring table { border-collapse: collapse; }
@@ -479,3 +482,9 @@ pre.code .rubyid_backref,
 pre.code .rubyid_nth_ref { color: #6D79DE; }
 pre.code .regexp, .dregexp { color: #036A07; }
 pre.code a { border-bottom: 1px dotted #bbf; }
+
+/* Color fix for links */
+#content .summary_desc pre.code .id > .object_link a, /* identifier */
+#content .docstring pre.code .id > .object_link a { color: #0085FF; }
+#content .summary_desc pre.code .const > .object_link a, /* constant */
+#content .docstring pre.code .const > .object_link a { color: #585CF6; }

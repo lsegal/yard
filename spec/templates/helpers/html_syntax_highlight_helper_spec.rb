@@ -5,7 +5,7 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlSyntaxHighlightHelper
 
   describe "#html_syntax_highlight" do
-    let(:object) { Registry.root }
+    let(:object) { CodeObjects::NamespaceObject.new(:root, :YARD) }
 
     before do
       Registry.root.source_type = :ruby
@@ -42,13 +42,24 @@ describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
     end if HAVE_RIPPER
 
     it "returns escaped unhighlighted source if a syntax error is found (ripper)" do
-      expect(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
       expect(html_syntax_highlight("def &x; ... end")).to eq "def &amp;x; ... end"
     end if HAVE_RIPPER
 
     it "returns escaped unhighlighted source if a syntax error is found (ripper)" do
-      expect(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
       expect(html_syntax_highlight("$ git clone http://url")).to eq "$ git clone http://url"
+    end if HAVE_RIPPER
+
+    it "links constants/methods" do
+      other = CodeObjects::NamespaceObject.new(:root, :Other)
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      allow(self).to receive(:run_verifier).with([other]).and_return([other])
+      allow(self).to receive(:link_object).with(other, "Other").and_return("LINK!")
+      result = html_syntax_highlight("def x; Other end")
+      html_equals_string(result, "<span class='kw'>def</span>
+        <span class='id identifier rubyid_x'>x</span><span class='semicolon'>;</span>
+        <span class='const'>LINK!</span> <span class='kw'>end</span>")
     end if HAVE_RIPPER
   end
 end
