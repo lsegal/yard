@@ -86,7 +86,7 @@ module YARD
             libver = create_library_version_if_yardopts_exist(library, pwd)
 
             # Check default location
-            yfile = File.join(pwd, '.yardoc')
+            yfile = File.join(pwd, Registry::DEFAULT_YARDOC_FILE)
             libver ||= YARD::Server::LibraryVersion.new(library, nil, yfile)
           end
 
@@ -213,8 +213,9 @@ module YARD
           add_libraries([File.basename(Dir.pwd), nil])
 
           # Generate doc for first time
+          # This is not necessary but makes for a better first-run experience
           libver = libraries.empty? ? nil : libraries.values.first.first
-          if libver and !File.exist?(libver.yardoc_file)
+          if libver and !libver.ready?
             generate_doc_for_first_time(libver)
           end
         else
