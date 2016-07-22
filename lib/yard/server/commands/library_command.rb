@@ -106,7 +106,7 @@ module YARD
         end
 
         def load_yardoc
-          raise LibraryNotPreparedError unless library.yardoc_file
+          raise LibraryNotPreparedError unless library.ready?
           if Thread.current[:__yard_last_yardoc__] == library.yardoc_file
             log.debug "Reusing yardoc file: #{library.yardoc_file}"
             return

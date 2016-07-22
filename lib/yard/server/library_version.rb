@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'thread'
 
 module YARD
   module Server
@@ -144,6 +145,13 @@ module YARD
       alias == eql?
       alias equal? eql?
 
+      # @return [Boolean] whether the library has been completely processed
+      #   and is ready to be served
+      def ready?
+        return false if yardoc_file.nil?
+        serializer.complete?
+      end
+
       # @note You should not directly override this method. Instead, implement
       #   +load_yardoc_from_SOURCENAME+ when implementing loading for a specific
       #   source type. See the {LibraryVersion} documentation for "Implementing
@@ -160,7 +168,7 @@ module YARD
       #   begin preparing the library for subsequent requests, although this
       #   is not necessary.
       def prepare!
-        return if yardoc_file
+        return if ready?
         meth = "load_yardoc_from_#{source}"
         send(meth) if respond_to?(meth, true)
       end
@@ -170,16 +178,31 @@ module YARD
       # @return [nil] if there is no installed gem for the library
       def gemspec
         ver = version ? "= #{version}" : ">= 0"
-        Gem.source_index.find_name(name, ver).first
+        Gem.source_index.find_name(name, ver).last
       end
 
       protected
 
+      @@chdir_mutex = Mutex.new
+
       # Called when a library of source type "disk" is to be prepared. In this
-      # case, the {#yardoc_file} should already be set, so nothing needs to be
-      # done.
+      # case, the {#yardoc_file} should already be set, but the library may not
+      # be prepared. Run preparation if not done.
+      #
+      # @raise [LibraryNotPreparedError] if the yardoc file has not been
+      #   prepared.
       def load_yardoc_from_disk
-        nil
+        return if ready?
+
+        @@chdir_mutex.synchronize do
+          Dir.chdir(source_path_for_disk) do
+            Thread.new do
+              CLI::Yardoc.run('--no-stats', '-n', '-b', yardoc_file)
+            end
+          end
+        end
+
+        raise LibraryNotPreparedError
       end
 
       # Called when a library of source type "gem" is to be prepared. In this
@@ -192,18 +215,18 @@ module YARD
         require 'rubygems'
         ver = version ? "= #{version}" : ">= 0"
         self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
-        unless yardoc_file && File.directory?(yardoc_file)
+        return if ready?
+
+        @@chdir_mutex.synchronize do
           Thread.new do
             # Build gem docs on demand
             log.debug "Building gem docs for #{to_s(false)}"
             CLI::Gems.run(name, ver)
             self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
-            FileUtils.touch(File.join(yardoc_file, 'complete'))
           end
         end
-        unless yardoc_file && File.exist?(File.join(yardoc_file, 'complete'))
-          raise LibraryNotPreparedError
-        end
+
+        raise LibraryNotPreparedError
       end
 
       # @return [String] the source path for a disk source
@@ -221,6 +244,11 @@ module YARD
       def load_source_path
         meth = "source_path_for_#{source}"
         send(meth) if respond_to?(meth, true)
+      end
+
+      def serializer
+        return if yardoc_file.nil?
+        @serializer ||= Serializers::YardocSerializer.new(yardoc_file)
       end
     end
   end
