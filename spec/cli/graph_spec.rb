@@ -2,13 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::CLI::Graph do
   it "serializes output" do
-    expect(Registry).to receive(:load).at_least(1).times
+    allow(Registry).to receive(:load).at_least(1).times
     allow(subject).to receive(:yardopts) { [] }
     expect(subject.options.serializer).to receive(:serialize).once
     subject.run
   end
 
   it "reads yardoc file from .yardopts" do
+    allow(Registry).to receive(:load).at_least(1).times
     allow(subject).to receive(:yardopts) { %w(--db /path/to/db) }
     expect(subject.options.serializer).to receive(:serialize).once
     subject.run
