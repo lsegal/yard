@@ -73,4 +73,15 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
       eof
     end
   end unless LEGACY_PARSER
+
+  it "allows constant to have same name as constant in parent namespace" do
+    YARD.parse_string <<-eof
+      module A
+        class C; end
+        module B; C = 1 end
+      end
+    eof
+    expect(log.io.string).to eq ""
+    expect(Registry.at('A::B::C').type).to eq :constant
+  end
 end

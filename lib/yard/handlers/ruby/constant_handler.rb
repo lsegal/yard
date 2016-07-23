@@ -19,7 +19,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
     name = statement[0][0][0]
     value = statement[1].source
     obj = P(namespace, name)
-    if obj.is_a?(NamespaceObject)
+    if obj.is_a?(NamespaceObject) && obj.namespace == namespace
       raise YARD::Parser::UndocumentableError, "constant for existing #{obj.type} #{obj}"
     else
       register ConstantObject.new(namespace, name) {|o| o.source = statement; o.value = value.strip }
