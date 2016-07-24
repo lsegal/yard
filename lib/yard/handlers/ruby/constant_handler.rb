@@ -10,18 +10,21 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
       process_structclass(statement)
     elsif statement[0].type == :var_field && statement[0][0].type == :const
       process_constant(statement)
+    elsif statement[0].type == :const_path_field
+      process_constant(statement)
     end
   end
 
   private
 
   def process_constant(statement)
-    name = statement[0][0][0]
+    name = statement[0].source
     value = statement[1].source
     obj = P(namespace, name)
     if obj.is_a?(NamespaceObject) && obj.namespace == namespace
       raise YARD::Parser::UndocumentableError, "constant for existing #{obj.type} #{obj}"
     else
+      ensure_loaded! obj.parent
       register ConstantObject.new(namespace, name) {|o| o.source = statement; o.value = value.strip }
     end
   end

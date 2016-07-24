@@ -1,3 +1,7 @@
+# Master branch (unreleased)
+
+- Added support for compound constant assignments (`A::B::C = true`).
+
 # 0.9.5 - July 22nd, 2016
 
 - `yard doc` will now generate `.yardoc/processing` and `.yardoc/complete` files

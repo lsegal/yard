@@ -84,4 +84,17 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
     expect(log.io.string).to eq ""
     expect(Registry.at('A::B::C').type).to eq :constant
   end
+
+  it "detects compound constant names" do
+    YARD.parse_string <<-eof
+      module A
+        class AA; end
+        AA::B = true
+      end
+      A::AA::C = true
+    eof
+
+    expect(Registry.at('A::AA::B').type).to eq :constant
+    expect(Registry.at('A::AA::C').type).to eq :constant
+  end if HAVE_RIPPER
 end
