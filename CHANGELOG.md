@@ -1,7 +1,12 @@
 # Master branch (unreleased)
 
-- Added `YARD::Tags::Tag#explain_types` returning a plain English summary
-  of the type specification of a given tag.
+- Added {YARD::Tags::Tag#explain_types} returning a plain English summary
+  of the type specification of a given tag. Also adds {YARD::Tags::TypesExplainer}
+  as an implementation class for the method.
+- Added support for automatic linking of constants and method calls of
+  Ruby syntax highlighted source code in generated HTML. Also adds the
+  {YARD::Parser::Ruby::TokenResolver} implementation class to iterate over
+  tokenized code with extra resolved object information.
 - Added support for compound constant assignments (`A::B::C = true`).
 
 # 0.9.5 - July 22nd, 2016
