@@ -43,14 +43,16 @@ describing this data in the body of the description, a developer may formally
 declare the parameter or return type(s) in a single line. Consider the
 following method documented with YARD formatting:
 
-     # Reverses the contents of a String or IO object.
-     #
-     # @param [String, #read] contents the contents to reverse
-     # @return [String] the contents reversed lexically
-     def reverse(contents)
-       contents = contents.read if contents.respond_to? :read
-       contents.reverse
-     end
+```ruby
+# Reverses the contents of a String or IO object.
+#
+# @param [String, #read] contents the contents to reverse
+# @return [String] the contents reversed lexically
+def reverse(contents)
+  contents = contents.read if contents.respond_to? :read
+  contents.reverse
+end
+```
 
 With the above @param tag, we learn that the contents parameter can either be
 a String or any object that responds to the 'read' method, which is more
@@ -64,10 +66,12 @@ descriptive.
 extended and customized by plugins. Take for instance the scenario where you
 need to document the following code:
 
-    class List
-      # Sets the publisher name for the list.
-      cattr_accessor :publisher
-    end
+```ruby
+class List
+ # Sets the publisher name for the list.
+ cattr_accessor :publisher
+end
+```
 
 This custom declaration provides dynamically generated code that is hard for a
 documentation tool to properly document without help from the developer. To
@@ -104,7 +108,9 @@ documentation a much faster process.
 
 To install YARD, use the following command:
 
-    $ gem install yard
+```sh
+$ gem install yard
+```
 
 (Add `sudo` if you're installing under a POSIX system as root)
 
@@ -115,7 +121,9 @@ Alternatively, if you've checked the source out directly, you can call
 install lacks RDoc, which is occasionally used by YARD to convert markup to HTML.
 If running `which rdoc` turns up empty, install RDoc by issuing:
 
-    $ sudo apt-get install rdoc
+```sh
+$ sudo apt-get install rdoc
+```
 
 
 ## Usage
@@ -129,7 +137,9 @@ YARD comes packaged with a executable named `yard` which can control the many
 functions of YARD, including generating documentation, graphs running the
 YARD server, and so on. To view a list of available YARD commands, type:
 
-    $ yard --help
+```sh
+$ yard --help
+```
 
 Plugins can also add commands to the `yard` executable to provide extra
 functionality.
@@ -145,7 +155,9 @@ project root. This will assume your files are
 located in the `lib/` directory. If they are located elsewhere, you can specify
 paths and globs from the commandline via:
 
-    $ yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
+```sh
+$ yardoc 'lib/**/*.rb' 'app/**/*.rb' ...etc...
+```
 
 The tool will generate a `.yardoc` file which will store the cached database
 of your source code and documentation. If you want to re-generate your docs
@@ -164,12 +176,16 @@ maintainer/developer consumption).
 You can also add extra informative files (README, LICENSE) by separating
 the globs and the filenames with '-'.
 
-    $ yardoc 'app/**/*.rb' - README LICENSE FAQ
+```sh
+$ yardoc 'app/**/*.rb' - README LICENSE FAQ
+```
 
 If no globs precede the '-' argument, the default glob (`lib/**/*.rb`) is
 used:
 
-    $ yardoc - README LICENSE FAQ
+```sh
+$ yardoc - README LICENSE FAQ
+```
 
 Note that the README file can be specified with its own `--readme` switch.
 
@@ -186,9 +202,11 @@ a few shortcuts are available. For instance, to document only objects that have
 an "@api" tag with the value "public", all of the following syntaxes would give
 the same result:
 
-    --query '@api.text == "public"'
-    --query 'object.has_tag?(:api) && object.tag(:api).text == "public"'
-    --query 'has_tag?(:api) && tag(:api).text == "public"'
+```sh
+--query '@api.text == "public"'
+--query 'object.has_tag?(:api) && object.tag(:api).text == "public"'
+--query 'has_tag?(:api) && tag(:api).text == "public"'
+```
 
 Note that the "@tag" syntax returns the first tag named "tag" on the object.
 To return the array of all tags named "tag", use "@@tag".
@@ -196,8 +214,10 @@ To return the array of all tags named "tag", use "@@tag".
 Multiple `--query` arguments are allowed in the command line parameters. The
 following two lines both check for the existence of a return and param tag:
 
-    --query '@return' --query '@param'
-    --query '@return && @param'
+```sh
+--query '@return' --query '@param'
+--query '@return && @param'
+```
 
 For more information about the query syntax, see the {YARD::Verifier} class.
 
@@ -206,11 +226,13 @@ For more information about the query syntax, see the {YARD::Verifier} class.
 The second most obvious is to generate docs via a Rake task. You can do this by
 adding the following to your `Rakefile`:
 
-    YARD::Rake::YardocTask.new do |t|
-      t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
-      t.options = ['--any', '--extra', '--opts'] # optional
-      t.stats_options = ['--list-undoc']         # optional
-    end
+```ruby
+YARD::Rake::YardocTask.new do |t|
+ t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
+ t.options = ['--any', '--extra', '--opts'] # optional
+ t.stats_options = ['--list-undoc']         # optional
+end
+```
 
 All the settings: `files`, `options` and `stats_options` are optional. `files` will default to
 `lib/**/*.rb`, `options` will represents any options you might want
@@ -219,7 +241,9 @@ Again, a full list of options is available by typing `yardoc --help`
 in a shell. You can also override the options at the Rake command-line with the
 OPTS environment variable:
 
-    $ rake yard OPTS='--any --extra --opts'
+```sh
+$ rake yard OPTS='--any --extra --opts'
+```
 
 **3. `yri` RI Implementation**
 
@@ -227,8 +251,10 @@ The yri binary will use the cached .yardoc database to give you quick ri-style
 access to your documentation. It's way faster than ri but currently does not
 work with the stdlib or core Ruby libraries, only the active project. Example:
 
-    $ yri YARD::Handlers::Base#register
-    $ yri File.relative_path
+```sh
+$ yri YARD::Handlers::Base#register
+$ yri File.relative_path
+```
 
 Note that class methods must not be referred to with the "::" namespace
 separator. Only modules, classes and constants should use "::".
@@ -236,7 +262,9 @@ separator. Only modules, classes and constants should use "::".
 You can also do lookups on any installed gems. Just make sure to build the
 .yardoc databases for installed gems with:
 
-    $ sudo yard gems
+```sh
+$ yard gems
+```
 
 If you don't have sudo access, it will write these files to your `~/.yard`
 directory. `yri` will also cache lookups there.
@@ -246,7 +274,9 @@ directory. `yri` will also cache lookups there.
 The `yard server` command serves documentation for a local project or all installed
 RubyGems. To serve documentation for a project you are working on, simply run:
 
-    $ yard server
+```sh
+$ yard server
+```
 
 And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at [http://localhost:8808](http://localhost:8808).
@@ -262,7 +292,9 @@ change any documentation in the source and refresh to see the new contents.
 
 To serve documentation for all installed gems, call:
 
-    $ yard server --gems
+```sh
+$ yard server --gems
+```
 
 This will also automatically build documentation for any gems that have not
 been previously scanned. Note that in this case there will be a slight delay
@@ -280,7 +312,9 @@ option to show mixin inclusions. You can output to stdout or a file, or pipe dir
 to `dot`. The same public, protected and private visibility rules apply to `yard graph`.
 More options can be seen by typing `yard graph --help`, but here is an example:
 
-    $ yard graph --protected --full --dependencies
+```sh
+$ yard graph --protected --full --dependencies
+```
 
 
 ## Changelog
