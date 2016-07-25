@@ -64,11 +64,17 @@ module YARD
         path, namespace = $', @registry.root
       end
 
-      resolved = nil
+      resolved, lexical_lookup = nil, 0
       while namespace && !resolved
         resolved = lookup_path_direct(namespace, path, type)
         resolved ||= lookup_path_inherited(namespace, path, type) if inheritance
-        namespace = namespace.parent
+        break if resolved
+        namespace, lexical_lookup = namespace.parent, lexical_lookup + 1
+      end
+
+      # method objects cannot be resolved through lexical lookup by more than 1 ns
+      if lexical_lookup > 1 && resolved.is_a?(CodeObjects::MethodObject)
+        resolved = nil
       end
 
       if proxy_fallback

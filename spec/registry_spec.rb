@@ -213,6 +213,21 @@ describe YARD::Registry do
       expect(Registry.resolve(P('MyObject'), '#foo', true)).to eq P('BasicObject#foo')
     end
 
+    it "does not perform lexical lookup to resolve a method object by more than one namespace" do
+      YARD.parse_string <<-eof
+        module A
+          def foo; end
+          def self.bar; end
+          module B; module C; end end
+        end
+      eof
+
+      expect(Registry.resolve(P('A::B::C'), '#foo', true)).to be nil
+      expect(Registry.resolve(P('A::B::C'), '.bar', true)).to be nil
+      expect(Registry.resolve(P('A::B'), '#foo', true)).not_to be nil
+      expect(Registry.resolve(P('A::B'), '.bar', true)).not_to be nil
+    end
+
     it "does not resolve methods in Object if inheriting BasicObject when inheritance = true" do
       YARD.parse_string <<-eof
         class Object; def foo; end end
