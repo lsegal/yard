@@ -42,8 +42,6 @@ rescue LoadError
 end
 
 task :travis_ci do
-  ENV['SUITE'] = '1'
-  ENV['CI'] = '1'
   ENV['LEGACY'] = nil
   Rake::Task['specs'].execute
   if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
