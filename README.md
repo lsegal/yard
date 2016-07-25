@@ -7,7 +7,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
 [![Build Status](https://travis-ci.org/lsegal/yard.svg?branch=master)](https://travis-ci.org/lsegal/yard)
-[![Coverage Status](https://coveralls.io/repos/github/lsegal/yard/badge.svg?branch=master)](https://coveralls.io/github/lsegal/yard?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/lsegal/yard/badge.svg)](https://coveralls.io/github/lsegal/yard)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 ## Synopsis
