@@ -6,8 +6,7 @@ rescue LoadError
 end
 
 begin
-  require 'bundler'
-  Bundler.setup
+  require 'bundler/setup'
 rescue LoadError
 end
 
