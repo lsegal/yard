@@ -174,6 +174,7 @@ module YARD
 
       autoload :AstNode,           __p('parser/ruby/ast_node')
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
+      autoload :TokenResolver,     __p('parser/ruby/token_resolver')
     end
 
     autoload :Base,                __p('parser/base')
