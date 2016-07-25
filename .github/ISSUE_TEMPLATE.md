@@ -28,6 +28,6 @@ visual issues.]
 * Relevant software dependency/versions:
   * [Any 3rd party libs required to reproduce, omit if none]
 
-I have read the [Contributing Guide](contrib).
+I have read the [Contributing Guide][contrib].
 
 [contrib]: https://github.com/lsegal/yard/blob/master/CONTRIBUTING.md
