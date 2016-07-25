@@ -256,6 +256,7 @@ module YARD
     autoload :ScopeDirective,      __p('tags/directives')
     autoload :Tag,                 __p('tags/tag')
     autoload :TagFormatError,      __p('tags/tag_format_error')
+    autoload :TypesExplainer,      __p('tags/types_explainer')
     autoload :VisibilityDirective, __p('tags/directives')
   end
 

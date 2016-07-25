@@ -1,5 +1,7 @@
 # Master branch (unreleased)
 
+- Added `YARD::Tags::Tag#explain_types` returning a plain English summary
+  of the type specification of a given tag.
 - Added support for compound constant assignments (`A::B::C = true`).
 
 # 0.9.5 - July 22nd, 2016

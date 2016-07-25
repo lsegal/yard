@@ -31,4 +31,18 @@ describe YARD::Tags::Library do
       expect(tag('@x.y.zz foo(bar)').signature).to eq 'foo(bar)'
     end
   end
+
+  describe "#tag.explain_types" do
+    it "can explain tag types" do
+      expect(tag("@return [A, B<String>]").explain_types).to eq "an A; a B of (Strings)"
+    end
+
+    it "returns nil if no types present" do
+      expect(tag("@return").explain_types).to eq nil
+    end
+
+    it "returns nil if types are not parseable" do
+      expect(tag("@return [$]").explain_types).to eq nil
+    end
+  end
 end
