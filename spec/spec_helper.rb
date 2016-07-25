@@ -11,19 +11,6 @@ begin
 rescue LoadError
 end
 
-begin
-  require 'simplecov'
-  SimpleCov.start
-  # TODO: hide some rb files from cov report
-  # hide = '_spec\.rb$,spec_helper\.rb$,ruby_lex\.rb$,autoload\.rb$'
-  # if YARD::Parser::SourceParser.parser_type == :ruby
-  #   hide += ',legacy\/.+_handler'
-  # else
-  #   hide += ',ruby_parser\.rb$,ast_node\.rb$,handlers\/ruby\/[^\/]+\.rb$'
-  # end
-rescue LoadError
-end if ENV['COVERAGE']
-
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 
 unless defined?(HAVE_RIPPER)
@@ -35,6 +22,11 @@ unless defined?(HAVE_RIPPER)
     def self.parser_type; @parser_type == :ruby ? :ruby18 : @parser_type end
   end if ENV['LEGACY']
 end
+
+begin
+  require 'coveralls'
+  Coveralls.wear!
+end if ENV['CI'] && HAVE_RIPPER
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 

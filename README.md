@@ -7,6 +7,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
 [![Build Status](https://travis-ci.org/lsegal/yard.svg?branch=master)](https://travis-ci.org/lsegal/yard)
+[![Code Coverage](https://coveralls.io/repos/github/lsegal/yard/badge.svg)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 ## Synopsis

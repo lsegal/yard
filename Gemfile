@@ -8,6 +8,7 @@ group :development do
   gem 'rvm-tester'
   gem 'simplecov'
   gem 'samus'
+  gem 'coveralls', :require => false
 end
 
 group :asciidoc do
