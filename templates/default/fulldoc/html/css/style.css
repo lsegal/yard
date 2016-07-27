@@ -1,4 +1,4 @@
-html {
+html { margin: 0; padding: 0;
   width: 100%;
   height: 100%;
 }
@@ -6,11 +6,13 @@ body {
   font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif;
   font-size: 13px;
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
-  display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
 }
 
 #nav {
@@ -27,12 +29,12 @@ body {
   width: 20%;
   height: 100%;
   position: relative;
-  display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
-  flex-shrink: 0;
+  display: flex;
   -webkit-flex-shrink: 0;
   -ms-flex: 1 0;
+  flex-shrink: 0;
 }
 #resizer {
   position: absolute;
@@ -44,14 +46,17 @@ body {
   z-index: 9999;
 }
 #main {
-  flex: 5 1;
   -webkit-flex: 5 1;
   -ms-flex: 5 1;
+  flex: 5 1;
   outline: none;
   position: relative;
   background: #fff;
   padding: 1.2em;
   padding-top: 0.2em;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;  
 }
 
 @media (max-width: 920px) {
@@ -59,8 +64,6 @@ body {
 }
 
 @media (min-width: 920px) {
-  body { height: 100%; overflow: hidden; }
-  #main { height: 100%; overflow: auto; }
   #search { display: none; }
   #search_frame { display: none; }
 }
@@ -181,14 +184,14 @@ p.inherited {
   border: 0;
   width: 100%;
   font-size: 1em;
-  display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
+  display: flex;
 }
 .box_info dl dt {
-  flex-shrink: 0;
   -webkit-flex-shrink: 1;
   -ms-flex-shrink: 1;
+  flex-shrink: 0;
   width: 100px;
   text-align: right;
   font-weight: bold;
@@ -198,9 +201,9 @@ p.inherited {
   padding-right: 10px;
 }
 .box_info dl dd {
-  flex-grow: 1;
   -webkit-flex-grow: 1;
   -ms-flex: 1;
+  flex-grow: 1;
   max-width: 420px;
   padding: 6px 0;
   padding-right: 20px;
@@ -229,7 +232,15 @@ ul.toplevel { list-style: none; padding-left: 0; font-size: 1.1em; }
 
 dl.constants { margin-left: 10px; }
 dl.constants dt { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
-dl.constants dd { width: 75%; white-space: pre; font-family: monospace; margin-bottom: 18px; }
+
+dl.constants dd { width: 100%; font-family: monospace; margin-bottom: 18px;
+  margin-left: 0;
+  padding-left: 32px;
+  box-sizing: border-box;
+}
+
+dl.constants dd pre.code { word-wrap: normal; white-space: normal; }
+
 dl.constants .docstring .note:first-child { margin-top: 5px; }
 
 .summary_desc {
@@ -395,9 +406,9 @@ li.r2 { background: #fafafa; }
   position: absolute;
   top: 40px;
   right: 12px;
-  width: 500px;
+  min-width: 15em;
   max-width: 80%;
-  height: 80%;
+  height: calc(100% - 50px);
   overflow-y: scroll;
   border: 1px solid #999;
   border-collapse: collapse;
