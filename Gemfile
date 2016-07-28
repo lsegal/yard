@@ -3,9 +3,8 @@ source 'https://rubygems.org'
 group :development do
   gem 'rspec', '~> 3.0'
   gem 'rake', '~> 11.0'
-  gem 'json', '~> 2.0'
   gem 'rdoc', '~> 4.0'
-  gem 'rvm-tester'
+  gem 'json'
   gem 'simplecov'
   gem 'samus'
   gem 'coveralls', :require => false
