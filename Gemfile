@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec', '~> 3.3'
-  gem 'rake', '~> 10.0'
-  gem 'json', '~> 1.8'
-  gem 'rdoc', '~> 4.2'
+  gem 'rspec', '~> 3.0'
+  gem 'rake', '~> 11.0'
+  gem 'json', '~> 2.0'
+  gem 'rdoc', '~> 4.0'
   gem 'rvm-tester'
   gem 'simplecov'
   gem 'samus'
@@ -16,7 +16,7 @@ group :asciidoc do
 end
 
 group :markdown do
-  gem 'redcarpet', '= 2.3.0', :platforms => :mri
+  gem 'redcarpet', '~> 3.0', :platforms => :mri
   gem 'kramdown', :platforms => :jruby
 end
 
@@ -25,14 +25,9 @@ group :textile do
 end
 
 group :server do
-  gem 'rack', '~> 1.6'
+  gem 'rack', '~> 2.0'
 end
 
 group :i18n do
   gem 'gettext', '>= 2.2.1'
 end
-
-# No way to specify 1.8.7 only
-# group :parser do
-#  gem 'ripper', :platforms => :mri_18
-# end

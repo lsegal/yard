@@ -1,5 +1,9 @@
 # Master branch (unreleased)
 
+- Removed official support for Ruby 1.x (1.8/1.9). YARD can still be installed
+  in these versions, but support is not guaranteed. Simple bug fixes may still
+  be considered via pull request only. Issues without code will be automatically
+  closed.
 - Added {YARD::Tags::Tag#explain_types} returning a plain English summary
   of the type specification of a given tag. Also adds {YARD::Tags::TypesExplainer}
   as an implementation class for the method.
