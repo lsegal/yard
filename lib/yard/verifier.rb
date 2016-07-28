@@ -37,7 +37,7 @@ module YARD
 
     def expressions=(value)
       @expressions = value
-      create_method_from_expressions
+      @evaluator = Evaluator.new(self)
     end
 
     # Creates a verifier from a set of expressions
@@ -58,27 +58,13 @@ module YARD
       self.expressions += expressions.flatten
     end
 
-    # Passes any method calls to the object from the {#call}
-    def method_missing(sym, *args, &block)
-      if object.respond_to?(sym)
-        object.send(sym, *args, &block)
-      else
-        super
-      end
-    end
-
     # Tests the expressions on the object.
     #
     # @note If the object is a {CodeObjects::Proxy} the result will always be true.
     # @param [CodeObjects::Base] object the object to verify
     # @return [Boolean] the result of the expressions
     def call(object)
-      return true if object.is_a?(CodeObjects::Proxy)
-      modify_nilclass
-      @object = object
-      retval = __execute ? true : false
-      unmodify_nilclass
-      retval
+      @evaluator.call(object)
     end
 
     # Runs a list of objects against the verifier and returns the subset
@@ -91,59 +77,112 @@ module YARD
       list.reject {|item| call(item).is_a?(FalseClass) }
     end
 
-    protected
-
-    # @return [CodeObjects::Base] the current object being tested
-    attr_reader :object
-    alias o object
-
-    private
-
     # @private
-    NILCLASS_METHODS = [:type, :method_missing]
-
-    # Modifies nil to not throw NoMethodErrors. This allows
-    # syntax like object.tag(:return).text to work if the #tag
-    # call returns nil, which means users don't need to perform
-    # stringent nil checking
-    #
-    # @return [void]
-    def modify_nilclass
-      NILCLASS_METHODS.each do |meth|
-        NilClass.send(:define_method, meth) {|*args| }
+    class Evaluator < BasicObject
+      def initialize(verifier)
+        @object = nil
+        @verifier = verifier
+        create_method_from_expressions
       end
-    end
 
-    # Returns the state of NilClass back to normal
-    # @return [void]
-    def unmodify_nilclass
-      NILCLASS_METHODS.each do |meth|
-        next unless nil.respond_to?(meth)
-        NilClass.send(:remove_method, meth)
+      def call(object)
+        return true if object.is_a?(::YARD::CodeObjects::Proxy)
+        @object = object
+        modify_nilclass
+        retval = !!__execute
+        unmodify_nilclass
+        retval
       end
-    end
 
-    # Creates the +__execute+ method by evaluating the expressions
-    # as Ruby code
-    # @return [void]
-    def create_method_from_expressions
-      expr = expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
+      # Passes any method calls to the object from the {#call}
+      def method_missing(sym, *args, &block)
+        if object.respond_to?(sym)
+          object.send(sym, *args, &block)
+        else
+          super
+        end
+      end
 
-      instance_eval(<<-eof, __FILE__, __LINE__ + 1)
-        def __execute; #{expr}; end
-      eof
-    end
+      protected
 
-    # Parses a single expression, handling some of the DSL syntax.
-    #
-    # The syntax "@tag" should be turned into object.tag(:tag),
-    # and "@@tag" should be turned into object.tags(:tag)
-    #
-    # @return [String] the parsed expression
-    def parse_expression(expr)
-      expr = expr.gsub(/@@(?:(\w+)|\{([\w\.]+)\})/, 'object.tags("\1\2")')
-      expr = expr.gsub(/@(?:(\w+)|\{([\w\.]+)\})/, 'object.tag("\1\2")')
-      expr
+      # @return [CodeObjects::Base] the current object being tested
+      attr_reader :object
+      alias o object
+
+      private
+
+      # @private
+      NILCLASS_METHODS = [:type, :method_missing]
+
+      # @private
+      VALID_TOKENS = %w(ident period lparen rparen tstring_beg tstring_content
+        tstring_end symbol op kw sp ignored_nl nl lbracket rbracket comma).
+          inject({}) {|h,v| h[v.to_sym] = true; h }
+
+      # Modifies nil to not throw NoMethodErrors. This allows
+      # syntax like object.tag(:return).text to work if the #tag
+      # call returns nil, which means users don't need to perform
+      # stringent nil checking
+      #
+      # @return [void]
+      def modify_nilclass
+        NILCLASS_METHODS.each do |meth|
+          ::NilClass.send(:define_method, meth) {|*args| }
+        end
+      end
+
+      # Returns the state of NilClass back to normal
+      # @return [void]
+      def unmodify_nilclass
+        NILCLASS_METHODS.each do |meth|
+          next unless nil.respond_to?(meth)
+          ::NilClass.send(:remove_method, meth)
+        end
+      end
+
+      # Creates the +__execute+ method by evaluating the expressions
+      # as Ruby code
+      # @return [void]
+      def create_method_from_expressions
+        expr = @verifier.expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
+
+        instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+          def __execute; #{expr}; end
+        eof
+      end
+
+      # Parses a single expression, handling some of the DSL syntax.
+      #
+      # The syntax "@tag" should be turned into object.tag(:tag),
+      # and "@@tag" should be turned into object.tags(:tag)
+      #
+      # @return [String] the parsed expression
+      def parse_expression(expr)
+        expr = expr.gsub(/@@(?:(\w+)|\{([\w\.]+)\})/, 'object.tags("\1\2")')
+        expr = expr.gsub(/@(?:(\w+)|\{([\w\.]+)\})/, 'object.tag("\1\2")')
+        validate_expression(expr)
+        expr
+      end
+
+      def validate_expression(expr)
+        ::Kernel.require 'ripper'
+        tokens = Parser::Ruby::RubyParser.parse(expr, '(verifier)').tokens
+        tokens.each do |token|
+          if !VALID_TOKENS[token[0]]
+            ::Kernel.raise ::SyntaxError,
+              "disallowed #{token[0]} (`#{token[1]}') in verifier expression"
+          end
+
+          if token[0] == :ident && token[1] =~ /\A(send|__send__)\Z/
+            ::Kernel.raise ::SyntaxError,
+              "disallowed #send (`#{token[1]}') in verifier expression"
+          elsif token[0] == :ident && token[1] == "require"
+            ::Kernel.raise ::SyntaxError,
+              "disallowed #require (`#{token[1]}') in verifier expression"
+          end
+        end
+      rescue ::LoadError
+      end
     end
   end
 end
