@@ -50,19 +50,27 @@ describe YARD::CodeObjects do
 
   describe :BUILTIN_EXCEPTIONS do
     it "includes all base exceptions" do
+      bad_names = []
       YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
-        expect(eval(name)).to be <= Exception
+        begin
+          bad_names << name unless eval(name) <= Exception
+        rescue NameError
+        end
       end
+      expect(bad_names).to be_empty
     end
   end
 
   describe :BUILTIN_CLASSES do
     it "includes all base classes" do
+      bad_names = []
       YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
-        next if name == "MatchingData" && !defined?(::MatchingData)
-        next if name == "Continuation"
-        expect(eval(name)).to be_instance_of(Class)
+        begin
+          bad_names << name unless eval(name).is_a?(Class)
+        rescue NameError
+        end
       end
+      expect(bad_names).to be_empty
     end
 
     it "includes all exceptions" do
