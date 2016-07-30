@@ -49,37 +49,42 @@ module YARD
     # YARD can be extended to support custom library sources in order to
     # build or retrieve a yardoc file at runtime from many different locations.
     #
-    # To implement this behaviour, two methods must be added to the +LibraryVersion+
-    # class, +#load_yardoc_from_SOURCE+ and +#source_path_for_SOURCE+. In both
-    # cases, "SOURCE" represents the source type used in {#source} when creating
-    # the library object. The +#source_path_for_SOURCE+ method is called upon
+    # To implement this behaviour, 3 methods can be added to the +LibraryVersion+
+    # class, +#load_yardoc_from_SOURCE+, +#yardoc_file_for_SOURCE+, and
+    # +#source_path_for_SOURCE+. In all cases, "SOURCE" represents the source
+    # type used in {#source} when creating the library object. The
+    # +#yardoc_file_for_SOURCE+ and +#source_path_for_SOURCE+ methods are called upon
     # creation and should return the location where the source code for the library
     # lives. The load method is called from {#prepare!} if there is no yardoc file
     # and should set {#yardoc_file}. Below is a full example for
     # implementing a custom library source, +:http+, which reads packaged .yardoc
     # databases from zipped archives off of an HTTP server.
     #
+    # Note that only +#load_yardoc_from_SOURCE+ is required. The other two
+    # methods are optional and can be set manually (via {#source_path=} and
+    # {#yardoc_file=}) on the object at any time.
+    #
     # @example Implementing a Custom Library Source
     #   # Adds the source type "http" for .yardoc files zipped on HTTP servers
     #   class LibraryVersion
     #     def load_yardoc_from_http
-    #       return if yardoc_file # we have the library
-    #
-    #       # otherwise download it in a thread and return immediately
     #       Thread.new do
     #         # zip/unzip method implementations are not shown
     #         download_zip_file("http://mysite.com/yardocs/#{self}.zip")
     #         unzip_file_to("/path/to/yardocs/#{self}")
-    #         self.yardoc_file = "/path/to/yardocs/#{self}/.yardoc"
-    #         self.source_path = self.yardoc_file
     #       end
     #
     #       # tell the server it's not ready yet (but it might be next time)
     #       raise LibraryNotPreparedError
     #     end
     #
-    #     # we set this later
-    #     def source_path_for_http; nil end
+    #     def yardoc_file_for_http
+    #       "/path/to/yardocs/#{self}/.yardoc"
+    #     end
+    #
+    #     def source_path_for_http
+    #       File.dirname(yardoc_file)
+    #     end
     #   end
     #
     #   # Creating a library of this source type:
@@ -96,7 +101,11 @@ module YARD
       #   information from.
       # @return [nil] if no yardoc file exists yet. In this case, {#prepare!} will
       #   be called on this library to build the yardoc file.
-      attr_accessor :yardoc_file
+      # @note To implement a custom yardoc file getter, implement
+      def yardoc_file
+        @yardoc_file ||= load_yardoc_file
+      end
+      attr_writer :yardoc_file
 
       # @return [Symbol] the source type representing where the yardoc should be
       #   loaded from. Defaults are +:disk+ and +:gem+, though custom sources
@@ -109,7 +118,10 @@ module YARD
       #   value is filled by calling +#source_path_for_SOURCE+ on this class.
       # @return [nil] if there is no source code
       # @see LibraryVersion LibraryVersion documentation for "Implementing a Custom Library Source"
-      attr_accessor :source_path
+      def source_path
+        @source_path ||= load_source_path
+      end
+      attr_writer :source_path
 
       # @param [String] name the name of the library
       # @param [String] version the specific (usually, but not always, numeric) library
@@ -123,7 +135,6 @@ module YARD
         self.yardoc_file = yardoc
         self.version = version
         self.source = source
-        self.source_path = load_source_path
       end
 
       # @param [Boolean] url_format if true, returns the string in a URI-compatible
@@ -212,17 +223,15 @@ module YARD
       # @raise [LibraryNotPreparedError] if the gem does not have an existing
       #   yardoc file.
       def load_yardoc_from_gem
-        require 'rubygems'
-        ver = version ? "= #{version}" : ">= 0"
-        self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
         return if ready?
+        ver = version ? "= #{version}" : ">= 0"
 
         @@chdir_mutex.synchronize do
           Thread.new do
             # Build gem docs on demand
             log.debug "Building gem docs for #{to_s(false)}"
             CLI::Gems.run(name, ver)
-            self.yardoc_file = Registry.yardoc_file_for_gem(name, ver)
+            log.debug "Done building gem docs for #{to_s(false)}"
           end
         end
 
@@ -239,10 +248,22 @@ module YARD
         gemspec.full_gem_path if gemspec
       end
 
+      # @return [String] the yardoc file for a gem source
+      def yardoc_file_for_gem
+        require 'rubygems'
+        ver = version ? "= #{version}" : ">= 0"
+        Registry.yardoc_file_for_gem(name, ver)
+      end
+
       private
 
       def load_source_path
         meth = "source_path_for_#{source}"
+        send(meth) if respond_to?(meth, true)
+      end
+
+      def load_yardoc_file
+        meth = "yardoc_file_for_#{source}"
         send(meth) if respond_to?(meth, true)
       end
 

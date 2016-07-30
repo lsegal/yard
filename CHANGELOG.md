@@ -12,6 +12,10 @@
   {YARD::Parser::Ruby::TokenResolver} implementation class to iterate over
   tokenized code with extra resolved object information.
 - Added support for compound constant assignments (`A::B::C = true`).
+- Added `LibraryVersion#yardoc_file_for_SOURCE` callback method for sources with
+  a pre-determined yardoc file location. Implement this method instead of
+  manually setting `library.yardoc_file = ...` in your load method (you can
+  still assign the attribute manually).
 
 # 0.9.5 - July 22nd, 2016
 
