@@ -248,7 +248,7 @@ module YARD
 
       def serializer
         return if yardoc_file.nil?
-        @serializer ||= Serializers::YardocSerializer.new(yardoc_file)
+        Serializers::YardocSerializer.new(yardoc_file)
       end
     end
   end
