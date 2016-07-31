@@ -7,9 +7,9 @@
   <% end %>
 </title>
 <% stylesheets.each do |stylesheet| %>
-  <link rel="stylesheet" href="<%= url_for(stylesheet) %>" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css" charset="utf-8" />
 <% end %>
 <%= erb :script_setup %>
 <% javascripts.each do |javascript| %>
-  <script type="text/javascript" charset="utf-8" src="<%= url_for(javascript) %>"></script>
+  <script type="text/javascript" charset="utf-8" src="<%= mtime_url(javascript) %>"></script>
 <% end %>

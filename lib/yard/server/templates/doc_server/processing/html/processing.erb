@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="<%= abs_url('css', 'style.css') %>" type="text/css" media="screen" charset="utf-8" />
-    <link rel="stylesheet" href="<%= abs_url('css', 'custom.css') %>" type="text/css" media="screen" charset="utf-8" />
-    <script type="text/javascript" charset="utf-8" src="<%= abs_url('js', 'jquery.js') %>"></script>
+    <link rel="stylesheet" href="<%= abs_url('css', 'style.css') %>?<%= mtime('css/style.css') %>" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="<%= abs_url('css', 'custom.css') %>?<%= mtime('css/custom.css') %>" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8" src="<%= abs_url('js', 'jquery.js') %>?<%= mtime('js/jquery.js') %>"></script>
     <script type="text/javascript" charset="utf-8">
       function checkPage(process) {
         $.ajax({cache: false, url: "<%= router.request.path %>" + (process ? "?process=true" : ""),
@@ -46,7 +46,7 @@
         <strong><%= @library.name %></strong> <% if @library.version %>(<%= @library.version %>)<% end %> is being processed.
         You'll be redirected when the pages are built, it shouldn't take much longer.
       </p>
-      <img src="<%= abs_url('images', 'processing.gif') %>" align="center" />
+      <img src="<%= abs_url('images', 'processing.gif') %>?<%= mtime('images/processing.gif') %>" align="center" />
     </div>
   </body>
 </html>

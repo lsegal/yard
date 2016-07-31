@@ -24,21 +24,10 @@ module YARD
         # @raise [FinishRequest] if a file was found and served
         # @return [void]
         def static_template_file?
-          # these consts were defined in StaticFileCommand originally 
-          static_paths = StaticFileCommand::STATIC_PATHS
+          # this const was defined in StaticFileCommand originally
           default_mime_types = StaticFileCommand::DefaultMimeTypes
 
-          assets_template = Templates::Engine.template(:default, :fulldoc, :html)
-
-          file = nil
-          ([adapter.document_root] + static_paths.reverse).compact.each do |path_prefix|
-            file = File.join(path_prefix, path)
-            break if File.exist?(file)
-            file = nil
-          end
-
-          # Search in default/fulldoc/html template if nothing in static asset paths
-          file ||= assets_template.find_file(path)
+          file = find_file(adapter, path)
 
           if file
             ext = "." + (path[/\.(\w+)$/, 1] || "html")
@@ -46,6 +35,25 @@ module YARD
             self.body = File.read(file)
             raise FinishRequest
           end
+        end
+
+        module_function
+
+        def find_file(adapter, url)
+          # this const was defined in StaticFileCommand originally
+          static_paths = StaticFileCommand::STATIC_PATHS
+
+          file = nil
+          ([adapter.document_root] + static_paths.reverse).compact.each do |path_prefix|
+            file = File.join(path_prefix, url)
+            p file
+            break if File.exist?(file)
+            file = nil
+          end
+
+          # Search in default/fulldoc/html template if nothing in static asset paths
+          assets_template = Templates::Engine.template(:default, :fulldoc, :html)
+          file || assets_template.find_file(url)
         end
       end
     end

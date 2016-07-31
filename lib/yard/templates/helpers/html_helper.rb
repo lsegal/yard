@@ -350,6 +350,9 @@ module YARD
         link + (anchor ? '#' + urlencode(anchor_for(anchor)) : '')
       end
 
+      alias mtime_url url_for
+      def mtime(file) nil end
+
       # Returns the URL for a specific file
       #
       # @param [String, CodeObjects::ExtraFileObject] filename the filename to link to
