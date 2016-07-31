@@ -180,9 +180,6 @@ module YARD
           end
           obj
         end
-
-        # @private
-        @@last_yardoc = nil
       end
     end
   end
