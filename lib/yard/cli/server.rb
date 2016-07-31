@@ -202,6 +202,9 @@ module YARD
         opts.on('-s', '--server TYPE', 'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|
           server_options[:server] = type
         end
+        opts.on('--fork', 'Use process forking when serving requests') do
+          options[:use_fork] = true
+        end
         common_options(opts)
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
           self.scripts << file

@@ -29,6 +29,13 @@ module YARD
       #
       # @abstract
       class LibraryCommand < Base
+        begin
+          Process.fork { exit 0 }
+          CAN_FORK = true
+        rescue
+          CAN_FORK = false
+        end
+
         # @return [LibraryVersion] the object containing library information
         attr_accessor :library
 
@@ -44,6 +51,10 @@ module YARD
         # @return [Boolean] whether to reparse data
         attr_accessor :incremental
 
+        # @return [Boolean] whether or not this adapter calls +fork+ when serving
+        #   library requests. Defaults to false.
+        attr_accessor :use_fork
+
         # Needed to synchronize threads in {#setup_yardopts}
         # @private
         @@library_chdir_lock = Mutex.new
@@ -54,7 +65,21 @@ module YARD
         end
 
         def call(request)
-          save_default_template_info
+          if can_fork?
+            call_with_fork(request) { super }
+          else
+            begin
+              save_default_template_info
+              call_without_fork(request) { super }
+            ensure
+              restore_template_info
+            end
+          end
+        end
+
+        private
+
+        def call_without_fork(request)
           self.request = request
           self.options = LibraryOptions.new
           self.options.reset_defaults
@@ -62,14 +87,27 @@ module YARD
           setup_library
           self.options.title = "Documentation for #{library.name} " +
             (library.version ? '(' + library.version + ')' : '')
-          super
+          yield
         rescue LibraryNotPreparedError
           not_prepared
-        ensure
-          restore_template_info
         end
 
-        private
+        def call_with_fork(request, &block)
+          reader, writer = IO.pipe
+
+          fork do
+            log.debug "[pid=#{Process.pid}] fork serving: #{request.path}"
+            reader.close
+            writer.print(Marshal.dump(call_without_fork(request, &block)))
+          end
+
+          writer.close
+          Marshal.load(reader.read)
+        end
+
+        def can_fork?
+          CAN_FORK && use_fork
+        end
 
         def save_default_template_info
           @old_template_paths = Templates::Engine.template_paths.dup
