@@ -55,7 +55,7 @@ body {
 }
 
 @media (max-width: 920px) {
-  .nav_wrap { width: 0; top: 0; right: 0; overflow: visible; position: absolute; }
+  .nav_wrap { width: 100%; top: 0; right: 0; overflow: visible; position: absolute; }
   #resizer { display: none; }
   #nav {
     z-index: 9999;
