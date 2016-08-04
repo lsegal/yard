@@ -243,4 +243,10 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" 
   it "handles inheritance from 'self'" do
     expect(Registry.at('Outer1::Inner1').superclass).to eq Registry.at('Outer1')
   end
+
+  it "should handle assignment of new classes to constants" do
+    obj = Registry.at('ClassAssignment')
+    obj.should be_kind_of(CodeObjects::ClassObject)
+    obj.docstring.should == 'Docstring'
+  end
 end
