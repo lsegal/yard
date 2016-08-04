@@ -285,8 +285,8 @@ module YARD
         # Last minute modifications
         self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if self.files.empty?
         self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
-        readme = Dir.glob('README{,*[^~]}').first
-        readme ||= Dir.glob(files.first).first if options.onefile
+        readme = Dir.glob('README{,*[^~]}').sort.first
+        readme ||= Dir.glob(files.first).sort.first if options.onefile
         options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
         options.files.unshift(options.readme).uniq! if options.readme
 
@@ -400,6 +400,7 @@ module YARD
       # @param [Array<String>] files the set of documentation files
       def add_extra_files(*files)
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
+        files.sort!
         files.each do |file|
           if File.file?(file)
             options.files << CodeObjects::ExtraFileObject.new(file)
