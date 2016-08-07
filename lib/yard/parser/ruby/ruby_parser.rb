@@ -559,6 +559,7 @@ module YARD
         def on_parse_error(msg)
           raise ParserSyntaxError, "syntax error in `#{file}`:(#{lineno},#{column}): #{msg}"
         end
+        alias compile_error on_parse_error
 
         def comment_starts_line?(charno)
           (charno-1).downto(0) do |i|

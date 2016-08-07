@@ -450,5 +450,9 @@ eof
       expect(Registry.at(:Foo).docstring).to eq "this is a comment"
       expect(Registry.at(:Bar).docstring).to eq "this is a comment"
     end
+
+    it "handles compile errors" do
+      expect { stmt(":~$ Do not clobber") }.to raise_error(Parser::ParserSyntaxError)
+    end
   end
 end if HAVE_RIPPER
