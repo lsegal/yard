@@ -173,13 +173,13 @@ describe YARD::CodeObjects::ClassObject do
     end
 
     it "does not set a superclass on BasicObject class" do
-      o = ClassObject.new(:root, :Object)
-      expect(o.superclass).to eq P(:BasicObject)
+      o = ClassObject.new(:root, :BasicObject)
+      expect(o.superclass).to be nil
     end
 
     it "sets superclass of Object to BasicObject" do
-      o = ClassObject.new(:root, :BasicObject)
-      expect(o.superclass).to be nil
+      o = ClassObject.new(:root, :Object)
+      expect(o.superclass).to eq P(:BasicObject)
     end
 
     it "raises ArgumentError if superclass == self" do
