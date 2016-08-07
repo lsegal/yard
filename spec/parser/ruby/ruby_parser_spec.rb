@@ -270,14 +270,16 @@ eof
       expect(stmt(src).jump(:string_literal).source).to eq '"this is a string"'
     end
 
-    it "shows proper source for %w() array" do
-      src = "%w(\na b c\n d e f\n)"
-      expect(stmt(src).jump(:qwords_literal).source).to eq src
-    end
+    %w(w W i I).each do |tok|
+      it "shows proper source for %#{tok}() array" do
+        src = "%#{tok}(\na b c\n d e f\n)"
+        expect(stmt(src).source).to eq src
+      end
 
-    it "shows proper source for %w{} array" do
-      src = "%w{\na b c\n d e f\n}"
-      expect(stmt(src).jump(:array).source).to eq src
+      it "shows proper source for %#{tok}{} array" do
+        src = "%#{tok}{\na b c\n d e f\n}"
+        expect(stmt(src).source).to eq src
+      end
     end
 
     it "parses %w() array in constant declaration" do

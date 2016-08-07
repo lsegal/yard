@@ -101,6 +101,9 @@ module YARD
           :next => "next",
           :paren => :lparen,
           :qwords_literal => :qwords_beg,
+          :words_literal => :words_beg,
+          :qsymbols_literal => :qsymbols_beg,
+          :symbols_literal => :symbols_beg,
           :redo => "redo",
           :regexp_literal => :regexp_beg,
           :rescue => "rescue",
@@ -414,22 +417,28 @@ module YARD
           eof
         end
 
-        def on_qwords_new(*args)
-          node = LiteralNode.new(:qwords_literal, args)
-          if @map[:qwords_beg]
-            lstart, sstart = *@map[:qwords_beg].pop
-            node.source_range = Range.new(sstart, @ns_charno-1)
-            node.line_range = Range.new(lstart, lineno)
-          end
-          node
-        end
+        %w(symbols qsymbols words qwords).each do |kw|
+          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            begin; undef on_#{kw}_new; rescue NameError; end
+            def on_#{kw}_new(*args)
+              node = LiteralNode.new(:#{kw}_literal, args)
+              if @map[:#{kw}_beg]
+                lstart, sstart = *@map[:#{kw}_beg].pop
+                node.source_range = Range.new(sstart, @ns_charno-1)
+                node.line_range = Range.new(lstart, lineno)
+              end
+              node
+            end
 
-        def on_qwords_add(list, item)
-          last = @source[@ns_charno,1] == "\n" ? @ns_charno - 1 : @ns_charno
-          list.source_range = (list.source_range.first..last)
-          list.line_range = (list.line_range.first..lineno)
-          list.push(item)
-          list
+            begin; undef on_#{kw}_add; rescue NameError; end
+            def on_#{kw}_add(list, item)
+              last = @source[@ns_charno,1] == "\n" ? @ns_charno - 1 : @ns_charno
+              list.source_range = (list.source_range.first..last)
+              list.line_range = (list.line_range.first..lineno)
+              list.push(item)
+              list
+            end
+          eof
         end
 
         def on_string_literal(*args)
