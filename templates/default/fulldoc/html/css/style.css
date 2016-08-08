@@ -462,6 +462,9 @@ pre.code .val { color: #036A07; }
 pre.code .tstring_content,
 pre.code .heredoc_beg, pre.code .heredoc_end,
 pre.code .qwords_beg, pre.code .qwords_end,
+pre.code .words_beg, pre.code .words_end,
+pre.code .qsymbols_beg, pre.code .qsymbols_end,
+pre.code .symbols_beg, pre.code .symbols_end,
 pre.code .tstring, pre.code .dstring { color: #036A07; }
 pre.code .fid, pre.code .rubyid_new, pre.code .rubyid_to_s,
 pre.code .rubyid_to_sym, pre.code .rubyid_to_f,
