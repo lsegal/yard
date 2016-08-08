@@ -63,20 +63,29 @@ module YARD
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|[a-z]\w*)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
 
     # All builtin Ruby exception classes for inheritance tree.
-    BUILTIN_EXCEPTIONS = ["SecurityError", "Exception", "NoMethodError", "FloatDomainError",
-      "IOError", "TypeError", "NotImplementedError", "SystemExit", "Interrupt", "SyntaxError",
-      "RangeError", "NoMemoryError", "ArgumentError", "ThreadError", "EOFError", "RuntimeError",
-      "ZeroDivisionError", "StandardError", "LoadError", "NameError", "LocalJumpError", "SystemCallError",
-      "SignalException", "ScriptError", "SystemStackError", "RegexpError", "IndexError"]
+    BUILTIN_EXCEPTIONS = ["ArgumentError", "ClosedQueueError", "EncodingError",
+      "EOFError", "Exception", "FiberError", "FloatDomainError", "IndexError",
+      "Interrupt", "IOError", "KeyError", "LoadError", "LocalJumpError",
+      "NameError", "NoMemoryError", "NoMethodError", "NotImplementedError",
+      "RangeError", "RegexpError", "RuntimeError", "ScriptError", "SecurityError",
+      "SignalException", "StandardError", "StopIteration", "SyntaxError",
+      "SystemCallError", "SystemExit", "SystemStackError", "ThreadError",
+      "TypeError", "UncaughtThrowError", "ZeroDivisionError"]
+
     # All builtin Ruby classes for inheritance tree.
     # @note MatchingData is a 1.8.x legacy class
-    BUILTIN_CLASSES = ["TrueClass", "Array", "Dir", "Struct", "UnboundMethod", "Object", "Fixnum", "Float",
-      "ThreadGroup", "MatchingData", "MatchData", "Proc", "Binding", "Class", "Time", "Bignum", "NilClass", "Symbol",
-      "Numeric", "String", "Data", "MatchData", "Regexp", "Integer", "File", "IO", "Range", "FalseClass",
-      "Method", "Continuation", "Thread", "Hash", "Module"] + BUILTIN_EXCEPTIONS
+    BUILTIN_CLASSES = ["Array", "Bignum", "Binding", "Class", "Complex",
+      "ConditionVariable", "Data", "Dir", "Encoding", "Enumerator", "FalseClass",
+      "Fiber", "File", "Fixnum", "Float", "Hash", "IO", "Integer", "MatchData",
+      "Method", "Module", "NilClass", "Numeric", "Object", "Proc", "Queue",
+      "Random", "Range", "Rational", "Regexp", "RubyVM", "SizedQueue", "String",
+      "Struct", "Symbol", "Thread", "ThreadGroup", "Time", "TracePoint",
+      "TrueClass", "UnboundMethod"] + BUILTIN_EXCEPTIONS
+
     # All builtin Ruby modules for mixin handling.
-    BUILTIN_MODULES = ["ObjectSpace", "Signal", "Marshal", "Kernel", "Process", "GC", "FileTest", "Enumerable",
-      "Comparable", "Errno", "Precision", "Math"]
+    BUILTIN_MODULES = ["Comparable", "Enumerable", "Errno", "FileTest", "GC",
+      "Kernel", "Marshal", "Math", "ObjectSpace", "Precision", "Process", "Signal"]
+
     # All builtin Ruby classes and modules.
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
 
