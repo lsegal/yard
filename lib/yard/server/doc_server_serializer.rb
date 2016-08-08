@@ -1,5 +1,3 @@
-require 'cgi'
-
 module YARD
   module Server
     # A custom {Serializers::Base serializer} which returns resource URLs instead of
@@ -34,7 +32,7 @@ module YARD
         if name.respond_to?(:force_encoding)
           name = name.dup.force_encoding('binary')
         end
-        CGI.escape(name)
+        Templates::Helpers::HtmlHelper.urlencode(name)
       end
     end
   end

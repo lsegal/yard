@@ -7,6 +7,9 @@ module YARD
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
 
+      # @private
+      URLMATCH = /[^\w\s~!\*'\(\):;@&=\$,\[\]<>-]/
+
       # @group Escaping Template Data
 
       # Escapes HTML entities
@@ -22,8 +25,21 @@ module YARD
       # @param [String] text the URL
       # @return [String] the escaped URL
       def urlencode(text)
-        CGI.escape(text.to_s)
+        enc = nil
+        if text.respond_to?(:force_encoding)
+          enc = text.encoding
+          text = text.force_encoding('binary')
+        end
+
+        text = text.gsub(/%[a-z0-9]{2}|#{URLMATCH}/i) do
+          $&.size > 1 ? $& : "%" + $&.ord.to_s(16).upcase
+        end.gsub(' ', '+')
+
+        text = text.force_encoding(enc) if enc
+        text
       end
+
+      module_function :urlencode
 
       # @group Converting Markup to HTML
 
