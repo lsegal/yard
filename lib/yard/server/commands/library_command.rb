@@ -32,7 +32,7 @@ module YARD
         begin
           Process.fork { exit 0 }
           CAN_FORK = true
-        rescue
+        rescue Exception
           CAN_FORK = false
         end
 
