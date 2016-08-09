@@ -656,10 +656,13 @@ module YARD
         end
 
         def freeze_tree(node = nil)
-          node ||= root
-          node.children.each do |child|
-            child.parent = node
-            freeze_tree(child)
+          nodes = [node || root]
+          while !nodes.empty?
+            p_node = nodes.shift
+            p_node.children.each do |child|
+              child.parent = p_node
+              nodes << child
+            end
           end
         end
       end if defined?(::Ripper)
