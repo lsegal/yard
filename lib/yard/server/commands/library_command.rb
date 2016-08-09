@@ -29,11 +29,13 @@ module YARD
       #
       # @abstract
       class LibraryCommand < Base
-        begin
-          Process.fork { exit 0 }
-          CAN_FORK = true
-        rescue
-          CAN_FORK = false
+        CAN_FORK = false
+        if Process.respond_to?(:fork)
+          begin
+            Process.fork { exit 0 }
+            CAN_FORK = true
+          rescue
+          end
         end
 
         # @return [LibraryVersion] the object containing library information
