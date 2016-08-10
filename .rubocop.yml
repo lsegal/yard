@@ -1,0 +1,42 @@
+inherit_from:
+  - .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 2.4
+Metrics:
+  Enabled: false
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
+Style/Documentation:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Style/SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: false
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# Disable these until we know what to do with them
+Style/MutableConstant:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/WhenThen:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+Style/PerlBackrefs:
+  Enabled: false
+Style/BlockComments:
+  Exclude:
+    - benchmarks/*.rb
+Style/CaseEquality:
+  Enabled: false

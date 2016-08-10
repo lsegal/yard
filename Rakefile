@@ -32,9 +32,14 @@ end
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
-  task :default => :spec
 rescue LoadError
 end
+
+task :rubocop do
+  sh "rubocop"
+end
+
+task :default => [:rubocop, :spec]
 
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
