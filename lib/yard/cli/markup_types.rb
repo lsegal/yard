@@ -10,7 +10,7 @@ module YARD
       #
       # @param [Array<String>] args the list of arguments.
       # @return [void]
-      def run(*args)
+      def run(*args) # rubocop:disable Lint/UnusedMethodArgument
         log.puts "Available markup types for `doc' command:"
         log.puts
         types = Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS

@@ -41,7 +41,7 @@ module YARD
           end
         end
 
-        def handle_method(scope, var_name, name, func_name, source_file = nil)
+        def handle_method(scope, var_name, name, func_name, _source_file = nil)
           visibility = :public
           case scope
           when "singleton_method"; scope = :class

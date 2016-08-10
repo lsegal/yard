@@ -209,7 +209,7 @@ module YARD
         def advance(num = 1) @index += num end
         def back(num = 1) @index -= num end
 
-        def advance_loop(&block)
+        def advance_loop
           yield while @index <= @content.size
         end
 

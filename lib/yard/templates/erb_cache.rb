@@ -2,7 +2,7 @@ module YARD
   module Templates
     # @since 0.5.4
     module ErbCache
-      def self.method_for(filename, &block)
+      def self.method_for(filename)
         @methods ||= {}
         return @methods[filename] if @methods[filename]
         @methods[filename] = name = "_erb_cache_#{@methods.size}"

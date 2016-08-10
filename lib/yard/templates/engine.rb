@@ -111,7 +111,7 @@ module YARD
         # @yield a block whose result will be serialize
         # @yieldreturn [String] the contents to serialize
         # @see Serializers::Base
-        def with_serializer(object, serializer, &block)
+        def with_serializer(object, serializer)
           output = nil
           filename = serializer.serialized_path(object)
           if serializer.respond_to?(:basepath)

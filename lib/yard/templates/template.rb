@@ -395,7 +395,7 @@ module YARD
         end
       end
 
-      def with_section(&block)
+      def with_section
         sect = section
         value = yield
         self.section = sect

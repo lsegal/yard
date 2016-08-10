@@ -201,7 +201,7 @@ module YARD
         # @param statement a statement object or node (depends on language type)
         # @return [Boolean] whether or not this handler object should process
         #   the given statement
-        def handles?(statement)
+        def handles?(statement) # rubocop:disable Lint/UnusedMethodArgument
           raise NotImplementedError, "override #handles? in a subclass"
         end
 
@@ -300,7 +300,7 @@ module YARD
       # Parses the semantic "block" contained in the statement node.
       #
       # @abstract Subclasses should call {Processor#process parser.process}
-      def parse_block(*args)
+      def parse_block(*)
         raise NotImplementedError, "#{self} did not implement a #parse_block method for handling"
       end
 
@@ -358,7 +358,6 @@ module YARD
       # Executes a given block with specific state values for {#owner},
       # {#namespace} and {#scope}.
       #
-      # @param [Proc] block the block to execute with specific state
       # @option opts [CodeObjects::NamespaceObject] :namespace (value of #namespace)
       #   the namespace object that {#namespace} will be equal to for the
       #   duration of the block.
@@ -367,7 +366,7 @@ module YARD
       # @option opts [CodeObjects::Base] :owner (value of #owner)
       #   the owner object (method) for the duration of the block
       # @yield a block to execute with the given state values.
-      def push_state(opts = {}, &block)
+      def push_state(opts = {})
         opts = {
           :namespace => namespace,
           :scope => :instance,

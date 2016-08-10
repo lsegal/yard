@@ -5,7 +5,7 @@ module YARD
         # Legacy Ruby parser
         # @since 0.5.6
         class RubyParser < Parser::Base
-          def initialize(source, filename)
+          def initialize(source, _filename)
             @source = source
           end
 

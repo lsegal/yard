@@ -59,7 +59,7 @@ end
 # @param [String] title currently unused
 #
 # @see layout#diskfile
-def serialize_file(file, title = nil)
+def serialize_file(file, title = nil) # rubocop:disable Lint/UnusedMethodArgument
   options.object = Registry.root
   options.file = file
   outfile = 'file.' + file.name + '.html'

@@ -139,7 +139,7 @@ module YARD
     # @yieldparam [Symbol] key the option key
     # @yieldparam [Object] value the option value
     # @return [void]
-    def each(&block)
+    def each
       instance_variables.each do |ivar|
         name = ivar.to_s.sub(/^@/, '')
         yield(name.to_sym, send(name))
@@ -210,7 +210,7 @@ module YARD
     end
 
     unless defined? tap() # only for 1.8.6
-      def tap(&block) yield(self); self end
+      def tap() yield(self); self end
     end
   end
 end

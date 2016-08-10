@@ -7,7 +7,7 @@ module YARD
       # of a disk location.
       # @param (see Templates::Helpers::HtmlHelper#url_for)
       # @return (see Templates::Helpers::HtmlHelper#url_for)
-      def url_for(obj, anchor = nil, relative = false)
+      def url_for(obj, anchor = nil, relative = false) # rubocop:disable Lint/UnusedMethodArgument
         return '' if obj.nil?
         return url_for_index if obj == '_index.html'
         return abs_url(base_path(router.static_prefix), obj) if String === obj

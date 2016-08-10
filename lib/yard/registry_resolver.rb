@@ -13,7 +13,7 @@ module YARD
     # @param registry [Registry] only set this if customizing the registry
     #   object
     def initialize(registry = Registry)
-      @registry = Registry
+      @registry = registry
     end
 
     # Performs a lookup on a given path in the registry. Resolution will occur

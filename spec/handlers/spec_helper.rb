@@ -7,7 +7,7 @@ def undoc_error(code)
   expect { StubbedSourceParser.parse_string(code) }.to raise_error(Parser::UndocumentableError)
 end
 
-def with_parser(parser_type, &block)
+def with_parser(parser_type)
   tmp = StubbedSourceParser.parser_type
   StubbedSourceParser.parser_type = parser_type
   yield

@@ -367,7 +367,7 @@ module YARD
       end
 
       alias mtime_url url_for
-      def mtime(file) nil end
+      def mtime(_file) nil end
 
       # Returns the URL for a specific file
       #

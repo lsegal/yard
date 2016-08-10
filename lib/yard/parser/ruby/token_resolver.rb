@@ -41,7 +41,7 @@ module YARD
         #   # :const -> "A::B"
         #   # No object: [:op, "::"]
         #   # :const -> "A::B::C"
-        def each(&block)
+        def each
           @states = []
           push_state
           @tokens.each do |token|

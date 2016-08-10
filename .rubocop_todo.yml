@@ -158,12 +158,6 @@ Lint/UnreachableCode:
 Lint/UnusedBlockArgument:
   Enabled: false
 
-# Offense count: 55
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Enabled: false
-
 # Offense count: 2
 # Configuration parameters: ContextCreatingMethods.
 Lint/UselessAccessModifier:

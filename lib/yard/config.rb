@@ -253,7 +253,7 @@ module YARD
     end
 
     # Temporarily loads .yardopts file into @yardopts
-    def self.with_yardopts(&block)
+    def self.with_yardopts
       yfile = CLI::Yardoc::DEFAULT_YARDOPTS_FILE
       @yardopts = File.file?(yfile) ? File.read_binary(yfile).shell_split : []
       result = yield

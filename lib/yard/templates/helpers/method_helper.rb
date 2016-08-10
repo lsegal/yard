@@ -53,7 +53,7 @@ module YARD
       end
 
       # @return [String] formats source of an object
-      def format_code(object, show_lines = false)
+      def format_code(object, _show_lines = false)
         i = -1
         lines = object.source.split(/\n/)
         longestline = (object.line + lines.size).to_s.length

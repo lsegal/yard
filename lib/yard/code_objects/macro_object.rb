@@ -93,7 +93,7 @@ module YARD
         #     interpolating the block data as a variable.
         #   @return [String] the expanded macro data
         # @param [String] macro_data the macro data to expand (taken from {#macro_data})
-        def expand(macro_data, call_params = [], full_source = '', block_source = '')
+        def expand(macro_data, call_params = [], full_source = '', block_source = '') # rubocop:disable Lint/UnusedMethodArgument
           macro_data = macro_data.all if macro_data.is_a?(Docstring)
           macro_data.gsub(MACRO_MATCH) do
             escape, first, last, rng = $1, $2 || $5, $4, $3 ? true : false
@@ -117,7 +117,7 @@ module YARD
         # @param [Docstring] docstring the docstring to create a macro out of
         # @!macro macro.expand
         # @see find_or_create
-        def apply(docstring, call_params = [], full_source = '', block_source = '', method_object = nil)
+        def apply(docstring, call_params = [], full_source = '', block_source = '', _method_object = nil) # rubocop:disable Lint/UnusedMethodArgument
           docstring = docstring.all if Docstring === docstring
           parser = Docstring.parser
           handler = OpenStruct.new
@@ -133,7 +133,7 @@ module YARD
         #
         # @param [MacroObject] macro the macro object
         # @!macro macro.expand
-        def apply_macro(macro, docstring, call_params = [], full_source = '', block_source = '')
+        def apply_macro(macro, docstring, call_params = [], full_source = '', block_source = '') # rubocop:disable Lint/UnusedMethodArgument
           apply(docstring, call_params, full_source, block_source)
         end
       end

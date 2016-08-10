@@ -176,7 +176,7 @@ module YARD
           obj.send(:initialize, options)
           class << obj
             attr_reader :contents
-            def asset(file, contents) @contents = contents end
+            def asset(_file, contents) @contents = contents end
           end
           obj
         end

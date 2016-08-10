@@ -58,7 +58,9 @@ module YARD
       # @param [CodeObjects::Base] object the object to check existence of
       # @return [Boolean] whether the endpoint exists.
       # @since 0.6.0
-      def exists?(object) false end
+      def exists?(object) # rubocop:disable Lint/UnusedMethodArgument
+        false
+      end
 
       # @group Callbacks
 

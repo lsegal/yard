@@ -15,7 +15,7 @@ module YARD
 
       # Overrides serialize behaviour and writes data to standard input
       # of the associated command
-      def serialize(object, data)
+      def serialize(_object, data)
         IO.popen(@cmd, 'w') {|io| io.write(data) }
       end
     end

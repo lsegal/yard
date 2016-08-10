@@ -3,7 +3,7 @@ module YARD
     # A custom {Serializers::Base serializer} which returns resource URLs instead of
     # static relative paths to files on disk.
     class DocServerSerializer < Serializers::FileSystemSerializer
-      def initialize(command = nil)
+      def initialize(_command = nil)
         super(:basepath => '', :extension => '')
       end
 

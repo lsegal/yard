@@ -106,7 +106,7 @@ module YARD
       end
 
       class TkUnknownChar < Token
-        def initialize(line_no, char_no, id)
+        def initialize(line_no, char_no, _id)
           super(line_no, char_no)
           @name = char_no > 255 ? '?' : char_no.chr
         end
@@ -408,7 +408,7 @@ module YARD
           getc
         end
 
-        def ungetc(ch)
+        def ungetc(_ch)
           raise "unget past beginning of file" if @offset <= 0
           @offset -= 1
           if @content[@offset] == ?\n

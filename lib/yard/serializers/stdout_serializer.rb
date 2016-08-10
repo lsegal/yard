@@ -11,7 +11,7 @@ module YARD
       end
 
       # Overrides serialize behaviour to write data to standard output
-      def serialize(object, data)
+      def serialize(_object, data)
         print(@wrap ? word_wrap(data, @wrap) : data)
       end
 
@@ -20,9 +20,9 @@ module YARD
       # Wraps text to a specific column length
       #
       # @param [String] text the text to wrap
-      # @param [Fixnum] length the column length to wrap to
+      # @param [Fixnum] _length the column length to wrap to
       # @return [String] the wrapped text
-      def word_wrap(text, length = 80)
+      def word_wrap(text, _length = 80)
         # See ruby-talk/10655 / Ernest Ellingson
         text.gsub(/\t/,"     ").gsub(/.{1,50}(?:\s|\Z)/){($& +
           5.chr).gsub(/\n\005/,"\n").gsub(/\005/,"\n")}

@@ -79,7 +79,7 @@ def sort_listing(list)
   list.sort_by {|o| [o.scope.to_s, o.name.to_s.downcase] }
 end
 
-def inherited_attr_list(&block)
+def inherited_attr_list
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
     next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
@@ -91,7 +91,7 @@ def inherited_attr_list(&block)
   end
 end
 
-def inherited_constant_list(&block)
+def inherited_constant_list
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
     next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false

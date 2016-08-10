@@ -5,7 +5,7 @@ module YARD
   class StubProxy
     instance_methods.each {|m| undef_method(m) unless m.to_s =~ /^__|^object_id$/ }
 
-    def _dump(depth) @path end
+    def _dump(_depth) @path end
     def self._load(str) new(str) end
     def hash; @path.hash end
 
@@ -50,7 +50,7 @@ module YARD
       # times.
       #
       # @see #locked_for_writing?
-      def lock_for_writing(&block)
+      def lock_for_writing
         File.open!(processing_path, 'w') {}
         yield
       ensure

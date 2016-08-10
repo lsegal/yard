@@ -1,5 +1,5 @@
 include T('default/module/dot')
 
-def format_path(object)
+def format_path(_object)
   ""
 end

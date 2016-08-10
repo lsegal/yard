@@ -63,14 +63,14 @@ module YARD
           @types = types
         end
 
-        def to_s(singular = true)
+        def to_s(_singular = true)
           "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} of (" + list_join(types.map {|t| t.to_s(false) }) + ")"
         end
       end
 
       # @private
       class FixedCollectionType < CollectionType
-        def to_s(singular = true)
+        def to_s(_singular = true)
           "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} containing (" + types.map(&:to_s).join(" followed by ") + ")"
         end
       end
@@ -85,7 +85,7 @@ module YARD
           @value_types = value_types
         end
 
-        def to_s(singular = true)
+        def to_s(_singular = true)
           "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" + list_join(key_types.map {|t| t.to_s(false) }) +
           ") and values of (" + list_join(value_types.map {|t| t.to_s(false) }) + ")"
         end

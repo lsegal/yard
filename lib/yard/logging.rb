@@ -65,7 +65,7 @@ module YARD
     #   stream is not a TTY. Use +nil+ for no alternate logging.
     # @yield a block of arbitrary code to benchmark
     # @return [void]
-    def capture(msg, nontty_log = :debug, &block)
+    def capture(msg, nontty_log = :debug)
       progress(msg, nontty_log)
       yield
     ensure
@@ -161,7 +161,7 @@ module YARD
     # @param [Fixnum] new_level the logger level for the duration of the block.
     #   values can be found in Ruby's Logger class.
     # @yield the block with the logger temporarily set to +new_level+
-    def enter_level(new_level = level, &block)
+    def enter_level(new_level = level)
       old_level, self.level = level, new_level
       yield
     ensure
@@ -182,7 +182,7 @@ module YARD
     end
 
     # Log format (from Logger implementation). Used by Logger internally
-    def format_log(sev, time, prog, msg)
+    def format_log(sev, _time, _prog, msg)
       "[#{sev.downcase}]: #{msg}\n"
     end
   end

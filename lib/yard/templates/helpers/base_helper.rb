@@ -135,7 +135,7 @@ module YARD::Templates::Helpers
     # @param [String] title the optional title to display the link as
     # @param [Hash] params optional parameters for the link
     # @return [String] the linked URL
-    def link_url(url, title = nil, params = nil)
+    def link_url(url, title = nil, params = nil) # rubocop:disable Lint/UnusedMethodArgument
       url
     end
 
@@ -146,7 +146,7 @@ module YARD::Templates::Helpers
     # @param [String] anchor optional anchor
     # @return [String] the link to the file
     # @since 0.5.5
-    def link_file(filename, title = nil, anchor = nil)
+    def link_file(filename, title = nil, anchor = nil) # rubocop:disable Lint/UnusedMethodArgument
       return filename.filename if CodeObjects::ExtraFileObject === filename
       filename
     end

@@ -230,7 +230,7 @@ module YARD
       # @yield [self] a block to perform any extra initialization on the object
       # @yieldparam [Base] self the newly initialized code object
       # @return [Base] the newly created object
-      def initialize(namespace, name, *args, &block)
+      def initialize(namespace, name, *)
         if namespace && namespace != :root &&
             !namespace.is_a?(NamespaceObject) && !namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"

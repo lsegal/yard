@@ -530,7 +530,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       }
     end
 
-    def format_types(types, brackets = false) types.join(", ") end
+    def format_types(types, _brackets = false) types.join(", ") end
     def signature(obj, link = false) super(obj, link).strip end
 
     it_should_behave_like "signature"

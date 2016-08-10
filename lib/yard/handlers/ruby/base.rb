@@ -23,7 +23,9 @@ module YARD
         # Tests if the node matches the handler
         # @param [Parser::Ruby::AstNode] node a Ruby node
         # @return [Boolean] whether the +node+ matches the handler
-        def matches?(node) raise NotImplementedError end
+        def matches?(node) # rubocop:disable Lint/UnusedMethodArgument
+          raise NotImplementedError
+        end
 
         protected
 
