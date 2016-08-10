@@ -25,11 +25,11 @@ module YARD
       # @private
       class Type
         attr_accessor :name
-        
+
         def initialize(name)
           @name = name
         end
-        
+
         def to_s(singular = true)
           if name[0, 1] == "#"
             singular ? "an object that responds to #{name}" : "objects that respond to #{name}"
@@ -57,12 +57,12 @@ module YARD
       # @private
       class CollectionType < Type
         attr_accessor :types
-        
+
         def initialize(name, types)
           @name = name
           @types = types
         end
-        
+
         def to_s(singular = true)
           "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} of (" + list_join(types.map {|t| t.to_s(false) }) + ")"
         end
@@ -78,15 +78,15 @@ module YARD
       # @private
       class HashCollectionType < Type
         attr_accessor :key_types, :value_types
-        
+
         def initialize(name, key_types, value_types)
           @name = name
           @key_types = key_types
           @value_types = value_types
         end
-        
+
         def to_s(singular = true)
-          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" + list_join(key_types.map {|t| t.to_s(false) }) + 
+          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" + list_join(key_types.map {|t| t.to_s(false) }) +
           ") and values of (" + list_join(value_types.map {|t| t.to_s(false) }) + ")"
         end
       end
@@ -106,15 +106,15 @@ module YARD
           :hash_collection_end => /\}/,
           :parse_end => nil
         }
-        
+
         def self.parse(string)
           new(string).parse
         end
-        
+
         def initialize(string)
           @scanner = StringScanner.new(string)
         end
-        
+
         def parse
           types = []
           type = nil
@@ -149,7 +149,7 @@ module YARD
                   unless type
                     type = Type.new(name)
                   end
-                  types << type 
+                  types << type
                   return types
                 end
               end

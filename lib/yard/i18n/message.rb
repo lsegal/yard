@@ -10,7 +10,7 @@ module YARD
       # @return [String] the message ID of the trnslation target message.
       attr_reader :id
 
-      # @return [Set] the set of locations. Location is an array of 
+      # @return [Set] the set of locations. Location is an array of
       # path and line number where the message is appeared.
       attr_reader :locations
 

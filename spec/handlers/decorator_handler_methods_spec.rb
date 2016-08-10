@@ -359,7 +359,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
           .not_to respond_to :docstring
       end
 
-      describe "transfer source to decorated method defs" do 
+      describe "transfer source to decorated method defs" do
         specify do
           expect(subject.source).to eq code.lines.to_a[-3].strip
         end

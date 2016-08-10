@@ -161,16 +161,16 @@ eot
         text = <<-eot
 Paragraph 1.
 
-  
-	
+
+
 
 Paragraph 2.
 eot
         expect(translate(text)).to eq <<-eot
 Paragraphe 1.
 
-  
-	
+
+
 
 Paragraphe 2.
 eot

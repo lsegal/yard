@@ -145,7 +145,7 @@ module YARD
           end
 
           ([last_sep] | search_seps).compact.each do |search_sep|
-            break if found = @registry.at(ns.path + search_sep.to_s + part) 
+            break if found = @registry.at(ns.path + search_sep.to_s + part)
           end
 
           break cur_obj = found if found

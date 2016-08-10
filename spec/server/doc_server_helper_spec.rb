@@ -44,7 +44,7 @@ describe YARD::Server::DocServerHelper do
     end
 
     it "uses script name prefix if set" do
-      @helper.adapter.router.request.script_name = '/mount/point' 
+      @helper.adapter.router.request.script_name = '/mount/point'
       @helper.library = LibraryVersion.new('foo', 'bar')
       @helper.adapter.router.request.version_supplied = true
       expect(@helper.url_for(P('A'))).to eq '/mount/point/PREFIX/foo/bar/A'
@@ -63,7 +63,7 @@ describe YARD::Server::DocServerHelper do
     end
 
     it "uses script name prefix if set" do
-      @helper.adapter.router.request.script_name = '/mount/point' 
+      @helper.adapter.router.request.script_name = '/mount/point'
       file = CodeObjects::ExtraFileObject.new('a/b/FooBar.md', '')
       expect(@helper.url_for_file(file)).to eq '/mount/point/PREFIX/foo/file/a/b/FooBar.md'
     end

@@ -7,7 +7,7 @@ module YARD
       # and {favicon?} helpers.
       module StaticFileHelpers
         include WEBrick::HTTPUtils
-        
+
         # Serves an empty favicon.
         # @raise [FinishRequest] finalizes an empty body if the path matches
         #   /favicon.ico so browsers don't complain.

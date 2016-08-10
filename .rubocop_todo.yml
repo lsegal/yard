@@ -1225,23 +1225,6 @@ Style/TrailingUnderscoreVariable:
   Exclude:
     - 'lib/yard/templates/helpers/html_helper.rb'
 
-# Offense count: 57
-# Cop supports --auto-correct.
-Style/TrailingWhitespace:
-  Exclude:
-    - 'lib/yard/cli/server.rb'
-    - 'lib/yard/i18n/message.rb'
-    - 'lib/yard/registry_resolver.rb'
-    - 'lib/yard/server/commands/static_file_helpers.rb'
-    - 'lib/yard/tags/types_explainer.rb'
-    - 'lib/yard/templates/helpers/html_syntax_highlight_helper.rb'
-    - 'spec/cli/server_spec.rb'
-    - 'spec/handlers/decorator_handler_methods_spec.rb'
-    - 'spec/handlers/visibility_handler_spec.rb'
-    - 'spec/i18n/text_spec.rb'
-    - 'spec/server/doc_server_helper_spec.rb'
-    - 'spec/tags/types_explainer_spec.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, IgnoreClassMethods, Whitelist.

@@ -4,7 +4,7 @@ module YARD
       # Helper methods for syntax highlighting.
       module HtmlSyntaxHighlightHelper
         include ModuleHelper
-        
+
         # Highlights Ruby source
         # @param [String] source the Ruby source code
         # @return [String] the highlighted Ruby source

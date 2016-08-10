@@ -180,19 +180,19 @@ describe YARD::CLI::Server do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com'
       run '--bind', 'example.com'
-    end    
+    end
 
     it "binds address with WebRick adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'webrick'
       run '--bind', 'example.com', '-a', 'webrick'
-    end  
+    end
 
     it "binds address with Rack adapter" do
       @server_options[:Host] = 'example.com'
       run '-B', 'example.com', '-a', 'rack'
       run '--bind', 'example.com', '-a', 'rack'
-    end          
+    end
 
     it "accepts -p, --port" do
       @server_options[:Port] = 10

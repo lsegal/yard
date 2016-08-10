@@ -183,7 +183,7 @@ module YARD
         end
         opts.on('-B HOST', '--bind', 'The host address to bind to') do |host|
           server_options[:Host] = host.to_s
-        end        
+        end
         opts.on('-p PORT', '--port', 'Serves documentation on PORT') do |port|
           server_options[:Port] = port.to_i
         end
