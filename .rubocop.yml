@@ -15,8 +15,6 @@ Style/HashSyntax:
   EnforcedStyle: hash_rockets
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
 Style/SpaceInsideBlockBraces:
   SpaceBeforeBlockParameters: false
 Style/MultilineMethodCallIndentation:
@@ -42,3 +40,9 @@ Style/CaseEquality:
   Enabled: false
 Style/WordArray:
   Enabled: false
+Style/AlignParameters:
+  Enabled: false # does not work correctly with subsequent block
+Style/AlignArray:
+  Enabled: false # does not support indentation
+Style/AlignHash:
+  Enabled: false # does not support indentation
