@@ -47,7 +47,7 @@ module YARD
 
       def parse_content(content)
         lex = RubyLex.new(content)
-        while tk = lex.token do
+        while tk = lex.token
           self << convert_token(lex, tk)
         end
       end

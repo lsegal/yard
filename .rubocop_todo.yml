@@ -1254,18 +1254,3 @@ Style/UnneededInterpolation:
 Style/VariableName:
   Exclude:
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/WhileUntilDo:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/token_list.rb'
-    - 'spec/registry_spec.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/WhileUntilModifier:
-  Exclude:
-    - 'lib/yard/parser/c/c_parser.rb'
-    - 'spec/registry_spec.rb'

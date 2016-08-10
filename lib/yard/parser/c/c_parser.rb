@@ -210,7 +210,7 @@ module YARD
         def back(num = 1) @index -= num end
 
         def advance_loop(&block)
-          while @index <= @content.size; yield end
+          yield while @index <= @content.size
         end
 
         def nextline

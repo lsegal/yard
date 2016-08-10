@@ -392,18 +392,14 @@ describe YARD::Registry do
         Registry.clear
         YARD.parse_string "# docstring 1\nclass Foo; end"
         mutex.synchronize { barrier += 1 }
-        while barrier < 2 do
-          s = "barrier < 2, spinning"
-        end
+        s = "barrier < 2, spinning" while barrier < 2
         expect(Registry.at('Foo').docstring).to eq "docstring 1"
       end
       threads << Thread.new do
         Registry.clear
         YARD.parse_string "# docstring 2\nclass Foo; end"
         mutex.synchronize { barrier += 1 }
-        while barrier < 2 do
-          s = "barrier < 2, spinning"
-        end
+        s = "barrier < 2, spinning" while barrier < 2
         expect(Registry.at('Foo').docstring).to eq "docstring 2"
       end
       threads.each {|t| t.join }
@@ -417,15 +413,11 @@ describe YARD::Registry do
         expect(Registry.yardoc_file).to eq '.yardoc'
         Registry.yardoc_file = 'foo'
         mutex.synchronize { barrier += 1 }
-        while barrier == 1 do
-          s = "barrier = 1, spinning"
-        end
+        s = "barrier = 1, spinning" while barrier == 1
         expect(Registry.yardoc_file).to eq 'foo'
       end
       threads << Thread.new do
-        while barrier == 0 do
-          s = "barrier = 0, spinning"
-        end
+        s = "barrier = 0, spinning" while barrier == 0
         expect(Registry.yardoc_file).to eq '.yardoc'
         mutex.synchronize { barrier += 1 }
         Registry.yardoc_file = 'foo2'
@@ -446,15 +438,11 @@ describe YARD::Registry do
         expect(Registry.po_dir).to eq 'po'
         Registry.po_dir = 'locale'
         mutex.synchronize { barrier += 1 }
-        while barrier == 1 do
-          s = "barrier = 1, spinning"
-        end
+        s = "barrier = 1, spinning" while barrier == 1
         expect(Registry.po_dir).to eq 'locale'
       end
       threads << Thread.new do
-        while barrier == 0 do
-          s = "barrier = 0, spinning"
-        end
+        s = "barrier = 0, spinning" while barrier == 0
         expect(Registry.po_dir).to eq 'po'
         mutex.synchronize { barrier += 1 }
         Registry.po_dir = '.'
