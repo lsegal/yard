@@ -32,9 +32,7 @@ def init
   end
 end
 
-def contents
-  @contents
-end
+attr_reader :contents
 
 def index
   @objects_by_letter = {}

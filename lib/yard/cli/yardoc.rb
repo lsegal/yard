@@ -44,8 +44,7 @@ module YARD
       # @return [CodeObjects::ExtraFileObject] the file object being rendered.
       #   The +object+ key is not used so that a file may be rendered in the context
       #   of an object's namespace (for generating links).
-      attr_reader :file
-      def file=(v) @file = v end
+      attr_accessor :file
 
       # @return [String] the current locale
       attr_accessor :locale
