@@ -2,11 +2,6 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::Verifier do
   describe "#parse_expressions" do
-    it "creates #__execute method" do
-      v = Verifier.new("expr1")
-      expect(v).to respond_to(:__execute)
-    end
-
     it "parses @tagname into tag('tagname')" do
       obj = double(:object)
       expect(obj).to receive(:tag).with('return')
@@ -50,6 +45,21 @@ describe YARD::Verifier do
       expect(obj).to receive(:tag).with('return').and_return(true)
       expect(obj).to receive(:tag).with('param').and_return(false)
       expect(Verifier.new('@return', '@param').call(obj)).to be false
+    end
+
+    it "will not parse constants or blocks" do
+      expect(lambda { Verifier.new('File.unlink("x")') }).to raise_error(SyntaxError, /disallowed const/)
+      expect(lambda { Verifier.new('[].each { }') }).to raise_error(SyntaxError, /disallowed lbrace/)
+      expect(lambda { Verifier.new('o.send :puts, "test"') }).to raise_error(SyntaxError, /disallowed #send/)
+      expect(lambda { Verifier.new('o.__send__ :puts, "test"') }).to raise_error(SyntaxError, /disallowed #send/)
+      expect(lambda { Verifier.new('o.require "foo"') }).to raise_error(SyntaxError, /disallowed #require/)
+      expect(lambda { Verifier.new('require "foo"') }).to raise_error(SyntaxError, /disallowed #require/)
+    end
+
+    it "does not allow calls outside of object" do
+      obj = CodeObjects::ClassObject.new(nil, "A")
+      expect(lambda { Verifier.new('raise "test"').call(obj) }).to raise_error(NoMethodError)
+      expect(lambda { Verifier.new('o.puts "test"').call(obj) }).to raise_error(NoMethodError)
     end
   end
 

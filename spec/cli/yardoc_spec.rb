@@ -454,8 +454,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "does not call #tag on namespace if namespace is proxy with --no-private" do
-      ns = double(:namespace)
-      expect(ns).to receive(:is_a?).with(CodeObjects::Proxy).and_return(true)
+      ns = double(:namespace, :type => :proxy)
       expect(ns).not_to receive(:tag)
       obj = double(:object, :type => :class, :namespace => ns, :visibility => :public)
       expect(obj).to receive(:tag).ordered.with(:private).and_return(false)
@@ -468,7 +467,6 @@ describe YARD::CLI::Yardoc do
       Registry.clear
       YARD.parse_string "module Qux; class Foo::Bar; end; end"
       foobar = Registry.at('Foo::Bar')
-      foobar.namespace.type = :module
       @yardoc.parse_arguments *%w( --no-private )
       expect(@yardoc.options.verifier.call(foobar)).to be true
     end
