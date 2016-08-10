@@ -40,3 +40,5 @@ Style/BlockComments:
     - benchmarks/*.rb
 Style/CaseEquality:
   Enabled: false
+Style/WordArray:
+  Enabled: false
