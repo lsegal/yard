@@ -8,6 +8,7 @@ group :development do
   gem 'simplecov'
   gem 'samus'
   gem 'coveralls', :require => false
+  gem 'rubocop', :require => false
 end
 
 group :asciidoc do

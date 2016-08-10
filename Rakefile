@@ -36,7 +36,7 @@ rescue LoadError
 end
 
 task :rubocop do
-  sh "rubocop"
+  sh "bundle exec rubocop"
 end
 
 task :default => [:rubocop, :spec]
