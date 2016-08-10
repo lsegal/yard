@@ -141,7 +141,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "highlights ruby if markup is :ruby" do
-      expect(htmlify("class Foo; end", :ruby)).to match /\A<pre class="code ruby"><span/
+      expect(htmlify("class Foo; end", :ruby)).to match(/\A<pre class="code ruby"><span/)
     end
 
     it "includes file and htmlifies it" do

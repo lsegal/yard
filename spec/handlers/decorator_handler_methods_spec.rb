@@ -22,7 +22,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
           # process_decorator params written like this due to Ruby 1.8.
           # A modern handler should splat local_nodes.
           local_data[:return] =
-          process_decorator *(local_nodes + [local_mock_handler_opts]) do |method, node, name|
+          process_decorator(*(local_nodes + [local_mock_handler_opts])) do |method, node, name|
             local_data[:method] = method
             local_data[:node] = node
             local_data[:name] = name
@@ -58,7 +58,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     let(:method_string) { "#{class_name}#foo" }
     let(:code) {"
       class #{class_name}
-        #{make_defs *method_defs}
+        #{make_defs(*method_defs)}
         # #{docstring}
         mock_decorator #{param_string}
       end
@@ -318,7 +318,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       let(:param_string) { 'def foo param1, param2; end' }
       let(:code) {"
         class #{class_name}
-          #{make_defs *method_defs}
+          #{make_defs(*method_defs)}
           # #{docstring}
           first_decorator second_decorator third_decorator #{param_string}
         end

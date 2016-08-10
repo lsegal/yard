@@ -221,22 +221,22 @@ describe YARD::CLI::Yardoc do
     end
 
     it "accepts --default-return" do
-      @yardoc.parse_arguments *%w( --default-return XYZ )
+      @yardoc.parse_arguments(*%w( --default-return XYZ ))
       expect(@yardoc.options.default_return).to eq "XYZ"
     end
 
     it "allows --hide-void-return to be set" do
-      @yardoc.parse_arguments *%w( --hide-void-return )
+      @yardoc.parse_arguments(*%w( --hide-void-return ))
       expect(@yardoc.options.hide_void_return).to be true
     end
 
     it "accepts --embed-mixins" do
-      @yardoc.parse_arguments *%w( --embed-mixins )
+      @yardoc.parse_arguments(*%w( --embed-mixins ))
       expect(@yardoc.options.embed_mixins).to eq ['*']
     end
 
     it "accepts --embed-mixin MODULE" do
-      @yardoc.parse_arguments *%w( --embed-mixin MyModule )
+      @yardoc.parse_arguments(*%w( --embed-mixin MyModule ))
       expect(@yardoc.options.embed_mixins).to eq ['MyModule']
     end
 
@@ -245,19 +245,19 @@ describe YARD::CLI::Yardoc do
       expect(Registry).to receive(:load)
       expect(Registry).to receive(:load_all)
       allow(@yardoc).to receive(:generate).and_return(true)
-      @yardoc.run *%w( --use-cache )
+      @yardoc.run(*%w( --use-cache ))
     end
 
     it "does not print statistics with --no-stats" do
       allow(@yardoc).to receive(:statistics).and_return(false)
       expect(CLI::Stats).not_to receive(:new)
-      @yardoc.run *%w( --no-stats )
+      @yardoc.run(*%w( --no-stats ))
     end
 
     it "disables progress bar with --no-progress" do
       old = log.show_progress
       log.show_progress = true
-      @yardoc.run *%w( --no-progress )
+      @yardoc.run(*%w( --no-progress ))
       expect(log.show_progress).to eq false
       log.show_progress = old
     end
@@ -270,32 +270,32 @@ describe YARD::CLI::Yardoc do
 
       it "copies assets to output directory" do
         expect(FileUtils).to receive(:cp_r).with('a', 'doc/a')
-        @yardoc.run *%w( --asset a )
+        @yardoc.run(*%w( --asset a ))
         expect(@yardoc.assets).to eq({'a' => 'a'})
       end
 
       it "allows multiple --asset options" do
         expect(FileUtils).to receive(:cp_r).with('a', 'doc/a')
         expect(FileUtils).to receive(:cp_r).with('b', 'doc/b')
-        @yardoc.run *%w( --asset a --asset b )
+        @yardoc.run(*%w( --asset a --asset b ))
         expect(@yardoc.assets).to eq({'a' => 'a', 'b' => 'b'})
       end
 
       it "does not allow from or to to refer to a path above current path" do
         expect(log).to receive(:warn).exactly(4).times.with(/invalid/i)
-        @yardoc.run *%w( --asset ../../../etc/passwd )
+        @yardoc.run(*%w( --asset ../../../etc/passwd ))
         expect(@yardoc.assets).to be_empty
-        @yardoc.run *%w( --asset a/b/c/d/../../../../../../etc/passwd )
+        @yardoc.run(*%w( --asset a/b/c/d/../../../../../../etc/passwd ))
         expect(@yardoc.assets).to be_empty
-        @yardoc.run *%w( --asset /etc/passwd )
+        @yardoc.run(*%w( --asset /etc/passwd ))
         expect(@yardoc.assets).to be_empty
-        @yardoc.run *%w( --asset normal:/etc/passwd )
+        @yardoc.run(*%w( --asset normal:/etc/passwd ))
         expect(@yardoc.assets).to be_empty
       end
 
       it "allows from:to syntax" do
         expect(FileUtils).to receive(:cp_r).with('foo', 'doc/bar')
-        @yardoc.run *%w( --asset foo:bar )
+        @yardoc.run(*%w( --asset foo:bar ))
         expect(@yardoc.assets).to eq({'foo' => 'bar'})
       end
 
@@ -440,7 +440,7 @@ describe YARD::CLI::Yardoc do
     it "accepts --no-private" do
       obj = double(:object)
       expect(obj).to receive(:tag).ordered.with(:private).and_return(true)
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(obj)).to be false
     end
 
@@ -449,7 +449,7 @@ describe YARD::CLI::Yardoc do
       expect(ns).to receive(:tag).with(:private).and_return(true)
       obj = double(:object, :namespace => ns)
       expect(obj).to receive(:tag).with(:private).and_return(false)
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(obj)).to be false
     end
 
@@ -459,7 +459,7 @@ describe YARD::CLI::Yardoc do
       expect(ns).not_to receive(:tag)
       obj = double(:object, :type => :class, :namespace => ns, :visibility => :public)
       expect(obj).to receive(:tag).ordered.with(:private).and_return(false)
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(obj)).to be true
     end
 
@@ -469,12 +469,12 @@ describe YARD::CLI::Yardoc do
       YARD.parse_string "module Qux; class Foo::Bar; end; end"
       foobar = Registry.at('Foo::Bar')
       foobar.namespace.type = :module
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(foobar)).to be true
     end
 
     it "does not call #tag on proxy object" do # @bug gh-197
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(P('ProxyClass'))).to be true
     end
 
@@ -486,7 +486,7 @@ describe YARD::CLI::Yardoc do
           def foo; end
         end
       eof
-      @yardoc.parse_arguments *%w( --no-private )
+      @yardoc.parse_arguments(*%w( --no-private ))
       expect(@yardoc.options.verifier.call(Registry.at('ABC'))).to be false
       expect(@yardoc.options.verifier.call(Registry.at('ABC#foo'))).to be false
     end
@@ -550,7 +550,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "accepts a --query" do
-      @yardoc.parse_arguments *%w( --query @return )
+      @yardoc.parse_arguments(*%w( --query @return ))
       expect(@yardoc.options.verifier).to be_a(Verifier)
     end
 
@@ -558,7 +558,7 @@ describe YARD::CLI::Yardoc do
       obj = double(:object)
       expect(obj).to receive(:tag).ordered.with('return').and_return(true)
       expect(obj).to receive(:tag).ordered.with('tag').and_return(false)
-      @yardoc.parse_arguments *%w( --query @return --query @tag )
+      @yardoc.parse_arguments(*%w( --query @return --query @tag ))
       expect(@yardoc.options.verifier).to be_a(Verifier)
       expect(@yardoc.options.verifier.call(obj)).to be false
     end
@@ -571,7 +571,7 @@ describe YARD::CLI::Yardoc do
       expect(File).to receive(:file?).with('extra_file2').and_return(true)
       expect(File).to receive(:read).with('extra_file1').and_return('')
       expect(File).to receive(:read).with('extra_file2').and_return('')
-      @yardoc.parse_arguments *%w( file1 file2 - extra_file1 extra_file2 )
+      @yardoc.parse_arguments(*%w( file1 file2 - extra_file1 extra_file2 ))
       expect(@yardoc.files).to eq %w( file1 file2 )
       expect(@yardoc.options.files).to eq(
         [CodeObjects::ExtraFileObject.new('extra_file1', ''),
@@ -580,7 +580,7 @@ describe YARD::CLI::Yardoc do
 
     it "accepts files section only containing extra files" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return([])
-      @yardoc.parse_arguments *%w( - LICENSE )
+      @yardoc.parse_arguments(*%w( - LICENSE ))
       expect(@yardoc.files).to eq Parser::SourceParser::DEFAULT_PATH_GLOB
       expect(@yardoc.options.files).to eq [CodeObjects::ExtraFileObject.new('LICENSE', '')]
     end
@@ -592,7 +592,7 @@ describe YARD::CLI::Yardoc do
       expect(File).to receive(:read).with('b.txt').and_return('')
       expect(File).to receive(:file?).with('a.txt').and_return(true)
       expect(File).to receive(:file?).with('b.txt').and_return(true)
-      @yardoc.parse_arguments *%w( file1 file2 - *.txt )
+      @yardoc.parse_arguments(*%w( file1 file2 - *.txt ))
       expect(@yardoc.files).to eq %w( file1 file2 )
       expect(@yardoc.options.files).to eq(
         [CodeObjects::ExtraFileObject.new('a.txt', ''),
@@ -601,26 +601,26 @@ describe YARD::CLI::Yardoc do
 
     it "warns if extra file is not found" do
       expect(log).to receive(:warn).with(/Could not find extra file: UNKNOWN/)
-      @yardoc.parse_arguments *%w( - UNKNOWN )
+      @yardoc.parse_arguments(*%w( - UNKNOWN ))
     end
 
     it "warns if readme file is not found" do
       expect(log).to receive(:warn).with(/Could not find readme file: UNKNOWN/)
-      @yardoc.parse_arguments *%w( -r UNKNOWN )
+      @yardoc.parse_arguments(*%w( -r UNKNOWN ))
     end
 
     it "uses first file as readme if no readme is specified when using --one-file" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return []
       expect(Dir).to receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
       expect(File).to receive(:read).with('lib/foo.rb').and_return('')
-      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.parse_arguments(*%w( --one-file lib/*.rb ))
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
     end
 
     it "uses readme it exists when using --one-file" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README']
       expect(File).to receive(:read).with('README').and_return('')
-      @yardoc.parse_arguments *%w( --one-file lib/*.rb )
+      @yardoc.parse_arguments(*%w( --one-file lib/*.rb ))
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
     end
 
@@ -628,7 +628,7 @@ describe YARD::CLI::Yardoc do
       ienc = Encoding.default_internal
       eenc = Encoding.default_external
       expect(log).to receive(:warn).with(/not compatible with US-ASCII.*using ASCII-8BIT/)
-      @yardoc.parse_arguments *%w( --one-file --charset us-ascii )
+      @yardoc.parse_arguments(*%w( --one-file --charset us-ascii ))
       expect(Encoding.default_internal.name).to eq 'ASCII-8BIT'
       expect(Encoding.default_external.name).to eq 'ASCII-8BIT'
       Encoding.default_internal = ienc

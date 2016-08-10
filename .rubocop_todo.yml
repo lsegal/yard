@@ -6,32 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 39
-Lint/AmbiguousOperator:
-  Exclude:
-    - 'benchmarks/splat_vs_flatten.rb'
-    - 'spec/cli/command_parser_spec.rb'
-    - 'spec/cli/yardoc_spec.rb'
-    - 'spec/handlers/decorator_handler_methods_spec.rb'
-
-# Offense count: 20
-Lint/AmbiguousRegexpLiteral:
-  Exclude:
-    - 'lib/yard/cli/server.rb'
-    - 'lib/yard/handlers/ruby/legacy/alias_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/attribute_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/exception_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/extend_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/mixin_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/module_function_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/private_class_method_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/private_constant_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/visibility_handler.rb'
-    - 'spec/code_objects/base_spec.rb'
-    - 'spec/handlers/ruby/legacy/base_spec.rb'
-    - 'spec/parser/source_parser_spec.rb'
-    - 'spec/templates/helpers/html_helper_spec.rb'
-
 # Offense count: 67
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:

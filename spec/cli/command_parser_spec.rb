@@ -11,7 +11,7 @@ describe YARD::CLI::CommandParser do
       expect(command).to receive(:run).with('--help')
       CLI::CommandParser.commands[:foo] = command
       @cmd.class.default_command = :foo
-      @cmd.run *%w( foo --help )
+      @cmd.run(*%w( foo --help ))
     end
 
     it "uses default command if first argument is a switch" do
@@ -19,7 +19,7 @@ describe YARD::CLI::CommandParser do
       expect(command).to receive(:run).with('--a', 'b', 'c')
       CLI::CommandParser.commands[:foo] = command
       @cmd.class.default_command = :foo
-      @cmd.run *%w( --a b c )
+      @cmd.run(*%w( --a b c ))
     end
 
     it "uses default command if no arguments are provided" do
@@ -32,12 +32,12 @@ describe YARD::CLI::CommandParser do
 
     it "lists commands if command is not found" do
       expect(@cmd).to receive(:list_commands)
-      @cmd.run *%w( unknown_command --args )
+      @cmd.run(*%w( unknown_command --args ))
     end
 
     it "lists commands if --help is provided as sole argument" do
       expect(@cmd).to receive(:list_commands)
-      @cmd.run *%w( --help )
+      @cmd.run(*%w( --help ))
     end
   end
 end

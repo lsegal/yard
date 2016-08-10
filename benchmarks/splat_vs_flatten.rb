@@ -7,6 +7,6 @@ def foo(*args) args.last.inspect end
 
 TESTS = 10_000
 Benchmark.bmbm do |x|
-  x.report("splat") { TESTS.times { foo *$a } }
-  x.report("flatten") { TESTS.times { foo *[$a].flatten } }
+  x.report("splat") { TESTS.times { foo(*$a) } }
+  x.report("flatten") { TESTS.times { foo(*[$a].flatten) } }
 end

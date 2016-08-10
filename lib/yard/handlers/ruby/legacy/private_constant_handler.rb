@@ -1,6 +1,6 @@
 # (see Ruby::PrivateConstantHandler)
 class YARD::Handlers::Ruby::Legacy::PrivateConstantHandler < YARD::Handlers::Ruby::Legacy::Base
-  handles /\Aprivate_constant(\s|\(|$)/
+  handles(/\Aprivate_constant(\s|\(|$)/)
   namespace_only
 
   process do

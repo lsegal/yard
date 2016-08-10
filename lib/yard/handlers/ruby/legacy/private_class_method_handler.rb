@@ -1,6 +1,6 @@
 # (see Ruby::PrivateClassMethodHandler)
 class YARD::Handlers::Ruby::Legacy::PrivateClassMethodHandler < YARD::Handlers::Ruby::Legacy::Base
-  handles /\Aprivate_class_method(\s|\(|$)/
+  handles(/\Aprivate_class_method(\s|\(|$)/)
   namespace_only
 
   process do

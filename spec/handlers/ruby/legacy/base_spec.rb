@@ -41,7 +41,7 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
 
   it "handles regex input" do
     class TestRegexHandler < Handlers::Ruby::Legacy::Base
-      handles /^nothello$/
+      handles(/^nothello$/)
     end
 
     expect(TestRegexHandler.handles?(stmt("nothello"))).to be true
@@ -59,7 +59,7 @@ describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
 
   it "parses a do/end or { } block with #parse_block" do
     class MyBlockHandler < Handlers::Ruby::Legacy::Base
-      handles /\AmyMethod\b/
+      handles(/\AmyMethod\b/)
       def process
         parse_block(:owner => "test")
       end

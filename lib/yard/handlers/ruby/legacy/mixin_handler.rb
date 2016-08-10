@@ -1,6 +1,6 @@
 # (see Ruby::MixinHandler)
 class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy::Base
-  handles /\Ainclude(\s|\()/
+  handles(/\Ainclude(\s|\()/)
   namespace_only
 
   process do

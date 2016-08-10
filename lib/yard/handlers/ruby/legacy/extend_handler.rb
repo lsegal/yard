@@ -1,6 +1,6 @@
 # (see Ruby::ExtendHandler)
 class YARD::Handlers::Ruby::Legacy::ExtendHandler < YARD::Handlers::Ruby::Legacy::MixinHandler
-  handles /\Aextend(\s|\()/
+  handles(/\Aextend(\s|\()/)
   namespace_only
 
   def scope; :class end

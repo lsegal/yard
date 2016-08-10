@@ -138,7 +138,7 @@ describe YARD::Parser::SourceParser do
     it "handles basic callback support" do
       before_file do |parser|
         expect(parser.contents).to eq 'class Foo; end'
-        expect(parser.file).to match /(foo|bar)\.rb/
+        expect(parser.file).to match(/(foo|bar)\.rb/)
       end
       parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
@@ -183,7 +183,7 @@ describe YARD::Parser::SourceParser do
     it "handles basic callback support" do
       after_file do |parser|
         expect(parser.contents).to eq 'class Foo; end'
-        expect(parser.file).to match /(foo|bar)\.rb/
+        expect(parser.file).to match(/(foo|bar)\.rb/)
       end
       parse_list ['foo.rb', 'class Foo; end'], ['bar.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
@@ -604,10 +604,10 @@ describe YARD::Parser::SourceParser do
         expect(log).to receive(:debug) {|m| msgs << m }.at_least(:once)
         allow(log).to receive(:<<)
         in_order_parse 'parse_in_order_001', 'parse_in_order_002'
-        expect(msgs[1]).to match /Parsing .+parse_in_order_001.+/
-        expect(msgs[2]).to match /Missing object MyModule/
-        expect(msgs[3]).to match /Parsing .+parse_in_order_002.+/
-        expect(msgs[4]).to match /Re-processing .+parse_in_order_001.+/
+        expect(msgs[1]).to match(/Parsing .+parse_in_order_001.+/)
+        expect(msgs[2]).to match(/Missing object MyModule/)
+        expect(msgs[3]).to match(/Parsing .+parse_in_order_002.+/)
+        expect(msgs[4]).to match(/Re-processing .+parse_in_order_001.+/)
       end
     end
 

@@ -408,7 +408,7 @@ describe YARD::CodeObjects::Base do
       expect(foo_c.tag(:return).types).to eq ['String']
       expect(foo_c.file).to eq '(stdin)'
       expect(foo_c.line).to eq 4
-      expect(foo_c.source).to match /source_code_here/
+      expect(foo_c.source).to match(/source_code_here/)
       expect(foo_c.signature).to eq 'def foo(a, b, c)'
       expect(foo_c.parameters).to eq [['a', nil], ['b', nil], ['c', nil]]
     end
