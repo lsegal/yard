@@ -189,7 +189,7 @@ module YARD
         #   statement.
         #
         def handles(*matches)
-          (@handlers ||= []).push(*matches)
+          (@handlers ||= []).concat(matches)
         end
 
         # This class is implemented by {Ruby::Base} and {Ruby::Legacy::Base}.

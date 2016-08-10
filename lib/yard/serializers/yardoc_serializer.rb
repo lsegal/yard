@@ -20,9 +20,11 @@ module YARD
       @object ||= Registry.at(@path)
       @object.send(meth, *args, &block)
     rescue NoMethodError => e
-      e.backtrace.delete_if {|l| l[0, __FILE__.size] == __FILE__ }
+      e.backtrace.delete_if {|l| l[0, FILELEN] == __FILE__ }
       raise
     end
+
+    FILELEN = __FILE__.size
   end
 
   module Serializers

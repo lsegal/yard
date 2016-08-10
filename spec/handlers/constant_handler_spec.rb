@@ -12,7 +12,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandle
   end
 
   it "maintains newlines" do
-    expect(Registry.at("A::B::MYCONSTANT").value.gsub("\r", "")).to eq "A +\nB +\nC +\nD"
+    expect(Registry.at("A::B::MYCONSTANT").value.delete("\r")).to eq "A +\nB +\nC +\nD"
   end
 
   it "turns Const = Struct.new(:sym) into class Const with attr :sym" do

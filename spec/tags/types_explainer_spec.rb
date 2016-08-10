@@ -177,7 +177,7 @@ describe YARD::Tags::TypesExplainer do
       explain = YARD::Tags::TypesExplainer.explain("Array<String, Array<Symbol, List(String, {K=>V})>>")
       result = "an Array of (Strings or an Array of (Symbols or a List containing 
         (a String followed by a Hash with keys made of (K's) and values of (V's))))"
-      expect(explain).to eq result.gsub(/\n/, '').squeeze(' ')
+      expect(explain).to eq result.delete("\n").squeeze(' ')
     end
     
     it "parses various examples" do
@@ -194,7 +194,7 @@ describe YARD::Tags::TypesExplainer do
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)
-        expect(explain).to eq expected.gsub(/\n/, '').squeeze(' ')
+        expect(explain).to eq expected.delete("\n").squeeze(' ')
       end
     end
   end

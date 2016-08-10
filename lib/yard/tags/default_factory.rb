@@ -72,10 +72,10 @@ module YARD
 
       def parse_tag_with_types_name_and_default(tag_name, text)
         # Can't allow () in a default tag, otherwise the grammar is too ambiguous when types is omitted.
-        open, close = TYPELIST_OPENING_CHARS.gsub('(', ''), TYPELIST_CLOSING_CHARS.gsub(')', '')
+        open, close = TYPELIST_OPENING_CHARS.delete('('), TYPELIST_CLOSING_CHARS.delete(')')
         name, types, text = *extract_types_and_name_from_text(text, open, close)
         name, text = *extract_name_from_text(text) unless name
-        if text =~ /\A\(/
+        if text.start_with?('(')
           _, default, text = *extract_types_and_name_from_text(text, '(', ')')
           DefaultTag.new(tag_name, text, types, name, default)
         else

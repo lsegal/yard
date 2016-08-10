@@ -121,9 +121,7 @@ module YARD
       def generate
         pot = header
         sorted_messages = @messages.sort_by do |message|
-          sorted_locations = message.locations.sort_by do |location|
-            location
-          end
+          sorted_locations = message.locations.sort
           sorted_locations.first || []
         end
         sorted_messages.each do |message|

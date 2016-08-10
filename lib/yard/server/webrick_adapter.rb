@@ -39,5 +39,5 @@ end
 # @private
 class WEBrick::HTTPRequest
   attr_accessor :version_supplied
-  def xhr?; (self['X-Requested-With'] || "").downcase == 'xmlhttprequest' end
+  def xhr?; (self['X-Requested-With'] || "").casecmp('xmlhttprequest').zero? end
 end

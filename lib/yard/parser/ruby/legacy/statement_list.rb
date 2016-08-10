@@ -19,7 +19,7 @@ module YARD
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
-          @tokens = TokenList.new(content.gsub("\r", ""))
+          @tokens = TokenList.new(content.delete("\r"))
         else
           raise ArgumentError, "Invalid content for StatementList: #{content.inspect}:#{content.class}"
         end
@@ -236,7 +236,7 @@ module YARD
         # Since, of course, the convention is to have "# text"
         # and not "#text", which I deem ugly (you heard it here first)
         @comments ||= []
-        if tk.text =~ /\A=begin/
+        if tk.text.start_with?('=begin')
           lines = tk.text.count("\n")
           @comments += tk.text.gsub(/\A=begin.*\r?\n|\r?\n=end.*\r?\n?\Z/, '').split(/\r?\n/)
           @comments_last_line = tk.line_no + lines
@@ -266,7 +266,7 @@ module YARD
           @block = TokenList.new
           tokens = [tk, TkStatementEnd.new(tk.line_no, tk.char_no)]
           tokens = tokens.reverse if TkBEGIN === tk.class
-          @statement.push(*tokens)
+          @statement.concat(tokens)
         else
           @statement << tk
         end

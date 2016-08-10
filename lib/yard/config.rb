@@ -247,7 +247,7 @@ module YARD
     # @param [String] name the plugin name
     # @return [String] the sanitized and normalized plugin name.
     def self.translate_plugin_name(name)
-      name = name.gsub('/', '') # Security sanitization
+      name = name.delete('/') # Security sanitization
       name = "yard-" + name unless name =~ YARD_PLUGIN_PREFIX
       name
     end

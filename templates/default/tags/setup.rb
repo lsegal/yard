@@ -1,7 +1,7 @@
 def init
   tags = Tags::Library.visible_tags - [:abstract, :deprecated, :note, :todo]
   create_tag_methods(tags - [:example, :option, :overload, :see])
-  sections :index, tags.map {|t| t.to_s.gsub('.', '_').to_sym }
+  sections :index, tags.map {|t| t.to_s.tr('.', '_').to_sym }
   sections.any(:overload).push(T('docstring'))
 end
 
@@ -32,7 +32,7 @@ end
 
 def create_tag_methods(tags)
   tags.each do |tag|
-    tag_meth = tag.to_s.gsub('.', '_')
+    tag_meth = tag.to_s.tr('.', '_')
     next if respond_to?(tag_meth)
     instance_eval(<<-eof, __FILE__, __LINE__ + 1)
       def #{tag_meth}; tag(#{tag.inspect}) end

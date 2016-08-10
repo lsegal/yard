@@ -84,5 +84,5 @@ end
 class Rack::Request
   attr_accessor :version_supplied
   alias query params
-  def xhr?; (env['HTTP_X_REQUESTED_WITH'] || "").downcase == "xmlhttprequest" end
+  def xhr?; (env['HTTP_X_REQUESTED_WITH'] || "").casecmp("xmlhttprequest").zero? end
 end

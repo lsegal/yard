@@ -128,7 +128,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
         tags.each { |t| method.add_tag t }
     end
 
-    block.call method, node, name.to_sym if block_given?
+    yield method, node, name.to_sym if block_given?
 
     [{:method => method, :node => node, :name => name.to_sym}]
   end

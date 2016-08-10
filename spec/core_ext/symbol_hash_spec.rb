@@ -62,7 +62,7 @@ describe SymbolHash do
     h = SymbolHash.new
     h.update('test' => 'value')
     expect(h[:test]).to eq :value
-    h.merge!('test' => 'value2')
+    h.merge!('test' => 'value2') # rubocop:disable Performance/RedundantMerge
     expect(h[:test]).to eq :value2
   end
 

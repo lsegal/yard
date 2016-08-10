@@ -33,7 +33,7 @@ module YARD
 
         text = text.gsub(/%[a-z0-9]{2}|#{URLMATCH}/i) do
           $&.size > 1 ? $& : "%" + $&.ord.to_s(16).upcase
-        end.gsub(' ', '+')
+        end.tr(' ', '+')
 
         text = text.force_encoding(enc) if enc
         text
@@ -232,7 +232,7 @@ module YARD
               file = (@file ? @file.filename : object.file) || '(unknown)'
               line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
               log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".")
-              log.warn((match[1] ? '...' : '') + match[2].gsub("\n","") + (match[3] ? '...' : '')) if match
+              log.warn((match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '')) if match
             end
 
             link

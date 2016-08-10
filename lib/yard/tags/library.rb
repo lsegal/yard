@@ -221,7 +221,7 @@ module YARD
         private
 
         def tag_or_directive_method_name(tag_name, type = 'tag')
-          "#{tag_name.to_s.gsub('.', '_')}_#{type}"
+          "#{tag_name.to_s.tr('.', '_')}_#{type}"
         end
       end
 

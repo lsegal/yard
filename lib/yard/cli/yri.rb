@@ -178,10 +178,10 @@ module YARD
       # Adds paths in {SEARCH_PATHS_FILE}
       # @since 0.5.1
       def add_default_paths
-        @search_paths.push(*DEFAULT_SEARCH_PATHS)
+        @search_paths.concat(DEFAULT_SEARCH_PATHS)
         return unless File.file?(SEARCH_PATHS_FILE)
         paths = File.readlines(SEARCH_PATHS_FILE).map {|l| l.strip }
-        @search_paths.push(*paths)
+        @search_paths.concat(paths)
       end
 
       # Parses commandline options.

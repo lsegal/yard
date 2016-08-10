@@ -83,7 +83,7 @@ module YARD
         def macro_name_matches(macro)
           objs = [macro.method_object]
           if objs.first.type != :proxy && objs.first.respond_to?(:aliases)
-            objs.push(*objs.first.aliases)
+            objs.concat(objs.first.aliases)
           end
 
           objs.any? {|obj| obj.name.to_s == caller_method.to_s }
