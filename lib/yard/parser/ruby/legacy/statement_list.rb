@@ -377,7 +377,7 @@ module YARD
       # @return [RubyToken::Token] the next non-space token
       def peek_no_space
         return @tokens.first unless @tokens.first.class == TkSPACE
-        return @tokens[1]
+        @tokens[1]
       end
     end
   end

@@ -33,7 +33,7 @@ module YARD
         end
 
         def serve_xhr
-          self.headers['Content-Type'] = 'text/plain'
+          headers['Content-Type'] = 'text/plain'
           self.body = visible_results.map {|o|
             [(o.type == :method ? o.name(true) : o.name).to_s,
              o.path,

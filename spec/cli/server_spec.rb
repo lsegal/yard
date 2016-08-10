@@ -24,11 +24,15 @@ describe YARD::CLI::Server do
   end
 
   def rack_required
-    begin; require 'rack'; rescue LoadError; pending "rack required for this test" end
+    require 'rack'
+  rescue LoadError
+    pending "rack required for this test"
   end
 
   def bundler_required
-    begin; require 'bundler'; rescue LoadError; pending "bundler required for this test" end
+    require 'bundler'
+  rescue LoadError
+    pending "bundler required for this test"
   end
 
   def unstub_adapter

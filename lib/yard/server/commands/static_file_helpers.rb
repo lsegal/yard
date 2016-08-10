@@ -13,7 +13,7 @@ module YARD
         #   /favicon.ico so browsers don't complain.
         def favicon?
           return unless request.path == '/favicon.ico'
-          self.headers['Content-Type'] = 'image/png'
+          headers['Content-Type'] = 'image/png'
           self.status = 200
           self.body = ''
           raise FinishRequest

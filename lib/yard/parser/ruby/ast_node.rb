@@ -285,7 +285,7 @@ module YARD
 
         # @return [nil] pretty prints the node
         def pretty_print(q)
-          objs = self.dup + [:__last__]
+          objs = dup + [:__last__]
           objs.unshift(type) if type && type != :list
 
           options = []

@@ -16,9 +16,9 @@ module YARD
           return unless path.empty?
 
           self.options = LibraryIndexOptions.new
-          self.options.adapter = adapter
-          self.options.libraries = adapter.libraries
-          self.options.reset_defaults
+          options.adapter = adapter
+          options.libraries = adapter.libraries
+          options.reset_defaults
           render
         end
       end

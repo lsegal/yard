@@ -88,7 +88,7 @@ module YARD
 
     # return [Boolean] if the obj's type matches the provided type.
     def validate(obj, type)
-      return !type || (obj && obj.type == type) ? obj : nil
+      !type || (obj && obj.type == type) ? obj : nil
     end
 
     # Performs a lexical lookup from a namespace for a path and a type hint.

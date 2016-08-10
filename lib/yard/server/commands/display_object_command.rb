@@ -14,7 +14,7 @@ module YARD
                 :path => filename.sub(%r{^#{library.source_path.to_s}/}, ''))
               self.status, self.headers, self.body =
                 *DisplayFileCommand.new(opts).call(request)
-              cache(self.body)
+              cache(body)
               return
             else
               self.path = 'index'

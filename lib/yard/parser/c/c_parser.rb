@@ -185,7 +185,7 @@ module YARD
               break
             end
           end
-          return @content[start...@index]
+          @content[start...@index]
         end
 
         def attach_comment(statement)

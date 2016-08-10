@@ -101,7 +101,7 @@ module YARD
       def mapped_name(object)
         build_filename_map if !@name_map
         map = @name_map[object.path.downcase]
-        return map && map[object.name] ? map[object.name] : object.name.to_s
+        map && map[object.name] ? map[object.name] : object.name.to_s
       end
 
       # Remove special chars from filenames.

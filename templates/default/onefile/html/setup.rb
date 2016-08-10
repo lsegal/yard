@@ -55,7 +55,7 @@ def override_serializer
 
     def serialized_path(object)
       return object if object.is_a?(String)
-      return 'index.html'
+      'index.html'
     end
   end
 end

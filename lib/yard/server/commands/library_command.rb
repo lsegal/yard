@@ -82,10 +82,10 @@ module YARD
         def call_without_fork(request)
           self.request = request
           self.options = LibraryOptions.new
-          self.options.reset_defaults
-          self.options.command = self
+          options.reset_defaults
+          options.command = self
           setup_library
-          self.options.title = "Documentation for #{library.name} " +
+          options.title = "Documentation for #{library.name} " +
             (library.version ? '(' + library.version + ')' : '')
           yield
         rescue LibraryNotPreparedError

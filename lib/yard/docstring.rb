@@ -171,7 +171,7 @@ module YARD
     def summary
       resolve_reference
       return @summary if @summary
-      stripped = self.gsub(/[\r\n](?![\r\n])/, ' ').strip
+      stripped = gsub(/[\r\n](?![\r\n])/, ' ').strip
       num_parens = 0
       idx = length.times do |index|
         case stripped[index, 1]

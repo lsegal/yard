@@ -136,7 +136,7 @@ module YARD::CodeObjects
       end
 
       if @superclass == self
-        msg = "superclass #{@superclass.inspect} cannot be the same as the declared class #{self.inspect}"
+        msg = "superclass #{@superclass.inspect} cannot be the same as the declared class #{inspect}"
         @superclass = P("::Object")
         raise ArgumentError, msg
       end

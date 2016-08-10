@@ -79,7 +79,7 @@ describe YARD::Server::Commands::Base do
     end
 
     it "allows headers to be defined" do
-      cmd = MyProcCommand.new { self.headers['Foo'] = 'BAR' }
+      cmd = MyProcCommand.new { headers['Foo'] = 'BAR' }
       s, h, b = *cmd.call(mock_request('/foo'))
       expect(h['Foo']).to eq 'BAR'
     end

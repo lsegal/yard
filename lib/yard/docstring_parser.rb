@@ -295,7 +295,7 @@ module YARD
     # @yieldreturn [void]
     # @return [void]
     def self.after_parse(&block)
-      self.after_parse_callbacks << block
+      after_parse_callbacks << block
     end
 
     # @return [Array<Proc>] the {after_parse} callback proc objects

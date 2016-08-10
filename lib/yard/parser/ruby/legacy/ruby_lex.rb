@@ -1306,7 +1306,7 @@ module YARD
           end
           comment << ch
         end
-        return Token(TkCOMMENT).set_text(comment)
+        Token(TkCOMMENT).set_text(comment)
       end
 
       def read_escape

@@ -174,7 +174,7 @@ module YARD
         end
         opts.on('-t', '--template-path PATH',
                 'The template path to look for templates in. (used with -t).') do |path|
-          self.template_paths << path
+          template_paths << path
         end
         opts.separator ''
         opts.separator "Web Server Options:"
@@ -207,7 +207,7 @@ module YARD
         end
         common_options(opts)
         opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
-          self.scripts << file
+          scripts << file
         end
         parse_options(opts, args)
 

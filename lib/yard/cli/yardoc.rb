@@ -282,8 +282,8 @@ module YARD
         super(*args)
 
         # Last minute modifications
-        self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if self.files.empty?
-        self.files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
+        self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if files.empty?
+        files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README{,*[^~]}').first
         readme ||= Dir.glob(files.first).first if options.onefile
         options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
@@ -550,7 +550,7 @@ module YARD
         end
 
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
-          self.excluded << path
+          excluded << path
         end
       end
 

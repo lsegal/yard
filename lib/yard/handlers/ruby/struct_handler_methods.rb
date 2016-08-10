@@ -38,7 +38,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     return true if (klass.tags(:attr) + klass.tags(:attr_reader) + klass.tags(:attr_writer)).empty?
     return true if member_tag_for_member(klass, member, type)
     return !member_tag_for_member(klass, member, :write) if type == :read
-    return !member_tag_for_member(klass, member, :read)
+    !member_tag_for_member(klass, member, :read)
   end
 
   # Gets the return type for the member in a nicely formatted string. Used

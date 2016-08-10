@@ -179,9 +179,9 @@ module YARD
           self.status = 404
           return unless body.empty?
           self.body = "Not found: #{request.path}"
-          self.headers['Content-Type'] = 'text/plain'
-          self.headers['X-Cascade'] = 'pass'
-          self.headers.delete('Cache-Control')
+          headers['Content-Type'] = 'text/plain'
+          headers['X-Cascade'] = 'pass'
+          headers.delete('Cache-Control')
         end
 
         # Sets the headers and status code for a redirection to a given URL
