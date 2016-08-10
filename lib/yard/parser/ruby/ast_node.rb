@@ -296,7 +296,7 @@ module YARD
             options << ['line', line_range]
             options << ['source', source_range]
           end
-          objs.pop if options.size == 0
+          objs.pop if options.empty?
 
           q.group(3, 's(', ')') do
             q.seplist(objs, nil, :each) do |v|
@@ -341,7 +341,7 @@ module YARD
           if size == 0
             self.line_range = @fallback_line
             self.source_range = @fallback_source
-          elsif children.size > 0
+          elsif !children.empty?
             f, l = children.first, children.last
             self.line_range = Range.new(f.line_range.first, l.line_range.last)
             self.source_range = Range.new(f.source_range.first, l.source_range.last)

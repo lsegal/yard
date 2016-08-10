@@ -14,7 +14,7 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
       end
     end
 
-    if errors.size > 0
+    unless errors.empty?
       msg = errors.size == 1 ? ": #{errors[0]}" : "s: #{errors.join(", ")}"
       raise YARD::Parser::UndocumentableError, "mixin#{msg} for class #{namespace.path}"
     end

@@ -36,7 +36,7 @@ def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
   return @meths if @meths
   @meths = object.meths(:inherited => false, :included => !options.embed_mixins.empty?)
-  if options.embed_mixins.size > 0
+  unless options.embed_mixins.empty?
     @meths = @meths.reject {|m| options.embed_mixins_match?(m.namespace) == false }
   end
   @meths = sort_listing(prune_method_listing(@meths))
@@ -54,7 +54,7 @@ def attr_listing
   @attrs = []
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
-    next if options.embed_mixins.size > 0 &&
+    next if !options.embed_mixins.empty? &&
       !options.embed_mixins_match?(superclass)
     [:class, :instance].each do |scope|
       superclass.attributes[scope].each do |name, rw|
@@ -82,24 +82,24 @@ end
 def inherited_attr_list(&block)
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
-    next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false
+    next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
     attribs = superclass.attributes[:instance]
     attribs = attribs.reject {|name, rw| object.child(:scope => :instance, :name => name) != nil }
     attribs = attribs.sort_by {|args| args.first.to_s }.map {|n, m| m[:read] || m[:write] }
     attribs = prune_method_listing(attribs, false)
-    yield superclass, attribs if attribs.size > 0
+    yield superclass, attribs unless attribs.empty?
   end
 end
 
 def inherited_constant_list(&block)
   object.inheritance_tree(true)[1..-1].each do |superclass|
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
-    next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false
+    next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
     consts = superclass.constants(:included => false, :inherited => false)
     consts = consts.reject {|const| object.child(:type => :constant, :name => const.name) != nil }
     consts = consts.sort_by {|const| const.name.to_s }
     consts = run_verifier(consts)
-    yield superclass, consts if consts.size > 0
+    yield superclass, consts unless consts.empty?
   end
 end
 

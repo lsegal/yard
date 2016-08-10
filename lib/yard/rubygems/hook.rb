@@ -54,7 +54,7 @@ module YARD
       specs.each do |spec|
         gen_yard, gen_yri = generate_yard, generate_yri
         gen_yri = false if gen_yard # never generate both, no need
-        if types.size > 0 # --no-document is not in effect
+        unless types.empty? # --no-document is not in effect
           # look at spec.metadata['yard.run'] for override
           run_yard = spec.metadata['yard.run']
           gen_yard = true if run_yard && run_yard != 'yri'
@@ -100,7 +100,7 @@ module YARD
       args << '--backtrace' if Gem.configuration.backtrace
       unless File.file?(File.join(@spec.full_gem_path, '.yardopts'))
         args << @spec.require_paths
-        if @spec.extra_rdoc_files.size > 0
+        unless @spec.extra_rdoc_files.empty?
           args << '-'
           args += @spec.extra_rdoc_files
         end

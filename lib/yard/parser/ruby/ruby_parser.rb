@@ -503,7 +503,7 @@ module YARD
 
         def on_comment(comment)
           not_comment = false
-          if @last_ns_token.nil? || @last_ns_token.size == 0
+          if @last_ns_token.nil? || @last_ns_token.empty?
             if comment =~ SourceParser::SHEBANG_LINE && !@encoding_line
               @shebang_line = comment
               not_comment = true
@@ -619,7 +619,7 @@ module YARD
                 add_comment(line, nil, pick, true) if pick
               end
             end
-          end if @comments.size > 0
+          end if !@comments.empty?
 
           # insert all remaining comments
           @comments.each do |line, comment|

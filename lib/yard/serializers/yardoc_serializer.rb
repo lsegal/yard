@@ -121,7 +121,7 @@ module YARD
 
         if object.is_a?(Hash) || object.is_a?(Array) ||
             object.is_a?(CodeObjects::Base) ||
-            object.instance_variables.size > 0
+            !object.instance_variables.empty?
           object = object.dup
         end
 

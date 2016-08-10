@@ -214,7 +214,7 @@ module YARD
       #   templates, they will have {Template::ClassMethods#run} called on them.
       #   Any subsections can be yielded to using yield or {#yieldall}
       def sections(*args)
-        @sections = Section.new(nil, *args) if args.size > 0
+        @sections = Section.new(nil, *args) unless args.empty?
         @sections
       end
 

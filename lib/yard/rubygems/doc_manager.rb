@@ -14,7 +14,7 @@ class Gem::DocManager
     args << '--backtrace' if Gem.configuration.backtrace
     unless File.file?(File.join(@spec.full_gem_path, '.yardopts'))
       args << @spec.require_paths
-      if @spec.extra_rdoc_files.size > 0
+      unless @spec.extra_rdoc_files.empty?
         args << '-'
         args += @spec.extra_rdoc_files
       end

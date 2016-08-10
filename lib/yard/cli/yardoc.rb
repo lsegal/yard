@@ -236,7 +236,7 @@ module YARD
       # @return [void]
       def run(*args)
         log.show_progress = true
-        if args.size == 0 || !args.first.nil?
+        if args.empty? || !args.first.nil?
           # fail early if arguments are not valid
           return unless parse_arguments(*args)
         end
@@ -450,15 +450,15 @@ module YARD
         no_api = true if apis.delete('')
         exprs = []
 
-        if apis.size > 0
+        unless apis.empty?
           exprs << "#{apis.uniq.inspect}.include?(@api.text)"
         end
 
-        if hidden_apis.size > 0
+        unless hidden_apis.empty?
           exprs << "!#{hidden_apis.uniq.inspect}.include?(@api.text)"
         end
 
-        exprs = exprs.size > 0 ? [exprs.join(' && ')] : []
+        exprs = !exprs.empty? ? [exprs.join(' && ')] : []
         exprs << "!@api" if no_api
 
         expr = exprs.join(' || ')

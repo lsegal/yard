@@ -17,7 +17,7 @@ module YARD
               errors << err.message
             end
           end
-          if errors.size > 0
+          unless errors.empty?
             msg = errors.size == 1 ? ": #{errors[0]}" : "s: #{errors.join(", ")}"
             raise UndocumentableError, "private constant#{msg} for #{namespace.path}"
           end

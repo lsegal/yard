@@ -1276,8 +1276,3 @@ Style/WhileUntilModifier:
 # SupportedStyles: percent, brackets
 Style/WordArray:
   Enabled: false
-
-# Offense count: 28
-# Cop supports --auto-correct.
-Style/ZeroLengthPredicate:
-  Enabled: false

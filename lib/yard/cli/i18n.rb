@@ -20,7 +20,7 @@ module YARD
       end
 
       def run(*args)
-        if args.size == 0 || !args.first.nil?
+        if args.empty? || !args.first.nil?
           # fail early if arguments are not valid
           return unless parse_arguments(*args)
         end

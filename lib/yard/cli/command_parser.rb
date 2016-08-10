@@ -61,7 +61,7 @@ module YARD
       # @return [void]
       def run(*args)
         unless args == ['--help']
-          if args.size == 0 || args.first =~ /^-/
+          if args.empty? || args.first =~ /^-/
             command_name = self.class.default_command
           else
             command_name = args.first.to_sym

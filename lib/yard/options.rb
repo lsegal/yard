@@ -170,7 +170,7 @@ module YARD
       if meth.to_s =~ /^(.+)=$/
         log.debug "Attempting to set unregistered key #{$1} on #{self.class}"
         instance_variable_set("@#{$1}", args.first)
-      elsif args.size == 0
+      elsif args.empty?
         log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
         instance_variable_get("@#{meth}")
       else

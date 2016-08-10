@@ -41,7 +41,7 @@ module YARD
         if gem_install_cmd
           configure_gemrc
         elsif key
-          if reset || values.size > 0
+          if reset || !values.empty?
             modify_item
           else
             view_item
