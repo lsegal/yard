@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles 'extend' call to include modules into the class scope of another
 # @see MixinHandler
 class YARD::Handlers::Ruby::ExtendHandler < YARD::Handlers::Ruby::MixinHandler

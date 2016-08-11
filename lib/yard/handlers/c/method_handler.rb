@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
   MATCH1 = /rb_define_
                  (

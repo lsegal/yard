@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Helper methods to parse @attr_* tags on a class.
 #
 # @deprecated The use of +@attr+ tags are deprecated since 0.8.0 in favour of

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
 class StringSerializer < YARD::Serializers::Base
@@ -33,7 +34,7 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
 
   def render
     @files = []
-    @output = ''
+    @output = String.new("")
     YARD.parse_string <<-eof
       class A
         # Foo method

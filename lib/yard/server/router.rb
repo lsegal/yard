@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Server
     # A router class implements the logic used to recognize a request for a specific

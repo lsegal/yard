@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 begin
   require 'rubygems/user_interaction'
   require 'rubygems/doc_manager'

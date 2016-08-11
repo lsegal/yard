@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A subclass of Hash where all keys are converted into Symbols, and
 # optionally, all String values are converted into Symbols.
 class SymbolHash < Hash

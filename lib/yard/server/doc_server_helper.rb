@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Server
     # A module that is mixed into {Templates::Template} in order to customize

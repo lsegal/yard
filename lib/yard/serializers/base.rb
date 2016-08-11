@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Serializers
     # The abstract base serializer. Serializers allow templates to be

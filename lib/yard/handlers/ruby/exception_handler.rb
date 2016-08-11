@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles 'raise' calls inside methods
 class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
   handles method_call(:raise)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles the Init_Libname() method
 class YARD::Handlers::C::InitHandler < YARD::Handlers::C::Base
   MATCH = /\A\s*(?:\S+\s+)*void\s+(?:[Ii]nit_)?(\w+)\s*/

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module I18n
     # Acts as a container for {Message} objects.

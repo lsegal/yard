@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/lib/yard'
 require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
 require 'rbconfig'

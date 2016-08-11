@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Templates
     module Helpers
@@ -5,7 +6,7 @@ module YARD
       module TextHelper
         # @return [String] escapes text
         def h(text)
-          out = ""
+          out = String.new("")
           text = resolve_links(text)
           text = text.split(/\n/)
           text.each_with_index do |line, i|

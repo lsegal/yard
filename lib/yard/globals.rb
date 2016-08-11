@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # @group Global Convenience Methods
 
 # Shortcut for creating a YARD::CodeObjects::Proxy via a path

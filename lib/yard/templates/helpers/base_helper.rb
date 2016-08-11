@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD::Templates::Helpers
   # The base helper module included in all templates.
   module BaseHelper

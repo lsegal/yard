@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   # Similar to a Proc, but runs a set of Ruby expressions using a small
   # DSL to make tag lookups easier.

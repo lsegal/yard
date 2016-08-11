@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Templates
     module Helpers
@@ -20,7 +21,7 @@ module YARD
 
         def html_syntax_highlight_ruby_ripper(source)
           resolver = Parser::Ruby::TokenResolver.new(source, object)
-          output = ""
+          output = String.new("")
           resolver.each do |s, token_obj|
             token_obj = clean_token_object(token_obj)
             output << "<span class='tstring'>" if [:tstring_beg, :regexp_beg].include?(s[0])

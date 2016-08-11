@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CodeObjects
     # A list of code objects. This array acts like a set (no unique items)
@@ -580,7 +581,7 @@ module YARD
       # @param [String] source the source code to format
       # @return [String] formatted source
       def format_source(source)
-        source.chomp!
+        source = source.chomp
         last = source.split(/\r?\n/).last
         indent = last ? last[/^([ \t]*)/, 1].length : 0
         source.gsub(/^[ \t]{#{indent}}/, '')

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CLI
     # @since 0.6.0

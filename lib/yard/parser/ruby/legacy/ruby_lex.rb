@@ -352,7 +352,7 @@ module YARD
               line
             end .join("\n")
           end
-          @content = content
+          @content = String.new(content)
           @content << "\n" unless @content[-1, 1] == "\n"
           @size      = @content.size
           @offset    = 0
@@ -610,11 +610,11 @@ module YARD
         end
 
         @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do |op, _io|
-          str = op
+          str = String.new(op)
           @ltype = "="
 
           begin
-            line = ""
+            line = String.new
             begin
               ch = getc
               line << ch
@@ -695,7 +695,7 @@ module YARD
               @lex_state = EXPR_BEG
               Token(TkQUESTION).set_text(op)
             else
-              str = op
+              str = String.new(op)
               str << ch
               if ch == '\\' #'
                 str << read_escape
@@ -951,7 +951,7 @@ module YARD
 
       def identify_gvar
         @lex_state = EXPR_END
-        str = "$"
+        str = String.new("$")
 
         tk = case ch = getc
              when %r{[~_*$?!@/\\;,=:<>".]}
@@ -1088,7 +1088,7 @@ module YARD
         end
 
         ltback, @ltype = @ltype, lt
-        reserve = ""
+        reserve = String.new
 
         while ch = getc
           reserve << ch
@@ -1100,7 +1100,7 @@ module YARD
           end
         end
 
-        str = ""
+        str = String.new
         while (l = gets)
           l.chomp!
           l.strip! if indent
@@ -1201,7 +1201,7 @@ module YARD
         @quoted = quoted
         subtype = nil
 
-        str = ""
+        str = String.new
         str << initial_char if initial_char
         str << (opener || quoted)
 
@@ -1247,7 +1247,7 @@ module YARD
       end
 
       def skip_inner_expression
-        res = ""
+        res = String.new
         nest = 0
         while (ch = getc)
           res << ch
@@ -1263,7 +1263,7 @@ module YARD
 
       def identify_comment
         @ltype = "#"
-        comment = "#"
+        comment = String.new("#")
         while ch = getc
           if ch == "\\"
             ch = getc
@@ -1285,7 +1285,7 @@ module YARD
       end
 
       def read_escape
-        res = ""
+        res = String.new
         case ch = getc
         when /[0-7]/
           ungetc ch

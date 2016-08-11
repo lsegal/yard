@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'ostruct'
 
 module YARD
@@ -129,7 +130,7 @@ module YARD
     def parse_content(content)
       content = content.split(/\r?\n/) if content.is_a?(String)
       return '' if !content || content.empty?
-      docstring = ""
+      docstring = String.new("")
 
       indent = content.first[/^\s*/].length
       last_indent = 0
@@ -175,7 +176,8 @@ module YARD
           tag_buf << line.gsub(/^[ \t]{#{orig_indent}}/, '')
         elsif !tag_name
           # Regular docstring text
-          docstring << line << "\n"
+          docstring << line
+          docstring << "\n"
         end
 
         last_indent = indent

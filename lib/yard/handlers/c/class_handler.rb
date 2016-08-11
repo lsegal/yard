@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class YARD::Handlers::C::ClassHandler < YARD::Handlers::C::Base
   MATCH1 = /([\w\.]+)\s* = \s*(?:rb_define_class|boot_defclass)\s*
             \(

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::I18n::PotGenerator do
@@ -85,7 +86,7 @@ eoh
 
   describe "Escape" do
     def generate_message_pot(message_id)
-      pot = ""
+      pot = String.new("")
       message = YARD::I18n::Message.new(message_id)
       @generator.send(:generate_message, pot, message)
       pot

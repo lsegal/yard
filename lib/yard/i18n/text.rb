@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module I18n
     # Provides some convenient features for translating a text.
@@ -49,7 +50,7 @@ module YARD
       # @param [Locale] locale the translation target locale.
       # @return [String] translated text.
       def translate(locale)
-        translated_text = ""
+        translated_text = String.new("")
         parse do |part|
           case part[:type]
           when :markup
@@ -73,7 +74,7 @@ module YARD
       private
 
       def parse(&block)
-        paragraph = ""
+        paragraph = String.new("")
         paragraph_start_line = 0
         line_no = 0
         in_header = @options[:have_header]
@@ -108,7 +109,7 @@ module YARD
               paragraph << line
               emit_paragraph_event(paragraph, paragraph_start_line, line_no,
                                    &block)
-              paragraph = ""
+              paragraph = String.new("")
             end
           else
             paragraph_start_line = line_no if paragraph.empty?

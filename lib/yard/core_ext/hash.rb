@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Hash
   class << self
     def create(*args)

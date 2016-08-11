@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Gem
   class << self
     undef source_index if method_defined?(:source_index)

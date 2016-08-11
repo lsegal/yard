@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class YARD::Handlers::C::AliasHandler < YARD::Handlers::C::Base
   MATCH = /rb_define_alias
              \s*\(\s*([\w\.]+),

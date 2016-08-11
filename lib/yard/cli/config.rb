@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CLI
     # CLI command to view or edit configuration options

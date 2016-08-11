@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'cgi'
 
 module YARD
@@ -25,6 +26,7 @@ module YARD
       # @param [String] text the URL
       # @return [String] the escaped URL
       def urlencode(text)
+        text = text.dup
         enc = nil
         if text.respond_to?(:force_encoding)
           enc = text.encoding
@@ -54,7 +56,7 @@ module YARD
         return text unless respond_to?(markup_meth)
         return "" unless text
         return text unless markup
-        html = send(markup_meth, text)
+        html = send(markup_meth, text).dup
         if html.respond_to?(:encode)
           html = html.force_encoding(text.encoding) # for libs that mess with encoding
           html = html.encode(:invalid => :replace, :replace => '?')
@@ -308,7 +310,7 @@ module YARD
       # (see BaseHelper#link_url)
       def link_url(url, title = nil, params = {})
         title ||= url
-        title.gsub!(/[\r\n]/, ' ')
+        title = title.gsub(/[\r\n]/, ' ')
         params = SymbolHash.new(false).update(
           :href => url,
           :title => h(title)

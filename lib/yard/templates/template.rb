@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'erb'
 
 module YARD
@@ -247,7 +248,7 @@ module YARD
       # @yieldparam [Hash] opts any extra options to yield
       # @return [String] the rendered sections joined together
       def run(opts = nil, sects = sections, start_at = 0, break_first = false, &block)
-        out = ""
+        out = String.new("")
         return out if sects.nil?
         sects = sects[start_at..-1] if start_at > 0
         sects = Section.new(nil, sects) unless sects.is_a?(Section)

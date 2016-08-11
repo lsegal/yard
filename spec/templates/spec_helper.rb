@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/../spec_helper'
 
 include YARD::Templates
@@ -24,6 +25,8 @@ def html_equals(result, expected_example)
 end
 
 def html_equals_string(result, expected)
+  result = String.new(result)
+  expected = String.new(expected)
   [expected, result].each do |value|
     value.gsub!(/(>)\s+|\s+(<)/, '\1\2')
     value.gsub!(/&#39;/, "'")

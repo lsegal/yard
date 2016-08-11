@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Serializers
     # Implements a serializer that reads from and writes to the filesystem.
@@ -110,7 +111,7 @@ module YARD
       def encode_path_components(*components)
         components.map! do |p|
           p.gsub(/[^\w\.-]/) do |x|
-            encoded = '_'
+            encoded = String.new('_')
 
             x.each_byte {|b| encoded << ("%X" % b) }
             encoded

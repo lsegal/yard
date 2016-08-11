@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'stringio'
 require 'ostruct'
 
@@ -72,7 +73,7 @@ module YARD
       # Byte order marks for various encodings
       # @since 0.7.0
       ENCODING_BYTE_ORDER_MARKS = {
-        'utf-8' => "\xEF\xBB\xBF",
+        'utf-8' => String.new("\xEF\xBB\xBF"),
         # Not yet supported
         # 'utf-16be' => "\xFE\xFF",
         # 'utf-16le' => "\xFF\xFE",
@@ -418,7 +419,7 @@ module YARD
         case content
         when String
           @file = File.cleanpath(content)
-          content = convert_encoding(File.read_binary(file))
+          content = convert_encoding(String.new(File.read_binary(file)))
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 

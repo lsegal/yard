@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # (see Ruby::PrivateClassMethodHandler)
 class YARD::Handlers::Ruby::Legacy::PrivateClassMethodHandler < YARD::Handlers::Ruby::Legacy::Base
   handles(/\Aprivate_class_method(\s|\(|$)/)

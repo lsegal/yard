@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::CLI::Yardoc do
@@ -507,7 +508,7 @@ describe YARD::CLI::Yardoc do
     end
 
     it "uses String#shell_split to split .yardopts tokens" do
-      optsdata = "foo bar"
+      optsdata = String.new("foo bar")
       expect(optsdata).to receive(:shell_split)
       expect(File).to receive(:read_binary).with("test").and_return(optsdata)
       @yardoc.options_file = "test"

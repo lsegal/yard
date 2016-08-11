@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CodeObjects
     # Represents the root namespace object (the invisible Ruby module that

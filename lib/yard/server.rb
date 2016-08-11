@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Server
     # Registers a static path to be used in static asset lookup.

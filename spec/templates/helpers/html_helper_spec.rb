@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
 require 'ostruct'
@@ -43,7 +44,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "takes file encoding if there is a file" do
-      @file = OpenStruct.new(:contents => 'foo'.force_encoding('sjis'))
+      @file = OpenStruct.new(:contents => String.new('foo').force_encoding('sjis'))
       # not the correct charset name, but good enough
       expect(['Shift_JIS', 'Windows-31J']).to include(charset)
     end if YARD.ruby19?
@@ -118,7 +119,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "handles various encodings" do
       allow(self).to receive(:object).and_return(Registry.root)
-      text = "\xB0\xB1"
+      text = String.new("\xB0\xB1")
       if defined?(Encoding)
         Encoding.default_internal = 'utf-8'
         text = text.force_encoding('binary')

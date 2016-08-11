@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class YARD::Handlers::C::PathHandler < YARD::Handlers::C::Base
   MATCH = /([\w\.]+)\s* = \s*rb_path2class\s*\(\s*"([\w:]+)"\)/mx
   handles MATCH

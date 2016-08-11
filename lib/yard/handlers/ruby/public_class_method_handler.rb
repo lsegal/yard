@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Sets visibility of a class method to public.
 class YARD::Handlers::Ruby::PublicClassMethodHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::DecoratorHandlerMethods

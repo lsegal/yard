@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Tags
     # Keeps track of all the registered meta-data tags and directives.

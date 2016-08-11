@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles a method definition
 class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   handles :def, :defs

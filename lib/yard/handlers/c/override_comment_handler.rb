@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Parses comments
 class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
   handles(/./)

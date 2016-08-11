@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + "/../spec_helper"
 
 def tag_parse(content, object = nil, handler = nil)
@@ -36,7 +37,7 @@ describe YARD::Tags::ParseDirective do
           eval "def foo; end"
         end
       eof
-      parser = Parser::SourceParser.new
+      parser = YARD::Parser::SourceParser.new
       parser.file = "myfile.rb"
       parser.parse(StringIO.new(src))
       expect(Registry.at('A#foo').file).to eq 'myfile.rb'

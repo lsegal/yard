@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "benchmark"
 
 files = Dir.glob(File.dirname(__FILE__) + '/../lib/**/*.rb').join(" ")

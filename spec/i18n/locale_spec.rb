@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::I18n::Locale do
@@ -57,7 +58,7 @@ eop
       expect(GetText::POParser).to receive(:new).and_return(parser)
       expect(parser).to receive(:parse_file) do |file, hash|
         expect(file).to eq 'foo/fr.po'
-        parser.parse(data, hash)
+        parser.parse(String.new(data), hash)
       end
       expect(@locale.load('foo')).to be true
       expect(@locale.translate('Hello')).to eq "Bonjour"

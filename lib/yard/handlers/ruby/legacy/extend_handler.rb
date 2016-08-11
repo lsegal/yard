@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # (see Ruby::ExtendHandler)
 class YARD::Handlers::Ruby::Legacy::ExtendHandler < YARD::Handlers::Ruby::Legacy::MixinHandler
   handles(/\Aextend(\s|\()/)

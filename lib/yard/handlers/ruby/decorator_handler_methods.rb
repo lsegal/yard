@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Helper methods to assist with processing decorators.
 module YARD::Handlers::Ruby::DecoratorHandlerMethods
   # @overload process_decorator(*nodes, opts = {}, &block)
