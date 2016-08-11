@@ -55,7 +55,7 @@ describe YARD::Server::Router do
       expect(command).to receive(:new) do |*args|
         @command = command.allocate
         @command.send(:initialize, *args)
-        class << @command; def call(_req); self end end
+        class << @command; define_method(:call) {|*| self } end
         @command
       end
       router.call(req)

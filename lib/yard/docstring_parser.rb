@@ -135,7 +135,8 @@ module YARD
       orig_indent = 0
       directive = false
       last_line = ""
-      tag_name, tag_klass, tag_buf = nil, nil, []
+      tag_name = nil
+      tag_buf = []
 
       (content+['']).each_with_index do |line, index|
         indent = line[/^\s*/].length
@@ -247,44 +248,6 @@ module YARD
       list.include?(tag_name)
     end
 
-    private
-
-    def namespace
-      if object
-        object.namespace
-      else
-        nil
-      end
-    end
-
-    def detect_reference(content)
-      if content =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
-        path, extra = $1, $'
-        [CodeObjects::Proxy.new(namespace, path), extra]
-      else
-        [nil, content]
-      end
-    end
-
-    # @!group Parser Callback Methods
-
-    # Calls the {Tags::Directive#after_parse} callback on all the
-    # created directives.
-    def call_directives_after_parse
-      directives.each do |dir|
-        dir.after_parse
-      end
-    end
-
-    # Calls all {after_parse} callbacks
-    def call_after_parse_callbacks
-      self.class.after_parse_callbacks.each do |cb|
-        cb.call(self)
-      end
-    end
-
-    public
-
     # Creates a callback that is called after a docstring is successfully
     # parsed. Use this method to perform sanity checks on a docstring's
     # tag data, or add any extra tags automatically to a docstring.
@@ -324,6 +287,42 @@ module YARD
           log.warn "@param tag has unknown parameter name: " +
             "#{tag.name} #{infile_info}"
         end
+      end
+    end
+
+    private
+
+    def namespace
+      if object
+        object.namespace
+      else
+        nil
+      end
+    end
+
+    def detect_reference(content)
+      if content =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
+        path, extra = $1, $'
+        [CodeObjects::Proxy.new(namespace, path), extra]
+      else
+        [nil, content]
+      end
+    end
+
+    # @!group Parser Callback Methods
+
+    # Calls the {Tags::Directive#after_parse} callback on all the
+    # created directives.
+    def call_directives_after_parse
+      directives.each do |dir|
+        dir.after_parse
+      end
+    end
+
+    # Calls all {after_parse} callbacks
+    def call_after_parse_callbacks
+      self.class.after_parse_callbacks.each do |cb|
+        cb.call(self)
       end
     end
 

@@ -46,41 +46,41 @@ describe YARD::Server::Commands::Base do
   describe "#call" do
     it "handles a NotFoundError and use message as body" do
       cmd = MyProcCommand.new { raise NotFoundError, "hello world" }
-      s, h, b = *cmd.call(mock_request('/foo'))
+      s, _, b = *cmd.call(mock_request('/foo'))
       expect(s).to eq 404
       expect(b).to eq ["hello world"]
     end
 
     it "does not use message as body if not provided in NotFoundError" do
       cmd = MyProcCommand.new { raise NotFoundError }
-      s, h, b = *cmd.call(mock_request('/foo'))
+      s, _, b = *cmd.call(mock_request('/foo'))
       expect(s).to eq 404
       expect(b).to eq ["Not found: /foo"]
     end
 
     it "handles 404 status code from #run" do
       cmd = MyProcCommand.new { self.status = 404 }
-      s, h, b = *cmd.call(mock_request('/foo'))
+      s, _, b = *cmd.call(mock_request('/foo'))
       expect(s).to eq 404
       expect(b).to eq ["Not found: /foo"]
     end
 
     it "does not override body if status is 404 and body is defined" do
       cmd = MyProcCommand.new { self.body = "foo"; self.status = 404 }
-      s, h, b = *cmd.call(mock_request('/bar'))
+      s, _, b = *cmd.call(mock_request('/bar'))
       expect(s).to eq 404
       expect(b).to eq ['foo']
     end
 
     it "handles body as Array" do
       cmd = MyProcCommand.new { self.body = ['a', 'b', 'c'] }
-      s, h, b = *cmd.call(mock_request('/foo'))
+      _, _, b = *cmd.call(mock_request('/foo'))
       expect(b).to eq %w(a b c)
     end
 
     it "allows headers to be defined" do
       cmd = MyProcCommand.new { headers['Foo'] = 'BAR' }
-      s, h, b = *cmd.call(mock_request('/foo'))
+      _, h, _ = *cmd.call(mock_request('/foo'))
       expect(h['Foo']).to eq 'BAR'
     end
   end

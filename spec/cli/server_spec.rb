@@ -267,7 +267,6 @@ describe YARD::CLI::Server do
       @libraries['gem2'] = [Server::LibraryVersion.new('gem2', '1.0.0', nil, :gem)]
       gem1 = double(:gem1, :name => 'gem1', :version => '1.0.0', :full_gem_path => '/path/to/foo')
       gem2 = double(:gem2, :name => 'gem2', :version => '1.0.0', :full_gem_path => '/path/to/bar')
-      specs = {'gem1' => gem1, 'gem2' => gem2}
       lockfile_parser = double(:new, :specs => [gem1, gem2])
       allow(Bundler::LockfileParser).to receive(:new).and_return(lockfile_parser)
 

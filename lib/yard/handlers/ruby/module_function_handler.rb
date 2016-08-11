@@ -5,7 +5,7 @@ class YARD::Handlers::Ruby::ModuleFunctionHandler < YARD::Handlers::Ruby::Base
   namespace_only
 
   process do
-    return if (ident = statement.jump(:ident)) == statement
+    return if statement.jump(:ident) == statement
     case statement.type
     when :var_ref, :vcall
       self.scope = :module

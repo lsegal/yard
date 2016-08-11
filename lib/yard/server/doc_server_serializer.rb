@@ -12,7 +12,6 @@ module YARD
         when CodeObjects::RootObject
           "toplevel"
         when CodeObjects::ExtendedMethodObject
-          name = object.name.to_s
           serialized_path(object.namespace) + ':' + urlencode(object.name.to_s)
         when CodeObjects::MethodObject
           serialized_path(object.namespace) +

@@ -184,7 +184,7 @@ describe YARD::CodeObjects::ClassObject do
 
     it "raises ArgumentError if superclass == self" do
       expect do
-        o = ClassObject.new(:root, :Object) do |o|
+        ClassObject.new(:root, :Object) do |o|
           o.superclass = :Object
         end
       end.to raise_error(ArgumentError)
@@ -196,7 +196,7 @@ describe YARD::CodeObjects::ClassObject do
       o2.superclass = :SystemCallError
       o3 = ClassObject.new(:root, :StandardError)
       o3.superclass = :Object
-      o4 = ClassObject.new(:root, :Object)
+      ClassObject.new(:root, :Object)
 
       o.superclass = :Object
       expect(o.is_exception?).to be false
@@ -216,7 +216,7 @@ describe YARD::CodeObjects::ClassObject do
 
     it "does not raise ArgumentError if superclass is proxy in different namespace" do
       expect do
-        o = ClassObject.new(:root, :X) do |o|
+        ClassObject.new(:root, :X) do |o|
           o.superclass = P('OTHER::X')
         end
       end.not_to raise_error

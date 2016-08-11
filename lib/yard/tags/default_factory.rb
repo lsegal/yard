@@ -132,7 +132,7 @@ module YARD
       end
 
       def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
-        s, e = 0, 0
+        e = 0
         before = ''
         list, level, seen_space, i = [''], 0, false, 0
         last_seen = ''
@@ -151,7 +151,6 @@ module YARD
             next
           elsif opening_types.include?(c)
             list.last << c if level > 0
-            s = i if level == 0
             level += 1
           elsif closing_types.include?(c)
             level -= 1 unless last_seen == '=' && c == '>'

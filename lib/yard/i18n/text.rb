@@ -33,7 +33,6 @@ module YARD
       # @return [void]
       def extract_messages
         parse do |part|
-          line_no = part[:line_no]
           case part[:type]
           when :markup, :empty_line
             # ignore

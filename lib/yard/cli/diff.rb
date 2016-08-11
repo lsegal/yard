@@ -177,7 +177,6 @@ module YARD
       end
 
       def generate_yardoc(dir)
-        olddir = Dir.pwd
         Dir.chdir(dir) do
           log.enter_level(Logger::ERROR) { Yardoc.run('-n', '--no-save') }
         end
@@ -196,7 +195,6 @@ module YARD
               Zlib::GzipReader.wrap(pkg) do |gzio|
                 tar = Gem::Package::TarReader.new(gzio)
                 tar.each do |entry|
-                  mode = entry.header.mode
                   file = File.join(tmpdir, entry.full_name)
                   FileUtils.mkdir_p(File.dirname(file))
                   File.open(file, 'wb') do |out|

@@ -171,12 +171,12 @@ module YARD
           tplopts = [options.template, :fulldoc, options.format]
           tplclass = Templates::Engine.template(*tplopts)
           obj = Object.new.extend(tplclass)
-          class << obj; def init; end end
+          class << obj; define_method(:init) { } end
           obj.class = tplclass
           obj.send(:initialize, options)
           class << obj
             attr_reader :contents
-            def asset(_file, contents) @contents = contents end
+            define_method(:asset) {|_, contents| @contents = contents }
           end
           obj
         end

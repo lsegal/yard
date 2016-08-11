@@ -374,7 +374,7 @@ eof
 
     it "does not group comments if they don't begin the line" do
       Registry.clear
-      ast = YARD.parse_string(<<-eof).enumerator
+      YARD.parse_string(<<-eof).enumerator
         class Foo
           CONST1 = 1 # Comment here
           CONST2 = 2 # Another comment here
@@ -387,7 +387,7 @@ eof
     %w(if unless).each do |type|
       it "does not get confused by modifier '#{type}' statements" do
         Registry.clear
-        ast = YARD.parse_string(<<-eof).enumerator
+        YARD.parse_string(<<-eof).enumerator
           module Foo
             #{type} test?
               # Docstring
@@ -434,7 +434,7 @@ eof
 
       it "does not add comment blocks to #{type}_mod nodes" do
         Registry.clear
-        ast = YARD.parse_string(<<-eof).enumerator
+        YARD.parse_string(<<-eof).enumerator
           class Foo
             # Docstring
             def bar; end if true

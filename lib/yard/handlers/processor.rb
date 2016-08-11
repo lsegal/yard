@@ -112,8 +112,8 @@ module YARD
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process
-            rescue HandlerAborted => abort
-              log.debug "#{handler.to_s} cancelled from #{caller.last}"
+            rescue HandlerAborted
+              log.debug "#{handler} cancelled from #{caller.last}"
               log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr
               log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
@@ -121,10 +121,10 @@ module YARD
               log.warn "You can correct this issue by loading the source file for this object before `#{file}'"
               log.warn
             rescue Parser::UndocumentableError => undocerr
-              log.warn "in #{handler.to_s}: Undocumentable #{undocerr.message}"
+              log.warn "in #{handler}: Undocumentable #{undocerr.message}"
               log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
-              log.error "Unhandled exception in #{handler.to_s}:"
+              log.error "Unhandled exception in #{handler}:"
               log.error "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
               log.backtrace(e)
             end

@@ -164,7 +164,7 @@ describe YARD::Options do
 
   describe "#tap" do
     it "supports #tap(&block) (even in 1.8.6)" do
-      o = FooOptions.new.tap {|o| o.foo = :BAR }
+      o = FooOptions.new.tap {|obj| obj.foo = :BAR }
       expect(o.to_hash).to eq({:foo => :BAR})
     end
   end

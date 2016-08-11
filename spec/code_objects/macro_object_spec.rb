@@ -75,7 +75,7 @@ describe YARD::CodeObjects::MacroObject do
     end
 
     it "appends docstring to existing macro" do
-      macro = MacroObject.create('name', '$3$2$1')
+      MacroObject.create('name', '$3$2$1')
       result = MacroObject.apply("@!macro name\nfoobar", args)
       expect(result).to eq "cba\nfoobar"
     end

@@ -44,9 +44,9 @@ def described_in_docs(klass, meth, file = nil)
     YARD::Parser::SourceParser.new.parse(filename)
   else
     underscore = klass.class_name.gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
-    $".find_all {|p| p.include? underscore }.each do |filename|
-      next unless File.exist? filename
-      YARD::Parser::SourceParser.new.parse(filename)
+    $".find_all {|p| p.include? underscore }.each do |found_fname|
+      next unless File.exist? found_fname
+      YARD::Parser::SourceParser.new.parse(found_fname)
     end
   end
 

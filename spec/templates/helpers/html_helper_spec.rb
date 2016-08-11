@@ -235,8 +235,6 @@ describe YARD::Templates::Helpers::HtmlHelper do
         end
       eof
       obj = Registry.at('Foo::Baz#a').tag(:overload)
-      foobar = Registry.at('Foo::Bar')
-      foobaz = Registry.at('Foo::Baz')
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       allow(self).to receive(:object).and_return(obj)
       expect(link_object("Bar#a")).to match %r{href="Bar.html#a-instance_method"}
@@ -255,7 +253,6 @@ describe YARD::Templates::Helpers::HtmlHelper do
       CodeObjects::ClassObject.new(P('YARD'), :Bar)
       allow(Registry.at('YARD::Bar')).to receive(:title).and_return('TITLE!')
       allow(self).to receive(:object).and_return(Registry.at('YARD::Bar'))
-      serializer = Serializers::FileSystemSerializer.new
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       expect(link_object("Bar")).to match %r{>TITLE!</a>}
     end
@@ -270,7 +267,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "uses Klass.foo when linking to class method in current namespace" do
       root = CodeObjects::ModuleObject.new(:root, :Klass)
-      obj = CodeObjects::MethodObject.new(root, :foo, :class)
+      CodeObjects::MethodObject.new(root, :foo, :class)
       allow(self).to receive(:object).and_return(root)
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       expect(link_object("foo")).to match %r{>Klass.foo</a>}

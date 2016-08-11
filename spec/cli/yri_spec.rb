@@ -89,7 +89,7 @@ describe YARD::CLI::YRI do
     end
 
     it "ensures output is serialized" do
-      obj = YARD::CodeObjects::ClassObject.new(:root, 'Foo')
+      YARD::CodeObjects::ClassObject.new(:root, 'Foo')
       allow(@yri).to receive(:test_stub) do
         expect(@yri.instance_variable_get(:@serializer)).to receive(:serialize).once
       end

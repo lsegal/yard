@@ -88,14 +88,6 @@ Lint/Loop:
     - 'lib/yard/parser/c/c_parser.rb'
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
 
-# Offense count: 6
-Lint/NestedMethodDefinition:
-  Exclude:
-    - 'lib/yard/server/commands/library_command.rb'
-    - 'spec/server/router_spec.rb'
-    - 'templates/default/onefile/html/setup.rb'
-    - 'templates/guide/fulldoc/html/setup.rb'
-
 # Offense count: 4
 Lint/NonLocalExitFromIterator:
   Exclude:
@@ -123,35 +115,6 @@ Lint/RescueException:
   Exclude:
     - 'lib/yard/server/commands/library_command.rb'
 
-# Offense count: 10
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'lib/yard/handlers/ruby/attribute_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/attribute_handler.rb'
-    - 'spec/cli/diff_spec.rb'
-    - 'spec/code_objects/class_object_spec.rb'
-    - 'spec/handlers/decorator_handler_methods_spec.rb'
-    - 'spec/handlers/mixin_handler_spec.rb'
-    - 'spec/options_spec.rb'
-    - 'spec/spec_helper.rb'
-    - 'spec/templates/helpers/text_helper_spec.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Lint/StringConversionInInterpolation:
-  Exclude:
-    - 'lib/yard/handlers/processor.rb'
-
-# Offense count: 1
-Lint/UnderscorePrefixedVariableName:
-  Exclude:
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-
-# Offense count: 1
-Lint/UnreachableCode:
-  Exclude:
-    - 'spec/parser/c_parser_spec.rb'
-
 # Offense count: 49
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
@@ -170,10 +133,6 @@ Lint/UselessAccessModifier:
 Lint/UselessArraySplat:
   Exclude:
     - 'lib/yard/templates/helpers/markup_helper.rb'
-
-# Offense count: 60
-Lint/UselessAssignment:
-  Enabled: false
 
 # Offense count: 2
 Lint/UselessSetterCall:

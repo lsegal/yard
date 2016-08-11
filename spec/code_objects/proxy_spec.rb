@@ -4,7 +4,7 @@ describe YARD::CodeObjects::Proxy do
   before { Registry.clear }
 
   it "returns the object if it's in the Registry" do
-    pathobj = ModuleObject.new(:root, :YARD)
+    ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
     expect(proxyobj.type).to eq :module
     expect(Proxy === proxyobj).to be false
@@ -12,7 +12,7 @@ describe YARD::CodeObjects::Proxy do
 
   it "handles complex string namespaces" do
     ModuleObject.new(:root, :A)
-    pathobj = ModuleObject.new(P(nil, :A), :B)
+    ModuleObject.new(P(nil, :A), :B)
     expect(P(:root, "A::B")).to be_instance_of(ModuleObject)
   end
 
@@ -33,8 +33,8 @@ describe YARD::CodeObjects::Proxy do
   end
 
   it "responds to respond_to?" do
-    obj = ClassObject.new(:root, :Object)
-    yardobj = ModuleObject.new(:root, :YARD)
+    ClassObject.new(:root, :Object)
+    ModuleObject.new(:root, :YARD)
     expect(P(:YARD).respond_to?(:children)).to be true
     expect(P(:NOTYARD).respond_to?(:children)).to be false
 
@@ -51,7 +51,7 @@ describe YARD::CodeObjects::Proxy do
   end
 
   it "pretends it's the object's type if it can resolve" do
-    pathobj = ModuleObject.new(:root, :YARD)
+    ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
     expect(proxyobj).to be_instance_of(ModuleObject)
   end
@@ -117,14 +117,14 @@ describe YARD::CodeObjects::Proxy do
   it "ensures that the correct object was resolved" do
     foo = ModuleObject.new(:root, :Foo)
     foobar = ModuleObject.new(foo, :Bar)
-    foobaz = ClassObject.new(foo, :Baz)
+    ClassObject.new(foo, :Baz)
 
     # Remember, we're looking for Qux::Bar, not just 'Bar'
     proxy = Proxy.new(foobar, 'Foo::Qux::Bar')
     expect(proxy.type).to eq :proxy
 
     qux = ModuleObject.new(foo, :Qux)
-    quxbar = ModuleObject.new(qux, :Bar)
+    ModuleObject.new(qux, :Bar)
 
     # Now it should resolve
     expect(proxy.type).to eq :module

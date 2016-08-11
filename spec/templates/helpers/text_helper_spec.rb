@@ -45,8 +45,9 @@ describe YARD::Templates::Helpers::TextHelper do
 
   describe "#h" do
     let(:object) do
-      o = YARD::CodeObjects::MethodObject.new(:root, :foo, :instance)
-      o.tap {|o| o.docstring = "test" }
+      YARD::CodeObjects::MethodObject.new(:root, :foo, :instance).tap do |o|
+        o.docstring = "test"
+      end
     end
 
     it "resolves links" do

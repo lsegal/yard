@@ -15,7 +15,6 @@ def all_objects
 end
 
 def layout
-  fulldoc = Object.new.extend(T('fulldoc'))
   layout = Object.new.extend(T('layout'))
   @css_data = layout.stylesheets.map {|sheet| read_asset(sheet) }.join("\n")
   @js_data = layout.javascripts.map {|script| read_asset(script) }.join("")
@@ -48,12 +47,12 @@ end
 def override_serializer
   return if @serializer.nil?
   class << @serializer
-    def serialize(object, data)
+    define_method(:serialize) do |object, data|
       return unless object == 'index.html'
-      super
+      super(object, data)
     end
 
-    def serialized_path(object)
+    define_method(:serialized_path) do |object|
       return object if object.is_a?(String)
       'index.html'
     end

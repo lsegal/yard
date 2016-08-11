@@ -134,7 +134,7 @@ module YARD
 
         MAPPINGS.each do |k, v|
           if Array === v
-            v.each {|_v| (REV_MAPPINGS[_v] ||= []) << k }
+            v.each {|vv| (REV_MAPPINGS[vv] ||= []) << k }
           else
             (REV_MAPPINGS[v] ||= []) << k
           end
@@ -185,7 +185,7 @@ module YARD
         end
 
         REV_MAPPINGS.select {|k,v| k.is_a?(Symbol) }.each do |pair|
-          event, value = *pair
+          event = pair.first
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end

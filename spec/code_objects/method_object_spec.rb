@@ -35,11 +35,11 @@ describe YARD::CodeObjects::MethodObject do
   end
 
   it "exists in the registry after successful creation" do
-    obj = MethodObject.new(@yard, :something, :class)
+    MethodObject.new(@yard, :something, :class)
     expect(Registry.at("YARD.something")).not_to be nil
     expect(Registry.at("YARD#something")).to be nil
     expect(Registry.at("YARD::something")).to be nil
-    obj = MethodObject.new(@yard, :somethingelse)
+    MethodObject.new(@yard, :somethingelse)
     expect(Registry.at("YARD#somethingelse")).not_to be nil
   end
 
@@ -104,7 +104,7 @@ describe YARD::CodeObjects::MethodObject do
     end
 
     it "returns nil if namespace is proxy" do
-      obj = MethodObject.new(P(:ProxyClass), :foo)
+      MethodObject.new(P(:ProxyClass), :foo)
       expect(MethodObject.new(@yard, :foo).attr_info).to eq nil
     end
 

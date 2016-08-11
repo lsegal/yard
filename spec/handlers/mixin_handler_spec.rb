@@ -17,7 +17,7 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" 
   end
 
   it "sets the type of non-existing modules to :module" do
-    o = Registry.at(:X).instance_mixins.find {|o| o.name == :NOTEXIST }
+    o = Registry.at(:X).instance_mixins.find {|obj| obj.name == :NOTEXIST }
     expect(o.type).to eq :module
   end
 

@@ -118,7 +118,6 @@ module YARD
         def parse
           types = []
           type = nil
-          fixed = false
           name = nil
           loop do
             found = false

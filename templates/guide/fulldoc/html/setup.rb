@@ -20,11 +20,11 @@ Template.extra_includes << OverrideFileLinks
 
 def init
   class << options.serializer
-    def serialized_path(object)
+    define_method(:serialized_path) do |object|
       if CodeObjects::ExtraFileObject === object
-        super.sub(/^file\./, '').downcase
+        super(object).sub(/^file\./, '').downcase
       else
-        super
+        super(object)
       end
     end
   end if options.serializer

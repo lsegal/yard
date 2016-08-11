@@ -129,7 +129,6 @@ module YARD
             just_const_name = name.gsub(/\A.+::/, '')
             if object.path == name || object.name.to_s == just_const_name
               comment = override_comment.source
-              stmt = override_comment
               break
             end
           end

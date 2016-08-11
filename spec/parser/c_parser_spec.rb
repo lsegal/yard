@@ -121,8 +121,8 @@ describe YARD::Parser::C::CParser do
         end
         thr.join(5)
         if thr.alive?
-          fail "Did not parse in time"
           thr.kill
+          fail "Did not parse in time"
         end
       end
     end

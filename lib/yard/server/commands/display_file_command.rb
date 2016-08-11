@@ -8,7 +8,6 @@ module YARD
         attr_accessor :index
 
         def run
-          ppath = library.source_path
           filename = File.cleanpath(File.join(library.source_path, path))
           raise NotFoundError if !File.file?(filename)
           if filename =~ /\.(jpe?g|gif|png|bmp)$/i

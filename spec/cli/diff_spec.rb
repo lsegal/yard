@@ -59,7 +59,7 @@ describe YARD::CLI::Diff do
         eof
       end
       allow(log).to receive(:print) {|data| @data << data }
-      allow(log).to receive(:puts) {|*args| @data << args.join("\n"); @data << "\n" }
+      allow(log).to receive(:puts) {|*pargs| @data << pargs.join("\n"); @data << "\n" }
       @diff.run(*(args + ['gem1', 'gem2']))
     end
 

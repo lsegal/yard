@@ -96,7 +96,7 @@ describe YARD::CodeObjects::ExtraFileObject do
 
     it "ignores encoding in 1.8.x (or encoding-unaware platforms)" do
       expect(log).not_to receive(:warn)
-      file = ExtraFileObject.new('file.txt', "# @encoding INVALID\nFOO")
+      ExtraFileObject.new('file.txt', "# @encoding INVALID\nFOO")
     end if YARD.ruby18?
 
     it "attempts to re-parse data as 8-bit ascii if parsing fails" do

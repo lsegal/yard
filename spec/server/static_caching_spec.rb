@@ -16,7 +16,7 @@ describe YARD::Server::StaticCaching do
       request.path_info = '/hello/world.html'
       expect(File).to receive(:file?).with('/public/hello/world.html').and_return(true)
       expect(File).to receive(:open).with('/public/hello/world.html', anything).and_return('body')
-      s, h, b = *check_static_cache
+      s, _, b = *check_static_cache
       expect(s).to eq 200
       expect(b).to eq ["body"]
     end
@@ -25,7 +25,7 @@ describe YARD::Server::StaticCaching do
       request.path_info = '/hello/world'
       expect(File).to receive(:file?).with('/public/hello/world.html').and_return(true)
       expect(File).to receive(:open).with('/public/hello/world.html', anything).and_return('body')
-      s, h, b = *check_static_cache
+      s, _, b = *check_static_cache
       expect(s).to eq 200
       expect(b).to eq ["body"]
     end
