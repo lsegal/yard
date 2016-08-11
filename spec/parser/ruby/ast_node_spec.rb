@@ -23,11 +23,11 @@ describe YARD::Parser::Ruby::AstNode do
       out = StringIO.new
       PP.pp(obj, out)
       vcall = RUBY_VERSION >= '1.9.3' ? 'vcall' : 'var_ref'
-      expect(out.string).to eq "s(s(:#{vcall},\n" +
-        "      s(:ident, \"bye\", line: 2..2, source: 4..6),\n" +
-        "      docstring: \"x\",\n" +
-        "      line: 2..2,\n" +
-        "      source: 4..6))\n"
+      expect(out.string).to eq "s(s(:#{vcall},\n" \
+                               "      s(:ident, \"bye\", line: 2..2, source: 4..6),\n" \
+                               "      docstring: \"x\",\n" \
+                               "      line: 2..2,\n" \
+                               "      source: 4..6))\n"
     end
   end
 end if HAVE_RIPPER

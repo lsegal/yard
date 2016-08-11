@@ -575,7 +575,8 @@ describe YARD::CLI::Yardoc do
       expect(@yardoc.files).to eq %w(file1 file2)
       expect(@yardoc.options.files).to eq(
         [CodeObjects::ExtraFileObject.new('extra_file1', ''),
-          CodeObjects::ExtraFileObject.new('extra_file2', '')])
+          CodeObjects::ExtraFileObject.new('extra_file2', '')]
+      )
     end
 
     it "accepts files section only containing extra files" do
@@ -596,7 +597,8 @@ describe YARD::CLI::Yardoc do
       expect(@yardoc.files).to eq %w(file1 file2)
       expect(@yardoc.options.files).to eq(
         [CodeObjects::ExtraFileObject.new('a.txt', ''),
-          CodeObjects::ExtraFileObject.new('b.txt', '')])
+          CodeObjects::ExtraFileObject.new('b.txt', '')]
+      )
     end
 
     it "warns if extra file is not found" do

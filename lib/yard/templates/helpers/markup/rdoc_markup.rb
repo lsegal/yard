@@ -12,7 +12,6 @@ module YARD
           class RDocMarkupToHtml < RDoc::Markup::ToHtml
             if defined?(RDoc::VERSION) && RDoc::VERSION >= '4.0.0' &&
                defined?(RDoc::Options)
-            then
               def initialize
                 options = RDoc::Options.new
                 options.pipe = true

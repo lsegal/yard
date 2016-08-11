@@ -156,12 +156,12 @@ class Gem::SourceIndex
                   latest[name].platform != Gem::Platform::RUBY
 
       if prev_ver.nil? ||
-         (curr_ver > prev_ver && spec.platform == Gem::Platform::RUBY) then
+         (curr_ver > prev_ver && spec.platform == Gem::Platform::RUBY)
         result[name].clear
         latest[name] = spec
       end
 
-      if spec.platform != Gem::Platform::RUBY then
+      if spec.platform != Gem::Platform::RUBY
         result[name].delete_if do |result_spec|
           result_spec.platform == spec.platform
         end
@@ -285,9 +285,9 @@ class Gem::SourceIndex
       only_platform = platform_only
       requirement = gem_pattern.requirement
 
-      gem_pattern = if Regexp === gem_pattern.name then
+      gem_pattern = if Regexp === gem_pattern.name
                       gem_pattern.name
-                    elsif gem_pattern.name.empty? then
+                    elsif gem_pattern.name.empty?
                       //
                     else
                       /^#{Regexp.escape gem_pattern.name}$/
@@ -297,7 +297,7 @@ class Gem::SourceIndex
       gem_pattern = /#{gem_pattern}/i
     end
 
-    unless Gem::Requirement === requirement then
+    unless Gem::Requirement === requirement
       requirement = Gem::Requirement.create requirement
     end
 
@@ -306,7 +306,7 @@ class Gem::SourceIndex
         requirement.satisfied_by?(spec.version)
     end
 
-    if only_platform then
+    if only_platform
       specs = specs.select do |spec|
         Gem::Platform.match spec.platform
       end

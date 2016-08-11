@@ -95,7 +95,8 @@ describe YARD::CodeObjects::MacroObject do
 
     it "keeps other tags" do
       expect(apply("@!macro\n  foo$1$2$3\n@param name foo\nfoo")).to eq(
-        "fooabc\nfoo\n@param name\n  foo")
+        "fooabc\nfoo\n@param name\n  foo"
+      )
     end
   end
 

@@ -361,8 +361,8 @@ module YARD
         options.markup = :rdoc unless has_markup
         log.enter_level(lvl) { result = obj.load_markup_provider }
         if !result && !has_markup
-          log.warn "Could not load default RDoc formatter, " +
-            "ignoring any markup (install RDoc to get default formatting)."
+          log.warn "Could not load default RDoc formatter, " \
+                   "ignoring any markup (install RDoc to get default formatting)."
           options.markup = :none
           true
         else

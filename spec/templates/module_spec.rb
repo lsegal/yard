@@ -125,7 +125,8 @@ describe YARD::Templates::Engine.template(:default, :module) do
     eof
 
     html_equals(Registry.at('A').format(html_options(
-      :verifier => Verifier.new('!@private'))), :module003)
+      :verifier => Verifier.new('!@private')
+    )), :module003)
   end
 
   it "embeds mixins with :embed_mixins = ['Foo', 'Bar', 'Baz::A*']" do

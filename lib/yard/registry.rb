@@ -63,12 +63,12 @@ module YARD
 
           if for_writing
             result = global_yardoc_file(spec, for_writing) ||
-              old_global_yardoc_file(spec, for_writing) ||
-              local_yardoc_file(spec, for_writing)
+                     old_global_yardoc_file(spec, for_writing) ||
+                     local_yardoc_file(spec, for_writing)
           else
             result = local_yardoc_file(spec, for_writing) ||
-              global_yardoc_file(spec, for_writing) ||
-              old_global_yardoc_file(spec, for_writing)
+                     global_yardoc_file(spec, for_writing) ||
+                     old_global_yardoc_file(spec, for_writing)
           end
 
           break if result
@@ -391,7 +391,7 @@ module YARD
         yfile = spec.doc_dir(DEFAULT_YARDOC_FILE)
         if for_writing
           if File.writable?(path) ||
-              (!File.directory?(path) && File.writable?(File.dirname(path)))
+             (!File.directory?(path) && File.writable?(File.dirname(path)))
             return yfile
           end
         elsif !for_writing && File.exist?(yfile)

@@ -89,8 +89,8 @@ module YARD
         end
 
         if providers.nil? || providers.empty?
-          log.error "Invalid markup type '#{type}' or markup provider " +
-            "(#{options.markup_provider}) is not registered."
+          log.error "Invalid markup type '#{type}' or markup provider " \
+                    "(#{options.markup_provider}) is not registered."
           return false
         end
 

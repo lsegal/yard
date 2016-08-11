@@ -39,7 +39,8 @@ describe YARD::Server::Commands::Base do
     it "returns a valid redirection" do
       cmd = MyProcCommand.new { redirect '/foo' }
       expect(cmd.call(mock_request('/foo'))).to eq(
-        [302, {"Content-Type" => "text/html", "Location" => "/foo"}, [""]])
+        [302, {"Content-Type" => "text/html", "Location" => "/foo"}, [""]]
+      )
     end
   end
 

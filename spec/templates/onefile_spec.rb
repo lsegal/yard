@@ -48,8 +48,7 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
     Templates::Engine.generate Registry.all(:class),
       :serializer => StringSerializer.new(@files, @output),
       :onefile => true, :format => :html, :readme => readme, :files => [readme,
-        CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')
-      ]
+        CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')]
   end
 
   it "renders html" do

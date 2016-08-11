@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.homepage      = "http://yardoc.org"
   s.platform      = Gem::Platform::RUBY
   s.files         = Dir.glob("{docs,bin,lib,spec,templates,benchmarks}/**/*") +
-    ['CHANGELOG.md', 'LICENSE', 'LEGAL', 'README.md', 'Rakefile', '.yardopts', __FILE__]
+                    ['CHANGELOG.md', 'LICENSE', 'LEGAL', 'README.md', 'Rakefile', '.yardopts', __FILE__]
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)

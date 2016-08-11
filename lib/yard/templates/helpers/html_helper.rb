@@ -353,7 +353,7 @@ module YARD
         if relative
           fromobj = object
           if object.is_a?(CodeObjects::Base) &&
-              !object.is_a?(CodeObjects::NamespaceObject)
+             !object.is_a?(CodeObjects::NamespaceObject)
             fromobj = owner
           end
 

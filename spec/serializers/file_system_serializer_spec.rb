@@ -56,8 +56,7 @@ describe YARD::Serializers::FileSystemSerializer do
         :* => '_2A_i.html',
         :| => '_7C_i.html',
         :/ => '_2F_i.html',
-        :=~ => '_3D_7E_i.html'
-      }.each do |meth, value|
+        :=~ => '_3D_7E_i.html'}.each do |meth, value|
         allow(m).to receive(:name).and_return(meth)
         expect(s.serialized_path(m)).to eq value
       end
@@ -95,7 +94,8 @@ describe YARD::Serializers::FileSystemSerializer do
       o2 = CodeObjects::ClassObject.new(:root, "Ab")
       s = Serializers::FileSystemSerializer.new
       expect([["AB_.html", "Ab.html"], ["AB.html", "Ab_.html"]]).to include(
-        [s.serialized_path(o1), s.serialized_path(o2)])
+        [s.serialized_path(o1), s.serialized_path(o2)]
+      )
     end
 
     it "handles case sensitivity of nested paths for objects with matching names" do

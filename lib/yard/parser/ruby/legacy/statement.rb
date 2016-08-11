@@ -56,8 +56,8 @@ module YARD
         last_tk = nil
         tokens.reject do |tk|
           tk.is_a?(RubyToken::TkNL) ||
-          (last_tk.is_a?(RubyToken::TkSPACE) &&
-          last_tk.class == tk.class) && last_tk = tk
+            (last_tk.is_a?(RubyToken::TkSPACE) &&
+            last_tk.class == tk.class) && last_tk = tk
         end
       end
     end

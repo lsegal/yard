@@ -247,7 +247,8 @@ describe YARD::CodeObjects::Base do
     it "accepts a string" do
       YARD.parse_string "module A; class B; end; class C; end; end"
       expect(Registry.at('A::B').relative_path(Registry.at('A::C'))).to eq(
-        Registry.at('A::B').relative_path('A::C'))
+        Registry.at('A::B').relative_path('A::C')
+      )
     end
 
     it "returns full class name when objects share a common class prefix" do

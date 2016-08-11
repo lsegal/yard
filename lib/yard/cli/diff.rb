@@ -63,7 +63,7 @@ module YARD
             end
             all_objects_notice = false
             log.print "" + (@compact ? "#{short} " : "  ") +
-              object.path + " (#{object.file}:#{object.line})"
+                      object.path + " (#{object.file}:#{object.line})"
             last_object = object
             first_object = true
           end

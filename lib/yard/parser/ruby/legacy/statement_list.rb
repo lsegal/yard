@@ -214,7 +214,7 @@ module YARD
           end
         when Parser::SourceParser::ENCODING_LINE
           if (@last_ns_tk.class == TkCOMMENT && @last_ns_tk.text == @shebang_line) ||
-              !@last_ns_tk
+             !@last_ns_tk
             @encoding_line = tk.text
             return
           end
@@ -256,8 +256,8 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       def process_simple_block_opener(tk)
         return unless [TkLBRACE, TkDO, TkBEGIN, TkELSE].include?(tk.class) &&
-          # Make sure hashes are parsed as hashes, not as blocks
-          (@last_ns_tk.nil? || @last_ns_tk.lex_state != EXPR_BEG)
+                      # Make sure hashes are parsed as hashes, not as blocks
+                      (@last_ns_tk.nil? || @last_ns_tk.lex_state != EXPR_BEG)
 
         @level += 1
         @state = :block
@@ -298,35 +298,35 @@ module YARD
         return unless
           # We might be coming after a statement-ending token...
           (@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
-           # Or we might be at the beginning of an argument list
-           (@current_block == TkDEF && tk.class == TkRPAREN)
+          # Or we might be at the beginning of an argument list
+          (@current_block == TkDEF && tk.class == TkRPAREN)
 
         # Continue line ending on . or ::
         return if @last_tk && [EXPR_DOT].include?(@last_tk.lex_state)
 
         # Continue a possible existing new statement unless we just finished an expression...
         return unless (@last_tk && [EXPR_END, EXPR_ARG].include?(@last_tk.lex_state)) ||
-          # Or we've opened a block and are ready to move into the body
-          (@current_block && [TkNL, TkSEMICOLON].include?(tk.class) &&
-           # Handle the case where the block statement's expression is on the next line
-           #
-           # while
-           #     foo
-           # end
-           @last_ns_tk.class != @current_block &&
-           # And the case where part of the expression is on the next line
-           #
-           # while foo ||
-           #     bar
-           # end
-           @last_tk.lex_state != EXPR_BEG)
+                      # Or we've opened a block and are ready to move into the body
+                      (@current_block && [TkNL, TkSEMICOLON].include?(tk.class) &&
+                       # Handle the case where the block statement's expression is on the next line
+                       #
+                       # while
+                       #     foo
+                       # end
+                       @last_ns_tk.class != @current_block &&
+                       # And the case where part of the expression is on the next line
+                       #
+                       # while foo ||
+                       #     bar
+                       # end
+                       @last_tk.lex_state != EXPR_BEG)
 
         # Continue with the statement if we've hit a comma in a def
         return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
 
 
         if [TkEND_OF_SCRIPT, TkNL, TkSEMICOLON].include?(tk.class) && @state == :block_statement &&
-            [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
+           [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
           @current_block = nil
         end
 

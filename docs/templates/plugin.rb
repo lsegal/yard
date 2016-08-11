@@ -25,15 +25,15 @@ module TagTemplateHelper
 
   # Wrap url_for and url_for_file to rewrite object when generating docs for
   # yard.tag/directive objects.
-  %w(url_for, url_for_file).each do |meth|
+  %w(url_for url_for_file).each do |meth|
     self.class.send(:define_method, meth) do
       if object.is_a?(CodeObjects::Base) &&
-            (object.tag('yard.tag') || object.tag('yard.directive') ||
-            (object.type == :class && object.superclass.name == :Directive))
-          obj, self.object = object, Registry.root
-          url = super
-          self.object = obj
-          url
+         (object.tag('yard.tag') || object.tag('yard.directive') ||
+         (object.type == :class && object.superclass.name == :Directive))
+        obj, self.object = object, Registry.root
+        url = super
+        self.object = obj
+        url
       else
         super
       end

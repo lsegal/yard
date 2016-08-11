@@ -10,11 +10,11 @@ module YARD
           text = text.split(/\n/)
           text.each_with_index do |line, i|
             out <<
-            case line
-            when /^\s*$/; "\n\n"
-            when /^\s+\S/, /^=/; line + "\n"
-            else; line + (text[i + 1] =~ /^\s+\S/ ? "\n" : " ")
-            end
+              case line
+              when /^\s*$/; "\n\n"
+              when /^\s+\S/, /^=/; line + "\n"
+              else; line + (text[i + 1] =~ /^\s+\S/ ? "\n" : " ")
+              end
           end
           out
         end

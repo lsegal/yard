@@ -90,9 +90,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       "Array<String, Symbol>" => [["Array", "String", "Symbol"],
         "<tt><a href=''>Array</a>&lt;<a href=''>String</a>, <a href=''>Symbol</a>&gt;</tt>"],
       "Array<{String => Array<Symbol>}>" => [["Array", "String", "Array", "Symbol"],
-        "<tt><a href=''>Array</a>&lt;{<a href=''>String</a> =&gt; " +
-        "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]
-    }.each do |text, values|
+        "<tt><a href=''>Array</a>&lt;{<a href=''>String</a> =&gt; " \
+          "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]}.each do |text, values|
       it "links all classes in #{text}" do
         if text.count('<') > 0
           expect(self).to receive(:h).with('<').at_least(text.count('<')).times.and_return("&lt;")
@@ -165,7 +164,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
         end
       end
       expect(htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
-        '<p><a href="http://example.com">http://example.com</a></p>')
+        '<p><a href="http://example.com">http://example.com</a></p>'
+      )
     end
 
     it "does not autolink URLs inside of {} (markdown specific)" do
@@ -173,9 +173,11 @@ describe YARD::Templates::Helpers::HtmlHelper do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
       expect(htmlify('{http://example.com Title}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>Title</a></p>})
+        %r{<p><a href="http://example.com".*>Title</a></p>}
+      )
       expect(htmlify('{http://example.com}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>http://example.com</a></p>})
+        %r{<p><a href="http://example.com".*>http://example.com</a></p>}
+      )
     end
 
     it "creates tables (markdown specific)" do
@@ -544,7 +546,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       allow(self).to receive(:serializer).and_return(serializer)
       allow(self).to receive(:object).and_return(Registry.at('Foo'))
       expect(signature(Registry.at('Foo#foo').tag(:overload), true)).to eq(
-        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">#<strong>bar</strong>(a, b, c)  </a>")
+        "<a href=\"#foo-instance_method\" title=\"#bar (instance method)\">#<strong>bar</strong>(a, b, c)  </a>"
+      )
     end
   end
 
@@ -572,7 +575,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       expect(subject).to receive(:html_markup_html) {|text| text }
       expect(subject).to receive(:html_syntax_highlight_NAME).and_return("foobar")
       expect(subject.htmlify('<pre><code>def x; end</code></pre>', :html)).to eq(
-        '<pre class="code NAME"><code class="NAME">foobar</code></pre>')
+        '<pre class="code NAME"><code class="NAME">foobar</code></pre>'
+      )
     end
 
     it "adds !!!LANG to className in outputted pre tag" do
@@ -580,7 +584,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
       expect(subject).to receive(:html_markup_html) {|text| text }
       expect(subject).to receive(:html_syntax_highlight_LANG).and_return("foobar")
       expect(subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html)).to eq(
-        '<pre class="code LANG"><code class="LANG">foobar</code></pre>')
+        '<pre class="code LANG"><code class="LANG">foobar</code></pre>'
+      )
     end
 
     it "calls html_syntax_highlight_NAME if source starts with !!!NAME" do
@@ -620,17 +625,20 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "doesn't escape code snippets twice" do
       expect(subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html)).to eq(
-        '<pre class="code foo"><code class="foo">{&quot;foo&quot; =&gt; 1}</code></pre>')
+        '<pre class="code foo"><code class="foo">{&quot;foo&quot; =&gt; 1}</code></pre>'
+      )
     end
 
     it "highlights source when matching a pre lang= tag" do
       expect(subject.htmlify('<pre lang="foo"><code>x = 1</code></pre>', :html)).to eq(
-        '<pre class="code foo"><code class="foo">x = 1</code></pre>')
+        '<pre class="code foo"><code class="foo">x = 1</code></pre>'
+      )
     end
 
     it "highlights source when matching a code class= tag" do
       expect(subject.htmlify('<pre><code class="foo">x = 1</code></pre>', :html)).to eq(
-        '<pre class="code foo"><code class="foo">x = 1</code></pre>')
+        '<pre class="code foo"><code class="foo">x = 1</code></pre>'
+      )
     end
   end
 

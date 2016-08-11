@@ -115,13 +115,13 @@ module YARD
 
       def internal_dump(object, first_object = false)
         if !first_object && object.is_a?(CodeObjects::Base) &&
-            !(Tags::OverloadTag === object)
+           !(Tags::OverloadTag === object)
           return StubProxy.new(object.path)
         end
 
         if object.is_a?(Hash) || object.is_a?(Array) ||
-            object.is_a?(CodeObjects::Base) ||
-            !object.instance_variables.empty?
+           object.is_a?(CodeObjects::Base) ||
+           !object.instance_variables.empty?
           object = object.dup
         end
 

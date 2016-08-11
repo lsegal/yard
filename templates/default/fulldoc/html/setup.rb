@@ -124,8 +124,8 @@ def generate_assets
     if respond_to?(list_generator_method)
       send(list_generator_method)
     else
-      log.error "Unable to generate '#{list[:title]}' list because no method " +
-        "'#{list_generator_method}' exists"
+      log.error "Unable to generate '#{list[:title]}' list because no method " \
+                "'#{list_generator_method}' exists"
     end
   end
 

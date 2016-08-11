@@ -552,7 +552,8 @@ describe YARD::Parser::SourceParser do
               expect(result.enumerator[0].source.encoding.to_s).to eq(default_encoding)
             else
               expect(['Shift_JIS', 'Windows-31J', 'UTF-8']).send(msg, include(
-                result.enumerator[0].source.encoding.to_s))
+                result.enumerator[0].source.encoding.to_s
+              ))
             end
           end
           expect(result.encoding_line).send(msg, eq(src.split("\n").last))

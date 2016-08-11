@@ -39,7 +39,7 @@ class Gem::DocManager
 
   begin undef setup_rdoc; rescue NameError; end
   def setup_rdoc
-    if File.exist?(@doc_dir) && !File.writable?(@doc_dir) then
+    if File.exist?(@doc_dir) && !File.writable?(@doc_dir)
       raise Gem::FilePermissionError.new(@doc_dir)
     end
 

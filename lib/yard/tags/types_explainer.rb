@@ -86,8 +86,9 @@ module YARD
         end
 
         def to_s(_singular = true)
-          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" + list_join(key_types.map {|t| t.to_s(false) }) +
-          ") and values of (" + list_join(value_types.map {|t| t.to_s(false) }) + ")"
+          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" +
+            list_join(key_types.map {|t| t.to_s(false) }) +
+            ") and values of (" + list_join(value_types.map {|t| t.to_s(false) }) + ")"
         end
       end
 

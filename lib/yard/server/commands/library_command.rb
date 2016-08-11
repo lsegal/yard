@@ -86,7 +86,7 @@ module YARD
           options.command = self
           setup_library
           options.title = "Documentation for #{library.name} " +
-            (library.version ? '(' + library.version + ')' : '')
+                          (library.version ? '(' + library.version + ')' : '')
           yield
         rescue LibraryNotPreparedError
           not_prepared

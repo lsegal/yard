@@ -209,11 +209,11 @@ module YARD
         @tags += [library.tag_create(tag_name, tag_buf)].flatten
       else
         log.warn "Unknown tag @#{tag_name}" +
-          (object ? " in file `#{object.file}` near line #{object.line}" : "")
+                 (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
     rescue Tags::TagFormatError
       log.warn "Invalid tag format for @#{tag_name}" +
-        (object ? " in file `#{object.file}` near line #{object.line}" : "")
+               (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
     # Creates a {Tags::RefTag}
@@ -232,12 +232,12 @@ module YARD
         end
       else
         log.warn "Unknown directive @!#{tag_name}" +
-          (object ? " in file `#{object.file}` near line #{object.line}" : "")
+                 (object ? " in file `#{object.file}` near line #{object.line}" : "")
         nil
       end
     rescue Tags::TagFormatError
       log.warn "Invalid directive format for @!#{tag_name}" +
-        (object ? " in file `#{object.file}` near line #{object.line}" : "")
+               (object ? " in file `#{object.file}` near line #{object.line}" : "")
       nil
     end
 
@@ -273,19 +273,19 @@ module YARD
       next if parser.object.is_alias?
       names = parser.object.parameters.map {|l| l.first.gsub(/\W/, '') }
       seen_names = []
-      infile_info = "\n    in file `#{parser.object.file}' " +
+      infile_info = "\n    in file `#{parser.object.file}' " \
                     "near line #{parser.object.line}"
       parser.tags.each do |tag|
         next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
         if seen_names.include?(tag.name)
-          log.warn "@param tag has duplicate parameter name: " +
-            "#{tag.name} #{infile_info}"
+          log.warn "@param tag has duplicate parameter name: " \
+                   "#{tag.name} #{infile_info}"
         elsif names.include?(tag.name)
           seen_names << tag.name
         else
-          log.warn "@param tag has unknown parameter name: " +
-            "#{tag.name} #{infile_info}"
+          log.warn "@param tag has unknown parameter name: " \
+                   "#{tag.name} #{infile_info}"
         end
       end
     end
@@ -331,10 +331,10 @@ module YARD
       parser.tags.each_with_index do |tag, i|
         next unless tag.tag_name == "see"
         if "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
-          infile_info = "\n    in file `#{parser.object.file}' " +
-                "near line #{parser.object.line}"
-          log.warn "@see tag (##{i + 1}) should not be wrapped in {} " +
-            "(causes rendering issues): #{infile_info}"
+          infile_info = "\n    in file `#{parser.object.file}' " \
+                        "near line #{parser.object.line}"
+          log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
+                   "(causes rendering issues): #{infile_info}"
         end
       end
     end

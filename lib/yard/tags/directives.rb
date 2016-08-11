@@ -267,8 +267,8 @@ module YARD
 
       def attach?
         new? && # must have data or there is nothing to attach
-        class_method? || # always attach to class methods
-        (tag.types && tag.types.include?('attach'))
+          class_method? || # always attach to class methods
+          (tag.types && tag.types.include?('attach'))
       end
 
       def class_method?
@@ -283,7 +283,7 @@ module YARD
       def expand(macro_data)
         return if attach? && class_method?
         return if !anonymous? && new? &&
-          (!handler || handler.statement.source.empty?)
+                  (!handler || handler.statement.source.empty?)
         call_params = []
         caller_method = nil
         full_source = ''
@@ -300,8 +300,8 @@ module YARD
         if new? || attach?
           if handler && attach?
             if object && object.is_a?(CodeObjects::NamespaceObject)
-              log.warn "Attaching macros to non-methods is unsupported, ignoring: " +
-                "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
+              log.warn "Attaching macros to non-methods is unsupported, ignoring: " \
+                       "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
               obj = nil
             else
               obj = object ? object :
@@ -324,8 +324,8 @@ module YARD
 
       def warn
         if object && handler
-          log.warn "Invalid/missing macro name for " +
-            "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
+          log.warn "Invalid/missing macro name for " \
+                   "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
         end
       end
     end

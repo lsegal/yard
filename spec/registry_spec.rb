@@ -266,7 +266,8 @@ describe YARD::Registry do
       eof
       expect(Registry.resolve(P('Foo'), 'Bar', false, false, :class)).to eq Registry.at('Foo::Bar')
       expect(Registry.resolve(P('Foo'), 'Bar', false, false, :method)).to eq(
-        Registry.at('Foo.Bar'))
+        Registry.at('Foo.Bar')
+      )
     end
 
     it "returns proxy fallback with given type if supplied" do

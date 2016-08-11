@@ -20,7 +20,8 @@ describe YARD::I18n::Text do
 eot
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
-           [:paragraph, "# Getting Started with YARD", 3]])
+           [:paragraph, "# Getting Started with YARD", 3]]
+        )
       end
 
       it "ignores markup line" do
@@ -32,7 +33,8 @@ eot
 eot
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 2],
-           [:paragraph, "# Getting Started with YARD", 4]])
+           [:paragraph, "# Getting Started with YARD", 4]]
+        )
       end
 
       it "terminates header block by markup line not at the first line" do
@@ -45,7 +47,8 @@ eot
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
            [:paragraph, "#!markdown", 2],
-           [:paragraph, "# Getting Started with YARD", 4]])
+           [:paragraph, "# Getting Started with YARD", 4]]
+        )
       end
     end
 
@@ -66,7 +69,8 @@ eop
 eot
         expect(extract_messages(text)).to eq(
           [[:paragraph, paragraph1, 1],
-           [:paragraph, paragraph2, 4]])
+           [:paragraph, paragraph2, 4]]
+        )
       end
     end
   end

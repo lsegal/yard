@@ -19,12 +19,12 @@ describe YARD::CLI::Stats do
     eof
 
     @main_stats =
-      "Files:           1\n" +
-      "Modules:         1 (    1 undocumented)\n" +
-      "Classes:         1 (    1 undocumented)\n" +
-      "Constants:       1 (    1 undocumented)\n" +
-      "Attributes:      1 (    0 undocumented)\n" +
-      "Methods:         2 (    1 undocumented)\n" +
+      "Files:           1\n" \
+      "Modules:         1 (    1 undocumented)\n" \
+      "Classes:         1 (    1 undocumented)\n" \
+      "Constants:       1 (    1 undocumented)\n" \
+      "Attributes:      1 (    0 undocumented)\n" \
+      "Methods:         2 (    1 undocumented)\n" \
       " 33.33% documented\n"
 
     @output = StringIO.new
@@ -55,13 +55,13 @@ eof
       def foo; end
     eof
     @stats.run('--list-undoc')
-    expect(@output.string).to eq "Files:           1\n" +
-                              "Modules:         0 (    0 undocumented)\n" +
-                              "Classes:         0 (    0 undocumented)\n" +
-                              "Constants:       0 (    0 undocumented)\n" +
-                              "Attributes:      0 (    0 undocumented)\n" +
-                              "Methods:         1 (    0 undocumented)\n" +
-                              " 100.00% documented\n"
+    expect(@output.string).to eq "Files:           1\n" \
+                                 "Modules:         0 (    0 undocumented)\n" \
+                                 "Classes:         0 (    0 undocumented)\n" \
+                                 "Constants:       0 (    0 undocumented)\n" \
+                                 "Attributes:      0 (    0 undocumented)\n" \
+                                 "Methods:         1 (    0 undocumented)\n" \
+                                 " 100.00% documented\n"
   end
 
   it "lists undocumented objects in compact mode with --list-undoc --compact" do
@@ -84,12 +84,13 @@ eof
   it "ignores everything with --no-public" do
     @stats.run('--no-public')
     expect(@output.string).to eq(
-      "Files:           0\n" +
-      "Modules:         0 (    0 undocumented)\n" +
-      "Classes:         0 (    0 undocumented)\n" +
-      "Constants:       0 (    0 undocumented)\n" +
-      "Attributes:      0 (    0 undocumented)\n" +
-      "Methods:         0 (    0 undocumented)\n" +
-      " 100.00% documented\n")
+      "Files:           0\n" \
+      "Modules:         0 (    0 undocumented)\n" \
+      "Classes:         0 (    0 undocumented)\n" \
+      "Constants:       0 (    0 undocumented)\n" \
+      "Attributes:      0 (    0 undocumented)\n" \
+      "Methods:         0 (    0 undocumented)\n" \
+      " 100.00% documented\n"
+    )
   end
 end

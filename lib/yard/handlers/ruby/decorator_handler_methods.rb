@@ -109,23 +109,17 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
     # Tag decorator on decorated method.
     if method.respond_to? :add_tag
-      method.add_tag YARD::Tags::Tag.new(
-        :decorator,
-        statement.jump(:command).jump(:ident).source
-      )
+      method.add_tag YARD::Tags::Tag.new(:decorator,
+        statement.jump(:command).jump(:ident).source)
     end
 
     # Transfer decorator docstring to methods passed to the helper as parameters.
-    if transfer_docstring \
-      && node.def? \
-      && statement.docstring \
-      && method.docstring.empty?
-        tags = method.tags if method.respond_to? :tags
-        tags ||= []
-
-        method.docstring = statement.docstring
-
-        tags.each {|t| method.add_tag t }
+    if transfer_docstring && node.def? &&
+       statement.docstring && method.docstring.empty?
+      tags = method.tags if method.respond_to? :tags
+      tags ||= []
+      method.docstring = statement.docstring
+      tags.each {|t| method.add_tag t }
     end
 
     yield method, node, name.to_sym if block_given?

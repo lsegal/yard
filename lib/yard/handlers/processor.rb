@@ -152,8 +152,8 @@ module YARD
       def find_handlers(statement)
         Base.subclasses.find_all do |handler|
           handler_base_class > handler &&
-          (handler.namespace_only? ? owner.is_a?(CodeObjects::NamespaceObject) : true) &&
-          handles?(handler, statement)
+            (handler.namespace_only? ? owner.is_a?(CodeObjects::NamespaceObject) : true) &&
+            handles?(handler, statement)
         end
       end
 

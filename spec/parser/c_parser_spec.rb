@@ -68,7 +68,8 @@ describe YARD::Parser::C::CParser do
           }
         eof
         expect(Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ')).to eq(
-          "VALUE foo(VALUE x) { int value = x;\n}")
+          "VALUE foo(VALUE x) { int value = x;\n}"
+        )
       end
     end
 

@@ -56,13 +56,15 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     let(:param_string)  { 'def foo param1, param2; end' }
     let(:method_defs)   { [] }
     let(:method_string) { "#{class_name}#foo" }
-    let(:code) {"
+    let(:code) do
+      <<-eof
       class #{class_name}
         #{make_defs(*method_defs)}
         # #{docstring}
         mock_decorator #{param_string}
       end
-    "}
+      eof
+    end
 
     before {
       Registry.clear
@@ -234,10 +236,11 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
           describe "for methods" do
             let(:param_string) { decorator_params.join(',') }
-            let(:decorator_params) {[
-              "def #{'self.' if mock_handler_opts[:scope] == :class}foo f1, f2; end",
+            let(:decorator_params) {
+              [
+                "def #{'self.' if mock_handler_opts[:scope] == :class}foo f1, f2; end",
               "def #{'self.' if mock_handler_opts[:scope] == :class}bar b1, b2; end"
-            ]}
+              ]}
 
             specify do
               expect(subject.count).to eq decorator_params.count
@@ -281,7 +284,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
       describe "does not attach" do
         describe "to undefined methods" do
-          let(:code) {"
+          let(:code) {
+            "
             class #{class_name}
               # #{docstring}
               mock_decorator :foo
@@ -294,7 +298,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
         end
 
         describe "to methods with existing docstring" do
-          let(:code) {"
+          let(:code) {
+            "
             class #{class_name}
 
               # original docstring
@@ -316,7 +321,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       subject { Registry.at method_string }
 
       let(:param_string) { 'def foo param1, param2; end' }
-      let(:code) {"
+      let(:code) {
+        "
         class #{class_name}
           #{make_defs(*method_defs)}
           # #{docstring}

@@ -6,7 +6,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
 
   process do
     if statement[1].call? && statement[1][0][0] == s(:const, "Struct") &&
-        statement[1][2] == s(:ident, "new")
+       statement[1][2] == s(:ident, "new")
       process_structclass(statement)
     elsif statement[0].type == :var_field && statement[0][0].type == :const
       process_constant(statement)

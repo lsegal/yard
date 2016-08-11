@@ -42,7 +42,8 @@ describe YARD::CLI::Server do
   def run(*args)
     if @set_libraries && @libraries.empty?
       library = Server::LibraryVersion.new(
-        File.basename(Dir.pwd), nil, File.expand_path('.yardoc'))
+        File.basename(Dir.pwd), nil, File.expand_path('.yardoc')
+      )
       @libraries = {library.name => [library]}
     end
     unless @no_verify_libraries

@@ -9,8 +9,8 @@ module YARD
           parent = nil if parent == "0"
           namespace = in_module ? ensure_variable_defined!(in_module) : Registry.root
           if namespace.nil?
-            raise Parser::UndocumentableError, "class #{class_name}. " +
-              "Cannot find definition for parent namespace."
+            raise Parser::UndocumentableError,
+              "class #{class_name}. Cannot find definition for parent namespace."
           end
 
           register ClassObject.new(namespace, class_name) do |obj|
@@ -31,8 +31,8 @@ module YARD
         def handle_module(var_name, module_name, in_module = nil)
           namespace = in_module ? ensure_variable_defined!(in_module) : Registry.root
           if namespace.nil?
-            raise Parser::UndocumentableError, "module #{module_name}. " +
-              "Cannot find definition for parent namespace."
+            raise Parser::UndocumentableError,
+              "module #{module_name}. Cannot find definition for parent namespace."
           end
 
           register ModuleObject.new(namespace, module_name) do |obj|

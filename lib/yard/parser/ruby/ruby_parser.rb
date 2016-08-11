@@ -530,7 +530,7 @@ module YARD
           hash_flag = $1 == '##' ? true : false
 
           if append_comment && @comments_last_column &&
-              @comments_last_column == column && comment_starts_line?(ch)
+             @comments_last_column == column && comment_starts_line?(ch)
             @comments.delete(lineno - 1)
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)

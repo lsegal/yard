@@ -262,32 +262,31 @@ module YARD
 
         [:TkASSIGN,     Token,  "="],
         [:TkDOT,        Token,  "."],
-        [:TkLPAREN,     Token,  "("],  #(exp)
-        [:TkLBRACK,     Token,  "["],  #[arry]
-        [:TkLBRACE,     Token,  "{"],  #{hash}
+        [:TkLPAREN,     Token,  "("],  # (exp)
+        [:TkLBRACK,     Token,  "["],  # [arry]
+        [:TkLBRACE,     Token,  "{"],  # {hash}
         [:TkRPAREN,     Token,  ")"],
         [:TkRBRACK,     Token,  "]"],
         [:TkRBRACE,     Token,  "}"],
         [:TkCOMMA,      Token,  ","],
         [:TkSEMICOLON,  Token,  ";"],
 
-#        [:TkRD_COMMENT,     TkVal],
         [:TkSPACE,          TkWhitespace],
         [:TkNL,             TkWhitespace],
         [:TkEND_OF_SCRIPT,  TkWhitespace],
 
         [:TkBACKSLASH,  TkUnknownChar,  "\\"],
         [:TkAT,         TkUnknownChar,  "@"],
-        [:TkDOLLAR,     TkUnknownChar,  "\$"] #"
+        [:TkDOLLAR,     TkUnknownChar,  "\$"]
       ]
 
       # { reading => token_class }
       # { reading => [token_class, *opt] }
-      TkReading2Token = {}
-      TkSymbol2Token = {}
+      TkReading2Token = {} # rubocop:disable Style/ConstantName
+      TkSymbol2Token = {} # rubocop:disable Style/ConstantName
 
       # @private
-      def RubyToken.def_token(token_n, super_token = Token, reading = nil, *opts)
+      def self.def_token(token_n, super_token = Token, reading = nil, *opts)
         token_n = token_n.id2name unless token_n.kind_of?(String)
         if RubyToken.const_defined?(token_n)
           # IRB.fail AlreadyDefinedToken, token_n
@@ -536,8 +535,8 @@ module YARD
       def lex
         catch(:eof) do
           until ((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
-             !@continue ||
-             tk.nil?
+                !@continue ||
+                tk.nil?
           end
           line = get_read
 
@@ -573,11 +572,10 @@ module YARD
 
       ENINDENT_CLAUSE = [
         "case", "class", "def", "do", "for", "if",
-        "module", "unless", "until", "while", "begin" #, "when"
-      ]
+        "module", "unless", "until", "while", "begin"
+      ] #, "when"
       ACCEPTS_COLON = ["if", "for", "unless", "until", "while"]
-      DEINDENT_CLAUSE = ["end" #, "when"
-      ]
+      DEINDENT_CLAUSE = ["end"] #, "when"
 
       PERCENT_LTYPE = {
         "q" => "\'",
@@ -625,13 +623,11 @@ module YARD
           Token(TkSPACE).set_text(chars)
         end
 
-        @OP.def_rule("#") do
-          |op, io|
+        @OP.def_rule("#") do |op, io|
           identify_comment
         end
 
-        @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do
-          |op, io|
+        @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do |op, io|
           str = op
           @ltype = "="
 
@@ -787,8 +783,7 @@ module YARD
       end
 
       def lex_int2
-        @OP.def_rules("]", "}", ")") do
-          |op, io|
+        @OP.def_rules("]", "}", ")") do |op, io|
           @lex_state = EXPR_END
           @indent -= 1
           Token(op).set_text(op)
@@ -918,8 +913,7 @@ module YARD
           end
         end
 
-        @OP.def_rule('%') do
-          |op, io|
+        @OP.def_rule('%') do |op, io|
           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
             identify_quotation('%')
           elsif peek(0) == '='
@@ -1043,8 +1037,8 @@ module YARD
             # reserved word?
 
             if @lex_state != EXPR_BEG &&
-                @lex_state != EXPR_FNAME &&
-                trans[1]
+               @lex_state != EXPR_FNAME &&
+               trans[1]
               # modifiers
               token_c = TkSymbol2Token[trans[1]]
               @lex_state = trans[0]
