@@ -190,13 +190,11 @@ module YARD
         [:TklEND,       TkKW,  "END",      EXPR_END],
         [:Tk__LINE__,   TkKW,  "__LINE__", EXPR_END],
         [:Tk__FILE__,   TkKW,  "__FILE__", EXPR_END],
-
         [:TkIDENTIFIER, TkId],
         [:TkFID,        TkId],
         [:TkGVAR,       TkId],
         [:TkIVAR,       TkId],
         [:TkCONSTANT,   TkId],
-
         [:TkINTEGER,    TkVal],
         [:TkFLOAT,      TkVal],
         [:TkSYMBOL,     TkVal],
@@ -205,13 +203,11 @@ module YARD
         [:TkXSTRING,    TkVal],
         [:TkREGEXP,     TkVal],
         [:TkCOMMENT,    TkVal],
-
         [:TkDSTRING,    TkNode],
         [:TkDXSTRING,   TkNode],
         [:TkDREGEXP,    TkNode],
         [:TkNTH_REF,    TkId],
         [:TkBACK_REF,   TkId],
-
         [:TkUPLUS,      TkOp,   "+@"],
         [:TkUMINUS,     TkOp,   "-@"],
         [:TkPOW,        TkOp,   "**"],
@@ -237,13 +233,8 @@ module YARD
         [:TkASSOC,      TkOp,   "=>"],
         [:TkQUESTION,   TkOp,   "?"], #?
         [:TkCOLON,      TkOp,   ":"], #:
-
-#        [:TkfLPAREN],         # func( #
-#        [:TkfLBRACK],         # func[ #
-#        [:TkfLBRACE],         # func{ #
         [:TkSTAR],            # *arg
         [:TkAMPER],           # &arg #
-#        [:TkSYMBOL,     TkId],          # :SYMBOL
         [:TkSYMBEG,     TkId],
         [:TkGT,         TkOp,   ">"],
         [:TkLT,         TkOp,   "<"],
@@ -257,9 +248,7 @@ module YARD
         [:TkBITAND,     TkOp,   "&"],
         [:TkBITNOT,     TkOp,   "~"],
         [:TkNOTOP,      TkOp,   "!"],
-
         [:TkBACKQUOTE,  TkOp,   "`"],
-
         [:TkASSIGN,     Token,  "="],
         [:TkDOT,        Token,  "."],
         [:TkLPAREN,     Token,  "("],  # (exp)
@@ -270,11 +259,9 @@ module YARD
         [:TkRBRACE,     Token,  "}"],
         [:TkCOMMA,      Token,  ","],
         [:TkSEMICOLON,  Token,  ";"],
-
         [:TkSPACE,          TkWhitespace],
         [:TkNL,             TkWhitespace],
         [:TkEND_OF_SCRIPT,  TkWhitespace],
-
         [:TkBACKSLASH,  TkUnknownChar,  "\\"],
         [:TkAT,         TkUnknownChar,  "@"],
         [:TkDOLLAR,     TkUnknownChar,  "\$"]
@@ -849,10 +836,10 @@ module YARD
 
         @OP.def_rule("(") do
           @indent += 1
-          # if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
-          #  @lex_state = EXPR_BEG
-          #  tk = Token(TkfLPAREN)
-          # else
+            # if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
+            #  @lex_state = EXPR_BEG
+            #  tk = Token(TkfLPAREN)
+            # else
             @lex_state = EXPR_BEG
             tk = Token(TkLPAREN)
           # end

@@ -63,7 +63,7 @@ class Gem::SourceIndex
       if deprecated.empty?
         from_gems_in(*installed_spec_directories)
       else
-        from_gems_in(*deprecated) # HACK warn
+        from_gems_in(*deprecated) # HACK: warn
       end
     end
 
@@ -272,7 +272,7 @@ class Gem::SourceIndex
     requirement = nil
     only_platform = false
 
-    # TODO - Remove support and warning for legacy arguments after 2008/11
+    # TODO: Remove support and warning for legacy arguments after 2008/11
     unless Gem::Dependency === gem_pattern
       warn "#{Gem.location_of_caller.join ':'}:Warning: Gem::SourceIndex#search support for #{gem_pattern.class} patterns is deprecated, use #find_name"
     end

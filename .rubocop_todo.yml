@@ -222,21 +222,6 @@ Style/ClassMethods:
   Exclude:
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: Keywords.
-# Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
-Style/CommentAnnotation:
-  Exclude:
-    - 'lib/yard/rubygems/backports/source_index.rb'
-    - 'lib/yard/tags/overload_tag.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/CommentIndentation:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-
 # Offense count: 18
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly.
