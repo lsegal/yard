@@ -979,7 +979,7 @@ module YARD
         str = "$"
 
         tk = case ch = getc
-             when /[~_*$?!@\/\\;,=:<>".]/   #"
+             when %r{[~_*$?!@/\\;,=:<>".]}
                str << ch
                Token(TkGVAR, str)
 

@@ -229,7 +229,7 @@ module YARD
 
       def generate_doc_for_first_time(libver)
         log.enter_level(Logger::INFO) do
-          yardoc_file = libver.yardoc_file.sub(/^#{Regexp.quote Dir.pwd}[\\\/]+/, '')
+          yardoc_file = libver.yardoc_file.sub(%r{^#{Regexp.quote Dir.pwd}[\\/]+}, '')
           log.info "No yardoc db found in #{yardoc_file}, parsing source before starting server..."
         end
         Dir.chdir(libver.source_path) do

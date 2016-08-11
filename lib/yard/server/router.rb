@@ -105,17 +105,17 @@ module YARD
         path = path.gsub(%r{//+}, '/').gsub(%r{^/|/$}, '')
         return route_index if path.empty? || path == docs_prefix
         case path
-        when /^(#{docs_prefix}|#{list_prefix}|#{search_prefix}|#{static_prefix})(\/.*|$)/
+        when %r{^(#{docs_prefix}|#{list_prefix}|#{search_prefix}|#{static_prefix})(/.*|$)}
           prefix = $1
           paths = $2.gsub(%r{^/|/$}, '').split('/')
           library, paths = *parse_library_from_path(paths)
           return unless library
           return case prefix
-          when docs_prefix;   route_docs(library, paths)
-          when list_prefix;   route_list(library, paths)
-          when search_prefix; route_search(library, paths)
-          when static_prefix; route_static(library, paths)
-          end
+                 when docs_prefix;   route_docs(library, paths)
+                 when list_prefix;   route_list(library, paths)
+                 when search_prefix; route_search(library, paths)
+                 when static_prefix; route_static(library, paths)
+                 end
         end
         nil
       end

@@ -645,7 +645,7 @@ module YARD
 
         opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output ',
                                      '  directory after generating') do |asset|
-          re = /^(?:\.\.\/|\/)/
+          re = %r{^(?:\.\./|/)}
           from, to = *asset.split(':').map {|f| File.cleanpath(f) }
           to ||= from
           if from =~ re || to =~ re

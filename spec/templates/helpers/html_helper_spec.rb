@@ -193,7 +193,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       EOF
 
       html = htmlify(markdown, :markdown)
-      expect(html).to match %r{<table>}
+      expect(html).to match(/<table>/)
       expect(html).to match %r{<th>City</th>}
       expect(html).to match %r{<td>NC</td>}
     end
@@ -237,7 +237,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       obj = Registry.at('Foo::Baz#a').tag(:overload)
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       allow(self).to receive(:object).and_return(obj)
-      expect(link_object("Bar#a")).to match %r{href="Bar.html#a-instance_method"}
+      expect(link_object("Bar#a")).to match(/href="Bar.html#a-instance_method"/)
     end
 
     it "uses relative path in title" do
@@ -283,7 +283,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       obj = Registry.at('Array#&')
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       allow(self).to receive(:object).and_return(obj)
-      expect(link_object("Array#&")).to match %r{title="Array#&amp; \(method\)"}
+      expect(link_object("Array#&")).to match(/title="Array#&amp; \(method\)"/)
     end
   end
 
@@ -348,7 +348,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
   describe "#resolve_links" do
     def parse_link(link)
       results = {}
-      link =~ /<a (.+?)>(.+?)<\/a>/m
+      link =~ %r{<a (.+?)>(.+?)</a>}m
       params, results[:inner_text] = $1, $2
       params.scan(/\s*(\S+?)=['"](.+?)['"]\s*/).each do |key, value|
         results[key.to_sym] = value.gsub(/^["'](.+)["']$/, '\1')

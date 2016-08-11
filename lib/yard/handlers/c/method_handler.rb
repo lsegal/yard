@@ -1,5 +1,5 @@
 class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
-  MATCH1 = %r{rb_define_
+  MATCH1 = /rb_define_
                  (
                     singleton_method |
                     method           |
@@ -9,11 +9,11 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
                  \s*\(\s*([\w\.]+)\s*,
                    \s*"([^"]+)"\s*,
                    \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?\s*,
-                   \s*(-?\w+)\s*\)}xm
-  MATCH2 = %r{rb_define_global_function\s*\(
+                   \s*(-?\w+)\s*\)/xm
+  MATCH2 = /rb_define_global_function\s*\(
                 \s*"([^"]+)",
                 \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
-                \s*(-?\w+)\s*\)}xm
+                \s*(-?\w+)\s*\)/xm
   handles MATCH1
   handles MATCH2
   statement_class BodyStatement

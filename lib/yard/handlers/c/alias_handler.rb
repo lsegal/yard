@@ -1,8 +1,8 @@
 class YARD::Handlers::C::AliasHandler < YARD::Handlers::C::Base
-  MATCH = %r{rb_define_alias
+  MATCH = /rb_define_alias
              \s*\(\s*([\w\.]+),
              \s*"([^"]+)",
-             \s*"([^"]+)"\s*\)}xm
+             \s*"([^"]+)"\s*\)/xm
   handles MATCH
   statement_class BodyStatement
 

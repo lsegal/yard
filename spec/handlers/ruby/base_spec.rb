@@ -52,7 +52,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
 
   it "handles regex input (matches AstNode#source)" do
     class RegexHandler < Handlers::Ruby::Base
-      handles %r{^if x ==}
+      handles(/^if x ==/)
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [RegexHandler]
     ast = Parser::Ruby::RubyParser.parse("if x == 2 then true end").ast

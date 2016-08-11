@@ -145,7 +145,7 @@ module YARD
           when TkINTEGER
             token.text.to_i
           when TkREGEXP
-            token.text =~ /\A\/(.+)\/([^\/])\Z/
+            token.text =~ %r{\A/(.+)/([^/])\Z}
             Regexp.new($1, $2)
           when TkTRUE
             true

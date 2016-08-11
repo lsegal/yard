@@ -1,6 +1,6 @@
 # Parses comments
 class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
-  handles %r{.}
+  handles(/./)
   statement_class Comment
 
   process do

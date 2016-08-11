@@ -1,5 +1,5 @@
 class YARD::Handlers::C::AttributeHandler < YARD::Handlers::C::Base
-  MATCH = %r{rb_define_attr\s*\(\s*([\w\.]+),\s*"([^"]+)",\s*(0|1)\s*,\s*(0|1)\s*\)}
+  MATCH = /rb_define_attr\s*\(\s*([\w\.]+),\s*"([^"]+)",\s*(0|1)\s*,\s*(0|1)\s*\)/
   handles MATCH
 
   process do

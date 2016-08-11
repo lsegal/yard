@@ -1,6 +1,6 @@
 # Handles the Init_Libname() method
 class YARD::Handlers::C::InitHandler < YARD::Handlers::C::Base
-  MATCH = %r{\A\s*(?:\S+\s+)*void\s+(?:[Ii]nit_)?(\w+)\s*}
+  MATCH = /\A\s*(?:\S+\s+)*void\s+(?:[Ii]nit_)?(\w+)\s*/
   handles MATCH
   statement_class ToplevelStatement
 

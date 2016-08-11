@@ -64,7 +64,7 @@ module YARD
           # @todo Refactor into own SimpleMarkup subclass
           def fix_typewriter(text)
             code_tags = 0
-            text.gsub(/<(\/)?(pre|code|tt)|(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+/) do |str|
+            text.gsub(%r{<(/)?(pre|code|tt)|(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+}) do |str|
               closed, tag, first_text, type_text = $1, $2, $3, $4
 
               if tag

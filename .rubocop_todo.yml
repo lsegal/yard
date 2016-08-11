@@ -832,13 +832,6 @@ Style/RaiseArgs:
     - 'lib/yard/rubygems/doc_manager.rb'
     - 'lib/yard/rubygems/hook.rb'
 
-# Offense count: 33
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/RescueModifier:

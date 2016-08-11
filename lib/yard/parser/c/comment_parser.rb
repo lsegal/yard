@@ -121,9 +121,9 @@ module YARD
         end
 
         def remove_private_comments(comment)
-           comment = comment.gsub(/\/?\*--\n(.*?)\/?\*\+\+/m, '')
-           comment = comment.sub(/\/?\*--\n.*/m, '')
-           comment
+          comment = comment.gsub(%r{/?\*--\n(.*?)/?\*\+\+}m, '')
+          comment = comment.sub(%r{/?\*--\n.*}m, '')
+          comment
         end
       end
     end

@@ -204,7 +204,7 @@ module YARD
       # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(/<(\/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W<]|.+<\/|$)/m) do |str|
+        text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W<]|.+</|$)}m) do |str|
           closed, tag, escape, name, title, match = $1, $2, $3, $4, $5, $&
           if tag
             code_tags += (closed ? -1 : 1)
@@ -216,7 +216,7 @@ module YARD
 
           next(match) if name[0,1] == '|'
 
-          if name == '<a' && title =~ /href=["'](.+?)["'].*>.*<\/a>\s*(.*)\Z/
+          if name == '<a' && title =~ %r{href=["'](.+?)["'].*>.*</a>\s*(.*)\Z}
             name, title = $1, $2
             title = nil if title.empty?
           end
@@ -268,7 +268,7 @@ module YARD
 
       # Inserts an include link while respecting inlining
       def insert_include(text, markup = options.markup)
-        htmlify(text, markup).gsub(/\A\s*<p>|<\/p>\s*\Z/, '')
+        htmlify(text, markup).gsub(%r{\A\s*<p>|</p>\s*\Z}, '')
       end
 
       # (see BaseHelper#link_object)
@@ -307,7 +307,7 @@ module YARD
           :href => url,
           :title  => h(title)
         ).update(params)
-        params[:target] ||= '_parent' if url =~ /^(\w+):\/\//
+        params[:target] ||= '_parent' if url =~ %r{^(\w+)://}
         "<a #{tag_attrs(params)}>#{title}</a>".gsub(/[\r\n]/, ' ')
       end
 
@@ -607,7 +607,7 @@ module YARD
       # @return [String] highlighted html
       # @see #html_syntax_highlight
       def parse_codeblocks(html)
-        html.gsub(/<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:<\/code>\s*)?<\/pre>/m) do
+        html.gsub(%r{<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
           string = $3
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
           language, _ = parse_lang_for_codeblock(string)
@@ -617,7 +617,7 @@ module YARD
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')
-          %Q{<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>}
+          %(<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>)
         end
       end
     end

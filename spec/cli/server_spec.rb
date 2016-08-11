@@ -87,7 +87,7 @@ describe YARD::CLI::Server do
   context 'when .yardopts file exists' do
     before :each do
       Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
-      allow(File).to receive(:exist?).with(/\.yardoc\/complete$/).and_return(false)
+      allow(File).to receive(:exist?).with(%r{\.yardoc/complete$}).and_return(false)
       allow(Dir).to receive(:pwd).and_return('/path/to/bar')
       allow(Dir).to receive(:chdir).and_yield
       @name = 'bar'
@@ -101,7 +101,7 @@ describe YARD::CLI::Server do
     end
 
     it "uses the yardoc db location specified by .yardopts" do
-      allow(File).to receive(:exist?).with(/\/foo\/complete$/).and_return(false)
+      allow(File).to receive(:exist?).with(%r{/foo/complete$}).and_return(false)
       mock_file '/path/to/bar/.yardopts', '--db foo'
       @libraries[@name] = [Server::LibraryVersion.new(@name, nil, File.expand_path('/path/to/bar/foo'))]
       @libraries.values[0][0].source_path = File.expand_path('/path/to/bar')
@@ -118,8 +118,8 @@ describe YARD::CLI::Server do
 
   context "when .yardopts file doesn't exist" do
     before :each do
-      allow(File).to receive(:exist?).with(/\.yardoc\/complete$/).and_return(false)
-      allow(File).to receive(:exist?).with(/^(.*[\\\/])?\.yardopts$/).and_return(false)
+      allow(File).to receive(:exist?).with(%r{\.yardoc/complete$}).and_return(false)
+      allow(File).to receive(:exist?).with(%r{^(.*[\\/])?\.yardopts$}).and_return(false)
     end
 
     it "defaults to .yardoc if no library is specified" do
@@ -152,7 +152,7 @@ describe YARD::CLI::Server do
 
   describe "General options" do
     before do
-      allow(File).to receive(:exist?).with(/\.yardoc\/complete$/).and_return(false)
+      allow(File).to receive(:exist?).with(%r{\.yardoc/complete$}).and_return(false)
       allow(File).to receive(:exist?).with(/\.yardopts$/).and_return(false)
     end
 
