@@ -26,7 +26,8 @@ def tag(name, opts = nil)
   @no_types = true if opts[:no_types]
   @name = name
   out = erb('tag')
-  @no_names, @no_types = nil, nil
+  @no_names = nil
+  @no_types = nil
   out
 end
 

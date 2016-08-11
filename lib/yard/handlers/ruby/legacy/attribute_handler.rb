@@ -7,7 +7,8 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
     begin
       attr_type   = statement.tokens.first.text.to_sym
       symbols     = tokval_list statement.tokens[2..-1], :attr, TkTRUE, TkFALSE
-      read, write = true, false
+      read = true
+      write = false
     rescue SyntaxError
       raise YARD::Parser::UndocumentableError, attr_type
     end
@@ -22,7 +23,8 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
     when :attr_reader
       # change nothing
     when :attr_writer
-      read, write = false, true
+      read = false
+      write = true
     end
 
     # Add all attributes

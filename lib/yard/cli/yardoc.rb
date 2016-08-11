@@ -219,7 +219,8 @@ module YARD
         @has_markup = false
 
         if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
-          ::Encoding.default_external, ::Encoding.default_internal = 'utf-8', 'utf-8'
+          ::Encoding.default_external = 'utf-8'
+          ::Encoding.default_internal = 'utf-8'
         end
       end
 
@@ -350,7 +351,8 @@ module YARD
       #
       # @return (see YARD::Templates::Helpers::MarkupHelper#load_markup_provider)
       def verify_markup_options
-        result, lvl = false, has_markup ? log.level : Logger::FATAL
+        result = false
+        lvl = has_markup ? log.level : Logger::FATAL
         obj = Struct.new(:options).new(options)
         obj.extend(Templates::Helpers::MarkupHelper)
         options.files.each do |file|
@@ -677,7 +679,8 @@ module YARD
                                  '  (default is system locale)') do |encoding|
           begin
             if defined?(Encoding) && Encoding.respond_to?(:default_external=)
-              Encoding.default_external, Encoding.default_internal = encoding, encoding
+              Encoding.default_external = encoding
+              Encoding.default_internal = encoding
             end
           rescue ArgumentError => e
             raise OptionParser::InvalidOption, e

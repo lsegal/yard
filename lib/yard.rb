@@ -54,7 +54,8 @@ end
 
 # Keep track of Ruby version for compatibility code
 # @deprecated Use {YARD.ruby18?} or {YARD.ruby19?} instead.
-RUBY18, RUBY19 = YARD.ruby18?, YARD.ruby19?
+RUBY18 = YARD.ruby18?
+RUBY19 = YARD.ruby19?
 
 # Load Ruby core extension classes
 Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|

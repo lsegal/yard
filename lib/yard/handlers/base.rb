@@ -374,7 +374,10 @@ module YARD
           :visibility => nil
         }.update(opts)
 
-        ns, vis, sc, oo = namespace, visibility, scope, owner
+        ns = namespace
+        vis = visibility
+        sc = scope
+        oo = owner
         self.namespace = opts[:namespace]
         self.visibility = opts[:visibility] || :public
         self.scope = opts[:scope]

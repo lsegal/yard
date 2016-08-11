@@ -20,7 +20,7 @@ describe YARD::CLI::YRI do
       expect(Registry).to receive(:load).with('bar.yardoc')
       expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
       expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
-      @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
+      @yri.instance_variable_set("@cache", 'Foo' => 'bar.yardoc')
       expect(@yri.find_object('Foo')).to eq 'OBJ'
     end
 
@@ -30,7 +30,7 @@ describe YARD::CLI::YRI do
       expect(Registry).to receive(:load).with('.yardoc')
       expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
       expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
-      @yri.instance_variable_set("@cache", {'Foo' => 'bar.yardoc'})
+      @yri.instance_variable_set("@cache", 'Foo' => 'bar.yardoc')
       expect(@yri.find_object('Foo')).to eq 'OBJ'
       expect(@yri.instance_variable_get("@search_paths")[0]).to eq '.yardoc'
     end

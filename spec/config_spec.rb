@@ -18,7 +18,7 @@ describe YARD::Config do
     it "overwrites options with data in ~/.yard/config" do
       expect(File).to receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(true)
       expect(File).to receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
-      expect(YAML).to receive(:load_file).with(YARD::Config::CONFIG_FILE).and_return({'test' => true})
+      expect(YAML).to receive(:load_file).with(YARD::Config::CONFIG_FILE).and_return('test' => true)
       YARD::Config.load
       expect(YARD::Config.options[:test]).to be true
     end

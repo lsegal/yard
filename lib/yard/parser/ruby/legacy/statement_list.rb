@@ -49,8 +49,13 @@ module YARD
         @current_block = nil
         @comments_line = nil
         @comments_hash_flag = nil
-        @statement, @block, @comments = TokenList.new, nil, nil
-        @last_tk, @last_ns_tk, @before_last_tk, @before_last_ns_tk = nil, nil, nil, nil
+        @statement = TokenList.new
+        @block = nil
+        @comments = nil
+        @last_tk = nil
+        @last_ns_tk = nil
+        @before_last_tk = nil
+        @before_last_ns_tk = nil
         @first_line = nil
 
         until @done

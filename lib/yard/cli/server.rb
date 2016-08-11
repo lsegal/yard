@@ -71,7 +71,8 @@ module YARD
 
       def add_libraries(args)
         (0...args.size).step(2) do |index|
-          library, dir = args[index], args[index + 1]
+          library = args[index]
+          dir = args[index + 1]
 
           libver = nil
           if dir

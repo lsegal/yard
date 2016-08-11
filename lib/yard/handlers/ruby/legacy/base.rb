@@ -54,8 +54,6 @@ module YARD
             statement.tokens.first.text
           elsif statement.tokens.first.is_a?(TkDEF)
             extract_method_details.first
-          else
-            nil
           end
         end
 
@@ -68,7 +66,8 @@ module YARD
         #   arguments (name and optional value)
         def extract_method_details
           if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
-            meth, args = $1, $2
+            meth = $1
+            args = $2
             meth.gsub!(/\s+/, '')
             args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
             args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
@@ -180,13 +179,14 @@ module YARD
         def tokval_list(tokenlist, *accepted_types)
           return [] unless tokenlist
           out = [[]]
-          parencount, beforeparen = 0, 0
+          parencount = 0
+          beforeparen = 0
           needcomma = false
           seen_comma = true
           tokenlist.each do |token|
             tokval = accepted_types == [:all] ? token.text : tokval(token, *accepted_types)
             parencond = !out.last.empty? && !tokval.nil?
-            #puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
+            # puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
             case token
             when TkCOMMA
               if parencount == 0

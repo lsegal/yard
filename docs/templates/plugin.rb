@@ -30,7 +30,8 @@ module TagTemplateHelper
       if object.is_a?(CodeObjects::Base) &&
          (object.tag('yard.tag') || object.tag('yard.directive') ||
          (object.type == :class && object.superclass.name == :Directive))
-        obj, self.object = object, Registry.root
+        obj = object
+        self.object = Registry.root
         url = super
         self.object = obj
         url
@@ -46,9 +47,11 @@ module TagTemplateHelper
       when "yard:include_tags"
         return T('yard_tags').run(options)
       when /^tag:(\S+)/
-        tag_name, suffix = $1, "tag"
+        tag_name = $1
+        suffix = "tag"
         if tag_name =~ /^!/
-          tag_name, suffix = tag_name[1..-1], "directive"
+          tag_name = tag_name[1..-1]
+          suffix = "directive"
         end
 
         obj = Registry.at("YARD::Tags::Library##{tag_name}_#{suffix}")

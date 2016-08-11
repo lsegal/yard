@@ -342,7 +342,8 @@ module YARD
             self.line_range = @fallback_line
             self.source_range = @fallback_source
           elsif !children.empty?
-            f, l = children.first, children.last
+            f = children.first
+            l = children.last
             self.line_range = Range.new(f.line_range.first, l.line_range.last)
             self.source_range = Range.new(f.source_range.first, l.source_range.last)
           elsif @fallback_line || @fallback_source

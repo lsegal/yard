@@ -74,10 +74,10 @@ module YARD
       ENCODING_BYTE_ORDER_MARKS = {
         'utf-8' => "\xEF\xBB\xBF",
         # Not yet supported
-        #'utf-16be' => "\xFE\xFF",
-        #'utf-16le' => "\xFF\xFE",
-        #'utf-32be' => "\x00\x00\xFF\xFE",
-        #'utf-32le' => "\xFF\xFE",
+        # 'utf-16be' => "\xFE\xFF",
+        # 'utf-16le' => "\xFF\xFE",
+        # 'utf-32be' => "\x00\x00\xFF\xFE",
+        # 'utf-32le' => "\xFF\xFE",
       }
 
       class << self

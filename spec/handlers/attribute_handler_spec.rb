@@ -4,7 +4,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandl
   before(:all) { parse_file :attribute_handler_001, __FILE__ }
 
   def read_write(namespace, name, read, write, scope = :instance)
-    rname, wname = namespace.to_s + "#" + name.to_s, namespace.to_s + "#" + name.to_s + "="
+    rname = namespace.to_s + "#" + name.to_s
+    wname = namespace.to_s + "#" + name.to_s + "="
     if read
       expect(Registry.at(rname)).to be_instance_of(CodeObjects::MethodObject)
     else

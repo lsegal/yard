@@ -45,7 +45,8 @@ module YARD
 
       def add_gems(gems)
         0.step(gems.size - 1, 2) do |index|
-          gem, ver_require = gems[index], gems[index + 1] || ">= 0"
+          gem = gems[index]
+          ver_require = gems[index + 1] || ">= 0"
           specs = Gem.source_index.find_name(gem, ver_require)
           if specs.empty?
             log.warn "#{gem} #{ver_require} could not be found in RubyGems index"

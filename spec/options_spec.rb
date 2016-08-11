@@ -111,7 +111,7 @@ describe YARD::Options do
     it "does not ignore keys with no setter (OpenStruct behaviour)" do
       o = FooOptions.new
       o.update(:bar => "xyz")
-      expect(o.to_hash).to eq({:foo => "abc", :bar => "xyz"})
+      expect(o.to_hash).to eq(:foo => "abc", :bar => "xyz")
     end
   end
 
@@ -119,13 +119,13 @@ describe YARD::Options do
     it "updates a new object" do
       o = FooOptions.new
       expect(o.merge(:foo => "xyz").object_id).not_to eq o.object_id
-      expect(o.merge(:foo => "xyz").to_hash).to eq({:foo => "xyz"})
+      expect(o.merge(:foo => "xyz").to_hash).to eq(:foo => "xyz")
     end
 
     it "adds in values from original object" do
       o = FooOptions.new
       o.update(:bar => "foo")
-      expect(o.merge(:baz => 1).to_hash).to eq({:foo => "abc", :bar => "foo", :baz => 1})
+      expect(o.merge(:baz => 1).to_hash).to eq(:foo => "abc", :bar => "foo", :baz => 1)
     end
   end
 
@@ -149,7 +149,7 @@ describe YARD::Options do
         def foo; "HELLO#{@foo}" end
       end
       o = ToHashOptions2.new
-      expect(o.to_hash).to eq({:foo => "HELLO1"})
+      expect(o.to_hash).to eq(:foo => "HELLO1")
     end
 
     it "ignores ivars with no accessor" do
@@ -158,14 +158,14 @@ describe YARD::Options do
         def initialize; @foo = 1; @bar = "NOIGNORE" end
       end
       o = ToHashOptions3.new
-      expect(o.to_hash).to eq({:foo => 1, :bar => "NOIGNORE"})
+      expect(o.to_hash).to eq(:foo => 1, :bar => "NOIGNORE")
     end
   end
 
   describe "#tap" do
     it "supports #tap(&block) (even in 1.8.6)" do
       o = FooOptions.new.tap {|obj| obj.foo = :BAR }
-      expect(o.to_hash).to eq({:foo => :BAR})
+      expect(o.to_hash).to eq(:foo => :BAR)
     end
   end
 end

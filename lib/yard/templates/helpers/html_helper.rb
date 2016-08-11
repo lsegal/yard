@@ -205,7 +205,12 @@ module YARD
       def resolve_links(text)
         code_tags = 0
         text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W<]|.+</|$)}m) do |str|
-          closed, tag, escape, name, title, match = $1, $2, $3, $4, $5, $&
+          closed = $1
+          tag = $2
+          escape = $3
+          name = $4
+          title = $5
+          match = $&
           if tag
             code_tags += (closed ? -1 : 1)
             next str
@@ -217,7 +222,8 @@ module YARD
           next(match) if name[0, 1] == '|'
 
           if name == '<a' && title =~ %r{href=["'](.+?)["'].*>.*</a>\s*(.*)\Z}
-            name, title = $1, $2
+            name = $1
+            title = $2
             title = nil if title.empty?
           end
 
@@ -343,7 +349,8 @@ module YARD
 
         if obj.is_a?(CodeObjects::Base) && !obj.is_a?(CodeObjects::NamespaceObject)
           # If the obj is not a namespace obj make it the anchor.
-          anchor, obj = obj, obj.namespace
+          anchor = obj
+          obj = obj.namespace
         end
 
         objpath = serializer.serialized_path(obj)
@@ -597,7 +604,8 @@ module YARD
       def parse_lang_for_codeblock(source)
         type = nil
         if source =~ /\A(?:[ \t]*\r?\n)?[ \t]*!!!([\w.+-]+)[ \t]*\r?\n/
-          type, source = $1, $'
+          type = $1
+          source = $'
         end
 
         [type, source]

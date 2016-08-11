@@ -60,9 +60,9 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
         nodes
       end
 
-    decorated_methods = selected_nodes.map { |param|
+    decorated_methods = selected_nodes.map do |param|
       process_decorator_parameter param, opts, &block
-    }.flatten
+    end.flatten
 
     # Store method nodes in decorator node.
     statement.define_singleton_method :decorators do

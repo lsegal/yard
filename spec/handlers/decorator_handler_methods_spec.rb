@@ -34,10 +34,10 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     # @param symbols [Symbol] method names
     # @return [String] method definition code
     def make_defs(*symbols)
-      symbols.map { |s|
+      symbols.map do |s|
         s = "self.#{s}" if mock_handler_opts[:scope] == :class
         "def #{s}; end"
-      }.join("\n")
+      end.join("\n")
     end
 
     # Generate an AST for the given source code string.
@@ -65,7 +65,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       eof
     end
 
-    before {
+    before do
       Registry.clear
       YARD::Handlers::Base.clear_subclasses
 
@@ -75,7 +75,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       create_test_handler :third
 
       StubbedSourceParser.parse_string code
-    }
+    end
 
     it "returns an array of hashes containing the method proxy, node, and name" do
       expect(subject[:return]).to be_an Array
@@ -135,11 +135,11 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
       describe "can specify which params to capture as methods" do
         let(:method_defs) { [:foo, :bar, :baz, :bat] }
-        let(:parameters) {
+        let(:parameters) do
           [:option_1, :baz, :bat, :option_2, :foo, :bar].map do |s|
             make_ast s.inspect
           end
-        }
+        end
 
         describe "as a single param" do
           let(:nodes) { parameters[4] }
@@ -234,11 +234,10 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
           describe "for methods" do
             let(:param_string) { decorator_params.join(',') }
-            let(:decorator_params) {
-              [
-                "def #{'self.' if mock_handler_opts[:scope] == :class}foo f1, f2; end",
-              "def #{'self.' if mock_handler_opts[:scope] == :class}bar b1, b2; end"
-              ]}
+            let(:decorator_params) do
+              ["def #{'self.' if mock_handler_opts[:scope] == :class}foo f1, f2; end",
+              "def #{'self.' if mock_handler_opts[:scope] == :class}bar b1, b2; end"]
+            end
 
             specify do
               expect(subject.count).to eq decorator_params.count
@@ -282,13 +281,14 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
       describe "does not attach" do
         describe "to undefined methods" do
-          let(:code) {
-            "
+          let(:code) do
+            <<-eof
             class #{class_name}
               # #{docstring}
               mock_decorator :foo
             end
-          "}
+            eof
+          end
 
           specify do
             expect(subject).not_to respond_to :docstring
@@ -296,8 +296,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
         end
 
         describe "to methods with existing docstring" do
-          let(:code) {
-            "
+          let(:code) do
+            <<-eof
             class #{class_name}
 
               # original docstring
@@ -306,7 +306,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
               # #{docstring}
               mock_decorator :foo
             end
-          "}
+            eof
+          end
 
           specify do
             expect(subject.docstring).to eq 'original docstring'
@@ -319,14 +320,15 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       subject { Registry.at method_string }
 
       let(:param_string) { 'def foo param1, param2; end' }
-      let(:code) {
-        "
+      let(:code) do
+        <<-eof
         class #{class_name}
           #{make_defs(*method_defs)}
           # #{docstring}
           first_decorator second_decorator third_decorator #{param_string}
         end
-      "}
+        eof
+      end
 
       specify "register nested method defs" do
         expect(subject).to be_a YARD::CodeObjects::MethodObject
@@ -365,7 +367,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
       describe "transfer source to decorated method defs" do
         specify do
-          expect(subject.source).to eq code.lines.to_a[-3].strip
+          expect(subject.source).to eq code.lines.to_a[-2].strip
         end
 
         describe "unless opt-out param is set" do

@@ -81,7 +81,8 @@ module YARD
 
       # @return [String] a URL for a file with a timestamp
       def mtime_url(file)
-        url, time = url_for(file), mtime(file)
+        url = url_for(file)
+        time = mtime(file)
         url + (time ? "?#{time}" : "")
       end
     end

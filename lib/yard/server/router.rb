@@ -77,7 +77,8 @@ module YARD
       #   will be nil if no matching library was found.
       def parse_library_from_path(paths)
         return [adapter.libraries.values.first.first, paths] if adapter.options[:single_library]
-        library, paths = nil, paths.dup
+        library = nil
+        paths = paths.dup
         libs = adapter.libraries[paths.first]
         if libs
           paths.shift

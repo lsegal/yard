@@ -28,8 +28,8 @@ describe YARD::Serializers::YardocSerializer do
 
     it "maintains hash key equality when loading a dumped object" do
       newfoo = @serializer.internal_dump(@foo)
-      expect({@foo => 1}).to have_key(newfoo)
-      expect({newfoo => 1}).to have_key(@foo)
+      expect(@foo => 1).to have_key(newfoo)
+      expect(newfoo => 1).to have_key(@foo)
     end
   end
 

@@ -128,12 +128,12 @@ eop
         o.docstring = "An alias to {Parser::SourceParser}'s parsing method"
       end
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [],
           :comments => ["YARD.parse"]
         }
-      })
+      )
     end
 
     it "extracts at location" do
@@ -142,12 +142,12 @@ eop
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [["yard.rb", 13]],
           :comments => ["YARD.parse"]
         }
-      })
+      )
     end
 
     it "extracts at tag name" do
@@ -156,12 +156,12 @@ eop
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "tag|see|Parser::SourceParser.parse" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@see"]
         }
-      })
+      )
     end
 
     it "extracts at tag text" do
@@ -173,7 +173,7 @@ eod
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "tag|example|Parse a glob of files" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@example"]
@@ -182,7 +182,7 @@ eod
           :locations => [["yard.rb", 12]],
           :comments => ["@example Parse a glob of files"]
         }
-      })
+      )
     end
 
     it "extracts at tag types" do
@@ -194,7 +194,7 @@ eod
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "tag|param|paths" => {
           :locations => [["yard.rb", 12]],
           :comments => ["@param [String, Array<String>]"]
@@ -203,7 +203,7 @@ eod
           :locations => [["yard.rb", 12]],
           :comments => ["@param [String, Array<String>] paths"]
         }
-      })
+      )
     end
 
     it "extracts at overload tag recursively" do
@@ -216,7 +216,7 @@ eod
       end
 
       @generator.parse_objects([object])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "tag|overload|foo" => {
           :locations => [],
           :comments => ["@overload"]
@@ -233,7 +233,7 @@ eod
           :locations => [],
           :comments => ["@param [Integer] i"]
         }
-      })
+      )
     end
   end
 
@@ -249,7 +249,7 @@ eor
       allow(File).to receive(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)
       @generator.parse_files([file])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         "Getting Started Guide" => {
           :locations => [[path, 1]],
           :comments => ["title"]
@@ -258,7 +258,7 @@ eor
           :locations => [[path, 3]],
           :comments => []
         }
-      })
+      )
     end
 
     it "extracts at paragraphs" do
@@ -280,7 +280,7 @@ eot
       allow(File).to receive(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)
       @generator.parse_files([file])
-      expect(@generator.messages).to eq create_messages({
+      expect(@generator.messages).to eq create_messages(
         paragraph1 => {
           :locations => [[path, 1]],
           :comments => []
@@ -289,7 +289,7 @@ eot
           :locations => [[path, 4]],
           :comments => []
         }
-      })
+      )
     end
   end
 end

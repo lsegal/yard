@@ -94,7 +94,8 @@ module YARD
           brace_level = 1
           loop do
             strip_non_statement_data
-            start, line = @index, @line
+            start = @index
+            line = @line
             consume_until(/[{};]/)
             brace_level += 1 if prevchar == '{'
             brace_level -= 1 if prevchar == '}'

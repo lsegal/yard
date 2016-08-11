@@ -56,9 +56,11 @@ module YARD
             signature, types = *line.split(/ [-=]> /)
             types = parse_types(types)
             if signature.sub!(/\[?\s*(\{(?:\s*\|(.+?)\|)?.*\})\s*\]?\s*$/, '') && $1
-              blk, blkparams = $1, $2
+              blk = $1
+              blkparams = $2
             else
-              blk, blkparams = nil, nil
+              blk = nil
+              blkparams = nil
             end
             case signature
             when /^(\w+)\s*=\s+(\w+)/

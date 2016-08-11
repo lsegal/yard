@@ -131,7 +131,8 @@ module YARD
       return '' if !content || content.empty?
       docstring = ""
 
-      indent, last_indent = content.first[/^\s*/].length, 0
+      indent = content.first[/^\s*/].length
+      last_indent = 0
       orig_indent = 0
       directive = false
       last_line = ""
@@ -154,13 +155,17 @@ module YARD
           else
             create_tag(tag_name, buf)
           end
-          tag_name, tag_buf, directive = nil, [], false
+          tag_name = nil
+          tag_buf = []
+          directive = false
           orig_indent = 0
         end
 
         # Found a meta tag
         if line =~ META_MATCH
-          directive, tag_name, tag_buf = $1, $2, [($3 || '')]
+          directive = $1
+          tag_name = $2
+          tag_buf = [($3 || '')]
         elsif tag_name && indent >= orig_indent && !empty
           orig_indent = indent if orig_indent == 0
           # Extra data added to the tag on the next line
@@ -293,16 +298,13 @@ module YARD
     private
 
     def namespace
-      if object
-        object.namespace
-      else
-        nil
-      end
+      object && object.namespace
     end
 
     def detect_reference(content)
       if content =~ /\A\s*\(see (\S+)\s*\)(?:\s|$)/
-        path, extra = $1, $'
+        path = $1
+        extra = $'
         [CodeObjects::Proxy.new(namespace, path), extra]
       else
         [nil, content]

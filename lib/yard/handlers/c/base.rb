@@ -66,7 +66,8 @@ module YARD
         end
 
         def ensure_variable_defined!(var, max_retries = 1)
-          retries, object = 0, nil
+          retries = 0
+          object = nil
 
           loop do
             object = namespace_for_variable(var)

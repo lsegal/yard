@@ -231,7 +231,8 @@ module YARD
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
           if node.respond_to?(:block)
-            sr, lr = node.block.source_range, node.block.line_range
+            sr = node.block.source_range
+            lr = node.block.line_range
             node.block.source_range = Range.new(sr.first, @tokens.last[2][1] - 1)
             node.block.line_range = Range.new(lr.first, @tokens.last[2][0])
           end

@@ -34,12 +34,15 @@ module YARD
         end
 
         if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
-          @orignamespace, @origname = namespace, name
+          @orignamespace = namespace
+          @origname = name
           @imethod = true if name.include? ISEP
           namespace = Proxy.new(namespace, $`) unless $`.empty?
           name = $1
         else
-          @orignamespace, @origname, @imethod = nil, nil, nil
+          @orignamespace = nil
+          @origname = nil
+          @imethod = nil
         end
 
         @name = name.to_sym

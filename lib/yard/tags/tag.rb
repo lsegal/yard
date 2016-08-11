@@ -41,7 +41,10 @@ module YARD
       #                                for the tag
       # @param [String] name           optional key name which the tag refers to
       def initialize(tag_name, text, types = nil, name = nil)
-        @tag_name, @text, @name, @types = tag_name.to_s, text, name, (types ? [types].flatten.compact : nil)
+        @tag_name = tag_name.to_s
+        @text = text
+        @name = name
+        @types = (types ? [types].flatten.compact : nil)
       end
 
       # Convenience method to access the first type specified. This should mainly

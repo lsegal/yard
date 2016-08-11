@@ -3,7 +3,7 @@ shared_examples "class method visibility decorator" do
   # visibility decorator to test.
 
   describe do
-    before {
+    before do
       StubbedSourceParser.parse_string <<-CODE
         class A
           def self.b; end
@@ -15,7 +15,7 @@ shared_examples "class method visibility decorator" do
           #{visibility}_class_method("e")
         end
       CODE
-    }
+    end
 
     it "handles private_class_method statement" do
       expect(Registry.at('A.c').visibility).to eq visibility
@@ -42,7 +42,7 @@ shared_examples "class method visibility decorator" do
   end
 
   describe "handles reopened class" do
-    before {
+    before do
       StubbedSourceParser.parse_string <<-CODE
         class SingletonClass
 
@@ -78,7 +78,7 @@ shared_examples "class method visibility decorator" do
 
         end
       CODE
-    }
+    end
 
     specify do
       expect(Registry.at('SingletonClass.foo').visibility).not_to eq visibility
@@ -94,7 +94,7 @@ shared_examples "class method visibility decorator" do
     # Valid as of Ruby 2.1.0:
     # private_class_method def self.foo; end
 
-    let(:code) {
+    let(:code) do
       <<-CODE
         class SingletonClass
           # Valid Ruby 2.1.0 syntax.
@@ -103,7 +103,7 @@ shared_examples "class method visibility decorator" do
           end
         end
       CODE
-    }
+    end
 
     let(:method_def) { "#{visibility}_class_method def self.foo param1, param2" }
 

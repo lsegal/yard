@@ -56,7 +56,8 @@ module YARD
       def parse_tag_with_types_and_title(tag_name, text)
         name, types, text = *extract_types_and_name_from_text_unstripped(text)
         if name
-          title, desc = name, text
+          title = name
+          desc = text
         else
           title, desc = *extract_title_and_desc_from_text(text)
         end
@@ -72,7 +73,8 @@ module YARD
 
       def parse_tag_with_types_name_and_default(tag_name, text)
         # Can't allow () in a default tag, otherwise the grammar is too ambiguous when types is omitted.
-        open, close = TYPELIST_OPENING_CHARS.delete('('), TYPELIST_CLOSING_CHARS.delete(')')
+        open = TYPELIST_OPENING_CHARS.delete('(')
+        close = TYPELIST_CLOSING_CHARS.delete(')')
         name, types, text = *extract_types_and_name_from_text(text, open, close)
         name, text = *extract_name_from_text(text) unless name
         if text.start_with?('(')
@@ -101,7 +103,8 @@ module YARD
 
       def extract_title_and_desc_from_text(text)
         raise TagFormatError if text.nil? || text.empty?
-        title, desc = nil, nil
+        title = nil
+        desc = nil
         if text =~ /\A[ \t]\n/
           desc = text
         else
@@ -134,7 +137,10 @@ module YARD
       def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
         e = 0
         before = ''
-        list, level, seen_space, i = [''], 0, false, 0
+        list = ['']
+        level = 0
+        seen_space = false
+        i = 0
         last_seen = ''
         while i < text.length
           c = text[i, 1]

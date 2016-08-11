@@ -17,8 +17,10 @@ describe YARD::Templates::Engine.template(:default, :onefile) do
   before do
     Registry.clear
     if defined?(::Encoding)
-      @eenc, Encoding.default_external = Encoding.default_external, 'ascii-8bit'
-      @ienc, Encoding.default_internal = Encoding.default_internal, 'ascii-8bit'
+      @eenc = Encoding.default_external
+      Encoding.default_external = 'ascii-8bit'
+      @ienc = Encoding.default_internal
+      Encoding.default_internal = 'ascii-8bit'
     end
   end
 

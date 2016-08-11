@@ -13,7 +13,8 @@ class YARD::Handlers::Ruby::Legacy::AliasHandler < YARD::Handlers::Ruby::Legacy:
     raise YARD::Parser::UndocumentableError, statement.tokens.first.text if names.size != 2
 
     names = names.map {|n| Symbol === n ? n.to_s.delete('"') : n }
-    new_meth, old_meth = names[0].to_sym, names[1].to_sym
+    new_meth = names[0].to_sym
+    old_meth = names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
       o.add_file(parser.file, statement.tokens.first.line_no, statement.comments)

@@ -22,31 +22,6 @@ Style/BlockDelimiters:
     - 'spec/handlers/decorator_handler_methods_spec.rb'
     - 'spec/parser/source_parser_spec.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/BlockEndNewline:
-  Exclude:
-    - 'spec/handlers/decorator_handler_methods_spec.rb'
-
-# Offense count: 43
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'spec/cli/yardoc_spec.rb'
-    - 'spec/cli/yri_spec.rb'
-    - 'spec/config_spec.rb'
-    - 'spec/core_ext/hash_spec.rb'
-    - 'spec/i18n/pot_generator_spec.rb'
-    - 'spec/options_spec.rb'
-    - 'spec/registry_store_spec.rb'
-    - 'spec/serializers/yardoc_serializer_spec.rb'
-    - 'spec/server/webrick_servlet_spec.rb'
-    - 'spec/templates/helpers/base_helper_spec.rb'
-    - 'spec/templates/helpers/html_helper_spec.rb'
-    - 'spec/templates/template_spec.rb'
-
 # Offense count: 17
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly.
@@ -68,50 +43,12 @@ Style/ConditionalAssignment:
     - 'templates/default/module/setup.rb'
     - 'templates/guide/layout/html/setup.rb'
 
-# Offense count: 3
-Style/DoubleNegation:
-  Exclude:
-    - 'lib/yard/code_objects/method_object.rb'
-    - 'lib/yard/templates/helpers/markup/rdoc_markup.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/EachWithObject:
   Exclude:
     - 'lib/yard/parser/ruby/legacy/token_list.rb'
     - 'lib/yard/templates/engine.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'lib/yard/docstring_parser.rb'
-    - 'lib/yard/handlers/ruby/base.rb'
-    - 'lib/yard/handlers/ruby/legacy/base.rb'
-    - 'lib/yard/parser/ruby/legacy/statement_list.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: consistent, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
-Style/FirstParameterIndentation:
-  Exclude:
-    - 'spec/parser/source_parser_spec.rb'
-    - 'spec/templates/module_spec.rb'
-
-# Offense count: 10
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: format, sprintf, percent
-Style/FormatString:
-  Exclude:
-    - 'lib/yard/cli/command_parser.rb'
-    - 'lib/yard/cli/stats.rb'
-    - 'lib/yard/serializers/file_system_serializer.rb'
-    - 'lib/yard/serializers/yardoc_serializer.rb'
-    - 'lib/yard/templates/helpers/html_helper.rb'
-    - 'lib/yard/templates/helpers/text_helper.rb'
 
 # Offense count: 10
 # Configuration parameters: MinBodyLength.
@@ -155,30 +92,6 @@ Style/IndentArray:
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
 Style/IndentHash:
   EnforcedStyle: consistent
-
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: line_count_dependent, lambda, literal
-Style/Lambda:
-  Exclude:
-    - 'lib/yard/cli/yardoc.rb'
-    - 'lib/yard/templates/template_options.rb'
-    - 'spec/options_spec.rb'
-    - 'spec/rake/yardoc_task_spec.rb'
-    - 'spec/tags/types_explainer_spec.rb'
-    - 'spec/templates/tag_spec.rb'
-    - 'spec/templates/template_spec.rb'
-
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'benchmarks/template_profile.rb'
-    - 'lib/yard/handlers/ruby/legacy/base.rb'
-    - 'lib/yard/parser/source_parser.rb'
-    - 'spec/core_ext/string_spec.rb'
-    - 'spec/handlers/legacy_base_spec.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.

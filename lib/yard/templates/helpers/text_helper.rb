@@ -96,7 +96,10 @@ module YARD
 
         def resolve_links(text)
           text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W]|$)/m) do |_str|
-            escape, name, title, match = $1, $2, $3, $&
+            escape = $1
+            name = $2
+            title = $3
+            match = $&
             next(match[1..-1]) if escape
             next(match) if name[0, 1] == '|'
             linkify(name, title)

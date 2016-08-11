@@ -156,8 +156,6 @@ module YARD
             statement.method_name(true).to_s
           elsif statement.type == :var_ref || statement.type == :vcall
             statement[0].jump(:ident, :kw).source
-          else
-            nil
           end
         end
       end

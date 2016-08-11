@@ -61,15 +61,18 @@ module YARD
       orignamespace = namespace
 
       if path =~ /\A#{default_separator}/
-        path, namespace = $', @registry.root
+        path = $'
+        namespace = @registry.root
       end
 
-      resolved, lexical_lookup = nil, 0
+      resolved = nil
+      lexical_lookup = 0
       while namespace && !resolved
         resolved = lookup_path_direct(namespace, path, type)
         resolved ||= lookup_path_inherited(namespace, path, type) if inheritance
         break if resolved
-        namespace, lexical_lookup = namespace.parent, lexical_lookup + 1
+        namespace = namespace.parent
+        lexical_lookup = lexical_lookup + 1
       end
 
       # method objects cannot be resolved through lexical lookup by more than 1 ns
@@ -110,10 +113,15 @@ module YARD
 
     # Performs a lookup through the inheritance chain on a path with a type hint.
     def lookup_path_inherited(namespace, path, type)
-      resolved, last_obj, scopes, last_sep, pos = nil, namespace, [], nil, 0
+      resolved = nil
+      last_obj = namespace
+      scopes = []
+      last_sep = nil
+      pos = 0
 
       if path =~ /\A(#{separators_match})/
-        last_sep, path = $1, $'
+        last_sep = $1
+        path = $'
       end
 
       path.scan(/(.+?)(#{separators_match}|$)/).each do |part, sep|
@@ -128,7 +136,8 @@ module YARD
         collect_namespaces(last_obj).each do |ns|
           next if ns.is_a?(CodeObjects::Proxy)
 
-          found, search_seps = nil, []
+          found = nil
+          search_seps = []
           scopes.each do |scope|
             search_seps += separators_for_type(scope)
           end

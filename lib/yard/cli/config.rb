@@ -80,7 +80,8 @@ module YARD
           YARD::Config.options[key] = YARD::Config::DEFAULT_CONFIG_OPTIONS[key]
         else
           log.debug "Setting #{key} to #{values.inspect}"
-          items, current_items = encode_values, YARD::Config.options[key]
+          items = encode_values
+          current_items = YARD::Config.options[key]
           items = [current_items].flatten + [items].flatten if append
           YARD::Config.options[key] = items
         end

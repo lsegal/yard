@@ -19,7 +19,8 @@ class YARD::Handlers::Ruby::AliasHandler < YARD::Handlers::Ruby::Base
     end
     raise YARD::Parser::UndocumentableError, "alias/alias_method" if names.size != 2
 
-    new_meth, old_meth = names[0].to_sym, names[1].to_sym
+    new_meth = names[0].to_sym
+    old_meth = names[1].to_sym
     old_obj = namespace.child(:name => old_meth, :scope => scope)
     new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
       o.add_file(parser.file, statement.line)

@@ -100,7 +100,7 @@ describe YARD::Parser::SourceParser do
     end
 
     it "handles basic callback support and maintain files/globals" do
-      before_list do |_f, g| g.foo = :bar end
+      before_list {|_f, g| g.foo = :bar }
       after_list do |files, globals|
         expect(files).to eq ['foo.rb', 'bar.rb']
         expect(globals.foo).to eq :bar
@@ -551,9 +551,8 @@ describe YARD::Parser::SourceParser do
               default_encoding = 'UTF-8'
               expect(result.enumerator[0].source.encoding.to_s).to eq(default_encoding)
             else
-              expect(['Shift_JIS', 'Windows-31J', 'UTF-8']).send(msg, include(
-                result.enumerator[0].source.encoding.to_s
-              ))
+              expect(['Shift_JIS', 'Windows-31J', 'UTF-8']).send(msg,
+                include(result.enumerator[0].source.encoding.to_s))
             end
           end
           expect(result.encoding_line).send(msg, eq(src.split("\n").last))

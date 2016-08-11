@@ -84,7 +84,8 @@ module YARD
         def handle_alias(var_name, new_name, old_name)
           namespace = namespace_for_variable(var_name)
           return if namespace.nil?
-          new_meth, old_meth = new_name.to_sym, old_name.to_sym
+          new_meth = new_name.to_sym
+          old_meth = old_name.to_sym
           old_obj = namespace.child(:name => old_meth, :scope => :instance)
           new_obj = register MethodObject.new(namespace, new_meth, :instance) do |o|
             register_visibility(o, visibility)
@@ -152,9 +153,11 @@ module YARD
         end
 
         def find_method_body(object, symbol)
-          file, in_file = statement.file, false
+          file = statement.file
+          in_file = false
           if statement.comments && statement.comments.source =~ /\A\s*in (\S+)\Z/
-            file, in_file = $1, true
+            file = $1
+            in_file = true
             process_file(file, object)
           end
 

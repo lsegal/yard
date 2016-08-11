@@ -162,7 +162,8 @@ module YARD
     #   values can be found in Ruby's Logger class.
     # @yield the block with the logger temporarily set to +new_level+
     def enter_level(new_level = level)
-      old_level, self.level = level, new_level
+      old_level = level
+      self.level = new_level
       yield
     ensure
       self.level = old_level

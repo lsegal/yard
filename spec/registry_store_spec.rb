@@ -16,7 +16,7 @@ describe YARD::RegistryStore do
       expect(File).to receive(:file?).with('foo/checksums').and_return(false)
       expect(File).to receive(:file?).with('foo/proxy_types').and_return(false)
       expect(File).to receive(:file?).with('foo/object_types').and_return(false)
-      expect(@serializer).to receive(:deserialize).with('root').and_return({:root => @foo, :A => @bar})
+      expect(@serializer).to receive(:deserialize).with('root').and_return(:root => @foo, :A => @bar)
       expect(@store.load('foo')).to be true
       expect(@store.root).to eq @foo
       expect(@store.get('A')).to eq @bar
@@ -75,7 +75,7 @@ describe YARD::RegistryStore do
         'file1 CHECKSUM1', '  file2 CHECKSUM2 '
       ])
       expect(@store.load('foo')).to be true
-      expect(@store.checksums).to eq({'file1' => 'CHECKSUM1', 'file2' => 'CHECKSUM2'})
+      expect(@store.checksums).to eq('file1' => 'CHECKSUM1', 'file2' => 'CHECKSUM2')
     end
 
     it "loads proxy_types if they exist" do
@@ -84,9 +84,9 @@ describe YARD::RegistryStore do
       expect(File).to receive(:file?).with('foo/proxy_types').and_return(true)
       expect(File).to receive(:file?).with('foo/object_types').and_return(false)
       expect(File).to receive(:file?).with('foo/objects/root.dat').and_return(false)
-      expect(File).to receive(:read_binary).with('foo/proxy_types').and_return(Marshal.dump({'a' => 'b'}))
+      expect(File).to receive(:read_binary).with('foo/proxy_types').and_return(Marshal.dump('a' => 'b'))
       expect(@store.load('foo')).to be true
-      expect(@store.proxy_types).to eq({'a' => 'b'})
+      expect(@store.proxy_types).to eq('a' => 'b')
     end
 
     it "loads root object if it exists" do
@@ -215,7 +215,7 @@ describe YARD::RegistryStore do
       expect(File).to receive(:file?).with('foo/checksums').and_return(false)
       expect(File).to receive(:file?).with('foo/proxy_types').and_return(false)
       expect(File).to receive(:file?).with('foo/object_types').and_return(false)
-      expect(@serializer).to receive(:deserialize).with('root').and_return({:'A#foo' => @foo, :A => @bar})
+      expect(@serializer).to receive(:deserialize).with('root').and_return(:'A#foo' => @foo, :A => @bar)
       @store.load('foo')
       expect(@store.paths_for_type(:method)).to eq ['#foo']
       expect(@store.paths_for_type(:class)).to eq ['Bar']

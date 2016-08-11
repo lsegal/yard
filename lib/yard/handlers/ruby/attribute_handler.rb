@@ -8,7 +8,8 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
 
   process do
     return if statement.type == :var_ref || statement.type == :vcall
-    read, write = true, false
+    read = true
+    write = false
     params = statement.parameters(false).dup
 
     # Change read/write based on attr_reader/writer/accessor
@@ -23,7 +24,8 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
     when :attr_reader
       # change nothing
     when :attr_writer
-      read, write = false, true
+      read = false
+      write = true
     end
 
     # Add all attributes

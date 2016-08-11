@@ -271,14 +271,14 @@ describe YARD::CLI::Yardoc do
       it "copies assets to output directory" do
         expect(FileUtils).to receive(:cp_r).with('a', 'doc/a')
         @yardoc.run(*%w(--asset a))
-        expect(@yardoc.assets).to eq({'a' => 'a'})
+        expect(@yardoc.assets).to eq('a' => 'a')
       end
 
       it "allows multiple --asset options" do
         expect(FileUtils).to receive(:cp_r).with('a', 'doc/a')
         expect(FileUtils).to receive(:cp_r).with('b', 'doc/b')
         @yardoc.run(*%w(--asset a --asset b))
-        expect(@yardoc.assets).to eq({'a' => 'a', 'b' => 'b'})
+        expect(@yardoc.assets).to eq('a' => 'a', 'b' => 'b')
       end
 
       it "does not allow from or to to refer to a path above current path" do
@@ -296,7 +296,7 @@ describe YARD::CLI::Yardoc do
       it "allows from:to syntax" do
         expect(FileUtils).to receive(:cp_r).with('foo', 'doc/bar')
         @yardoc.run(*%w(--asset foo:bar))
-        expect(@yardoc.assets).to eq({'foo' => 'bar'})
+        expect(@yardoc.assets).to eq('foo' => 'bar')
       end
 
       it "does not put from inside of to/ if from is a directory" do

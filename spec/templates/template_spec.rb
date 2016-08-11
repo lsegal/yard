@@ -232,18 +232,18 @@ describe YARD::Templates::Template do
   describe "#add_options" do
     it "sets instance variables in addition to options" do
       mod = template(:f).new
-      mod.send(:add_options, {:a => 1, :b => 2})
-      expect(mod.options).to eq({:a => 1, :b => 2})
+      mod.send(:add_options, :a => 1, :b => 2)
+      expect(mod.options).to eq(:a => 1, :b => 2)
       expect(mod.instance_variable_get("@a")).to eq 1
       expect(mod.instance_variable_get("@b")).to eq 2
     end
 
     it "sets instance variables and options only for the block" do
       mod = template(:f).new
-      mod.send(:add_options, {:a => 100, :b => 200}) do
-        expect(mod.options).to eq({:a => 100, :b => 200})
+      mod.send(:add_options, :a => 100, :b => 200) do
+        expect(mod.options).to eq(:a => 100, :b => 200)
       end
-      expect(mod.options).not_to eq({:a => 100, :b => 200})
+      expect(mod.options).not_to eq(:a => 100, :b => 200)
     end
   end
 

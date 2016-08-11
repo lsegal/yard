@@ -49,7 +49,8 @@ module YARD
       generate_yri = types.include? 'yri'
 
       specs.each do |spec|
-        gen_yard, gen_yri = generate_yard, generate_yri
+        gen_yard = generate_yard
+        gen_yri = generate_yri
         gen_yri = false if gen_yard # never generate both, no need
         unless types.empty? # --no-document is not in effect
           # look at spec.metadata['yard.run'] for override

@@ -351,7 +351,8 @@ describe YARD::Templates::Helpers::HtmlHelper do
     def parse_link(link)
       results = {}
       link =~ %r{<a (.+?)>(.+?)</a>}m
-      params, results[:inner_text] = $1, $2
+      params = $1
+      results[:inner_text] = $2
       params.scan(/\s*(\S+?)=['"](.+?)['"]\s*/).each do |key, value|
         results[key.to_sym] = value.gsub(/^["'](.+)["']$/, '\1')
       end
@@ -374,46 +375,46 @@ describe YARD::Templates::Helpers::HtmlHelper do
       allow(self).to receive(:serializer).and_return Serializers::FileSystemSerializer.new
       allow(self).to receive(:object).and_return Registry.root
 
-      expect(parse_link(resolve_links("{file:TEST.txt#abc}"))).to eq({
+      expect(parse_link(resolve_links("{file:TEST.txt#abc}"))).to eq(
         :inner_text => "TEST",
         :title => "TEST",
         :href => "file.TEST.html#abc"
-      })
-      expect(parse_link(resolve_links("{file:TEST.txt title}"))).to eq({
+      )
+      expect(parse_link(resolve_links("{file:TEST.txt title}"))).to eq(
         :inner_text => "title",
         :title => "title",
         :href => "file.TEST.html"
-      })
+      )
     end
 
     it "creates regular links with http:// or https:// prefixes" do
-      expect(parse_link(resolve_links("{http://example.com}"))).to eq({
+      expect(parse_link(resolve_links("{http://example.com}"))).to eq(
         :inner_text => "http://example.com",
         :target => "_parent",
         :href => "http://example.com",
         :title => "http://example.com"
-      })
-      expect(parse_link(resolve_links("{http://example.com title}"))).to eq({
+      )
+      expect(parse_link(resolve_links("{http://example.com title}"))).to eq(
         :inner_text => "title",
         :target => "_parent",
         :href => "http://example.com",
         :title => "title"
-      })
+      )
     end
 
     it "creates mailto links with mailto: prefixes" do
-      expect(parse_link(resolve_links('{mailto:joanna@example.com}'))).to eq({
+      expect(parse_link(resolve_links('{mailto:joanna@example.com}'))).to eq(
         :inner_text => 'mailto:joanna@example.com',
         :target => '_parent',
         :href => 'mailto:joanna@example.com',
         :title => 'mailto:joanna@example.com'
-      })
-      expect(parse_link(resolve_links('{mailto:steve@example.com Steve}'))).to eq({
+      )
+      expect(parse_link(resolve_links('{mailto:steve@example.com Steve}'))).to eq(
         :inner_text => 'Steve',
         :target => '_parent',
         :href => 'mailto:steve@example.com',
         :title => 'Steve'
-      })
+      )
     end
 
     it "ignores {links} that begin with |...|" do
@@ -443,12 +444,12 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "resolves link with newline in title-part" do
-      expect(parse_link(resolve_links("{http://example.com foo\nbar}"))).to eq({
+      expect(parse_link(resolve_links("{http://example.com foo\nbar}"))).to eq(
         :inner_text => "foo bar",
         :target => "_parent",
         :href => "http://example.com",
         :title => "foo bar"
-      })
+      )
     end
 
     it "resolves links to methods whose names have been escaped" do

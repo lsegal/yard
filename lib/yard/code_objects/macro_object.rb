@@ -92,7 +92,10 @@ module YARD
         def expand(macro_data, call_params = [], full_source = '', block_source = '') # rubocop:disable Lint/UnusedMethodArgument
           macro_data = macro_data.all if macro_data.is_a?(Docstring)
           macro_data.gsub(MACRO_MATCH) do
-            escape, first, last, rng = $1, $2 || $5, $4, $3 ? true : false
+            escape = $1
+            first = $2 || $5
+            last = $4
+            rng = $3 ? true : false
             next $&[1..-1] if escape
             if first == '*'
               last ? $& : full_source

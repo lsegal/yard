@@ -28,6 +28,8 @@ Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Style/DotPosition:
   EnforcedStyle: trailing
+Style/FormatString:
+  EnforcedStyle: percent
 
 # Disable these until we know what to do with them
 Style/AccessorMethodName: # this creates breaking changes in the API
@@ -35,6 +37,8 @@ Style/AccessorMethodName: # this creates breaking changes in the API
 Style/PredicateName: # this creates breaking changes in the API
   Enabled: false
 Style/MethodMissing: # this doesn't exist in 1.8/1.9
+  Enabled: false
+Style/Lambda: # not supported in 1.8
   Enabled: false
 Style/AlignParameters: # does not work correctly with subsequent block
   Enabled: false

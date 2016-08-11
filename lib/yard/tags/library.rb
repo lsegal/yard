@@ -194,7 +194,8 @@ module YARD
         def define_directive(tag, tag_meth = nil, directive_class = nil)
           directive_meth = directive_method_name(tag)
           if directive_class.nil?
-            tag_meth, directive_class = nil, tag_meth
+            directive_class = tag_meth
+            tag_meth = nil
           end
           class_eval <<-eof, __FILE__, __LINE__
             def #{directive_meth}(tag, parser)

@@ -7,7 +7,8 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     mscope = scope
 
     if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
-      meth, args = $1, $2
+      meth = $1
+      args = $2
       meth.gsub!(/\s+/, '')
       args = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(args), :all)
       args.map! do |a|
@@ -24,7 +25,9 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
 
     # Class method if prefixed by self(::|.) or Module(::|.)
     if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
-      mscope, meth, prefix = :class, $1, $`
+      mscope = :class
+      meth = $1
+      prefix = $`
       if prefix =~ /^[a-z]/ && prefix != "self"
         raise YARD::Parser::UndocumentableError, 'method defined on object instance'
       end

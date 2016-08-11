@@ -49,7 +49,8 @@ module YARD
       # To add statistics for a specific type, add a method +#stats_for_TYPE+
       # to this class that calls {#output}.
       def print_statistics
-        @total, @undocumented = 0, 0
+        @total = 0
+        @undocumented = 0
         meths = methods.map(&:to_s).grep(/^stats_for_/)
         STATS_ORDER.each do |meth|
           mname = "stats_for_#{meth}"

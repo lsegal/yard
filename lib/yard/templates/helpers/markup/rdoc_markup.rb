@@ -64,7 +64,10 @@ module YARD
           def fix_typewriter(text)
             code_tags = 0
             text.gsub(%r{<(/)?(pre|code|tt)|(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+}) do |str|
-              closed, tag, first_text, type_text = $1, $2, $3, $4
+              closed = $1
+              tag = $2
+              first_text = $3
+              type_text = $4
 
               if tag
                 code_tags += (closed ? -1 : 1)
@@ -95,7 +98,7 @@ module YARD
           def accept_paragraph(*args)
             par = args.last
             text = par.respond_to?(:txt) ? par.txt : par.text
-            @hyperlink = !!(text =~ /\{(https?:|mailto:|link:|www\.)/)
+            @hyperlink = text =~ /\{(https?:|mailto:|link:|www\.)/ ? true : false
             super
           end
         end

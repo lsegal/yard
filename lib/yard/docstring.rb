@@ -130,7 +130,8 @@ module YARD
     # @param [String] content the raw comments to be parsed
     def replace(content, parse = true)
       content = content.join("\n") if content.is_a?(Array)
-      @tags, @ref_tags = [], []
+      @tags = []
+      @ref_tags = []
       if parse
         super(parse_comments(content))
       else
@@ -332,7 +333,8 @@ module YARD
         return if @unresolved_reference.nil?
         return if CodeObjects::Proxy === @unresolved_reference
 
-        reference, @unresolved_reference = @unresolved_reference, nil
+        reference = @unresolved_reference
+        @unresolved_reference = nil
         self.all = [reference.docstring.all, @all].join("\n")
       end
     end
