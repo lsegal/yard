@@ -4,6 +4,7 @@ inherit_from:
 AllCops:
   TargetRubyVersion: 2.4
   Exclude:
+    - 'vendor/**/*' # need to reset this apparently
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb' # old file, don't touch
 Metrics:
   Enabled: false
