@@ -46,9 +46,9 @@ module YARD
       # @param [Message] other the +Message+ to be compared.
       # @return [Boolean] checks whether this message is equal to another.
       def ==(other)
-        other.is_a?(self.class) and
-          @id == other.id and
-          @locations == other.locations and
+        other.is_a?(self.class) &&
+          @id == other.id &&
+          @locations == other.locations &&
           @comments == other.comments
       end
     end

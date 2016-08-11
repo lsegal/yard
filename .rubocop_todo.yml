@@ -152,23 +152,6 @@ Style/AccessorMethodName:
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
     - 'lib/yard/templates/engine.rb'
 
-# Offense count: 38
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: always, conditionals
-Style/AndOr:
-  Exclude:
-    - 'lib/yard/cli/server.rb'
-    - 'lib/yard/code_objects/proxy.rb'
-    - 'lib/yard/handlers/ruby/decorator_handler_methods.rb'
-    - 'lib/yard/i18n/message.rb'
-    - 'lib/yard/i18n/messages.rb'
-    - 'lib/yard/i18n/pot_generator.rb'
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-    - 'lib/yard/rubygems/backports/source_index.rb'
-    - 'lib/yard/rubygems/hook.rb'
-
 # Offense count: 5
 # Cop supports --auto-correct.
 Style/Attr:

@@ -511,7 +511,7 @@ module YARD
       end
 
       def gets
-        c = getc or return
+        (c = getc) || return
         l = ""
         begin
           l.concat c unless c == "\r"
@@ -536,12 +536,12 @@ module YARD
       def lex
         catch(:eof) do
           until (((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
-             !@continue or
+             !@continue ||
              tk.nil?)
           end
           line = get_read
 
-          if line == "" and tk.kind_of?(TkEND_OF_SCRIPT) || tk.nil?
+          if line == "" && tk.kind_of?(TkEND_OF_SCRIPT) || tk.nil?
             nil
           else
             line
@@ -560,7 +560,7 @@ module YARD
               abort if @exception_on_syntax_error
               tk = TkError.new(line_no, char_no)
             end
-          end while @skip_space and tk.kind_of?(TkSPACE)
+          end while @skip_space && tk.kind_of?(TkSPACE)
           if @read_auto_clean_up
             get_read
           end
@@ -752,12 +752,12 @@ module YARD
         @OP.def_rules("+", "-") do |op, io|
           catch(:RET) do
             if @lex_state == EXPR_ARG
-              if @space_seen and peek(0) =~ /[0-9]/
+              if @space_seen && peek(0) =~ /[0-9]/
                 throw :RET, identify_number(op)
               else
                 @lex_state = EXPR_BEG
               end
-            elsif @lex_state != EXPR_END and peek(0) =~ /[0-9]/
+            elsif @lex_state != EXPR_END && peek(0) =~ /[0-9]/
               throw :RET, identify_number(op)
             else
               @lex_state = EXPR_BEG
@@ -807,7 +807,7 @@ module YARD
 
         @OP.def_rule("::") do
           # p @lex_state.id2name, @space_seen
-          if @lex_state == EXPR_BEG or @lex_state == EXPR_ARG && @space_seen
+          if @lex_state == EXPR_BEG || @lex_state == EXPR_ARG && @space_seen
             @lex_state = EXPR_BEG
             tk = Token(TkCOLON3)
           else
@@ -824,7 +824,7 @@ module YARD
             getc
             @lex_state = EXPR_BEG
             Token(TkOPASGN, :/).set_text("/=") #")
-          elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
+          elsif @lex_state == EXPR_ARG && @space_seen && peek(0) !~ /\s/
             identify_string(op)
           else
             @lex_state = EXPR_BEG
@@ -925,7 +925,7 @@ module YARD
           elsif peek(0) == '='
             getc
             Token(TkOPASGN, "%").set_text("%=")
-          elsif @lex_state == EXPR_ARG and @space_seen and peek(0) !~ /\s/
+          elsif @lex_state == EXPR_ARG && @space_seen && peek(0) !~ /\s/
             identify_quotation('%')
           else
             @lex_state = EXPR_BEG
@@ -1020,7 +1020,7 @@ module YARD
         end
         ungetc
 
-        if ch == "!" or ch == "?"
+        if ch == "!" || ch == "?"
           token.concat getc
         end
         # fix token
@@ -1162,7 +1162,7 @@ module YARD
       def identify_number(start)
         str = start.dup
 
-        if start == "+" or start == "-" or start == ""
+        if start == "+" || start == "-" || start == ""
           start = getc
           str << start
         end
@@ -1242,7 +1242,7 @@ module YARD
               end
             elsif opener == ch
               nest += 1
-            elsif @ltype != "'" && @ltype != "]" and ch == "#"
+            elsif @ltype != "'" && @ltype != "]" && ch == "#"
               ch = getc
               if ch == "{"
                 subtype = true
@@ -1356,7 +1356,7 @@ module YARD
 
         when "C", "c" #, "^"
           res << ch
-          if ch == "C" and (ch = getc) != "-"
+          if ch == "C" && (ch = getc) != "-"
             ungetc
           else
             res << ch

@@ -49,13 +49,13 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
     # Parse decorator parameters (decorator chain).
     all_nodes.each do |param|
-      parse_block param if param.call? or param.def?
+      parse_block param if param.call? || param.def?
     end
 
     selected_nodes =
       if nodes.empty?
         all_nodes
-      elsif (nodes.count == 1 and nodes.first == nil)
+      elsif (nodes.count == 1 && nodes.first == nil)
         []
       else
         nodes
@@ -105,7 +105,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
     )
 
     # Transfer source to methods passed to the helper as parameters.
-    method.source = statement.source if transfer_source and node.def?
+    method.source = statement.source if transfer_source && node.def?
 
     # Tag decorator on decorated method.
     if method.respond_to? :add_tag
@@ -117,9 +117,9 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
     # Transfer decorator docstring to methods passed to the helper as parameters.
     if transfer_docstring \
-      and node.def? \
-      and statement.docstring \
-      and method.docstring.empty?
+      && node.def? \
+      && statement.docstring \
+      && method.docstring.empty?
         tags = method.tags if method.respond_to? :tags
         tags ||= []
 

@@ -64,7 +64,7 @@ module YARD
         new(spec, gen_yard, gen_yri).generate
       end
 
-      return unless generate_yard or generate_yri
+      return unless generate_yard || generate_yri
 
       duration = (Time.now - start).to_i
       names = specs.map(&:name).join ', '

@@ -143,7 +143,7 @@ module YARD
         PARSER_EVENT_TABLE.each do |event, arity|
           node_class = AstNode.node_class_for(event)
 
-          if /_new\z/ =~ event.to_s and arity == 0
+          if /_new\z/ =~ event.to_s && arity == 0
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               def on_#{event}(*args)
                 #{node_class}.new(:list, args, :listchar => charno...charno, :listline => lineno..lineno)

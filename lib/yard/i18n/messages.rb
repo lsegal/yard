@@ -42,7 +42,7 @@ module YARD
       # @param [Messages] other the container to compare.
       # @return [Boolean] whether +self+ and +other+ is equivalence or not.
       def ==(other)
-        other.is_a?(self.class) and
+        other.is_a?(self.class) &&
           @messages == other.messages
       end
 

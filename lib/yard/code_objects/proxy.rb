@@ -54,7 +54,7 @@ module YARD
           @namespace = Proxy.new(@namespace.namespace, @namespace.value)
         end
 
-        unless @namespace.is_a?(NamespaceObject) or @namespace.is_a?(Proxy)
+        unless @namespace.is_a?(NamespaceObject) || @namespace.is_a?(Proxy)
           raise ArgumentError, "Invalid namespace object: #{namespace}"
         end
 

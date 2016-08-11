@@ -152,11 +152,11 @@ class Gem::SourceIndex
       prev_ver = latest.key?(name) ? latest[name].version : nil
 
       next if !include_prerelease && curr_ver.prerelease?
-      next unless prev_ver.nil? or curr_ver >= prev_ver or
+      next unless prev_ver.nil? || curr_ver >= prev_ver ||
                   latest[name].platform != Gem::Platform::RUBY
 
-      if prev_ver.nil? or
-         (curr_ver > prev_ver and spec.platform == Gem::Platform::RUBY) then
+      if prev_ver.nil? ||
+         (curr_ver > prev_ver && spec.platform == Gem::Platform::RUBY) then
         result[name].clear
         latest[name] = spec
       end
@@ -302,8 +302,8 @@ class Gem::SourceIndex
     end
 
     specs = all_gems.values.select do |spec|
-      spec.name =~ gem_pattern and
-        requirement.satisfied_by? spec.version
+      spec.name =~ gem_pattern &&
+        requirement.satisfied_by?(spec.version)
     end
 
     if only_platform then
@@ -341,14 +341,14 @@ class Gem::SourceIndex
 
       latest = remotes.sort.last
 
-      outdateds << local.name if latest and local.version < latest
+      outdateds << local.name if latest && local.version < latest
     end
 
     outdateds
   end
 
   def ==(other) # :nodoc:
-    self.class === other and @gems == other.gems
+    self.class === other && @gems == other.gems
   end
 
   def dump
