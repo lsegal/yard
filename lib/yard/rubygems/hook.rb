@@ -109,7 +109,7 @@ module YARD
       end
     rescue Errno::EACCES => e
       dirname = File.dirname e.message.split("-")[1].strip
-      raise Gem::FilePermissionError.new(dirname)
+      raise Gem::FilePermissionError, dirname
     rescue => ex
       alert_error "While generating documentation for #{@spec.full_name}"
       ui.errs.puts "... MESSAGE:   #{ex}"

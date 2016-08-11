@@ -48,7 +48,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @return [String] the user-declared type of the struct member, or [Object] if
   #   the user did not define a type for this member.
   def return_type_from_tag(member_tag)
-    (member_tag && member_tag.types) ? member_tag.types : "Object"
+    member_tag && member_tag.types ? member_tag.types : "Object"
   end
 
   # Creates the auto-generated docstring for the getter method of a struct's

@@ -5,7 +5,7 @@ MARSHAL_FILE = "marshal_test.db"
 DBM_FILE = "dbm_test"
 WRITE_TIMES = 1
 READ_TIMES = 100
-NUM_INDICES = 10000
+NUM_INDICES = 10_000
 INDICES = ['33', '857', '5022', '8555']
 
 def generate_index

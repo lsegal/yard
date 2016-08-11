@@ -222,7 +222,7 @@ module YARD
         # @return [Boolean] whether the handler should only be processed inside
         #   a namespace.
         def namespace_only?
-          (@namespace_only ||= false) ? true : false
+          @namespace_only ||= false
         end
 
         # Declares that a handler should only be called when inside a filename

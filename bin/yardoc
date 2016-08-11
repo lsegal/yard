@@ -5,7 +5,7 @@ path = __FILE__
 while File.symlink?(path)
   path = File.expand_path(File.readlink(path), File.dirname(path))
 end
-$:.unshift(File.join(File.dirname(File.expand_path(path)), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(File.expand_path(path)), '..', 'lib'))
 
 require 'yard'
 

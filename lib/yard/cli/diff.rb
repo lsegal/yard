@@ -191,20 +191,23 @@ module YARD
           require 'rubygems/package/tar_reader'
           reader = Gem::Package::TarReader.new(io)
           reader.each do |pkg|
-            if pkg.full_name == 'data.tar.gz'
-              Zlib::GzipReader.wrap(pkg) do |gzio|
-                tar = Gem::Package::TarReader.new(gzio)
-                tar.each do |entry|
-                  file = File.join(tmpdir, entry.full_name)
-                  FileUtils.mkdir_p(File.dirname(file))
-                  File.open(file, 'wb') do |out|
-                    out.write(entry.read)
-                    out.fsync rescue nil
+            next unless pkg.full_name == 'data.tar.gz'
+            Zlib::GzipReader.wrap(pkg) do |gzio|
+              tar = Gem::Package::TarReader.new(gzio)
+              tar.each do |entry|
+                file = File.join(tmpdir, entry.full_name)
+                FileUtils.mkdir_p(File.dirname(file))
+                File.open(file, 'wb') do |out|
+                  out.write(entry.read)
+                  begin
+                    out.fsync
+                  rescue NotImplementedError
+                    nil # noop
                   end
                 end
               end
-              break
             end
+            break
           end
         else
           Gem::Package.open(io) do |pkg|

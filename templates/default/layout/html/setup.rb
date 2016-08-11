@@ -19,7 +19,7 @@ def init
     when CodeObjects::Base
       unless object.root?
         cur = object.namespace
-        while !cur.root?
+        until cur.root?
           @breadcrumb.unshift(cur)
           cur = cur.namespace
         end

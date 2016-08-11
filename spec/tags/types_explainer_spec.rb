@@ -15,36 +15,36 @@ describe YARD::Tags::TypesExplainer do
     expect(lambda { parse(types) }).to raise_error(SyntaxError)
   end
 
-	describe Type, '#to_s' do
+  describe Type, '#to_s' do
    before { @t = Type.new(nil) }
 
-    it "works for a class/module reference" do
-      @t.name = "ClassModuleName"
-      expect(@t.to_s).to eq "a ClassModuleName"
-      expect(@t.to_s(false)).to eq "ClassModuleNames"
+   it "works for a class/module reference" do
+     @t.name = "ClassModuleName"
+     expect(@t.to_s).to eq "a ClassModuleName"
+     expect(@t.to_s(false)).to eq "ClassModuleNames"
 
-      @t.name = "XYZ"
-      expect(@t.to_s).to eq "a XYZ"
-      expect(@t.to_s(false)).to eq "XYZ's"
+     @t.name = "XYZ"
+     expect(@t.to_s).to eq "a XYZ"
+     expect(@t.to_s(false)).to eq "XYZ's"
 
-      @t.name = "Array"
-      expect(@t.to_s).to eq "an Array"
-      expect(@t.to_s(false)).to eq "Arrays"
-    end
+     @t.name = "Array"
+     expect(@t.to_s).to eq "an Array"
+     expect(@t.to_s(false)).to eq "Arrays"
+   end
 
-    it "works for a method (ducktype)" do
-      @t.name = "#mymethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
-    end
+   it "works for a method (ducktype)" do
+     @t.name = "#mymethod"
+     expect(@t.to_s).to eq "an object that responds to #mymethod"
+     expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
+   end
 
-    it "works for a constant value" do
-      ['false', 'true', 'nil', '4'].each do |name|
-        @t.name = name
-        expect(@t.to_s).to eq name
-        expect(@t.to_s(false)).to eq name
-      end
-    end
+   it "works for a constant value" do
+     ['false', 'true', 'nil', '4'].each do |name|
+       @t.name = name
+       expect(@t.to_s).to eq name
+       expect(@t.to_s(false)).to eq name
+     end
+   end
  end
 
   describe CollectionType, '#to_s' do

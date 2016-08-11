@@ -97,12 +97,6 @@ Style/EmptyElse:
     - 'lib/yard/handlers/ruby/legacy/base.rb'
     - 'lib/yard/parser/ruby/legacy/statement_list.rb'
 
-# Offense count: 88
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs.
-Style/EmptyLineBetweenDefs:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
@@ -167,22 +161,6 @@ Style/IndentArray:
 Style/IndentHash:
   EnforcedStyle: consistent
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: normal, rails
-Style/IndentationConsistency:
-  Exclude:
-    - 'spec/handlers/c/constant_handler_spec.rb'
-    - 'spec/tags/types_explainer_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Width.
-Style/IndentationWidth:
-  Exclude:
-    - 'lib/yard/cli/server.rb'
-
 # Offense count: 11
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -207,59 +185,6 @@ Style/LeadingCommentSpace:
     - 'spec/core_ext/string_spec.rb'
     - 'spec/handlers/legacy_base_spec.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/MethodCallParentheses:
-  Exclude:
-    - 'lib/yard/options.rb'
-    - 'spec/handlers/ruby/base_spec.rb'
-
-# Offense count: 7
-Style/MethodMissing:
-  Exclude:
-    - 'lib/yard/code_objects/base.rb'
-    - 'lib/yard/code_objects/extended_method_object.rb'
-    - 'lib/yard/code_objects/proxy.rb'
-    - 'lib/yard/options.rb'
-    - 'lib/yard/serializers/yardoc_serializer.rb'
-    - 'lib/yard/tags/overload_tag.rb'
-    - 'lib/yard/verifier.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-Style/NegatedIf:
-  Exclude:
-    - 'lib/yard/code_objects/base.rb'
-    - 'lib/yard/code_objects/namespace_object.rb'
-    - 'lib/yard/config.rb'
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-    - 'lib/yard/parser/ruby/token_resolver.rb'
-    - 'lib/yard/parser/source_parser.rb'
-    - 'lib/yard/serializers/file_system_serializer.rb'
-    - 'lib/yard/server/commands/display_file_command.rb'
-    - 'templates/default/method_details/text/setup.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/NegatedWhile:
-  Exclude:
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-    - 'templates/default/layout/html/setup.rb'
-
-# Offense count: 13
-Style/NestedTernaryOperator:
-  Exclude:
-    - 'lib/yard/code_objects/method_object.rb'
-    - 'lib/yard/code_objects/proxy.rb'
-    - 'lib/yard/handlers/ruby/legacy/base.rb'
-    - 'lib/yard/parser/ruby/legacy/statement.rb'
-    - 'lib/yard/server/library_version.rb'
-    - 'lib/yard/tags/directives.rb'
-    - 'lib/yard/tags/types_explainer.rb'
-    - 'lib/yard/templates/helpers/base_helper.rb'
-    - 'lib/yard/templates/helpers/html_helper.rb'
-    - 'lib/yard/templates/helpers/method_helper.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
@@ -275,99 +200,7 @@ Style/Next:
     - 'lib/yard/tags/types_explainer.rb'
     - 'templates/default/fulldoc/html/setup.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/NumericLiterals:
-  MinDigits: 6
-
 # Offense count: 74
 # Cop supports --auto-correct.
 Style/ParallelAssignment:
   Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'spec/tags/directives_spec.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, exploded
-Style/RaiseArgs:
-  Exclude:
-    - 'lib/yard/rubygems/doc_manager.rb'
-    - 'lib/yard/rubygems/hook.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RescueModifier:
-  Exclude:
-    - 'lib/yard/cli/diff.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'lib/yard/core_ext/symbol_hash.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: only_raise, only_fail, semantic
-Style/SignalException:
-  Exclude:
-    - 'Rakefile'
-    - 'spec/parser/c_parser_spec.rb'
-
-# Offense count: 1
-# Configuration parameters: Methods.
-# Methods: {"reduce"=>["a", "e"]}, {"inject"=>["a", "e"]}
-Style/SingleLineBlockParams:
-  Exclude:
-    - 'lib/yard/code_objects/base.rb'
-
-# Offense count: 233
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Enabled: false
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles.
-# SupportedStyles: use_perl_names, use_english_names
-Style/SpecialGlobalVars:
-  EnforcedStyle: use_perl_names
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/Tab:
-  Exclude:
-    - 'spec/tags/types_explainer_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowSafeAssignment.
-# SupportedStyles: require_parentheses, require_no_parentheses
-Style/TernaryParentheses:
-  Exclude:
-    - 'lib/yard/handlers/base.rb'
-    - 'lib/yard/handlers/ruby/struct_handler_methods.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/UnlessElse:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/statement_list.rb'
-    - 'lib/yard/templates/helpers/method_helper.rb'
-    - 'templates/guide/method/html/setup.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'lib/yard/server/library_version.rb'

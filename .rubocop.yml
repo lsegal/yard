@@ -1,5 +1,5 @@
-inherit_from:
-  - .rubocop_todo.yml
+#inherit_from:
+#  - .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.4
@@ -38,6 +38,14 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/MethodMissing:
   Enabled: false # this doesn't exist in 1.8/1.9
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+Style/SingleLineMethods:
+  Enabled: false
+Style/SingleLineBlockParams:
+  Enabled: false
+Style/NestedTernaryOperator:
+  Enabled: false
 Style/MutableConstant:
   Enabled: false
 Style/FrozenStringLiteralComment:

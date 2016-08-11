@@ -11,10 +11,10 @@ describe YARD::Tags::ParseDirective do
     after { Registry.clear }
 
     it "parses if handler=nil but use file=(stdin)" do
-      tag_parse %{@!parse
+      tag_parse %(@!parse
         # Docstring here
         def foo; end
-      }
+      )
       expect(Registry.at('#foo').docstring).to eq "Docstring here"
       expect(Registry.at('#foo').file).to eq '(stdin)'
     end

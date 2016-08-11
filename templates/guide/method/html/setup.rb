@@ -12,10 +12,10 @@ def format_args(object)
     end
   end
 
-  unless params.empty?
+  if params.empty?
+    ""
+  else
     args = params.map {|n, v| v ? "<em>#{h n}</em> = #{h v}" : "<em>" + n.to_s + "</em>" }.join(", ")
     args
-  else
-    ""
   end
 end

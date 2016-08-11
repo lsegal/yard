@@ -45,7 +45,7 @@ def described_in_docs(klass, meth, file = nil)
     YARD::Parser::SourceParser.new.parse(filename)
   else
     underscore = klass.class_name.gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
-    $".find_all {|p| p.include? underscore }.each do |found_fname|
+    $LOADED_FEATURES.find_all {|p| p.include? underscore }.each do |found_fname|
       next unless File.exist? found_fname
       YARD::Parser::SourceParser.new.parse(found_fname)
     end
@@ -76,7 +76,7 @@ end
 def docspec(objname = self.class.description, klass = self.class.described_type)
   # Parse the file (could be multiple files)
   underscore = klass.class_name.gsub(/([a-z])([A-Z])/, '\1_\2').downcase.gsub('::', '/')
-  $".find_all {|p| p.include? underscore }.each do |filename|
+  $LOADED_FEATURES.find_all {|p| p.include? underscore }.each do |filename|
     filename = File.join(YARD::ROOT, filename)
     next unless File.exist? filename
     YARD::Parser::SourceParser.new.parse(filename)

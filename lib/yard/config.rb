@@ -175,7 +175,7 @@ module YARD
           load_plugin(gem.name)
         rescue Gem::LoadError => e
           tmp = load_plugin_failed(gem.name, e)
-          result = tmp if !tmp
+          result = tmp unless tmp
         end
       end
       result

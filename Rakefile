@@ -9,9 +9,9 @@ task :publish do
   ver = ENV['VERSION']
 
   if ver.nil? || ver.empty?
-    fail "missing VERSION=x.y.z"
+    raise "missing VERSION=x.y.z"
   elsif ver < YARD::VERSION
-    fail "invalid version `#{ver}' (must be >= `#{YARD::VERSION}')"
+    raise "invalid version `#{ver}' (must be >= `#{YARD::VERSION}')"
   end
 
   file = "release-v#{ver}.tar.gz"

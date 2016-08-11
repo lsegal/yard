@@ -25,7 +25,7 @@ class SymbolHash < Hash
   #   @param [Array] list an even list of key followed by value
   #   @return [SymbolHash] a new SymbolHash object
   def self.[](*hsh)
-    obj = new;
+    obj = new
     if hsh.size == 1 && hsh.first.is_a?(Hash)
       hsh.first.each {|k, v| obj[k] = v }
     else

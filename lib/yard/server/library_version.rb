@@ -142,7 +142,7 @@ module YARD
       #   readable format.
       # @return [String] the string representation of the library.
       def to_s(url_format = true)
-        version ? "#{name}#{url_format ? '/' : '-'}#{version}" : "#{name}"
+        version ? "#{name}#{url_format ? '/' : '-'}#{version}" : name.to_s
       end
 
       # @return [Fixnum] used for Hash mapping.

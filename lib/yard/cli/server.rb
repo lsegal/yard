@@ -109,17 +109,17 @@ module YARD
       # @return [LibraryVersion, nil]
       def create_library_version_if_yardopts_exist(library, dir)
         if dir
-         options_file = File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
-         if File.exist?(options_file)
-           # Found yardopts, extract db path
-           yfile = extract_db_from_options_file(options_file)
-           db = File.expand_path(yfile, dir)
+          options_file = File.join(dir, Yardoc::DEFAULT_YARDOPTS_FILE)
+          if File.exist?(options_file)
+            # Found yardopts, extract db path
+            yfile = extract_db_from_options_file(options_file)
+            db = File.expand_path(yfile, dir)
 
-           # Create libver
-           libver = YARD::Server::LibraryVersion.new(library, nil, db)
-           libver.source_path = dir
-           libver
-         end
+            # Create libver
+            libver = YARD::Server::LibraryVersion.new(library, nil, db)
+            libver.source_path = dir
+            libver
+          end
         end
       end
 

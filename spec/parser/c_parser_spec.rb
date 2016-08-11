@@ -123,7 +123,7 @@ describe YARD::Parser::C::CParser do
         thr.join(5)
         if thr.alive?
           thr.kill
-          fail "Did not parse in time"
+          raise "Did not parse in time"
         end
       end
     end

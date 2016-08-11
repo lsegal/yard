@@ -65,7 +65,7 @@ module YARD
               self.last_sep = nil
             when :op, :period
               self.last_sep = token[1]
-              if !CodeObjects.types_for_separator(token[1])
+              unless CodeObjects.types_for_separator(token[1])
                 self.object = nil
                 self.last_sep = nil
               end

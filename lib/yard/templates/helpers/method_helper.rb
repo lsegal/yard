@@ -13,13 +13,13 @@ module YARD
           end
         end
 
-        unless params.empty?
+        if params.empty?
+          ""
+        else
           args = params.map do |n, v|
             v ? "#{n}#{n[-1, 1] == ':' ? '' : ' ='} #{v}" : n.to_s
           end.join(", ")
           h("(#{args})")
-        else
-          ""
         end
       end
 

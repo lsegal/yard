@@ -540,7 +540,7 @@ module YARD
 
           @comments[lineno] = comment
           @comments_range[lineno] = source_range
-          @comments_flags[lineno] = hash_flag if !append_comment
+          @comments_flags[lineno] = hash_flag unless append_comment
           @comments_last_column = column
         end
 
@@ -618,7 +618,7 @@ module YARD
                 add_comment(line, nil, pick, true) if pick
               end
             end
-          end if !@comments.empty?
+          end unless @comments.empty?
 
           # insert all remaining comments
           @comments.each do |line, _comment|
@@ -656,7 +656,7 @@ module YARD
 
         def freeze_tree(node = nil)
           nodes = [node || root]
-          while !nodes.empty?
+          until nodes.empty?
             p_node = nodes.shift
             p_node.children.each do |child|
               child.parent = p_node

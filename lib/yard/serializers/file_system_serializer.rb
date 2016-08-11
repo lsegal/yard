@@ -99,7 +99,7 @@ module YARD
 
       # @return [String] the filesystem mapped name of a given object.
       def mapped_name(object)
-        build_filename_map if !@name_map
+        build_filename_map unless @name_map
         map = @name_map[object.path.downcase]
         map && map[object.name] ? map[object.name] : object.name.to_s
       end

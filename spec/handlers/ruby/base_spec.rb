@@ -29,7 +29,7 @@ describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles :list
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [IgnoredHandler, NotIgnoredHandler]
-    expect(@processor.find_handlers(s())).to eq [NotIgnoredHandler]
+    expect(@processor.find_handlers(s)).to eq [NotIgnoredHandler]
   end
 
   it "handles string input (matches AstNode#source)" do
