@@ -788,25 +788,6 @@ Style/PercentLiteralDelimiters:
     - 'lib/yard/templates/helpers/html_helper.rb'
     - 'spec/tags/directives_spec.rb'
 
-# Offense count: 18
-# Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
-# NamePrefix: is_, has_, have_
-# NamePrefixBlacklist: is_, has_, have_
-# NameWhitelist: is_a?
-Style/PredicateName:
-  Exclude:
-    - 'spec/**/*'
-    - 'lib/yard/code_objects/base.rb'
-    - 'lib/yard/code_objects/class_object.rb'
-    - 'lib/yard/code_objects/method_object.rb'
-    - 'lib/yard/core_ext/symbol_hash.rb'
-    - 'lib/yard/docstring.rb'
-    - 'lib/yard/parser/ruby/ast_node.rb'
-    - 'lib/yard/rubygems/specification.rb'
-    - 'lib/yard/tags/library.rb'
-    - 'lib/yard/tags/overload_tag.rb'
-    - 'lib/yard/templates/helpers/filter_helper.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 Style/PreferredHashMethods:
