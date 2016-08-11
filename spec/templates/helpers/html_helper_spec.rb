@@ -589,7 +589,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
         !!!NAME
         def x; end
       eof
-      )).to eq "foobar"
+                                          )).to eq "foobar"
     end
 
     it "does not highlight if highlight option is false" do
