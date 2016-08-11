@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module I18n
     # +Locale+ is a wrapper for gettext's PO parsing feature. It hides

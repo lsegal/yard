@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CodeObjects
     # A special type of +NoMethodError+ when raised from a {Proxy}

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles +attr_*+ statements in modules/classes
 class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   handles method_call(:attr)

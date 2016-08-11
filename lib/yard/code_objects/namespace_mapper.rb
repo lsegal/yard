@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CodeObjects
     # This module controls registration and accessing of namespace separators

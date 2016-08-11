@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Tags
     # Represents a metadata tag value (+@tag+). Tags can have any combination of

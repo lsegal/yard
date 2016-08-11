@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 shared_examples_for "signature" do
   before do
     YARD::Registry.clear

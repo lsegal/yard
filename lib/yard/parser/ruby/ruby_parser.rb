@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 begin require 'ripper'; rescue LoadError; nil end
 
 module YARD
@@ -545,7 +546,7 @@ module YARD
         def on_embdoc_beg(text)
           visit_ns_token(:embdoc_beg, text)
           @embdoc_start = charno - text.length
-          @embdoc = ""
+          @embdoc = String.new("")
         end
 
         def on_embdoc(text)

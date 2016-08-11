@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD::CodeObjects
   # Represents an instance method of a module that was mixed into the class
   # scope of another namespace.

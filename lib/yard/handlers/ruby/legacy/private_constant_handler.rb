@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # (see Ruby::PrivateConstantHandler)
 class YARD::Handlers::Ruby::Legacy::PrivateConstantHandler < YARD::Handlers::Ruby::Legacy::Base
   handles(/\Aprivate_constant(\s|\(|$)/)

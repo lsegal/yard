@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles a class variable (@@variable)
 class YARD::Handlers::Ruby::ClassVariableHandler < YARD::Handlers::Ruby::Base
   handles :assign

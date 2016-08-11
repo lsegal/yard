@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Serializers
     # Serializes an object to a process (like less)

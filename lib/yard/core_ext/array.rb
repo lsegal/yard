@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Array
   # Places values before or after another object (by value) in
   # an array. This is used in tandem with the before and after

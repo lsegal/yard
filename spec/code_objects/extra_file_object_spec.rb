@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe YARD::CodeObjects::ExtraFileObject do
@@ -80,7 +81,7 @@ describe YARD::CodeObjects::ExtraFileObject do
 
     it "forces encoding to @encoding attribute if present" do
       expect(log).not_to receive(:warn)
-      data = "# @encoding sjis\nFOO"
+      data = String.new("# @encoding sjis\nFOO")
       data.force_encoding('binary')
       file = ExtraFileObject.new('file.txt', data)
       expect(['Shift_JIS', 'Windows-31J']).to include(file.contents.encoding.to_s)
@@ -88,7 +89,7 @@ describe YARD::CodeObjects::ExtraFileObject do
 
     it "warns if @encoding is invalid" do
       expect(log).to receive(:warn).with("Invalid encoding `INVALID' in file.txt")
-      data = "# @encoding INVALID\nFOO"
+      data = String.new("# @encoding INVALID\nFOO")
       encoding = data.encoding
       file = ExtraFileObject.new('file.txt', data)
       expect(file.contents.encoding).to eq encoding
@@ -101,7 +102,7 @@ describe YARD::CodeObjects::ExtraFileObject do
 
     it "attempts to re-parse data as 8-bit ascii if parsing fails" do
       expect(log).not_to receive(:warn)
-      str, out = *(["\xB0"] * 2)
+      str, out = *([String.new("\xB0")] * 2)
       if str.respond_to?(:force_encoding)
         str.force_encoding('utf-8')
         out.force_encoding('binary')

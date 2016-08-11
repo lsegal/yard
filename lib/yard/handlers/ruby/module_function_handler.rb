@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles module_function calls to turn methods into public class methods.
 # Also creates a private instance copy of the method.
 class YARD::Handlers::Ruby::ModuleFunctionHandler < YARD::Handlers::Ruby::Base

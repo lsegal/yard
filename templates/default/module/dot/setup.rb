@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def init
   @modules = object.children.select {|o| o.type == :module }
   @classes = object.children.select {|o| o.type == :class }

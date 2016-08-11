@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 include Helpers::ModuleHelper
 
 def init
@@ -213,7 +214,7 @@ end
 # @return [String] HTML output of the classes to be displayed in the
 #    full_list_class template.
 def class_list(root = Registry.root, tree = TreeContext.new)
-  out = ""
+  out = String.new("")
   children = run_verifier(root.children)
   if root == Registry.root
     children += @items.select {|o| o.namespace.is_a?(CodeObjects::Proxy) }

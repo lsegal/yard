@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles 'private', 'protected', and 'public' calls.
 class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
   include YARD::Handlers::Ruby::DecoratorHandlerMethods

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Module
   # Returns the class name of a full module namespace path
   #

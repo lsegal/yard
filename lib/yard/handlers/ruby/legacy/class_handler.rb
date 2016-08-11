@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # (see Ruby::ClassHandler)
 class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy::Base
   include YARD::Handlers::Ruby::StructHandlerMethods

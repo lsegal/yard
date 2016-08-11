@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class String
   # Splits text into tokens the way a shell would, handling quoted
   # text as a single token. Use '\"' and "\'" to escape quotes and
@@ -5,16 +6,16 @@ class String
   #
   # @return [Array] an array representing the tokens
   def shell_split
-    out = [""]
+    out = [String.new("")]
     state = :none
     escape_next = false
-    quote = ""
+    quote = String.new("")
     strip.split(//).each do |char|
       case state
       when :none, :space
         case char
         when /\s/
-          out << "" unless state == :space
+          out << String.new("") unless state == :space
           state = :space
           escape_next = false
         when "\\"
@@ -30,7 +31,7 @@ class String
             escape_next = false
           else
             state = char
-            quote = ""
+            quote = String.new("")
           end
         else
           state = :none

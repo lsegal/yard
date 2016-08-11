@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   # Handles all logic for complex lexical and inherited object resolution.
   # Used by {Registry.resolve}, so there is no need to use this class

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD::CodeObjects
   register_separator NSEP, :namespace
   default_separator NSEP

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def init
   super
   sections.place(:tag_list).after_any(:files)

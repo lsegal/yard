@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class YARD::Handlers::C::MixinHandler < YARD::Handlers::C::Base
   MATCH = /rb_include_module\s*\(\s*(\w+?),\s*(\w+?)\s*\)/
   handles MATCH

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 attr_reader :contents
 
 def init

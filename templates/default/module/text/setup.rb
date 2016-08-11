@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def init
   sections :header, [T('docstring')], :children, :includes, :extends,
     :class_meths_list, :instance_meths_list

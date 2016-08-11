@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Server
     # Short circuits a request by raising an error. This exception is caught

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # (see Ruby::AttributeHandler)
 class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Legacy::Base
   handles(/\Aattr(?:_(?:reader|writer|accessor))?(?:\s|\()/)

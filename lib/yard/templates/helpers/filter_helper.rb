@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Templates::Helpers
     # Helpers for various object types

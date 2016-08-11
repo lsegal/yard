@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CLI
     # Lists all constant and method names in the codebase. Uses {Yardoc} --list.

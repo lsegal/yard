@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Handles the declaration of a module
 class YARD::Handlers::Ruby::ModuleHandler < YARD::Handlers::Ruby::Base
   handles :module

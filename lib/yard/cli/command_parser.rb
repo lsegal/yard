@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module CLI
     # This class parses a command name out of the +yard+ CLI command and calls

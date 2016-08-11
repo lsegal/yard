@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Parser
     # Represents the abstract base parser class that parses source code in

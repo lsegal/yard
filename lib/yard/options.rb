@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   # Generalized options class for passing around large amounts of options between objects.
   #

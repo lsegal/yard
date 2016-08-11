@@ -66,8 +66,6 @@ Style/NestedTernaryOperator:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/FrozenStringLiteralComment:
-  Enabled: false
 Style/WhenThen:
   Enabled: false
 Style/StringLiterals:

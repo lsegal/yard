@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Tags
     class OverloadTag < Tag
@@ -42,7 +43,7 @@ module YARD
       def parse_tag(text)
         @signature, text = *text.split(/\r?\n/, 2)
         @signature.strip!
-        text ||= ""
+        text ||= String.new("")
         numspaces = text[/\A(\s*)/, 1].length
         text.gsub!(/^[ \t]{#{numspaces}}/, '')
         text.strip!

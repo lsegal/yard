@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   # This class maintains all system-wide configuration for YARD and handles
   # the loading of plugins. To access options call {options}, and to load

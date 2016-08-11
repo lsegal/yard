@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Handlers
     # Raise this error when a handler should exit before completing.

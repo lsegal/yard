@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module YARD
   module Server
     # A custom {Serializers::Base serializer} which returns resource URLs instead of

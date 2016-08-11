@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "benchmark"
 
 # To prove that flattening a small list is not significantly slower than
