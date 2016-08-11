@@ -283,6 +283,58 @@ eof
       end
     end
 
+    it "\n     Parses several formats of percent arrays into source strings\n" \
+         "     in constant declarations.  Loops thru all combinations of\n" \
+         "     () {} [] <> || delimiters, %i %I %w %W array types, and five\n" \
+         "     types of element/delimiter whitespace." do
+      delimiter_h = {
+        '(' => ')',
+        '{' => '}',
+        '[' => ']',
+        '<' => '>',
+        '|' => '|'
+      }
+
+      type_h = {
+        'i' => :qsymbols_literal,
+        'I' => :symbols_literal,
+        'w' => :qwords_literal,
+        'W' => :words_literal
+      }
+
+      str_a = [
+        'TEST = %{type}[A B C]',
+        'TEST = %{type}[  A  B  C  ]',
+        'TEST = %{type}[ \nA \nB \nC \n]',
+        'TEST = %{type}[\n\nAD\n\nB\n\nC\n\n]',
+        'TEST = %{type}[\n A\n B\n C\n ]'
+      ]
+
+      failed_tests = []
+
+      delimiter_h.each do |o, c|
+        type_h.each do |id, sym|
+          str_a.each do |str|
+            str_sub = str.sub(/\{type\}/, id).sub(/\[/, o).sub(/\]/, c)
+
+            s = stmt(str_sub.gsub(/\\n/, "\n"))
+
+            node = s.jump(sym)
+            p_source = node.source.gsub(/\n/, '\\n')
+            if p_source != str_sub[7..-1]
+              failed_tests << "#{str_sub.ljust(31)} ->  #{p_source}"
+            end
+          end
+        end
+        failed_tests << "\n" unless failed_tests.empty?
+      end
+      unless failed_tests.empty?
+        msg = "Failures:\n#{'-------- INPUT --------'.ljust(36)}" \
+          "---- OUTPUT -----\n#{failed_tests.join("\n")}"
+      end
+      expect(failed_tests).to be_empty, msg
+    end
+
     it "parses %w() array in constant declaration" do
       s = stmt(<<-eof)
         class Foo
