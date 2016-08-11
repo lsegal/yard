@@ -788,22 +788,6 @@ Style/PercentLiteralDelimiters:
     - 'lib/yard/templates/helpers/html_helper.rb'
     - 'spec/tags/directives_spec.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-Style/PreferredHashMethods:
-  Exclude:
-    - 'benchmarks/builtins_vs_eval.rb'
-    - 'lib/yard/cli/command_parser.rb'
-    - 'lib/yard/code_objects/class_object.rb'
-    - 'lib/yard/code_objects/method_object.rb'
-    - 'lib/yard/i18n/pot_generator.rb'
-    - 'lib/yard/parser/ruby/ast_node.rb'
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-    - 'lib/yard/parser/source_parser.rb'
-    - 'lib/yard/serializers/file_system_serializer.rb'
-    - 'spec/core_ext/symbol_hash_spec.rb'
-    - 'spec/registry_spec.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

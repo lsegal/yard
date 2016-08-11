@@ -28,7 +28,7 @@ module YARD
         super
         @name_map = nil
         @basepath = (options[:basepath] || 'doc').to_s
-        @extension = (options.has_key?(:extension) ? options[:extension] : 'html').to_s
+        @extension = (options.key?(:extension) ? options[:extension] : 'html').to_s
       end
 
       # Serializes object with data to its serialized path (prefixed by the +#basepath+).

@@ -421,7 +421,7 @@ module YARD
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 
-          if Registry.checksums.has_key?(file)
+          if Registry.checksums.key?(file)
             log.info "File '#{file}' was modified, re-processing..."
           end
           Registry.checksums[@file] = checksum

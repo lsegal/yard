@@ -190,7 +190,7 @@ EOH
       end
 
       def extract_documents(object)
-        return if @extracted_objects.has_key?(object)
+        return if @extracted_objects.key?(object)
 
         @extracted_objects[object] = true
         case object

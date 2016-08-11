@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'yard')
 TIMES = (ARGV[0] || 10_000).to_i
 
 def bench_builtins(name)
-  YARD::CodeObjects::BUILTIN_EXCEPTIONS_HASH.has_key? name
+  YARD::CodeObjects::BUILTIN_EXCEPTIONS_HASH.key? name
 end
 
 def bench_eval(name)

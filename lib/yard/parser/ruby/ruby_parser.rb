@@ -157,7 +157,7 @@ module YARD
                 list
               end
             eof
-          elsif MAPPINGS.has_key?(event)
+          elsif MAPPINGS.key?(event)
             module_eval(<<-eof, __FILE__, __LINE__ + 1)
               begin; undef on_#{event}; rescue NameError; end
               def on_#{event}(*args)

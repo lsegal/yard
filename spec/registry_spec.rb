@@ -340,7 +340,7 @@ describe YARD::Registry do
       Registry.load!(File.dirname(__FILE__) + '/serializers/data/serialized_yardoc')
       baz = Registry.at('Foo#baz')
       expect(Registry.at('Foo').aliases.keys).to include(baz)
-      expect(Registry.at('Foo').aliases.has_key?(baz)).to be true
+      expect(Registry.at('Foo').aliases.key?(baz)).to be true
     end
   end
 

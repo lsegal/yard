@@ -55,7 +55,8 @@ class SymbolHash < Hash
   # Tests if a symbolized key exists
   # @param [#to_sym] key the key to test
   # @return [Boolean] whether the key exists
-  def has_key?(key) super(key.to_sym) end
+  def key?(key) super(key.to_sym) end
+  alias has_key? key?
 
   # Updates the object with the contents of another Hash object.
   # This method modifies the original SymbolHash object

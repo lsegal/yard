@@ -32,7 +32,7 @@ module YARD::CodeObjects
     #
     # @return [Boolean] whether the object represents a Ruby exception
     def is_exception?
-      inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS_HASH.has_key? o.path }
+      inheritance_tree.reverse.any? {|o| BUILTIN_EXCEPTIONS_HASH.key? o.path }
     end
 
     # Returns the inheritance tree of the object including self.

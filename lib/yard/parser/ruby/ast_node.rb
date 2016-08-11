@@ -128,7 +128,7 @@ module YARD
               ReferenceNode
             elsif type.to_s =~ /_literal\Z/
               LiteralNode
-            elsif KEYWORDS.has_key?(type)
+            elsif KEYWORDS.key?(type)
               KeywordNode
             else
               AstNode

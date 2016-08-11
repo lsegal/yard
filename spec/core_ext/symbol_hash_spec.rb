@@ -27,12 +27,12 @@ describe SymbolHash do
     end
   end
 
-  describe "#has_key?" do
+  describe "#key?" do
     it "returns same result for String or Symbol" do
       h = SymbolHash.new
       h[:test] = 1
-      expect(h.has_key?(:test)).to be true
-      expect(h.has_key?('test')).to be true
+      expect(h.key?(:test)).to be true
+      expect(h.has_key?('test')).to be true # rubocop:disable Style/PreferredHashMethods
     end
   end
 
