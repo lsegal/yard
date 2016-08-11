@@ -182,11 +182,7 @@ module YARD
         when "\r", "\n"
           next_char = stripped[index + 1, 1].to_s
           if next_char =~ /^\s*$/
-            if stripped[index - 1, 1] == '.'
-              break index - 2
-            else
-              break index - 1
-            end
+            break stripped[index - 1, 1] == '.' ? index - 2 : index - 1
           end
         when "{", "(", "["
           num_parens += 1

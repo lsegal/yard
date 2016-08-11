@@ -124,35 +124,30 @@ module YARD
             TOKENS.each do |token_type, match|
               # TODO: cleanup this code.
               # rubocop:disable Lint/AssignmentInCondition
-              if (match.nil? && @scanner.eos?) || (match && token = @scanner.scan(match))
-                found = true
-                case token_type
-                when :type_name
-                  raise SyntaxError, "expecting END, got name '#{token}'" if name
-                  name = token
-                when :type_next
-                  raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if name.nil?
-                  unless type
-                    type = Type.new(name)
-                  end
-                  types << type
-                  type = nil
-                  name = nil
-                when :fixed_collection_start, :collection_start
-                  name ||= "Array"
-                  klass = token_type == :collection_start ? CollectionType : FixedCollectionType
-                  type = klass.new(name, parse)
-                when :hash_collection_start
-                  name ||= "Hash"
-                  type = HashCollectionType.new(name, parse, parse)
-                when :hash_collection_next, :hash_collection_end, :fixed_collection_end, :collection_end, :parse_end
-                  raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
-                  unless type
-                    type = Type.new(name)
-                  end
-                  types << type
-                  return types
-                end
+              next unless (match.nil? && @scanner.eos?) || (match && token = @scanner.scan(match))
+              found = true
+              case token_type
+              when :type_name
+                raise SyntaxError, "expecting END, got name '#{token}'" if name
+                name = token
+              when :type_next
+                raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if name.nil?
+                type = Type.new(name) unless type
+                types << type
+                type = nil
+                name = nil
+              when :fixed_collection_start, :collection_start
+                name ||= "Array"
+                klass = token_type == :collection_start ? CollectionType : FixedCollectionType
+                type = klass.new(name, parse)
+              when :hash_collection_start
+                name ||= "Hash"
+                type = HashCollectionType.new(name, parse, parse)
+              when :hash_collection_next, :hash_collection_end, :fixed_collection_end, :collection_end, :parse_end
+                raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
+                type = Type.new(name) unless type
+                types << type
+                return types
               end
             end
             raise SyntaxError, "invalid character at #{@scanner.peek(1)}" unless found

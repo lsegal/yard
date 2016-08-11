@@ -478,11 +478,8 @@ module YARD
             if arg.first.class == Array
               arg.map! do |sub_arg|
                 next sub_arg unless sub_arg.class == Array
-                if sub_arg[0].type == :label
-                  type = :named_arg
-                else
-                  type = :unnamed_optional_arg
-                end
+                type = sub_arg[0].type == :label ?
+                  :named_arg : :unnamed_optional_arg
                 AstNode.new(type, sub_arg, :listline => lineno..lineno, :listchar => charno..charno)
               end
             end
@@ -598,9 +595,7 @@ module YARD
             end
 
             @comments.keys.each do |line|
-              if node.line > line
-                add_comment(line, nil, node)
-              end
+              add_comment(line, nil, node) if node.line > line
             end
           end
 
@@ -608,16 +603,15 @@ module YARD
           root.traverse do |node|
             next if node.type == :list || node.parent.type != :list
             @comments.keys.each do |line|
-              if node.line_range.include?(line)
-                pick = nil
-                node.traverse do |subnode|
-                  next unless subnode.type == :list
-                  pick ||= subnode
-                  next unless subnode.line_range.include?(line)
-                  pick = subnode
-                end
-                add_comment(line, nil, pick, true) if pick
+              next unless node.line_range.include?(line)
+              pick = nil
+              node.traverse do |subnode|
+                next unless subnode.type == :list
+                pick ||= subnode
+                next unless subnode.line_range.include?(line)
+                pick = subnode
               end
+              add_comment(line, nil, pick, true) if pick
             end
           end unless @comments.empty?
 

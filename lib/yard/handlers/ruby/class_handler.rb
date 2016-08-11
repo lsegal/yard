@@ -105,11 +105,8 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       return superclass.source
     when :fcall, :command
       methname = superclass.method_name.source
-      if methname == "DelegateClass"
-        return superclass.parameters.first.source
-      elsif superclass.method_name.type == :const
-        return methname
-      end
+      return superclass.parameters.first.source if methname == "DelegateClass"
+      return methname if superclass.method_name.type == :const
     when :call, :command_call
       cname = superclass.namespace.source
       if cname =~ /^O?Struct$/ && superclass.method_name(true) == :new

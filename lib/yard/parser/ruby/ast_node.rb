@@ -289,9 +289,7 @@ module YARD
           objs.unshift(type) if type && type != :list
 
           options = []
-          if @docstring
-            options << ['docstring', docstring]
-          end
+          options << ['docstring', docstring] if @docstring
           if @source_range || @line_range
             options << ['line', line_range]
             options << ['source', source_range]
@@ -444,6 +442,7 @@ module YARD
         end
 
         def block_param; parameters.last end
+
         def block
           last.type == :do_block || last.type == :brace_block ? last : nil
         end
@@ -490,9 +489,8 @@ module YARD
         def then_block; self[1] end
 
         def else_block
-          if self[2] && !cmod?
-            self[2].type == :elsif ? self[2] : self[2][0]
-          end
+          return unless self[2] && !cmod?
+          self[2].type == :elsif ? self[2] : self[2][0]
         end
 
         private

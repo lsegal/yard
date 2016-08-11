@@ -29,14 +29,12 @@ module YARD
           if @use_git
             load_git_commit(gemfile)
             all_objects
+          elsif load_gem_data(gemfile)
+            log.info "Found #{gemfile}"
+            all_objects
           else
-            if load_gem_data(gemfile)
-              log.info "Found #{gemfile}"
-              all_objects
-            else
-              log.error "Cannot find gem #{gemfile}"
-              nil
-            end
+            log.error "Cannot find gem #{gemfile}"
+            nil
           end
         end.compact
 

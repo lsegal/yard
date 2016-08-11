@@ -62,8 +62,8 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     if info
       if meth.to_s =~ /=$/ # writer
         info[:write] = obj if info[:read]
-      else
-        info[:read] = obj if info[:write]
+      elsif info[:write]
+        info[:read] = obj
       end
     end
 
@@ -85,9 +85,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       end
     end
 
-    if args.splat_param
-      params << ['*' + args.splat_param.source, nil]
-    end
+    params << ['*' + args.splat_param.source, nil] if args.splat_param
 
     if args.unnamed_end_params
       params += args.unnamed_end_params.map {|a| [a.source, nil] }
@@ -103,9 +101,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       params << ['**' + args.double_splat_param.source, nil]
     end
 
-    if args.block_param
-      params << ['&' + args.block_param.source, nil]
-    end
+    params << ['&' + args.block_param.source, nil] if args.block_param
 
     params
   end

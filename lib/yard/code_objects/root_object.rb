@@ -7,6 +7,7 @@ module YARD
       def inspect; @inspect ||= "#<yardoc root>" end
       def root?; true end
       def title; 'Top Level Namespace' end
+
       def equal?(other)
         other == :root ? true : super(other)
       end

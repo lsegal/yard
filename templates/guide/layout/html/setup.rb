@@ -8,11 +8,7 @@ def init
     if @topfile
       @toptitle = @topfile.attributes[:title] || "Documentation Overview"
     end
-    if @file == options.readme
-      @page_title = options.title
-    else
-      @page_title = @file.title
-    end
+    @page_title = @file == options.readme ? options.title : @file.title
 
     index = options.files.index(@file)
     if index

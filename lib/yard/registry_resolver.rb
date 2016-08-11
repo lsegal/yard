@@ -72,7 +72,7 @@ module YARD
         resolved ||= lookup_path_inherited(namespace, path, type) if inheritance
         break if resolved
         namespace = namespace.parent
-        lexical_lookup = lexical_lookup + 1
+        lexical_lookup += 1
       end
 
       # method objects cannot be resolved through lexical lookup by more than 1 ns
@@ -176,9 +176,7 @@ module YARD
 
       nss = object.inheritance_tree(true)
       if object.respond_to?(:superclass)
-        if object.superclass != P('BasicObject')
-          nss |= [P('Object')]
-        end
+        nss |= [P('Object')] if object.superclass != P('BasicObject')
         nss |= [P('BasicObject')]
       end
 

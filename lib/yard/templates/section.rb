@@ -93,9 +93,7 @@ module YARD
           when Array;   next
           else
             subsections = args[index + 1].is_a?(Array) ? args[index + 1] : []
-            if subsections.is_a?(Section)
-              subsections = []
-            end
+            subsections = [] if subsections.is_a?(Section)
             sections << Section.new(name, subsections)
           end
         end

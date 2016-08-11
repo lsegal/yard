@@ -311,11 +311,9 @@ module YARD
           else
             obj = nil
           end
-          if anonymous? # anonymous macro
-            return tag.text || ""
-          else
-            macro = CodeObjects::MacroObject.create(tag.name, tag.text, obj)
-          end
+
+          return tag.text || "" if anonymous? # anonymous macro
+          macro = CodeObjects::MacroObject.create(tag.name, tag.text, obj)
         else
           macro = CodeObjects::MacroObject.find(tag.name)
         end
@@ -474,9 +472,7 @@ module YARD
         clean_name = object.name.to_s.sub(/=$/, '')
         attrs = object.namespace.attributes[object.scope]
         attrs[clean_name] ||= SymbolHash[:read => nil, :write => nil]
-        if readable?
-          attrs[clean_name][:read] = object
-        end
+        attrs[clean_name][:read] = object if readable?
         if writable?
           if object.name.to_s[-1, 1] == '='
             writer = object

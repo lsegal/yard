@@ -451,9 +451,7 @@ module YARD
         no_api = true if apis.delete('')
         exprs = []
 
-        unless apis.empty?
-          exprs << "#{apis.uniq.inspect}.include?(@api.text)"
-        end
+        exprs << "#{apis.uniq.inspect}.include?(@api.text)" unless apis.empty?
 
         unless hidden_apis.empty?
           exprs << "!#{hidden_apis.uniq.inspect}.include?(@api.text)"

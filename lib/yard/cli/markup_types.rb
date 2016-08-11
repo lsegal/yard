@@ -18,9 +18,7 @@ module YARD
         types.sort_by {|name, _| name.to_s }.each do |name, providers|
           log.puts "[#{name}]"
           libs = providers.map {|p| p[:lib] }.compact
-          unless libs.empty?
-            log.puts "  Providers: #{libs.join(" ")}"
-          end
+          log.puts "  Providers: #{libs.join(" ")}" unless libs.empty?
           if exts[name]
             log.puts "  Extensions: #{exts[name].map {|e| ".#{e}" }.join(" ")}"
           end

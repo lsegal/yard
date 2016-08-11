@@ -28,9 +28,7 @@ def subclasses
   return if @subclasses.nil? || @subclasses.empty?
   @subclasses = @subclasses.sort_by(&:path).map do |child|
     name = child.path
-    if object.namespace
-      name = object.relative_path(child)
-    end
+    name = object.relative_path(child) if object.namespace
     [name, child]
   end
   erb(:subclasses)

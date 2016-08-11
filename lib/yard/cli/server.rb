@@ -219,9 +219,7 @@ module YARD
           # Generate doc for first time
           # This is not necessary but makes for a better first-run experience
           libver = libraries.empty? ? nil : libraries.values.first.first
-          if libver && !libver.ready?
-            generate_doc_for_first_time(libver)
-          end
+          generate_doc_for_first_time(libver) if libver && !libver.ready?
         else
           add_libraries(args)
           options[:single_library] = false if libraries.size > 1

@@ -45,15 +45,16 @@ end
 def layout
   @nav_url = url_for_list(!@file || options.index ? 'class' : 'file')
 
-  if !object || object.is_a?(String)
-    @path = nil
-  elsif @file
-    @path = @file.path
-  elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
-    @path = object.parent.path
-  else
-    @path = object.path
-  end
+  @path =
+    if !object || object.is_a?(String)
+      nil
+    elsif @file
+      @file.path
+    elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
+      object.parent.path
+    else
+      object.path
+    end
 
   erb(:layout)
 end

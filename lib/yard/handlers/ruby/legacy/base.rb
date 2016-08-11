@@ -71,9 +71,7 @@ module YARD
             meth.gsub!(/\s+/, '')
             args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
             args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
-            if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
-              meth = $`
-            end
+            meth = $` if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
             return meth, args
           end
         end
@@ -193,8 +191,8 @@ module YARD
                 out << [] unless out.last.empty?
                 needcomma = false
                 seen_comma = true
-              else
-                out.last << token.text if parencond
+              elsif parencond
+                out.last << token.text
               end
             when TkLPAREN
               if seen_comma
@@ -235,9 +233,7 @@ module YARD
               end
             end
 
-            if beforeparen == 0 && parencount < 0
-              break
-            end
+            break if beforeparen == 0 && parencount < 0
           end
           # Flatten any single element lists
           out.map {|e| e.empty? ? nil : (e.size == 1 ? e.pop : e.flatten.join) }.compact

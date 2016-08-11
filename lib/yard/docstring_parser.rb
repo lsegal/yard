@@ -332,12 +332,11 @@ module YARD
 
       parser.tags.each_with_index do |tag, i|
         next unless tag.tag_name == "see"
-        if "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
-          infile_info = "\n    in file `#{parser.object.file}' " \
-                        "near line #{parser.object.line}"
-          log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
-                   "(causes rendering issues): #{infile_info}"
-        end
+        next unless "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
+        infile_info = "\n    in file `#{parser.object.file}' " \
+                      "near line #{parser.object.line}"
+        log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
+                 "(causes rendering issues): #{infile_info}"
       end
     end
   end

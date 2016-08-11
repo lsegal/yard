@@ -27,9 +27,8 @@ module YARD
             txt = macro.expand([caller_method, *call_params], statement.source)
             @docstring += "\n" + txt
 
-            if !attaching && txt.match(/^\s*@!/) # macro has a directive
-              return register_docstring(nil)
-            end
+            # macro may have a directive
+            return register_docstring(nil) if !attaching && txt.match(/^\s*@!/)
           elsif !statement.comments_hash_flag && !implicit_docstring?
             return register_docstring(nil)
           end

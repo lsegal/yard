@@ -180,10 +180,9 @@ module YARD
             end
             @newline = false if chr !~ /\s/
 
-            if chr =~ end_char && (chr == '{' || chr == '(')
-              break
-            elsif chr =~ end_char && bracket_level <= 0 && brace_level <= 0
-              break
+            if chr =~ end_char
+              break if chr == '{' || chr == '('
+              break if bracket_level <= 0 && brace_level <= 0
             end
           end
           @content[start...@index]

@@ -83,6 +83,7 @@ module YARD
       attr_accessor :yardoc_file
       undef yardoc_file, yardoc_file=
       def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
+
       def yardoc_file
         Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE
       end
@@ -347,6 +348,7 @@ module YARD
       attr_accessor :po_dir
       undef po_dir, po_dir=
       def po_dir=(dir) Thread.current[:__yard_po_dir__] = dir end
+
       def po_dir
         Thread.current[:__yard_po_dir__] ||= DEFAULT_PO_DIR
       end
@@ -375,9 +377,7 @@ module YARD
         [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
           next if s.empty? && name =~ /^\w/
           path = name
-          if namespace != root
-            path = [namespace.path, name].join(s)
-          end
+          path = [namespace.path, name].join(s) if namespace != root
           found = at(path)
           return found if found && (type.nil? || found.type == type)
         end
@@ -402,11 +402,8 @@ module YARD
       def old_global_yardoc_file(spec, for_writing = false)
         path = spec.full_gem_path
         yfile = File.join(path, DEFAULT_YARDOC_FILE)
-        if for_writing && File.writable?(path)
-          return yfile
-        elsif !for_writing && File.exist?(yfile)
-          return yfile
-        end
+        return yfile if for_writing && File.writable?(path)
+        return yfile if !for_writing && File.exist?(yfile)
       end
 
       def local_yardoc_file(spec, for_writing = false)

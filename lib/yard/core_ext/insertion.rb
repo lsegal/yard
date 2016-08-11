@@ -10,8 +10,10 @@ class Insertion
   #
   # @param [Array] list the list to perform the insertion on
   # @param [Object] value the value to insert
-  def initialize(list, value) @list = list
-                              @values = (Array === value ? value : [value]) end
+  def initialize(list, value)
+    @list = list
+    @values = (Array === value ? value : [value])
+  end
 
   # Inserts the value before +val+
   # @param [Object] val the object the value will be inserted before

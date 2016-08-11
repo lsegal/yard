@@ -388,11 +388,8 @@ module YARD
           fromobj = fromobj.namespace
         end
         from = serializer.serialized_path(fromobj)
-        if filename == options.readme
-          path = 'index.html'
-        else
-          path = serializer.serialized_path(filename)
-        end
+        path = filename == options.readme ?
+          'index.html' : serializer.serialized_path(filename)
         link = File.relative_path(from, path)
         link += (anchor ? '#' + urlencode(anchor) : '')
         link

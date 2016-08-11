@@ -417,11 +417,8 @@ module YARD
       #   into a docstring and meta tags.
       def docstring=(comments)
         @docstrings.clear
-        if Docstring === comments
-          @docstring = comments
-        else
-          @docstring = Docstring.new(comments, self)
-        end
+        @docstring = Docstring === comments ?
+          comments : Docstring.new(comments, self)
       end
 
       # Default type is the lowercase class name without the "Object" suffix.
@@ -474,11 +471,8 @@ module YARD
         common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
         common = path unless common =~ /(\.|::|#)$/
         common = common.sub(/(\.|::|#)[^:#\.]*?$/, '') if same_parent
-        if %w(. :).include?(common[-1, 1]) || other[common.size, 1] == '#'
-          suffix = ''
-        else
-          suffix = '(::|\.)'
-        end
+        suffix = %w(. :).include?(common[-1, 1]) || other[common.size, 1] == '#' ?
+          '' : '(::|\.)'
         result = other.sub(/^#{Regexp.quote common}#{suffix}/, '')
         result.empty? ? other : result
       end

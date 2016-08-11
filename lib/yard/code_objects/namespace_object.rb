@@ -93,7 +93,7 @@ module YARD::CodeObjects
         opts = SymbolHash[opts]
         children.find do |obj|
           opts.each do |meth, value|
-            break false if !(value.is_a?(Array) ? value.include?(obj[meth]) : obj[meth] == value)
+            break false unless value.is_a?(Array) ? value.include?(obj[meth]) : obj[meth] == value
           end
         end
       end

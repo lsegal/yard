@@ -41,9 +41,7 @@ class Gem::SourceIndex
     # Undef old methods
     %w(from_installed_gems installed_spec_directories
         from_gems_in load_specification).each do |meth|
-      if instance_methods(true).find {|m| m.to_s == meth }
-        undef_method(meth)
-      end
+      undef_method(meth) if instance_methods(true).find {|m| m.to_s == meth }
     end
 
     ##

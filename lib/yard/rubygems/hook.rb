@@ -142,13 +142,9 @@ module YARD
 
       setup
 
-      if @generate_yri && (@force || !File.exist?(@yri_dir))
-        install_yri
-      end
+      install_yri if @generate_yri && (@force || !File.exist?(@yri_dir))
 
-      if @generate_yard && (@force || !File.exist?(@yard_dir))
-        install_yard
-      end
+      install_yard if @generate_yard && (@force || !File.exist?(@yard_dir))
     end
 
     ##
@@ -158,9 +154,7 @@ module YARD
       self.class.load_yard
 
       if File.exist?(@doc_dir)
-        unless File.writable?(@doc_dir)
-          raise Gem::FilePermissionError, @doc_dir
-        end
+        raise Gem::FilePermissionError, @doc_dir unless File.writable?(@doc_dir)
       else
         FileUtils.mkdir_p @doc_dir
       end

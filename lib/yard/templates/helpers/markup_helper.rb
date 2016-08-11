@@ -125,9 +125,7 @@ module YARD
       # @see MARKUP_EXTENSIONS
       # @since 0.6.0
       def markup_for_file(contents, filename)
-        if contents && contents =~ MARKUP_FILE_SHEBANG # Shebang support
-          return $1.to_sym
-        end
+        return $1.to_sym if contents && contents =~ MARKUP_FILE_SHEBANG # Shebang support
 
         ext = (File.extname(filename)[1..-1] || '').downcase
         MARKUP_EXTENSIONS.each do |type, exts|

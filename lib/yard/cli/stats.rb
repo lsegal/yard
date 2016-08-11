@@ -61,13 +61,14 @@ module YARD
         end
         meths.each {|m| send(m) }
 
-        if @undocumented == 0
-          total = 100
-        elsif @total == 0
-          total = 0
-        else
-          total = (@total - @undocumented).to_f / @total.to_f * 100
-        end
+        total =
+          if @undocumented == 0
+            100
+          elsif @total == 0
+            0
+          else
+            (@total - @undocumented).to_f / @total.to_f * 100
+          end
         log.puts("% 3.2f%% documented" % total)
       end
 
@@ -157,11 +158,12 @@ module YARD
       def output(name, data, undoc = nil)
         @total += data if data.is_a?(Integer) && undoc
         @undocumented += undoc if undoc.is_a?(Integer)
-        if undoc
-          data = ("%5s (% 5d undocumented)" % [data, undoc])
-        else
-          data = "%5s" % data
-        end
+        data =
+          if undoc
+            ("%5s (% 5d undocumented)" % [data, undoc])
+          else
+            "%5s" % data
+          end
         log.puts("%-12s %s" % [name + ":", data])
       end
 

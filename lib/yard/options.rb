@@ -209,8 +209,6 @@ module YARD
       val
     end
 
-    unless defined?(tap) # only for 1.8.6
-      def tap; yield(self); self end
-    end
+    def tap; yield(self); self end unless defined?(tap) # only for 1.8.6
   end
 end

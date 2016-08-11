@@ -106,11 +106,8 @@ module YARD
 
         def handle_constants(type, var_name, const_name, value)
           return unless type =~ /^const$|^global_const$/
-          if type == 'global_const'
-            namespace = :root
-          else
-            namespace = namespace_for_variable(var_name)
-          end
+          namespace = type == 'global_const' ?
+            :root : namespace_for_variable(var_name)
           register ConstantObject.new(namespace, const_name) do |obj|
             obj.source_type = :c
             obj.value = value
@@ -197,7 +194,7 @@ module YARD
         def record_parameters(object, symbol, src)
           # use regex to extract comma-delimited list of parameters from cfunc definition
           if src.source =~ /VALUE\s+#{symbol}\(([^)]*)\)\s*\{/m
-            params = $~[1].split(/\s*,\s*/)
+            params = $~[1].split(/\s*,\s*/) # rubocop:disable Style/SpecialGlobalVars
             # cfunc for a "varargs" method has params "int argc, VALUE *argv"
             if params[0] =~ /int\s+argc/ && params[1] =~ /VALUE\s*\*\s*argv/
               object.parameters = [['*args', nil]]

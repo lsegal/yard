@@ -202,6 +202,7 @@ class TreeContext
       @next = first
       @after = second
     end
+
     def next
       @next, @after = @after, @next
       @after
@@ -218,23 +219,22 @@ def class_list(root = Registry.root, tree = TreeContext.new)
     children += @items.select {|o| o.namespace.is_a?(CodeObjects::Proxy) }
   end
   children.compact.sort_by(&:path).each do |child|
-    if child.is_a?(CodeObjects::NamespaceObject)
-      name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
-      has_children = run_verifier(child.children).any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
-      out << "<li id='object_#{child.path}' class='#{tree.classes.join(' ')}'>"
-      out << "<div class='item' style='padding-left:#{tree.indent}'>"
-      out << "<a class='toggle'></a> " if has_children
-      out << linkify(child, name)
-      out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
-      out << "<small class='search_info'>"
-      out << child.namespace.title
-      out << "</small>"
-      out << "</div>"
-      tree.nest do
-        out << "<ul>#{class_list(child, tree)}</ul>" if has_children
-      end
-      out << "</li>"
+    next unless child.is_a?(CodeObjects::NamespaceObject)
+    name = child.namespace.is_a?(CodeObjects::Proxy) ? child.path : child.name
+    has_children = run_verifier(child.children).any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
+    out << "<li id='object_#{child.path}' class='#{tree.classes.join(' ')}'>"
+    out << "<div class='item' style='padding-left:#{tree.indent}'>"
+    out << "<a class='toggle'></a> " if has_children
+    out << linkify(child, name)
+    out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
+    out << "<small class='search_info'>"
+    out << child.namespace.title
+    out << "</small>"
+    out << "</div>"
+    tree.nest do
+      out << "<ul>#{class_list(child, tree)}</ul>" if has_children
     end
+    out << "</li>"
   end
   out
 end

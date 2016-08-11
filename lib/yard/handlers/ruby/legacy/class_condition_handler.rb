@@ -73,10 +73,9 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     return unless statement.block
     stmtlist = YARD::Parser::Ruby::Legacy::StatementList
     stmtlist.new(statement.block).each do |stmt|
-      if TkELSE === stmt.tokens.first
-        push_state(:visibility => visibility) do
-          parser.process(stmtlist.new(stmt.block))
-        end
+      next unless TkELSE === stmt.tokens.first
+      push_state(:visibility => visibility) do
+        parser.process(stmtlist.new(stmt.block))
       end
     end
   end

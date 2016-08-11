@@ -115,11 +115,9 @@ module YARD
 
         expression = "#{visibilities.uniq.inspect}.include?(object.visibility)"
         options.verifier = Verifier.new(expression)
-        if args.first
-          @objects = args.map {|o| Registry.at(o) }.compact
-        else
-          @objects = [Registry.root]
-        end
+        @objects = args.first ?
+          args.map {|o| Registry.at(o) }.compact :
+          [Registry.root]
       end
     end
   end

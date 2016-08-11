@@ -8,9 +8,8 @@ desc "Publish gem"
 task :publish do
   ver = ENV['VERSION']
 
-  if ver.nil? || ver.empty?
-    raise "missing VERSION=x.y.z"
-  elsif ver < YARD::VERSION
+  raise "missing VERSION=x.y.z" if ver.nil? || ver.empty?
+  if ver < YARD::VERSION
     raise "invalid version `#{ver}' (must be >= `#{YARD::VERSION}')"
   end
 

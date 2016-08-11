@@ -104,12 +104,8 @@ def inherited_constant_list
 end
 
 def docstring_full(obj)
-  docstring = ""
-  if obj.tags(:overload).size == 1 && obj.docstring.empty?
-    docstring = obj.tag(:overload).docstring
-  else
-    docstring = obj.docstring
-  end
+  docstring = obj.tags(:overload).size == 1 && obj.docstring.empty? ?
+    obj.tag(:overload).docstring : obj.docstring
 
   if docstring.summary.empty? && obj.tags(:return).size == 1 && obj.tag(:return).text
     docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/, &:upcase).strip)

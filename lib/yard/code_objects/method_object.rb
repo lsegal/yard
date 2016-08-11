@@ -69,9 +69,7 @@ module YARD::CodeObjects
       YARD::Registry.delete(self)
       @path = nil
       @scope = v.to_sym
-      if @scope == :module
-        @scope = :class
-      end
+      @scope = :class if @scope == :module
       YARD::Registry.register(self) if reregister
     end
 
