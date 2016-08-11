@@ -62,3 +62,6 @@ Style/GlobalVars:
   Exclude:
     - benchmarks/**/*.rb
     - spec/**/*.rb
+Lint/Loop: # because this is legacy code. not worth fixing
+  Exclude:
+    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'

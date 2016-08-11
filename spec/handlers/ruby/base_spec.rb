@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
-  include YARD::Parser::Ruby; YARD::Parser::Ruby::AstNode
+  include YARD::Parser::Ruby
+  YARD::Parser::Ruby::AstNode # rubocop:disable Lint/Void
 
   before do
     allow(Handlers::Ruby::Base).to receive(:inherited)

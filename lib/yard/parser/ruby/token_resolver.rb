@@ -87,6 +87,14 @@ module YARD
           end
         end
 
+        def self.state_attr(*attrs)
+          attrs.each do |attr|
+            define_method(attr) { @states.last[attr.to_sym] }
+            define_method("#{attr}=") {|v| @states.last[attr.to_sym] = v }
+            protected attr, :"#{attr}="
+          end
+        end
+
         private
 
         def push_state
@@ -95,14 +103,6 @@ module YARD
 
         def pop_state
           @states.pop
-        end
-
-        def self.state_attr(*attrs)
-          attrs.each do |attr|
-            define_method(attr) { @states.last[attr.to_sym] }
-            define_method("#{attr}=") {|v| @states.last[attr.to_sym] = v }
-            protected attr, :"#{attr}="
-          end
         end
 
         state_attr :object, :next_object, :skip_group, :last_sep

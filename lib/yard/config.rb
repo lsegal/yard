@@ -164,8 +164,6 @@ module YARD
       load_plugin_failed(name, e)
     end
 
-    private
-
     # Load gem plugins if :load_plugins is true
     def self.load_gem_plugins
       return true unless options[:load_plugins]

@@ -1,6 +1,6 @@
 module YARD
   module Tags
-    class TagFormatError < Exception
+    class TagFormatError < RuntimeError
     end
   end
 end

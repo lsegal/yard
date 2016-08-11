@@ -520,7 +520,7 @@ module YARD
         return unless object.module_function?
         modobj = MethodObject.new(object.namespace, object.name)
         object.copy_to(modobj)
-        modobj.visibility = :private
+        modobj.visibility = :private # rubocop:disable Lint/UselessSetterCall
       end
 
       # Registers the object as dynamic if the object is defined inside

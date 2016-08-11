@@ -86,13 +86,13 @@ module YARD
           end
           statement.source = @content[start..@index]
           statement.block = stmts
-          statement.declaration = decl
+          statement.declaration = decl # rubocop:disable Lint/UselessSetterCall
         end
 
         def consume_body_statements
           stmts = []
           brace_level = 1
-          while true
+          loop do
             strip_non_statement_data
             start, line = @index, @line
             consume_until(/[{};]/)
@@ -100,28 +100,28 @@ module YARD
             brace_level -= 1 if prevchar == '}'
 
             break if prevchar.empty? || (brace_level <= 0 && prevchar == '}')
-            end_chr = @index
-            end_chr -= 1 if prevchar == '}'
             src = @content[start...@index]
-            if src && src !~ /\A\s*\Z|\A\}\Z/
-              stmt = BodyStatement.new(src, @file, line)
-              attach_comment(stmt)
-              stmts << stmt
-            end
+            next unless src && src !~ /\A\s*\Z|\A\}\Z/
+
+            stmt = BodyStatement.new(src, @file, line)
+            attach_comment(stmt)
+            stmts << stmt
           end
           stmts
         end
 
         def strip_non_statement_data
           start = @index
-          begin
+          loop do
             start = @index
             case char
             when /\s/; consume_whitespace
             when '#';  consume_directive
             when '/';  consume_comment
             end
-          end until start == @index
+
+            break if start == @index
+          end
         end
 
         def consume_whitespace

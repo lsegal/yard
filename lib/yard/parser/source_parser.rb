@@ -6,7 +6,7 @@ module YARD
     # Raised when an object is recognized but cannot be documented. This
     # generally occurs when the Ruby syntax used to declare an object is
     # too dynamic in nature.
-    class UndocumentableError < Exception; end
+    class UndocumentableError < RuntimeError; end
 
     # Raised when the parser sees a Ruby syntax error
     class ParserSyntaxError < UndocumentableError; end

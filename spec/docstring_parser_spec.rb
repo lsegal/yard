@@ -122,7 +122,7 @@ eof
     end
 
     it "does not parse invalid tag names" do
-      invalid = %w(@ @return@ @param, @x-y @.x.y.z)
+      invalid = %w(@ @return@ @p,aram @x-y @.x.y.z)
       invalid.each do |tag|
         expect(docstring(tag + ' foo bar')).to eq tag + ' foo bar'
       end
@@ -184,7 +184,6 @@ eof
       data = "Foo\n@!scope class\n@!visibility private\nBar"
       parse(data)
       dirs = @parser.directives
-      dirs.size == 2
       expect(dirs[0]).to be_a(Tags::ScopeDirective)
       expect(dirs[0].tag.text).to eq 'class'
       expect(dirs[1]).to be_a(Tags::VisibilityDirective)

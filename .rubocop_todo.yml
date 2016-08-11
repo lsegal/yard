@@ -39,32 +39,6 @@ Lint/HandleExceptions:
     - 'spec/code_objects/constants_spec.rb'
     - 'spec/spec_helper.rb'
 
-# Offense count: 12
-Lint/IneffectiveAccessModifier:
-  Exclude:
-    - 'lib/yard/config.rb'
-    - 'lib/yard/parser/ruby/token_resolver.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: runtime_error, standard_error
-Lint/InheritException:
-  Exclude:
-    - 'lib/yard/parser/source_parser.rb'
-    - 'lib/yard/tags/tag_format_error.rb'
-
-# Offense count: 1
-Lint/LiteralInCondition:
-  Exclude:
-    - 'lib/yard/parser/c/c_parser.rb'
-
-# Offense count: 5
-Lint/Loop:
-  Exclude:
-    - 'lib/yard/parser/c/c_parser.rb'
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-
 # Offense count: 4
 Lint/NonLocalExitFromIterator:
   Exclude:
@@ -79,43 +53,6 @@ Lint/ParenthesesAsGroupedExpression:
     - 'spec/parser/ruby/legacy/statement_list_spec.rb'
     - 'spec/parser/ruby/ruby_parser_spec.rb'
     - 'spec/parser/source_parser_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Lint/PercentStringArray:
-  Exclude:
-    - 'docs/templates/plugin.rb'
-    - 'spec/docstring_parser_spec.rb'
-
-# Offense count: 1
-Lint/RescueException:
-  Exclude:
-    - 'lib/yard/server/commands/library_command.rb'
-
-# Offense count: 2
-# Configuration parameters: ContextCreatingMethods.
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'lib/yard/config.rb'
-    - 'lib/yard/docstring_parser.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UselessArraySplat:
-  Exclude:
-    - 'lib/yard/templates/helpers/markup_helper.rb'
-
-# Offense count: 2
-Lint/UselessSetterCall:
-  Exclude:
-    - 'lib/yard/handlers/base.rb'
-    - 'lib/yard/parser/c/c_parser.rb'
-
-# Offense count: 2
-Lint/Void:
-  Exclude:
-    - 'spec/docstring_parser_spec.rb'
-    - 'spec/handlers/ruby/base_spec.rb'
 
 # Offense count: 4
 Style/AccessorMethodName:
