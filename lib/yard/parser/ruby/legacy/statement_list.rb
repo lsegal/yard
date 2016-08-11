@@ -297,9 +297,9 @@ module YARD
 
         return unless
           # We might be coming after a statement-ending token...
-          ((@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
+          (@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
            # Or we might be at the beginning of an argument list
-           (@current_block == TkDEF && tk.class == TkRPAREN))
+           (@current_block == TkDEF && tk.class == TkRPAREN)
 
         # Continue line ending on . or ::
         return if @last_tk && [EXPR_DOT].include?(@last_tk.lex_state)

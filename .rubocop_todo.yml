@@ -761,17 +761,6 @@ Style/OpMethod:
 Style/ParallelAssignment:
   Enabled: false
 
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment.
-Style/ParenthesesAroundCondition:
-  Exclude:
-    - 'lib/yard/handlers/ruby/attribute_handler.rb'
-    - 'lib/yard/handlers/ruby/decorator_handler_methods.rb'
-    - 'lib/yard/handlers/ruby/legacy/attribute_handler.rb'
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'lib/yard/parser/ruby/legacy/statement_list.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: PreferredDelimiters.

@@ -32,7 +32,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
 
       # Show their methods as well
       {:read => name, :write => "#{name}="}.each do |type, meth|
-        if (type == :read ? read : write)
+        if type == :read ? read : write
           o = MethodObject.new(namespace, meth, scope)
           if type == :write
             o.parameters = [['value', nil]]

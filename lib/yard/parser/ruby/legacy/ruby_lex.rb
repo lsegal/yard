@@ -535,9 +535,9 @@ module YARD
 
       def lex
         catch(:eof) do
-          until (((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
+          until ((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
              !@continue ||
-             tk.nil?)
+             tk.nil?
           end
           line = get_read
 
@@ -720,7 +720,7 @@ module YARD
             else
               str = op
               str << ch
-              if (ch == '\\') #'
+              if ch == '\\' #'
                 str << read_escape
               end
               @lex_state = EXPR_END
@@ -1042,9 +1042,9 @@ module YARD
           if token_c
             # reserved word?
 
-            if (@lex_state != EXPR_BEG &&
+            if @lex_state != EXPR_BEG &&
                 @lex_state != EXPR_FNAME &&
-                trans[1])
+                trans[1]
               # modifiers
               token_c = TkSymbol2Token[trans[1]]
               @lex_state = trans[0]
