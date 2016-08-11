@@ -99,7 +99,7 @@ module YARD
       class TkOPASGN < TkOp
         def initialize(line_no, char_no, op)
           super(line_no, char_no)
-          op = TkReading2Token[op] unless op.kind_of?(Symbol)
+          op = TkReading2Token[op] unless op.is_a?(Symbol)
           @op = op
         end
         attr :op
@@ -127,7 +127,7 @@ module YARD
         tk = nil
         case token
         when String, Symbol
-          source = token.kind_of?(String) ? TkReading2Token : TkSymbol2Token
+          source = token.is_a?(String) ? TkReading2Token : TkSymbol2Token
           if (tk = source[token]).nil?
             IRB.fail TkReading2TokenNoKey, token
           end
@@ -274,7 +274,7 @@ module YARD
 
       # @private
       def self.def_token(token_n, super_token = Token, reading = nil, *opts)
-        token_n = token_n.id2name unless token_n.kind_of?(String)
+        token_n = token_n.id2name unless token_n.is_a?(String)
         if RubyToken.const_defined?(token_n)
           # IRB.fail AlreadyDefinedToken, token_n
         end
@@ -439,7 +439,7 @@ module YARD
       attr_reader :continue
       attr_reader :lex_state
 
-      def RubyLex.debug?
+      def self.debug?
         false
       end
 
@@ -516,13 +516,13 @@ module YARD
 
       def lex
         catch(:eof) do
-          until ((tk = token).kind_of?(TkNL) || tk.kind_of?(TkEND_OF_SCRIPT)) &&
+          until ((tk = token).is_a?(TkNL) || tk.is_a?(TkEND_OF_SCRIPT)) &&
                 !@continue ||
                 tk.nil?
           end
           line = get_read
 
-          if line == "" && tk.kind_of?(TkEND_OF_SCRIPT) || tk.nil?
+          if line == "" && tk.is_a?(TkEND_OF_SCRIPT) || tk.nil?
             nil
           else
             line
@@ -536,12 +536,12 @@ module YARD
           begin
             begin
               tk = @OP.match(self)
-              @space_seen = tk.kind_of?(TkSPACE)
+              @space_seen = tk.is_a?(TkSPACE)
             rescue SyntaxError
               abort if @exception_on_syntax_error
               tk = TkError.new(line_no, char_no)
             end
-          end while @skip_space && tk.kind_of?(TkSPACE)
+          end while @skip_space && tk.is_a?(TkSPACE)
           if @read_auto_clean_up
             get_read
           end

@@ -42,7 +42,7 @@ describe YARD::Tags::OverloadTag do
     @tag.object = double(:object)
     expect(@tag.object).to receive(:is_a?).at_least(3).times.with(CodeObjects::Base).and_return(true)
     expect(@tag.is_a?(CodeObjects::Base)).to be true
-    expect(@tag.kind_of?(CodeObjects::Base)).to be true
+    expect(@tag.is_a?(CodeObjects::Base)).to be true
     expect(CodeObjects::Base === @tag).to be true
   end
 

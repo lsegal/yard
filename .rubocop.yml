@@ -31,6 +31,8 @@ Style/PredicateName: # this creates breaking changes in the API
   Enabled: false
 Style/MultilineTernaryOperator:
   Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
 Style/MutableConstant:
   Enabled: false
 Style/FrozenStringLiteralComment:

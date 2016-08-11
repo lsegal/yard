@@ -196,32 +196,6 @@ Style/CharacterLiteral:
   Exclude:
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
 
-# Offense count: 1
-Style/ClassAndModuleCamelCase:
-  Exclude:
-    - 'spec/templates/template_spec.rb'
-
-# Offense count: 80
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: is_a?, kind_of?
-Style/ClassCheck:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'spec/tags/overload_tag_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/ClassMethods:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-
 # Offense count: 18
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly.

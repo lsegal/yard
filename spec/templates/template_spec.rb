@@ -133,7 +133,7 @@ describe YARD::Templates::Template do
 
   describe "#init" do
     it "is called during initialization" do
-      module YARD::Templates::Engine::Template__full_path_e
+      module YARD::Templates::Engine::Template__full_path_e # rubocop:disable Style/ClassAndModuleCamelCase
         def init; sections 1, 2, 3 end
       end
       expect(template(:e).new.sections).to eq Section.new(nil, 1, 2, 3)
