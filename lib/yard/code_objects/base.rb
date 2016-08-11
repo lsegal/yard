@@ -24,7 +24,7 @@ module YARD
         end
         self
       end
-      alias_method :<<, :push
+      alias << push
     end
 
     extend NamespaceMapper
@@ -448,7 +448,7 @@ module YARD
           name.to_s
         end
       end
-      alias_method :to_s, :path
+      alias to_s path
 
       # @note
       #   Override this method if your object has a special title that does
@@ -529,8 +529,8 @@ module YARD
         end
       end
 
-      alias_method :parent, :namespace
-      alias_method :parent=, :namespace=
+      alias parent namespace
+      alias parent= namespace=
 
       # Gets a tag from the {#docstring}
       # @see Docstring#tag

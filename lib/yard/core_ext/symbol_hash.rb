@@ -63,7 +63,7 @@ class SymbolHash < Hash
   # @param [Hash] hash the hash object to copy the values from
   # @return [SymbolHash] self
   def update(hash) hash.each {|k,v| self[k] = v }; self end
-  alias_method :merge!, :update
+  alias merge! update
 
   # Merges the contents of another hash into a new SymbolHash object
   #

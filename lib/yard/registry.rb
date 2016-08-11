@@ -257,7 +257,7 @@ module YARD
       # @return [CodeObjects::Base] the object at path
       # @return [nil] if no object is found
       def at(path) path ? thread_local_store[path] : nil end
-      alias_method :[], :at
+      alias [] at
 
       # The root namespace object.
       # @return [CodeObjects::RootObject] the root object in the namespace

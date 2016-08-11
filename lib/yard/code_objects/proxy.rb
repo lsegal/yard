@@ -19,7 +19,7 @@ module YARD
       def self.===(other) other.is_a?(self) end
 
       attr_reader :namespace
-      alias_method :parent, :namespace
+      alias parent namespace
 
       # Creates a new Proxy
       #

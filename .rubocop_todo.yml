@@ -152,20 +152,6 @@ Style/AccessorMethodName:
     - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
     - 'lib/yard/templates/engine.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: prefer_alias, prefer_alias_method
-Style/Alias:
-  Exclude:
-    - 'lib/yard/code_objects/base.rb'
-    - 'lib/yard/code_objects/proxy.rb'
-    - 'lib/yard/core_ext/hash.rb'
-    - 'lib/yard/core_ext/symbol_hash.rb'
-    - 'lib/yard/logging.rb'
-    - 'lib/yard/parser/ruby/legacy/token_list.rb'
-    - 'lib/yard/registry.rb'
-
 # Offense count: 38
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

@@ -36,7 +36,7 @@ module YARD
         end
         self
       end
-      alias_method :<<, :push
+      alias << push
 
       def squeeze(type = TkSPACE)
         last = nil

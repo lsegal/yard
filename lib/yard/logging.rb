@@ -118,7 +118,7 @@ module YARD
       print("#{msg}\n")
     end
 
-    alias_method :print_no_newline, :<<
+    alias print_no_newline <<
     private :print_no_newline
 
     # Displays an unformatted line to the logger output stream.
@@ -129,7 +129,7 @@ module YARD
       clear_line
       print_no_newline(msg)
     end
-    alias_method :<<, :print
+    alias << print
 
     # Prints the backtrace +exc+ to the logger as error data.
     #
