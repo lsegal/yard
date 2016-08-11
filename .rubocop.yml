@@ -30,14 +30,22 @@ Style/DotPosition:
   EnforcedStyle: trailing
 
 # Disable these until we know what to do with them
+Style/AccessorMethodName: # this creates breaking changes in the API
+  Enabled: false
 Style/PredicateName: # this creates breaking changes in the API
+  Enabled: false
+Style/MethodMissing: # this doesn't exist in 1.8/1.9
+  Enabled: false
+Style/AlignParameters: # does not work correctly with subsequent block
+  Enabled: false
+Style/AlignArray: # does not support indentation
+  Enabled: false
+Style/AlignHash: # does not support indentation
   Enabled: false
 Style/MultilineTernaryOperator:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
-Style/MethodMissing:
-  Enabled: false # this doesn't exist in 1.8/1.9
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
 Style/SingleLineMethods:
@@ -65,12 +73,6 @@ Style/CaseEquality:
   Enabled: false
 Style/WordArray:
   Enabled: false
-Style/AlignParameters:
-  Enabled: false # does not work correctly with subsequent block
-Style/AlignArray:
-  Enabled: false # does not support indentation
-Style/AlignHash:
-  Enabled: false # does not support indentation
 Style/GlobalVars:
   Exclude:
     - benchmarks/**/*.rb
