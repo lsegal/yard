@@ -89,8 +89,8 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       let(:code) { "class DecoratorTest; mock_decorator def foo; end; end" }
 
       specify do
-        expect(subject[:return].first[:method]) \
-          .to be_a YARD::CodeObjects::MethodObject
+        expect(subject[:return].first[:method]).
+          to be_a YARD::CodeObjects::MethodObject
       end
     end
 
@@ -358,11 +358,11 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       end
 
       specify "don't transfer docstring to other decorators" do
-        expect(Registry.at("#{class_name}#second_decorator")) \
-          .not_to respond_to :docstring
+        expect(Registry.at("#{class_name}#second_decorator")).
+          not_to respond_to :docstring
 
-        expect(Registry.at("#{class_name}#third_decorator")) \
-          .not_to respond_to :docstring
+        expect(Registry.at("#{class_name}#third_decorator")).
+          not_to respond_to :docstring
       end
 
       describe "transfer source to decorated method defs" do

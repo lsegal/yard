@@ -23,6 +23,8 @@ Style/NumericPredicate: # ruby 1.8/1.9 do not have positive?/negative?
   EnforcedStyle: comparison
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+Style/DotPosition:
+  EnforcedStyle: trailing
 
 # Disable these until we know what to do with them
 Style/PredicateName: # this creates breaking changes in the API
