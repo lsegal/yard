@@ -724,28 +724,6 @@ Style/Next:
     - 'lib/yard/tags/types_explainer.rb'
     - 'templates/default/fulldoc/html/setup.rb'
 
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/NilComparison:
-  Exclude:
-    - 'lib/yard/docstring.rb'
-    - 'lib/yard/handlers/ruby/class_condition_handler.rb'
-    - 'lib/yard/handlers/ruby/decorator_handler_methods.rb'
-    - 'lib/yard/handlers/ruby/legacy/class_condition_handler.rb'
-    - 'lib/yard/parser/ruby/legacy/statement_list.rb'
-    - 'lib/yard/registry_store.rb'
-    - 'lib/yard/templates/helpers/markup_helper.rb'
-
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: IncludeSemanticChanges.
-Style/NonNilCheck:
-  Exclude:
-    - 'lib/yard/handlers/ruby/class_condition_handler.rb'
-    - 'lib/yard/handlers/ruby/legacy/base.rb'
-    - 'lib/yard/handlers/ruby/legacy/class_condition_handler.rb'
-    - 'templates/default/module/setup.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/NumericLiterals:

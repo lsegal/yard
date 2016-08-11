@@ -6,7 +6,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
 
   process do
     condition = parse_condition
-    if condition == nil
+    if condition.nil?
       # Parse both blocks if we're unsure of the condition
       parse_then_block
       parse_else_block
@@ -58,7 +58,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     end
 
     if TkUNLESS === statement.tokens.first
-      condition = !condition if condition != nil
+      condition = !condition unless condition.nil?
     end
     condition
   end

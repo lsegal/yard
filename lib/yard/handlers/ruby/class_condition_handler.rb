@@ -14,7 +14,7 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
 
   process do
     condition = parse_condition
-    if condition == nil
+    if condition.nil?
       # Parse both blocks if we're unsure of the condition
       parse_then_block
       parse_else_block
@@ -69,7 +69,7 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
 
     # Invert an unless condition
     if statement.type == :unless || statement.type == :unless_mod
-      condition = !condition if condition != nil
+      condition = !condition unless condition.nil?
     end
     condition
   end

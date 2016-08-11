@@ -187,7 +187,7 @@ module YARD
           seen_comma = true
           tokenlist.each do |token|
             tokval = accepted_types == [:all] ? token.text : tokval(token, *accepted_types)
-            parencond = !out.last.empty? && tokval != nil
+            parencond = !out.last.empty? && !tokval.nil?
             #puts "#{seen_comma.inspect} #{parencount} #{token.class.class_name} #{out.inspect}"
             case token
             when TkCOMMA
@@ -209,14 +209,14 @@ module YARD
               if beforeparen > 0
                 beforeparen -= 1
               else
-                out.last << token.text if parencount > 0 && tokval != nil
+                out.last << token.text if parencount > 0 && !tokval.nil?
                 parencount -= 1
               end
             when TkLBRACE, TkLBRACK, TkDO
               parencount += 1
-              out.last << token.text if tokval != nil
+              out.last << token.text unless tokval.nil?
             when TkRBRACE, TkRBRACK, TkEND
-              out.last << token.text if tokval != nil
+              out.last << token.text unless tokval.nil?
               parencount -= 1
             else
               break if TkKW === token && ![TkTRUE, TkFALSE, TkSUPER, TkSELF, TkNIL].include?(token.class)
@@ -225,7 +225,7 @@ module YARD
               if parencount == 0
                 next if needcomma
                 next if TkWhitespace === token
-                if tokval != nil
+                if !tokval.nil?
                   out.last << tokval
                 else
                   out.last.clear

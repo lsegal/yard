@@ -84,7 +84,7 @@ def inherited_attr_list
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
     next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
     attribs = superclass.attributes[:instance]
-    attribs = attribs.reject {|name, rw| object.child(:scope => :instance, :name => name) != nil }
+    attribs = attribs.select {|name, rw| object.child(:scope => :instance, :name => name).nil? }
     attribs = attribs.sort_by {|args| args.first.to_s }.map {|n, m| m[:read] || m[:write] }
     attribs = prune_method_listing(attribs, false)
     yield superclass, attribs unless attribs.empty?
@@ -96,7 +96,7 @@ def inherited_constant_list
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
     next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
     consts = superclass.constants(:included => false, :inherited => false)
-    consts = consts.reject {|const| object.child(:type => :constant, :name => const.name) != nil }
+    consts = consts.select {|const| object.child(:type => :constant, :name => const.name).nil? }
     consts = consts.sort_by {|const| const.name.to_s }
     consts = run_verifier(consts)
     yield superclass, consts unless consts.empty?

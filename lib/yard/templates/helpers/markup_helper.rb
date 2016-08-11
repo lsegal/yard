@@ -88,7 +88,7 @@ module YARD
           providers = providers.select {|p| p[:lib] == options.markup_provider }
         end
 
-        if providers == nil || providers.empty?
+        if providers.nil? || providers.empty?
           log.error "Invalid markup type '#{type}' or markup provider " +
             "(#{options.markup_provider}) is not registered."
           return false

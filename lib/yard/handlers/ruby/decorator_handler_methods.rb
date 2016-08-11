@@ -55,7 +55,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
     selected_nodes =
       if nodes.empty?
         all_nodes
-      elsif nodes.count == 1 && nodes.first == nil
+      elsif nodes.count == 1 && nodes.first.nil?
         []
       else
         nodes

@@ -242,7 +242,7 @@ module YARD
           @comments_last_line = tk.line_no + lines
         else
           @comments << tk.text.gsub(/^(#+)\s{0,1}/, '')
-          @comments_hash_flag = $1 == '##' if @comments_hash_flag == nil
+          @comments_hash_flag = $1 == '##' if @comments_hash_flag.nil?
           @comments_last_line = tk.line_no
         end
         @comments.pop if @comments.size == 1 && @comments.first =~ /^\s*$/

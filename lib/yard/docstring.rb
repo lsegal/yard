@@ -53,7 +53,7 @@ module YARD
 
     # @return [Boolean] whether the docstring was started with "##"
     attr_reader :hash_flag
-    def hash_flag=(v) @hash_flag = v == nil ? false : v end
+    def hash_flag=(v) @hash_flag = v.nil? ? false : v end
 
     # Matches a tag at the start of a comment line
     # @deprecated Use {DocstringParser::META_MATCH}
