@@ -472,17 +472,6 @@ Style/FormatString:
     - 'lib/yard/templates/helpers/html_helper.rb'
     - 'lib/yard/templates/helpers/text_helper.rb'
 
-# Offense count: 30
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Exclude:
-    - 'benchmarks/format_args.rb'
-    - 'benchmarks/registry_store_types.rb'
-    - 'benchmarks/ripper_parser.rb'
-    - 'benchmarks/splat_vs_flatten.rb'
-    - 'spec/handlers/base_spec.rb'
-    - 'spec/templates/spec_helper.rb'
-
 # Offense count: 12
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:

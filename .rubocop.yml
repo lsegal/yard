@@ -46,3 +46,7 @@ Style/AlignArray:
   Enabled: false # does not support indentation
 Style/AlignHash:
   Enabled: false # does not support indentation
+Style/GlobalVars:
+  Exclude:
+    - benchmarks/**/*.rb
+    - spec/**/*.rb
