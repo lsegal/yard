@@ -88,9 +88,9 @@ describe YARD::CodeObjects::NamespaceObject do
   describe "#class_attributes" do
     it "lists class attributes" do
       a = NamespaceObject.new(nil, :Mod)
-      a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
-      a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
-      a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
+      a.attributes[:instance][:a] = {:read => MethodObject.new(a, :a), :write => nil}
+      a.attributes[:instance][:b] = {:read => MethodObject.new(a, :b), :write => nil}
+      a.attributes[:class][:a] = {:read => MethodObject.new(a, :a, :class), :write => nil}
       expect(a.class_attributes.keys).to include(:a)
       expect(a.class_attributes.keys).not_to include(:b)
     end
@@ -99,9 +99,9 @@ describe YARD::CodeObjects::NamespaceObject do
   describe "#instance_attributes" do
     it "lists instance attributes" do
       a = NamespaceObject.new(nil, :Mod)
-      a.attributes[:instance][:a] = { :read => MethodObject.new(a, :a), :write => nil }
-      a.attributes[:instance][:b] = { :read => MethodObject.new(a, :b), :write => nil }
-      a.attributes[:class][:a] = { :read => MethodObject.new(a, :a, :class), :write => nil }
+      a.attributes[:instance][:a] = {:read => MethodObject.new(a, :a), :write => nil}
+      a.attributes[:instance][:b] = {:read => MethodObject.new(a, :b), :write => nil}
+      a.attributes[:class][:a] = {:read => MethodObject.new(a, :a, :class), :write => nil}
       expect(a.instance_attributes.keys).to include(:a)
       expect(a.instance_attributes.keys).to include(:b)
     end

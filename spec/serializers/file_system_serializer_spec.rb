@@ -43,7 +43,7 @@ describe YARD::Serializers::FileSystemSerializer do
       m = CodeObjects::MethodObject.new(nil, 'a')
       s = Serializers::FileSystemSerializer.new
 
-      { :gsub! => 'gsub_21_i.html',
+      {:gsub! => 'gsub_21_i.html',
         :ask? => 'ask_3F_i.html',
         :=== => '_3D_3D_3D_i.html',
         :+ => '_2B_i.html',
@@ -117,9 +117,9 @@ describe YARD::Serializers::FileSystemSerializer do
       meth = CodeObjects::MethodObject.new(yard, :baz, :class)
       meth2 = CodeObjects::MethodObject.new(yard, :baz)
 
-      { 'foo/FooBar/baz_c.txt' => meth,
+      {'foo/FooBar/baz_c.txt' => meth,
         'foo/FooBar/baz_i.txt' => meth2,
-        'foo/FooBar.txt' => yard }.each do |path, obj|
+        'foo/FooBar.txt' => yard}.each do |path, obj|
         io = StringIO.new
         expect(File).to receive(:open).with(path, 'wb').and_yield(io)
         expect(io).to receive(:write).with("data")

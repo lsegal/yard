@@ -45,9 +45,9 @@ module YARD
 
       self.extra_includes = [
         proc {|options|
-          { :html => Helpers::HtmlHelper,
+          {:html => Helpers::HtmlHelper,
             :text => Helpers::TextHelper,
-            :dot  => Helpers::UMLHelper }[options.format]
+            :dot  => Helpers::UMLHelper}[options.format]
         }
       ]
 

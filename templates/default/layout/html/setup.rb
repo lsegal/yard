@@ -79,7 +79,7 @@ end
 # @return [Array<Hash{Symbol=>String}>] the list of search links and drop-down menus
 # @since 0.7.0
 def menu_lists
-[ { :type => 'class', :title => 'Classes', :search_title => 'Class List' },
-  { :type => 'method', :title => 'Methods', :search_title => 'Method List' },
-  { :type => 'file', :title => 'Files', :search_title => 'File List' } ]
+  [{:type => 'class', :title => 'Classes', :search_title => 'Class List'},
+    {:type => 'method', :title => 'Methods', :search_title => 'Method List'},
+    {:type => 'file', :title => 'Files', :search_title => 'File List'}]
 end

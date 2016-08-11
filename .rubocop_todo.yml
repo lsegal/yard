@@ -921,20 +921,6 @@ Style/SpaceInsideBrackets:
     - 'lib/yard/cli/diff.rb'
     - 'templates/default/layout/html/setup.rb'
 
-# Offense count: 28
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-# SupportedStyles: space, no_space, compact
-Style/SpaceInsideHashLiteralBraces:
-  Exclude:
-    - 'lib/yard/parser/ruby/ast_node.rb'
-    - 'lib/yard/templates/template.rb'
-    - 'spec/code_objects/namespace_object_spec.rb'
-    - 'spec/serializers/file_system_serializer_spec.rb'
-    - 'spec/server/spec_helper.rb'
-    - 'spec/templates/helpers/html_helper_spec.rb'
-    - 'templates/default/layout/html/setup.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/SpaceInsideParens:

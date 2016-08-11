@@ -81,7 +81,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
       expect(format_types(["String", "Symbol"], false)).to eq "<tt>String</tt>, <tt>Symbol</tt>"
     end
 
-    { "String" => [["String"],
+    {"String" => [["String"],
         "<tt><a href=''>String</a></tt>"],
       "A::B::C" => [["A::B::C"],
         "<tt><a href=''>A::B::C</a></tt>"],
