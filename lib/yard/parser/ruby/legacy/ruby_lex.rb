@@ -278,7 +278,7 @@ module YARD
 
         [:TkBACKSLASH,  TkUnknownChar,  "\\"],
         [:TkAT,         TkUnknownChar,  "@"],
-        [:TkDOLLAR,     TkUnknownChar,  "\$"], #"
+        [:TkDOLLAR,     TkUnknownChar,  "\$"] #"
       ]
 
       # { reading => token_class }
@@ -607,7 +607,7 @@ module YARD
       DLtype2Token = {
         "\"" => TkDSTRING,
         "\`" => TkDXSTRING,
-        "/" => TkDREGEXP,
+        "/" => TkDREGEXP
       }
 
       def lex_init()

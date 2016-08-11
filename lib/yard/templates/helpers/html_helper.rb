@@ -610,7 +610,7 @@ module YARD
         html.gsub(%r{<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
           string = $3
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
-          language, _ = parse_lang_for_codeblock(string)
+          language, = parse_lang_for_codeblock(string)
           language ||= $1 || $2 || object.source_type
 
           if options.highlight
@@ -623,4 +623,3 @@ module YARD
     end
   end
 end
-

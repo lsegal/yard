@@ -56,11 +56,11 @@ eoh
       messages = {
         "tag|see|Parser::SourceParser.parse" => {
           :locations => [["yard.rb", 14]],
-          :comments => ["@see"],
+          :comments => ["@see"]
         },
         "Parses a path or set of paths" => {
           :locations => [["yard.rb", 12], ["yard/parser/source_parser.rb", 83]],
-          :comments => ["YARD.parse", "YARD::Parser::SourceParser.parse"],
+          :comments => ["YARD.parse", "YARD::Parser::SourceParser.parse"]
         }
       }
       add_messages(@generator.messages, messages)
@@ -131,7 +131,7 @@ eop
       expect(@generator.messages).to eq create_messages({
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [],
-          :comments => ["YARD.parse"],
+          :comments => ["YARD.parse"]
         }
       })
     end
@@ -145,7 +145,7 @@ eop
       expect(@generator.messages).to eq create_messages({
         "An alias to {Parser::SourceParser}'s parsing method" => {
           :locations => [["yard.rb", 13]],
-          :comments => ["YARD.parse"],
+          :comments => ["YARD.parse"]
         }
       })
     end
@@ -159,8 +159,8 @@ eop
       expect(@generator.messages).to eq create_messages({
         "tag|see|Parser::SourceParser.parse" => {
           :locations => [["yard.rb", 12]],
-          :comments => ["@see"],
-        },
+          :comments => ["@see"]
+        }
       })
     end
 
@@ -176,11 +176,11 @@ eod
       expect(@generator.messages).to eq create_messages({
         "tag|example|Parse a glob of files" => {
           :locations => [["yard.rb", 12]],
-          :comments => ["@example"],
+          :comments => ["@example"]
         },
         "YARD.parse('lib/**/*.rb')" => {
           :locations => [["yard.rb", 12]],
-          :comments => ["@example Parse a glob of files"],
+          :comments => ["@example Parse a glob of files"]
         }
       })
     end
@@ -197,11 +197,11 @@ eod
       expect(@generator.messages).to eq create_messages({
         "tag|param|paths" => {
           :locations => [["yard.rb", 12]],
-          :comments => ["@param [String, Array<String>]"],
+          :comments => ["@param [String, Array<String>]"]
         },
         "a path, glob, or list of paths to\nparse" => {
           :locations => [["yard.rb", 12]],
-          :comments => ["@param [String, Array<String>] paths"],
+          :comments => ["@param [String, Array<String>] paths"]
         }
       })
     end
@@ -232,7 +232,7 @@ eod
         "integer parameter" => {
           :locations => [],
           :comments => ["@param [Integer] i"]
-        },
+        }
       })
     end
   end
@@ -252,11 +252,11 @@ eor
       expect(@generator.messages).to eq create_messages({
         "Getting Started Guide" => {
           :locations => [[path, 1]],
-          :comments => ["title"],
+          :comments => ["title"]
         },
         "# Getting Started with YARD" => {
           :locations => [[path, 3]],
-          :comments => [],
+          :comments => []
         }
       })
     end
@@ -283,11 +283,11 @@ eot
       expect(@generator.messages).to eq create_messages({
         paragraph1 => {
           :locations => [[path, 1]],
-          :comments => [],
+          :comments => []
         },
         paragraph2 => {
           :locations => [[path, 4]],
-          :comments => [],
+          :comments => []
         }
       })
     end

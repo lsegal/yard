@@ -849,32 +849,6 @@ Style/TernaryParentheses:
     - 'lib/yard/handlers/base.rb'
     - 'lib/yard/handlers/ruby/struct_handler_methods.rb'
 
-# Offense count: 132
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Enabled: false
-
-# Offense count: 27
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-# SupportedStyles: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'lib/yard/i18n/text.rb'
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'lib/yard/templates/helpers/markup_helper.rb'
-    - 'spec/config_spec.rb'
-    - 'spec/i18n/pot_generator_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowNamedUnderscoreVariables.
-Style/TrailingUnderscoreVariable:
-  Exclude:
-    - 'lib/yard/templates/helpers/html_helper.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/UnlessElse:

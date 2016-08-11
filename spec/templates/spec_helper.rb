@@ -70,4 +70,3 @@ def template_options(opts, klass)
   options.update(opts)
   options
 end
-

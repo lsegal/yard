@@ -3,4 +3,3 @@ def generate_tag_list
   @list_type = "tag"
   asset('tag_list.html', erb(:full_list))
 end
-

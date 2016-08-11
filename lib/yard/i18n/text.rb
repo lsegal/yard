@@ -125,7 +125,7 @@ module YARD
         part = {
           :type => :markup,
           :line => line,
-          :line_no => line_no,
+          :line_no => line_no
         }
         yield(part)
       end
@@ -138,7 +138,7 @@ module YARD
           :infix => match_data[3],
           :value => match_data[4],
           :suffix => match_data[5],
-          :line_no => line_no,
+          :line_no => line_no
         }
         yield(part)
       end
@@ -147,7 +147,7 @@ module YARD
         part = {
           :type => :empty_line,
           :line => line,
-          :line_no => line_no,
+          :line_no => line_no
         }
         yield(part)
       end
@@ -155,7 +155,7 @@ module YARD
       def emit_paragraph_event(paragraph, paragraph_start_line, line_no, &block)
         paragraph_part = {
           :type => :paragraph,
-          :line_no => paragraph_start_line,
+          :line_no => paragraph_start_line
         }
         match_data = /(\s*)\z/.match(paragraph)
         if match_data

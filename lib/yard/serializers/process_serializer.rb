@@ -21,4 +21,3 @@ module YARD
     end
   end
 end
-

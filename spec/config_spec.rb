@@ -142,7 +142,7 @@ describe YARD::Config do
         'yard_plugin' => double('yard_plugin'),
         'yard-plugin' => double('yard-plugin'),
         'my-yard-plugin' => double('yard-plugin'),
-        'rspec' => double('rspec'),
+        'rspec' => double('rspec')
       }
       plugins.each do |k, v|
         expect(v).to receive(:name).at_least(1).times.and_return(k)

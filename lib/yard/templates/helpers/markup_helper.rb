@@ -28,16 +28,16 @@ module YARD
           {:lib => :bluecloth, :const => 'BlueCloth'},
           {:lib => :maruku, :const => 'Maruku'},
           {:lib => :'rpeg-markdown', :const => 'PEGMarkdown'},
-          {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkdown'},
+          {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkdown'}
         ],
         :textile => [
-          {:lib => :redcloth, :const => 'RedCloth'},
+          {:lib => :redcloth, :const => 'RedCloth'}
         ],
         :textile_strict => [
-          {:lib => :redcloth, :const => 'RedCloth'},
+          {:lib => :redcloth, :const => 'RedCloth'}
         ],
         :rdoc => [
-          {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'},
+          {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'}
         ],
         :asciidoc => [
           {:lib => :asciidoctor, :const => 'Asciidoctor'}
@@ -46,7 +46,7 @@ module YARD
         :text => [],
         :pre  => [],
         :html => [],
-        :none => [],
+        :none => []
       }
 
       # Returns a list of extensions for various markup types. To register
