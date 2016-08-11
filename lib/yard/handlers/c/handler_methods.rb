@@ -174,12 +174,8 @@ module YARD
             next unless override_comment.file == file
             name = name.gsub(/::([^:\.#]+?)\Z/, '.\1')
 
-            path = if name =~ /\.|#/ # explicit namespace in override comment
-              object.path
-            else
-              object.name.to_s
-            end
-
+            # explicit namespace in override comment
+            path = name =~ /\.|#/ ? object.path : object.name.to_s
             if path == name || path == name.sub(/new$/, 'initialize') || path == name.sub('.', '#')
               register_docstring(object, override_comment.source, override_comment)
               return

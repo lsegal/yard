@@ -324,7 +324,6 @@ module YARD
         # Continue with the statement if we've hit a comma in a def
         return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
 
-
         if [TkEND_OF_SCRIPT, TkNL, TkSEMICOLON].include?(tk.class) && @state == :block_statement &&
            [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
           @current_block = nil

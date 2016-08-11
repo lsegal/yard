@@ -9,5 +9,4 @@ class YARD::Handlers::C::AttributeHandler < YARD::Handlers::C::Base
       handle_attribute(var_name, name, read, write)
     end
   end
-
 end

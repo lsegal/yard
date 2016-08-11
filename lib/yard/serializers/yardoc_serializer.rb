@@ -63,27 +63,29 @@ module YARD
       end
 
       def serialized_path(object)
-        path = case object
-        when String, Symbol
-          object = object.to_s
-          if object =~ /#/
-            object += '_i'
-          elsif object =~ /\./
-            object += '_c'
-          end
-          object.split(/::|\.|#/).map do |p|
-            p.gsub(/[^\w\.-]/) do |x|
-              encoded = '_'
-
-              x.each_byte {|b| encoded << ("%X" % b) }
-              encoded
+        path =
+          case object
+          when String, Symbol
+            object = object.to_s
+            if object =~ /#/
+              object += '_i'
+            elsif object =~ /\./
+              object += '_c'
             end
-          end.join('/') + '.' + extension
-        when YARD::CodeObjects::RootObject
-          'root.dat'
-        else
-          super(object)
-        end
+            object.split(/::|\.|#/).map do |p|
+              p.gsub(/[^\w\.-]/) do |x|
+                encoded = '_'
+
+                x.each_byte {|b| encoded << ("%X" % b) }
+                encoded
+              end
+            end.join('/') + '.' + extension
+          when YARD::CodeObjects::RootObject
+            'root.dat'
+          else
+            super(object)
+          end
+
         File.join('objects', path)
       end
 

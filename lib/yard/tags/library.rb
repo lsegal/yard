@@ -385,7 +385,7 @@ module YARD
       #   def reverse; end
       # @yard.signature Optional title
       #   Code block
-      define_tag "Example",            :example,     :with_title_and_text
+      define_tag "Example",            :example, :with_title_and_text
 
       # Adds an emphasized note at the top of the docstring for the object
       #

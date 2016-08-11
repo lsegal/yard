@@ -29,6 +29,8 @@ Style/DotPosition:
 # Disable these until we know what to do with them
 Style/PredicateName: # this creates breaking changes in the API
   Enabled: false
+Style/MultilineTernaryOperator:
+  Enabled: false
 Style/MutableConstant:
   Enabled: false
 Style/FrozenStringLiteralComment:

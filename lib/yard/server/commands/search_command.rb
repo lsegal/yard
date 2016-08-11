@@ -55,7 +55,6 @@ module YARD
 
         def search_for_object
           # rubocop:disable Style/MultilineBlockChain
-          # rubocop:disable Style/BlockDelimiters
           self.results = run_verifier(Registry.all).select {|o|
             o.path.downcase.include?(query.downcase)
           }.reject {|o|

@@ -21,7 +21,6 @@ module YARD
         private :new
       end
 
-
       # @private
       class Type
         attr_accessor :name

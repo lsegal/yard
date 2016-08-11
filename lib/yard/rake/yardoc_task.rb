@@ -3,7 +3,6 @@ require 'rake/tasklib'
 
 module YARD
   module Rake
-
     # The rake task to run {CLI::Yardoc} and generate documentation.
     class YardocTask < ::Rake::TaskLib
       # The name of the task

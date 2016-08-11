@@ -41,7 +41,7 @@ Benchmark.bmbm do |x|
     rungen
   end
 
-  x.report("erb")  do
+  x.report("erb") do
     eval <<-eof
        module YARD; module Templates; module Template
         def erb_with(str, x) ERB.new(str, nil) end

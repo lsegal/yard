@@ -91,7 +91,6 @@ class Gem::SourceIndex
     def load_specification(file_name)
       Gem::Specification.load file_name
     end
-
   end
 
   ##
@@ -354,17 +353,14 @@ class Gem::SourceIndex
   def dump
     Marshal.dump(self)
   end
-
 end
 
 # :stopdoc:
 module Gem
-
   ##
   # Cache is an alias for SourceIndex to allow older YAMLized source index
   # objects to load properly.
 
   Cache = SourceIndex unless defined?(Cache)
-
 end
 # :startdoc:

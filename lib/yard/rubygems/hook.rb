@@ -10,7 +10,6 @@ require 'fileutils'
 
 module YARD
   class RubygemsHook
-
     include Gem::UserInteraction
     extend Gem::UserInteraction
 
@@ -32,12 +31,10 @@ module YARD
     attr_accessor :generate_yri
 
     class << self
-
       ##
       # Loaded version of YARD. Set by ::load_yard
 
       attr_reader :yard_version
-
     end
 
     ##

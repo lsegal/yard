@@ -71,7 +71,6 @@ module YARD
         parse_options(opts, args)
         add_gems(args)
 
-
         if !args.empty? && @gems.empty?
           log.error "No specified gems could be found for command"
         elsif @gems.empty?

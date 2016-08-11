@@ -233,10 +233,10 @@ module YARD
         [:TkRSHFT,      TkOp,   ">>"],
         [:TkCOLON2,     TkOp],
         [:TkCOLON3,     TkOp],
-        [:OPASGN,       TkOp],               # +=, -=  etc. #
+        [:OPASGN,       TkOp], # +=, -=  etc. #
         [:TkASSOC,      TkOp,   "=>"],
-        [:TkQUESTION,   TkOp,   "?"],  #?
-        [:TkCOLON,      TkOp,   ":"],        #:
+        [:TkQUESTION,   TkOp,   "?"], #?
+        [:TkCOLON,      TkOp,   ":"], #:
 
 #        [:TkfLPAREN],         # func( #
 #        [:TkfLBRACK],         # func[ #
@@ -282,8 +282,8 @@ module YARD
 
       # { reading => token_class }
       # { reading => [token_class, *opt] }
-      TkReading2Token = {} # rubocop:disable Style/ConstantName
-      TkSymbol2Token = {} # rubocop:disable Style/ConstantName
+      TkReading2Token = {}
+      TkSymbol2Token = {}
 
       # @private
       def self.def_token(token_n, super_token = Token, reading = nil, *opts)
@@ -321,10 +321,7 @@ module YARD
 
       NEWLINE_TOKEN = TkNL.new(0, 0)
       NEWLINE_TOKEN.set_text("\n")
-
     end
-
-
 
     # Lexical analyzer for Ruby source
     # @private
@@ -358,7 +355,6 @@ module YARD
       #
       # @private
       class BufferedReader
-
         attr_reader :line_num
 
         def initialize(content)
@@ -519,7 +515,6 @@ module YARD
         l
       end
 
-
       def ungetc(c = nil)
         @reader.ungetc(c)
       end
@@ -630,7 +625,6 @@ module YARD
         @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do |op, _io|
           str = op
           @ltype = "="
-
 
           begin
             line = ""
@@ -902,14 +896,14 @@ module YARD
           t.set_text("{")
         end
 
-        @OP.def_rule('\\') do   #'
+        @OP.def_rule('\\') do #'
           if getc == "\n"
             @space_seen = true
             @continue = true
             Token(TkSPACE).set_text("\\\n")
           else
             ungetc
-            Token("\\").set_text("\\")  #"
+            Token("\\").set_text("\\") #"
           end
         end
 
@@ -927,7 +921,7 @@ module YARD
           end
         end
 
-        @OP.def_rule('$') do  #'
+        @OP.def_rule('$') do #'
           identify_gvar
         end
 
@@ -1091,7 +1085,7 @@ module YARD
           ch = getc
           indent = true
         end
-        if /['"`]/ =~ ch            # '
+        if /['"`]/ =~ ch # '
           lt = ch
           quoted = ""
           while (c = getc) && c != lt
@@ -1111,7 +1105,7 @@ module YARD
 
         while ch = getc
           reserve << ch
-          if ch == "\\"    #"
+          if ch == "\\" #"
             ch = getc
             reserve << ch
           elsif ch == "\n"

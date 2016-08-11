@@ -174,7 +174,6 @@ end
 
 # @api private
 class TreeContext
-
   def initialize
     @depth = 0
     @even_odd = Alternator.new(:even, :odd)
@@ -208,7 +207,6 @@ class TreeContext
       @after
     end
   end
-
 end
 
 # @return [String] HTML output of the classes to be displayed in the

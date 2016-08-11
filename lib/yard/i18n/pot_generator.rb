@@ -131,6 +131,7 @@ module YARD
       end
 
       private
+
       def header
         <<-EOH
 # SOME DESCRIPTIVE TITLE.

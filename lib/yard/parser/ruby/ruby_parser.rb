@@ -589,7 +589,7 @@ module YARD
             end
 
             # check upwards from line before node; check node's line at the end
-            ((node.line - 1).downto(node.line - 2).to_a + [node.line]).each  do |line|
+            ((node.line - 1).downto(node.line - 2).to_a + [node.line]).each do |line|
               comment = @comments[line]
               if comment && !comment.empty?
                 add_comment(line, node)

@@ -1,6 +1,5 @@
 # Helper methods to assist with processing decorators.
 module YARD::Handlers::Ruby::DecoratorHandlerMethods
-
   # @overload process_decorator(*nodes, opts = {}, &block)
   #   Takes care of parsing method definitions passed to decorators
   #   as parameters, as well as parsing chained decorators.
@@ -126,5 +125,4 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
     [{:method => method, :node => node, :name => name.to_sym}]
   end
-
 end

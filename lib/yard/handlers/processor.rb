@@ -17,7 +17,6 @@ module YARD
     #
     # @see Handlers::Base
     class Processor
-
       class << self
         # Registers a new namespace for handlers of the given type.
         # @since 0.6.0

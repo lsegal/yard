@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
   describe "#process_decorator" do
-
     # Create a YARD decorator handler.
     # @param name [Symbol] name of the mock decorator
     def create_test_handler(name)
@@ -202,7 +201,6 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       end
 
       describe "creates method proxies" do
-
         shared_examples "decorator helper scope" do
           let(:param_string) { decorator_params.map(&:inspect).join(',') }
 

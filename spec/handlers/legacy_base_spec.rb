@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/spec_helper'
 include Parser::Ruby::Legacy
 
 describe YARD::Handlers::Ruby::Legacy::Base, "#tokval" do
-
   before { @handler = Handlers::Ruby::Legacy::Base.new(nil, nil) }
 
   def tokval(code, *types)

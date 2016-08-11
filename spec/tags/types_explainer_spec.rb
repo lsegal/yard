@@ -16,7 +16,7 @@ describe YARD::Tags::TypesExplainer do
   end
 
 	describe Type, '#to_s' do
-    before { @t = Type.new(nil) }
+   before { @t = Type.new(nil) }
 
     it "works for a class/module reference" do
       @t.name = "ClassModuleName"
@@ -106,7 +106,6 @@ describe YARD::Tags::TypesExplainer do
       expect(@t.to_s).to eq "a Hash with keys made of (Strings) and values of (true or false)"
     end
   end
-
 
   describe Parser, '#parse' do
     it "parses a regular class name" do

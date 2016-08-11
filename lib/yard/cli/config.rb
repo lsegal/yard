@@ -191,7 +191,6 @@ module YARD
         self.values = args if args.size >= 1
         args
       end
-
     end
   end
 end
