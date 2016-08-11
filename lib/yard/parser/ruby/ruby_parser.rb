@@ -49,6 +49,7 @@ module YARD
           @frozen_string_line = nil
           @file_encoding = nil
           @newline = true
+          @percent_ary = nil
         end
 
         def parse
@@ -263,7 +264,21 @@ module YARD
         end
 
         def add_token(token, data)
-          if @tokens.last && @tokens.last[0] == :symbeg
+          if @percent_ary
+            if token == :words_sep && data !~ /\s\z/
+              rng = @percent_ary.source_range
+              rng = Range.new(rng.first, rng.last + data.length)
+              @percent_ary.source_range = rng
+              @tokens << [token, data, [lineno, charno]]
+              @percent_ary = nil
+            elsif token == :tstring_end && data =~ /\A\s/
+              rng = @percent_ary.source_range
+              rng = Range.new(rng.first, rng.last + data.length)
+              @percent_ary.source_range = rng
+              @tokens << [token, data, [lineno, charno]]
+              @percent_ary = nil
+            end
+          elsif @tokens.last && @tokens.last[0] == :symbeg
             @tokens[-1] = [:symbol, ":" + data, @tokens.last[2]]
           elsif @heredoc_state == :started
             @heredoc_tokens << [token, data, [lineno, charno]]
@@ -297,8 +312,6 @@ module YARD
         undef on_aref_field
         undef on_lbracket
         undef on_rbracket
-        undef on_qwords_new
-        undef on_qwords_add
         undef on_string_literal
         undef on_lambda
         undef on_unary
@@ -425,6 +438,7 @@ module YARD
             begin; undef on_#{kw}_new; rescue NameError; end
             def on_#{kw}_new(*args)
               node = LiteralNode.new(:#{kw}_literal, args)
+              @percent_ary = node
               if @map[:#{kw}_beg]
                 lstart, sstart = *@map[:#{kw}_beg].pop
                 node.source_range = Range.new(sstart, @ns_charno-1)
