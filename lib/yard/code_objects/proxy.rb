@@ -69,17 +69,13 @@ module YARD
 
       # (see Base#name)
       def name(prefix = false)
-        prefix ? (@imethod ? ISEP : '') + @name.to_s : @name
+        prefix ? "#{@imethod && ISEP}#{@name}" : @name
       end
 
       # Returns a text representation of the Proxy
       # @return [String] the object's #inspect method or P(OBJECTPATH)
       def inspect
-        if obj = to_obj
-          obj.inspect
-        else
-          "P(#{path})"
-        end
+        to_obj ? to_obj.inspect : "P(#{path})"
       end
 
       # If the proxy resolves to an object, returns its path, otherwise
@@ -88,11 +84,7 @@ module YARD
       # @return [String] the assumed path of the proxy (or the real path
       #   of the resolved object)
       def path
-        if obj = to_obj
-          obj.path
-        else
-          proxy_path
-        end
+        to_obj ? to_obj.path : proxy_path
       end
       alias to_s path
       alias to_str path
@@ -100,20 +92,12 @@ module YARD
 
       # @return [Boolean]
       def is_a?(klass)
-        if obj = to_obj
-          obj.is_a?(klass)
-        else
-          self.class <= klass
-        end
+        to_obj ? to_obj.is_a?(klass) : self.class <= klass
       end
 
       # @return [Boolean]
       def ===(other)
-        if obj = to_obj
-          obj === other
-        else
-          self.class <= other.class
-        end
+        to_obj ? to_obj === other : self.class <= other.class
       end
 
       # @return [Boolean]
@@ -142,11 +126,7 @@ module YARD
       # resolved. Otherwise returns +Proxy+.
       # @return [Class] the resolved object's class or +Proxy+
       def class
-        if obj = to_obj
-          obj.class
-        else
-          Proxy
-        end
+        to_obj ? to_obj.class : Proxy
       end
 
       # Returns the type of the proxy. If it cannot be resolved at the
@@ -155,11 +135,7 @@ module YARD
       # @return [Symbol] the Proxy's type
       # @see #type=
       def type
-        if obj = to_obj
-          obj.type
-        else
-          @type || :proxy
-        end
+        to_obj ? to_obj.type : @type || :proxy
       end
 
       # Allows a parser to infer the type of the proxy by its path.
@@ -179,29 +155,25 @@ module YARD
 
       # @return [Boolean]
       def respond_to?(meth, include_private = false)
-        if obj = to_obj
-          obj.respond_to?(meth, include_private)
-        else
-          super
-        end
+        to_obj ? to_obj.respond_to?(meth, include_private) : super
       end
 
       # Dispatches the method to the resolved object.
       #
       # @raise [ProxyMethodError] if the proxy cannot find the real object
       def method_missing(meth, *args, &block)
-        if obj = to_obj
-          obj.__send__(meth, *args, &block)
+        if to_obj
+          to_obj.__send__(meth, *args, &block)
         else
-          log.warn "Load Order / Name Resolution Problem on #{path}:"
-          log.warn "-"
-          log.warn "Something is trying to call #{meth} on object #{path} before it has been recognized."
-          log.warn "This error usually means that you need to modify the order in which you parse files"
-          log.warn "so that #{path} is parsed before methods or other objects attempt to access it."
-          log.warn "-"
-          log.warn "YARD will recover from this error and continue to parse but you *may* have problems"
-          log.warn "with your generated documentation. You should probably fix this."
-          log.warn "-"
+          log.warn "Load Order / Name Resolution Problem on #{path}:\n" \
+                   "-\n" \
+                   "Something is trying to call #{meth} on object #{path} before it has been recognized.\n" \
+                   "This error usually means that you need to modify the order in which you parse files\n" \
+                   "so that #{path} is parsed before methods or other objects attempt to access it.\n" \
+                   "-\n" \
+                   "YARD will recover from this error and continue to parse but you *may* have problems\n" \
+                   "with your generated documentation. You should probably fix this.\n" \
+                   "-\n"
           begin
             super
           rescue NoMethodError
@@ -225,7 +197,8 @@ module YARD
       # @return [Base, nil] the registered code object or nil
       def to_obj
         return @obj if @obj
-        if @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s, false, false, @type)
+        @obj = Registry.resolve(@namespace, (@imethod ? ISEP : '') + @name.to_s, false, false, @type)
+        if @obj
           if @origname && @origname.include?("::") && !@obj.path.include?(@origname)
             # the object's path should include the original proxy namespace,
             # otherwise it's (probably) not the right object.

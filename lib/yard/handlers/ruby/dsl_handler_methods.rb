@@ -22,7 +22,8 @@ module YARD
             attaching = true
           end
 
-          if macro = find_attached_macro
+          macro = find_attached_macro
+          if macro
             txt = macro.expand([caller_method, *call_params], statement.source)
             @docstring += "\n" + txt
 

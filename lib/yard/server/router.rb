@@ -52,11 +52,8 @@ module YARD
       # @return [Array(Numeric,Hash,Array)] the Rack-style server response data
       def call(request)
         self.request = request
-        if result = (check_static_cache || route)
-          result
-        else
-          RootRequestCommand.new(adapter.options).call(request)
-        end
+        result = check_static_cache || route
+        result ? result : RootRequestCommand.new(adapter.options).call(request)
       end
 
       # @group Route Prefixes
@@ -81,9 +78,11 @@ module YARD
       def parse_library_from_path(paths)
         return [adapter.libraries.values.first.first, paths] if adapter.options[:single_library]
         library, paths = nil, paths.dup
-        if libs = adapter.libraries[paths.first]
+        libs = adapter.libraries[paths.first]
+        if libs
           paths.shift
-          if library = libs.find {|l| l.version == paths.first }
+          library = libs.find {|l| l.version == paths.first }
+          if library
             request.version_supplied = true if request
             paths.shift
           else # use the last lib in the list

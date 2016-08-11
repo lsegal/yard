@@ -23,7 +23,8 @@ def layout
 end
 
 def read_asset(file)
-  return unless file = T('fulldoc').find_file(file)
+  file = T('fulldoc').find_file(file)
+  return unless file
   data = File.read(file)
   superfile = self.class.find_nth_file('fulldoc', 2)
   data.gsub!('{{{__super__}}}', superfile ? IO.read(superfile) : "")

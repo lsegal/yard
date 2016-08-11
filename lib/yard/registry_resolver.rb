@@ -93,9 +93,8 @@ module YARD
 
     # Performs a lexical lookup from a namespace for a path and a type hint.
     def lookup_path_direct(namespace, path, type)
-      if namespace.root? && result = validate(@registry.at(path), type)
-        return result
-      end
+      result = namespace.root? && validate(@registry.at(path), type)
+      return result if result
 
       if path =~ /\A(#{separators_match})/
         return validate(@registry.at(namespace.path + path), type)
@@ -135,17 +134,19 @@ module YARD
           end
 
           if search_seps.empty?
-            if ns.type == :root
-              search_seps = [""]
-            elsif last_sep.nil?
-              search_seps = separators
-            else
-              search_seps = [@default_sep]
-            end
+            search_seps =
+              if ns.type == :root
+                [""]
+              elsif last_sep.nil?
+                separators
+              else
+                [@default_sep]
+              end
           end
 
           ([last_sep] | search_seps).compact.each do |search_sep|
-            break if found = @registry.at(ns.path + search_sep.to_s + part)
+            found = @registry.at(ns.path + search_sep.to_s + part)
+            break if found
           end
 
           break cur_obj = found if found

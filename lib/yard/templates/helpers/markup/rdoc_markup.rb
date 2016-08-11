@@ -4,7 +4,7 @@ module YARD
   module Templates
     module Helpers
       module Markup
-        begin require 'rdoc'; rescue LoadError; end
+        begin require 'rdoc'; rescue LoadError; nil end
         begin
           require 'rdoc/markup'
           require 'rdoc/markup/to_html'

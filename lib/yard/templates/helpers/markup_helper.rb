@@ -97,7 +97,7 @@ module YARD
         # Search for provider, return the library class name as const if found
         providers.each do |provider|
           begin require provider[:lib].to_s; rescue LoadError; next end if provider[:lib]
-          begin klass = eval("::" + provider[:const]); rescue NameError; next end
+          begin klass = eval("::" + provider[:const]); rescue NameError; next end # rubocop:disable Lint/Eval
           MarkupHelper.markup_cache[type][:provider] = provider[:lib] # Cache the provider
           MarkupHelper.markup_cache[type][:class] = klass
           return true

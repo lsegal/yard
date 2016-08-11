@@ -30,7 +30,11 @@ module YARD
       private
 
       def parse_statements
-        while stmt = next_statement do self << stmt end
+        loop do
+          stmt = next_statement
+          break if stmt.nil?
+          self << stmt
+        end
       end
 
       # Returns the next statement in the token stream
@@ -49,7 +53,9 @@ module YARD
         @last_tk, @last_ns_tk, @before_last_tk, @before_last_ns_tk = nil, nil, nil, nil
         @first_line = nil
 
-        while !@done && tk = @tokens.shift
+        until @done
+          tk = @tokens.shift
+          break if tk.nil?
           process_token(tk)
 
           @before_last_tk = @last_tk
@@ -77,8 +83,6 @@ module YARD
           @statement << TkCOMMENT.new(@comments_line, 0)
           @statement.first.set_text("# " + @comments.join("\n# "))
           Statement.new(@statement, nil, @comments)
-        else
-          nil
         end
       end
 
@@ -86,14 +90,14 @@ module YARD
         extra = []
         (@statement.size - 1).downto(0) do |index|
           token = @statement[index]
-          if TkStatementEnd === token
-            while [TkNL, TkSPACE, TkSEMICOLON].include?(@statement[index - 1].class)
-              extra.unshift(@statement.delete_at(index - 1))
-              index -= 1
-            end
-            @statement.insert(index + 1, *extra)
-            return
+          next unless TkStatementEnd === token
+
+          while [TkNL, TkSPACE, TkSEMICOLON].include?(@statement[index - 1].class)
+            extra.unshift(@statement.delete_at(index - 1))
+            index -= 1
           end
+          @statement.insert(index + 1, *extra)
+          break
         end
       end
 
@@ -108,7 +112,7 @@ module YARD
         @statement.each_with_index do |token, index|
           if TkBlockContents === token
             @statement[index, 1] = [token, *extra]
-            return
+            break
           end
         end
       end
@@ -262,7 +266,7 @@ module YARD
         @level += 1
         @state = :block
         @block_num += 1
-        unless @block
+        if @block.nil?
           @block = TokenList.new
           tokens = [tk, TkStatementEnd.new(tk.line_no, tk.char_no)]
           tokens = tokens.reverse if TkBEGIN === tk.class

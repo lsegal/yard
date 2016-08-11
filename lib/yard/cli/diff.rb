@@ -123,30 +123,29 @@ module YARD
         # First check for argument as .yardoc file
         [File.join(gemfile, '.yardoc'), gemfile].each do |yardoc|
           log.info "Searching for .yardoc db at #{yardoc}"
-          if File.directory?(yardoc)
-            Registry.load_yardoc(yardoc)
-            Registry.load_all
-            return true
-          end
+          next unless File.directory?(yardoc)
+          Registry.load_yardoc(yardoc)
+          Registry.load_all
+          return true
         end
 
         # Next check installed RubyGems
         gemfile_without_ext = gemfile.sub(/\.gem$/, '')
         log.info "Searching for installed gem #{gemfile_without_ext}"
         Gem.source_index.find_name('').find do |spec|
-          if spec.full_name == gemfile_without_ext
-            if yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
-              Registry.load_yardoc(yardoc)
-              Registry.load_all
-            else
-              log.enter_level(Logger::ERROR) do
-                olddir = Dir.pwd
-                Gems.run(spec.name, spec.version.to_s)
-                Dir.chdir(olddir)
-              end
+          next unless spec.full_name == gemfile_without_ext
+          yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
+          if yardoc
+            Registry.load_yardoc(yardoc)
+            Registry.load_all
+          else
+            log.enter_level(Logger::ERROR) do
+              olddir = Dir.pwd
+              Gems.run(spec.name, spec.version.to_s)
+              Dir.chdir(olddir)
             end
-            return true
           end
+          return true
         end
 
         # Look for local .gem file
@@ -166,6 +165,7 @@ module YARD
           open(url) {|io| expand_and_parse(gemfile, io) }
           return true
         rescue OpenURI::HTTPError
+          nil # noop
         end
         false
       end

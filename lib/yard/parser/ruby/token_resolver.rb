@@ -140,8 +140,9 @@ module YARD
               type = type.sub(/<.+>/, '')
               if type == "self"
                 resolved_types << obj.parent
-              elsif type_obj = Registry.resolve(obj, type, true)
-                resolved_types << type_obj
+              else
+                type_obj = Registry.resolve(obj, type, true)
+                resolved_types << type_obj if type_obj
               end
             end
           end

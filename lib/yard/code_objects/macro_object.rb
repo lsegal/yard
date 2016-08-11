@@ -68,11 +68,7 @@ module YARD
         # @return [nil] if the +data+ has no macro tag or if the macro is
         #   not new and no macro by the macro name is found.
         def find_or_create(macro_name, data, method_object = nil)
-          if macro = find(name)
-            macro
-          else
-            create(macro_name, data, method_object)
-          end
+          find(name) || create(macro_name, data, method_object)
         end
         alias create_docstring find_or_create
 

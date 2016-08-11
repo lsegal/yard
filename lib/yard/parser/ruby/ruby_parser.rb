@@ -1,4 +1,4 @@
-begin require 'ripper'; rescue LoadError; end
+begin require 'ripper'; rescue LoadError; nil end
 
 module YARD
   module Parser
@@ -67,9 +67,8 @@ module YARD
           return nil unless defined?(::Encoding)
           return @file_encoding if @file_encoding
           return Encoding.default_internal unless @encoding_line
-          if match = @encoding_line.match(SourceParser::ENCODING_LINE)
-            @file_encoding = match.captures.last
-          end
+          match = @encoding_line.match(SourceParser::ENCODING_LINE)
+          @file_encoding = match.captures.last if match
         end
 
         private

@@ -50,9 +50,10 @@ module TagTemplateHelper
         if tag_name =~ /^!/
           tag_name, suffix = tag_name[1..-1], "directive"
         end
-        if obj = Registry.at("YARD::Tags::Library##{tag_name}_#{suffix}")
-          return tag_link(obj.tag("yard.#{suffix}"))
-        end
+
+        obj = Registry.at("YARD::Tags::Library##{tag_name}_#{suffix}")
+        return tag_link(obj.tag("yard.#{suffix}")) if obj
+
         log.warn "Cannot find tag: #{args.first}"
         return args.first
       end

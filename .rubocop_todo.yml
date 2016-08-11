@@ -6,46 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 60
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Enabled: false
-
-# Offense count: 13
-Lint/Eval:
-  Exclude:
-    - 'benchmarks/builtins_vs_eval.rb'
-    - 'benchmarks/erb_vs_erubis.rb'
-    - 'benchmarks/generation.rb'
-    - 'lib/yard/cli/server.rb'
-    - 'lib/yard/templates/helpers/markup_helper.rb'
-    - 'spec/code_objects/constants_spec.rb'
-    - 'spec/spec_helper.rb'
-
-# Offense count: 18
-Lint/HandleExceptions:
-  Exclude:
-    - 'Rakefile'
-    - 'lib/yard/cli/diff.rb'
-    - 'lib/yard/cli/yri.rb'
-    - 'lib/yard/handlers/base.rb'
-    - 'lib/yard/parser/ruby/ruby_parser.rb'
-    - 'lib/yard/rubygems/backports.rb'
-    - 'lib/yard/rubygems/doc_manager.rb'
-    - 'lib/yard/server/commands/base.rb'
-    - 'lib/yard/templates/engine.rb'
-    - 'lib/yard/templates/helpers/markup/rdoc_markdown.rb'
-    - 'lib/yard/templates/helpers/markup/rdoc_markup.rb'
-    - 'spec/code_objects/constants_spec.rb'
-    - 'spec/spec_helper.rb'
-
-# Offense count: 4
-Lint/NonLocalExitFromIterator:
-  Exclude:
-    - 'lib/yard/handlers/c/handler_methods.rb'
-    - 'lib/yard/parser/ruby/legacy/statement_list.rb'
-    - 'lib/yard/parser/source_parser.rb'
-
 # Offense count: 1
 Style/AccessorMethodName:
   Exclude:

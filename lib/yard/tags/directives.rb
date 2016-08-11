@@ -250,7 +250,8 @@ module YARD
     class MacroDirective < Directive
       def call
         raise TagFormatError if tag.name.nil? && tag.text.to_s.empty?
-        unless macro_data = find_or_create
+        macro_data = find_or_create
+        unless macro_data
           warn
           return
         end

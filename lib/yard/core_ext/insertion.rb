@@ -52,9 +52,8 @@ class Insertion
       end
     end
 
-    if index = list.index(val)
-      list[index + rel, 0] = @values
-    end
+    index = list.index(val)
+    list[index + rel, 0] = @values if index
     list
   end
 end

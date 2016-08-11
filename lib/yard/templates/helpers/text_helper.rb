@@ -80,7 +80,8 @@ module YARD
           args = format_args(meth)
           extras = []
           extras_text = ''
-          if rw = meth.namespace.attributes[meth.scope][meth.name]
+          rw = meth.namespace.attributes[meth.scope][meth.name]
+          if rw
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
             attname = attname.size == 1 ? attname.join('') + 'only' : nil
             extras << attname if attname

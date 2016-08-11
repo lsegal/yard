@@ -99,20 +99,27 @@ module YARD::CodeObjects
     # @return [Boolean] whether the method is a writer attribute
     # @since 0.5.3
     def writer?
-      !!((info = attr_info) && info[:write] == self)
+      info = attr_info
+      info && info[:write] == self ? true : false
     end
 
     # @return [Boolean] whether the method is a reader attribute
     # @since 0.5.3
     def reader?
-      !!((info = attr_info) && info[:read] == self)
+      info = attr_info
+      info && info[:read] == self ? true : false
     end
 
     # Tests if the object is defined as an attribute in the namespace
     # @return [Boolean] whether the object is an attribute
     def is_attribute?
-      return false unless info = attr_info
-      info[name.to_s =~ /=$/ ? :write : :read] ? true : false
+      info = attr_info
+      if info
+        read_or_write = name.to_s =~ /=$/ ? :write : :read
+        info[read_or_write] ? true : false
+      else
+        false
+      end
     end
 
     # Tests if the object is defined as an alias of another method

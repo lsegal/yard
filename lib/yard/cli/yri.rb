@@ -57,12 +57,15 @@ module YARD
 
         if @name.nil? || @name.strip.empty?
           print_usage
-          exit(1)
-        elsif object = find_object(@name)
+          return exit(1)
+        end
+
+        object = find_object(@name)
+        if object
           print_object(object)
         else
           STDERR.puts "No documentation for `#{@name}'"
-          exit(1)
+          return exit(1)
         end
       end
 
@@ -112,18 +115,16 @@ module YARD
 
         # Try to load it from in memory cache
         log.debug "Searching for #{name} in memory"
-        if obj = try_load_object(name, nil)
-          return obj
-        end
+        obj = try_load_object(name, nil)
+        return obj if obj
 
         log.debug "Searching for #{name} in search paths"
         @search_paths.each do |path|
           next unless File.exist?(path)
           log.debug "Searching for #{name} in #{path}..."
           Registry.load(path)
-          if obj = try_load_object(name, path)
-            return obj
-          end
+          obj = try_load_object(name, path)
+          return obj if obj
         end
         nil
       end
@@ -139,12 +140,9 @@ module YARD
       #   No caching is done if this is nil.
       # @return [void]
       def try_load_object(name, cache_path)
-        if obj = Registry.at(name)
-          if cache_path
-            cache_object(name, cache_path)
-          end
-          return obj
-        end
+        obj = Registry.at(name)
+        cache_object(name, cache_path) if obj && cache_path
+        obj
       end
 
       # Loads {CACHE_FILE}
@@ -163,16 +161,18 @@ module YARD
         require 'rubygems'
         gem_paths = []
         Gem.source_index.find_name('').each do |spec|
-          if yfile = Registry.yardoc_file_for_gem(spec.name)
-            if spec.name =~ /^yard-doc-/
-              gem_paths.unshift(yfile)
-            else
-              gem_paths.push(yfile)
-            end
+          yfile = Registry.yardoc_file_for_gem(spec.name)
+          next if yfile.nil?
+
+          if spec.name =~ /^yard-doc-/
+            gem_paths.unshift(yfile)
+          else
+            gem_paths.push(yfile)
           end
         end
         @search_paths += gem_paths
       rescue LoadError
+        nil # noop
       end
 
       # Adds paths in {SEARCH_PATHS_FILE}

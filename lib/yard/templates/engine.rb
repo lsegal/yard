@@ -53,7 +53,7 @@ module YARD
           full_paths ||= [path]
           full_paths = [full_paths] unless full_paths.is_a?(Array)
           name = template_module_name(full_paths.first)
-          begin; return const_get(name); rescue NameError; end
+          begin; return const_get(name); rescue NameError; nil end
 
           mod = const_set(name, Module.new)
           mod.send(:include, Template)

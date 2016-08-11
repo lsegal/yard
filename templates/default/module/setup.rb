@@ -28,8 +28,8 @@ end
 
 def methodmissing
   mms = object.meths(:inherited => true, :included => true)
-  return unless @mm = mms.find {|o| o.name == :method_missing && o.scope == :instance }
-  erb(:methodmissing)
+  @mm = mms.find {|o| o.name == :method_missing && o.scope == :instance }
+  erb(:methodmissing) if @mm
 end
 
 def method_listing(include_specials = true)
@@ -123,7 +123,8 @@ def docstring_summary(obj)
 end
 
 def groups(list, type = "Method")
-  if groups_data = object.groups
+  groups_data = object.groups
+  if groups_data
     list.each {|m| groups_data |= [m.group] if m.group && owner != m.namespace }
     others = list.select {|m| !m.group || !groups_data.include?(m.group) }
     groups_data.each do |name|

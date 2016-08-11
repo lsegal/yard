@@ -14,9 +14,10 @@ module YARD
           Registry.load_all
           self.query = request.query['q']
           redirect(abs_url(adapter.router.docs_prefix, single_library ? library : '')) if query.nil? || query =~ /\A\s*\Z/
-          if found = Registry.at(query)
-            redirect(url_for(found))
-          end
+
+          found = Registry.at(query)
+          redirect(url_for(found)) if found
+
           search_for_object
           request.xhr? ? serve_xhr : serve_normal
         end

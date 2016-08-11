@@ -511,7 +511,8 @@ module YARD
         extras = []
         extras_text = ''
         if show_extras
-          if rw = meth.attr_info
+          rw = meth.attr_info
+          if rw
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
             attname = attname.size == 1 ? attname.join('') + 'only' : nil
             extras << attname if attname
@@ -548,13 +549,15 @@ module YARD
         if @file && has_encoding
           lang = @file.contents.encoding.to_s
         else
-          return 'utf-8' unless has_encoding || lang = ENV['LANG']
-          if has_encoding
-            lang = ::Encoding.default_external.name.downcase
-          else
-            lang = lang.downcase.split('.').last
-          end
+          return 'utf-8' unless has_encoding || ENV['LANG']
+          lang =
+            if has_encoding
+              ::Encoding.default_external.name.downcase
+            else
+              ENV['LANG'].downcase.split('.').last
+            end
         end
+
         case lang
         when "ascii-8bit", "us-ascii", "ascii-7bit"; 'iso-8859-1'
         when "utf8"; 'utf-8'

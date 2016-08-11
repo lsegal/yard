@@ -23,7 +23,8 @@ module YARD
           end
           return index if path == 'index'
 
-          if object = Registry.at(object_path)
+          object = Registry.at(object_path)
+          if object
             options.update(:type => :layout)
             render(object)
           else

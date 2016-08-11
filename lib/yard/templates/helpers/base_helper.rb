@@ -70,7 +70,8 @@ module YARD::Templates::Helpers
           end
         when /^include:(\S+)/
           path = $1
-          if obj = YARD::Registry.resolve(object.namespace, path)
+          obj = YARD::Registry.resolve(object.namespace, path)
+          if obj
             link_include_object(obj)
           else
             log.warn "Cannot find object at `#{path}' for inclusion"
@@ -78,7 +79,8 @@ module YARD::Templates::Helpers
           end
         when /^render:(\S+)/
           path = $1
-          if obj = YARD::Registry.resolve(object, path)
+          obj = YARD::Registry.resolve(object, path)
+          if obj
             opts = options.dup
             opts.delete(:serializer)
             obj.format(opts)

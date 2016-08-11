@@ -35,6 +35,8 @@ Style/MultilineTernaryOperator:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
+Style/MethodMissing:
+  Enabled: false # this doesn't exist in 1.8/1.9
 Style/MutableConstant:
   Enabled: false
 Style/FrozenStringLiteralComment:
@@ -61,6 +63,10 @@ Style/AlignArray:
 Style/AlignHash:
   Enabled: false # does not support indentation
 Style/GlobalVars:
+  Exclude:
+    - benchmarks/**/*.rb
+    - spec/**/*.rb
+Lint/Eval:
   Exclude:
     - benchmarks/**/*.rb
     - spec/**/*.rb

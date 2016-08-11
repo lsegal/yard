@@ -23,9 +23,8 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
   private
 
   def process_mixin(mixin)
-    unless mixmatch = mixin[/\A(#{NAMESPACEMATCH})/, 1]
-      raise YARD::Parser::UndocumentableError
-    end
+    mixmatch = mixin[/\A(#{NAMESPACEMATCH})/, 1]
+    raise YARD::Parser::UndocumentableError unless mixmatch
 
     case obj = Proxy.new(namespace, mixmatch)
     when ConstantObject # If a constant is included, use its value as the real object

@@ -8,7 +8,8 @@ class YARD::Handlers::C::MixinHandler < YARD::Handlers::C::Base
       namespace = namespace_for_variable(klass_var)
       ensure_loaded!(namespace)
 
-      if var = namespace_for_variable(mixin_var)
+      var = namespace_for_variable(mixin_var)
+      if var
         namespace.mixins(:instance) << var
       else
         raise YARD::Parser::UndocumentableError,

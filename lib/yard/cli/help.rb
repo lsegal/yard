@@ -6,7 +6,8 @@ module YARD
       def description; "Retrieves help for a command" end
 
       def run(*args)
-        if args.first && cmd = CommandParser.commands[args.first.to_sym]
+        cmd = args.first && CommandParser.commands[args.first.to_sym]
+        if cmd
           cmd.run('--help')
         else
           log.puts "Command #{args.first} not found." if args.first

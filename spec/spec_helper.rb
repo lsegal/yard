@@ -8,12 +8,13 @@ end
 begin
   require 'bundler/setup'
 rescue LoadError
+  nil # noop
 end
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 
 unless defined?(HAVE_RIPPER)
-  begin require 'ripper'; rescue LoadError; end
+  begin require 'ripper'; rescue LoadError; nil end
   HAVE_RIPPER = defined?(::Ripper) && !ENV['LEGACY'] ? true : false
   LEGACY_PARSER = !HAVE_RIPPER
 

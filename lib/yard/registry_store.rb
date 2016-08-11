@@ -37,7 +37,8 @@ module YARD
 
       # check disk
       return if @notfound[key]
-      if obj = @serializer.deserialize(key)
+      obj = @serializer.deserialize(key)
+      if obj
         @loaded_objects += 1
         put(key, obj)
       else
@@ -153,13 +154,14 @@ module YARD
       objects = []
 
       all_disk_objects.sort_by(&:size).each do |path|
-        if obj = @serializer.deserialize(path, true)
-          objects << obj
-        end
+        obj = @serializer.deserialize(path, true)
+        objects << obj if obj
       end
+
       objects.each do |obj|
         put(obj.path, obj)
       end
+
       @loaded_objects += objects.size
       log.debug "Loaded database (file='#{@file}' count=#{objects.size} total=#{@available_objects})"
     end
@@ -292,15 +294,16 @@ module YARD
     end
 
     def load_root
-      if root = @serializer.deserialize('root')
-        @loaded_objects += 1
-        if root.is_a?(Hash) # single object db
-          log.debug "Loading single object DB from .yardoc"
-          @loaded_objects += (root.keys.size - 1)
-          @store = root
-        else # just the root object
-          @store[:root] = root
-        end
+      root = @serializer.deserialize('root')
+      return if root.nil?
+
+      @loaded_objects += 1
+      if root.is_a?(Hash) # single object db
+        log.debug "Loading single object DB from .yardoc"
+        @loaded_objects += (root.keys.size - 1)
+        @store = root
+      else # just the root object
+        @store[:root] = root
       end
     end
 

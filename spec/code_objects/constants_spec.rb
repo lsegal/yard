@@ -55,6 +55,7 @@ describe YARD::CodeObjects do
         begin
           bad_names << name unless eval(name) <= Exception
         rescue NameError
+          nil # noop
         end
       end
       expect(bad_names).to be_empty
@@ -68,6 +69,7 @@ describe YARD::CodeObjects do
         begin
           bad_names << name unless eval(name).is_a?(Class)
         rescue NameError
+          nil # noop
         end
       end
       expect(bad_names).to be_empty

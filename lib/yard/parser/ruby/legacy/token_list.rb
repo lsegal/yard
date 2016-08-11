@@ -10,12 +10,7 @@ module YARD
       def to_s(full_statement = false, show_block = true)
         inject([]) do |acc, token|
           break acc if !full_statement && TkStatementEnd === token
-          if !show_block && TkBlockContents === token
-            acc << ""
-          else
-            acc << token.text
-          end
-          acc
+          acc << (!show_block && TkBlockContents === token ? "" : token.text)
         end.join
       end
 
@@ -47,7 +42,9 @@ module YARD
 
       def parse_content(content)
         lex = RubyLex.new(content)
-        while tk = lex.token
+        loop do
+          tk = lex.token
+          break if tk.nil?
           self << convert_token(lex, tk)
         end
       end
@@ -58,10 +55,15 @@ module YARD
           sym = TkLABEL.new(tk.line_no, tk.char_no, nil)
           sym.lex_state = lex.lex_state
           sym.set_text(tk.text + next_tk.text)
-        elsif TkSYMBEG === tk && next_tk = lex.token
-          sym = TkSYMBOL.new(tk.line_no, tk.char_no, nil)
-          sym.lex_state = lex.lex_state
-          sym.set_text(tk.text + next_tk.text)
+        elsif TkSYMBEG === tk
+          next_tk = lex.token
+          if next_tk
+            sym = TkSYMBOL.new(tk.line_no, tk.char_no, nil)
+            sym.lex_state = lex.lex_state
+            sym.set_text(tk.text + next_tk.text)
+          else
+            tk
+          end
         else
           tk
         end

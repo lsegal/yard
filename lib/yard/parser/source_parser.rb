@@ -39,7 +39,8 @@ module YARD
       #
       # @see Processor#parse_remaining_files
       def parse
-        while file = files.shift
+        until files.empty?
+          file = files.shift
           log.capture("Parsing #{file}") do
             SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
           end
@@ -362,8 +363,8 @@ module YARD
         def parse_in_order(*files)
           global_state = OpenStruct.new
 
-          before_parse_list_callbacks.each do |cb|
-            return if cb.call(files, global_state) == false
+          return if before_parse_list_callbacks.any? do |cb|
+            cb.call(files, global_state) == false
           end
 
           OrderedParser.new(global_state, files).parse
@@ -487,10 +488,13 @@ module YARD
       # Runs a {Handlers::Processor} object to post process the parsed statements.
       # @return [void]
       def post_process
-        return unless @parser.respond_to? :enumerator
-        return unless enumerator = @parser.enumerator
-        post = Handlers::Processor.new(self)
-        post.process(enumerator)
+        return unless @parser.respond_to?(:enumerator)
+
+        enumerator = @parser.enumerator
+        if enumerator
+          post = Handlers::Processor.new(self)
+          post.process(enumerator)
+        end
       end
 
       def parser_type=(value)
@@ -510,7 +514,10 @@ module YARD
       # @since 0.5.6
       def parser_class
         klass = self.class.parser_types[parser_type]
-        raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1] if !klass
+        unless klass
+          raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1]
+        end
+
         klass
       end
     end

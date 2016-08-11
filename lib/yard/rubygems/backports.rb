@@ -5,4 +5,5 @@ begin
     require File.dirname(__FILE__) + '/backports/source_index'
   end
 rescue LoadError
+  nil # noop
 end

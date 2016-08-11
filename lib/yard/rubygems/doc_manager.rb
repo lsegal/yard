@@ -2,6 +2,7 @@ begin
   require 'rubygems/user_interaction'
   require 'rubygems/doc_manager'
 rescue LoadError
+  nil # noop
 end
 
 class Gem::DocManager
@@ -26,7 +27,7 @@ class Gem::DocManager
     YARD::CLI::Yardoc.run(*args)
   rescue Errno::EACCES => e
     dirname = File.dirname e.message.split("-")[1].strip
-    raise Gem::FilePermissionError.new(dirname)
+    raise Gem::FilePermissionError, dirname
   rescue => ex
     alert_error "While generating documentation for #{@spec.full_name}"
     ui.errs.puts "... MESSAGE:   #{ex}"
@@ -37,10 +38,10 @@ class Gem::DocManager
     Dir.chdir(old_pwd)
   end
 
-  begin undef setup_rdoc; rescue NameError; end
+  begin undef setup_rdoc; rescue NameError; nil end
   def setup_rdoc
     if File.exist?(@doc_dir) && !File.writable?(@doc_dir)
-      raise Gem::FilePermissionError.new(@doc_dir)
+      raise Gem::FilePermissionError, @doc_dir
     end
 
     FileUtils.mkdir_p @doc_dir unless File.exist?(@doc_dir)
@@ -71,7 +72,7 @@ class Gem::DocManager
   begin
     alias install_ri_yard_orig install_ri
     alias install_ri install_ri_yard
-  rescue NameError; end
+  rescue NameError; nil end
 
   def install_rdoc_yard
     if @spec.has_rdoc?
@@ -84,5 +85,5 @@ class Gem::DocManager
   begin
     alias install_rdoc_yard_orig install_rdoc
     alias install_rdoc install_rdoc_yard
-  rescue NameError; end
+  rescue NameError; nil end
 end

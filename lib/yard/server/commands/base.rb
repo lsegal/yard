@@ -95,6 +95,7 @@ module YARD
           begin
             run
           rescue FinishRequest
+            nil # noop
           rescue NotFoundError => e
             self.body = e.message if e.message != e.class.to_s
             not_found

@@ -122,6 +122,9 @@ module YARD
           loop do
             found = false
             TOKENS.each do |token_type, match|
+              # TODO: cleanup this code.
+              # rubocop:disable Lint/AssignmentInCondition
+              # rubocop:disable Style/Next
               if (match.nil? && @scanner.eos?) || (match && token = @scanner.scan(match))
                 found = true
                 case token_type

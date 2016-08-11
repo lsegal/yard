@@ -196,7 +196,7 @@ module YARD
           elsif adapter.casecmp('rack') == 0
             self.adapter = YARD::Server::RackAdapter
           else
-            self.adapter = eval(adapter)
+            self.adapter = eval(adapter) # rubocop:disable Lint/Eval
           end
         end
         opts.on('-s', '--server TYPE', 'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|

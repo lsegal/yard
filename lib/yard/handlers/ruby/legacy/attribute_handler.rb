@@ -50,9 +50,11 @@ class YARD::Handlers::Ruby::Legacy::AttributeHandler < YARD::Handlers::Ruby::Leg
 
           # Regsiter the object explicitly
           namespace.attributes[scope][name][type] = o
-        elsif obj = namespace.children.find {|other| other.name == meth.to_sym && other.scope == scope }
+        else
+          obj = namespace.children.find {|other| other.name == meth.to_sym && other.scope == scope }
+
           # register an existing method as attribute
-          namespace.attributes[scope][name][type] = obj
+          namespace.attributes[scope][name][type] = obj if obj
         end
       end
     end

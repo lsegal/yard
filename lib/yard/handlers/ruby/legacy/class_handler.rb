@@ -80,7 +80,8 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   end
 
   def struct_superclass_name(superclass)
-    if match = superclass.match(/\A(Struct)\.new\((.*?)\)/)
+    match = superclass.match(/\A(Struct)\.new\((.*?)\)/)
+    if match
       paramstring = match[2].split(",")
       first = paramstring.first.strip
       if first[0, 1] =~ /['"]/ && first[-1, 1] =~ /['"]/ && first !~ /\#\{/

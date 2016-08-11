@@ -426,6 +426,7 @@ module YARD
         ensure_loaded!(object.namespace)
         object.namespace.children << object
       rescue NamespaceMissingError
+        nil # noop
       end
 
       # Registers the file/line of the declaration with the object

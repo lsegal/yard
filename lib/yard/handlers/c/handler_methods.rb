@@ -158,7 +158,8 @@ module YARD
             process_file(file, object)
           end
 
-          if src_stmt = symbols[symbol]
+          src_stmt = symbols[symbol]
+          if src_stmt
             register_file_info(object, src_stmt.file, src_stmt.line, true)
             register_source(object, src_stmt)
             record_parameters(object, symbol, src_stmt)
@@ -170,15 +171,17 @@ module YARD
 
           # found source (possibly) but no docstring
           # so look in overrides
-          override_comments.each do |name, override_comment|
+          return if override_comments.any? do |name, override_comment|
             next unless override_comment.file == file
             name = name.gsub(/::([^:\.#]+?)\Z/, '.\1')
 
             # explicit namespace in override comment
-            path = name =~ /\.|#/ ? object.path : object.name.to_s
+            path = (name =~ /\.|#/ ? object.path : object.name.to_s)
             if path == name || path == name.sub(/new$/, 'initialize') || path == name.sub('.', '#')
               register_docstring(object, override_comment.source, override_comment)
-              return
+              true
+            else
+              false
             end
           end
 
