@@ -191,9 +191,9 @@ module YARD
           server_options[:DocumentRoot] = File.expand_path(docroot)
         end
         opts.on('-a', '--adapter ADAPTER', 'Use the ADAPTER (full Ruby class) for web server') do |adapter|
-          if adapter.casecmp('webrick').zero?
+          if adapter.casecmp('webrick') == 0
             self.adapter = YARD::Server::WebrickAdapter
-          elsif adapter.casecmp('rack').zero?
+          elsif adapter.casecmp('rack') == 0
             self.adapter = YARD::Server::RackAdapter
           else
             self.adapter = eval(adapter)

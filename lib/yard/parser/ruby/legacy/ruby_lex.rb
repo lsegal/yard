@@ -1277,7 +1277,7 @@ module YARD
         while (ch = getc)
           res << ch
           if ch == '}'
-            break if nest.zero?
+            break if nest == 0
             nest -= 1
           elsif ch == '{'
             nest += 1

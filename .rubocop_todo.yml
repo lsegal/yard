@@ -751,13 +751,6 @@ Style/NonNilCheck:
 Style/NumericLiterals:
   MinDigits: 6
 
-# Offense count: 73
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
 # Offense count: 1
 Style/OpMethod:
   Exclude:
