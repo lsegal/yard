@@ -19,7 +19,7 @@ class Gem::DocManager
         args += @spec.extra_rdoc_files
       end
     end
-    args = args.flatten.map {|arg| arg.to_s }
+    args = args.flatten.map(&:to_s)
 
     old_pwd = Dir.pwd
     Dir.chdir(@spec.full_gem_path)

@@ -24,7 +24,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @return [Array<String>] the list of members defined as attributes on the class
   def members_from_tags(klass)
     tags = klass.tags(:attr) + klass.tags(:attr_reader) + klass.tags(:attr_writer)
-    tags.map {|t| t.name }.uniq
+    tags.map(&:name).uniq
   end
 
   # Determines whether to create an attribute method based on the class's

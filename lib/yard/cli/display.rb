@@ -53,7 +53,7 @@ module YARD
         @objects = args.map {|o| Registry.at(o) }
 
         # validation
-        return false if @objects.any? {|o| o.nil? }
+        return false if @objects.any?(&:nil?)
         verify_markup_options
       end
 

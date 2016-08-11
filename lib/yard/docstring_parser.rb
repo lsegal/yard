@@ -314,9 +314,7 @@ module YARD
     # Calls the {Tags::Directive#after_parse} callback on all the
     # created directives.
     def call_directives_after_parse
-      directives.each do |dir|
-        dir.after_parse
-      end
+      directives.each(&:after_parse)
     end
 
     # Calls all {after_parse} callbacks

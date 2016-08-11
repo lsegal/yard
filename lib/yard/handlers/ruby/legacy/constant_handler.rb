@@ -23,6 +23,6 @@ class YARD::Handlers::Ruby::Legacy::ConstantHandler < YARD::Handlers::Ruby::Lega
 
   def extract_parameters(parameters)
     members = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(parameters), TkSYMBOL)
-    members.map {|m| m.to_s }
+    members.map(&:to_s)
   end
 end

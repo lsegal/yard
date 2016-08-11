@@ -112,7 +112,7 @@ def docstring_full(obj)
   end
 
   if docstring.summary.empty? && obj.tags(:return).size == 1 && obj.tag(:return).text
-    docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/) {|x| x.upcase }.strip)
+    docstring = Docstring.new(obj.tag(:return).text.gsub(/\A([a-z])/, &:upcase).strip)
   end
 
   docstring

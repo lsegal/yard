@@ -248,7 +248,7 @@ module YARD
       # @param [Boolean] reload whether to load entire database
       # @return [Array<String>] all of the paths in the registry.
       def paths(reload = false)
-        thread_local_store.keys(reload).map {|k| k.to_s }
+        thread_local_store.keys(reload).map(&:to_s)
       end
 
       # Returns the object at a specific path.

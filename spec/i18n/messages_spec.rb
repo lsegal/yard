@@ -21,7 +21,7 @@ describe YARD::I18n::Messages do
       @messages.each do |message|
         enumerated_messages << message
       end
-      enumerated_messages = enumerated_messages.sort_by {|m| m.id }
+      enumerated_messages = enumerated_messages.sort_by(&:id)
       expect(enumerated_messages).to eq [message("Hello World!"), message("Title")]
     end
 

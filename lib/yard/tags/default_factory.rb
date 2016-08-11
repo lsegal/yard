@@ -127,7 +127,7 @@ module YARD
         if list.nil?
           [nil, nil, text.strip]
         else
-          [before ? before.strip : nil, list.map {|e| e.strip }, text.strip]
+          [before ? before.strip : nil, list.map(&:strip), text.strip]
         end
       end
 

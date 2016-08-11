@@ -82,7 +82,7 @@ describe YARD::CodeObjects::MethodObject do
 
     it "never shows a prefix for a class method" do
       obj = MethodObject.new(nil, :something, :class)
-      expect(obj.name).to eq :"something"
+      expect(obj.name).to eq :something
       expect(obj.name(true)).to eq "something"
     end
   end

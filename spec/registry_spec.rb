@@ -402,7 +402,7 @@ describe YARD::Registry do
         "barrier < 2, spinning" while barrier < 2
         expect(Registry.at('Foo').docstring).to eq "docstring 2"
       end
-      threads.each {|t| t.join }
+      threads.each(&:join)
     end
 
     it "allows setting of yardoc_file in separate threads" do
@@ -422,7 +422,7 @@ describe YARD::Registry do
         mutex.synchronize { barrier += 1 }
         Registry.yardoc_file = 'foo2'
       end
-      threads.each {|t| t.join }
+      threads.each(&:join)
       Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
     end
 
@@ -447,7 +447,7 @@ describe YARD::Registry do
         mutex.synchronize { barrier += 1 }
         Registry.po_dir = '.'
       end
-      threads.each {|t| t.join }
+      threads.each(&:join)
       Registry.po_dir = Registry::DEFAULT_PO_DIR
     end
   end

@@ -35,7 +35,7 @@ module YARD
         if object.has_tag?(:yield) && object.tag(:yield).types
           params = object.tag(:yield).types
         elsif object.has_tag?(:yieldparam)
-          params = object.tags(:yieldparam).map {|t| t.name }
+          params = object.tags(:yieldparam).map(&:name)
         elsif object.has_tag?(:yield)
           return "{ ... }"
         else

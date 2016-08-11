@@ -180,7 +180,7 @@ module YARD
       def add_default_paths
         @search_paths.concat(DEFAULT_SEARCH_PATHS)
         return unless File.file?(SEARCH_PATHS_FILE)
-        paths = File.readlines(SEARCH_PATHS_FILE).map {|l| l.strip }
+        paths = File.readlines(SEARCH_PATHS_FILE).map(&:strip)
         @search_paths.concat(paths)
       end
 

@@ -796,19 +796,6 @@ Style/SpecialGlobalVars:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/SymbolLiteral:
-  Exclude:
-    - 'spec/code_objects/method_object_spec.rb'
-
-# Offense count: 46
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: respond_to, define_method
-Style/SymbolProc:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
 Style/Tab:
   Exclude:
     - 'spec/tags/types_explainer_spec.rb'

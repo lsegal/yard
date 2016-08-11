@@ -82,7 +82,7 @@ module YARD
         log.puts "Usage: yard <command> [options]"
         log.puts
         log.puts "Commands:"
-        commands.keys.sort_by {|k| k.to_s }.each do |command_name|
+        commands.keys.sort_by(&:to_s).each do |command_name|
           command = commands[command_name].new
           log.puts "%-8s %s" % [command_name, command.description]
         end

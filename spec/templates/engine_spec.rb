@@ -60,14 +60,14 @@ describe YARD::Templates::Engine do
       paths = ['/full/path/template/name', '/full/path2/template/name']
       expect(Engine).to receive(:find_template_paths).with(nil, 'template').at_least(1).times.and_return([])
       expect(Engine).to receive(:find_template_paths).with(nil, 'template/name').and_return(paths)
-      ancestors = Engine.template('template/name').ancestors.map {|m| m.class_name }
+      ancestors = Engine.template('template/name').ancestors.map(&:class_name)
       expect(ancestors).to include("Template__full_path2_template_name")
     end
 
     it "includes parent directories before other template paths" do
       paths = ['/full/path/template/name', '/full/path2/template/name']
       expect(Engine).to receive(:find_template_paths).with(nil, 'template/name').and_return(paths)
-      ancestors = Engine.template('template/name').ancestors.map {|m| m.class_name }
+      ancestors = Engine.template('template/name').ancestors.map(&:class_name)
       expect(ancestors[0, 4]).to eq ["Template__full_path_template_name", "Template__full_path_template",
         "Template__full_path2_template_name", "Template__full_path2_template"]
     end

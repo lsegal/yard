@@ -21,7 +21,7 @@ describe YARD::Templates::Template do
       expect(File).to receive(:directory?).with('/bar/a/b').and_return(false)
       expect(File).to receive(:directory?).with('/foo/a').at_least(1).times.and_return(true)
       expect(File).to receive(:directory?).with('/bar/a').at_least(1).times.and_return(true)
-      ancestors = Engine.template('a/b').ancestors.map {|c| c.class_name }
+      ancestors = Engine.template('a/b').ancestors.map(&:class_name)
       expect(ancestors[0, 3]).to eq %w(Template__foo_a_b Template__bar_a Template__foo_a)
     end
 

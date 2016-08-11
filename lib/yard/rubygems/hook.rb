@@ -105,7 +105,7 @@ module YARD
           args += @spec.extra_rdoc_files
         end
       end
-      args = args.flatten.map {|arg| arg.to_s }
+      args = args.flatten.map(&:to_s)
 
       Dir.chdir(@spec.full_gem_path) do
         YARD::CLI::Yardoc.run(*args)

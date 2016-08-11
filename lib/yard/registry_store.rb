@@ -152,7 +152,7 @@ module YARD
       log.debug "Loading entire database: #{@file} ..."
       objects = []
 
-      all_disk_objects.sort_by {|x| x.size }.each do |path|
+      all_disk_objects.sort_by(&:size).each do |path|
         if obj = @serializer.deserialize(path, true)
           objects << obj
         end

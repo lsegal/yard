@@ -42,12 +42,10 @@ module YARD
 
         def call_params
           if statement.tokens.first.is_a?(TkDEF)
-            extract_method_details.last.map {|param| param.first }
+            extract_method_details.last.map(&:first)
           else
             tokens = statement.tokens[1..-1]
-            tokval_list(tokens, :attr, :identifier, TkId).map do |value|
-              value.to_s
-            end
+            tokval_list(tokens, :attr, :identifier, TkId).map(&:to_s)
           end
         end
 

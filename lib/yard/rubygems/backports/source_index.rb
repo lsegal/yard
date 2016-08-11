@@ -312,7 +312,7 @@ class Gem::SourceIndex
       end
     end
 
-    specs.sort_by {|s| s.sort_obj }
+    specs.sort_by(&:sort_obj)
   end
 
   ##

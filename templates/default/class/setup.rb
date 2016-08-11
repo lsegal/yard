@@ -8,7 +8,7 @@ end
 
 def constructor_details
   ctors = object.meths(:inherited => true, :included => true)
-  return unless @ctor = ctors.find {|o| o.constructor? }
+  return unless @ctor = ctors.find(&:constructor?)
   return if prune_method_listing([@ctor]).empty?
   erb(:constructor_details)
 end
@@ -25,7 +25,7 @@ def subclasses
 
   @subclasses = globals.subclasses[object.path]
   return if @subclasses.nil? || @subclasses.empty?
-  @subclasses = @subclasses.sort_by {|o| o.path }.map do |child|
+  @subclasses = @subclasses.sort_by(&:path).map do |child|
     name = child.path
     if object.namespace
       name = object.relative_path(child)

@@ -329,7 +329,7 @@ describe YARD::Docstring do
 
       object = YARD::Registry.at('A#b')
       expect(object.docstring).to eq 'Docstring'
-      expect(object.tags.map {|x| x.tag_name }).to eq ['return']
+      expect(object.tags.map(&:tag_name)).to eq ['return']
 
       YARD::Registry.clear
     end

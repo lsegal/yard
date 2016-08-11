@@ -207,7 +207,7 @@ module YARD
     # @since 0.7.0
     # @todo Add Tags::Tag#to_raw and refactor
     def to_raw
-      tag_data = tags.sort_by {|t| t.tag_name }.map do |tag|
+      tag_data = tags.sort_by(&:tag_name).map do |tag|
         case tag
         when Tags::OverloadTag
           tag_text = "@#{tag.tag_name} #{tag.signature}\n"
@@ -230,7 +230,7 @@ module YARD
         end
         tag_text
       end
-      [strip, tag_data.join("\n")].reject {|l| l.empty? }.compact.join("\n")
+      [strip, tag_data.join("\n")].reject(&:empty?).compact.join("\n")
     end
 
     # @group Creating and Accessing Meta-data
@@ -344,7 +344,7 @@ module YARD
     # @return [Array<Tags::RefTag>] the list of valid reference tags
     def convert_ref_tags
       list = @ref_tags.reject {|t| CodeObjects::Proxy === t.owner }
-      list.map {|t| t.tags }.flatten
+      list.map(&:tags).flatten
     end
 
     # Parses out comments split by newlines into a new code object

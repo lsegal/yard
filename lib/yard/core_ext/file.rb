@@ -60,6 +60,6 @@ class File
   # @return [String] the ascii-8bit encoded data
   # @since 0.5.3
   def self.read_binary(file)
-    File.open(file, 'rb') {|f| f.read }
+    File.open(file, 'rb', &:read)
   end
 end

@@ -50,7 +50,7 @@ module YARD
       # to this class that calls {#output}.
       def print_statistics
         @total, @undocumented = 0, 0
-        meths = methods.map {|m| m.to_s }.grep(/^stats_for_/)
+        meths = methods.map(&:to_s).grep(/^stats_for_/)
         STATS_ORDER.each do |meth|
           mname = "stats_for_#{meth}"
           if meths.include?(mname)
@@ -137,8 +137,8 @@ module YARD
       # Statistics for methods
       def stats_for_methods
         objs = all_objects.select {|m| m.type == :method }
-        objs.reject! {|m| m.is_alias? }
-        objs.reject! {|m| m.is_attribute? }
+        objs.reject!(&:is_alias?)
+        objs.reject!(&:is_attribute?)
         undoc = objs.select {|m| m.docstring.blank? }
         @undoc_list |= undoc if @undoc_list
         output "Methods", objs.size, undoc.size

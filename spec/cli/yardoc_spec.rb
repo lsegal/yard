@@ -369,7 +369,7 @@ describe YARD::CLI::Yardoc do
       eof
       @yardoc.run('--api', 'private', '--api', 'public')
       expect(@yardoc.options.verifier.run(Registry.all).
-        sort_by {|o| o.path }).to eq [P('Bar'), P('Foo')]
+        sort_by(&:path)).to eq [P('Bar'), P('Foo')]
     end
 
     it "allows --no-api to specify objects with no @api tag" do
@@ -397,7 +397,7 @@ describe YARD::CLI::Yardoc do
       eof
       @yardoc.run('--no-api', '--api', 'public')
       expect(@yardoc.options.verifier.run(Registry.all).
-        sort_by {|o| o.path }).to eq [P('Bar'), P('Baz')]
+        sort_by(&:path)).to eq [P('Bar'), P('Baz')]
     end
 
     it "ensures Ruby code cannot be used" do
@@ -419,7 +419,7 @@ describe YARD::CLI::Yardoc do
       eof
       @yardoc.run('--hide-api', 'private')
       expect(@yardoc.options.verifier.run(Registry.all).
-        sort_by {|o| o.path }).to eq [P('Bar'), P('Baz')]
+        sort_by(&:path)).to eq [P('Bar'), P('Baz')]
     end
 
     it "allows --hide-api to work with --api" do
@@ -432,7 +432,7 @@ describe YARD::CLI::Yardoc do
       eof
       @yardoc.run('--api', 'public', '--hide-api', 'private')
       expect(@yardoc.options.verifier.run(Registry.all).
-        sort_by {|o| o.path }).to eq [P('Bar')]
+        sort_by(&:path)).to eq [P('Bar')]
     end
   end
 

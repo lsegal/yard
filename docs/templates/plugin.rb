@@ -11,7 +11,7 @@ module TagTemplateHelper
   end
 
   def collect_tags
-    (all_tags + all_directives).sort_by {|t| t.name }
+    (all_tags + all_directives).sort_by(&:name)
   end
 
   def tag_link(tag)

@@ -6,7 +6,7 @@ end
 
 def method_list
   @meths = object.meths(:inherited => false, :included => false)
-  cons = @meths.find {|meth| meth.constructor? }
+  cons = @meths.find(&:constructor?)
   @meths = @meths.reject {|meth| special_method?(meth) }
   @meths = sort_listing(prune_method_listing(@meths, false))
   @meths.unshift(cons) if cons

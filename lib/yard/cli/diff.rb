@@ -51,7 +51,7 @@ module YARD
           last_object = nil
           all_objects_notice = false
           log.puts name + ":" unless @compact
-          objects.sort_by {|o| o.path }.each do |object|
+          objects.sort_by(&:path).each do |object|
             if !@list_all && last_object && object.parent == last_object
               log.print " (...)" unless all_objects_notice
               all_objects_notice = true
