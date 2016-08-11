@@ -123,7 +123,7 @@ module YARD
       end
 
       # @private
-      def Token(token, value = nil)
+      def Token(token, value = nil) # rubocop:disable Style/MethodName
         tk = nil
         case token
         when String, Symbol

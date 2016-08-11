@@ -135,6 +135,9 @@ module YARD
           new(*args).run
         end
 
+        # rubocop:disable Style/MethodName
+
+        # Alias for creating {Engine.template}.
         def T(*path)
           Engine.template(*path)
         end
@@ -145,6 +148,8 @@ module YARD
         def S(*args)
           Section.new(*args)
         end
+
+        # rubocop:enable Style/MethodName
 
         private
 
@@ -191,7 +196,7 @@ module YARD
       #
       # @param [Array<String, Symbol>] path the path of the template
       # @return [Template] the loaded template module
-      def T(*path)
+      def T(*path) # rubocop:disable Style/MethodName
         path.unshift(options.template) if options.template
         path.push(options.format) if options.format
         self.class.T(*path)

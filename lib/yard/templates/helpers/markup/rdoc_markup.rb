@@ -88,7 +88,7 @@ module YARD
           attr_accessor :from_path
 
           # Disable auto-link of URLs
-          def handle_special_HYPERLINK(special)
+          def handle_special_HYPERLINK(special) # rubocop:disable Style/MethodName
             @hyperlink ? special.text : super
           end
 

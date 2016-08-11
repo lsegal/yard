@@ -572,17 +572,6 @@ Style/MethodMissing:
     - 'lib/yard/tags/overload_tag.rb'
     - 'lib/yard/verifier.rb'
 
-# Offense count: 7
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/MethodName:
-  Exclude:
-    - 'lib/yard/globals.rb'
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'lib/yard/server/webrick_adapter.rb'
-    - 'lib/yard/templates/helpers/markup/rdoc_markup.rb'
-    - 'lib/yard/templates/template.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 Style/NegatedIf:
