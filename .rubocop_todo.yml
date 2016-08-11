@@ -751,11 +751,6 @@ Style/NonNilCheck:
 Style/NumericLiterals:
   MinDigits: 6
 
-# Offense count: 1
-Style/OpMethod:
-  Exclude:
-    - 'lib/yard/parser/ruby/ast_node.rb'
-
 # Offense count: 77
 # Cop supports --auto-correct.
 Style/ParallelAssignment:

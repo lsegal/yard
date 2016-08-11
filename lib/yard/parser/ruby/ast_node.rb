@@ -162,8 +162,8 @@ module YARD
         # @return [Boolean] whether the node is equal to another by checking
         #   the list and type
         # @private
-        def ==(ast)
-          super && type == ast.type
+        def ==(other)
+          super && type == other.type
         end
 
         # @group Traversing a Node
