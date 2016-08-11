@@ -54,21 +54,23 @@ module YARD
         end
 
         def search_for_object
+          # rubocop:disable Style/MultilineBlockChain
+          # rubocop:disable Style/BlockDelimiters
           self.results = run_verifier(Registry.all).select {|o|
-              o.path.downcase.include?(query.downcase)
-            }.reject {|o|
-              name = (o.type == :method ? o.name(true) : o.name).to_s.downcase
-              !name.include?(query.downcase) ||
-                case o.type
-                when :method
-                  !(query =~ /[#.]/) && query.include?("::")
-                when :class, :module, :constant, :class_variable
-                  query =~ /[#.]/
-                end
-            }.sort_by {|o|
-              name = (o.type == :method ? o.name(true) : o.name).to_s
-              name.length.to_f / query.length.to_f
-            }
+            o.path.downcase.include?(query.downcase)
+          }.reject {|o|
+            name = (o.type == :method ? o.name(true) : o.name).to_s.downcase
+            !name.include?(query.downcase) ||
+              case o.type
+              when :method
+                !(query =~ /[#.]/) && query.include?("::")
+              when :class, :module, :constant, :class_variable
+                query =~ /[#.]/
+              end
+          }.sort_by {|o|
+            name = (o.type == :method ? o.name(true) : o.name).to_s
+            name.length.to_f / query.length.to_f
+          }
         end
       end
     end

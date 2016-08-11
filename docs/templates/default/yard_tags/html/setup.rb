@@ -10,18 +10,18 @@ def tag_signature(tag)
     extra = sig_tag.text
   end
   extra = case types.first
-  when 'with_name'
-    "name description"
-  when 'with_types'
-    "[Types] description"
-  when 'with_types_and_name'
-    "name [Types] description"
-  when 'with_title_and_text'
-    "title\ndescription"
-  when 'with_types_and_title'
-    "[Types] title\ndescription"
-  else
-    "description"
-  end if extra.nil?
+          when 'with_name'
+            "name description"
+          when 'with_types'
+            "[Types] description"
+          when 'with_types_and_name'
+            "name [Types] description"
+          when 'with_title_and_text'
+            "title\ndescription"
+          when 'with_types_and_title'
+            "[Types] title\ndescription"
+          else
+            "description"
+          end if extra.nil?
   signature + h(extra).gsub(/\n/, "<br/>&nbsp;&nbsp;&nbsp;")
 end

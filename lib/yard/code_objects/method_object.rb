@@ -153,11 +153,7 @@ module YARD::CodeObjects
     # (they should still have a separator as a prefix).
     # @return [String] the path of a method
     def path
-      @path ||= if !namespace || namespace.path == ""
-        sep + super
-      else
-        super
-      end
+      @path ||= !namespace || namespace.path == "" ? sep + super : super
     end
 
     # Returns the name of the object.

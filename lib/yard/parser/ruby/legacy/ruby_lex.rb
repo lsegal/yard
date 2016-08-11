@@ -1318,7 +1318,7 @@ module YARD
             break
           end
           res << ch
-        end
+          end
 
         when "x"
           res << ch

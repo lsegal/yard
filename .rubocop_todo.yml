@@ -11,29 +11,6 @@
 Lint/AssignmentInCondition:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: AlignWith, SupportedStyles.
-# SupportedStyles: either, start_of_block, start_of_line
-Lint/BlockAlignment:
-  Exclude:
-    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb'
-    - 'lib/yard/server/commands/search_command.rb'
-    - 'spec/tags/types_explainer_spec.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
-# SupportedStyles: keyword, variable, start_of_line
-Lint/EndAlignment:
-  Exclude:
-    - 'docs/templates/default/yard_tags/html/setup.rb'
-    - 'lib/yard/code_objects/base.rb'
-    - 'lib/yard/code_objects/method_object.rb'
-    - 'lib/yard/handlers/c/handler_methods.rb'
-    - 'lib/yard/serializers/yardoc_serializer.rb'
-    - 'lib/yard/server/router.rb'
-
 # Offense count: 13
 Lint/Eval:
   Exclude:

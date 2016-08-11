@@ -443,10 +443,10 @@ module YARD
       # @see #sep
       def path
         @path ||= if parent && !parent.root?
-          [parent.path, name.to_s].join(sep)
-        else
-          name.to_s
-        end
+                    [parent.path, name.to_s].join(sep)
+                  else
+                    name.to_s
+                  end
       end
       alias to_s path
 

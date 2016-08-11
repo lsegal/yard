@@ -45,7 +45,7 @@ describe YARD::Tags::TypesExplainer do
         expect(@t.to_s(false)).to eq name
       end
     end
-  end
+ end
 
   describe CollectionType, '#to_s' do
     before { @t = CollectionType.new("Array", nil) }
