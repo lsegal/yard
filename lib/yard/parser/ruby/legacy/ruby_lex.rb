@@ -498,7 +498,7 @@ module YARD
         begin
           l.concat c unless c == "\r"
           break if c == "\n"
-        end while c = getc
+        end while c = getc # rubocop:disable Lint/Loop
         l
       end
 

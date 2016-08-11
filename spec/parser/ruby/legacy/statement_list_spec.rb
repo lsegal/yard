@@ -187,7 +187,7 @@ eof
       def method; end
     eof
     expect(s.comments).to eq ["comment", "comment", "comment"]
-    expect(s.comments_range).to eq (1..3)
+    expect(s.comments_range).to eq(1..3)
 
     s = stmt <<-eof
 
@@ -196,7 +196,7 @@ eof
       def method; end
     eof
     expect(s.comments).to eq ["comment", "comment"]
-    expect(s.comments_range).to eq (2..3)
+    expect(s.comments_range).to eq(2..3)
 
     s = stmt <<-eof
       # comment
@@ -205,20 +205,20 @@ eof
       def method; end
     eof
     expect(s.comments).to eq ["comment", "comment"]
-    expect(s.comments_range).to eq (1..2)
+    expect(s.comments_range).to eq(1..2)
 
     s = stmt <<-eof
       # comment
       def method; end
     eof
     expect(s.comments).to eq ["comment"]
-    expect(s.comments_range).to eq (1..1)
+    expect(s.comments_range).to eq(1..1)
 
     s = stmt <<-eof
       def method; end # comment
     eof
     expect(s.comments).to eq ["comment"]
-    expect(s.comments_range).to eq (1..1)
+    expect(s.comments_range).to eq(1..1)
   end
 
   it "only looks up to two lines back for comments" do

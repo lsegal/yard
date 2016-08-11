@@ -22,7 +22,7 @@ describe YARD::Parser::Ruby::RubyParser do
         def method; end
       eof
       expect(s.comments).to eq "comment\ncomment\ncomment"
-      expect(s.comments_range).to eq (1..3)
+      expect(s.comments_range).to eq(1..3)
 
       s = stmt <<-eof
 
@@ -31,7 +31,7 @@ describe YARD::Parser::Ruby::RubyParser do
         def method; end
       eof
       expect(s.comments).to eq "comment\ncomment"
-      expect(s.comments_range).to eq (2..3)
+      expect(s.comments_range).to eq(2..3)
 
       s = stmt <<-eof
         # comment
@@ -40,20 +40,20 @@ describe YARD::Parser::Ruby::RubyParser do
         def method; end
       eof
       expect(s.comments).to eq "comment\ncomment"
-      expect(s.comments_range).to eq (1..2)
+      expect(s.comments_range).to eq(1..2)
 
       s = stmt <<-eof
         # comment
         def method; end
       eof
       expect(s.comments).to eq "comment"
-      expect(s.comments_range).to eq (1..1)
+      expect(s.comments_range).to eq(1..1)
 
       s = stmt <<-eof
         def method; end # comment
       eof
       expect(s.comments).to eq "comment"
-      expect(s.comments_range).to eq (1..1)
+      expect(s.comments_range).to eq(1..1)
     end
 
     it "only looks up to two lines back for comments" do
@@ -175,7 +175,7 @@ eof
     it "handles defs with keywords as method name" do
       ast = stmt("# docstring\nclass A;\ndef class; end\nend")
       expect(ast.jump(:class).docstring).to eq "docstring"
-      expect(ast.jump(:class).line_range).to eq (2..4)
+      expect(ast.jump(:class).line_range).to eq(2..4)
     end
 
     it "handles defs with unnamed argument with default values" do
@@ -337,7 +337,7 @@ eof
           # Ending comment
         end
       eof
-      expect(s.jump(:class).line_range).to eq (1..7)
+      expect(s.jump(:class).line_range).to eq(1..7)
     end
 
     it "has the correct line range for blocks" do

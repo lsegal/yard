@@ -18,8 +18,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandl
     end
 
     attrs = Registry.at(namespace).attributes[scope][name]
-    expect(attrs[:read]).to eq (read ? Registry.at(rname) : nil)
-    expect(attrs[:write]).to eq (write ? Registry.at(wname) : nil)
+    expect(attrs[:read]).to eq(read ? Registry.at(rname) : nil)
+    expect(attrs[:write]).to eq(write ? Registry.at(wname) : nil)
   end
 
   it "parses attributes inside modules too" do

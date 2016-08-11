@@ -270,7 +270,7 @@ describe YARD::Parser::SourceParser do
       expect(Registry.at(:Hello)).not_to eq nil
       expect(Registry.at("Hello::Hi#me")).not_to eq nil
       expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring\nDocstring2"
-      expect(Registry.at("Hello::Hi#me").docstring.line_range).to eq (3..4)
+      expect(Registry.at("Hello::Hi#me").docstring.line_range).to eq(3..4)
     end
 
     it "parses Ruby code with metaclasses" do
