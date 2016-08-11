@@ -571,7 +571,7 @@ module YARD
       # @param [Hash{String => String}] opts the tag options
       # @return [String] the tag attributes of an HTML tag
       def tag_attrs(opts = {})
-        opts.sort_by {|k, v| k.to_s }.map {|k, v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
+        opts.sort_by {|k, _v| k.to_s }.map {|k, v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
       end
 
       # Converts a {CodeObjects::MethodObject} into an overload object

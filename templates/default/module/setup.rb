@@ -57,7 +57,7 @@ def attr_listing
     next if !options.embed_mixins.empty? &&
             !options.embed_mixins_match?(superclass)
     [:class, :instance].each do |scope|
-      superclass.attributes[scope].each do |name, rw|
+      superclass.attributes[scope].each do |_name, rw|
         attr = prune_method_listing([rw[:read], rw[:write]].compact, false).first
         @attrs << attr if attr
       end
@@ -84,8 +84,8 @@ def inherited_attr_list
     next if superclass.is_a?(YARD::CodeObjects::Proxy)
     next if !options.embed_mixins.empty? && options.embed_mixins_match?(superclass) != false
     attribs = superclass.attributes[:instance]
-    attribs = attribs.select {|name, rw| object.child(:scope => :instance, :name => name).nil? }
-    attribs = attribs.sort_by {|args| args.first.to_s }.map {|n, m| m[:read] || m[:write] }
+    attribs = attribs.select {|name, _rw| object.child(:scope => :instance, :name => name).nil? }
+    attribs = attribs.sort_by {|args| args.first.to_s }.map {|_n, m| m[:read] || m[:write] }
     attribs = prune_method_listing(attribs, false)
     yield superclass, attribs unless attribs.empty?
   end

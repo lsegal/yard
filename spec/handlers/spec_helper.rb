@@ -16,7 +16,7 @@ end
 
 class StubbedProcessor < Processor
   def process(statements)
-    statements.each_with_index do |stmt, index|
+    statements.each_with_index do |stmt, _index|
       find_handlers(stmt).each do |handler|
         handler.new(self, stmt).process
       end

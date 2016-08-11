@@ -610,11 +610,11 @@ module YARD
 
       def lex_init()
         @OP = SLex.new
-        @OP.def_rules("\0", "\004", "\032") do |chars, io|
+        @OP.def_rules("\0", "\004", "\032") do |chars, _io|
           Token(TkEND_OF_SCRIPT).set_text(chars)
         end
 
-        @OP.def_rules(" ", "\t", "\f", "\r", "\13") do |chars, io|
+        @OP.def_rules(" ", "\t", "\f", "\r", "\13") do |chars, _io|
           @space_seen = TRUE
           while (ch = getc) =~ /[ \t\f\r\13]/
             chars << ch
@@ -623,11 +623,11 @@ module YARD
           Token(TkSPACE).set_text(chars)
         end
 
-        @OP.def_rule("#") do |op, io|
+        @OP.def_rule("#") do |_op, _io|
           identify_comment
         end
 
-        @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do |op, io|
+        @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do |op, _io|
           str = op
           @ltype = "="
 
@@ -672,12 +672,12 @@ module YARD
           "=", "==", "===",
           "=~", "<=>",
           "<", "<=",
-          ">", ">=", ">>") do |op, io|
+          ">", ">=", ">>") do |op, _io|
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
 
-        @OP.def_rules("<<") do |op, io|
+        @OP.def_rules("<<") do |op, _io|
           tk = nil
           if @lex_state != EXPR_END && @lex_state != EXPR_CLASS &&
              (@lex_state != EXPR_ARG || @space_seen)
@@ -691,11 +691,11 @@ module YARD
           tk
         end
 
-        @OP.def_rules("'", '"') do |op, io|
+        @OP.def_rules("'", '"') do |op, _io|
           identify_string(op)
         end
 
-        @OP.def_rules("`") do |op, io|
+        @OP.def_rules("`") do |op, _io|
           if @lex_state == EXPR_FNAME
             Token(op).set_text(op)
           else
@@ -703,7 +703,7 @@ module YARD
           end
         end
 
-        @OP.def_rules('?') do |op, io|
+        @OP.def_rules('?') do |op, _io|
           if @lex_state == EXPR_END
             @lex_state = EXPR_BEG
             Token(TkQUESTION).set_text(op)
@@ -725,27 +725,27 @@ module YARD
           end
         end
 
-        @OP.def_rules("&", "&&", "|", "||") do |op, io|
+        @OP.def_rules("&", "&&", "|", "||") do |op, _io|
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
 
         @OP.def_rules("+=", "-=", "*=", "**=",
-          "&=", "|=", "^=", "<<=", ">>=", "||=", "&&=") do |op, io|
+          "&=", "|=", "^=", "<<=", ">>=", "||=", "&&=") do |op, _io|
           @lex_state = EXPR_BEG
           op =~ /^(.*)=$/
           Token(TkOPASGN, $1).set_text(op)
         end
 
-        @OP.def_rule("+@", proc { @lex_state == EXPR_FNAME }) do |op, io|
+        @OP.def_rule("+@", proc { @lex_state == EXPR_FNAME }) do |op, _io|
           Token(TkUPLUS).set_text(op)
         end
 
-        @OP.def_rule("-@", proc { @lex_state == EXPR_FNAME }) do |op, io|
+        @OP.def_rule("-@", proc { @lex_state == EXPR_FNAME }) do |op, _io|
           Token(TkUMINUS).set_text(op)
         end
 
-        @OP.def_rules("+", "-") do |op, io|
+        @OP.def_rules("+", "-") do |op, _io|
           catch(:RET) do
             if @lex_state == EXPR_ARG
               if @space_seen && peek(0) =~ /[0-9]/
@@ -774,7 +774,7 @@ module YARD
           end
         end
 
-        @OP.def_rules("..", "...") do |op, io|
+        @OP.def_rules("..", "...") do |op, _io|
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
         end
@@ -783,7 +783,7 @@ module YARD
       end
 
       def lex_int2
-        @OP.def_rules("]", "}", ")") do |op, io|
+        @OP.def_rules("]", "}", ")") do |op, _io|
           @lex_state = EXPR_END
           @indent -= 1
           Token(op).set_text(op)
@@ -812,7 +812,7 @@ module YARD
           tk.set_text("::")
         end
 
-        @OP.def_rule("/") do |op, io|
+        @OP.def_rule("/") do |op, _io|
           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
             identify_string(op)
           elsif peek(0) == '='
@@ -837,7 +837,7 @@ module YARD
         #   Token(TkOPASGN, :^)
         # end
 
-        @OP.def_rules(",", ";") do |op, io|
+        @OP.def_rules(",", ";") do |op, _io|
           @colonblock_seen = false
           @lex_state = EXPR_BEG
           Token(op).set_text(op)
@@ -913,7 +913,7 @@ module YARD
           end
         end
 
-        @OP.def_rule('%') do |op, io|
+        @OP.def_rule('%') do |_op, _io|
           if @lex_state == EXPR_BEG || @lex_state == EXPR_MID
             identify_quotation('%')
           elsif peek(0) == '='

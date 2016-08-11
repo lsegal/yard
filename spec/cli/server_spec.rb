@@ -251,7 +251,7 @@ describe YARD::CLI::Server do
       gem2 = double(:gem2, :name => 'gem2', :version => '1.0.0', :full_gem_path => '/path/to/bar')
       specs = {'gem1' => gem1, 'gem2' => gem2}
       source = double(:source_index)
-      allow(source).to receive(:find_name) do |k, ver|
+      allow(source).to receive(:find_name) do |k, _ver|
         k == '' ? specs.values : specs.grep(k).map {|name| specs[name] }
       end
       allow(Gem).to receive(:source_index).and_return(source)

@@ -84,10 +84,10 @@ describe YARD::Parser::SourceParser do
     end
 
     it "passes in globals" do
-      before_list {|f, g| g.x = 1 }
-      before_list {|f, g| g.x += 1 }
-      before_list {|f, g| g.x += 1 }
-      after_list {|f, g| expect(g.x).to eq 3 }
+      before_list {|_f, g| g.x = 1 }
+      before_list {|_f, g| g.x += 1 }
+      before_list {|_f, g| g.x += 1 }
+      after_list {|_f, g| expect(g.x).to eq 3 }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
     end
@@ -100,7 +100,7 @@ describe YARD::Parser::SourceParser do
     end
 
     it "handles basic callback support and maintain files/globals" do
-      before_list do |f, g| g.foo = :bar end
+      before_list do |_f, g| g.foo = :bar end
       after_list do |files, globals|
         expect(files).to eq ['foo.rb', 'bar.rb']
         expect(globals.foo).to eq :bar

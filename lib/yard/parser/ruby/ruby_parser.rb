@@ -184,7 +184,7 @@ module YARD
           eof
         end
 
-        REV_MAPPINGS.select {|k, v| k.is_a?(Symbol) }.each do |pair|
+        REV_MAPPINGS.select {|k, _v| k.is_a?(Symbol) }.each do |pair|
           event = pair.first
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
@@ -622,7 +622,7 @@ module YARD
           end if !@comments.empty?
 
           # insert all remaining comments
-          @comments.each do |line, comment|
+          @comments.each do |line, _comment|
             add_comment(line, nil, root, true)
           end
 

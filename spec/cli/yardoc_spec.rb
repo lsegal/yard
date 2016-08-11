@@ -127,7 +127,7 @@ describe YARD::CLI::Yardoc do
       expect(@yardoc.use_yardopts_file).to be true
     end
 
-    should_accept('--yardopts with filename') do |arg|
+    should_accept('--yardopts with filename') do |_arg|
       @yardoc = CLI::Yardoc.new
       expect(File).to receive(:read_binary).with('.foobar').and_return('')
       @yardoc.use_document_file = false

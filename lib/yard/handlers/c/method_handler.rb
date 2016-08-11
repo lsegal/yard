@@ -19,7 +19,7 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
   statement_class BodyStatement
 
   process do
-    statement.source.scan(MATCH1) do |type, var_name, name, func_name, param_count|
+    statement.source.scan(MATCH1) do |type, var_name, name, func_name, _param_count|
       break if var_name == "ruby_top_self"
       break if var_name == "nstr"
       break if var_name == "envtbl"
@@ -28,7 +28,7 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
       handle_method(type, var_name, name, func_name)
     end
 
-    statement.source.scan(MATCH2) do |name, func_name, param_count|
+    statement.source.scan(MATCH2) do |name, func_name, _param_count|
       handle_method("method", "rb_mKernel", name, func_name)
     end
   end

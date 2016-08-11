@@ -204,7 +204,7 @@ module YARD
     # Check for command-line safe_mode switch in {arguments}
     def self.load_commandline_safemode
       with_yardopts do
-        arguments.each_with_index do |arg, i|
+        arguments.each_with_index do |arg, _i|
           options[:safe_mode] = true if arg == '--safe'
         end
       end

@@ -6,7 +6,7 @@ def init
   return serialize_onefile if options.onefile
   generate_assets
   serialize('_index.html')
-  options.files.each_with_index do |file, i|
+  options.files.each_with_index do |file, _i|
     serialize_file(file, file.title)
   end
 

@@ -175,7 +175,7 @@ describe YARD::Handlers::Base do
       create_handler(stmts, parser_type)
       parse(file, parser_type)
       expect(Registry.at('#FOO')).send(creates ? :not_to : :to, be_nil)
-      Handlers::Base.subclasses.delete_if {|k, v| k.to_s =~ /^InFileHandler/ }
+      Handlers::Base.subclasses.delete_if {|k, _v| k.to_s =~ /^InFileHandler/ }
     end
 
     [:ruby, :ruby18].each do |parser_type|

@@ -94,7 +94,7 @@ module YARD
         private
 
         def resolve_links(text)
-          text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W]|$)/m) do |str|
+          text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W]|$)/m) do |_str|
             escape, name, title, match = $1, $2, $3, $&
             next(match[1..-1]) if escape
             next(match) if name[0, 1] == '|'

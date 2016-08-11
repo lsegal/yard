@@ -108,7 +108,7 @@ module YARD
       # @param [Array] statements a list of statements
       # @return [void]
       def process(statements)
-        statements.each_with_index do |stmt, index|
+        statements.each_with_index do |stmt, _index|
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process

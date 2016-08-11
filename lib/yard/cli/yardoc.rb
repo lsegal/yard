@@ -335,7 +335,7 @@ module YARD
         Registry.load_all if use_cache
         objects = run_verifier(all_objects).reject do |object|
           serialized = !options.serializer || options.serializer.exists?(object)
-          if checksums && serialized && !object.files.any? {|f, line| changed_files.include?(f) }
+          if checksums && serialized && !object.files.any? {|f, _line| changed_files.include?(f) }
             true
           else
             log.debug "Re-generating object #{object.path}..."
@@ -563,7 +563,7 @@ module YARD
           options.onefile = true
         end
 
-        opts.on('--list', 'List objects to standard out (implies -n)') do |format|
+        opts.on('--list', 'List objects to standard out (implies -n)') do |_format|
           self.generate = false
           self.list = true
         end

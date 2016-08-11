@@ -48,7 +48,7 @@ describe YARD::CLI::I18n do
       expect(@i18n.use_yardopts_file).to be true
     end
 
-    should_accept('--yardopts with filename') do |arg|
+    should_accept('--yardopts with filename') do |_arg|
       @i18n = YARD::CLI::I18n.new
       expect(File).to receive(:read_binary).with('.yardopts_i18n').and_return('')
       @i18n.use_document_file = false
