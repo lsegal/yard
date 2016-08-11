@@ -113,7 +113,7 @@ eof
     before { @library = TestLibrary.new }
 
     it "accepts valid tags" do
-      valid = %w( testing valid is_a is_A __ )
+      valid = %w(testing valid is_a is_A __)
       valid.each do |tag|
         TestLibrary.define_tag("Tag", tag)
         doc = docstring('@' + tag + ' foo bar')
@@ -122,7 +122,7 @@ eof
     end
 
     it "does not parse invalid tag names" do
-      invalid = %w( @ @return@ @param, @x-y @.x.y.z )
+      invalid = %w(@ @return@ @param, @x-y @.x.y.z)
       invalid.each do |tag|
         expect(docstring(tag + ' foo bar')).to eq tag + ' foo bar'
       end

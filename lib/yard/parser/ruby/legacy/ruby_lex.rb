@@ -293,7 +293,7 @@ module YARD
           # IRB.fail AlreadyDefinedToken, token_n
         end
 
-        token_c =  Class.new super_token
+        token_c = Class.new super_token
         RubyToken.const_set token_n, token_c
         # token_c.inspect
 
@@ -320,7 +320,7 @@ module YARD
         def_token(*defs)
       end
 
-      NEWLINE_TOKEN = TkNL.new(0,0)
+      NEWLINE_TOKEN = TkNL.new(0, 0)
       NEWLINE_TOKEN.set_text("\n")
 
     end
@@ -366,12 +366,12 @@ module YARD
           if /\t/ =~ content
             tab_width = 2
             content = content.split(/\n/).map do |line|
-              1 while line.gsub!(/\t+/) { ' ' * (tab_width*$&.length - $`.length % tab_width)}  && $~ #`
+              1 while line.gsub!(/\t+/) { ' ' * (tab_width * $&.length - $`.length % tab_width) } && $~ #`
               line
             end .join("\n")
           end
-          @content   = content
-          @content << "\n" unless @content[-1,1] == "\n"
+          @content = content
+          @content << "\n" unless @content[-1, 1] == "\n"
           @size      = @content.size
           @offset    = 0
           @hwm       = 0
@@ -437,7 +437,7 @@ module YARD
 
         def divert_read_from(reserve)
           @content[@offset, 0] = reserve
-          @size      = @content.size
+          @size = @content.size
         end
       end
 
@@ -630,7 +630,7 @@ module YARD
           identify_comment
         end
 
-        @OP.def_rule("=begin", proc{@prev_char_no == 0 && peek(0) =~ /\s/}) do
+        @OP.def_rule("=begin", proc { @prev_char_no == 0 && peek(0) =~ /\s/ }) do
           |op, io|
           str = op
           @ltype = "="
@@ -741,11 +741,11 @@ module YARD
           Token(TkOPASGN, $1).set_text(op)
         end
 
-        @OP.def_rule("+@", proc{@lex_state == EXPR_FNAME}) do |op, io|
+        @OP.def_rule("+@", proc { @lex_state == EXPR_FNAME }) do |op, io|
           Token(TkUPLUS).set_text(op)
         end
 
-        @OP.def_rule("-@", proc{@lex_state == EXPR_FNAME}) do |op, io|
+        @OP.def_rule("-@", proc { @lex_state == EXPR_FNAME }) do |op, io|
           Token(TkUMINUS).set_text(op)
         end
 
@@ -853,7 +853,7 @@ module YARD
           Token("~").set_text("~")
         end
 
-        @OP.def_rule("~@", proc{@lex_state = EXPR_FNAME}) do
+        @OP.def_rule("~@", proc { @lex_state = EXPR_FNAME }) do
           @lex_state = EXPR_BEG
           Token("~").set_text("~@")
         end
@@ -870,11 +870,11 @@ module YARD
           tk.set_text("(")
         end
 
-        @OP.def_rule("[]", proc{@lex_state == EXPR_FNAME}) do
+        @OP.def_rule("[]", proc { @lex_state == EXPR_FNAME }) do
           Token("[]").set_text("[]")
         end
 
-        @OP.def_rule("[]=", proc{@lex_state == EXPR_FNAME}) do
+        @OP.def_rule("[]=", proc { @lex_state == EXPR_FNAME }) do
           Token("[]=").set_text("[]=")
         end
 
@@ -956,7 +956,7 @@ module YARD
         # # end
         # end
 
-        @OP.def_rule("__END__", proc{@prev_char_no == 0 && peek(0) =~ /[\r\n]/}) do
+        @OP.def_rule("__END__", proc { @prev_char_no == 0 && peek(0) =~ /[\r\n]/ }) do
           throw :eof
         end
 
@@ -1221,14 +1221,14 @@ module YARD
         Token(type).set_text(str)
       end
 
-      def identify_string(ltype, quoted = ltype, opener=nil, initial_char = nil)
+      def identify_string(ltype, quoted = ltype, opener = nil, initial_char = nil)
         @ltype = ltype
         @quoted = quoted
         subtype = nil
 
         str = ""
         str << initial_char if initial_char
-        str << (opener||quoted)
+        str << (opener || quoted)
 
         nest = 0
         begin

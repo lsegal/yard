@@ -46,7 +46,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
 
       if classname == "self"
         parse_block(:namespace => namespace, :scope => :class)
-      elsif classname[0,1] =~ /[A-Z]/
+      elsif classname[0, 1] =~ /[A-Z]/
         register ClassObject.new(namespace, classname) if Proxy === proxy
         parse_block(:namespace => proxy, :scope => :class)
       else
@@ -67,7 +67,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   # @return [Array<String>] a list of member names
   def extract_parameters(superstring)
     paramstring = superstring.match(/\A(O?Struct)\.new\((.*?)\)/)[2]
-    paramstring.split(",").select {|x| x.strip[0,1] == ":"}.map {|x| x.strip[1..-1] } # the 1..-1 chops the leading :
+    paramstring.split(",").select {|x| x.strip[0, 1] == ":" }.map {|x| x.strip[1..-1] } # the 1..-1 chops the leading :
   end
 
   def create_struct_superclass(superclass, superclass_def)
@@ -83,7 +83,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     if match = superclass.match(/\A(Struct)\.new\((.*?)\)/)
       paramstring = match[2].split(",")
       first = paramstring.first.strip
-      if first[0,1] =~ /['"]/ && first[-1,1] =~ /['"]/ && first !~ /\#\{/
+      if first[0, 1] =~ /['"]/ && first[-1, 1] =~ /['"]/ && first !~ /\#\{/
         return "Struct::#{first[1..-2]}"
       end
     end

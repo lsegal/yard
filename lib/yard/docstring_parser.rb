@@ -138,7 +138,7 @@ module YARD
       tag_name = nil
       tag_buf = []
 
-      (content+['']).each_with_index do |line, index|
+      (content + ['']).each_with_index do |line, index|
         indent = line[/^\s*/].length
         empty = (line =~ /^\s*$/ ? true : false)
         done = content.size == index
@@ -335,7 +335,7 @@ module YARD
         if "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
           infile_info = "\n    in file `#{parser.object.file}' " +
                 "near line #{parser.object.line}"
-          log.warn "@see tag (##{i+1}) should not be wrapped in {} " +
+          log.warn "@see tag (##{i + 1}) should not be wrapped in {} " +
             "(causes rendering issues): #{infile_info}"
         end
       end

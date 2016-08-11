@@ -336,13 +336,13 @@ module YARD
       undef globals, extra_state
 
       def owner; parser.owner end
-      def owner=(v) parser.owner=v end
+      def owner=(v) parser.owner = v end
       def namespace; parser.namespace end
-      def namespace=(v); parser.namespace=v end
+      def namespace=(v); parser.namespace = v end
       def visibility; parser.visibility end
-      def visibility=(v); parser.visibility=v end
+      def visibility=(v); parser.visibility = v end
       def scope; parser.scope end
-      def scope=(v); parser.scope=v end
+      def scope=(v); parser.scope = v end
       def globals; parser.globals end
       def extra_state; parser.extra_state end
 

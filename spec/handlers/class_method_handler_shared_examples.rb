@@ -114,7 +114,7 @@ shared_examples "class method visibility decorator" do
     end
 
     it "handles parameters correctly" do
-      expect(subject.parameters.map { |p| p.first }).to eq ['param1', 'param2']
+      expect(subject.parameters.map {|p| p.first }).to eq ['param1', 'param2']
     end
 
     it "attaches documentation to method definition" do

@@ -55,7 +55,7 @@ module YARD
         opts.parse!(args)
       rescue OptionParser::ParseError => err
         unrecognized_option(err)
-        args.shift if args.first && args.first[0,1] != '-'
+        args.shift if args.first && args.first[0, 1] != '-'
         retry
       end
 

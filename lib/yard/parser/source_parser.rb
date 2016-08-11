@@ -474,7 +474,7 @@ module YARD
           content.force_encoding('binary')
           ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
             bom.force_encoding('binary')
-            if content[0,bom.size] == bom
+            if content[0, bom.size] == bom
               content.force_encoding(encoding)
               return content
             end

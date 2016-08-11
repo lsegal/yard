@@ -14,10 +14,10 @@ rescue
 end
 
 Benchmark.bmbm do |b|
-  b.report("builtins PASS") { TIMES.times {YARD::CodeObjects::BUILTIN_EXCEPTIONS.each {|y| bench_builtins(y) } } }
-  b.report("eval PASS") { TIMES.times {YARD::CodeObjects::BUILTIN_EXCEPTIONS.each {|y| bench_eval(y) }} }
-  b.report("builtins FAIL") { TIMES.times {YARD::CodeObjects::BUILTIN_MODULES.each {|y| bench_builtins(y) } } }
-  b.report("eval FAIL") { TIMES.times {YARD::CodeObjects::BUILTIN_MODULES.each {|y| bench_eval(y) }} }
-  b.report("builtins ANY") { TIMES.times {YARD::CodeObjects::BUILTIN_CLASSES.each {|y| bench_builtins(y) } } }
-  b.report("eval ANY") { TIMES.times {YARD::CodeObjects::BUILTIN_CLASSES.each {|y| bench_eval(y) }} }
+  b.report("builtins PASS") { TIMES.times { YARD::CodeObjects::BUILTIN_EXCEPTIONS.each {|y| bench_builtins(y) } } }
+  b.report("eval PASS") { TIMES.times { YARD::CodeObjects::BUILTIN_EXCEPTIONS.each {|y| bench_eval(y) } } }
+  b.report("builtins FAIL") { TIMES.times { YARD::CodeObjects::BUILTIN_MODULES.each {|y| bench_builtins(y) } } }
+  b.report("eval FAIL") { TIMES.times { YARD::CodeObjects::BUILTIN_MODULES.each {|y| bench_eval(y) } } }
+  b.report("builtins ANY") { TIMES.times { YARD::CodeObjects::BUILTIN_CLASSES.each {|y| bench_builtins(y) } } }
+  b.report("eval ANY") { TIMES.times { YARD::CodeObjects::BUILTIN_CLASSES.each {|y| bench_eval(y) } } }
 end

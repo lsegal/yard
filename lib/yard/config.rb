@@ -196,7 +196,7 @@ module YARD
       with_yardopts do
         arguments.each_with_index do |arg, i|
           next unless arg == '--plugin'
-          load_plugin(arguments[i+1])
+          load_plugin(arguments[i + 1])
         end
       end
     end

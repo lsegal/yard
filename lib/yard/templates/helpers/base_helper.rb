@@ -55,7 +55,7 @@ module YARD::Templates::Helpers
       if args.first.is_a?(String)
         case args.first
         when %r{://}, /^mailto:/
-          link_url(args[0], args[1], {:target => '_parent'}.merge(args[2]||{}))
+          link_url(args[0], args[1], {:target => '_parent'}.merge(args[2] || {}))
         when /^include:file:(\S+)/
           file = $1
           relpath = File.relative_path(Dir.pwd, File.expand_path(file))

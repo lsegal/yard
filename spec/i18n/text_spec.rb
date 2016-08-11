@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe YARD::I18n::Text do
   describe "#extract_messages" do
-    def extract_messages(input, options={})
+    def extract_messages(input, options = {})
       text = YARD::I18n::Text.new(StringIO.new(input), options)
       messages = []
       text.extract_messages do |*message|
@@ -82,7 +82,7 @@ eot
       locale
     end
 
-    def translate(input, options={})
+    def translate(input, options = {})
       text = YARD::I18n::Text.new(StringIO.new(input), options)
       text.translate(locale)
     end

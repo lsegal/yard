@@ -22,7 +22,7 @@ describe YARD::Templates::Template do
       expect(File).to receive(:directory?).with('/foo/a').at_least(1).times.and_return(true)
       expect(File).to receive(:directory?).with('/bar/a').at_least(1).times.and_return(true)
       ancestors = Engine.template('a/b').ancestors.map {|c| c.class_name }
-      expect(ancestors[0, 3]).to eq %w( Template__foo_a_b Template__bar_a Template__foo_a )
+      expect(ancestors[0, 3]).to eq %w(Template__foo_a_b Template__bar_a Template__foo_a)
     end
 
     it "includes parent directory template if exists" do
@@ -199,14 +199,14 @@ describe YARD::Templates::Template do
   describe "#run" do
     it "renders all sections" do
       mod = template(:e).new
-      allow(mod).to receive(:render_section) { |section| section.name.to_s }
+      allow(mod).to receive(:render_section) {|section| section.name.to_s }
       mod.sections :a, :b, :c
       expect(mod.run).to eq 'abc'
     end
 
     it "renders all sections with options" do
       mod = template(:e).new
-      allow(mod).to receive(:render_section) { |section| section.name.to_s }
+      allow(mod).to receive(:render_section) {|section| section.name.to_s }
       expect(mod).to receive(:add_options).with(:a => 1).and_yield
       mod.sections :a
       expect(mod.run(:a => 1)).to eq 'a'

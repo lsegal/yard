@@ -201,7 +201,7 @@ module YARD
               object.parameters = [['*args', nil]]
             else
               # the first cfunc argument is the 'self' argument, we don't need that
-              object.parameters = params.drop(1).map { |s| [s[/VALUE\s+(\S+)/, 1], nil] }
+              object.parameters = params.drop(1).map {|s| [s[/VALUE\s+(\S+)/, 1], nil] }
             end
           end
         end

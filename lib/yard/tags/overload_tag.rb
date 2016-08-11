@@ -52,7 +52,7 @@ module YARD
       def parse_signature
         if signature =~ /^(?:def\s)?\s*(#{CodeObjects::METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
           meth, args = $1, $2
-          meth.gsub!(/\s+/,'')
+          meth.gsub!(/\s+/, '')
           # FIXME refactor this code to not make use of the Handlers::Base class (tokval_list should be moved)
           toks = YARD::Parser::Ruby::Legacy::TokenList.new(args)
           args = YARD::Handlers::Ruby::Legacy::Base.new(nil, nil).send(:tokval_list, toks, :all)

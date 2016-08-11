@@ -67,7 +67,7 @@ describe YARD::CLI::Server do
   def assert_libraries(expected_libs, actual_libs)
     expect(actual_libs).to eq expected_libs
     expected_libs.each do |name, libs|
-      libs.each_with_index do |expected,i|
+      libs.each_with_index do |expected, i|
         actual = actual_libs[name][i]
         [:source, :source_path, :yardoc_file].each do |m|
           expect(actual.send(m)).to eq expected.send(m)

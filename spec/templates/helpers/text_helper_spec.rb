@@ -39,7 +39,7 @@ describe YARD::Templates::Helpers::TextHelper do
 
     it "truncates text that is longer than allowed width" do
       text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
-      expect(align_right(text)).to eq ' ' + text[0,68] + '...'
+      expect(align_right(text)).to eq ' ' + text[0, 68] + '...'
     end
   end
 

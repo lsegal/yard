@@ -8,7 +8,7 @@ module YARD
       # @param [#each_line] input a text to be translated.
       # @option options [Boolean] :have_header (false) whether the
       #   input text has header or not.
-      def initialize(input, options={})
+      def initialize(input, options = {})
         @input = input
         @options = options
       end

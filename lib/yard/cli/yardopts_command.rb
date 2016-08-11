@@ -82,8 +82,8 @@ module YARD
           opts.parse(args)
         rescue OptionParser::ParseError => err
           idx = args.index(err.args.first)
-          args = args[(idx+1)..-1]
-          args.shift while args.first && args.first[0,1] != '-'
+          args = args[(idx + 1)..-1]
+          args.shift while args.first && args.first[0, 1] != '-'
           retry
         end
       end

@@ -51,7 +51,7 @@ def described_in_docs(klass, meth, file = nil)
   end
 
   # Get the object
-  objname = klass.name + (meth[0,1] == '#' ? meth : '::' + meth)
+  objname = klass.name + (meth[0, 1] == '#' ? meth : '::' + meth)
   obj = Registry.at(objname)
   raise "Cannot find object #{objname} described by spec." unless obj
   raise "#{obj.path} has no @it tags to spec." unless obj.has_tag? :it

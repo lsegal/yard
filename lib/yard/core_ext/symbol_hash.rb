@@ -27,9 +27,9 @@ class SymbolHash < Hash
   def self.[](*hsh)
     obj = new;
     if hsh.size == 1 && hsh.first.is_a?(Hash)
-      hsh.first.each {|k,v| obj[k] = v }
+      hsh.first.each {|k, v| obj[k] = v }
     else
-      0.step(hsh.size, 2) {|n| obj[hsh[n]] = hsh[n+1] }
+      0.step(hsh.size, 2) {|n| obj[hsh[n]] = hsh[n + 1] }
     end
     obj
   end
@@ -63,7 +63,7 @@ class SymbolHash < Hash
   #
   # @param [Hash] hash the hash object to copy the values from
   # @return [SymbolHash] self
-  def update(hash) hash.each {|k,v| self[k] = v }; self end
+  def update(hash) hash.each {|k, v| self[k] = v }; self end
   alias merge! update
 
   # Merges the contents of another hash into a new SymbolHash object

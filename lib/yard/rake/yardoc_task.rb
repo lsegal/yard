@@ -54,7 +54,7 @@ module YARD
         @files = []
 
         yield self if block_given?
-        self.options +=  ENV['OPTS'].split(/[ ,]/) if ENV['OPTS']
+        self.options += ENV['OPTS'].split(/[ ,]/) if ENV['OPTS']
         self.files   += ENV['FILES'].split(/[ ,]/) if ENV['FILES']
         self.options << '--no-stats' unless stats_options.empty?
 

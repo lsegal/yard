@@ -75,7 +75,7 @@ describe YARD::Rake::YardocTask do
 
   describe "#before" do
     it "allows before callback" do
-      proc = lambda { }
+      proc = lambda {}
       expect(proc).to receive(:call)
       expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.before = proc }
@@ -85,7 +85,7 @@ describe YARD::Rake::YardocTask do
 
   describe "#after" do
     it "allows after callback" do
-      proc = lambda { }
+      proc = lambda {}
       expect(proc).to receive(:call)
       expect(@yardoc).to receive(:run)
       YARD::Rake::YardocTask.new {|t| t.after = proc }

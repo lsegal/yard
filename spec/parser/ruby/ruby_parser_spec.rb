@@ -239,7 +239,7 @@ eof
       s = stmt(src)
       t = tokenize(src)
       expect(s.source).to eq src
-      expect(t.map { |x| x[1] }.join).to eq src
+      expect(t.map {|x| x[1] }.join).to eq src
     end
 
     it "shows proper source for regular heredoc" do
@@ -247,7 +247,7 @@ eof
       s = stmt(src)
       t = tokenize(src)
       expect(s.source).to eq src
-      expect(t.map { |x| x[1] }.join).to eq src
+      expect(t.map {|x| x[1] }.join).to eq src
     end
 
     it "shows proper source for heredoc with comment" do

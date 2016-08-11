@@ -90,7 +90,7 @@ module YARD
     BUILTIN_ALL = BUILTIN_CLASSES + BUILTIN_MODULES
 
     # Hash of {BUILTIN_EXCEPTIONS} as keys and true as value (for O(1) lookups)
-    BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h,n| h.update(n => true) }
+    BUILTIN_EXCEPTIONS_HASH = BUILTIN_EXCEPTIONS.inject({}) {|h, n| h.update(n => true) }
 
     # +Base+ is the superclass of all code objects recognized by YARD. A code
     # object is any entity in the Ruby language (class, method, module). A
@@ -191,7 +191,7 @@ module YARD
             namespace = Proxy.new(namespace.namespace, namespace.value)
           end
 
-          if name.to_s[0,2] == NSEP
+          if name.to_s[0, 2] == NSEP
             name = name.to_s[2..-1]
             namespace = Registry.root
           end
@@ -474,7 +474,7 @@ module YARD
         common = [path, other].join(" ").match(/^(\S*)\S*(?: \1\S*)*$/)[1]
         common = path unless common =~ /(\.|::|#)$/
         common = common.sub(/(\.|::|#)[^:#\.]*?$/, '') if same_parent
-        if %w(. :).include?(common[-1,1]) || other[common.size,1] == '#'
+        if %w(. :).include?(common[-1, 1]) || other[common.size, 1] == '#'
           suffix = ''
         else
           suffix = '(::|\.)'

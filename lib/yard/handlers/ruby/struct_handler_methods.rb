@@ -15,7 +15,7 @@ module YARD::Handlers::Ruby::StructHandlerMethods
   # @return [Tags::Tag, nil] the tag matching the request, or nil if not found
   def member_tag_for_member(klass, member, type = :read)
     specific_tag = type == :read ? :attr_reader : :attr_writer
-    (klass.tags(specific_tag) + klass.tags(:attr)).find {|tag| tag.name == member}
+    (klass.tags(specific_tag) + klass.tags(:attr)).find {|tag| tag.name == member }
   end
 
   # Retrieves all members defined in @attr* tags

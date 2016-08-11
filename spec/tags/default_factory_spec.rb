@@ -59,7 +59,7 @@ describe YARD::Tags::DefaultFactory do
       expect(a).to eq b
       expect(b).to eq c
       expect(c).to eq d
-      expect(a).to include(['a','b','c'])
+      expect(a).to include(['a', 'b', 'c'])
     end
 
     it "returns the text before the type list as the last element" do

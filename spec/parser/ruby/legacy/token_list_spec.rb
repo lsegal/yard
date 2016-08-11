@@ -4,7 +4,7 @@ include YARD::Parser::Ruby::Legacy
 include YARD::Parser::Ruby::Legacy::RubyToken
 
 describe YARD::Parser::Ruby::Legacy::TokenList do
-  describe  "#initialize / #push" do
+  describe "#initialize / #push" do
     it "accepts a tokenlist (via constructor or push)" do
       expect { TokenList.new(TokenList.new) }.not_to raise_error
       expect(TokenList.new.push(TokenList.new("x = 2")).size).to eq 6

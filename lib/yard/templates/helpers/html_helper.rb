@@ -214,7 +214,7 @@ module YARD
 
           next(match[1..-1]) if escape
 
-          next(match) if name[0,1] == '|'
+          next(match) if name[0, 1] == '|'
 
           if name == '<a' && title =~ %r{href=["'](.+?)["'].*>.*</a>\s*(.*)\Z}
             name, title = $1, $2
@@ -227,7 +227,7 @@ module YARD
             object
           else
             link = linkify(name, title)
-            if (link == name || link == title) && (name+' '+link !~ /\A<a\s.*>/)
+            if (link == name || link == title) && (name + ' ' + link !~ /\A<a\s.*>/)
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
               file = (@file ? @file.filename : object.file) || '(unknown)'
               line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
@@ -305,7 +305,7 @@ module YARD
         title.gsub!(/[\r\n]/, ' ')
         params = SymbolHash.new(false).update(
           :href => url,
-          :title  => h(title)
+          :title => h(title)
         ).update(params)
         params[:target] ||= '_parent' if url =~ %r{^(\w+)://}
         "<a #{tag_attrs(params)}>#{title}</a>".gsub(/[\r\n]/, ' ')
@@ -571,7 +571,7 @@ module YARD
       # @param [Hash{String => String}] opts the tag options
       # @return [String] the tag attributes of an HTML tag
       def tag_attrs(opts = {})
-        opts.sort_by {|k, v| k.to_s }.map {|k,v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
+        opts.sort_by {|k, v| k.to_s }.map {|k, v| "#{k}=#{v.to_s.inspect}" if v }.join(" ")
       end
 
       # Converts a {CodeObjects::MethodObject} into an overload object

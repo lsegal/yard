@@ -71,7 +71,7 @@ class Gem::SourceIndex
     # Returns a list of directories from Gem.path that contain specifications.
 
     def installed_spec_directories
-      Gem.path.collect { |dir| File.join(dir, "specifications") }
+      Gem.path.collect {|dir| File.join(dir, "specifications") }
     end
 
     ##
@@ -101,9 +101,9 @@ class Gem::SourceIndex
   # TODO merge @gems and @prerelease_gems and provide a separate method
   # #prerelease_gems
 
-  def initialize(specifications={})
+  def initialize(specifications = {})
     @gems = {}
-    specifications.each{ |full_name, spec| add_spec spec }
+    specifications.each {|full_name, spec| add_spec spec }
     @spec_dirs = nil
   end
 
@@ -113,11 +113,11 @@ class Gem::SourceIndex
   end
 
   def prerelease_gems
-    @gems.reject{ |name, gem| !gem.version.prerelease? }
+    @gems.reject {|name, gem| !gem.version.prerelease? }
   end
 
   def released_gems
-    @gems.reject{ |name, gem| gem.version.prerelease? }
+    @gems.reject {|name, gem| gem.version.prerelease? }
   end
 
   ##
@@ -142,8 +142,8 @@ class Gem::SourceIndex
   # Returns an Array specifications for the latest released versions
   # of each gem in this index.
 
-  def latest_specs(include_prerelease=false)
-    result = Hash.new { |h,k| h[k] = [] }
+  def latest_specs(include_prerelease = false)
+    result = Hash.new {|h, k| h[k] = [] }
     latest = {}
 
     sort.each do |_, spec|
@@ -312,7 +312,7 @@ class Gem::SourceIndex
       end
     end
 
-    specs.sort_by { |s| s.sort_obj }
+    specs.sort_by {|s| s.sort_obj }
   end
 
   ##
@@ -337,7 +337,7 @@ class Gem::SourceIndex
 
       fetcher = Gem::SpecFetcher.fetcher
       remotes = fetcher.find_matching dependency
-      remotes = remotes.map { |(_, version, _), _| version }
+      remotes = remotes.map {|(_, version, _), _| version }
 
       latest = remotes.sort.last
 

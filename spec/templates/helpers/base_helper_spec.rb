@@ -142,13 +142,13 @@ describe YARD::Templates::Helpers::BaseHelper do
   describe "#format_object_type" do
     it "returns Exception if type is Exception" do
       obj = double(:object, :is_exception? => true)
-      allow(obj).to receive(:is_a?) { |arg| arg == YARD::CodeObjects::ClassObject }
+      allow(obj).to receive(:is_a?) {|arg| arg == YARD::CodeObjects::ClassObject }
       expect(format_object_type(obj)).to eq "Exception"
     end
 
     it "returns Class if type is Class" do
       obj = double(:object, :is_exception? => false)
-      allow(obj).to receive(:is_a?) { |arg| arg == YARD::CodeObjects::ClassObject }
+      allow(obj).to receive(:is_a?) {|arg| arg == YARD::CodeObjects::ClassObject }
       expect(format_object_type(obj)).to eq "Class"
     end
 

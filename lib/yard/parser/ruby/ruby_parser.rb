@@ -184,7 +184,7 @@ module YARD
           eof
         end
 
-        REV_MAPPINGS.select {|k,v| k.is_a?(Symbol) }.each do |pair|
+        REV_MAPPINGS.select {|k, v| k.is_a?(Symbol) }.each do |pair|
           event = pair.first
           ast_token = AST_TOKENS.include?(event)
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
@@ -233,7 +233,7 @@ module YARD
           node.line_range = Range.new(lstart, lineno)
           if node.respond_to?(:block)
             sr, lr = node.block.source_range, node.block.line_range
-            node.block.source_range = Range.new(sr.first, @tokens.last[2][1]-1)
+            node.block.source_range = Range.new(sr.first, @tokens.last[2][1] - 1)
             node.block.line_range = Range.new(lr.first, @tokens.last[2][0])
           end
           node
@@ -255,7 +255,7 @@ module YARD
           @ns_charno = charno
           @newline = [:semicolon, :comment, :kw, :op, :lparen, :lbrace].include?(token)
           if ast_token
-            AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno-1, :token => true)
+            AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno - 1, :token => true)
           end
         end
 
@@ -339,7 +339,7 @@ module YARD
         end
 
         def on_unary(op, val)
-          map = @map[op.to_s[0,1]]
+          map = @map[op.to_s[0, 1]]
           lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
           node = AstNode.node_class_for(:unary).new(:unary, [op, val])
           node.source_range = Range.new(sstart, @ns_charno - 1)
@@ -498,7 +498,7 @@ module YARD
           ch = charno
           @charno += data.length
           @ns_charno = charno
-          AstNode.new(:label, [data[0...-1]], :line => lineno..lineno, :char => ch..charno-1, :token => true)
+          AstNode.new(:label, [data[0...-1]], :line => lineno..lineno, :char => ch..charno - 1, :token => true)
         end
 
         def on_comment(comment)
@@ -523,7 +523,7 @@ module YARD
             return
           end
 
-          source_range = ch..(charno-1)
+          source_range = ch..(charno - 1)
           comment = comment.gsub(/^(\#+)\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
 
@@ -547,7 +547,7 @@ module YARD
 
         def on_embdoc_beg(text)
           visit_ns_token(:embdoc_beg, text)
-          @embdoc_start = charno-text.length
+          @embdoc_start = charno - text.length
           @embdoc = ""
         end
 
@@ -571,7 +571,7 @@ module YARD
         alias compile_error on_parse_error
 
         def comment_starts_line?(charno)
-          (charno-1).downto(0) do |i|
+          (charno - 1).downto(0) do |i|
             ch = @source[i]
             break if ch == "\n"
             return false if ch != " " && ch != "\t"
@@ -589,7 +589,7 @@ module YARD
             end
 
             # check upwards from line before node; check node's line at the end
-            ((node.line-1).downto(node.line-2).to_a + [node.line]).each  do |line|
+            ((node.line - 1).downto(node.line - 2).to_a + [node.line]).each  do |line|
               comment = @comments[line]
               if comment && !comment.empty?
                 add_comment(line, node)

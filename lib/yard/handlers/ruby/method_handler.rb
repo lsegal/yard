@@ -75,7 +75,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     params = []
 
     if args.unnamed_required_params
-      params += args.unnamed_required_params.map { |a| [a.source, nil] }
+      params += args.unnamed_required_params.map {|a| [a.source, nil] }
     end
 
     if args.unnamed_optional_params
@@ -89,7 +89,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     end
 
     if args.unnamed_end_params
-      params += args.unnamed_end_params.map { |a| [a.source, nil] }
+      params += args.unnamed_end_params.map {|a| [a.source, nil] }
     end
 
     if args.named_params

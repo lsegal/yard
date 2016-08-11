@@ -246,7 +246,7 @@ module YARD
         begin
           opts.parse!(args)
         rescue OptionParser::ParseError
-          args.shift if args.first && args.first[0,1] != '-'
+          args.shift if args.first && args.first[0, 1] != '-'
           retry
         end
 

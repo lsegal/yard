@@ -43,7 +43,7 @@ module YARD
         return if registry.size != 2
 
         first_object = nil
-        [   ["Added objects", "A", added_objects(*registry)],
+        [["Added objects", "A", added_objects(*registry)],
             ["Modified objects", "M", modified_objects(*registry)],
             ["Removed objects", "D", removed_objects(*registry)]].each do |name, short, objects|
           next if short == "M" && @modified == false

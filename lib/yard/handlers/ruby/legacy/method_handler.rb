@@ -8,7 +8,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
 
     if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
       meth, args = $1, $2
-      meth.gsub!(/\s+/,'')
+      meth.gsub!(/\s+/, '')
       args = tokval_list(YARD::Parser::Ruby::Legacy::TokenList.new(args), :all)
       args.map! do |a|
         k, v, r = *a.split(/(:)|=/, 2)

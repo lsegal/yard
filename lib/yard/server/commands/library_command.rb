@@ -171,7 +171,7 @@ module YARD
           tplopts = [options.template, :fulldoc, options.format]
           tplclass = Templates::Engine.template(*tplopts)
           obj = Object.new.extend(tplclass)
-          class << obj; define_method(:init) { } end
+          class << obj; define_method(:init) {} end
           obj.class = tplclass
           obj.send(:initialize, options)
           class << obj

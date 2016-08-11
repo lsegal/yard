@@ -569,7 +569,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "calls #html_syntax_highlight_NAME if there's an object with a #source_type" do
       subject.object = OpenStruct.new(:source_type => :NAME)
-      expect(subject).to receive(:html_markup_html) { |text| text }
+      expect(subject).to receive(:html_markup_html) {|text| text }
       expect(subject).to receive(:html_syntax_highlight_NAME).and_return("foobar")
       expect(subject.htmlify('<pre><code>def x; end</code></pre>', :html)).to eq(
         '<pre class="code NAME"><code class="NAME">foobar</code></pre>')
@@ -577,7 +577,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
 
     it "adds !!!LANG to className in outputted pre tag" do
       subject.object = OpenStruct.new(:source_type => :LANG)
-      expect(subject).to receive(:html_markup_html) { |text| text }
+      expect(subject).to receive(:html_markup_html) {|text| text }
       expect(subject).to receive(:html_syntax_highlight_LANG).and_return("foobar")
       expect(subject.htmlify("<pre><code>!!!LANG\ndef x; end</code></pre>", :html)).to eq(
         '<pre class="code LANG"><code class="LANG">foobar</code></pre>')
@@ -599,7 +599,7 @@ describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "does not highlight if there is no highlight method specified by !!!NAME" do
-      def subject.respond_to?(method, include_all=false)
+      def subject.respond_to?(method, include_all = false)
         return false if method == 'html_syntax_highlight_NAME'
         super
       end

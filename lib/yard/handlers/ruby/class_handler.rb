@@ -43,7 +43,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
           end
         end
 
-        if classname[0,1] =~ /[A-Z]/
+        if classname[0, 1] =~ /[A-Z]/
           register ClassObject.new(namespace, classname) if Proxy === proxy
           parse_block(statement[1], :namespace => proxy, :scope => :class)
         else
@@ -64,8 +64,8 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
   # @param [MethodCallNode] superclass the AST node for the Struct.new call
   # @return [Array<String>] the member names to generate methods for
   def extract_parameters(superclass)
-    members = superclass.parameters.select {|x| x && x.type == :symbol_literal}
-    members.map! {|x| x.source.strip[1..-1]}
+    members = superclass.parameters.select {|x| x && x.type == :symbol_literal }
+    members.map! {|x| x.source.strip[1..-1] }
     members
   end
 

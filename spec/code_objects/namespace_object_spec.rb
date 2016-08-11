@@ -59,9 +59,9 @@ describe YARD::CodeObjects::NamespaceObject do
       c = NamespaceObject.new(nil, :YARD)
       c.class_mixins << b
 
-      [bmeth, bmeth2].each { |o| expect(o.scope).to eq :instance }
+      [bmeth, bmeth2].each {|o| expect(o.scope).to eq :instance }
       meths = c.included_meths(:scope => :class)
-      meths.each { |o| expect(o.scope).to eq :class }
+      meths.each {|o| expect(o.scope).to eq :class }
     end
 
     it "does not list methods overridden by another included module" do

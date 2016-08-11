@@ -477,7 +477,7 @@ module YARD
           attrs[clean_name][:read] = object
         end
         if writable?
-          if object.name.to_s[-1,1] == '='
+          if object.name.to_s[-1, 1] == '='
             writer = object
             writer.parameters = [['value', nil]]
           else

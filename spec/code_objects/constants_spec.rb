@@ -85,7 +85,7 @@ describe YARD::CodeObjects do
       a = YARD::CodeObjects::BUILTIN_ALL
       b = YARD::CodeObjects::BUILTIN_CLASSES
       c = YARD::CodeObjects::BUILTIN_MODULES
-      expect(a).to eq b+c
+      expect(a).to eq b + c
     end
   end
 

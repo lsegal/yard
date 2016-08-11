@@ -67,7 +67,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
     # Store method nodes in decorator node.
     statement.define_singleton_method :decorators do
-      decorated_methods.map { |h| h[:node] }
+      decorated_methods.map {|h| h[:node] }
     end
 
     decorated_methods
@@ -75,7 +75,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
   private
 
-  def process_decorator_parameter(node, opts={}, &block)
+  def process_decorator_parameter(node, opts = {}, &block)
     scope              = opts.fetch :scope, :instance
     transfer_docstring = opts.fetch :transfer_docstring, true
     transfer_source    = opts.fetch :transfer_source, true
@@ -125,7 +125,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
 
         method.docstring = statement.docstring
 
-        tags.each { |t| method.add_tag t }
+        tags.each {|t| method.add_tag t }
     end
 
     yield method, node, name.to_sym if block_given?

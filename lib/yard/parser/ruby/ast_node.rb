@@ -207,7 +207,7 @@ module YARD
           nodes = [self]
           nodes.each.with_index do |node, index|
             yield node
-            nodes.insert index+1, *node.children
+            nodes.insert index + 1, *node.children
           end
         end
 

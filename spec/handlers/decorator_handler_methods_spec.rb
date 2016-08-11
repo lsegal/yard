@@ -84,7 +84,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     end
 
     describe "method is a MethodObject if the method has been defined" do
-      let(:code) {"class DecoratorTest; mock_decorator def foo; end; end"}
+      let(:code) { "class DecoratorTest; mock_decorator def foo; end; end" }
 
       specify do
         expect(subject[:return].first[:method]) \
@@ -93,7 +93,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     end
 
     describe "method is a Proxy if the method has not been defined" do
-      let(:code) {"class DecoratorTest; mock_decorator :foo; end"}
+      let(:code) { "class DecoratorTest; mock_decorator :foo; end" }
 
       specify do
         expect(subject[:return].first[:method]).to be_a YARD::CodeObjects::Proxy
@@ -120,7 +120,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     end
 
     describe "nodes argument" do
-      subject { data[:mock][:return].map { |h| h[:method].to_s } }
+      subject { data[:mock][:return].map {|h| h[:method].to_s } }
 
       describe "assumes all params refer to methods by default" do
         let(:method_defs)  { [:foo, :bar] }
@@ -253,7 +253,7 @@ describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
           end
         end # decorator helper scope shared examples
 
-        subject { data[:mock][:return].map { |h| h[:method] } }
+        subject { data[:mock][:return].map {|h| h[:method] } }
 
         let(:docstring) { 'the foo method' }
         let(:method_defs) { [:foo, :bar] }

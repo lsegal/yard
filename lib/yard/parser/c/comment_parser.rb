@@ -85,7 +85,7 @@ module YARD
           if types =~ /true or false/
             ["Boolean"]
           else
-            (types||"").split(/,| or /).map do |t|
+            (types || "").split(/,| or /).map do |t|
               case t.strip.gsub(/^an?_/, '')
               when "class"; "Class"
               when "obj", "object", "anObject"; "Object"

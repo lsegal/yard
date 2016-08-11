@@ -53,7 +53,7 @@ module YARD
           fspath = ['file.' + object.name + (extension.empty? ? '' : ".#{extension}")]
         else
           objname = object != YARD::Registry.root ? mapped_name(object) : "top-level-namespace"
-          objname += '_' + object.scope.to_s[0,1] if object.is_a?(CodeObjects::MethodObject)
+          objname += '_' + object.scope.to_s[0, 1] if object.is_a?(CodeObjects::MethodObject)
           fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
           if object.namespace && object.namespace.path != ""
             fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
@@ -112,7 +112,7 @@ module YARD
           p.gsub(/[^\w\.-]/) do |x|
             encoded = '_'
 
-            x.each_byte { |b| encoded << ("%X" % b) }
+            x.each_byte {|b| encoded << ("%X" % b) }
             encoded
           end
         end

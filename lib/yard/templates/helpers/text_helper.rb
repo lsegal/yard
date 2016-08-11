@@ -97,7 +97,7 @@ module YARD
           text.gsub(/(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W]|$)/m) do |str|
             escape, name, title, match = $1, $2, $3, $&
             next(match[1..-1]) if escape
-            next(match) if name[0,1] == '|'
+            next(match) if name[0, 1] == '|'
             linkify(name, title)
           end
         end

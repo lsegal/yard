@@ -46,8 +46,8 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   # @return [Array<String>] the member names to generate methods for
   def extract_parameters(superclass)
     return [] unless superclass.parameters
-    members = superclass.parameters.select {|x| x && x.type == :symbol_literal}
-    members.map! {|x| x.source.strip[1..-1]}
+    members = superclass.parameters.select {|x| x && x.type == :symbol_literal }
+    members.map! {|x| x.source.strip[1..-1] }
     members
   end
 end

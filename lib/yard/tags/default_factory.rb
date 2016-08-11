@@ -145,7 +145,7 @@ module YARD
             next
           end
 
-          if level > 0 && c == '#' && text[i+1..-1] =~ CodeObjects::METHODNAMEMATCH
+          if level > 0 && c == '#' && text[i + 1..-1] =~ CodeObjects::METHODNAMEMATCH
             list.last << c + $&
             i += $&.length + 1
             next
@@ -176,7 +176,7 @@ module YARD
         if list.size == 1 && list.first == ''
           [nil, nil, text]
         else
-          [before, list, text[(e+1)..-1]]
+          [before, list, text[(e + 1)..-1]]
         end
       end
     end

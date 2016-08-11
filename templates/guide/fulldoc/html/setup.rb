@@ -38,7 +38,7 @@ def init
 end
 
 def generate_assets
-  %w( js/jquery.js js/app.js css/style.css css/common.css ).each do |file|
+  %w(js/jquery.js js/app.js css/style.css css/common.css).each do |file|
     asset(file, file(file, true))
   end
 end
@@ -65,8 +65,8 @@ end
 
 def serialize_onefile
   layout = Object.new.extend(T('layout'))
-  options.css_data = layout.stylesheets.map {|sheet| file(sheet,true) }.join("\n")
-  options.js_data = layout.javascripts.map {|script| file(script,true) }.join("")
+  options.css_data = layout.stylesheets.map {|sheet| file(sheet, true) }.join("\n")
+  options.js_data = layout.javascripts.map {|script| file(script, true) }.join("")
   Templates::Engine.with_serializer('onefile.html', options.serializer) do
     T('onefile').run(options)
   end

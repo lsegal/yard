@@ -199,7 +199,7 @@ describe YARD::CodeObjects::Base do
   it "maintains all file associations when objects are defined multiple times in multiple files" do
     3.times do |i|
       allow(File).to receive(:read_binary).and_return("class X; end")
-      Parser::SourceParser.new.parse("file#{i+1}.rb")
+      Parser::SourceParser.new.parse("file#{i + 1}.rb")
     end
 
     expect(Registry.at(:X).file).to eq 'file1.rb'

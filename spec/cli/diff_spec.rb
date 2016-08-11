@@ -26,8 +26,8 @@ describe YARD::CLI::Diff do
     def run(*args)
       @all_call = -1
       @data = StringIO.new
-      @objects1 ||= %w( C#fooey C#baz D.bar )
-      @objects2 ||= %w( A A::B A::B::C A.foo A#foo B C.foo C.bar C#baz )
+      @objects1 ||= %w(C#fooey C#baz D.bar)
+      @objects2 ||= %w(A A::B A::B::C A.foo A#foo B C.foo C.bar C#baz)
       @objects = [@objects1, @objects2]
       expect(@diff).to receive(:load_gem_data).ordered.with('gem1') do
         Registry.clear

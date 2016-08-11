@@ -63,7 +63,7 @@ describe YARD::CLI::YRI do
       expect(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
-      expect(spaths[0,4]).to eq %w(foo bar line1 line2)
+      expect(spaths[0, 4]).to eq %w(foo bar line1 line2)
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
   end

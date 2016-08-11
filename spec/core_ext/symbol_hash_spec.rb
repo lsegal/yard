@@ -54,8 +54,8 @@ describe SymbolHash do
 
   it "does not symbolize value if it is not a String" do
     h = SymbolHash.new
-    h['test'] = [1,2,3]
-    expect(h['test']).to eq [1,2,3]
+    h['test'] = [1, 2, 3]
+    expect(h['test']).to eq [1, 2, 3]
   end
 
   it "supports symbolization using #update or #merge!" do

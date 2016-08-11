@@ -71,7 +71,7 @@ module YARD
         def extract_method_details
           if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
             meth, args = $1, $2
-            meth.gsub!(/\s+/,'')
+            meth.gsub!(/\s+/, '')
             args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
             args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
             if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/

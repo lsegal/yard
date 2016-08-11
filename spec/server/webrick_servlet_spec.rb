@@ -9,7 +9,7 @@ describe YARD::Server::WebrickServlet do
       end
       server = double(:server, :[] => nil)
       adapter = mock_adapter
-      adapter.router = proc { [200, {'Header' => 'foo'}, ['body']]}
+      adapter.router = proc { [200, {'Header' => 'foo'}, ['body']] }
       WebrickServlet.new(server, adapter).do_GET(mock_request('/foo'), resp)
       expect(resp.status).to eq 200
       expect(resp.headers).to eq({'Header' => 'foo'})

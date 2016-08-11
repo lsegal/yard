@@ -22,7 +22,7 @@ module YARD
             log.puts "  Providers: #{libs.join(" ")}"
           end
           if exts[name]
-            log.puts "  Extensions: #{exts[name].map {|e| ".#{e}"}.join(" ")}"
+            log.puts "  Extensions: #{exts[name].map {|e| ".#{e}" }.join(" ")}"
           end
 
           log.puts
