@@ -116,16 +116,15 @@ module YARD
               log.debug "#{handler} cancelled from #{caller.last}"
               log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr
-              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized."
-              log.warn "If this class/method is part of your source tree, this will affect your documentation results."
-              log.warn "You can correct this issue by loading the source file for this object before `#{file}'"
-              log.warn
+              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized.\n" \
+                       "If this class/method is part of your source tree, this will affect your documentation results.\n" \
+                       "You can correct this issue by loading the source file for this object before `#{file}'\n"
             rescue Parser::UndocumentableError => undocerr
-              log.warn "in #{handler}: Undocumentable #{undocerr.message}"
-              log.warn "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
+              log.warn "in #{handler}: Undocumentable #{undocerr.message}\n" \
+                       "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
-              log.error "Unhandled exception in #{handler}:"
-              log.error "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+              log.error "Unhandled exception in #{handler}:\n" \
+                        "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
               log.backtrace(e)
             end
           end

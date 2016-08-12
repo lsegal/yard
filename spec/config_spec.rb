@@ -82,7 +82,7 @@ describe YARD::Config do
 
     it "logs error if plugin is not found" do
       expect(YARD::Config).to receive(:require).with('yard-foo').and_raise(LoadError)
-      expect(log).to receive(:warn).with(/Error loading plugin 'yard-foo'/).once
+      expect(log).to receive(:error).with(/Error loading plugin 'yard-foo'/).once
       expect(YARD::Config.load_plugin('yard-foo')).to be false
     end
 
@@ -170,7 +170,7 @@ describe YARD::Config do
       expect(source_mock).to receive(:find_name).with('').and_return(plugins.values)
       expect(Gem).to receive(:source_index).and_return(source_mock)
       expect(YARD::Config).to receive(:load_plugin).with('yard-plugin').and_raise(Gem::LoadError)
-      expect(log).to receive(:warn).with(/Error loading plugin 'yard-plugin'/)
+      expect(log).to receive(:error).with(/Error loading plugin 'yard-plugin'/)
       expect(YARD::Config.load_plugins).to be false
     end
   end

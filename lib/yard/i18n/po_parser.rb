@@ -12,8 +12,8 @@ module YARD
           require "gettext/runtime/mofile"
           @@gettext_version = 2
         rescue LoadError
-          log.warn "Need gettext gem 2.x for i18n feature:"
-          log.warn "  gem install gettext -v 2.3.9"
+          log.warn "Need gettext gem 2.x for i18n feature:\n" \
+                   "\tgem install gettext -v 2.3.9"
         end
       else
         begin
@@ -26,8 +26,8 @@ module YARD
             require "gettext/runtime/mofile"
             @@gettext_version = 2
           rescue LoadError
-            log.warn "Need gettext gem for i18n feature:"
-            log.warn "  gem install gettext"
+            log.warn "Need gettext gem for i18n feature:\n" \
+                     "\tgem install gettext"
           end
         end
       end
