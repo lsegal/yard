@@ -343,7 +343,19 @@ module YARD
     # @return [Array<Tags::RefTag>] the list of valid reference tags
     def convert_ref_tags
       list = @ref_tags.reject {|t| CodeObjects::Proxy === t.owner }
-      list.map(&:tags).flatten
+
+      @ref_tag_recurse_count ||= 0
+      @ref_tag_recurse_count += 1
+      if @ref_tag_recurse_count > 2
+        log.error "#{@object.file}:#{@object.line}: Detected circular reference tag in " \
+                  "`#{@object}', ignoring all reference tags for this object " \
+                  "(#{@ref_tags.map {|t| "@#{t.tag_name}" }.join(", ")})."
+        @ref_tags = []
+        return @ref_tags
+      end
+      list = list.map(&:tags).flatten
+      @ref_tag_recurse_count -= 1
+      list
     end
 
     # Parses out comments split by newlines into a new code object

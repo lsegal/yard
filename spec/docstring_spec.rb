@@ -182,6 +182,33 @@ describe YARD::Docstring do
       expect(tags.first).to be_kind_of(Tags::RefTag)
       expect(tags.first.owner).to eq o
     end
+
+    it "returns an empty list (and warning) if circular reftags are found" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @param (see #b)
+          def a; end
+          # @param (see #a)
+          def b; end
+        end
+      eof
+
+      expect(log.io.string).to match(/error.*circular reference tag in `Foo#b'/)
+      expect(Registry.at('Foo#a').tags).to be_empty
+      expect(Registry.at('Foo#b').tags).to be_empty
+    end
+
+    it "returns an empty list (and warning) if self-circular reftags are found" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @param (see #bar)
+          def bar; end
+        end
+      eof
+
+      expect(log.io.string).to match(/error.*circular reference tag in `Foo#bar'/)
+      expect(Registry.at('Foo#bar').tags).to be_empty
+    end
   end
 
   describe "#empty?/#blank?" do
