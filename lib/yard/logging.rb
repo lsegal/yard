@@ -8,20 +8,33 @@ module YARD
   class Logger < ::Logger
     class SuppressMessage < RuntimeError; end
 
+    # Registers a custom code to log at a given severity level. Once this code
+    # is registered, it can be used in {#add} to send structured log messages
+    # with support for callbacks defined in an {.on_message} hook.
+    #
+    # @param code [Symbol] the new custom code
+    # @param severity [Symbol] the severity to log this code as. Must be one
+    #   of {SEVERITIES}.
+    # @return [void]
+    # @example Defining a custom logger code for a plugin error
+    #   # Allows my plugin to log custom logger warnings
+    #   YARD::Logger.register_code :invalid_record_declaration, :warn
     def self.register_code(code, severity)
       codes[code] = severity
     end
 
+    def self.on_message(code = nil, &block)
+      (on_message_callbacks[code] ||= []) << block
+    end
+
+    # @private
     def self.codes
       @codes ||= {}
     end
 
+    # @private
     def self.on_message_callbacks
       @on_message_callbacks ||= {}
-    end
-
-    def self.on_message(code = nil, &block)
-      (on_message_callbacks[code] ||= []) << block
     end
 
     # The list of characters displayed beside the progress bar to indicate
@@ -188,49 +201,106 @@ module YARD
       self.level = old_level
     end
 
-    # @private
-    CORE_SEVERITIES = [:debug, :warn, :error, :fatal, :info, :unknown]
+    # The default list of logger severity codes.
+    SEVERITIES = [:debug, :info, :warn, :error, :fatal, :unknown]
 
     # @private
-    CORE_SEVERITIES_MAP = CORE_SEVERITIES.inject({}) {|h, k| h[k] = true; h }
+    SEVERITIES_MAP = SEVERITIES.inject({}) {|h, k| h[k] = true; h }
 
-    def add(code = :warn, opts = {}, _progname = nil)
+    # Adds a message to be logged either using a custom structured code, or a
+    # default logger severities. See {SEVERITIES} for a list of default
+    # severities.
+    #
+    # @note If a custom structured code is used, it must first be registered via
+    #   {.register_code}.
+    # @note All messages returned in block form will have their space prefixes
+    #   stripped away. This allows heredoc style <tt><<-eof</tt> formatting of long
+    #   lines.
+    # @overload add(code = :warn, message = "")
+    #   @param code [Symbol] the custom code or default severity code to log
+    #     the message as. If a custom code is used, it must first be registered
+    #     with {.register_code}.
+    #   @param message [String] the string to log.
+    #   @return [void]
+    #   @example
+    #     log.add :unknown_tag, "unknown tag in #{object}"
+    # @overload add(code = :warn, opts = {}, &block)
+    #   @param code [Symbol] the custom code or default severity code to log
+    #     the message as. If a custom code is used, it must first be registered
+    #     with {.register_code}.
+    #   @param opts [Hash] a custom structure of data to pass to any callbacks.
+    #     registered to the logger. Also supports `:message` and `:code` to
+    #     override their respective values.
+    #   @option opts :message [String] the string to log (if no block is passed).
+    #   @yieldreturn [String] if a block is supplied, return the string to log.
+    #   @return [void]
+    #   @example Logging with custom data
+    #     log.add :unknown_tag, object: object, file: object.file do
+    #       "unknown tag in #{object}"
+    #     end
+    # @overload add(opts = {}, &block)
+    #   @param opts [Hash] a custom structure of data to pass to any callbacks
+    #     registered to the logger. Also supports `:message` and `:code` to
+    #     override their respective values.
+    #   @option opts :code [Symbol] (:warn) the custom code or default severity
+    #     code to log the message as. If a custom code is used, it must first be
+    #     registered with {.register_code}.
+    #   @option opts :message [String] the string to log (if no block is passed).
+    #   @yieldreturn [String] if a block is supplied, return the string to log.
+    #   @return [void]
+    #   @example Logging with message in block
+    #     log.add code: :unknown_tag, object: object, file: object.file do
+    #       "unknown tag in #{object}"
+    #     end
+    #   @example Logging with message in hash
+    #     log.add code: :unknown_tag, message: "unknown tag in #{object}",
+    #             object: object, file: object.file
+    # @see .register_code
+    # @see .on_message
+    def add(code, opts = {}, _progname = nil)
       if Fixnum === code # called by base class when actually logging
         clear_line
         return super
       end
 
-      opts = {:message => opts} if String === opts
-      message = block_given? ? clean_block_message(yield) : opts[:message]
-      message ||= ""
+      case opts
+      when String
+        opts = {:message => opts}
+      when Hash
+        opts = opts.dup
+        opts[:message] ||= block_given? ? clean_block_message(yield) : ""
+      end
 
       if Hash === code
-        opts = code
+        opts = opts.merge(code)
         code = opts[:code]
+      else
+        opts[:code] = code
       end
 
       raise ArgumentError, "missing required code" if code.nil?
 
-      if CORE_SEVERITIES_MAP[code]
-        severity = code
+      if SEVERITIES_MAP[code]
+        opts[:severity] = code
       else
-        severity = self.class.codes[code]
-        if severity.nil?
+        opts[:severity] = self.class.codes[code]
+        if opts[:severity].nil?
           add(DEBUG, "logging warning for unknown code: #{code}")
-          severity = :warn
-        elsif !call_log_callbacks(code, message, severity, opts, [code])
+          opts[:severity] = :warn
+        elsif !call_log_callbacks(opts, [code])
           return
         end
       end
 
-      send(severity, message)
+      send(opts[:severity], opts[:message])
     end
 
     [:debug, :warn, :error, :fatal, :info, :unknown].each do |severity|
       alias_method "#{severity}_without_callback", severity
       private "#{severity}_without_callback"
       define_method(severity) do |msg = ""|
-        if call_log_callbacks(severity, msg, severity, {}, [severity, nil])
+        opts = {:severity => severity, :message => msg, :code => severity}
+        if call_log_callbacks(opts, [severity, nil])
           send("#{severity}_without_callback", msg)
         end
       end
@@ -238,9 +308,8 @@ module YARD
 
     private
 
-    # @return [Boolean] whether to send the message through to logger
-    def call_log_callbacks(code, message, severity, opts, list)
-      opts = opts.merge(:code => code, :message => message, :severity => severity)
+    # @raise [SuppressMessage] if message should be suppressed by logger
+    def call_log_callbacks(opts, list)
       should_log = true
 
       list.uniq.each do |type|

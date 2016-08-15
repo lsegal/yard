@@ -134,6 +134,17 @@ describe YARD::Logger do
       log.add :test_code, 'message'
     end
 
+    it 'allows callbacks to modify logger data' do
+      YARD::Logger.register_code :test_code, :warn
+      YARD::Logger.on_message :test_code do |data|
+        data[:message] = data[:object] + "bar"
+        data[:severity] = :fatal
+      end
+
+      log.add :test_code, :object => 'foo'
+      expect(log.io.string).to eq "[fatal]: foobar\n"
+    end
+
     it 'can suppress a log message in a callback' do
       YARD::Logger.register_code :test_code, :warn
       YARD::Logger.on_message :test_code do
