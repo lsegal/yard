@@ -201,7 +201,7 @@ module YARD
       end
 
       opts = {:message => opts} if String === opts
-      message = block_given? ? yield.strip.squeeze : opts[:message]
+      message = block_given? ? clean_block_message(yield) : opts[:message]
       message ||= ""
 
       if Hash === code
@@ -254,6 +254,10 @@ module YARD
       end
 
       should_log
+    end
+
+    def clean_block_message(message)
+      message.gsub(/\n +/, "\n").strip
     end
 
     def clear_line
