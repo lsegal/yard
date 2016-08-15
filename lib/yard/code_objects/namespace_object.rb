@@ -7,10 +7,6 @@ module YARD::CodeObjects
   # The two main Ruby objects that can act as namespaces are modules
   # ({ModuleObject}) and classes ({ClassObject}).
   class NamespaceObject < Base
-    attr_writer :constants, :cvars, :mixins, :child, :meths
-    attr_writer :class_attributes, :instance_attributes
-    attr_writer :included_constants, :included_meths
-
     # @return [Array<String>] a list of ordered group names inside the namespace
     # @since 0.6.0
     attr_accessor :groups
