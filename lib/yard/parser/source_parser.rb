@@ -4,6 +4,9 @@ require 'ostruct'
 
 module YARD
   module Parser
+    Logger.register_code :parser_syntax_error, :warn
+    Logger.register_code :parser_argument_error, :warn
+
     # Raised when an object is recognized but cannot be documented. This
     # generally occurs when the Ruby syntax used to declare an object is
     # too dynamic in nature.
@@ -448,10 +451,10 @@ module YARD
 
         @parser
       rescue ArgumentError, NotImplementedError => e
-        log.warn("Cannot parse `#{file}': #{e.message}")
+        log.add(:parser_argument_error, "Cannot parse `#{file}': #{e.message}")
         log.backtrace(e, :warn)
       rescue ParserSyntaxError => e
-        log.warn(e.message.capitalize)
+        log.add(:parser_syntax_error, e.message.capitalize)
         log.backtrace(e, :warn)
       end
 

@@ -3,6 +3,8 @@ require 'ostruct'
 
 module YARD
   module Tags
+    Logger.register_code :invalid_macro_name, :warn
+
     # The base directive class. Subclass this class to create a custom
     # directive, registering it with {Library.define_directive}. Directive
     # classes are executed via the {#call} method, which perform all directive
@@ -324,8 +326,9 @@ module YARD
 
       def warn
         if object && handler
-          log.warn "Invalid/missing macro name for " \
-                   "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
+          log.add :invalid_macro_name,
+            "Invalid/missing macro name for " \
+            "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
         end
       end
     end

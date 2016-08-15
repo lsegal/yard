@@ -2,6 +2,8 @@
 module YARD
   module Handlers
     module C
+      Logger.register_code :missing_source_file, :warn
+
       class Base < Handlers::Base
         include YARD::Parser::C
         include HandlerMethods
@@ -108,7 +110,8 @@ module YARD
             globals.ordered_parser.files.delete(file) if globals.ordered_parser
             parser.process(Parser::C::CParser.new(File.read(file), file).parse)
           rescue Errno::ENOENT
-            log.warn "Missing source file `#{file}' when parsing #{object}"
+            log.add :missing_source_file,
+              "Missing source file `#{file}' when parsing #{object}"
           end
         end
 

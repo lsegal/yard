@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 module YARD::CodeObjects
+  YARD::Logger.register_code :invalid_encoding, :warn
+
   # An ExtraFileObject represents an extra documentation file (README or other
   # file). It is not strictly a CodeObject (does not inherit from `Base`) although
   # it implements `path`, `name` and `type`, and therefore should be structurally
@@ -108,14 +110,16 @@ module YARD::CodeObjects
         begin
           contents.force_encoding(attributes[:encoding])
         rescue ArgumentError
-          log.warn "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
+          log.add :invalid_encoding,
+            "Invalid encoding `#{attributes[:encoding]}' in #{filename}"
         end
       end
       contents
     rescue ArgumentError => e
       if retried && e.message =~ /invalid byte sequence/
         # This should never happen.
-        log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
+        log.add :invalid_encoding,
+          "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
         return ''
       end
       data.force_encoding('binary') if data.respond_to?(:force_encoding)

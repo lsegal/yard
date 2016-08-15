@@ -5,6 +5,8 @@ module YARD
   module Templates::Helpers
     # The helper module for HTML templates.
     module HtmlHelper
+      Logger.register_code :unresolved_link, :warn
+
       include MarkupHelper
       include HtmlSyntaxHighlightHelper
 
@@ -239,8 +241,9 @@ module YARD
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
               file = (@file ? @file.filename : object.file) || '(unknown)'
               line = (@file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
-              log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".") +
-                       "\n\t" + (match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '') if match
+              log.add :unresolved_link,
+                "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".") +
+                "\n\t" + (match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '') if match
             end
 
             link

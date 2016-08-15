@@ -464,11 +464,9 @@ describe YARD::Templates::Helpers::HtmlHelper do
         # And a reference to {InvalidObject}
         class MyObject; end
       eof
-      logger = double(:log)
-      expect(logger).to receive(:warn).ordered.with(
+      expect(log).to receive(:warn).ordered.with(
         "In file `(stdin)':2: Cannot resolve link to InvalidObject from text:\n\t...{InvalidObject}"
       )
-      allow(self).to receive(:log).and_return(logger)
       allow(self).to receive(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
@@ -481,21 +479,17 @@ describe YARD::Templates::Helpers::HtmlHelper do
         # {InvalidObject4}
         class MyObject; end
       eof
-      logger = double(:log)
-      expect(logger).to receive(:warn).ordered.with("In file `(stdin)':1: Cannot resolve link to InvalidObject1 from text:\n\t{InvalidObject1}...")
-      expect(logger).to receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject2 from text:\n\t...{InvalidObject2}")
-      expect(logger).to receive(:warn).ordered.with("In file `(stdin)':3: Cannot resolve link to InvalidObject3 from text:\n\t...{InvalidObject3}...")
-      expect(logger).to receive(:warn).ordered.with("In file `(stdin)':4: Cannot resolve link to InvalidObject4 from text:\n\t{InvalidObject4}")
-      allow(self).to receive(:log).and_return(logger)
+      expect(log).to receive(:warn).ordered.with("In file `(stdin)':1: Cannot resolve link to InvalidObject1 from text:\n\t{InvalidObject1}...")
+      expect(log).to receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject2 from text:\n\t...{InvalidObject2}")
+      expect(log).to receive(:warn).ordered.with("In file `(stdin)':3: Cannot resolve link to InvalidObject3 from text:\n\t...{InvalidObject3}...")
+      expect(log).to receive(:warn).ordered.with("In file `(stdin)':4: Cannot resolve link to InvalidObject4 from text:\n\t{InvalidObject4}")
       allow(self).to receive(:object).and_return(Registry.at('MyObject'))
       resolve_links(object.docstring)
     end
 
     it "warns about missing reference for file template (no object)" do
       @file = CodeObjects::ExtraFileObject.new('myfile.txt', '')
-      logger = double(:log)
-      expect(logger).to receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:\n\t...{InvalidObject Some Title}")
-      allow(self).to receive(:log).and_return(logger)
+      expect(log).to receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:\n\t...{InvalidObject Some Title}")
       allow(self).to receive(:object).and_return(Registry.root)
       resolve_links(<<-eof)
         Hello world

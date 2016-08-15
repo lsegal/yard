@@ -6,6 +6,24 @@ module YARD
   # Handles console logging for info, warnings and errors.
   # Uses the stdlib Logger class in Ruby for all the backend logic.
   class Logger < ::Logger
+    class SuppressMessage < RuntimeError; end
+
+    def self.register_code(code, severity)
+      codes[code] = severity
+    end
+
+    def self.codes
+      @codes ||= {}
+    end
+
+    def self.on_message_callbacks
+      @on_message_callbacks ||= {}
+    end
+
+    def self.on_message(code = nil, &block)
+      (on_message_callbacks[code] ||= []) << block
+    end
+
     # The list of characters displayed beside the progress bar to indicate
     # "movement".
     # @since 0.8.2
@@ -170,12 +188,72 @@ module YARD
       self.level = old_level
     end
 
+    # @private
+    CORE_SEVERITIES = [:debug, :warn, :error, :fatal, :info, :unknown]
+
+    # @private
+    CORE_SEVERITIES_MAP = CORE_SEVERITIES.inject({}) {|h, k| h[k] = true; h }
+
+    def add(code = :warn, opts = {}, _progname = nil)
+      if Fixnum === code # called by base class when actually logging
+        clear_line
+        return super
+      end
+
+      opts = {:message => opts} if String === opts
+      message = block_given? ? yield.strip.squeeze : opts[:message]
+      message ||= ""
+
+      if Hash === code
+        opts = code
+        code = opts[:code]
+      end
+
+      raise ArgumentError, "missing required code" if code.nil?
+
+      if CORE_SEVERITIES_MAP[code]
+        severity = code
+      else
+        severity = self.class.codes[code]
+        if severity.nil?
+          add(DEBUG, "logging warning for unknown code: #{code}")
+          severity = :warn
+        elsif !call_log_callbacks(code, message, severity, opts, [code])
+          return
+        end
+      end
+
+      send(severity, message)
+    end
+
+    [:debug, :warn, :error, :fatal, :info, :unknown].each do |severity|
+      alias_method "#{severity}_without_callback", severity
+      private "#{severity}_without_callback"
+      define_method(severity) do |msg = ""|
+        if call_log_callbacks(severity, msg, severity, {}, [severity, nil])
+          send("#{severity}_without_callback", msg)
+        end
+      end
+    end
+
     private
 
-    # Override this internal Logger method to clear line
-    def add(*args)
-      clear_line
-      super(*args)
+    # @return [Boolean] whether to send the message through to logger
+    def call_log_callbacks(code, message, severity, opts, list)
+      opts = opts.merge(:code => code, :message => message, :severity => severity)
+      should_log = true
+
+      list.uniq.each do |type|
+        self.class.on_message_callbacks.fetch(type, []).each do |cb|
+          begin
+            cb.call(opts)
+          rescue SuppressMessage
+            should_log = false
+          end
+        end
+      end
+
+      should_log
     end
 
     def clear_line

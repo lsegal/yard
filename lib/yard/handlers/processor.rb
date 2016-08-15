@@ -3,6 +3,10 @@ require 'ostruct'
 
 module YARD
   module Handlers
+    Logger.register_code :namespace_missing, :warn
+    Logger.register_code :undocumentable, :warn
+    Logger.register_code :parser_unhandled_exception, :error
+
     # Iterates over all statements in a file and delegates them to the
     # {Handlers::Base} objects that are registered to handle the statement.
     #
@@ -116,15 +120,20 @@ module YARD
               log.debug "#{handler} cancelled from #{caller.last}"
               log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue NamespaceMissingError => missingerr
-              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized.\n" \
-                       "If this class/method is part of your source tree, this will affect your documentation results.\n" \
-                       "You can correct this issue by loading the source file for this object before `#{file}'\n"
+              log.add :namespace_missing,
+                :error => missingerr,
+                :message => "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized.\n" \
+                "If this class/method is part of your source tree, this will affect your documentation results.\n" \
+                "You can correct this issue by loading the source file for this object before `#{file}'\n"
             rescue Parser::UndocumentableError => undocerr
-              log.warn "in #{handler}: Undocumentable #{undocerr.message}\n" \
-                       "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
+              log.add :undocumentable,
+                :error => undocerr,
+                :message => "in #{handler}: Undocumentable #{undocerr.message}\n" \
+                "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
-              log.error "Unhandled exception in #{handler}:\n" \
-                        "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+              log.add :parser_unhandled_exception,
+                "Unhandled exception in #{handler}:\n" \
+                "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
               log.backtrace(e)
             end
           end

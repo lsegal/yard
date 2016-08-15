@@ -2,6 +2,14 @@
 require 'ostruct'
 
 module YARD
+  Logger.register_code :unknown_tag, :warn
+  Logger.register_code :invalid_tag, :warn
+  Logger.register_code :unknown_directive, :warn
+  Logger.register_code :invalid_directive, :warn
+  Logger.register_code :unknown_param_in_tag, :warn
+  Logger.register_code :duplicate_param_in_tag, :warn
+  Logger.register_code :ambiguous_see_tag, :warn
+
   # Parses text and creates a {Docstring} object to represent documentation
   # for a {CodeObjects::Base}. To create a new docstring, you should initialize
   # the parser and call {#parse} followed by {#to_docstring}.
@@ -215,12 +223,14 @@ module YARD
       if library.has_tag?(tag_name)
         @tags += [library.tag_create(tag_name, tag_buf)].flatten
       else
-        log.warn "Unknown tag @#{tag_name}" +
-                 (object ? " in file `#{object.file}` near line #{object.line}" : "")
+        log.add :unknown_tag,
+          "Unknown tag @#{tag_name}" +
+          (object ? " in file `#{object.file}` near line #{object.line}" : "")
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid tag format for @#{tag_name}" +
-               (object ? " in file `#{object.file}` near line #{object.line}" : "")
+      log.add :invalid_tag,
+        "Invalid tag format for @#{tag_name}" +
+        (object ? " in file `#{object.file}` near line #{object.line}" : "")
     end
 
     # Creates a {Tags::RefTag}
@@ -238,13 +248,15 @@ module YARD
           dir
         end
       else
-        log.warn "Unknown directive @!#{tag_name}" +
-                 (object ? " in file `#{object.file}` near line #{object.line}" : "")
+        log.add :unknown_directive,
+          "Unknown directive @!#{tag_name}" +
+          (object ? " in file `#{object.file}` near line #{object.line}" : "")
         nil
       end
     rescue Tags::TagFormatError
-      log.warn "Invalid directive format for @!#{tag_name}" +
-               (object ? " in file `#{object.file}` near line #{object.line}" : "")
+      log.add :invalid_directive,
+        "Invalid directive format for @!#{tag_name}" +
+        (object ? " in file `#{object.file}` near line #{object.line}" : "")
       nil
     end
 
@@ -286,13 +298,15 @@ module YARD
         next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
         if seen_names.include?(tag.name)
-          log.warn "@param tag has duplicate parameter name: " \
-                   "#{tag.name} #{infile_info}"
+          log.add :duplicate_param_in_tag,
+            "@param tag has duplicate parameter name: " \
+            "#{tag.name} #{infile_info}"
         elsif names.include?(tag.name)
           seen_names << tag.name
         else
-          log.warn "@param tag has unknown parameter name: " \
-                   "#{tag.name} #{infile_info}"
+          log.add :unknown_param_in_tag,
+            "@param tag has unknown parameter name: " \
+            "#{tag.name} #{infile_info}"
         end
       end
     end
@@ -337,8 +351,9 @@ module YARD
         next unless "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
         infile_info = "\n    in file `#{parser.object.file}' " \
                       "near line #{parser.object.line}"
-        log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
-                 "(causes rendering issues): #{infile_info}"
+        log.add :ambiguous_see_tag,
+          "@see tag (##{i + 1}) should not be wrapped in {} " \
+          "(causes rendering issues): #{infile_info}"
       end
     end
   end
