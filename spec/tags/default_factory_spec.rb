@@ -159,5 +159,11 @@ describe YARD::Tags::DefaultFactory do
       expect(t.pair.defaults).to eq ["default"]
       expect(t.pair.text).to eq "description"
     end
+
+    it "allows omitting default" do
+      t = parse_options("xyz [Types] key")
+      expect(t.pair).to be_instance_of(Tags::DefaultTag)
+      expect(t.pair.name).to eq "key"
+    end
   end
 end

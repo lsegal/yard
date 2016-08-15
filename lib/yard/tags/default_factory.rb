@@ -78,7 +78,7 @@ module YARD
         close = TYPELIST_CLOSING_CHARS.delete(')')
         name, types, text = *extract_types_and_name_from_text(text, open, close)
         name, text = *extract_name_from_text(text) unless name
-        if text.start_with?('(')
+        if text && text.start_with?('(')
           _, default, text = *extract_types_and_name_from_text(text, '(', ')')
           DefaultTag.new(tag_name, text, types, name, default)
         else
