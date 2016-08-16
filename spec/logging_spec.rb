@@ -78,14 +78,6 @@ describe YARD::Logger do
       log.add :warn
     end
 
-    it 'raises if code is not supplied in code, msg form' do
-      expect { log.add(nil, 'message') }.to raise_error(ArgumentError)
-    end
-
-    it 'raises if code is not supplied in opts form' do
-      expect { log.add({}) }.to raise_error(ArgumentError)
-    end
-
     it 'strips extra space from message in block' do
       log.add :warn do
         <<-eof

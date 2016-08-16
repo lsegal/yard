@@ -216,7 +216,7 @@ module YARD
     # @note All messages returned in block form will have their space prefixes
     #   stripped away. This allows heredoc style <tt><<-eof</tt> formatting of long
     #   lines.
-    # @overload add(code = :warn, message = "")
+    # @overload add(code, message = "")
     #   @param code [Symbol] the custom code or default severity code to log
     #     the message as. If a custom code is used, it must first be registered
     #     with {.register_code}.
@@ -224,7 +224,7 @@ module YARD
     #   @return [void]
     #   @example
     #     log.add :unknown_tag, "unknown tag in #{object}"
-    # @overload add(code = :warn, opts = {}, &block)
+    # @overload add(code, opts = {}, &block)
     #   @param code [Symbol] the custom code or default severity code to log
     #     the message as. If a custom code is used, it must first be registered
     #     with {.register_code}.
@@ -238,23 +238,6 @@ module YARD
     #     log.add :unknown_tag, object: object, file: object.file do
     #       "unknown tag in #{object}"
     #     end
-    # @overload add(opts = {}, &block)
-    #   @param opts [Hash] a custom structure of data to pass to any callbacks
-    #     registered to the logger. Also supports `:message` and `:code` to
-    #     override their respective values.
-    #   @option opts :code [Symbol] (:warn) the custom code or default severity
-    #     code to log the message as. If a custom code is used, it must first be
-    #     registered with {.register_code}.
-    #   @option opts :message [String] the string to log (if no block is passed).
-    #   @yieldreturn [String] if a block is supplied, return the string to log.
-    #   @return [void]
-    #   @example Logging with message in block
-    #     log.add code: :unknown_tag, object: object, file: object.file do
-    #       "unknown tag in #{object}"
-    #     end
-    #   @example Logging with message in hash
-    #     log.add code: :unknown_tag, message: "unknown tag in #{object}",
-    #             object: object, file: object.file
     # @see .register_code
     # @see .on_message
     def add(code, opts = {}, _progname = nil)
@@ -270,15 +253,7 @@ module YARD
         opts = opts.dup
         opts[:message] ||= block_given? ? clean_block_message(yield) : ""
       end
-
-      if Hash === code
-        opts = opts.merge(code)
-        code = opts[:code]
-      else
-        opts[:code] = code
-      end
-
-      raise ArgumentError, "missing required code" if code.nil?
+      opts[:code] = code
 
       if SEVERITIES_MAP[code]
         opts[:severity] = code
