@@ -20,16 +20,48 @@ module YARD
     #   # Allows my plugin to log custom logger warnings
     #   YARD::Logger.register_code :invalid_record_declaration, :warn
     def self.register_code(code, severity)
-      codes[code] = severity
+      registered_codes[code] = severity
     end
 
+    # Register a callback when a logging message is added for a given code (or
+    # {SEVERITIES} level).
+    #
+    # @param code [Symbol, nil] the code to register the callback for. If a
+    #   value from {SEVERITIES} is passed, the hook will be called for all
+    #   messages at that log level, including messages from custom codes. If
+    #   +nil+ (or +code+ is omitted), this hook is called for all messages.
+    # @yieldparam data [Hash<Symbol, Object>] a bag of data passed in from
+    #   {#add}. Also includes +:message+, +:code+, and +:severity+ keys from
+    #   the add call with the string, custom code, and mapped severity respectively.
+    #   Values in this hash can be modified to update the final logged details.
+    # @yieldreturn [void]
+    # @raise [SuppressMessage] raise this exception from the callback if you
+    #   wish to suppress the logging message.
+    # @example Suppressing a message for a custom log code
+    #   YARD::Logger.on_message :unknown_tag do |data|
+    #     raise YARD::Logger::SuppressMessage if data[:tag_name] == "special"
+    #   end
+    # @example Modifying a log message
+    #   YARD::Logger.on_message :parse_error do |data|
+    #     data[:message] = "PARSE ERROR!\n" + data[:error].backtrace.to_s
+    #   end
+    # @example Hooking into all warnings
+    #   YARD::Logger.on_message :warn do |data|
+    #     log.debug "A warning occurred: #{data[:message]}"
+    #   end
+    # @example Hooking into all messages
+    #   YARD::Logger.on_message do |data|
+    #     # cannot use log from here, will be infinite loop!
+    #   end
     def self.on_message(code = nil, &block)
       (on_message_callbacks[code] ||= []) << block
     end
 
-    # @private
-    def self.codes
-      @codes ||= {}
+    # @return [Hash<Symbol, Symbol>] the map of structured codes to their
+    #   respective {SEVERITIES} logging level. Do not modify this property
+    #   directly, use {.register_code} instead.
+    def self.registered_codes
+      @registered_codes ||= {}
     end
 
     # @private
@@ -207,39 +239,40 @@ module YARD
     # @private
     SEVERITIES_MAP = SEVERITIES.inject({}) {|h, k| h[k] = true; h }
 
-    # Adds a message to be logged either using a custom structured code, or a
-    # default logger severities. See {SEVERITIES} for a list of default
-    # severities.
+    # @overload add(code, *args)
+    #   Adds a message to be logged either using a custom structured code, or a
+    #   default logger severities. See {SEVERITIES} for a list of default
+    #   severities.
     #
-    # @note If a custom structured code is used, it must first be registered via
-    #   {.register_code}.
-    # @note All messages returned in block form will have their space prefixes
-    #   stripped away. This allows heredoc style <tt><<-eof</tt> formatting of long
-    #   lines.
-    # @overload add(code, message = "")
-    #   @param code [Symbol] the custom code or default severity code to log
-    #     the message as. If a custom code is used, it must first be registered
-    #     with {.register_code}.
-    #   @param message [String] the string to log.
+    #   @note If a custom structured code is used, it must first be registered via
+    #     {.register_code}.
+    #   @overload add(code, message = "")
+    #     @param code [Symbol] the custom code or default severity code to log
+    #       the message as. If a custom code is used, it must first be registered
+    #       with {.register_code}.
+    #     @param message [String] the string to log.
+    #     @example
+    #       log.add :unknown_tag, "unknown tag in #{object}"
+    #   @overload add(code, opts = {}, &block)
+    #     @note All messages returned in block form will have their space prefixes
+    #       stripped away. This allows heredoc style <tt><<-eof</tt> formatting
+    #       of long lines.
+    #     @param code [Symbol] the custom code or default severity code to log
+    #       the message as. If a custom code is used, it must first be registered
+    #       with {.register_code}.
+    #     @param opts [Hash] a custom structure of data to pass to any callbacks.
+    #       registered to the logger. Also supports `:message` and `:code` to
+    #       override their respective values.
+    #     @option opts :message [String] the string to log (if no block is passed).
+    #     @yield an optional block to provide a multi-line string message.
+    #     @yieldreturn [String] if a block is supplied, return the string to log.
+    #     @example Logging with custom data
+    #       log.add :unknown_tag, object: object, file: object.file do
+    #         "unknown tag in #{object}"
+    #       end
+    #   @see .register_code
+    #   @see .on_message
     #   @return [void]
-    #   @example
-    #     log.add :unknown_tag, "unknown tag in #{object}"
-    # @overload add(code, opts = {}, &block)
-    #   @param code [Symbol] the custom code or default severity code to log
-    #     the message as. If a custom code is used, it must first be registered
-    #     with {.register_code}.
-    #   @param opts [Hash] a custom structure of data to pass to any callbacks.
-    #     registered to the logger. Also supports `:message` and `:code` to
-    #     override their respective values.
-    #   @option opts :message [String] the string to log (if no block is passed).
-    #   @yieldreturn [String] if a block is supplied, return the string to log.
-    #   @return [void]
-    #   @example Logging with custom data
-    #     log.add :unknown_tag, object: object, file: object.file do
-    #       "unknown tag in #{object}"
-    #     end
-    # @see .register_code
-    # @see .on_message
     def add(code, opts = {}, _progname = nil)
       if Fixnum === code # called by base class when actually logging
         clear_line
@@ -258,7 +291,7 @@ module YARD
       if SEVERITIES_MAP[code]
         opts[:severity] = code
       else
-        opts[:severity] = self.class.codes[code]
+        opts[:severity] = self.class.registered_codes[code]
         if opts[:severity].nil?
           add(DEBUG, "logging warning for unknown code: #{code}")
           opts[:severity] = :warn

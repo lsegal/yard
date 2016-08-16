@@ -37,13 +37,13 @@ describe YARD::Logger do
   describe "#add" do
     before do
       @callbacks = YARD::Logger.on_message_callbacks
-      @codes = YARD::Logger.codes
+      @registered_codes = YARD::Logger.registered_codes
       @calls = []
       @expect_calls = []
     end
 
     after do
-      YARD::Logger.codes.clear.replace(@codes)
+      YARD::Logger.registered_codes.clear.replace(@registered_codes)
       YARD::Logger.on_message_callbacks.clear.replace(@callbacks)
       expect(@calls).to eq(@expect_calls) unless @expect_calls.empty?
     end
