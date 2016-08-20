@@ -216,4 +216,8 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
     expect(Registry.at('DirectiveMethods#Bar')).to be nil
     expect(Registry.at('DirectiveMethods').mixins).to include P(:Bar)
   end
+
+  it "allows macros to be attached to instance methods (for mixins)" do
+    expect(Registry.at('InstanceAttachTestClass#bar')).not_to be nil
+  end
 end

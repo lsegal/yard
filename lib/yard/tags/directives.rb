@@ -285,7 +285,7 @@ module YARD
       end
 
       def expand(macro_data)
-        return if attach? && class_method?
+        return if attach?
         return if !anonymous? && new? &&
                   (!handler || handler.statement.source.empty?)
         call_params = []
