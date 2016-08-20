@@ -35,7 +35,7 @@ module YARD
         def template(*path)
           from_template = nil
           from_template = path.shift if path.first.is_a?(Template)
-          path = path.join('/')
+          path = path.join('/').gsub(' ','')
           full_paths = find_template_paths(from_template, path)
 
           path = File.cleanpath(path).gsub('../', '')
