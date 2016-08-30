@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 # Handles a method definition
 class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
+  TYPE_CONVENTIONS = {
+    /\?\z/                                    => 'Boolean',
+    /\A(?:to_s|inspect|marshal_dump|_dump)\z/ => 'String',
+    /\A(?:to_int|to_i|hash)\z/                => 'Integer',
+    /\A(?:to_ary|to_a)\z/                     => 'Array',
+    /\A(?:to_hash|to_h)\z/                    => 'Hash',
+    /\A(?:to_enum|enum_for)\z/                => 'Enumerator',
+    /\Ato_proc\z/                             => 'Proc',
+    /\Ato_io\z/                               => 'IO',
+    /\Ato_sym\z/                              => 'Symbol',
+    /\Ato_f\z/                                => 'Float',
+    /\Ato_r\z/                                => 'Rational'
+  }
+
   handles :def, :defs
 
   process do
@@ -38,13 +52,19 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included
         extended method_added method_removed method_undefined).include?(meth)
       obj.add_tag(YARD::Tags::Tag.new(:private, nil))
-    elsif meth.to_s =~ /\?$/
-      if obj.tag(:return) && (obj.tag(:return).types || []).empty?
-        obj.tag(:return).types = ['Boolean']
-      elsif obj.tag(:return).nil?
-        unless obj.tags(:overload).any? {|overload| overload.tag(:return) }
-          obj.add_tag(YARD::Tags::Tag.new(:return, "", "Boolean"))
+    else
+      TYPE_CONVENTIONS.each_pair do |pattern, type|
+        next unless meth.to_s =~ pattern
+
+        if obj.tag(:return) && (obj.tag(:return).types || []).empty?
+          obj.tag(:return).types = [type]
+        elsif obj.tag(:return).nil?
+          unless obj.tags(:overload).any? {|overload| overload.tag(:return) }
+            obj.add_tag(YARD::Tags::Tag.new(:return, "", type))
+          end
         end
+
+        break
       end
     end
 

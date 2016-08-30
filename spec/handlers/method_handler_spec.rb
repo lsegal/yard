@@ -114,6 +114,33 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     expect(meth).not_to have_tag(:return)
   end
 
+  {
+    :to_s         => String,
+    :inspect      => String,
+    :to_sym       => Symbol,
+    :to_int       => Integer,
+    :to_i         => Integer,
+    :to_f         => Float,
+    :to_r         => Rational,
+    :to_ary       => Array,
+    :to_a         => Array,
+    :to_hash      => Hash,
+    :to_h         => Hash,
+    :to_enum      => Enumerator,
+    :enum_for     => Enumerator,
+    :to_proc      => Proc,
+    :to_io        => IO,
+    :hash         => Integer,
+    :marshal_dump => String,
+    :_dump        => String
+  }.each_pair do |name, klass|
+    it "sets @return tag on ##{name} if no docstring is set" do
+      meth = P("Foo##{name}")
+      expect(meth).to have_tag(:return)
+      expect(meth.tag(:return).types).to eq [klass.to_s]
+    end
+  end
+
   it "adds method writer to existing attribute" do
     expect(Registry.at('Foo#attr_name')).to be_reader
     expect(Registry.at('Foo#attr_name=')).to be_writer

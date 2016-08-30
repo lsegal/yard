@@ -73,6 +73,29 @@ end
   #   @return whether today is the rainy day.
   def rainy?; end
 
+  # @group Some well known methods without @return tag
+
+  def to_s; end
+  def inspect; end
+  def to_sym; end
+  def to_int; end
+  def to_i; end
+  def to_f; end
+  def to_r; end
+  def to_ary; end
+  def to_a; end
+  def to_hash; end
+  def to_h; end
+  def to_enum; end
+  def enum_for; end
+  def to_proc; end
+  def to_io; end
+  def hash; end
+  def marshal_dump; end
+  def _dump; end
+
+  # @endgroup
+
   attr_writer :attr_name
   def attr_name; end
 
