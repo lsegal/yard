@@ -410,7 +410,8 @@ module YARD
         end
 
         def double_splat_param
-          YARD.ruby2? ? self[-2] : nil
+          return nil unless YARD.ruby2?
+          self[-2] if self[-2].is_a?(AstNode) && self[-2].type == :ident
         end
 
         def block_param

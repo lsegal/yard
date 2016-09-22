@@ -51,6 +51,11 @@ describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler"
     expect(P('Foo#blockmeth').parameters).to eq [['x', nil], ['&block', nil]]
   end
 
+  it "handles double splats" do
+    expect(P('Foo#d_splat').parameters).to eq [["reg", nil], ["**opts", nil]]
+    expect(P('Foo#d_unnamed_splat').parameters).to eq []
+  end
+
   it "handles overloads" do
     meth = P('Foo#foo')
 

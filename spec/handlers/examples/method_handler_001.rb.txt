@@ -40,6 +40,8 @@ end
   def /(x = File.new('x', 'w'), y = 2) end
   def |; end; def =~ ()
   def -@; end;
+  def d_splat(reg, **opts); end
+  def d_unnamed_splat(**); end
 end
   def *(o) def +@; end
     def ~@
