@@ -100,4 +100,19 @@ describe YARD::Templates::Engine.template(:default, :method) do
 
     it_should_behave_like "all formats"
   end
+
+  describe "method with keyword arguments spalt" do
+    before do
+      @template = :method006
+      YARD.parse_string <<-'eof'
+        # @param [String] x the x argument
+        # @param [Boolean] y the y argument
+        # @param [kword1] keyword 1
+        # @param [kword2] keyword 2
+        def m(x, y, *args, kword1: 123, kword2:, **) end
+      eof
+    end
+
+    it_should_behave_like "all formats"
+  end
 end
