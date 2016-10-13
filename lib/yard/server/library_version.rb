@@ -190,7 +190,7 @@ module YARD
       # @return [nil] if there is no installed gem for the library
       def gemspec
         ver = version ? "= #{version}" : ">= 0"
-        Gem.source_index.find_name(name, ver).last
+        Gem::Specification.find_all_by_name(name, ver).last
       end
 
       protected

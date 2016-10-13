@@ -60,9 +60,6 @@ Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|
   require file
 end
 
-# Backport RubyGems SourceIndex and other classes
-require File.join(YARD::ROOT, 'yard', 'rubygems', 'backports')
-
 require File.join(YARD::ROOT, 'yard', 'globals')
 
 # Load YARD configuration options (and plugins)

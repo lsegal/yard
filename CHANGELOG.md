@@ -16,6 +16,7 @@
   a pre-determined yardoc file location. Implement this method instead of
   manually setting `library.yardoc_file = ...` in your load method (you can
   still assign the attribute manually).
+- Replaced "backport" of `Gem.source_index` / `Gem::SourceIndex` with `Gem::Specification` because the former doesn't correctly load gems installed via `:path` or `:git` options in a Gemfile, meaning serving documentation for such gems via `yard server -G` throws silent errors (and spins infinitely in the UI). The "backport" was introduced in https://github.com/lsegal/yard/commit/75e5aea51f149694269118ccd3ef6db09e7efc76 because RubyGems 1.8 removed SourceIndex and replaced it with Gem::Specification, but @lsegal didn't want to require YARD users to upgrade to Rubygems > 1.8. That was 5 years ago, and we should be able to move on now.
 
 # 0.9.5 - July 22nd, 2016
 

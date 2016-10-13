@@ -161,7 +161,7 @@ module YARD
       def add_gem_paths
         require 'rubygems'
         gem_paths = []
-        Gem.source_index.find_name('').each do |spec|
+        Gem::Specification.find_all_by_name('').each do |spec|
           yfile = Registry.yardoc_file_for_gem(spec.name)
           next if yfile.nil?
 
