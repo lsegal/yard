@@ -73,7 +73,7 @@ module YARD
             args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
             args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
             meth = $` if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
-            return meth, args
+            [meth, args]
           end
         end
 
