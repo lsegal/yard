@@ -149,7 +149,7 @@ describe YARD::Config do
         expect(v).to receive(:name).at_least(1).times.and_return(k)
       end
 
-      expect(Gem::Specification).to receive(:find_all_by_name).with('').and_return(plugins.values)
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return(plugins.values)
       expect(YARD::Config).to receive(:load_plugin).with('yard_plugin').and_return(false)
       expect(YARD::Config).to receive(:load_plugin).with('yard-plugin').and_return(true)
       expect(YARD::Config.load_plugins).to be true
@@ -164,7 +164,7 @@ describe YARD::Config do
         expect(v).to receive(:name).at_least(1).times.and_return(k)
       end
 
-      expect(Gem::Specification).to receive(:find_all_by_name).with('').and_return(plugins.values)
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return(plugins.values)
       expect(YARD::Config).to receive(:load_plugin).with('yard-plugin').and_raise(Gem::LoadError)
       expect(log).to receive(:error).with(/Error loading plugin 'yard-plugin'/)
       expect(YARD::Config.load_plugins).to be false

@@ -48,7 +48,7 @@ module YARD
         0.step(gems.size - 1, 2) do |index|
           gem = gems[index]
           ver_require = gems[index + 1] || ">= 0"
-          specs = Gem::Specification.find_all_by_name(gem, ver_require)
+          specs = YARD::GemIndex.find_all_by_name(gem, ver_require)
           if specs.empty?
             log.warn "#{gem} #{ver_require} could not be found in RubyGems index"
           else
@@ -76,7 +76,7 @@ module YARD
         if !args.empty? && @gems.empty?
           log.error "No specified gems could be found for command"
         elsif @gems.empty?
-          @gems += Gem::Specification.find_all_by_name('') if @gems.empty?
+          @gems += YARD::GemIndex.find_all_by_name('') if @gems.empty?
         end
       end
     end
