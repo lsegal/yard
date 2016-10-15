@@ -251,11 +251,9 @@ describe YARD::CLI::Server do
       gem1 = double(:gem1, :name => 'gem1', :version => '1.0.0', :full_gem_path => '/path/to/foo')
       gem2 = double(:gem2, :name => 'gem2', :version => '1.0.0', :full_gem_path => '/path/to/bar')
       specs = {'gem1' => gem1, 'gem2' => gem2}
-      source = double(:source_index)
-      allow(source).to receive(:find_name) do |k, _ver|
+      allow(YARD::GemIndex).to receive(:find_all_by_name) do |k, _ver|
         k == '' ? specs.values : specs.grep(k).map {|name| specs[name] }
       end
-      allow(Gem).to receive(:source_index).and_return(source)
       run '-g'
       run '--gems'
     end

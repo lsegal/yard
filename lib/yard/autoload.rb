@@ -290,6 +290,7 @@ module YARD
   autoload :Config,           __p('config')
   autoload :Docstring,        __p('docstring')
   autoload :DocstringParser,  __p('docstring_parser')
+  autoload :GemIndex,         __p('gem_index')
   autoload :Logger,           __p('logging')
   autoload :Options,          __p('options')
   autoload :Registry,         __p('registry')

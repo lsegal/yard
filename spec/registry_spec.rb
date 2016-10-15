@@ -18,39 +18,39 @@ describe YARD::Registry do
     end
 
     it "returns nil if gem isn't found" do
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([])
       expect(Registry.yardoc_file_for_gem('foo')).to eq nil
     end
 
     it "allows version to be specified" do
-      allow(Gem.source_index).to receive(:find_name).with('foo', '= 2').and_return([])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '= 2').and_return([])
       expect(Registry.yardoc_file_for_gem('foo', '= 2')).to eq nil
     end
 
     it "returns existing .yardoc path for gem when for_writing=false" do
       allow(File).to receive(:exist?).twice.and_return(false)
       allow(File).to receive(:exist?).with('/path/to/foo/.yardoc').and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq '/path/to/foo/.yardoc'
     end
 
     it "returns new existing .yardoc path for gem when for_writing=false" do
       allow(File).to receive(:exist?).and_return(false)
       allow(File).to receive(:exist?).with('/path/to/foo/doc/.yardoc').and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq '/path/to/foo/doc/.yardoc'
     end
 
     it "returns nil if no .yardoc path exists in gem when for_writing=false" do
       allow(File).to receive(:exist?).twice.and_return(false)
       allow(File).to receive(:exist?).with('/path/to/foo/.yardoc').and_return(false)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to eq nil
     end
 
     it "searches local gem path first if for_writing=false" do
       allow(File).to receive(:exist?).and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo')).to match %r{/.yard/gem_index/foo-1.0.yardoc$}
     end
 
@@ -59,13 +59,13 @@ describe YARD::Registry do
       allow(File).to receive(:directory?).with(@gem.doc_dir).and_return(true)
       allow(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       allow(File).to receive(:writable?).with(@gem.full_gem_path).and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/.yardoc'
     end
 
     it "returns new global .yardoc path for gem if for_writing=true and dir is writable" do
       allow(File).to receive(:writable?).with(@gem.doc_dir).and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/doc/.yardoc'
     end
 
@@ -73,14 +73,14 @@ describe YARD::Registry do
       allow(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       allow(File).to receive(:directory?).with(@gem.doc_dir).and_return(false)
       allow(File).to receive(:writable?).with(File.dirname(@gem.doc_dir)).and_return(true)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to eq '/path/to/foo/doc/.yardoc'
     end
 
     it "returns local .yardoc path for gem if for_writing=true and dir is not writable" do
       allow(File).to receive(:writable?).with(@gem.doc_dir).and_return(false)
       allow(File).to receive(:writable?).with(@gem.full_gem_path).and_return(false)
-      allow(Gem.source_index).to receive(:find_name).with('foo', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('foo', '>= 0').and_return([@gem])
       expect(Registry.yardoc_file_for_gem('foo', '>= 0', true)).to match %r{/.yard/gem_index/foo-1.0.yardoc$}
     end
 
@@ -88,7 +88,7 @@ describe YARD::Registry do
       allow(@gem).to receive(:name).and_return('yard-doc-core')
       allow(@gem).to receive(:full_name).and_return('yard-doc-core-1.0')
       allow(@gem).to receive(:full_gem_path).and_return('/path/to/yard-doc-core')
-      allow(Gem.source_index).to receive(:find_name).with('yard-doc-core', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('yard-doc-core', '>= 0').and_return([@gem])
       allow(File).to receive(:exist?).with('/path/to/yard-doc-core/.yardoc').and_return(true)
       expect(Registry.yardoc_file_for_gem('yard-doc-core')).to eq '/path/to/yard-doc-core/.yardoc'
     end
@@ -97,7 +97,7 @@ describe YARD::Registry do
       allow(@gem).to receive(:name).and_return('yard-doc-core')
       allow(@gem).to receive(:full_name).and_return('yard-doc-core-1.0')
       allow(@gem).to receive(:full_gem_path).and_return('/path/to/yard-doc-core')
-      allow(Gem.source_index).to receive(:find_name).with('yard-doc-core', '>= 0').and_return([@gem])
+      allow(YARD::GemIndex).to receive(:find_all_by_name).with('yard-doc-core', '>= 0').and_return([@gem])
       allow(File).to receive(:exist?).with('/path/to/yard-doc-core/.yardoc').and_return(true)
       expect(Registry.yardoc_file_for_gem('yard-doc-core', '>= 0', true)).to eq nil
     end

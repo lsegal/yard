@@ -33,40 +33,40 @@ describe YARD::CLI::Gems do
   describe "#run" do
     it "builds all gem indexes if no gem is specified" do
       build_specs(@gem1, @gem2)
-      expect(Gem.source_index).to receive(:find_name).with('').and_return([@gem1, @gem2])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return([@gem1, @gem2])
       CLI::Gems.run
     end
 
     it "allows gem to be specified" do
       build_specs(@gem1)
-      expect(Gem.source_index).to receive(:find_name).with(@gem1.name, '>= 0').and_return([@gem1])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem1.name, '>= 0').and_return([@gem1])
       CLI::Gems.run(@gem1.name)
     end
 
     it "allows multiple gems to be specified for building" do
       build_specs(@gem1, @gem2)
-      expect(Gem.source_index).to receive(:find_name).with(@gem1.name, @gem1.version).and_return([@gem1])
-      expect(Gem.source_index).to receive(:find_name).with(@gem2.name, '>= 0').and_return([@gem2])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem1.name, @gem1.version).and_return([@gem1])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem2.name, '>= 0').and_return([@gem2])
       CLI::Gems.run(@gem1.name, @gem1.version, @gem2.name)
     end
 
     it "allows version to be specified with gem" do
       build_specs(@gem1)
-      expect(Gem.source_index).to receive(:find_name).with(@gem1.name, '>= 1.0').and_return([@gem1])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem1.name, '>= 1.0').and_return([@gem1])
       CLI::Gems.run(@gem1.name, '>= 1.0')
     end
 
     it "warns if one of the gems is not found, but it should process others" do
       build_specs(@gem2)
-      expect(Gem.source_index).to receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
-      expect(Gem.source_index).to receive(:find_name).with(@gem2.name, '>= 0').and_return([@gem2])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem1.name, '>= 2.0').and_return([])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem2.name, '>= 0').and_return([@gem2])
       expect(log).to receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
       CLI::Gems.run(@gem1.name, '>= 2.0', @gem2.name)
     end
 
     it "fails if specified gem(s) is/are not found" do
       expect(CLI::Yardoc).not_to receive(:run)
-      expect(Gem.source_index).to receive(:find_name).with(@gem1.name, '>= 2.0').and_return([])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with(@gem1.name, '>= 2.0').and_return([])
       expect(log).to receive(:warn).with(/#{@gem1.name} >= 2.0 could not be found/)
       expect(log).to receive(:error).with(/No specified gems could be found/)
       CLI::Gems.run(@gem1.name, '>= 2.0')
@@ -75,7 +75,7 @@ describe YARD::CLI::Gems do
     it "accepts --rebuild" do
       @rebuild = true
       build_specs(@gem1)
-      expect(Gem.source_index).to receive(:find_name).with('').and_return([@gem1])
+      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return([@gem1])
       CLI::Gems.run('--rebuild')
     end
   end
