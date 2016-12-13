@@ -36,9 +36,8 @@ rescue LoadError
   nil # noop
 end
 
-task :rubocop do
-  sh "rubocop"
-end
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
 
 task :default => [:rubocop, :spec]
 
