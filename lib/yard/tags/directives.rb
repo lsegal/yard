@@ -429,7 +429,7 @@ module YARD
     # containing this directive does not need to be attached to any source, but
     # if it is, that source code will be used as the method's source.
     #
-    # To define an regular method, see {tag:!method}
+    # To define a regular method, see {tag:!method}
     #
     # @note For backwards compatibility support, you do not need to indent
     #   the attribute's docstring text. If an +@!attribute+ directive is seen with
