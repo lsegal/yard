@@ -3,6 +3,8 @@
 include YARD::Templates
 
 def only_copy?(result, example, type)
+  return false unless defined?($COPY)
+
   if $COPY == :all || $COPY == example
     puts(result) unless $COPYT && $COPYT != type
   end
