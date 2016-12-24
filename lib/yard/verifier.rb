@@ -131,6 +131,7 @@ module YARD
       expr = expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
 
       instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+        begin; undef __execute; rescue NameError; end
         def __execute; #{expr}; end
       eof
     end
