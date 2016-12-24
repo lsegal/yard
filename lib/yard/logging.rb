@@ -48,6 +48,7 @@ module YARD
       self.formatter = method(:format_log)
       @progress_indicator = 0
       @mutex = Mutex.new
+      @progress_msg = nil
     end
 
     # Changes the debug level to DEBUG if $DEBUG is set
