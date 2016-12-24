@@ -26,7 +26,11 @@ module YARD
         end
 
         def self.statement_class(type = nil)
-          type ? @statement_class = type : (@statement_class || Statement)
+          if type
+            @statement_class = type
+          else
+            (defined?(@statement_class) && @statement_class) || Statement
+          end
         end
 
         # @group Registering objects
