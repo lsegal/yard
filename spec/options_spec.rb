@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Options do
+RSpec.describe YARD::Options do
   class FooOptions < YARD::Options
     attr_accessor :foo
     def initialize; self.foo = "abc" end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Templates::Helpers::BaseHelper do
+RSpec.describe YARD::Templates::Helpers::BaseHelper do
   include YARD::Templates::Helpers::BaseHelper
 
   describe "#run_verifier" do

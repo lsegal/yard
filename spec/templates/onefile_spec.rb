@@ -14,7 +14,7 @@ class StringSerializer < YARD::Serializers::Base
   end
 end
 
-describe YARD::Templates::Engine.template(:default, :onefile) do
+RSpec.describe YARD::Templates::Engine.template(:default, :onefile) do
   before do
     Registry.clear
     if defined?(::Encoding)

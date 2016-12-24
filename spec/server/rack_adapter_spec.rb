@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe "YARD::Server::RackMiddleware" do
+RSpec.describe "YARD::Server::RackMiddleware" do
   before do
     begin; require 'rack'; rescue LoadError; pending "rack required for these tests" end
     @superapp = double(:superapp)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Insertion do
+RSpec.describe Insertion do
   describe "#before" do
     it "places an object before another" do
       expect([1, 2].place(3).before(2)).to eq [1, 3, 2]

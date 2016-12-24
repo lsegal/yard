@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-shared_examples_for "signature" do
+RSpec.shared_examples_for "signature" do
   before do
     YARD::Registry.clear
     @options = Templates::TemplateOptions.new

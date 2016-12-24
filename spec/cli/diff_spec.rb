@@ -2,7 +2,7 @@
 require 'stringio'
 require 'open-uri'
 
-describe YARD::CLI::Diff do
+RSpec.describe YARD::CLI::Diff do
   before do
     allow(CLI::Yardoc).to receive(:run)
     allow(CLI::Gems).to receive(:run)

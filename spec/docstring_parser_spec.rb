@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::DocstringParser do
+RSpec.describe YARD::DocstringParser do
   after(:all) do
     YARD::Registry.clear
   end

@@ -175,7 +175,7 @@ RSpec.configure do |config|
   #   - http://rspec.info/blog/2012/06/rspecs-new-expectation-syntax/
   #   - http://www.teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
   #   - http://rspec.info/blog/2014/05/notable-changes-in-rspec-3/#zero-monkey-patching-mode
-  #config.disable_monkey_patching! # FIXME: Not yet working
+  config.disable_monkey_patching!
 
   # This setting enables warnings. It's recommended, but in some cases may
   # be too noisy due to issues in dependencies.

@@ -3,7 +3,7 @@
 include YARD::Parser::Ruby::Legacy
 include YARD::Parser::Ruby::Legacy::RubyToken
 
-describe YARD::Parser::Ruby::Legacy::TokenList do
+RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
   describe "#initialize / #push" do
     it "accepts a tokenlist (via constructor or push)" do
       expect { TokenList.new(TokenList.new) }.not_to raise_error

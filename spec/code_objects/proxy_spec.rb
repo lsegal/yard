@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::Proxy do
+RSpec.describe YARD::CodeObjects::Proxy do
   before { Registry.clear }
 
   it "returns the object if it's in the Registry" do

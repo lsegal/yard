@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::I18n do
+RSpec.describe YARD::CLI::I18n do
   before do
     @i18n = YARD::CLI::I18n.new
     @i18n.use_document_file = false

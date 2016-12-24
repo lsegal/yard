@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::ExtraFileObject do
+RSpec.describe YARD::CodeObjects::ExtraFileObject do
   describe "#initialize" do
     it "attempts to read contents from filesystem if contents=nil" do
       expect(File).to receive(:read).with('file.txt').and_return('')

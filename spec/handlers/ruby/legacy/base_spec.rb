@@ -2,7 +2,7 @@
 
 include Parser::Ruby::Legacy
 
-describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
+RSpec.describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
   before do
     allow(Handlers::Ruby::Legacy::Base).to receive(:inherited)
     if RUBY_VERSION > '1.8.7'

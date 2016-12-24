@@ -12,7 +12,7 @@ class GeneratorMock
   end
 end
 
-describe YARD::Templates::Helpers::MarkupHelper do
+RSpec.describe YARD::Templates::Helpers::MarkupHelper do
   before do
     YARD::Templates::Helpers::MarkupHelper.clear_markup_cache
   end

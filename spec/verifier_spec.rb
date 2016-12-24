@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Verifier do
+RSpec.describe YARD::Verifier do
   describe "#parse_expressions" do
     it "creates #__execute method" do
       v = Verifier.new("expr1")

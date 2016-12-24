@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Docstring do
+RSpec.describe YARD::Docstring do
   before { YARD::Registry.clear }
 
   describe "#initialize" do

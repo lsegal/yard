@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + "/shared_signature_examples"
 require 'ostruct'
 
-describe YARD::Templates::Helpers::HtmlHelper do
+RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper

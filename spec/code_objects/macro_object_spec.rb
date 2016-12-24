@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::MacroObject do
+RSpec.describe YARD::CodeObjects::MacroObject do
   before do
     Registry.clear
   end

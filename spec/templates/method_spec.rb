@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 # $COPY = :method001
 # $COPYT = :html
 
-describe YARD::Templates::Engine.template(:default, :method) do
+RSpec.describe YARD::Templates::Engine.template(:default, :method) do
   before { Registry.clear }
 
   shared_examples_for "all formats" do

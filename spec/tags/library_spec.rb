@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Tags::Library do
+RSpec.describe YARD::Tags::Library do
   def tag(docstring)
     Docstring.new(docstring).tags.first
   end

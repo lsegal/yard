@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Tags::TypesExplainer do
+RSpec.describe YARD::Tags::TypesExplainer do
   Type = YARD::Tags::TypesExplainer::Type
   CollectionType = YARD::Tags::TypesExplainer::CollectionType
   FixedCollectionType = YARD::Tags::TypesExplainer::FixedCollectionType

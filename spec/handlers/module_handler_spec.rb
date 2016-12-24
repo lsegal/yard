@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler" do
+RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ModuleHandler" do
   before(:all) { parse_file :module_handler_001, __FILE__ }
 
   it "parses a module block" do

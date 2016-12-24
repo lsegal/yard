@@ -3,7 +3,7 @@
 # described_in_docs String, '#camelcase'
 # described_in_docs String, '#underscore'
 
-describe String do
+RSpec.describe String do
   describe "#shell_split" do
     it "splits simple non-quoted text" do
       expect("a b c".shell_split).to eq %w(a b c)

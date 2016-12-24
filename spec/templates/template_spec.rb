@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Template do
+RSpec.describe YARD::Templates::Template do
   def template(path)
     YARD::Templates::Engine.template!(path, '/full/path/' + path.to_s)
   end

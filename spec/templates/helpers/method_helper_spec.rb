@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Templates::Helpers::MethodHelper do
+RSpec.describe YARD::Templates::Helpers::MethodHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::MethodHelper
 

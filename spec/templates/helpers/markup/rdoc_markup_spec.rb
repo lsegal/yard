@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Templates::Helpers::Markup::RDocMarkup do
+RSpec.describe YARD::Templates::Helpers::Markup::RDocMarkup do
   describe "loading mechanism" do
     before { @good_libs = [] }
 

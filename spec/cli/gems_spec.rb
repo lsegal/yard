@@ -2,7 +2,7 @@
 require 'ostruct'
 require 'rubygems'
 
-describe YARD::CLI::Gems do
+RSpec.describe YARD::CLI::Gems do
   before do
     @rebuild = false
     @gem1 = build_mock('gem1')

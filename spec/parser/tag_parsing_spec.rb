@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Parser, "tag handling" do
+RSpec.describe YARD::Parser, "tag handling" do
   before { parse_file :tag_handler_001, __FILE__ }
 
   it "knows the list of all available tags" do

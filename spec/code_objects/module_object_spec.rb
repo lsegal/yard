@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::ModuleObject do
+RSpec.describe YARD::CodeObjects::ModuleObject do
   describe "#meths" do
     before do
       Registry.clear

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
+RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::HtmlSyntaxHighlightHelper
 

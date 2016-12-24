@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::Help do
+RSpec.describe YARD::CLI::Help do
   describe "#run" do
     it "accepts help command" do
       expect(CLI::Yardoc).to receive(:run).with('--help')

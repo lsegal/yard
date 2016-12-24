@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects do
+RSpec.describe YARD::CodeObjects do
   describe :CONSTANTMATCH do
     it "matches a constant" do
       expect("Constant"[CodeObjects::CONSTANTMATCH]).to eq "Constant"

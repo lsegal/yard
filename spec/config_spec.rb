@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'yaml'
 
-describe YARD::Config do
+RSpec.describe YARD::Config do
   describe ".load" do
     before do
       expect(File).to receive(:file?).twice.with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)

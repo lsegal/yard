@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::RegistryStore do
+RSpec.describe YARD::RegistryStore do
   before do
     FileUtils.rm_rf("foo")
     @store = RegistryStore.new

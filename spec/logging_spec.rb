@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Logger do
+RSpec.describe YARD::Logger do
   describe "#show_backtraces" do
     it "is true if debug level is on" do
       log.show_backtraces = true

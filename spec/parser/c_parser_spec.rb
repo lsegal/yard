@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Parser::C::CParser do
+RSpec.describe YARD::Parser::C::CParser do
   describe "#parse" do
     def parse(contents)
       Registry.clear

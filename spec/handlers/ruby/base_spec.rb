@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
+RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
   include YARD::Parser::Ruby
   YARD::Parser::Ruby::AstNode # rubocop:disable Lint/Void
 

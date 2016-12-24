@@ -2,14 +2,14 @@
 
 class MyParser < Parser::Base; end
 
-shared_examples_for "parser type registration" do
+RSpec.shared_examples_for "parser type registration" do
   after do
     Parser::SourceParser.parser_types.delete(:my_parser)
     Parser::SourceParser.parser_type_extensions.delete(:my_parser)
   end
 end
 
-describe YARD::Parser::SourceParser do
+RSpec.describe YARD::Parser::SourceParser do
   before do
     Registry.clear
   end

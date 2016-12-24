@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::Yardoc do
+RSpec.describe YARD::CLI::Yardoc do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.statistics = false

@@ -6,7 +6,7 @@ class TestYRI < YARD::CLI::YRI
   def print_object(*args) test_stub; super end
 end
 
-describe YARD::CLI::YRI do
+RSpec.describe YARD::CLI::YRI do
   before do
     @yri = TestYRI.new
     allow(Registry).to receive(:load)

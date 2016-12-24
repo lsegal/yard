@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe SymbolHash do
+RSpec.describe SymbolHash do
   it "allows access to keys as String or Symbol" do
     h = SymbolHash.new(false)
     h['test'] = true

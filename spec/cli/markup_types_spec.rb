@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::MarkupTypes do
+RSpec.describe YARD::CLI::MarkupTypes do
   it "lists all available markup types" do
     YARD::CLI::MarkupTypes.run
     data = log.io.string

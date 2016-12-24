@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::CommandParser do
+RSpec.describe YARD::CLI::CommandParser do
   describe "#run" do
     before do
       @cmd = CLI::CommandParser.new

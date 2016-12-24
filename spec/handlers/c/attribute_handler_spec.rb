@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::AttributeHandler do
+RSpec.describe YARD::Handlers::C::AttributeHandler do
   def run(read, write, commented = nil)
     parse <<-eof
       /* FOO */

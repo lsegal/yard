@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::I18n::Message do
+RSpec.describe YARD::I18n::Message do
   def message(id)
     YARD::I18n::Message.new(id)
   end

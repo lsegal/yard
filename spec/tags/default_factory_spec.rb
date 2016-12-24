@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Tags::DefaultFactory do
+RSpec.describe YARD::Tags::DefaultFactory do
   before { @f = YARD::Tags::DefaultFactory.new }
 
   describe "#parse_tag" do

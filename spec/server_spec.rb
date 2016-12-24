@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Server do
+RSpec.describe YARD::Server do
   describe ".register_static_path" do
     it "registers a static path" do
       YARD::Server.register_static_path 'foo'

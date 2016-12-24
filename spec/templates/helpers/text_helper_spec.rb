@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/shared_signature_examples"
 
-describe YARD::Templates::Helpers::TextHelper do
+RSpec.describe YARD::Templates::Helpers::TextHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::TextHelper
   include YARD::Templates::Helpers::MethodHelper

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::CLI::Graph do
+RSpec.describe YARD::CLI::Graph do
   it "serializes output" do
     allow(Registry).to receive(:load).at_least(1).times
     allow(subject).to receive(:yardopts) { [] }

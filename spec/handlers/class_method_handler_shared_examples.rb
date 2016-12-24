@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-shared_examples "class method visibility decorator" do
+RSpec.shared_examples "class method visibility decorator" do
   # Use let(:visibility) to specify the name of the x_class_method
   # visibility decorator to test.
 

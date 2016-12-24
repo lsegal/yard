@@ -8,7 +8,7 @@ class MyCacheCommand < Base
   def run; cache 'foo' end
 end
 
-describe YARD::Server::Commands::Base do
+RSpec.describe YARD::Server::Commands::Base do
   describe "#cache" do
     before do
       @command = MyCacheCommand.new(:adapter => mock_adapter, :caching => true)

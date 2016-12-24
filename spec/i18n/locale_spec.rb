@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::I18n::Locale do
+RSpec.describe YARD::I18n::Locale do
   def locale(name)
     YARD::I18n::Locale.new(name)
   end

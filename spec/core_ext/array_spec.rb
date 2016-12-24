@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Array do
+RSpec.describe Array do
   describe "#place" do
     it "creates an Insertion object" do
       expect([].place('x')).to be_kind_of(Insertion)

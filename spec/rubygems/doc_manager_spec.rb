@@ -2,7 +2,7 @@
 require File.join(YARD::ROOT, 'rubygems_plugin')
 require 'fileutils'
 
-describe Gem::DocManager do
+RSpec.describe Gem::DocManager do
   before do
     # Ensure filesystem integrity
     allow(FileUtils).to receive(:mkdir_p)

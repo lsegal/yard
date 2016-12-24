@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 
 require 'stringio'
 
-describe YARD::Serializers::FileSystemSerializer do
+RSpec.describe YARD::Serializers::FileSystemSerializer do
   before do
     allow(FileUtils).to receive(:mkdir_p)
     allow(File).to receive(:open)

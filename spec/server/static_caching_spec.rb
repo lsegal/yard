@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Server::StaticCaching do
+RSpec.describe YARD::Server::StaticCaching do
   include StaticCaching
 
   describe "#check_static_cache" do

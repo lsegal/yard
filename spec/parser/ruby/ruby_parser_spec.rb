@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Parser::Ruby::RubyParser do
+RSpec.describe YARD::Parser::Ruby::RubyParser do
   def stmt(stmt)
     YARD::Parser::Ruby::RubyParser.new(stmt, nil).parse.root.first
   end

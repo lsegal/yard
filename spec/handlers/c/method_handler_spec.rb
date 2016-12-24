@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::MethodHandler do
+RSpec.describe YARD::Handlers::C::MethodHandler do
   it "registers methods" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");

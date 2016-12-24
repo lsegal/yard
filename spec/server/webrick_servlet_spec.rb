@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Server::WebrickServlet do
+RSpec.describe YARD::Server::WebrickServlet do
   describe "#do_GET" do
     it "performs a GET" do
       resp = OpenStruct.new

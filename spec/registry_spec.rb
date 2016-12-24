@@ -3,7 +3,7 @@ include CodeObjects
 
 require "thread"
 
-describe YARD::Registry do
+RSpec.describe YARD::Registry do
   before { Registry.clear }
 
   describe ".yardoc_file_for_gem" do

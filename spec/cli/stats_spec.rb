@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'stringio'
 
-describe YARD::CLI::Stats do
+RSpec.describe YARD::CLI::Stats do
   before do
     Registry.clear
     YARD.parse_string <<-eof

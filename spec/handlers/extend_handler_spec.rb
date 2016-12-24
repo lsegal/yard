@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ExtendHandler" do
+RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ExtendHandler" do
   before(:all) { parse_file :extend_handler_001, __FILE__ }
 
   it "includes modules at class scope" do

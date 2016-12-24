@@ -4,7 +4,7 @@ require 'stringio'
 
 include YARD::Parser::Ruby
 
-describe YARD::Parser::Ruby::AstNode do
+RSpec.describe YARD::Parser::Ruby::AstNode do
   describe "#jump" do
     it "jumps to the first specific inner node if found" do
       ast = s(:paren, s(:paren, s(:params, s(s(:ident, "hi"), s(:ident, "bye")))))

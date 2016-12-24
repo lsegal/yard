@@ -4,7 +4,7 @@ require 'ostruct'
 
 include Parser
 
-describe YARD::Handlers::Base do
+RSpec.describe YARD::Handlers::Base do
   describe "#handles and inheritance" do
     before do
       allow(Handlers::Base).to receive(:inherited)

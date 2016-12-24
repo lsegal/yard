@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::I18n::PotGenerator do
+RSpec.describe YARD::I18n::PotGenerator do
   def create_messages(messages)
     yard_messages = YARD::I18n::Messages.new
     add_messages(yard_messages, messages)

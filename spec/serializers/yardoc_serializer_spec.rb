@@ -8,7 +8,7 @@ instance_eval do
   end
 end
 
-describe YARD::Serializers::YardocSerializer do
+RSpec.describe YARD::Serializers::YardocSerializer do
   before do
     @serializer = YARD::Serializers::YardocSerializer.new('.yardoc')
 

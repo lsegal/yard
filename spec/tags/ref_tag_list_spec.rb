@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe YARD::Tags::RefTagList do
+RSpec.describe YARD::Tags::RefTagList do
   before { YARD::Registry.clear }
 
   it "accepts symbol or string as owner's path and convert it into a proxy" do
