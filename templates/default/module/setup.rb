@@ -35,7 +35,7 @@ end
 
 def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
-  return @meths if @meths
+  return @meths if defined?(@meths) && @meths
   @meths = object.meths(:inherited => false, :included => !options.embed_mixins.empty?)
   unless options.embed_mixins.empty?
     @meths = @meths.reject {|m| options.embed_mixins_match?(m.namespace) == false }
