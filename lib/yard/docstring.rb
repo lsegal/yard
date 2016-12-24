@@ -154,7 +154,7 @@ module YARD
       resolve_reference
       obj = super
       %w(all summary tags ref_tags).each do |name|
-        val = instance_variable_get("@#{name}")
+        val = instance_variable_defined?("@#{name}") && instance_variable_get("@#{name}")
         obj.instance_variable_set("@#{name}", val ? val.dup : nil)
       end
       obj
