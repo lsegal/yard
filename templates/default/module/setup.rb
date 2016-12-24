@@ -51,7 +51,7 @@ def special_method?(meth)
 end
 
 def attr_listing
-  return @attrs if @attrs
+  return @attrs if defined?(@attrs) && @attrs
   @attrs = []
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
