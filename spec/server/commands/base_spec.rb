@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 class MyProcCommand < Base
   def initialize(&block) self.class.send(:define_method, :run, &block) end

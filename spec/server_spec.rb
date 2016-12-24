@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
 
 describe YARD::Server do
   describe ".register_static_path" do

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Module do
   describe "#class_name" do

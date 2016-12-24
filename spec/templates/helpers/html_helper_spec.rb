@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
 require 'ostruct'
 

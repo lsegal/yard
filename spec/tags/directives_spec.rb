@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/../spec_helper"
 
 def tag_parse(content, object = nil, handler = nil)
   @parser = DocstringParser.new

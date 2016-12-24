@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper')
 
 describe YARD::Parser::Ruby::TokenResolver do
   before(:all) do

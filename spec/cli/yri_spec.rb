@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 class TestYRI < YARD::CLI::YRI
   public :optparse, :find_object, :cache_object
