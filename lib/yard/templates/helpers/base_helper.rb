@@ -8,7 +8,7 @@ module YARD::Templates::Helpers
     #   page. Might not be the current {#object} when inside sub-templates.
     attr_reader :owner
     undef owner
-    def owner; @owner || object.namespace end
+    def owner; (defined?(@owner) && @owner) || object.namespace end
 
     # @group Managing Global Template State
 
