@@ -327,7 +327,7 @@ module YARD
     # @return [void]
     def resolve_reference
       loop do
-        return if @unresolved_reference.nil?
+        return if defined?(@unresolved_reference).nil? || @unresolved_reference.nil?
         return if CodeObjects::Proxy === @unresolved_reference
 
         reference = @unresolved_reference
