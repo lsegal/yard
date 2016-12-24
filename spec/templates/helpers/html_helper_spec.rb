@@ -120,7 +120,9 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       allow(self).to receive(:object).and_return(Registry.root)
       text = String.new("\xB0\xB1")
       if defined?(Encoding)
-        Encoding.default_internal = 'utf-8'
+        utf8 = Encoding.find('utf-8')
+
+        Encoding.default_internal = utf8 unless Encoding.default_internal == utf8
         text = text.force_encoding('binary')
       end
       htmlify(text, :text)
