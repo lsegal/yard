@@ -3,7 +3,7 @@ def init
   @breadcrumb = []
   if @onefile
     sections :layout
-  elsif @file
+  elsif defined?(@file) && @file
     if @file.attributes[:namespace]
       @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root
     end
@@ -44,12 +44,12 @@ def index
 end
 
 def layout
-  @nav_url = url_for_list(!@file || options.index ? 'class' : 'file')
+  @nav_url = url_for_list(!(defined?(@file) && @file) || options.index ? 'class' : 'file')
 
   @path =
     if !object || object.is_a?(String)
       nil
-    elsif @file
+    elsif defined?(@file) && @file
       @file.path
     elsif !object.is_a?(YARD::CodeObjects::NamespaceObject)
       object.parent.path
