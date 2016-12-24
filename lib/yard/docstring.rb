@@ -172,7 +172,7 @@ module YARD
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
       resolve_reference
-      return @summary if @summary
+      return @summary if defined?(@summary) && @summary
       stripped = gsub(/[\r\n](?![\r\n])/, ' ').strip
       num_parens = 0
       idx = length.times do |index|
