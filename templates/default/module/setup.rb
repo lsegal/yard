@@ -69,7 +69,7 @@ def attr_listing
 end
 
 def constant_listing
-  return @constants if @constants
+  return @constants if defined?(@constants) && @constants
   @constants = object.constants(:included => false, :inherited => false)
   @constants += object.cvars
   @constants = run_verifier(@constants)
