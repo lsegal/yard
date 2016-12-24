@@ -89,8 +89,8 @@ RSpec.describe YARD::CLI::Yardoc do
       @counter ||= 0
       @counter += 1
       counter = @counter
+      define_method("test_options_#{@counter}", &block)
       args.each do |arg|
-        define_method("test_options_#{@counter}", &block)
         it("accepts #{arg}") { send("test_options_#{counter}", arg) }
       end
     end
