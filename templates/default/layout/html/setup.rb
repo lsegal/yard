@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 def init
   @breadcrumb = []
+  @page_title = ''
   if @onefile
     sections :layout
   elsif defined?(@file) && @file
