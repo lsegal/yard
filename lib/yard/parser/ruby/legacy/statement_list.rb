@@ -17,6 +17,7 @@ module YARD
       def initialize(content)
         @shebang_line = nil
         @encoding_line = nil
+        @comments_last_line = nil
         if content.is_a? TokenList
           @tokens = content.dup
         elsif content.is_a? String
