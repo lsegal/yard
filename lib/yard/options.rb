@@ -173,7 +173,7 @@ module YARD
         instance_variable_set("@#{$1}", args.first)
       elsif args.empty?
         log.debug "Attempting to access unregistered key #{meth} on #{self.class}"
-        instance_variable_get("@#{meth}")
+        instance_variable_defined?("@#{meth}") ? instance_variable_get("@#{meth}") : nil
       else
         super
       end
