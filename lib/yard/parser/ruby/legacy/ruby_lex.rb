@@ -463,6 +463,8 @@ module YARD
         @skip_space = false
         @read_auto_clean_up = false
         @exception_on_syntax_error = true
+
+        @colonblock_seen = false
       end
 
       attr_accessor :skip_space
