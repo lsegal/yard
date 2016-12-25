@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class MyProcCommand < Base
-  def initialize(&block) self.class.send(:define_method, :run, &block) end
+  def initialize(&block)
+    self.class.send(:undef_method, :run)
+    self.class.send(:define_method, :run, &block)
+  end
 end
 
 class MyCacheCommand < Base
