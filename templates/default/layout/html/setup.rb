@@ -2,6 +2,7 @@
 def init
   @breadcrumb = []
   @page_title = ''
+  @breadcrumb_title = ''
   if @onefile
     sections :layout
   elsif defined?(@file) && @file
