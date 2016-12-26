@@ -23,8 +23,8 @@ private
 def tag(name, opts = nil)
   return unless object.has_tag?(name)
   opts ||= options_for_tag(name)
-  @no_names = true if opts[:no_names]
-  @no_types = true if opts[:no_types]
+  @no_names = !!opts[:no_names]
+  @no_types = !!opts[:no_types]
   @name = name
   out = erb('tag')
   @no_names = nil
