@@ -1,4 +1,4 @@
-<p class="tag_title"><%= @label ? @label : YARD::Tags::Library.labels[@name] %>:</p>
+<p class="tag_title"><%= (defined?(@label) && @label) ? @label : YARD::Tags::Library.labels[@name] %>:</p>
 <ul class="<%= @name %>">
   <% object.tags(@name).each do |tag| %>
     <li>
