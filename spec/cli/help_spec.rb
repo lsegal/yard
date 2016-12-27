@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::Help do
+RSpec.describe YARD::CLI::Help do
   describe "#run" do
     it "accepts help command" do
       expect(CLI::Yardoc).to receive(:run).with('--help')

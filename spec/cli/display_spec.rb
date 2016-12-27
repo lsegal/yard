@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::Display do
+RSpec.describe YARD::CLI::Display do
   before do
     allow(Registry).to receive(:load)
     @object = CodeObjects::ClassObject.new(:root, :Foo)

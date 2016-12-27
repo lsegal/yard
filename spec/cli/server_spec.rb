@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 class Server::WebrickAdapter; def start; end end
 
-describe YARD::CLI::Server do
+RSpec.describe YARD::CLI::Server do
   before do
     allow(CLI::Yardoc).to receive(:run)
     @no_verify_libraries = false

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::ClassHandler do
+RSpec.describe YARD::Handlers::C::ClassHandler do
   it "registers classes" do
     parse_init 'cFoo = rb_define_class("Foo", rb_cObject);'
     expect(Registry.at('Foo').type).to eq :class

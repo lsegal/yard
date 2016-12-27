@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 require 'ostruct'
 require 'rubygems'
 
-describe YARD::CLI::Gems do
+RSpec.describe YARD::CLI::Gems do
   before do
     @rebuild = false
     @gem1 = build_mock('gem1')

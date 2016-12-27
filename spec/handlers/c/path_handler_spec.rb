@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::PathHandler do
+RSpec.describe YARD::Handlers::C::PathHandler do
   it "tracks variable names defined under namespaces" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), "spec_helper")
 
-describe YARD::Logger do
+RSpec.describe YARD::Logger do
   describe "#show_backtraces" do
     it "is true if debug level is on" do
       log.show_backtraces = true

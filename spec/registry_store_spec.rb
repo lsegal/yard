@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), "spec_helper")
 
-describe YARD::RegistryStore do
+RSpec.describe YARD::RegistryStore do
   before do
     FileUtils.rm_rf("foo")
     @store = RegistryStore.new

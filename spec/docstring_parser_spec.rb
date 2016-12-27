@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::DocstringParser do
+RSpec.describe YARD::DocstringParser do
   after(:all) do
     YARD::Registry.clear
   end
@@ -150,8 +149,8 @@ eof
     end
 
     it "handles directives with @! prefix syntax" do
-      TestLibrary.define_directive('dir1', Tags::ScopeDirective)
-      docstring("@!dir1 class")
+      TestLibrary.define_directive('dir2', Tags::ScopeDirective)
+      docstring("@!dir2 class")
       expect(@parser.state.scope).to eq :class
     end
   end

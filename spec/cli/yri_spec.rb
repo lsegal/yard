@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 class TestYRI < YARD::CLI::YRI
   public :optparse, :find_object, :cache_object
@@ -7,7 +6,7 @@ class TestYRI < YARD::CLI::YRI
   def print_object(*args) test_stub; super end
 end
 
-describe YARD::CLI::YRI do
+RSpec.describe YARD::CLI::YRI do
   before do
     @yri = TestYRI.new
     allow(Registry).to receive(:load)

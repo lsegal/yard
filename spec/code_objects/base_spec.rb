@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::Base do
+RSpec.describe YARD::CodeObjects::Base do
   before { Registry.clear }
 
   it "does not allow empty object name" do

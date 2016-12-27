@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::I18n::Locale do
+RSpec.describe YARD::I18n::Locale do
   def locale(name)
     YARD::I18n::Locale.new(name)
   end

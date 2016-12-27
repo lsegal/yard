@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Tags::Library do
+RSpec.describe YARD::Tags::Library do
   def tag(docstring)
     Docstring.new(docstring).tags.first
   end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Rake::YardocTask do
+RSpec.describe YARD::Rake::YardocTask do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.statistics = false

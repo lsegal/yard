@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::I18n do
+RSpec.describe YARD::CLI::I18n do
   before do
     @i18n = YARD::CLI::I18n.new
     @i18n.use_document_file = false

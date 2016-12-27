@@ -11,3 +11,4 @@ Gemfile.lock
 /coverage
 /.bundle
 /vendor
+spec/examples.txt

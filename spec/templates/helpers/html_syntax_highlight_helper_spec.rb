@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
+RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::HtmlSyntaxHighlightHelper
 

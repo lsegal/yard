@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Handlers::C::StructHandler do
+RSpec.describe YARD::Handlers::C::StructHandler do
   after { Registry.clear }
 
   it "handles Struct class definitions" do

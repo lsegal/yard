@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 require 'stringio'
 require 'open-uri'
 
-describe YARD::CLI::Diff do
+RSpec.describe YARD::CLI::Diff do
   before do
     allow(CLI::Yardoc).to receive(:run)
     allow(CLI::Gems).to receive(:run)

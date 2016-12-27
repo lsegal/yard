@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<%= charset %>" />
-    <title><%= @title %></title>
+    <title><%= defined?(@title) ? @title : '' %></title>
     <%= erb(:headers) %>
   </head>
   <body>
     <div id="content">
-      <h1><%= @title %></h1>
+      <h1><%= defined?(@title) ? @title : '' %></h1>
       <%= yieldall %>
     </div>
 

@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + "/shared_signature_examples"
 require 'ostruct'
 
-describe YARD::Templates::Helpers::HtmlHelper do
+RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Templates::Helpers::MethodHelper
@@ -121,7 +120,9 @@ describe YARD::Templates::Helpers::HtmlHelper do
       allow(self).to receive(:object).and_return(Registry.root)
       text = String.new("\xB0\xB1")
       if defined?(Encoding)
-        Encoding.default_internal = 'utf-8'
+        utf8 = Encoding.find('utf-8')
+
+        Encoding.default_internal = utf8 unless Encoding.default_internal == utf8
         text = text.force_encoding('binary')
       end
       htmlify(text, :text)

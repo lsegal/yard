@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe File do
+RSpec.describe File do
   describe ".relative_path" do
     it "returns the relative path between two files" do
       expect(File.relative_path('a/b/c/d.html', 'a/b/d/q.html')).to eq '../d/q.html'

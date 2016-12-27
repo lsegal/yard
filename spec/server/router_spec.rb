@@ -9,7 +9,7 @@ class MyRouterSpecRouter < Router
   def check_static_cache; nil end
 end
 
-describe YARD::Server::Router do
+RSpec.describe YARD::Server::Router do
   before do
     @adapter = mock_adapter
     @projects = @adapter.libraries['project']

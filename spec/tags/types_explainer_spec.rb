@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Tags::TypesExplainer do
+RSpec.describe YARD::Tags::TypesExplainer do
   Type = YARD::Tags::TypesExplainer::Type
   CollectionType = YARD::Tags::TypesExplainer::CollectionType
   FixedCollectionType = YARD::Tags::TypesExplainer::FixedCollectionType

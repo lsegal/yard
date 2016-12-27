@@ -1,15 +1,17 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
 class MyProcCommand < Base
-  def initialize(&block) self.class.send(:define_method, :run, &block) end
+  def initialize(&block)
+    self.class.send(:undef_method, :run)
+    self.class.send(:define_method, :run, &block)
+  end
 end
 
 class MyCacheCommand < Base
   def run; cache 'foo' end
 end
 
-describe YARD::Server::Commands::Base do
+RSpec.describe YARD::Server::Commands::Base do
   describe "#cache" do
     before do
       @command = MyCacheCommand.new(:adapter => mock_adapter, :caching => true)

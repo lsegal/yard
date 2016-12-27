@@ -15,7 +15,7 @@ module YARD
       end
 
       def self.clear!
-        return unless @methods
+        return unless defined?(@methods) && @methods
         @methods.clear
       end
     end

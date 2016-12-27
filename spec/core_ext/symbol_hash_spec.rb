@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe SymbolHash do
+RSpec.describe SymbolHash do
   it "allows access to keys as String or Symbol" do
     h = SymbolHash.new(false)
     h['test'] = true

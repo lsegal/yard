@@ -1,6 +1,6 @@
 <ul>
   <% @libraries.sort_by {|name, y| name.downcase }.each do |name, library_versions| %>
-  <li class="r<%= @row = @row == 1 ? 2 : 1 %>">
+  <li class="r<%= @row = (!defined?(@row) || @row == 1) ? 2 : 1 %>">
     <% library_versions = library_versions.dup %>
     <% first_lib = library_versions.pop %>
     <a href="<%= abs_url(router.docs_prefix, first_lib.name) %>"><%= name %></a>

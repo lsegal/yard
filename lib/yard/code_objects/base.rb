@@ -272,7 +272,7 @@ module YARD
       # @return [String] if prefix is true, prefix + the name as a String.
       #   This must be implemented by the subclass.
       def name(prefix = false)
-        prefix ? @name.to_s : @name
+        prefix ? @name.to_s : (defined?(@name) && @name)
       end
 
       # Associates a file with a code object, optionally adding the line where it was defined.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Section do
+RSpec.describe YARD::Templates::Section do
   include YARD::Templates
 
   describe "#initialize" do

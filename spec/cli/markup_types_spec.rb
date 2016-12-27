@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::MarkupTypes do
+RSpec.describe YARD::CLI::MarkupTypes do
   it "lists all available markup types" do
     YARD::CLI::MarkupTypes.run
     data = log.io.string

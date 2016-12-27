@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" do
+RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" do
   before(:all) { parse_file :class_handler_001, __FILE__ }
 
   it "parses a class block with docstring" do

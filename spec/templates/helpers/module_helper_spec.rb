@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/../spec_helper"
 
-describe YARD::Templates::Helpers::ModuleHelper do
+RSpec.describe YARD::Templates::Helpers::ModuleHelper do
   include YARD::Templates::Helpers::BaseHelper
   include YARD::Templates::Helpers::ModuleHelper
 

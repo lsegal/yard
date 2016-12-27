@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::NamespaceObject do
+RSpec.describe YARD::CodeObjects::NamespaceObject do
   before { Registry.clear }
 
   describe "#child" do

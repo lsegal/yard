@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::CommandParser do
+RSpec.describe YARD::CLI::CommandParser do
   describe "#run" do
     before do
       @cmd = CLI::CommandParser.new

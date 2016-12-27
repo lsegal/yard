@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Server::DocServerSerializer do
+RSpec.describe YARD::Server::DocServerSerializer do
   describe "#serialized_path" do
     before do
       Registry.clear

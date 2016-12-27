@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::OverrideCommentHandler do
+RSpec.describe YARD::Handlers::C::OverrideCommentHandler do
   [:class, :module].each do |type|
     it "handles Document-#{type}" do
       parse(<<-eof)

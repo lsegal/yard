@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::MethodObject do
+RSpec.describe YARD::CodeObjects::MethodObject do
   before do
     Registry.clear
     @yard = ModuleObject.new(:root, :YARD)

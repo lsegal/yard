@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Engine.template(:default, :module) do
+RSpec.describe YARD::Templates::Engine.template(:default, :module) do
   before do
     Registry.clear
     YARD.parse_string <<-'eof'

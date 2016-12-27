@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::InitHandler do
+RSpec.describe YARD::Handlers::C::InitHandler do
   it "adds documentation in Init_ClassName() to ClassName" do
     parse(<<-eof)
       // Bar!

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Templates::Engine.template(:default, :constant) do
+RSpec.describe YARD::Templates::Engine.template(:default, :constant) do
   describe "fully dressed constant" do
     it "renders text format correctly" do
       YARD.parse_string <<-'eof'

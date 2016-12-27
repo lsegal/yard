@@ -27,7 +27,7 @@ class MockDocServerHelper
   def options; OpenStruct.new end
 end
 
-describe YARD::Server::DocServerHelper do
+RSpec.describe YARD::Server::DocServerHelper do
   before do
     @helper = MockDocServerHelper.new
   end

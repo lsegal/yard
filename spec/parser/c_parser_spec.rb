@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe YARD::Parser::C::CParser do
+RSpec.describe YARD::Parser::C::CParser do
   describe "#parse" do
     def parse(contents)
       Registry.clear

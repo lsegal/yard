@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Options do
+RSpec.describe YARD::Options do
   class FooOptions < YARD::Options
     attr_accessor :foo
     def initialize; self.foo = "abc" end

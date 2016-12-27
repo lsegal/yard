@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::ConstantHandler do
+RSpec.describe YARD::Handlers::C::ConstantHandler do
   it "registers constants" do
     parse_init <<-eof
       mFoo = rb_define_module("Foo");

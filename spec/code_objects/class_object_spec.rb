@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::CodeObjects::ClassObject do
+RSpec.describe YARD::CodeObjects::ClassObject do
   describe "#inheritance_tree" do
     before(:all) do
       Registry.clear

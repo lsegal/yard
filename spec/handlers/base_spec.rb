@@ -4,7 +4,7 @@ require 'ostruct'
 
 include Parser
 
-describe YARD::Handlers::Base do
+RSpec.describe YARD::Handlers::Base do
   describe "#handles and inheritance" do
     before do
       allow(Handlers::Base).to receive(:inherited)
@@ -161,9 +161,9 @@ describe YARD::Handlers::Base do
     def create_handler(stmts, parser_type)
       $handler_counter ||= 0
       sklass = parser_type == :ruby ? "Base" : "Legacy::Base"
-      instance_eval(<<-eof)
+      instance_eval(<<-eof, __FILE__, __LINE__ + 1)
         class ::InFileHandler#{$handler_counter += 1} < Handlers::Ruby::#{sklass}
-          handles /^class/
+          handles(/^class/)
           #{stmts}
           def process; MethodObject.new(:root, :FOO) end
         end
@@ -199,13 +199,13 @@ describe YARD::Handlers::Base do
         end
 
         it "allows a Regexp as argument and test against full path" do
-          test_handler 'file_a.rbx', 'in_file /\.rbx$/', true, parser_type
-          test_handler '/path/to/file_a.rbx', 'in_file /\/to\/file_/', true, parser_type
-          test_handler '/path/to/file_a.rbx', 'in_file /^\/path/', true, parser_type
+          test_handler 'file_a.rbx', 'in_file(/\.rbx$/)', true, parser_type
+          test_handler '/path/to/file_a.rbx', 'in_file(/\/to\/file_/)', true, parser_type
+          test_handler '/path/to/file_a.rbx', 'in_file(/^\/path/)', true, parser_type
         end
 
         it "allows multiple in_file declarations" do
-          stmts = 'in_file "x"; in_file /y/; in_file "foo.rb"'
+          stmts = 'in_file "x"; in_file(/y/); in_file "foo.rb"'
           test_handler 'foo.rb', stmts, true, parser_type
           test_handler 'xyzzy.rb', stmts, true, parser_type
           test_handler 'x', stmts, true, parser_type

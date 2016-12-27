@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', '..', '..', 'spec_helper')
 
-describe YARD::Parser::Ruby::Legacy::StatementList do
+RSpec.describe YARD::Parser::Ruby::Legacy::StatementList do
   def stmts(code) YARD::Parser::Ruby::Legacy::StatementList.new(code) end
   def stmt(code) stmts(code).first end
 

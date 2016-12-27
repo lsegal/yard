@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe YARD::Handlers::C::AliasHandler do
+RSpec.describe YARD::Handlers::C::AliasHandler do
   it "allows defining of aliases (rb_define_alias)" do
     parse <<-eof
       /* FOO */

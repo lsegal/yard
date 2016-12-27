@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Verifier do
+RSpec.describe YARD::Verifier do
   describe "#parse_expressions" do
     it "creates #__execute method" do
       v = Verifier.new("expr1")

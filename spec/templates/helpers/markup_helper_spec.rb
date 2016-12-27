@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../../spec_helper'
 
 module YARD::Templates::Helpers::MarkupHelper
   public :load_markup_provider, :markup_class, :markup_provider
@@ -13,7 +12,7 @@ class GeneratorMock
   end
 end
 
-describe YARD::Templates::Helpers::MarkupHelper do
+RSpec.describe YARD::Templates::Helpers::MarkupHelper do
   before do
     YARD::Templates::Helpers::MarkupHelper.clear_markup_cache
   end

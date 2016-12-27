@@ -157,13 +157,14 @@ module YARD
         def define_tag(label, tag, meth = nil)
           tag_meth = tag_method_name(tag)
           if meth.is_a?(Class) && Tag > meth
-            class_eval <<-eof, __FILE__, __LINE__
+            class_eval(<<-eof, __FILE__, __LINE__ + 1)
               def #{tag_meth}(text)
                 #{meth}.new(#{tag.inspect}, text)
               end
             eof
           else
-            class_eval <<-eof, __FILE__, __LINE__
+            class_eval(<<-eof, __FILE__, __LINE__ + 1)
+              begin; undef #{tag_meth}; rescue NameError; end
               def #{tag_meth}(text)
                 send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
               end

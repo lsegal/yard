@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandler" do
+RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandler" do
   before(:all) { parse_file :attribute_handler_001, __FILE__ }
 
   def read_write(namespace, name, read, write, scope = :instance)

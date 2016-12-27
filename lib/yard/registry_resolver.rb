@@ -15,6 +15,7 @@ module YARD
     #   object
     def initialize(registry = Registry)
       @registry = registry
+      @default_sep = nil
     end
 
     # Performs a lookup on a given path in the registry. Resolution will occur

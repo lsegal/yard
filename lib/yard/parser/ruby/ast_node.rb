@@ -158,6 +158,7 @@ module YARD
           @fallback_line = opts[:listline]
           @fallback_source = opts[:listchar]
           @token = true if opts[:token]
+          @docstring = nil
         end
 
         # @return [Boolean] whether the node is equal to another by checking

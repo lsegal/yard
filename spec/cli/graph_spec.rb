@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::Graph do
+RSpec.describe YARD::CLI::Graph do
   it "serializes output" do
     allow(Registry).to receive(:load).at_least(1).times
     allow(subject).to receive(:yardopts) { [] }

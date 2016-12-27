@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::CLI::Yardoc do
+RSpec.describe YARD::CLI::Yardoc do
   before do
     @yardoc = YARD::CLI::Yardoc.new
     @yardoc.statistics = false
@@ -90,8 +89,8 @@ describe YARD::CLI::Yardoc do
       @counter ||= 0
       @counter += 1
       counter = @counter
+      define_method("test_options_#{@counter}", &block)
       args.each do |arg|
-        define_method("test_options_#{@counter}", &block)
         it("accepts #{arg}") { send("test_options_#{counter}", arg) }
       end
     end

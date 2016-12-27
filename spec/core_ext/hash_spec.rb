@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Hash do
+RSpec.describe Hash do
   describe ".[]" do
     it "accepts an Array argument (Ruby 1.8.6 and older)" do
       list = [['foo', 'bar'], ['foo2', 'bar2']]

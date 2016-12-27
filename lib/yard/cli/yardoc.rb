@@ -220,8 +220,10 @@ module YARD
         @has_markup = false
 
         if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
-          ::Encoding.default_external = 'utf-8'
-          ::Encoding.default_internal = 'utf-8'
+          utf8 = ::Encoding.find('utf-8')
+
+          ::Encoding.default_external = utf8 unless ::Encoding.default_external == utf8
+          ::Encoding.default_internal = utf8 unless ::Encoding.default_internal == utf8
         end
       end
 

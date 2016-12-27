@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/../spec_helper"
 
 def tag_parse(content, object = nil, handler = nil)
   @parser = DocstringParser.new
@@ -7,7 +6,7 @@ def tag_parse(content, object = nil, handler = nil)
   @parser
 end
 
-describe YARD::Tags::ParseDirective do
+RSpec.describe YARD::Tags::ParseDirective do
   describe "#call" do
     after { Registry.clear }
 
@@ -45,7 +44,7 @@ describe YARD::Tags::ParseDirective do
   end
 end
 
-describe YARD::Tags::GroupDirective do
+RSpec.describe YARD::Tags::GroupDirective do
   describe "#call" do
     it "does nothing if handler=nil" do
       tag_parse("@!group foo")
@@ -59,7 +58,7 @@ describe YARD::Tags::GroupDirective do
   end
 end
 
-describe YARD::Tags::EndGroupDirective do
+RSpec.describe YARD::Tags::EndGroupDirective do
   describe "#call" do
     it "does nothing if handler=nil" do
       tag_parse("@!endgroup foo")
@@ -73,7 +72,7 @@ describe YARD::Tags::EndGroupDirective do
   end
 end
 
-describe YARD::Tags::MacroDirective do
+RSpec.describe YARD::Tags::MacroDirective do
   def handler
     OpenStruct.new(:call_params => %w(a b c),
                    :caller_method => 'foo',
@@ -162,7 +161,7 @@ describe YARD::Tags::MacroDirective do
   end
 end
 
-describe YARD::Tags::MethodDirective do
+RSpec.describe YARD::Tags::MethodDirective do
   describe "#call" do
     after { Registry.clear }
 
@@ -284,7 +283,7 @@ describe YARD::Tags::MethodDirective do
   end
 end
 
-describe YARD::Tags::AttributeDirective do
+RSpec.describe YARD::Tags::AttributeDirective do
   describe "#call" do
     after { Registry.clear }
 
@@ -370,7 +369,7 @@ describe YARD::Tags::AttributeDirective do
   end
 end
 
-describe YARD::Tags::ScopeDirective do
+RSpec.describe YARD::Tags::ScopeDirective do
   describe "#call" do
     after { Registry.clear }
 
@@ -408,7 +407,7 @@ describe YARD::Tags::ScopeDirective do
   end
 end
 
-describe YARD::Tags::VisibilityDirective do
+RSpec.describe YARD::Tags::VisibilityDirective do
   describe "#call" do
     after { Registry.clear }
 

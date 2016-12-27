@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe YARD::Parser, "tag handling" do
+RSpec.describe YARD::Parser, "tag handling" do
   before { parse_file :tag_handler_001, __FILE__ }
 
   it "knows the list of all available tags" do

@@ -154,7 +154,7 @@ module YARD
       resolve_reference
       obj = super
       %w(all summary tags ref_tags).each do |name|
-        val = instance_variable_get("@#{name}")
+        val = instance_variable_defined?("@#{name}") && instance_variable_get("@#{name}")
         obj.instance_variable_set("@#{name}", val ? val.dup : nil)
       end
       obj
@@ -172,7 +172,7 @@ module YARD
     # @return [String] The first line or paragraph of the docstring; always ends with a period.
     def summary
       resolve_reference
-      return @summary if @summary
+      return @summary if defined?(@summary) && @summary
       stripped = gsub(/[\r\n](?![\r\n])/, ' ').strip
       num_parens = 0
       idx = length.times do |index|
@@ -327,7 +327,7 @@ module YARD
     # @return [void]
     def resolve_reference
       loop do
-        return if @unresolved_reference.nil?
+        return if defined?(@unresolved_reference).nil? || @unresolved_reference.nil?
         return if CodeObjects::Proxy === @unresolved_reference
 
         reference = @unresolved_reference

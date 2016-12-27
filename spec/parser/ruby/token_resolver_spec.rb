@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper')
 
-describe YARD::Parser::Ruby::TokenResolver do
+RSpec.describe YARD::Parser::Ruby::TokenResolver do
   before(:all) do
     YARD.parse_string <<-eof
       module A

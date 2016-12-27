@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 require File.dirname(__FILE__) + '/class_method_handler_shared_examples'
 
-describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PublicClassMethodHandler" do
+RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}PublicClassMethodHandler" do
   before { Registry.clear }
 
   let(:visibility) { :public }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Templates::Engine do
+RSpec.describe YARD::Templates::Engine do
   before { @paths = Engine.template_paths }
   after { Engine.template_paths = @paths }
 

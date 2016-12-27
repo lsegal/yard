@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 require 'ostruct'
 
-describe YARD::Server::Commands::LibraryCommand do
+RSpec.describe YARD::Server::Commands::LibraryCommand do
   before do
     allow(Templates::Engine).to receive(:render)
     allow(Templates::Engine).to receive(:generate)

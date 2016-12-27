@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Tags::DefaultFactory do
+RSpec.describe YARD::Tags::DefaultFactory do
   before { @f = YARD::Tags::DefaultFactory.new }
 
   describe "#parse_tag" do

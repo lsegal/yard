@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
 
-describe YARD::Docstring do
+RSpec.describe YARD::Docstring do
   before { YARD::Registry.clear }
 
   describe "#initialize" do

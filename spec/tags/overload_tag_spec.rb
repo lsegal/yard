@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Tags::OverloadTag do
+RSpec.describe YARD::Tags::OverloadTag do
   before do
     @tag = Tags::OverloadTag.new(:overload, <<-'eof')
       def bar(a, b = 1, &block)

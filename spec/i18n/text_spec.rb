@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::I18n::Text do
+RSpec.describe YARD::I18n::Text do
   describe "#extract_messages" do
     def extract_messages(input, options = {})
       text = YARD::I18n::Text.new(StringIO.new(input), options)

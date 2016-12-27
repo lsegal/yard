@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::Templates::Helpers::BaseHelper do
+RSpec.describe YARD::Templates::Helpers::BaseHelper do
   include YARD::Templates::Helpers::BaseHelper
 
   describe "#run_verifier" do

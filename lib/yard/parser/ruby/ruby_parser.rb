@@ -221,6 +221,8 @@ module YARD
           eof
         end
 
+        undef on_sp
+
         def on_sp(tok)
           add_token(:sp, tok)
           @charno += tok.length

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe YARD::Parser::Base do
+RSpec.describe YARD::Parser::Base do
   describe "#initialize" do
     class MyParser < Parser::Base; def initialize(a, b) end end
 

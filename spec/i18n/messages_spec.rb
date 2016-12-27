@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
 
-describe YARD::I18n::Messages do
+RSpec.describe YARD::I18n::Messages do
   def message(id)
     YARD::I18n::Message.new(id)
   end

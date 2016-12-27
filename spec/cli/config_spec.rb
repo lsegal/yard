@@ -1,9 +1,7 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/../spec_helper'
-
 require 'yaml'
 
-describe YARD::CLI::Config do
+RSpec.describe YARD::CLI::Config do
   before do
     @config = YARD::CLI::Config.new
     YARD::Config.options = YARD::Config::DEFAULT_CONFIG_OPTIONS.dup

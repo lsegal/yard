@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/../spec_helper"
 require 'optparse'
 
-describe YARD::CLI::Command do
+RSpec.describe YARD::CLI::Command do
   describe "#parse_options" do
     before do
       @options = OptionParser.new

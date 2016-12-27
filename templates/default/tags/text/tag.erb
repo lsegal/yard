@@ -1,4 +1,4 @@
-<% title = @label ? @label : YARD::Tags::Library.labels[@name] %>
+<% title = (defined?(@label) && @label) ? @label : YARD::Tags::Library.labels[@name] %>
 <%= title %>:
 <%= hr(title.length) %>-
 
