@@ -1,6 +1,6 @@
 <% if object.has_tag?(:option) %>
   <% object.parameters.each do |param, default| %>
-    <% tags = object.tags(:option).select {|x| x.name.to_s == param.to_s.sub(/^\*+/, '') } %>
+    <% tags = object.tags(:option).select {|x| x.name.to_s == param.to_s.sub(/^\*+|:$/, '') } %>
     <% next if tags.empty? %>
     <p class="tag_title">Options Hash (<tt><%= param %></tt>):</p>
     <ul class="option">
