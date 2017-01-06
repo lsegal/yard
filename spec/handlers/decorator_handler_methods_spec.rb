@@ -388,25 +388,6 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
           expect(subject.source).to eq make_defs(*method_defs)
         end
       end
-
-      describe "are tagged" do
-        let(:method_defs)  { [:foo, :bar] }
-        let(:param_string) { method_defs.map(&:inspect).join(',') }
-
-        specify do
-          expect(subject.tags.count).to eq 3
-
-          subject.tags.each do |tag|
-            expect(tag.tag_name).to eq 'decorator'
-          end
-
-          expect(subject.tags.map(&:text)).to eq [
-            'third_decorator',
-            'second_decorator',
-            'first_decorator'
-          ]
-        end
-      end
     end
   end # process_decorator
 end unless LEGACY_PARSER

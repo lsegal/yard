@@ -107,12 +107,6 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
     # Transfer source to methods passed to the helper as parameters.
     method.source = statement.source if transfer_source && node.def?
 
-    # Tag decorator on decorated method.
-    if method.respond_to? :add_tag
-      method.add_tag YARD::Tags::Tag.new(:decorator,
-        statement.jump(:command).jump(:ident).source)
-    end
-
     # Transfer decorator docstring to methods passed to the helper as parameters.
     if transfer_docstring && node.def? &&
        statement.docstring && method.docstring.empty?
