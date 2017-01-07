@@ -224,7 +224,7 @@ module YARD
         def nextchar(num = 1) @content[@index + 1, num] end
 
         def struct
-          /struct\s[:alnum:]+\s\{/
+          /struct\s[a-zA-Z0-9]+\s\{/
         end
       end
     end

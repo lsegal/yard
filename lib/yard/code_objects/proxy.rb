@@ -4,6 +4,11 @@ module YARD
     # A special type of +NoMethodError+ when raised from a {Proxy}
     class ProxyMethodError < NoMethodError; end
 
+    # @private
+    PROXY_MATCH = /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{Regexp.quote(
+      (NSEP + ISEP + CSEP).split('').uniq.join
+    )}]+)$/
+
     # The Proxy class is a way to lazily resolve code objects in
     # cases where the object may not yet exist. A proxy simply stores
     # an unresolved path until a method is called on the object, at which
@@ -34,7 +39,7 @@ module YARD
           name = name[2..-1]
         end
 
-        if name =~ /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{NSEPQ}#{ISEPQ}#{CSEPQ}]+)$/
+        if name =~ PROXY_MATCH
           @orignamespace = namespace
           @origname = name
           @imethod = true if name.include? ISEP
