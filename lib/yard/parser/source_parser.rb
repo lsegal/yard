@@ -107,7 +107,7 @@ module YARD
           end
           files = [paths].flatten.
             map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c,cc,cxx,cpp}" : p }.
-            map {|p| p.include?("*") ? Dir[p].sort_by(&:length) : p }.flatten.
+            map {|p| p.include?("*") ? Dir[p].sort_by {|d| [d.length, d] } : p }.flatten.
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
 
           log.enter_level(level) do
