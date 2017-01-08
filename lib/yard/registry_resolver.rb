@@ -65,6 +65,7 @@ module YARD
       if path =~ /\A#{default_separator}/
         path = $'
         namespace = @registry.root
+        orignamespace = @registry.root
       end
 
       resolved = nil

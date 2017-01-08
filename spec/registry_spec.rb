@@ -278,6 +278,14 @@ RSpec.describe YARD::Registry do
       expect(proxy.type).to eq :method
     end
 
+    it "does not return proxy on original namespace if path is anchored to root" do
+      YARD.parse_string "module Foo; class Bar; def baz; end end end"
+      proxy = Registry.resolve(P('Foo::Bar#baz'), '::Bar', true, true)
+      expect(proxy.path).to eq('Bar')
+      expect(proxy.namespace).to equal(Registry.root)
+      expect(proxy.type).to eq(:proxy)
+    end
+
     it "only checks 'Path' in lookup on root namespace" do
       expect(Registry).to receive(:at).once.with('Test').and_return(true)
       Registry.resolve(Registry.root, "Test")
