@@ -1,4 +1,8 @@
-# Master branch (unreleased)
+# 0.9.7 - January 9th, 2017
+
+- Fix resolution of absolute object paths with ambiguous names. (#1029)
+
+# 0.9.6 - January 7th, 2017
 
 - Removed official support for Ruby 1.x (1.8/1.9). YARD can still be installed
   in these versions, but support is not guaranteed. Simple bug fixes may still
@@ -17,6 +21,7 @@
   manually setting `library.yardoc_file = ...` in your load method (you can
   still assign the attribute manually).
 - Use RubyGems 2.x+ API to query gems when available instead of using backport.
+- Various bug fixes
 
 # 0.9.5 - July 22nd, 2016
 
