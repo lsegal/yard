@@ -199,7 +199,7 @@ eof
       expect(File).to receive(:directory?).with('gem2-1.0.0').and_return(false)
       spec1   = double(:spec)
       spec2   = double(:spec)
-      expect(YARD::GemIndex).to receive(:find_all_by_name).at_least(1).times.and_return([spec1, spec2])
+      allow(YARD::GemIndex).to receive(:each) {|&b| [spec1, spec2].each(&b) }
       allow(spec1).to receive(:full_name).and_return('gem1-1.0.0')
       allow(spec1).to receive(:name).and_return('gem1')
       allow(spec1).to receive(:version).and_return('1.0.0')

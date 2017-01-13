@@ -170,7 +170,7 @@ module YARD
       return true unless options[:load_plugins]
       require 'rubygems'
       result = true
-      YARD::GemIndex.find_all_by_name('').each do |gem|
+      YARD::GemIndex.each do |gem|
         begin
           next true unless gem.name =~ YARD_PLUGIN_PREFIX
           load_plugin(gem.name)

@@ -13,5 +13,17 @@ module YARD
         Gem.source_index.find_name(*args)
       end
     end
+
+    def each(&block)
+      if defined?(Gem::Specification) && Gem::Specification.respond_to?(:each)
+        Gem::Specification.each(&block)
+      else
+        Gem.source_index.find_name('').each(&block)
+      end
+    end
+
+    def all
+      each.to_a
+    end
   end
 end

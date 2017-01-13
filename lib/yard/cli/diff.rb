@@ -131,7 +131,7 @@ module YARD
         # Next check installed RubyGems
         gemfile_without_ext = gemfile.sub(/\.gem$/, '')
         log.info "Searching for installed gem #{gemfile_without_ext}"
-        YARD::GemIndex.find_all_by_name('').find do |spec|
+        YARD::GemIndex.each.find do |spec|
           next unless spec.full_name == gemfile_without_ext
           yardoc = Registry.yardoc_file_for_gem(spec.name, "= #{spec.version}")
           if yardoc

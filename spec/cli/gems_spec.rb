@@ -32,7 +32,7 @@ RSpec.describe YARD::CLI::Gems do
   describe "#run" do
     it "builds all gem indexes if no gem is specified" do
       build_specs(@gem1, @gem2)
-      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return([@gem1, @gem2])
+      expect(YARD::GemIndex).to receive(:each) {|&b| [@gem1, @gem2].each(&b) }
       CLI::Gems.run
     end
 
@@ -74,7 +74,7 @@ RSpec.describe YARD::CLI::Gems do
     it "accepts --rebuild" do
       @rebuild = true
       build_specs(@gem1)
-      expect(YARD::GemIndex).to receive(:find_all_by_name).with('').and_return([@gem1])
+      expect(YARD::GemIndex).to receive(:each) {|&b| [@gem1].each(&b) }
       CLI::Gems.run('--rebuild')
     end
   end

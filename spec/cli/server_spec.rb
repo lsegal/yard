@@ -251,8 +251,9 @@ RSpec.describe YARD::CLI::Server do
       gem2 = double(:gem2, :name => 'gem2', :version => '1.0.0', :full_gem_path => '/path/to/bar')
       specs = {'gem1' => gem1, 'gem2' => gem2}
       allow(YARD::GemIndex).to receive(:find_all_by_name) do |k, _ver|
-        k == '' ? specs.values : specs.grep(k).map {|name| specs[name] }
+        specs.grep(k).map {|name| specs[name] }
       end
+      allow(YARD::GemIndex).to receive(:each) {|&b| specs.values.each(&b) }
       run '-g'
       run '--gems'
     end

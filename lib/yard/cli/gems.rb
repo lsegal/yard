@@ -76,7 +76,7 @@ module YARD
         if !args.empty? && @gems.empty?
           log.error "No specified gems could be found for command"
         elsif @gems.empty?
-          @gems += YARD::GemIndex.find_all_by_name('') if @gems.empty?
+          @gems += YARD::GemIndex.all if @gems.empty?
         end
       end
     end

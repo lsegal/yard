@@ -127,7 +127,7 @@ module YARD
 
       def add_gems
         require 'rubygems'
-        YARD::GemIndex.find_all_by_name('').each do |spec|
+        YARD::GemIndex.each do |spec|
           libraries[spec.name] ||= []
           libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
         end
