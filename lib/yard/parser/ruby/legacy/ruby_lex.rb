@@ -599,7 +599,7 @@ module YARD
         end
 
         @OP.def_rules(" ", "\t", "\f", "\r", "\13") do |chars, _io|
-          @space_seen = TRUE
+          @space_seen = true
           while (ch = getc) =~ /[ \t\f\r\13]/
             chars << ch
           end
@@ -642,9 +642,9 @@ module YARD
           @colonblock_seen = false
           case @lex_state
           when EXPR_BEG, EXPR_FNAME, EXPR_DOT
-            @continue = TRUE
+            @continue = true
           else
-            @continue = FALSE
+            @continue = false
             @lex_state = EXPR_BEG
           end
           Token(TkNL).set_text("\n")
@@ -1166,8 +1166,8 @@ module YARD
         end
 
         type = TkINTEGER
-        allow_point = TRUE
-        allow_e = TRUE
+        allow_point = true
+        allow_e = true
         while ch = getc
           case ch
           when /[0-9_]/
