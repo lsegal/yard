@@ -271,14 +271,18 @@ module YARD
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
+              return
             elsif token == :tstring_end && data =~ /\A\s/
               rng = @percent_ary.source_range
               rng = Range.new(rng.first, rng.last + data.length)
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
+              return
             end
-          elsif @tokens.last && @tokens.last[0] == :symbeg
+          end
+
+          if @tokens.last && @tokens.last[0] == :symbeg
             @tokens[-1] = [:symbol, ":" + data, @tokens.last[2]]
           elsif @heredoc_state == :started
             @heredoc_tokens << [token, data, [lineno, charno]]

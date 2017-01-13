@@ -296,6 +296,11 @@ eof
           expect(node.source).to eq(str[/(\%#{id}\(.+\))/m, 1])
         end
       end
+
+      it "tokenizing %#{id}(...) returns correct tokens" do
+        toks = tokenize("TEST = %#{id}(A B C)").flatten
+        expect(toks.count(:tstring_content)).to eq(3)
+      end
     end
 
     it "parses %w() array in constant declaration" do
