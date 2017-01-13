@@ -1,6 +1,11 @@
+# 0.9.8 - January 13th, 2017
+
+- Fixed installed gems not being correctly found in `yard server` and by plugins.
+- Fixed tokenization of `%w(...)` array syntax.
+
 # 0.9.7 - January 9th, 2017
 
-- Fix resolution of absolute object paths with ambiguous names. (#1029)
+- Fixed resolution of absolute object paths with ambiguous names. (#1029)
 
 # 0.9.6 - January 7th, 2017
 
