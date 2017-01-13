@@ -66,7 +66,9 @@ RSpec.describe YARD::CodeObjects do
   describe :BUILTIN_CLASSES do
     it "includes all base classes" do
       bad_names = []
-      YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
+      builtin_classes = YARD::CodeObjects::BUILTIN_CLASSES
+      builtin_classes -= ["Bignum", "Fixnum"] if 0.class == Integer
+      builtin_classes.each do |name|
         begin
           bad_names << name unless eval(name).is_a?(Class)
         rescue NameError
