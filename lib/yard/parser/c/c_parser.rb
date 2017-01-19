@@ -38,6 +38,7 @@ module YARD
             when '#'; consume_directive
             when '/'; consume_comment
             when /\s/; consume_whitespace
+            when '}'; advance # Skip possible C++ namespace closing brackets.
             else consume_toplevel_statement
             end
           end
@@ -75,6 +76,8 @@ module YARD
           line = @line
           decl = consume_until(/[{;]/)
           return nil if decl =~ /\A\s*\Z/
+          # Skip C++ namespace - treat content as top level statement.
+          return nil if decl =~ /\A(namespace)/
           statement = ToplevelStatement.new(nil, @file, line)
           @statements << statement
           attach_comment(statement)
