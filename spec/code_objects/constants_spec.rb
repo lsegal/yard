@@ -2,6 +2,13 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 RSpec.describe YARD::CodeObjects do
+  def silence_warnings
+    origverb = $VERBOSE
+    $VERBOSE = nil
+    yield
+    $VERBOSE = origverb
+  end
+
   describe :CONSTANTMATCH do
     it "matches a constant" do
       expect("Constant"[CodeObjects::CONSTANTMATCH]).to eq "Constant"
@@ -52,11 +59,13 @@ RSpec.describe YARD::CodeObjects do
   describe :BUILTIN_EXCEPTIONS do
     it "includes all base exceptions" do
       bad_names = []
-      YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
-        begin
-          bad_names << name unless eval(name) <= Exception
-        rescue NameError
-          nil # noop
+      silence_warnings do
+        YARD::CodeObjects::BUILTIN_EXCEPTIONS.each do |name|
+          begin
+            bad_names << name unless eval(name) <= Exception
+          rescue NameError
+            nil # noop
+          end
         end
       end
       expect(bad_names).to be_empty
@@ -66,11 +75,13 @@ RSpec.describe YARD::CodeObjects do
   describe :BUILTIN_CLASSES do
     it "includes all base classes" do
       bad_names = []
-      YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
-        begin
-          bad_names << name unless eval(name).is_a?(Class)
-        rescue NameError
-          nil # noop
+      silence_warnings do
+        YARD::CodeObjects::BUILTIN_CLASSES.each do |name|
+          begin
+            bad_names << name unless eval(name).is_a?(Class)
+          rescue NameError
+            nil # noop
+          end
         end
       end
       expect(bad_names).to be_empty
@@ -94,9 +105,11 @@ RSpec.describe YARD::CodeObjects do
 
   describe :BUILTIN_MODULES do
     it "includes all base modules" do
-      YARD::CodeObjects::BUILTIN_MODULES.each do |name|
-        next if YARD.ruby19? && ["Precision"].include?(name)
-        expect(eval(name)).to be_instance_of(Module)
+      silence_warnings do
+        YARD::CodeObjects::BUILTIN_MODULES.each do |name|
+          next if YARD.ruby19? && ["Precision"].include?(name)
+          expect(eval(name)).to be_instance_of(Module)
+        end
       end
     end
   end
