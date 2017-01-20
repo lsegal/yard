@@ -26,6 +26,29 @@ RSpec.describe YARD::Parser::C::CParser do
       end
     end
 
+    describe "C++ namespace" do
+      before(:all) do
+        file = File.join(File.dirname(__FILE__), 'examples', 'namespace.cpp.txt')
+        parse(File.read(file))
+      end
+
+      it "parses Rect class" do
+        obj = YARD::Registry.at('Rect')
+        expect(obj).not_to be nil
+        expect(obj.docstring).not_to be_blank
+      end
+
+      it "parses method inside of namespace" do
+        obj = YARD::Registry.at('Rect#inspect')
+        expect(obj.docstring).not_to be_blank
+      end
+
+      it "parses method after namespace" do
+        obj = YARD::Registry.at('Rect#hello_world')
+        expect(obj.docstring).not_to be_blank
+      end
+    end
+
     describe "Source located in extra files" do
       before(:all) do
         @multifile = File.join(File.dirname(__FILE__), 'examples', 'multifile.c.txt')
