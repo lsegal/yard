@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec', '~> 3.0'
+  gem 'rspec', '~> 3.5'
   gem 'rake', '~> 11.0'
   gem 'rdoc', '~> 4.0'
   gem 'json'
