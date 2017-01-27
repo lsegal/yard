@@ -97,5 +97,3 @@ Lint/Eval:
   Exclude:
     - benchmarks/**/*.rb
     - spec/**/*.rb
-EndOfLine:
-  Enabled: false
