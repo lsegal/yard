@@ -195,7 +195,6 @@ RSpec.describe YARD::Docstring do
           def b(test1, foo, test2, bar); end
         end
       eof
-      puts Registry.at('Foo#b').tags.inspect
       expect(Registry.at('Foo#b').tags[0].name).to eq "test1"
       expect(Registry.at('Foo#b').tags[1].name).to eq "foo"
       expect(Registry.at('Foo#b').tags[2].name).to eq "test2"

@@ -276,9 +276,9 @@ module YARD
     def tags(name = nil)
       list = []
       ref_tags = convert_ref_tags
-      @original_name_order.each do |name|
-        list << @tags.select {|tag| tag.name == name }[0]
-        list << ref_tags.select {|tag| tag.name == name }[0]
+      @original_name_order.each do |tag_name|
+        list << @tags.select {|tag| tag.name == tag_name }[0]
+        list << ref_tags.select {|tag| tag.name == tag_name }[0]
       end
       list.compact!
       return list unless name
