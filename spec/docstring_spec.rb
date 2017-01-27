@@ -182,6 +182,26 @@ RSpec.describe YARD::Docstring do
       expect(tags.first.owner).to eq o
     end
 
+    it "resolves references and new parameters based on encountered order" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @param foo [String] foo description
+          # @param bar [String] bar description
+          def a(foo, bar); end
+          # @param test1 [String] test1 description
+          # @param foo (see #a)
+          # @param test2 [String] test2 description
+          # @param bar (see #a)
+          def b(test1, foo, test2, bar); end
+        end
+      eof
+      puts Registry.at('Foo#b').tags.inspect
+      expect(Registry.at('Foo#b').tags[0].name).to eq "test1"
+      expect(Registry.at('Foo#b').tags[1].name).to eq "foo"
+      expect(Registry.at('Foo#b').tags[2].name).to eq "test2"
+      expect(Registry.at('Foo#b').tags[3].name).to eq "bar"
+    end
+
     it "returns an empty list (and warning) if circular reftags are found" do
       YARD.parse_string <<-eof
         class Foo

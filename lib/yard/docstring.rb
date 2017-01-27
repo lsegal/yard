@@ -240,13 +240,16 @@ module YARD
     # @param [Tags::Tag, Tags::RefTag] tags list of tag objects to add
     # @return [void]
     def add_tag(*tags)
+      @original_name_order = []
       tags.each_with_index do |tag, i|
         case tag
         when Tags::Tag
           tag.object = object
           @tags << tag
+          @original_name_order << tag.name
         when Tags::RefTag, Tags::RefTagList
           @ref_tags << tag
+          @original_name_order << tag.name
         else
           raise ArgumentError, "expected Tag or RefTag, got #{tag.class} (at index #{i})"
         end
@@ -271,7 +274,13 @@ module YARD
     # @param [#to_s] name the tag name to return data for, or nil for all tags
     # @return [Array<Tags::Tag>] the list of tags by the specified tag name
     def tags(name = nil)
-      list = @tags + convert_ref_tags
+      list = []
+      ref_tags = convert_ref_tags
+      @original_name_order.each do |name|
+        list << @tags.select {|tag| tag.name == name }[0]
+        list << ref_tags.select {|tag| tag.name == name }[0]
+      end
+      list.compact!
       return list unless name
       list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
