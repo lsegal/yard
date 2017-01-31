@@ -115,8 +115,7 @@ module YARD
       @handler = handler
       @reference, @raw_text = detect_reference(content)
       text = parse_content(@raw_text)
-      # Remove trailing/leading whitespace / newlines
-      @text = text.gsub(/\A[\r\n\s]+|[\r\n\s]+\Z/, '')
+      @text = text.strip
       call_directives_after_parse
       post_process
       self
