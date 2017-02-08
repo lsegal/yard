@@ -510,8 +510,21 @@ RSpec.describe YARD::CLI::Yardoc do
       optsdata = String.new("foo bar")
       expect(optsdata).to receive(:shell_split)
       expect(File).to receive(:read_binary).with("test").and_return(optsdata)
+      allow(optsdata).to receive(:gsub).and_return(optsdata)
       @yardoc.options_file = "test"
       @yardoc.run
+    end
+
+    it "ignores .yardopts tokens that are comments" do
+      optsdata = String.new("--one-file --locale es # --locale en\n// --title not_my_title")
+      expect(File).to receive(:read_binary).with("test").and_return(optsdata)
+      @yardoc.options_file = "test"
+      @yardoc.run
+
+      expect(@yardoc.options.onefile).to be_truthy
+      expect(@yardoc.options.locale).to eq('es')
+      expect(@yardoc.options.title).not_to eq('not_my_title')
+      expect(@yardoc.options.serializer.options)
     end
 
     it "allows opts specified in command line to override yardopts file" do
