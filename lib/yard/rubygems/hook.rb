@@ -72,6 +72,14 @@ module YARD
     end
 
     ##
+    # Pre uninstalls hook that removes documentation
+    #
+
+    def self.removal_hook(uninstaller)
+      new(uninstaller.spec).remove
+    end
+
+    ##
     # Loads the YARD generator
 
     def self.load_yard
@@ -160,7 +168,30 @@ module YARD
         FileUtils.mkdir_p @doc_dir
       end
     end
+
+    def uninstall_yard
+      if File.exist?(@yard_dir)
+        raise Gem::FilePermissionError, @yard_dir unless File.writable?(@yard_dir)
+        FileUtils.rm_rf @yard_dir
+      end
+    end
+
+    def uninstall_yri
+      if File.exist?(@yri_dir)
+        raise Gem::FilePermissionError, @yri_dir unless File.writable?(@yri_dir)
+        FileUtils.rm_rf @yri_dir
+      end
+    end
+
+    ##
+    # Removes YARD and yri data
+
+    def remove
+      uninstall_yri
+      uninstall_yard
+    end
   end
 end
 
 Gem.done_installing(&YARD::RubygemsHook.method(:generation_hook))
+Gem.pre_uninstall(&YARD::RubygemsHook.method(:removal_hook))
