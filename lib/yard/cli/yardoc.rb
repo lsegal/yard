@@ -117,7 +117,7 @@ module YARD
     #
     #   --tag overload:"Overloaded Method"
     #
-    # See +yardoc --help+ for a description of the various options.
+    # See +yard help doc+ for a description of the various options.
     #
     # Tags added in this way are automatically displayed in output. To add
     # a meta-data tag that does not show up in output, use +--hide-tag TAG+.
