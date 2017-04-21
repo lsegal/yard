@@ -133,13 +133,26 @@ module YARD
         end
       end
 
-      def add_gems_from_gemfile(gemfile = nil)
+      def add_gems_from_gemfile(gemfile = nil, dependencies_only = false)
         require 'bundler'
         gemfile ||= "Gemfile"
         if File.exist?("#{gemfile}.lock")
-          Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
-            libraries[spec.name] ||= []
-            libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
+          if dependencies_only
+            parsed_gemfile = Bundler::LockfileParser.new(File.read("#{gemfile}.lock"))
+            parsed_gemfile.dependencies.each do |dep|
+              libraries[dep.name] ||= []
+              specs = parsed_gemfile.specs.select do |spec|
+                spec.name == dep.name
+              end
+              specs.each do |spec|
+                libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
+              end
+            end
+          else
+            Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
+              libraries[spec.name] ||= []
+              libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
+            end
           end
         else
           log.warn "Cannot find #{gemfile}.lock, ignoring --gemfile option"
@@ -173,6 +186,9 @@ module YARD
         end
         opts.on('-G', '--gemfile [GEMFILE]', 'Serves documentation for gems from Gemfile') do |gemfile|
           add_gems_from_gemfile(gemfile)
+        end
+        opts.on('--gemfile-deps [GEMFILE]', 'Serves documentation for gems from Gemfile (Just dependencies)') do |gemfile|
+          add_gems_from_gemfile(gemfile, true)
         end
         opts.on('-t', '--template-path PATH',
                 'The template path to look for templates in. (used with -t).') do |path|

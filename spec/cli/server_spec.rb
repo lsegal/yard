@@ -280,6 +280,28 @@ RSpec.describe YARD::CLI::Server do
       run '--gemfile', 'different_name'
     end
 
+    it "accepts --gemfile-deps" do
+      bundler_required
+      @no_verify_libraries = true
+      @options[:single_library] = false
+
+      @libraries['gem1'] = [Server::LibraryVersion.new('gem1', '1.0.0', nil, :gem)]
+      @libraries['gem2'] = [Server::LibraryVersion.new('gem2', '1.0.0', nil, :gem)]
+      gem1 = double(:gem1, :name => 'gem1', :version => '1.0.0', :full_gem_path => '/path/to/foo')
+      gem2 = double(:gem2, :name => 'gem2', :version => '1.0.0', :full_gem_path => '/path/to/bar')
+      gem3 = double(:gem3, :name => 'gem3', :version => '1.0.0', :full_gem_path => '/path/to/bar')
+      lockfile_parser = double(:new, :specs => [gem1, gem2, gem3], :dependencies => [gem1, gem2])
+      allow(Bundler::LockfileParser).to receive(:new).and_return(lockfile_parser)
+
+      expect(File).to receive(:exist?).at_least(1).times.with("Gemfile.lock").and_return(true)
+      allow(File).to receive(:read)
+
+      run '--gemfile-deps'
+
+      expect(File).to receive(:exist?).with("different_name.lock").and_return(true)
+      run '--gemfile-deps', 'different_name'
+    end
+
     it "warns if lockfile is not found (with -G)" do
       bundler_required
       expect(File).to receive(:exist?).with(/\.yardopts$/).at_least(:once).and_return(false)
