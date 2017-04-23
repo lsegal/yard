@@ -121,11 +121,8 @@ module YARD
     # @param [String, nil] file the name of the yardoc db to load
     # @return [Boolean] whether the database was loaded
     def load(file = nil)
+      initialize
       @file = file
-      @store = {}
-      @proxy_types = {}
-      @object_types = {}
-      @notfound = {}
       @serializer = Serializers::YardocSerializer.new(@file)
       load_yardoc
     end
