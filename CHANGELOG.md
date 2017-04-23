@@ -1,3 +1,12 @@
+# 0.9.9 - April 23rd, 2017
+
+- Added `gem uninstall` hooks to remove YARD documentation files. (#1083)
+- Added support for C++ namespaces. (#809)
+- Fixed issue where loading a .html page via an anchor would not scroll to
+  the anchor section. (#1082)
+- Hide some Ruby warnings.
+- Improve progress indicator icons in terminal.
+
 # 0.9.8 - January 13th, 2017
 
 - Fixed installed gems not being correctly found in `yard server` and by plugins.
