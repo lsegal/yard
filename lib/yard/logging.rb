@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# encoding: utf-8
 require 'logger'
 require 'thread'
 
@@ -9,7 +10,7 @@ module YARD
     # The list of characters displayed beside the progress bar to indicate
     # "movement".
     # @since 0.8.2
-    PROGRESS_INDICATORS = ["\u230C", "\u230D", "\u230E", "\u230F"]
+    PROGRESS_INDICATORS = %w(⣷ ⣯ ⣟ ⡿ ⢿ ⣻ ⣽ ⣾)
 
     # @return [IO] the IO object being logged to
     # @since 0.8.2
@@ -49,6 +50,7 @@ module YARD
       @progress_indicator = 0
       @mutex = Mutex.new
       @progress_msg = nil
+      @progress_last_update = Time.now
     end
 
     # Changes the debug level to DEBUG if $DEBUG is set
@@ -93,8 +95,11 @@ module YARD
       @mutex.synchronize do
         print("\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r")
         @progress_msg = msg
-        @progress_indicator += 1
-        @progress_indicator %= PROGRESS_INDICATORS.size
+        if Time.now - @progress_last_update > 0.2
+          @progress_indicator += 1
+          @progress_indicator %= PROGRESS_INDICATORS.size
+          @progress_last_update = Time.now
+        end
       end
       Thread.new do
         sleep(0.05)
