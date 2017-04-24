@@ -189,7 +189,10 @@ RSpec.describe YARD::Tags::TypesExplainer do
         "Hash{String => Symbol, Number}" => "a Hash with keys made of (Strings) and values of (Symbols or Numbers)",
         "Array<Foo, Bar>, List(String, Symbol, #to_s), {Foo, Bar => Symbol, Number}" => "an Array of (Foos or Bars);
           a List containing (a String followed by a Symbol followed by an object that responds to #to_s);
-          a Hash with keys made of (Foos or Bars) and values of (Symbols or Numbers)"
+          a Hash with keys made of (Foos or Bars) and values of (Symbols or Numbers)",
+        "#weird_method?, #<=>, #!=" => "an object that responds to #weird_method?;
+          an object that responds to #<=>;
+          an object that responds to #!="
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)

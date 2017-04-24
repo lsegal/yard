@@ -94,12 +94,14 @@ module YARD
 
       # @private
       class Parser
+        include CodeObjects
+
         TOKENS = {
           :collection_start => /</,
           :collection_end => />/,
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
-          :type_name => /#\w+|((::)?\w+)+/,
+          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|\w+/,
           :type_next => /[,;]/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,
