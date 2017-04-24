@@ -21,7 +21,7 @@ class YARD::Handlers::C::ClassHandler < YARD::Handlers::C::Base
       handle_class(var_name, class_name, parent)
     end
     statement.source.scan(MATCH2) do |var_name, in_module, class_name, parent|
-      handle_class(var_name, class_name, parent, in_module)
+      handle_class(var_name, class_name, parent.strip, in_module)
     end
   end
 end

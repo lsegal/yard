@@ -10,9 +10,10 @@ RSpec.describe YARD::Handlers::C::ClassHandler do
   it "registers classes under namespaces" do
     parse_init <<-EOF
       cBar = rb_define_class("Bar", rb_cObject);
-      cFoo = rb_define_class_under(cBar, "Foo", rb_cObject);
+      cFoo = rb_define_class_under( cBar, "Foo", rb_cBaz );
     EOF
     expect(Registry.at('Bar::Foo').type).to eq :class
+    expect(Registry.at('Bar::Foo').superclass.path).to eq 'Baz'
   end
 
   it "remembers symbol defined with class" do
