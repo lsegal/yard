@@ -47,8 +47,10 @@ class Gem::DocManager
 
     FileUtils.mkdir_p @doc_dir unless File.exist?(@doc_dir)
 
-    self.class.load_rdoc if @spec.has_rdoc?
-    self.class.load_yardoc if @spec.has_yardoc?
+    if @spec.has_yardoc?
+    then self.class.load_yardoc
+    else self.class.load_rdoc
+    end
   end
 
   def install_yardoc
@@ -61,8 +63,7 @@ class Gem::DocManager
   end
 
   def install_ri_yard
-    install_ri_yard_orig if @spec.has_rdoc?
-    return if @spec.has_rdoc? == false
+    install_ri_yard_orig unless FalseClass === @spec.has_rdoc?
     return if @spec.has_yardoc?
 
     self.class.load_yardoc
@@ -76,10 +77,9 @@ class Gem::DocManager
   rescue NameError; nil end
 
   def install_rdoc_yard
-    if @spec.has_rdoc?
-      install_rdoc_yard_orig
-    elsif @spec.has_yardoc?
-      install_yardoc
+    if @spec.has_yardoc?
+    then install_yardoc
+    else install_rdoc_yard_orig
     end
   end
 
