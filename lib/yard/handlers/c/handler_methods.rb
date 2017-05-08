@@ -67,7 +67,9 @@ module YARD
             register_visibility(obj, visibility)
             find_method_body(obj, func_name)
             obj.explicit = true
-            obj.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
+            if name.end_with?("?") && !(obj.tag(:return) || (obj.tag(:overload) && obj.tag(:overload).tag(:return)))
+              obj.add_tag(Tags::Tag.new(:return, '', 'Boolean'))
+            end
           end
         end
 
