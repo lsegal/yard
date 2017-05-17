@@ -200,6 +200,9 @@ module YARD
       # @since 0.7.0
       attr_accessor :has_markup
 
+      # @return [Boolean] whether yard exits with error status code if a warning occurs
+      attr_accessor :fail_on_warning
+
       # Creates a new instance of the commandline utility
       def initialize
         super
@@ -218,6 +221,7 @@ module YARD
         @list = false
         @save_yardoc = true
         @has_markup = false
+        @fail_on_warning = false
 
         if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
           utf8 = ::Encoding.find('utf-8')
@@ -272,6 +276,8 @@ module YARD
             Stats.new(false).run(*args)
           end
         end
+
+        abort if fail_on_warning && log.warned
 
         true
       ensure
@@ -554,6 +560,10 @@ module YARD
 
         opts.on('--exclude REGEXP', 'Ignores a file if it matches path match (regexp)') do |path|
           excluded << path
+        end
+
+        opts.on('--fail-on-warning', 'Exit with error status code if a warning occurs') do
+          self.fail_on_warning = true
         end
       end
 

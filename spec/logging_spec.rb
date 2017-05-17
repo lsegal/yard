@@ -32,4 +32,13 @@ RSpec.describe YARD::Logger do
       log.enter_level(Logger::INFO) { log.backtrace(exc, :warn) }
     end
   end
+
+  describe '#warn' do
+    before  { log.warned = false }
+    after   { log.warned = false }
+
+    it 'changes #warned from false to true' do
+      expect { log.warn('message') }.to change(log, :warned).from(false).to(true)
+    end
+  end
 end
