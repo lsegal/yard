@@ -14,6 +14,7 @@ cache: bundler
 rvm:
   - 2.2.2
   - 2.3.1
+  - 2.4.1
 # - jruby
 
 # Define how to run your tests (defaults to `bundle exec rake` or `rake` depending on whether you have a `Gemfile`)
