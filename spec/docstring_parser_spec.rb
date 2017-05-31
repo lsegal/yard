@@ -215,6 +215,14 @@ eof
       eof
     end
 
+    it "does not warn about unused named parameters" do
+      expect(log).to_not receive(:warn).with(/@param tag has unknown parameter name: bar/)
+      YARD.parse_string <<-eof
+        # @param bar useful in subclasses
+        def foo(_bar) end
+      eof
+    end
+
     it "warns about invalid named parameters on @!method directives" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof

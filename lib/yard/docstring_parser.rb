@@ -278,6 +278,8 @@ module YARD
       next unless parser.object.is_a?(CodeObjects::MethodObject)
       next if parser.object.is_alias?
       names = parser.object.parameters.map {|l| l.first.gsub(/\W/, '') }
+      alt_names = names.find_all {|n| n.start_with?("_") }.map {|n| n[1..-1] }
+      names.concat(alt_names)
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " \
                     "near line #{parser.object.line}"
