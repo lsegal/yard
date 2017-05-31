@@ -111,7 +111,7 @@ module YARD
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
 
           log.enter_level(level) do
-            parse_in_order(*files.uniq)
+            parse_in_order(*files.sort.uniq)
           end
         end
 
