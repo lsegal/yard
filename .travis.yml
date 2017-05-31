@@ -12,8 +12,9 @@ cache: bundler
 
 # Specify which ruby versions you wish to run your tests on, each version will be used
 rvm:
-  - 2.2.2
-  - 2.3.1
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
 # - jruby
 
 # Define how to run your tests (defaults to `bundle exec rake` or `rake` depending on whether you have a `Gemfile`)
