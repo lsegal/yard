@@ -66,7 +66,7 @@ module YARD
 
       # Contains the Regexp object that matches the shebang line of extra
       # files to detect the markup type.
-      MARKUP_FILE_SHEBANG = /\A#!(\S+)\s*$/
+      MARKUP_FILE_SHEBANG = /\A#![ \t]*(\S+)\s*$/
 
       # Attempts to load the first valid markup provider in {MARKUP_PROVIDERS}.
       # If a provider is specified, immediately try to load it.
