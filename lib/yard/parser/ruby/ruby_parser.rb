@@ -231,7 +231,7 @@ module YARD
 
         def visit_event(node)
           map = @map[MAPPINGS[node.type]]
-          lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+          lstart, sstart = *(map && !map.empty? ? map.pop : [lineno, @ns_charno - 1])
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
           if node.respond_to?(:block)
