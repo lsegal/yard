@@ -82,13 +82,13 @@ module YARD
           end
         end
 
-        def handle_alias(var_name, new_name, old_name)
+        def handle_alias(var_name, new_name, old_name, scope = :instance)
           namespace = namespace_for_variable(var_name)
           return if namespace.nil?
           new_meth = new_name.to_sym
           old_meth = old_name.to_sym
-          old_obj = namespace.child(:name => old_meth, :scope => :instance)
-          new_obj = register MethodObject.new(namespace, new_meth, :instance) do |o|
+          old_obj = namespace.child(:name => old_meth, :scope => scope)
+          new_obj = register MethodObject.new(namespace, new_meth, scope) do |o|
             register_visibility(o, visibility)
             register_file_info(o, statement.file, statement.line)
           end
