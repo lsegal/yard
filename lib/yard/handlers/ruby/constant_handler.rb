@@ -35,6 +35,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
     if lhs.type == :const
       klass = create_class(lhs[0], P(:Struct))
       create_attributes(klass, extract_parameters(statement[1]))
+      parse_block(statement[1].block[1], :namespace => klass) unless statement[1].block.nil?
     else
       raise YARD::Parser::UndocumentableError, "Struct assignment to #{statement[0].source}"
     end
