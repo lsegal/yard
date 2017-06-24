@@ -27,6 +27,14 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     end
   end
 
+  it 'documents block for Struct.new if present' do
+    obj = Registry.at("MyStructWithConstant")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.constants[0].docstring).to eq 'A constant.'
+    expect(obj.constants[0].name).to eq :CONSTANT
+    expect(obj.constants[0].value).to eq "42"
+  end
+
   it "turns Const = Struct.new('Name', :sym) into class Const with attr :sym" do
     obj = Registry.at("NotMyClass")
     expect(obj).to be_kind_of(CodeObjects::ClassObject)

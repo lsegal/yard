@@ -18,6 +18,11 @@ MyClass = Struct.new(:a, :b, :c)
 NotMyClass = Struct.new("NotMyClass2", :b, :c)
 MyEmptyStruct = Struct.new
 
+MyStructWithConstant = Struct.new do
+  # A constant.
+  CONSTANT = 42
+end
+
 # A crazy struct.
 #
 # @attr [String] bar An attr
