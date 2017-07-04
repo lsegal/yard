@@ -2409,7 +2409,7 @@ msgstr ""
 "最終的に、@!attributeタグを用い@!methodタグを\n"
 "置換する事によって属性の様にメソッドのタグが出来る。\n"
 "読み込み専用,書込み専用,読み書きOK,個々に指定を宣言する為に\n"
-"@!attirbute指令は[r], [w], [rw]フラグ用に受け入れる\n"
+"@!attribute指令は[r], [w], [rw]フラグ用に受け入れる\n"
 
 #: ../docs/GettingStarted.md:241
 msgid ""
