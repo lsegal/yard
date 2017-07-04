@@ -13,7 +13,7 @@ module YARD
     # ".pot". PO file is an acronym for "Portable Object". PO file has
     # many parts of message ID (msgid) that is translation target
     # message and message string (msgstr) that is translated message
-    # of message ID. If you want to tranlsate "Hello" in English into
+    # of message ID. If you want to translate "Hello" in English into
     # "Bonjour" in French, "Hello" is the msgid ID and "Bonjour" is
     # msgstr. The extension for PO is ".po".
     #
