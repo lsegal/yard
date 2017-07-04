@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Backward compatability for gem specification lookup
+# Backward compatibility for gem specification lookup
 # @see Gem::SourceIndex
 module YARD
   module GemIndex
