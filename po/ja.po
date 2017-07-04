@@ -18962,7 +18962,7 @@ msgstr ""
 #: ../lib/yard/i18n/text.rb:34
 msgid ""
 "the block that\n"
-"recieves extracted a paragraph in body. Paragraph is a text\n"
+"receives extracted a paragraph in body. Paragraph is a text\n"
 "block separated by one or more empty lines. Empty line is a\n"
 "line that contains only zero or more whitespaces. It may\n"
 "called many times."
@@ -18972,7 +18972,7 @@ msgstr ""
 #: ../lib/yard/i18n/text.rb:34
 msgid ""
 "the block that\n"
-"recieves extracted an attribute in header. It may called many\n"
+"receives extracted an attribute in header. It may called many\n"
 "times."
 msgstr ""
 
