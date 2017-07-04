@@ -18893,7 +18893,7 @@ msgstr ""
 #: ../lib/yard/i18n/pot_generator.rb:118
 msgid ""
 "Comments of the +Message+ are used to generate the\n"
-"translater-comment line that is started with \"# \"."
+"translator-comment line that is started with \"# \"."
 msgstr ""
 
 # @return [String]

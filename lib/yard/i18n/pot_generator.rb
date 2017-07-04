@@ -116,7 +116,7 @@ module YARD
       # when the generater is created is prepended to each path in location.
       #
       # Comments of the +Message+ are used to generate the
-      # translater-comment line that is started with "# ".
+      # translator-comment line that is started with "# ".
       #
       # @return [String] POT format string
       def generate
