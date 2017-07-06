@@ -405,6 +405,19 @@ eof
       expect(Registry.at("Foo::CONST2").docstring).to eq "Another comment here"
     end
 
+    it "handles comments in the middle of a multi-line statement" do
+      Registry.clear
+      YARD.parse_string <<-eof
+        foo # BREAK
+        .bar
+
+        # Documentation
+        class Baz; end
+      eof
+      expect(Registry.at('Baz')).not_to be_nil
+      expect(Registry.at('Baz').docstring).to eq 'Documentation'
+    end
+
     %w(if unless).each do |type|
       it "does not get confused by modifier '#{type}' statements" do
         Registry.clear
