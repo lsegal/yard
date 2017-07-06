@@ -294,7 +294,7 @@ RSpec.describe YARD::CLI::Yardoc do
       end
 
       it "allows from:to syntax" do
-        expect(FileUtils).to receive(:cp_r).with(/^foo(\/\.)?/, 'doc/bar')
+        expect(FileUtils).to receive(:cp_r).with(%r{foo(\/\.)?}, 'doc/bar')
         @yardoc.run(*%w(--asset foo:bar))
         expect(@yardoc.assets).to eq('foo' => 'bar')
       end
