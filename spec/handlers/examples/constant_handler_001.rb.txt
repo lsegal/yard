@@ -29,5 +29,5 @@ end
 # @attr [Number] baz Another attr
 # @!attribute new_syntax
 #   Attribute defined with the new syntax
-#   @return [Symbol] something usefull
+#   @return [Symbol] something useful
 DocstringStruct = Struct.new(:bar, :baz, :new_syntax)

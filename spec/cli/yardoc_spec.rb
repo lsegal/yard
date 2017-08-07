@@ -670,7 +670,7 @@ RSpec.describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments('--tag', 'foo:Title of Foo')
     end
 
-    it "accepts --tag without title (and default to captialized tag name)" do
+    it "accepts --tag without title (and default to capitalized tag name)" do
       expect(Tags::Library).to receive(:define_tag).with('Foo', :foo, nil)
       @yardoc.parse_arguments('--tag', 'foo')
     end

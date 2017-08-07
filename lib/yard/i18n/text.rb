@@ -17,14 +17,14 @@ module YARD
       # Extracts translation target messages from +@input+.
       #
       # @yield [:attribute, name, value, line_no] the block that
-      #   recieves extracted an attribute in header. It may called many
+      #   receives extracted an attribute in header. It may called many
       #   times.
       # @yieldparam [String] name the name of extracted attribute.
       # @yieldparam [String] value the value of extracted attribute.
       # @yieldparam [Integer] line_no the defined line number of extracted
       #   attribute.
       # @yield [:paragraph, text, start_line_no] the block that
-      #   recieves extracted a paragraph in body. Paragraph is a text
+      #   receives extracted a paragraph in body. Paragraph is a text
       #   block separated by one or more empty lines. Empty line is a
       #   line that contains only zero or more whitespaces. It may
       #   called many times.

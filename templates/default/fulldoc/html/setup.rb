@@ -75,7 +75,7 @@ end
 #
 # Generates a file to the output with the specified contents.
 #
-# @example saving a custom html file to the documenation root
+# @example saving a custom html file to the documentation root
 #
 #   asset('my_custom.html','<html><body>Custom File</body></html>')
 #

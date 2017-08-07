@@ -325,7 +325,7 @@ RSpec.describe YARD::Parser::SourceParser do
       expect(Registry.at('Hello2#x').docstring).to eq "ANOTHER PASS"
     end
 
-    it "takes preceeding comments only if they exist" do
+    it "takes preceding comments only if they exist" do
       YARD.parse_string <<-eof
         # PASS
         module Hello # FAIL
