@@ -24,6 +24,16 @@ RSpec.describe YARD::Parser::C::CParser do
         expect(obj.docstring).not_to be_blank
         expect(obj.tags(:overload).size).to be > 1
       end
+
+      it "parses new_ary return type" do
+        obj = YARD::Registry.at('Array#map')
+        expect(obj.tags(:overload).count do |overload|
+          overload.tag(:return) && overload.tag(:return).types == ['Enumerator']
+        end).to eq 2
+        expect(obj.tags(:overload).count do |overload|
+          overload.tag(:return) && overload.tag(:return).types == ['Array']
+        end).to eq 2
+      end
     end
 
     describe "C++ namespace" do

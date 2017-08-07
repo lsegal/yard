@@ -92,7 +92,7 @@ module YARD
               case t.strip.gsub(/^an?_/, '')
               when "class"; "Class"
               when "obj", "object", "anObject"; "Object"
-              when "arr", "array", "anArray", /^\[/; "Array"
+              when "arr", "array", "anArray", "ary", "new_ary", /^\[/; "Array"
               when /^char\s*\*/, "char", "str", "string", "new_str"; "String"
               when "enum", "anEnumerator"; "Enumerator"
               when "exc", "exception"; "Exception"
