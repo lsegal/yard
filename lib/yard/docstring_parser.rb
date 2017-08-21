@@ -332,6 +332,7 @@ module YARD
       next unless parser.object
 
       parser.tags.each_with_index do |tag, i|
+        next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "see"
         next unless "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
         infile_info = "\n    in file `#{parser.object.file}' " \
