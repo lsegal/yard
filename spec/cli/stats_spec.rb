@@ -41,10 +41,10 @@ RSpec.describe YARD::CLI::Stats do
 Undocumented Objects:
 
 (in file: (stdin))
-B
 A
-A::CONST
 A#foo
+A::CONST
+B
 eof
   end
 
@@ -69,10 +69,10 @@ eof
     expect(@output.string).to eq <<-eof
 #{@main_stats}
 Undocumented Objects:
-B            ((stdin):11)
 A            ((stdin):1)
-A::CONST     ((stdin):2)
 A#foo        ((stdin):4)
+A::CONST     ((stdin):2)
+B            ((stdin):11)
 eof
   end
 
