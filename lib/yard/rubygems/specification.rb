@@ -35,8 +35,16 @@ class Gem::Specification
     alias _dump_without_rdoc _dump
     alias _dump _dump_with_rdoc
 
-    @@default_value[:has_rdoc] = true if defined?(@@default_value)
-    @@attributes << 'has_rdoc' if defined?(@@attributes)
-    @@nil_attributes << 'has_rdoc' if defined?(@@nil_attributes)
+    if class_variable_defined?(:@@default_value)
+      if @@default_value.frozen?
+        t = @@default_value.dup
+        t[:has_rdoc] = true
+        @@default_value = t.freeze
+      else
+        @@default_value[:has_rdoc] = true
+      end
+    end
+    @@attributes << 'has_rdoc' if class_variable_defined?(:@@attributes)
+    @@nil_attributes << 'has_rdoc' if class_variable_defined?(:@@nil_attributes)
   end
 end
