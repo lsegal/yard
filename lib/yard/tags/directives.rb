@@ -338,6 +338,10 @@ module YARD
     #
     # To define an attribute method, see {tag:!attribute}
     #
+    # @note This directive should only be used if there is no explicit
+    #   declaration for the method in any source files (i.e., the method
+    #   is declared dynamically via meta-programming). In all other cases, add
+    #   documentation to the method definition itself.
     # @note For backwards compatibility support, you do not need to indent
     #   the method's docstring text. If a +@!method+ directive is seen with
     #   no indented block, the entire docstring is used as the new method's
@@ -431,6 +435,10 @@ module YARD
     #
     # To define a regular method, see {tag:!method}
     #
+    # @note This directive should only be used if there is no explicit +attr_*+
+    #   declaration for the attribute in any source files (i.e., the attribute
+    #   is declared dynamically via meta-programming). In all other cases, add
+    #   documentation to the attribute declaration itself.
     # @note For backwards compatibility support, you do not need to indent
     #   the attribute's docstring text. If an +@!attribute+ directive is seen with
     #   no indented block, the entire docstring is used as the new attribute's
