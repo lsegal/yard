@@ -184,7 +184,8 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
 
     it "creates tables (markdown specific)" do
       log.enter_level(Logger::FATAL) do
-        unless markup_class(:markdown).to_s == "RedcarpetCompat"
+        supports_table = %w(RedcarpetCompat Kramdown::Document)
+        unless supports_table.include?(markup_class(:markdown).to_s)
           pending "This test depends on a markdown engine that supports tables"
         end
       end
