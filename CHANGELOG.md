@@ -1,3 +1,14 @@
+# [0.9.10] - November 18th, 2017
+
+[0.9.10]: https://github.com/lsegal/yard/compare/v0.9.9...v0.9.10
+
+- Added `--fail-on-warning` option for `yard doc` which exits with a non-zero
+  code if there are any warnings (#1093).
+- Added support for parsing inside `Struct.new` blocks (#1099).
+- Added support new ripper AST tokens (#1104, #1124).
+- Fixed an issue where `@see (obj)` reference tags would fail (#1111)
+- Fix sorting in `yard stats` (#1123).
+
 # [0.9.9] - April 23rd, 2017
 
 [0.9.9]: https://github.com/lsegal/yard/compare/v0.9.8...v0.9.9
