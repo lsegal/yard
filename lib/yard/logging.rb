@@ -47,6 +47,7 @@ module YARD
       self.show_progress = false
       self.level = WARN
       self.formatter = method(:format_log)
+      self.warned = false
       @progress_indicator = 0
       @mutex = Mutex.new
       @progress_msg = nil
@@ -59,6 +60,13 @@ module YARD
       self.level = DEBUG if $DEBUG
       super
     end
+
+    # Remembers when a warning occurs and writes a warning message.
+    def warn(*args)
+      self.warned = true
+      super
+    end
+    attr_accessor :warned
 
     # Captures the duration of a block of code for benchmark analysis. Also
     # calls {#progress} on the message to display it to the user.

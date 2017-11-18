@@ -183,6 +183,11 @@ RSpec.describe YARD::CLI::Yardoc do
       expect(Registry).not_to receive(:save)
       @yardoc.run(arg)
     end
+
+    should_accept('--fail-on-warning') do |arg|
+      expect(YARD).to receive(:parse)
+      @yardoc.run(arg)
+    end
   end
 
   describe "Output options" do
@@ -815,6 +820,20 @@ RSpec.describe YARD::CLI::Yardoc do
     it "does not create processing lock if not saving" do
       expect(Registry).not_to receive(:lock_for_writing)
       @yardoc.run('--no-save')
+    end
+
+    context "with --fail-on-warning" do
+      it "exits with error status code if a warning occurs" do
+        allow(log).to receive(:warned).and_return(true)
+        expect { @yardoc.run("--fail-on-warning") }.to raise_error(SystemExit) do |error|
+          expect(error).not_to be_success
+        end
+      end
+
+      it "does not exit if a warning does not occur" do
+        allow(log).to receive(:warned).and_return(false)
+        expect { @yardoc.run("--fail-on-warning") }.not_to raise_error
+      end
     end
   end
 end
