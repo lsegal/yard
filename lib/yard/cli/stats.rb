@@ -79,8 +79,9 @@ module YARD
         log.puts
         log.puts "Undocumented Objects:"
 
-        objects = @undoc_list.sort_by {|o| o.file.to_s }
-        max = objects.sort_by {|o| o.path.length }.last.path.length
+        # array needed for sort due to unstable sort
+        objects = @undoc_list.sort_by {|o| [o.file.to_s, o.path] }
+        max = objects.max {|a, b| a.path.length <=> b.path.length }.path.length
         if @compact
           objects.each do |object|
             log.puts("%-#{max}s     (%s)" % [object.path,
