@@ -40,6 +40,9 @@ module YARD
         :rdoc => [
           {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'}
         ],
+        :org => [
+          {:lib => :'org-ruby', :const => 'Orgmode::Parser'}
+        ],
         :asciidoc => [
           {:lib => :asciidoctor, :const => 'Asciidoctor'}
         ],
@@ -61,6 +64,7 @@ module YARD
         :asciidoc => ['asciidoc', 'ad', 'adoc', 'asc'],
         :markdown => ['markdown', 'md', 'mdown', 'mkd'],
         :rdoc => ['rdoc'],
+        :org => ['org'],
         :ruby => ['rb', 'ru']
       }
 

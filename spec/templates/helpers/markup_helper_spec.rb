@@ -122,6 +122,7 @@ RSpec.describe YARD::Templates::Helpers::MarkupHelper do
 
     it "looks for a file extension if no shebang is found" do
       expect(markup_for_file('', 'filename.MD')).to eq :markdown
+      expect(markup_for_file('', 'filename.ORG')).to eq :org
     end
 
     Templates::Helpers::MarkupHelper::MARKUP_EXTENSIONS.each do |type, exts|

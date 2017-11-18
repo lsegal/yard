@@ -86,6 +86,13 @@ module YARD
         end
       end
 
+      # Converts org-mode to HTML
+      # @param [String] text input org-mode text
+      # @return [String] output HTML
+      def html_markup_org(text)
+        markup_class(:org).new(text).to_html
+      end
+
       # Converts Asciidoc to HTML
       # @param [String] text input Asciidoc text
       # @return [String] output HTML
