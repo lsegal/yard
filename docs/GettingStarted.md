@@ -670,7 +670,7 @@ of plugin names separated by newlines. Note that the `.yard` directory might
 not exist, so you may need to create it.
 
 You may find some useful YARD plugins on [RubyGems][RubyGemsQuery] or with
-a [Google avanced query][GoogleAdvancedQuery].
+a [Google advanced query][GoogleAdvancedQuery].
 
 [graphviz]:http://www.graphviz.org
 [yard-rspec]:http://github.com/lsegal/yard-spec-plugin
