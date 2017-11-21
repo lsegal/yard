@@ -669,8 +669,11 @@ To disable a plugin create the file `~/.yard/ignored_plugins` with a list
 of plugin names separated by newlines. Note that the `.yard` directory might
 not exist, so you may need to create it.
 
-You may find some useful YARD plugins on [RubyGems](https://rubygems.org/search?utf8=%E2%9C%93&query=name%3A+yard) or with a [Google avanced querry](https://www.google.com/search?q=site%3Arubygems.org+intitle%3A%22yard-%22+OR+intitle%3A%22yard_%22).
+You may find some useful YARD plugins on [RubyGems][RubyGemsQuery] or with
+a [Google avanced query][GoogleAdvancedQuery].
 
 [graphviz]:http://www.graphviz.org
 [yard-rspec]:http://github.com/lsegal/yard-spec-plugin
 [rspec]:http://rspec.info
+[GoogleAdvancedQuery]:https://www.google.com/search?q=site%3Arubygems.org+intitle%3A%22yard-%22+OR+intitle%3A%22yard_%22
+[RubyGemsQuery]:https://rubygems.org/search?utf8=%E2%9C%93&query=name%3A+yard
