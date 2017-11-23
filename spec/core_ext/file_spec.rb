@@ -41,12 +41,12 @@ RSpec.describe File do
       expect(File.cleanpath('A/B/C/D/..')).to eq "A/B/C"
     end
 
-    it "passes the initial directory" do
-      expect(File.cleanpath('C/../../D')).to eq "../D"
+    it "does not allow relative path above root" do
+      expect(File.cleanpath('A/../../../../../D')).to eq "D"
     end
 
     it "does not remove multiple '../' at the beginning" do
-      expect(File.cleanpath('../../A/B')).to eq '../../A/B'
+      expect(File.cleanpath('../../A/B')).to eq 'A/B'
     end
   end
 

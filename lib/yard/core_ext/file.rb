@@ -40,6 +40,8 @@ class File
       if comp == RELATIVE_PARENTDIR && !acc.empty? && acc.last != RELATIVE_PARENTDIR
         acc.pop
         next acc
+      elsif comp == RELATIVE_PARENTDIR && acc.empty?
+        next acc
       end
       acc << comp
     end
