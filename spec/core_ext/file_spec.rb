@@ -41,6 +41,10 @@ RSpec.describe File do
       expect(File.cleanpath('A/B/C/D/..')).to eq "A/B/C"
     end
 
+    it "allows '../' at the beginning if rel_root=true" do
+      expect(File.cleanpath('A/../../B', true)).to eq '../B'
+    end
+
     it "does not allow relative path above root" do
       expect(File.cleanpath('A/../../../../../D')).to eq "D"
     end

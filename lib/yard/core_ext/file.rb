@@ -32,15 +32,16 @@ class File
   # @example Clean a path
   #   File.cleanpath('a/b//./c/../e') # => "a/b/e"
   # @param [String] path the path to clean
+  # @param [Boolean] rel_root allows relative path above root value
   # @return [String] the sanitized path
-  def self.cleanpath(path)
+  def self.cleanpath(path, rel_root = false)
     path = path.split(SEPARATOR)
     path = path.inject([]) do |acc, comp|
       next acc if comp == RELATIVE_SAMEDIR
       if comp == RELATIVE_PARENTDIR && !acc.empty? && acc.last != RELATIVE_PARENTDIR
         acc.pop
         next acc
-      elsif comp == RELATIVE_PARENTDIR && acc.empty?
+      elsif !rel_root && comp == RELATIVE_PARENTDIR && acc.empty?
         next acc
       end
       acc << comp
