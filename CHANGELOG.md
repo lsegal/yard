@@ -1,3 +1,11 @@
+# [0.9.11] - November 23rd, 2017
+
+[0.9.11]: https://github.com/lsegal/yard/compare/v0.9.10...v0.9.11
+
+- Fixed security issue in `--readme` that allowed for arbitrary file reads on
+  disk. Credit to ztz <ztz@ztz.me> for discovering this issue.
+- Improved styling for inline code blocks (#1142).
+
 # [0.9.10] - November 18th, 2017
 
 [0.9.10]: https://github.com/lsegal/yard/compare/v0.9.9...v0.9.10
