@@ -1,3 +1,10 @@
+# [0.9.12] - November 26th, 2017
+
+[0.9.12]: https://github.com/lsegal/yard/compare/v0.9.11...v0.9.12
+
+- Be more explicit about lack of support for absolute paths in extra files
+  specified by `yard doc` command.
+
 # [0.9.11] - November 23rd, 2017
 
 [0.9.11]: https://github.com/lsegal/yard/compare/v0.9.10...v0.9.11
