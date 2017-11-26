@@ -411,11 +411,24 @@ module YARD
       def add_extra_files(*files)
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
-          if File.file?(file)
+          if extra_file_valid?(file)
             options.files << CodeObjects::ExtraFileObject.new(file)
-          else
-            log.warn "Could not find extra file: #{file}"
           end
+        end
+      end
+
+      # @param file [String] the filename to validate
+      # @param check_exists [Boolean] whether the file should exist on disk
+      # @return [Boolean] whether the file is allowed to be used
+      def extra_file_valid?(file, check_exists = true)
+        if file =~ %r{^(?:\.\./|/)}
+          log.warn "Invalid file: #{file}"
+          false
+        elsif check_exists && !File.file?(file)
+          log.warn "Could not find file: #{file}"
+          false
+        else
+          true
         end
       end
 
@@ -644,10 +657,8 @@ module YARD
 
         opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page',
                                                       '  of documentation.') do |readme|
-          if File.file?(readme)
+          if extra_file_valid?(readme)
             options.readme = CodeObjects::ExtraFileObject.new(readme)
-          else
-            log.warn "Could not find readme file: #{readme}"
           end
         end
 
@@ -658,12 +669,9 @@ module YARD
 
         opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output ',
                                      '  directory after generating') do |asset|
-          re = %r{^(?:\.\./|/)}
           from, to = *asset.split(':').map {|f| File.cleanpath(f, true) }
           to ||= from
-          if from =~ re || to =~ re
-            log.warn "Invalid file '#{asset}'"
-          else
+          if extra_file_valid?(from, false) && extra_file_valid?(to, false)
             assets[from] = to
           end
         end

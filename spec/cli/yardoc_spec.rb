@@ -205,10 +205,10 @@ RSpec.describe YARD::CLI::Yardoc do
     end
 
     it "aliases --main to the --readme flag" do
-      readme = File.join(File.dirname(__FILE__), '..', '..', 'README.md')
-
-      @yardoc.parse_arguments('--main', readme)
-      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new(readme, '')
+      Dir.chdir(File.join(File.dirname(__FILE__), '..', '..')) do
+        @yardoc.parse_arguments('--main', 'README.md')
+        expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.md', '')
+      end
     end
 
     it "selects a markup provider when --markup-provider or -mp is set" do
@@ -607,13 +607,23 @@ RSpec.describe YARD::CLI::Yardoc do
     end
 
     it "warns if extra file is not found" do
-      expect(log).to receive(:warn).with(/Could not find extra file: UNKNOWN/)
+      expect(log).to receive(:warn).with(/Could not find file: UNKNOWN/)
       @yardoc.parse_arguments(*%w(- UNKNOWN))
     end
 
     it "warns if readme file is not found" do
-      expect(log).to receive(:warn).with(/Could not find readme file: UNKNOWN/)
+      expect(log).to receive(:warn).with(/Could not find file: UNKNOWN/)
       @yardoc.parse_arguments(*%w(-r UNKNOWN))
+    end
+
+    it "warns on absolute paths in extra files" do
+      expect(log).to receive(:warn).with(%r{Invalid file: /path/to/file})
+      @yardoc.parse_arguments(*%w(- /path/to/file))
+    end
+
+    it "warns on absolute paths in readme" do
+      expect(log).to receive(:warn).with(%r{Invalid file: /path/to/file})
+      @yardoc.parse_arguments(*%w(-r /path/to/file))
     end
 
     it "uses first file as readme if no readme is specified when using --one-file" do
