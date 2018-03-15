@@ -329,6 +329,7 @@ ul.summary a, ul.summary a:visited {
 ul.summary li { margin-bottom: 5px; }
 .summary_signature { padding: 4px 8px; background: #f8f8f8; border: 1px solid #f0f0f0; border-radius: 5px; }
 .summary_signature:hover { background: #CFEBFF; border-color: #A4CCDA; cursor: pointer; }
+.summary_signature.deprecated { background: #ffe5e5; border-color: #e9dada; }
 ul.summary.compact li { display: inline-block; margin: 0px 5px 0px 0px; line-height: 2.6em;}
 ul.summary.compact .summary_signature { padding: 5px 7px; padding-right: 4px; }
 #content .summary_signature:hover a,

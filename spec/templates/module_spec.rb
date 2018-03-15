@@ -186,6 +186,8 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
       module A
         # @group Foo
         FOO = 1
+
+        # @deprecated
         BAR = 2
 
         # @group Bar
