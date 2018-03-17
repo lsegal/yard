@@ -400,7 +400,7 @@ prefix to the object name. Files refer to extra readme files you added
 via the command-line. Consider the following examples:
 
     {file:docs/GettingStarted.md Getting Started}
-    {file:mypage.html Name#anchor}
+    {file:mypage.html#anchor Name}
 
 As shown, you can also add an optional `#anchor` if the page is an HTML link.
 
