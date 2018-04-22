@@ -131,17 +131,22 @@ def groups(list, type = "Method")
   else
     others = []
     group_data = {}
-    list.each do |meth|
-      if meth.group
-        (group_data[meth.group] ||= []) << meth
+    list.each do |itm|
+      if itm.group
+        (group_data[itm.group] ||= []) << itm
       else
-        others << meth
+        others << itm
       end
     end
     group_data.each {|group, items| yield(items, group) unless items.empty? }
   end
 
-  scopes(others) {|items, scope| yield(items, "#{scope.to_s.capitalize} #{type} Summary") }
+  return if others.empty?
+  if others.first.respond_to?(:scope)
+    scopes(others) {|items, scope| yield(items, "#{scope.to_s.capitalize} #{type} Summary") }
+  else
+    yield(others, "#{type} Summary")
+  end
 end
 
 def scopes(list)

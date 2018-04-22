@@ -179,4 +179,25 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
     html_equals(Registry.at('A').format(html_options(:embed_mixins => ['Foo', 'Bar', 'Baz::A*'])), :module004)
   end
+
+  it "renders constant groups correctly in html" do
+    Registry.clear
+    YARD.parse_string <<-'eof'
+      module A
+        # @group Foo
+        FOO = 1
+
+        # @deprecated
+        BAR = 2
+
+        # @group Bar
+        BAZ = 3
+
+        # @endgroup
+
+        WORLD = 4
+      end
+    eof
+    html_equals(Registry.at('A').format(html_options), :module005)
+  end
 end
