@@ -348,7 +348,11 @@ module YARD
       end
 
       def erb_with(content, filename = nil)
-        erb = ERB.new(content, nil, options.format == :text ? '<>' : nil)
+        erb = if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
+                ERB.new(content, :trim_mode => options.format == :text ? '<>' : nil)
+              else
+                ERB.new(content, nil, options.format == :text ? '<>' : nil)
+              end
         erb.filename = filename if filename
         erb
       end
