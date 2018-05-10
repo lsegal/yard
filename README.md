@@ -322,7 +322,7 @@ See {file:CHANGELOG.md} for a list of changes.
 
 ## License
 
-YARD &copy; 2007-2016 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
+YARD &copy; 2007-2018 by [Loren Segal](mailto:lsegal@soen.ca). YARD is
 licensed under the MIT license except for some files which come from the
 RDoc/Ruby distributions. Please see the {file:LICENSE} and {file:LEGAL}
 documents for more information.
