@@ -79,4 +79,29 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
       expect(format_block(Registry.at('#foo'))).to eq "{|a, b, c| ... }"
     end
   end
+
+  describe "#format_constant" do
+    include YARD::Templates::Helpers::HtmlHelper
+
+    it "displays correctly constant values which are quoted symbols" do
+      YARD.parse_string %(
+        class TestFmtConst
+          Foo = :''
+          Bar = :BAR
+          Baz = :'B+z'
+        end
+      )
+      # html_syntax_highlight will be called by format_constant for
+      # Foo, Bar and Baz and in turn will enquire for options.highlight
+      expect(self).to receive(:options).exactly(3).times.and_return(
+        Options.new.update(:highlight => false)
+      )
+      foo, bar, baz = %w(Foo Bar Baz).map do |c|
+        Registry.at("TestFmtConst::#{c}").value
+      end
+      expect(format_constant(foo)).to eq ":&quot;&quot;"
+      expect(format_constant(bar)).to eq ':BAR'
+      expect(format_constant(baz)).to eq ":&quot;B+z&quot;"
+    end
+  end
 end
