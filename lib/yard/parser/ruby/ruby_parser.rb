@@ -285,9 +285,10 @@ module YARD
           if token == :symbeg
             @symbol = [:symbol, data, [lineno, charno]]
           elsif @symbol
-            if token == :tstring_content
+            case token
+            when :tstring_content
               @symbol[1] += data
-            elsif token == :tstring_end || token == :const
+            when :tstring_end, :const, :ident
               @symbol[1] += data
               @tokens << @symbol
               @symbol = nil

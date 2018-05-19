@@ -307,12 +307,13 @@ eof
       tokens = tokenize(<<-eof)
         class X
           Foo = :''
+          Fuu = :bar
           Bar = :BAR
           Baz = :"B+z"
         end
       eof
       symbols = tokens.select {|t| t[0] == :symbol }.map {|t| t[1] }
-      expect(symbols).to eq %w(:'' :BAR :"B+z")
+      expect(symbols).to eq %w(:'' :bar :BAR :"B+z")
     end
 
     it "parses %w() array in constant declaration" do
