@@ -1,3 +1,13 @@
+# [0.9.13] - May 28th, 2018
+
+[0.9.13]: https://github.com/lsegal/yard/compare/v0.9.12...v0.9.13
+
+- Added support for grouped constants via `@!group` directive (#1056).
+- Added support for quoted symbols (#1168).
+- Added support for i18n in tag text (#1169).
+- Fixed HTML rendering of inline code blocks (#1152).
+- Fixed rendering of anchor URLs in rendered HTML (#1154).
+
 # [0.9.12] - November 26th, 2017
 
 [0.9.12]: https://github.com/lsegal/yard/compare/v0.9.11...v0.9.12
