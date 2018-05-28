@@ -21,6 +21,8 @@ MyEmptyStruct = Struct.new
 MyStructWithConstant = Struct.new do
   # A constant.
   CONSTANT = 42
+  # Special constant (empty symbol)
+  EMPTY = :''
 end
 
 # A crazy struct.
