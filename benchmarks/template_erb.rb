@@ -12,7 +12,7 @@ Benchmark.bm do |x|
     module Templates
       module Template
         def erb(section, &block)
-          erb = ERB.new(cache(section), nil)
+          erb = ERB.new(cache(section))
           erb.filename = cache_filename(section).to_s
           erb.result(binding, &block)
         end

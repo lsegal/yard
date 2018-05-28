@@ -45,7 +45,7 @@ Benchmark.bmbm do |x|
   x.report("erb") do
     eval <<-eof
        module YARD; module Templates; module Template
-        def erb_with(str, x) ERB.new(str, nil) end
+        def erb_with(str, x) ERB.new(str) end
       end end end
     eof
 
