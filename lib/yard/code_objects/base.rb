@@ -594,7 +594,15 @@ module YARD
         text = I18n::Text.new(@docstring)
         localized_text = text.translate(locale)
         docstring = Docstring.new(localized_text, self)
-        docstring.add_tag(*@docstring.tags)
+        @docstring.tags.each do |tag|
+          if tag.is_a?(Tags::Tag)
+            localized_tag = tag.clone
+            localized_tag.text = I18n::Text.new(tag.text).translate(locale)
+            docstring.add_tag(localized_tag)
+          else
+            docstring.add_tag(tag)
+          end
+        end
         docstring
       end
     end

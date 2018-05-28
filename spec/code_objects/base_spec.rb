@@ -358,6 +358,17 @@ RSpec.describe YARD::CodeObjects::Base do
         expect(o.docstring('fr')).to eq "Bonjour"
       end
 
+      it "returns localized docstring tag" do
+        o = CodeObjects::MethodObject.new(:root, 'Hello#message')
+        o.docstring.add_tag(Tags::Tag.new('return', 'Hello'))
+
+        fr_locale = YARD::I18n::Locale.new('fr')
+        allow(fr_locale).to receive(:translate).with('Hello').and_return('Bonjour')
+        allow(Registry).to receive(:locale).with('fr').and_return(fr_locale)
+
+        expect(o.docstring('fr').tags.map(&:text)).to eq ['Bonjour']
+      end
+
       it "returns updated localized docstring" do
         fr_locale = YARD::I18n::Locale.new('fr')
         allow(Registry).to receive(:locale).with('fr').and_return(fr_locale)
