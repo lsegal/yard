@@ -1,3 +1,9 @@
+# [0.9.14] - June 2nd, 2018
+
+[0.9.14]: https://github.com/lsegal/yard/compare/v0.9.13...v0.9.14
+
+- Fixed a regression in symbol parsing (#1170).
+
 # [0.9.13] - May 28th, 2018
 
 [0.9.13]: https://github.com/lsegal/yard/compare/v0.9.12...v0.9.13
