@@ -35,4 +35,4 @@ RSpec.describe YARD::CLI::Yardoc do
       end
     end
   end
-end
+end if ENV['CI'] || ENV['YY']

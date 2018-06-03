@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Note: including YARD::Parser::Ruby::Legacy at top-level is problematic
-#       for other tests (e.g cli/yard_on_yard_spec.rb)
-
 RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
   Legacy = YARD::Parser::Ruby::Legacy
   TokenList = Legacy::TokenList
