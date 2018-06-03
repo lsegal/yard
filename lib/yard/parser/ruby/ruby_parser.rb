@@ -282,17 +282,9 @@ module YARD
             end
           end
 
-          if token == :symbeg
-            @symbol = [:symbol, data, [lineno, charno]]
-          elsif @symbol
-            case token
-            when :tstring_content
-              @symbol[1] += data
-            when :tstring_end, :const, :ident
-              @symbol[1] += data
-              @tokens << @symbol
-              @symbol = nil
-            end
+          if @tokens.last && (@tokens.last[0] == :symbeg ||
+              (@tokens.last[0] == :symbol && token.to_s =~ /^tstring/))
+            @tokens[-1] = [:symbol, @tokens.last[1] + data, @tokens.last[2]]
           elsif @heredoc_state == :started
             @heredoc_tokens << [token, data, [lineno, charno]]
 
