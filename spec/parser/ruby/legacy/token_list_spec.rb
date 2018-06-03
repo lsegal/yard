@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-include YARD::Parser::Ruby::Legacy
-include YARD::Parser::Ruby::Legacy::RubyToken
-
 RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
+  Legacy = YARD::Parser::Ruby::Legacy
+  TokenList = Legacy::TokenList
+  LT = Legacy::RubyToken
+
   describe "#initialize / #push" do
     it "accepts a tokenlist (via constructor or push)" do
       expect { TokenList.new(TokenList.new) }.not_to raise_error
@@ -11,8 +12,9 @@ RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
     end
 
     it "accept a token (via constructor or push)" do
-      expect { TokenList.new(Token.new(0, 0)) }.not_to raise_error
-      expect(TokenList.new.push(Token.new(0, 0), Token.new(1, 1)).size).to eq 2
+      expect { TokenList.new(LT::Token.new(0, 0)) }.not_to raise_error
+      expect(TokenList.new.push(LT::Token.new(0, 0),
+                                LT::Token.new(1, 1)).size).to eq 2
     end
 
     it "accepts a string and parse it as code (via constructor or push)" do
@@ -30,15 +32,15 @@ RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
     it "does not interpolate string data" do
       x = TokenList.new('x = "hello #{world}"')
       expect(x.size).to eq 6
-      expect(x[4].class).to eq TkDSTRING
+      expect(x[4].class).to eq LT::TkDSTRING
       expect(x.to_s).to eq 'x = "hello #{world}"' + "\n"
     end
 
     it "handles label syntax" do
       x = TokenList.new('a:1,b:2')
-      expect(x[0].class).to eq TkLABEL
+      expect(x[0].class).to eq LT::TkLABEL
       expect(x[0].text).to eq 'a:'
-      expect(x[3].class).to eq TkLABEL
+      expect(x[3].class).to eq LT::TkLABEL
       expect(x[3].text).to eq 'b:'
     end
   end
@@ -46,13 +48,13 @@ RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
   describe "#to_s" do
     before do
       @t = TokenList.new
-      @t << TkDEF.new(1, 1, "def")
-      @t << TkSPACE.new(1, 1)
-      @t << TkIDENTIFIER.new(1, 1, "x")
-      @t << TkStatementEnd.new(1, 1)
-      @t << TkSEMICOLON.new(1, 1) << TkSPACE.new(1, 1)
-      @t << TkBlockContents.new(1, 1)
-      @t << TkSPACE.new(1, 1) << TkEND.new(1, 1, "end")
+      @t << LT::TkDEF.new(1, 1, "def")
+      @t << LT::TkSPACE.new(1, 1)
+      @t << LT::TkIDENTIFIER.new(1, 1, "x")
+      @t << LT::TkStatementEnd.new(1, 1)
+      @t << LT::TkSEMICOLON.new(1, 1) << LT::TkSPACE.new(1, 1)
+      @t << LT::TkBlockContents.new(1, 1)
+      @t << LT::TkSPACE.new(1, 1) << LT::TkEND.new(1, 1, "end")
       @t[0].set_text "def"
       @t[1].set_text " "
       @t[2].set_text "x"
