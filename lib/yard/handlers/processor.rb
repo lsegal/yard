@@ -88,7 +88,7 @@ module YARD
       attr_accessor :extra_state
 
       # Creates a new Processor for a +file+.
-      # @param [SourceParser] parser the parser used to initialize the processor
+      # @param [Parser::SourceParser] parser the parser used to initialize the processor
       def initialize(parser)
         @file = parser.file || "(stdin)"
         @namespace = YARD::Registry.root

@@ -35,11 +35,11 @@ module YARD
     # @return [String] the complete input string to the parser.
     attr_accessor :raw_text
 
-    # @return [Array<Tag>] the list of meta-data tags identified
+    # @return [Array<Tags::Tag>] the list of meta-data tags identified
     #   by the parser
     attr_accessor :tags
 
-    # @return [Array<Directive>] a list of directives identified
+    # @return [Array<Tags::Directive>] a list of directives identified
     #   by the parser. This list will not be passed on to the
     #   Docstring object.
     attr_accessor :directives
@@ -228,7 +228,7 @@ module YARD
     end
 
     # Creates a new directive using the registered {#library}
-    # @return [Directive] the directive object that is created
+    # @return [Tags::Directive] the directive object that is created
     def create_directive(tag_name, tag_buf)
       if library.has_directive?(tag_name)
         dir = library.directive_create(tag_name, tag_buf, self)

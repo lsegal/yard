@@ -45,7 +45,7 @@ module YARD
 
         # @group Attributes Set Per Request
 
-        # @return [Request] request object
+        # @return [Rack::Request] request object
         attr_accessor :request
 
         # @return [String] the path after the command base URI
