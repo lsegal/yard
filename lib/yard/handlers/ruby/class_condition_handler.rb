@@ -52,12 +52,17 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
       # defined? keyword used, let's see if we can look up the name
       # in the registry, then we'll try using Ruby's powers. eval() is not
       # *too* dangerous here since code is not actually executed.
-      name = statement.condition[0].source
-      obj = YARD::Registry.resolve(namespace, name, true)
-      begin
-        condition = true if obj || Object.instance_eval("defined? #{name}")
-      rescue SyntaxError, NameError
-        condition = false
+      arg = statement.condition.first
+
+      if arg.type == :var_ref
+        name = arg.source
+        obj = YARD::Registry.resolve(namespace, name, true)
+
+        begin
+          condition = true if obj || (name && Object.instance_eval("defined? #{name}"))
+        rescue SyntaxError, NameError
+          condition = false
+        end
       end
     when :var_ref
       var = statement.condition[0]

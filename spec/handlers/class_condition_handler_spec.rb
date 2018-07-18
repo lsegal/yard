@@ -65,4 +65,23 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCon
     eof
     no_undoc_error "if caller.none? { |l| l =~ %r{lib/rails/generators\\.rb:(\\d+):in `lookup!'$} }; end"
   end
+
+  it "only parses identifiers or namespaces from defined? expressions" do
+    module A
+      @@value = nil
+      def self.b(value) @@value = value end
+      def self.value; @@value end
+    end
+
+    YARD.parse_string <<-eof
+      if defined? A.b(42).to_i
+        class Foo; end
+      else
+        class Bar; end
+      end
+    eof
+    expect(A.value).to be_nil
+    expect(YARD::Registry.at('Foo')).not_to be_nil
+    expect(YARD::Registry.at('Bar')).not_to be_nil
+  end
 end

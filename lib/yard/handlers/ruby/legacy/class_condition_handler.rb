@@ -41,7 +41,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
     case statement.tokens[1..-1].to_s.strip
     when /^(\d+)$/
       condition = $1 != "0"
-    when /^defined\?\s*\(?(.+?)\)?$/
+    when /^defined\?\s*\(?\s*([A-Za-z0-9:_]+?)\s*\)?$/
       # defined? keyword used, let's see if we can look up the name
       # in the registry, then we'll try using Ruby's powers. eval() is not
       # *too* dangerous here since code is not actually executed.

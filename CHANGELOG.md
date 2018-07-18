@@ -1,3 +1,13 @@
+# master
+
+# [0.9.15] - July 17th, 2018
+
+[0.9.15]: https://github.com/lsegal/yard/compare/v0.9.14...v0.9.15
+
+- Fixed security issue in parsing of Ruby code that could allow for arbitrary
+  execution. Credit to Nelson Elhage <nelhage@nelhage.com> for discovering this
+  issue.
+
 # [0.9.14] - June 2nd, 2018
 
 [0.9.14]: https://github.com/lsegal/yard/compare/v0.9.13...v0.9.14
