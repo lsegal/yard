@@ -132,7 +132,7 @@ module YARD
     # @see NamespaceMapper.register_separator
     class Base
       # The files the object was defined in. To add a file, use {#add_file}.
-      # @return [Array<String>] a list of files
+      # @return [Array<Array<String, Integer>>] a list of files
       # @see #add_file
       attr_reader :files
 
