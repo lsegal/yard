@@ -46,9 +46,10 @@ RSpec.describe YARD::CLI::YRI do
   describe "#initialize" do
     it "loads search paths" do
       path = %r{/\.yard/yri_search_paths$}
-      expect(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
-      expect(File).to receive(:file?).with(path).and_return(true)
-      expect(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
+      allow(File).to receive(:file?).and_call_original
+      allow(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      allow(File).to receive(:file?).with(path).and_return(true)
+      allow(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
       expect(spaths).to include('line1')
@@ -58,9 +59,10 @@ RSpec.describe YARD::CLI::YRI do
     it "uses DEFAULT_SEARCH_PATHS prior to other paths" do
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.push('foo', 'bar')
       path = %r{/\.yard/yri_search_paths$}
-      expect(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
-      expect(File).to receive(:file?).with(path).and_return(true)
-      expect(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
+      allow(File).to receive(:file?).and_call_original
+      allow(File).to receive(:file?).with(%r{/\.yard/yri_cache$}).and_return(false)
+      allow(File).to receive(:file?).with(path).and_return(true)
+      allow(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
       spaths = @yri.instance_variable_get("@search_paths")
       expect(spaths[0, 4]).to eq %w(foo bar line1 line2)

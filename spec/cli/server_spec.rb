@@ -85,6 +85,10 @@ RSpec.describe YARD::CLI::Server do
     mock_file(filename_e) unless filename_e == filename
   end
 
+  before :each do
+    allow(File).to receive(:exist?).and_call_original
+  end
+
   context 'when .yardopts file exists' do
     before :each do
       Registry.yardoc_file = Registry::DEFAULT_YARDOC_FILE
