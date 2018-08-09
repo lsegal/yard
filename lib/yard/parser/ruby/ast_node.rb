@@ -207,9 +207,10 @@ module YARD
         # @return [void]
         def traverse
           nodes = [self]
-          nodes.each.with_index do |node, index|
+          until nodes.empty?
+            node = nodes.pop
             yield node
-            nodes.insert index + 1, *node.children
+            nodes += node.children.reverse unless node.children.empty?
           end
         end
 
