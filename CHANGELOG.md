@@ -1,5 +1,12 @@
 # master
 
+# [0.9.16] - August 11th, 2018
+
+[0.9.16]: https://github.com/lsegal/yard/compare/v0.9.15...v0.9.16
+
+- Documentation fixes (#1175, #1178).
+- Fixed stack overflow issue when parsing extremely large lists (#1176).
+
 # [0.9.15] - July 17th, 2018
 
 [0.9.15]: https://github.com/lsegal/yard/compare/v0.9.14...v0.9.15
