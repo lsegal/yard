@@ -13,7 +13,7 @@ module YARD
       # @return [Hash] a list of library names and yardoc files to serve
       attr_accessor :libraries
 
-      # @return [Adapter] the adapter to use for loading the web server
+      # @return [YARD::Server::Adapter] the adapter to use for loading the web server
       attr_accessor :adapter
 
       # @return [Array<String>] a list of scripts to load
