@@ -2,14 +2,14 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec', '~> 3.5'
-  gem 'rake', '~> 11.0'
-  gem 'rdoc', '~> 4.0'
+  gem 'rspec'
+  gem 'rake'
+  gem 'rdoc'
   gem 'json'
   gem 'simplecov'
   gem 'samus'
   gem 'coveralls', :require => false
-  gem 'rubocop', '0.44.1', :require => false
+  gem 'rubocop', :require => false
 end
 
 group :asciidoc do
@@ -17,18 +17,17 @@ group :asciidoc do
 end
 
 group :markdown do
-  gem 'redcarpet', '~> 3.0', :platforms => :mri
-  gem 'kramdown', :platforms => :jruby
+  gem 'redcarpet'
 end
 
 group :textile do
-  gem 'RedCloth', :platforms => :ruby
+  gem 'RedCloth'
 end
 
 group :server do
-  gem 'rack', '~> 2.0'
+  gem 'rack'
 end
 
 group :i18n do
-  gem 'gettext', '>= 2.2.1'
+  gem 'gettext'
 end
