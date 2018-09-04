@@ -205,7 +205,7 @@ module YARD
     # @since 0.7.0
     # @todo Add Tags::Tag#to_raw and refactor
     def to_raw
-      tag_data = tags.sort_by(&:tag_name).map do |tag|
+      tag_data = tags.map do |tag|
         case tag
         when Tags::OverloadTag
           tag_text = "@#{tag.tag_name} #{tag.signature}\n"
@@ -271,7 +271,7 @@ module YARD
     # @param [#to_s] name the tag name to return data for, or nil for all tags
     # @return [Array<Tags::Tag>] the list of tags by the specified tag name
     def tags(name = nil)
-      list = @tags + convert_ref_tags
+      list = stable_sort_by(@tags + convert_ref_tags, &:tag_name)
       return list unless name
       list.select {|tag| tag.tag_name.to_s == name.to_s }
     end
@@ -373,6 +373,14 @@ module YARD
       @unresolved_reference = parser.reference
       add_tag(*parser.tags)
       parser.text
+    end
+
+    # A stable sort_by method.
+    #
+    # @param [Enumerable]
+    # @return [Array]
+    def stable_sort_by(list)
+      list.each_with_index.sort_by {|tag, i| [yield(tag), i] }.map(&:first)
     end
   end
 end

@@ -296,6 +296,15 @@ RSpec.describe YARD::Docstring do
       expect(doc.to_raw).to eq doc.all
     end
 
+    it "is stable sorting tags" do
+      expected = Docstring.new("123\n@param x\n@param y\n@version A")
+      doc = Docstring.new("123")
+      doc.add_tag(Tags::Tag.new('version', 'A'))
+      doc.add_tag(Tags::Tag.new('param', 'x'))
+      doc.add_tag(Tags::Tag.new('param', 'y'))
+      expect(doc.to_raw).to eq expected.all
+    end
+
     # @bug gh-563
     it "handles full @option tags" do
       doc = Docstring.new("@option foo [String] bar (nil) baz")
