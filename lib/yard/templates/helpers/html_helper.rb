@@ -11,6 +11,9 @@ module YARD
       # @private
       URLMATCH = /[^\w\s~!\*'\(\):;@&=\$,\[\]<>-]/
 
+      # @private
+      ASCIIDOC_ATTRIBUTES = {"env" => "yard", "env-yard" => ""}.freeze
+
       # @group Escaping Template Data
 
       # Escapes HTML entities
@@ -97,7 +100,8 @@ module YARD
       # @param [String] text input Asciidoc text
       # @return [String] output HTML
       def html_markup_asciidoc(text)
-        markup_class(:asciidoc).render(text)
+        options = {:attributes => ASCIIDOC_ATTRIBUTES}
+        markup_class(:asciidoc).render(text, options)
       end
 
       # Converts Textile to HTML
