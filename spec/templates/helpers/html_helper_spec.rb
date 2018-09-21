@@ -214,6 +214,21 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       html = htmlify(markdown, :markdown)
       expect(html).to match %r{^<p>Introduction:</p>.*<code class="ruby">}m
     end
+
+    it "sets env and env-yard attributes (AsciiDoc specific)" do
+      adoc = <<-EOF.strip.gsub(/^\s+/, "") # strip and unindent
+        ifdef::env[]
+        Attribute "env" is set, and its value is "{env}".
+        endif::[]
+
+        ifdef::env-yard[]
+        Attribute "env-yard" is set, and its value is "{env-yard}".
+        endif::[]
+      EOF
+      html = htmlify(adoc, :asciidoc)
+      expect(html).to match(/"env" is set, and its value is "yard"./)
+      expect(html).to match(/"env-yard" is set, and its value is ""./)
+    end
   end
 
   describe "#link_object" do
