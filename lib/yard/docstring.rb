@@ -377,8 +377,8 @@ module YARD
 
     # A stable sort_by method.
     #
-    # @param [Enumerable]
-    # @return [Array]
+    # @param list [Enumerable] the list to sort.
+    # @return [Array] a stable sorted list.
     def stable_sort_by(list)
       list.each_with_index.sort_by {|tag, i| [yield(tag), i] }.map(&:first)
     end
