@@ -36,6 +36,7 @@ rescue LoadError
   nil # noop
 end
 
+desc "Check code style with Rubocop"
 task :rubocop do
   sh "rubocop"
 end
