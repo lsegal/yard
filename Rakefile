@@ -41,7 +41,12 @@ task :rubocop do
   sh "rubocop"
 end
 
-task :default => [:rubocop, :spec]
+desc "Generate documentation for Yard, and fail if there are any warnings"
+task :test_doc do
+  sh "bin/yard --fail-on-warning #{"--no-progress" if ENV["CI"]}"
+end
+
+task :default => [:rubocop, :spec, :test_doc]
 
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
