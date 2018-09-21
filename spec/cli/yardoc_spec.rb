@@ -184,9 +184,22 @@ RSpec.describe YARD::CLI::Yardoc do
       @yardoc.run(arg)
     end
 
+    # This example relies on processing Yard's own documentation, and with
+    # --fail-on-warning option on, will raise a SystemExit error if building
+    # that documentation produces any one warning.
+    #
+    # Unless handled, it will cause immediate and abnormal process exit,
+    # without running remaining tests, and with non-successful exit status.
+    #
+    # While suppressing exceptions is generally a bad practice and against this
+    # project's style guide, here it is well advocated,
+    # hence Lint/HandleExceptions cop is disabled.
     should_accept('--fail-on-warning') do |arg|
       expect(YARD).to receive(:parse)
-      @yardoc.run(arg)
+      begin
+        @yardoc.run(arg)
+      rescue SystemExit # rubocop:disable Lint/HandleExceptions
+      end
     end
   end
 
