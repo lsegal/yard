@@ -16,6 +16,8 @@ before_install:
 
 # Specify which ruby versions you wish to run your tests on, each version will be used
 rvm:
+  - "2.0"
+  - "2.1"
   - "2.2"
   - "2.3"
   - "2.4"

@@ -101,7 +101,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :method) do
     it_should_behave_like "all formats"
   end
 
-  describe "method with keyword arguments spalt" do
+  describe "method with keyword arguments" do
     before do
       @template = :method006
       YARD.parse_string <<-'eof'
@@ -114,5 +114,5 @@ RSpec.describe YARD::Templates::Engine.template(:default, :method) do
     end
 
     it_should_behave_like "all formats"
-  end
+  end if RUBY_VERSION >= "2.1"
 end
