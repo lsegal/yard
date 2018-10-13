@@ -70,10 +70,10 @@ RSpec.describe YARD::CodeObjects::ExtraFileObject do
       expect(file.contents).to eq " #!foobar\nHello"
     end
 
-    it "does not parse out attributes if there are newlines prior to attributes" do
-      file = ExtraFileObject.new('file.txt', "\n# @title\nFOO BAR")
+    it "does not parse out attributes if there are at least two newlines prior to attributes" do
+      file = ExtraFileObject.new('file.txt', "\n\n# @title\nFOO BAR")
       expect(file.attributes).to be_empty
-      expect(file.contents).to eq "\n# @title\nFOO BAR"
+      expect(file.contents).to eq "\n\n# @title\nFOO BAR"
     end
 
     it "sets contents to data after attributes" do
