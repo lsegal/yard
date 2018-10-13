@@ -38,13 +38,25 @@ RSpec.describe YARD::CodeObjects::ExtraFileObject do
     it "allows the attributes section to be wrapped in an HTML comment" do
       file = ExtraFileObject.new('file.txt', "<!--\n# @title X\n-->\nFOO BAR")
       expect(file.attributes[:title]).to eq "X"
-      expect(file.contents).to eq "FOO BAR"
+      expect(file.contents).to eq "<!--\n-->\nFOO BAR"
     end
 
     it "allows whitespace around ignored HTML comment" do
       file = ExtraFileObject.new('file.txt', " \t <!-- \n# @title X\n \t --> \nFOO BAR")
       expect(file.attributes[:title]).to eq "X"
-      expect(file.contents).to eq "FOO BAR"
+      expect(file.contents).to eq " \t <!-- \n \t --> \nFOO BAR"
+    end
+
+    it "allows the attributes section to be wrapped in an AsciiDoc comment" do
+      file = ExtraFileObject.new('file.txt', "````\n# @title X\n````\nFOO BAR")
+      expect(file.attributes[:title]).to eq "X"
+      expect(file.contents).to eq "````\n````\nFOO BAR"
+    end
+
+    it "allows the attributes section to be wrapped in a Textile comment" do
+      file = ExtraFileObject.new('file.txt', "###.\n# @title X\n\nFOO BAR")
+      expect(file.attributes[:title]).to eq "X"
+      expect(file.contents).to eq "###.\n\nFOO BAR"
     end
 
     it "parses out old-style #!markup shebang format" do
