@@ -501,6 +501,43 @@ eof
       expect(Registry.at(:Bar).docstring).to eq "this is a comment"
     end
 
+    it "removes all magic comments at the start of the buffer" do
+      YARD.parse_string(<<~RUBY)
+        # frozen_string_literal: true
+        # frozen_string_literal : true
+        # encoding: UTF-8
+        # warn_indent: true
+        # also_magic: true
+        # More-magic: true
+        # this is a comment
+        class Foo; end
+      RUBY
+
+      expect(Registry.at(:Foo).docstring).to eq "this is a comment"
+    end
+
+    it "does not remove any magic comment past the beginning of the buffer" do
+      YARD.parse_string(<<~RUBY)
+        1
+        # frozen_string_literal: true
+        # encoding: UTF-8
+        # warn_indent: true
+        # also_magic: true
+        # More-magic: true
+        # this is a comment
+        class Foo; end
+      RUBY
+
+      expect(Registry.at(:Foo).docstring).to eq(<<~COMMENT.chomp)
+        frozen_string_literal: true
+        encoding: UTF-8
+        warn_indent: true
+        also_magic: true
+        More-magic: true
+        this is a comment
+      COMMENT
+    end
+
     it "handles compile errors" do
       expect { stmt(":~$ Do not clobber") }.to raise_error(Parser::ParserSyntaxError)
     end

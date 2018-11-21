@@ -532,6 +532,8 @@ module YARD
             elsif comment =~ SourceParser::FROZEN_STRING_LINE
               @frozen_string_line = comment
               not_comment = true
+            elsif comment =~ SourceParser::MAGIC_COMMENT
+              not_comment = true
             end
           end
 
