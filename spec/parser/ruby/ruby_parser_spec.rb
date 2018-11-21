@@ -502,7 +502,7 @@ eof
     end
 
     it "removes all magic comments at the start of the buffer" do
-      YARD.parse_string(<<~RUBY)
+      YARD.parse_string(<<-RUBY)
         # frozen_string_literal: true
         # frozen_string_literal : true
         # encoding: UTF-8
@@ -517,7 +517,7 @@ eof
     end
 
     it "does not remove any magic comment past the beginning of the buffer" do
-      YARD.parse_string(<<~RUBY)
+      YARD.parse_string(<<-RUBY)
         1
         # frozen_string_literal: true
         # encoding: UTF-8
@@ -528,7 +528,7 @@ eof
         class Foo; end
       RUBY
 
-      expect(Registry.at(:Foo).docstring).to eq(<<~COMMENT.chomp)
+      expect(Registry.at(:Foo).docstring).to eq(<<-COMMENT.each_line.map(&:strip).join("\n"))
         frozen_string_literal: true
         encoding: UTF-8
         warn_indent: true
