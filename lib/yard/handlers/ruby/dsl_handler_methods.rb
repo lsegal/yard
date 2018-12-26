@@ -7,8 +7,9 @@ module YARD
         include Parser
 
         IGNORE_METHODS = Hash[*%w(alias alias_method autoload attr attr_accessor
-          attr_reader attr_writer extend include public private protected
-          private_constant).map {|n| [n, true] }.flatten]
+          attr_reader attr_writer extend include module_function public private
+          protected private_constant private_class_method public_class_method).
+          map {|n| [n, true] }.flatten]
 
         def handle_comments
           return if IGNORE_METHODS[caller_method]
