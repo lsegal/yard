@@ -184,13 +184,13 @@ RSpec.describe YARD::Parser::C::CParser do
         file = File.join(File.dirname(__FILE__), 'examples', 'file.c.txt')
         parse(File.read(file))
       end
-  
+
       it "parses methods from define_filetest_function" do
         obj = YARD::Registry.at('File.exist?')
         expect(obj).not_to be nil
         expect(obj.docstring).not_to be_blank
       end
-    end  
+    end
   end
 
   describe "Override comments" do
