@@ -178,6 +178,19 @@ RSpec.describe YARD::Parser::C::CParser do
         expect(Registry.at('Foo#func').docstring).to eq "docstring"
       end
     end
+
+    describe "File singleton methods" do
+      before(:all) do
+        file = File.join(File.dirname(__FILE__), 'examples', 'file.c.txt')
+        parse(File.read(file))
+      end
+  
+      it "parses methods from define_filetest_function" do
+        obj = YARD::Registry.at('File.exist?')
+        expect(obj).not_to be nil
+        expect(obj.docstring).not_to be_blank
+      end
+    end  
   end
 
   describe "Override comments" do
