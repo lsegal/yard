@@ -519,7 +519,12 @@ module YARD
         if @namespace
           reg_obj = Registry.at(path)
           return if reg_obj && reg_obj.class == self.class
-          @namespace.children << self unless @namespace.is_a?(Proxy)
+
+          unless @namespace.is_a?(Proxy)
+            # remove prior objects from obj's children that match this one
+            @namespace.children.delete_if {|o| o.path == path }
+            @namespace.children << self
+          end
           Registry.register(self)
         end
       end

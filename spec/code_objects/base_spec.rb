@@ -121,6 +121,16 @@ RSpec.describe YARD::CodeObjects::Base do
     expect(obj.children).to include(obj2)
   end
 
+  # @bug gh-1209
+  it "removes prior defined objects at the same path from namespace's children" do
+    Registry.clear
+    obj = ModuleObject.new(:root, :YARD)
+    const = ConstantObject.new(obj, :Testing)
+    klass = ClassObject.new(obj, :Testing)
+    expect(obj.children.map {|o| o.type }).to eq [:class]
+    expect(Registry.at('YARD::Testing').type).to eq :class
+  end
+
   it "properly re-indents source starting from 0 indentation" do
     obj = CodeObjects::Base.new(nil, :test)
     obj.source = <<-eof
