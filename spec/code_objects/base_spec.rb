@@ -125,9 +125,9 @@ RSpec.describe YARD::CodeObjects::Base do
   it "removes prior defined objects at the same path from namespace's children" do
     Registry.clear
     obj = ModuleObject.new(:root, :YARD)
-    const = ConstantObject.new(obj, :Testing)
-    klass = ClassObject.new(obj, :Testing)
-    expect(obj.children.map {|o| o.type }).to eq [:class]
+    ConstantObject.new(obj, :Testing)
+    ClassObject.new(obj, :Testing)
+    expect(obj.children.map {|o| o.type.to_sym }).to eq [:class]
     expect(Registry.at('YARD::Testing').type).to eq :class
   end
 
