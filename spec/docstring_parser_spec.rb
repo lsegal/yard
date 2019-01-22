@@ -241,6 +241,24 @@ eof
         alias bar foo
       eof
     end
+
+    it "does not warn on matching param with inline method modifier" do
+      expect(log).to_not receive(:warn)
+      YARD.parse_string <<-eof
+        # @param [Numeric] a
+        # @return [Numeric]
+        private_class_method def self.foo(a); a + 1; end
+      eof
+    end
+
+    it "warns on mismatching param with inline method modifier" do
+      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param [Numeric] notaparam
+        # @return [Numeric]
+        private_class_method def self.foo(a); a + 1; end
+      eof
+    end
   end
 
   describe "after_parse (see)" do
