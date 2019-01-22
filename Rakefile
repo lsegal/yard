@@ -43,7 +43,7 @@ end
 
 desc "Generate documentation for Yard, and fail if there are any warnings"
 task :test_doc do
-  sh "bin/yard --fail-on-warning #{"--no-progress" if ENV["CI"]}"
+  sh "ruby bin/yard --fail-on-warning #{"--no-progress" if ENV["CI"]}"
 end
 
 task :default => [:rubocop, :spec, :test_doc]
