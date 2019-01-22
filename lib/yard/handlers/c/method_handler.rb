@@ -15,8 +15,13 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
                 \s*"([^"]+)",
                 \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
                 \s*(-?\w+)\s*\)/xm
+  MATCH3 = /define_filetest_function\s*\(
+                \s*"([^"]+)",
+                \s*(?:RUBY_METHOD_FUNC\(|VALUEFUNC\(|\(\w+\))?(\w+)\)?,
+                \s*(-?\w+)\s*\)/xm
   handles MATCH1
   handles MATCH2
+  handles MATCH3
   statement_class BodyStatement
 
   process do
@@ -31,6 +36,10 @@ class YARD::Handlers::C::MethodHandler < YARD::Handlers::C::Base
 
     statement.source.scan(MATCH2) do |name, func_name, _param_count|
       handle_method("method", "rb_mKernel", name, func_name)
+    end
+
+    statement.source.scan(MATCH3) do |name, func_name, _param_count|
+      handle_method("singleton_method", "rb_cFile", name, func_name)
     end
   end
 end
