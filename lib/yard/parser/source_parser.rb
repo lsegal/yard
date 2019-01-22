@@ -68,7 +68,7 @@ module YARD
 
       # The default glob of files to be parsed.
       # @since 0.9.0
-      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.rb", "ext/**/*.{c,cc,cxx,cpp}"]
+      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.rb", "ext/**/*.{c,cc,cxx,cpp,rb}"]
 
       # Byte order marks for various encodings
       # @since 0.7.0

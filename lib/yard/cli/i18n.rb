@@ -45,7 +45,7 @@ module YARD
         opts.banner = "Usage: yard i18n [options] [source_files [- extra_files]]"
         opts.top.list.clear
         opts.separator "(if a list of source files is omitted, "
-        opts.separator "  {lib,app}/**/*.rb ext/**/*.c is used.)"
+        opts.separator "  {lib,app}/**/*.rb ext/**/*.{c,rb} is used.)"
         opts.separator ""
         opts.separator "Example: yard i18n -o yard.pot - FAQ LICENSE"
         opts.separator "  The above example outputs .pot file for files in"

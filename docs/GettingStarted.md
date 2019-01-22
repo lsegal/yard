@@ -525,7 +525,7 @@ which is automatically detected by YARD if found in the root of your project
 (any file starting with `README*`). You can specify extra files on the command
 line (or in the `.yardopts` file) by listing them after the '-' separator:
 
-    yardoc lib/**/*.rb ext/**/*.c - LICENSE.txt
+    yardoc lib/**/*.rb ext/**/*.{c,rb} - LICENSE.txt
 
 Note that the README will automatically be picked up, so you do not need to
 specify it. If you don't want to modify the default file globs, you can ignore

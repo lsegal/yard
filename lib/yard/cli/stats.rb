@@ -184,7 +184,7 @@ module YARD
         opts = OptionParser.new
         opts.banner = "Usage: yard stats [options] [source_files]"
 
-        opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.c is used.)"
+        opts.separator "(if a list of source files is omitted, lib/**/*.rb ext/**/*.{c,rb} is used.)"
 
         general_options(opts)
         output_options(opts)

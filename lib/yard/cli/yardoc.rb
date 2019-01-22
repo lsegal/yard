@@ -516,7 +516,7 @@ module YARD
         opts.banner = "Usage: yard doc [options] [source_files [- extra_files]]"
 
         opts.separator "(if a list of source files is omitted, "
-        opts.separator "  {lib,app}/**/*.rb ext/**/*.c is used.)"
+        opts.separator "  {lib,app}/**/*.rb ext/**/*.{c,rb} is used.)"
         opts.separator ""
         opts.separator "Example: yardoc -o documentation/ - FAQ LICENSE"
         opts.separator "  The above example outputs documentation for files in"
