@@ -113,14 +113,17 @@ module YARD::CodeObjects
       end
       contents
     rescue ArgumentError => e
-      if retried && e.message =~ /invalid byte sequence/
+      raise unless e.message =~ /invalid byte sequence/
+
+      if retried
         # This should never happen.
         log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
         return ''
+      else
+        data.force_encoding('binary') if data.respond_to?(:force_encoding)
+        retried = true
+        retry
       end
-      data.force_encoding('binary') if data.respond_to?(:force_encoding)
-      retried = true
-      retry
     end
 
     def translate(data)
