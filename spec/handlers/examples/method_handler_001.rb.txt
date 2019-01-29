@@ -50,6 +50,16 @@ end
   def %(o) end
   def ^(o) end
 
+  def multiline_params(x,
+    y, z, zz = 'zz',
+    *foo,
+    a: 'a', b: 'b',
+    c: 'c',
+    **bar,
+    &blk
+  )
+  end
+
   def optsmeth(x, opts = {}) end
   def blockmeth(x, &block) end
 

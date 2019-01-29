@@ -41,6 +41,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
   it "handles parameters" do
     expect(P('Foo#[]').parameters).to eq [['key', "'default'"]]
     expect(P('Foo#/').parameters).to eq [['x', "File.new('x', 'w')"], ['y', '2']]
+    expect(P('Foo#multiline_params').signature).to eq "def multiline_params(x, y, z, zz = 'zz', *foo, a: 'a', b: 'b', c: 'c', **bar, &blk)"
   end
 
   it "handles opts = {} as parameter" do
