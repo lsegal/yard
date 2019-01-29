@@ -106,7 +106,17 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   def method_signature
     method_name = statement.method_name(true)
     if statement.parameters.any? {|e| e }
-      "def #{method_name}(#{statement.parameters.source})"
+      formatted_args = format_args.map do |name, default|
+        next name unless default
+
+        if name.end_with?(':')
+          [name, default].join(' ')
+        else
+          [name, default].join(' = ')
+        end
+      end.join(', ')
+
+      "def #{method_name}(#{formatted_args})"
     else
       "def #{method_name}"
     end
