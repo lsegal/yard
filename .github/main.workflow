@@ -1,6 +1,6 @@
 workflow "Build, Test, and Publish" {
   on = "push"
-  resolves = ["Package Gem", "Publish Gem", "Create GitHub Release"]
+  resolves = ["Install", "Test", "Package Gem", "On Tag", "Release Notes", "Publish Gem", "Create GitHub Release"]
 }
 
 action "Install" {
@@ -32,10 +32,13 @@ action "Create GitHub Release" {
   needs = "Release Notes"
   uses = "./.github/actions/release"
   secrets = ["RELEASE_TOKEN"]
+  env = {
+    ARTIFACT = "*.gem"
+  }
 }
 
 action "Publish Gem" {
-  needs = "On Tag"
+  needs = "Create GitHub Release"
   uses = "scarhand/actions-ruby@master"
   args = "push *.gem"
   secrets = ["RUBYGEMS_AUTH_TOKEN"]
