@@ -1,6 +1,9 @@
 {
   "actions": [
     {
+      "action": "ruby-bundle"
+    },
+    {
       "action": "rake-task"
     },
     {
@@ -24,13 +27,15 @@
     {
       "action": "archive-git-full",
       "files": ["git.tgz"],
-      "publish": [{
-        "action": "git-push",
-        "arguments": {
-          "remotes": "origin",
-          "refs": "master v$version"
+      "publish": [
+        {
+          "action": "git-push",
+          "arguments": {
+            "remotes": "origin",
+            "refs": "master v$version"
+          }
         }
-      }]
+      ]
     },
     {
       "action": "gem-build",
