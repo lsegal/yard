@@ -294,8 +294,15 @@ module YARD
         # Last minute modifications
         self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if files.empty?
         files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
-        readme = Dir.glob('README{,*[^~]}').first
-        readme ||= Dir.glob(files.first).first if options.onefile
+        readmes = Dir.glob('README{,*[^~]}')
+        if readmes.empty?
+          readme = Dir.glob(files.first).first if options.onefile && !files.empty?
+        else
+          readme = readmes.
+            sort {|a, b| File.extname(a) <=> File.extname(b) }.
+            sort {|a, b| a.slice(0, a.rindex('.') || a.length) <=> b.slice(0, b.rindex('.') || b.length) }.
+            first
+        end
         options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
         options.files.unshift(options.readme).uniq! if options.readme
 
