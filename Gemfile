@@ -13,7 +13,8 @@ group :development do
 end
 
 group :asciidoc do
-  gem 'asciidoctor'
+  # Asciidoctor 2.0 drops support for Ruby < 2.3.
+  gem 'asciidoctor', RUBY_VERSION < '2.3' ? '< 2' : '>= 0'
 end
 
 group :markdown do
