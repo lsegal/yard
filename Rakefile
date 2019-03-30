@@ -41,6 +41,70 @@ task :rubocop do
   sh "rubocop"
 end
 
+def release_version
+  unless defined?(@__release_version)
+    ver = ENV['VERSION']
+
+    raise "missing VERSION=x.y.z" if ver.nil? || ver.empty?
+    if ver < YARD::VERSION
+      raise "invalid version `#{ver}' (must be >= `#{YARD::VERSION}')"
+    end
+
+    @__release_version = ENV['VERSION']
+  end
+
+  @__release_version
+end
+
+def word_wrap(text)
+  text.gsub(/(.{1,60})(\s|$)/, "\\1\n  ")
+end
+
+def collect_issues
+  devnull = YARD.windows? ? "NUL" : "/dev/null"
+  out = `git log $(git describe --tags --abbrev=0)...HEAD -E --grep '#[0-9]+' 2>#{devnull}`
+  out.scan(%r{((?:\S+\/\S+)?#\d+)}).flatten
+end
+
+def commit_message
+  message = "Tag release v#{release_version}"
+
+  issues = collect_issues
+  unless issues.empty?
+    message += "\n\nReferences:\n  " + word_wrap(issues.uniq.sort.join(", "))
+  end
+
+  message
+end
+
+desc "Tags a version"
+task :tag do
+  ver = release_version
+  vfile = File.join(File.dirname(__FILE__), 'lib', 'yard', 'version.rb')
+  content = File.read(vfile)
+  content = content.sub(/VERSION = '(.+?)'/, "VERSION = '#{ver}'")
+  File.open(vfile, 'w') {|f| f.write(content) }
+
+  day_ord = {1 => "st", 2 => "nd", 3 => "rd"}[Time.now.day % 10] || "th"
+  chfile = File.join(File.dirname(__FILE__), 'CHANGELOG.md')
+  content = File.read(chfile)
+  repl = <<-eof
+# master
+
+# [#{ver}] - #{Time.now.strftime("%B %d#{day_ord}, %Y")}
+
+[#{ver}]: https://github.com/lsegal/yard/compare/v\\2...v#{ver}
+
+\\1
+
+# [\\2]
+eof
+  content = content.sub(/\A\s*# master\r?\n(.*?)\r?\n# \[(.+?)\]/mis, repl.strip)
+  File.open(chfile, 'w') {|f| f.write(content) }
+  sh "git commit -m \"#{commit_message}\" -- lib/yard/version.rb CHANGELOG.md"
+  sh "git tag v#{ver}"
+end
+
 desc "Generate documentation for Yard, and fail if there are any warnings"
 task :test_doc do
   sh "ruby bin/yard --fail-on-warning #{"--no-progress" if ENV["CI"]}"
