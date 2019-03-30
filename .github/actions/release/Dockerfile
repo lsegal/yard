@@ -8,9 +8,9 @@ LABEL "maintainer"="Loren Segal <lsegal@soen.ca>"
 
 RUN apk add --no-cache -U \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  hub git
+  hub git ruby
 
 WORKDIR /github/workspace
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT [ "/entrypoint.sh" ]
+COPY ./entrypoint.rb /entrypoint.rb
+RUN chmod +x /entrypoint.rb
+ENTRYPOINT [ "/entrypoint.rb" ]

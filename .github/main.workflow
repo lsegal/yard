@@ -1,6 +1,6 @@
 workflow "Build, Test, and Publish" {
   on = "push"
-  resolves = ["Install", "Test", "Package Gem", "On Tag", "Release Notes", "Publish Gem", "Create GitHub Release"]
+  resolves = ["Install", "Test", "Package Gem", "On Tag", "Publish Gem", "Create GitHub Release"]
 }
 
 action "Install" {
@@ -23,13 +23,8 @@ action "On Tag" {
   args = "tag v*"
 }
 
-action "Release Notes" {
-  needs = "On Tag"
-  uses = "./.github/actions/changelog"
-}
-
 action "Create GitHub Release" {
-  needs = "Release Notes"
+  needs = "On Tag"
   uses = "./.github/actions/release"
   secrets = ["RELEASE_TOKEN"]
   env = {

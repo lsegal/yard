@@ -6,7 +6,7 @@ rlsfile = ENV['RELEASE_FILE'] || '/github/home/.releasenotes'
 
 match = /^#\s*\[#{version}\]\s+-\s+(?<title>.+?)\r?\n(?<body>.*?)\r?\n#/ms.match(log)
 unless match
-  puts "No Changelog notes found for v#{version}"
+  puts "Skipping release, no Changelog notes found for v#{version}"
   exit 78
 end
 
@@ -19,3 +19,7 @@ puts ""
 puts notes
 
 File.open(rlsfile, 'w') {|f| f.write(notes) }
+
+artifact_arg = ENV['ARTIFACT'] ? "-a #{ENV['ARTIFACT'].inspect}" : ''
+ENV['GITHUB_TOKEN'] = ENV['RELEASE_TOKEN'] || ENV['GITHUB_TOKEN']
+system "hub release create #{artifact_arg} -F #{rlsfile} v#{version}"
