@@ -15043,16 +15043,6 @@ msgstr ""
 msgid "the last part of a module path"
 msgstr "モジュールパスの最後の部分"
 
-# Module#namespace_name
-#: ../lib/yard/core_ext/module.rb:12
-msgid "Returns the module namespace path minus the class/module name"
-msgstr "クラス/モジュール名を引いたモジュールのnamespaceのパスを返す"
-
-# @example 
-#: ../lib/yard/core_ext/module.rb:16
-msgid "module A::B::C; namespace_name end # => \"A::B\""
-msgstr ""
-
 # @return [String]
 #: ../lib/yard/core_ext/module.rb:16
 msgid "the namespace minus the class/module name"

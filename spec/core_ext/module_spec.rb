@@ -6,10 +6,4 @@ RSpec.describe Module do
       expect(YARD::CodeObjects::Base.class_name).to eq "Base"
     end
   end
-
-  describe "#namespace" do
-    it "returns everything before the class name" do
-      expect(YARD::CodeObjects::Base.namespace_name).to eq "YARD::CodeObjects"
-    end
-  end
 end
