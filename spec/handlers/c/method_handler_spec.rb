@@ -213,6 +213,7 @@ RSpec.describe YARD::Handlers::C::MethodHandler do
     foo = Registry.at('Foo#foo?')
     expect(foo.docstring).to eq 'DOCSTRING'
     expect(foo.tag(:return).types).to eq ['Boolean']
+    expect(foo.tags(:return).size).to eq 1
   end
 
   it "does not add return tag if return tags exist" do
@@ -226,6 +227,7 @@ RSpec.describe YARD::Handlers::C::MethodHandler do
     eof
     foo = Registry.at('Foo#foo?')
     expect(foo.tag(:return).types).to eq ['String']
+    expect(foo.tags(:return).size).to eq 1
   end
 
   it "handles casted method names" do

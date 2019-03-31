@@ -5,6 +5,7 @@ module YARD
       module HandlerMethods
         include Parser::C
         include CodeObjects
+        include Common::MethodHandler
 
         def handle_class(var_name, class_name, parent, in_module = nil)
           parent = nil if parent == "0"
@@ -67,7 +68,7 @@ module YARD
             register_visibility(obj, visibility)
             find_method_body(obj, func_name)
             obj.explicit = true
-            obj.add_tag(Tags::Tag.new(:return, '', 'Boolean')) if name =~ /\?$/
+            add_predicate_return_tag(obj) if name =~ /\?$/
           end
         end
 
