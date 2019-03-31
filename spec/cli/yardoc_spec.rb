@@ -647,11 +647,45 @@ RSpec.describe YARD::CLI::Yardoc do
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
     end
 
+    it "uses no readme if files is empty and no readme is specified when using --one-file" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return []
+      @yardoc.parse_arguments '--one-file', ''
+      expect(@yardoc.options.readme).to be_nil
+    end
+
     it "uses readme it exists when using --one-file" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README']
       expect(File).to receive(:read).with('README').and_return('')
       @yardoc.parse_arguments(*%w(--one-file lib/*.rb))
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
+    end
+
+    it "selects readme with no file extension over readme with file extension" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.md', 'README']
+      expect(File).to receive(:read).with('README').and_return('')
+      @yardoc.parse_arguments
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
+    end
+
+    it "selects readme with no suffix over readme with hyphenated suffix" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README.md', 'README-de.md']
+      expect(File).to receive(:read).with('README.md').and_return('')
+      @yardoc.parse_arguments
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.md', '')
+    end
+
+    it "selects readme with no suffix over readme with dotted suffix" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.fr.md', 'README.md', 'README.de.md']
+      expect(File).to receive(:read).with('README.md').and_return('')
+      @yardoc.parse_arguments
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.md', '')
+    end
+
+    it "selects first readme from lexically sorted list" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README-de.md']
+      expect(File).to receive(:read).with('README-de.md').and_return('')
+      @yardoc.parse_arguments
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README-de.md', '')
     end
 
     it "does not allow US-ASCII charset when using --one-file" do
