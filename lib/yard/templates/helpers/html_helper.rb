@@ -101,7 +101,7 @@ module YARD
       # @return [String] output HTML
       def html_markup_asciidoc(text)
         options = {:attributes => ASCIIDOC_ATTRIBUTES}
-        markup_class(:asciidoc).render(text, options)
+        markup_class(:asciidoc).convert(text, options)
       end
 
       # Converts Textile to HTML

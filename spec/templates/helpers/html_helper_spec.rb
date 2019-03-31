@@ -216,7 +216,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "sets env and env-yard attributes (AsciiDoc specific)" do
-      adoc = <<-EOF.strip.gsub(/^\s+/, "") # strip and unindent
+      adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
         ifdef::env[]
         Attribute "env" is set, and its value is "{env}".
         endif::[]
@@ -228,6 +228,25 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       html = htmlify(adoc, :asciidoc)
       expect(html).to match(/"env" is set, and its value is "yard"./)
       expect(html).to match(/"env-yard" is set, and its value is ""./)
+    end
+
+    it "should not include the document title from the AsciiDoc header" do
+      adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
+        = Project Name
+
+        Introduction.
+
+        == Installation
+
+        Installation instructions.
+
+        == Usage
+
+        Usage instructions.
+      EOF
+      html = htmlify(adoc, :asciidoc)
+      expect(html).to_not match(/Project Name/)
+      expect(html).to include(%(<h2 id="_installation">Installation</h2>))
     end
   end
 
