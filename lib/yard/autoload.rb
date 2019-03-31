@@ -64,6 +64,11 @@ module YARD
   # parsing phase. This allows YARD as well as any custom extension to
   # analyze source and generate {CodeObjects} to be stored for later use.
   module Handlers
+    # Shared logic between C and Ruby handlers.
+    module Common
+      autoload :MethodHandler,            __p('handlers/common/method_handler')
+    end
+
     # CRuby Handlers
     # @since 0.8.0
     module C
