@@ -62,7 +62,8 @@ end
 
 def collect_issues
   devnull = YARD.windows? ? "NUL" : "/dev/null"
-  out = `git log $(git describe --tags --abbrev=0)...HEAD -E --grep '#[0-9]+' 2>#{devnull}`
+  prevtag = `git describe --tags --abbrev=0`.strip
+  out = `git log #{prevtag}...HEAD -E --grep "#[0-9]+" 2>#{devnull}`
   out.scan(%r{((?:\S+\/\S+)?#\d+)}).flatten
 end
 
@@ -102,7 +103,7 @@ eof
   content = content.sub(/\A\s*# master\r?\n(.*?)\r?\n# \[(.+?)\]/mis, repl.strip)
   File.open(chfile, 'w') {|f| f.write(content) }
   sh "git commit -m \"#{commit_message}\" -- lib/yard/version.rb CHANGELOG.md"
-  sh "git tag v#{ver}"
+  sh "git tag -f v#{ver}"
 end
 
 desc "Generate documentation for Yard, and fail if there are any warnings"
