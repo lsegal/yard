@@ -6,9 +6,8 @@ ENV VERSION=${VERSION}
 WORKDIR /github/lsegal/yard
 ENTRYPOINT samus publish release-v${VERSION}.tar.gz
 
-# Needed for Git
-RUN git config --global user.email "bot@yardoc.org"
-RUN git config --global user.name "YARD Release Bot"
+COPY ./.samusprep/.samus /root/.samus
+COPY ./.samusprep/.gitconfig /root/.gitconfig
 
 # Setup Samus
 ENV PATH=$PATH:/samus/bin

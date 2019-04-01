@@ -1,6 +1,28 @@
 {
   "actions": [
     {
+      "action": "fs-sedfiles",
+      "files": ["lib/*/version.rb"],
+      "arguments": {
+        "search": "VERSION = ['\"](.+?)['\"]",
+        "replace": "VERSION = '$version'"
+      }
+    },
+    {
+      "action": "chmod-files",
+      "files": ["**/*,644", "bin/*,755"]
+    },
+    {
+      "action": "git-commit",
+      "files": ["lib/*/version.rb"]
+    },
+    {
+      "action": "git-merge",
+      "arguments": {
+        "branch": "master"
+      }
+    },
+    {
       "action": "ruby-bundle"
     },
     {
