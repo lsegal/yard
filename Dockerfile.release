@@ -1,0 +1,24 @@
+FROM lsegal/samus:latest as samus
+
+FROM ruby:2
+ARG VERSION
+ENV VERSION=${VERSION}
+WORKDIR /github/lsegal/yard
+ENTRYPOINT samus publish release-v${VERSION}.tar.gz
+
+# Needed for Git
+RUN git config --global user.email "bot@yardoc.org"
+RUN git config --global user.name "YARD Release Bot"
+
+# Setup Samus
+ENV PATH=$PATH:/samus/bin
+COPY --from=samus /samus /samus
+
+# Install gems
+ENV BUNDLE_PATH=/var/gems
+COPY Gemfile /github/lsegal/yard
+RUN bundle
+
+# Run build
+COPY . /github/lsegal/yard
+RUN samus build ${VERSION}

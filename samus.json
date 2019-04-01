@@ -7,21 +7,9 @@
       "action": "rake-task"
     },
     {
-      "action": "fs-sedfiles",
-      "files": ["lib/*/version.rb"],
+      "action": "rake-task",
       "arguments": {
-        "search": "VERSION = ['\"](.+?)['\"]",
-        "replace": "VERSION = '$version'"
-      }
-    },
-    {
-      "action": "git-commit",
-      "files": ["lib/*/version.rb"]
-    },
-    {
-      "action": "git-merge",
-      "arguments": {
-        "branch": "master"
+        "task": "release:tag VERSION=$version"
       }
     },
     {
