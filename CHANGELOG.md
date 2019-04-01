@@ -1,5 +1,15 @@
 # master
 
+- Fixed bug in browser back button (#1071, #1228)
+- Fixed handling of ArgumentError in ExtraFileObject (#1198)
+- Fixed double return tag displaying on boolean methods (#1226)
+- Removed unused `Module#namespace_name` function (#1229)
+- Fixed parsing order of README files. YARD will now prefer README over
+  README.md over README.x.md or README-x.md (and the like). READMEs will now
+  also be ordered by filename; the first README is still chosen unless
+  `--readme` is provided.
+- Updated AsciiDoc markup support to use non-deprecated calls.
+
 # [0.9.16] - August 11th, 2018
 
 [0.9.16]: https://github.com/lsegal/yard/compare/v0.9.15...v0.9.16
@@ -193,7 +203,7 @@ contributions to this version.
   to `default/fulldoc/html`, specifically the index or navigation lists.
 - Added support for Ruby 2.1+ decorator style method declaration syntax. YARD now
   supports:
-    private def foo(x, y) end
+  private def foo(x, y) end
 - Metadata headers in extra files can now be escaped from rendering by enclosing them
   in HTML comment blocks (`<!--\n @metadata here... \n-->`). Ensure that the opening
   comment tag is alone on the first line of the file to use this functionality.
