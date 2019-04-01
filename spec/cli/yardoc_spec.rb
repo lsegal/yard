@@ -661,17 +661,17 @@ RSpec.describe YARD::CLI::Yardoc do
     end
 
     it "selects readme with no file extension over readme with file extension" do
-      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.md', 'README']
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.md', 'README-DEV', 'README']
       expect(File).to receive(:read).with('README').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
     end
 
     it "selects readme with no suffix over readme with hyphenated suffix" do
-      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README.md', 'README-de.md']
-      expect(File).to receive(:read).with('README.md').and_return('')
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README.long-extension', 'README-de.md']
+      expect(File).to receive(:read).with('README.long-extension').and_return('')
       @yardoc.parse_arguments
-      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.md', '')
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.long-extension', '')
     end
 
     it "selects readme with no suffix over readme with dotted suffix" do
