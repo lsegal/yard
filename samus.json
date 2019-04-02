@@ -41,6 +41,7 @@
       "publish": [
         {
           "action": "git-push",
+          "credentials": "lsegal.github.ssh",
           "arguments": {
             "remotes": "origin",
             "refs": "master v$version"
