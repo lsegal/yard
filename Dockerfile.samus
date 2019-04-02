@@ -6,6 +6,11 @@ ENV VERSION=${VERSION}
 WORKDIR /github/lsegal/yard
 ENTRYPOINT samus publish release-v${VERSION}.tar.gz
 
+# Prepare credential config
+RUN mkdir -p ~/.ssh
+RUN echo "Host *" > ~/.ssh/config
+RUN echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+RUN chmod 400 ~/.ssh/config
 COPY ./.samusprep/.samus /root/.samus
 COPY ./.samusprep/.gitconfig /root/.gitconfig
 
