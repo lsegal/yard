@@ -29,12 +29,6 @@
       "action": "rake-task"
     },
     {
-      "action": "rake-task",
-      "arguments": {
-        "task": "release:tag VERSION=$version"
-      }
-    },
-    {
       "action": "archive-git-full",
       "files": ["git.tgz"],
       "publish": [
