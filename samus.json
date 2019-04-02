@@ -13,8 +13,15 @@
       "files": ["**/*,644", "bin/*,755"]
     },
     {
+      "action": "changelog-rotate",
+      "files": ["CHANGELOG.md"],
+      "arguments": {
+        "title_format": "$version - %B %d$day_nth, %Y"
+      }
+    },
+    {
       "action": "git-commit",
-      "files": ["lib/*/version.rb"]
+      "files": ["CHANGELOG.md", "lib/*/version.rb"]
     },
     {
       "action": "git-merge",
