@@ -1,5 +1,9 @@
 # master
 
+# 0.9.19 - April 2nd, 2019
+
+[0.9.19]: https://github.com/lsegal/yard/compare/v0.9.16...v0.9.19
+
 - Fixed bug in browser back button (#1071, #1228)
 - Fixed handling of ArgumentError in ExtraFileObject (#1198)
 - Fixed double return tag displaying on boolean methods (#1226)
