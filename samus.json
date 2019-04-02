@@ -16,7 +16,7 @@
       "action": "changelog-rotate",
       "files": ["CHANGELOG.md"],
       "arguments": {
-        "title_format": "$version - %B %d$day_nth, %Y"
+        "title_format": "$version - %B %-d$day_nth, %Y"
       }
     },
     {
