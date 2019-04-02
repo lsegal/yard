@@ -20,4 +20,4 @@ RUN bundle
 
 # Run build
 COPY . /github/lsegal/yard
-RUN samus build ${VERSION}
+RUN samus build --skip-restore ${VERSION}
