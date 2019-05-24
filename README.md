@@ -226,6 +226,8 @@ The second most obvious is to generate docs via a Rake task. You can do this by
 adding the following to your `Rakefile`:
 
 ```ruby
+require 'yard'
+
 YARD::Rake::YardocTask.new do |t|
  t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
  t.options = ['--any', '--extra', '--opts'] # optional
