@@ -1,0 +1,99 @@
+#inherit_from:
+#  - .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - 'vendor/**/*' # need to reset this apparently
+    - 'lib/yard/parser/ruby/legacy/ruby_lex.rb' # old file, don't touch
+Metrics:
+  Enabled: false
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
+Style/Documentation:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+Style/SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: false
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Style/NumericPredicate: # ruby 1.8/1.9 do not have positive?/negative?
+  EnforcedStyle: comparison
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Style/DotPosition:
+  EnforcedStyle: trailing
+Style/FormatString:
+  EnforcedStyle: percent
+Style/IndentArray:
+  EnforcedStyle: consistent
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+# Disable these until we know what to do with them
+Style/SafeNavigation:
+  Enabled: false # not supported in 1.8...2.1
+Style/GuardClause: # does not provide much value
+  Enabled: false
+Style/VariableNumber:
+  Enabled: false
+Style/AccessorMethodName: # this creates breaking changes in the API
+  Enabled: false
+Style/PredicateName: # this creates breaking changes in the API
+  Enabled: false
+Style/MethodMissing: # this doesn't exist in 1.8/1.9
+  Enabled: false
+Style/Lambda: # not supported in 1.8
+  Enabled: false
+Style/EachWithObject: # not supported in 1.8
+  Enabled: false
+Style/AlignParameters: # does not work correctly with subsequent block
+  Enabled: false
+Style/AlignArray: # does not support indentation
+  Enabled: false
+Style/AlignHash: # does not support indentation
+  Enabled: false
+Style/MultilineTernaryOperator:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+Style/SingleLineMethods:
+  Enabled: false
+Style/SingleLineBlockParams:
+  Enabled: false
+Style/NestedTernaryOperator:
+  Enabled: false
+Style/MutableConstant:
+  Enabled: false
+Style/WhenThen:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+Style/PerlBackrefs:
+  Enabled: false
+Style/BlockComments:
+  Exclude:
+    - benchmarks/*.rb
+Style/CaseEquality:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
+Style/GlobalVars:
+  Exclude:
+    - benchmarks/**/*.rb
+    - spec/**/*.rb
+Lint/UnneededSplatExpansion:
+  Enabled: false
+Lint/Eval:
+  Exclude:
+    - benchmarks/**/*.rb
+- spec/**/*.rb
