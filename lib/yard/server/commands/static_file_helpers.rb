@@ -47,7 +47,6 @@ module YARD
           file = nil
           ([adapter.document_root] + static_paths.reverse).compact.each do |path_prefix|
             file = File.join(path_prefix, url)
-            p file
             break if File.exist?(file)
             file = nil
           end
