@@ -1,5 +1,9 @@
 # master
 
+# 0.9.20 - June 27th, 2019
+
+[0.9.20]: https://github.com/lsegal/yard/compare/v0.9.19...v0.9.20
+
 - Fix parsing of stringified Symbols in Ruby source (#1256).
 - Fix path traversal vulnerability in `yard server`. This bug would allow
  unsanitized HTTP requests to access arbitrary files on the machine of a
