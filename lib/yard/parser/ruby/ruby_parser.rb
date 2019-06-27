@@ -333,6 +333,7 @@ module YARD
         undef on_bodystmt
         undef on_top_const_ref
         undef on_const_path_ref
+        undef on_dyna_symbol
 
         def on_program(*args)
           args.first
@@ -410,6 +411,16 @@ module YARD
           visit_ns_token(:rbracket, tok, false)
         end
 
+        def on_dyna_symbol(sym)
+          rng = if sym.source_range.size == 0 # rubocop:disable Style/ZeroLengthPredicate
+                  (sym.source_range.begin - 3)...sym.source_range.end
+                else
+                  (sym.source_range.begin - 2)..(sym.source_range.end + 1)
+                end
+          AstNode.new(:dyna_symbol, [sym], :line => lineno..lineno,
+            :listline => lineno..lineno, :listchar => rng, :char => rng)
+        end
+
         def on_top_const_ref(*args)
           type = :top_const_ref
           node = AstNode.node_class_for(type).new(type, args)
@@ -481,7 +492,8 @@ module YARD
         end
 
         def on_string_content(*args)
-          AstNode.new(:string_content, args, :listline => lineno..lineno, :listchar => charno..charno)
+          chr_rng = args.empty? ? charno...charno : charno..charno
+          AstNode.new(:string_content, args, :listline => lineno..lineno, :listchar => chr_rng)
         end
 
         def on_rescue(exc, *args)

@@ -20,11 +20,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
 
   def process_constant(statement)
     name = statement[0].source
-    value = if statement[1].type == :dyna_symbol
-              statement[1].first.source.intern.inspect
-            else
-              statement[1].source
-            end
+    value = statement[1].source
     obj = P(namespace, name)
     if obj.is_a?(NamespaceObject) && obj.namespace == namespace
       raise YARD::Parser::UndocumentableError, "constant for existing #{obj.type} #{obj}"

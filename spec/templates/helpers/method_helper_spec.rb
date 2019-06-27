@@ -99,9 +99,9 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
       foo, bar, baz = %w(Foo Bar Baz).map do |c|
         Registry.at("TestFmtConst::#{c}").value
       end
-      expect(format_constant(foo)).to eq ":&quot;&quot;"
+      expect(format_constant(foo)).to eq ":&#39;&#39;"
       expect(format_constant(bar)).to eq ':BAR'
-      expect(format_constant(baz)).to eq ":&quot;B+z&quot;"
+      expect(format_constant(baz)).to eq ":&#39;B+z&#39;"
     end
   end
 end

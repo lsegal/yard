@@ -35,7 +35,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj.constants[0].value).to eq "42"
     expect(obj.constants[1].docstring).to eq 'Special constant (empty symbol)'
     expect(obj.constants[1].name).to eq :EMPTY
-    expect(obj.constants[1].value).to eq ':""'
+    expect(obj.constants[1].value).to eq ":''"
   end
 
   it "turns Const = Struct.new('Name', :sym) into class Const with attr :sym" do
