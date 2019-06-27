@@ -1,5 +1,11 @@
 # master
 
+- Fix parsing of stringified Symbols in Ruby source (#1256).
+- Fix path traversal vulnerability in `yard server`. This bug would allow
+ unsanitized HTTP requests to access arbitrary files on the machine of a
+ `yard server` host under certain conditions. Thanks to CuongMX from
+ Viettel Cyber Security for discovering this vulnerability.
+
 # 0.9.19 - April 2nd, 2019
 
 [0.9.19]: https://github.com/lsegal/yard/compare/v0.9.16...v0.9.19
