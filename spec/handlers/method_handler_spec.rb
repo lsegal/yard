@@ -43,6 +43,30 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     expect(P('Foo#/').parameters).to eq [['x', "File.new('x', 'w')"], ['y', '2']]
   end
 
+  it "handles multiline parameters" do
+    YARD.parse_string <<-EOF
+      class Bar
+        def multiline_params(x,
+          y, z, zz = 'zz',
+          *foo,
+          a: 'a', b: 'b',
+          c: 'c',
+          **bar,
+          &blk
+        )
+        end
+      end
+    EOF
+
+    sig = "def multiline_params(x, y, z, zz = 'zz', *foo, a: 'a', b: 'b', c: 'c', **bar, &blk)"
+    expect(P('Bar#multiline_params').signature).to eq sig
+  end if YARD.ruby2?
+
+  it "handles method signature with no parameters" do
+    YARD.parse_string "class Bar; def foo; end end"
+    expect(P('Bar#foo').signature).to eq 'def foo'
+  end
+
   it "handles opts = {} as parameter" do
     expect(P('Foo#optsmeth').parameters).to eq [['x', nil], ['opts', '{}']]
   end

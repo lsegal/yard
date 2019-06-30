@@ -21,7 +21,6 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
 
     nobj = P(namespace, nobj.value) while nobj.type == :constant
     obj = register MethodObject.new(nobj, meth, mscope) do |o|
-      o.signature = method_signature
       o.explicit = true
       o.parameters = args
     end
@@ -101,14 +100,5 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     params << ['&' + args.block_param.source, nil] if args.block_param
 
     params
-  end
-
-  def method_signature
-    method_name = statement.method_name(true)
-    if statement.parameters.any? {|e| e }
-      "def #{method_name}(#{statement.parameters.source})"
-    else
-      "def #{method_name}"
-    end
   end
 end
