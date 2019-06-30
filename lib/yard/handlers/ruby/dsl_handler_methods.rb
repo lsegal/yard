@@ -40,10 +40,9 @@ module YARD
             return register_docstring(nil)
           end
 
-          object = MethodObject.new(namespace, method_name, scope)
-          object = register(object)
-          object.signature = method_signature
-          object
+          register MethodObject.new(namespace, method_name, scope) do |o|
+            o.signature = method_signature
+          end
         end
 
         def register_docstring(object, docstring = @docstring, stmt = statement)

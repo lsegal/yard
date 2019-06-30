@@ -31,6 +31,8 @@ module YARD
           source.split(/\n/).first
         end
 
+        alias signature first_line
+
         def show
           "\t#{line}: #{first_line}"
         end

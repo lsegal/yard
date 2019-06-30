@@ -24,7 +24,6 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       o.explicit = true
       o.parameters = args
     end
-    obj.signature = method_signature
 
     # delete any aliases referencing old method
     nobj.aliases.each do |aobj, name|
@@ -101,24 +100,5 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     params << ['&' + args.block_param.source, nil] if args.block_param
 
     params
-  end
-
-  def method_signature
-    method_name = statement.method_name(true)
-    if statement.parameters.any? {|e| e }
-      formatted_args = format_args.map do |name, default|
-        next name unless default
-
-        if name.end_with?(':')
-          [name, default].join(' ')
-        else
-          [name, default].join(' = ')
-        end
-      end.join(', ')
-
-      "def #{method_name}(#{formatted_args})"
-    else
-      "def #{method_name}"
-    end
   end
 end

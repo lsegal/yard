@@ -67,6 +67,13 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandl
     expect(obj.docstring).to eq 'The foo method'
   end
 
+  it "recognizes methods with no attached source" do
+    obj = Registry.at('Foo#no_src')
+    expect(obj).not_to be nil
+    expect(obj.signature).to eq 'def no_src'
+    expect(obj.source).to eq ''
+  end
+
   it "allows setting of @!scope" do
     expect(Registry.at('Foo.xyz').scope).to eq :class
   end

@@ -22,6 +22,8 @@ module YARD
         to_s.split(/\n/)[0]
       end
 
+      alias signature first_line
+
       def to_s(include_block = true)
         tokens.map do |token|
           RubyToken::TkBlockContents === token ? (include_block ? block.to_s : '') : token.text

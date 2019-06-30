@@ -485,6 +485,17 @@ module YARD
           include_block_param ? params : params[0...-1]
         end
 
+        def signature
+          params_src = ''
+          params = self[1 + index_adjust]
+          if params.first
+            params_src = params.type == :paren ? '' : ' '
+            params_src += params.source.gsub(/\s+(\s|\))/m, '\1')
+          end
+
+          "def #{method_name(true)}#{params_src}"
+        end
+
         alias block last
 
         private

@@ -382,10 +382,13 @@ module YARD
       #   as a +String+ for the definition of the code object only (not the block)
       def source=(statement)
         if statement.respond_to?(:source)
-          self.signature = statement.first_line
           @source = format_source(statement.source.strip)
         else
           @source = format_source(statement.to_s)
+        end
+
+        if statement.respond_to?(:signature)
+          self.signature = statement.signature
         end
       end
 

@@ -79,6 +79,8 @@ class Foo
   # @!method qux2(a, b, c)
   something
 
+  # @!method no_src
+
   # @!macro
   #   $1 $2 $3
   def regular_meth(a, b, c) end
