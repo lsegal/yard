@@ -103,10 +103,11 @@ RSpec.describe YARD::CodeObjects::ExtraFileObject do
     it "attempts to re-parse data as 8-bit ascii if parsing fails" do
       expect(log).not_to receive(:warn)
       str, out = *([String.new("\xB0")] * 2)
-      if str.respond_to?(:force_encoding)
-        str.force_encoding('utf-8')
-        out.force_encoding('binary')
+      if str.respond_to?(:force_encoding!)
+        str.force_encoding!('utf-8')
+        out.force_encoding!('binary')
       end
+      expect(str.valid_encoding?).to be(false)
       file = ExtraFileObject.new('file.txt', str)
       expect(file.contents).to eq out
     end
