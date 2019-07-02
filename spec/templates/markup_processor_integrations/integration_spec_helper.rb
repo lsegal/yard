@@ -20,6 +20,12 @@ RSpec.shared_context 'shared helpers for markup processor integration specs' do
     obj
   end
 
+  before(:each) do
+    if html_renderer.markup_class(markup).nil?
+      skip "Missing markup renderer #{markup}"
+    end
+  end
+
   # Works only with one-liners.
   def highlighted_ruby_regexp(*identifiers)
     prefix = Regexp.escape '<pre class="code ruby"><code class="ruby">'
