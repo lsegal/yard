@@ -45,7 +45,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
           else
             src = "def #{meth}"
             full_src = "#{src}\n  @#{name}\nend"
-            doc = "Returns the value of attribute #{name}"
+            doc = "Returns the value of attribute #{name}."
           end
           o.source ||= full_src
           o.signature ||= src
