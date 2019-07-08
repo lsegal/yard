@@ -189,6 +189,10 @@ module YARD
         def new(namespace, name, *args, &block)
           raise ArgumentError, "invalid empty object name" if name.to_s.empty?
           if namespace.is_a?(ConstantObject)
+            unless namespace.value =~ /\A#{NAMESPACEMATCH}\Z/
+              raise Parser::UndocumentableError, "constant mapping"
+            end
+
             namespace = Proxy.new(namespace.namespace, namespace.value)
           end
 

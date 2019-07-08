@@ -58,6 +58,10 @@ module YARD
         self.type = type
 
         if @namespace.is_a?(ConstantObject)
+          unless @namespace.value =~ /\A#{NAMESPACEMATCH}\Z/
+            raise Parser::UndocumentableError, "constant mapping"
+          end
+
           @origname = nil # forget these for a constant
           @orignamespace = nil
           @namespace = Proxy.new(@namespace.namespace, @namespace.value)

@@ -84,6 +84,21 @@ RSpec.describe YARD::CodeObjects::Base do
     expect { CodeObjects::Base.new("ROOT!", :Me) }.to raise_error(ArgumentError)
   end
 
+  it "allows constants to be used as a namespace" do
+    a = ConstantObject.new(:root, :A)
+    a.value = "B::C"
+    b = ClassObject.new(:root, :B)
+    c = ClassObject.new(b, :C)
+    klass = ClassObject.new(a, "MyClass")
+    expect(klass.path).to eq "B::C::MyClass"
+  end
+
+  it "does not allow constants to be used as a namespace if they do not resolve to a valid namespace" do
+    a = ConstantObject.new(:root, :A)
+    a.value = "$$INVALID$$"
+    expect { ClassObject.new(a, "MyClass") }.to raise_error(Parser::UndocumentableError)
+  end
+
   it "registers itself in the registry if namespace is supplied" do
     obj = ModuleObject.new(:root, :Me)
     expect(Registry.at(:Me)).to eq obj

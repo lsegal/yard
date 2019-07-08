@@ -4,6 +4,12 @@ require File.dirname(__FILE__) + '/spec_helper'
 RSpec.describe YARD::CodeObjects::Proxy do
   before { Registry.clear }
 
+  it "does not allow constants to be used as a namespace if they do not resolve to a valid namespace" do
+    a = ConstantObject.new(:root, :A)
+    a.value = "$$INVALID$$"
+    expect { P("A::MyClass") }.to raise_error(Parser::UndocumentableError)
+  end
+
   it "returns the object if it's in the Registry" do
     ModuleObject.new(:root, :YARD)
     proxyobj = P(:root, :YARD)
