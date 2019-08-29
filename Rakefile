@@ -6,6 +6,8 @@ require 'samus'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 
+Dir['tasks/**/*.rake'].each { |task_file| load task_file }
+
 desc "Builds the gem"
 task :gem do
   sh "gem build yard.gemspec"
