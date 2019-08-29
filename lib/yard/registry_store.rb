@@ -72,7 +72,12 @@ module YARD
     # Deletes an object at a given path
     # @param [#to_sym] key the key to delete
     # @return [void]
-    def delete(key) @store.delete(key.to_sym) end
+    def delete(key)
+      if @store[key.to_sym]
+        @object_types[@store[key.to_sym].type].delete(key.to_s)
+        @store.delete(key.to_sym)
+      end
+    end
 
     # Gets all path names from the store. Loads the entire database
     # if +reload+ is +true+

@@ -305,7 +305,7 @@ RSpec.describe YARD::RegistryStore do
   end
 
   describe "#delete" do
-    pending "deletes the given object from store" do
+    it "deletes the given object from store" do
       @store.put(:YARD, @foo)
       expect(@store.get(:YARD)).to be @foo
       expect(@store.paths_for_type(:method)).to eq ["YARD"]
