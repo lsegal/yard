@@ -304,6 +304,17 @@ RSpec.describe YARD::RegistryStore do
     end
   end
 
+  describe "#delete" do
+    pending "deletes the given object from store" do
+      @store.put(:YARD, @foo)
+      expect(@store.get(:YARD)).to be @foo
+      expect(@store.paths_for_type(:method)).to eq ["YARD"]
+      @store.delete(:YARD)
+      expect(@store.get(:YARD)).to be nil
+      expect(@store.paths_for_type(:method)).to eq []
+    end
+  end
+
   describe "#locale" do
     it "loads ./po/LOCALE_NAME.po" do
       fr_locale = I18n::Locale.new("fr")
