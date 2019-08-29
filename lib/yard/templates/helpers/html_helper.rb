@@ -628,11 +628,13 @@ module YARD
       # @return [String] highlighted html
       # @see #html_syntax_highlight
       def parse_codeblocks(html)
-        html.gsub(%r{<pre\s*(?:lang="(.+?)")?>(?:\s*<code\s*(?:class="(.+?)")?\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
+        html.gsub(%r{<pre((?:\s+\w+="(?:.+?)")*)\s*>(?:\s*<code((?:\s+\w+="(?:.+?)")*)\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
           string = $3
+
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
           language, = parse_lang_for_codeblock(string)
-          language ||= $1 || $2 || object.source_type
+          language ||= detect_lang_in_codeblock_attributes($1, $2)
+          language ||= object.source_type
 
           if options.highlight
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
@@ -640,6 +642,20 @@ module YARD
           classes = ['code', language].compact.join(' ')
           %(<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>)
         end
+      end
+
+      # Parses code block's HTML attributes in order to detect the programming
+      # language of what's enclosed in that code block.
+      #
+      # @param [String, nil] pre_html_attrs HTML attribute list of +pre+ element
+      # @param [String, nil] code_html_attrs HTML attribute list of +code+
+      #   element
+      # @return [String, nil] detected programming language
+      def detect_lang_in_codeblock_attributes(pre_html_attrs, code_html_attrs)
+        detected = nil
+        detected ||= (/\blang="(.+?)"/ =~ pre_html_attrs && $1)
+        detected ||= (/\bclass="(.+?)"/ =~ code_html_attrs && $1)
+        detected
       end
     end
   end
