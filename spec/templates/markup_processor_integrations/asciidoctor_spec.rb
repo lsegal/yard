@@ -51,7 +51,6 @@ ASCIIDOC
   end
 
   it 'renders fenced and annotated block of Ruby code, and applies syntax highlight' do
-    pending "Fails due to https://github.com/lsegal/yard/issues/1239"
     expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '3'))
   end
 

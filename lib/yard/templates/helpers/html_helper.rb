@@ -653,6 +653,7 @@ module YARD
       # @return [String, nil] detected programming language
       def detect_lang_in_codeblock_attributes(pre_html_attrs, code_html_attrs)
         detected = nil
+        detected ||= (/\bdata-lang="(.+?)"/ =~ code_html_attrs && $1)
         detected ||= (/\blang="(.+?)"/ =~ pre_html_attrs && $1)
         detected ||= (/\bclass="(.+?)"/ =~ code_html_attrs && $1)
         detected
