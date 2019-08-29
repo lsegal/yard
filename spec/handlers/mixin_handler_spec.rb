@@ -53,4 +53,8 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
     undoc_error "module X; include invalid, Y; end"
     expect(Registry.at('X').mixins).to eq [P('Y')]
   end
+
+  it "adds mixins from include calls to constants" do
+    expect(P('FromConstant').instance_mixins).to eq [P('A')]
+  end
 end

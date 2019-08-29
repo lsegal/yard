@@ -21,4 +21,8 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ExtendHa
   it "does not allow extending self if object is a class" do
     undoc_error "class Foo; extend self; end"
   end
+
+  it "adds mixins from extend calls to constants" do
+    expect(P('FromConstant').class_mixins).to eq [P('A')]
+  end
 end
