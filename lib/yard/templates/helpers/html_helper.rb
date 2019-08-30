@@ -65,7 +65,7 @@ module YARD
           html = html.encode(:invalid => :replace, :replace => '?')
         end
         html = resolve_links(html)
-        unless [:text, :none, :pre].include?(markup)
+        unless [:text, :none, :pre, :ruby].include?(markup)
           html = parse_codeblocks(html)
         end
         html
