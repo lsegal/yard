@@ -97,14 +97,7 @@ module YARD
           stmts = []
           brace_level = 1
           loop do
-            # Need to include the @! directive tags for them to be processed
-            # along with the body statement content.
-            # (At least the @!group directive.)
-            directive_tags = capture_directive_tags_hack do
-              strip_non_statement_data
-            end
-            stmts.concat(directive_tags)
-
+            strip_non_statement_data
             start = @index
             line = @line
             consume_until(/[{};]/)
@@ -120,15 +113,6 @@ module YARD
             stmts << stmt
           end
           stmts
-        end
-
-        def capture_directive_tags_hack
-          temp = @statements.dup
-          yield if block_given?
-          stmts = (@statements - temp)
-          stmts.select do |stmt|
-            stmt.is_a?(Comment) && stmt.source.start_with?('@!')
-          end
         end
 
         def strip_non_statement_data

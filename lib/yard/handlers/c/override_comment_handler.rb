@@ -5,10 +5,7 @@ class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
   statement_class Comment
 
   process do
-    if statement.overrides.empty?
-      register_docstring(nil) if directive_tag?
-      return
-    end
+    return if statement.overrides.empty?
     statement.overrides.each do |type, name|
       override_comments << [name, statement]
       obj = nil
@@ -30,11 +27,5 @@ class YARD::Handlers::C::OverrideCommentHandler < YARD::Handlers::C::Base
 
   def register_file_info(object, file = parser.file, line = statement.line, comments = statement.comments)
     super
-  end
-
-  private
-
-  def directive_tag?
-    statement.source.start_with?('@!')
   end
 end
