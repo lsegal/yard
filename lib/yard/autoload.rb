@@ -78,6 +78,7 @@ module YARD
       autoload :AttributeHandler,         __p('handlers/c/attribute_handler')
       autoload :ClassHandler,             __p('handlers/c/class_handler')
       autoload :ConstantHandler,          __p('handlers/c/constant_handler')
+      autoload :DirectiveParserHandler,   __p('handlers/c/directive_parser_handler')
       autoload :HandlerMethods,           __p('handlers/c/handler_methods')
       autoload :InitHandler,              __p('handlers/c/init_handler')
       autoload :MethodHandler,            __p('handlers/c/method_handler')
