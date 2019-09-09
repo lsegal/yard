@@ -504,5 +504,38 @@ eof
     it "handles compile errors" do
       expect { stmt(":~$ Do not clobber") }.to raise_error(Parser::ParserSyntaxError)
     end
+
+    it "groups constants" do
+      YARD.parse_string <<-eof
+        class Example
+          # @!group Foos
+
+          # Foobar description.
+          FOOBAR = 1
+
+          # Foobiz description.
+          FOOBIZ = 2
+
+          # @!endgroup
+
+          # Hello description.
+          HELLO = 3
+        end
+      eof
+      constant = Registry.at('Example::FOOBAR')
+      expect(constant.value).to eq '1'
+      expect(constant.docstring).to eq "Foobar description."
+      expect(constant.group).to eq "Foos"
+
+      constant = Registry.at('Example::FOOBIZ')
+      expect(constant.value).to eq '2'
+      expect(constant.docstring).to eq "Foobiz description."
+      expect(constant.group).to eq "Foos"
+
+      constant = Registry.at('Example::HELLO')
+      expect(constant.value).to eq '3'
+      expect(constant.docstring).to eq "Hello description."
+      expect(constant.group).to eq nil
+    end
   end
 end if HAVE_RIPPER
