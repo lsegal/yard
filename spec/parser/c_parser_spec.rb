@@ -125,6 +125,44 @@ RSpec.describe YARD::Parser::C::CParser do
       end
     end
 
+    describe "Group directives" do
+      it "groups constants" do
+        parse <<-eof
+          void Init_Mask(void)
+          {
+              rb_cExample  = rb_define_class("Example", rb_cObject);
+
+              // @!group Foos
+
+              /* 1: Foobar description. */
+              rb_define_const(rb_cExample, "FOOBAR", INT2NUM(1));
+
+              /* 2: Foobiz description. */
+              rb_define_const(rb_cExample, "FOOBIZ", INT2NUM(2));
+
+              // @!endgroup
+
+              /* 3: Hello description. */
+              rb_define_const(rb_cExample, "HELLO", INT2NUM(3));
+          }
+        eof
+        constant = Registry.at('Example::FOOBAR')
+        expect(constant.value).to eq '1'
+        expect(constant.docstring).to eq "Foobar description."
+        expect(constant.group).to eq "Foos"
+
+        constant = Registry.at('Example::FOOBIZ')
+        expect(constant.value).to eq '2'
+        expect(constant.docstring).to eq "Foobiz description."
+        expect(constant.group).to eq "Foos"
+
+        constant = Registry.at('Example::HELLO')
+        expect(constant.value).to eq '3'
+        expect(constant.docstring).to eq "Hello description."
+        expect(constant.group).to eq nil
+      end
+    end
+
     describe "Macros" do
       it "handles param## inside of macros" do
         thr = Thread.new do
