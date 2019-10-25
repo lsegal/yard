@@ -130,7 +130,7 @@ RSpec.describe YARD::Parser::C::CParser do
         parse <<-eof
           void Init_Mask(void)
           {
-              rb_cExample  = rb_define_class("Example", rb_cObject);
+              rb_cExample = rb_define_class("Example", rb_cObject);
 
               // @!group Foos
 
