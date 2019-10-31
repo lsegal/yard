@@ -16,7 +16,7 @@ rvm:
   - "2.4"
   - "2.5"
   - "2.6"
-  # - ruby-head
+  - ruby-head
   # - jruby
 
 # Define how to run your tests (defaults to `bundle exec rake` or `rake` depending on whether you have a `Gemfile`)
@@ -49,3 +49,7 @@ env:
 #   webhooks:
 #     urls:
 #       - https://webhooks.gitter.im/e/c6dbb9323007dfcf81df
+
+matrix:
+  allow_failures:
+    - rvm: ruby-head
