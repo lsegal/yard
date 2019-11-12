@@ -51,7 +51,7 @@ module YARD
         return object if object.is_a?(String)
 
         if object.is_a?(CodeObjects::ExtraFileObject)
-          fspath = ['file.' + object.name + (extension.empty? ? '' : ".#{extension}")]
+          fspath = ['_file', object.name + (extension.empty? ? '' : ".#{extension}")]
         else
           objname = object != YARD::Registry.root ? mapped_name(object) : "top-level-namespace"
           objname += '_' + object.scope.to_s[0, 1] if object.is_a?(CodeObjects::MethodObject)

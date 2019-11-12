@@ -20,7 +20,7 @@ module YARD
         when CodeObjects::ConstantObject, CodeObjects::ClassVariableObject
           serialized_path(object.namespace) + "##{object.name}-#{object.type}"
         when CodeObjects::ExtraFileObject
-          super(object).gsub(/^file\./, 'file/')
+          super(object).gsub(/^_file\//, 'file/')
         else
           super(object)
         end
