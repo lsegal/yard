@@ -32,6 +32,18 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
       obj = Proxy.new(namespace, mixin.source, :module)
     end
 
-    namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
+    rec = recipient(mixin)
+    return if rec.nil? || rec.mixins(scope).include?(obj)
+    rec.mixins(scope).unshift(obj)
+  end
+
+  def recipient(mixin)
+    if statement[0].type == :var_ref && statement[0][0] != s(:kw, "self")
+      statement[0][0].type == :const ?
+        Proxy.new(namespace, statement.namespace.source) :
+        nil
+    else
+      namespace
+    end
   end
 end
