@@ -612,7 +612,7 @@ module YARD
 
         def insert_comments
           root.traverse do |node|
-            next if node.type == :comment || node.type == :list || node.parent.type != :list
+            next if %i{comment void_stmt list}.include?(node.type) || node.parent.type != :list
 
             # never attach comments to if/unless mod nodes
             if node.type == :if_mod || node.type == :unless_mod
