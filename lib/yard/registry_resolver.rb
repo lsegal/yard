@@ -62,7 +62,7 @@ module YARD
       end
       orignamespace = namespace
 
-      if path =~ /\A#{default_separator}/
+      if path =~ starts_with_default_separator_match
         path = $'
         namespace = @registry.root
         orignamespace = @registry.root
@@ -102,12 +102,12 @@ module YARD
       result = namespace.root? && validate(@registry.at(path), type)
       return result if result
 
-      if path =~ /\A(#{separators_match})/
+      if path =~ starts_with_separator_match
         return validate(@registry.at(namespace.path + path), type)
       end
 
       separators.each do |sep|
-        result = validate(@registry.at(namespace.path + sep + path), type)
+        result = validate(@registry.at("#{namespace.path}#{sep}#{path}"), type)
         return result if result
       end
 
@@ -122,12 +122,12 @@ module YARD
       last_sep = nil
       pos = 0
 
-      if path =~ /\A(#{separators_match})/
+      if path =~ starts_with_separator_match
         last_sep = $1
         path = $'
       end
 
-      path.scan(/(.+?)(#{separators_match}|$)/).each do |part, sep|
+      path.scan(split_on_separators_match).each do |part, sep|
         cur_obj = nil
         pos += "#{part}#{sep}".length
         parsed_end = pos == path.length
@@ -184,6 +184,48 @@ module YARD
       end
 
       nss
+    end
+
+    # @see NamespaceMapper#register_separator
+    def register_separator(*)
+      super
+      invalidate_memoized_matchers
+    end
+
+    # @see NamespaceMapper#clear_separators
+    def clear_separators
+      super
+      invalidate_memoized_matchers
+    end
+
+    # @see NamespaceMapper#default_separator
+    def default_separator(value = nil)
+      @starts_with_default_separator_match = nil if value
+      super
+    end
+
+    # @return [Regexp] the regexp match of the default separator
+    def starts_with_default_separator_match
+      @starts_with_default_separator_match ||= /\A#{default_separator}/
+    end
+
+    # @return [Regexp] the regexp that matches strings starting with
+    #   a separator
+    def starts_with_separator_match
+      @starts_with_separator_match ||= /\A(#{separators_match})/
+    end
+
+    # @return [Regexp] the regexp that can be used to split a string on all
+    #   occurrences of separator tokens
+    def split_on_separators_match
+      @split_on_separators_match ||= /(.+?)(#{separators_match}|$)/
+    end
+
+    # Additional invalidations to done when NamespaceMapper API methods are
+    # called on this class
+    def invalidate_memoized_matchers
+      @starts_with_separator_match = nil
+      @split_on_separators_match = nil
     end
   end
 end
