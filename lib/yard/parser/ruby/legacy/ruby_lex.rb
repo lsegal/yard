@@ -1,5 +1,5 @@
 require "e2mmap"
-require "irb/slex"
+require_relative "irb/slex"
 
 module YARD
   module Parser::Ruby::Legacy
