@@ -12,7 +12,7 @@
 
 require "irb/notifier"
 
-# :stopdoc:
+# @private
 module IRB
   class SLex
     DOUT = Notifier::def_notifier("SLex::")
