@@ -21,7 +21,4 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
   s.metadata['yard.run'] = 'yri'
-
-  # FIXME: The following dependency can be removed when dropping legacy Ruby support.
-  s.add_runtime_dependency('e2mmap')
 end

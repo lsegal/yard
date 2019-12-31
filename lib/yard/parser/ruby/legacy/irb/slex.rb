@@ -10,17 +10,11 @@
 #
 #
 
-require "e2mmap"
 require "irb/notifier"
 
 # :stopdoc:
 module IRB
   class SLex
-
-    extend Exception2MessageMapper
-    def_exception :ErrNodeNothing, "node nothing"
-    def_exception :ErrNodeAlreadyExists, "node already exists"
-
     DOUT = Notifier::def_notifier("SLex::")
     D_WARN = DOUT::def_notifier(1, "Warn: ")
     D_DEBUG = DOUT::def_notifier(2, "Debug: ")
@@ -111,7 +105,7 @@ module IRB
             chrs.unshift ch
             self.create_subnode(chrs)
           else
-            SLex.fail ErrNodeNothing
+            raise "node nothing"
           end
         end
       end
@@ -120,7 +114,7 @@ module IRB
         if chrs.empty?
           if @postproc
             D_DETAIL.pp node
-            SLex.fail ErrNodeAlreadyExists
+            raise "node already exists"
           else
             D_DEBUG.puts "change abstract node to real node."
             @preproc = preproc
@@ -137,7 +131,7 @@ module IRB
               DebugLogger.pp self
               DebugLogger.pp ch
               DebugLogger.pp chrs
-              SLex.fail ErrNodeAlreadyExists
+              raise "node already exists"
             else
               D_WARN.puts "change abstract node to real node"
               node.preproc = preproc
