@@ -1,5 +1,9 @@
 # master
 
+# 0.9.22 - December 31st, 2019
+
+[0.9.22]: https://github.com/lsegal/yard/compare/v0.9.21...v0.9.22
+
 - Revert jquery update in last release since it requires more changes. (#1298)
 
 # 0.9.21 - December 31st, 2019
