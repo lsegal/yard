@@ -1,5 +1,17 @@
 # master
 
+- Updates to add support for Ruby 2.7.0 (#1290, #1296)
+- Fix parsing of multiline method signatures (#1220)
+- Remove RubyGems post install message (#1269)
+- Improve object deletion from RegistryStore (#1284)
+- Improve memory usage performance (#1260)
+- Handle include and extend calls with explicit receivers (#1274)
+- Fix deep nesting of TOC items (#1288)
+- Fix highlighting for Asciidoc markup code blocks (#1276)
+- Fix HTML formatting of script tags (#1263)
+- Update jquery to 3.4.1 (#1294)
+- Test fixes (#1244)
+
 # 0.9.20 - June 27th, 2019
 
 [0.9.20]: https://github.com/lsegal/yard/compare/v0.9.19...v0.9.20
