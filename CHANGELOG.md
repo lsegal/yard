@@ -1,5 +1,9 @@
 # master
 
+# 0.9.21 - December 31st, 2019
+
+[0.9.21]: https://github.com/lsegal/yard/compare/v0.9.20...v0.9.21
+
 - Updates to add support for Ruby 2.7.0 (#1290, #1296)
 - Fix parsing of multiline method signatures (#1220)
 - Remove RubyGems post install message (#1269)
