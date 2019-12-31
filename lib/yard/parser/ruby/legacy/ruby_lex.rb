@@ -1,5 +1,4 @@
-require "e2mmap"
-require "irb/slex"
+require_relative 'irb/slex'
 
 module YARD
   module Parser::Ruby::Legacy
@@ -129,7 +128,7 @@ module YARD
         when String, Symbol
           source = token.is_a?(String) ? TkReading2Token : TkSymbol2Token
           if (tk = source[token]).nil?
-            IRB.fail TkReading2TokenNoKey, token
+            raise "no key #{token}"
           end
           tk = Token(tk[0], value)
         else
@@ -285,7 +284,7 @@ module YARD
 
         if reading
           if TkReading2Token[reading]
-            IRB.fail TkReading2TokenDuplicateError, token_n, reading
+            raise "duplicate #{token_n} #{reading}"
           end
           if opts.empty?
             TkReading2Token[reading] = [token_c]
@@ -424,14 +423,6 @@ module YARD
       end
 
       # end of nested class BufferedReader
-
-      extend Exception2MessageMapper
-      def_exception(:AlreadyDefinedToken, "Already defined token(%s)")
-      def_exception(:TkReading2TokenNoKey, "key nothing(key='%s')")
-      def_exception(:TkSymbol2TokenNoKey, "key nothing(key='%s')")
-      def_exception(:TkReading2TokenDuplicateError,
-        "key duplicate(token_n='%s', key='%s')")
-      def_exception(:SyntaxError, "%s")
 
       include RubyToken
       include IRB
