@@ -1,5 +1,8 @@
 # master
 
+- Fix issues with double encoded code blocks when highlighted from an extra
+  file.
+
 # 0.9.22 - December 31st, 2019
 
 [0.9.22]: https://github.com/lsegal/yard/compare/v0.9.21...v0.9.22
