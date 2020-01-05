@@ -1,5 +1,9 @@
 # master
 
+# 0.9.23 - January 5th, 2020
+
+[0.9.23]: https://github.com/lsegal/yard/compare/v0.9.22...v0.9.23
+
 - Fix issues with double encoded code blocks when highlighted from an extra
   file.
 
