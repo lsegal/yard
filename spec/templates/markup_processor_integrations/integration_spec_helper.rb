@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'shared helpers for markup processor integration specs' do
+  after do
+    YARD::Templates::Helpers::MarkupHelper.clear_markup_cache
+  end
+
   let(:rendered_document) { html_renderer.htmlify document }
 
   let(:template_options) do
