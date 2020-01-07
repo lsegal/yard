@@ -53,7 +53,6 @@ MARKDOWN
   end
 
   it 'renders fenced and annotated block of non-Ruby code, and does not apply syntax highlight' do
-    pending 'This is actually highlighted, but it is not a big deal'
     expect(rendered_document).to match('x = 4')
   end
 end
