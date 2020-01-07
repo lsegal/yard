@@ -1,11 +1,11 @@
-name: Windows
+name: macOS
 
 on: [push, pull_request]
 jobs:
   build:
     name: >-
-      Windows | Ruby: ${{ matrix.ruby }}
-    runs-on: "windows-latest"
+      macOS | Ruby: ${{ matrix.ruby }}
+    runs-on: "macos-latest"
     strategy:
       fail-fast: false
       matrix:
