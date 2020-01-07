@@ -45,6 +45,18 @@ RSpec.describe YARD::Serializers::YardocSerializer do
     end
   end
 
+  describe "#serialized_path" do
+    it "handles String path name" do
+      path = @serializer.serialized_path('Path::To#object')
+      expect(path).to eq('objects/Path/To/object_i.dat')
+    end
+
+    it "handles special encoding characters" do
+      path = @serializer.serialized_path('object$')
+      expect(path).to eq('objects/object_24.dat')
+    end
+  end
+
   describe "#lock_for_writing" do
     it "creates a lock file during writing and cleans up" do
       expect(File).to receive(:open!).with(@serializer.processing_path, 'w')

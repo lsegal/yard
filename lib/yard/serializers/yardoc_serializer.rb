@@ -77,7 +77,7 @@ module YARD
               p.gsub(/[^\w\.-]/) do |x|
                 encoded = '_'
 
-                x.each_byte {|b| encoded << ("%X" % b) }
+                x.each_byte {|b| encoded += ("%X" % b) }
                 encoded
               end
             end.join('/') + '.' + extension
