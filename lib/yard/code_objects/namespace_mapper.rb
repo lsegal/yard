@@ -103,7 +103,7 @@ module YARD
         # @!group Invalidation callbacks
 
         # Adds a callback that triggers when a new separator is registered or
-        # the cache is cleared by {#invalidate}
+        # the cache is cleared by invalidation.
         def on_invalidate(&block)
           (@invalidation_callbacks ||= []).push(block)
         end
