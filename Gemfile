@@ -16,11 +16,11 @@ group :asciidoc do
 end
 
 group :markdown do
-  gem 'redcarpet', :platforms => [:ruby]
+  gem 'redcarpet'
 end
 
 group :textile do
-  gem 'RedCloth', :platforms => [:ruby]
+  gem 'RedCloth'
 end
 
 group :server do
