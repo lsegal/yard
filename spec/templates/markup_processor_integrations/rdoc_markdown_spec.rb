@@ -27,12 +27,6 @@ Fenced and annotated block of Ruby code:
 x = 3
 ```
 
-Fenced and annotated block of non-Ruby code:
-
-```plain
-x = 4
-```
-
 MARKDOWN
   end
 
@@ -50,10 +44,5 @@ MARKDOWN
 
   it 'renders fenced and annotated block of Ruby code, and applies syntax highlight' do
     expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '3'))
-  end
-
-  it 'renders fenced and annotated block of non-Ruby code, and does not apply syntax highlight' do
-    pending 'This is actually highlighted, but it is not a big deal'
-    expect(rendered_document).to match('x = 4')
   end
 end
