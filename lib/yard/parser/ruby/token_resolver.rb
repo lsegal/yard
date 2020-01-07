@@ -7,6 +7,7 @@ module YARD
       # constant or identifier token.
       class TokenResolver
         include Enumerable
+        include CodeObjects::NamespaceMapper
 
         # Creates a token resolver for given source.
         #
@@ -114,7 +115,8 @@ module YARD
 
           if toktype == :const
             types.any? do |type|
-              prefix = (type ? type.path : "") + last_sep.to_s
+              prefix = type ? type.path : ""
+              prefix += last_sep.to_s if separators.include?(last_sep.to_s)
               self.object = Registry.resolve(@default_namespace, "#{prefix}#{name}", true)
             end
           else # ident

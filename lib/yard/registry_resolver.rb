@@ -16,6 +16,9 @@ module YARD
     def initialize(registry = Registry)
       @registry = registry
       @default_sep = nil
+
+      # Preload all code objects for separator declarations
+      YARD::CodeObjects.constants.map {|t| YARD::CodeObjects.const_get(t) }
     end
 
     # Performs a lookup on a given path in the registry. Resolution will occur
@@ -186,46 +189,29 @@ module YARD
       nss
     end
 
-    # @see NamespaceMapper#register_separator
-    def register_separator(*)
-      super
-      invalidate_memoized_matchers
-    end
-
-    # @see NamespaceMapper#clear_separators
-    def clear_separators
-      super
-      invalidate_memoized_matchers
-    end
-
-    # @see NamespaceMapper#default_separator
-    def default_separator(value = nil)
-      @starts_with_default_separator_match = nil if value
-      super
-    end
-
     # @return [Regexp] the regexp match of the default separator
     def starts_with_default_separator_match
-      @starts_with_default_separator_match ||= /\A#{default_separator}/
+      @@starts_with_default_separator_match ||= /\A#{default_separator}/
     end
 
     # @return [Regexp] the regexp that matches strings starting with
     #   a separator
     def starts_with_separator_match
-      @starts_with_separator_match ||= /\A(#{separators_match})/
+      @@starts_with_separator_match ||= /\A(#{separators_match})/
     end
 
     # @return [Regexp] the regexp that can be used to split a string on all
     #   occurrences of separator tokens
     def split_on_separators_match
-      @split_on_separators_match ||= /(.+?)(#{separators_match}|$)/
+      @@split_on_separators_match ||= /(.+?)(#{separators_match}|$)/
     end
 
     # Additional invalidations to done when NamespaceMapper API methods are
     # called on this class
-    def invalidate_memoized_matchers
-      @starts_with_separator_match = nil
-      @split_on_separators_match = nil
+    YARD::CodeObjects::NamespaceMapper.on_invalidate do
+      @@starts_with_default_separator_match = nil
+      @@starts_with_separator_match = nil
+      @@split_on_separators_match = nil
     end
   end
 end

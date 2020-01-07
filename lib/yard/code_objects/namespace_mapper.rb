@@ -11,6 +11,9 @@ module YARD
       # Registers a separator with an optional set of valid types that
       # must follow the separator lexically.
       #
+      # Calls all callbacks defined by {NamespaceMapper.on_invalidate} after
+      # the separator is registered.
+      #
       # @param sep [String] the separator string for the namespace
       # @param valid_types [Array<Symbol>] a list of object types that
       #   must follow the separator. If the list is empty, any type can
@@ -20,6 +23,7 @@ module YARD
       #   register_separator "#", :method
       #   # Anything after a "." denotes a method object
       #   register_separator ".", :method
+      # @see .on_invalidate
       def register_separator(sep, *valid_types)
         NamespaceMapper.invalidate
 
@@ -30,6 +34,19 @@ module YARD
 
         NamespaceMapper.map[sep] ||= []
         NamespaceMapper.map[sep] += valid_types
+      end
+
+      # Unregisters a separator by a type.
+      #
+      # @param type [Symbol] the type to unregister
+      # @see #register_separator
+      def unregister_separator_by_type(type)
+        seps = NamespaceMapper.rev_map[type]
+        return unless seps
+        
+        seps.each {|s| NamespaceMapper.map.delete(s) }
+        NamespaceMapper.rev_map.delete(type)
+        NamespaceMapper.invalidate
       end
 
       # Clears the map of separators.
@@ -50,6 +67,7 @@ module YARD
       #   default_separator "::"
       def default_separator(value = nil)
         if value
+          NamespaceMapper.invalidate
           NamespaceMapper.default_separator = Regexp.quote value
         else
           NamespaceMapper.default_separator
@@ -71,17 +89,25 @@ module YARD
       # @param sep [String] the separator to return types for
       # @return [Array<Symbol>] a list of types registered to a separator
       def types_for_separator(sep)
-        NamespaceMapper.map[sep]
+        NamespaceMapper.map[sep] || []
       end
 
       # @param type [String] the type to return separators for
       # @return [Array<Symbol>] a list of separators registered to a type
       def separators_for_type(type)
-        NamespaceMapper.rev_map[type]
+        NamespaceMapper.rev_map[type] || []
       end
 
       # Internal methods to act as a singleton registry
       class << self
+        # @!group Invalidation callbacks
+
+        # Adds a callback that triggers when a new separator is registered or
+        # the cache is cleared by {#invalidate}
+        def on_invalidate(&block)
+          (@invalidation_callbacks ||= []).push(block)
+        end
+
         # @!visibility private
 
         # @return [Hash] a mapping of types to separators
@@ -98,11 +124,12 @@ module YARD
         # @return [void]
         def invalidate
           @map_match = nil
+          (@invalidation_callbacks || []).each(&:call)
         end
 
         # @return [Regexp] the full list of separators as a regexp match
         def map_match
-          @map_match ||= @map.keys.map {|k| Regexp.quote k }.join('|')
+          @map_match ||= map.keys.map {|k| Regexp.quote k }.join('|')
         end
 
         # @return [String] the default separator when no separator can begin
