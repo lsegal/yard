@@ -504,5 +504,17 @@ eof
     it "handles compile errors" do
       expect { stmt(":~$ Do not clobber") }.to raise_error(Parser::ParserSyntaxError)
     end
+
+    it "handles cls/mod comments without line spacing" do
+      ast = stmt <<-eof
+        module A
+          # comment 1
+          # comment 2
+          class B
+          end
+        end
+      eof
+      expect(ast.jump(:class).docstring).to eq "comment 1\ncomment 2"
+    end
   end
 end if HAVE_RIPPER
