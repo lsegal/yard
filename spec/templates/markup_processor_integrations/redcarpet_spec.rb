@@ -55,4 +55,10 @@ MARKDOWN
   it 'renders fenced and annotated block of non-Ruby code, and does not apply syntax highlight' do
     expect(rendered_document).to match('x = 4')
   end
+
+  it "autolinks URLs" do
+    expect(html_renderer.htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
+      '<p><a href="http://example.com">http://example.com</a></p>'
+    )
+  end
 end

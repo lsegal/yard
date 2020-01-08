@@ -149,17 +149,6 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(htmlify("test {include:file:foo.rdoc}", :rdoc).gsub(/[\r?\n]+/, '')).to eq '<p>test HI</p>'
     end
 
-    it "autolinks URLs (markdown specific)" do
-      log.enter_level(Logger::FATAL) do
-        unless markup_class(:markdown).to_s == "RedcarpetCompat"
-          pending 'This test depends on a markdown engine that supports autolinking'
-        end
-      end
-      expect(htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
-        '<p><a href="http://example.com">http://example.com</a></p>'
-      )
-    end
-
     it "does not autolink URLs inside of {} (markdown specific)" do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
