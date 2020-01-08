@@ -1,5 +1,9 @@
 # master
 
+# 0.9.24 - January 8th, 2020
+
+[0.9.24]: https://github.com/lsegal/yard/compare/v0.9.23...v0.9.24
+
 - Add {YARD::CodeObjects::NamespaceMapper.on_invalidate} callback when separator
   cache is changed.
 - Fix issue where Registry fails to resolve first-time lookups on instance methods.
