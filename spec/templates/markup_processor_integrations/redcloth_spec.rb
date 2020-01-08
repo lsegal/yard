@@ -2,6 +2,14 @@
 
 require File.dirname(__FILE__) + '/integration_spec_helper'
 
+# Hack to fix RedCloth compat issues with MinGW compilation hosts
+begin
+  require 'redcloth'
+rescue LoadError
+  require 'rbconfig'
+  RbConfig::CONFIG['arch'] = 'not_windows_dont_worry'
+end
+
 RSpec.describe 'RedCloth integration' do
   include_context 'shared helpers for markup processor integration specs'
   let(:markup) { :textile }
