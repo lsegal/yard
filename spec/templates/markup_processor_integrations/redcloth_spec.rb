@@ -45,4 +45,12 @@ TEXTILE
   it 'renders pre. block, and applies Ruby syntax highlight' do
     expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '2'))
   end
+
+  it "does not use hard breaks for newlines" do
+    expect(html_renderer.htmlify("A\nB", :textile)).not_to include("<br")
+  end
+
+  it "uses hard breaks for newlines with textile_strict" do
+    expect(html_renderer.htmlify("A\nB", :textile_strict)).to include("<br")
+  end
 end

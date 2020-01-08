@@ -106,16 +106,6 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   end
 
   describe "#htmlify" do
-    it "does not use hard breaks for textile markup (RedCloth specific)" do
-      begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
-      expect(htmlify("A\nB", :textile)).not_to include("<br")
-    end
-
-    it "uses hard breaks for textile_strict markup (RedCloth specific)" do
-      begin; require 'redcloth'; rescue LoadError; pending 'test requires redcloth gem' end
-      expect(htmlify("A\nB", :textile_strict)).to include("<br")
-    end
-
     it "handles various encodings" do
       allow(self).to receive(:object).and_return(Registry.root)
       text = String.new("\xB0\xB1")
