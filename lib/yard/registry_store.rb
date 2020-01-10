@@ -291,7 +291,8 @@ module YARD
     def load_checksums
       return unless File.file?(checksums_path)
       lines = File.readlines(checksums_path).map do |line|
-        line.strip.split(/\s+/)
+        parts = line.strip.split(/\s+/)
+        parts.count > 2 ? [parts[0..-2].join(' '), parts[-1]] : parts
       end
       @checksums = Hash[lines]
     end
