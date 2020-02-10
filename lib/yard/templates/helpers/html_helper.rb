@@ -316,6 +316,9 @@ module YARD
         link = url_for(obj, anchor, relative)
         link = link ? link_url(link, title, :title => h("#{obj.title} (#{obj.type})")) : title
         "<span class='object_link'>" + link + "</span>"
+      rescue Parser::UndocumentableError
+        log.warn "The namespace of link #{obj.inspect} is a constant or invalid."
+        title || obj.to_s
       end
 
       # (see BaseHelper#link_url)
