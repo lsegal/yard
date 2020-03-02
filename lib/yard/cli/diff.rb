@@ -161,7 +161,10 @@ module YARD
         url = "http://rubygems.org/downloads/#{gemfile}"
         log.info "Searching for remote gem file #{url}"
         begin
-          open(url) {|io| expand_and_parse(gemfile, io) }
+          # Note: In Ruby 2.4.x, URI.open is a private method. After
+          # 2.5, URI.open behaves much like Kernel#open once you've
+          # required 'open-uri'
+          OpenURI.open_uri(url) {|io| expand_and_parse(gemfile, io) }
           return true
         rescue OpenURI::HTTPError
           nil # noop
