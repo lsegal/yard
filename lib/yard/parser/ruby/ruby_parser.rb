@@ -684,6 +684,7 @@ module YARD
         end
 
         def freeze_tree(node = nil)
+          @tokens = @tokens.sort_by {|t| t.last }
           nodes = [node || root]
           until nodes.empty?
             p_node = nodes.shift
