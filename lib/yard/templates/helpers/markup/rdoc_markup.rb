@@ -34,16 +34,17 @@ module YARD
         class RDocMarkup
           attr_accessor :from_path
 
+          @@mutex = Mutex.new
           @@formatter = nil
           @@markup = nil
-          @@mutex = nil
 
           def initialize(text)
             @text = text
 
-            @@formatter ||= RDocMarkupToHtml.new
-            @@markup ||= MARKUP.new
-            @@mutex ||= Mutex.new
+            @@mutex.synchronize do
+              @@formatter ||= RDocMarkupToHtml.new
+              @@markup ||= MARKUP.new
+            end
           end
 
           def to_html
