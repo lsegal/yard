@@ -412,7 +412,7 @@ module YARD
         end
 
         def on_dyna_symbol(sym)
-          rng = if sym.source_range.size == 0 # rubocop:disable Style/ZeroLengthPredicate
+          rng = if sym.source_range.to_a.size == 0 # rubocop:disable Style/ZeroLengthPredicate
                   (sym.source_range.begin - 3)...sym.source_range.end
                 else
                   (sym.source_range.begin - 2)..(sym.source_range.end + 1)
@@ -612,7 +612,7 @@ module YARD
 
         def insert_comments
           root.traverse do |node|
-            next if %i{comment void_stmt list}.include?(node.type) || node.parent.type != :list
+            next if [:comment, :void_stmt, :list].include?(node.type) || node.parent.type != :list
 
             # never attach comments to if/unless mod nodes
             if node.type == :if_mod || node.type == :unless_mod
