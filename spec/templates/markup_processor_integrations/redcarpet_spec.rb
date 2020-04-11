@@ -40,6 +40,10 @@ MARKDOWN
     expect(rendered_document).to match(header_regexp(2, 'Example code listings'))
   end
 
+  it 'generates anchor tags for level 2 header' do
+    expect(rendered_document).to include('<h2 id="example-code-listings">Example code listings</h2>')
+  end
+
   it 'renders indented block of code, and applies Ruby syntax highlight' do
     expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '1'))
   end
