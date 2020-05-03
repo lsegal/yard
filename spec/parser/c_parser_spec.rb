@@ -106,6 +106,24 @@ RSpec.describe YARD::Parser::C::CParser do
       end
     end
 
+    describe "Class inherited from core error class" do
+      it "resolves correct name" do
+        parse <<-eof
+          void
+          Init_Mask(void)
+          {
+              rb_cFoo = rb_define_class("Foo", rb_cObject);
+              rb_cMyError = rb_define_class("MyError", rb_eArgError);
+          }
+        eof
+        klass = Registry.at('MyError')
+        expect(klass.name).to eq :MyError
+        expect(klass.title).to eq 'MyError'
+        expect(klass.superclass.name).to eq :ArgumentError
+        expect(klass.superclass.title).to eq 'ArgumentError'
+      end
+    end
+
     describe "Constant" do
       it "does not truncate docstring" do
         parse <<-eof
