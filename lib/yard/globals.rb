@@ -5,7 +5,7 @@
 #
 # @see YARD::CodeObjects::Proxy
 # @see YARD::Registry.resolve
-def P(namespace, name = nil, type = nil) # rubocop:disable Style/MethodName
+def P(namespace, name = nil, type = nil) # rubocop:disable Naming/MethodName
   if name.nil?
     name = namespace
     namespace = nil

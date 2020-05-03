@@ -59,7 +59,8 @@ module YARD
 
         if @namespace.is_a?(ConstantObject)
           unless @namespace.value =~ /\A#{NAMESPACEMATCH}\Z/
-            raise Parser::UndocumentableError, "constant mapping"
+            raise Parser::UndocumentableError, "constant mapping for " +
+              "#{@origname} (type=#{type.inspect})"
           end
 
           @origname = nil # forget these for a constant

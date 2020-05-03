@@ -81,9 +81,13 @@ module YARD
         if provider.to_s == 'RDiscount'
           provider.new(text, :autolink).to_html
         elsif provider.to_s == 'RedcarpetCompat'
-          provider.new(text, :no_intraemphasis, :gh_blockcode,
-                             :fenced_code, :autolink, :tables,
-                             :lax_spacing).to_html
+          provider.new(text, :autolink,
+                             :fenced_code,
+                             :gh_blockcode,
+                             :lax_spacing,
+                             :tables,
+                             :with_toc_data,
+                             :no_intraemphasis).to_html
         else
           provider.new(text).to_html
         end
@@ -316,6 +320,9 @@ module YARD
         link = url_for(obj, anchor, relative)
         link = link ? link_url(link, title, :title => h("#{obj.title} (#{obj.type})")) : title
         "<span class='object_link'>" + link + "</span>"
+      rescue Parser::UndocumentableError
+        log.warn "The namespace of link #{obj.inspect} is a constant or invalid."
+        title || obj.to_s
       end
 
       # (see BaseHelper#link_url)

@@ -202,8 +202,7 @@ module YARD
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               unless @last_ns_token == [:kw, "def"] ||
-                  (@tokens.last && @tokens.last[0] == :symbeg) ||
-                  (!@newline && %w(if while until unless).include?(tok))
+                  (@tokens.last && @tokens.last[0] == :symbeg)
                 (@map[tok] ||= []) << [lineno, charno]
               end
               visit_ns_token(:#{event}, tok, true)
@@ -412,7 +411,7 @@ module YARD
         end
 
         def on_dyna_symbol(sym)
-          rng = if sym.source_range.size == 0 # rubocop:disable Style/ZeroLengthPredicate
+          rng = if sym.source_range.to_a.size == 0 # rubocop:disable Style/ZeroLengthPredicate
                   (sym.source_range.begin - 3)...sym.source_range.end
                 else
                   (sym.source_range.begin - 2)..(sym.source_range.end + 1)
@@ -442,6 +441,8 @@ module YARD
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{kw}; rescue NameError; end
             def on_#{kw}(*args)
+              mapping = @map[#{kw.to_s.sub(/_mod$/, '').inspect}]
+              mapping.pop if mapping
               sr = args.last.source_range.first..args.first.source_range.last
               lr = args.last.line_range.first..args.first.line_range.last
               #{node_class}.new(:#{kw}, args, :line => lr, :char => sr)
@@ -612,7 +613,7 @@ module YARD
 
         def insert_comments
           root.traverse do |node|
-            next if %i{comment void_stmt list}.include?(node.type) || node.parent.type != :list
+            next if [:comment, :void_stmt, :list].include?(node.type) || node.parent.type != :list
 
             # never attach comments to if/unless mod nodes
             if node.type == :if_mod || node.type == :unless_mod
@@ -684,6 +685,7 @@ module YARD
         end
 
         def freeze_tree(node = nil)
+          @tokens = @tokens.sort_by {|t| t.last }
           nodes = [node || root]
           until nodes.empty?
             p_node = nodes.shift

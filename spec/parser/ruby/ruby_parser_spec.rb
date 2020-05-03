@@ -317,6 +317,19 @@ eof
       expect(symbols).to eq %w(:'' :bar :BAR :"B+z" :if)
     end
 
+    # @bug gh-1313
+    it "tokenizes comments in-order" do
+      src = <<-eof
+        def method
+          # Method comment not docstring
+        end
+      eof
+      
+      tokens = tokenize(src.gsub(/^ +/, ''))
+      expect(tokens).to eq(tokens.sort_by {|t| t.last })
+      expect(tokens.map {|t| t.first }).to eq %i(kw sp ident nl comment kw nl)
+    end
+
     it "parses %w() array in constant declaration" do
       s = stmt(<<-eof)
         class Foo
@@ -515,6 +528,16 @@ eof
         end
       eof
       expect(ast.jump(:class).docstring).to eq "comment 1\ncomment 2"
+    end
+
+    %w(if unless).each do |type|
+      let(:condition_type) { type }
+      let(:ast) { stmt '"#{' + type + ' condition?; 42; end}" ' + type + ' verbose?' }
+      let(:subject) { ast.jump(:string_embexpr)[0][0].source }
+
+      it "returns correct source for interpolated non-ternary '#{type}' conditionals" do
+        is_expected.to eq "#{condition_type} condition?; 42; end"
+      end
     end
   end
 end if HAVE_RIPPER

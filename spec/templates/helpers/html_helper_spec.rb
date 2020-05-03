@@ -519,6 +519,17 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
         And more.
       eof
     end
+
+    it "warns if you link a constant namespace as if it were a class/module" do
+      @file = CodeObjects::ExtraFileObject.new('myfile.txt', '')
+      YARD.parse_string('CONST = 1')
+
+      logger = double(:log)
+      allow(self).to receive(:log).and_return(logger)
+      expect(logger).to receive(:warn).ordered.with("The namespace of link \"::CONST#meth\" is a constant or invalid.")
+      expect(logger).to receive(:warn).ordered.with("In file `myfile.txt':1: Cannot resolve link to ::CONST#meth from text:\n\t{::CONST#meth}")
+      expect(resolve_links("{::CONST#meth}")).to eq('::CONST#meth')
+    end
   end
 
   describe "#signature" do

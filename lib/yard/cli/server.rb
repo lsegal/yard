@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module YARD
   module CLI
     # A local documentation server
@@ -58,11 +59,13 @@ module YARD
 
       def load_template_paths
         return if YARD::Config.options[:safe_mode]
+
         Templates::Engine.template_paths |= template_paths
       end
 
       def select_adapter
         return adapter if adapter
+
         require 'rubygems'
         require 'rack'
         self.adapter = YARD::Server::RackAdapter
@@ -129,7 +132,8 @@ module YARD
         require 'rubygems'
         YARD::GemIndex.each do |spec|
           libraries[spec.name] ||= []
-          libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
+          libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s,
+                                                                    nil, :gem)]
         end
       end
 
@@ -139,7 +143,8 @@ module YARD
         if File.exist?("#{gemfile}.lock")
           Bundler::LockfileParser.new(File.read("#{gemfile}.lock")).specs.each do |spec|
             libraries[spec.name] ||= []
-            libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name, spec.version.to_s, nil, :gem)]
+            libraries[spec.name] |= [YARD::Server::LibraryVersion.new(spec.name,
+                                                                      spec.version.to_s, nil, :gem)]
           end
         else
           log.warn "Cannot find #{gemfile}.lock, ignoring --gemfile option"
@@ -171,7 +176,8 @@ module YARD
         opts.on('-g', '--gems', 'Serves documentation for installed gems') do
           add_gems
         end
-        opts.on('-G', '--gemfile [GEMFILE]', 'Serves documentation for gems from Gemfile') do |gemfile|
+        opts.on('-G', '--gemfile [GEMFILE]',
+                'Serves documentation for gems from Gemfile') do |gemfile|
           add_gems_from_gemfile(gemfile)
         end
         opts.on('-t', '--template-path PATH',
@@ -192,23 +198,26 @@ module YARD
         opts.on('--docroot DOCROOT', 'Uses DOCROOT as document root') do |docroot|
           server_options[:DocumentRoot] = File.expand_path(docroot)
         end
-        opts.on('-a', '--adapter ADAPTER', 'Use the ADAPTER (full Ruby class) for web server') do |adapter|
-          if adapter.casecmp('webrick') == 0
-            self.adapter = YARD::Server::WebrickAdapter
-          elsif adapter.casecmp('rack') == 0
-            self.adapter = YARD::Server::RackAdapter
-          else
-            self.adapter = eval(adapter) # rubocop:disable Lint/Eval
-          end
+        opts.on('-a', '--adapter ADAPTER',
+                'Use the ADAPTER (full Ruby class) for web server') do |adapter|
+          self.adapter = if adapter.casecmp('webrick') == 0
+                           YARD::Server::WebrickAdapter
+                         elsif adapter.casecmp('rack') == 0
+                           YARD::Server::RackAdapter
+                         else
+                           eval(adapter) # rubocop:disable Security/Eval
+                         end
         end
-        opts.on('-s', '--server TYPE', 'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|
+        opts.on('-s', '--server TYPE',
+                'Use a specific server type eg. thin,mongrel,cgi (Rack specific)') do |type|
           server_options[:server] = type
         end
         opts.on('--fork', 'Use process forking when serving requests') do
           options[:use_fork] = true
         end
         common_options(opts)
-        opts.on('-e', '--load FILE', 'A Ruby script to load before the source tree is parsed.') do |file|
+        opts.on('-e', '--load FILE',
+                'A Ruby script to load before the source tree is parsed.') do |file|
           scripts << file
         end
         parse_options(opts, args)
