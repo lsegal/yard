@@ -529,5 +529,15 @@ eof
       eof
       expect(ast.jump(:class).docstring).to eq "comment 1\ncomment 2"
     end
+
+    %w(if unless).each do |type|
+      let(:condition_type) { type }
+      let(:ast) { stmt '"#{' + type + ' condition?; 42; end}" ' + type + ' verbose?' }
+      let(:subject) { ast.jump(:string_embexpr)[0][0].source }
+
+      it "returns correct source for interpolated non-ternary '#{type}' conditionals" do
+        is_expected.to eq "#{condition_type} condition?; 42; end"
+      end
+    end
   end
 end if HAVE_RIPPER

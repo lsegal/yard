@@ -202,8 +202,7 @@ module YARD
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               unless @last_ns_token == [:kw, "def"] ||
-                  (@tokens.last && @tokens.last[0] == :symbeg) ||
-                  (!@newline && %w(if while until unless).include?(tok))
+                  (@tokens.last && @tokens.last[0] == :symbeg)
                 (@map[tok] ||= []) << [lineno, charno]
               end
               visit_ns_token(:#{event}, tok, true)
@@ -442,6 +441,8 @@ module YARD
           module_eval(<<-eof, __FILE__, __LINE__ + 1)
             begin; undef on_#{kw}; rescue NameError; end
             def on_#{kw}(*args)
+              mapping = @map[#{kw.to_s.sub(/_mod$/, '').inspect}]
+              mapping.pop if mapping
               sr = args.last.source_range.first..args.first.source_range.last
               lr = args.last.line_range.first..args.first.line_range.last
               #{node_class}.new(:#{kw}, args, :line => lr, :char => sr)
