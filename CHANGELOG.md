@@ -1,5 +1,9 @@
 # master
 
+# 0.9.25 - May 3rd, 2020
+
+[0.9.25]: https://github.com/lsegal/yard/compare/v0.9.24...v0.9.25
+
 - Fix parsing issue with conditional blocks mixed with conditional modifiers.
   (#1308, #1324, #1326, #1327)
 - Add table of contents IDs to redcarpet generated markdown. (#1323)
