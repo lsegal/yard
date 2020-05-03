@@ -1,5 +1,16 @@
 # master
 
+- Fix parsing issue with conditional blocks mixed with conditional modifiers.
+  (#1308, #1324, #1326, #1327)
+- Add table of contents IDs to redcarpet generated markdown. (#1323)
+- Backport fixes for Ruby 1.9 (#1320)
+- Fix parsing of checksums in yard server (#1301)
+- Map Ruby C variable error names to Ruby classes (#1270, #1275)
+- Fix initialization of RDocMarkup across threads (#1318)
+- Remove warning for Kernel#open (#1312)
+- Omit spec files in gem package (#1307)
+- README updates (#1322)
+
 # 0.9.24 - January 8th, 2020
 
 [0.9.24]: https://github.com/lsegal/yard/compare/v0.9.23...v0.9.24
@@ -43,9 +54,9 @@
 
 - Fix parsing of stringified Symbols in Ruby source (#1256).
 - Fix path traversal vulnerability in `yard server`. This bug would allow
- unsanitized HTTP requests to access arbitrary files on the machine of a
- `yard server` host under certain conditions. Thanks to CuongMX from
- Viettel Cyber Security for discovering this vulnerability.
+  unsanitized HTTP requests to access arbitrary files on the machine of a
+  `yard server` host under certain conditions. Thanks to CuongMX from
+  Viettel Cyber Security for discovering this vulnerability.
 
 # 0.9.19 - April 2nd, 2019
 
