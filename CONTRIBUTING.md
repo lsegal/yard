@@ -42,7 +42,7 @@ If you believe you have found a bug, please include a few things in your report:
    if the behavior is intentional or not.
 
 Finally, please **DO NOT** submit a report that states a feature simply
-*"does not work"* without any additional information in the report. Consider
+_"does not work"_ without any additional information in the report. Consider
 the issue from the maintainer's perspective: in order to fix your bug, we
 need to drill down to the broken line of code, and in order to do this,
 we must be able to reproduce the issue on our end to find that line of
@@ -132,7 +132,7 @@ help handle day-to-day operations, such as releases, bug fixes, and triage.
 You can do some of this as a non-maintainer too, but if you like this project,
 we can always use more hands on deck!
 
-[code]: https://github.com/lsegal/yard/blob/master/CODE_OF_CONDUCT.md
+[code]: https://github.com/lsegal/yard/blob/main/CODE_OF_CONDUCT.md
 [issues]: http://github.com/lsegal/yard/issues
 [commit]: http://chris.beams.io/posts/git-commit/
 [pr]: https://help.github.com/articles/using-pull-requests/

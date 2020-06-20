@@ -5,7 +5,7 @@
 [![Documentation](https://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://rubydoc.org/gems/yard/frames)
 
 [![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
-[![Build Status](https://travis-ci.org/lsegal/yard.svg?branch=master)](https://travis-ci.org/lsegal/yard)
+[![Build Status](https://travis-ci.org/lsegal/yard.svg?branch=main)](https://travis-ci.org/lsegal/yard)
 [![Coverage Status](https://coveralls.io/repos/github/lsegal/yard/badge.svg)](https://coveralls.io/github/lsegal/yard)
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 

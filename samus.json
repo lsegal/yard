@@ -2,7 +2,9 @@
   "actions": [
     {
       "action": "fs-sedfiles",
-      "files": ["lib/*/version.rb"],
+      "files": [
+        "lib/*/version.rb"
+      ],
       "arguments": {
         "search": "VERSION = ['\"](.+?)['\"]",
         "replace": "VERSION = '$version'"
@@ -10,23 +12,31 @@
     },
     {
       "action": "chmod-files",
-      "files": ["**/*,644", "bin/*,755"]
+      "files": [
+        "**/*,644",
+        "bin/*,755"
+      ]
     },
     {
       "action": "changelog-rotate",
-      "files": ["CHANGELOG.md"],
+      "files": [
+        "CHANGELOG.md"
+      ],
       "arguments": {
         "title_format": "$version - %B %-d$day_nth, %Y"
       }
     },
     {
       "action": "git-commit",
-      "files": ["CHANGELOG.md", "lib/*/version.rb"]
+      "files": [
+        "CHANGELOG.md",
+        "lib/*/version.rb"
+      ]
     },
     {
       "action": "git-merge",
       "arguments": {
-        "branch": "master"
+        "branch": "main"
       }
     },
     {
@@ -37,32 +47,40 @@
     },
     {
       "action": "archive-git-full",
-      "files": ["git.tgz"],
+      "files": [
+        "git.tgz"
+      ],
       "publish": [
         {
           "action": "git-push",
           "credentials": "lsegal.github.ssh",
           "arguments": {
             "remotes": "origin",
-            "refs": "master v$version"
+            "refs": "main v$version"
           }
         }
       ]
     },
     {
       "action": "gem-build",
-      "files": ["*.gemspec"],
+      "files": [
+        "*.gemspec"
+      ],
       "publish": [
         {
           "action": "gem-push",
-          "files": ["*.gem"],
+          "files": [
+            "*.gem"
+          ],
           "credentials": "lsegal.rubygems"
         }
       ]
     },
     {
       "action": "changelog-parse",
-      "files": ["CHANGELOG.md"],
+      "files": [
+        "CHANGELOG.md"
+      ],
       "publish": [
         {
           "action": "github-release",

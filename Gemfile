@@ -7,7 +7,7 @@ group :development do
   gem 'rdoc'
   gem 'json'
   gem 'simplecov'
-  gem 'samus', '~> 3.0.8', :require => false
+  gem 'samus', '~> 3.0.9', :require => false
   gem 'coveralls', :require => false
 end
 
