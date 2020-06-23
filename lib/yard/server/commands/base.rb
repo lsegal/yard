@@ -183,7 +183,7 @@ module YARD
           self.body = "Not found: #{request.path}"
           headers['Content-Type'] = 'text/plain'
           headers['X-Cascade'] = 'pass'
-          headers.delete('Cache-Control')
+          headers['Cache-Control'] = 'nocache'
         end
 
         # Sets the headers and status code for a redirection to a given URL
@@ -201,7 +201,7 @@ module YARD
         # requests served with "?1234567890" style timestamp query strings.
         def add_cache_control
           return if request.query_string.to_i == 0
-          headers['Cache-Control'] = 'private, max-age=300'
+          headers['Cache-Control'] ||= 'public, max-age=300'
         end
       end
     end
