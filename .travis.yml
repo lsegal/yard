@@ -1,6 +1,3 @@
-# Enables Travis to use their new container-based infrastructure
-sudo: false
-
 # Build for Ruby
 language: ruby
 
