@@ -145,7 +145,7 @@ module YARD::CodeObjects
     end
 
     # Returns all alias names of the object
-    # @return [Array<Symbol>] the alias names
+    # @return [Array<MethodObject>] the alias names
     def aliases
       list = []
       return list unless namespace.is_a?(NamespaceObject)
