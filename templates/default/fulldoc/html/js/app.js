@@ -4,10 +4,36 @@ var localStorage = {}, sessionStorage = {};
 try { localStorage = window.localStorage; } catch (e) { }
 try { sessionStorage = window.sessionStorage; } catch (e) { }
 
+jQuery.fn.oldToggle = function( fn, fn2 ) {
+  // Save reference to arguments for access in closure
+  var args = arguments,
+    guid = fn.guid || jQuery.guid++,
+    i = 0,
+    toggler = function( event ) {
+      // Figure out which function to execute
+      var lastToggle = ( jQuery._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
+      jQuery._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
+
+      // Make sure that clicks stop
+      event.preventDefault();
+
+      // and execute the function
+      return args[ lastToggle ].apply( this, arguments ) || false;
+    };
+
+  // link all the functions, so any of them can unbind this click handler
+  toggler.guid = guid;
+  while ( i < args.length ) {
+    args[ i++ ].guid = guid;
+  }
+
+  return this.click( toggler );
+};
+
 function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
-    $('.toggleSource').toggle(function() {
+    $('.toggleSource').oldToggle(function() {
        $(this).parent().nextAll('.source_code').slideDown(100);
        $(this).text("Hide source");
     },
@@ -20,7 +46,7 @@ function createSourceLinks() {
 function createDefineLinks() {
     var tHeight = 0;
     $('.defines').after(" <a href='#' class='toggleDefines'>more...</a>");
-    $('.toggleDefines').toggle(function() {
+    $('.toggleDefines').oldToggle(function() {
         tHeight = $(this).parent().prev().height();
         $(this).prev().css('display', 'inline');
         $(this).parent().prev().height($(this).parent().height());
@@ -35,7 +61,7 @@ function createDefineLinks() {
 
 function createFullTreeLinks() {
     var tHeight = 0;
-    $('.inheritanceTree').toggle(function() {
+    $('.inheritanceTree').oldToggle(function() {
         tHeight = $(this).parent().prev().height();
         $(this).parent().toggleClass('showAll');
         $(this).text("(hide)");
@@ -216,7 +242,7 @@ function generateTOC() {
   html = '<div id="toc"><p class="title hide_toc"><a href="#"><strong>Table of Contents</strong></a></p></div>';
   $('#content').prepend(html);
   $('#toc').append(_toc);
-  $('#toc .hide_toc').toggle(function() {
+  $('#toc .hide_toc').oldToggle(function() {
     $('#toc .top').slideUp('fast');
     $('#toc').toggleClass('hidden');
     $('#toc .title small').toggle();
