@@ -7,6 +7,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
   it "handles includes from classes or modules" do
     expect(Registry.at(:X).instance_mixins).to include(P(:A))
     expect(Registry.at(:Y).instance_mixins).to include(P(:A))
+    expect(Registry.at(:Y).instance_mixins).to include(P('B::D')) unless LEGACY_PARSER
   end
 
   it "handles includes in class << self" do

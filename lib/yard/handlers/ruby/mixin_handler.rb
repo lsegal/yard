@@ -2,6 +2,7 @@
 # Handles the 'include' statement to mixin a module in the instance scope
 class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   handles method_call(:include)
+  handles method_call(:prepend)
   namespace_only
 
   process do
@@ -34,7 +35,9 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
 
     rec = recipient(mixin)
     return if rec.nil? || rec.mixins(scope).include?(obj)
-    rec.mixins(scope).unshift(obj)
+
+    shift = statement.method_name(true) == :include ? :unshift : :push
+    rec.mixins(scope).send(shift, obj)
   end
 
   def recipient(mixin)
