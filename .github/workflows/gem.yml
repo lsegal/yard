@@ -1,0 +1,27 @@
+name: Release Version
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: tag
+        run: echo ::set-output name=TAG::$(echo $GITHUB_REF | cut -d / -f 3)
+      - run: ruby -e 'tag=ENV["GITHUB_REF"].sub("refs/tags/", "").sub("v", "v?");puts File.read("CHANGELOG.md")[/#\s+#{tag}[^\r\n]+\r?\n(.+?)(^#|\Z)/mi,1].strip' > extracted_changelog.md
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG }}
+          release_name: Release ${{ steps.tag.outputs.TAG }}
+          body_path: extracted_changelog.md
+      - name: Publish RubyGem
+        uses: dawidd6/action-publish-gem@v1
+        with:
+          api_key: ${{secrets.RUBYGEMS_API_KEY}}

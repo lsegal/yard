@@ -44,55 +44,6 @@
     },
     {
       "action": "rake-task"
-    },
-    {
-      "action": "archive-git-full",
-      "files": [
-        "git.tgz"
-      ],
-      "publish": [
-        {
-          "action": "git-push",
-          "credentials": "lsegal.github.ssh",
-          "arguments": {
-            "remotes": "origin",
-            "refs": "main v$version"
-          }
-        }
-      ]
-    },
-    {
-      "action": "gem-build",
-      "files": [
-        "*.gemspec"
-      ],
-      "publish": [
-        {
-          "action": "gem-push",
-          "files": [
-            "*.gem"
-          ],
-          "credentials": "lsegal.rubygems"
-        }
-      ]
-    },
-    {
-      "action": "changelog-parse",
-      "files": [
-        "CHANGELOG.md"
-      ],
-      "publish": [
-        {
-          "action": "github-release",
-          "credentials": "lsegal.github",
-          "files": [],
-          "arguments": {
-            "repository": "lsegal/yard",
-            "tag": "v$version",
-            "changelog": "CHANGELOG.md"
-          }
-        }
-      ]
     }
   ]
 }
