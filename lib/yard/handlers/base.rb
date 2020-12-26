@@ -456,7 +456,7 @@ module YARD
           object.docstring = parser.to_docstring
 
           # Add hash_flag/line_range
-          if stmt
+          if stmt && stmt.respond_to?(:comments_hash_flag)
             object.docstring.hash_flag = stmt.comments_hash_flag
             object.docstring.line_range = stmt.comments_range
           end

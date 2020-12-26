@@ -2,6 +2,7 @@
 source 'https://rubygems.org'
 
 group :development do
+  gem 'rbs'
   gem 'rspec'
   gem 'rake'
   gem 'rdoc'

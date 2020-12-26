@@ -140,6 +140,16 @@ module YARD
       autoload :YieldHandler,             __p('handlers/ruby/yield_handler')
     end
 
+    module RBS # Ruby signature handlers
+      autoload :Base,                     __p('handlers/rbs/base')
+      autoload :ClassHandler,             __p('handlers/rbs/class_handler')
+      autoload :ConstantHandler,          __p('handlers/rbs/constant_handler')
+      autoload :MethodHandler,            __p('handlers/rbs/method_handler')
+      autoload :MixinHandler,             __p('handlers/rbs/mixin_handler')
+      autoload :ModuleHandler,            __p('handlers/rbs/module_handler')
+      autoload :VisibilityHandler,        __p('handlers/rbs/visibility_handler')
+    end
+
     autoload :Base,                       __p('handlers/base')
     autoload :HandlerAborted,             __p('handlers/base')
     autoload :NamespaceMissingError,      __p('handlers/base')
@@ -181,6 +191,10 @@ module YARD
       autoload :AstNode,           __p('parser/ruby/ast_node')
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
       autoload :TokenResolver,     __p('parser/ruby/token_resolver')
+    end
+
+    module RBS # RBS parsing components.
+      autoload :RBSParser,         __p('parser/rbs/rbs_parser')
     end
 
     autoload :Base,                __p('parser/base')

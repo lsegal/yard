@@ -36,6 +36,7 @@ module YARD
       register_handler_namespace :ruby, Ruby
       register_handler_namespace :ruby18, Ruby::Legacy
       register_handler_namespace :c, C
+      register_handler_namespace :rbs, RBS
 
       # @return [String] the filename
       attr_accessor :file
@@ -123,8 +124,13 @@ module YARD
               log.warn "in #{handler}: Undocumentable #{undocerr.message}\n" \
                        "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
             rescue => e
-              log.error "Unhandled exception in #{handler}:\n" \
-                        "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+              if stmt.respond_to?(:show)
+                log.error "Unhandled exception in #{handler}:\n" \
+                          "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+              elsif stmt.respond_to?(:location)
+                log.error "Unhandled exception in #{handler}:"
+                          "  in `#{file}`:#{stmt.location.start_line}:\n\n#{stmt}\n"
+              end
               log.backtrace(e)
             end
           end

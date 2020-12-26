@@ -68,7 +68,7 @@ module YARD
 
       # The default glob of files to be parsed.
       # @since 0.9.0
-      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.rb", "ext/**/*.{c,cc,cxx,cpp,rb}"]
+      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.{rb,rbs}", "ext/**/*.{c,cc,cxx,cpp,rb}"]
 
       # Byte order marks for various encodings
       # @since 0.7.0
@@ -145,7 +145,7 @@ module YARD
         # @see Parser::Base
         def register_parser_type(type, parser_klass, extensions = nil)
           unless Base > parser_klass
-            raise ArgumentError, "expecting parser_klass to be a subclass of YARD::Parser::Base"
+            raise ArgumentError, "expecting #{parser_klass} to be a subclass of YARD::Parser::Base"
           end
           parser_type_extensions[type.to_sym] = extensions if extensions
           parser_types[type.to_sym] = parser_klass
@@ -379,6 +379,11 @@ module YARD
       register_parser_type :ruby,   Ruby::RubyParser
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      C::CParser, ['c', 'cc', 'cxx', 'cpp']
+
+      begin
+        require 'rbs'
+        register_parser_type :rbs, RBS::RBSParser, ['rbs']
+      rescue LoadError; end
 
       self.parser_type = :ruby
 
