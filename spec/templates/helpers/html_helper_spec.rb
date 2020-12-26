@@ -21,16 +21,18 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   end
 
   describe "#charset" do
+    after { Encoding.default_external = 'utf-8' if defined?(Encoding) }
+
     it "returns foo if LANG=foo" do
       expect(ENV).to receive(:[]).with('LANG').and_return('shift_jis') if YARD.ruby18?
-      expect(Encoding.default_external).to receive(:name).and_return('shift_jis') if defined?(Encoding)
+      Encoding.default_external = 'shift_jis' if defined?(Encoding)
       expect(charset).to eq 'shift_jis'
     end
 
-    ['US-ASCII', 'ASCII-7BIT', 'ASCII-8BIT'].each do |type|
+    ['US-ASCII', 'binary', 'ASCII-8BIT'].each do |type|
       it "converts #{type} to iso-8859-1" do
         expect(ENV).to receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
-        expect(Encoding.default_external).to receive(:name).and_return(type) if defined?(Encoding)
+        Encoding.default_external = type if defined?(Encoding)
         expect(charset).to eq 'iso-8859-1'
       end
     end
@@ -38,9 +40,9 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     it "supports utf8 as an encoding value for utf-8" do
       type = 'utf8'
       expect(ENV).to receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
-      expect(Encoding.default_external).to receive(:name).and_return(type) if defined?(Encoding)
+      Encoding.default_external = type if defined?(Encoding)
       expect(charset).to eq 'utf-8'
-    end
+    end if RUBY_VERSION < '3'
 
     it "takes file encoding if there is a file" do
       @file = OpenStruct.new(:contents => String.new('foo').force_encoding('sjis'))

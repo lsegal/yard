@@ -20,9 +20,7 @@ module YARD
 
       def [](*args)
         if args.first.is_a?(Range) || args.size > 1
-          obj = super(*args)
-          obj.name = name
-          return obj
+          return self.class.new(name, *super(*args))
         elsif args.first.is_a?(Integer)
           return super(*args)
         end

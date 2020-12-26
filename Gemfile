@@ -9,6 +9,7 @@ group :development do
   gem 'simplecov'
   gem 'samus', '~> 3.0.9', :require => false
   gem 'coveralls', :require => false
+  gem 'webrick'
 end
 
 group :asciidoc do

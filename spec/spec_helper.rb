@@ -209,4 +209,5 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 end
 
+YARD::Logger
 include YARD
