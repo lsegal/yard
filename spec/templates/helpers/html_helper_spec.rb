@@ -37,13 +37,6 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       end
     end
 
-    it "supports utf8 as an encoding value for utf-8" do
-      type = 'utf8'
-      expect(ENV).to receive(:[]).with('LANG').and_return(type) if YARD.ruby18?
-      Encoding.default_external = type if defined?(Encoding)
-      expect(charset).to eq 'utf-8'
-    end if RUBY_VERSION < '3'
-
     it "takes file encoding if there is a file" do
       @file = OpenStruct.new(:contents => String.new('foo').force_encoding('sjis'))
       # not the correct charset name, but good enough
