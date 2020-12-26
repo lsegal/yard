@@ -28,3 +28,14 @@ jobs:
           bundle exec rake
         env:
           CI: true
+  build_ruby3:
+    name: "Ruby: 3.0 OS: Linux"
+    container: ruby:3.0-rc-alpine
+    steps:
+      - uses: actions/checkout@v2
+      - run: apk add -U build-base
+      - run: gem update --system --no-document --conservative
+      - run: bundle install --jobs=3 --retry=3
+      - run: ruby -v && bundle exec rake
+        env:
+          CI: true

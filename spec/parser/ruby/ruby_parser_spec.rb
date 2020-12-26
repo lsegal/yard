@@ -539,5 +539,16 @@ eof
         is_expected.to eq "#{condition_type} condition?; 42; end"
       end
     end
+
+    it "handles single-line method declaration syntax" do
+      YARD.parse_string <<-eof
+        class A
+          # Adds two numbers
+          def add(x) = x + 1
+        end
+      eof
+
+      expect(Registry.at('A#add').docstring).to eq('Adds two numbers')
+    end if RUBY_VERSION >= '3.'
   end
 end if HAVE_RIPPER
