@@ -30,6 +30,7 @@ jobs:
           CI: true
   build_ruby3:
     name: "Ruby: 3.0 OS: Linux"
+    runs-on: ubuntu-latest
     container: ruby:3.0-rc-alpine
     steps:
       - uses: actions/checkout@v2
