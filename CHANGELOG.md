@@ -1,5 +1,9 @@
 # main
 
+# 0.9.26 - December 26th, 2020
+
+[0.9.26]: https://github.com/lsegal/yard/compare/v0.9.25...v0.9.26
+
 - Add support for Ruby 3.0 and fix tests
 - Fix support for `frozen_string_literal: false` magic comments (#1363)
 
