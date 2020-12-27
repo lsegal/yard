@@ -2,7 +2,6 @@
 require File.dirname(__FILE__) + '/lib/yard'
 require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
 require 'rbconfig'
-require 'samus'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 
@@ -35,5 +34,3 @@ task :default => [:spec, :test_doc]
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]
 end
-
-Samus::Rake::DockerReleaseTask.new
