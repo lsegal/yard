@@ -295,9 +295,10 @@ module YARD
         self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if files.empty?
         files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README{,*[^~]}').
+          select {|f| extra_file_valid?(f)}.
           sort_by {|r| [r.count('.'), r.index('.'), r] }.first
         readme ||= Dir.glob(files.first).first if options.onefile && !files.empty?
-        options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme
+        options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme && extra_file_valid?(readme)
         options.files.unshift(options.readme).uniq! if options.readme
 
         Tags::Library.visible_tags -= hidden_tags
