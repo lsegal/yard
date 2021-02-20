@@ -74,8 +74,8 @@ module YARD
         return nil if !types || types.empty?
         begin
           TypesExplainer.explain!(*types)
-        rescue SyntaxError
-          log.warn "Cannot parse `#{types.join(", ")}` as types" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+        rescue SyntaxError => e
+          log.warn "Cannot parse `#{types.join(", ")}` from `#{e.message}`" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
         end
       end
     end
