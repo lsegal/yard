@@ -199,5 +199,11 @@ RSpec.describe YARD::Tags::TypesExplainer do
         expect(explain).to eq expected.delete("\n").squeeze(' ')
       end
     end
+
+    it "warns about parsing failures" do
+      expect(log).to receive(:warn).with(/\ACannot parse.+String or Proc/)
+      explain = YARD::Tags::TypesExplainer.explain("String or Proc")
+      expect(explain).to be_nil
+    end
   end
 end

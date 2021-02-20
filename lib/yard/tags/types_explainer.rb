@@ -8,7 +8,8 @@ module YARD
       # @param types [Array<String>] a list of types to parse and summarize
       def self.explain(*types)
         explain!(*types)
-      rescue SyntaxError
+      rescue SyntaxError => e
+        log.warn "Cannot parse `#{types.join(", ")}`:#{e.message}"
         nil
       end
 
