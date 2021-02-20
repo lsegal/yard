@@ -33,7 +33,7 @@ module YARD
       include StaticCaching
       include Commands
 
-      # @return [Adapter Dependent] the request data coming in with the routing
+      # @return Adapter Dependent the request data coming in with the routing
       attr_accessor :request
 
       # @return [Adapter] the adapter used by the router
@@ -49,7 +49,7 @@ module YARD
       # Perform routing on a specific request, serving the request as a static
       # file through {Commands::RootRequestCommand} if no route is found.
       #
-      # @param [Adapter Dependent] request the request object
+      # @param Adapter Dependent request the request object
       # @return [Array(Numeric,Hash,Array)] the Rack-style server response data
       def call(request)
         self.request = request
