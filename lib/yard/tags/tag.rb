@@ -25,7 +25,7 @@ module YARD
       # @return [String] a name associated with the tag
       attr_accessor :name
 
-      # @return [CodeObjects::Base] the associated object
+      # @return [CodeObjects::Base, nil] the associated object
       attr_accessor :object
 
       # Creates a new tag object with a tag name and text. Optionally, formally declared types
@@ -65,6 +65,18 @@ module YARD
       def explain_types
         return nil if !types || types.empty?
         TypesExplainer.explain(*types)
+      end
+
+      # Warns for invalid type syntax.
+      #
+      # @return [void]
+      def warns_about_invalid_types
+        return nil if !types || types.empty?
+        begin
+          TypesExplainer.explain!(*types)
+        rescue SyntaxError
+          log.warn "Cannot parse `#{types.join(", ")}` as types" + (object ? " in file `#{object.file}` near line #{object.line}" : "")
+        end
       end
     end
   end

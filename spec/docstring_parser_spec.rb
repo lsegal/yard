@@ -101,6 +101,11 @@ eof
       docstring("@hello world")
     end
 
+    it "warns about invalid type syntax" do
+      expect(log).to receive(:warn).with(/\ACannot parse.+String or Proc/)
+      docstring("@param [String or Proc]")
+    end
+
     it "does not add trailing whitespace to freeform tags" do
       doc = docstring("@api private   \t   ")
       expect(doc.tag(:api).text).to eq "private"
