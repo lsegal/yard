@@ -8,7 +8,11 @@ group :development do
   gem 'json'
   gem 'simplecov'
   gem 'samus', '~> 3.0.9', :require => false
-  gem 'coveralls_reborn', '~> 0.20.0', require: false
+  if RUBY_VERSION < '2.4'
+    gem 'coveralls', :require => false
+  else
+    gem 'coveralls_reborn', '~> 0.20.0', require: false
+  end
   gem 'webrick'
 end
 
