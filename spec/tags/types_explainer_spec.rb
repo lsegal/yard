@@ -131,6 +131,13 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type[3].name).to eq "E"
     end
 
+    it "parses a list that contains symbols" do
+      type = parse("A, :b")
+      expect(type.size).to eq 2
+      expect(type[0].name).to eq "A"
+      expect(type[1].name).to eq ":b"
+    end
+
     it "parses a collection type" do
       type = parse("MyList<String>")
       expect(type.first).to be_a(CollectionType)

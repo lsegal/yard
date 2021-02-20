@@ -107,6 +107,7 @@ module YARD
           :hash_collection_start => /\{/,
           :hash_collection_next => /=>/,
           :hash_collection_end => /\}/,
+          :symbol => /:\S+/,
           :parse_end => nil
         }
 
@@ -146,6 +147,9 @@ module YARD
               when :hash_collection_start
                 name ||= "Hash"
                 type = HashCollectionType.new(name, parse, parse)
+              when :symbol
+                name = token
+                type = Type.new(name)
               when :hash_collection_next, :hash_collection_end, :fixed_collection_end, :collection_end, :parse_end
                 raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
                 type = Type.new(name) unless type
