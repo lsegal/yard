@@ -62,6 +62,26 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     expect(P('Bar#multiline_params').signature).to eq sig
   end if YARD.ruby2?
 
+  it "handles endless method definitions without parameters" do
+    YARD.parse_string <<-EOF
+      class Bar
+        def endless = true
+      end
+    EOF
+
+    expect(P('Bar#endless').signature).to eq "def endless"
+  end if YARD.ruby3?
+
+  it "handles endless method definitions with parameters" do
+    YARD.parse_string <<-EOF
+      class Bar
+        def endless_with_arg(arg = true) = true
+      end
+    EOF
+
+    expect(P('Bar#endless_with_arg').signature).to eq "def endless_with_arg(arg = true)"
+  end if YARD.ruby3?
+
   it "handles method signature with no parameters" do
     YARD.parse_string "class Bar; def foo; end end"
     expect(P('Bar#foo').signature).to eq 'def foo'

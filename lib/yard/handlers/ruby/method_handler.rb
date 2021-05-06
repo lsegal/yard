@@ -67,7 +67,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   end
 
   def format_args
-    args = statement.parameters
+    return [] unless args = statement.parameters
 
     params = []
 
