@@ -583,6 +583,12 @@ RSpec.describe YARD::CLI::Yardoc do
   end
 
   describe "Extra file arguments" do
+    def expect_extra_files_valid(obj, validity_hash = {})
+      validity_hash.each do |filename, valid|
+        expect(obj).to receive(:extra_file_valid?).with(filename).and_return(valid)
+      end
+    end
+
     it "accepts extra files if specified after '-' with source files" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return([])
       expect(File).to receive(:file?).with('extra_file1').and_return(true)
@@ -642,6 +648,7 @@ RSpec.describe YARD::CLI::Yardoc do
     it "uses first file as readme if no readme is specified when using --one-file" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return []
       expect(Dir).to receive(:glob).with('lib/*.rb').and_return(['lib/foo.rb'])
+      expect_extra_files_valid(@yardoc, 'lib/foo.rb' => true)
       expect(File).to receive(:read).with('lib/foo.rb').and_return('')
       @yardoc.parse_arguments(*%w(--one-file lib/*.rb))
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('lib/foo.rb', '')
@@ -653,8 +660,10 @@ RSpec.describe YARD::CLI::Yardoc do
       expect(@yardoc.options.readme).to be_nil
     end
 
-    it "uses readme it exists when using --one-file" do
+    it "uses readme if it exists when using --one-file" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README']
+      expect_extra_files_valid(@yardoc, 'README' => true)
+      expect_extra_files_valid(@yardoc, 'README' => true)
       expect(File).to receive(:read).with('README').and_return('')
       @yardoc.parse_arguments(*%w(--one-file lib/*.rb))
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
@@ -662,6 +671,8 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects readme with no file extension over readme with file extension" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.md', 'README-DEV', 'README']
+      expect_extra_files_valid(@yardoc, 'README.md' => true, 'README-DEV' => true, 'README' => true)
+      expect_extra_files_valid(@yardoc, 'README' => true)
       expect(File).to receive(:read).with('README').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README', '')
@@ -669,6 +680,8 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects readme with no suffix over readme with hyphenated suffix" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README.long-extension', 'README-de.md']
+      expect_extra_files_valid(@yardoc, 'README-fr.md' => true, 'README.long-extension'=> true, 'README-de.md' => true)
+      expect_extra_files_valid(@yardoc, 'README.long-extension'=> true)
       expect(File).to receive(:read).with('README.long-extension').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.long-extension', '')
@@ -683,9 +696,20 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects first readme from lexically sorted list" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README-de.md']
+      expect_extra_files_valid(@yardoc, 'README-fr.md'=> true, 'README-de.md' => true)
+      expect_extra_files_valid(@yardoc, 'README-de.md' => true)
       expect(File).to receive(:read).with('README-de.md').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README-de.md', '')
+    end
+
+    it "selects readme that exists over a readme that does not" do
+      expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.fr.md', 'README.md', 'README.de.md']
+      expect_extra_files_valid(@yardoc, 'README.fr.md'=> true, 'README.md' => false, 'README.de.md' => false)
+      expect_extra_files_valid(@yardoc, 'README.fr.md'=> true)
+      expect(File).to receive(:read).with('README.fr.md').and_return('')
+      @yardoc.parse_arguments
+      expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.fr.md', '')
     end
 
     it "does not allow US-ASCII charset when using --one-file" do
