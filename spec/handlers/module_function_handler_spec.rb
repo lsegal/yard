@@ -44,6 +44,21 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
     assert_module_function('Foo', 'baz')
   end
 
+  it "can decorate a method definition" do
+    YARD.parse_string <<-eof
+      module Foo
+        def qux; end
+
+        module_function def bar; end
+
+        def baz; end
+      end
+    eof
+    expect(Registry.at('Foo.qux')).to be nil
+    assert_module_function('Foo', 'bar')
+    expect(Registry.at('Foo.baz')).to be nil
+  end
+
   # @bug gh-563
   it "copies tags to module function properly" do
     YARD.parse_string <<-eof
