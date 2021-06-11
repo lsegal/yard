@@ -1,6 +1,6 @@
 name: Unit Tests
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     name: "Ruby: ${{ matrix.ruby }} OS: ${{ matrix.os }}"
@@ -8,35 +8,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        ruby: ["2.4", "2.5", "2.6", "2.7"]
+        os: [ubuntu-20.04, macos-10.15, windows-2019]
+        # 3.0 is interpreted as 3
+        ruby: [2.2, 2.3, 2.4, 2.5, 2.6, 2.7, "3.0"]
+        exclude:
+          - { os: windows-2019 , ruby: 2.2 }
+          - { os: windows-2019 , ruby: 2.3 }
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Select Ruby Version
-        uses: eregon/use-ruby-action@master
+      - name: Install Ruby & 'bundle install'
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          base: update
-      - name: Update RubyGems & Bundler
-        run: gem update --system --no-document --conservative
-      - name: Install Dependencies
-        run: bundle install --jobs=3 --retry=3
+          bundler-cache: true
       - name: Run Test
         run: |
           ruby -v
           bundle exec rake
-        env:
-          CI: true
-  build_ruby3:
-    name: "Ruby: 3.0 OS: Linux"
-    runs-on: ubuntu-latest
-    container: ruby:3.0-alpine
-    steps:
-      - uses: actions/checkout@v2
-      - run: apk add -U build-base
-      - run: gem update --system --no-document --conservative
-      - run: bundle install --jobs=3 --retry=3
-      - run: ruby -v && bundle exec rake
         env:
           CI: true
