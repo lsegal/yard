@@ -78,9 +78,10 @@ module YARD
       def html_markup_markdown(text)
         # TODO: other libraries might be more complex
         provider = markup_class(:markdown)
-        if provider.to_s == 'RDiscount'
+        case provider.to_s
+        when  'RDiscount'
           provider.new(text, :autolink).to_html
-        elsif provider.to_s == 'RedcarpetCompat'
+        when 'RedcarpetCompat'
           provider.new(text, :autolink,
                              :fenced_code,
                              :gh_blockcode,
@@ -88,6 +89,8 @@ module YARD
                              :tables,
                              :with_toc_data,
                              :no_intraemphasis).to_html
+        when 'CommonMarker'
+          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink])
         else
           provider.new(text).to_html
         end
