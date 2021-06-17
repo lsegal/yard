@@ -370,7 +370,7 @@ module YARD
 
         def on_aref(*args)
           @map[:lbracket].pop
-          ll, lc = *@map[:aref].pop
+          ll, lc = *@map[:aref].shift
           sr = args.first.source_range.first..lc
           lr = args.first.line_range.first..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
