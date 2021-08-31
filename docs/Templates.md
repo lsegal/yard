@@ -331,7 +331,6 @@ YARD's `fulldoc` template defines three javascript files:
     |   |   |   |-- app.js
     |   |   |   |-- full_list.js
     |   |   |   |-- jquery.js
-    |   |   |   |-- jquery-migrate.js
 
 The `app.js` is the primary javascript file for the HTML output.
 
@@ -339,8 +338,6 @@ The `full_list.js` defines additional javascript loaded specifically for the
 search field menus (i.e. class list, method list, and file list).
 
 The `jquery.js` is copy of the jquery javascript library.
-
-The `jquery-migrate.js` is copy of the jquery migrate helper javascript library.
 
 ### Adding a Custom Stylesheet or Javascript
 
