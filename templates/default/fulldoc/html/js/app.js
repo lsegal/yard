@@ -21,16 +21,17 @@ function createSourceLinks() {
 function createDefineLinks() {
     var tHeight = 0;
     $('.defines').after(" <a href='#' class='toggleDefines'>more...</a>");
-    $('.toggleDefines').toggle(function() {
+    $('.toggleDefines').click(function() {
+      if ($(this).text() === "more...") {
         tHeight = $(this).parent().prev().height();
         $(this).prev().css('display', 'inline');
         $(this).parent().prev().height($(this).parent().height());
         $(this).text("(less)");
-    },
-    function() {
+      } else {
         $(this).prev().hide();
         $(this).parent().prev().height(tHeight);
         $(this).text("more...");
+      }
     });
 }
 
