@@ -7,44 +7,46 @@ try { sessionStorage = window.sessionStorage; } catch (e) { }
 function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
-    $('.toggleSource').toggle(function() {
-       $(this).parent().nextAll('.source_code').slideDown(100);
-       $(this).text("Hide source");
-    },
-    function() {
+    $('.toggleSource').click(function() {
+      if ($(this).text() === "View source") {
+        $(this).parent().nextAll('.source_code').slideDown(100);
+        $(this).text("Hide source");
+      } else {
         $(this).parent().nextAll('.source_code').slideUp(100);
         $(this).text("View source");
+      }
     });
 }
 
 function createDefineLinks() {
     var tHeight = 0;
     $('.defines').after(" <a href='#' class='toggleDefines'>more...</a>");
-    $('.toggleDefines').toggle(function() {
+    $('.toggleDefines').click(function() {
+      if ($(this).text() === "more...") {
         tHeight = $(this).parent().prev().height();
         $(this).prev().css('display', 'inline');
         $(this).parent().prev().height($(this).parent().height());
         $(this).text("(less)");
-    },
-    function() {
+      } else {
         $(this).prev().hide();
         $(this).parent().prev().height(tHeight);
         $(this).text("more...");
+      }
     });
 }
 
 function createFullTreeLinks() {
     var tHeight = 0;
-    $('.inheritanceTree').toggle(function() {
+    $('.inheritanceTree').click(function() {
+      if($(this).text() === "show all") {
         tHeight = $(this).parent().prev().height();
-        $(this).parent().toggleClass('showAll');
         $(this).text("(hide)");
         $(this).parent().prev().height($(this).parent().height());
-    },
-    function() {
-        $(this).parent().toggleClass('showAll');
+      } else {
         $(this).parent().prev().height(tHeight);
         $(this).text("show all");
+      }
+      $(this).parent().toggleClass('showAll');
     });
 }
 
@@ -216,14 +218,14 @@ function generateTOC() {
   html = '<div id="toc"><p class="title hide_toc"><a href="#"><strong>Table of Contents</strong></a></p></div>';
   $('#content').prepend(html);
   $('#toc').append(_toc);
-  $('#toc .hide_toc').toggle(function() {
-    $('#toc .top').slideUp('fast');
-    $('#toc').toggleClass('hidden');
-    $('#toc .title small').toggle();
-  }, function() {
-    $('#toc .top').slideDown('fast');
-    $('#toc').toggleClass('hidden');
-    $('#toc .title small').toggle();
+  $('#toc .title.hide_toc').click(function() {
+    if ($(this).parent().hasClass('hidden')) {
+      $(this).next().slideDown('fast');
+    } else {
+      $(this).next().slideUp('fast');
+    }
+    $(this).parent().toggleClass('hidden');
+    $(this).find('small').toggle();
   });
 }
 
