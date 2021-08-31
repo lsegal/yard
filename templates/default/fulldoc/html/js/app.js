@@ -7,13 +7,14 @@ try { sessionStorage = window.sessionStorage; } catch (e) { }
 function createSourceLinks() {
     $('.method_details_list .source_code').
         before("<span class='showSource'>[<a href='#' class='toggleSource'>View source</a>]</span>");
-    $('.toggleSource').toggle(function() {
-       $(this).parent().nextAll('.source_code').slideDown(100);
-       $(this).text("Hide source");
-    },
-    function() {
+    $('.toggleSource').click(function() {
+      if ($(this).text() === "View source") {
+        $(this).parent().nextAll('.source_code').slideDown(100);
+        $(this).text("Hide source");
+      } else {
         $(this).parent().nextAll('.source_code').slideUp(100);
         $(this).text("View source");
+      }
     });
 }
 
