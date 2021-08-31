@@ -101,7 +101,7 @@ end
 #   searchable full lists, e.g., Class List, Method List, File List.
 # @since 0.7.0
 def javascripts_full_list
-  %w(js/jquery.js js/jquery-migrate.js js/full_list.js)
+  %w(js/jquery.js js/full_list.js)
 end
 
 def menu_lists

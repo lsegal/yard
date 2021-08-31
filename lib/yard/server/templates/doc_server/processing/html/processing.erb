@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="<%= abs_url('css', 'style.css') %>?<%= mtime('css/style.css') %>" type="text/css" media="screen" charset="utf-8" />
     <link rel="stylesheet" href="<%= abs_url('css', 'custom.css') %>?<%= mtime('css/custom.css') %>" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8" src="<%= abs_url('js', 'jquery.js') %>?<%= mtime('js/jquery.js') %>"></script>
-    <script type="text/javascript" charset="utf-8" src="<%= abs_url('js', 'jquery-migrate.js') %>?<%= mtime('js/jquery-migrate.js') %>"></script>
     <script type="text/javascript" charset="utf-8">
       function checkPage(process) {
         $.ajax({cache: false, url: "<%= router.request.path %>" + (process ? "?process=true" : ""),

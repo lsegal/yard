@@ -39,7 +39,7 @@ def init
 end
 
 def generate_assets
-  %w(js/jquery.js js/jquery-migrate.js js/app.js css/style.css css/common.css).each do |file|
+  %w(js/jquery.js js/app.js css/style.css css/common.css).each do |file|
     asset(file, file(file, true))
   end
 end

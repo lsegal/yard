@@ -71,7 +71,7 @@ end
 # @return [Array<String>] core javascript files for layout
 # @since 0.7.0
 def javascripts
-  %w(js/jquery.js js/jquery-migrate.js js/app.js)
+  %w(js/jquery.js js/app.js)
 end
 
 # @return [Array<String>] core stylesheets for the layout
