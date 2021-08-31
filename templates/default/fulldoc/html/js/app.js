@@ -35,16 +35,16 @@ function createDefineLinks() {
 
 function createFullTreeLinks() {
     var tHeight = 0;
-    $('.inheritanceTree').toggle(function() {
+    $('.inheritanceTree').click(function() {
+      if($(this).text() === "show all") {
         tHeight = $(this).parent().prev().height();
-        $(this).parent().toggleClass('showAll');
         $(this).text("(hide)");
         $(this).parent().prev().height($(this).parent().height());
-    },
-    function() {
-        $(this).parent().toggleClass('showAll');
+      } else {
         $(this).parent().prev().height(tHeight);
         $(this).text("show all");
+      }
+      $(this).parent().toggleClass('showAll');
     });
 }
 
