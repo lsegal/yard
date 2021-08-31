@@ -216,14 +216,14 @@ function generateTOC() {
   html = '<div id="toc"><p class="title hide_toc"><a href="#"><strong>Table of Contents</strong></a></p></div>';
   $('#content').prepend(html);
   $('#toc').append(_toc);
-  $('#toc .hide_toc').toggle(function() {
-    $('#toc .top').slideUp('fast');
-    $('#toc').toggleClass('hidden');
-    $('#toc .title small').toggle();
-  }, function() {
-    $('#toc .top').slideDown('fast');
-    $('#toc').toggleClass('hidden');
-    $('#toc .title small').toggle();
+  $('#toc .title.hide_toc').click(function() {
+    if ($(this).parent().hasClass('hidden')) {
+      $(this).next().slideDown('fast');
+    } else {
+      $(this).next().slideUp('fast');
+    }
+    $(this).parent().toggleClass('hidden');
+    $(this).find('small').toggle();
   });
 }
 
