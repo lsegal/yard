@@ -18,6 +18,7 @@ end
 
 group :markdown do
   gem 'redcarpet'
+  gem 'commonmarker'
 end
 
 group :textile do
