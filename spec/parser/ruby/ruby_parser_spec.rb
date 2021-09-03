@@ -213,6 +213,9 @@ eof
 
       ast = stmt('def x(a = S[1]) end').jump(:params)
       expect(ast.source).to eq 'a = S[1]'
+
+      ast = stmt('a[b[c]]')
+      expect(ast.source).to eq 'a[b[c]]'
     end
 
     it "ends source properly on if/unless mod" do
