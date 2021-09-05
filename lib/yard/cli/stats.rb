@@ -43,6 +43,8 @@ module YARD
 
         print_statistics
         print_undocumented_objects
+
+        abort if fail_on_warning && log.warned
       end
 
       # Prints statistics for different object types
