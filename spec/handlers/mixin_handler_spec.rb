@@ -58,4 +58,15 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
   it "adds mixins from include calls to constants" do
     expect(P('FromConstant').instance_mixins).to eq [P('A')]
   end
+
+  it "can mixin a const by complex path" do
+    YARD.parse_string <<-eof
+      class A1; class B1; class C1; end end end
+      class D1; class E1; class F1; end end end
+      A1::B1::C1.include D1::E1::F1
+    eof
+
+    expect(YARD::Registry.root.instance_mixins).not_to eq [P('D1::E1::F1')]
+    expect(P('A1::B1::C1').instance_mixins).to eq [P('D1::E1::F1')]
+  end
 end

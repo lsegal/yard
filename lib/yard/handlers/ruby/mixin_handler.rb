@@ -41,7 +41,9 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
   end
 
   def recipient(mixin)
-    if statement[0].type == :var_ref && statement[0][0] != s(:kw, "self")
+    if statement[0].type == :const_path_ref
+      Proxy.new(namespace, statement[0].source)
+    elsif statement[0].type == :var_ref && statement[0][0] != s(:kw, "self")
       statement[0][0].type == :const ?
         Proxy.new(namespace, statement.namespace.source) :
         nil
