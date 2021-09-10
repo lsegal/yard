@@ -31,7 +31,7 @@ module YARD
       # @abstract
       class LibraryCommand < Base
         begin
-          Process.fork { exit 0 }
+          Process.fork { }
           CAN_FORK = true
         rescue Exception # rubocop:disable Lint/RescueException
           CAN_FORK = false
