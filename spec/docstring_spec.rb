@@ -94,6 +94,14 @@ RSpec.describe YARD::Docstring do
       Registry.clear
     end
 
+    it "does not attach period if summary ends with '?'" do
+      expect(Docstring.new("Is this object correctly configured?").summary).to eq "Is this object correctly configured?"
+    end
+
+    it "does not attach period if summary ends with '!'" do
+      expect(Docstring.new("Invoke this method first!").summary).to eq "Invoke this method first!"
+    end
+
     it "handles references embedded in summary" do
       expect(Docstring.new("Aliasing {Test.test}. Done.").summary).to eq "Aliasing {Test.test}."
     end
