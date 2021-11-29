@@ -1,5 +1,9 @@
 # main
 
+# 0.9.27 - November 29th, 2021
+
+[0.9.27]: https://github.com/lsegal/yard/compare/v0.9.26...v0.9.27
+
 - Add support for Ruby 3.0 endless method definitions. (#1376, #1381)
 - Add existence check for README file (#1367)
 - Support module_function decorator (#1365)
