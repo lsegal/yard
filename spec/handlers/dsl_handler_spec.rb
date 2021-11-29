@@ -193,6 +193,14 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandl
     expect(Registry.at('DSLMethods#bar').docstring).to eq "Returns Integer for bar"
   end
 
+  it "maintains state on unattached directives" do
+    expect(Registry.at('StateParsing.method1')).to be_nil
+
+    %w(method2 method3).each do |meth|
+      expect(Registry.at("StateParsing.#{meth}").visibility).to eq(:private)
+    end
+  end
+
   it "does not detect implicit macros with invalid method names" do
     undoc_error <<-eof
       ##

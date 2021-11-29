@@ -154,3 +154,16 @@ class DirectiveMethods
 
   attach Bar
 end
+
+class StateParsing
+  def method1; end
+
+  # @!scope class
+  # @!visibility private
+
+  # method2 docs
+  def method2; end
+
+  # method3 docs
+  def method3; end
+end

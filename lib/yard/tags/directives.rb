@@ -74,6 +74,13 @@ module YARD
       def after_parse; end
 
       protected :parser
+
+      protected
+
+      def inside_directive?
+        return true if parser.state.inside_directive
+        parser.directives.any? { |d| d.is_a?(MethodDirective) && d.tag.text.empty? }
+      end
     end
 
     # Ends a group listing definition. Group definition automatically end
@@ -574,6 +581,8 @@ module YARD
         if %w(class instance module).include?(tag.text)
           if object.is_a?(CodeObjects::MethodObject)
             object.scope = tag.text.to_sym
+          elsif handler && !inside_directive?
+            handler.scope = tag.text.to_sym
           else
             parser.state.scope = tag.text.to_sym
           end
@@ -604,7 +613,7 @@ module YARD
         if %w(public protected private).include?(tag.text)
           if object.is_a?(CodeObjects::Base)
             object.visibility = tag.text.to_sym
-          elsif handler && !parser.state.inside_directive
+          elsif handler && !inside_directive?
             handler.visibility = tag.text.to_sym
           else
             parser.state.visibility = tag.text.to_sym
