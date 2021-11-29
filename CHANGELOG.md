@@ -1,6 +1,16 @@
 # main
 
-- Add support for Ruby 3.0 endless method definitions. (#1376)
+- Add support for Ruby 3.0 endless method definitions. (#1376, #1381)
+- Add existence check for README file (#1367)
+- Support module_function decorator (#1365)
+- Add CommonMarker markup support (`-m commonmarker`) (#1157, #1388)
+- Fix nested array parsing (#1389)
+- Add WEBrick as a runtime dependency for Ruby 3.0 support (#1400)
+- Support `fail_on_warning` option in `yard stats` command (#1392)
+- Better integration with Sorbet (#1401)
+- Handle include mixins on complex paths (#1386)
+- Fix `@!scope` maintaining state in lone comment blocks (#1411)
+- Remove support for Travis CI
 
 # 0.9.26 - December 26th, 2020
 
