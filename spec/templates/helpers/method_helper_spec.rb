@@ -103,5 +103,17 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
       expect(format_constant(bar)).to eq ':BAR'
       expect(format_constant(baz)).to eq ":&#39;B+z&#39;"
     end
+
+    context "when an empty string is passed as param" do
+      it "returns an empty string" do
+        # html_syntax_highlight will be called by format_constant
+        # and in turn will enquire for options.highlight
+        expect(self).to receive(:options).once.and_return(
+          Options.new.update(:highlight => false)
+        )
+
+        expect(format_constant("")).to eq ""
+      end
+    end
   end
 end
