@@ -225,7 +225,8 @@ module YARD
         end
 
         opts.on('--query QUERY', "Only includes objects that match a specific query") do |query|
-          options[:verifier].add_expressions(query.taint)
+          query.taint if query.respond_to?(:taint)
+          options[:verifier].add_expressions(query)
         end
       end
     end
