@@ -176,7 +176,9 @@ module YARD
         def load_setup_rb
           setup_file = File.join(full_path, 'setup.rb')
           if File.file? setup_file
-            module_eval(File.read(setup_file).taint, setup_file, 1)
+            setup_code = File.read(setup_file)
+            setup_code.taint if setup_code.respond_to?(:taint)
+            module_eval(setup_code, setup_file, 1)
           end
         end
       end

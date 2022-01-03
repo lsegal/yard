@@ -650,7 +650,8 @@ module YARD
 
         opts.on('--query QUERY', "Only show objects that match a specific query") do |query|
           next if YARD::Config.options[:safe_mode]
-          options.verifier.add_expressions(query.taint)
+          query.taint if query.respond_to?(:taint)
+          options.verifier.add_expressions(query)
         end
 
         opts.on('--title TITLE', 'Add a specific title to HTML documents') do |title|
