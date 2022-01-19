@@ -1,6 +1,6 @@
 # main
 
-# 0.9.27 - November 29th, 2021
+# [0.9.27] - November 29th, 2021
 
 [0.9.27]: https://github.com/lsegal/yard/compare/v0.9.26...v0.9.27
 
@@ -16,14 +16,14 @@
 - Fix `@!scope` maintaining state in lone comment blocks (#1411)
 - Remove support for Travis CI
 
-# 0.9.26 - December 26th, 2020
+# [0.9.26] - December 26th, 2020
 
 [0.9.26]: https://github.com/lsegal/yard/compare/v0.9.25...v0.9.26
 
 - Add support for Ruby 3.0 and fix tests
 - Fix support for `frozen_string_literal: false` magic comments (#1363)
 
-# 0.9.25 - May 3rd, 2020
+# [0.9.25] - May 3rd, 2020
 
 [0.9.25]: https://github.com/lsegal/yard/compare/v0.9.24...v0.9.25
 
@@ -38,7 +38,7 @@
 - Omit spec files in gem package (#1307)
 - README updates (#1322)
 
-# 0.9.24 - January 8th, 2020
+# [0.9.24] - January 8th, 2020
 
 [0.9.24]: https://github.com/lsegal/yard/compare/v0.9.23...v0.9.24
 
@@ -46,20 +46,20 @@
   cache is changed.
 - Fix issue where Registry fails to resolve first-time lookups on instance methods.
 
-# 0.9.23 - January 5th, 2020
+# [0.9.23] - January 5th, 2020
 
 [0.9.23]: https://github.com/lsegal/yard/compare/v0.9.22...v0.9.23
 
 - Fix issues with double encoded code blocks when highlighted from an extra
   file.
 
-# 0.9.22 - December 31st, 2019
+# [0.9.22] - December 31st, 2019
 
 [0.9.22]: https://github.com/lsegal/yard/compare/v0.9.21...v0.9.22
 
 - Revert jquery update in last release since it requires more changes. (#1298)
 
-# 0.9.21 - December 31st, 2019
+# [0.9.21] - December 31st, 2019
 
 [0.9.21]: https://github.com/lsegal/yard/compare/v0.9.20...v0.9.21
 
@@ -75,7 +75,7 @@
 - Update jquery to 3.4.1 (#1294)
 - Test fixes (#1244)
 
-# 0.9.20 - June 27th, 2019
+# [0.9.20] - June 27th, 2019
 
 [0.9.20]: https://github.com/lsegal/yard/compare/v0.9.19...v0.9.20
 
@@ -85,7 +85,7 @@
   `yard server` host under certain conditions. Thanks to CuongMX from
   Viettel Cyber Security for discovering this vulnerability.
 
-# 0.9.19 - April 2nd, 2019
+# [0.9.19] - April 2nd, 2019
 
 [0.9.19]: https://github.com/lsegal/yard/compare/v0.9.16...v0.9.19
 
