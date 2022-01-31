@@ -97,7 +97,7 @@ RSpec.describe YARD::Templates::Helpers::BaseHelper do
 
     it "passes off to #link_url if argument is recognized as a URL" do
       url = "http://yardoc.org/"
-      expect(self).to receive(:link_url).with(url, nil, :target => '_parent')
+      expect(self).to receive(:link_url).with(url, nil, {:target => '_parent'})
       linkify url
     end
 
