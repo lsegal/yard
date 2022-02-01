@@ -97,7 +97,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       params << ['**' + args.double_splat_param.source, nil]
     end
 
-    params << ['&' + args.block_param.source, nil] if args.block_param
+    params << ['&' + args.block_param.source, nil] if args.block_param && !args.args_forward
 
     params
   end
