@@ -249,7 +249,7 @@ RSpec.describe YARD::CodeObjects::Base do
   describe "#format" do
     it "sends object to Templates.render" do
       object = MethodObject.new(:root, :method)
-      expect(Templates::Engine).to receive(:render).with(:x => 1, :object => object, :type => object.type)
+      expect(Templates::Engine).to receive(:render).with({:x => 1, :object => object, :type => object.type})
       object.format :x => 1
     end
 
