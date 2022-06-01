@@ -208,7 +208,7 @@ RSpec.describe YARD::Templates::Template do
     it "renders all sections with options" do
       mod = template(:e).new
       allow(mod).to receive(:render_section) {|section| section.name.to_s }
-      expect(mod).to receive(:add_options).with(:a => 1).and_yield
+      expect(mod).to receive(:add_options).with({:a => 1}).and_yield
       mod.sections :a
       expect(mod.run(:a => 1)).to eq 'a'
     end
