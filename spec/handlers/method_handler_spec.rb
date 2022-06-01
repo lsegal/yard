@@ -82,7 +82,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     EOF
 
     expect(P('Bar#method_with_forwarding').signature).to eq "def method_with_forwarding(...)"
-  end
+  end if YARD.ruby3? # this is 2.7+ but we can just test on 3+
 
   it "handles method with anonymous block" do
     YARD.parse_string <<-EOF
