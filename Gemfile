@@ -8,7 +8,7 @@ group :development do
   gem 'json'
   gem 'simplecov'
   gem 'samus', '~> 3.0.9', :require => false
-  gem 'coveralls', :require => false
+  gem 'coveralls_reborn', :require => false
   gem 'webrick'
 end
 
