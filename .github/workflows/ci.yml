@@ -9,11 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, macos-10.15, windows-2019]
-        # 3.0 is interpreted as 3
-        ruby: [2.2, 2.3, 2.4, 2.5, 2.6, 2.7, "3.0", 3.1]
+        # 3.0 is interpreted as 3. also disable 2.5 due to bundler crashes
+        ruby: [2.2, 2.3, 2.4, 2.6, 2.7, "3.0", 3.1]
         exclude:
-          - { os: windows-2019 , ruby: 2.2 }
-          - { os: windows-2019 , ruby: 2.3 }
+          - { os: windows-2019, ruby: 2.2 }
+          - { os: windows-2019, ruby: 2.3 }
     steps:
       - name: Checkout
         uses: actions/checkout@v2
