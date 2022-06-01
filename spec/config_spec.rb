@@ -17,7 +17,13 @@ RSpec.describe YARD::Config do
     it "overwrites options with data in ~/.yard/config" do
       expect(File).to receive(:file?).with(YARD::Config::CONFIG_FILE).and_return(true)
       expect(File).to receive(:file?).with(YARD::Config::IGNORED_PLUGINS).and_return(false)
-      expect(YAML).to receive(:load_file).with(YARD::Config::CONFIG_FILE).and_return('test' => true)
+      if YAML.respond_to?(:safe_load_file)
+        expect(YAML).to receive(:safe_load_file)
+          .with(YARD::Config::CONFIG_FILE, permitted_classes: [SymbolHash, Symbol])
+          .and_return('test' => true)
+      else
+        expect(YAML).to receive(:load_file).with(YARD::Config::CONFIG_FILE).and_return('test' => true)
+      end
       YARD::Config.load
       expect(YARD::Config.options[:test]).to be true
     end

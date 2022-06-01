@@ -236,7 +236,11 @@ module YARD
     def self.read_config_file
       if File.file?(CONFIG_FILE)
         require 'yaml'
-        YAML.load_file(CONFIG_FILE)
+        if YAML.respond_to?(:safe_load_file)
+          YAML.safe_load_file(CONFIG_FILE, permitted_classes: [SymbolHash, Symbol])
+        else
+          YAML.load_file(CONFIG_FILE)
+        end
       else
         {}
       end
