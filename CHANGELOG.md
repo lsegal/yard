@@ -1,5 +1,14 @@
 # main
 
+# [0.9.28] - June 1st, 2022
+
+[0.9.28]: https://github.com/lsegal/yard/compare/v0.9.27...v0.9.28
+
+- Safe load config YAML files (#1385)
+- Handle empty string constants (#1415)
+- Pre-emptively support removal of `Object#taint` in Ruby 3.2 (#1419)
+- Fix Ruby 3.1 forward args Ripper change (#1431)
+
 # [0.9.27] - November 29th, 2021
 
 [0.9.27]: https://github.com/lsegal/yard/compare/v0.9.26...v0.9.27
