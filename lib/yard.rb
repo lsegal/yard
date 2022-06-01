@@ -51,6 +51,9 @@ module YARD
 
   # @return [Boolean] whether YARD is being run in Ruby 3.0
   def self.ruby3?; @ruby3 ||= (RUBY_VERSION >= '3.0.0') end
+
+  # @return [Boolean] whether YARD is being run in Ruby 3.1
+  def self.ruby31?; @ruby31 ||= (RUBY_VERSION >= '3.1.0') end
 end
 
 # Keep track of Ruby version for compatibility code

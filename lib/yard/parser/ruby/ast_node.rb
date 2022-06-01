@@ -426,6 +426,13 @@ module YARD
         def block_param
           self[-1] ? self[-1][0] : nil
         end
+
+        def args_forward
+          # shape is (required, optional, rest, more, keyword, keyword_rest, block)
+          # Ruby 3.1 moves :args_forward from rest to keyword_rest
+          args_index = YARD.ruby31? ? -2 : 2
+          self[args_index].type == :args_forward if self[args_index]
+        end
       end
 
       class MethodCallNode < AstNode
