@@ -90,7 +90,7 @@ module YARD
                              :with_toc_data,
                              :no_intraemphasis).to_html
         when 'CommonMarker'
-          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink])
+          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
         else
           provider.new(text).to_html
         end
