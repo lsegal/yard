@@ -1501,7 +1501,7 @@ msgstr ""
 "これらのオブジェクトはツリー構造のように振る舞い、これらの直接の子全てのリストを維持している。\n"
 "namespaceではない全てのオブジェクトは単純にベースクラスのサブクラスである。\n"
 "{YARD::CodeObjects::RootObject RootObject} は\n"
-"特別な `NamespaceObject` ともいえ、Rubyの中のトップレベルnamaspaceを参照する。\n"
+"特別な `NamespaceObject` ともいえ、Rubyの中のトップレベルnamespaceを参照する。\n"
 "パラメータとして namespace オブジェクトを受け入れるメソッドは、\n"
 "root オブジェクト用のショートカットとして `:root` シンボルも受け入れる。"
 
