@@ -15746,7 +15746,7 @@ msgstr ""
 # YARD::DocstringParser
 #: ../lib/yard/docstring_parser.rb:11
 msgid ""
-"The DocstringParser can be subclassed and subtituted during parsing by\n"
+"The DocstringParser can be subclassed and substituted during parsing by\n"
 "setting the {Docstring.default_parser} attribute with the name of the\n"
 "subclass. This allows developers to change the way docstrings are\n"
 "parsed, allowing for completely different docstring syntaxes."
