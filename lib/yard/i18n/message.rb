@@ -18,7 +18,7 @@ module YARD
       # @return [Set] the set of comments for the messages.
       attr_reader :comments
 
-      # Creates a trasnlate target message for message ID +id+.
+      # Creates a translate target message for message ID +id+.
       #
       # @param [String] id the message ID of the translate target message.
       def initialize(id)

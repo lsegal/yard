@@ -18545,7 +18545,7 @@ msgstr "メッセージ用のコメントのグループ"
 
 # YARD::Handlers::Processor#initialize
 #: ../lib/yard/i18n/message.rb:21
-msgid "Creates a trasnlate target message for message ID +id+."
+msgid "Creates a translate target message for message ID +id+."
 msgstr "メッセージID +id+ 用の翻訳目標のメッセージを作成する"
 
 # @return [Tag]
