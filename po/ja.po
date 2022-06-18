@@ -27892,7 +27892,7 @@ msgstr "任意のタイトルとして、リンクに表示する"
 #: ../lib/yard/templates/helpers/base_helper.rb:143
 #: ../lib/yard/templates/helpers/html_helper.rb:220
 msgid "Links to an extra file"
-msgstr "extarファイルにリンクする"
+msgstr "extraファイルにリンクする"
 
 # @param [String] anchor
 #: ../lib/yard/templates/helpers/base_helper.rb:149
