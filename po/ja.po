@@ -18525,7 +18525,7 @@ msgstr ""
 
 # @param tag_name
 #: ../lib/yard/i18n/message.rb:11
-msgid "the message ID of the trnslation target message."
+msgid "the message ID of the translation target message."
 msgstr "翻訳目標のメッセージのメッセージID"
 
 # @param [Fixnum, nil] line

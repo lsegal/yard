@@ -8,7 +8,7 @@ module YARD
     #
     # @since 0.8.1
     class Message
-      # @return [String] the message ID of the trnslation target message.
+      # @return [String] the message ID of the translation target message.
       attr_reader :id
 
       # @return [Set] the set of locations. Location is an array of
