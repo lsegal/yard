@@ -31067,7 +31067,7 @@ msgstr "解析された式"
 
 #~ msgid ""
 #~ "* **Domain Specific Language (DSL)**: In the context of Ruby, a DSL is a "
-#~ "languge\n"
+#~ "language\n"
 #~ "  optimized for a specific domain (problem) but represented using Ruby "
 #~ "syntax."
 #~ msgstr ""
