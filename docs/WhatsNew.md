@@ -92,7 +92,7 @@ methods are defined dynamically and not associated with any code.
 #### New `@!parse` directive to parse Ruby code
 
 A new {tag:!parse} directive was added that allows a developer to have
-YARD parse code that might not necessarily be parseable in its original
+YARD parse code that might not necessarily be parsable in its original
 form. This is useful when using `instance_eval` and other dynamic
 meta-programming techniques to define methods or perform functionality.
 For instance, a common case of the "self.included" callback in module

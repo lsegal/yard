@@ -58,10 +58,10 @@ module YARD
       end
 
       # Provides a plain English summary of the type specification, or nil
-      # if no types are provided or parseable.
+      # if no types are provided or parsable.
       #
       # @return [String] a plain English description of the associated types
-      # @return [nil] if no types are provided or not parseable
+      # @return [nil] if no types are provided or not parsable
       def explain_types
         return nil if !types || types.empty?
         TypesExplainer.explain(*types)

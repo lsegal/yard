@@ -41,7 +41,7 @@ RSpec.describe YARD::Tags::Library do
       expect(tag("@return").explain_types).to eq nil
     end
 
-    it "returns nil if types are not parseable" do
+    it "returns nil if types are not parsable" do
       expect(tag("@return [$]").explain_types).to eq nil
     end
   end

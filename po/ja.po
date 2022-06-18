@@ -7124,7 +7124,7 @@ msgstr "#### Rubyのコードを解析する為の新しい `@!parse` ディレ�
 #: ../docs/WhatsNew.md:87
 msgid ""
 "A new {tag:!parse} directive was added that allows a developer to have\n"
-"YARD parse code that might not necessarily be parseable in its original\n"
+"YARD parse code that might not necessarily be parsable in its original\n"
 "form. This is useful when using `instance_eval` and other dynamic\n"
 "meta-programming techniques to define methods or perform functionality.\n"
 "For instance, a common case of the \"self.included\" callback in module\n"
