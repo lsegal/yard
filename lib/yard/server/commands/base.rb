@@ -119,7 +119,7 @@ module YARD
         #     def run
         #       self.body = 'ERROR! The System is down!'
         #       self.status = 500
-        #       self.headers['Conten-Type'] = 'text/plain'
+        #       self.headers['Content-Type'] = 'text/plain'
         #     end
         #   end
         #
