@@ -18876,7 +18876,7 @@ msgstr ""
 msgid ""
 "Locations of the +Message+ are used to generate the reference\n"
 "line that is started with \"#: \". +relative_base_path+ passed\n"
-"when the generater is created is prepended to each path in location."
+"when the generator is created is prepended to each path in location."
 msgstr ""
 
 # YARD::I18n::PotGenerator#generate
