@@ -6175,7 +6175,7 @@ msgstr ""
 "'default/class'から自動的に継承する。\n"
 "そして 'default/class/setup.rb' の中に定義されるもの全ては、\n"
 "'default/class/html/setup.rb' によって上書きされることも意味する。\n"
-"(yard/lib以下の話ではなくyard/templetes以下の話)"
+"(yard/lib以下の話ではなくyard/templates以下の話)"
 
 #: ../docs/Templates.md:200
 msgid ""
