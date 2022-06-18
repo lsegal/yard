@@ -18652,7 +18652,7 @@ msgstr ""
 # YARD::I18n::Messages#register
 #: ../lib/yard/i18n/messages.rb:31
 msgid ""
-"Registers a {Message}, the mssage ID of which is +id+. If\n"
+"Registers a {Message}, the message ID of which is +id+. If\n"
 "corresponding +Message+ is already registered, the previously\n"
 "registered object is returned."
 msgstr ""

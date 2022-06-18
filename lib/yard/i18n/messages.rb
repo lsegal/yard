@@ -28,7 +28,7 @@ module YARD
         @messages[id]
       end
 
-      # Registers a {Message}, the mssage ID of which is +id+. If
+      # Registers a {Message}, the message ID of which is +id+. If
       # corresponding +Message+ is already registered, the previously
       # registered object is returned.
       #
