@@ -19475,7 +19475,7 @@ msgstr "tag|example|ハッシュ構文を用いたオプションの設定"
 
 # @param [Hash] options
 #: ../lib/yard/options.rb:99
-msgid "the optin to set"
+msgid "the option to set"
 msgstr "設定するためのオプション"
 
 # @param [Object] value
