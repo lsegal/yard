@@ -1204,7 +1204,7 @@ that is actually being employed. Here's an example:
       # @overload def to_html(html, autolink = true)
       #   This docstring describes the specific overload only.
       #   @param [String] html the HTML
-      #   @param [Boolean] autolink whether or not to atuomatically link
+      #   @param [Boolean] autolink whether or not to automatically link
       #     URL references
       # @overload def to_html(html, opts = {})
       #   @param [String] html the HTML
