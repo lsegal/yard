@@ -11513,7 +11513,7 @@ msgstr ""
 
 # @param [Hash, nil] checksums
 #: ../lib/yard/cli/yardoc.rb:340
-msgid "if supplied, a list of checkums for files."
+msgid "if supplied, a list of checksums for files."
 msgstr "提供する場合は、ファイルの為のチェックサムのリスト"
 
 # @param [Hash, nil]
