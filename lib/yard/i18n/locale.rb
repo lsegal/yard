@@ -57,7 +57,7 @@ module YARD
       end
 
       # @param [String] message the translation target message.
-      # @return [String] translated message. If tarnslation isn't
+      # @return [String] translated message. If translation isn't
       #   registered, the +message+ is returned.
       def translate(message)
         @messages[message] || message

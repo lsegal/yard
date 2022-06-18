@@ -18512,7 +18512,7 @@ msgstr "翻訳目標のメッセージ"
 # @return [String]
 #: ../lib/yard/i18n/locale.rb:45
 msgid ""
-"translated message. If tarnslation isn't\n"
+"translated message. If translation isn't\n"
 "registered, the +message+ is returned."
 msgstr ""
 
