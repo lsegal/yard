@@ -94,7 +94,7 @@ module YARD
     #
     # @example Setting an option with Hash syntax
     #   options[:format] = :html # equivalent to: options.format = :html
-    # @param [Symbol, String] key the optin to set
+    # @param [Symbol, String] key the option to set
     # @param [Object] value the value to set for the option
     # @return [Object] the value being set
     def []=(key, value) send("#{key}=", value) end

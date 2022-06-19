@@ -8,7 +8,7 @@ module YARD
     #
     # @since 0.8.1
     class Message
-      # @return [String] the message ID of the trnslation target message.
+      # @return [String] the message ID of the translation target message.
       attr_reader :id
 
       # @return [Set] the set of locations. Location is an array of
@@ -18,7 +18,7 @@ module YARD
       # @return [Set] the set of comments for the messages.
       attr_reader :comments
 
-      # Creates a trasnlate target message for message ID +id+.
+      # Creates a translate target message for message ID +id+.
       #
       # @param [String] id the message ID of the translate target message.
       def initialize(id)

@@ -113,7 +113,7 @@ module YARD
       #
       # Locations of the +Message+ are used to generate the reference
       # line that is started with "#: ". +relative_base_path+ passed
-      # when the generater is created is prepended to each path in location.
+      # when the generator is created is prepended to each path in location.
       #
       # Comments of the +Message+ are used to generate the
       # translator-comment line that is started with "# ".

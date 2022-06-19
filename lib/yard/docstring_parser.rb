@@ -8,7 +8,7 @@ module YARD
   #
   # == Subclassing Notes
   #
-  # The DocstringParser can be subclassed and subtituted during parsing by
+  # The DocstringParser can be subclassed and substituted during parsing by
   # setting the {Docstring.default_parser} attribute with the name of the
   # subclass. This allows developers to change the way docstrings are
   # parsed, allowing for completely different docstring syntaxes.

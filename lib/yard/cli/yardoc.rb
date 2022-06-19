@@ -334,7 +334,7 @@ module YARD
       private
 
       # Generates output for objects
-      # @param [Hash, nil] checksums if supplied, a list of checkums for files.
+      # @param [Hash, nil] checksums if supplied, a list of checksums for files.
       # @return [void]
       # @since 0.5.1
       def run_generate(checksums)

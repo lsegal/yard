@@ -210,7 +210,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandl
     eof
   end
 
-  it "warns on unparseable DSL statements" do
+  it "warns on unparsable DSL statements" do
     undoc_error "private(*foo(bar))"
   end if HAVE_RIPPER
 

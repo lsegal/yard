@@ -1501,7 +1501,7 @@ msgstr ""
 "これらのオブジェクトはツリー構造のように振る舞い、これらの直接の子全てのリストを維持している。\n"
 "namespaceではない全てのオブジェクトは単純にベースクラスのサブクラスである。\n"
 "{YARD::CodeObjects::RootObject RootObject} は\n"
-"特別な `NamespaceObject` ともいえ、Rubyの中のトップレベルnamaspaceを参照する。\n"
+"特別な `NamespaceObject` ともいえ、Rubyの中のトップレベルnamespaceを参照する。\n"
 "パラメータとして namespace オブジェクトを受け入れるメソッドは、\n"
 "root オブジェクト用のショートカットとして `:root` シンボルも受け入れる。"
 
@@ -6175,7 +6175,7 @@ msgstr ""
 "'default/class'から自動的に継承する。\n"
 "そして 'default/class/setup.rb' の中に定義されるもの全ては、\n"
 "'default/class/html/setup.rb' によって上書きされることも意味する。\n"
-"(yard/lib以下の話ではなくyard/templetes以下の話)"
+"(yard/lib以下の話ではなくyard/templates以下の話)"
 
 #: ../docs/Templates.md:200
 msgid ""
@@ -7124,7 +7124,7 @@ msgstr "#### Rubyのコードを解析する為の新しい `@!parse` ディレ�
 #: ../docs/WhatsNew.md:87
 msgid ""
 "A new {tag:!parse} directive was added that allows a developer to have\n"
-"YARD parse code that might not necessarily be parseable in its original\n"
+"YARD parse code that might not necessarily be parsable in its original\n"
 "form. This is useful when using `instance_eval` and other dynamic\n"
 "meta-programming techniques to define methods or perform functionality.\n"
 "For instance, a common case of the \"self.included\" callback in module\n"
@@ -9452,7 +9452,7 @@ msgid ""
 msgstr ""
 "1. **新しいテンプレートエンジンとテンプレート**\n"
 "2. **yardoc `--query` 引数**\n"
-"3. **Greatly ecpanded API ドキュメント**\n"
+"3. **Greatly expanded API ドキュメント**\n"
 "4. **新しいプラグインのサポート**\n"
 "5. **新しいタグ(@abstract, @private)**\n"
 "6. **デフォルトのrake taskは`rake yard`コマンドになった**"
@@ -9607,7 +9607,7 @@ msgid ""
 "This tag exists so that you can create a query (`--query !@private`) to\n"
 "ignore all of these private objects in your documentation. You can also\n"
 "use the new `--no-private` switch, which is a shortcut to the "
-"afformentioned\n"
+"aforementioned\n"
 "query. You can read more about the new tags in the {file:docs/GettingStarted."
 "md}\n"
 "guide."
@@ -9816,7 +9816,7 @@ msgid ""
 "      # @overload def to_html(html, autolink = true)\n"
 "      #   This docstring describes the specific overload only.\n"
 "      #   @param [String] html the HTML\n"
-"      #   @param [Boolean] autolink whether or not to atuomatically link\n"
+"      #   @param [Boolean] autolink whether or not to automatically link\n"
 "      #     URL references\n"
 "      # @overload def to_html(html, opts = {})\n"
 "      #   @param [String] html the HTML\n"
@@ -9828,7 +9828,7 @@ msgstr ""
 "      # @overload def to_html(html, autolink = true)\n"
 "      #   This docstring describes the specific overload only.\n"
 "      #   @param [String] html the HTML\n"
-"      #   @param [Boolean] autolink whether or not to atuomatically link\n"
+"      #   @param [Boolean] autolink whether or not to automatically link\n"
 "      #     URL references\n"
 "      # @overload def to_html(html, opts = {})\n"
 "      #   @param [String] html the HTML\n"
@@ -11513,7 +11513,7 @@ msgstr ""
 
 # @param [Hash, nil] checksums
 #: ../lib/yard/cli/yardoc.rb:340
-msgid "if supplied, a list of checkums for files."
+msgid "if supplied, a list of checksums for files."
 msgstr "提供する場合は、ファイルの為のチェックサムのリスト"
 
 # @param [Hash, nil]
@@ -15746,7 +15746,7 @@ msgstr ""
 # YARD::DocstringParser
 #: ../lib/yard/docstring_parser.rb:11
 msgid ""
-"The DocstringParser can be subclassed and subtituted during parsing by\n"
+"The DocstringParser can be subclassed and substituted during parsing by\n"
 "setting the {Docstring.default_parser} attribute with the name of the\n"
 "subclass. This allows developers to change the way docstrings are\n"
 "parsed, allowing for completely different docstring syntaxes."
@@ -18512,7 +18512,7 @@ msgstr "翻訳目標のメッセージ"
 # @return [String]
 #: ../lib/yard/i18n/locale.rb:45
 msgid ""
-"translated message. If tarnslation isn't\n"
+"translated message. If translation isn't\n"
 "registered, the +message+ is returned."
 msgstr ""
 
@@ -18525,7 +18525,7 @@ msgstr ""
 
 # @param tag_name
 #: ../lib/yard/i18n/message.rb:11
-msgid "the message ID of the trnslation target message."
+msgid "the message ID of the translation target message."
 msgstr "翻訳目標のメッセージのメッセージID"
 
 # @param [Fixnum, nil] line
@@ -18545,7 +18545,7 @@ msgstr "メッセージ用のコメントのグループ"
 
 # YARD::Handlers::Processor#initialize
 #: ../lib/yard/i18n/message.rb:21
-msgid "Creates a trasnlate target message for message ID +id+."
+msgid "Creates a translate target message for message ID +id+."
 msgstr "メッセージID +id+ 用の翻訳目標のメッセージを作成する"
 
 # @return [Tag]
@@ -18652,7 +18652,7 @@ msgstr ""
 # YARD::I18n::Messages#register
 #: ../lib/yard/i18n/messages.rb:31
 msgid ""
-"Registers a {Message}, the mssage ID of which is +id+. If\n"
+"Registers a {Message}, the message ID of which is +id+. If\n"
 "corresponding +Message+ is already registered, the previously\n"
 "registered object is returned."
 msgstr ""
@@ -18876,7 +18876,7 @@ msgstr ""
 msgid ""
 "Locations of the +Message+ are used to generate the reference\n"
 "line that is started with \"#: \". +relative_base_path+ passed\n"
-"when the generater is created is prepended to each path in location."
+"when the generator is created is prepended to each path in location."
 msgstr ""
 
 # YARD::I18n::PotGenerator#generate
@@ -19475,7 +19475,7 @@ msgstr "tag|example|ハッシュ構文を用いたオプションの設定"
 
 # @param [Hash] options
 #: ../lib/yard/options.rb:99
-msgid "the optin to set"
+msgid "the option to set"
 msgstr "設定するためのオプション"
 
 # @param [Object] value
@@ -23736,7 +23736,7 @@ msgid ""
 "  def run\n"
 "    self.body = 'ERROR! The System is down!'\n"
 "    self.status = 500\n"
-"    self.headers['Conten-Type'] = 'text/plain'\n"
+"    self.headers['Content-Type'] = 'text/plain'\n"
 "  end\n"
 "end"
 msgstr ""
@@ -27892,7 +27892,7 @@ msgstr "任意のタイトルとして、リンクに表示する"
 #: ../lib/yard/templates/helpers/base_helper.rb:143
 #: ../lib/yard/templates/helpers/html_helper.rb:220
 msgid "Links to an extra file"
-msgstr "extarファイルにリンクする"
+msgstr "extraファイルにリンクする"
 
 # @param [String] anchor
 #: ../lib/yard/templates/helpers/base_helper.rb:149
@@ -30096,7 +30096,7 @@ msgstr "解析された式"
 #~ "{Library.default_factory}."
 #~ msgstr ""
 #~ "次の事に留意する。\n"
-#~ "+tag_facotory+ は、タグを解析する為に利用されるfactoryオブジェクトとな"
+#~ "+tag_factory+ は、タグを解析する為に利用されるfactoryオブジェクトとな"
 #~ "る。\n"
 #~ "この値は{DefaultFactory}クラスがデフォルトとなり、\n"
 #~ "{Library.default_factory}を変更する事によって設定できる。"
@@ -31067,7 +31067,7 @@ msgstr "解析された式"
 
 #~ msgid ""
 #~ "* **Domain Specific Language (DSL)**: In the context of Ruby, a DSL is a "
-#~ "languge\n"
+#~ "language\n"
 #~ "  optimized for a specific domain (problem) but represented using Ruby "
 #~ "syntax."
 #~ msgstr ""

@@ -13,7 +13,7 @@ module YARD
       end
 
       # (see explain)
-      # @raise [SyntaxError] if the types are not parseable
+      # @raise [SyntaxError] if the types are not parsable
       def self.explain!(*types)
         Parser.parse(types.join(", ")).join("; ")
       end

@@ -52,7 +52,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
           register(o)
           o.docstring = doc if o.docstring.blank?(false)
 
-          # Regsiter the object explicitly
+          # Register the object explicitly
           namespace.attributes[scope][name][type] = o
         else
           obj = namespace.children.find {|other| other.name == meth.to_sym && other.scope == scope }
