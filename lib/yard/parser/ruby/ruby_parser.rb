@@ -133,6 +133,12 @@ module YARD
         AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
           :int, :float, :ivar, :label, :period, :regexp_end, :tstring_content, :backtick]
 
+        COMMENT_SKIP_NODE_TYPES = [
+          :comment,
+          :void_stmt,
+          :list
+        ].freeze
+
         MAPPINGS.each do |k, v|
           if Array === v
             v.each {|vv| (REV_MAPPINGS[vv] ||= []) << k }
@@ -613,7 +619,7 @@ module YARD
 
         def insert_comments
           root.traverse do |node|
-            next if [:comment, :void_stmt, :list].include?(node.type) || node.parent.type != :list
+            next if COMMENT_SKIP_NODE_TYPES.include?(node.type) || node.parent.type != :list
 
             # never attach comments to if/unless mod nodes
             if node.type == :if_mod || node.type == :unless_mod
