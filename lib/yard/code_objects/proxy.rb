@@ -34,7 +34,7 @@ module YARD
       def initialize(namespace, name, type = nil)
         namespace = Registry.root if !namespace || namespace == :root
 
-        if name =~ /^#{NSEPQ}/
+        if name[0, 2] == NSEP
           namespace = Registry.root
           name = name[2..-1]
         end
@@ -75,8 +75,8 @@ module YARD
         # If the name begins with "::" (like "::String")
         # this is definitely a root level object, so
         # remove the namespace and attach it to the root
-        if @name =~ /^#{NSEPQ}/
-          @name.gsub!(/^#{NSEPQ}/, '')
+        if @name[0, 2] == NSEP
+          @name = @name[2..-1]
           @namespace = Registry.root
         end
       end
