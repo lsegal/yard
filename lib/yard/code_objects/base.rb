@@ -434,7 +434,10 @@ module YARD
       #
       # @return [Symbol] the type of code object this represents
       def type
-        self.class.name.split('::').last.gsub(/Object$/, '').downcase.to_sym
+        obj_name = self.class.name.split('::').last
+        obj_name.gsub!(/Object$/, '')
+        obj_name.downcase!
+        obj_name.to_sym
       end
 
       # Represents the unique path of the object. The default implementation
