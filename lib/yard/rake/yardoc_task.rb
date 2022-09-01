@@ -68,6 +68,7 @@ module YARD
       def define
         desc "Generate YARD Documentation" unless ::Rake.application.last_description
         task(name) do
+          require 'yard'
           before.call if before.is_a?(Proc)
           yardoc = YARD::CLI::Yardoc.new
           yardoc.options[:verifier] = verifier if verifier
