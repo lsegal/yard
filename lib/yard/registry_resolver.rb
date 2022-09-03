@@ -132,7 +132,8 @@ module YARD
 
       path.scan(split_on_separators_match).each do |part, sep|
         cur_obj = nil
-        pos += "#{part}#{sep}".length
+        pos += part.length
+        pos += sep.length
         parsed_end = pos == path.length
 
         if !last_obj || (!parsed_end && !last_obj.is_a?(CodeObjects::NamespaceObject))
