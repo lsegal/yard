@@ -806,6 +806,11 @@ RSpec.describe YARD::CLI::Yardoc do
       @yardoc.parse_arguments('--non-transitive-tag', 'foo')
       expect(Tags::Library.transitive_tags).not_to include(:foo)
     end
+
+    it "accepts --mask-directive" do
+      @yardoc.parse_arguments('--mask-directive', 'foo')
+      expect(Tags::Library.factory_method_for_directive(:foo)).to eq Tags::NilDirective
+    end
   end
 
   describe "Safe mode" do

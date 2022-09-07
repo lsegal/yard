@@ -785,6 +785,12 @@ module YARD
         opts.on('--non-transitive-tag TAG', 'Marks a tag as not transitive') do |tag|
           Tags::Library.transitive_tags -= [tag.to_sym]
         end
+
+        opts.on('--mask-directive DIRECTIVE',
+                'Masks a directive to suppress any callback ' \
+                ' and the "unknown directive" warning') do |tag|
+          Tags::Library.define_directive(tag, Tags::NilDirective)
+        end
       end
     end
   end
