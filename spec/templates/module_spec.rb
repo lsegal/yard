@@ -200,4 +200,16 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
     eof
     html_equals(Registry.at('A').format(html_options), :module005)
   end
+
+  it "renders constants that are aliases as links in html" do
+    Registry.clear
+    YARD.parse_string <<~RUBY
+      # Checkout {BAR}
+      module A
+        FOO = 1
+        BAR = FOO
+      end
+    RUBY
+    html_equals(Registry.at('A').format(html_options), :module006)
+  end
 end

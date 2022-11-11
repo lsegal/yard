@@ -10,7 +10,7 @@
         <dt id="<%= anchor_for(cnst) %>" class="<%= cnst.has_tag?(:deprecated) ? 'deprecated' : '' %>"><%= cnst.name %> =
           <%= yieldall :object => cnst %>
         </dt>
-        <dd><pre class="code"><%= format_constant cnst.value %></pre></dd>
+        <dd><% if cnst.is_a?(YARD::CodeObjects::ConstantObject) && cnst.target %><%= linkify(cnst.target, cnst.value) %><% else %><pre class="code"><%= format_constant cnst.value %></pre><% end %></dd>
       <% end %>
     </dl>
   <% end %>

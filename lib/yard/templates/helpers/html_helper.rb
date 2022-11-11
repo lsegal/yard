@@ -301,6 +301,17 @@ module YARD
       def link_object(obj, title = nil, anchor = nil, relative = true)
         return title if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
+
+        was_const = false
+        # Re-link references to constants that are aliases to their target. But keep
+        # their current title.
+        while obj.is_a?(CodeObjects::ConstantObject) && obj.target
+          title ||= h(object.relative_path(obj)).to_s
+          was_const = true
+          obj = obj.target
+        end
+        return link_object(obj, title, anchor, relative) if was_const
+
         if title
           title = title.to_s
         elsif object.is_a?(CodeObjects::Base)
