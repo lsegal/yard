@@ -69,4 +69,8 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
     expect(YARD::Registry.root.instance_mixins).not_to eq [P('D1::E1::F1')]
     expect(P('A1::B1::C1').instance_mixins).to eq [P('D1::E1::F1')]
   end
+
+  it "resolves modules that mix themselves in" do
+    expect(Registry.at('Foo').mixins).to match_array [P('MixMySelfIn'), P('Nested::Foo')]
+  end
 end
