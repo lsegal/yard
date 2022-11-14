@@ -2,6 +2,11 @@
 require 'yaml'
 
 RSpec.describe YARD::Config do
+  before do
+    allow(File).to receive(:file?).with(".yard/config").and_return(false)
+    allow(File).to receive(:file?).with(".yardopts").and_return(false)
+  end
+
   describe ".load" do
     before do
       expect(File).to receive(:file?).twice.with(CLI::Yardoc::DEFAULT_YARDOPTS_FILE).and_return(false)
