@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.metadata['yard.run'] = 'yri'
 
   s.add_runtime_dependency 'webrick', '~> 1.7.0'
+  s.add_runtime_dependency 'rackup'
 end

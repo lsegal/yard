@@ -56,11 +56,12 @@ module YARD
           [ex.message + "\n" + ex.backtrace.join("\n")]]
       end
 
-      # Starts the +Rack::Server+. This method will pass control to the server and
+      # Starts the +Rackup::Server+. This method will pass control to the server and
       # block.
       # @return [void]
       def start
-        server = Rack::Server.new(server_options)
+        require "rackup"
+        server = Rackup::Server.new(server_options)
         server.instance_variable_set("@app", self)
         print_start_message(server)
         server.start
