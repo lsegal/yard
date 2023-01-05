@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 group :development do
   gem 'rspec', '>= 3.11.0'
   gem 'rake'
-  gem 'rdoc'
+  gem 'rdoc', '~> 5.0'
   gem 'json'
   gem 'simplecov'
   gem 'samus', '~> 3.0.9', :require => false
