@@ -26,7 +26,7 @@ group :textile do
 end
 
 group :server do
-  gem 'rack'
+  gem 'rackup'
 end
 
 group :i18n do
