@@ -42,7 +42,7 @@ module YARD
 
     # A server adapter to respond to requests using the Rack server infrastructure.
     class RackAdapter < Adapter
-      include WEBrick::HTTPUtils
+      include YARD::Server::HTTPUtils
 
       # Responds to Rack requests and builds a response with the {Router}.
       # @return [Array(Numeric,Hash,Array)] the Rack-style response

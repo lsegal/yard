@@ -236,6 +236,7 @@ module YARD
     autoload :FinishRequest,          __p('server/adapter')
     autoload :LibraryVersion,         __p('server/library_version')
     autoload :NotFoundError,          __p('server/adapter')
+    autoload :HTTPUtils,              __p('server/http_utils')
     autoload :RackAdapter,            __p('server/rack_adapter')
     autoload :RackMiddleware,         __p('server/rack_adapter')
     autoload :Router,                 __p('server/router')
