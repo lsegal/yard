@@ -29,5 +29,5 @@ RSpec.describe YARD::Parser::Ruby::AstNode do
                                "      line: 2..2,\n" \
                                "      source: 4..6))\n"
     end
-  end
+  end unless YARD.ruby31?
 end if HAVE_RIPPER
