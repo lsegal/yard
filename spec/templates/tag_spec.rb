@@ -45,8 +45,8 @@ RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
         module Foo; end
       eof
 
-      proc = lambda { Registry.at('Foo').format(html_options) }
-      expect(proc).not_to raise_error
+      expect { Registry.at('Foo').format(html_options) }
+        .not_to raise_error
     end
   end
 end
