@@ -131,19 +131,6 @@ module YARD
         end
       end
 
-      # Continue parsing the remainder of the files in the +globals.ordered_parser+
-      # object. After the remainder of files are parsed, processing will continue
-      # on the current file.
-      #
-      # @return [void]
-      # @see Parser::OrderedParser
-      def parse_remaining_files
-        if globals.ordered_parser
-          globals.ordered_parser.parse
-          log.debug("Re-processing #{@file}...")
-        end
-      end
-
       # Searches for all handlers in {Base.subclasses} that match the +statement+
       #
       # @param statement the statement object to match.
