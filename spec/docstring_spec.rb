@@ -168,6 +168,47 @@ RSpec.describe YARD::Docstring do
       expect(tags.size).to eq 0
     end
 
+    it "preserves the order of ref tags mixed with local tags" do
+      YARD.parse_string <<-eof
+        class A
+          # @param x X
+          # @param z Z
+          def a(x, z); end
+          # @param x (see #a)
+          # @param y Y
+          # @param z (see #a)
+          def b(x,y,z);end
+          # @param x cX
+          # @param y (see #b)
+          # @param z cZ
+          def c(x,y,z);end
+          # (see #c)
+          def d(x,y,z); end
+        end
+      eof
+
+      # local tag between refs
+      expect(YARD::Registry.at('A#b').tags.map { |t| [t.tag_name, t.name, t.text]}).to eq [
+        ['param', 'x', 'X'],
+        ['param', 'y', 'Y'],
+        ['param', 'z', 'Z'],
+      ]
+
+      # ref tag between locals
+      expect(YARD::Registry.at('A#c').tags.map { |t| [t.tag_name, t.name, t.text]}).to eq [
+        ['param', 'x', 'cX'],
+        ['param', 'y', 'Y'],
+        ['param', 'z', 'cZ'],
+      ]
+
+      # through a ref doctring
+      expect(YARD::Registry.at('A#d').tags.map { |t| [t.tag_name, t.name, t.text]}).to eq [
+        ['param', 'x', 'cX'],
+        ['param', 'y', 'Y'],
+        ['param', 'z', 'cZ'],
+      ]
+    end
+
     it "resolves references to methods in the same class with #methname" do
       klass = CodeObjects::ClassObject.new(:root, "Foo")
       o = CodeObjects::MethodObject.new(klass, "bar")
