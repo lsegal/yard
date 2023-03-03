@@ -46,6 +46,9 @@ module YARD
     # @return [CodeObjects::Base] the object that owns the docstring.
     attr_accessor :object
 
+    # @return [CodeObjects::Base] the namespace of the docstring
+    attr_reader :namespace
+
     # @return [Range] line range in the {#object}'s file where the docstring was parsed from
     attr_accessor :line_range
 
@@ -79,6 +82,7 @@ module YARD
       docstring.replace(text, false)
       docstring.object = object
       docstring.add_tag(*tags)
+      docstring.instance_variable_set("@namespace", object)
       docstring.instance_variable_set("@unresolved_reference", ref_object)
       docstring.instance_variable_set("@all", raw_data) if raw_data
       docstring
@@ -102,6 +106,7 @@ module YARD
     #   with.
     def initialize(content = '', object = nil)
       @object = object
+      @namespace = object
       @summary = nil
       @hash_flag = false
 
@@ -330,9 +335,9 @@ module YARD
         return if defined?(@unresolved_reference).nil? || @unresolved_reference.nil?
         return if CodeObjects::Proxy === @unresolved_reference
 
-        reference = @unresolved_reference
+        @namespace = @unresolved_reference
         @unresolved_reference = nil
-        self.all = [reference.docstring.all, @all].join("\n")
+        self.all = [@namespace.docstring.all, @all].join("\n")
       end
     end
 

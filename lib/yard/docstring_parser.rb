@@ -224,7 +224,8 @@ module YARD
 
     # Creates a {Tags::RefTag}
     def create_ref_tag(tag_name, name, object_name)
-      @tags << Tags::RefTagList.new(tag_name, P(object, object_name), name)
+      namespace = object && object.docstring ? object.docstring.namespace : object
+      @tags << Tags::RefTagList.new(tag_name, P(namespace, object_name), name)
     end
 
     # Creates a new directive using the registered {#library}
