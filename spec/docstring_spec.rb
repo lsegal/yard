@@ -182,6 +182,25 @@ RSpec.describe YARD::Docstring do
       expect(tags.first.owner).to eq o
     end
 
+    it "uses the right namespace following ref tags through a docstring reference" do
+      YARD.parse_string <<-eof
+        class A
+          class B
+            # @param x
+            def b(x); end
+          end
+          # @param x (see B#b)
+          def a(x);end
+        end
+        class C
+          # (see A#a)
+          def c(x);end
+        end
+      eof
+
+      expect(YARD::Registry.at('C#c').tags.map(&:name)).to eq ['x']
+    end
+
     it "returns an empty list (and warning) if circular reftags are found" do
       YARD.parse_string <<-eof
         class Foo
