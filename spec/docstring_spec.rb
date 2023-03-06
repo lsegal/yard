@@ -233,7 +233,8 @@ RSpec.describe YARD::Docstring do
         end
       eof
 
-      expect(log.io.string).to match(/error.*circular reference tag in `Foo#b'/)
+      err = "Detected circular reference tag in `Foo#b'. Ignoring reference tag from @param to `Foo#a'."
+      expect(log.io.string).to include(err)
       expect(Registry.at('Foo#a').tags).to be_empty
       expect(Registry.at('Foo#b').tags).to be_empty
     end
@@ -246,7 +247,8 @@ RSpec.describe YARD::Docstring do
         end
       eof
 
-      expect(log.io.string).to match(/error.*circular reference tag in `Foo#bar'/)
+      err = "Detected circular reference tag in `Foo#bar'. Ignoring reference tag from @param to `Foo#bar'."
+      expect(log.io.string).to include(err)
       expect(Registry.at('Foo#bar').tags).to be_empty
     end
   end
