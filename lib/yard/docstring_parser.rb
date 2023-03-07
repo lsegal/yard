@@ -281,6 +281,7 @@ module YARD
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " \
                     "near line #{parser.object.line}"
+      splat_param = parser.object.parameters.any? { |name, _| name =~ /\A\*/ }
       param_tags = []
       parser.tags.each do |tag|
         next unless tag.tag_name == "param"
@@ -299,12 +300,14 @@ module YARD
         if seen_names.include?(tag.name)
           log.warn "#{parser.object} @param tag has duplicate parameter name: " \
                    "#{tag.name} #{infile_info}"
-        elsif names.include?(tag.name)
-          seen_names << tag.name
-        else
+        end
+        # warn about unknown params. but not delegated params, where the param tag
+        # is a reference and the object takes *args or **keywords.
+        if !names.include?(tag.name) && !((tag.is_a?(Tags::RefTag) || tag.is_a?(Tags::RefTagList)) && splat_param)
           log.warn "#{parser.object} @param tag has unknown parameter name: " \
                    "#{tag.name} #{infile_info}"
         end
+        seen_names << tag.name
       end
     end
 
