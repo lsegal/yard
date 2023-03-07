@@ -285,12 +285,12 @@ module YARD
         next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
         if seen_names.include?(tag.name)
-          log.warn "@param tag has duplicate parameter name: " \
+          log.warn "#{parser.object} @param tag has duplicate parameter name: " \
                    "#{tag.name} #{infile_info}"
         elsif names.include?(tag.name)
           seen_names << tag.name
         else
-          log.warn "@param tag has unknown parameter name: " \
+          log.warn "#{parser.object} @param tag has unknown parameter name: " \
                    "#{tag.name} #{infile_info}"
         end
       end
@@ -337,7 +337,7 @@ module YARD
         next unless "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
         infile_info = "\n    in file `#{parser.object.file}' " \
                       "near line #{parser.object.line}"
-        log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
+        log.warn "#{parser.object} @see tag (##{i + 1}) should not be wrapped in {} " \
                  "(causes rendering issues): #{infile_info}"
       end
     end
