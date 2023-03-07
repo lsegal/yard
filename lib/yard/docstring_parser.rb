@@ -281,9 +281,21 @@ module YARD
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " \
                     "near line #{parser.object.line}"
+      param_tags = []
       parser.tags.each do |tag|
-        next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
+        if tag.is_a?(Tags::RefTagList)
+          if tag.name
+            param_tags << tag
+          elsif !(CodeObjects::Proxy === tag.owner)
+            param_tags += tag.tags
+          end
+          # if the ref tag doesn't have a name and doesn't yet resolve, do nothing
+        else
+          param_tags << tag
+        end
+      end
+      param_tags.each do |tag|
         if seen_names.include?(tag.name)
           log.warn "#{parser.object} @param tag has duplicate parameter name: " \
                    "#{tag.name} #{infile_info}"
