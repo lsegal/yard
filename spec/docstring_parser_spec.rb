@@ -215,6 +215,42 @@ eof
       eof
     end
 
+    it "does warn about invalid named reference parameters without a splat" do
+      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param notaparam (see #elsewhere)
+        def foo(a) end
+      eof
+    end
+
+    it "does not warn about unknown named parameters that are delegated" do
+      expect(log).not_to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param notaparam (see #elsewhere)
+        def foo(*a) end
+      eof
+    end
+
+    it "does not warn about unknown named delegated parameters from ref tag list" do
+      expect(log).not_to receive(:warn).with(/@param tag has unknown parameter name: barparam/)
+      YARD.parse_string <<-eof
+        # @param barparam
+        def bar(barparam) end
+        # @param (see #bar)
+        def foo(*a) end
+      eof
+    end
+
+    it "does warn about unknown named delegated parameters from ref tag list without splat" do
+      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: barparam/)
+      YARD.parse_string <<-eof
+        # @param barparam
+        def bar(barparam) end
+        # @param (see #bar)
+        def foo(a) end
+      eof
+    end
+
     it "warns about invalid named parameters on @!method directives" do
       expect(log).to receive(:warn).with(/#foo @param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
