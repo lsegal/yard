@@ -1,5 +1,9 @@
 # main
 
+# 0.9.29 - April 8th, 2023
+
+[0.9.29]: https://github.com/lsegal/yard/compare/v0.9.28...v0.9.29
+
 - Enable table support for CommonMarker (#1443)
 - Parser performance improvements (#1452, #1453, #1454, #1455)
 - Fix autoload of RipperParser (#1460)
