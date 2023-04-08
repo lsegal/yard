@@ -70,6 +70,10 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
     expect(P('A1::B1::C1').instance_mixins).to eq [P('D1::E1::F1')]
   end
 
+  it "resolves modules that mix themselves in" do
+    expect(Registry.at('Foo').mixins).to match_array [P('MixMySelfIn'), P('Nested::Foo')]
+  end
+
   it "ensures the recipient is loaded from another file" do
     # 002 includes a module into a module defined in 003
     parse_file [:mixin_handler_002, :mixin_handler_003], __FILE__

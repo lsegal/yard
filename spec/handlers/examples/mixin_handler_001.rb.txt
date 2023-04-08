@@ -38,3 +38,16 @@ end
 
 module FromConstant; end
 FromConstant.include A
+
+module Foo
+end
+
+module MixMySelfIn
+  Foo.include(self)
+end
+
+module Nested
+  module Foo
+    ::Foo.include(self)
+  end
+end
