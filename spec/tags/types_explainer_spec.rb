@@ -12,7 +12,7 @@ RSpec.describe YARD::Tags::TypesExplainer do
   end
 
   def parse_fail(types)
-    expect(lambda { parse(types) }).to raise_error(SyntaxError)
+    expect { parse(types) }.to raise_error(SyntaxError)
   end
 
   describe Type, '#to_s' do

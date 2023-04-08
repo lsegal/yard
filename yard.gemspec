@@ -15,11 +15,9 @@ Gem::Specification.new do |s|
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yardoc.org"
   s.platform      = Gem::Platform::RUBY
-  s.files         = `git ls-files`.strip.split(/\s+/).reject {|f| f.match(%r{^spec/}) }
+  s.files         = Dir['{lib}/**/*', 'LICENSE', 'LEGAL', 'README.md']
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
   s.metadata['yard.run'] = 'yri'
-
-  s.add_runtime_dependency 'webrick', '~> 1.7.0'
 end

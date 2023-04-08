@@ -70,7 +70,7 @@ module YARD
         load(file)
       rescue LoadError => load_exception
         log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
-        exit
+        exit 1
       end
 
       # Callback when an unrecognize option is parsed
