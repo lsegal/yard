@@ -119,6 +119,8 @@ end if ENV['TM_APP_PATH']
 RSpec.configure do |config|
   config.before(:each) { log.io = StringIO.new }
 
+  config.raise_errors_for_deprecations!
+
   # isolate environment of each test
   # any other global settings which might be modified by a test should also
   # be saved and restored here
