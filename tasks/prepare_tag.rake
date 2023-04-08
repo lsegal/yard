@@ -20,7 +20,9 @@ namespace :release do
         '__RESTORE_FILE' => restore_file.path,
       }
       (action['arguments'] || {}).each {|k, v| env["_#{k.upcase}"] = v }
-      cmd = [File.join(build_path, action['action']), *action['files']]
+      file = File.join(build_path, action['action'])
+      shebang = File.readlines(file).first[%r{\A#!(?:\S+)/(.+)}, 1].strip.split(' ')
+      cmd = [*shebang, file, *action['files']]
       puts "[C] #{action['action']} #{(action['files'] || []).join(' ')}"
       output = ""
       IO.popen(env, cmd) {|io| output = io.read }
@@ -40,6 +42,6 @@ namespace :release do
 
   desc 'Pushes the main branch and tag for VERSION=X.Y.Z'
   task :push do
-    sh "git push main v#{ENV['VERSION']}"
+    sh "git push origin main v#{ENV['VERSION']}"
   end
 end

@@ -1,5 +1,11 @@
 # main
 
+- Enable table support for CommonMarker (#1443)
+- Parser performance improvements (#1452, #1453, #1454, #1455)
+- Fix autoload of RipperParser (#1460)
+- Remove dependency on webrick for better Ruby 3.1+ support
+- Improvements for mixin resolution (#1467, #1468)
+
 # [0.9.28] - June 1st, 2022
 
 [0.9.28]: https://github.com/lsegal/yard/compare/v0.9.27...v0.9.28
