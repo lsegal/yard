@@ -34,7 +34,10 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     end
 
     rec = recipient(mixin)
-    return if rec.nil? || rec.mixins(scope).include?(obj)
+    return if rec.nil?
+
+    ensure_loaded!(rec)
+    return if rec.mixins(scope).include?(obj)
 
     shift = statement.method_name(true) == :include ? :unshift : :push
     rec.mixins(scope).send(shift, obj)

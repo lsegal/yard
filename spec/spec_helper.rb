@@ -31,10 +31,10 @@ end if ENV['CI'] && HAVE_RIPPER
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 
-def parse_file(file, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
+def parse_file(files, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
   Registry.clear
-  path = File.join(File.dirname(thisfile), 'examples', file.to_s + ext)
-  YARD::Parser::SourceParser.parse(path, [], log_level)
+  paths = Array(files).map { |file| File.join(File.dirname(thisfile), 'examples', file.to_s + ext) }
+  YARD::Parser::SourceParser.parse(paths, [], log_level)
 end
 
 def described_in_docs(klass, meth, file = nil)
