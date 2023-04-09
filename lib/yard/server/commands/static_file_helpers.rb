@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'webrick/httputils'
 
 module YARD
   module Server
@@ -7,7 +6,7 @@ module YARD
       # Include this module to get access to {#static_template_file?}
       # and {favicon?} helpers.
       module StaticFileHelpers
-        include WEBrick::HTTPUtils
+        include Server::HTTPUtils
 
         # Serves an empty favicon.
         # @raise [FinishRequest] finalizes an empty body if the path matches
