@@ -12,16 +12,6 @@ module YARD
       RackServer = Rack::Server
     end
 
-    # Safely use refinements since Rack requires 2.4+
-    # @private
-    module RackRefinements
-      refine Rack::Request do
-        attr_accessor :version_supplied
-        alias query params
-        def xhr?; (env['HTTP_X_REQUESTED_WITH'] || "").casecmp("xmlhttprequest") == 0 end
-      end
-    end
-
     # This class wraps the {RackAdapter} into a Rack-compatible middleware.
     # See {#initialize} for a list of options to pass via Rack's +#use+ method.
     #
@@ -61,7 +51,6 @@ module YARD
     # A server adapter to respond to requests using the Rack server infrastructure.
     class RackAdapter < Adapter
       include YARD::Server::HTTPUtils
-      using RackRefinements
 
       # Responds to Rack requests and builds a response with the {Router}.
       # @return [Array(Numeric,Hash,Array)] the Rack-style response
@@ -98,4 +87,11 @@ module YARD
       end
     end
   end
+end
+
+# @private
+class Rack::Request
+  attr_accessor :version_supplied
+  alias query params
+  def xhr?; (env['HTTP_X_REQUESTED_WITH'] || "").casecmp("xmlhttprequest") == 0 end
 end

@@ -1,5 +1,7 @@
 # main
 
+- Fix issue with custom Rack::Request attributes in `yard server`
+
 # 0.9.31 - April 9th, 2023
 
 [0.9.31]: https://github.com/lsegal/yard/compare/v0.9.30...v0.9.31
