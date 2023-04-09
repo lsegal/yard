@@ -1,5 +1,9 @@
 # main
 
+# 0.9.30 - April 9th, 2023
+
+[0.9.30]: https://github.com/lsegal/yard/compare/v0.9.29...v0.9.30
+
 - Hot release fix to correct issue with gem packaging missing templates (#1490)
 
 # 0.9.29 - April 8th, 2023
