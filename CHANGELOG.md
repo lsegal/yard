@@ -1,5 +1,9 @@
 # main
 
+# 0.9.31 - April 9th, 2023
+
+[0.9.31]: https://github.com/lsegal/yard/compare/v0.9.30...v0.9.31
+
 - Remove dependency on webrick in YARD::Server::Commands::StaticFileHelpers
 
 # 0.9.30 - April 9th, 2023
