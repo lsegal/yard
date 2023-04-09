@@ -593,6 +593,14 @@ module YARD
       # @see tag:return
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
+      # Documents the type of context in which the block is expected
+      # to run.
+      #
+      # @example
+      #   # @yieldself [Array] An array will evaluate the block
+      #   def add5_block(&block) [].instance_eval(&block) end
+      define_tag "Yield Self",         :yieldself, :with_types
+
       # @yard.signature [r | w | rw] attribute_name
       #   Indented attribute docstring
       define_directive :attribute, :with_types_and_title, AttributeDirective
