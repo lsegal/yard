@@ -632,7 +632,7 @@ module YARD
       define_directive :visibility,                       VisibilityDirective
 
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
-        :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise,
+        :param, :option, :yield, :yieldparam, :yieldself, :yieldreturn, :return, :raise,
         :see, :author, :since, :version]
 
       self.transitive_tags = [:since, :api]

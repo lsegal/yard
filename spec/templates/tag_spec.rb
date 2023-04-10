@@ -23,6 +23,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
         # @version 1.0
         # @yield a block
         # @yieldparam [String] a a value
+        # @yieldself [Object] an object
         # @yieldreturn [Hash] a hash
         # @example Wash your car
         #   car.wash
