@@ -1,5 +1,7 @@
 # main
 
+- Ensure .yardopts is present in gem package (internal YARD documentation change)
+
 # 0.9.32 - April 9th, 2023
 
 [0.9.32]: https://github.com/lsegal/yard/compare/v0.9.31...v0.9.32

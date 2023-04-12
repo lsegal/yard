@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.email         = "lsegal@soen.ca"
   s.homepage      = "http://yardoc.org"
   s.platform      = Gem::Platform::RUBY
-  s.files         = Dir['{lib,docs,po,templates}/**/*', 'LICENSE', 'LEGAL', 'README.md']
+  s.files         = Dir['{lib,docs,po,templates}/**/*', '.yardopts*', 'LICENSE', 'LEGAL', 'README.md']
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
