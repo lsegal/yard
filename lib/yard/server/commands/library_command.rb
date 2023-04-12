@@ -94,16 +94,16 @@ module YARD
         end
 
         def call_with_fork(request, &block)
-          reader, writer = IO.pipe
+          IO.pipe(:binmode => true) do |reader, writer|
+            fork do
+              log.debug "[pid=#{Process.pid}] fork serving: #{request.path}"
+              reader.close
+              writer.print(Marshal.dump(call_without_fork(request, &block)))
+            end
 
-          fork do
-            log.debug "[pid=#{Process.pid}] fork serving: #{request.path}"
-            reader.close
-            writer.print(Marshal.dump(call_without_fork(request, &block)))
+            writer.close
+            Marshal.load(reader.read)
           end
-
-          writer.close
-          Marshal.load(reader.read)
         end
 
         def can_fork?
