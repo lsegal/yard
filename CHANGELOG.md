@@ -1,6 +1,7 @@
 # main
 
 - Add changelog to yard.gemspec
+- Fix fork behavior in `yard server --fork`
 
 # [0.9.33] - April 11st, 2023
 
