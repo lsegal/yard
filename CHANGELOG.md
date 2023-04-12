@@ -1,6 +1,8 @@
 # main
 
-# 0.9.33 - April 11st, 2023
+- Add changelog to yard.gemspec
+
+# [0.9.33] - April 11st, 2023
 
 [0.9.33]: https://github.com/lsegal/yard/compare/v0.9.32...v0.9.33
 
@@ -12,19 +14,19 @@
 
 - Fix issue with custom Rack::Request attributes in `yard server`
 
-# 0.9.31 - April 9th, 2023
+# [0.9.31] - April 9th, 2023
 
 [0.9.31]: https://github.com/lsegal/yard/compare/v0.9.30...v0.9.31
 
 - Remove dependency on webrick in YARD::Server::Commands::StaticFileHelpers
 
-# 0.9.30 - April 9th, 2023
+# [0.9.30] - April 9th, 2023
 
 [0.9.30]: https://github.com/lsegal/yard/compare/v0.9.29...v0.9.30
 
 - Hot release fix to correct issue with gem packaging missing templates (#1490)
 
-# 0.9.29 - April 8th, 2023
+# [0.9.29] - April 8th, 2023
 
 [0.9.29]: https://github.com/lsegal/yard/compare/v0.9.28...v0.9.29
 
