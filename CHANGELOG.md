@@ -1,5 +1,9 @@
 # main
 
+# [0.9.34] - April 12nd, 2023
+
+[0.9.34]: https://github.com/lsegal/yard/compare/v0.9.33...v0.9.34
+
 - Add changelog to yard.gemspec
 - Fix fork behavior in `yard server --fork`
 
