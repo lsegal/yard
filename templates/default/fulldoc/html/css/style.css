@@ -85,7 +85,6 @@ body {
 @media (max-width: 320px) {
   body { height: 100%; overflow: hidden; overflow-wrap: break-word; }
   #main { height: 100%; overflow: auto; }
-  #search { display: none; }
 }
 
 #main img { max-width: 100%; }
@@ -387,6 +386,16 @@ ul.fullTree li:last-child { padding-bottom: 0; }
   padding: 5px;
   min-width: 55px;
   text-align: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  top: auto;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px,  1px);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
 }
 
 #menu { font-size: 1.3em; color: #bbb; }

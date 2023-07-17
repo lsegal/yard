@@ -232,7 +232,7 @@ def class_list(root = Registry.root, tree = TreeContext.new)
     out << "<li id='object_#{child.path}' class='#{tree.classes.join(' ')}'>"
     out << "<div class='item' style='padding-left:#{tree.indent}'>"
     accessible_props = "aria-label='#{name} child nodes' aria-expanded='false' aria-controls='object_#{child.path}'"
-    out << "<a tabindex='0' class='toggle' #{accessible_props}></a> " if has_children
+    out << "<a tabindex='0' class='toggle' role='button' #{accessible_props}></a> " if has_children
     out << linkify(child, name)
     out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
     out << "<small class='search_info'>"
