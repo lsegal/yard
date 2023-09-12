@@ -303,6 +303,7 @@ module YARD
       # definitions with docstrings first.
       #
       # @return [String] a filename
+      # @return [nil] if there is no file associated with the object
       def file
         @files.first ? @files.first[0] : nil
       end
