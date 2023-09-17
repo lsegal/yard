@@ -2,7 +2,7 @@
 
 require File.dirname(__FILE__) + '/integration_spec_helper'
 
-RSpec.describe 'Markdown processrors integration' do
+RSpec.describe 'Markdown processors integration' do
   include_context 'shared helpers for markup processor integration specs'
 
   shared_examples 'shared examples for markdown processors' do
