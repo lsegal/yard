@@ -476,9 +476,8 @@ module YARD
           content.force_encoding('binary')
           ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
             bom.force_encoding('binary')
-            if content[0, bom.size] == bom
-              content.force_encoding(encoding)
-              return content
+            if content.start_with?(bom)
+              return content.sub(bom, '').force_encoding(encoding)
             end
           end
           content.force_encoding('utf-8') # UTF-8 is default encoding
