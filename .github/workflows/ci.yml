@@ -16,7 +16,7 @@ jobs:
           - { os: windows-2019, ruby: 2.3 }
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Ruby & 'bundle install'
         uses: ruby/setup-ruby@v1
         with:
