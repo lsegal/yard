@@ -1,4 +1,4 @@
-<% if object.has_tag?(:option) %>
+<% if object.has_tag?(:option) && object.respond_to?(:parameters) %>
   <% object.parameters.each do |param, default| %>
     <% tags = object.tags(:option).select {|x| x.name.to_s == param.to_s.sub(/^\*+|:$/, '') } %>
     <% next if tags.empty? %>
