@@ -68,6 +68,7 @@ RSpec.describe YARD::Tags::DefaultFactory do
     end
 
     it "returns text unparsed if there is no type list" do
+      expect(parse_types(nil)).to eq [nil, nil, '']
       expect(parse_types('')).to eq [nil, nil, '']
       expect(parse_types('[]')).to eq [nil, nil, '[]']
     end
