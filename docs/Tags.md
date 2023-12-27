@@ -206,7 +206,7 @@ also be a list of types separated by commas.
 An order dependent list is a set of types surrounded by "()" and separated by
 commas. This list must contain exactly those types in exactly the order specified.
 For instance, an Array containing a String, Fixnum and Hash in that order (and
-having exactly those 3 elements) would be listed as: `Array<(String, Fixnum, Hash)>`.
+having exactly those 3 elements) would be listed as: `Array(String, Fixnum, Hash)`.
 
 #### Literals
 
