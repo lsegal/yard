@@ -7,7 +7,9 @@
 <script type="text/javascript">
   var match = decodeURIComponent(window.location.hash).match(/^#!(.+)/);
   var name = match ? match[1] : '<%= url_for_main %>';
-  name = name.replace(/^((\w*):)?[\/\\]*/gm, '').trim();
+  if (name.match(/^((?:(?:[\w]*):)?[\/\\]*)/gm)[0]?.length > 0) {
+      name = '<%= url_for_main %>'
+  }
   window.top.location.replace(name)
 </script>
 <noscript>
