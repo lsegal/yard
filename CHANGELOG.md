@@ -1,5 +1,13 @@
 # main
 
+# [0.9.36] - February 29th, 2024
+
+[0.9.36]: https://github.com/lsegal/yard/compare/v0.9.35...v0.9.36
+
+- Further XSS fixes for generated frameset pages (#1538)
+- Improve tests for Ruby 3.3 compatibility (#1519, #1531)
+- Documentation improvements (#1524)
+
 # [0.9.35] - February 28th, 2024
 
 [0.9.35]: https://github.com/lsegal/yard/compare/v0.9.34...v0.9.35
