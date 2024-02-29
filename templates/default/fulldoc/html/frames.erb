@@ -5,10 +5,15 @@
 	<title><%= options.title %></title>
 </head>
 <script type="text/javascript">
-  var match = decodeURIComponent(window.location.hash).match(/^#!(.+)/);
-  var name = match ? match[1] : '<%= url_for_main %>';
-  name = name.replace(/^((\w*):)?[\/\\]*/gm, '').trim();
-  window.top.location.replace(name)
+var mainUrl = '<%= url_for_main %>';
+try {
+    var match = decodeURIComponent(window.location.hash).match(/^#!(.+)/);
+    var name = match ? match[1] : mainUrl;
+    var url = new URL(name, location.href);
+    window.top.location.replace(url.origin === location.origin ? name : mainUrl);
+} catch (e) {
+    window.top.location.replace(mainUrl);
+}
 </script>
 <noscript>
   <h1>Oops!</h1>
