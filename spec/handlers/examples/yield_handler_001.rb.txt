@@ -1,7 +1,4 @@
 class Testing
-  # Ignore yields outside methods
-  yield x, y, z
-
   # Should document this
   def mymethod
     yield
