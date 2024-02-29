@@ -5,7 +5,7 @@
 	<title><%= options.title %></title>
 </head>
 <script type="text/javascript">
-var mainUrl = '<%= url_for_main %>'
+var mainUrl = '<%= url_for_main %>';
 try {
     var match = decodeURIComponent(window.location.hash).match(/^#!(.+)/);
     var name = match ? match[1] : mainUrl;
