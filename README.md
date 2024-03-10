@@ -220,7 +220,7 @@ The second most obvious is to generate docs via a Rake task. You can do this by
 adding the following to your `Rakefile`:
 
 ```ruby
-require 'yard'
+require 'yard/rake/yardoc_task'
 
 YARD::Rake::YardocTask.new do |t|
  t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
