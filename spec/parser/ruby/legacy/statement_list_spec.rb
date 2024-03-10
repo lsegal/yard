@@ -294,6 +294,12 @@ eof
   it "converts heredoc to string" do
     src = "<<-XML\n  foo\n\nXML"
     s = stmt(src)
-    expect(s.source).to eq '"foo\n\n"'
+    expect(s.source).to eq '"  foo\n\n"'
+  end
+
+  it "converts squiggly heredoc to string" do
+    src = "<<~XML\n  bar\n\nXML"
+    s = stmt(src)
+    expect(s.source).to eq '"bar\n\n"'
   end
 end

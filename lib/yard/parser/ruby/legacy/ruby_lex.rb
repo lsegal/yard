@@ -656,7 +656,7 @@ module YARD
           if @lex_state != EXPR_END && @lex_state != EXPR_CLASS &&
              (@lex_state != EXPR_ARG || @space_seen)
             c = peek(0)
-            tk = identify_here_document if /[-\w\"\'\`]/ =~ c
+            tk = identify_here_document if /[-~\w\"\'\`]/ =~ c
           end
           if !tk
             @lex_state = EXPR_BEG
@@ -1063,6 +1063,8 @@ module YARD
         ch = getc
         if ch == "-"
           ch = getc
+        elsif ch == "~"
+          ch = getc
           indent = true
         end
         if /['"`]/ =~ ch # '
@@ -1096,9 +1098,12 @@ module YARD
         str = String.new
         while (l = gets)
           l.chomp!
-          l.strip! if indent
-          break if l == quoted
-          str << l.chomp << "\n"
+          if l == quoted
+            str = dedent(str) if indent
+            break
+          else
+            str << l.chomp << "\n"
+          end
         end
 
         @reader.divert_read_from(reserve)
@@ -1106,6 +1111,16 @@ module YARD
         @ltype = ltback
         @lex_state = EXPR_END
         Token(Ltype2Token[lt], str).set_text(str.dump)
+      end
+
+      def dedent(str)
+        lines = str.split("\n", -1)
+        dedent_amt = lines.map do |line|
+          line =~ /\S/ ? line.match(/^ */).offset(0)[1] : nil
+        end.compact.min || 0
+        return str if dedent_amt.zero?
+
+        lines.map { |line| line =~ /\S/ ? line.gsub(/^ {#{dedent_amt}}/, "") : line }.join("\n")
       end
 
       def identify_quotation(initial_char)
