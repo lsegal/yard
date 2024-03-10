@@ -461,3 +461,15 @@ RSpec.describe YARD::Tags::VisibilityDirective do
     end if YARD::Parser::SourceParser.parser_type == :ruby
   end
 end
+
+RSpec.describe YARD::Tags::NilDirective do
+  describe '#call' do
+    before { Tags::Library.define_directive(:unknown, YARD::Tags::NilDirective) }
+
+    after { Registry.clear }
+
+    it "does nothing if directive is unknown" do
+      tag_parse("@!unknown")
+    end
+  end
+end

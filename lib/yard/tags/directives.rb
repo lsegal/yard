@@ -621,5 +621,11 @@ module YARD
         end
       end
     end
+
+    # Does nothing but suppresses "unknown directive" warnings, if
+    # a missing directive definition was masked with this class.
+    class NilDirective < Directive
+      def call; end
+    end
   end
 end
