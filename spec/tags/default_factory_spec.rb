@@ -164,5 +164,11 @@ RSpec.describe YARD::Tags::DefaultFactory do
       expect(t.pair).to be_instance_of(Tags::DefaultTag)
       expect(t.pair.name).to eq "key"
     end
+
+    it "returns nil when only name is present" do
+      expect(log).to receive(:warn).with("Encountered option tag with no text")
+      t = parse_options("xyz")
+      expect(t.pair).to be(nil)
+    end
   end
 end

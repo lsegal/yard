@@ -73,6 +73,11 @@ module YARD
       end
 
       def parse_tag_with_types_name_and_default(tag_name, text)
+        if text.nil?
+          log.warn "Encountered #{tag_name} tag with no text"
+          return
+        end
+
         # Can't allow () in a default tag, otherwise the grammar is too ambiguous when types is omitted.
         open = TYPELIST_OPENING_CHARS.delete('(')
         close = TYPELIST_CLOSING_CHARS.delete(')')
