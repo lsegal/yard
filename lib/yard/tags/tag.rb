@@ -23,6 +23,7 @@ module YARD
       attr_accessor :types
 
       # @return [String] a name associated with the tag
+      # @return [nil] if no tag name is supplied
       attr_accessor :name
 
       # @return [CodeObjects::Base] the associated object
