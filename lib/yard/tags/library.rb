@@ -593,6 +593,14 @@ module YARD
       # @see tag:return
       define_tag "Yield Returns",      :yieldreturn, :with_types
 
+      # Documents the type of context in which the block is expected
+      # to run.
+      #
+      # @example
+      #   # @yieldself [Array] An array will evaluate the block
+      #   def add5_block(&block) [].instance_eval(&block) end
+      define_tag "Yield Self",         :yieldself, :with_types
+
       # @yard.signature [r | w | rw] attribute_name
       #   Indented attribute docstring
       define_directive :attribute, :with_types_and_title, AttributeDirective
@@ -624,7 +632,7 @@ module YARD
       define_directive :visibility,                       VisibilityDirective
 
       self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
-        :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise,
+        :param, :option, :yield, :yieldparam, :yieldself, :yieldreturn, :return, :raise,
         :see, :author, :since, :version]
 
       self.transitive_tags = [:since, :api]

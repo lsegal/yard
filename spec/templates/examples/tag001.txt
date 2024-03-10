@@ -42,6 +42,11 @@ Yield Parameters:
 
     (String) a - a value
 
+Yield Self:
+-----------
+
+    (Object) - an object
+
 Yield Returns:
 --------------
 
