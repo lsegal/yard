@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html <%= "lang=\"#{html_lang}\"" unless html_lang.nil? %>>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="<%= charset %>" />
@@ -26,7 +26,10 @@
           <% end %>
         </div>
 
-        <div id="search">Search: <input type="text" /></div>
+        <div id="search">
+          <label for="search-class">Search:</label>
+          <input id="search-class" type="text" />
+        </div>
       </div>
 
       <ul id="full_list" class="<%= @list_class || @list_type %>">

@@ -104,6 +104,12 @@ def javascripts_full_list
   %w(js/jquery.js js/full_list.js)
 end
 
+# Sets the HTML language lang="value" where value is the value returned from
+# this method. Defaults to nil which does not set the lang attribute.
+def html_lang
+  nil
+end
+
 def menu_lists
   Object.new.extend(T('layout')).menu_lists
 end
@@ -225,7 +231,8 @@ def class_list(root = Registry.root, tree = TreeContext.new)
     has_children = run_verifier(child.children).any? {|o| o.is_a?(CodeObjects::NamespaceObject) }
     out << "<li id='object_#{child.path}' class='#{tree.classes.join(' ')}'>"
     out << "<div class='item' style='padding-left:#{tree.indent}'>"
-    out << "<a class='toggle'></a> " if has_children
+    accessible_props = "aria-label='#{name} child nodes' aria-expanded='false' aria-controls='object_#{child.path}'"
+    out << "<a tabindex='0' class='toggle' role='button' #{accessible_props}></a> " if has_children
     out << linkify(child, name)
     out << " &lt; #{child.superclass.name}" if child.is_a?(CodeObjects::ClassObject) && child.superclass
     out << "<small class='search_info'>"
@@ -233,7 +240,8 @@ def class_list(root = Registry.root, tree = TreeContext.new)
     out << "</small>"
     out << "</div>"
     tree.nest do
-      out << "<ul>#{class_list(child, tree)}</ul>" if has_children
+      labeled_by = "aria-labelledby='object_#{child.path}'"
+      out << "<div #{labeled_by}><ul>#{class_list(child, tree)}</ul></div>" if has_children
     end
     out << "</li>"
   end
