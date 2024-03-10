@@ -8,7 +8,7 @@ def init
   generate_assets
   serialize('_index.html')
   options.files.each_with_index do |file, _i|
-    serialize_file(file, file.title)
+    serialize_file(file)
   end
 
   options.delete(:objects)
@@ -48,6 +48,7 @@ end
 # Generate the index document for the output
 # @params [Hash] options contains data and flags that influence the output
 def serialize_index(options)
+  options.object = Registry.root
   Templates::Engine.with_serializer('index.html', options.serializer) do
     T('layout').run(options.merge(:index => true))
   end
@@ -57,18 +58,12 @@ end
 # the README file or files specified on the command-line.
 #
 # @param [File] file object to be saved to the output
-# @param [String] title currently unused
 #
 # @see layout#diskfile
-def serialize_file(file, title = nil) # rubocop:disable Lint/UnusedMethodArgument
-  options.object = Registry.root
+def serialize_file(file)
   options.file = file
-  outfile = 'file.' + file.name + '.html'
-
   serialize_index(options) if file == options.readme
-  Templates::Engine.with_serializer(outfile, options.serializer) do
-    T('layout').run(options)
-  end
+  serialize(file)
   options.delete(:file)
 end
 
