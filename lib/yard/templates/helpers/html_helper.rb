@@ -90,7 +90,8 @@ module YARD
                              :with_toc_data,
                              :no_intraemphasis).to_html
         when 'Commonmarker'
-          Commonmarker.to_html(text) # GFM configs are on by default
+          # GFM configs are on by default; use YARD for syntax highlighting
+          Commonmarker.to_html(text, plugins: {syntax_highlighter: nil})
         when 'CommonMarker'
           CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
         else
