@@ -89,6 +89,8 @@ module YARD
                              :tables,
                              :with_toc_data,
                              :no_intraemphasis).to_html
+        when 'Commonmarker'
+          Commonmarker.to_html(text) # GFM configs are on by default
         when 'CommonMarker'
           CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
         else
