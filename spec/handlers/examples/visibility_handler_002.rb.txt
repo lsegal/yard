@@ -1,0 +1,7 @@
+class Testing
+  private attr_accessor :inline_private_attr
+  protected attr_writer :inline_protected_writer
+
+  # This one should be public
+  attr_reader :inline_public_reader
+end
