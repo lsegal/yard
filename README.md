@@ -126,7 +126,7 @@ $ sudo apt-get install rdoc
 
 When rendering markdown, yard will use one of several possible markdown providers,
 [in order of priority](https://github.com/lsegal/yard/blob/e833aac7a01510245dd4ae1d1d18b046c8293c2d/lib/yard/templates/helpers/markup_helper.rb#L26-L33).
-If you are experiencing rendering bugs (#1410, #1543), try adding one of the
+If you are experiencing rendering bugs (example [1](https://github.com/lsegal/yard/issues/1410) [2](https://github.com/lsegal/yard/issues/1543)), try adding one of the
 gems further up in the list to your Gemfile.
 
 ## Usage
