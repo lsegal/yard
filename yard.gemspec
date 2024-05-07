@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
   s.metadata['yard.run'] = 'yri'
+  s.add_dependency 'ostruct'
 end
