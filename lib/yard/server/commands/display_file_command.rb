@@ -11,7 +11,7 @@ module YARD
         def run
           filename = File.cleanpath(File.join(library.source_path, path))
           raise NotFoundError unless File.file?(filename)
-          if filename =~ /\.(jpe?g|gif|png|bmp|svg)$/i
+          if filename =~ /\.(jpe?g|gif|png|bmp|svg|webp)$/i
             headers['Content-Type'] = StaticFileCommand::DefaultMimeTypes[$1.downcase] || 'text/html'
             render File.read_binary(filename)
           else

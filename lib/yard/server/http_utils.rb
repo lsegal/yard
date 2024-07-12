@@ -97,6 +97,7 @@ module YARD::Server
       "tiff"  => "image/tiff",
       "txt"   => "text/plain",
       "wasm"  => "application/wasm",
+      "webp"   => "image/webp",
       "xbm"   => "image/x-xbitmap",
       "xhtml" => "text/html",
       "xls"   => "application/vnd.ms-excel",
