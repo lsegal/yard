@@ -271,7 +271,7 @@ module YARD
 
         # @return [Fixnum] the starting line number of the node
         def line
-          line_range && line_range.first
+          line_range && (line_range.begin || line_range.end)
         end
 
         # @return [String] the first line of source represented by the node.

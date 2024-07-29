@@ -30,4 +30,18 @@ RSpec.describe YARD::Parser::Ruby::AstNode do
                                "      source: 4..6))\n"
     end
   end unless YARD.ruby31?
+
+  describe "#line" do
+    it "does not break on beginless or endless ranges" do
+      skip "Unsupported ruby version" if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.7')
+
+      obj = YARD::Parser::Ruby::RubyParser.parse("# x\nbye", "x").ast
+      # obj.range returns (2..2) in this case, but sometimes, this range is set
+      # to a beginless or endless one.
+      obj.line_range = Range.new(nil, 2)
+      expect(obj.line).to eq 2
+      obj.line_range = Range.new(2, nil)
+      expect(obj.line).to eq 2
+    end
+  end
 end if HAVE_RIPPER
