@@ -44,4 +44,23 @@ RSpec.describe YARD::Parser::Ruby::AstNode do
       expect(obj.line).to eq 2
     end
   end
+
+  describe "#reset_line_info" do
+    it "does not break on beginless or endless ranges" do
+      skip "Unsupported ruby version" if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.7')
+
+      obj = YARD::Parser::Ruby::RubyParser.parse("# x\ndef fn(arg); 42; end", "x").ast
+      obj = obj.first
+      expect(obj.children.size).to eq 3
+      fst = obj.children.first
+      lst = obj.children.last
+      fst.line_range = Range.new(nil, 10)
+      fst.source_range = Range.new(nil, 10)
+      lst.line_range = Range.new(2, nil)
+      lst.source_range = Range.new(2, nil)
+      obj.send(:reset_line_info)
+      expect(obj.line_range).to eq Range.new(nil, nil)
+      expect(obj.source_range).to eq Range.new(nil, nil)
+    end
+  end
 end if HAVE_RIPPER
