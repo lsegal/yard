@@ -41,4 +41,15 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
   it "can decorate a method definition" do
     expect(Registry.at('Testing#decpriv').visibility).to eq :private
   end unless LEGACY_PARSER
+
+  describe 'ruby 3 specific features' do
+    before(:all) { parse_file :visibility_handler_002, __FILE__ }
+
+    it "handles attr_accessor when inlined" do
+      expect(Registry.at('Testing#inline_private_attr').visibility).to eq :private
+      expect(Registry.at('Testing#inline_private_attr=').visibility).to eq :private
+      expect(Registry.at('Testing#inline_protected_writer=').visibility).to eq :protected
+      expect(Registry.at('Testing#inline_public_reader').visibility).to eq :public
+    end
+  end if RUBY_VERSION >= "3."
 end
