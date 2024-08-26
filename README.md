@@ -192,7 +192,7 @@ Note that the README file can be specified with its own `--readme` switch.
 You can also add a `.yardopts` file to your project directory which lists the
 switches separated by whitespace (newlines or space) to pass to yardoc whenever
 it is run. A full overview of the `.yardopts` file can be found in
-{YARD::CLI::Yardoc}.
+[YARD::CLI::Yardoc](https://rubydoc.info/gems/yard/YARD/CLI/Yardoc#label-Options+File+-28.yardopts-29).
 
 ### Queries
 
