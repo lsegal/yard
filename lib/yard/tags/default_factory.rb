@@ -143,6 +143,7 @@ module YARD
         seen_space = false
         i = 0
         last_seen = ''
+        text ||= ''
         while i < text.length
           c = text[i, 1]
 
