@@ -57,9 +57,10 @@ module YARD
     private
 
     def __cache_lookup__(name)
+      key = name.to_sym.inspect
       instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-        def #{name}; @table[:#{name}]; end
-        def #{name}=(v); @table[:#{name}] = v; end
+        def #{name}; @table[#{key}]; end
+        (class << self; self; end).define_method("#{name}=") { |v| @table[#{key}] = v }
       RUBY
     end
   end
