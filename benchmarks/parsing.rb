@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "benchmark"
 require 'yard'
-require 'logger'
 
 PATH_ORDER = [
   'lib/yard/autoload.rb',
@@ -16,8 +15,8 @@ PATH_ORDER = [
 ]
 
 Benchmark.bmbm do |x|
-  x.report("parse in order") { YARD::Registry.clear; YARD.parse PATH_ORDER, [], Logger::ERROR }
-  x.report("parse") { YARD::Registry.clear; YARD.parse 'lib/**/*.rb', [], Logger::ERROR }
+  x.report("parse in order") { YARD::Registry.clear; YARD.parse PATH_ORDER, [], YARD::Logger::ERROR }
+  x.report("parse") { YARD::Registry.clear; YARD.parse 'lib/**/*.rb', [], YARD::Logger::ERROR }
 end
 
 =begin

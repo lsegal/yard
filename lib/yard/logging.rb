@@ -1,12 +1,44 @@
 # encoding: utf-8
 # frozen_string_literal: true
-require 'logger'
 require 'thread'
 
 module YARD
   # Handles console logging for info, warnings and errors.
   # Uses the stdlib Logger class in Ruby for all the backend logic.
-  class Logger < ::Logger
+  class Logger
+    # Log severity levels
+    module Severity
+      # Debugging log level
+      DEBUG = 0
+
+      # Information log level
+      INFO = 1
+
+      # Warning log level
+      WARN = 2
+
+      # Error log level
+      ERROR = 3
+
+      # Fatal log level
+      FATAL = 4
+
+      # Unknown log level
+      UNKNOWN = 5
+
+      # @private
+      SEVERITIES = {
+        DEBUG => :debug,
+        INFO => :info,
+        WARN => :warn,
+        ERROR => :error,
+        FATAL => :fatal,
+        UNKNOWN => :unknown
+      }
+    end
+
+    include Severity
+
     # The list of characters displayed beside the progress bar to indicate
     # "movement".
     # @since 0.8.2
@@ -22,11 +54,16 @@ module YARD
     def show_backtraces; @show_backtraces || level == DEBUG end
     attr_writer :show_backtraces
 
+    # @return [DEBUG, INFO, WARN, ERROR, FATAL, UNKNOWN] the logging level
+    attr_accessor :level
+
+    # @return [Boolean] whether a warn message has been emitted. Used for status tracking.
+    attr_accessor :warned
+
     # @return [Boolean] whether progress indicators should be shown when
     #   logging CLIs (by default this is off).
     def show_progress
       return false if YARD.ruby18? # threading is too ineffective for progress support
-      return false if YARD.windows? # windows has poor ANSI support
       return false unless io.tty? # no TTY support on IO
       return false unless level > INFO # no progress in verbose/debug modes
       @show_progress
@@ -41,12 +78,10 @@ module YARD
 
     # Creates a new logger
     def initialize(pipe, *args)
-      super(pipe, *args)
       self.io = pipe
       self.show_backtraces = true
       self.show_progress = false
       self.level = WARN
-      self.formatter = method(:format_log)
       self.warned = false
       @progress_indicator = 0
       @mutex = Mutex.new
@@ -54,19 +89,39 @@ module YARD
       @progress_last_update = Time.now
     end
 
-    # Changes the debug level to DEBUG if $DEBUG is set
-    # and writes a debugging message.
-    def debug(*args)
-      self.level = DEBUG if $DEBUG
-      super
+    # @!macro [attach] logger.create_log_method
+    #   @method $1(message)
+    #   Logs a message with the $1 severity level.
+    #   @param message [String] the message to log
+    #   @see #log
+    # @private
+    def self.create_log_method(name)
+      severity = Severity.const_get(name.to_s.upcase)
+      define_method(name) { |message| log(severity, message) }
     end
 
+    create_log_method :info
+    create_log_method :error
+    create_log_method :fatal
+    create_log_method :unknown
+
+    # Changes the debug level to DEBUG if $DEBUG is set and writes a debugging message.
+    create_log_method :debug
+
     # Remembers when a warning occurs and writes a warning message.
-    def warn(*args)
-      self.warned = true
-      super
+    create_log_method :warn
+
+    # Logs a message with a given severity
+    # @param severity [DEBUG, INFO, WARN, ERROR, FATAL, UNKNOWN] the severity level
+    # @param message [String] the message to log
+    def log(severity, message)
+      self.level = DEBUG if $DEBUG
+      return unless severity >= level
+
+      self.warned = true if severity == WARN
+      clear_line
+      puts "[#{SEVERITIES[severity].to_s.downcase}]: #{message}"
     end
-    attr_accessor :warned
 
     # Captures the duration of a block of code for benchmark analysis. Also
     # calls {#progress} on the message to display it to the user.
@@ -120,7 +175,7 @@ module YARD
     # @since 0.8.2
     def clear_progress
       return unless show_progress
-      print_no_newline("\e[?25h\e[2K")
+      io.write("\e[?25h\e[2K")
       @progress_msg = nil
     end
 
@@ -133,16 +188,13 @@ module YARD
       print("#{msg}\n")
     end
 
-    alias print_no_newline <<
-    private :print_no_newline
-
     # Displays an unformatted line to the logger output stream.
     # @param [String] msg the message to display
     # @return [void]
     # @since 0.8.2
     def print(msg = '')
       clear_line
-      print_no_newline(msg)
+      io.write(msg)
     end
     alias << print
 
@@ -186,20 +238,9 @@ module YARD
 
     private
 
-    # Override this internal Logger method to clear line
-    def add(*args)
-      clear_line
-      super(*args)
-    end
-
     def clear_line
       return unless @progress_msg
-      print_no_newline("\e[2K\r")
-    end
-
-    # Log format (from Logger implementation). Used by Logger internally
-    def format_log(sev, _time, _prog, msg)
-      "[#{sev.downcase}]: #{msg}\n"
+      io.write("\e[2K\r")
     end
   end
 end
