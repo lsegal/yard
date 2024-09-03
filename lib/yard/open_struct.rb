@@ -11,10 +11,10 @@ module YARD
       if name.to_s.end_with?('=')
         varname = name.to_s[0..-2].to_sym
         __cache_lookup__(varname)
-        self[varname] = args.first
+        send(name, args.first)
       else
         __cache_lookup__(name)
-        self[name]
+        send(name)
       end
     end
 
@@ -60,7 +60,7 @@ module YARD
       key = name.to_sym.inspect
       instance_eval <<-RUBY, __FILE__, __LINE__ + 1
         def #{name}; @table[#{key}]; end
-        (class << self; self; end).define_method("#{name}=") { |v| @table[#{key}] = v }
+        def #{name.to_s.sub('?','_')}=(v); @table[#{key}] = v; end unless #{key}.to_s.include?('?')
       RUBY
     end
   end
