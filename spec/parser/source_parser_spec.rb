@@ -499,6 +499,15 @@ RSpec.describe YARD::Parser::SourceParser do
       YARD.parse ['foo']
     end
 
+    it "converts globs into UTF-8" do
+      expect(Dir).to receive(:[]).with('lib/**/*.rb').and_return(['lib/é.rb'])
+      expect(File).to receive(:file?).with('lib/é.rb').and_return(true)
+      expect(File).to receive(:read_binary).with('lib/é.rb').and_return("class A; end")
+
+      YARD.parse ['lib/**/*.rb']
+      expect(Registry.at('A')).not_to be nil
+    end
+
     it "uses Registry.checksums cache if file is cached" do
       data = 'DATA'
       hash = Registry.checksum_for(data)

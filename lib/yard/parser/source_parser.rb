@@ -107,7 +107,8 @@ module YARD
           files = [paths].flatten.
             map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c,cc,cxx,cpp}" : p }.
             map {|p| p.include?("*") ? Dir[p].sort_by {|d| [d.length, d] } : p }.flatten.
-            reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }
+            reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }.
+            map {|p| p.encoding == Encoding.default_external ? p : p.dup.force_encoding(Encoding.default_external) }
 
           log.enter_level(level) do
             parse_in_order(*files.uniq)
