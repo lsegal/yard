@@ -46,8 +46,7 @@ module YARD
 
     # @return [IO] the IO object being logged to
     # @since 0.8.2
-    def io; @logdev end
-    def io=(pipe) @logdev = pipe end
+    attr_accessor :io
 
     # @return [Boolean] whether backtraces should be shown (by default
     #   this is on).
@@ -70,6 +69,8 @@ module YARD
     end
     attr_writer :show_progress
 
+    # @!group Constructor Methods
+
     # The logger instance
     # @return [Logger] the logger instance
     def self.instance(pipe = STDOUT)
@@ -77,6 +78,7 @@ module YARD
     end
 
     # Creates a new logger
+    # @private
     def initialize(pipe, *args)
       self.io = pipe
       self.show_backtraces = true
@@ -94,11 +96,14 @@ module YARD
     #   Logs a message with the $1 severity level.
     #   @param message [String] the message to log
     #   @see #log
+    #   @return [void]
     # @private
     def self.create_log_method(name)
       severity = Severity.const_get(name.to_s.upcase)
       define_method(name) { |message| log(severity, message) }
     end
+
+    # @!group Logging Methods
 
     create_log_method :info
     create_log_method :error
@@ -123,21 +128,26 @@ module YARD
       puts "[#{SEVERITIES[severity].to_s.downcase}]: #{message}"
     end
 
-    # Captures the duration of a block of code for benchmark analysis. Also
-    # calls {#progress} on the message to display it to the user.
+    # @!group Level Control Methods
+
+    # Sets the logger level for the duration of the block
     #
-    # @todo Implement capture storage for reporting of benchmarks
-    # @param [String] msg the message to display
-    # @param [Symbol, nil] nontty_log the level to log as if the output
-    #   stream is not a TTY. Use +nil+ for no alternate logging.
-    # @yield a block of arbitrary code to benchmark
-    # @return [void]
-    def capture(msg, nontty_log = :debug)
-      progress(msg, nontty_log)
+    # @example
+    #   log.enter_level(Logger::ERROR) do
+    #     YARD.parse_string "def x; end"
+    #   end
+    # @param [Fixnum] new_level the logger level for the duration of the block.
+    #   values can be found in Ruby's Logger class.
+    # @yield the block with the logger temporarily set to +new_level+
+    def enter_level(new_level = level)
+      old_level = level
+      self.level = new_level
       yield
     ensure
-      clear_progress
+      self.level = old_level
     end
+
+    # @!group Utility Printing Methods
 
     # Displays a progress indicator for a given message. This progress report
     # is only displayed on TTY displays, otherwise the message is passed to
@@ -210,30 +220,34 @@ module YARD
         exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n")
     end
 
+    # @!group Benchmarking Methods
+
+    # Captures the duration of a block of code for benchmark analysis. Also
+    # calls {#progress} on the message to display it to the user.
+    #
+    # @todo Implement capture storage for reporting of benchmarks
+    # @param [String] msg the message to display
+    # @param [Symbol, nil] nontty_log the level to log as if the output
+    #   stream is not a TTY. Use +nil+ for no alternate logging.
+    # @yield a block of arbitrary code to benchmark
+    # @return [void]
+    def capture(msg, nontty_log = :debug)
+      progress(msg, nontty_log)
+      yield
+    ensure
+      clear_progress
+    end
+
+    # @!endgroup
+
     # Warns that the Ruby environment does not support continuations. Applies
     # to JRuby, Rubinius and MacRuby. This warning will only display once
     # per Ruby process.
     #
     # @deprecated Continuations are no longer needed by YARD 0.8.0+.
     # @return [void]
+    # @private
     def warn_no_continuations
-    end
-
-    # Sets the logger level for the duration of the block
-    #
-    # @example
-    #   log.enter_level(Logger::ERROR) do
-    #     YARD.parse_string "def x; end"
-    #   end
-    # @param [Fixnum] new_level the logger level for the duration of the block.
-    #   values can be found in Ruby's Logger class.
-    # @yield the block with the logger temporarily set to +new_level+
-    def enter_level(new_level = level)
-      old_level = level
-      self.level = new_level
-      yield
-    ensure
-      self.level = old_level
     end
 
     private
