@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + "/shared_signature_examples"
-require 'ostruct'
 
 RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper

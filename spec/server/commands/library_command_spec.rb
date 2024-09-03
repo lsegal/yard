@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'ostruct'
 
 RSpec.describe YARD::Server::Commands::LibraryCommand do
   before do

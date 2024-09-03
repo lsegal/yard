@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'ostruct'
 
 module YARD
   # Parses text and creates a {Docstring} object to represent documentation

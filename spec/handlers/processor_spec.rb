@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 RSpec.describe YARD::Handlers::Processor do
   before do
-    @proc = Handlers::Processor.new(OpenStruct.new(:parser_type => :ruby))
+    @proc = Handlers::Processor.new(YARD::OpenStruct.new(:parser_type => :ruby))
   end
 
   it "starts with public visibility" do
@@ -19,7 +19,7 @@ RSpec.describe YARD::Handlers::Processor do
   end
 
   it "has a globals structure" do
-    expect(@proc.globals).to be_a(OpenStruct)
+    expect(@proc.globals).to be_a(YARD::OpenStruct)
   end
 
   it "ignores HandlerAborted exceptions (but print debug info)" do

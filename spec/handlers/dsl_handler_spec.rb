@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require File.dirname(__FILE__) + '/spec_helper'
-require 'ostruct'
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   before(:all) { parse_file :dsl_handler_001, __FILE__ }

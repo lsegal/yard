@@ -48,7 +48,7 @@ RSpec.describe YARD::Parser::SourceParser do
     it "handles basic callback support" do
       before_list do |files, globals|
         expect(files).to eq ['foo.rb', 'bar.rb']
-        expect(globals).to eq OpenStruct.new
+        expect(globals).to eq YARD::OpenStruct.new
       end
       parse_list ['foo.rb', 'foo!'], ['bar.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil

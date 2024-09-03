@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'stringio'
-require 'ostruct'
 
 module YARD
   module Parser

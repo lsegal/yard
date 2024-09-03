@@ -298,6 +298,7 @@ module YARD
   autoload :DocstringParser,  __p('docstring_parser')
   autoload :GemIndex,         __p('gem_index')
   autoload :Logger,           __p('logging')
+  autoload :OpenStruct,       __p('open_struct')
   autoload :Options,          __p('options')
   autoload :Registry,         __p('registry')
   autoload :RegistryResolver, __p('registry_resolver')

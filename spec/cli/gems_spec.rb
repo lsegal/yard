@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'ostruct'
 require 'rubygems'
 
 RSpec.describe YARD::CLI::Gems do
