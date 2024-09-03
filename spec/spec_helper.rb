@@ -211,5 +211,10 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 end
 
+# Needed before including YARD to avoid a Logger load conflict because of the `include YARD` line
+begin
+  require 'asciidoctor'
+rescue LoadError; end
+
 YARD::Logger
 include YARD
