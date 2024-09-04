@@ -1,5 +1,15 @@
 # main
 
+- Fix JavaScript errors in `--one-file` template (#1426)
+- Fix heredoc parsing and add support for squiggly heredocs (#1315, #1495)
+- Accessibility improvements to the default template (#1501)
+- Improved YARD documentation (#1410, #1512, #1516, #1544)
+- Fix error when parsing `@option` tags (#1515)
+- Fix issue parsing UTF-8 filenames (#1517)
+- Replace OpenStruct with optimized YARD::OpenStruct to avoid ostruct performance warnings (#1545)
+- Add support for `private attr_*` syntax (#1541)
+- Remove logger dependency (#1546)
+
 # [0.9.36] - February 29th, 2024
 
 [0.9.36]: https://github.com/lsegal/yard/compare/v0.9.35...v0.9.36
