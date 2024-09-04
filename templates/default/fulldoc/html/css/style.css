@@ -388,16 +388,6 @@ ul.fullTree li:last-child { padding-bottom: 0; }
   text-align: center;
 }
 
-.visually-hidden {
-  position: absolute;
-  top: auto;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px,  1px);
-  width: 1px;
-  height: 1px;
-  white-space: nowrap;
-}
-
 #menu { font-size: 1.3em; color: #bbb; }
 #menu .title, #menu a { font-size: 0.7em; }
 #menu .title a { font-size: 1em; }

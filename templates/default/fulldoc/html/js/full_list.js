@@ -108,7 +108,7 @@ function enableSearch() {
     }
   });
 
-  $('#full_list').after("<div id='noresults' role='status' class='visually-hidden'></div>");
+  $('#full_list').after("<div id='noresults' role='status' style='display: none'></div>");
 }
 
 function ignoredKeyPress(event) {
@@ -136,7 +136,7 @@ function clearSearch() {
 function performSearch(searchString) {
   clearSearchTimeout();
   $('#full_list, #content').addClass('insearch');
-  $('#noresults').text('').addClass('visually-hidden');
+  $('#noresults').text('').hide();
   partialSearch(searchString, 0);
 }
 
@@ -178,7 +178,7 @@ function searchDone() {
     // This is read out to screen readers
     $('#noresults').text('There are ' + found + ' results.');
   }
-  $('#noresults').removeClass('visually-hidden');
+  $('#noresults').show();
   $('#content').removeClass('insearch');
 }
 
