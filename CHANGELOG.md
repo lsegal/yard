@@ -1,5 +1,9 @@
 # main
 
+# [0.9.37] - September 4th, 2024
+
+[0.9.37]: https://github.com/lsegal/yard/compare/v0.9.36...v0.9.37
+
 - Fix JavaScript errors in `--one-file` template (#1426)
 - Fix heredoc parsing and add support for squiggly heredocs (#1315, #1495)
 - Accessibility improvements to the default template (#1501)
