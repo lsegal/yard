@@ -108,7 +108,7 @@ function enableSearch() {
     }
   });
 
-  $('#full_list').after("<div id='noresults' role='status' style='visually-hidden'></div>");
+  $('#full_list').after("<div id='noresults' role='status' class='visually-hidden'></div>");
 }
 
 function ignoredKeyPress(event) {
