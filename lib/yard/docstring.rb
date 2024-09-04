@@ -192,7 +192,9 @@ module YARD
         end
       end
       @summary = stripped[0..idx]
-      if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
+      if !@summary.empty? &&
+         @summary !~ /\A\s*\{include:.+\}\s*\Z/ && # Summary is copied using +{include:...}+
+         @summary !~ /[!?]\s*\Z/ # Summary ends in a terminal punctuation
         @summary += '.'
       end
       @summary
