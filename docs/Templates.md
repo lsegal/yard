@@ -280,10 +280,11 @@ seen above by creating such a path in our '/path/to/mytemplates' custom template
 path:
 
     /path/to/mytemplates/:
-    |-- class
-    |   |-- html
-    |   |   |-- customsection.erb
-    |   |-- setup.rb
+    |--default
+    |   |-- class
+    |   |   |-- html
+    |   |   |   |-- customsection.erb
+    |   |   |-- setup.rb
 
 The `setup.rb` file would look like:
 
