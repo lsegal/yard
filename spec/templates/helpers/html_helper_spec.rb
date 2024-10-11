@@ -143,6 +143,30 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(htmlify("test {include:file:foo.rdoc}", :rdoc).gsub(/[\r?\n]+/, '')).to eq '<p>test HI</p>'
     end
 
+    it "preserves syntax highlighting in {include:} snippets" do
+      load_markup_provider(:rdoc)
+      expect(File).to receive(:file?).with('foo.rdoc').and_return(true)
+      expect(File).to receive(:read).with('foo.rdoc').and_return(
+                        " !!!ruby\n x = 1\n"
+                      )
+      expect(htmlify("{include:file:foo.rdoc}", :rdoc).gsub(/[\r?\n]+/, '')).
+        not_to include("&lt;")
+    end
+
+    it "escapes {include:} html snippets only once" do
+      expect(self).to receive(:html_syntax_highlight_html) do |source|
+        %(<strong>#{CGI.escapeHTML(source)}</strong>)
+      end.at_least(:once)
+
+      load_markup_provider(:rdoc)
+      expect(File).to receive(:file?).with('foo.md').and_return(true)
+      expect(File).to receive(:read).with('foo.md').and_return(
+                        "    !!!html\n    <h1>\n"
+                      )
+      expect(htmlify("{include:file:foo.md}", :markdown).gsub(/[\r?\n]+/, '')).
+        to include(%(<strong>&lt;h1&gt;</strong>))
+    end
+
     it "does not autolink URLs inside of {} (markdown specific)" do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
@@ -644,6 +668,12 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     it "doesn't escape code snippets twice" do
       expect(subject.htmlify('<pre lang="foo"><code>{"foo" => 1}</code></pre>', :html)).to eq(
         '<pre class="code foo"><code class="foo">{&quot;foo&quot; =&gt; 1}</code></pre>'
+      )
+    end
+
+    it "wraps but doesn't alter ruby snippets that already contain highlighting tags" do
+      expect(subject.htmlify('<pre lang="ruby"><span class="kw">for</span></pre>', :html)).to eq(
+        '<pre class="code ruby"><code class="ruby"><span class="kw">for</span></code></pre>'
       )
     end
 
