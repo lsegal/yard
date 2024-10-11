@@ -92,14 +92,17 @@ module YARD
     end
 
     # The location where YARD stores user-specific settings
-    CONFIG_DIR = File.expand_path('~/.yard')
+    USER_CONFIG_DIR = File.expand_path('~/.yard')
 
-    # The main configuration YAML file.
-    CONFIG_FILE = File.join(CONFIG_DIR, 'config')
+    # @deprecated Use {USER_CONFIG_DIR}
+    CONFIG_DIR = USER_CONFIG_DIR
+
+    # @deprecated Use {config_file}, passing the necessary directory
+    CONFIG_FILE = File.join(USER_CONFIG_DIR, 'config')
 
     # File listing all ignored plugins
     # @deprecated Set `ignored_plugins` in the {CONFIG_FILE} instead.
-    IGNORED_PLUGINS = File.join(CONFIG_DIR, 'ignored_plugins')
+    IGNORED_PLUGINS = File.join(USER_CONFIG_DIR, 'ignored_plugins')
 
     # Default configuration options
     DEFAULT_CONFIG_OPTIONS = {
@@ -113,19 +116,36 @@ module YARD
     # to allow it to be used as a plugin.
     YARD_PLUGIN_PREFIX = /^yard[-_]/
 
-    # Loads settings from {CONFIG_FILE}. This method is called by YARD at
-    # load time and should not be called by the user.
-    # @return [void]
     def self.load
       self.options = SymbolHash.new(false)
       options.update(DEFAULT_CONFIG_OPTIONS)
-      options.update(read_config_file)
+      load_project_config_file
+      load_user_config_file
       load_commandline_safemode
       add_ignored_plugins_file
       translate_plugin_names
       load_plugins
+    end
+
+    def self.config_file(dir)
+      File.join(dir, 'config')
+    end
+
+    def self.load_project_config_file
+      load_config_file(config_file(".yard"))
+    end
+
+    def self.load_user_config_file
+      load_config_file(config_file(USER_CONFIG_DIR))
+    end
+
+    # Loads settings from `config_file`. This method is called by YARD at
+    # load time and should not be called by the user.
+    # @return [void]
+    def self.load_config_file(config_file)
+      options.update(read_config_file(config_file))
     rescue => e
-      log.error "Invalid configuration file, using default options."
+      log.error "Invalid configuration file #{config_file}, using default options."
       log.backtrace(e)
       options.update(DEFAULT_CONFIG_OPTIONS)
     end
@@ -134,8 +154,8 @@ module YARD
     # @return [void]
     def self.save
       require 'yaml'
-      Dir.mkdir(CONFIG_DIR) unless File.directory?(CONFIG_DIR)
-      File.open(CONFIG_FILE, 'w') {|f| f.write(YAML.dump(options)) }
+      Dir.mkdir(USER_CONFIG_DIR) unless File.directory?(USER_CONFIG_DIR)
+      File.open(config_file(USER_CONFIG_DIR), 'w') {|f| f.write(YAML.dump(options)) }
     end
 
     # Loads gems that match the name 'yard-*' (recommended) or 'yard_*' except
@@ -231,15 +251,16 @@ module YARD
     end
 
     # Loads the YAML configuration file into memory
+    # @param [String] config_file the file to load
     # @return [Hash] the contents of the YAML file from disk
-    # @see CONFIG_FILE
-    def self.read_config_file
-      if File.file?(CONFIG_FILE)
+    # @see config_file
+    def self.read_config_file(config_file)
+      if File.file?(config_file)
         require 'yaml'
         if YAML.respond_to?(:safe_load_file)
-          YAML.safe_load_file(CONFIG_FILE, permitted_classes: [SymbolHash, Symbol])
+          YAML.safe_load_file(config_file, permitted_classes: [SymbolHash, Symbol])
         else
-          YAML.load_file(CONFIG_FILE)
+          YAML.load_file(config_file)
         end
       else
         {}
