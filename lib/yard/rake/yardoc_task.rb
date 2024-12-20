@@ -68,6 +68,9 @@ module YARD
       def define
         desc "Generate YARD Documentation" unless ::Rake.application.last_description
         task(name) do
+          # Lazy load yard so we don't impact the load time of the Rakefile
+          require_relative '../../yard'
+
           before.call if before.is_a?(Proc)
           yardoc = YARD::CLI::Yardoc.new
           yardoc.options[:verifier] = verifier if verifier
