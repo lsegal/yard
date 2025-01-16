@@ -57,6 +57,18 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj.attributes[:instance]).to be_empty
   end
 
+  it "turns A::Const = Struct.new(:sym) into class A::Const with attr :sym" do
+    obj = Registry.at("A::NestedCompactStruct")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Struct)
+    attrs = obj.attributes[:instance]
+    [:b, :c].each do |key|
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).not_to be nil
+    end
+  end
+
   it "maintains docstrings on structs defined via constants" do
     obj = Registry.at("DocstringStruct")
     expect(obj).not_to be nil
