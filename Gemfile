@@ -27,6 +27,7 @@ end
 
 group :server do
   gem 'rack', '~> 2.0'
+  gem 'rackup', '~> 1.0'
 end
 
 group :i18n do
