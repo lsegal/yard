@@ -1,37 +1,18 @@
 # frozen_string_literal: true
 require 'thread'
 
+gem 'rdoc', '>= 6.0'
+require 'rdoc'
+require 'rdoc/markup'
+require 'rdoc/markup/to_html'
+
 module YARD
   module Templates
     module Helpers
       module Markup
-        begin require 'rdoc'; rescue LoadError; nil end
-        begin
-          require 'rdoc/markup'
-          require 'rdoc/markup/to_html'
-          class RDocMarkup; MARKUP = RDoc::Markup end
-          class RDocMarkupToHtml < RDoc::Markup::ToHtml
-            if defined?(RDoc::VERSION) && RDoc::VERSION >= '4.0.0' &&
-               defined?(RDoc::Options)
-              def initialize
-                options = RDoc::Options.new
-                options.pipe = true
-                super(options)
-              end
-            end
-          end
-        rescue LoadError
-          begin
-            require 'rdoc/markup/simple_markup'
-            require 'rdoc/markup/simple_markup/to_html'
-            class RDocMarkup; MARKUP = SM::SimpleMarkup end
-            class RDocMarkupToHtml < SM::ToHtml; end
-          rescue LoadError
-            raise NameError, "could not load RDocMarkup (rdoc is not installed)"
-          end
-        end
-
         class RDocMarkup
+          MARKUP = RDoc::Markup
+
           attr_accessor :from_path
 
           @@mutex = Mutex.new
@@ -63,8 +44,6 @@ module YARD
           private
 
           # Fixes RDoc behaviour with ++ only supporting alphanumeric text.
-          #
-          # @todo Refactor into own SimpleMarkup subclass
           def fix_typewriter(text)
             code_tags = 0
             text.gsub(%r{<(/)?(pre|code|tt)|(\s|^|>)\+(?! )([^\n\+]{1,900})(?! )\+}) do |str|
@@ -82,17 +61,26 @@ module YARD
             end
           end
 
-          # Don't allow -- to turn into &#8212; element. The chances of this being
-          # some --option is far more likely than the typographical meaning.
-          #
-          # @todo Refactor into own SimpleMarkup subclass
+          # Don't allow -- to turn into &#8212; element (em dash)
           def fix_dash_dash(text)
             text.gsub(/&#8212;(?=\S)/, '--')
           end
         end
 
-        class RDocMarkupToHtml
+        # Specialized ToHtml formatter for YARD
+        #
+        # @todo Refactor into own SimpleMarkup subclass
+        class RDocMarkupToHtml < RDoc::Markup::ToHtml
           attr_accessor :from_path
+
+          def initialize
+            options = RDoc::Options.new
+            options.pipe = true
+            super(options)
+
+            # The hyperlink detection state
+            @hyperlink = false
+          end
 
           # Disable auto-link of URLs
           def handle_special_HYPERLINK(special) # rubocop:disable Style/MethodName
