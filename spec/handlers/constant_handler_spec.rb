@@ -85,6 +85,50 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(a3.tag(:return).types).to eq ["Symbol"]
   end
 
+  it "turns Const = Data.define(:sym) into class Const with attr reader :sym" do
+    obj = Registry.at("MyData")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    attrs = obj.attributes[:instance]
+    [:a, :b, :c].each do |key|
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).to be nil
+    end
+  end
+
+  it "turns Const = Data.define into empty data class" do
+    obj = Registry.at("MyEmptyData")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    expect(obj.attributes[:instance]).to be_empty
+  end
+
+  it "turns A::Const = Data.define(:sym) into class A::Const with attr reader :sym" do
+    obj = Registry.at("A::NestedCompactData")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    attrs = obj.attributes[:instance]
+    [:b, :c].each do |key|
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).to be nil
+    end
+  end
+
+  it "documents block for Data.define if present" do
+    obj = Registry.at("MyDataWithMethods")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    attrs = obj.attributes[:instance]
+    [:c, :d].each do |key|
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).to be nil
+    end
+    expect(obj.meths).to include(P("MyDataWithMethods#foo"))
+  end
+
   it "raises undocumentable error in 1.9 parser for Struct.new assignment to non-const" do
     undoc_error "nonconst = Struct.new"
   end unless LEGACY_PARSER
