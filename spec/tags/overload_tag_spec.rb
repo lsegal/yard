@@ -50,4 +50,19 @@ RSpec.describe YARD::Tags::OverloadTag do
     tag = Tags::OverloadTag.new(:overload, "default")
     expect(tag.signature).to eq "default"
   end
+
+  it "properly handles complex signatures" do
+    tag = Tags::OverloadTag.new(:overload, "foo(a, b = 1, *c, d, e:, f: 2, g:, **rest, &block)")
+    expect(tag.parameters).to eq [
+      ['a', nil],
+      ['b', "1"],
+      ['*c', nil],
+      ['d', nil],
+      ['e:', nil],
+      ['f:', "2"],
+      ['g:', nil],
+      ['**rest', nil],
+      ['&block', nil],
+    ]
+  end
 end

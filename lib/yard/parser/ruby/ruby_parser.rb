@@ -390,7 +390,7 @@ module YARD
 
         def on_array(other)
           node = AstNode.node_class_for(:array).new(:array, [other])
-          map = @map[MAPPINGS[node.type]]
+          map = @map[MAPPINGS[node.type]] if other.nil? || other.type == :list
           if map && !map.empty?
             lstart, sstart = *map.pop
             node.source_range = Range.new(sstart, @ns_charno - 1)

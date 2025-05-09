@@ -60,7 +60,8 @@ module YARD
           args = YARD::Handlers::Ruby::Legacy::Base.new(nil, nil).send(:tokval_list, toks, :all)
           args = args.map do |a|
             k, v = *a.split(/:|=/, 2)
-            [k.strip.to_s + (a[k.size, 1] == ':' ? ':' : ''), (v ? v.strip : nil)]
+            v.strip! if v
+            [k.strip.to_s + (a[k.size, 1] == ':' ? ':' : ''), (v && v.empty? ? nil : v)]
           end if args
           @name = meth.to_sym
           @parameters = args
