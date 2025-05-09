@@ -325,6 +325,30 @@
         $(hash)[0].scrollIntoView();
       }
     };
+
+    window.addEventListener(
+      "message",
+      function (e) {
+        if (e.data.action === "navigate") {
+          fetch(e.data.url)
+            .then((response) => response.text())
+            .then((text) => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(text, "text/html");
+              document.title = doc.querySelector("head title").innerText;
+              const content = doc.querySelector("#main").innerHTML;
+              document.querySelector("#main").innerHTML = content;
+              const url = new URL(e.data.url, "https://localhost");
+              const hash = decodeURIComponent(url.hash ?? "");
+              if (hash) {
+                document.getElementById(hash.substring(1)).scrollIntoView();
+              }
+              history.pushState({}, document.title, e.data.url);
+            });
+        }
+      },
+      false
+    );
   }
 
   $(document).ready(function () {

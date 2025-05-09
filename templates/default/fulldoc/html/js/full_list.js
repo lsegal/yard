@@ -44,14 +44,21 @@ function enableLinks() {
     $clicked.addClass('clicked');
     evt.stopPropagation();
 
-    if (evt.target.tagName === 'A') return true;
+    if (window.origin === "null") {
+      if (evt.target.tagName === 'A') return true;
 
-    var elem = $clicked.find('> .item .object_link a')[0];
-    var e = evt.originalEvent;
-    var newEvent = new MouseEvent(evt.originalEvent.type);
-    newEvent.initMouseEvent(e.type, e.canBubble, e.cancelable, e.view, e.detail, e.screenX, e.screenY, e.clientX, e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.button, e.relatedTarget);
-    elem.dispatchEvent(newEvent);
-    evt.preventDefault();
+      var elem = $clicked.find('> .item .object_link a')[0];
+      var e = evt.originalEvent;
+      var newEvent = new MouseEvent(evt.originalEvent.type);
+      newEvent.initMouseEvent(e.type, e.canBubble, e.cancelable, e.view, e.detail, e.screenX, e.screenY, e.clientX, e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.button, e.relatedTarget);
+      elem.dispatchEvent(newEvent);
+      evt.preventDefault();
+    } else {
+      window.top.postMessage({
+        action: "navigate",
+        url: $clicked.find('.object_link a').attr('href'),
+      }, "*");
+    }
     return false;
   });
 }
