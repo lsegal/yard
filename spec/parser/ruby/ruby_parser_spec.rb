@@ -283,6 +283,11 @@ eof
         src = "%#{tok}{\na b c\n d e f\n}"
         expect(stmt(src).source).to eq src
       end
+
+      it "shows proper source for %#{tok}[] array" do
+        src = "%#{tok}[\na b c\n d e f\n]"
+        expect(stmt(src).source).to eq src
+      end
     end
 
     {'i' => :qsymbols_literal, 'I' => :symbols_literal,
@@ -297,6 +302,33 @@ eof
         ].each do |str|
           node = stmt(str).jump(sym)
           expect(node.source).to eq(str[/(\%#{id}\(.+\))/m, 1])
+        end
+      end
+
+      it "parses %#{id}{...} literals" do
+        [
+          "TEST = %#{id}{A B C}",
+          "TEST = %#{id}{  A  B  C  }",
+          "TEST = %#{id}{ \nA \nB \nC \n}",
+          "TEST = %#{id}{\n\nAD\n\nB\n\nC\n\n}",
+          "TEST = %#{id}{\n A\n B\n C\n }",
+        ].each do |str|
+          node = stmt(str).jump(sym)
+          expect(node.source).to eq(str[/(\%#{id}\{.+\})/m, 1])
+        end
+      end
+
+      it "parses %#{id}[...] literals" do
+        [
+          "TEST = %#{id}[A B C]",
+          "TEST = %#{id}[  A  B  C  ]",
+          "TEST = %#{id}[ \nA \nB \nC \n]",
+          "TEST = %#{id}[\n\nAD\n\nB\n\nC\n\n]",
+          "TEST = %#{id}[\n A\n B\n C\n ]",
+          "TEST = %#{id}[\n  A]",
+        ].each do |str|
+          node = stmt(str).jump(sym)
+          expect(node.source).to eq(str[/(\%#{id}\[.+\])/m, 1])
         end
       end
 
@@ -327,7 +359,7 @@ eof
           # Method comment not docstring
         end
       eof
-      
+
       tokens = tokenize(src.gsub(/^ +/, ''))
       expect(tokens).to eq(tokens.sort_by {|t| t.last })
       expect(tokens.map {|t| t.first }).to eq %i(kw sp ident nl comment kw nl)
@@ -368,6 +400,27 @@ eof
         end
       eof
       expect(s.jump(:array).source).to eq "['foo', 'bar']"
+    end
+
+    it "parses [[]] as array of arrays" do
+      s = stmt(<<-eof)
+        class Foo
+          FOO = [['foo', 'bar']]
+        end
+      eof
+      expect(s.jump(:array).source).to eq "[['foo', 'bar']]"
+    end
+
+    it "parses %w() array inside another empty array" do
+      s = stmts(<<-eof)
+        FOO = [%w( foo bar )]
+      eof
+      expect(s[0].jump(:array).source).to eq '[%w( foo bar )]'
+    end
+
+    it "parses %w() array inside another populated array" do
+      s = stmts("FOO = ['1', %w[]]")
+      expect(s[0].jump(:array).source).to eq "['1', %w[]]"
     end
 
     it "shows source for unary minus" do
