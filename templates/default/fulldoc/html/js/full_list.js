@@ -20,17 +20,6 @@ function escapeShortcut() {
   });
 }
 
-function navResizer() {
-  $(window).mousemove(function(e) {
-    window.parent.postMessage({
-      action: 'mousemove', event: {pageX: e.pageX, which: e.which}
-    }, '*');
-  }).mouseup(function(e) {
-    window.parent.postMessage({action: 'mouseup'}, '*');
-  });
-  window.parent.postMessage("navReady", "*");
-}
-
 function clearSearchTimeout() {
   clearTimeout(searchTimeout);
   searchTimeout = null;
@@ -239,7 +228,6 @@ window.addEventListener("message", windowEvents, false);
 
 $(document).ready(function() {
   escapeShortcut();
-  navResizer();
   enableLinks();
   enableToggles();
   populateSearchCache();

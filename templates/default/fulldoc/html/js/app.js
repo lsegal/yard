@@ -250,34 +250,42 @@
     );
   }
 
-  function navResizeFn(e) {
-    if (e.which !== 1) {
-      navResizeFnStop();
-      return;
-    }
-
-    sessionStorage.navWidth = e.pageX.toString();
-    $(".nav_wrap").css("width", e.pageX);
-    $(".nav_wrap").css("-ms-flex", "inherit");
-  }
-
-  function navResizeFnStop() {
-    $(window).unbind("mousemove", navResizeFn);
-    window.removeEventListener("message", navMessageFn, false);
-  }
-
-  function navMessageFn(e) {
-    if (e.data.action === "mousemove") navResizeFn(e.data.event);
-    if (e.data.action === "mouseup") navResizeFnStop();
-  }
-
   function navResizer() {
-    $("#resizer").mousedown(function (e) {
-      e.preventDefault();
-      $(window).mousemove(navResizeFn);
-      window.addEventListener("message", navMessageFn, false);
-    });
-    $(window).mouseup(navResizeFnStop);
+    const resizer = document.getElementById("resizer");
+    resizer.addEventListener(
+      "pointerdown",
+      function (e) {
+        resizer.setPointerCapture(e.pointerId);
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      false
+    );
+    resizer.addEventListener(
+      "pointerup",
+      function (e) {
+        resizer.releasePointerCapture(e.pointerId);
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      false
+    );
+    resizer.addEventListener(
+      "pointermove",
+      function (e) {
+        console.log(e);
+        if ((e.buttons & 1) === 0) {
+          return;
+        }
+
+        sessionStorage.navWidth = e.pageX.toString();
+        $(".nav_wrap").css("width", e.pageX);
+        $(".nav_wrap").css("-ms-flex", "inherit");
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      false
+    );
 
     if (sessionStorage.navWidth) {
       navResizeFn({ which: 1, pageX: parseInt(sessionStorage.navWidth, 10) });
@@ -295,15 +303,6 @@
       document.getElementById("nav").contentWindow.postMessage(opts, "*");
       done = true;
     }
-
-    window.addEventListener(
-      "message",
-      function (event) {
-        if (event.data === "navReady") postMessage();
-        return false;
-      },
-      false
-    );
   }
 
   function mainFocus() {
