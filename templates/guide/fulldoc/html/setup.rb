@@ -23,7 +23,7 @@ def init
   class << options.serializer
     define_method(:serialized_path) do |object|
       if CodeObjects::ExtraFileObject === object
-        super(object).sub(/^file\./, '').downcase
+        super(object).sub(/^_file\//, '').downcase
       else
         super(object)
       end
