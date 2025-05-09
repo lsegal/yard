@@ -127,6 +127,7 @@ module YARD::CodeObjects
     end
 
     def translate(data)
+      return data if locale.nil?
       text = YARD::I18n::Text.new(data, :have_header => true)
       text.translate(YARD::Registry.locale(locale))
     end
