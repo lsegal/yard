@@ -288,7 +288,8 @@
     );
 
     if (sessionStorage.navWidth) {
-      navResizeFn({ which: 1, pageX: parseInt(sessionStorage.navWidth, 10) });
+      $(".nav_wrap").css("width", parseInt(sessionStorage.navWidth, 10));
+      $(".nav_wrap").css("-ms-flex", "inherit");
     }
   }
 
