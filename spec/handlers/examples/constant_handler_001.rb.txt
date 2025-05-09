@@ -17,6 +17,7 @@ end
 MyClass = Struct.new(:a, :b, :c)
 NotMyClass = Struct.new("NotMyClass2", :b, :c)
 MyEmptyStruct = Struct.new
+A::NestedCompactStruct = Struct.new(:b, :c)
 
 MyStructWithConstant = Struct.new do
   # A constant.

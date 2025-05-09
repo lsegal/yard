@@ -34,13 +34,13 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
   end
 
   def process_structclass(statement)
-    lhs = statement[0][0]
-    if lhs.type == :const
-      klass = create_class(lhs[0], P(:Struct))
+    lhs = statement[0]
+    if (lhs.type == :var_field && lhs[0].type == :const) || lhs.type == :const_path_field
+      klass = create_class(lhs.source, P(:Struct))
       create_attributes(klass, extract_parameters(statement[1]))
       parse_block(statement[1].block[1], :namespace => klass) unless statement[1].block.nil?
     else
-      raise YARD::Parser::UndocumentableError, "Struct assignment to #{statement[0].source}"
+      raise YARD::Parser::UndocumentableError, "Struct assignment to #{lhs.source}"
     end
   end
 
