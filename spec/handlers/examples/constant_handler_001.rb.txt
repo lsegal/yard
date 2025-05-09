@@ -33,3 +33,10 @@ end
 #   Attribute defined with the new syntax
 #   @return [Symbol] something useful
 DocstringStruct = Struct.new(:bar, :baz, :new_syntax)
+
+MyData = Data.define(:a, :b, :c)
+MyEmptyData = Data.define
+A::NestedCompactData = Data.define(:b, :c)
+MyDataWithMethods = Data.define(:c, :d) do
+  def foo; end
+end
