@@ -65,11 +65,14 @@ module YARD
 
       private
 
-      # Parses the .yardopts file for default yard options
+      # Parses the .yardopts file for default yard options,
+      # ignoring comment lines beginning with // or #
       # @return [Array<String>] an array of options parsed from .yardopts
       def yardopts(file = options_file)
         return [] unless use_yardopts_file
-        File.read_binary(file).shell_split
+        contents = File.read_binary(file)
+        opts = contents.gsub(%r{(#|//).*\n?}, "")
+        opts.shell_split
       rescue Errno::ENOENT
         []
       end
