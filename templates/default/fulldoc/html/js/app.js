@@ -153,7 +153,6 @@
           });
           // Add the value of the constant as "Tooltip" to the summary object
           list.find("pre.code").each(function () {
-            console.log($(this).parent());
             var dt_element = $(this).parent().prev();
             var tooltip = $(this).text();
             if (dt_element.hasClass("deprecated")) {
@@ -273,7 +272,6 @@
     resizer.addEventListener(
       "pointermove",
       function (e) {
-        console.log(e);
         if ((e.buttons & 1) === 0) {
           return;
         }
