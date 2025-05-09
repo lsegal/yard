@@ -195,6 +195,13 @@ function highlight() {
   });
 }
 
+function isInView(element) {
+  const rect = element.getBoundingClientRect();
+  const windowHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+  return rect.left >= 0 && rect.bottom <= windowHeight;
+}
+  
 /**
  * Expands the tree to the target element and its immediate
  * children.
@@ -210,7 +217,7 @@ function expandTo(path) {
     $(el).find('> div > a.toggle').attr('aria-expanded', 'true');
   });
 
-  if($target[0]) {
+  if($target[0] && !isInView($target[0])) {
     window.scrollTo(window.scrollX, $target.offset().top - 250);
     highlight();
   }
