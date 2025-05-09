@@ -324,43 +324,6 @@ window.__app = function () {
         $(hash)[0].scrollIntoView();
       }
     };
-
-    window.addEventListener(
-      "message",
-      async (e) => {
-        if (e.data.action === "navigate") {
-          const response = await fetch(e.data.url);
-          const text = await response.text();
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(text, "text/html");
-
-          const classListLink =
-            document.getElementById("class_list_link").classList;
-
-          document.documentElement.replaceChild(doc.head, document.head);
-          const content = doc.querySelector("#main").innerHTML;
-          document.querySelector("#main").innerHTML = content;
-
-          document.head.querySelectorAll("script").forEach((script) => {
-            const newScript = document.createElement("script");
-            newScript.textContent = script.textContent;
-            script.parentNode.replaceChild(newScript, script);
-          });
-
-          window.__app();
-
-          document.getElementById("class_list_link").classList = classListLink;
-
-          const url = new URL(e.data.url, "https://localhost");
-          const hash = decodeURIComponent(url.hash ?? "");
-          if (hash) {
-            document.getElementById(hash.substring(1)).scrollIntoView();
-          }
-          history.pushState({}, document.title, e.data.url);
-        }
-      },
-      false
-    );
   }
 
   $(document).ready(function () {
@@ -379,3 +342,54 @@ window.__app = function () {
   });
 };
 window.__app();
+
+window.addEventListener(
+  "message",
+  async (e) => {
+    if (e.data.action === "navigate") {
+      const response = await fetch(e.data.url);
+      const text = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "text/html");
+
+      const classListLink =
+        document.getElementById("class_list_link").classList;
+
+      const content = doc.querySelector("#main").innerHTML;
+      document.querySelector("#main").innerHTML = content;
+      document.title = doc.head.querySelector("title").innerText;
+      document.head.querySelectorAll("script").forEach((script) => {
+        if (
+          !script.type ||
+          (script.type === "text/javascript" && !script.src)
+        ) {
+          script.remove();
+        }
+      });
+
+      doc.head.querySelectorAll("script").forEach((script) => {
+        if (
+          !script.type ||
+          (script.type === "text/javascript" && !script.src)
+        ) {
+          const newScript = document.createElement("script");
+          newScript.type = script.type;
+          newScript.textContent = script.textContent;
+          document.head.appendChild(newScript);
+        }
+      });
+
+      window.__app();
+
+      document.getElementById("class_list_link").classList = classListLink;
+
+      const url = new URL(e.data.url, "https://localhost");
+      const hash = decodeURIComponent(url.hash ?? "");
+      if (hash) {
+        document.getElementById(hash.substring(1)).scrollIntoView();
+      }
+      history.pushState({}, document.title, e.data.url);
+    }
+  },
+  false
+);
