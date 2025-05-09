@@ -38,6 +38,7 @@ module YARD
           @@formatter = nil
           @@markup = nil
 
+          # @param text [String]
           def initialize(text)
             @text = text
 
@@ -47,6 +48,7 @@ module YARD
             end
           end
 
+          # @return [String]
           def to_html
             html = nil
             @@mutex.synchronize do

@@ -228,7 +228,7 @@ module YARD
       # @example Create class Z inside namespace X::Y
       #   CodeObjects::Base.new(P("X::Y"), :Z) # or
       #   CodeObjects::Base.new(Registry.root, "X::Y")
-      # @param [NamespaceObject] namespace the namespace the object belongs in,
+      # @param [NamespaceObject, :root, nil] namespace the namespace the object belongs in,
       #   {Registry.root} or :root should be provided if it is associated with
       #   the top level namespace.
       # @param [Symbol, String] name the name (or complex path) of the object.
