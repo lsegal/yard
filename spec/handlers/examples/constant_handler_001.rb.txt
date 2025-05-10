@@ -17,6 +17,7 @@ end
 MyClass = Struct.new(:a, :b, :c)
 NotMyClass = Struct.new("NotMyClass2", :b, :c)
 MyEmptyStruct = Struct.new
+A::NestedCompactStruct = Struct.new(:b, :c)
 
 MyStructWithConstant = Struct.new do
   # A constant.
@@ -33,3 +34,10 @@ end
 #   Attribute defined with the new syntax
 #   @return [Symbol] something useful
 DocstringStruct = Struct.new(:bar, :baz, :new_syntax)
+
+MyData = Data.define(:a, :b, :c)
+MyEmptyData = Data.define
+A::NestedCompactData = Data.define(:b, :c)
+MyDataWithMethods = Data.define(:c, :d) do
+  def foo; end
+end

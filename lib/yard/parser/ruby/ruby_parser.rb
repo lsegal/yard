@@ -242,8 +242,8 @@ module YARD
           if node.respond_to?(:block)
             sr = node.block.source_range
             lr = node.block.line_range
-            node.block.source_range = Range.new(sr.first, @tokens.last[2][1] - 1)
-            node.block.line_range = Range.new(lr.first, @tokens.last[2][0])
+            node.block.source_range = Range.new(sr.begin, @tokens.last[2][1] - 1)
+            node.block.line_range = Range.new(lr.begin, @tokens.last[2][0])
           end
           node
         end
@@ -272,14 +272,14 @@ module YARD
           if @percent_ary
             if token == :words_sep && data !~ /\s\z/
               rng = @percent_ary.source_range
-              rng = Range.new(rng.first, rng.last + data.length)
+              rng = Range.new(rng.begin, rng.end.to_i + data.length)
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
               return
             elsif token == :tstring_end && data =~ /\A\s/
               rng = @percent_ary.source_range
-              rng = Range.new(rng.first, rng.last + data.length)
+              rng = Range.new(rng.begin, rng.end.to_i + data.length)
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
@@ -377,8 +377,8 @@ module YARD
         def on_aref(*args)
           @map[:lbracket].pop
           ll, lc = *@map[:aref].shift
-          sr = args.first.source_range.first..lc
-          lr = args.first.line_range.first..ll
+          sr = args.first.source_range.begin..lc
+          lr = args.first.line_range.begin..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
         end
 
@@ -390,7 +390,7 @@ module YARD
 
         def on_array(other)
           node = AstNode.node_class_for(:array).new(:array, [other])
-          map = @map[MAPPINGS[node.type]]
+          map = @map[MAPPINGS[node.type]] if other.nil? || other.type == :list
           if map && !map.empty?
             lstart, sstart = *map.pop
             node.source_range = Range.new(sstart, @ns_charno - 1)
@@ -449,8 +449,8 @@ module YARD
             def on_#{kw}(*args)
               mapping = @map[#{kw.to_s.sub(/_mod$/, '').inspect}]
               mapping.pop if mapping
-              sr = args.last.source_range.first..args.first.source_range.last
-              lr = args.last.line_range.first..args.first.line_range.last
+              sr = args.last.source_range.begin..args.first.source_range.end
+              lr = args.last.line_range.begin..args.first.line_range.end
               #{node_class}.new(:#{kw}, args, :line => lr, :char => sr)
             end
           eof
@@ -473,8 +473,8 @@ module YARD
             begin; undef on_#{kw}_add; rescue NameError; end
             def on_#{kw}_add(list, item)
               last = @source[@ns_charno,1] == "\n" ? @ns_charno - 1 : @ns_charno
-              list.source_range = (list.source_range.first..last)
-              list.line_range = (list.line_range.first..lineno)
+              list.source_range = (list.source_range.begin..last)
+              list.line_range = (list.line_range.begin..lineno)
               list.push(item)
               list
             end
@@ -485,9 +485,9 @@ module YARD
           node = visit_event_arr(LiteralNode.new(:string_literal, args))
           if args.size == 1
             r = args[0].source_range
-            if node.source_range != Range.new(r.first - 1, r.last + 1)
+            if node.source_range != Range.new(r.begin - 1, r.end + 1)
               klass = AstNode.node_class_for(node[0].type)
-              r = Range.new(node.source_range.first + 1, node.source_range.last - 1)
+              r = Range.new(node.source_range.begin + 1, node.source_range.end - 1)
               node[0] = klass.new(node[0].type, [@source[r]], :line => node.line_range, :char => r)
             end
           end
@@ -573,7 +573,7 @@ module YARD
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
             range = @comments_range.delete(lineno - 1)
-            source_range = range.first..source_range.last
+            source_range = range.begin..source_range.end
             comment = append_comment + "\n" + comment
           end
 
@@ -627,11 +627,13 @@ module YARD
             end
 
             # check upwards from line before node; check node's line at the end
-            ((node.line - 1).downto(node.line - 2).to_a + [node.line]).each do |line|
-              comment = @comments[line]
-              if comment && !comment.empty?
-                add_comment(line, node)
-                break
+            if (n_l = node.line)
+              ((n_l - 1).downto(n_l - 2).to_a + [n_l]).each do |line|
+                comment = @comments[line]
+                if comment && !comment.empty?
+                  add_comment(line, node)
+                  break
+                end
               end
             end
 
