@@ -103,7 +103,11 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
 end
 
 module Kernel
-  require 'cgi'
+  if RUBY_VERSION < '3.5'
+    require 'cgi/util'
+  else
+    require 'cgi/escape'
+  end
 
   def p(*args)
     puts args.map {|arg| CGI.escapeHTML(arg.inspect) }.join("<br/>\n")
