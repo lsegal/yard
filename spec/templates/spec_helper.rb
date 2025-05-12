@@ -5,9 +5,7 @@ include YARD::Templates
 def only_copy?(result, example, type)
   return false unless defined?($COPY)
 
-  if $COPY == :all || $COPY == example
-    puts(result) unless $COPYT && $COPYT != type
-  end
+  puts(result) if ($COPY == :all || $COPY == example) && !($COPYT && $COPYT != type)
   $COPY ? true : false
 end
 
@@ -30,7 +28,7 @@ def html_equals_string(result, expected)
   expected = String.new(expected)
   [expected, result].each do |value|
     value.gsub!(/(>)\s+|\s+(<)/, '\1\2')
-    value.gsub!(/&#39;/, "'")
+    value.gsub!('&#39;', "'")
     value.strip!
   end
   text_equals_string(result, expected)

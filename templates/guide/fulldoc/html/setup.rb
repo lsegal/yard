@@ -46,11 +46,9 @@ end
 
 def serialize_file(file)
   index = options.files.index(file)
-  outfile = file.name.downcase + '.html'
+  outfile = "#{file.name.downcase}.html"
   options.file = file
-  if file.attributes[:namespace]
-    options.object = Registry.at(file.attributes[:namespace])
-  end
+  options.object = Registry.at(file.attributes[:namespace]) if file.attributes[:namespace]
   options.object ||= Registry.root
 
   if file == options.readme
@@ -67,7 +65,7 @@ end
 def serialize_onefile
   layout = Object.new.extend(T('layout'))
   options.css_data = layout.stylesheets.map {|sheet| file(sheet, true) }.join("\n")
-  options.js_data = layout.javascripts.map {|script| file(script, true) }.join("")
+  options.js_data = layout.javascripts.map {|script| file(script, true) }.join
   Templates::Engine.with_serializer('onefile.html', options.serializer) do
     T('onefile').run(options)
   end

@@ -51,10 +51,10 @@ module YARD
         return object if object.is_a?(String)
 
         if object.is_a?(CodeObjects::ExtraFileObject)
-          fspath = ['file.' + object.name + (extension.empty? ? '' : ".#{extension}")]
+          fspath = ["file.#{object.name}#{extension.empty? ? '' : ".#{extension}"}"]
         else
-          objname = object != YARD::Registry.root ? mapped_name(object) : "top-level-namespace"
-          objname += '_' + object.scope.to_s[0, 1] if object.is_a?(CodeObjects::MethodObject)
+          objname = object == YARD::Registry.root ? "top-level-namespace" : mapped_name(object)
+          objname += "_#{object.scope.to_s[0, 1]}" if object.is_a?(CodeObjects::MethodObject)
           fspath = [objname + (extension.empty? ? '' : ".#{extension}")]
           if object.namespace && object.namespace.path != ""
             fspath.unshift(*object.namespace.path.split(CodeObjects::NSEP))
@@ -84,12 +84,11 @@ module YARD
       def build_filename_map
         @name_map = {}
         YARD::Registry.all.each do |object|
-          lpath = nil
-          if object.parent && object.parent.type != :root
-            lpath = object.parent.path + "::" + object.name.to_s.downcase
-          else
-            lpath = object.path.downcase
-          end
+          lpath = if object.parent && object.parent.type != :root
+                    "#{object.parent.path}::#{object.name.to_s.downcase}"
+                  else
+                    object.path.downcase
+                  end
 
           @name_map[lpath] ||= {}
           size = @name_map[lpath].size

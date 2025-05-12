@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Section do
   include YARD::Templates
 
   describe "#initialize" do
     it "converts first argument to splat if it is array" do
-      s = Section.new(:name, [:foo, :bar])
+      s = Section.new(:name, %i(foo bar))
       expect(s.name).to eq :name
       expect(s[0].name).to eq :foo
       expect(s[1].name).to eq :bar
@@ -27,7 +27,7 @@ RSpec.describe YARD::Templates::Section do
 
   describe "#[]" do
     it "uses Array#[] if argument is integer" do
-      expect(Section.new(:name, [:foo, :bar])[0].name).to eq :foo
+      expect(Section.new(:name, %i(foo bar))[0].name).to eq :foo
     end
 
     it "returns new Section object if more than one argument" do
@@ -45,13 +45,13 @@ RSpec.describe YARD::Templates::Section do
 
   describe "#eql?" do
     it "checks for equality of two equal sections" do
-      expect(Section.new(:foo, [:a, :b])).to eql(Section.new(:foo, :a, :b))
-      expect(Section.new(:foo, [:a, :b])).to eq Section.new(:foo, :a, :b)
+      expect(Section.new(:foo, %i(a b))).to eql(Section.new(:foo, :a, :b))
+      expect(Section.new(:foo, %i(a b))).to eq Section.new(:foo, :a, :b)
     end
 
     it "is not equal if section names are different" do
-      expect(Section.new(:foo, [:a, :b])).not_to eql(Section.new(:bar, :a, :b))
-      expect(Section.new(:foo, [:a, :b])).not_to eq Section.new(:bar, :a, :b)
+      expect(Section.new(:foo, %i(a b))).not_to eql(Section.new(:bar, :a, :b))
+      expect(Section.new(:foo, %i(a b))).not_to eq Section.new(:bar, :a, :b)
     end
   end
 
@@ -132,7 +132,7 @@ RSpec.describe YARD::Templates::Section do
     it "finds item inside sections" do
       s = Section.new(:foo, Section.new(:bar, Section.new(:bar)))
       s.any(:bar).push(:baz)
-      expect(s.to_a).to eq [:foo, [:bar, [:bar, :baz]]]
+      expect(s.to_a).to eq [:foo, [:bar, %i(bar baz)]]
     end
 
     it "finds item in any deeply nested set of sections" do

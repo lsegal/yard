@@ -24,7 +24,7 @@ module YARD
         # Tests if the node matches the handler
         # @param [Parser::Ruby::AstNode] node a Ruby node
         # @return [Boolean] whether the +node+ matches the handler
-        def matches?(node) # rubocop:disable Lint/UnusedMethodArgument
+        def matches?(node)
           raise NotImplementedError
         end
 
@@ -38,8 +38,9 @@ module YARD
         def matches?(node)
           case node.type
           when :var_ref
-            if !node.parent || node.parent.type == :list
-              return true if node[0].type == :ident && (name.nil? || node[0][0] == name)
+            n = node
+            if (!n.parent || n.parent.type == :list) && n[0].type == :ident && (name.nil? || n[0][0] == name)
+              return true
             end
           when :fcall, :command, :vcall
             return true if name.nil? || node[0][0] == name
@@ -103,7 +104,7 @@ module YARD
           #   any method name + "?" that {AstNode} responds to.
           # @return [void]
           def meta_type(type)
-            TestNodeWrapper.new(type.to_s + "?")
+            TestNodeWrapper.new("#{type}?")
           end
 
           # @group Testing for a Handler
@@ -155,7 +156,7 @@ module YARD
         def caller_method
           if statement.call? || statement.def?
             statement.method_name(true).to_s
-          elsif statement.type == :var_ref || statement.type == :vcall
+          elsif %i(var_ref vcall).include?(statement.type)
             statement[0].jump(:ident, :kw).source
           end
         end

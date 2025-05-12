@@ -32,7 +32,7 @@ module YARD
           # YARD::Config.load_plugin(name)
         end
         opts.on('--legacy', 'Use old style Ruby parser and handlers. ',
-                            '  Always on in 1.8.x.') do
+                '  Always on in 1.8.x.') do
           YARD::Parser::SourceParser.parser_type = :ruby18
         end
         opts.on('--safe', 'Enable safe mode for this instance') do
@@ -54,8 +54,8 @@ module YARD
       # @return [void]
       def parse_options(opts, args)
         opts.parse!(args)
-      rescue OptionParser::ParseError => err
-        unrecognized_option(err)
+      rescue OptionParser::ParseError => e
+        unrecognized_option(e)
         args.shift if args.first && args.first[0, 1] != '-'
         retry
       end
@@ -68,8 +68,8 @@ module YARD
       def load_script(file)
         return if YARD::Config.options[:safe_mode]
         load(file)
-      rescue LoadError => load_exception
-        log.error "The file `#{file}' could not be loaded:\n#{load_exception}"
+      rescue LoadError => e
+        log.error "The file `#{file}' could not be loaded:\n#{e}"
         exit 1
       end
 

@@ -94,9 +94,7 @@ module YARD::Handlers::Ruby::DecoratorHandlerMethods
       name = node.jump(:ident, :string_content, :const).source
     end
 
-    if name.nil?
-      raise YARD::Parser::UndocumentableError, 'statement, cannot determine method name'
-    end
+    raise YARD::Parser::UndocumentableError, 'statement, cannot determine method name' if name.nil?
 
     method = YARD::CodeObjects::Proxy.new(
       namespace,

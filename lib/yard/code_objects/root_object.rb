@@ -10,7 +10,7 @@ module YARD
       def title; 'Top Level Namespace' end
 
       def equal?(other)
-        other == :root ? true : super(other)
+        other == :root ? true : super
       end
 
       def hash; :root.hash end

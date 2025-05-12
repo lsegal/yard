@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 class MyRouterSpecRouter < Router
   def docs_prefix; 'mydocs/foo' end
@@ -18,7 +18,7 @@ RSpec.describe YARD::Server::Router do
 
   describe "#parse_library_from_path" do
     def parse(*args)
-      @request.path_info = '/' + args.join('/')
+      @request.path_info = "/#{args.join('/')}"
       @router = MyRouterSpecRouter.new(@adapter)
       @router.request = @request
       @router.parse_library_from_path(args.flatten)

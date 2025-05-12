@@ -3,13 +3,11 @@ module YARD
   module Parser::Ruby::Legacy
     class Statement
       attr_reader :tokens, :comments, :block
-      attr_accessor :comments_range
+      attr_accessor :comments_range, :comments_hash_flag
 
       # @deprecated Groups are now defined by directives
       # @see Tags::GroupDirective
       attr_accessor :group
-
-      attr_accessor :comments_hash_flag
 
       def initialize(tokens, block = nil, comments = nil)
         @tokens = tokens
@@ -19,7 +17,7 @@ module YARD
       end
 
       def first_line
-        to_s.split(/\n/)[0]
+        to_s.split("\n")[0]
       end
 
       alias signature first_line
@@ -33,7 +31,7 @@ module YARD
 
       def inspect
         l = line - 1
-        to_s(false).split(/\n/).map do |text|
+        to_s(false).split("\n").map do |text|
           "\t#{l += 1}:  #{text}"
         end.join("\n")
       end
@@ -60,7 +58,7 @@ module YARD
         tokens.reject do |tk|
           tk.is_a?(RubyToken::TkNL) ||
             (last_tk.is_a?(RubyToken::TkSPACE) &&
-            last_tk.class == tk.class) && last_tk = tk
+            last_tk.instance_of?(tk.class) && last_tk = tk)
         end
       end
     end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Engine.template(:default, :module) do
   before do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       module B
         def c; end
         def d; end
@@ -63,21 +63,21 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
       module TMP; include A end
       class TMP2; extend A end
-    eof
+    EOF
   end
 
   it "renders html format correctly" do
     html_equals(Registry.at('A').format(html_options(:hide_void_return => true,
-      :verifier => Verifier.new('object.type != :method || object.visibility == :public'))),
-        :module001)
+                                                     :verifier => Verifier.new('object.type != :method || object.visibility == :public'))),
+                :module001)
   end
 
   it "renders text format correctly" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       module A
         include D, E, F, A::B::C
       end
-    eof
+    EOF
 
     text_equals(Registry.at('A').format(text_options), :module001)
   end
@@ -88,7 +88,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
   it "renders groups correctly in html" do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       module A
         # @group Foo
         attr_accessor :foo_attr
@@ -102,14 +102,14 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
         def self.baz; end
       end
-    eof
+    EOF
 
     html_equals(Registry.at('A').format(html_options), :module002)
   end
 
   it "ignores overwritten/private attributes/constants from inherited list" do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       module B
         attr_reader :foo
         attr_accessor :bar
@@ -123,7 +123,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
         attr_reader :bar
         FOO = 2
       end
-    eof
+    EOF
 
     html_equals(Registry.at('A').
       format(html_options(:verifier => Verifier.new('!@private'))), :module003)
@@ -131,7 +131,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
   it "embeds mixins with :embed_mixins = ['Foo', 'Bar', 'Baz::A*']" do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       class A
         # This method is in A
         def foo; end
@@ -175,14 +175,14 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
           def baz_abc; end
         end
       end
-    eof
+    EOF
 
     html_equals(Registry.at('A').format(html_options(:embed_mixins => ['Foo', 'Bar', 'Baz::A*'])), :module004)
   end
 
   it "renders constant groups correctly in html" do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       module A
         # @group Foo
         FOO = 1
@@ -197,7 +197,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
 
         WORLD = 4
       end
-    eof
+    EOF
     html_equals(Registry.at('A').format(html_options), :module005)
   end
 end

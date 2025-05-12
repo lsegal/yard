@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::ClassObject do
   describe "#inheritance_tree" do
@@ -49,7 +49,7 @@ RSpec.describe YARD::CodeObjects::ClassObject do
     before(:all) do
       Registry.clear
 
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class SuperYard < String
           def foo; end
           def foo2; end
@@ -76,7 +76,7 @@ RSpec.describe YARD::CodeObjects::ClassObject do
         class FinalYard < SuperYard
           include IncludedYard
         end
-      eof
+      EOF
     end
 
     it "shows inherited methods by default" do
@@ -125,7 +125,7 @@ RSpec.describe YARD::CodeObjects::ClassObject do
     before(:all) do
       Registry.clear
 
-      Parser::SourceParser.parse_string <<-eof
+      Parser::SourceParser.parse_string <<-EOF
         class YARD
           CONST1 = 1
           CONST2 = "hello"
@@ -140,7 +140,7 @@ RSpec.describe YARD::CodeObjects::ClassObject do
           CONST2 = "hi"
           CONST3 = "foo"
         end
-      eof
+      EOF
     end
 
     it "lists inherited constants by default" do

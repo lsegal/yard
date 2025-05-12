@@ -20,11 +20,12 @@ module YARD
       #   is parsed with {RubyLex}.
       def push(*tokens)
         tokens.each do |tok|
-          if tok.is_a?(TokenList) || tok.is_a?(Array)
+          case tok
+          when TokenList, Array
             concat tok
-          elsif tok.is_a?(Token)
-            super tok
-          elsif tok.is_a?(String)
+          when Token
+            super(tok)
+          when String
             parse_content(tok)
           else
             raise ArgumentError, "Expecting token, list of tokens or string of code to be tokenized. Got #{tok.class}"

@@ -126,7 +126,8 @@ module YARD
       # @return [Array(String, Array<String>, String)] the text before the type
       #   list (or nil), followed by the type list parsed into an array of
       #   strings, followed by the text following the type list.
-      def extract_types_and_name_from_text(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
+      def extract_types_and_name_from_text(text, opening_types = TYPELIST_OPENING_CHARS,
+closing_types = TYPELIST_CLOSING_CHARS)
         before, list, text = *extract_types_and_name_from_text_unstripped(text, opening_types, closing_types)
         if list.nil?
           [nil, nil, text.strip]
@@ -135,7 +136,8 @@ module YARD
         end
       end
 
-      def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS, closing_types = TYPELIST_CLOSING_CHARS)
+      def extract_types_and_name_from_text_unstripped(text, opening_types = TYPELIST_OPENING_CHARS,
+closing_types = TYPELIST_CLOSING_CHARS)
         e = 0
         before = String.new("")
         list = [String.new("")]
@@ -144,17 +146,18 @@ module YARD
         i = 0
         last_seen = ''
         text ||= ''
+        quotes = ['"', "'"]
         while i < text.length
           c = text[i, 1]
 
-          if (c == '"' || c == "'") && text[i..-1] =~ /#{c}.+?#{c}/
+          if quotes.include?(c) && text[i..-1] =~ /#{c}.+?#{c}/
             list.last << $&
             i += $&.length
             next
           end
 
           if level > 0 && c == '#' && text[i + 1..-1] =~ CodeObjects::METHODNAMEMATCH
-            list.last << c + $&
+            list.last << (c + $&)
             i += $&.length + 1
             next
           elsif opening_types.include?(c)
@@ -180,7 +183,7 @@ module YARD
           i += 1
         end
 
-        before = before.empty? ? nil : before
+        before = nil if before.empty?
         if list.size == 1 && list.first == ''
           [nil, nil, text]
         else

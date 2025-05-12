@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Handlers::C::AttributeHandler do
   def run(read, write, commented = nil)
-    parse <<-eof
+    parse <<-EOF
       /* FOO */
       VALUE foo(VALUE x) { int value = x; }
       void Init_Foo() {
@@ -12,7 +12,7 @@ RSpec.describe YARD::Handlers::C::AttributeHandler do
           rb_define_attr(rb_cFoo, "foo", #{read}, #{write});
         #{commented ? '*/' : ''}
       }
-    eof
+    EOF
   end
 
   it "handles readonly attribute (rb_define_attr)" do

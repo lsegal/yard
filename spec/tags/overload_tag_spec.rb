@@ -2,12 +2,12 @@
 
 RSpec.describe YARD::Tags::OverloadTag do
   before do
-    @tag = Tags::OverloadTag.new(:overload, <<-'eof')
+    @tag = Tags::OverloadTag.new(:overload, <<-EOF)
       def bar(a, b = 1, &block)
         Hello world
         @param a [String]
         @return [String]
-    eof
+    EOF
   end
 
   it "parses the first line as a method signature" do
@@ -62,7 +62,7 @@ RSpec.describe YARD::Tags::OverloadTag do
       ['f:', "2"],
       ['g:', nil],
       ['**rest', nil],
-      ['&block', nil],
+      ['&block', nil]
     ]
   end
 end

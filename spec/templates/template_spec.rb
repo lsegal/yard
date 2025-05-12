@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Template do
   def template(path)
-    YARD::Templates::Engine.template!(path, '/full/path/' + path.to_s)
+    YARD::Templates::Engine.template!(path, "/full/path/#{path}")
   end
 
   before :each do
@@ -49,7 +49,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:c)
       mod.send(:include, template(:d))
       mod.send(:include, template(:a))
-      expect(mod.full_paths).to eq ['c', 'a', 'b', 'd'].map {|o| '/full/path/' + o }
+      expect(mod.full_paths).to eq(['c', 'a', 'b', 'd'].map {|o| "/full/path/#{o}" })
     end
 
     it "only lists full paths of modules that respond to full_paths" do
@@ -134,7 +134,7 @@ RSpec.describe YARD::Templates::Template do
 
   describe "#init" do
     it "is called during initialization" do
-      module YARD::Templates::Engine::Template__full_path_e # rubocop:disable Style/ClassAndModuleCamelCase
+      module YARD::Templates::Engine::Template__full_path_e # rubocop:disable Naming/ClassAndModuleCamelCase
         def init; sections 1, 2, 3 end
       end
       expect(template(:e).new.sections).to eq Section.new(nil, 1, 2, 3)
@@ -216,10 +216,10 @@ RSpec.describe YARD::Templates::Template do
     it "runs section list if provided" do
       mod = template(:e).new
       expect(mod).to receive(:render_section).exactly(2).times do |section|
-        expect([:q, :x]).to include(section.name)
+        expect(%i(q x)).to include(section.name)
         section.name.to_s
       end
-      mod.run({}, [:q, :x])
+      mod.run({}, %i(q x))
     end
 
     it "accepts a nil section as empty string" do
@@ -235,8 +235,8 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:f).new
       mod.send(:add_options, :a => 1, :b => 2)
       expect(mod.options).to eq(:a => 1, :b => 2)
-      expect(mod.instance_variable_get("@a")).to eq 1
-      expect(mod.instance_variable_get("@b")).to eq 2
+      expect(mod.instance_variable_get(:@a)).to eq 1
+      expect(mod.instance_variable_get(:@b)).to eq 2
     end
 
     it "sets instance variables and options only for the block" do
@@ -287,9 +287,9 @@ RSpec.describe YARD::Templates::Template do
   describe "#yield" do
     it "yields a subsection" do
       mod = template(:e).new
-      mod.sections :a, [:b, :c]
+      mod.sections :a, %i(b c)
       class << mod
-        def a; "(" + yield + ")" end
+        def a; "(#{yield})" end
         def b; "b" end
         def c; "c" end
       end
@@ -301,7 +301,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b, [:c]]
       class << mod
-        def a; "(" + yield + ")" end
+        def a; "(#{yield})" end
         def b; yield end
         def c; "c" end
       end
@@ -313,7 +313,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b, [:c, [:d, [:e]]]]
       class << mod
-        def a; "(" + yield + ")" end
+        def a; "(#{yield})" end
         def b; yield end
         def c; yield end
         def d; yield end
@@ -325,9 +325,9 @@ RSpec.describe YARD::Templates::Template do
 
     it "yields first two elements if yield is called twice" do
       mod = template(:e).new
-      mod.sections :a, [:b, :c, :d]
+      mod.sections :a, %i(b c d)
       class << mod
-        def a; "(" + yield + yield + ")" end
+        def a; "(#{yield}#{yield})" end
         def b; 'b' end
         def c; "c" end
       end
@@ -339,7 +339,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b, [:c], :d]
       class << mod
-        def a; "(" + yield + yield + ")" end
+        def a; "(#{yield}#{yield})" end
         def b; 'b' end
         def d; "d" end
       end
@@ -351,7 +351,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b]
       class << mod
-        def a; "(" + yield(:x => "a") + ")" end
+        def a; "(#{yield(:x => "a")})" end
         def b; options.x + @x end
       end
 
@@ -364,10 +364,10 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b, [:d, [:e]], :c]
       class << mod
-        def a; "(" + yieldall + ")" end
-        def b; "b" + yieldall end
+        def a; "(#{yieldall})" end
+        def b; "b#{yieldall}" end
         def c; "c" end
-        def d; 'd' + yieldall end
+        def d; "d#{yieldall}" end
         def e; 'e' end
       end
 
@@ -376,9 +376,9 @@ RSpec.describe YARD::Templates::Template do
 
     it "yields options to all subsections" do
       mod = template(:e).new
-      mod.sections :a, [:b, :c]
+      mod.sections :a, %i(b c)
       class << mod
-        def a; "(" + yieldall(:x => "2") + ")" end
+        def a; "(#{yieldall(:x => "2")})" end
         def b; @x end
         def c; @x end
       end
@@ -389,7 +389,7 @@ RSpec.describe YARD::Templates::Template do
       mod = template(:e).new
       mod.sections :a, [:b]
       class << mod
-        def a; "(" + yieldall + yieldall + ")" end
+        def a; "(#{yieldall}#{yieldall})" end
         def b; "b" end
       end
 

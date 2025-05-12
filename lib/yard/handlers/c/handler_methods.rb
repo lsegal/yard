@@ -12,7 +12,7 @@ module YARD
           namespace = in_module ? ensure_variable_defined!(in_module) : Registry.root
           if namespace.nil?
             raise Parser::UndocumentableError,
-              "class #{class_name}. Cannot find definition for parent namespace."
+                  "class #{class_name}. Cannot find definition for parent namespace."
           end
 
           register ClassObject.new(namespace, class_name) do |obj|
@@ -34,7 +34,7 @@ module YARD
           namespace = in_module ? ensure_variable_defined!(in_module) : Registry.root
           if namespace.nil?
             raise Parser::UndocumentableError,
-              "module #{module_name}. Cannot find definition for parent namespace."
+                  "module #{module_name}. Cannot find definition for parent namespace."
           end
 
           register ModuleObject.new(namespace, module_name) do |obj|
@@ -144,7 +144,7 @@ module YARD
           # can be escaped with a backslash.
           if comment
             comment.scan(/\A\s*(.*?[^\s\\]):\s*(.+)/m) do |new_value, new_comment|
-              object.value = new_value.gsub(/\\:/, ':')
+              object.value = new_value.gsub("\\:", ':')
               comment = new_comment
             end
             register_docstring(object, comment, stmt)
@@ -198,12 +198,12 @@ module YARD
           if src.source =~ /VALUE\s+#{symbol}\(([^)]*)\)\s*\{/m
             params = $~[1].split(/\s*,\s*/) # rubocop:disable Style/SpecialGlobalVars
             # cfunc for a "varargs" method has params "int argc, VALUE *argv"
-            if params[0] =~ /int\s+argc/ && params[1] =~ /VALUE\s*\*\s*argv/
-              object.parameters = [['*args', nil]]
-            else
-              # the first cfunc argument is the 'self' argument, we don't need that
-              object.parameters = params.drop(1).map {|s| [s[/VALUE\s+(\S+)/, 1], nil] }
-            end
+            object.parameters = if params[0] =~ /int\s+argc/ && params[1] =~ /VALUE\s*\*\s*argv/
+                                  [['*args', nil]]
+                                else
+                                  # the first cfunc argument is the 'self' argument, we don't need that
+                                  params.drop(1).map {|s| [s[/VALUE\s+(\S+)/, 1], nil] }
+                                end
           end
         end
       end

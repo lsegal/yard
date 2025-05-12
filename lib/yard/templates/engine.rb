@@ -39,9 +39,7 @@ module YARD
 
           path = File.cleanpath(path).gsub('../', '')
           raise ArgumentError, "No such template for #{path}" if full_paths.empty?
-          mod = template!(path, full_paths)
-
-          mod
+          template!(path, full_paths)
         end
 
         # Forces creation of a template at +path+ within a +full_path+.
@@ -114,9 +112,7 @@ module YARD
         def with_serializer(object, serializer)
           output = nil
           filename = serializer.serialized_path(object)
-          if serializer.respond_to?(:basepath)
-            filename = File.join(serializer.basepath, filename)
-          end
+          filename = File.join(serializer.basepath, filename) if serializer.respond_to?(:basepath)
           log.capture("Generating #{filename}", nil) do
             serializer.before_serialize if serializer
             output = yield
@@ -173,7 +169,7 @@ module YARD
         # @param [String] path the path to generate a module name for
         # @return [String] the module name
         def template_module_name(path)
-          'Template_' + path.to_s.gsub(/[^a-z0-9]/i, '_')
+          "Template_#{path.to_s.gsub(/[^a-z0-9]/i, '_')}"
         end
       end
 

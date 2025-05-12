@@ -2,7 +2,7 @@
 
 RSpec.describe YARD::Parser::Ruby::TokenResolver do
   before(:all) do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module A
         def nomatch; end
 
@@ -47,7 +47,7 @@ RSpec.describe YARD::Parser::Ruby::TokenResolver do
         # @return [Q]
         def self.q; end
       end
-    eof
+    EOF
   end
 
   def tokens_match
@@ -55,7 +55,7 @@ RSpec.describe YARD::Parser::Ruby::TokenResolver do
   end
 
   def objs_match(*objects)
-    other_objs = @resolved.reject {|_, o| !o }.map {|_, o| o.path }
+    other_objs = @resolved.select {|_, o| o }.map {|_, o| o.path }
     expect(other_objs).to eq objects.flatten
     tokens_match
   end

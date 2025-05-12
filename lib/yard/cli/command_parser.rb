@@ -68,9 +68,7 @@ module YARD
             command_name = args.first.to_sym
             args.shift
           end
-          if commands.key?(command_name)
-            return commands[command_name].run(*args)
-          end
+          return commands[command_name].run(*args) if commands.key?(command_name)
         end
         list_commands
       end

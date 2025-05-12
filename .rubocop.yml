@@ -1,11 +1,33 @@
-#inherit_from:
-#  - .rubocop_todo.yml
-
+plugins:
+  - rubocop-rake
+  - rubocop-performance
+AllCops:
+  TargetRubyVersion: 2.0
+  SuggestExtensions: false
+  NewCops: enable
+  Exclude:
+    - vendor/**/*
+    - lib/yard/parser/ruby/legacy/irb/slex.rb
+    - lib/yard/parser/ruby/legacy/ruby_lex.rb
+    - lib/yard/server/http_utils.rb
 Metrics:
+  Enabled: false
+Performance:
+  Exclude:
+    - spec/**/*.rb
+Gemspec/RequireMFA:
   Enabled: false
 Layout/LineLength:
   AutoCorrect: true
-  Max: 100
+  Max: 120
+  Exclude:
+    - spec/**/*.rb
+Naming/MethodParameterName:
+  Enabled: false
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
 Style/Semicolon:
   AllowAsExpressionSeparator: true
 Style/Documentation:
@@ -30,11 +52,47 @@ Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
-
-# Disable these until we know what to do with them
 Style/SafeNavigation:
   Enabled: false # not supported in 1.8...2.1
+Style/DocumentDynamicEvalDefinition: # not helpful
+  Enabled: false
+Style/OpenStructUse:
+  Enabled: false
+Style/MixinUsage:
+  Exclude:
+    - docs/**/*.rb
+    - benchmarks/**/*.rb
+    - spec/**/*
+    - templates/**/*
+    - lib/yard/templates/**/*
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    "%w": "()"
+    "%W": "()"
+    "%i": "()"
+    "%I": "()"
+Style/MultilineIfModifier: # autocorrect usually fails
+  Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
 Style/GuardClause: # does not provide much value
+  Enabled: false
+Style/IfWithBooleanLiteralBranches: # this isn't reliable
+  Enabled: false
+Lint/DuplicateMethods:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - benchmarks/**/*.rb
+    - docs/**/*.rb
+    - spec/**/*.rb
+Style/FormatStringToken:
+  Enabled: false
+Lint/UselessConstantScoping:
+  Enabled: false
+Lint/SuppressedException:
+  Enabled: false
+Bundler/GemFilename:
   Enabled: false
 Naming/VariableNumber:
   Enabled: false
@@ -42,7 +100,9 @@ Naming/AccessorMethodName: # this creates breaking changes in the API
   Enabled: false
 Naming/PredicateName: # this creates breaking changes in the API
   Enabled: false
-Style/MethodMissingSuper: # this doesn't exist in 1.8/1.9
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+Lint/MissingSuper: # this doesn't exist in 1.8/1.9
   Enabled: false
 Style/MissingRespondToMissing: # this doesn't exist in 1.8/1.9
   Enabled: false
@@ -62,6 +122,10 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Layout/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+Style/EvalWithLocation:
+  Enabled: false
 Style/SingleLineMethods:
   Enabled: false
 Style/SingleLineBlockParams:
@@ -89,13 +153,20 @@ Style/GlobalVars:
   Exclude:
     - benchmarks/**/*.rb
     - spec/**/*.rb
+Style/StderrPuts:
+  Enabled: false
+Style/FileWrite:
+  Enabled: false
+Style/FileRead:
+  Enabled: false
 Lint/RedundantSplatExpansion:
   Enabled: false
 Security/Eval:
   Exclude:
     - benchmarks/**/*.rb
     - spec/**/*.rb
-
+Security/MarshalLoad:
+  Enabled: false
 Layout/SpaceAroundMethodCallOperator:
   Enabled: false
 Lint/RaiseException:

@@ -7,7 +7,8 @@ class YARD::Handlers::Ruby::Legacy::ExceptionHandler < YARD::Handlers::Ruby::Leg
     return unless owner.is_a?(MethodObject) # Only methods yield
     return if owner.has_tag?(:raise)
 
-    klass = statement.tokens.to_s[/^raise[\(\s]*(#{NAMESPACEMATCH})\s*(?:\)|,|\s(?:if|unless|until)|;|(?:(?:\.|\:\:)\s*)?new|$)/, 1]
+    klass = statement.tokens.to_s[
+      /^raise[\(\s]*(#{NAMESPACEMATCH})\s*(?:\)|,|\s(?:if|unless|until)|;|(?:(?:\.|::)\s*)?new|$)/o, 1]
     owner.add_tag YARD::Tags::Tag.new(:raise, '', klass) if klass
   end
 end

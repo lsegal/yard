@@ -77,12 +77,12 @@ RSpec.describe YARD::Serializers::FileSystemSerializer do
     end
 
     it "serializes path from overload tag" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         class Foo
           # @overload bar
           def bar; end
         end
-      eof
+      EOF
 
       serializer = Serializers::FileSystemSerializer.new
       object = Registry.at('Foo#bar').tag(:overload)
@@ -101,10 +101,10 @@ RSpec.describe YARD::Serializers::FileSystemSerializer do
 
     it "handles case sensitivity of nested paths for objects with matching names" do
       Registry.clear
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Abc; class D; end end
         class ABC; class D; end end
-      eof
+      EOF
 
       s = Serializers::FileSystemSerializer.new
       expect(s.serialized_path(Registry.at('ABC::D'))).to eq "ABC/D.html"

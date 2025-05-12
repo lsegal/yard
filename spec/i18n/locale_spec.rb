@@ -41,7 +41,7 @@ RSpec.describe YARD::I18n::Locale do
     end
 
     it "returns true for existent PO", :if => have_gettext_gem do
-      data = <<-eop
+      data = <<-EOP
 msgid ""
 msgstr ""
 "Language: fr\n"
@@ -51,7 +51,7 @@ msgstr ""
 
 msgid "Hello"
 msgstr "Bonjour"
-eop
+      EOP
       parser = GetText::POParser.new
       expect(File).to receive(:exist?).with('foo/fr.po').and_return(true)
       expect(GetText::POParser).to receive(:new).and_return(parser)

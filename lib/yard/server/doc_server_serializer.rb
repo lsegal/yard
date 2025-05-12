@@ -13,25 +13,23 @@ module YARD
         when CodeObjects::RootObject
           "toplevel"
         when CodeObjects::ExtendedMethodObject
-          serialized_path(object.namespace) + ':' + urlencode(object.name.to_s)
+          "#{serialized_path(object.namespace)}:#{urlencode(object.name.to_s)}"
         when CodeObjects::MethodObject
           serialized_path(object.namespace) +
             (object.scope == :instance ? ":" : ".") + urlencode(object.name.to_s)
         when CodeObjects::ConstantObject, CodeObjects::ClassVariableObject
           serialized_path(object.namespace) + "##{object.name}-#{object.type}"
         when CodeObjects::ExtraFileObject
-          super(object).gsub(/^file\./, 'file/')
+          super.gsub(/^file\./, 'file/')
         else
-          super(object)
+          super
         end
       end
 
       private
 
       def urlencode(name)
-        if name.respond_to?(:force_encoding)
-          name = name.dup.force_encoding('binary')
-        end
+        name = name.dup.force_encoding('binary') if name.respond_to?(:force_encoding)
         Templates::Helpers::HtmlHelper.urlencode(name)
       end
     end

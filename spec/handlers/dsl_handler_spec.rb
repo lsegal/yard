@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandler" do
   before(:all) { parse_file :dsl_handler_001, __FILE__ }
@@ -201,12 +201,12 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}DSLHandl
   end
 
   it "does not detect implicit macros with invalid method names" do
-    undoc_error <<-eof
+    undoc_error <<-EOF
       ##
       # IMPLICIT METHOD THAT SHOULD
       # NOT BE DETECTED
       dsl_method '/foo/bar'
-    eof
+    EOF
   end
 
   it "warns on unparsable DSL statements" do

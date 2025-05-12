@@ -6,7 +6,7 @@ module YARD
 
     # @private
     PROXY_MATCH = /(?:#{NSEPQ}|#{ISEPQ}|#{CSEPQ})([^#{Regexp.quote(
-      (NSEP + ISEP + CSEP).split('').uniq.join
+      (NSEP + ISEP + CSEP).chars.uniq.join
     )}]+)$/
 
     # The Proxy class is a way to lazily resolve code objects in
@@ -34,7 +34,7 @@ module YARD
       def initialize(namespace, name, type = nil)
         namespace = Registry.root if !namespace || namespace == :root
 
-        if name =~ /^#{NSEPQ}/
+        if name =~ /^#{NSEPQ}/o
           namespace = Registry.root
           name = name[2..-1]
         end
@@ -58,9 +58,9 @@ module YARD
         self.type = type
 
         if @namespace.is_a?(ConstantObject)
-          unless @namespace.value =~ /\A#{NAMESPACEMATCH}\Z/
-            raise Parser::UndocumentableError, "constant mapping for " +
-              "#{@origname} (type=#{type.inspect})"
+          unless @namespace.value =~ /\A#{NAMESPACEMATCH}\Z/o
+            raise Parser::UndocumentableError, "constant mapping for " \
+                                               "#{@origname} (type=#{type.inspect})"
           end
 
           @origname = nil # forget these for a constant
@@ -75,8 +75,8 @@ module YARD
         # If the name begins with "::" (like "::String")
         # this is definitely a root level object, so
         # remove the namespace and attach it to the root
-        if @name =~ /^#{NSEPQ}/
-          @name.gsub!(/^#{NSEPQ}/, '')
+        if @name =~ /^#{NSEPQ}/o
+          @name.gsub!(/^#{NSEPQ}/o, '')
           @namespace = Registry.root
         end
       end
@@ -159,7 +159,7 @@ module YARD
 
       # @return [Boolean]
       def instance_of?(klass)
-        self.class == klass
+        instance_of?(klass)
       end
 
       # @return [Boolean]

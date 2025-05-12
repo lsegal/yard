@@ -180,16 +180,16 @@ RSpec.describe YARD::RegistryStore do
       serializer = double(:serializer)
       expect(serializer).to receive(:deserialize).once.with(:YARD).and_return(@foo)
       @store.load('foo')
-      @store.instance_variable_set("@loaded_objects", 0)
-      @store.instance_variable_set("@available_objects", 100)
-      @store.instance_variable_set("@serializer", serializer)
+      @store.instance_variable_set(:@loaded_objects, 0)
+      @store.instance_variable_set(:@available_objects, 100)
+      @store.instance_variable_set(:@serializer, serializer)
       expect(@store.get(:YARD)).to eq @foo
       expect(@store.get(:YARD)).to eq @foo
-      expect(@store.instance_variable_get("@loaded_objects")).to eq 1
+      expect(@store.instance_variable_get(:@loaded_objects)).to eq 1
     end
   end
 
-  [:keys, :values].each do |item|
+  %i(keys values).each do |item|
     describe "##{item}" do
       it "loads entire database if reload=true" do
         expect(File).to receive(:directory?).with('foo').and_return(true)
@@ -261,12 +261,12 @@ RSpec.describe YARD::RegistryStore do
       expect(File).to receive(:file?).with('foo/objects/root.dat').and_return(false)
       expect(@store).to receive(:all_disk_objects).at_least(1).times.and_return(['foo/objects/foo', 'foo/objects/bar'])
       @store.load('foo')
-      serializer = @store.instance_variable_get("@serializer")
+      serializer = @store.instance_variable_get(:@serializer)
       expect(serializer).to receive(:deserialize).with('foo/objects/foo', true).and_return(foomock)
       expect(serializer).to receive(:deserialize).with('foo/objects/bar', true).and_return(barmock)
       @store.send(:load_all)
-      expect(@store.instance_variable_get("@available_objects")).to eq 2
-      expect(@store.instance_variable_get("@loaded_objects")).to eq 2
+      expect(@store.instance_variable_get(:@available_objects)).to eq 2
+      expect(@store.instance_variable_get(:@loaded_objects)).to eq 2
       expect(@store[:Foo]).to eq foomock
       expect(@store[:Bar]).to eq barmock
     end
@@ -276,14 +276,14 @@ RSpec.describe YARD::RegistryStore do
     it "destroys file ending in .yardoc when force=false" do
       expect(File).to receive(:file?).with('foo.yardoc').and_return(true)
       expect(File).to receive(:unlink).with('foo.yardoc')
-      @store.instance_variable_set("@file", 'foo.yardoc')
+      @store.instance_variable_set(:@file, 'foo.yardoc')
       expect(@store.destroy).to be true
     end
 
     it "destroys dir ending in .yardoc when force=false" do
       expect(File).to receive(:directory?).with('foo.yardoc').and_return(true)
       expect(FileUtils).to receive(:rm_rf).with('foo.yardoc')
-      @store.instance_variable_set("@file", 'foo.yardoc')
+      @store.instance_variable_set(:@file, 'foo.yardoc')
       expect(@store.destroy).to be true
     end
 
@@ -292,14 +292,14 @@ RSpec.describe YARD::RegistryStore do
       expect(File).not_to receive(:directory?).with('foo')
       expect(File).not_to receive(:unlink).with('foo')
       expect(FileUtils).not_to receive(:rm_rf).with('foo')
-      @store.instance_variable_set("@file", 'foo')
+      @store.instance_variable_set(:@file, 'foo')
       expect(@store.destroy).to be false
     end
 
     it "destroys any file/dir when force=true" do
       expect(File).to receive(:file?).with('foo').and_return(true)
       expect(File).to receive(:unlink).with('foo')
-      @store.instance_variable_set("@file", 'foo')
+      @store.instance_variable_set(:@file, 'foo')
       expect(@store.destroy(true)).to be true
     end
   end

@@ -27,7 +27,7 @@ module YARD
           macro = find_attached_macro
           if macro
             txt = macro.expand([caller_method, *call_params], statement.source)
-            @docstring += "\n" + txt
+            @docstring += "\n#{txt}"
 
             # macro may have a directive
             return register_docstring(nil) if !attaching && txt.match(/^\s*@!/)
@@ -36,9 +36,7 @@ module YARD
           end
 
           # ignore DSL definitions if @method/@attribute directive is used
-          if @docstring =~ /^@!?(method|attribute)\b/
-            return register_docstring(nil)
-          end
+          return register_docstring(nil) if @docstring =~ /^@!?(method|attribute)\b/
 
           register MethodObject.new(namespace, method_name, scope) do |o|
             o.signature = method_signature
@@ -58,7 +56,7 @@ module YARD
 
         def method_name
           name = call_params.first || ""
-          if name =~ /^#{CodeObjects::METHODNAMEMATCH}$/
+          if name =~ /^#{CodeObjects::METHODNAMEMATCH}$/o
             name
           else
             raise UndocumentableError, "method, missing name"
@@ -84,9 +82,7 @@ module YARD
         #   its alias names.
         def macro_name_matches(macro)
           objs = [macro.method_object]
-          if objs.first.type != :proxy && objs.first.respond_to?(:aliases)
-            objs.concat(objs.first.aliases)
-          end
+          objs.concat(objs.first.aliases) if objs.first.type != :proxy && objs.first.respond_to?(:aliases)
 
           objs.any? {|obj| obj.name.to_s == caller_method.to_s }
         end

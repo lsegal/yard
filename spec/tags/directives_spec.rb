@@ -29,13 +29,13 @@ RSpec.describe YARD::Tags::ParseDirective do
     end
 
     it "parses code in context of current handler" do
-      src = <<-eof
+      src = <<-EOF
         class A
           # @!parse
           #   def foo; end
           eval "def foo; end"
         end
-      eof
+      EOF
       parser = YARD::Parser::SourceParser.new
       parser.file = "myfile.rb"
       parser.parse(StringIO.new(src))
@@ -166,25 +166,25 @@ RSpec.describe YARD::Tags::MethodDirective do
     after { Registry.clear }
 
     it "uses entire docstring if no indented data is found" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!method foo
           # @!method bar
           # @!scope class
         end
-      eof
+      EOF
       expect(Registry.at('Foo.foo')).to be_a(CodeObjects::MethodObject)
       expect(Registry.at('Foo.bar')).to be_a(CodeObjects::MethodObject)
     end
 
     it "handles indented block text in @!method" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!method foo(a)
         #   Docstring here
         #   @return [String] the foo
         # Ignore this
         # @param [String] a
-      eof
+      EOF
       foo = Registry.at('#foo')
       expect(foo.docstring).to eq "Docstring here"
       expect(foo.docstring.tag(:return)).not_to be nil
@@ -192,7 +192,7 @@ RSpec.describe YARD::Tags::MethodDirective do
     end
 
     it "executes directives on object in indented block" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!method foo(a)
           #   @!scope class
@@ -201,7 +201,7 @@ RSpec.describe YARD::Tags::MethodDirective do
           #   Hello
           # Ignore this
         end
-      eof
+      EOF
       foo = Registry.at('Foo.foo')
       expect(foo.visibility).to eq :private
       bar = Registry.at('Foo#bar')
@@ -209,7 +209,7 @@ RSpec.describe YARD::Tags::MethodDirective do
     end
 
     it "is able to define multiple @methods in docstring" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!method foo1
           #   Docstring1
@@ -219,7 +219,7 @@ RSpec.describe YARD::Tags::MethodDirective do
           #   @!scope class
           #   Docstring3
         end
-      eof
+      EOF
       foo1 = Registry.at('Foo#foo1')
       foo2 = Registry.at('Foo#foo2')
       foo3 = Registry.at('Foo.foo3')
@@ -229,7 +229,7 @@ RSpec.describe YARD::Tags::MethodDirective do
     end
 
     it "defines the method inside namespace if attached to namespace object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module Foo
           # @!method foo
           #   Docstring1
@@ -238,40 +238,40 @@ RSpec.describe YARD::Tags::MethodDirective do
           class Bar
           end
         end
-      eof
+      EOF
       expect(Registry.at('Foo::Bar#foo').docstring).to eq 'Docstring1'
       expect(Registry.at('Foo::Bar#bar').docstring).to eq 'Docstring2'
     end
 
     it "sets scope to class if signature has 'self.' prefix" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!method self.foo
         # @!method self. bar
         # @!method self.baz()
         class Foo
         end
-      eof
+      EOF
       %w(foo bar baz).each do |name|
         expect(Registry.at("Foo.#{name}")).to be_a(CodeObjects::MethodObject)
       end
     end
 
     it "defines parameters from signature" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!method foo(a, b, c = nil)
-      eof
+      EOF
       expect(Registry.at('#foo').parameters).to eq [['a', nil], ['b', nil], ['c', 'nil']]
     end
 
     it "is able to define method with module scope (module function)" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!method foo
         #   @!scope module
         #   This is a docstring
         #   @return [Boolean] whether this is true
         class Foo
         end
-      eof
+      EOF
       foo_c = Registry.at('Foo.foo')
       foo_i = Registry.at('Foo#foo')
       expect(foo_c).not_to be nil
@@ -288,25 +288,25 @@ RSpec.describe YARD::Tags::AttributeDirective do
     after { Registry.clear }
 
     it "uses entire docstring if no indented data is found" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!attribute foo
           # @!attribute bar
           # @!scope class
         end
-      eof
+      EOF
       expect(Registry.at('Foo.foo')).to be_reader
       expect(Registry.at('Foo.bar')).to be_reader
     end
 
     it "handles indented block in @!attribute" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!attribute foo
         #   Docstring here
         #   @return [String] the foo
         # Ignore this
         # @param [String] a
-      eof
+      EOF
       foo = Registry.at('#foo')
       expect(foo.is_attribute?).to be true
       expect(foo.docstring).to eq "Docstring here"
@@ -315,7 +315,7 @@ RSpec.describe YARD::Tags::AttributeDirective do
     end
 
     it "is able to define multiple @attributes in docstring" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!attribute [r] foo1
           #   Docstring1
@@ -325,7 +325,7 @@ RSpec.describe YARD::Tags::AttributeDirective do
           #   @!scope class
           #   Docstring3
         end
-      eof
+      EOF
       foo1 = Registry.at('Foo#foo1')
       foo2 = Registry.at('Foo#foo2=')
       foo3 = Registry.at('Foo.foo3')
@@ -342,27 +342,27 @@ RSpec.describe YARD::Tags::AttributeDirective do
     end
 
     it "defines the attr inside namespace if attached to namespace object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module Foo
           # @!attribute [r] foo
           # @!attribute [r] bar
           class Bar
           end
         end
-      eof
+      EOF
       expect(Registry.at('Foo::Bar#foo')).to be_reader
       expect(Registry.at('Foo::Bar#bar')).to be_reader
     end
   end
 
   it "sets scope to class if signature has 'self.' prefix" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       # @!attribute self.foo
       # @!attribute self. bar
       # @!attribute self.baz
       class Foo
       end
-    eof
+    EOF
     %w(foo bar baz).each do |name|
       expect(Registry.at("Foo.#{name}")).to be_reader
     end
@@ -445,7 +445,7 @@ RSpec.describe YARD::Tags::VisibilityDirective do
 
     it "updates visibility on future methods" do
       Registry.clear
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @!visibility private
 
@@ -454,7 +454,7 @@ RSpec.describe YARD::Tags::VisibilityDirective do
           def bar; end
           def baz; end
         end
-      eof
+      EOF
       %w(foo bar baz).each do |name|
         expect(Registry.at("Foo##{name}").visibility).to eq :private
       end

@@ -5,9 +5,8 @@ module YARD::CodeObjects
   # it implements `path`, `name` and `type`, and therefore should be structurally
   # compatible with most CodeObject interfaces.
   class ExtraFileObject
-    attr_accessor :filename
+    attr_accessor :filename, :name
     attr_writer :attributes
-    attr_accessor :name
     # @since 0.8.3
     attr_reader :locale
 
@@ -113,12 +112,12 @@ module YARD::CodeObjects
       end
       contents
     rescue ArgumentError => e
-      raise unless e.message =~ /invalid byte sequence/
+      raise unless e.message.include?('invalid byte sequence')
 
       if retried
         # This should never happen.
         log.warn "Could not read #{filename}, #{e.message}. You probably want to set `--charset`."
-        return ''
+        ''
       else
         data.force_encoding('binary') if data.respond_to?(:force_encoding)
         retried = true

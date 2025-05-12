@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/shared_signature_examples"
+require "#{File.dirname(__FILE__)}/shared_signature_examples"
 
 RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   include YARD::Templates::Helpers::BaseHelper
@@ -85,14 +85,10 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
         "<tt><a href=''>Array</a>&lt;<a href=''>String</a>, <a href=''>Symbol</a>&gt;</tt>"],
       "Array<{String => Array<Symbol>}>" => [["Array", "String", "Array", "Symbol"],
         "<tt><a href=''>Array</a>&lt;{<a href=''>String</a> =&gt; " \
-          "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]}.each do |text, values|
+        "<a href=''>Array</a>&lt;<a href=''>Symbol</a>&gt;}&gt;</tt>"]}.each do |text, values|
       it "links all classes in #{text}" do
-        if text.count('<') > 0
-          expect(self).to receive(:h).with('<').at_least(text.count('<')).times.and_return("&lt;")
-        end
-        if text.count('>') > 0
-          expect(self).to receive(:h).with('>').at_least(text.count('>')).times.and_return("&gt;")
-        end
+        expect(self).to receive(:h).with('<').at_least(text.count('<')).times.and_return("&lt;") if text.count('<') > 0
+        expect(self).to receive(:h).with('>').at_least(text.count('>')).times.and_return("&gt;") if text.count('>') > 0
         values[0].each {|v| expect(self).to receive(:linkify).with(v, v).and_return("<a href=''>#{v}</a>") }
         expect(format_types([text], false)).to eq values[1]
       end
@@ -178,9 +174,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
 
     it "handles fenced code blocks (Redcarpet specific)" do
       log.enter_level(Logger::FATAL) do
-        unless markup_class(:markdown).to_s == 'RedcarpetCompat'
-          pending 'This test is Redcarpet specific'
-        end
+        pending 'This test is Redcarpet specific' unless markup_class(:markdown).to_s == 'RedcarpetCompat'
       end
 
       markdown = "Introduction:\n```ruby\nputs\n\nputs\n```"
@@ -237,7 +231,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "links objects from overload tag" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         module Foo
           class Bar; def a; end end
           class Baz
@@ -245,7 +239,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
             def a; end
           end
         end
-      eof
+      EOF
       obj = Registry.at('Foo::Baz#a').tag(:overload)
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       allow(self).to receive(:object).and_return(obj)
@@ -286,12 +280,12 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "escapes method name in title" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         class Array
           def &(other)
           end
         end
-      eof
+      EOF
       obj = Registry.at('Array#&')
       allow(self).to receive(:serializer).and_return(Serializers::FileSystemSerializer.new)
       allow(self).to receive(:object).and_return(obj)
@@ -468,11 +462,11 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "warns about missing reference at right file location for object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # Comments here
         # And a reference to {InvalidObject}
         class MyObject; end
-      eof
+      EOF
       logger = double(:log)
       expect(logger).to receive(:warn).ordered.with(
         "In file `(stdin)':2: Cannot resolve link to InvalidObject from text:\n\t...{InvalidObject}"
@@ -483,13 +477,13 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "shows ellipsis on either side if there is more on the line in a reference warning" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # {InvalidObject1} beginning of line
         # end of line {InvalidObject2}
         # Middle of {InvalidObject3} line
         # {InvalidObject4}
         class MyObject; end
-      eof
+      EOF
       logger = double(:log)
       expect(logger).to receive(:warn).ordered.with("In file `(stdin)':1: Cannot resolve link to InvalidObject1 from text:\n\t{InvalidObject1}...")
       expect(logger).to receive(:warn).ordered.with("In file `(stdin)':2: Cannot resolve link to InvalidObject2 from text:\n\t...{InvalidObject2}")
@@ -506,12 +500,12 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(logger).to receive(:warn).ordered.with("In file `myfile.txt':3: Cannot resolve link to InvalidObject from text:\n\t...{InvalidObject Some Title}")
       allow(self).to receive(:log).and_return(logger)
       allow(self).to receive(:object).and_return(Registry.root)
-      resolve_links(<<-eof)
+      resolve_links(<<-EOF)
         Hello world
         This is a line
         And {InvalidObject Some Title}
         And more.
-      eof
+      EOF
     end
 
     it "warns if you link a constant namespace as if it were a class/module" do
@@ -548,17 +542,17 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     def format_types(types, _brackets = false) types.join(", ") end
-    def signature(obj, link = false) super(obj, link).strip end
+    def signature(obj, link = false) super.strip end
 
     it_should_behave_like "signature"
 
     it "links to regular method if overload name does not have the same method name" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @overload bar(a, b, c)
           def foo; end
         end
-      eof
+      EOF
       serializer = double(:serializer)
       allow(serializer).to receive(:serialized_path).with(Registry.at('Foo')).and_return('')
       allow(self).to receive(:serializer).and_return(serializer)
@@ -608,10 +602,10 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
 
     it "calls html_syntax_highlight_NAME if source starts with !!!NAME" do
       expect(subject).to receive(:html_syntax_highlight_NAME).and_return("foobar")
-      expect(subject.html_syntax_highlight(<<-eof
+      expect(subject.html_syntax_highlight(<<-EOF
         !!!NAME
         def x; end
-      eof
+      EOF
                                           )).to eq "foobar"
     end
 

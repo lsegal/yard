@@ -20,9 +20,7 @@ module YARD
           log.puts "[#{name}]"
           libs = providers.map {|p| p[:lib] }.compact
           log.puts "  Providers: #{libs.join(" ")}" unless libs.empty?
-          if exts[name]
-            log.puts "  Extensions: #{exts[name].map {|e| ".#{e}" }.join(" ")}"
-          end
+          log.puts "  Extensions: #{exts[name].map {|e| ".#{e}" }.join(" ")}" if exts[name]
 
           log.puts
         end

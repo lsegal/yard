@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 class MyDocServerSerializerRouter
   attr_accessor :request
@@ -12,9 +12,7 @@ class MockDocServerHelper
   include YARD::Templates::Helpers::HtmlHelper
   include YARD::Server::DocServerHelper
 
-  attr_accessor :adapter
-  attr_accessor :single_library
-  attr_accessor :library
+  attr_accessor :adapter, :single_library, :library
 
   def initialize
     @single_library = false

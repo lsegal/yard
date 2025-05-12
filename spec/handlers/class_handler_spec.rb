@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path("#{File.dirname(__FILE__)}/spec_helper")
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHandler" do
   before(:all) { parse_file :class_handler_001, __FILE__ }
@@ -78,10 +78,10 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
   ['not.aclass', 'self', 'AnotherClass.new'].each do |klass|
     it "raises an UndocumentableError if the constant class reference 'class << SomeConstant' does not point to a valid class name" do
       with_parser(:ruby18) do
-        undoc_error <<-eof
+        undoc_error <<-EOF
           CONST = #{klass}
           class << CONST; end
-        eof
+        EOF
       end
       expect(Registry.at(klass)).to be nil
     end
@@ -96,10 +96,10 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
   end
 
   it "documents 'class Exception' without running into superclass issues" do
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       class Exception
       end
-    eof
+    EOF
     expect(Registry.at(:Exception)).not_to be nil
   end
 
@@ -116,7 +116,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
     obj = Registry.at("Point")
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
-    [:x, :y, :z].each do |key|
+    %i(x y z).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -127,7 +127,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
     obj = Registry.at("AnotherPoint")
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
-    [:a, :b, :c].each do |key|
+    %i(a b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -144,7 +144,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
   it "attaches attribtues to the generated Struct::Name class when Struct.new('Name') is used" do
     obj = Registry.at("Struct::XPoint")
     attrs = obj.attributes[:instance]
-    [:a, :b, :c].each do |key|
+    %i(a b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -177,7 +177,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
   end
 
   ["SemiDoccedStruct", "NotAStruct"].each do |struct|
-    describe("Attributes on a " + (struct == "NotAStruct" ? "class" : "struct")) do
+    describe("Attributes on a #{struct == "NotAStruct" ? "class" : "struct"}") do
       it "defines both readers and writers when @attr is used on Structs" do
         obj = Registry.at(struct)
         attrs = obj.attributes[:instance]

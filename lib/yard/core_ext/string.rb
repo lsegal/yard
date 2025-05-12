@@ -10,7 +10,7 @@ class String
     state = :none
     escape_next = false
     quote = String.new("")
-    strip.split(//).each do |char|
+    strip.chars.each do |char|
       case state
       when :none, :space
         case char

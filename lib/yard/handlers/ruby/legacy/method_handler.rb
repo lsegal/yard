@@ -7,7 +7,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     nobj = namespace
     mscope = scope
 
-    if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
+    if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/mo
       meth = $1
       args = $2
       meth.gsub!(/\s+/, '')
@@ -25,7 +25,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     end
 
     # Class method if prefixed by self(::|.) or Module(::|.)
-    if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
+    if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/o
       mscope = :class
       meth = $1
       prefix = $`
@@ -50,7 +50,7 @@ class YARD::Handlers::Ruby::Legacy::MethodHandler < YARD::Handlers::Ruby::Legacy
     if mscope == :instance && meth == "initialize"
       unless obj.has_tag?(:return)
         obj.add_tag(YARD::Tags::Tag.new(:return,
-          "a new instance of #{namespace.name}", namespace.name.to_s))
+                                        "a new instance of #{namespace.name}", namespace.name.to_s))
       end
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included
         extended method_added method_removed method_undefined).include?(meth)

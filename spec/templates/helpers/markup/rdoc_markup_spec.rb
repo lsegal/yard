@@ -12,12 +12,12 @@ RSpec.describe YARD::Templates::Helpers::Markup::RDocMarkup do
     def load_markup
       require 'rdoc/markup'
       require 'rdoc/markup/to_html'
-      return :RDoc2
+      :RDoc2
     rescue LoadError
       begin
         require 'rdoc/markup/simple_markup'
         require 'rdoc/markup/simple_markup/to_html'
-        return :RDoc1
+        :RDoc1
       rescue LoadError
         raise NameError, "could not load RDocMarkup (rdoc is not installed)"
       end

@@ -11,9 +11,7 @@ class YARD::Handlers::Ruby::ExtendHandler < YARD::Handlers::Ruby::MixinHandler
 
   def process_mixin(mixin)
     if mixin == s(:var_ref, s(:kw, "self"))
-      if namespace.is_a?(ClassObject)
-        raise UndocumentableError, "extend(self) statement on class"
-      end
+      raise UndocumentableError, "extend(self) statement on class" if namespace.is_a?(ClassObject)
       namespace.mixins(scope) << namespace
     else
       super

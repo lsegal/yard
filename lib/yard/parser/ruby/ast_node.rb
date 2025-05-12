@@ -39,8 +39,7 @@ module YARD
       # list, like Strings or Symbols representing names. To return only
       # the AstNode children of the node, use {#children}.
       class AstNode < Array
-        attr_accessor :docstring_hash_flag
-        attr_accessor :docstring, :docstring_range, :source
+        attr_accessor :docstring_hash_flag, :docstring, :docstring_range, :source
 
         # @deprecated Groups are now defined by directives
         # @see Tags::GroupDirective
@@ -82,7 +81,7 @@ module YARD
         def full_source
           return parent.full_source if parent
           return @full_source if @full_source
-          return IO.read(@file) if file && File.exist?(file)
+          File.read(@file) if file && File.exist?(file)
         end
 
         # @return [String] the parse of {#full_source} that the node represents
@@ -321,8 +320,8 @@ module YARD
 
         # @return [String] inspects the object
         def inspect
-          typeinfo = type && type != :list ? ':' + type.to_s + ', ' : ''
-          's(' + typeinfo + map(&:inspect).join(", ") + ')'
+          typeinfo = type && type != :list ? ":#{type}, " : ''
+          "s(#{typeinfo}#{map(&:inspect).join(", ")})"
         end
 
         # @group Managing node state
@@ -339,7 +338,7 @@ module YARD
         # Resets line information
         # @return [void]
         def reset_line_info
-          if size == 0
+          if size == 0 || @fallback_line || @fallback_source
             self.line_range = @fallback_line
             self.source_range = @fallback_source
           elsif !children.empty?
@@ -347,9 +346,6 @@ module YARD
             l = children.last
             self.line_range = Range.new(f.line_range.begin, l.line_range.end)
             self.source_range = Range.new(f.source_range.begin, l.source_range.end)
-          elsif @fallback_line || @fallback_source
-            self.line_range = @fallback_line
-            self.source_range = @fallback_source
           else
             self.line_range = 0...0
             self.source_range = 0...0
@@ -386,9 +382,7 @@ module YARD
           return @unnamed_optional_params if defined?(@unnamed_optional_params)
 
           params = self[1] || []
-          if self[-3] && self[-3][0] && self[-3][0].type == :unnamed_optional_arg
-            params += self[-3]
-          end
+          params += self[-3] if self[-3] && self[-3][0] && self[-3][0].type == :unnamed_optional_arg
 
           @unnamed_optional_params = params.empty? ? nil : params
         end
@@ -396,11 +390,7 @@ module YARD
         def named_params
           return @named_params if defined?(@named_params)
 
-          if YARD.ruby2? && self[-3] && self[-3][0] && self[-3][0].type == :named_arg
-            @named_params = self[-3]
-          else
-            @named_params = nil
-          end
+          @named_params = (self[-3] if YARD.ruby2? && self[-3] && self[-3][0] && self[-3][0].type == :named_arg)
         end
 
         def splat_param
@@ -454,7 +444,7 @@ module YARD
           return [] if type == :vcall
           params = self[1 + index_adjust]
           return [] unless params
-          params = call_has_paren? ? params.first : params
+          params = params.first if call_has_paren?
           return [] unless params
           include_block_param ? params : params[0...-1]
         end
@@ -462,17 +452,17 @@ module YARD
         def block_param; parameters.last end
 
         def block
-          last.type == :do_block || last.type == :brace_block ? last : nil
+          %i(do_block brace_block).include?(last.type) ? last : nil
         end
 
         private
 
         def index_adjust
-          [:call, :command_call].include?(type) ? 2 : 0
+          %i(call command_call).include?(type) ? 2 : 0
         end
 
         def call_has_paren?
-          [:fcall, :call].include?(type)
+          %i(fcall call).include?(type)
         end
       end
 
@@ -487,7 +477,7 @@ module YARD
         end
 
         def parameters(include_block_param = true)
-          return unless params = self[1 + index_adjust]
+          return unless (params = self[1 + index_adjust])
           params = params[0] if params.type == :paren
           include_block_param ? params : params[0...-1]
         end
@@ -495,7 +485,7 @@ module YARD
         def signature
           params_src = ''
           params = self[1 + index_adjust]
-          if params and params.first
+          if params && params.first
             params_src = params.type == :paren ? '' : ' '
             params_src += params.source.gsub(/\s+(\s|\))/m, '\1')
           end

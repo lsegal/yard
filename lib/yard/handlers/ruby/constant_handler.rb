@@ -10,11 +10,9 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
        statement[1][2] == s(:ident, "new")
       process_structclass(statement)
     elsif statement[1].call? && statement[1][0][0] == s(:const, "Data") &&
-       statement[1][2] == s(:ident, "define")
+          statement[1][2] == s(:ident, "define")
       process_dataclass(statement)
-    elsif statement[0].type == :var_field && statement[0][0].type == :const
-      process_constant(statement)
-    elsif statement[0].type == :const_path_field
+    elsif statement[0].type == :const_path_field || (statement[0].type == :var_field && statement[0][0].type == :const)
       process_constant(statement)
     end
   end

@@ -10,7 +10,7 @@ end
 
 def bench_eval(name)
   eval(name).is_a?(Class)
-rescue
+rescue StandardError
   false
 end
 

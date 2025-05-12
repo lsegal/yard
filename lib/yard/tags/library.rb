@@ -156,19 +156,19 @@ module YARD
         #   creating the tag or the name of the class to directly create a tag for
         def define_tag(label, tag, meth = nil)
           tag_meth = tag_method_name(tag)
-          if meth.is_a?(Class) && Tag > meth
-            class_eval(<<-eof, __FILE__, __LINE__ + 1)
+          if meth.is_a?(Class) && meth < Tag
+            class_eval(<<-EOF, __FILE__, __LINE__ + 1)
               def #{tag_meth}(text)
                 #{meth}.new(#{tag.inspect}, text)
               end
-            eof
+            EOF
           else
-            class_eval(<<-eof, __FILE__, __LINE__ + 1)
+            class_eval(<<-EOF, __FILE__, __LINE__ + 1)
               begin; undef #{tag_meth}; rescue NameError; end
               def #{tag_meth}(text)
                 send_to_factory(#{tag.inspect}, #{meth.inspect}, text)
               end
-            eof
+            EOF
           end
 
           @labels ||= SymbolHash.new(false)
@@ -199,11 +199,11 @@ module YARD
             directive_class = tag_meth
             tag_meth = nil
           end
-          class_eval <<-eof, __FILE__, __LINE__
+          class_eval <<-EOF, __FILE__, __LINE__
             def #{directive_meth}(tag, parser)
               directive_call(tag, parser)
             end
-          eof
+          EOF
 
           @factory_methods ||= SymbolHash.new(false)
           @factory_methods.update(tag => tag_meth)
@@ -232,7 +232,7 @@ module YARD
 
       def send_to_factory(tag_name, meth, text)
         meth = meth.to_s
-        send_name = "parse_tag" + (meth.empty? ? "" : "_" + meth)
+        send_name = "parse_tag#{meth.empty? ? "" : "_#{meth}"}"
         if @factory.respond_to?(send_name)
           @factory.send(send_name, tag_name, text)
         else
@@ -623,11 +623,11 @@ module YARD
       # @yard.signature public | protected | private
       define_directive :visibility,                       VisibilityDirective
 
-      self.visible_tags = [:abstract, :deprecated, :note, :todo, :example, :overload,
-        :param, :option, :yield, :yieldparam, :yieldreturn, :return, :raise,
-        :see, :author, :since, :version]
+      self.visible_tags = %i(abstract deprecated note todo example overload
+        param option yield yieldparam yieldreturn return raise
+        see author since version)
 
-      self.transitive_tags = [:since, :api]
+      self.transitive_tags = %i(since api)
     end
   end
 end

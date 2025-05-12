@@ -76,7 +76,7 @@ module YARD
       # @return [nil] if the mixin is not a module object
       def embed_mixins_match?(mixin)
         return true if mixin == object # the method is not inherited
-        return nil unless mixin.is_a?(CodeObjects::ModuleObject)
+        return false unless mixin.is_a?(CodeObjects::ModuleObject)
         embed_mixins.any? do |embed_mixin|
           re = /\A#{Regexp.quote(embed_mixin).gsub('\*', '.*')}\Z/
           matchstr = embed_mixin.include?("::") ? mixin.path : mixin.name

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 require 'thread'
 
@@ -51,7 +50,7 @@ module YARD
     # @return [Boolean] whether backtraces should be shown (by default
     #   this is on).
     def show_backtraces; @show_backtraces || level == DEBUG end
-    attr_writer :show_backtraces
+    attr_writer :show_backtraces, :show_progress
 
     # @return [DEBUG, INFO, WARN, ERROR, FATAL, UNKNOWN] the logging level
     attr_accessor :level
@@ -67,19 +66,18 @@ module YARD
       return false unless level > INFO # no progress in verbose/debug modes
       @show_progress
     end
-    attr_writer :show_progress
 
     # @!group Constructor Methods
 
     # The logger instance
     # @return [Logger] the logger instance
-    def self.instance(pipe = STDOUT)
-      @logger ||= new(pipe)
+    def self.instance(pipe = $stdout)
+      @instance ||= new(pipe)
     end
 
     # Creates a new logger
     # @private
-    def initialize(pipe, *args)
+    def initialize(pipe, *_args)
       self.io = pipe
       self.show_backtraces = true
       self.show_progress = false
@@ -100,7 +98,7 @@ module YARD
     # @private
     def self.create_log_method(name)
       severity = Severity.const_get(name.to_s.upcase)
-      define_method(name) { |message| log(severity, message) }
+      define_method(name) {|message| log(severity, message) }
     end
 
     # @!group Logging Methods
@@ -162,9 +160,7 @@ module YARD
       send(nontty_log, msg) if nontty_log
       return unless show_progress
       icon = ""
-      if defined?(::Encoding)
-        icon = PROGRESS_INDICATORS[@progress_indicator] + " "
-      end
+      icon = "#{PROGRESS_INDICATORS[@progress_indicator]} " if defined?(::Encoding)
       @mutex.synchronize do
         print("\e[2K\e[?25l\e[1m#{icon}#{msg}\e[0m\r")
         @progress_msg = msg
@@ -176,7 +172,7 @@ module YARD
       end
       Thread.new do
         sleep(0.05)
-        progress(msg + ".", nil) if @progress_msg == msg
+        progress("#{msg}.", nil) if @progress_msg == msg
       end
     end
 
@@ -215,9 +211,10 @@ module YARD
     # @return [void]
     def backtrace(exc, level_meth = :error)
       return unless show_backtraces
+
+      trace = exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join
       send(level_meth, "#{exc.class.class_name}: #{exc.message}")
-      send(level_meth, "Stack trace:" +
-        exc.backtrace[0..5].map {|x| "\n\t#{x}" }.join + "\n")
+      send(level_meth, "Stack trace:#{trace}\n")
     end
 
     # @!group Benchmarking Methods
@@ -247,8 +244,7 @@ module YARD
     # @deprecated Continuations are no longer needed by YARD 0.8.0+.
     # @return [void]
     # @private
-    def warn_no_continuations
-    end
+    def warn_no_continuations; end
 
     private
 

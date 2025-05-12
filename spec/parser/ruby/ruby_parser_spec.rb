@@ -15,66 +15,66 @@ RSpec.describe YARD::Parser::Ruby::RubyParser do
 
   describe "#parse" do
     it "gets comment line numbers" do
-      s = stmt <<-eof
+      s = stmt <<-EOF
         # comment
         # comment
         # comment
         def method; end
-      eof
+      EOF
       expect(s.comments).to eq "comment\ncomment\ncomment"
       expect(s.comments_range).to eq(1..3)
 
-      s = stmt <<-eof
+      s = stmt <<-EOF
 
         # comment
         # comment
         def method; end
-      eof
+      EOF
       expect(s.comments).to eq "comment\ncomment"
       expect(s.comments_range).to eq(2..3)
 
-      s = stmt <<-eof
+      s = stmt <<-EOF
         # comment
         # comment
 
         def method; end
-      eof
+      EOF
       expect(s.comments).to eq "comment\ncomment"
       expect(s.comments_range).to eq(1..2)
 
-      s = stmt <<-eof
+      s = stmt <<-EOF
         # comment
         def method; end
-      eof
+      EOF
       expect(s.comments).to eq "comment"
       expect(s.comments_range).to eq(1..1)
 
-      s = stmt <<-eof
+      s = stmt <<-EOF
         def method; end # comment
-      eof
+      EOF
       expect(s.comments).to eq "comment"
       expect(s.comments_range).to eq(1..1)
     end
 
     it "only looks up to two lines back for comments" do
-      s = stmts <<-eof
+      s = stmts <<-EOF
         # comments
 
         # comments
 
         def method; end
-      eof
+      EOF
       expect(s[1].comments).to eq "comments"
 
-      s = stmts <<-eof
+      s = stmts <<-EOF
         # comments
 
 
         def method; end
-      eof
+      EOF
       expect(s[1].comments).to eq nil
 
-      ss = stmts <<-eof
+      ss = stmts <<-EOF
         # comments
 
 
@@ -82,13 +82,13 @@ RSpec.describe YARD::Parser::Ruby::RubyParser do
 
         # hello
         def method2; end
-      eof
+      EOF
       expect(ss[1].comments).to eq nil
       expect(ss[2].comments).to eq 'hello'
     end
 
     it "handles block comment followed by line comment" do
-      ss = stmts <<-eof
+      ss = stmts <<-EOF
 # comments1
 
 =begin
@@ -96,12 +96,12 @@ comments2
 =end
 # comments3
 def hello; end
-eof
+      EOF
       expect(ss.last.comments).to eq "comments3"
     end
 
     it "handles block comment followed by block comment" do
-      ss = stmts <<-eof
+      ss = stmts <<-EOF
 =begin
 comments1
 =end
@@ -109,7 +109,7 @@ comments1
 comments2
 =end
 def hello; end
-eof
+      EOF
       expect(ss.last.comments.strip).to eq "comments2"
     end
 
@@ -301,7 +301,7 @@ eof
           "TEST = %#{id}(\n A\n B\n C\n )"
         ].each do |str|
           node = stmt(str).jump(sym)
-          expect(node.source).to eq(str[/(\%#{id}\(.+\))/m, 1])
+          expect(node.source).to eq(str[/(%#{id}\(.+\))/m, 1])
         end
       end
 
@@ -311,10 +311,10 @@ eof
           "TEST = %#{id}{  A  B  C  }",
           "TEST = %#{id}{ \nA \nB \nC \n}",
           "TEST = %#{id}{\n\nAD\n\nB\n\nC\n\n}",
-          "TEST = %#{id}{\n A\n B\n C\n }",
+          "TEST = %#{id}{\n A\n B\n C\n }"
         ].each do |str|
           node = stmt(str).jump(sym)
-          expect(node.source).to eq(str[/(\%#{id}\{.+\})/m, 1])
+          expect(node.source).to eq(str[/(%#{id}\{.+\})/m, 1])
         end
       end
 
@@ -325,10 +325,10 @@ eof
           "TEST = %#{id}[ \nA \nB \nC \n]",
           "TEST = %#{id}[\n\nAD\n\nB\n\nC\n\n]",
           "TEST = %#{id}[\n A\n B\n C\n ]",
-          "TEST = %#{id}[\n  A]",
+          "TEST = %#{id}[\n  A]"
         ].each do |str|
           node = stmt(str).jump(sym)
-          expect(node.source).to eq(str[/(\%#{id}\[.+\])/m, 1])
+          expect(node.source).to eq(str[/(%#{id}\[.+\])/m, 1])
         end
       end
 
@@ -339,7 +339,7 @@ eof
     end
 
     it "properly tokenizes symbols" do
-      tokens = tokenize(<<-eof)
+      tokens = tokenize(<<-EOF)
         class X
           Foo = :''
           Fuu = :bar
@@ -347,30 +347,30 @@ eof
           Baz = :"B+z"
           Qux = :if
         end
-      eof
+      EOF
       symbols = tokens.select {|t| t[0] == :symbol }.map {|t| t[1] }
       expect(symbols).to eq %w(:'' :bar :BAR :"B+z" :if)
     end
 
     # @bug gh-1313
     it "tokenizes comments in-order" do
-      src = <<-eof
+      src = <<-EOF
         def method
           # Method comment not docstring
         end
-      eof
+      EOF
 
       tokens = tokenize(src.gsub(/^ +/, ''))
-      expect(tokens).to eq(tokens.sort_by {|t| t.last })
-      expect(tokens.map {|t| t.first }).to eq %i(kw sp ident nl comment kw nl)
+      expect(tokens).to eq(tokens.sort_by(&:last))
+      expect(tokens.map(&:first)).to eq %i(kw sp ident nl comment kw nl)
     end
 
     it "parses %w() array in constant declaration" do
-      s = stmt(<<-eof)
+      s = stmt(<<-EOF)
         class Foo
           FOO = %w( foo bar )
         end
-      eof
+      EOF
       expect(s.jump(:qwords_literal).source).to eq '%w( foo bar )'
       if RUBY_VERSION >= '1.9.3' # ripper fix: array node encapsulates qwords
         expect(s.jump(:array).source).to eq '%w( foo bar )'
@@ -378,43 +378,43 @@ eof
     end
 
     it "parses %w() array source in object[] parsed context" do
-      s = stmts(<<-eof)
+      s = stmts(<<-EOF)
         {}[:key]
         FOO = %w( foo bar )
-      eof
+      EOF
       expect(s[1].jump(:array).source).to eq '%w( foo bar )'
     end
 
     it "parses %w() array source in object[]= parsed context" do
-      s = stmts(<<-eof)
+      s = stmts(<<-EOF)
         {}[:key] = :value
         FOO = %w( foo bar )
-      eof
+      EOF
       expect(s[1].jump(:array).source).to eq '%w( foo bar )'
     end
 
     it "parses [] as array" do
-      s = stmt(<<-eof)
+      s = stmt(<<-EOF)
         class Foo
           FOO = ['foo', 'bar']
         end
-      eof
+      EOF
       expect(s.jump(:array).source).to eq "['foo', 'bar']"
     end
 
     it "parses [[]] as array of arrays" do
-      s = stmt(<<-eof)
+      s = stmt(<<-EOF)
         class Foo
           FOO = [['foo', 'bar']]
         end
-      eof
+      EOF
       expect(s.jump(:array).source).to eq "[['foo', 'bar']]"
     end
 
     it "parses %w() array inside another empty array" do
-      s = stmts(<<-eof)
+      s = stmts(<<-EOF)
         FOO = [%w( foo bar )]
-      eof
+      EOF
       expect(s[0].jump(:array).source).to eq '[%w( foo bar )]'
     end
 
@@ -432,7 +432,7 @@ eof
     end
 
     it "has the correct line range for class/modules" do
-      s = stmt(<<-eof)
+      s = stmt(<<-EOF)
         class Foo
           def foo; end
 
@@ -440,23 +440,23 @@ eof
 
           # Ending comment
         end
-      eof
+      EOF
       expect(s.jump(:class).line_range).to eq(1..7)
     end
 
     it "has the correct line range for blocks" do
       Registry.clear
-      ast = YARD.parse_string(<<-eof).enumerator
+      ast = YARD.parse_string(<<-EOF).enumerator
         module A
           some_method
         end
-      eof
+      EOF
       expect(ast.first.block.source.strip).to eq "some_method"
     end
 
     it "finds lone comments" do
       Registry.clear
-      ast = YARD.parse_string(<<-eof).enumerator
+      ast = YARD.parse_string(<<-EOF).enumerator
         class Foo
           ##
           # comment here
@@ -466,7 +466,7 @@ eof
 
           # end comment
         end
-      eof
+      EOF
       comment = ast.first.last.jump(:comment)
       expect(comment.type).to eq :comment
       expect(comment.docstring_hash_flag).to be true
@@ -478,25 +478,25 @@ eof
 
     it "does not group comments if they don't begin the line" do
       Registry.clear
-      YARD.parse_string(<<-eof).enumerator
+      YARD.parse_string(<<-EOF).enumerator
         class Foo
           CONST1 = 1 # Comment here
           CONST2 = 2 # Another comment here
         end
-      eof
+      EOF
       expect(Registry.at("Foo::CONST1").docstring).to eq "Comment here"
       expect(Registry.at("Foo::CONST2").docstring).to eq "Another comment here"
     end
 
     it "handles comments in the middle of a multi-line statement" do
       Registry.clear
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         foo # BREAK
         .bar
 
         # Documentation
         class Baz; end
-      eof
+      EOF
       expect(Registry.at('Baz')).not_to be_nil
       expect(Registry.at('Baz').docstring).to eq 'Documentation'
     end
@@ -504,7 +504,7 @@ eof
     %w(if unless).each do |type|
       it "does not get confused by modifier '#{type}' statements" do
         Registry.clear
-        YARD.parse_string(<<-eof).enumerator
+        YARD.parse_string(<<-EOF).enumerator
           module Foo
             #{type} test?
               # Docstring
@@ -516,7 +516,7 @@ eof
               end
             end
           end
-        eof
+        EOF
 
         expect(Registry.at("Foo::Bar").docstring).to eq "Docstring"
         expect(Registry.at("Foo::Bar#foo").docstring).to eq "Docstring2"
@@ -524,11 +524,11 @@ eof
 
       it "supports #{type} statements at start of source" do
         Registry.clear
-        YARD.parse_string <<-eof
+        YARD.parse_string <<-EOF
           #{type} condition?
             class Foo; def bar; #{type} true; end end end
           end
-        eof
+        EOF
 
         expect(log.io.string).to eq ""
         expect(Registry.at('Foo#bar')).not_to eq nil
@@ -536,14 +536,14 @@ eof
 
       it "can handle complex non-modifier '#{type}' statements" do
         Registry.clear
-        YARD.parse_string <<-eof
+        YARD.parse_string <<-EOF
           class Foo
             def initialize(data, options = Hash.new)
               #{type} true; raise "error" end
               @x = ( #{type} 1; true end ) # This line should not blow up
             end
           end
-        eof
+        EOF
 
         expect(log.io.string).to eq ""
         expect(Registry.at('Foo#initialize')).not_to eq nil
@@ -551,12 +551,12 @@ eof
 
       it "does not add comment blocks to #{type}_mod nodes" do
         Registry.clear
-        YARD.parse_string(<<-eof).enumerator
+        YARD.parse_string(<<-EOF).enumerator
           class Foo
             # Docstring
             def bar; end if true
           end
-        eof
+        EOF
 
         expect(Registry.at("Foo#bar").docstring).to eq "Docstring"
       end
@@ -575,20 +575,20 @@ eof
     end
 
     it "handles cls/mod comments without line spacing" do
-      ast = stmt <<-eof
+      ast = stmt <<-EOF
         module A
           # comment 1
           # comment 2
           class B
           end
         end
-      eof
+      EOF
       expect(ast.jump(:class).docstring).to eq "comment 1\ncomment 2"
     end
 
     %w(if unless).each do |type|
       let(:condition_type) { type }
-      let(:ast) { stmt '"#{' + type + ' condition?; 42; end}" ' + type + ' verbose?' }
+      let(:ast) { stmt "\"\#{#{type} condition?; 42; end}\" #{type} verbose?" }
       let(:subject) { ast.jump(:string_embexpr)[0][0].source }
 
       it "returns correct source for interpolated non-ternary '#{type}' conditionals" do
@@ -597,12 +597,12 @@ eof
     end
 
     it "handles single-line method declaration syntax" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class A
           # Adds two numbers
           def add(x) = x + 1
         end
-      eof
+      EOF
 
       expect(Registry.at('A#add').docstring).to eq('Adds two numbers')
     end if RUBY_VERSION >= '3.'

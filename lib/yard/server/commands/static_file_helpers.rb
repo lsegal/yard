@@ -12,7 +12,7 @@ module YARD
         # @raise [FinishRequest] finalizes an empty body if the path matches
         #   /favicon.ico so browsers don't complain.
         def favicon?
-          return unless request.path == '/favicon.ico'
+          return false unless request.path == '/favicon.ico'
           headers['Content-Type'] = 'image/png'
           self.status = 200
           self.body = ''
@@ -30,7 +30,7 @@ module YARD
           file = find_file(adapter, path)
 
           if file
-            ext = "." + (path[/\.(\w+)$/, 1] || "html")
+            ext = ".#{path[/\.(\w+)$/, 1] || "html"}"
             headers['Content-Type'] = mime_type(ext, default_mime_types)
             self.body = File.read(file)
             raise FinishRequest

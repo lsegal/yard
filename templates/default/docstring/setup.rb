@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 def init
   return if object.docstring.blank? && !object.has_tag?(:api)
-  sections :index, [:private, :deprecated, :abstract, :todo, :note, :returns_void, :text], T('tags')
+  sections :index, %i(private deprecated abstract todo note returns_void text), T('tags')
 end
 
 def private
@@ -38,9 +38,7 @@ end
 
 def docstring_text
   text = ""
-  unless object.tags(:overload).size == 1 && object.docstring.empty?
-    text = object.docstring
-  end
+  text = object.docstring unless object.tags(:overload).size == 1 && object.docstring.empty?
 
   if text.strip.empty? && object.tags(:return).size == 1 && object.tag(:return).text
     text = object.tag(:return).text.gsub(/\A([a-z])/, &:downcase)

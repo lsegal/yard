@@ -5,23 +5,23 @@ RSpec.describe YARD::Parser::Ruby::Legacy::StatementList do
   def stmt(code) stmts(code).first end
 
   it "parses dangling block expressions" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       if
           foo
         puts 'hi'
       end
-eof
+    EOF
 
     expect(s.tokens.to_s(true)).to eq "if\n          foo\n        ...\n      end"
     expect(s.tokens.to_s).to eq "if\n          foo"
     expect(s.block.to_s).to eq "puts 'hi'"
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
       if foo ||
           bar
         puts 'hi'
       end
-eof
+    EOF
 
     expect(s.tokens.to_s(true)).to eq "if foo ||\n          bar\n        ...\n      end"
     expect(s.tokens.to_s).to eq "if foo ||\n          bar"
@@ -92,11 +92,11 @@ eof
   end
 
   it "parses blocks with do/end" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       foo do
         puts 'hi'
       end
-    eof
+    EOF
 
     expect(s.tokens.to_s(true)).to eq "foo do\n        ...\n      end"
     expect(s.block.to_s).to eq "puts 'hi'"
@@ -154,92 +154,92 @@ eof
   end
 
   it "handles multiple methods" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       def %; end
       def b; end
-    eof
+    EOF
     expect(s.to_s).to eq "def %; end"
   end
 
   it "handles nested methods" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       def *(o) def +@; end
         def ~@
         end end
-    eof
+    EOF
     expect(s.tokens.to_s(true)).to eq "def *(o) ... end"
     expect(s.block.to_s).to eq "def +@; end\n        def ~@\n        end"
 
-    s = stmts(<<-eof)
+    s = stmts(<<-EOF)
       def /(other) 'hi' end
       def method1
         def dynamic; end
       end
-    eof
+    EOF
     expect(s[1].to_s).to eq "def method1\n        def dynamic; end\n      end"
   end
 
   it "gets comment line numbers" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       # comment
       # comment
       # comment
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq ["comment", "comment", "comment"]
     expect(s.comments_range).to eq(1..3)
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
 
       # comment
       # comment
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq ["comment", "comment"]
     expect(s.comments_range).to eq(2..3)
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
       # comment
       # comment
 
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq ["comment", "comment"]
     expect(s.comments_range).to eq(1..2)
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
       # comment
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq ["comment"]
     expect(s.comments_range).to eq(1..1)
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
       def method; end # comment
-    eof
+    EOF
     expect(s.comments).to eq ["comment"]
     expect(s.comments_range).to eq(1..1)
   end
 
   it "only looks up to two lines back for comments" do
-    s = stmt <<-eof
+    s = stmt <<-EOF
       # comments
 
       # comments
 
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq ["comments"]
 
-    s = stmt <<-eof
+    s = stmt <<-EOF
       # comments
 
 
       def method; end
-    eof
+    EOF
     expect(s.comments).to eq nil
 
-    ss = stmts <<-eof
+    ss = stmts <<-EOF
       # comments
 
 
@@ -247,7 +247,7 @@ eof
 
       # hello
       def method2; end
-    eof
+    EOF
     expect(ss[0].comments).to eq nil
     expect(ss[1].comments).to eq ['hello']
   end
@@ -283,10 +283,10 @@ eof
   end
 
   it "does not open a block on an aliased keyword block opener" do
-    s = stmts(<<-eof)
+    s = stmts(<<-EOF)
       class A; alias x do end
       class B; end
-    eof
+    EOF
     expect(s[0].block.to_s).to eq 'alias x do'
     expect(s.size).to be > 1
   end

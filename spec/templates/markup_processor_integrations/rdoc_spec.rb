@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/integration_spec_helper'
+require "#{File.dirname(__FILE__)}/integration_spec_helper"
 
 RSpec.describe 'RDoc integration' do
   include_context 'shared helpers for markup processor integration specs'
@@ -21,7 +21,7 @@ Verbatim non-Ruby block:
 
   This has nothing to do with Ruby.
 
-RDOC
+    RDOC
   end
 
   it 'renders level 2 header' do
@@ -33,7 +33,7 @@ RDOC
   end
 
   it 'renders indented block of text which is not a piece of Ruby code, ' \
-    'and does not apply syntax highlight' do
+     'and does not apply syntax highlight' do
     expect(rendered_document).to match('This has nothing to do with Ruby.')
   end
 end

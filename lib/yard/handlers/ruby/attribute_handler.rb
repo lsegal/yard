@@ -8,7 +8,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
   namespace_only
 
   process do
-    return if statement.type == :var_ref || statement.type == :vcall
+    return if %i(var_ref vcall).include?(statement.type)
     read = true
     write = false
     params = statement.parameters(false).dup
@@ -17,9 +17,7 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
     case statement.method_name(true)
     when :attr
       # In the case of 'attr', the second parameter (if given) isn't a symbol.
-      if params.size == 2
-        write = true if params.pop == s(:var_ref, s(:kw, "true"))
-      end
+      write = true if (params.size == 2) && (params.pop == s(:var_ref, s(:kw, "true")))
     when :attr_accessor
       write = true
     when :attr_reader

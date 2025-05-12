@@ -62,7 +62,7 @@ RSpec.describe SymbolHash do
     h = SymbolHash.new
     h.update('test' => 'value')
     expect(h[:test]).to eq :value
-    h.merge!('test' => 'value2') # rubocop:disable Performance/RedundantMerge
+    h.merge!('test' => 'value2')
     expect(h[:test]).to eq :value2
   end
 

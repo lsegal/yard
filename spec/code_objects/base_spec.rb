@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::Base do
   before { Registry.clear }
@@ -88,7 +88,7 @@ RSpec.describe YARD::CodeObjects::Base do
     a = ConstantObject.new(:root, :A)
     a.value = "B::C"
     b = ClassObject.new(:root, :B)
-    c = ClassObject.new(b, :C)
+    ClassObject.new(b, :C)
     klass = ClassObject.new(a, "MyClass")
     expect(klass.path).to eq "B::C::MyClass"
   end
@@ -104,7 +104,7 @@ RSpec.describe YARD::CodeObjects::Base do
     expect(Registry.at(:Me)).to eq obj
 
     obj2 = ModuleObject.new(obj, :Too)
-    expect(Registry.at(:"Me::Too")).to eq obj2
+    expect(Registry.at(:'Me::Too')).to eq obj2
   end
 
   describe "#[]=" do
@@ -148,7 +148,7 @@ RSpec.describe YARD::CodeObjects::Base do
 
   it "properly re-indents source starting from 0 indentation" do
     obj = CodeObjects::Base.new(nil, :test)
-    obj.source = <<-eof
+    obj.source = <<-EOF
       def mymethod
         if x == 2 &&
             5 == 5
@@ -157,19 +157,19 @@ RSpec.describe YARD::CodeObjects::Base do
           1
         end
       end
-    eof
+    EOF
     expect(obj.source).to eq "def mymethod\n  if x == 2 &&\n      5 == 5\n    3\n  else\n    1\n  end\nend"
 
     Registry.clear
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       def key?(key)
         super(key)
       end
-    eof
+    EOF
     expect(Registry.at('#key?').source).to eq "def key?(key)\n  super(key)\nend"
 
     Registry.clear
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
         def key?(key)
           if x == 2
             puts key
@@ -177,12 +177,12 @@ RSpec.describe YARD::CodeObjects::Base do
             exit
           end
         end
-    eof
+    EOF
     expect(Registry.at('#key?').source).to eq "def key?(key)\n  if x == 2\n    puts key\n  else\n    exit\n  end\nend"
   end
 
   it "does not add newlines to source when parsing sub blocks" do
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       module XYZ
         module ZYX
           class ABC
@@ -192,7 +192,7 @@ RSpec.describe YARD::CodeObjects::Base do
           end
         end
       end
-    eof
+    EOF
     expect(Registry.at('XYZ::ZYX::ABC#msg').source).to eq "def msg\n  hello_world\nend"
   end
 
@@ -203,19 +203,19 @@ RSpec.describe YARD::CodeObjects::Base do
   end
 
   it "sets file and line information" do
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       class X; end
-    eof
+    EOF
     expect(Registry.at(:X).file).to eq '(stdin)'
     expect(Registry.at(:X).line).to eq 1
   end
 
   it "maintains all file associations when objects are defined multiple times in one file" do
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       class X; end
       class X; end
       class X; end
-    eof
+    EOF
 
     expect(Registry.at(:X).file).to eq '(stdin)'
     expect(Registry.at(:X).line).to eq 1
@@ -234,12 +234,12 @@ RSpec.describe YARD::CodeObjects::Base do
   end
 
   it "prioritizes the definition with a docstring when returning #file" do
-    Parser::SourceParser.parse_string <<-eof
+    Parser::SourceParser.parse_string <<-EOF
       class X; end
       class X; end
       # docstring
       class X; end
-    eof
+    EOF
 
     expect(Registry.at(:X).file).to eq '(stdin)'
     expect(Registry.at(:X).line).to eq 4
@@ -427,14 +427,14 @@ RSpec.describe YARD::CodeObjects::Base do
 
   describe "#copy_to" do
     it "copies all data to new object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         private
         # A docstring
         # @return [String] a tag
         def foo(a, b, c)
           source_code_here
         end
-      eof
+      EOF
       foo_c = MethodObject.new(:root, :foo, :class)
       Registry.at('#foo').copy_to(foo_c)
       expect(foo_c.scope).to eq :class
@@ -458,10 +458,10 @@ RSpec.describe YARD::CodeObjects::Base do
     end
 
     it "copies docstring and rewrite tags to new object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @return [String] a tag
         def foo; end
-      eof
+      EOF
       foo_c = MethodObject.new(:root, :foo, :class)
       foo_i = Registry.at('#foo')
       foo_i.copy_to(foo_c)

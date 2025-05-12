@@ -14,11 +14,11 @@ class YARD::Handlers::Ruby::Legacy::YieldHandler < YARD::Handlers::Ruby::Legacy:
       if item == "self"
         yieldtag.types << '_self'
         owner.add_tag YARD::Tags::Tag.new(:yieldparam,
-          "the object that the method was called on", owner.namespace.path, '_self')
+                                          "the object that the method was called on", owner.namespace.path, '_self')
       elsif item == "super"
         yieldtag.types << '_super'
         owner.add_tag YARD::Tags::Tag.new(:yieldparam,
-          "the result of the method from the superclass", nil, '_super')
+                                          "the result of the method from the superclass", nil, '_super')
       else
         yieldtag.types << item
       end

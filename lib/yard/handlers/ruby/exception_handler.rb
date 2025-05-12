@@ -5,7 +5,7 @@ class YARD::Handlers::Ruby::ExceptionHandler < YARD::Handlers::Ruby::Base
 
   process do
     return unless owner.is_a?(MethodObject) # Only methods yield
-    return if [:command_call, :call].include? statement.type
+    return if %i(command_call call).include? statement.type
     return if owner.has_tag?(:raise)
 
     klass = nil

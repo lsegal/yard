@@ -49,7 +49,7 @@ module YARD
           next if objects.empty?
           last_object = nil
           all_objects_notice = false
-          log.puts name + ":" unless @compact
+          log.puts "#{name}:" unless @compact
           objects.sort_by(&:path).each do |object|
             if !@list_all && last_object && object.parent == last_object
               log.print " (...)" unless all_objects_notice
@@ -61,8 +61,7 @@ module YARD
               log.puts
             end
             all_objects_notice = false
-            log.print "" + (@compact ? "#{short} " : "  ") +
-                      object.path + " (#{object.file}:#{object.line})"
+            log.print "#{@compact ? "#{short} " : "  "}#{object.path} (#{object.file}:#{object.line})"
             last_object = object
             first_object = true
           end
@@ -101,14 +100,14 @@ module YARD
 
       def load_git_commit(commit)
         Registry.clear
-        commit_path = 'git_commit' + commit.gsub(/\W/, '_')
+        commit_path = "git_commit#{commit.gsub(/\W/, '_')}"
         tmpdir = File.join(Dir.tmpdir, commit_path)
         log.info "Expanding #{commit} to #{tmpdir}..."
         Dir.chdir(@old_path)
         FileUtils.mkdir_p(tmpdir)
         FileUtils.cp_r('.', tmpdir)
         Dir.chdir(tmpdir)
-        log.info("git says: " + `git reset --hard #{commit}`.chomp)
+        log.info("git says: #{`git reset --hard #{commit}`.chomp}")
         generate_yardoc(tmpdir)
       ensure
         Dir.chdir(@old_path)
@@ -161,7 +160,7 @@ module YARD
         url = "http://rubygems.org/downloads/#{gemfile}"
         log.info "Searching for remote gem file #{url}"
         begin
-          # Note: In Ruby 2.4.x, URI.open is a private method. After
+          # NOTE: In Ruby 2.4.x, URI.open is a private method. After
           # 2.5, URI.open behaves much like Kernel#open once you've
           # required 'open-uri'
           OpenURI.open_uri(url) {|io| expand_and_parse(gemfile, io) }

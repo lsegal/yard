@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Handlers::C::ClassHandler do
   it "registers modules" do
@@ -16,26 +16,26 @@ RSpec.describe YARD::Handlers::C::ClassHandler do
   end
 
   it "remembers symbol defined with class" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       cXYZ = rb_define_module("Foo");
       rb_define_method(cXYZ, "bar", bar, 0);
-    eof
+    EOF
     expect(Registry.at('Foo').type).to eq :module
     expect(Registry.at('Foo#bar')).not_to be nil
   end
 
   it "does not associate declaration comments as module docstring" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       /* Docstring! */
       mFoo = rb_define_module("Foo");
-    eof
+    EOF
     expect(Registry.at('Foo').docstring).to be_blank
   end
 
   it "associates a file with the declaration" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       mFoo = rb_define_module("Foo");
-    eof
+    EOF
     expect(Registry.at('Foo').file).to eq '(stdin)'
     expect(Registry.at('Foo').line).to eq 2
   end
@@ -51,21 +51,21 @@ RSpec.describe YARD::Handlers::C::ClassHandler do
 
   it "raises undoc error if a class is defined under a namespace that cannot be resolved" do
     with_parser(:c) do
-      undoc_error <<-eof
+      undoc_error <<-EOF
         void Init_Foo() {
           mFoo = rb_define_class_under(invalid, "Foo", rb_cObject);
         }
-      eof
+      EOF
     end
   end unless ENV['LEGACY']
 
   it "raises undoc error if a module is defined under a namespace that cannot be resolved" do
     with_parser(:c) do
-      undoc_error <<-eof
+      undoc_error <<-EOF
         void Init_Foo() {
           mFoo = rb_define_module_under(invalid, "Foo");
         }
-      eof
+      EOF
     end
   end unless ENV['LEGACY']
 end

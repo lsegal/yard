@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHandler" do
   before(:all) { parse_file :alias_handler_001, __FILE__ }
@@ -10,8 +10,8 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AliasHan
 
   ['c', 'd?', '[]', '[]=', '-@', '%', '*', 'cstrkey', 'cstrmeth'].each do |a|
     it "handles the Ruby 'alias' keyword syntax for method ##{a}" do
-      expect(P('A#' + a)).to be_instance_of(CodeObjects::MethodObject)
-      expect(P('A#' + a).is_alias?).to be true
+      expect(P("A##{a}")).to be_instance_of(CodeObjects::MethodObject)
+      expect(P("A##{a}").is_alias?).to be true
     end
   end
 

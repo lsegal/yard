@@ -46,10 +46,11 @@ module YARD
         def each
           @states = []
           push_state
+          skip_types = %i(const ident op period)
           @tokens.each do |token|
             yield_obj = false
 
-            if skip_group && [:const, :ident, :op, :period].include?(token[0])
+            if skip_group && skip_types.include?(token[0])
               yield token, nil
               next
             else
@@ -57,11 +58,7 @@ module YARD
             end
 
             case token[0]
-            when :const
-              lookup(token[0], token[1])
-              yield_obj = true
-              self.last_sep = nil
-            when :ident
+            when :const, :ident
               lookup(token[0], token[1])
               yield_obj = true
               self.last_sep = nil

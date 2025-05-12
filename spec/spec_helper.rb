@@ -16,7 +16,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'yard'))
 
 unless defined?(HAVE_RIPPER)
   begin require 'ripper'; rescue LoadError; nil end
-  HAVE_RIPPER = defined?(::Ripper) && !ENV['LEGACY'] ? true : false
+  HAVE_RIPPER = defined?(Ripper) && !ENV['LEGACY'] ? true : false
   LEGACY_PARSER = !HAVE_RIPPER
 
   class YARD::Parser::SourceParser
@@ -33,7 +33,7 @@ NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 
 def parse_file(files, thisfile = __FILE__, log_level = log.level, ext = '.rb.txt')
   Registry.clear
-  paths = Array(files).map { |file| File.join(File.dirname(thisfile), 'examples', file.to_s + ext) }
+  paths = Array(files).map {|file| File.join(File.dirname(thisfile), 'examples', file.to_s + ext) }
   YARD::Parser::SourceParser.parse(paths, [], log_level)
 end
 
@@ -53,7 +53,7 @@ def described_in_docs(klass, meth, file = nil)
   end
 
   # Get the object
-  objname = klass.name + (meth[0, 1] == '#' ? meth : '::' + meth)
+  objname = klass.name + (meth[0, 1] == '#' ? meth : "::#{meth}")
   obj = Registry.at(objname)
   raise "Cannot find object #{objname} described by spec." unless obj
   raise "#{obj.path} has no @it tags to spec." unless obj.has_tag? :it
@@ -65,7 +65,7 @@ def described_in_docs(klass, meth, file = nil)
       it(it.name + " (from #{path}:#{obj.line})") do
         begin
           eval(it.text)
-        rescue => e
+        rescue StandardError => e
           e.set_backtrace(["#{path}:#{obj.line}:in @it tag specification"])
           raise e
         end
@@ -91,11 +91,11 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
 
   # Run examples
   obj.tags(:example).each do |exs|
-    exs.text.split(/\n/).each do |ex|
+    exs.text.split("\n").each do |ex|
       begin
         hash = eval("{ #{ex} }")
         expect(hash.keys.first).to eq hash.values.first
-      rescue => e
+      rescue StandardError => e
         raise e, "#{e.message}\nInvalid spec example in #{objname}:\n\n\t#{ex}\n"
       end
     end
@@ -111,7 +111,7 @@ module Kernel
   end
 
   def puts(str = '')
-    STDOUT.puts str + "<br/>\n"
+    $stdout.puts "#{str}<br/>\n"
     str
   end
 end if ENV['TM_APP_PATH']
@@ -215,6 +215,4 @@ end
 begin
   require 'asciidoctor'
 rescue LoadError; end
-
-YARD::Logger
 include YARD

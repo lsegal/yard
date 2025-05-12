@@ -3,15 +3,13 @@ module YARD
   module Templates::Helpers
     # Helpers for UML template format
     module UMLHelper
+      VISIBILITIES = {:public => '+', :protected => '#', :private => '-'}
+
       # Official UML visibility prefix syntax for an object given its visibility
       # @param [CodeObjects::Base] object the object to retrieve visibility for
       # @return [String] the UML visibility prefix
       def uml_visibility(object)
-        case object.visibility
-        when :public;    '+'
-        when :protected; '#'
-        when :private;   '-'
-        end
+        VISIBILITIES[object.visibility]
       end
 
       # Formats the path of an object for Graphviz syntax
@@ -33,7 +31,7 @@ module YARD
       # @return [String] tidied text.
       def tidy(data)
         indent = 0
-        data.split(/\n/).map do |line|
+        data.split("\n").map do |line| # rubocop:disable Style/StringConcatenation
           line.gsub!(/^\s*/, '')
           next if line.empty?
           indent -= 1 if line =~ /^\s*\}\s*$/

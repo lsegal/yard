@@ -14,7 +14,8 @@ module YARD
         def run
           Registry.load_all
           self.query = request.query['q']
-          redirect(abs_url(adapter.router.docs_prefix, single_library ? library : '')) if query.nil? || query =~ /\A\s*\Z/
+          redirect(abs_url(adapter.router.docs_prefix,
+                           single_library ? library : '')) if query.nil? || query =~ /\A\s*\Z/
 
           found = Registry.at(query)
           redirect(url_for(found)) if found
@@ -31,17 +32,17 @@ module YARD
 
         def url_for(object)
           abs_url(base_path(router.docs_prefix),
-            serializer.serialized_path(object))
+                  serializer.serialized_path(object))
         end
 
         def serve_xhr
           headers['Content-Type'] = 'text/plain'
-          self.body = visible_results.map {|o|
+          self.body = visible_results.map do |o|
             [(o.type == :method ? o.name(true) : o.name).to_s,
              o.path,
              o.namespace.root? ? '' : o.namespace.path,
              url_for(o)].join(",")
-          }.join("\n")
+          end.join("\n")
         end
 
         def serve_normal
@@ -64,14 +65,15 @@ module YARD
             !name.include?(query.downcase) ||
               case o.type
               when :method
-                !(query =~ /[#.]/) && query.include?("::")
+                query !~ /[#.]/ && query.include?("::")
               when :class, :module, :constant, :class_variable
                 query =~ /[#.]/
               end
           end.sort_by do |o|
             name = (o.type == :method ? o.name(true) : o.name).to_s
-            name.length.to_f / query.length.to_f
+            name.length.to_f / query.length
           end
+          # rubocop:enable Style/MultilineBlockChain
         end
       end
     end

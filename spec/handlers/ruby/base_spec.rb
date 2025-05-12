@@ -25,6 +25,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
     class IgnoredHandler < Handlers::Base
       handles :list
     end
+
     class NotIgnoredHandler < Handlers::Ruby::Base
       handles :list
     end
@@ -75,7 +76,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles method_call(:meth)
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [MethCallHandler]
-    ast = Parser::Ruby::RubyParser.parse(<<-"eof").ast
+    ast = Parser::Ruby::RubyParser.parse(<<-EOF).ast
       meth                   # 0
       meth()                 # 1
       meth(1,2,3)            # 2
@@ -86,7 +87,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       NotMeth.meth 1, 2, 3   # 7
       NotMeth.meth(1, 2, 3)  # 8
       NotMeth                # 9
-    eof
+    EOF
     (0..8).each do |i|
       valid MethCallHandler, ast[i]
     end

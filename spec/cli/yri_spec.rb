@@ -20,7 +20,7 @@ RSpec.describe YARD::CLI::YRI do
       expect(Registry).to receive(:load).with('bar.yardoc')
       expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
       expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
-      @yri.instance_variable_set("@cache", 'Foo' => 'bar.yardoc')
+      @yri.instance_variable_set(:@cache, 'Foo' => 'bar.yardoc')
       expect(@yri.find_object('Foo')).to eq 'OBJ'
     end
 
@@ -30,9 +30,9 @@ RSpec.describe YARD::CLI::YRI do
       expect(Registry).to receive(:load).with('.yardoc')
       expect(Registry).to receive(:at).ordered.with('Foo').and_return(nil)
       expect(Registry).to receive(:at).ordered.with('Foo').and_return('OBJ')
-      @yri.instance_variable_set("@cache", 'Foo' => 'bar.yardoc')
+      @yri.instance_variable_set(:@cache, 'Foo' => 'bar.yardoc')
       expect(@yri.find_object('Foo')).to eq 'OBJ'
-      expect(@yri.instance_variable_get("@search_paths")[0]).to eq '.yardoc'
+      expect(@yri.instance_variable_get(:@search_paths)[0]).to eq '.yardoc'
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe YARD::CLI::YRI do
       allow(File).to receive(:file?).with(path).and_return(true)
       allow(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
-      spaths = @yri.instance_variable_get("@search_paths")
+      spaths = @yri.instance_variable_get(:@search_paths)
       expect(spaths).to include('line1')
       expect(spaths).to include('line2')
     end
@@ -64,7 +64,7 @@ RSpec.describe YARD::CLI::YRI do
       allow(File).to receive(:file?).with(path).and_return(true)
       allow(File).to receive(:readlines).with(path).and_return(%w(line1 line2))
       @yri = YARD::CLI::YRI.new
-      spaths = @yri.instance_variable_get("@search_paths")
+      spaths = @yri.instance_variable_get(:@search_paths)
       expect(spaths[0, 4]).to eq %w(foo bar line1 line2)
       YARD::CLI::YRI::DEFAULT_SEARCH_PATHS.replace([])
     end
@@ -85,7 +85,7 @@ RSpec.describe YARD::CLI::YRI do
     end
 
     it "prints 'no documentation exists for object' if object is not found" do
-      expect(STDERR).to receive(:puts).with("No documentation for `Foo'")
+      expect($stderr).to receive(:puts).with("No documentation for `Foo'")
       expect(@yri).to receive(:exit).with(1)
       @yri.run('Foo')
     end

@@ -25,7 +25,7 @@ module YARD
       # @return [String] the wrapped text
       def word_wrap(text, _length = 80)
         # See ruby-talk/10655 / Ernest Ellingson
-        text.gsub(/\t/, "     ").gsub(/.{1,50}(?:\s|\Z)/) do
+        text.gsub("\t", "     ").gsub(/.{1,50}(?:\s|\Z)/) do
           ($& + 5.chr).gsub(/\n\005/, "\n").gsub(/\005/, "\n")
         end
       end

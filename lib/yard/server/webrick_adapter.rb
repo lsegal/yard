@@ -26,7 +26,7 @@ module YARD
       end
 
       # @private
-      def do_GET(request, response) # rubocop:disable Style/MethodName
+      def do_GET(request, response) # rubocop:disable Naming/MethodName
         status, headers, body = *adapter.router.call(request)
         response.status = status
         response.body = body.is_a?(Array) ? body[0] : body

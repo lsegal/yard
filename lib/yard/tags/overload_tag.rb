@@ -15,7 +15,7 @@ module YARD
       def has_tag?(name) docstring.has_tag?(name) end
 
       def object=(value)
-        super(value)
+        super
         docstring.object = value
         docstring.tags.each {|tag| tag.object = value }
       end
@@ -51,7 +51,7 @@ module YARD
       end
 
       def parse_signature
-        if signature =~ /^(?:def\s)?\s*(#{CodeObjects::METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
+        if signature =~ /^(?:def\s)?\s*(#{CodeObjects::METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/mo
           meth = $1
           args = $2
           meth.gsub!(/\s+/, '')

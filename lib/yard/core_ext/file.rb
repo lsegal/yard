@@ -57,7 +57,7 @@ class File
   def self.open!(file, *args, &block)
     dir = dirname(file)
     FileUtils.mkdir_p(dir) unless directory?(dir)
-    open(file, *args, &block)
+    File.open(file, *args, &block)
   end
 
   # Reads a file with binary encoding

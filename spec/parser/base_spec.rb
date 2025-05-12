@@ -6,7 +6,7 @@ RSpec.describe YARD::Parser::Base do
 
     it "takes 2 arguments" do
       expect { YARD::Parser::Base.new }.to raise_error(ArgumentError,
-        /wrong (number|#) of arguments|given 0, expected 2/)
+                                                       /wrong (number|#) of arguments|given 0, expected 2/)
     end
 
     it "raises NotImplementedError on #initialize" do

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ConstantHandler" do
   before(:all) { parse_file :constant_handler_001, __FILE__ }
@@ -20,7 +20,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     obj = Registry.at("MyClass")
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
-    [:a, :b, :c].each do |key|
+    %i(a b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -42,7 +42,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     obj = Registry.at("NotMyClass")
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     attrs = obj.attributes[:instance]
-    [:b, :c].each do |key|
+    %i(b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -62,7 +62,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     expect(obj.superclass).to eq P(:Struct)
     attrs = obj.attributes[:instance]
-    [:b, :c].each do |key|
+    %i(b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).not_to be nil
@@ -90,7 +90,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     expect(obj.superclass).to eq P(:Data)
     attrs = obj.attributes[:instance]
-    [:a, :b, :c].each do |key|
+    %i(a b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).to be nil
@@ -109,7 +109,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     expect(obj.superclass).to eq P(:Data)
     attrs = obj.attributes[:instance]
-    [:b, :c].each do |key|
+    %i(b c).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).to be nil
@@ -121,7 +121,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(obj).to be_kind_of(CodeObjects::ClassObject)
     expect(obj.superclass).to eq P(:Data)
     attrs = obj.attributes[:instance]
-    [:c, :d].each do |key|
+    %i(c d).each do |key|
       expect(attrs).to have_key(key)
       expect(attrs[key][:read]).not_to be nil
       expect(attrs[key][:write]).to be nil
@@ -135,32 +135,32 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
 
   %w(module class).each do |type|
     it "does not allow #{type} to be redefined as constant" do
-      undoc_error <<-eof
+      undoc_error <<-EOF
         #{type} Foo; end
         Foo = "value"
-      eof
+      EOF
     end
   end unless LEGACY_PARSER
 
   it "allows constant to have same name as constant in parent namespace" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module A
         class C; end
         module B; C = 1 end
       end
-    eof
+    EOF
     expect(log.io.string).to eq ""
     expect(Registry.at('A::B::C').type).to eq :constant
   end
 
   it "detects compound constant names" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module A
         class AA; end
         AA::B = true
       end
       A::AA::C = true
-    eof
+    EOF
 
     expect(Registry.at('A::AA::B').type).to eq :constant
     expect(Registry.at('A::AA::C').type).to eq :constant

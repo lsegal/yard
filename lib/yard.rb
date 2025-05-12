@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module YARD
   # The root path for YARD source libraries
-  ROOT = File.expand_path(File.dirname(__FILE__))
+  ROOT = __dir__
 
   require File.join(YARD::ROOT, 'yard', 'version')
   require File.join(YARD::ROOT, 'yard', 'autoload')
@@ -62,7 +62,7 @@ RUBY18 = YARD.ruby18?
 RUBY19 = YARD.ruby19?
 
 # Load Ruby core extension classes
-Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).each do |file|
+Dir.glob(File.join(YARD::ROOT, 'yard', 'core_ext', '*.rb')).sort.each do |file|
   require file
 end
 

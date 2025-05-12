@@ -3,7 +3,8 @@
 def __p(path) File.join(YARD::ROOT, 'yard', *path.split('/')); end
 
 module YARD
-  module CLI # Namespace for command-line interface components
+  # Namespace for command-line interface components
+  module CLI
     autoload :Command,         __p('cli/command')
     autoload :CommandParser,   __p('cli/command_parser')
     autoload :Config,          __p('cli/config')
@@ -89,8 +90,10 @@ module YARD
       autoload :SymbolHandler,            __p('handlers/c/symbol_handler')
     end
 
-    module Ruby # All Ruby handlers
-      module Legacy # Handlers for old Ruby 1.8 parser
+    # All Ruby handlers
+    module Ruby
+      # Handlers for old Ruby 1.8 parser
+      module Legacy
         autoload :Base,                   __p('handlers/ruby/legacy/base')
 
         autoload :AliasHandler,           __p('handlers/ruby/legacy/alias_handler')
@@ -159,7 +162,8 @@ module YARD
   # The parser namespace holds all parsing engines used by YARD.
   # Currently only Ruby and C (Ruby) parsers are implemented.
   module Parser
-    module C # CRuby Parsing components
+    # CRuby Parsing components
+    module C
       autoload :BodyStatement,     __p('parser/c/statement')
       autoload :Comment,           __p('parser/c/statement')
       autoload :CommentParser,     __p('parser/c/comment_parser')
@@ -168,8 +172,10 @@ module YARD
       autoload :ToplevelStatement, __p('parser/c/statement')
     end
 
-    module Ruby # Ruby parsing components.
-      module Legacy # Handles Ruby parsing in Ruby 1.8.
+    # Ruby parsing components.
+    module Ruby
+      # Handles Ruby parsing in Ruby 1.8.
+      module Legacy
         autoload :RubyParser,     __p('parser/ruby/legacy/ruby_parser')
         autoload :RubyToken,      __p('parser/ruby/legacy/ruby_lex')
         autoload :Statement,      __p('parser/ruby/legacy/statement')
@@ -189,11 +195,13 @@ module YARD
     autoload :UndocumentableError, __p('parser/source_parser')
   end
 
-  module Rake # Holds Rake tasks used by YARD
+  # Holds Rake tasks used by YARD
+  module Rake
     autoload :YardocTask, __p('rake/yardoc_task')
   end
 
-  module Serializers # Namespace for components that serialize to various endpoints
+  # Namespace for components that serialize to various endpoints
+  module Serializers
     autoload :Base,                 __p('serializers/base')
     autoload :FileSystemSerializer, __p('serializers/file_system_serializer')
     autoload :ProcessSerializer,    __p('serializers/process_serializer')
@@ -245,7 +253,8 @@ module YARD
     autoload :WebrickServlet,         __p('server/webrick_adapter')
   end
 
-  module Tags # Namespace for Tag components
+  # Namespace for Tag components
+  module Tags
     autoload :AttributeDirective,  __p('tags/directives')
     autoload :DefaultFactory,      __p('tags/default_factory')
     autoload :DefaultTag,          __p('tags/default_tag')
@@ -269,8 +278,10 @@ module YARD
 
   # Namespace for templating system
   module Templates
-    module Helpers # Namespace for template helpers
-      module Markup # Namespace for markup providers
+    # Namespace for template helpers
+    module Helpers
+      # Namespace for markup providers
+      module Markup
         autoload :RDocMarkup,               __p('templates/helpers/markup/rdoc_markup')
         autoload :RDocMarkdown,             __p('templates/helpers/markup/rdoc_markdown')
       end

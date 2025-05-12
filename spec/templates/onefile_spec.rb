@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 class StringSerializer < YARD::Serializers::Base
   attr_accessor :files, :string
@@ -17,7 +17,7 @@ end
 RSpec.describe YARD::Templates::Engine.template(:default, :onefile) do
   before do
     Registry.clear
-    if defined?(::Encoding)
+    if defined?(Encoding)
       @eenc = Encoding.default_external
       Encoding.default_external = 'ascii-8bit'
       @ienc = Encoding.default_internal
@@ -26,7 +26,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :onefile) do
   end
 
   after do
-    if defined?(::Encoding)
+    if defined?(Encoding)
       Encoding.default_internal = @ienc
       Encoding.default_external = @eenc
     end
@@ -35,7 +35,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :onefile) do
   def render
     @files = []
     @output = String.new("")
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       class A
         # Foo method
         # @return [String]
@@ -45,13 +45,13 @@ RSpec.describe YARD::Templates::Engine.template(:default, :onefile) do
         # @return [Numeric]
         def bar; end
       end
-    eof
+    EOF
     readme = CodeObjects::ExtraFileObject.new('README',
-      "# This is a code comment\n\n# Top of file\n\n\nclass C; end")
+                                              "# This is a code comment\n\n# Top of file\n\n\nclass C; end")
     Templates::Engine.generate Registry.all(:class),
-      :serializer => StringSerializer.new(@files, @output),
-      :onefile => true, :format => :html, :readme => readme, :files => [readme,
-        CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')]
+                               :serializer => StringSerializer.new(@files, @output),
+                               :onefile => true, :format => :html, :readme => readme, :files => [readme,
+                                 CodeObjects::ExtraFileObject.new('LICENSE', 'This is a license!')]
   end
 
   it "renders html" do

@@ -11,19 +11,19 @@ def format_args_regex(object)
 end
 
 def format_args_parameters(object)
-  if !object.parameters.empty?
+  if object.parameters.empty?
+    ""
+  else
     args = object.parameters.map {|n, v| v ? "#{n} = #{v}" : n.to_s }.join(", ")
     "(#{args})"
-  else
-    ""
   end
 end
 
 YARD::Registry.load
 $object = YARD::Registry.at('YARD::Generators::Base#G')
 
-log.puts "regex:  " + format_args_regex($object)
-log.puts "params: " + format_args_parameters($object)
+log.puts "regex:  #{format_args_regex($object)}"
+log.puts "params: #{format_args_parameters($object)}"
 log.puts
 
 TIMES = 100_000

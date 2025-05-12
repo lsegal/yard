@@ -18,7 +18,7 @@ RSpec.describe YARD::DocstringParser do
 
   describe "#parse" do
     it "parses comments into tags" do
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 @param name Hello world
   how are you?
 @param name2
@@ -27,7 +27,7 @@ RSpec.describe YARD::DocstringParser do
   is a new paragraph:
 
   right here.
-      eof
+      EOF
       tags = doc.tags(:param)
       expect(tags[0].name).to eq "name"
       expect(tags[0].text).to eq "Hello world\nhow are you?"
@@ -38,17 +38,17 @@ RSpec.describe YARD::DocstringParser do
     end
 
     it "ends parsing a tag on de-dent" do
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 @note test
   one two three
 rest of docstring
-      eof
+      EOF
       expect(doc.tag(:note).text).to eq "test\none two three"
       expect(doc).to eq "rest of docstring"
     end
 
     it "parses examples embedded in doc" do
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 test string here
 @example code
 
@@ -58,18 +58,18 @@ test string here
   class A; end
 
 more stuff
-eof
+      EOF
       expect(doc).to eq "test string here\nmore stuff"
       expect(doc.tag(:example).text).to eq "\ndef foo(x, y, z)\nend\n\nclass A; end"
     end
 
     it "removes only original indentation from beginning of line in tags" do
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 @param name
   some value
   foo bar
    baz
-eof
+      EOF
       expect(doc.tag(:param).text).to eq "some value\nfoo bar\n baz"
     end
 
@@ -77,21 +77,21 @@ eof
       Tags::Library.define_tag(nil, :foo1)
       Tags::Library.define_tag(nil, :foo2)
       Tags::Library.define_tag(nil, :foo3)
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 @foo1 bar1
 @foo2 bar2
 @foo3 bar3
-eof
+      EOF
       expect(doc.tag(:foo1).text).to eq "bar1"
       expect(doc.tag(:foo2).text).to eq "bar2"
     end
 
     it "ends tag on newline if next line is not indented" do
-      doc = docstring(<<-eof)
+      doc = docstring(<<-EOF)
 @author bar1
 @api bar2
 Hello world
-eof
+      EOF
       expect(doc.tag(:author).text).to eq "bar1"
       expect(doc.tag(:api).text).to eq "bar2"
     end
@@ -116,7 +116,7 @@ eof
       valid = %w(testing valid is_a is_A __)
       valid.each do |tag|
         TestLibrary.define_tag("Tag", tag)
-        doc = docstring('@' + tag + ' foo bar')
+        doc = docstring("@#{tag} foo bar")
         expect(doc.tag(tag).text).to eq 'foo bar'
       end
     end
@@ -124,7 +124,7 @@ eof
     it "does not parse invalid tag names" do
       invalid = %w(@ @return@ @p,aram @x-y @.x.y.z)
       invalid.each do |tag|
-        expect(docstring(tag + ' foo bar')).to eq tag + ' foo bar'
+        expect(docstring("#{tag} foo bar")).to eq "#{tag} foo bar"
       end
     end
 
@@ -209,55 +209,55 @@ eof
 
     it "warns about invalid named parameters" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @param notaparam foo
         def foo(a) end
-      eof
+      EOF
     end
 
     it "warns about invalid named parameters on @!method directives" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!method foo(a)
         #   @param notaparam foo
         test
-      eof
+      EOF
     end
 
     it "warns about duplicate named parameters" do
       expect(log).to receive(:warn).with(/@param tag has duplicate parameter name: a/)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @param a foo
         # @param a foo
         def foo(a) end
-      eof
+      EOF
     end
 
     it "does not warn on aliases" do
       expect(log).to_not receive(:warn)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @param a foo
         def foo(a) end
         alias bar foo
-      eof
+      EOF
     end
 
     it "does not warn on matching param with inline method modifier" do
       expect(log).to_not receive(:warn)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @param [Numeric] a
         # @return [Numeric]
         private_class_method def self.foo(a); a + 1; end
-      eof
+      EOF
     end
 
     it "warns on mismatching param with inline method modifier" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @param [Numeric] notaparam
         # @return [Numeric]
         private_class_method def self.foo(a); a + 1; end
-      eof
+      EOF
     end
   end
 

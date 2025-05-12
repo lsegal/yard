@@ -36,8 +36,8 @@ module YARD
           text = text.force_encoding('binary')
         end
 
-        text = text.gsub(/%[a-z0-9]{2}|#{URLMATCH}/i) do
-          $&.size > 1 ? $& : "%" + $&.ord.to_s(16).upcase
+        text = text.gsub(/%[a-z0-9]{2}|#{URLMATCH}/io) do
+          $&.size > 1 ? $& : "%#{$&.ord.to_s(16).upcase}"
         end.tr(' ', '+')
 
         text = text.force_encoding(enc) if enc
@@ -65,9 +65,7 @@ module YARD
           html = html.encode(:invalid => :replace, :replace => '?')
         end
         html = resolve_links(html)
-        unless [:text, :none, :pre, :ruby].include?(markup)
-          html = parse_codeblocks(html)
-        end
+        html = parse_codeblocks(html) unless %i(text none pre ruby).include?(markup)
         html
       end
 
@@ -79,18 +77,18 @@ module YARD
         # TODO: other libraries might be more complex
         provider = markup_class(:markdown)
         case provider.to_s
-        when  'RDiscount'
+        when 'RDiscount'
           provider.new(text, :autolink).to_html
         when 'RedcarpetCompat'
           provider.new(text, :autolink,
-                             :fenced_code,
-                             :gh_blockcode,
-                             :lax_spacing,
-                             :tables,
-                             :with_toc_data,
-                             :no_intraemphasis).to_html
+                       :fenced_code,
+                       :gh_blockcode,
+                       :lax_spacing,
+                       :tables,
+                       :with_toc_data,
+                       :no_intraemphasis).to_html
         when 'CommonMarker'
-          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
+          CommonMarker.render_html(text, %i(DEFAULT GITHUB_PRE_LANG), %i(autolink table))
         else
           provider.new(text).to_html
         end
@@ -144,7 +142,7 @@ module YARD
       # @return [String] the output HTML
       # @since 0.6.0
       def html_markup_pre(text)
-        "<pre>" + h(text) + "</pre>"
+        "<pre>#{h(text)}</pre>"
       end
 
       # Converts plaintext to regular HTML
@@ -177,12 +175,12 @@ module YARD
       # @return [String] the highlighted HTML
       # @since 0.7.0
       def html_markup_ruby(source)
-        '<pre class="code ruby">' + html_syntax_highlight(source, :ruby) + '</pre>'
+        "<pre class=\"code ruby\">#{html_syntax_highlight(source, :ruby)}</pre>"
       end
 
       # @return [String] HTMLified text as a single line (paragraphs removed)
       def htmlify_line(*args)
-        "<div class='inline'>" + htmlify(*args) + "</div>"
+        "<div class='inline'>#{htmlify(*args)}</div>"
       end
 
       # @group Syntax Highlighting Source Code
@@ -253,12 +251,15 @@ module YARD
             object
           else
             link = linkify(name, title)
-            if (link == name || link == title) && (name + ' ' + link !~ /\A<a\s.*>/)
+            if (link == name || link == title) && ("#{name} #{link}" !~ /\A<a\s.*>/)
               match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
               file = (defined?(@file) && @file ? @file.filename : object.file) || '(unknown)'
-              line = (defined?(@file) && @file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
-              log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".") +
-                       "\n\t" + (match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '') if match
+              line = (defined?(@file) && @file ? 1 :
+                (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
+              if match
+                log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text#{match ? ":" : "."}\n\t" \
+                         "#{match[1] ? '...' : ''}#{match[2].delete("\n")}#{match[3] ? '...' : ''}"
+              end
             end
 
             link
@@ -280,9 +281,7 @@ module YARD
 
       # (see BaseHelper#link_include_file)
       def link_include_file(file)
-        unless file.is_a?(CodeObjects::ExtraFileObject)
-          file = CodeObjects::ExtraFileObject.new(file)
-        end
+        file = CodeObjects::ExtraFileObject.new(file) unless file.is_a?(CodeObjects::ExtraFileObject)
         file.attributes[:markup] ||= markup_for_file('', file.filename)
         insert_include(file.contents, file.attributes[:markup] || options.markup)
       end
@@ -301,28 +300,28 @@ module YARD
       def link_object(obj, title = nil, anchor = nil, relative = true)
         return title if obj.nil?
         obj = Registry.resolve(object, obj, true, true) if obj.is_a?(String)
-        if title
-          title = title.to_s
-        elsif object.is_a?(CodeObjects::Base)
-          # Check if we're linking to a class method in the current
-          # object. If we are, create a title in the format of
-          # "CurrentClass.method_name"
-          if obj.is_a?(CodeObjects::MethodObject) && obj.scope == :class && obj.parent == object
-            title = h([object.name, obj.sep, obj.name].join)
-          elsif obj.title != obj.path
-            title = h(obj.title)
-          else
-            title = h(object.relative_path(obj))
-          end
-        else
-          title = h(obj.title)
-        end
+        title = if title
+                  title.to_s
+                elsif object.is_a?(CodeObjects::Base)
+                  # Check if we're linking to a class method in the current
+                  # object. If we are, create a title in the format of
+                  # "CurrentClass.method_name"
+                  if obj.is_a?(CodeObjects::MethodObject) && obj.scope == :class && obj.parent == object
+                    h([object.name, obj.sep, obj.name].join)
+                  elsif obj.title != obj.path
+                    h(obj.title)
+                  else
+                    h(object.relative_path(obj))
+                  end
+                else
+                  h(obj.title)
+                end
         return title unless serializer
         return title if obj.is_a?(CodeObjects::Proxy)
 
         link = url_for(obj, anchor, relative)
         link = link ? link_url(link, title, :title => h("#{obj.title} (#{obj.type})")) : title
-        "<span class='object_link'>" + link + "</span>"
+        "<span class='object_link'>#{link}</span>"
       rescue Parser::UndocumentableError
         log.warn "The namespace of link #{obj.inspect} is a constant or invalid."
         title || obj.to_s
@@ -393,7 +392,7 @@ module YARD
           link = objpath
         end
 
-        link + (anchor ? '#' + urlencode(anchor_for(anchor)) : '')
+        link + (anchor ? "##{urlencode(anchor_for(anchor))}" : '')
       end
 
       alias mtime_url url_for
@@ -407,14 +406,12 @@ module YARD
       def url_for_file(filename, anchor = nil)
         return '' unless serializer
         fromobj = object
-        if CodeObjects::Base === fromobj && !fromobj.is_a?(CodeObjects::NamespaceObject)
-          fromobj = fromobj.namespace
-        end
+        fromobj = fromobj.namespace if CodeObjects::Base === fromobj && !fromobj.is_a?(CodeObjects::NamespaceObject)
         from = serializer.serialized_path(fromobj)
         path = filename == options.readme ?
           'index.html' : serializer.serialized_path(filename)
         link = File.relative_path(from, path)
-        link += (anchor ? '#' + urlencode(anchor) : '')
+        link += (anchor ? "##{urlencode(anchor)}" : '')
         link
       end
 
@@ -457,7 +454,7 @@ module YARD
       # @return [String] a formatted list of objects
       def format_object_name_list(objects)
         objects.sort_by {|o| o.name.to_s.downcase }.map do |o|
-          "<span class='name'>" + linkify(o, o.name) + "</span>"
+          "<span class='name'>#{linkify(o, o.name)}</span>"
         end.join(", ")
       end
 
@@ -478,7 +475,7 @@ module YARD
         list = typelist.map do |type|
           type = type.gsub(/([<>])/) { h($1) }
           type = type.gsub(/([\w:]+)/) { $1 == "lt" || $1 == "gt" ? $1 : linkify($1, $1) }
-          "<tt>" + type + "</tt>"
+          "<tt>#{type}</tt>"
         end
         list.empty? ? "" : (brackets ? "(#{list.join(", ")})" : list.join(", "))
       end
@@ -491,25 +488,23 @@ module YARD
       # @since 0.5.3
       def signature_types(meth, link = true)
         meth = convert_method_to_overload(meth)
-        if meth.respond_to?(:object) && !meth.has_tag?(:return)
-          meth = meth.object
-        end
+        meth = meth.object if meth.respond_to?(:object) && !meth.has_tag?(:return)
 
         type = options.default_return || ""
         if meth.tag(:return) && meth.tag(:return).types
-          types = meth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
+          types = meth.tags(:return).map {|t| t.types || [] }.flatten.uniq
           first = link ? h(types.first) : format_types([types.first], false)
-          if types.size == 2 && types.last == 'nil'
-            type = first + '<sup>?</sup>'
-          elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
-            type = first + '<sup>+</sup>'
-          elsif types.size > 2
-            type = [first, '...'].join(', ')
-          elsif types == ['void'] && options.hide_void_return
-            type = ""
-          else
-            type = link ? h(types.join(", ")) : format_types(types, false)
-          end
+          type = if types.size == 2 && types.last == 'nil'
+                   "#{first}<sup>?</sup>"
+                 elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
+                   "#{first}<sup>+</sup>"
+                 elsif types.size > 2
+                   [first, '...'].join(', ')
+                 elsif types == ['void'] && options.hide_void_return
+                   ""
+                 else
+                   link ? h(types.join(", ")) : format_types(types, false)
+                 end
         elsif !type.empty?
           type = link ? h(type) : format_types([type], false)
         end
@@ -541,19 +536,19 @@ module YARD
           rw = meth.attr_info
           if rw
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
-            attname = attname.size == 1 ? attname.join('') + 'only' : nil
+            attname = attname.size == 1 ? "#{attname.join}only" : nil
             extras << attname if attname
           end
           extras << meth.visibility if meth.visibility != :public
-          extras_text = ' <span class="extras">(' + extras.join(", ") + ')</span>' unless extras.empty?
+          extras_text = " <span class=\"extras\">(#{extras.join(", ")})</span>" unless extras.empty?
         end
         title = "%s<strong>%s</strong>%s %s %s" % [scope, h(name), args, blk, type]
         if link
-          if meth.is_a?(YARD::CodeObjects::MethodObject)
-            link_title = "#{h meth.name(true)} (#{meth.scope} #{meth.type})"
-          else
-            link_title = "#{h name} (#{meth.type})"
-          end
+          link_title = if meth.is_a?(YARD::CodeObjects::MethodObject)
+                         "#{h meth.name(true)} (#{meth.scope} #{meth.type})"
+                       else
+                         "#{h name} (#{meth.type})"
+                       end
           obj = meth.respond_to?(:object) ? meth.object : meth
           url = url_for(object, obj)
           link_url(url, title, :title => link_title) + extras_text
@@ -631,6 +626,10 @@ module YARD
         [type, source]
       end
 
+      # @!private
+      CODEBLOCKS_MATCH =
+        %r{<pre((?:\s+\w+="(?:.+?)")*)\s*>(?:\s*<code((?:\s+\w+="(?:.+?)")*)\s*>)?(.+?)(?:</code>\s*)?</pre>}m
+
       # Parses code blocks out of html and performs syntax highlighting
       # on code inside of the blocks.
       #
@@ -638,7 +637,7 @@ module YARD
       # @return [String] highlighted html
       # @see #html_syntax_highlight
       def parse_codeblocks(html)
-        html.gsub(%r{<pre((?:\s+\w+="(?:.+?)")*)\s*>(?:\s*<code((?:\s+\w+="(?:.+?)")*)\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
+        html.gsub(CODEBLOCKS_MATCH) do
           string = $3
 
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
@@ -646,9 +645,7 @@ module YARD
           language ||= detect_lang_in_codeblock_attributes($1, $2)
           language ||= object.source_type
 
-          if options.highlight
-            string = html_syntax_highlight(CGI.unescapeHTML(string), language)
-          end
+          string = html_syntax_highlight(CGI.unescapeHTML(string), language) if options.highlight
           classes = ['code', language].compact.join(' ')
           %(<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>)
         end
@@ -663,9 +660,9 @@ module YARD
       # @return [String, nil] detected programming language
       def detect_lang_in_codeblock_attributes(pre_html_attrs, code_html_attrs)
         detected = nil
-        detected ||= (/\bdata-lang="(.+?)"/ =~ code_html_attrs && $1)
-        detected ||= (/\blang="(.+?)"/ =~ pre_html_attrs && $1)
-        detected ||= (/\bclass="(.+?)"/ =~ code_html_attrs && $1)
+        detected ||= /\bdata-lang="(.+?)"/ =~ code_html_attrs && $1
+        detected ||= /\blang="(.+?)"/ =~ pre_html_attrs && $1
+        detected ||= /\bclass="(.+?)"/ =~ code_html_attrs && $1
         detected
       end
     end

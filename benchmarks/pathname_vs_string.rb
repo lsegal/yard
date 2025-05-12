@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'pathname'
 require "benchmark"
-require File.dirname(__FILE__) + '/../lib/yard'
+require "#{File.dirname(__FILE__)}/../lib/yard"
 
 pathobj = Pathname.new("a/b/c")
 strobj  = "a/b/c"

@@ -1,12 +1,14 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassConditionHandler" do
   before(:all) { parse_file :class_condition_handler_001, __FILE__ }
 
   def verify_method(*names)
-    names.each {|name| expect(Registry.at("A##{name}")).not_to be nil }
-    names.each {|name| expect(Registry.at("A##{name}not")).to be nil }
+    names.each do |name|
+      expect(Registry.at("A##{name}")).not_to be nil
+      expect(Registry.at("A##{name}not")).to be nil
+    end
   end
 
   def no_undoc_error(code)
@@ -58,11 +60,11 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCon
     expect(log).not_to receive(:warn)
     expect(log).not_to receive(:error)
     no_undoc_error "if defined?(A) && defined?(B); puts 'hi' end"
-    no_undoc_error(<<-eof)
+    no_undoc_error(<<-EOF)
       (<<-TEST) unless defined?(ABCD_MODEL_TEST)
         'String'
       TEST
-    eof
+    EOF
     no_undoc_error "if caller.none? { |l| l =~ %r{lib/rails/generators\\.rb:(\\d+):in `lookup!'$} }; end"
   end
 
@@ -73,13 +75,13 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassCon
       def self.value; @@value end
     end
 
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       if defined? A.b(42).to_i
         class Foo; end
       else
         class Bar; end
       end
-    eof
+    EOF
     expect(A.value).to be_nil
     expect(YARD::Registry.at('Foo')).not_to be_nil
     expect(YARD::Registry.at('Bar')).not_to be_nil

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}AttributeHandler" do
   before(:all) { parse_file :attribute_handler_001, __FILE__ }
 
   def read_write(namespace, name, read, write, scope = :instance)
-    rname = namespace.to_s + "#" + name.to_s
-    wname = namespace.to_s + "#" + name.to_s + "="
+    rname = "#{namespace}##{name}"
+    wname = "#{namespace}##{name}="
     if read
       expect(Registry.at(rname)).to be_instance_of(CodeObjects::MethodObject)
     else

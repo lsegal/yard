@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Engine.template(:default, :docstring) do
   before do
     Registry.clear
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       private
       # Comments
       # @abstract override this class
@@ -28,7 +28,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :docstring) do
         # @private
         def initialize; end
       end
-    eof
+    EOF
   end
 
   it "renders html format correctly" do

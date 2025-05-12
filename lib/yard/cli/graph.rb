@@ -73,7 +73,8 @@ module YARD
         opts.separator ""
         opts.separator "General Options:"
 
-        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
+        opts.on('-b', '--db FILE',
+                'Use a specified .yardoc db to load from or save to. (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
 
@@ -101,7 +102,7 @@ module YARD
         opts.separator "Output options:"
 
         opts.on('--dot [OPTIONS]', 'Send the results directly to `dot` with optional arguments.') do |dotopts|
-          options.serializer = Serializers::ProcessSerializer.new('dot ' + dotopts.to_s)
+          options.serializer = Serializers::ProcessSerializer.new("dot #{dotopts}")
         end
 
         opts.on('-f', '--file [FILE]', 'Writes output to a file instead of stdout.') do |file|

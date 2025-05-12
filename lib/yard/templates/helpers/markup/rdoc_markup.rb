@@ -10,6 +10,7 @@ module YARD
           require 'rdoc/markup'
           require 'rdoc/markup/to_html'
           class RDocMarkup; MARKUP = RDoc::Markup end
+
           class RDocMarkupToHtml < RDoc::Markup::ToHtml
             if defined?(RDoc::VERSION) && RDoc::VERSION >= '4.0.0' &&
                defined?(RDoc::Options)
@@ -24,7 +25,7 @@ module YARD
           begin
             require 'rdoc/markup/simple_markup'
             require 'rdoc/markup/simple_markup/to_html'
-            class RDocMarkup; MARKUP = SM::SimpleMarkup end
+            class RDocMarkup; MARKUP = SM::SimpleMarkup end # rubocop:disable Lint/ConstantReassignment
             class RDocMarkupToHtml < SM::ToHtml; end
           rescue LoadError
             raise NameError, "could not load RDocMarkup (rdoc is not installed)"
@@ -56,8 +57,7 @@ module YARD
               html = @@markup.convert(@text, @@formatter)
             end
             html = fix_dash_dash(html)
-            html = fix_typewriter(html)
-            html
+            fix_typewriter(html)
           end
 
           private
@@ -78,7 +78,7 @@ module YARD
                 next str
               end
               next str unless code_tags == 0
-              first_text + '<tt>' + type_text + '</tt>'
+              "#{first_text}<tt>#{type_text}</tt>"
             end
           end
 
@@ -95,7 +95,7 @@ module YARD
           attr_accessor :from_path
 
           # Disable auto-link of URLs
-          def handle_special_HYPERLINK(special) # rubocop:disable Style/MethodName
+          def handle_special_HYPERLINK(special) # rubocop:disable Naming/MethodName
             @hyperlink ? special.text : super
           end
 

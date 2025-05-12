@@ -13,17 +13,17 @@ RSpec.describe YARD::Rake::YardocTask do
     allow(Registry).to receive(:load)
     allow(Registry).to receive(:save)
     allow(YARD::CLI::Yardoc).to receive(:new).and_return(@yardoc)
-    ::Rake.application.clear
+    Rake.application.clear
   end
 
   def run
-    ::Rake.application.tasks[0].invoke
+    Rake.application.tasks[0].invoke
   end
 
   describe "#initialize" do
     it "allows separate rake task name to be set" do
       YARD::Rake::YardocTask.new(:notyardoc)
-      expect(::Rake.application.tasks[0].name).to eq "notyardoc"
+      expect(Rake.application.tasks[0].name).to eq "notyardoc"
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe YARD::Rake::YardocTask do
         t.options = ['--private', '--protected']
       end
       run
-      expect(@yardoc.visibilities).to eq [:public, :private, :protected]
+      expect(@yardoc.visibilities).to eq %i(public private protected)
     end
 
     it "allows --api and --no-api" do

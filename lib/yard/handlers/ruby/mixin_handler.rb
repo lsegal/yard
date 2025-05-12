@@ -7,11 +7,11 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
 
   process do
     errors = []
-    statement.parameters(false).reverse.each do |mixin|
+    statement.parameters(false).reverse_each do |mixin|
       begin
         process_mixin(mixin)
-      rescue YARD::Parser::UndocumentableError => err
-        errors << err.message
+      rescue YARD::Parser::UndocumentableError => e
+        errors << e.message
       end
     end
     unless errors.empty?
@@ -26,16 +26,16 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     raise YARD::Parser::UndocumentableError unless mixin.ref?
     raise YARD::Parser::UndocumentableError if mixin.first.type == :ident
 
-    if mixin.type == :var_ref && mixin[0] == s(:kw, "self")
-      obj = namespace
-    else
-      case obj = Proxy.new(namespace, mixin.source)
-      when ConstantObject # If a constant is included, use its value as the real object
-        obj = Proxy.new(namespace, obj.value, :module)
-      else
-        obj = Proxy.new(namespace, mixin.source, :module)
-      end
-    end
+    obj = if mixin.type == :var_ref && mixin[0] == s(:kw, "self")
+            namespace
+          else
+            case obj = Proxy.new(namespace, mixin.source)
+            when ConstantObject # If a constant is included, use its value as the real object
+              Proxy.new(namespace, obj.value, :module)
+            else
+              Proxy.new(namespace, mixin.source, :module)
+            end
+          end
 
     rec = recipient(mixin)
     return if rec.nil?
@@ -47,8 +47,8 @@ class YARD::Handlers::Ruby::MixinHandler < YARD::Handlers::Ruby::Base
     rec.mixins(scope).send(shift, obj)
   end
 
-  def recipient(mixin)
-    if statement[0].type == :const_path_ref || statement[0].type == :top_const_ref
+  def recipient(_mixin)
+    if %i(const_path_ref top_const_ref).include?(statement[0].type)
       Proxy.new(namespace, statement[0].source)
     elsif statement[0].type == :var_ref && statement[0][0] != s(:kw, "self")
       statement[0][0].type == :const ?

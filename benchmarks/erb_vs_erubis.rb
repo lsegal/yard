@@ -13,41 +13,41 @@ end
 
 Benchmark.bmbm do |x|
   x.report("erubis") do
-    eval <<-eof
+    eval <<-EOF
       module YARD; module Templates; module Template
         def erb_with(str, x) Erubis::Eruby.new(str) end
       end end end
-    eof
+    EOF
 
     rungen
   end
 
   x.report("fast-erubis") do
-    eval <<-eof
+    eval <<-EOF
       module YARD; module Templates; module Template
         def erb_with(str, x) Erubis::FastEruby.new(str) end
       end end end
-    eof
+    EOF
 
     rungen
   end
 
   x.report("tiny-erubis") do
-    eval <<-eof
+    eval <<-EOF
       module YARD; module Templates; module Template
         def erb_with(str, x) Erubis::TinyEruby.new(str) end
       end end end
-    eof
+    EOF
 
     rungen
   end
 
   x.report("erb") do
-    eval <<-eof
+    eval <<-EOF
        module YARD; module Templates; module Template
         def erb_with(str, x) ERB.new(str) end
       end end end
-    eof
+    EOF
 
     rungen
   end

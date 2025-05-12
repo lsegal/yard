@@ -44,8 +44,9 @@ module YARD::CodeObjects
     #   the inheritance tree.
     def inheritance_tree(include_mods = false)
       list = (include_mods ? mixins(:instance, :class) : [])
-      if superclass.is_a?(Proxy) || superclass.respond_to?(:inheritance_tree)
-        list += [superclass] unless superclass == P(:Object) || superclass == P(:BasicObject)
+      if (superclass.is_a?(Proxy) || superclass.respond_to?(:inheritance_tree)) &&
+         !(superclass == P(:Object) || superclass == P(:BasicObject))
+        list += [superclass]
       end
       [self] + list.map do |m|
         next m if m == self
@@ -65,7 +66,7 @@ module YARD::CodeObjects
     # @return [Array<MethodObject>] the list of methods that matched
     def meths(opts = {})
       opts = SymbolHash[:inherited => true].update(opts)
-      list = super(opts)
+      list = super
       list += inherited_meths(opts).reject do |o|
         next(false) if opts[:all]
         list.find {|o2| o2.name == o.name && o2.scope == o.scope }
@@ -100,7 +101,7 @@ module YARD::CodeObjects
     # @return [Array<ConstantObject>] the list of constant that matched
     def constants(opts = {})
       opts = SymbolHash[:inherited => true].update(opts)
-      super(opts) + (opts[:inherited] ? inherited_constants : [])
+      super + (opts[:inherited] ? inherited_constants : [])
     end
 
     # Returns only the constants that were inherited.

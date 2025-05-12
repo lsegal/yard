@@ -13,8 +13,8 @@ module YARD
             next unless AstNode === param
             begin
               privatize_constant(param)
-            rescue UndocumentableError => err
-              errors << err.message
+            rescue UndocumentableError => e
+              errors << e.message
             end
           end
           unless errors.empty?

@@ -25,7 +25,7 @@ RSpec.describe Gem::DocManager do
   describe ".load_yardoc" do
     it "properly loads YARD" do
       expect(Gem::DocManager).to receive(:require) do |path|
-        expect(File.expand_path(path)).to eq YARD::ROOT + '/yard'
+        expect(File.expand_path(path)).to eq "#{YARD::ROOT}/yard"
       end
       Gem::DocManager.load_yardoc
     end
@@ -104,7 +104,7 @@ RSpec.describe Gem::DocManager do
     it "adds -o outdir when generating docs" do
       expect(File).to receive(:file?).with(@yardopts).and_return(true)
       @spec.has_yardoc = true
-      doc_dir = File.join(@doc.instance_variable_get("@doc_dir"), 'rdoc')
+      doc_dir = File.join(@doc.instance_variable_get(:@doc_dir), 'rdoc')
       runs.with('-o', doc_dir, '--quiet')
       install
     end

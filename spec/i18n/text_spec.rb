@@ -13,11 +13,11 @@ RSpec.describe YARD::I18n::Text do
 
     describe "Header" do
       it "extracts at attribute" do
-        text = <<-eot
+        text = <<-EOT
 # @title Getting Started Guide
 
 # Getting Started with YARD
-eot
+        EOT
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
            [:paragraph, "# Getting Started with YARD", 3]]
@@ -25,12 +25,12 @@ eot
       end
 
       it "ignores markup line" do
-        text = <<-eot
+        text = <<-EOT
 #!markdown
 # @title Getting Started Guide
 
 # Getting Started with YARD
-eot
+        EOT
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 2],
            [:paragraph, "# Getting Started with YARD", 4]]
@@ -38,12 +38,12 @@ eot
       end
 
       it "terminates header block by markup line not at the first line" do
-        text = <<-eot
+        text = <<-EOT
 # @title Getting Started Guide
 #!markdown
 
 # Getting Started with YARD
-eot
+        EOT
         expect(extract_messages(text, :have_header => true)).to eq(
           [[:attribute, "title", "Getting Started Guide", 1],
            [:paragraph, "#!markdown", 2],
@@ -54,19 +54,19 @@ eot
 
     describe "Body" do
       it "splits to paragraphs" do
-        paragraph1 = <<-eop.strip
+        paragraph1 = <<-EOP.strip
 Note that class methods must not be referred to with the "::" namespace
 separator. Only modules, classes and constants should use "::".
-eop
-        paragraph2 = <<-eop.strip
+        EOP
+        paragraph2 = <<-EOP.strip
 You can also do lookups on any installed gems. Just make sure to build the
 .yardoc databases for installed gems with:
-eop
-        text = <<-eot
+        EOP
+        text = <<-EOT
 #{paragraph1}
 
 #{paragraph2}
-eot
+        EOT
         expect(extract_messages(text)).to eq(
           [[:paragraph, paragraph1, 1],
            [:paragraph, paragraph2, 4]]
@@ -93,91 +93,91 @@ eot
 
     describe "Header" do
       it "extracts at attribute" do
-        text = <<-eot
+        text = <<-EOT
 # @title Hello
 
 # Getting Started with YARD
 
 Paragraph.
-eot
-        expect(translate(text, :have_header => true)).to eq <<-eot
+        EOT
+        expect(translate(text, :have_header => true)).to eq <<-EOT
 # @title Bonjour (Hello in fr)
 
 # Getting Started with YARD
 
 Paragraph.
-eot
+        EOT
       end
 
       it "ignores markup line" do
-        text = <<-eot
+        text = <<-EOT
 #!markdown
 # @title Hello
 
 # Getting Started with YARD
 
 Paragraph.
-eot
-        expect(translate(text, :have_header => true)).to eq <<-eot
+        EOT
+        expect(translate(text, :have_header => true)).to eq <<-EOT
 #!markdown
 # @title Bonjour (Hello in fr)
 
 # Getting Started with YARD
 
 Paragraph.
-eot
+        EOT
       end
     end
 
     describe "Body" do
       it "splits to paragraphs" do
-        paragraph1 = <<-eop.strip
+        paragraph1 = <<-EOP.strip
 Paragraph 1.
-eop
-        paragraph2 = <<-eop.strip
+        EOP
+        paragraph2 = <<-EOP.strip
 Paragraph 2.
-eop
-        text = <<-eot
+        EOP
+        text = <<-EOT
 #{paragraph1}
 
 #{paragraph2}
-eot
-        expect(translate(text)).to eq <<-eot
+        EOT
+        expect(translate(text)).to eq <<-EOT
 Paragraphe 1.
 
 Paragraphe 2.
-eot
+        EOT
       end
 
       it "does not modify non-translated message" do
-        nonexistent_paragraph = <<-eop.strip
+        nonexistent_paragraph = <<-EOP.strip
 Nonexsitent paragraph.
-eop
-        text = <<-eot
+        EOP
+        text = <<-EOT
 #{nonexistent_paragraph}
-eot
-        expect(translate(text)).to eq <<-eot
+        EOT
+        expect(translate(text)).to eq <<-EOT
 #{nonexistent_paragraph}
-eot
+        EOT
       end
 
       it "keeps empty lines" do
-        text = <<-eot
+        text = <<-EOT
 Paragraph 1.
 
 
 
 
 Paragraph 2.
-eot
-        expect(translate(text)).to eq <<-eot
+        EOT
+        expect(translate(text)).to eq <<-EOT
 Paragraphe 1.
 
 
 
 
 Paragraphe 2.
-eot
+        EOT
       end
     end
   end

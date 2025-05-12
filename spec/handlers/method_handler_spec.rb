@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHandler" do
   before(:all) do
@@ -20,7 +20,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     expect(P("String.hello")).to be_instance_of(CodeObjects::MethodObject)
   end
 
-  [:[], :[]=, :allowed?, :/, :=~, :==, :`, :|, :*, :&, :%, :'^', :-@, :+@, :'~@'].each do |name|
+  %i([] []= allowed? / =~ == ` | * & % ^ -@ +@ ~@).each do |name|
     it "allows valid method #{name}" do
       expect(Registry.at("Foo##{name}")).not_to be nil
     end
@@ -82,7 +82,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     EOF
 
     expect(P('Bar#method_with_forwarding').signature).to eq "def method_with_forwarding(...)"
-  end if YARD.ruby3? # this is 2.7+ but we can just test on 3+
+  end if YARD.ruby3?
 
   it "handles method with anonymous block" do
     YARD.parse_string <<-EOF
@@ -154,7 +154,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
 
   %w(inherited included method_added method_removed method_undefined).each do |meth|
     it "sets @private tag on #{meth} callback method if no docstring is set" do
-      expect(P('Foo.' + meth)).to have_tag(:private)
+      expect(P("Foo.#{meth}")).to have_tag(:private)
     end
   end
 

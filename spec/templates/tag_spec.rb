@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
   before { Registry.clear }
 
   describe "all known tags" do
     before do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # Comments
         # @abstract override me
         # @param [Hash] opts the options
@@ -30,7 +30,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
         #   a = String.new
         #   flip(a.reverse)
         def m(opts = {}) end
-      eof
+      EOF
     end
 
     it "renders text format correctly" do
@@ -40,25 +40,25 @@ RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
 
   describe "param tags on non-methods" do
     it "does not display @param tags on non-method objects" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @param [#to_s] name the name
         module Foo; end
-      eof
+      EOF
 
-      expect { Registry.at('Foo').format(html_options) }
-        .not_to raise_error
+      expect { Registry.at('Foo').format(html_options) }.
+        not_to raise_error
     end
   end
 
   describe "option tags on non-methods" do
     it "does not display @option tags on non-method objects" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @option opts name [#to_s] ('bar') the name
         module Foo; end
-      eof
+      EOF
 
-      expect { Registry.at('Foo').format(html_options) }
-        .not_to raise_error
+      expect { Registry.at('Foo').format(html_options) }.
+        not_to raise_error
     end
   end
 end

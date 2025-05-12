@@ -58,10 +58,10 @@ module YARD
         request = Rack::Request.new(env)
         request.path_info = unescape(request.path_info) # unescape things like %3F
         router.call(request)
-      rescue StandardError => ex
-        log.backtrace(ex)
+      rescue StandardError => e
+        log.backtrace(e)
         [500, {'Content-Type' => 'text/plain'},
-          [ex.message + "\n" + ex.backtrace.join("\n")]]
+          ["#{e.message}\n#{e.backtrace.join("\n")}"]]
       end
 
       # Starts the Rack server. This method will pass control to the server and
@@ -69,7 +69,7 @@ module YARD
       # @return [void]
       def start
         server = RackServer.new(server_options)
-        server.instance_variable_set("@app", self)
+        server.instance_variable_set(:@app, self)
         print_start_message(server)
         server.start
       end

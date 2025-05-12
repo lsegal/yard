@@ -89,7 +89,7 @@ module YARD::Templates::Helpers
             ''
           end
         when /^file:(\S+?)(?:#(\S+))?$/
-          link_file($1, args[1] ? args[1] : nil, $2)
+          link_file($1, args[1] || nil, $2)
         else
           link_object(*args)
         end
@@ -198,7 +198,7 @@ module YARD::Templates::Helpers
       when YARD::CodeObjects::RootObject
         "Top Level Namespace"
       else
-        format_object_type(object) + ": " + object.title
+        "#{format_object_type(object)}: #{object.title}"
       end
     end
 

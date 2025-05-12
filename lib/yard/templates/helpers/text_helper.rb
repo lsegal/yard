@@ -8,12 +8,12 @@ module YARD
         def h(text)
           out = String.new("")
           text = resolve_links(text)
-          text = text.split(/\n/)
+          text = text.split("\n")
           text.each_with_index do |line, i|
             out <<
               case line
               when /^\s*$/; "\n\n"
-              when /^\s+\S/, /^=/; line + "\n"
+              when /^\s+\S/, /^=/; "#{line}\n"
               else; line + (text[i + 1] =~ /^\s+\S/ ? "\n" : " ")
               end
           end
@@ -37,8 +37,8 @@ module YARD
 
         # @return [String] aligns text to the right
         def align_right(text, spacer = ' ', col = 72)
-          text = text[0, col - 4] + '...' if (col - 1 - text.length) < 0
-          spacer * (col - 1 - text.length) + " " + text
+          text = "#{text[0, col - 4]}..." if (col - 1 - text.length) < 0
+          "#{spacer * (col - 1 - text.length)} #{text}"
         end
 
         # @return [String] returns a horizontal rule for output
@@ -49,29 +49,25 @@ module YARD
         # @return [String] the formatted signature for a method
         def signature(meth)
           # use first overload tag if it has a return type and method itself does not
-          if !meth.tag(:return) && meth.tag(:overload) && meth.tag(:overload).tag(:return)
-            meth = meth.tag(:overload)
-          end
+          meth = meth.tag(:overload) if !meth.tag(:return) && meth.tag(:overload) && meth.tag(:overload).tag(:return)
 
           type = options.default_return || ""
           rmeth = meth
-          if !rmeth.has_tag?(:return) && rmeth.respond_to?(:object)
-            rmeth = meth.object
-          end
+          rmeth = meth.object if !rmeth.has_tag?(:return) && rmeth.respond_to?(:object)
           if rmeth.tag(:return) && rmeth.tag(:return).types
-            types = rmeth.tags(:return).map {|t| t.types ? t.types : [] }.flatten.uniq
+            types = rmeth.tags(:return).map {|t| t.types || [] }.flatten.uniq
             first = types.first
-            if types.size == 2 && types.last == 'nil'
-              type = first + '?'
-            elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
-              type = first + '+'
-            elsif types.size > 2
-              type = [first, '...'].join(', ')
-            elsif types == ['void'] && options.hide_void_return
-              type = ""
-            else
-              type = types.join(", ")
-            end
+            type = if types.size == 2 && types.last == 'nil'
+                     "#{first}?"
+                   elsif types.size == 2 && types.last =~ /^(Array)?<#{Regexp.quote types.first}>$/
+                     "#{first}+"
+                   elsif types.size > 2
+                     [first, '...'].join(', ')
+                   elsif types == ['void'] && options.hide_void_return
+                     ""
+                   else
+                     types.join(", ")
+                   end
           end
           type = "(#{type})" if type.include?(',')
           type = " -> #{type} " unless type.empty?
@@ -84,11 +80,11 @@ module YARD
           rw = meth.namespace.attributes[meth.scope][meth.name]
           if rw
             attname = [rw[:read] ? 'read' : nil, rw[:write] ? 'write' : nil].compact
-            attname = attname.size == 1 ? attname.join('') + 'only' : nil
+            attname = attname.size == 1 ? "#{attname.join}only" : nil
             extras << attname if attname
           end
           extras << meth.visibility if meth.visibility != :public
-          extras_text = '(' + extras.join(", ") + ')' unless extras.empty?
+          extras_text = "(#{extras.join(", ")})" unless extras.empty?
           title = "%s%s%s %s%s%s" % [scope, name, args, blk, type, extras_text]
           title.gsub(/\s+/, ' ')
         end

@@ -19,17 +19,13 @@ module YARD
     ##
     # Force installation of documentation?
 
-    attr_accessor :force
+    attr_accessor :force, :generate_yard, :generate_yri
 
     ##
     # Generate yard?
 
-    attr_accessor :generate_yard
-
     ##
     # Generate yri data?
-
-    attr_accessor :generate_yri
 
     class << self
       ##
@@ -120,11 +116,11 @@ module YARD
     rescue Errno::EACCES => e
       dirname = File.dirname e.message.split("-")[1].strip
       raise Gem::FilePermissionError, dirname
-    rescue => ex
+    rescue StandardError => e
       alert_error "While generating documentation for #{@spec.full_name}"
-      ui.errs.puts "... MESSAGE:   #{ex}"
+      ui.errs.puts "... MESSAGE:   #{e}"
       ui.errs.puts "... YARDOC args: #{args.join(' ')}"
-      ui.errs.puts "\t#{ex.backtrace.join("\n\t")}" if Gem.configuration.backtrace
+      ui.errs.puts "\t#{e.backtrace.join("\n\t")}" if Gem.configuration.backtrace
       ui.errs.puts "(continuing with the rest of the installation)"
     end
 
@@ -193,5 +189,5 @@ module YARD
   end
 end
 
-Gem.done_installing(&YARD::RubygemsHook.method(:generation_hook))
-Gem.pre_uninstall(&YARD::RubygemsHook.method(:removal_hook))
+Gem.done_installing { YARD::RubygemsHook.generation_hook }
+Gem.pre_uninstall { YARD::RubygemsHook.removal_hook }

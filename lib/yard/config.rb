@@ -124,7 +124,7 @@ module YARD
       add_ignored_plugins_file
       translate_plugin_names
       load_plugins
-    rescue => e
+    rescue StandardError => e
       log.error "Invalid configuration file, using default options."
       log.backtrace(e)
       options.update(DEFAULT_CONFIG_OPTIONS)
@@ -219,9 +219,7 @@ module YARD
 
     # Legacy support for {IGNORED_PLUGINS}
     def self.add_ignored_plugins_file
-      if File.file?(IGNORED_PLUGINS)
-        options[:ignored_plugins] += File.read(IGNORED_PLUGINS).split(/\s+/)
-      end
+      options[:ignored_plugins] += File.read(IGNORED_PLUGINS).split(/\s+/) if File.file?(IGNORED_PLUGINS)
     end
 
     # Translates plugin names to add yard- prefix.
@@ -237,7 +235,7 @@ module YARD
       if File.file?(CONFIG_FILE)
         require 'yaml'
         if YAML.respond_to?(:safe_load_file)
-          YAML.safe_load_file(CONFIG_FILE, permitted_classes: [SymbolHash, Symbol])
+          YAML.safe_load_file(CONFIG_FILE, :permitted_classes => [SymbolHash, Symbol])
         else
           YAML.load_file(CONFIG_FILE)
         end
@@ -251,7 +249,7 @@ module YARD
     # @return [String] the sanitized and normalized plugin name.
     def self.translate_plugin_name(name)
       name = name.delete('/') # Security sanitization
-      name = "yard-" + name unless name =~ YARD_PLUGIN_PREFIX
+      name = "yard-#{name}" unless name =~ YARD_PLUGIN_PREFIX
       name
     end
 

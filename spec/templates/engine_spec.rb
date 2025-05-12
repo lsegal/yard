@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Templates::Engine do
   before { @paths = Engine.template_paths }
@@ -49,8 +49,8 @@ RSpec.describe YARD::Templates::Engine do
       expect(Engine).to receive(:template_paths).and_return([])
       expect(File).to receive(:directory?).with("/full/path/template/notname").and_return(true)
       start_template = double(:start_template,
-        :full_path  => '/full/path/template/name',
-        :full_paths => ['/full/path/template/name'])
+                              :full_path  => '/full/path/template/name',
+                              :full_paths => ['/full/path/template/name'])
       expect(start_template).to receive(:is_a?).with(Template).and_return(true)
       mod = Engine.template(start_template, '..', 'notname')
       expect(mod).to include(Template)
@@ -79,11 +79,11 @@ RSpec.describe YARD::Templates::Engine do
       mod = double(:template)
       options = TemplateOptions.new
       options.reset_defaults
-      options.objects = [:a, :b, :c]
+      options.objects = %i(a b c)
       options.object = Registry.root
       expect(mod).to receive(:run).with(options)
       expect(Engine).to receive(:template).with(:default, :fulldoc, :text).and_return(mod)
-      Engine.generate([:a, :b, :c])
+      Engine.generate(%i(a b c))
     end
   end
 

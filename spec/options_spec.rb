@@ -41,6 +41,7 @@ RSpec.describe YARD::Options do
       class ResetDefaultOptions2 < YARD::Options
         default_attr :foo, 'FOO'
       end
+
       class ResetDefaultOptions3 < ResetDefaultOptions2
       end
       o = ResetDefaultOptions3.new

@@ -68,13 +68,13 @@ module YARD
               signature = "#{$1}=(#{$2})"
             when /^\w+\s+\S/
               signature = signature.split(/\s+/)
-              signature = "#{signature[1]}#{signature[2] ? '(' + signature[2..-1].join(' ') + ')' : ''}"
+              signature = "#{signature[1]}#{signature[2] ? "(#{signature[2..-1].join(' ')})" : ''}"
             when /^\w+\[(.+?)\]\s*(=)?/
               signature = "[]#{$2}(#{$1})"
-            when /^\w+\s+(#{CodeObjects::METHODMATCH})\s+(\w+)/
+            when /^\w+\s+(#{CodeObjects::METHODMATCH})\s+(\w+)/o
               signature = "#{$1}(#{$2})"
             end
-            break unless signature =~ /^#{CodeObjects::METHODNAMEMATCH}/
+            break unless signature =~ /^#{CodeObjects::METHODNAMEMATCH}/o
             signature = signature.rstrip
             overloads << "@overload #{signature}"
             overloads << "  @yield [#{blkparams}]" if blk
@@ -85,7 +85,7 @@ module YARD
         end
 
         def parse_types(types)
-          if types =~ /true or false/
+          if types.to_s.include?('true or false')
             ["Boolean"]
           else
             (types || "").split(/,| or /).map do |t|
@@ -108,7 +108,8 @@ module YARD
               when "matchdata"; "MatchData"
               when "encoding"; "Encoding"
               when "fixnum", "fix"; "Fixnum"
-              when /^(?:un)?signed$/, /^(?:(?:un)?signed\s*)?(?:short|int|long|long\s+long)$/, "integer", "Integer"; "Integer"
+              when /^(?:un)?signed$/, /^(?:(?:un)?signed\s*)?(?:short|int|long|long\s+long)$/, "integer", "Integer"
+                "Integer"
               when "num", "numeric", "Numeric", "number"; "Numeric"
               when "aBignum"; "Bignum"
               when "nil"; "nil"
@@ -116,8 +117,7 @@ module YARD
               when "false"; "false"
               when "bool", "boolean", "Boolean"; "Boolean"
               when "self"; "self"
-              when /^[-+]?\d/; t
-              when /[A-Z][_a-z0-9]+/; t
+              when /^[-+]?\d/, /[A-Z][_a-z0-9]+/; t
               end
             end.compact
           end
@@ -125,8 +125,7 @@ module YARD
 
         def remove_private_comments(comment)
           comment = comment.gsub(%r{/?\*--\n(.*?)/?\*\+\+}m, '')
-          comment = comment.sub(%r{/?\*--\n.*}m, '')
-          comment
+          comment.sub(%r{/?\*--\n.*}m, '')
         end
       end
     end

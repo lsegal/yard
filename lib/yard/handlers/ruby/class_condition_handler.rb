@@ -74,9 +74,7 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
     end
 
     # Invert an unless condition
-    if statement.type == :unless || statement.type == :unless_mod
-      condition = !condition unless condition.nil?
-    end
+    condition = !condition if %i(unless unless_mod).include?(statement.type) && !condition.nil?
     condition
   end
 
@@ -85,8 +83,6 @@ class YARD::Handlers::Ruby::ClassConditionHandler < YARD::Handlers::Ruby::Base
   end
 
   def parse_else_block
-    if statement.else_block
-      parse_block(statement.else_block, :visibility => visibility)
-    end
+    parse_block(statement.else_block, :visibility => visibility) if statement.else_block
   end
 end

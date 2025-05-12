@@ -148,9 +148,7 @@ module YARD
           buf = tag_buf.join("\n")
           if directive || tag_is_directive?(tag_name)
             directive = create_directive(tag_name, buf)
-            if directive
-              docstring << parse_content(directive.expanded_text).chomp
-            end
+            docstring << parse_content(directive.expanded_text).chomp if directive
           else
             create_tag(tag_name, buf)
           end
@@ -164,7 +162,7 @@ module YARD
         if line =~ META_MATCH
           directive = $1
           tag_name = $2
-          tag_buf = [($3 || '')]
+          tag_buf = [$3 || '']
         elsif tag_name && indent >= orig_indent && !empty
           orig_indent = indent if orig_indent == 0
           # Extra data added to the tag on the next line
@@ -206,9 +204,7 @@ module YARD
     # @param [String] tag_buf the text attached to the tag with newlines removed.
     # @return [Tags::Tag, Tags::RefTag] a tag
     def create_tag(tag_name, tag_buf = '')
-      if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
-        return create_ref_tag(tag_name, $1, $2)
-      end
+      return create_ref_tag(tag_name, $1, $2) if tag_buf =~ /\A\s*(?:(\S+)\s+)?\(\s*see\s+(\S+)\s*\)\s*\Z/
 
       if library.has_tag?(tag_name)
         @tags += [library.tag_create(tag_name, tag_buf)].flatten

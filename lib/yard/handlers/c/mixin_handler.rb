@@ -14,7 +14,7 @@ class YARD::Handlers::C::MixinHandler < YARD::Handlers::C::Base
         namespace.mixins(:instance) << var
       else
         raise YARD::Parser::UndocumentableError,
-          "CRuby mixin for unrecognized variable '#{mixin_var}'"
+              "CRuby mixin for unrecognized variable '#{mixin_var}'"
       end
     end
   end

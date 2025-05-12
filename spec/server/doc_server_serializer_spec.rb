@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Server::DocServerSerializer do
   describe "#serialized_path" do
@@ -55,6 +55,6 @@ RSpec.describe YARD::Server::DocServerSerializer do
       else
         expect(@serializer.serialized_path(file)).to eq 'file/test_C5A0'
       end
-    end if defined?(::Encoding)
+    end if defined?(Encoding)
   end
 end

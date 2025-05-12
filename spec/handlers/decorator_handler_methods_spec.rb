@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
   describe "#process_decorator" do
@@ -48,7 +48,7 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
     subject { data[:mock] }
 
-    let(:data) { Hash.new }
+    let(:data) { {} }
     let(:nodes) { [] }
     let(:mock_handler_opts) { {:scope => :instance} }
     let(:class_name)    { 'DecoratorTest' }
@@ -57,13 +57,13 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
     let(:method_defs)   { [] }
     let(:method_string) { "#{class_name}#foo" }
     let(:code) do
-      <<-eof
+      <<-EOF
       class #{class_name}
         #{make_defs(*method_defs)}
         # #{docstring}
         mock_decorator #{param_string}
       end
-      eof
+      EOF
     end
 
     before do
@@ -125,7 +125,7 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       subject { data[:mock][:return].map {|h| h[:method].to_s } }
 
       describe "assumes all params refer to methods by default" do
-        let(:method_defs)  { [:foo, :bar] }
+        let(:method_defs)  { %i(foo bar) }
         let(:param_string) { method_defs.map(&:inspect).join(',') }
         let(:nodes) { [] }
 
@@ -135,9 +135,9 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       end
 
       describe "can specify which params to capture as methods" do
-        let(:method_defs) { [:foo, :bar, :baz, :bat] }
+        let(:method_defs) { %i(foo bar baz bat) }
         let(:parameters) do
-          [:option_1, :baz, :bat, :option_2, :foo, :bar].map do |s|
+          %i(option_1 baz bat option_2 foo bar).map do |s|
             make_ast s.inspect
           end
         end
@@ -206,7 +206,7 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
           let(:param_string) { decorator_params.map(&:inspect).join(',') }
 
           describe "for symbols" do
-            let(:decorator_params) { [:foo, :bar] }
+            let(:decorator_params) { %i(foo bar) }
 
             specify do
               expect(subject.count).to eq decorator_params.count
@@ -248,16 +248,16 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
                 expect(subject[i].to_s).to eq \
                   class_name +
                   (mock_handler_opts[:scope] == :class ? '.' : '#') +
-                  decorator_params[i].split(' ')[1][/\w+$/]
+                  decorator_params[i].split[1][/\w+$/]
               end
             end
           end
-        end # decorator helper scope shared examples
+        end
 
         subject { data[:mock][:return].map {|h| h[:method] } }
 
         let(:docstring) { 'the foo method' }
-        let(:method_defs) { [:foo, :bar] }
+        let(:method_defs) { %i(foo bar) }
 
         describe "for :instance" do
           let(:mock_handler_opts) { {:scope => :instance} }
@@ -283,12 +283,12 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
       describe "does not attach" do
         describe "to undefined methods" do
           let(:code) do
-            <<-eof
+            <<-EOF
             class #{class_name}
               # #{docstring}
               mock_decorator :foo
             end
-            eof
+            EOF
           end
 
           specify do
@@ -298,7 +298,7 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
         describe "to methods with existing docstring" do
           let(:code) do
-            <<-eof
+            <<-EOF
             class #{class_name}
 
               # original docstring
@@ -307,7 +307,7 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
               # #{docstring}
               mock_decorator :foo
             end
-            eof
+            EOF
           end
 
           specify do
@@ -322,13 +322,13 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
 
       let(:param_string) { 'def foo param1, param2; end' }
       let(:code) do
-        <<-eof
+        <<-EOF
         class #{class_name}
           #{make_defs(*method_defs)}
           # #{docstring}
           first_decorator second_decorator third_decorator #{param_string}
         end
-        eof
+        EOF
       end
 
       specify "register nested method defs" do
@@ -389,5 +389,5 @@ RSpec.describe "YARD::Handlers::Ruby::DecoratorHandlerMethods" do
         end
       end
     end
-  end # process_decorator
+  end
 end unless LEGACY_PARSER

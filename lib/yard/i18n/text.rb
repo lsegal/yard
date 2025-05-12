@@ -53,7 +53,7 @@ module YARD
         translated_text = String.new("")
         parse do |part|
           case part[:type]
-          when :markup
+          when :markup, :empty_line
             translated_text << part[:line]
           when :attribute
             prefix = "#{part[:prefix]}#{part[:name]}#{part[:infix]}"
@@ -62,8 +62,6 @@ module YARD
             translated_text << "#{prefix}#{value}#{suffix}"
           when :paragraph
             translated_text << locale.translate(part[:paragraph])
-          when :empty_line
-            translated_text << part[:line]
           else
             raise "should not reach here: unexpected type: #{type}"
           end
@@ -117,9 +115,7 @@ module YARD
           end
         end
 
-        unless paragraph.empty?
-          emit_paragraph_event(paragraph, paragraph_start_line, line_no, &block)
-        end
+        emit_paragraph_event(paragraph, paragraph_start_line, line_no, &block) unless paragraph.empty?
       end
 
       def emit_markup_event(line, line_no)

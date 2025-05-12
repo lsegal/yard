@@ -15,7 +15,7 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
       self.visibility = ident.first.to_sym
     when :command
       if RUBY_VERSION >= '3.' && is_attribute_method?(statement.parameters.first)
-        parse_block(statement.parameters.first, visibility: ident.first.to_sym)
+        parse_block(statement.parameters.first, :visibility => ident.first.to_sym)
         return
       end
       process_decorator do |method|

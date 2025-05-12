@@ -26,9 +26,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       end
       parse_block(statement[2], :namespace => klass)
 
-      if undocsuper
-        raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
-      end
+      raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)' if undocsuper
     elsif statement.type == :sclass
       if statement[0] == s(:var_ref, s(:kw, "self"))
         parse_block(statement[1], :namespace => namespace, :scope => :class)
@@ -37,7 +35,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
 
         # Allow constants to reference class names
         if ConstantObject === proxy
-          if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
+          if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/o
             proxy = Proxy.new(namespace, proxy.value)
           else
             raise YARD::Parser::UndocumentableError, "constant class reference '#{classname}'"
@@ -110,9 +108,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       return methname if superclass.method_name.type == :const
     when :call, :command_call
       cname = superclass.namespace.source
-      if cname =~ /^O?Struct$/ && superclass.method_name(true) == :new
-        return cname
-      end
+      return cname if cname =~ /^O?Struct$/ && superclass.method_name(true) == :new
     end
     nil
   end
