@@ -27,7 +27,7 @@ end
 begin
   require 'coveralls'
   Coveralls.wear!
-end if ENV['CI'] && HAVE_RIPPER
+end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.5.0'
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 
