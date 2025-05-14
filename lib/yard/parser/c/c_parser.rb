@@ -84,9 +84,7 @@ module YARD
           stmts = nil
           if prevchar == '{'
             stmts = consume_body_statements
-            if decl =~ /\A(typedef|enum|class|#{struct}|union)/
-              consume_until(';')
-            end
+            consume_until(';') if decl =~ /\A(typedef|enum|class|#{struct}|union)/
           end
           statement.source = @content[start..@index]
           statement.block = stmts
@@ -134,7 +132,7 @@ module YARD
         end
 
         def consume_comment(add_comment = true)
-          return(advance) unless nextchar == '*' || nextchar == '/'
+          return(advance) unless ['*', '/'].include?(nextchar)
           line = @line
           type = nextchar == '*' ? :multi : :line
           advance(2)
@@ -185,7 +183,7 @@ module YARD
             @newline = false if chr !~ /\s/
 
             if chr =~ end_char
-              break if chr == '{' || chr == '('
+              break if ['{', '('].include?(chr)
               break if bracket_level <= 0 && brace_level <= 0
             end
           end

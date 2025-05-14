@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Server::Adapter do
   after(:all) { Server::Adapter.shutdown }
@@ -24,7 +24,7 @@ RSpec.describe YARD::Server::Adapter do
     it "adds template paths and helpers" do
       Adapter.setup
       expect(Templates::Template.extra_includes).to include(DocServerHelper)
-      expect(Templates::Engine.template_paths).to include(YARD::ROOT + '/yard/server/templates')
+      expect(Templates::Engine.template_paths).to include("#{YARD::ROOT}/yard/server/templates")
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe YARD::Server::Adapter do
       Adapter.setup
       Adapter.shutdown
       expect(Templates::Template.extra_includes).not_to include(DocServerHelper)
-      expect(Templates::Engine.template_paths).not_to include(YARD::ROOT + '/yard/server/templates')
+      expect(Templates::Engine.template_paths).not_to include("#{YARD::ROOT}/yard/server/templates")
     end
   end
 end

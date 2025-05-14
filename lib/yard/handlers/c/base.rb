@@ -36,19 +36,19 @@ module YARD
         # @group Registering objects
 
         def register_docstring(object, docstring = nil, stmt = nil)
-          super(object, docstring, stmt) if docstring
+          super if docstring
         end
 
         def register_file_info(object, file = nil, line = nil, comments = nil)
-          super(object, file, line, comments) if file
+          super if file
         end
 
         def register_source(object, source = nil, type = nil)
-          super(object, source, type) if source
+          super if source
         end
 
         def register_visibility(object, visibility = nil)
-          super(object, visibility) if visibility
+          super if visibility
         end
 
         # @group Looking up Symbol and Var Values
@@ -152,7 +152,7 @@ module YARD
           'rb_eSyntaxError' => 'SyntaxError',
           'rb_eSystemCallError' => 'SystemCallError',
           'rb_eSystemExit' => 'SystemExit',
-          'rb_eTypeError' => 'TypeError',
+          'rb_eTypeError' => 'TypeError'
         }
 
         def remove_var_prefix(var)

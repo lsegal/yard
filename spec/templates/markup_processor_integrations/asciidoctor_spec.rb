@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/integration_spec_helper'
+require "#{File.dirname(__FILE__)}/integration_spec_helper"
 
 RSpec.describe 'Asciidoctor integration' do
   include_context 'shared helpers for markup processor integration specs'
@@ -35,7 +35,7 @@ Fenced and annotated block of non-Ruby code:
 x = 4
 -----
 
-ASCIIDOC
+    ASCIIDOC
   end
 
   it 'renders level 2 header' do

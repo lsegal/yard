@@ -113,17 +113,17 @@ module YARD
               handler.new(self, stmt).process
             rescue HandlerAborted
               log.debug "#{handler} cancelled from #{caller.last}"
-              log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
-            rescue NamespaceMissingError => missingerr
-              log.warn "The #{missingerr.object.type} #{missingerr.object.path} has not yet been recognized.\n" \
-                       "If this class/method is part of your source tree, this will affect your documentation results.\n" \
+              log.debug "\tin file '#{file}':#{stmt.line}:\n\n#{stmt.show}\n"
+            rescue NamespaceMissingError => e
+              log.warn "The #{e.object.type} #{e.object.path} has not yet been recognized.\n" \
+                       "If this class/method is in your source tree, it will affect your documentation results.\n" \
                        "You can correct this issue by loading the source file for this object before `#{file}'\n"
-            rescue Parser::UndocumentableError => undocerr
-              log.warn "in #{handler}: Undocumentable #{undocerr.message}\n" \
-                       "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"
-            rescue => e
-              log.error "Unhandled exception in #{handler}:\n" \
-                        "  in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
+            rescue Parser::UndocumentableError => e
+              log.warn "in #{handler}: Undocumentable #{e.message}\n" \
+                       "\tin file '#{file}':#{stmt.line}:\n\n#{stmt.show}\n"
+            rescue StandardError => e
+              log.error "Unhandled exception in #{handler}:\n  " \
+                        "in `#{file}`:#{stmt.line}:\n\n#{stmt.show}\n"
               log.backtrace(e)
             end
           end
@@ -188,9 +188,7 @@ module YARD
         return if @handlers_loaded[parser_type]
         handler_base_namespace.constants.each do |c|
           const = handler_base_namespace.const_get(c)
-          unless Handlers::Base.subclasses.include?(const)
-            Handlers::Base.subclasses << const
-          end
+          Handlers::Base.subclasses << const unless Handlers::Base.subclasses.include?(const)
         end
         @handlers_loaded[parser_type] = true
       end

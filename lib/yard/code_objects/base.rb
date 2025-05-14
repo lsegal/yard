@@ -19,7 +19,7 @@ module YARD
       def push(value)
         value = Proxy.new(@owner, value) if value.is_a?(String) || value.is_a?(Symbol)
         if value.is_a?(CodeObjects::Base) || value.is_a?(Proxy)
-          super(value) unless include?(value)
+          super unless include?(value)
         else
           raise ArgumentError, "#{value.class} is not a valid CodeObject"
         end
@@ -58,7 +58,7 @@ module YARD
     NAMESPACEMATCH = /(?:(?:#{NSEPQ}\s*)?#{CONSTANTMATCH})+/
 
     # Regular expression to match a method name
-    METHODNAMEMATCH = %r{[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|![=~]?|<=>|[<>]=?|\*\*|[-/+%^&*~`|]|\[\]=?}
+    METHODNAMEMATCH = %r{[a-zA-Z_]\w*[!?=]?|[-+~]@|<<|>>|=~|===?|![=~]?|<=>|[<>]=?|\*\*|[-/+%^&*~`|]|\[\]=?}
 
     # Regular expression to match a fully qualified method def (self.foo, Class.foo).
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|[a-z]\w*)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
@@ -189,9 +189,7 @@ module YARD
         def new(namespace, name, *args, &block)
           raise ArgumentError, "invalid empty object name" if name.to_s.empty?
           if namespace.is_a?(ConstantObject)
-            unless namespace.value =~ /\A#{NAMESPACEMATCH}\Z/
-              raise Parser::UndocumentableError, "constant mapping"
-            end
+            raise Parser::UndocumentableError, "constant mapping" unless namespace.value =~ /\A#{NAMESPACEMATCH}\Z/o
 
             namespace = Proxy.new(namespace.namespace, namespace.value)
           end
@@ -201,13 +199,11 @@ module YARD
             namespace = Registry.root
           end
 
-          if name =~ /(?:#{NSEPQ})([^:]+)$/
-            return new(Proxy.new(namespace, $`), $1, *args, &block)
-          end
+          return new(Proxy.new(namespace, $`), $1, *args, &block) if name =~ /(?:#{NSEPQ})([^:]+)$/o
 
           obj = super(namespace, name, *args)
           existing_obj = Registry.at(obj.path)
-          obj = existing_obj if existing_obj && existing_obj.class == self
+          obj = existing_obj if existing_obj && existing_obj.instance_of?(self)
           yield(obj) if block_given?
           obj
         end
@@ -386,15 +382,13 @@ module YARD
       #   the +Parser::Statement+ holding the source code or the raw source
       #   as a +String+ for the definition of the code object only (not the block)
       def source=(statement)
-        if statement.respond_to?(:source)
-          @source = format_source(statement.source.strip)
-        else
-          @source = format_source(statement.to_s)
-        end
+        @source = if statement.respond_to?(:source)
+                    format_source(statement.source.strip)
+                  else
+                    format_source(statement.to_s)
+                  end
 
-        if statement.respond_to?(:signature)
-          self.signature = statement.signature
-        end
+        self.signature = statement.signature if statement.respond_to?(:signature)
       end
 
       # The documentation string associated with the object
@@ -529,7 +523,7 @@ module YARD
 
         if @namespace
           reg_obj = Registry.at(path)
-          return if reg_obj && reg_obj.class == self.class
+          return if reg_obj && reg_obj.instance_of?(self.class)
 
           unless @namespace.is_a?(Proxy)
             # remove prior objects from obj's children that match this one

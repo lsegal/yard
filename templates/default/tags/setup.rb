@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 def init
-  tags = Tags::Library.visible_tags - [:abstract, :deprecated, :note, :todo]
-  create_tag_methods(tags - [:example, :option, :overload, :see])
-  sections :index, tags.map {|t| t.to_s.tr('.', '_').to_sym }
+  tags = Tags::Library.visible_tags - %i(abstract deprecated note todo)
+  create_tag_methods(tags - %i(example option overload see))
+  sections(:index, tags.map {|t| t.to_s.tr('.', '_').to_sym })
   sections.any(:overload).push(T('docstring'))
 end
 
@@ -36,9 +36,9 @@ def create_tag_methods(tags)
   tags.each do |tag|
     tag_meth = tag.to_s.tr('.', '_')
     next if respond_to?(tag_meth)
-    instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+    instance_eval(<<-EOF, __FILE__, __LINE__ + 1)
       def #{tag_meth}; tag(#{tag.inspect}) end
-    eof
+    EOF
   end
 end
 

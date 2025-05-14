@@ -189,8 +189,8 @@ module YARD
       names_set = {}
       self.class.ancestors.each do |klass| # look at all ancestors
         defaults =
-          klass.instance_variable_defined?("@defaults") &&
-          klass.instance_variable_get("@defaults")
+          klass.instance_variable_defined?(:@defaults) &&
+          klass.instance_variable_get(:@defaults)
         next unless defaults
         defaults.each do |key, value|
           next if names_set[key]
@@ -206,12 +206,11 @@ module YARD
     # @return [Object] the value that was deleted
     def delete(key)
       val = self[key]
-      if instance_variable_defined?("@#{key}")
-        remove_instance_variable("@#{key}")
-      end
+      remove_instance_variable("@#{key}") if instance_variable_defined?("@#{key}")
       val
     end
 
-    def tap; yield(self); self end unless defined?(tap) # only for 1.8.6
+    # only for 1.8.6
+    def tap; yield(self); self end unless defined?(tap)
   end
 end

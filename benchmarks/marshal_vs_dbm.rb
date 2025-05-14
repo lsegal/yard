@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'benchmark'
 require 'dbm'
+require 'fileutils'
 
 MARSHAL_FILE = "marshal_test.db"
 DBM_FILE = "dbm_test"
@@ -14,7 +15,7 @@ def generate_index
 end
 
 def write_dbm
-  File.unlink(DBM_FILE + ".db") if File.exist?(DBM_FILE + ".db")
+  FileUtils.rm_f("#{DBM_FILE}.db")
   handle = DBM.new(DBM_FILE)
   NUM_INDICES.times {|t| handle[t.to_s] = Marshal.dump(generate_index) }
   handle.close
@@ -27,7 +28,7 @@ def read_dbm
 end
 
 def write_marshal
-  File.unlink(MARSHAL_FILE) if File.exist?(MARSHAL_FILE)
+  FileUtils.rm_f(MARSHAL_FILE)
   handle = {}
   NUM_INDICES.times {|t| handle[t.to_s] = generate_index }
   File.open(MARSHAL_FILE, "wb") {|f| f.write(Marshal.dump(handle)) }
@@ -46,7 +47,7 @@ Benchmark.bmbm do |x|
 end
 
 File.unlink(MARSHAL_FILE)
-File.unlink(DBM_FILE + ".db")
+File.unlink("#{DBM_FILE}.db")
 
 __END__
 

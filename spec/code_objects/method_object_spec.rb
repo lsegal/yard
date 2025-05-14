@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::MethodObject do
   before do
@@ -152,27 +152,27 @@ RSpec.describe YARD::CodeObjects::MethodObject do
     before { Registry.clear }
 
     it "returns overridden method from mixin first" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         module C; def foo; end end
         class A; def foo; end end
         class B < A; include C; def foo; end end
-      eof
+      EOF
       expect(Registry.at('B#foo').overridden_method).to eq Registry.at('C#foo')
     end
 
     it "returns overridden method from superclass" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         class A; def foo; end end
         class B < A; def foo; end end
-      eof
+      EOF
       expect(Registry.at('B#foo').overridden_method).to eq Registry.at('A#foo')
     end
 
     it "returns nil if none is found" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         class A; end
         class B < A; def foo; end end
-      eof
+      EOF
       expect(Registry.at('B#foo').overridden_method).to be nil
     end
 

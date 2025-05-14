@@ -6,12 +6,12 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
 
   process do
     errors = []
-    statement.tokens[1..-1].to_s.split(/\s*,\s*/).reverse.each do |mixin|
+    statement.tokens[1..-1].to_s.split(/\s*,\s*/).reverse_each do |mixin|
       mixin = mixin.strip
       begin
         process_mixin(mixin)
-      rescue YARD::Parser::UndocumentableError => err
-        errors << err.message
+      rescue YARD::Parser::UndocumentableError => e
+        errors << e.message
       end
     end
 
@@ -24,15 +24,15 @@ class YARD::Handlers::Ruby::Legacy::MixinHandler < YARD::Handlers::Ruby::Legacy:
   private
 
   def process_mixin(mixin)
-    mixmatch = mixin[/\A(#{NAMESPACEMATCH})/, 1]
+    mixmatch = mixin[/\A(#{NAMESPACEMATCH})/o, 1]
     raise YARD::Parser::UndocumentableError unless mixmatch
 
-    case obj = Proxy.new(namespace, mixmatch)
-    when ConstantObject # If a constant is included, use its value as the real object
-      obj = Proxy.new(namespace, obj.value, :module)
-    else
-      obj = Proxy.new(namespace, mixmatch, :module)
-    end
+    obj = case obj = Proxy.new(namespace, mixmatch)
+          when ConstantObject # If a constant is included, use its value as the real object
+            Proxy.new(namespace, obj.value, :module)
+          else
+            Proxy.new(namespace, mixmatch, :module)
+          end
 
     namespace.mixins(scope).unshift(obj) unless namespace.mixins(scope).include?(obj)
   end

@@ -84,15 +84,15 @@ module YARD::CodeObjects
     #   # => #<yardoc method MyClass#to_s>
     # @return [Base, nil] the first matched child object, or nil
     def child(opts = {})
-      if !opts.is_a?(Hash)
-        children.find {|o| o.name == opts.to_sym }
-      else
+      if opts.is_a?(Hash)
         opts = SymbolHash[opts]
         children.find do |obj|
           opts.each do |meth, value|
             break false unless value.is_a?(Array) ? value.include?(obj[meth]) : obj[meth] == value
           end
         end
+      else
+        children.find {|o| o.name == opts.to_sym }
       end
     end
 
@@ -112,8 +112,8 @@ module YARD::CodeObjects
     # @return [Array<MethodObject>] a list of method objects
     def meths(opts = {})
       opts = SymbolHash[
-        :visibility => [:public, :private, :protected],
-        :scope => [:class, :instance],
+        :visibility => %i(public private protected),
+        :scope => %i(class instance),
         :included => true
       ].update(opts)
 
@@ -142,7 +142,7 @@ module YARD::CodeObjects
     #   methods in the list.
     # @see #meths
     def included_meths(opts = {})
-      opts = SymbolHash[:scope => [:instance, :class]].update(opts)
+      opts = SymbolHash[:scope => %i(instance class)].update(opts)
       [opts[:scope]].flatten.map do |scope|
         mixins(scope).inject([]) do |list, mixin|
           next list if mixin.is_a?(Proxy)

@@ -10,10 +10,8 @@ class YARD::Handlers::C::InitHandler < YARD::Handlers::C::Base
     decl = statement.declaration[MATCH, 1]
     if decl
       ns = namespace_for_variable(decl)
-      if ns.is_a?(YARD::CodeObjects::NamespaceObject) && ns.docstring.blank?
-        if statement.comments
-          register_docstring(ns, statement.comments.source, statement)
-        end
+      if ns.is_a?(YARD::CodeObjects::NamespaceObject) && ns.docstring.blank? && statement.comments
+        register_docstring(ns, statement.comments.source, statement)
       end
     end
   end

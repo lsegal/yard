@@ -32,95 +32,95 @@ RSpec.shared_examples_for "signature" do
   end
 
   it "shows return type for single type" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [String]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:single]
   end
 
   it "shows return type for 2 types" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [String, Symbol]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:two_types]
   end
 
   it "shows return type for 2 types over multiple tags" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [String]
       # @return [Symbol]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:two_types_multitag]
   end
 
   it "shows 'Type?' if return types are [Type, nil]" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [Type, nil]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:type_nil]
   end
 
   it "shows 'Type?' if return types are [Type, nil, nil] (extra nil)" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [Type, nil]
       # @return [nil]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:type_nil]
   end
 
   it "shows 'Type+' if return types are [Type, Array<Type>]" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [Type, <Type>]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:type_array]
   end
 
   it "shows (Type, ...) for more than 2 return types" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [Type, <Type>]
       # @return [AnotherType]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:multitype]
   end
 
   it "shows (void) for @return [void] by default" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [void]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:void]
   end
 
   it "does not show return for @return [void] if :hide_void_return is true" do
     @options.hide_void_return = true
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @return [void]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:hide_void]
   end
 
   it "shows block for method with yield" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       def foo; yield(a, b, c) end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo')))).to eq @results[:block]
   end
 
   it "uses regular return tag if the @overload is empty" do
-    YARD.parse_string <<-'eof'
+    YARD.parse_string <<-EOF
       # @overload foobar
       #   Hello world
       # @return [String]
       def foo; end
-    eof
+    EOF
     expect(trim(signature(Registry.at('#foo').tag(:overload)))).to eq @results[:empty_overload]
   end
 end

@@ -79,8 +79,8 @@ module YARD
       docstring.replace(text, false)
       docstring.object = object
       docstring.add_tag(*tags)
-      docstring.instance_variable_set("@unresolved_reference", ref_object)
-      docstring.instance_variable_set("@all", raw_data) if raw_data
+      docstring.instance_variable_set(:@unresolved_reference, ref_object)
+      docstring.instance_variable_set(:@all, raw_data) if raw_data
       docstring
     end
 
@@ -192,9 +192,7 @@ module YARD
         end
       end
       @summary = stripped[0..idx]
-      if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
-        @summary += '.'
-      end
+      @summary += '.' if !@summary.empty? && @summary !~ /\A\s*\{include:.+\}\s*\Z/
       @summary
     end
 
@@ -209,22 +207,20 @@ module YARD
         case tag
         when Tags::OverloadTag
           tag_text = "@#{tag.tag_name} #{tag.signature}\n"
-          unless tag.docstring.blank?
-            tag_text += "\n  " + tag.docstring.all.gsub(/\r?\n/, "\n  ")
-          end
+          tag_text += "\n  #{tag.docstring.all.gsub(/\r?\n/, "\n  ")}" unless tag.docstring.blank?
         when Tags::OptionTag
           tag_text = "@#{tag.tag_name} #{tag.name}"
-          tag_text += ' [' + tag.pair.types.join(', ') + ']' if tag.pair.types
-          tag_text += ' ' + tag.pair.name.to_s if tag.pair.name
+          tag_text += " [#{tag.pair.types.join(', ')}]" if tag.pair.types
+          tag_text += " #{tag.pair.name}" if tag.pair.name
           tag_text += "\n " if tag.name && tag.text
-          tag_text += ' (' + tag.pair.defaults.join(', ') + ')' if tag.pair.defaults
-          tag_text += " " + tag.pair.text.strip.gsub(/\n/, "\n  ") if tag.pair.text
+          tag_text += " (#{tag.pair.defaults.join(', ')})" if tag.pair.defaults
+          tag_text += " #{tag.pair.text.strip.gsub("\n", "\n  ")}" if tag.pair.text
         else
-          tag_text = '@' + tag.tag_name
-          tag_text += ' [' + tag.types.join(', ') + ']' if tag.types
-          tag_text += ' ' + tag.name.to_s if tag.name
+          tag_text = "@#{tag.tag_name}"
+          tag_text += " [#{tag.types.join(', ')}]" if tag.types
+          tag_text += " #{tag.name}" if tag.name
           tag_text += "\n " if tag.name && tag.text
-          tag_text += ' ' + tag.text.strip.gsub(/\n/, "\n  ") if tag.text
+          tag_text += " #{tag.text.strip.gsub("\n", "\n  ")}" if tag.text
         end
         tag_text
       end
@@ -309,7 +305,7 @@ module YARD
     # @return [Boolean] whether or not the docstring has content
     def blank?(only_visible_tags = true)
       if only_visible_tags
-        empty? && !tags.any? {|tag| Tags::Library.visible_tags.include?(tag.tag_name.to_sym) }
+        empty? && tags.none? {|tag| Tags::Library.visible_tags.include?(tag.tag_name.to_sym) }
       else
         empty? && @tags.empty? && @ref_tags.empty?
       end

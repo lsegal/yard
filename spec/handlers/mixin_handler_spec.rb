@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHandler" do
   before(:all) { parse_file :mixin_handler_001, __FILE__ }
@@ -60,11 +60,11 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
   end
 
   it "can mixin a const by complex path" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       class A1; class B1; class C1; end end end
       class D1; class E1; module F1; end end end
       A1::B1::C1.include D1::E1::F1
-    eof
+    EOF
 
     expect(YARD::Registry.root.instance_mixins).not_to eq [P('D1::E1::F1')]
     expect(P('A1::B1::C1').instance_mixins).to eq [P('D1::E1::F1')]
@@ -76,7 +76,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
 
   it "ensures the recipient is loaded from another file" do
     # 002 includes a module into a module defined in 003
-    parse_file [:mixin_handler_002, :mixin_handler_003], __FILE__
+    parse_file %i(mixin_handler_002 mixin_handler_003), __FILE__
 
     expect(P('A1').instance_mixins).to eq [P('B1')]
   end

@@ -82,13 +82,9 @@ module YARD
       end
 
       # method objects cannot be resolved through lexical lookup by more than 1 ns
-      if lexical_lookup > 1 && resolved.is_a?(CodeObjects::MethodObject)
-        resolved = nil
-      end
+      resolved = nil if lexical_lookup > 1 && resolved.is_a?(CodeObjects::MethodObject)
 
-      if proxy_fallback
-        resolved ||= CodeObjects::Proxy.new(orignamespace, path, type)
-      end
+      resolved ||= CodeObjects::Proxy.new(orignamespace, path, type) if proxy_fallback
 
       resolved
     end
@@ -105,9 +101,7 @@ module YARD
       result = namespace.root? && validate(@registry.at(path), type)
       return result if result
 
-      if path =~ starts_with_separator_match
-        return validate(@registry.at(namespace.path + path), type)
-      end
+      return validate(@registry.at(namespace.path + path), type) if path =~ starts_with_separator_match
 
       separators.each do |sep|
         result = validate(@registry.at("#{namespace.path}#{sep}#{path}"), type)

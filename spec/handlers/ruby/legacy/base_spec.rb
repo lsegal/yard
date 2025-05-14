@@ -23,6 +23,7 @@ RSpec.describe YARD::Handlers::Ruby::Legacy::Base, "#handles and inheritance" do
     class IgnoredHandler < Handlers::Base
       handles "hello"
     end
+
     class NotIgnoredHandlerLegacy < Handlers::Ruby::Legacy::Base
       handles "hello"
     end

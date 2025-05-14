@@ -198,7 +198,7 @@ RSpec.describe YARD::CLI::Yardoc do
       expect(YARD).to receive(:parse)
       begin
         @yardoc.run(arg)
-      rescue SystemExit # rubocop:disable Lint/HandleExceptions
+      rescue SystemExit
       end
     end
   end
@@ -312,7 +312,7 @@ RSpec.describe YARD::CLI::Yardoc do
       end
 
       it "allows from:to syntax" do
-        expect(FileUtils).to receive(:cp_r).with(%r{foo(\/\.)?}, 'doc/bar')
+        expect(FileUtils).to receive(:cp_r).with(%r{foo(/\.)?}, 'doc/bar')
         @yardoc.run(*%w(--asset foo:bar))
         expect(@yardoc.assets).to eq('foo' => 'bar')
       end
@@ -366,38 +366,38 @@ RSpec.describe YARD::CLI::Yardoc do
     before { Registry.clear }
 
     it "allows --api name" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         # @api public
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--api', 'private')
       expect(@yardoc.options.verifier.run(Registry.all)).to eq [P('Foo')]
     end
 
     it "allows multiple --api's to all be shown" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         # @api public
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--api', 'private', '--api', 'public')
       expect(@yardoc.options.verifier.run(Registry.all).
         sort_by(&:path)).to eq [P('Bar'), P('Foo')]
     end
 
     it "allows --no-api to specify objects with no @api tag" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         # @api public
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--api', '')
       expect(@yardoc.options.verifier.run(Registry.all)).to eq [P('Baz')]
       @yardoc.options.verifier = Verifier.new
@@ -406,13 +406,13 @@ RSpec.describe YARD::CLI::Yardoc do
     end
 
     it "allows --no-api to work with other --api switches" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         # @api public
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--no-api', '--api', 'public')
       expect(@yardoc.options.verifier.run(Registry.all).
         sort_by(&:path)).to eq [P('Bar'), P('Baz')]
@@ -429,25 +429,25 @@ RSpec.describe YARD::CLI::Yardoc do
 
   describe "--hide-api option" do
     it "allows --hide-api to hide objects with api tags" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--hide-api', 'private')
       expect(@yardoc.options.verifier.run(Registry.all).
         sort_by(&:path)).to eq [P('Bar'), P('Baz')]
     end
 
     it "allows --hide-api to work with --api" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @api private
         class Foo; end
         # @api public
         class Bar; end
         class Baz; end
-      eof
+      EOF
       @yardoc.run('--api', 'public', '--hide-api', 'private')
       expect(@yardoc.options.verifier.run(Registry.all).
         sort_by(&:path)).to eq [P('Bar')]
@@ -498,12 +498,12 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "hides methods inside a 'private' class/module with --no-private" do
       Registry.clear
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @private
         class ABC
           def foo; end
         end
-      eof
+      EOF
       @yardoc.parse_arguments(*%w(--no-private))
       expect(@yardoc.options.verifier.call(Registry.at('ABC'))).to be false
       expect(@yardoc.options.verifier.call(Registry.at('ABC#foo'))).to be false
@@ -680,8 +680,8 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects readme with no suffix over readme with hyphenated suffix" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README.long-extension', 'README-de.md']
-      expect_extra_files_valid(@yardoc, 'README-fr.md' => true, 'README.long-extension'=> true, 'README-de.md' => true)
-      expect_extra_files_valid(@yardoc, 'README.long-extension'=> true)
+      expect_extra_files_valid(@yardoc, 'README-fr.md' => true, 'README.long-extension' => true, 'README-de.md' => true)
+      expect_extra_files_valid(@yardoc, 'README.long-extension' => true)
       expect(File).to receive(:read).with('README.long-extension').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.long-extension', '')
@@ -696,7 +696,7 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects first readme from lexically sorted list" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README-fr.md', 'README-de.md']
-      expect_extra_files_valid(@yardoc, 'README-fr.md'=> true, 'README-de.md' => true)
+      expect_extra_files_valid(@yardoc, 'README-fr.md' => true, 'README-de.md' => true)
       expect_extra_files_valid(@yardoc, 'README-de.md' => true)
       expect(File).to receive(:read).with('README-de.md').and_return('')
       @yardoc.parse_arguments
@@ -705,8 +705,8 @@ RSpec.describe YARD::CLI::Yardoc do
 
     it "selects readme that exists over a readme that does not" do
       expect(Dir).to receive(:glob).with('README{,*[^~]}').and_return ['README.fr.md', 'README.md', 'README.de.md']
-      expect_extra_files_valid(@yardoc, 'README.fr.md'=> true, 'README.md' => false, 'README.de.md' => false)
-      expect_extra_files_valid(@yardoc, 'README.fr.md'=> true)
+      expect_extra_files_valid(@yardoc, 'README.fr.md' => true, 'README.md' => false, 'README.de.md' => false)
+      expect_extra_files_valid(@yardoc, 'README.fr.md' => true)
       expect(File).to receive(:read).with('README.fr.md').and_return('')
       @yardoc.parse_arguments
       expect(@yardoc.options.readme).to eq CodeObjects::ExtraFileObject.new('README.fr.md', '')
@@ -721,7 +721,7 @@ RSpec.describe YARD::CLI::Yardoc do
       expect(Encoding.default_external.name).to eq 'ASCII-8BIT'
       Encoding.default_internal = ienc
       Encoding.default_external = eenc
-    end if defined?(::Encoding)
+    end if defined?(Encoding)
   end
 
   describe "Source file arguments" do

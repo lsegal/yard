@@ -48,7 +48,7 @@ module YARD
         # @return [MacroObject] if a macro is found
         # @return [nil] if there is no registered macro by that name
         def find(macro_name)
-          Registry.at('.macro.' + macro_name.to_s)
+          Registry.at(".macro.#{macro_name}")
         end
 
         # Parses a given docstring and determines if the macro is "new" or
@@ -148,7 +148,7 @@ module YARD
       def attached?; method_object ? true : false end
 
       # Overrides {Base#path} so the macro path is ".macro.MACRONAME"
-      def path; '.macro.' + name.to_s end
+      def path; ".macro.#{name}" end
 
       # Overrides the separator to be '.'
       def sep; '.' end

@@ -28,7 +28,7 @@ RSpec.describe YARD::I18n::PotGenerator do
       current_time = Time.parse("2011-11-20 22:17+0900")
       allow(@generator).to receive(:current_time).and_return(current_time)
       pot_creation_date = current_time.strftime("%Y-%m-%d %H:%M%z")
-      expect(@generator.generate).to eq <<-eoh
+      expect(@generator.generate).to eq <<-EOH
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
 
-eoh
+      EOH
     end
 
     it "generates messages in location order" do
@@ -64,7 +64,7 @@ eoh
         }
       }
       add_messages(@generator.messages, messages)
-      expect(@generator.generate).to eq <<-'eoh'
+      expect(@generator.generate).to eq <<-EOH
 HEADER
 
 # YARD.parse
@@ -79,7 +79,7 @@ msgstr ""
 msgid "tag|see|Parser::SourceParser.parse"
 msgstr ""
 
-eoh
+      EOH
     end
   end
 
@@ -92,28 +92,28 @@ eoh
     end
 
     it "escapes <\\>" do
-      expect(generate_message_pot("hello \\ world")).to eq <<-'eop'
+      expect(generate_message_pot("hello \\ world")).to eq <<-'EOP'
 msgid "hello \\ world"
 msgstr ""
 
-eop
+      EOP
     end
 
     it "escapes <\">" do
-      expect(generate_message_pot("hello \" world")).to eq <<-'eop'
+      expect(generate_message_pot("hello \" world")).to eq <<-'EOP'
 msgid "hello \" world"
 msgstr ""
 
-eop
+      EOP
     end
 
     it "escapes <\\n>" do
-      expect(generate_message_pot("hello \n world")).to eq <<-'eop'
+      expect(generate_message_pot("hello \n world")).to eq <<-'EOP'
 msgid "hello \n"
 " world"
 msgstr ""
 
-eop
+      EOP
     end
   end
 
@@ -166,10 +166,10 @@ eop
 
     it "extracts at tag text" do
       object = YARD::CodeObjects::MethodObject.new(@yard, :parse, :module) do |o|
-        o.docstring = <<-eod
+        o.docstring = <<-EOD
 @example Parse a glob of files
   YARD.parse('lib/**/*.rb')
-eod
+        EOD
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
@@ -187,10 +187,10 @@ eod
 
     it "extracts at tag types" do
       object = YARD::CodeObjects::MethodObject.new(@yard, :parse, :module) do |o|
-        o.docstring = <<-eod
+        o.docstring = <<-EOD
 @param [String, Array<String>] paths a path, glob, or list of paths to
   parse
-eod
+        EOD
         o.files = [["yard.rb", 12]]
       end
       @generator.parse_objects([object])
@@ -208,11 +208,11 @@ eod
 
     it "extracts at overload tag recursively" do
       object = YARD::CodeObjects::MethodObject.new(@yard, :parse, :module) do |o|
-        o.docstring = <<-eod
+        o.docstring = <<-EOD
 @overload foo(i)
   docstring foo(i)
   @param [Integer] i integer parameter
-eod
+        EOD
       end
 
       @generator.parse_objects([object])
@@ -240,11 +240,11 @@ eod
   describe "File" do
     it "extracts at attribute" do
       path = "GettingStarted.md"
-      text = <<-eor
+      text = <<-EOR
 # @title Getting Started Guide
 
 # Getting Started with YARD
-eor
+      EOR
       allow(File).to receive(:open).with(path).and_yield(StringIO.new(text))
       allow(File).to receive(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)
@@ -263,19 +263,19 @@ eor
 
     it "extracts at paragraphs" do
       path = "README.md"
-      paragraph1 = <<-eop.strip
+      paragraph1 = <<-EOP.strip
 Note that class methods must not be referred to with the "::" namespace
 separator. Only modules, classes and constants should use "::".
-eop
-      paragraph2 = <<-eop.strip
+      EOP
+      paragraph2 = <<-EOP.strip
 You can also do lookups on any installed gems. Just make sure to build the
 .yardoc databases for installed gems with:
-eop
-      text = <<-eot
+      EOP
+      text = <<-EOT
 #{paragraph1}
 
 #{paragraph2}
-eot
+      EOT
       allow(File).to receive(:open).with(path).and_yield(StringIO.new(text))
       allow(File).to receive(:read).with(path).and_return(text)
       file = YARD::CodeObjects::ExtraFileObject.new(path)

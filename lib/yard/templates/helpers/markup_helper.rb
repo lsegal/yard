@@ -90,9 +90,7 @@ module YARD
 
         providers = MARKUP_PROVIDERS[type.to_sym]
         return true if providers && providers.empty?
-        if providers && options.markup_provider
-          providers = providers.select {|p| p[:lib] == options.markup_provider }
-        end
+        providers = providers.select {|p| p[:lib] == options.markup_provider } if providers && options.markup_provider
 
         if providers.nil? || providers.empty?
           log.error "Invalid markup type '#{type}' or markup provider " \
@@ -103,7 +101,7 @@ module YARD
         # Search for provider, return the library class name as const if found
         providers.each do |provider|
           begin require provider[:lib].to_s; rescue LoadError; next end if provider[:lib]
-          begin klass = eval("::" + provider[:const]); rescue NameError; next end # rubocop:disable Lint/Eval
+          begin klass = eval("::#{provider[:const]}"); rescue NameError; next end # rubocop:disable Security/Eval
           MarkupHelper.markup_cache[type][:provider] = provider[:lib] # Cache the provider
           MarkupHelper.markup_cache[type][:class] = klass
           return true

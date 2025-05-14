@@ -70,7 +70,7 @@ RSpec.describe YARD::CLI::Server do
     expected_libs.each do |name, libs|
       libs.each_with_index do |expected, i|
         actual = actual_libs[name][i]
-        [:source, :source_path, :yardoc_file].each do |m|
+        %i(source source_path yardoc_file).each do |m|
           expect(actual.send(m)).to eq expected.send(m)
         end
       end
@@ -210,7 +210,7 @@ RSpec.describe YARD::CLI::Server do
     end
 
     it "accepts --docroot" do
-      @server_options[:DocumentRoot] = Dir.pwd + '/__foo/bar'
+      @server_options[:DocumentRoot] = "#{Dir.pwd}/__foo/bar"
       run '--docroot', '__foo/bar'
     end
 
@@ -308,7 +308,7 @@ RSpec.describe YARD::CLI::Server do
     it "loads ruby code (-e) after adapter" do
       unstub_adapter
       @cli.adapter = Server::WebrickAdapter
-      path = File.dirname(__FILE__) + '/tmp.adapterscript.rb'
+      path = "#{File.dirname(__FILE__)}/tmp.adapterscript.rb"
       begin
         File.open(path, 'w') do |f|
           f.puts "YARD::Templates::Engine.register_template_path 'foo'"

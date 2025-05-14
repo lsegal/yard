@@ -35,5 +35,6 @@ class YARD::Handlers::Ruby::ModuleFunctionHandler < YARD::Handlers::Ruby::Base
     class_method = MethodObject.new(namespace, instance_method.name, :module)
     instance_method.copy_to(class_method)
     class_method.visibility = :public
+    class_method
   end
 end

@@ -25,8 +25,7 @@ module YARD
       # Internal parser class
       # @since 0.5.6
       class RipperParser < Ripper
-        attr_reader :ast, :charno, :comments, :file, :tokens
-        attr_reader :shebang_line, :encoding_line, :frozen_string_line
+        attr_reader :ast, :charno, :comments, :file, :tokens, :shebang_line, :encoding_line, :frozen_string_line
         alias root ast
 
         def initialize(source, filename, *args)
@@ -114,7 +113,7 @@ module YARD
           :return0 => "return",
           :sclass => "class",
           :string_embexpr => :embexpr_beg,
-          :string_literal => [:tstring_beg, :heredoc_beg],
+          :string_literal => %i(tstring_beg heredoc_beg),
           :super => "super",
           :symbol => :symbeg,
           :top_const_ref => "::",
@@ -130,14 +129,14 @@ module YARD
         }
         REV_MAPPINGS = {}
 
-        AST_TOKENS = [:CHAR, :backref, :const, :cvar, :gvar, :heredoc_end, :ident,
-          :int, :float, :ivar, :label, :period, :regexp_end, :tstring_content, :backtick]
+        AST_TOKENS = %i(CHAR backref const cvar gvar heredoc_end ident
+          int float ivar label period regexp_end tstring_content backtick)
 
-        COMMENT_SKIP_NODE_TYPES = [
-          :comment,
-          :void_stmt,
-          :list
-        ].freeze
+        COMMENT_SKIP_NODE_TYPES = %i(
+          comment
+          void_stmt
+          list
+        ).freeze
 
         MAPPINGS.each do |k, v|
           if Array === v
@@ -150,61 +149,61 @@ module YARD
         PARSER_EVENT_TABLE.each do |event, arity|
           node_class = AstNode.node_class_for(event)
 
-          if arity == 0 && /_new\z/ =~ event.to_s
-            module_eval(<<-eof, __FILE__, __LINE__ + 1)
+          if arity == 0 && event.to_s.end_with?('_new')
+            module_eval(<<-EOF, __FILE__, __LINE__ + 1)
               def on_#{event}(*args)
                 #{node_class}.new(:list, args, :listchar => charno...charno, :listline => lineno..lineno)
               end
-            eof
+            EOF
           elsif /_add(_.+)?\z/ =~ event.to_s
-            module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            module_eval(<<-EOF, __FILE__, __LINE__ + 1)
               begin; undef on_#{event}; rescue NameError; end
               def on_#{event}(list, item)
                 list.push(item)
                 list
               end
-            eof
+            EOF
           elsif MAPPINGS.key?(event)
-            module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            module_eval(<<-EOF, __FILE__, __LINE__ + 1)
               begin; undef on_#{event}; rescue NameError; end
               def on_#{event}(*args)
                 visit_event #{node_class}.new(:#{event}, args)
               end
-            eof
+            EOF
           else
-            module_eval(<<-eof, __FILE__, __LINE__ + 1)
+            module_eval(<<-EOF, __FILE__, __LINE__ + 1)
               begin; undef on_#{event}; rescue NameError; end
               def on_#{event}(*args)
                 #{node_class}.new(:#{event}, args, :listline => lineno..lineno, :listchar => charno...charno)
               end
-            eof
+            EOF
           end
         end
 
         SCANNER_EVENTS.each do |event|
           ast_token = AST_TOKENS.include?(event)
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               visit_ns_token(:#{event}, tok, #{ast_token.inspect})
             end
-          eof
+          EOF
         end
 
         REV_MAPPINGS.select {|k, _v| k.is_a?(Symbol) }.each do |pair|
           event = pair.first
           ast_token = AST_TOKENS.include?(event)
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               (@map[:#{event}] ||= []) << [lineno, charno]
               visit_ns_token(:#{event}, tok, #{ast_token.inspect})
             end
-          eof
+          EOF
         end
 
-        [:kw, :op].each do |event|
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+        %i(kw op).each do |event|
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               unless @last_ns_token == [:kw, "def"] ||
@@ -213,18 +212,18 @@ module YARD
               end
               visit_ns_token(:#{event}, tok, true)
             end
-          eof
+          EOF
         end
 
-        [:nl, :ignored_nl].each do |event|
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+        %i(nl ignored_nl).each do |event|
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{event}; rescue NameError; end
             def on_#{event}(tok)
               add_token(:#{event}, tok)
               @newline = true
               @charno += tok ? tok.length : 0
             end
-          eof
+          EOF
         end
 
         undef on_sp
@@ -262,29 +261,17 @@ module YARD
           @last_ns_token = [token, data]
           @charno += data.length
           @ns_charno = charno
-          @newline = [:semicolon, :comment, :kw, :op, :lparen, :lbrace].include?(token)
-          if ast_token
-            AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno - 1, :token => true)
-          end
+          @newline = %i(semicolon comment kw op lparen lbrace).include?(token)
+          AstNode.new(token, [data], :line => lineno..lineno, :char => ch..charno - 1, :token => true) if ast_token
         end
 
         def add_token(token, data)
-          if @percent_ary
-            if token == :words_sep && data !~ /\s\z/
-              rng = @percent_ary.source_range
-              rng = Range.new(rng.begin, rng.end.to_i + data.length)
-              @percent_ary.source_range = rng
-              @tokens << [token, data, [lineno, charno]]
-              @percent_ary = nil
-              return
-            elsif token == :tstring_end && data =~ /\A\s/
-              rng = @percent_ary.source_range
-              rng = Range.new(rng.begin, rng.end.to_i + data.length)
-              @percent_ary.source_range = rng
-              @tokens << [token, data, [lineno, charno]]
-              @percent_ary = nil
-              return
-            end
+          if @percent_ary && ((token == :words_sep && data !~ /\s\z/) || (token == :tstring_end && data =~ /\A\s/))
+            rng = @percent_ary.source_range
+            rng = Range.new(rng.begin, rng.end.to_i + data.length)
+            @percent_ary.source_range = rng
+            @tokens << [token, data, [lineno, charno]]
+            @percent_ary = nil
           end
 
           if @tokens.last && (@tokens.last[0] == :symbeg ||
@@ -298,7 +285,7 @@ module YARD
             data.force_encoding(file_encoding) if file_encoding
 
             @heredoc_state = :ended if token == :heredoc_end
-          elsif (token == :nl || token == :comment) && @heredoc_state == :ended
+          elsif %i(nl comment).include?(token) && @heredoc_state == :ended
             @heredoc_tokens.unshift([token, data, [lineno, charno]])
             @tokens += @heredoc_tokens
             @heredoc_tokens = nil
@@ -442,9 +429,9 @@ module YARD
           ReferenceNode.new(:const_path_ref, args, :listline => lineno..lineno, :listchar => charno..charno)
         end
 
-        [:if_mod, :unless_mod, :while_mod, :until_mod].each do |kw|
+        %i(if_mod unless_mod while_mod until_mod).each do |kw|
           node_class = AstNode.node_class_for(kw)
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{kw}; rescue NameError; end
             def on_#{kw}(*args)
               mapping = @map[#{kw.to_s.sub(/_mod$/, '').inspect}]
@@ -453,11 +440,11 @@ module YARD
               lr = args.last.line_range.begin..args.first.line_range.end
               #{node_class}.new(:#{kw}, args, :line => lr, :char => sr)
             end
-          eof
+          EOF
         end
 
         %w(symbols qsymbols words qwords).each do |kw|
-          module_eval(<<-eof, __FILE__, __LINE__ + 1)
+          module_eval(<<-EOF, __FILE__, __LINE__ + 1)
             begin; undef on_#{kw}_new; rescue NameError; end
             def on_#{kw}_new(*args)
               node = LiteralNode.new(:#{kw}_literal, args)
@@ -478,7 +465,7 @@ module YARD
               list.push(item)
               list
             end
-          eof
+          EOF
         end
 
         def on_string_literal(*args)
@@ -514,11 +501,11 @@ module YARD
 
         def on_params(*args)
           args.map! do |arg|
-            next arg unless arg.class == Array
+            next arg unless arg.instance_of?(Array)
 
-            if arg.first.class == Array
+            if arg.first.instance_of?(Array)
               arg.map! do |sub_arg|
-                next sub_arg unless sub_arg.class == Array
+                next sub_arg unless sub_arg.instance_of?(Array)
                 type = sub_arg[0].type == :label ?
                   :named_arg : :unnamed_optional_arg
                 AstNode.new(type, sub_arg, :listline => lineno..lineno, :listchar => charno..charno)
@@ -565,7 +552,7 @@ module YARD
           comment = comment.gsub(/^(\#+)\s{0,1}/, '').chomp
           append_comment = @comments[lineno - 1]
 
-          hash_flag = $1 == '##' ? true : false
+          hash_flag = $1 == '##'
 
           if append_comment && @comments_last_column &&
              @comments_last_column == column && comment_starts_line?(ch)
@@ -574,7 +561,7 @@ module YARD
             @comments_flags.delete(lineno - 1)
             range = @comments_range.delete(lineno - 1)
             source_range = range.begin..source_range.end
-            comment = append_comment + "\n" + comment
+            comment = "#{append_comment}\n#{comment}"
           end
 
           @comments[lineno] = comment
@@ -622,9 +609,7 @@ module YARD
             next if COMMENT_SKIP_NODE_TYPES.include?(node.type) || node.parent.type != :list
 
             # never attach comments to if/unless mod nodes
-            if node.type == :if_mod || node.type == :unless_mod
-              node = node.then_block
-            end
+            node = node.then_block if %i(if_mod unless_mod).include?(node.type)
 
             # check upwards from line before node; check node's line at the end
             if (n_l = node.line)
@@ -693,7 +678,7 @@ module YARD
         end
 
         def freeze_tree(node = nil)
-          @tokens = @tokens.sort_by {|t| t.last }
+          @tokens = @tokens.sort_by(&:last)
           nodes = [node || root]
           until nodes.empty?
             p_node = nodes.shift

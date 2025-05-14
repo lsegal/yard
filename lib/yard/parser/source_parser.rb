@@ -72,7 +72,7 @@ module YARD
       # Byte order marks for various encodings
       # @since 0.7.0
       ENCODING_BYTE_ORDER_MARKS = {
-        'utf-8' => String.new("\xEF\xBB\xBF"),
+        'utf-8' => String.new("\xEF\xBB\xBF")
         # Not yet supported
         # 'utf-16be' => "\xFE\xFF",
         # 'utf-16le' => "\xFF\xFE",
@@ -144,7 +144,7 @@ module YARD
         # @return [void]
         # @see Parser::Base
         def register_parser_type(type, parser_klass, extensions = nil)
-          unless Base > parser_klass
+          unless parser_klass < Base
             raise ArgumentError, "expecting parser_klass to be a subclass of YARD::Parser::Base"
           end
           parser_type_extensions[type.to_sym] = extensions if extensions
@@ -423,9 +423,7 @@ module YARD
           checksum = Registry.checksum_for(content)
           return if Registry.checksums[file] == checksum
 
-          if Registry.checksums.key?(file)
-            log.info "File '#{file}' was modified, re-processing..."
-          end
+          log.info "File '#{file}' was modified, re-processing..." if Registry.checksums.key?(file)
           Registry.checksums[@file] = checksum
           self.parser_type = parser_type_for_filename(file)
         else
@@ -476,9 +474,7 @@ module YARD
           content.force_encoding('binary')
           ENCODING_BYTE_ORDER_MARKS.each do |encoding, bom|
             bom.force_encoding('binary')
-            if content.start_with?(bom)
-              return content.sub(bom, '').force_encoding(encoding)
-            end
+            return content.sub(bom, '').force_encoding(encoding) if content.start_with?(bom)
           end
           content.force_encoding('utf-8') # UTF-8 is default encoding
           content
@@ -514,9 +510,7 @@ module YARD
       # @since 0.5.6
       def parser_class
         klass = self.class.parser_types[parser_type]
-        unless klass
-          raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1]
-        end
+        raise ArgumentError, "invalid parser type '#{parser_type}' or unrecognized file", caller[1..-1] unless klass
 
         klass
       end

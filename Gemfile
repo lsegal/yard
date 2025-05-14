@@ -2,23 +2,30 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec', '>= 3.11.0'
+  gem 'coveralls_reborn', :require => false
+  gem 'json'
   gem 'rake'
   gem 'rdoc', '= 6.1.2.1'
-  gem 'json'
-  gem 'simplecov'
+  gem 'rspec', '>= 3.11.0'
   gem 'samus', '~> 3.0.9', :require => false
-  gem 'coveralls_reborn', :require => false
+  gem 'simplecov'
   gem 'webrick'
+end
+
+group :lint do
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rake'
 end
 
 group :asciidoc do
   gem 'asciidoctor'
+  gem 'logger' # needed for asciidoctor
 end
 
 group :markdown do
+  gem 'commonmarker', '~> 0.x'
   gem 'redcarpet'
-  gem 'commonmarker'
 end
 
 group :textile do

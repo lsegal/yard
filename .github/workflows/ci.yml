@@ -41,6 +41,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Lint
+        run: bundle exec rubocop
       - name: Bundle install
         if: matrix.container != null
         run: bundle install --jobs=4 --retry=3

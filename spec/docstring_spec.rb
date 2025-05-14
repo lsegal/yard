@@ -24,7 +24,7 @@ RSpec.describe YARD::Docstring do
     end
 
     it "adds a String" do
-      d = Docstring.new("FOO") + "BAR"
+      d = "#{Docstring.new("FOO")}BAR"
       expect(d).to eq "FOOBAR"
     end
   end
@@ -78,13 +78,13 @@ RSpec.describe YARD::Docstring do
       o = Docstring.new("Returns a list of tags specified by +name+ or all tags if +name+ is not specified.\n\nTest")
       expect(o.summary).to eq "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
 
-      doc = Docstring.new(<<-eof)
+      doc = Docstring.new(<<-EOF)
 
         Returns a list of tags specified by +name+ or all tags if +name+ is not specified.
 
         @param name the tag name to return data for, or nil for all tags
         @return [Array<Tags::Tag>] the list of tags by the specified tag name
-      eof
+      EOF
       expect(doc.summary).to eq "Returns a list of tags specified by +name+ or all tags if +name+ is not specified."
     end
 
@@ -183,14 +183,14 @@ RSpec.describe YARD::Docstring do
     end
 
     it "returns an empty list (and warning) if circular reftags are found" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @param (see #b)
           def a; end
           # @param (see #a)
           def b; end
         end
-      eof
+      EOF
 
       expect(log.io.string).to match(/error.*circular reference tag in `Foo#b'/)
       expect(Registry.at('Foo#a').tags).to be_empty
@@ -198,12 +198,12 @@ RSpec.describe YARD::Docstring do
     end
 
     it "returns an empty list (and warning) if self-circular reftags are found" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Foo
           # @param (see #bar)
           def bar; end
         end
-      eof
+      EOF
 
       expect(log.io.string).to match(/error.*circular reference tag in `Foo#bar'/)
       expect(Registry.at('Foo#bar').tags).to be_empty
@@ -353,7 +353,7 @@ RSpec.describe YARD::Docstring do
 
   describe "reference docstrings" do
     it "allows for construction of docstring with ref object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class A
           # Docstring
           # @return [Boolean]
@@ -361,7 +361,7 @@ RSpec.describe YARD::Docstring do
           # (see #a)
           def b; end
         end
-      eof
+      EOF
 
       object = YARD::Registry.at('A#b')
       expect(object.docstring).to eq 'Docstring'

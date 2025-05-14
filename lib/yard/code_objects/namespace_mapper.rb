@@ -43,7 +43,7 @@ module YARD
       def unregister_separator_by_type(type)
         seps = NamespaceMapper.rev_map[type]
         return unless seps
-        
+
         seps.each {|s| NamespaceMapper.map.delete(s) }
         NamespaceMapper.rev_map.delete(type)
         NamespaceMapper.invalidate

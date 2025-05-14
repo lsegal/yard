@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'fileutils'
+
 module YARD
   # Stubs marshal dumps and acts a delegate class for an object by path
   #
@@ -52,10 +54,10 @@ module YARD
       #
       # @see #locked_for_writing?
       def lock_for_writing
-        File.open!(processing_path, 'w') {}
+        FileUtils.touch(processing_path)
         yield
       ensure
-        File.unlink(processing_path) if File.exist?(processing_path)
+        FileUtils.rm_f(processing_path)
       end
 
       # @return [Boolean] whether the database is currently locked for writing
@@ -68,12 +70,12 @@ module YARD
           case object
           when String, Symbol
             object = object.to_s
-            if object =~ /#/
+            if object.include?('#')
               object += '_i'
-            elsif object =~ /\./
+            elsif object.include?('.')
               object += '_c'
             end
-            object.split(/::|\.|#/).map do |p|
+            object.split(/::|\.|#/).map do |p| # rubocop:disable Style/StringConcatenation
               p.gsub(/[^\w\.-]/) do |x|
                 encoded = '_'
 
@@ -84,7 +86,7 @@ module YARD
           when YARD::CodeObjects::RootObject
             'root.dat'
           else
-            super(object)
+            super
           end
 
         File.join('objects', path)
@@ -139,7 +141,7 @@ module YARD
           list = object.map do |k, v|
             [k, v].map {|item| internal_dump(item) }
           end
-          object.replace(Hash[list])
+          object.replace(list.to_h)
         when Array
           list = object.map {|item| internal_dump(item) }
           object.replace(list)

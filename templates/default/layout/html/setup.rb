@@ -9,7 +9,7 @@ def init
     if @file.attributes[:namespace]
       @object = options.object = Registry.at(@file.attributes[:namespace]) || Registry.root
     end
-    @breadcrumb_title = "File: " + @file.title
+    @breadcrumb_title = "File: #{@file.title}"
     @page_title = @breadcrumb_title
     sections :layout, [:diskfile]
   elsif @contents
@@ -18,7 +18,7 @@ def init
     case object
     when '_index.html'
       @page_title = options.title
-      sections :layout, [:index, [:listing, [:files, :objects]]]
+      sections :layout, [:index, [:listing, %i(files objects)]]
     when CodeObjects::Base
       unless object.root?
         cur = object.namespace
@@ -65,7 +65,7 @@ end
 def diskfile
   @file.attributes[:markup] ||= markup_for_file('', @file.filename)
   data = htmlify(@file.contents, @file.attributes[:markup])
-  "<div id='filecontents'>" + data + "</div>"
+  "<div id='filecontents'>#{data}</div>"
 end
 
 # @return [Array<String>] core javascript files for layout

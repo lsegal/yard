@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/shared_signature_examples"
+require "#{File.dirname(__FILE__)}/shared_signature_examples"
 
 RSpec.describe YARD::Templates::Helpers::TextHelper do
   include YARD::Templates::Helpers::BaseHelper
@@ -26,7 +26,7 @@ RSpec.describe YARD::Templates::Helpers::TextHelper do
       }
     end
 
-    def signature(obj) super(obj).strip end
+    def signature(obj) super.strip end
 
     it_should_behave_like "signature"
   end
@@ -34,12 +34,12 @@ RSpec.describe YARD::Templates::Helpers::TextHelper do
   describe "#align_right" do
     it "aligns text right" do
       text = "Method: #some_method (SomeClass)"
-      expect(align_right(text)).to eq ' ' * 40 + text
+      expect(align_right(text)).to eq (' ' * 40) + text
     end
 
     it "truncates text that is longer than allowed width" do
       text = "(Defined in: /home/user/.rip/.packages/some_gem-2460672e333ac07b9190ade88ec9a91c/long/path.rb)"
-      expect(align_right(text)).to eq ' ' + text[0, 68] + '...'
+      expect(align_right(text)).to eq " #{text[0, 68]}..."
     end
   end
 

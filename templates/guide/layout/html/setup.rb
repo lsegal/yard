@@ -6,9 +6,7 @@ def init
 
   @topfile = options.readme
   if options.files
-    if @topfile
-      @toptitle = @topfile.attributes[:title] || "Documentation Overview"
-    end
+    @toptitle = @topfile.attributes[:title] || "Documentation Overview" if @topfile
     @page_title = @file == options.readme ? options.title : @file.title
 
     index = options.files.index(@file)

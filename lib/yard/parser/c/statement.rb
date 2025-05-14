@@ -3,15 +3,11 @@ module YARD
   module Parser
     module C
       class Statement
-        attr_accessor :source
-        attr_accessor :line
-        attr_accessor :file
+        attr_accessor :source, :line, :file, :comments_hash_flag
 
         # @deprecated Groups are now defined by directives
         # @see Tags::GroupDirective
         attr_accessor :group
-
-        attr_accessor :comments_hash_flag
 
         def initialize(source, file = nil, line = nil)
           @source = source
@@ -28,7 +24,7 @@ module YARD
         end
 
         def first_line
-          source.split(/\n/).first
+          source.split("\n").first
         end
 
         alias signature first_line
@@ -43,17 +39,13 @@ module YARD
       end
 
       class ToplevelStatement < Statement
-        attr_accessor :block
-        attr_accessor :declaration
-        attr_accessor :comments
+        attr_accessor :block, :declaration, :comments
       end
 
       class Comment < Statement
         include CommentParser
 
-        attr_accessor :type
-        attr_accessor :overrides
-        attr_accessor :statement
+        attr_accessor :type, :overrides, :statement
 
         def initialize(source, file = nil, line = nil)
           super(parse_comments(source), file, line)

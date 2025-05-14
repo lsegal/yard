@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::ModuleObject do
   describe "#meths" do
@@ -50,7 +50,7 @@ RSpec.describe YARD::CodeObjects::ModuleObject do
     it "allows :visibility to be set" do
       meths = @yard.meths(:visibility => :public)
       expect(meths).not_to include(P("YARD.bar"))
-      meths = @yard.meths(:visibility => [:public, :private])
+      meths = @yard.meths(:visibility => %i(public private))
       expect(meths).to include(P("YARD#foo"))
       expect(meths).to include(P("YARD.bar"))
       expect(meths).not_to include(P("YARD#foo2"))

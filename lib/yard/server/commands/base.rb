@@ -164,7 +164,7 @@ module YARD
         # @see StaticCaching
         def cache(data)
           if caching && adapter.document_root
-            path = File.join(adapter.document_root, request.path_info.sub(/\.html$/, '') + '.html')
+            path = File.join(adapter.document_root, "#{request.path_info.sub(/\.html$/, '')}.html")
             path = path.sub(%r{/\.html$}, '.html')
             FileUtils.mkdir_p(File.dirname(path))
             log.debug "Caching data to #{path}"

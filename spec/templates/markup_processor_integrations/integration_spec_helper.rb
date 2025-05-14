@@ -25,9 +25,7 @@ RSpec.shared_context 'shared helpers for markup processor integration specs' do
   end
 
   before(:each) do
-    if html_renderer.markup_class(markup).nil?
-      skip "Missing markup renderer #{markup}"
-    end
+    skip "Missing markup renderer #{markup}" if html_renderer.markup_class(markup).nil?
   end
 
   # Works only with one-liners.

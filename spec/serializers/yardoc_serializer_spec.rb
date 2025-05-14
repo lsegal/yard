@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 instance_eval do
   class YARD::Serializers::YardocSerializer
@@ -59,11 +59,11 @@ RSpec.describe YARD::Serializers::YardocSerializer do
 
   describe "#lock_for_writing" do
     it "creates a lock file during writing and cleans up" do
-      expect(File).to receive(:open!).with(@serializer.processing_path, 'w')
-      expect(File).to receive(:exist?).with(@serializer.processing_path).exactly(2).times.and_return(true)
-      expect(File).to receive(:unlink).with(@serializer.processing_path)
+      expect(FileUtils).to receive(:touch).with(@serializer.processing_path)
+      expect(File).to receive(:exist?).with(@serializer.processing_path).and_return(true)
+      expect(FileUtils).to receive(:rm_f).with(@serializer.processing_path)
       @serializer.lock_for_writing do
-        expect(@serializer.locked_for_writing?).to eq true
+        expect(@serializer).to be_locked_for_writing
       end
     end
   end

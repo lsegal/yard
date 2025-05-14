@@ -11,11 +11,10 @@ module YARD
         def serializer; @command.serializer end
         def serialize; false end
 
-        attr_accessor :command
-        attr_accessor :frames
+        attr_accessor :command, :frames
 
         def each(&block)
-          super(&block)
+          super
           yield(:adapter, adapter)
           yield(:library, library)
           yield(:single_library, single_library)
@@ -31,7 +30,7 @@ module YARD
       # @abstract
       class LibraryCommand < Base
         begin
-          Process.fork { }
+          Process.fork {} # rubocop:disable Lint/EmptyBlock
           CAN_FORK = true
         rescue Exception # rubocop:disable Lint/RescueException
           CAN_FORK = false
@@ -87,7 +86,7 @@ module YARD
           options.command = self
           setup_library
           options.title = "Documentation for #{library.name} " +
-                          (library.version ? '(' + library.version + ')' : '')
+                          (library.version ? "(#{library.version})" : '')
           yield
         rescue LibraryNotPreparedError
           not_prepared
@@ -172,7 +171,7 @@ module YARD
           tplopts = [options.template, :fulldoc, options.format]
           tplclass = Templates::Engine.template(*tplopts)
           obj = Object.new.extend(tplclass)
-          class << obj; define_method(:init) {} end
+          class << obj; define_method(:init) {} end # rubocop:disable Lint/EmptyBlock
           obj.class = tplclass
           obj.send(:initialize, options)
           class << obj

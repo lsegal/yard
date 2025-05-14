@@ -12,9 +12,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     nobj = namespace
     mscope = scope
     if statement.type == :defs
-      if statement[0][0].type == :ident
-        raise YARD::Parser::UndocumentableError, 'method defined on object instance'
-      end
+      raise YARD::Parser::UndocumentableError, 'method defined on object instance' if statement[0][0].type == :ident
       nobj = P(namespace, statement[0].source) if statement[0][0].type == :const
       mscope = :class
     end
@@ -34,7 +32,7 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
     if obj.constructor?
       unless obj.has_tag?(:return)
         obj.add_tag(YARD::Tags::Tag.new(:return,
-          "a new instance of #{namespace.name}", namespace.name.to_s))
+                                        "a new instance of #{namespace.name}", namespace.name.to_s))
       end
     elsif mscope == :class && obj.docstring.blank? && %w(inherited included
         extended method_added method_removed method_undefined).include?(meth)
@@ -67,13 +65,11 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
   end
 
   def format_args
-    return [] unless args = statement.parameters
+    return [] unless (args = statement.parameters)
 
     params = []
 
-    if args.unnamed_required_params
-      params += args.unnamed_required_params.map {|a| [a.source, nil] }
-    end
+    params += args.unnamed_required_params.map {|a| [a.source, nil] } if args.unnamed_required_params
 
     if args.unnamed_optional_params
       params += args.unnamed_optional_params.map do |a|
@@ -81,11 +77,9 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       end
     end
 
-    params << ['*' + args.splat_param.source, nil] if args.splat_param
+    params << ["*#{args.splat_param.source}", nil] if args.splat_param
 
-    if args.unnamed_end_params
-      params += args.unnamed_end_params.map {|a| [a.source, nil] }
-    end
+    params += args.unnamed_end_params.map {|a| [a.source, nil] } if args.unnamed_end_params
 
     if args.named_params
       params += args.named_params.map do |a|
@@ -93,11 +87,9 @@ class YARD::Handlers::Ruby::MethodHandler < YARD::Handlers::Ruby::Base
       end
     end
 
-    if args.double_splat_param
-      params << ['**' + args.double_splat_param.source, nil]
-    end
+    params << ["**#{args.double_splat_param.source}", nil] if args.double_splat_param
 
-    params << ['&' + args.block_param.source, nil] if args.block_param && !args.args_forward
+    params << ["&#{args.block_param.source}", nil] if args.block_param && !args.args_forward
 
     params
   end

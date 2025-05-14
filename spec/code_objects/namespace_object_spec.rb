@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::NamespaceObject do
   before { Registry.clear }
@@ -112,7 +112,7 @@ RSpec.describe YARD::CodeObjects::NamespaceObject do
     before do
       Registry.clear
 
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module A
           CONST1 = 1
           CONST2 = 2
@@ -130,7 +130,7 @@ RSpec.describe YARD::CodeObjects::NamespaceObject do
           include A
           include B
         end
-      eof
+      EOF
     end
 
     it "lists all included constants by default" do
@@ -160,11 +160,11 @@ RSpec.describe YARD::CodeObjects::NamespaceObject do
 
   describe "#included_meths" do
     it "returns all included methods with :all = true" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module B; def foo; end end
         module C; def bar; end end
         class A; include B; include C; def foo; end; def bar; end end
-      eof
+      EOF
       expect(Registry.at('A').included_meths(:all => true)).to eq [P('C#bar'), P('B#foo')]
     end
   end

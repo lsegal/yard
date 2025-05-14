@@ -9,7 +9,7 @@ module YARD
       # printed.
       #
       # @see #print_statistics
-      STATS_ORDER = [:files, :modules, :classes, :constants, :attributes, :methods]
+      STATS_ORDER = %i(files modules classes constants attributes methods)
 
       # @return [Boolean] whether to parse and load registry
       attr_accessor :parse
@@ -70,7 +70,7 @@ module YARD
           elsif @total == 0
             0
           else
-            (@total - @undocumented).to_f / @total.to_f * 100
+            (@total - @undocumented).to_f / @total * 100
           end
         log.puts("% 3.2f%% documented" % total)
       end
@@ -168,7 +168,7 @@ module YARD
           else
             "%5s" % data
           end
-        log.puts("%-12s %s" % [name + ":", data])
+        log.puts("%-12s %s" % ["#{name}:", data])
       end
 
       private
@@ -197,7 +197,7 @@ module YARD
       end
 
       def general_options(opts)
-        super(opts)
+        super
 
         opts.on('--list-undoc', 'List all undocumented objects') do
           @undoc_list = []

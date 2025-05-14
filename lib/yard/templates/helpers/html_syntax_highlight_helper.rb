@@ -19,12 +19,15 @@ module YARD
 
         private
 
+        RIPPER_STRING_START_TOKENS = %i(tstring_beg regexp_beg).freeze
+        RIPPER_STRING_END_TOKENS = %i(tstring_end regexp_end).freeze
+
         def html_syntax_highlight_ruby_ripper(source)
           resolver = Parser::Ruby::TokenResolver.new(source, object)
           output = String.new("")
           resolver.each do |s, token_obj|
             token_obj = clean_token_object(token_obj)
-            output << "<span class='tstring'>" if [:tstring_beg, :regexp_beg].include?(s[0])
+            output << "<span class='tstring'>" if RIPPER_STRING_START_TOKENS.include?(s[0])
             case s.first
             when :nl, :ignored_nl, :sp
               output << h(s[1])
@@ -35,7 +38,7 @@ module YARD
             else
               output << "<span class='#{s.first}'>#{h(s[1])}</span>"
             end
-            output << "</span>" if [:tstring_end, :regexp_end].include?(s[0])
+            output << "</span>" if RIPPER_STRING_END_TOKENS.include?(s[0])
           end
           output
         rescue Parser::ParserSyntaxError
@@ -63,14 +66,12 @@ module YARD
         def clean_token_object(token_obj)
           return unless token_obj
           if token_obj == object
-            token_obj = nil
+            nil
           elsif token_obj.is_a?(CodeObjects::MethodObject)
-            token_obj = prune_method_listing([token_obj], false).first
+            prune_method_listing([token_obj], false).first
           else
-            token_obj = run_verifier([token_obj]).first
+            run_verifier([token_obj]).first
           end
-
-          token_obj
         end
       end
     end

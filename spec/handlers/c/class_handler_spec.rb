@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + "/spec_helper"
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::Handlers::C::ClassHandler do
   it "registers classes" do
@@ -17,51 +17,51 @@ RSpec.describe YARD::Handlers::C::ClassHandler do
   end
 
   it "remembers symbol defined with class" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       cXYZ = rb_define_class("Foo", rb_cObject);
       rb_define_method(cXYZ, "bar", bar, 0);
-    eof
+    EOF
     expect(Registry.at('Foo').type).to eq :class
     expect(Registry.at('Foo#bar')).not_to be nil
   end
 
   it "looks up superclass symbol name" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       cXYZ = rb_define_class("Foo", rb_cObject);
       cBar = rb_define_class("Bar", cXYZ);
-    eof
+    EOF
     expect(Registry.at('Bar').superclass).to eq Registry.at('Foo')
   end
 
   it "uses superclass symbol name as proxy if not found" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       // cXYZ = rb_define_class("Foo", rb_cObject);
       cBar = rb_define_class("Bar", cXYZ);
-    eof
+    EOF
     expect(Registry.at('Bar').superclass).to eq P('XYZ')
   end
 
   it "does not associate declaration comments as class docstring" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       /* Docstring! */
       cFoo = rb_define_class("Foo", cObject);
-    eof
+    EOF
     expect(Registry.at('Foo').docstring).to be_blank
   end
 
   it "associates a file with the declaration" do
-    parse_init(<<-eof)
+    parse_init(<<-EOF)
       cFoo = rb_define_class("Foo", cObject);
-    eof
+    EOF
     expect(Registry.at('Foo').file).to eq '(stdin)'
     expect(Registry.at('Foo').line).to eq 2
   end
 
   it "properly handles Proxy superclasses" do
-    parse_init <<-eof
+    parse_init <<-EOF
       mFoo = rb_define_module("Foo");
       cBar = rb_define_class_under(mFoo, "Bar", rb_cBar);
-    eof
+    EOF
     expect(Registry.at('Foo::Bar').type).to eq :class
     expect(Registry.at('Foo::Bar').superclass).to eq P('Bar')
     expect(Registry.at('Foo::Bar').superclass.type).to eq :class

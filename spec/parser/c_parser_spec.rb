@@ -88,7 +88,7 @@ RSpec.describe YARD::Parser::C::CParser do
 
     describe "Foo class" do
       it "does not include comments in docstring source" do
-        parse <<-eof
+        parse <<-EOF
           /*
            * Hello world
            */
@@ -99,7 +99,7 @@ RSpec.describe YARD::Parser::C::CParser do
           void Init_Foo() {
             rb_define_method(rb_cFoo, "foo", foo, 1);
           }
-        eof
+        EOF
         expect(Registry.at('Foo#foo').source.gsub(/\s\s+/, ' ')).to eq(
           "VALUE foo(VALUE x) { int value = x;\n}"
         )
@@ -108,14 +108,14 @@ RSpec.describe YARD::Parser::C::CParser do
 
     describe "Class inherited from core error class" do
       it "resolves correct name" do
-        parse <<-eof
+        parse <<-EOF
           void
           Init_Mask(void)
           {
               rb_cFoo = rb_define_class("Foo", rb_cObject);
               rb_cMyError = rb_define_class("MyError", rb_eArgError);
           }
-        eof
+        EOF
         klass = Registry.at('MyError')
         expect(klass.name).to eq :MyError
         expect(klass.title).to eq 'MyError'
@@ -126,7 +126,7 @@ RSpec.describe YARD::Parser::C::CParser do
 
     describe "Constant" do
       it "does not truncate docstring" do
-        parse <<-eof
+        parse <<-EOF
           #define MSK_DEADBEEF 0xdeadbeef
           void
           Init_Mask(void)
@@ -136,7 +136,7 @@ RSpec.describe YARD::Parser::C::CParser do
                * software crash or deadlock in embedded systems. */
               rb_define_const(rb_cMask, "DEADBEEF", INT2FIX(MSK_DEADBEEF));
           }
-        eof
+        EOF
         constant = Registry.at('Mask::DEADBEEF')
         expect(constant.value).to eq '0xdeadbeef'
         expect(constant.docstring).to eq "This constant is frequently used to indicate a\nsoftware crash or deadlock in embedded systems."
@@ -146,7 +146,7 @@ RSpec.describe YARD::Parser::C::CParser do
     describe "Macros" do
       it "handles param## inside of macros" do
         thr = Thread.new do
-          parse <<-eof
+          parse <<-EOF
           void
           Init_gobject_gparamspecs(void)
           {
@@ -169,7 +169,7 @@ RSpec.describe YARD::Parser::C::CParser do
 
               c = G_DEF_CLASS(G_TYPE_PARAM_CHAR, "Char", cParamSpec);
               DEF_NUMERIC_PSPEC_METHODS(c, char);
-          eof
+          EOF
         end
         thr.join(5)
         if thr.alive?
@@ -182,7 +182,7 @@ RSpec.describe YARD::Parser::C::CParser do
     describe "C macros in declaration" do
       it "handles C macros in method declaration" do
         Registry.clear
-        parse <<-eof
+        parse <<-EOF
         // docstring
         FOOBAR VALUE func() { }
 
@@ -191,7 +191,7 @@ RSpec.describe YARD::Parser::C::CParser do
         {
           rb_define_method(rb_cFoo, "func", func, 0); \
         }
-        eof
+        EOF
 
         expect(Registry.at('Foo#func').docstring).to eq "docstring"
       end

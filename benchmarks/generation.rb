@@ -12,13 +12,13 @@ def rungen
 end
 
 def redef(lock = false)
-  eval <<-eof
+  eval <<-EOF
     class YARD::CodeObjects::Proxy;
       def to_obj
         @obj #{lock ? '||' : ''}= YARD::Registry.resolve(@namespace, @name)
       end
     end
-  eof
+  EOF
 end
 
 Benchmark.bmbm do |x|

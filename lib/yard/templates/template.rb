@@ -121,7 +121,7 @@ module YARD
 
         def is_a?(klass)
           return true if klass == Template
-          super(klass)
+          super
         end
 
         # Creates a new template object to be rendered with {Template#run}
@@ -136,7 +136,7 @@ module YARD
           new(*args).run
         end
 
-        # rubocop:disable Style/MethodName
+        # rubocop:disable Naming/MethodName
 
         # Alias for creating {Engine.template}.
         def T(*path)
@@ -150,7 +150,7 @@ module YARD
           Section.new(*args)
         end
 
-        # rubocop:enable Style/MethodName
+        # rubocop:enable Naming/MethodName
 
         private
 
@@ -168,7 +168,7 @@ module YARD
         end
 
         def include_inherited(full_paths)
-          full_paths.reverse.each do |full_path|
+          full_paths.reverse_each do |full_path|
             include Engine.template!(path, full_path)
           end
         end
@@ -201,7 +201,7 @@ module YARD
       #
       # @param [Array<String, Symbol>] path the path of the template
       # @return [Template] the loaded template module
-      def T(*path) # rubocop:disable Style/MethodName
+      def T(*path) # rubocop:disable Naming/MethodName
         path.unshift(options.template) if options.template
         path.push(options.format) if options.format
         self.class.T(*path)
@@ -236,8 +236,7 @@ module YARD
       #     sections :section1, :section2, [:subsection1, :etc]
       #   end
       # @see #sections
-      def init
-      end
+      def init; end
 
       # Runs a template on +sects+ using extra options. This method should
       # not be called directly. Instead, call the class method {ClassMethods#run}
@@ -313,10 +312,10 @@ module YARD
         file = self.class.find_file(basename)
         raise ArgumentError, "no file for '#{basename}' in #{self.class.path}" unless file
 
-        data = IO.read(file)
+        data = File.read(file)
         if allow_inherited
           superfile = self.class.find_nth_file(basename, 2)
-          data.gsub!('{{{__super__}}}', superfile ? IO.read(superfile) : "")
+          data.gsub!('{{{__super__}}}', superfile ? File.read(superfile) : "")
         end
 
         data
@@ -330,7 +329,7 @@ module YARD
       def superb(sect = section, &block)
         filename = self.class.find_nth_file(erb_file_for(sect), 2)
         return "" unless filename
-        method_name = ErbCache.method_for(filename) { erb_with(IO.read(filename), filename) }
+        method_name = ErbCache.method_for(filename) { erb_with(File.read(filename), filename) }
         send(method_name, &block)
       end
 
@@ -382,7 +381,7 @@ module YARD
         file = cache_filename(section)
         @cache_filename[section.to_sym] = file
         raise ArgumentError, "no template for section '#{section}' in #{self.class.path}" unless file
-        @cache[section.to_sym] = IO.read(file)
+        @cache[section.to_sym] = File.read(file)
       end
 
       def cache_filename(section)

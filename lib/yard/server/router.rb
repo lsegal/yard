@@ -54,7 +54,7 @@ module YARD
       def call(request)
         self.request = request
         result = check_static_cache || route
-        result ? result : RootRequestCommand.new(adapter.options).call(request)
+        result || RootRequestCommand.new(adapter.options).call(request)
       end
 
       # @group Route Prefixes
