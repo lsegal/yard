@@ -106,6 +106,8 @@ Style/EvalWithLocation:
   Enabled: false
 Style/ExponentialNotation:
   Enabled: false
+Style/FetchEnvVar:
+  Enabled: false
 Style/FileRead:
   Enabled: false
 Style/FileWrite:
