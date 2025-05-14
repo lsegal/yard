@@ -338,14 +338,14 @@ module YARD
         # Resets line information
         # @return [void]
         def reset_line_info
-          if size == 0 || @fallback_line || @fallback_source
-            self.line_range = @fallback_line
-            self.source_range = @fallback_source
-          elsif !children.empty?
+          if !children.empty?
             f = children.first
             l = children.last
             self.line_range = Range.new(f.line_range.begin, l.line_range.end)
             self.source_range = Range.new(f.source_range.begin, l.source_range.end)
+          elsif size == 0 || @fallback_line || @fallback_source
+            self.line_range = @fallback_line
+            self.source_range = @fallback_source
           else
             self.line_range = 0...0
             self.source_range = 0...0
