@@ -1,5 +1,9 @@
 # frozen_string_literal: true
-require 'cgi'
+if RUBY_VERSION < '3.5'
+  require 'cgi/util'
+else
+  require 'cgi/escape'
+end
 
 module YARD
   module Templates::Helpers
