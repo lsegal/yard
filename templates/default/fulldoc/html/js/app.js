@@ -373,7 +373,7 @@ window.addEventListener(
           (script.type.includes("text/javascript") && !script.src)
         ) {
           const newScript = document.createElement("script");
-          newScript.type = script.type;
+          newScript.type = "text/javascript";
           newScript.textContent = script.textContent;
           document.head.appendChild(newScript);
         }
