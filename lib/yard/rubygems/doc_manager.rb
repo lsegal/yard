@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'fileutils'
+
 begin
   require 'rubygems/user_interaction'
   require 'rubygems/doc_manager'
@@ -29,11 +31,11 @@ class Gem::DocManager
   rescue Errno::EACCES => e
     dirname = File.dirname e.message.split("-")[1].strip
     raise Gem::FilePermissionError, dirname
-  rescue => ex
+  rescue StandardError => e
     alert_error "While generating documentation for #{@spec.full_name}"
-    ui.errs.puts "... MESSAGE:   #{ex}"
+    ui.errs.puts "... MESSAGE:   #{e}"
     ui.errs.puts "... YARDOC args: #{args.join(' ')}"
-    ui.errs.puts "\t#{ex.backtrace.join("\n\t")}" if Gem.configuration.backtrace
+    ui.errs.puts "\t#{e.backtrace.join("\n\t")}" if Gem.configuration.backtrace
     ui.errs.puts "(continuing with the rest of the installation)"
   ensure
     Dir.chdir(old_pwd)
@@ -41,11 +43,9 @@ class Gem::DocManager
 
   begin undef setup_rdoc; rescue NameError; nil end
   def setup_rdoc
-    if File.exist?(@doc_dir) && !File.writable?(@doc_dir)
-      raise Gem::FilePermissionError, @doc_dir
-    end
+    raise Gem::FilePermissionError, @doc_dir if File.exist?(@doc_dir) && !File.writable?(@doc_dir)
 
-    FileUtils.mkdir_p @doc_dir unless File.exist?(@doc_dir)
+    FileUtils.mkdir_p @doc_dir
 
     self.class.load_rdoc if @spec.has_rdoc?
     self.class.load_yardoc if @spec.has_yardoc?

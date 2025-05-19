@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/integration_spec_helper'
+require "#{File.dirname(__FILE__)}/integration_spec_helper"
 
 # Hack to fix RedCloth compat issues with MinGW compilation hosts
 begin
@@ -30,7 +30,7 @@ bc. x = 1
 p. Block of Ruby code using 'pre' tag:
 
 pre. x = 2
-TEXTILE
+    TEXTILE
   end
 
   it 'renders level 2 header' do

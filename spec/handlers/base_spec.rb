@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 include Parser
 
@@ -26,7 +26,7 @@ RSpec.describe YARD::Handlers::Base do
       class TestHandler1 < Handlers::Base
         handles :a, :b, :c
       end
-      expect(TestHandler1.handlers).to eq [:a, :b, :c]
+      expect(TestHandler1.handlers).to eq %i(a b c)
     end
 
     it "allows multiple handles calls" do
@@ -36,7 +36,7 @@ RSpec.describe YARD::Handlers::Base do
         handles :b
         handles :c
       end
-      expect(TestHandler2.handlers).to eq [:a, :b, :c]
+      expect(TestHandler2.handlers).to eq %i(a b c)
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe YARD::Handlers::Base do
   describe "transitive tags" do
     it "adds transitive tags to children" do
       Registry.clear
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @since 1.0
         # @author Foo
         class A
@@ -60,7 +60,7 @@ RSpec.describe YARD::Handlers::Base do
           # @since 1.1
           def bar; end
         end
-      eof
+      EOF
       expect(Registry.at('A').tag(:since).text).to eq "1.0"
       expect(Registry.at('A#foo').tag(:since).text).to eq "1.0"
       expect(Registry.at('A#bar').tag(:since).text).to eq "1.1"
@@ -153,20 +153,20 @@ RSpec.describe YARD::Handlers::Base do
   describe ".in_file" do
     def parse(filename, parser_type, src = "class A; end")
       parser = Parser::SourceParser.new(parser_type)
-      parser.instance_variable_set("@file", filename)
+      parser.instance_variable_set(:@file, filename)
       parser.parse(StringIO.new(src))
     end
 
     def create_handler(stmts, parser_type)
       $handler_counter ||= 0
       sklass = parser_type == :ruby ? "Base" : "Legacy::Base"
-      instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+      instance_eval(<<-EOF, __FILE__, __LINE__ + 1)
         class ::InFileHandler#{$handler_counter += 1} < Handlers::Ruby::#{sklass}
           handles(/^class/)
           #{stmts}
           def process; MethodObject.new(:root, :FOO) end
         end
-      eof
+      EOF
     end
 
     def test_handler(file, stmts, creates = true, parser_type = :ruby)
@@ -178,7 +178,7 @@ RSpec.describe YARD::Handlers::Base do
       Handlers::Base.subclasses.delete_if {|k, _v| k.to_s =~ /^InFileHandler/ }
     end
 
-    [:ruby, :ruby18].each do |parser_type|
+    %i(ruby ruby18).each do |parser_type|
       next if parser_type == :ruby && LEGACY_PARSER
       describe "Parser type = #{parser_type.inspect}" do
         it "allows handler to be specific to a file" do

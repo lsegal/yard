@@ -101,7 +101,7 @@ module YARD
     private
 
     # @private
-    NILCLASS_METHODS = [:type, :method_missing]
+    NILCLASS_METHODS = %i(type method_missing)
 
     # Modifies nil to not throw NoMethodErrors. This allows
     # syntax like object.tag(:return).text to work if the #tag
@@ -111,7 +111,7 @@ module YARD
     # @return [void]
     def modify_nilclass
       NILCLASS_METHODS.each do |meth|
-        NilClass.send(:define_method, meth) {|*args| }
+        NilClass.send(:define_method, meth) {|*args| } # rubocop:disable Lint/EmptyBlock
       end
     end
 
@@ -130,10 +130,10 @@ module YARD
     def create_method_from_expressions
       expr = expressions.map {|e| "(#{parse_expression(e)})" }.join(" && ")
 
-      instance_eval(<<-eof, __FILE__, __LINE__ + 1)
+      instance_eval(<<-EOF, __FILE__, __LINE__ + 1)
         begin; undef __execute; rescue NameError; end
         def __execute; #{expr}; end
-      eof
+      EOF
     end
 
     # Parses a single expression, handling some of the DSL syntax.
@@ -144,8 +144,7 @@ module YARD
     # @return [String] the parsed expression
     def parse_expression(expr)
       expr = expr.gsub(/@@(?:(\w+)|\{([\w\.]+)\})/, 'object.tags("\1\2")')
-      expr = expr.gsub(/@(?:(\w+)|\{([\w\.]+)\})/, 'object.tag("\1\2")')
-      expr
+      expr.gsub(/@(?:(\w+)|\{([\w\.]+)\})/, 'object.tag("\1\2")')
     end
   end
 end

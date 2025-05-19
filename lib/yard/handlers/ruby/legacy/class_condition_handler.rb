@@ -58,9 +58,7 @@ class YARD::Handlers::Ruby::Legacy::ClassConditionHandler < YARD::Handlers::Ruby
       condition = false
     end
 
-    if TkUNLESS === statement.tokens.first
-      condition = !condition unless condition.nil?
-    end
+    condition = !condition if (TkUNLESS === statement.tokens.first) && !condition.nil?
     condition
   end
 

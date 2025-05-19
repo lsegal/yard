@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/integration_spec_helper'
+require "#{File.dirname(__FILE__)}/integration_spec_helper"
 
 RSpec.describe 'Markdown processors integration' do
   include_context 'shared helpers for markup processor integration specs'
 
   shared_examples 'shared examples for markdown processors' do
     let(:document) do
-    <<-MARKDOWN
+      <<-MARKDOWN
 ## Example code listings
 
 Indented block of Ruby code:
@@ -36,7 +36,7 @@ x = 4
 
 commonmark line break with\\
 a backslash
-MARKDOWN
+      MARKDOWN
     end
 
     it 'renders level 2 header' do
@@ -72,7 +72,6 @@ MARKDOWN
 
     include_examples 'shared examples for markdown processors'
 
-
     it 'generates anchor tags for level 2 header' do
       expect(rendered_document).to include('<h2 id="example-code-listings">Example code listings</h2>')
     end
@@ -82,7 +81,7 @@ MARKDOWN
     end
   end
 
-  describe 'CommonMarker', if:  RUBY_VERSION >= '2.3' do
+  describe 'CommonMarker', :if => RUBY_VERSION >= '2.3' do
     let(:markup) { :markdown }
     let(:markup_provider) { :commonmarker }
 

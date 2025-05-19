@@ -59,7 +59,7 @@ module YARD
       end
 
       def output_options(opts)
-        super(opts)
+        super
         opts.on('-l', '--layout [LAYOUT]', 'Wraps output in layout template (good for HTML)') do |layout|
           @layout = layout || 'layout'
         end

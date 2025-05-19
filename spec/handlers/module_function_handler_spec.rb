@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}VisibilityHandler" do
   after { Registry.clear }
@@ -16,20 +16,20 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
   end
 
   it "is able to create a module function with parameters" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         def bar; end
         def baz; end
 
         module_function :bar, :baz
       end
-    eof
+    EOF
     assert_module_function('Foo', 'bar')
     assert_module_function('Foo', 'baz')
   end
 
   it "is able to set scope for duration of block without params" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         def qux; end
 
@@ -38,14 +38,14 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
         def bar; end
         def baz; end
       end
-    eof
+    EOF
     expect(Registry.at('Foo.qux')).to be nil
     assert_module_function('Foo', 'bar')
     assert_module_function('Foo', 'baz')
   end
 
   it "can decorate a method definition" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         def qux; end
 
@@ -53,7 +53,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
 
         def baz; end
       end
-    eof
+    EOF
     expect(Registry.at('Foo.qux')).to be nil
     assert_module_function('Foo', 'bar')
     expect(Registry.at('Foo.baz')).to be nil
@@ -61,7 +61,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
 
   # @bug gh-563
   it "copies tags to module function properly" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         # @param [String] foo bar
         # @option foo [String] bar (nil) baz
@@ -69,7 +69,7 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
         def bar(foo); end
         module_function :bar
       end
-    eof
+    EOF
     assert_module_function('Foo', 'bar')
     o = Registry.at('Foo.bar')
     expect(o.tag(:param).types).to eq ['String']
@@ -83,39 +83,39 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Visibili
   end
 
   it "handles all method names in parameters" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         def -(t); end
         def ==(other); end
         def a?; end
         module_function :-, '==', :a?
       end
-    eof
+    EOF
     assert_module_function('Foo', '-')
     assert_module_function('Foo', '==')
     assert_module_function('Foo', 'a?')
   end
 
   it "only accepts strings and symbols" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         module_function name
         module_function *argument
         module_function *(method_call)
       end
-    eof
+    EOF
     expect(Registry.at('Foo#name')).to be nil
     expect(Registry.at('Foo#argument')).to be nil
     expect(Registry.at('Foo#method_call')).to be nil
   end
 
   it "handles constants passed in as symbols" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         def Foo; end
         module_function :Foo
       end
-    eof
+    EOF
     assert_module_function('Foo', 'Foo')
   end
 end

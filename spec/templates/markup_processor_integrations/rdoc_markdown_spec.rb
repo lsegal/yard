@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/integration_spec_helper'
+require "#{File.dirname(__FILE__)}/integration_spec_helper"
 
 RSpec.describe 'Markdown via RDoc integration' do
   include_context 'shared helpers for markup processor integration specs'
@@ -27,7 +27,7 @@ Fenced and annotated block of Ruby code:
 x = 3
 ```
 
-MARKDOWN
+    MARKDOWN
   end
 
   it 'renders level 2 header' do

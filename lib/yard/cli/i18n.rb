@@ -21,9 +21,9 @@ module YARD
       end
 
       def run(*args)
-        if args.empty? || !args.first.nil?
+        if (args.empty? || !args.first.nil?) && !parse_arguments(*args)
           # fail early if arguments are not valid
-          return unless parse_arguments(*args)
+          return
         end
 
         YARD.parse(files, excluded)
@@ -55,7 +55,7 @@ module YARD
         opts.separator "A base set of options can be specified by adding a .yardopts"
         opts.separator "file to your base path containing all extra options separated"
         opts.separator "by whitespace."
-        super(opts)
+        super
       end
 
       def generate_pot(relative_base_path)

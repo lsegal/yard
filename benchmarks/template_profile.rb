@@ -15,4 +15,4 @@ result = RubyProf.profile do
 end
 
 printer = RubyProf::CallTreePrinter.new(result)
-printer.print(STDOUT)
+printer.print($stdout)

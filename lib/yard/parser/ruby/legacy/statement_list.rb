@@ -88,7 +88,7 @@ module YARD
           stmt
         elsif @comments
           @statement << TkCOMMENT.new(@comments_line, 0)
-          @statement.first.set_text("# " + @comments.join("\n# "))
+          @statement.first.set_text("# #{@comments.join("\n# ")}")
           Statement.new(@statement, nil, @comments)
         end
       end
@@ -134,7 +134,7 @@ module YARD
           return if process_initial_comment(tk)
           return if @statement.empty? && [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           @comments_last_line = nil
-          if @statement.empty? && tk.class == TkALIAS
+          if @statement.empty? && tk.instance_of?(TkALIAS)
             @state = :alias_statement
             @alias_values = []
             push_token(tk)
@@ -154,9 +154,7 @@ module YARD
           @alias_values << tk unless [TkSPACE, TkNL, TkCOMMENT].include?(tk.class)
           if @alias_values.size == 2
             @state = :first_statement
-            if [NilClass, TkNL, TkEND_OF_SCRIPT, TkSEMICOLON].include?(peek_no_space.class)
-              @done = true
-            end
+            @done = true if [NilClass, TkNL, TkEND_OF_SCRIPT, TkSEMICOLON].include?(peek_no_space.class)
           end
         when :balance
           @statement << tk
@@ -169,12 +167,12 @@ module YARD
           process_statement_end(tk)
         when :pre_block
           @current_block = nil
-          process_block_token(tk) unless tk.class == TkSEMICOLON
+          process_block_token(tk) unless tk.instance_of?(TkSEMICOLON)
           @state = :block
         when :block
           process_block_token(tk)
         when :post_block
-          if tk.class == TkSPACE
+          if tk.instance_of?(TkSPACE)
             @statement << tk
             return
           end
@@ -183,9 +181,7 @@ module YARD
           @state = :block
         end
 
-        if @first_line == tk.line_no && !@statement.empty? && TkCOMMENT === tk
-          process_initial_comment(tk)
-        end
+        process_initial_comment(tk) if @first_line == tk.line_no && !@statement.empty? && TkCOMMENT === tk
       end
 
       # Processes a token in a block
@@ -199,9 +195,7 @@ module YARD
         elsif @block_num > 1 || (@block.empty? && [TkSPACE, TkNL].include?(tk.class))
           @statement << tk
         else
-          if @block.empty?
-            @statement << TkBlockContents.new(tk.line_no, tk.char_no)
-          end
+          @statement << TkBlockContents.new(tk.line_no, tk.char_no) if @block.empty?
           @block << tk
         end
       end
@@ -211,11 +205,9 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       # @return [Boolean] whether or not +tk+ was processed as an initial comment
       def process_initial_comment(tk)
-        if @statement.empty? && (@comments_last_line || 0) < tk.line_no - 2
-          @comments = nil
-        end
+        @comments = nil if @statement.empty? && (@comments_last_line || 0) < tk.line_no - 2
 
-        return unless tk.class == TkCOMMENT
+        return unless tk.instance_of?(TkCOMMENT)
 
         case tk.text
         when Parser::SourceParser::SHEBANG_LINE
@@ -224,7 +216,7 @@ module YARD
             return
           end
         when Parser::SourceParser::ENCODING_LINE
-          if (@last_ns_tk.class == TkCOMMENT && @last_ns_tk.text == @shebang_line) ||
+          if (@last_ns_tk.instance_of?(TkCOMMENT) && @last_ns_tk.text == @shebang_line) ||
              !@last_ns_tk
             @encoding_line = tk.text
             return
@@ -304,13 +296,13 @@ module YARD
       # @param [RubyToken::Token] tk the token to process
       def process_statement_end(tk)
         # Whitespace means that we keep the same value of @new_statement as last token
-        return if tk.class == TkSPACE
+        return if tk.instance_of?(TkSPACE)
 
         return unless
           # We might be coming after a statement-ending token...
           (@last_tk && [TkSEMICOLON, TkNL, TkEND_OF_SCRIPT].include?(tk.class)) ||
           # Or we might be at the beginning of an argument list
-          (@current_block == TkDEF && tk.class == TkRPAREN)
+          (@current_block == TkDEF && tk.instance_of?(TkRPAREN))
 
         # Continue line ending on . or ::
         return if @last_tk && [EXPR_DOT].include?(@last_tk.lex_state)
@@ -333,7 +325,7 @@ module YARD
                        @last_tk.lex_state != EXPR_BEG)
 
         # Continue with the statement if we've hit a comma in a def
-        return if @current_block == TkDEF && peek_no_space.class == TkCOMMA
+        return if @current_block == TkDEF && peek_no_space.instance_of?(TkCOMMA)
 
         if [TkEND_OF_SCRIPT, TkNL, TkSEMICOLON].include?(tk.class) && @state == :block_statement &&
            [TkRBRACE, TkEND].include?(@last_ns_tk.class) && @level == 0
@@ -360,11 +352,11 @@ module YARD
       # @return [Boolean] whether or not the current statement's parentheses and blocks
       #   are balanced after +tk+
       def balances?(tk)
-        unless [TkALIAS, TkDEF].include?(@last_ns_tk.class) || @before_last_ns_tk.class == TkALIAS
+        unless [TkALIAS, TkDEF].include?(@last_ns_tk.class) || @before_last_ns_tk.instance_of?(TkALIAS)
           if [TkLPAREN, TkLBRACK, TkLBRACE, TkDO, TkBEGIN].include?(tk.class)
             @level += 1
           elsif OPEN_BLOCK_TOKENS.include?(tk.class)
-            @level += 1 unless tk.class == TkELSIF
+            @level += 1 unless tk.instance_of?(TkELSIF)
           elsif [TkRPAREN, TkRBRACK, TkRBRACE, TkEND].include?(tk.class) && @level > 0
             @level -= 1
           end
@@ -386,7 +378,7 @@ module YARD
       #
       # @return [RubyToken::Token] the next non-space token
       def peek_no_space
-        return @tokens.first unless @tokens.first.class == TkSPACE
+        return @tokens.first unless @tokens.first.instance_of?(TkSPACE)
         @tokens[1]
       end
     end

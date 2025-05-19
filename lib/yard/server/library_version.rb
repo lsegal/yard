@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'fileutils'
 require 'thread'
 
 module YARD
@@ -106,7 +105,7 @@ module YARD
       def yardoc_file
         @yardoc_file ||= load_yardoc_file
       end
-      attr_writer :yardoc_file
+      attr_writer :yardoc_file, :source_path
 
       # @return [Symbol] the source type representing where the yardoc should be
       #   loaded from. Defaults are +:disk+ and +:gem+, though custom sources
@@ -122,7 +121,6 @@ module YARD
       def source_path
         @source_path ||= load_source_path
       end
-      attr_writer :source_path
 
       # @param [String] name the name of the library
       # @param [String] version the specific (usually, but not always, numeric) library

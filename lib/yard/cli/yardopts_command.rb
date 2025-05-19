@@ -58,7 +58,7 @@ module YARD
         end
 
         opts.on('--[no-]document', "If arguments should be read from .document file. ",
-                                   "  (defaults to yes)") do |use_document|
+                "  (defaults to yes)") do |use_document|
           self.use_document_file = use_document
         end
       end
@@ -81,8 +81,8 @@ module YARD
         yardopts_options(opts)
         begin
           opts.parse(args)
-        rescue OptionParser::ParseError => err
-          idx = args.index(err.args.first)
+        rescue OptionParser::ParseError => e
+          idx = args.index(e.args.first)
           args = args[(idx + 1)..-1]
           args.shift while args.first && args.first[0, 1] != '-'
           retry

@@ -66,13 +66,13 @@ module YARD
         # @return [Array<String,Array<Array<String>>>] the method name followed by method
         #   arguments (name and optional value)
         def extract_method_details
-          if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/m
+          if statement.tokens.to_s =~ /^def\s+(#{METHODMATCH})(?:(?:\s+|\s*\()(.*)(?:\)\s*$)?)?/mo
             meth = $1
             args = $2
             meth.gsub!(/\s+/, '')
             args = tokval_list(Parser::Ruby::Legacy::TokenList.new(args), :all)
             args.map! {|a| k, v = *a.split('=', 2); [k.strip, (v ? v.strip : nil)] } if args
-            meth = $` if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/
+            meth = $` if meth =~ /(?:#{NSEPQ}|#{CSEPQ})([^#{NSEP}#{CSEPQ}]+)$/o
             [meth, args]
           end
         end
@@ -113,21 +113,13 @@ module YARD
           accepted_types = [TkVal] if accepted_types.empty?
           accepted_types.push(TkNode) if accepted_types.include? TkVal
 
-          if accepted_types.include?(:attr)
-            accepted_types.push(TkSTRING, TkSYMBOL)
-          end
+          accepted_types.push(TkSTRING, TkSYMBOL) if accepted_types.include?(:attr)
 
-          if accepted_types.include?(:string)
-            accepted_types.push(TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING)
-          end
+          accepted_types.push(TkSTRING, TkDSTRING, TkXSTRING, TkDXSTRING) if accepted_types.include?(:string)
 
-          if accepted_types.include?(:identifier)
-            accepted_types.push(TkIDENTIFIER, TkFID, TkGVAR)
-          end
+          accepted_types.push(TkIDENTIFIER, TkFID, TkGVAR) if accepted_types.include?(:identifier)
 
-          if accepted_types.include?(:number)
-            accepted_types.push(TkFLOAT, TkINTEGER)
-          end
+          accepted_types.push(TkFLOAT, TkINTEGER) if accepted_types.include?(:number)
 
           return unless accepted_types.any? {|t| t === token }
 
@@ -222,11 +214,11 @@ module YARD
               if parencount == 0
                 next if needcomma
                 next if TkWhitespace === token
-                if !tokval.nil?
-                  out.last << tokval
-                else
+                if tokval.nil?
                   out.last.clear
                   needcomma = true
+                else
+                  out.last << tokval
                 end
               elsif parencond
                 needcomma = true

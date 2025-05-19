@@ -59,9 +59,7 @@ module YARD
       else
         @notfound.delete(key.to_sym)
         (@object_types[value.type] ||= []) << key.to_s
-        if @store[key.to_sym]
-          @object_types[@store[key.to_sym].type].delete(key.to_s)
-        end
+        @object_types[@store[key.to_sym].type].delete(key.to_s) if @store[key.to_sym]
         @store[key.to_sym] = value
       end
     end
@@ -291,9 +289,9 @@ module YARD
     def load_checksums
       return unless File.file?(checksums_path)
       lines = File.readlines(checksums_path).map do |line|
-        line.strip.rpartition(' ').tap { |p| p.delete_at(1) }
+        line.strip.rpartition(' ').tap {|p| p.delete_at(1) }
       end
-      @checksums = Hash[lines]
+      @checksums = lines.to_h
     end
 
     def load_root
@@ -336,7 +334,7 @@ module YARD
     end
 
     def write_complete_lock
-      File.open!(@serializer.complete_lock_path, 'w') {}
+      FileUtils.touch(@serializer.complete_lock_path)
     end
   end
 end

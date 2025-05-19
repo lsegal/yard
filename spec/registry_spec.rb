@@ -151,12 +151,12 @@ RSpec.describe YARD::Registry do
     end
 
     it "does lexical lookup on the initial namespace" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module A
           module B; module C; end end
           module D; module E; end end
         end
-      eof
+      EOF
 
       d = Registry.at('A::B::C')
       expect(Registry.resolve(d, 'D::E')).to eq Registry.at('A::D::E')
@@ -194,33 +194,33 @@ RSpec.describe YARD::Registry do
     end
 
     it "resolves methods in Object when inheritance = true" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Object; def foo; end end
         class A; end
         class MyObject < A; end
-      eof
+      EOF
 
       expect(Registry.resolve(P('MyObject'), '#foo', true)).to eq P('Object#foo')
     end
 
     it "resolves methods in BasicObject when inheritance = true" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class BasicObject; def foo; end end
         class A; end
         class MyObject < A; end
-      eof
+      EOF
 
       expect(Registry.resolve(P('MyObject'), '#foo', true)).to eq P('BasicObject#foo')
     end
 
     it "does not perform lexical lookup to resolve a method object by more than one namespace" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module A
           def foo; end
           def self.bar; end
           module B; module C; end end
         end
-      eof
+      EOF
 
       expect(Registry.resolve(P('A::B::C'), '#foo', true)).to be nil
       expect(Registry.resolve(P('A::B::C'), '.bar', true)).to be nil
@@ -229,22 +229,22 @@ RSpec.describe YARD::Registry do
     end
 
     it "does not resolve methods in Object if inheriting BasicObject when inheritance = true" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class Object; def foo; end end
         class MyObject < BasicObject; end
-      eof
+      EOF
 
       expect(Registry.resolve(P('MyObject'), '#foo', true)).to be nil
     end
 
     it "performs lookups on each individual namespace when inheritance = true" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module A
           module B; include A::D end
           module C; extend A::D end
           module D; def bar; end end
         end
-      eof
+      EOF
 
       r = Registry.root
       expect(Registry.resolve(r, 'A::B#bar', true)).to eq Registry.at('A::D#bar')
@@ -258,12 +258,12 @@ RSpec.describe YARD::Registry do
     end
 
     it "allows keep trying to find obj where type equals object type" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module Foo
           class Bar; end
           def self.Bar; end
         end
-      eof
+      EOF
       expect(Registry.resolve(P('Foo'), 'Bar', false, false, :class)).to eq Registry.at('Foo::Bar')
       expect(Registry.resolve(P('Foo'), 'Bar', false, false, :method)).to eq(
         Registry.at('Foo.Bar')
@@ -346,7 +346,7 @@ RSpec.describe YARD::Registry do
 
     it "maintains hash key equality on loaded objects" do
       Registry.clear
-      Registry.load!(File.dirname(__FILE__) + '/serializers/data/serialized_yardoc')
+      Registry.load!("#{File.dirname(__FILE__)}/serializers/data/serialized_yardoc")
       baz = Registry.at('Foo#baz')
       expect(Registry.at('Foo').aliases.keys).to include(baz)
       expect(Registry.at('Foo').aliases.key?(baz)).to be true
@@ -354,7 +354,7 @@ RSpec.describe YARD::Registry do
   end
 
   ['load', 'load_all', 'load!'].each do |meth|
-    describe('.' + meth) do
+    describe(".#{meth}") do
       it "returns itself" do
         expect(Registry.send(meth)).to eq Registry
       end
@@ -369,8 +369,7 @@ RSpec.describe YARD::Registry do
     after { Registry.clear }
 
     it "iterates over .all" do
-      items = []
-      Registry.each {|x| items << x.path }
+      items = Registry.map(&:path)
       expect(items.sort).to eq ['#a', '#b', '#c']
     end
 

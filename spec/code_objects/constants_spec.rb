@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects do
   def silence_warnings
@@ -107,7 +107,7 @@ RSpec.describe YARD::CodeObjects do
     it "includes all base modules" do
       silence_warnings do
         YARD::CodeObjects::BUILTIN_MODULES.each do |name|
-          next if YARD.ruby19? && ["Precision"].include?(name)
+          next if YARD.ruby19? && name == "Precision"
           expect(eval(name)).to be_instance_of(Module)
         end
       end

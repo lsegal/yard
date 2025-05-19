@@ -3,7 +3,7 @@ module YARD
   # via +struct.attr_name+ and +struct.attr_name = value+.
   class OpenStruct
     def initialize(hash = {})
-      @table = hash.each_pair { |k, v| [k.to_sym, v] }
+      @table = hash.each_pair {|k, v| [k.to_sym, v] }
     end
 
     # @private
@@ -60,7 +60,7 @@ module YARD
       key = name.to_sym.inspect
       instance_eval <<-RUBY, __FILE__, __LINE__ + 1
         def #{name}; @table[#{key}]; end
-        def #{name.to_s.sub('?','_')}=(v); @table[#{key}] = v; end unless #{key}.to_s.include?('?')
+        def #{name.to_s.sub('?', '_')}=(v); @table[#{key}] = v; end unless #{key}.to_s.include?('?')
       RUBY
     end
   end

@@ -78,7 +78,7 @@ module YARD
 
       def inside_directive?
         return true if parser.state.inside_directive
-        parser.directives.any? { |d| d.is_a?(MethodDirective) && d.tag.text.empty? }
+        parser.directives.any? {|d| d.is_a?(MethodDirective) && d.tag.text.empty? }
       end
     end
 
@@ -274,8 +274,8 @@ module YARD
       end
 
       def attach?
-        new? && # must have data or there is nothing to attach
-          class_method? || # always attach to class methods
+        (new? && # must have data or there is nothing to attach
+          class_method?) || # always attach to class methods
           (tag.types && tag.types.include?('attach'))
       end
 
@@ -312,8 +312,8 @@ module YARD
                        "#{object.path} (#{handler.parser.file}:#{handler.statement.line})"
               obj = nil
             else
-              obj = object ? object :
-                P("#{handler.namespace}.#{handler.caller_method}")
+              obj = object ||
+                    P("#{handler.namespace}.#{handler.caller_method}")
             end
           else
             obj = nil
@@ -379,7 +379,7 @@ module YARD
 
       def method_name
         sig = sanitized_tag_signature
-        if sig && sig =~ /^#{CodeObjects::METHODNAMEMATCH}(\s|\(|$)/
+        if sig && sig =~ /^#{CodeObjects::METHODNAMEMATCH}(\s|\(|$)/o
           sig[/\A\s*([^\(; \t]+)/, 1]
         else
           handler.call_params.first
@@ -422,7 +422,7 @@ module YARD
         obj.signature = method_signature
         obj.parameters = OverloadTag.new(:overload, method_signature).parameters
         obj.docstring = Docstring.new!(parser.text, parser.tags, obj,
-          parser.raw_text, parser.reference)
+                                       parser.raw_text, parser.reference)
         handler.register_module_function(obj)
         old_obj = parser.object
         parser.object = obj
@@ -494,7 +494,7 @@ module YARD
             writer.parameters = [['value', nil]]
           else
             writer = CodeObjects::MethodObject.new(object.namespace,
-              object.name.to_s + '=', object.scope)
+                                                   "#{object.name}=", object.scope)
             writer.signature = "def #{object.name}=(value)"
             writer.visibility = object.visibility
             writer.dynamic = object.dynamic

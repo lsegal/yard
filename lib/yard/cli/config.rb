@@ -97,7 +97,7 @@ module YARD
       def list_configuration
         log.debug "Listing configuration"
         require 'yaml'
-        log.puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub(/\n\n/, "\n")
+        log.puts YAML.dump(YARD::Config.options).sub(/\A--.*\n/, '').gsub("\n\n", "\n")
       end
 
       def encode_values

@@ -23,7 +23,7 @@ module YARD
       # storing the source contents and filename if they are required.
       # @param [String] source the source contents
       # @param [String] filename the name of the file if from disk
-      def initialize(source, filename) # rubocop:disable Lint/UnusedMethodArgument
+      def initialize(source, filename)
         raise NotImplementedError, "invalid parser implementation"
       end
 

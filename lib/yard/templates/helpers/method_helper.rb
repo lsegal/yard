@@ -10,7 +10,7 @@ module YARD
         if object.has_tag?(:yield) || object.has_tag?(:yieldparam)
           params.reject! do |param|
             param[0].to_s[0, 1] == "&" &&
-              !object.tags(:param).any? {|t| t.name == param[0][1..-1] }
+              object.tags(:param).none? {|t| t.name == param[0][1..-1] }
           end
         end
 
@@ -43,24 +43,24 @@ module YARD
           params = nil
         end
 
-        params ? h("{|" + params.join(", ") + "| ... }") : ""
+        params ? h("{|#{params.join(", ")}| ... }") : ""
       end
 
       # @return [String] formats line numbers for source code of an object
       def format_lines(object)
         return "" if object.source.nil? || object.line.nil?
         i = -1
-        object.source.split(/\n/).map { object.line + (i += 1) }.join("\n")
+        object.source.split("\n").map { object.line + (i += 1) }.join("\n")
       end
 
       # @return [String] formats source of an object
       def format_code(object, _show_lines = false)
         i = -1
-        lines = object.source.split(/\n/)
+        lines = object.source.split("\n")
         longestline = (object.line + lines.size).to_s.length
         lines.map do |line|
           lineno = object.line + (i += 1)
-          (" " * (longestline - lineno.to_s.length)) + lineno.to_s + "    " + line
+          "#{" " * (longestline - lineno.to_s.length)}#{lineno}    #{line}"
         end.join("\n")
       end
 

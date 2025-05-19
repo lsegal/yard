@@ -202,7 +202,7 @@ module YARD
         # @param statement a statement object or node (depends on language type)
         # @return [Boolean] whether or not this handler object should process
         #   the given statement
-        def handles?(statement) # rubocop:disable Lint/UnusedMethodArgument
+        def handles?(statement)
           raise NotImplementedError, "override #handles? in a subclass"
         end
 
@@ -472,9 +472,7 @@ module YARD
       # @since 0.8.0
       def register_group(object, group = extra_state.group)
         if group
-          unless object.namespace.is_a?(Proxy)
-            object.namespace.groups |= [group]
-          end
+          object.namespace.groups |= [group] unless object.namespace.is_a?(Proxy)
           object.group = group
         end
       end

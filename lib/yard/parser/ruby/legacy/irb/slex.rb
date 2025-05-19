@@ -15,10 +15,10 @@ require "irb/notifier"
 # @private
 module IRB
   class SLex
-    DOUT = Notifier::def_notifier("SLex::")
-    D_WARN = DOUT::def_notifier(1, "Warn: ")
-    D_DEBUG = DOUT::def_notifier(2, "Debug: ")
-    D_DETAIL = DOUT::def_notifier(4, "Detail: ")
+    DOUT = Notifier.def_notifier("SLex::")
+    D_WARN = DOUT.def_notifier(1, "Warn: ")
+    D_DEBUG = DOUT.def_notifier(2, "Debug: ")
+    D_DETAIL = DOUT.def_notifier(4, "Detail: ")
 
     DOUT.level = Notifier::D_NOMSG
 
@@ -34,48 +34,47 @@ module IRB
     end
 
     def def_rules(*tokens, &block)
-      if block_given?
-        p = block
-      end
-      for token in tokens
+      p = block if block_given?
+      tokens.each do |token|
         def_rule(token, nil, p)
       end
     end
 
     def preproc(token, proc)
       node = search(token)
-      node.preproc=proc
+      node.preproc = proc
     end
 
     # need a check?
     def postproc(token)
       node = search(token, proc)
-      node.postproc=proc
+      node.postproc = proc
     end
 
     def search(token)
-      @head.search(token.split(//))
+      @head.search(token.chars)
     end
 
     def create(token, preproc = nil, postproc = nil)
-      @head.create_subnode(token.split(//), preproc, postproc)
+      @head.create_subnode(token.chars, preproc, postproc)
     end
 
     def match(token)
       case token
       when Array
+        # skip
       when String
-        return match(token.split(//))
+        return match(token.chars)
       else
         return @head.match_io(token)
       end
       ret = @head.match(token)
-      D_DETAIL.exec_if{D_DETAIL.printf "match end: %s:%s\n", ret, token.inspect}
+      D_DETAIL.exec_if { D_DETAIL.printf "match end: %s:%s\n", ret, token.inspect }
       ret
     end
 
     def inspect
-      format("<SLex: @head = %s>", @head.inspect)
+      "<SLex: @head = %s>" % @head.inspect
     end
 
     #----------------------------------------------------------------------
@@ -92,21 +91,18 @@ module IRB
         @postproc = postproc
       end
 
-      attr_accessor :preproc
-      attr_accessor :postproc
+      attr_accessor :preproc, :postproc
 
       def search(chrs, opt = nil)
         return self if chrs.empty?
         ch = chrs.shift
-        if node = @Tree[ch]
+        if (node = @Tree[ch])
           node.search(chrs, opt)
+        elsif opt
+          chrs.unshift ch
+          create_subnode(chrs)
         else
-          if opt
-            chrs.unshift ch
-            self.create_subnode(chrs)
-          else
-            raise "node nothing"
-          end
+          raise "node nothing"
         end
       end
 
@@ -124,7 +120,7 @@ module IRB
         end
 
         ch = chrs.shift
-        if node = @Tree[ch]
+        if (node = @Tree[ch])
           if chrs.empty?
             if node.postproc
               DebugLogger.pp node
@@ -164,32 +160,26 @@ module IRB
           if @preproc.nil? || @preproc.call(op, chrs)
             DOUT.printf(D_DETAIL, "op1: %s\n", op)
             @postproc.call(op, chrs)
-          else
-            nil
           end
         else
           ch = chrs.shift
-          if node = @Tree[ch]
-            if ret = node.match(chrs, op+ch)
-              return ret
+          if (node = @Tree[ch])
+            if (ret = node.match(chrs, op + ch))
+              ret
             else
               chrs.unshift ch
-              if @postproc and @preproc.nil? || @preproc.call(op, chrs)
+              if @postproc && (@preproc.nil? || @preproc.call(op, chrs))
                 DOUT.printf(D_DETAIL, "op2: %s\n", op.inspect)
-                ret = @postproc.call(op, chrs)
-                return ret
-              else
-                return nil
+                @postproc.call(op, chrs)
+
               end
             end
           else
             chrs.unshift ch
-            if @postproc and @preproc.nil? || @preproc.call(op, chrs)
+            if @postproc && (@preproc.nil? || @preproc.call(op, chrs))
               DOUT.printf(D_DETAIL, "op3: %s\n", op)
               @postproc.call(op, chrs)
-              return ""
-            else
-              return nil
+              ""
             end
           end
         end
@@ -198,9 +188,7 @@ module IRB
       def match_io(io, op = "")
         if op == ""
           ch = io.getc
-          if ch == nil
-            return nil
-          end
+          return nil if ch.nil?
         else
           ch = io.getc_of_rests
         end
@@ -208,30 +196,22 @@ module IRB
           if @preproc.nil? || @preproc.call(op, io)
             D_DETAIL.printf("op1: %s\n", op)
             @postproc.call(op, io)
-          else
-            nil
           end
-        else
-          if node = @Tree[ch]
-            if ret = node.match_io(io, op+ch)
-              ret
-            else
-              io.ungetc ch
-              if @postproc and @preproc.nil? || @preproc.call(op, io)
-                DOUT.exec_if{D_DETAIL.printf "op2: %s\n", op.inspect}
-                @postproc.call(op, io)
-              else
-                nil
-              end
-            end
+        elsif (node = @Tree[ch])
+          if (ret = node.match_io(io, op + ch))
+            ret
           else
             io.ungetc ch
-            if @postproc and @preproc.nil? || @preproc.call(op, io)
-              D_DETAIL.printf("op3: %s\n", op)
+            if @postproc && (@preproc.nil? || @preproc.call(op, io))
+              DOUT.exec_if { D_DETAIL.printf "op2: %s\n", op.inspect }
               @postproc.call(op, io)
-            else
-              nil
             end
+          end
+        else
+          io.ungetc ch
+          if @postproc && (@preproc.nil? || @preproc.call(op, io))
+            D_DETAIL.printf("op3: %s\n", op)
+            @postproc.call(op, io)
           end
         end
       end
@@ -240,14 +220,14 @@ module IRB
 end
 # :startdoc:
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
   case $1
   when "1"
     tr = SLex.new
     print "0: ", tr.inspect, "\n"
-    tr.def_rule("=") {print "=\n"}
+    tr.def_rule("=") { print "=\n" }
     print "1: ", tr.inspect, "\n"
-    tr.def_rule("==") {print "==\n"}
+    tr.def_rule("==") { print "==\n" }
     print "2: ", tr.inspect, "\n"
 
     print "case 1:\n"
@@ -260,9 +240,9 @@ if $0 == __FILE__
   when "2"
     tr = SLex.new
     print "0: ", tr.inspect, "\n"
-    tr.def_rule("=") {print "=\n"}
+    tr.def_rule("=") { print "=\n" }
     print "1: ", tr.inspect, "\n"
-    tr.def_rule("==", proc{false}) {print "==\n"}
+    tr.def_rule("==", proc { false }) { print "==\n" }
     print "2: ", tr.inspect, "\n"
 
     print "case 1:\n"

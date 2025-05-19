@@ -31,7 +31,7 @@ RSpec.describe YARD::CLI::Diff do
       @objects = [@objects1, @objects2]
       expect(@diff).to receive(:load_gem_data).ordered.with('gem1') do
         Registry.clear
-        YARD.parse_string <<-eof
+        YARD.parse_string <<-EOF
           class C
             def fooey; end
             def baz; FOO end
@@ -39,11 +39,11 @@ RSpec.describe YARD::CLI::Diff do
           class D
             def self.bar; end
           end
-        eof
+        EOF
       end
       expect(@diff).to receive(:load_gem_data).ordered.with('gem2') do
         Registry.clear
-        YARD.parse_string <<-eof
+        YARD.parse_string <<-EOF
           module A
             module B
               class C; end
@@ -56,7 +56,7 @@ RSpec.describe YARD::CLI::Diff do
             def self.bar; end
             def baz; BAR end
           end
-        eof
+        EOF
       end
       allow(log).to receive(:print) {|data| @data << data }
       allow(log).to receive(:puts) {|*pargs| @data << pargs.join("\n"); @data << "\n" }
@@ -65,7 +65,7 @@ RSpec.describe YARD::CLI::Diff do
 
     it "shows differences between objects" do
       run
-      expect(@data.string).to eq <<-eof
+      expect(@data.string).to eq <<-EOF
 Added objects:
 
   A ((stdin):1) (...)
@@ -82,12 +82,12 @@ Removed objects:
   C#fooey ((stdin):2)
   D ((stdin):5) (...)
 
-eof
+      EOF
     end
 
     it "accepts --compact" do
       run('--compact')
-      expect(@data.string).to eq <<-eof
+      expect(@data.string).to eq <<-EOF
 A A ((stdin):1) (...)
 A A::B::C ((stdin):3)
 A C.bar ((stdin):10)
@@ -95,13 +95,13 @@ A C.foo ((stdin):9)
 M C#baz ((stdin):3)
 D C#fooey ((stdin):2)
 D D ((stdin):5) (...)
-eof
+      EOF
     end
 
     it "accepts -a/--all" do
       ['-a', '--all'].each do |opt|
         run(opt)
-        expect(@data.string).to eq <<-eof
+        expect(@data.string).to eq <<-EOF
 Added objects:
 
   A ((stdin):1)
@@ -122,13 +122,13 @@ Removed objects:
   D ((stdin):5)
   D.bar ((stdin):6)
 
-eof
+        EOF
       end
     end
 
     it "accepts --compact and --all" do
       run('--compact', '--all')
-      expect(@data.string).to eq <<-eof
+      expect(@data.string).to eq <<-EOF
 A A ((stdin):1)
 A A#foo ((stdin):6)
 A A.foo ((stdin):5)
@@ -140,24 +140,24 @@ M C#baz ((stdin):3)
 D C#fooey ((stdin):2)
 D D ((stdin):5)
 D D.bar ((stdin):6)
-eof
+      EOF
     end
 
     it "accepts --no-modified" do
       run('--compact', '--no-modified')
-      expect(@data.string).to eq <<-eof
+      expect(@data.string).to eq <<-EOF
 A A ((stdin):1) (...)
 A A::B::C ((stdin):3)
 A C.bar ((stdin):10)
 A C.foo ((stdin):9)
 D C#fooey ((stdin):2)
 D D ((stdin):5) (...)
-eof
+      EOF
     end
 
     it "accepts --query" do
       run('--compact', '--query', 'o.type == :method')
-      expect(@data.string).to eq <<-eof
+      expect(@data.string).to eq <<-EOF
 A A#foo ((stdin):6)
 A A.foo ((stdin):5)
 A C.bar ((stdin):10)
@@ -165,7 +165,7 @@ A C.foo ((stdin):9)
 M C#baz ((stdin):3)
 D C#fooey ((stdin):2)
 D D.bar ((stdin):6)
-eof
+      EOF
     end
   end
 

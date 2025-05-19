@@ -6,7 +6,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
   namespace_only
 
   process do
-    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/m
+    if statement.tokens.to_s =~ /^class\s+(#{NAMESPACEMATCH})\s*(?:<\s*(.+)|\Z)/mo
       classname = $1
       superclass_def = $2
       superclass = parse_superclass($2)
@@ -29,16 +29,14 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
       end
       parse_block(:namespace => klass)
 
-      if undocsuper
-        raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)'
-      end
+      raise YARD::Parser::UndocumentableError, 'superclass (class was added without superclass)' if undocsuper
     elsif statement.tokens.to_s =~ /^class\s*<<\s*([\w\:\s]+)/
       classname = $1.gsub(/\s/, '')
       proxy = Proxy.new(namespace, classname)
 
       # Allow constants to reference class names
       if ConstantObject === proxy
-        if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/
+        if proxy.value =~ /\A#{NAMESPACEMATCH}\Z/o
           proxy = Proxy.new(namespace, proxy.value)
         else
           raise YARD::Parser::UndocumentableError, "constant class reference '#{classname}'"
@@ -85,9 +83,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     if match
       paramstring = match[2].split(",")
       first = paramstring.first.strip
-      if first[0, 1] =~ /['"]/ && first[-1, 1] =~ /['"]/ && first !~ /\#\{/
-        return "Struct::#{first[1..-2]}"
-      end
+      return "Struct::#{first[1..-2]}" if first[0, 1] =~ /['"]/ && first[-1, 1] =~ /['"]/ && !first.include?("\#{")
     end
     "Struct"
   end
@@ -101,10 +97,10 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
 
   def parse_superclass(superclass)
     case superclass
-    when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/,
+    when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/o,
          /\A(Struct|OStruct)\.new/,
          /\ADelegateClass\((.+?)\)\s*\Z/,
-         /\A(#{NAMESPACEMATCH})\(/
+         /\A(#{NAMESPACEMATCH})\(/o
       $1
     when "self"
       namespace.path

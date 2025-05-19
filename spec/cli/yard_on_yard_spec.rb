@@ -12,7 +12,7 @@ RSpec.describe YARD::CLI::Yardoc do
       rm_rf File.join($TOPDIR, 'doc')
       rm_rf File.join($TOPDIR, '.yardoc')
 
-      # Note: as this is very time consuming, we do it only once
+      # NOTE: as this is very time consuming, we do it only once
       Dir.chdir($TOPDIR) do
         @res = YARD::CLI::Yardoc.new.run('--title', 'YARD-On-YARD')
       end

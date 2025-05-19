@@ -34,7 +34,8 @@ module YARD
           if name[0, 1] == "#"
             singular ? "an object that responds to #{name}" : "objects that respond to #{name}"
           elsif name[0, 1] =~ /[A-Z]/
-            singular ? "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} " + name : "#{name}#{name[-1, 1] =~ /[A-Z]/ ? "'" : ''}s"
+            singular ? "a#{name[0,
+                                1] =~ /[aeiou]/i ? 'n' : ''} " + name : "#{name}#{name[-1, 1] =~ /[A-Z]/ ? "'" : ''}s"
           else
             name
           end
@@ -64,14 +65,14 @@ module YARD
         end
 
         def to_s(_singular = true)
-          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} of (" + list_join(types.map {|t| t.to_s(false) }) + ")"
+          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} of (#{list_join(types.map {|t| t.to_s(false) })})"
         end
       end
 
       # @private
       class FixedCollectionType < CollectionType
         def to_s(_singular = true)
-          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} containing (" + types.map(&:to_s).join(" followed by ") + ")"
+          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} containing (#{types.map(&:to_s).join(" followed by ")})"
         end
       end
 
@@ -86,9 +87,9 @@ module YARD
         end
 
         def to_s(_singular = true)
-          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of (" +
-            list_join(key_types.map {|t| t.to_s(false) }) +
-            ") and values of (" + list_join(value_types.map {|t| t.to_s(false) }) + ")"
+          "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} #{name} with keys made of " \
+            "(#{list_join(key_types.map {|t| t.to_s(false) })}) " \
+            "and values of (#{list_join(value_types.map {|t| t.to_s(false) })})"
         end
       end
 
@@ -135,7 +136,7 @@ module YARD
                 name = token
               when :type_next
                 raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if name.nil?
-                type = Type.new(name) unless type
+                type ||= Type.new(name)
                 types << type
                 type = nil
                 name = nil
@@ -148,10 +149,11 @@ module YARD
                 type = HashCollectionType.new(name, parse, parse)
               when :hash_collection_next, :hash_collection_end, :fixed_collection_end, :collection_end, :parse_end
                 raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
-                type = Type.new(name) unless type
+                type ||= Type.new(name)
                 types << type
                 return types
               end
+              # rubocop:enable Lint/AssignmentInCondition
             end
             raise SyntaxError, "invalid character at #{@scanner.peek(1)}" unless found
           end

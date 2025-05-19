@@ -73,7 +73,7 @@ RSpec.describe YARD::Templates::Helpers::MarkupHelper do
       # loading any libraries but our implementation tries to return the library
       # name as a constant
       @gen.load_markup_provider
-      expect(@gen.markup_provider).to eq :"rpeg-markdown"
+      expect(@gen.markup_provider).to eq :'rpeg-markdown'
     end
 
     it "overrides the search if `:markup_provider` is set in options" do

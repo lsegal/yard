@@ -243,9 +243,9 @@ module YARD
       # @return [void]
       def run(*args)
         log.show_progress = true
-        if args.empty? || !args.first.nil?
+        if (args.empty? || !args.first.nil?) && !parse_arguments(*args)
           # fail early if arguments are not valid
-          return unless parse_arguments(*args)
+          return
         end
 
         checksums = nil
@@ -289,14 +289,14 @@ module YARD
       # @return [Boolean] whether or not arguments are valid
       # @since 0.5.6
       def parse_arguments(*args)
-        super(*args)
+        super
 
         # Last minute modifications
         self.files = Parser::SourceParser::DEFAULT_PATH_GLOB if files.empty?
         files.delete_if {|x| x =~ /\A\s*\Z/ } # remove empty ones
         readme = Dir.glob('README{,*[^~]}').
-          select {|f| extra_file_valid?(f)}.
-          sort_by {|r| [r.count('.'), r.index('.'), r] }.first
+          select {|f| extra_file_valid?(f) }.
+          min_by {|r| [r.count('.'), r.index('.'), r] }
         readme ||= Dir.glob(files.first).first if options.onefile && !files.empty?
         options.readme ||= CodeObjects::ExtraFileObject.new(readme) if readme && extra_file_valid?(readme)
         options.files.unshift(options.readme).uniq! if options.readme
@@ -308,11 +308,9 @@ module YARD
         apply_locale
 
         # US-ASCII is invalid encoding for onefile
-        if defined?(::Encoding) && options.onefile
-          if ::Encoding.default_internal == ::Encoding::US_ASCII
-            log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
-            ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
-          end
+        if defined?(::Encoding) && options.onefile && (::Encoding.default_internal == ::Encoding::US_ASCII)
+          log.warn "--one-file is not compatible with US-ASCII encoding, using ASCII-8BIT"
+          ::Encoding.default_external, ::Encoding.default_internal = ['ascii-8bit'] * 2
         end
 
         if generate && !verify_markup_options
@@ -347,7 +345,7 @@ module YARD
         Registry.load_all if use_cache
         objects = run_verifier(all_objects).reject do |object|
           serialized = !options.serializer || options.serializer.exists?(object)
-          if checksums && serialized && !object.files.any? {|f, _line| changed_files.include?(f) }
+          if checksums && serialized && object.files.none? {|f, _line| changed_files.include?(f) }
             true
           else
             log.debug "Re-generating object #{object.path}..."
@@ -413,9 +411,7 @@ module YARD
       def add_extra_files(*files)
         files.map! {|f| f.include?("*") ? Dir.glob(f) : f }.flatten!
         files.each do |file|
-          if extra_file_valid?(file)
-            options.files << CodeObjects::ExtraFileObject.new(file)
-          end
+          options.files << CodeObjects::ExtraFileObject.new(file) if extra_file_valid?(file)
         end
       end
 
@@ -477,11 +473,9 @@ module YARD
 
         exprs << "#{apis.uniq.inspect}.include?(@api.text)" unless apis.empty?
 
-        unless hidden_apis.empty?
-          exprs << "!#{hidden_apis.uniq.inspect}.include?(@api.text)"
-        end
+        exprs << "!#{hidden_apis.uniq.inspect}.include?(@api.text)" unless hidden_apis.empty?
 
-        exprs = !exprs.empty? ? [exprs.join(' && ')] : []
+        exprs = exprs.empty? ? [] : [exprs.join(' && ')]
         exprs << "!@api" if no_api
 
         expr = exprs.join(' || ')
@@ -543,12 +537,12 @@ module YARD
         opts.separator "General Options:"
 
         opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to',
-                      '  (defaults to .yardoc)') do |yfile|
+                '  (defaults to .yardoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
 
         opts.on('--[no-]single-db', 'Whether code objects should be stored to single',
-                                    '  database file (advanced)') do |use_single_db|
+                '  database file (advanced)') do |use_single_db|
           Registry.single_object_db = use_single_db
         end
 
@@ -614,9 +608,9 @@ module YARD
         end
 
         opts.on('--[no-]api API', 'Generates documentation for a given API',
-                                  '(objects which define the correct @api tag).',
-                                  'If --no-api is given, displays objects with',
-                                  'no @api tag.') do |api|
+                '(objects which define the correct @api tag).',
+                'If --no-api is given, displays objects with',
+                'no @api tag.') do |api|
           api = '' if api == false
           apis.push(api)
         end
@@ -630,7 +624,7 @@ module YARD
         end
 
         opts.on('--embed-mixin [MODULE]', "Embeds mixin methods from a particular",
-                                          " module into class documentation") do |mod|
+                " module into class documentation") do |mod|
           options.embed_mixins << mod
         end
 
@@ -639,12 +633,12 @@ module YARD
         end
 
         opts.on('--default-return TYPE', "Shown if method has no return type. ",
-                                         "  (defaults to 'Object')") do |type|
+                "  (defaults to 'Object')") do |type|
           options.default_return = type
         end
 
         opts.on('--hide-void-return', "Hides return types specified as 'void'. ",
-                                      "  (default is shown)") do
+                "  (default is shown)") do
           options.hide_void_return = true
         end
 
@@ -659,24 +653,20 @@ module YARD
         end
 
         opts.on('-r', '--readme FILE', '--main FILE', 'The readme file used as the title page',
-                                                      '  of documentation.') do |readme|
-          if extra_file_valid?(readme)
-            options.readme = CodeObjects::ExtraFileObject.new(readme)
-          end
+                '  of documentation.') do |readme|
+          options.readme = CodeObjects::ExtraFileObject.new(readme) if extra_file_valid?(readme)
         end
 
         opts.on('--files FILE1,FILE2,...', 'Any extra comma separated static files to be ',
-                                           '  included (eg. FAQ)') do |files|
+                '  included (eg. FAQ)') do |files|
           add_extra_files(*files.split(","))
         end
 
         opts.on('--asset FROM[:TO]', 'A file or directory to copy over to output ',
-                                     '  directory after generating') do |asset|
+                '  directory after generating') do |asset|
           from, to = *asset.split(':').map {|f| File.cleanpath(f, true) }
           to ||= from
-          if extra_file_valid?(from, false) && extra_file_valid?(to, false)
-            assets[from] = to
-          end
+          assets[from] = to if extra_file_valid?(from, false) && extra_file_valid?(to, false)
         end
 
         opts.on('-o', '--output-dir PATH',
@@ -698,7 +688,7 @@ module YARD
         end
 
         opts.on('--charset ENC', 'Character set to use when parsing files ',
-                                 '  (default is system locale)') do |encoding|
+                '  (default is system locale)') do |encoding|
           begin
             if defined?(Encoding) && Encoding.respond_to?(:default_external=)
               Encoding.default_external = encoding

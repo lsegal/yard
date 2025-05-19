@@ -22,5 +22,5 @@ def tag_signature(tag)
             else
               "description"
             end
-  signature + h(extra).gsub(/\n/, "<br/>&nbsp;&nbsp;&nbsp;")
+  signature + h(extra).gsub("\n", "<br/>&nbsp;&nbsp;&nbsp;")
 end

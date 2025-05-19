@@ -154,7 +154,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
 
-EOH
+        EOH
       end
 
       def current_time
@@ -173,7 +173,7 @@ EOH
           pot << "#: #{@relative_base_path}/#{path}:#{line}\n"
         end
         escaped_message_id = escape_message_id(message.id)
-        escaped_message_id = escaped_message_id.gsub(/\n/, "\\\\n\"\n\"")
+        escaped_message_id = escaped_message_id.gsub("\n", "\\\\n\"\n\"")
         pot << "msgid \"#{escaped_message_id}\"\n"
         pot << "msgstr \"\"\n"
         pot << "\n"

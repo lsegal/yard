@@ -13,28 +13,28 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
     end
 
     it "does not show &blockarg if no @param tag and has @yield" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yield blah
         def foo(&block); end
-      eof
+      EOF
       expect(format_args(Registry.at('#foo'))).to eq ''
     end
 
     it "does not show &blockarg if no @param tag and has @yieldparam" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yieldparam blah test
         def foo(&block); end
-      eof
+      EOF
       expect(format_args(Registry.at('#foo'))).to eq ''
     end
 
     it "shows &blockarg if @param block is documented (even with @yield)" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yield [a,b]
         # @yieldparam a test
         # @param block test
         def foo(&block) end
-      eof
+      EOF
       expect(format_args(Registry.at('#foo'))).to eq '(&block)'
     end
   end
@@ -43,39 +43,39 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
     before { YARD::Registry.clear }
 
     it "shows block for method with yield" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         def foo; yield(a, b, c) end
-      eof
+      EOF
       expect(format_block(Registry.at('#foo'))).to eq "{|a, b, c| ... }"
     end
 
     it "shows block for method with @yieldparam tags" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yieldparam _self me!
         def foo; end
-      eof
+      EOF
       expect(format_block(Registry.at('#foo'))).to eq "{|_self| ... }"
     end
 
     it "shows block for method with @yield but no types" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yield blah
         # @yieldparam a
         def foo; end
 
         # @yield blah
         def foo2; end
-      eof
+      EOF
       expect(format_block(Registry.at('#foo'))).to eq "{|a| ... }"
       expect(format_block(Registry.at('#foo2'))).to eq "{ ... }"
     end
 
     it "shows block for method with @yield and types" do
-      YARD.parse_string <<-'eof'
+      YARD.parse_string <<-EOF
         # @yield [a, b, c] blah
         # @yieldparam a
         def foo; end
-      eof
+      EOF
       expect(format_block(Registry.at('#foo'))).to eq "{|a, b, c| ... }"
     end
   end

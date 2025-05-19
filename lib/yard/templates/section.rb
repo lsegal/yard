@@ -20,15 +20,15 @@ module YARD
 
       def [](*args)
         if args.first.is_a?(Range) || args.size > 1
-          return self.class.new(name, *super(*args))
+          return self.class.new(name, *super)
         elsif args.first.is_a?(Integer)
-          return super(*args)
+          return super
         end
         find {|o| o.name == args.first }
       end
 
       def eql?(other)
-        super(other) && name == other.name
+        super && name == other.name
       end
 
       def ==(other)
@@ -82,9 +82,7 @@ module YARD
       private
 
       def parse_sections(args)
-        if args.size == 1 && args.first.is_a?(Array) && !args.first.is_a?(Section)
-          args = args.first
-        end
+        args = args.first if args.size == 1 && args.first.is_a?(Array) && !args.first.is_a?(Section)
         sections = []
         args.each_with_index do |name, index|
           case name

@@ -47,7 +47,7 @@ module YARD
       # @return [void]
       def self.setup
         Templates::Template.extra_includes |= [YARD::Server::DocServerHelper]
-        Templates::Engine.template_paths |= [File.dirname(__FILE__) + '/templates']
+        Templates::Engine.template_paths |= ["#{File.dirname(__FILE__)}/templates"]
       end
 
       # Performs any global shutdown procedures for the adapter.
@@ -55,7 +55,7 @@ module YARD
       # @return [void]
       def self.shutdown
         Templates::Template.extra_includes -= [YARD::Server::DocServerHelper]
-        Templates::Engine.template_paths -= [File.dirname(__FILE__) + '/templates']
+        Templates::Engine.template_paths -= ["#{File.dirname(__FILE__)}/templates"]
       end
 
       # Creates a new adapter object

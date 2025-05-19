@@ -23,18 +23,17 @@ module YARD::Server
   # This module is generally used internally by WEBrick
 
   module HTTPUtils
-
     ##
     # Normalizes a request path.  Raises an exception if the path cannot be
     # normalized.
 
     def normalize_path(path)
-      raise "abnormal path `#{path}'" if path[0] != ?/
+      raise "abnormal path `#{path}'" if path[0] != '/'
       ret = path.dup
 
       ret.gsub!(%r{/+}o, '/')                    # //      => /
-      while ret.sub!(%r'/\.(?:/|\Z)', '/'); end  # /.      => /
-      while ret.sub!(%r'/(?!\.\./)[^/]+/\.\.(?:/|\Z)', '/'); end # /foo/.. => /foo
+      while ret.sub!(%r{/\.(?:/|\Z)}, '/'); end  # /.      => /
+      while ret.sub!(%r{/(?!\.\./)[^/]+/\.\.(?:/|\Z)}, '/'); end # /foo/.. => /foo
 
       raise "abnormal path `#{path}'" if %r{/\.\.(/|\Z)} =~ ret
       ret
@@ -54,7 +53,7 @@ module YARD::Server
       "cer"   => "application/pkix-cert",
       "crl"   => "application/pkix-crl",
       "crt"   => "application/x-x509-ca-cert",
-     #"crl"   => "application/x-pkcs7-crl",
+      # "crl"   => "application/x-pkcs7-crl",
       "css"   => "text/css",
       "dms"   => "application/octet-stream",
       "doc"   => "application/msword",
@@ -103,27 +102,27 @@ module YARD::Server
       "xml"   => "text/xml",
       "xpm"   => "image/x-xpixmap",
       "xwd"   => "image/x-xwindowdump",
-      "zip"   => "application/zip",
+      "zip"   => "application/zip"
     }
 
     ##
     # Loads Apache-compatible mime.types in +file+.
 
     def load_mime_types(file)
-      # note: +file+ may be a "| command" for now; some people may
+      # NOTE: +file+ may be a "| command" for now; some people may
       # rely on this, but currently we do not use this method by default.
-      open(file){ |io|
-        hash = Hash.new
-        io.each{ |line|
+      open(file) do |io|
+        hash = {}
+        io.each do |line|
           next if /^#/ =~ line
           line.chomp!
           mimetype, ext0 = line.split(/\s+/, 2)
           next unless ext0
           next if ext0.empty?
-          ext0.split(/\s+/).each{ |ext| hash[ext] = mimetype }
-        }
+          ext0.split(/\s+/).each {|ext| hash[ext] = mimetype }
+        end
         hash
-      }
+      end
     end
     module_function :load_mime_types
 
@@ -132,8 +131,8 @@ module YARD::Server
     # mime type was found application/octet-stream is returned.
 
     def mime_type(filename, mime_tab)
-      suffix1 = (/\.(\w+)$/ =~ filename && $1.downcase)
-      suffix2 = (/\.(\w+)\.[\w\-]+$/ =~ filename && $1.downcase)
+      suffix1 = /\.(\w+)$/ =~ filename && $1.downcase
+      suffix2 = /\.(\w+)\.[\w\-]+$/ =~ filename && $1.downcase
       mime_tab[suffix1] || mime_tab[suffix2] || "application/octet-stream"
     end
     module_function :mime_type
@@ -145,26 +144,25 @@ module YARD::Server
     def parse_header(raw)
       header = Hash.new([].freeze)
       field = nil
-      raw.each_line{|line|
+      raw.each_line do |line|
         case line
         when /^([A-Za-z0-9!\#$%&'*+\-.^_`|~]+):\s*(.*?)\s*\z/om
-          field, value = $1, $2
+          field = $1
+          value = $2
           field.downcase!
-          header[field] = [] unless header.has_key?(field)
+          header[field] = [] unless header.key?(field)
           header[field] << value
         when /^\s+(.*?)\s*\z/om
           value = $1
-          unless field
-            raise HTTPStatus::BadRequest, "bad header '#{line}'."
-          end
+          raise HTTPStatus::BadRequest, "bad header '#{line}'." unless field
           header[field][-1] << " " << value
         else
           raise HTTPStatus::BadRequest, "bad header '#{line}'."
         end
-      }
-      header.each{|key, values|
+      end
+      header.each do |_key, values|
         values.each(&:strip!)
-      }
+      end
       header
     end
     module_function :parse_header
@@ -173,8 +171,8 @@ module YARD::Server
     # Splits a header value +str+ according to HTTP specification.
 
     def split_header_value(str)
-      str.scan(%r'\G((?:"(?:\\.|[^"])+?"|[^",]+)+)
-                    (?:,\s*|\Z)'xn).flatten
+      str.scan(/\G((?:"(?:\\.|[^"])+?"|[^",]+)+)
+                    (?:,\s*|\Z)/xn).flatten
     end
     module_function :split_header_value
 
@@ -184,14 +182,14 @@ module YARD::Server
     def parse_range_header(ranges_specifier)
       if /^bytes=(.*)/ =~ ranges_specifier
         byte_range_set = split_header_value($1)
-        byte_range_set.collect{|range_spec|
+        byte_range_set.collect do |range_spec|
           case range_spec
-          when /^(\d+)-(\d+)/ then $1.to_i .. $2.to_i
-          when /^(\d+)-/      then $1.to_i .. -1
-          when /^-(\d+)/      then -($1.to_i) .. -1
+          when /^(\d+)-(\d+)/ then $1.to_i..$2.to_i
+          when /^(\d+)-/      then $1.to_i..-1
+          when /^-(\d+)/      then -$1.to_i..-1
           else return nil
           end
-        }
+        end
       end
     end
     module_function :parse_range_header
@@ -203,17 +201,16 @@ module YARD::Server
       tmp = []
       if value
         parts = value.split(/,\s*/)
-        parts.each {|part|
-          if m = %r{^([^\s,]+?)(?:;\s*q=(\d+(?:\.\d+)?))?$}.match(part)
-            val = m[1]
-            q = (m[2] or 1).to_f
-            tmp.push([val, q])
-          end
-        }
-        tmp = tmp.sort_by{|val, q| -q}
-        tmp.collect!{|val, q| val}
+        parts.each do |part|
+          next unless (m = /^([^\s,]+?)(?:;\s*q=(\d+(?:\.\d+)?))?$/.match(part))
+          val = m[1]
+          q = (m[2] or 1).to_f
+          tmp.push([val, q])
+        end
+        tmp = tmp.sort_by {|_val, q| -q }
+        tmp.collect! {|val, _q| val }
       end
-      return tmp
+      tmp
     end
     module_function :parse_qvalues
 
@@ -221,7 +218,7 @@ module YARD::Server
     # Removes quotes and escapes from +str+
 
     def dequote(str)
-      ret = (/\A"(.*)"\Z/ =~ str) ? $1 : str.dup
+      ret = /\A"(.*)"\Z/ =~ str ? $1 : str.dup
       ret.gsub!(/\\(.)/, "\\1")
       ret
     end
@@ -246,14 +243,10 @@ module YARD::Server
       ##
       # The name of the form data part
 
-      attr_accessor :name
+      attr_accessor :name, :filename, :next_data
 
       ##
-      # The filename of the form data part
-
-      attr_accessor :filename
-
-      attr_accessor :next_data # :nodoc:
+      # The filename of the form data part # :nodoc:
       protected :next_data
 
       ##
@@ -274,9 +267,7 @@ module YARD::Server
           @raw_header = EmptyRawHeader
           @header = EmptyHeader
           super(args.shift)
-          unless args.empty?
-            @next_data = self.class.new(*args)
-          end
+          @next_data = self.class.new(*args) unless args.empty?
         end
       end
 
@@ -284,11 +275,9 @@ module YARD::Server
       # Retrieves the header at the first entry in +key+
 
       def [](*key)
-        begin
-          @header[key[0].downcase].join(", ")
-        rescue StandardError, NameError
-          super
-        end
+        @header[key[0].downcase].join(", ")
+      rescue StandardError, NameError
+        super
       end
 
       ##
@@ -301,8 +290,8 @@ module YARD::Server
         if @header
           super
         elsif str == CRLF
-          @header = HTTPUtils::parse_header(@raw_header.join)
-          if cd = self['content-disposition']
+          @header = HTTPUtils.parse_header(@raw_header.join)
+          if (cd = self['content-disposition'])
             if /\s+name="(.*?)"/ =~ cd then @name = $1 end
             if /\s+filename="(.*?)"/ =~ cd then @filename = $1 end
           end
@@ -346,16 +335,16 @@ module YARD::Server
 
       def list
         ret = []
-        each_data{|data|
+        each_data do |data|
           ret << data.to_s
-        }
+        end
         ret
       end
 
       ##
       # A FormData will behave like an Array
 
-      alias :to_ary :list
+      alias to_ary list
 
       ##
       # This FormData's body
@@ -369,21 +358,21 @@ module YARD::Server
     # Parses the query component of a URI in +str+
 
     def parse_query(str)
-      query = Hash.new
+      query = {}
       if str
-        str.split(/[&;]/).each{|x|
+        str.split(/[&;]/).each do |x|
           next if x.empty?
-          key, val = x.split(/=/,2)
+          key, val = x.split('=', 2)
           key = unescape_form(key)
           val = unescape_form(val.to_s)
           val = FormData.new(val)
           val.name = key
-          if query.has_key?(key)
+          if query.key?(key)
             query[key].append_data(val)
             next
           end
           query[key] = val
-        }
+        end
       end
       query
     end
@@ -394,15 +383,15 @@ module YARD::Server
 
     def parse_form_data(io, boundary)
       boundary_regexp = /\A--#{Regexp.quote(boundary)}(--)?#{CRLF}\z/
-      form_data = Hash.new
+      form_data = {}
       return form_data unless io
       data = nil
-      io.each_line{|line|
+      io.each_line do |line|
         if boundary_regexp =~ line
           if data
             data.chop!
             key = data.name
-            if form_data.has_key?(key)
+            if form_data.key?(key)
               form_data[key].append_data(data)
             else
               form_data[key] = data
@@ -410,13 +399,11 @@ module YARD::Server
           end
           data = FormData.new
           next
-        else
-          if data
-            data << line
-          end
+        elsif data
+          data << line
         end
-      }
-      return form_data
+      end
+      form_data
     end
     module_function :parse_form_data
 
@@ -428,11 +415,11 @@ module YARD::Server
     upalpha  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     mark     = '-_.!~*\'()'
     unreserved = num + lowalpha + upalpha + mark
-    control  = (0x0..0x1f).collect{|c| c.chr }.join + "\x7f"
+    control  = "#{(0x0..0x1f).collect(&:chr).join}\u007F"
     space    = " "
     delims   = '<>#%"'
     unwise   = '{}|\\^[]`'
-    nonascii = (0x80..0xff).collect{|c| c.chr }.join
+    nonascii = (0x80..0xff).collect(&:chr).join
 
     module_function
 
@@ -440,24 +427,26 @@ module YARD::Server
 
     def _make_regex(str) /([#{Regexp.escape(str)}])/n end
     def _make_regex!(str) /([^#{Regexp.escape(str)}])/n end
+
     def _escape(str, regex)
       str = str.b
-      str.gsub!(regex) {"%%%02X" % $1.ord}
+      str.gsub!(regex) { "%%%02X" % $1.ord }
       # %-escaped string should contain US-ASCII only
       str.force_encoding(Encoding::US_ASCII)
     end
+
     def _unescape(str, regex)
       str = str.b
-      str.gsub!(regex) {$1.hex.chr}
+      str.gsub!(regex) { $1.hex.chr }
       # encoding of %-unescaped string is unknown
       str
     end
 
-    UNESCAPED = _make_regex(control+space+delims+unwise+nonascii)
-    UNESCAPED_FORM = _make_regex(reserved+control+delims+unwise+nonascii)
+    UNESCAPED = _make_regex(control + space + delims + unwise + nonascii)
+    UNESCAPED_FORM = _make_regex(reserved + control + delims + unwise + nonascii)
     NONASCII  = _make_regex(nonascii)
     ESCAPED   = /%([0-9a-fA-F]{2})/
-    UNESCAPED_PCHAR = _make_regex!(unreserved+":@&=+$,")
+    UNESCAPED_PCHAR = _make_regex!("#{unreserved}:@&=+$,")
 
     # :startdoc:
 
@@ -480,7 +469,7 @@ module YARD::Server
 
     def escape_form(str)
       ret = _escape(str, UNESCAPED_FORM)
-      ret.gsub!(/ /, "+")
+      ret.tr!(' ', "+")
       ret
     end
 
@@ -488,7 +477,7 @@ module YARD::Server
     # Unescapes form reserved characters in +str+
 
     def unescape_form(str)
-      _unescape(str.gsub(/\+/, " "), ESCAPED)
+      _unescape(str.tr('+', " "), ESCAPED)
     end
 
     ##
@@ -496,10 +485,10 @@ module YARD::Server
 
     def escape_path(str)
       result = ""
-      str.scan(%r{/([^/]*)}).each{|i|
+      str.scan(%r{/([^/]*)}).each do |i|
         result << "/" << _escape(i[0], UNESCAPED_PCHAR)
-      }
-      return result
+      end
+      result
     end
 
     ##

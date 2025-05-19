@@ -17,18 +17,16 @@ RSpec.describe YARD::I18n::Messages do
     it "enumerates messages" do
       @messages.register("Hello World!")
       @messages.register("Title")
-      enumerated_messages = []
-      @messages.each do |message|
-        enumerated_messages << message
+      enumerated_messages = @messages.map do |message|
+        message
       end
       enumerated_messages = enumerated_messages.sort_by(&:id)
       expect(enumerated_messages).to eq [message("Hello World!"), message("Title")]
     end
 
     it "does not yield any message if there are none" do
-      enumerated_messages = []
-      @messages.each do |message|
-        enumerated_messages << message
+      enumerated_messages = @messages.map do |message|
+        message
       end
       expect(enumerated_messages).to eq []
     end

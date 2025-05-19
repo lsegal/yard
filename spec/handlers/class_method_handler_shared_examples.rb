@@ -27,7 +27,7 @@ RSpec.shared_examples "class method visibility decorator" do
     # Issue #760
     # https://github.com/lsegal/yard/issues/760
     it "handles singleton classes" do
-      # Note: It's important to def a method within the singleton class or
+      # NOTE: It's important to def a method within the singleton class or
       #       the bug may not trigger.
       code = <<-CODE
         class SingletonClass
@@ -87,7 +87,7 @@ RSpec.shared_examples "class method visibility decorator" do
       expect(Registry.at('SingletonClass.baz').visibility).to     eq visibility
       expect(Registry.at('SingletonClass.bat').visibility).not_to eq visibility
     end
-  end unless LEGACY_PARSER # reopened class
+  end unless LEGACY_PARSER
 
   describe "as method definition decorator" do
     subject { Registry.at('SingletonClass.foo') }

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/spec_helper'
+require "#{File.dirname(__FILE__)}/spec_helper"
 
 RSpec.describe YARD::CodeObjects::Proxy do
   before { Registry.clear }
@@ -91,12 +91,12 @@ RSpec.describe YARD::CodeObjects::Proxy do
   end
 
   it "uses type to ensure resolved object is of intended type" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module Foo
         class Bar; end
         def self.Bar; end
       end
-    eof
+    EOF
     proxy = Proxy.new(P('Foo'), 'Bar')
     proxy.type = :method
     expect(proxy.path).to eq 'Foo.Bar'
@@ -138,10 +138,10 @@ RSpec.describe YARD::CodeObjects::Proxy do
   end
 
   it "handles constant names in namespaces" do
-    YARD.parse_string <<-eof
+    YARD.parse_string <<-EOF
       module A; end; B = A
       module B::C; def foo; end end
-    eof
+    EOF
     expect(Proxy.new(:root, 'B::C')).to eq Registry.at('A::C')
   end
 end

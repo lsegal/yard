@@ -55,22 +55,22 @@ module YARD
         return if specs.empty?
 
         result = nil
-        specs.reverse.each do |spec|
+        specs.reverse_each do |spec|
           if gem =~ /^yard-doc-/
             path = File.join(spec.full_gem_path, DEFAULT_YARDOC_FILE)
             result = File.exist?(path) && !for_writing ? path : nil
             result ? break : next
           end
 
-          if for_writing
-            result = global_yardoc_file(spec, for_writing) ||
-                     old_global_yardoc_file(spec, for_writing) ||
-                     local_yardoc_file(spec, for_writing)
-          else
-            result = local_yardoc_file(spec, for_writing) ||
+          result = if for_writing
                      global_yardoc_file(spec, for_writing) ||
-                     old_global_yardoc_file(spec, for_writing)
-          end
+                       old_global_yardoc_file(spec, for_writing) ||
+                       local_yardoc_file(spec, for_writing)
+                   else
+                     local_yardoc_file(spec, for_writing) ||
+                       global_yardoc_file(spec, for_writing) ||
+                       old_global_yardoc_file(spec, for_writing)
+                   end
 
           break if result
         end
@@ -236,7 +236,7 @@ module YARD
       # @see CodeObjects::Base#type
       def all(*types)
         if types.empty?
-          thread_local_store.values.select {|obj| obj != root }
+          thread_local_store.values.reject {|obj| obj == root }
         else
           list = []
           types.each do |type|
@@ -302,8 +302,8 @@ module YARD
       # @see P
       def resolve(namespace, name, inheritance = false, proxy_fallback = false, type = nil)
         thread_local_resolver.lookup_by_path name,
-          :namespace => namespace, :inheritance => inheritance,
-          :proxy_fallback => proxy_fallback, :type => type
+                                             :namespace => namespace, :inheritance => inheritance,
+                                             :proxy_fallback => proxy_fallback, :type => type
       end
 
       # @group Managing Source File Checksums
@@ -373,7 +373,7 @@ module YARD
       # @param [Symbol, nil] type the {CodeObjects::Base#type} that the resolved
       #   object must be equal to
       def partial_resolve(namespace, name, type = nil)
-        obj = at(name) || at('#' + name) if namespace.root?
+        obj = at(name) || at("##{name}") if namespace.root?
         return obj if obj && (type.nil? || obj.type == type)
         [CodeObjects::NSEP, CodeObjects::CSEP, ''].each do |s|
           next if s.empty? && name =~ /^\w/
@@ -393,10 +393,10 @@ module YARD
         if for_writing
           if File.writable?(path) ||
              (!File.directory?(path) && File.writable?(File.dirname(path)))
-            return yfile
+            yfile
           end
         elsif !for_writing && File.exist?(yfile)
-          return yfile
+          yfile
         end
       end
 
@@ -404,7 +404,7 @@ module YARD
         path = spec.full_gem_path
         yfile = File.join(path, DEFAULT_YARDOC_FILE)
         return yfile if for_writing && File.writable?(path)
-        return yfile if !for_writing && File.exist?(yfile)
+        yfile if !for_writing && File.exist?(yfile)
       end
 
       def local_yardoc_file(spec, for_writing = false)

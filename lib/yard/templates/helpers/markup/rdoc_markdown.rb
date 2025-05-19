@@ -12,7 +12,7 @@ module YARD
 
         class RDocMarkdown < RDocMarkup
           def initialize(text)
-            super RDoc::Markdown.new.parse(text)
+            super(RDoc::Markdown.new.parse(text))
           end
 
           def fix_typewriter(html) html end

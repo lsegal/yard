@@ -21,12 +21,12 @@ RSpec.describe YARD::Templates::Helpers::ModuleHelper do
     end
 
     it "ignores methods if namespace object is filtered" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @author test
         class Foo
           def bar; end
         end
-      eof
+      EOF
 
       options.verifier = YARD::Verifier.new('@author.text != "test"')
       expect(prune_method_listing(objects)).to eq []

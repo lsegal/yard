@@ -60,7 +60,7 @@ RSpec.describe YARD::Parser::SourceParser do
       before_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two]
+      expect(checks).to eq %i(one two)
     end
 
     it "cancels parsing if it returns false" do
@@ -80,7 +80,7 @@ RSpec.describe YARD::Parser::SourceParser do
       before_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two]
+      expect(checks).to eq %i(one two)
     end
 
     it "passes in globals" do
@@ -115,7 +115,7 @@ RSpec.describe YARD::Parser::SourceParser do
       after_list { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two]
+      expect(checks).to eq %i(one two)
     end
 
     it "does not cancel parsing if it returns false" do
@@ -125,7 +125,7 @@ RSpec.describe YARD::Parser::SourceParser do
       after_list { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :three]
+      expect(checks).to eq %i(one three)
     end
   end
 
@@ -150,7 +150,7 @@ RSpec.describe YARD::Parser::SourceParser do
       before_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two, :one, :two, :one, :two]
+      expect(checks).to eq %i(one two one two one two)
     end
 
     it "cancels parsing if it returns false" do
@@ -160,7 +160,7 @@ RSpec.describe YARD::Parser::SourceParser do
       before_file { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).to be nil
-      expect(checks).to eq [:one, :one, :one]
+      expect(checks).to eq %i(one one one)
     end
 
     it "does not cancel on nil" do
@@ -170,7 +170,7 @@ RSpec.describe YARD::Parser::SourceParser do
       before_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two, :one, :two, :one, :two]
+      expect(checks).to eq %i(one two one two one two)
     end
   end
 
@@ -195,7 +195,7 @@ RSpec.describe YARD::Parser::SourceParser do
       after_file { checks << :two }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :two, :one, :two, :one, :two]
+      expect(checks).to eq %i(one two one two one two)
     end
 
     it "does not cancel parsing if it returns false" do
@@ -205,7 +205,7 @@ RSpec.describe YARD::Parser::SourceParser do
       after_file { checks << :three }
       parse_list ['file.rb', ''], ['file2.rb', ''], ['file3.rb', 'class Foo; end']
       expect(Registry.at('Foo')).not_to be nil
-      expect(checks).to eq [:one, :three, :one, :three, :one, :three]
+      expect(checks).to eq %i(one three one three one three)
     end
   end
 
@@ -258,7 +258,7 @@ RSpec.describe YARD::Parser::SourceParser do
 
   describe "#parse_string" do
     it "parses basic Ruby code" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         module Hello
           class Hi
             # Docstring
@@ -266,7 +266,7 @@ RSpec.describe YARD::Parser::SourceParser do
             def me; "VALUE" end
           end
         end
-      eof
+      EOF
       expect(Registry.at(:Hello)).not_to eq nil
       expect(Registry.at("Hello::Hi#me")).not_to eq nil
       expect(Registry.at("Hello::Hi#me").docstring).to eq "Docstring\nDocstring2"
@@ -274,7 +274,7 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "parses Ruby code with metaclasses" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         module Hello
           class Hi
             class <<self
@@ -283,33 +283,33 @@ RSpec.describe YARD::Parser::SourceParser do
             end
           end
         end
-      eof
+      EOF
       expect(Registry.at(:Hello)).not_to eq nil
       expect(Registry.at("Hello::Hi.me")).not_to eq nil
       expect(Registry.at("Hello::Hi.me").docstring).to eq "Docstring"
     end
 
     it "only uses prepended comments for an object" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         # Test
 
         # PASS
         module Hello
         end # FAIL
-      eof
+      EOF
       expect(Registry.at(:Hello).docstring).to eq "PASS"
     end
 
     it "does not add comments appended to last line of block" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module Hello2
         end # FAIL
-      eof
+      EOF
       expect(Registry.at(:Hello2).docstring).to be_blank
     end
 
     it "adds comments appended to an object's first line" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module Hello # PASS
           HELLO
         end
@@ -318,7 +318,7 @@ RSpec.describe YARD::Parser::SourceParser do
           # ANOTHER PASS
           def x; end
         end
-      eof
+      EOF
 
       expect(Registry.at(:Hello).docstring).to eq "PASS"
       expect(Registry.at(:Hello2).docstring).to eq "PASS"
@@ -326,24 +326,24 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "takes preceding comments only if they exist" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # PASS
         module Hello # FAIL
           HELLO
         end
-      eof
+      EOF
 
       expect(Registry.at(:Hello).docstring).to eq "PASS"
     end
 
     it "strips all hashes prefixed on comment line" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         ### PASS
         #### PASS
         ##### PASS
         module Hello
         end
-      eof
+      EOF
       expect(Registry.at(:Hello).docstring).to eq "PASS\nPASS\nPASS"
     end
 
@@ -376,7 +376,7 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "adds macros on any object" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # @!macro [new] foo
         #   This is a macro
         #   @return [String] the string
@@ -384,7 +384,7 @@ RSpec.describe YARD::Parser::SourceParser do
           # @!macro foo
           def foo; end
         end
-      eof
+      EOF
 
       macro = CodeObjects::MacroObject.find('foo')
       expect(macro.macro_data).to eq "This is a macro\n@return [String] the string"
@@ -393,7 +393,7 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "allows directives parsed on lone comments" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         class Foo
           # @!method foo(a = "hello")
           # @!scope class
@@ -403,7 +403,7 @@ RSpec.describe YARD::Parser::SourceParser do
 
           # @!method bar(value)
         end
-      eof
+      EOF
       foo = Registry.at('Foo.foo')
       bar = Registry.at('Foo#bar')
       expect(foo).not_to be nil
@@ -415,13 +415,13 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "parses lone comments at end of blocks" do
-      YARD.parse_string(<<-eof)
+      YARD.parse_string(<<-EOF)
         class Foo
           none
 
           # @!method foo(a = "hello")
         end
-      eof
+      EOF
       foo = Registry.at('Foo#foo')
       expect(foo).not_to be nil
       expect(foo.signature).to eq 'def foo(a = "hello")'
@@ -435,7 +435,7 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "handles non-ASCII encoding in heredoc" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         # encoding: utf-8
 
         heredoc <<-ending
@@ -446,7 +446,7 @@ RSpec.describe YARD::Parser::SourceParser do
         class Foo < Bar
           attr_accessor :foo
         end
-      eof
+      EOF
       expect(Registry.at('Foo').superclass).to eq P('Bar')
     end
   end
@@ -561,7 +561,7 @@ RSpec.describe YARD::Parser::SourceParser do
               expect(result.enumerator[0].source.encoding.to_s).to eq(default_encoding)
             else
               expect(['Shift_JIS', 'Windows-31J', 'UTF-8']).send(msg,
-                include(result.enumerator[0].source.encoding.to_s))
+                                                                 include(result.enumerator[0].source.encoding.to_s))
             end
           end
           expect(result.encoding_line).send(msg, eq(src.split("\n").last))
@@ -582,7 +582,7 @@ RSpec.describe YARD::Parser::SourceParser do
           parser = Parser::SourceParser.new
           expect(File).to receive(:read_binary).with('tmpfile.c').and_return(src)
           result = parser.parse("tmpfile.c")
-          content = result.instance_variable_get("@content")
+          content = result.instance_variable_get(:@content)
           expect(['UTF-8']).send(msg, include(content.encoding.to_s))
         end
       end
@@ -603,7 +603,7 @@ RSpec.describe YARD::Parser::SourceParser do
 
   describe "#parse_in_order" do
     def in_order_parse(*files)
-      paths = files.map {|f| File.join(File.dirname(__FILE__), 'examples', f.to_s + '.rb.txt') }
+      paths = files.map {|f| File.join(File.dirname(__FILE__), 'examples', "#{f}.rb.txt") }
       YARD::Parser::SourceParser.parse(paths, [], Logger::DEBUG)
     end
 
@@ -661,7 +661,7 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "handles groups" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class A
           # @group Group Name
           def foo; end
@@ -674,7 +674,7 @@ RSpec.describe YARD::Parser::SourceParser do
           # @group Group 2
           def baz; end
         end
-      eof
+      EOF
 
       expect(Registry.at('A').groups).to eq ['Group Name', 'Group 2']
       expect(Registry.at('A#bar').group).to be nil
@@ -684,27 +684,27 @@ RSpec.describe YARD::Parser::SourceParser do
     end
 
     it "handles multi-line class/module references" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class A::
           B::C; end
-      eof
+      EOF
       expect(Registry.all).to eq [P('A::B::C')]
     end
 
     it "handles sclass definitions of multi-line class/module references" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         class << A::
           B::C
           def foo; end
         end
-      eof
+      EOF
       expect(Registry.all.size).to eq 2
       expect(Registry.at('A::B::C')).not_to be nil
       expect(Registry.at('A::B::C.foo')).not_to be nil
     end
 
     it "handles lone comment blocks at the end of a namespace" do
-      YARD.parse_string <<-eof
+      YARD.parse_string <<-EOF
         module A
           class B
             def c; end
@@ -712,7 +712,7 @@ RSpec.describe YARD::Parser::SourceParser do
             # @!method d
           end
         end
-      eof
+      EOF
       expect(Registry.at('A#d')).to be nil
       expect(Registry.at('A::B#d')).not_to be nil
     end

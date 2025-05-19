@@ -111,7 +111,7 @@ class Gem::SourceIndex
   end
 
   def prerelease_gems
-    @gems.reject {|_name, gem| !gem.version.prerelease? }
+    @gems.select {|_name, gem| gem.version.prerelease? }
   end
 
   def released_gems
@@ -273,13 +273,14 @@ class Gem::SourceIndex
 
     # TODO: Remove support and warning for legacy arguments after 2008/11
     unless Gem::Dependency === gem_pattern
-      warn "#{Gem.location_of_caller.join ':'}:Warning: Gem::SourceIndex#search support for #{gem_pattern.class} patterns is deprecated, use #find_name"
+      warn "#{Gem.location_of_caller.join ':'}:Warning: Gem::SourceIndex#search support for #{gem_pattern.class} " \
+           "patterns is deprecated, use #find_name"
     end
 
     case gem_pattern
-    when Regexp then
+    when Regexp
       requirement = platform_only || Gem::Requirement.default
-    when Gem::Dependency then
+    when Gem::Dependency
       only_platform = platform_only
       requirement = gem_pattern.requirement
 
@@ -295,9 +296,7 @@ class Gem::SourceIndex
       gem_pattern = /#{gem_pattern}/i
     end
 
-    unless Gem::Requirement === requirement
-      requirement = Gem::Requirement.create requirement
-    end
+    requirement = Gem::Requirement.create requirement unless Gem::Requirement === requirement
 
     specs = all_gems.values.select do |spec|
       spec.name =~ gem_pattern &&
@@ -337,7 +336,7 @@ class Gem::SourceIndex
       remotes = fetcher.find_matching dependency
       remotes = remotes.map {|(_, version, _), _| version }
 
-      latest = remotes.sort.last
+      latest = remotes.max
 
       outdateds << local.name if latest && local.version < latest
     end

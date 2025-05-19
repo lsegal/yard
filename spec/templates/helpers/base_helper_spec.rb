@@ -49,7 +49,7 @@ RSpec.describe YARD::Templates::Helpers::BaseHelper do
 
     it "returns path of Proxified object if argument is a String or Symbol" do
       expect(link_object("Array")).to eq "Array"
-      expect(link_object(:"A::B")).to eq "A::B"
+      expect(link_object(:'A::B')).to eq "A::B"
     end
 
     it "returns the argument if not an object, proxy, String or Symbol" do

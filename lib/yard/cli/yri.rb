@@ -50,11 +50,11 @@ module YARD
       def run(*args)
         optparse(*args)
 
-        if ::RbConfig::CONFIG['host_os'] =~ /mingw|win32/
-          @serializer ||= YARD::Serializers::StdoutSerializer.new
-        else
-          @serializer ||= YARD::Serializers::ProcessSerializer.new('less')
-        end
+        @serializer ||= if ::RbConfig::CONFIG['host_os'] =~ /mingw|win32/
+                          YARD::Serializers::StdoutSerializer.new
+                        else
+                          YARD::Serializers::ProcessSerializer.new('less')
+                        end
 
         if @name.nil? || @name.strip.empty?
           print_usage
@@ -65,8 +65,8 @@ module YARD
         if object
           print_object(object)
         else
-          STDERR.puts "No documentation for `#{@name}'"
-          return exit(1)
+          $stderr.puts "No documentation for `#{@name}'"
+          exit(1)
         end
       end
 

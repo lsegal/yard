@@ -3,12 +3,12 @@ include Helpers::ModuleHelper
 
 def init
   sections :header, :box_info, :pre_docstring, T('docstring'), :children,
-    :constant_summary, [T('docstring')], :inherited_constants,
-    :attribute_summary, [:item_summary], :inherited_attributes,
-    :method_summary, [:item_summary], :inherited_methods,
-    :methodmissing, [T('method_details')],
-    :attribute_details, [T('method_details')],
-    :method_details_list, [T('method_details')]
+           :constant_summary, [T('docstring')], :inherited_constants,
+           :attribute_summary, [:item_summary], :inherited_attributes,
+           :method_summary, [:item_summary], :inherited_methods,
+           :methodmissing, [T('method_details')],
+           :attribute_details, [T('method_details')],
+           :method_details_list, [T('method_details')]
 end
 
 def pre_docstring
@@ -37,9 +37,7 @@ def method_listing(include_specials = true)
   return @smeths ||= method_listing.reject {|o| special_method?(o) } unless include_specials
   return @meths if defined?(@meths) && @meths
   @meths = object.meths(:inherited => false, :included => !options.embed_mixins.empty?)
-  unless options.embed_mixins.empty?
-    @meths = @meths.reject {|m| options.embed_mixins_match?(m.namespace) == false }
-  end
+  @meths = @meths.reject {|m| options.embed_mixins_match?(m.namespace) == false } unless options.embed_mixins.empty?
   @meths = sort_listing(prune_method_listing(@meths))
   @meths
 end
@@ -53,11 +51,12 @@ end
 def attr_listing
   return @attrs if defined?(@attrs) && @attrs
   @attrs = []
+  types = %i(class instance)
   object.inheritance_tree(true).each do |superclass|
     next if superclass.is_a?(CodeObjects::Proxy)
     next if !options.embed_mixins.empty? &&
             !options.embed_mixins_match?(superclass)
-    [:class, :instance].each do |scope|
+    types.each do |scope|
       superclass.attributes[scope].each do |_name, rw|
         attr = prune_method_listing([rw[:read], rw[:write]].compact, false).first
         @attrs << attr if attr
@@ -150,7 +149,7 @@ def groups(list, type = "Method")
 end
 
 def scopes(list)
-  [:class, :instance].each do |scope|
+  %i(class instance).each do |scope|
     items = list.select {|m| m.scope == scope }
     yield(items, scope) unless items.empty?
   end

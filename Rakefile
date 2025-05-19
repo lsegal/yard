@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require File.dirname(__FILE__) + '/lib/yard'
-require File.dirname(__FILE__) + '/lib/yard/rubygems/specification'
+require "#{File.dirname(__FILE__)}/lib/yard"
+require "#{File.dirname(__FILE__)}/lib/yard/rubygems/specification"
 require 'rbconfig'
 
 YARD::VERSION.replace(ENV['YARD_VERSION']) if ENV['YARD_VERSION']
 
-Dir['tasks/**/*.rake'].each { |task_file| load task_file }
+Dir['tasks/**/*.rake'].each {|task_file| load task_file }
 
 desc "Builds the gem"
 task :gem do
@@ -29,7 +29,7 @@ task :test_doc do
   sh "ruby bin/yard --fail-on-warning #{"--no-progress" if ENV["CI"]}"
 end
 
-task :default => [:spec, :test_doc]
+task :default => %i(spec test_doc)
 
 YARD::Rake::YardocTask.new do |t|
   t.options += ['--title', "YARD #{YARD::VERSION} Documentation"]

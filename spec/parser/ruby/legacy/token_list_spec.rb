@@ -33,7 +33,7 @@ RSpec.describe YARD::Parser::Ruby::Legacy::TokenList do
       x = TokenList.new('x = "hello #{world}"')
       expect(x.size).to eq 6
       expect(x[4].class).to eq LT::TkDSTRING
-      expect(x.to_s).to eq 'x = "hello #{world}"' + "\n"
+      expect(x.to_s.strip).to eq %(x = "hello \#{world}")
     end
 
     it "handles label syntax" do
