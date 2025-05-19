@@ -66,7 +66,7 @@ RSpec.describe YARD::Serializers::FileSystemSerializer do
     it "handles ExtraFileObject's" do
       s = Serializers::FileSystemSerializer.new
       e = CodeObjects::ExtraFileObject.new('filename.txt', '')
-      expect(s.serialized_path(e)).to eq 'file.filename.html'
+      expect(s.serialized_path(e)).to eq '_file/filename.html'
     end
 
     it "differentiates instance and class methods from serialized path" do
