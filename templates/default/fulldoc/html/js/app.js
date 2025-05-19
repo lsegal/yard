@@ -361,7 +361,7 @@ window.addEventListener(
       document.head.querySelectorAll("script").forEach((script) => {
         if (
           !script.type ||
-          (script.type === "text/javascript" && !script.src)
+          (script.type.includes("text/javascript") && !script.src)
         ) {
           script.remove();
         }
@@ -370,7 +370,7 @@ window.addEventListener(
       doc.head.querySelectorAll("script").forEach((script) => {
         if (
           !script.type ||
-          (script.type === "text/javascript" && !script.src)
+          (script.type.includes("text/javascript") && !script.src)
         ) {
           const newScript = document.createElement("script");
           newScript.type = script.type;
