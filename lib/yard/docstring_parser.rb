@@ -280,18 +280,33 @@ module YARD
       seen_names = []
       infile_info = "\n    in file `#{parser.object.file}' " \
                     "near line #{parser.object.line}"
+      splat_param = parser.object.parameters.any? { |name, _| name =~ /\A\*/ }
+      param_tags = []
       parser.tags.each do |tag|
-        next if tag.is_a?(Tags::RefTagList) # we don't handle this yet
         next unless tag.tag_name == "param"
-        if seen_names.include?(tag.name)
-          log.warn "@param tag has duplicate parameter name: " \
-                   "#{tag.name} #{infile_info}"
-        elsif names.include?(tag.name)
-          seen_names << tag.name
+        if tag.is_a?(Tags::RefTagList)
+          if tag.name
+            param_tags << tag
+          elsif !(CodeObjects::Proxy === tag.owner)
+            param_tags += tag.tags
+          end
+          # if the ref tag doesn't have a name and doesn't yet resolve, do nothing
         else
-          log.warn "@param tag has unknown parameter name: " \
+          param_tags << tag
+        end
+      end
+      param_tags.each do |tag|
+        if seen_names.include?(tag.name)
+          log.warn "#{parser.object} @param tag has duplicate parameter name: " \
                    "#{tag.name} #{infile_info}"
         end
+        # warn about unknown params. but not delegated params, where the param tag
+        # is a reference and the object takes *args or **keywords.
+        if !names.include?(tag.name) && !((tag.is_a?(Tags::RefTag) || tag.is_a?(Tags::RefTagList)) && splat_param)
+          log.warn "#{parser.object} @param tag has unknown parameter name: " \
+                   "#{tag.name} #{infile_info}"
+        end
+        seen_names << tag.name
       end
     end
 
@@ -336,7 +351,7 @@ module YARD
         next unless "#{tag.name}#{tag.text}" =~ /\A\{.*\}\Z/
         infile_info = "\n    in file `#{parser.object.file}' " \
                       "near line #{parser.object.line}"
-        log.warn "@see tag (##{i + 1}) should not be wrapped in {} " \
+        log.warn "#{parser.object} @see tag (##{i + 1}) should not be wrapped in {} " \
                  "(causes rendering issues): #{infile_info}"
       end
     end
