@@ -39,7 +39,7 @@ RSpec.describe YARD::Tags::TypesExplainer do
     end
 
     it "works for a constant value" do
-      ['false', 'true', 'nil', '4'].each do |name|
+      ['false', 'true', 'nil', '4', ':foo'].each do |name|
         @t.name = name
         expect(@t.to_s).to eq name
         expect(@t.to_s(false)).to eq name
@@ -152,6 +152,11 @@ RSpec.describe YARD::Tags::TypesExplainer do
     it "allows a hash collection type without a name" do
       type = parse("{K=>V}")
       expect(type.first.name).to eq "Hash"
+    end
+
+    it "parses constant values" do
+      type = parse("false, true, nil, 4, :foo")
+      expect(type.map(&:name)).to eq ['false', 'true', 'nil', '4', ':foo']
     end
 
     it "does not accept two commas in a row" do
