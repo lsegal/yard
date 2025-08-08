@@ -431,7 +431,8 @@ module YARD
           # shape is (required, optional, rest, more, keyword, keyword_rest, block)
           # Ruby 3.1 moves :args_forward from rest to keyword_rest
           args_index = YARD.ruby31? ? -2 : 2
-          self[args_index].type == :args_forward if self[args_index]
+          node = self[args_index]
+          node.is_a?(AstNode) && node.type == :args_forward
         end
       end
 
