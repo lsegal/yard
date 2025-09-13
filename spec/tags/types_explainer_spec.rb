@@ -41,10 +41,18 @@ RSpec.describe YARD::Tags::TypesExplainer do
     end
     
     it "works for a constant value" do
-      ['false', 'true', 'nil', '4', ':foo'].each do |name|
+      ['false', 'true', 'nil', '4'].each do |name|
         @t.name = name
         expect(@t.to_s).to eq name
         expect(@t.to_s(false)).to eq name
+      end
+    end
+
+    it "works for literal values" do
+      [':symbol', "'5'"].each do |name|
+        @t.name = name
+        expect(@t.to_s).to eq "a literal value #{name}"
+        expect(@t.to_s(false)).to eq "a literal value #{name}"
       end
     end
   end
@@ -141,6 +149,17 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type[3].name).to eq "E"
     end
 
+    it 'parses a list of literal values' do
+      type = parse("true, false, nil, 4, :symbol, '5'")
+      expect(type.size).to eq 6
+      expect(type[0].name).to eq "true"
+      expect(type[1].name).to eq "false"
+      expect(type[2].name).to eq "nil"
+      expect(type[3].name).to eq "4"
+      expect(type[4].name).to eq ":symbol"
+      expect(type[5].name).to eq "'5'"
+    end
+
     it "parses a collection type" do
       type = parse("MyList<String>")
       expect(type.first).to be_a(YARD::Tags::TypesExplainer::CollectionType)
@@ -207,7 +226,8 @@ RSpec.describe YARD::Tags::TypesExplainer do
           a Hash with keys made of (Foos or Bars) and values of (Symbols or Numbers)",
         "#weird_method?, #<=>, #!=" => "an object that responds to #weird_method?;
           an object that responds to #<=>;
-          an object that responds to #!="
+          an object that responds to #!=",
+        ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)
