@@ -56,6 +56,26 @@ RSpec.describe YARD::CodeObjects do
     end
   end
 
+  describe :LITERALMATCH do
+    it "matches symbol literals" do
+      expect(":symbol"[CodeObjects::LITERALMATCH]).to eq ":symbol"
+      expect(":some_symbol"[CodeObjects::LITERALMATCH]).to eq ":some_symbol"
+      expect("not_a_symbol"[CodeObjects::LITERALMATCH]).to be nil
+    end
+
+    it "matches single-quoted string literals" do
+      expect("'string'"[CodeObjects::LITERALMATCH]).to eq "'string'"
+      expect("'some string with spaces'"[CodeObjects::LITERALMATCH]).to eq "'some string with spaces'"
+      expect("not_quoted"[CodeObjects::LITERALMATCH]).to be nil
+    end
+
+    it "matches double-quoted string literals" do
+      expect('"string"'[CodeObjects::LITERALMATCH]).to eq '"string"'
+      expect('"some string with spaces"'[CodeObjects::LITERALMATCH]).to eq '"some string with spaces"'
+      expect("not_quoted"[CodeObjects::LITERALMATCH]).to be nil
+    end
+  end
+
   describe :BUILTIN_EXCEPTIONS do
     it "includes all base exceptions" do
       bad_names = []
