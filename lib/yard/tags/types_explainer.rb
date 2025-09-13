@@ -33,6 +33,8 @@ module YARD
         def to_s(singular = true)
           if name[0, 1] == "#"
             singular ? "an object that responds to #{name}" : "objects that respond to #{name}"
+          elsif name[0, 1] == ":" || (name[0, 1] =~ /['"]/ && name[-1, 1] =~ /['"]/)
+            "a literal value #{name}"
           elsif name[0, 1] =~ /[A-Z]/
             singular ? "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} " + name : "#{name}#{name[-1, 1] =~ /[A-Z]/ ? "'" : ''}s"
           else
@@ -101,7 +103,7 @@ module YARD
           :collection_end => />/,
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
-          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|\w+/,
+          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|#{LITERALMATCH}|\w+/,
           :type_next => /[,;]/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,

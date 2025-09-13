@@ -63,6 +63,9 @@ module YARD
     # Regular expression to match a fully qualified method def (self.foo, Class.foo).
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|[a-z]\w*)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
 
+    # Regular expression to match symbol and string literals
+    LITERALMATCH = /:\w+|'[^']*'|"[^"]*"/
+
     # All builtin Ruby exception classes for inheritance tree.
     BUILTIN_EXCEPTIONS = ["ArgumentError", "ClosedQueueError", "EncodingError",
       "EOFError", "Exception", "FiberError", "FloatDomainError", "IndexError",
