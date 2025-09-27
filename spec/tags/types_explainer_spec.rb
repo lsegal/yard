@@ -218,7 +218,10 @@ RSpec.describe YARD::Tags::TypesExplainer do
         "#weird_method?, #<=>, #!=" => "an object that responds to #weird_method?;
           an object that responds to #<=>;
           an object that responds to #!=",
-        ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'"
+        ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'",
+        "Hash{:key_one, :key_two => String; :key_three => Symbol}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols)",
+        "Hash{:key_one, :key_two => String; :key_three => Symbol; :key_four => Hash{:sub_key_one => String}}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols) and keys made of (a literal value :key_four) and values of (a Hash with keys made of (a literal value :sub_key_one) and values of (Strings))",
+        "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)
