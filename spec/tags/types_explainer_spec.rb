@@ -2,6 +2,8 @@
 
 RSpec.describe YARD::Tags::TypesExplainer do
   Type = YARD::Tags::TypesExplainer::Type
+  LiteralType = YARD::Tags::TypesExplainer::LiteralType
+  DuckType = YARD::Tags::TypesExplainer::DuckType
   CollectionType = YARD::Tags::TypesExplainer::CollectionType
   FixedCollectionType = YARD::Tags::TypesExplainer::FixedCollectionType
   HashCollectionType = YARD::Tags::TypesExplainer::HashCollectionType
@@ -31,24 +33,6 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(@t.to_s).to eq "an Array"
       expect(@t.to_s(false)).to eq "Arrays"
     end
-
-    it "works for a method (ducktype)" do
-      @t.name = "#mymethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
-    end
-
-    it "works for multiple methods joined with '&' (ducktype)" do
-      @t.name = "#mymethod&#myothermethod&#mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
-
-    it "works for multiple methods joined with ' & ' (ducktype)" do
-      @t.name = "#mymethod & #myothermethod & #mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
     
     it "works for a constant value" do
       ['false', 'true', 'nil', '4'].each do |name|
@@ -57,12 +41,35 @@ RSpec.describe YARD::Tags::TypesExplainer do
         expect(@t.to_s(false)).to eq name
       end
     end
+  end
 
+  describe DuckType, '#to_s' do
+    it "works for a method (ducktype)" do
+      duck_type = DuckType.new("#mymethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod"
+    end
+
+    it "works for multiple methods joined with '&' (ducktype)" do
+      duck_type = DuckType.new("#mymethod&#myothermethod&#mythirdmethod")
+      duck_type.name = "#mymethod&#myothermethod&#mythirdmethod"
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+
+    it "works for multiple methods joined with ' & ' (ducktype)" do
+      duck_type = DuckType.new("#mymethod & #myothermethod & #mythirdmethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+  end
+
+  describe LiteralType, '#to_s' do
     it "works for literal values" do
       [':symbol', "'5'"].each do |name|
-        @t.name = name
-        expect(@t.to_s).to eq "a literal value #{name}"
-        expect(@t.to_s(false)).to eq "a literal value #{name}"
+        literal_type = LiteralType.new(name)
+        expect(literal_type.to_s).to eq "a literal value #{name}"
+        expect(literal_type.to_s(false)).to eq "a literal value #{name}"
       end
     end
   end
@@ -105,7 +112,7 @@ RSpec.describe YARD::Tags::TypesExplainer do
     end
   end
 
-  describe FixedCollectionType, '#to_s' do
+  describe HashCollectionType, '#to_s' do
     before { @t = HashCollectionType.new("Hash", nil, nil) }
 
     it "can contain a single key type and value type" do
