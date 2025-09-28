@@ -21,24 +21,6 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(@t.to_s).to eq "an Array"
       expect(@t.to_s(false)).to eq "Arrays"
     end
-
-    it "works for a method (ducktype)" do
-      @t.name = "#mymethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
-    end
-
-    it "works for multiple methods joined with '&' (ducktype)" do
-      @t.name = "#mymethod&#myothermethod&#mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
-
-    it "works for multiple methods joined with ' & ' (ducktype)" do
-      @t.name = "#mymethod & #myothermethod & #mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
     
     it "works for a constant value" do
       ['false', 'true', 'nil', '4'].each do |name|
@@ -47,12 +29,35 @@ RSpec.describe YARD::Tags::TypesExplainer do
         expect(@t.to_s(false)).to eq name
       end
     end
+  end
 
+  describe YARD::Tags::TypesExplainer::DuckType, '#to_s' do
+    it "works for a method (ducktype)" do
+      duck_type = described_class.new("#mymethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod"
+    end
+
+    it "works for multiple methods joined with '&' (ducktype)" do
+      duck_type = described_class.new("#mymethod&#myothermethod&#mythirdmethod")
+      duck_type.name = "#mymethod&#myothermethod&#mythirdmethod"
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+
+    it "works for multiple methods joined with ' & ' (ducktype)" do
+      duck_type = described_class.new("#mymethod & #myothermethod & #mythirdmethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+  end
+
+  describe YARD::Tags::TypesExplainer::LiteralType, '#to_s' do
     it "works for literal values" do
       [':symbol', "'5'"].each do |name|
-        @t.name = name
-        expect(@t.to_s).to eq "a literal value #{name}"
-        expect(@t.to_s(false)).to eq "a literal value #{name}"
+        literal_type = described_class.new(name)
+        expect(literal_type.to_s).to eq "a literal value #{name}"
+        expect(literal_type.to_s(false)).to eq "a literal value #{name}"
       end
     end
   end
