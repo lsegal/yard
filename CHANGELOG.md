@@ -1,5 +1,23 @@
 # main
 
+# [0.9.38] - December 5th, 2025
+
+[0.9.38]: https://github.com/lsegal/yard/compare/v0.9.37...v0.9.38
+
+- Add support for complex constant assignment (#1599)
+- Add support for Data type structs (#1600)
+- Support multi method duck type syntax in type explainer (#1631)
+- Improve Ruby 3.5 compatibility (#1616)
+- Update documentation for various type annotations (#1615)
+- JavaScript frontend updates (resizer, JS bugs, reduce console verbosity) for default template
+- Fix beginless/endless range errors (#1549, #1625)
+- Fix path structure in Templates.md documentation (#1588)
+- Fix signature handling in overload (#1590)
+- Fix handling of **nil with named block (#1623)
+- Fix directives in empty class bodies (#1624)
+- Fix parsing of array within array syntax (#1604)
+- Fix parsing of visibility keywords in front of class methods (#1632)
+
 # [0.9.37] - September 4th, 2024
 
 [0.9.37]: https://github.com/lsegal/yard/compare/v0.9.36...v0.9.37
