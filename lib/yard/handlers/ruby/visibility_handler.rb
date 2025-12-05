@@ -13,6 +13,7 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
     case statement.type
     when :var_ref, :vcall
       self.visibility = ident.first.to_sym
+      globals.visibility_origin = :keyword
     when :command
       if RUBY_VERSION >= '3.' && is_attribute_method?(statement.parameters.first)
         parse_block(statement.parameters.first, visibility: ident.first.to_sym)

@@ -27,7 +27,7 @@ RSpec.shared_examples_for "signature" do
   end
 
   it "shows signature for private class method" do
-    YARD.parse_string "class A; private; def self.foo; end end"
+    YARD.parse_string "class A; private_class_method def self.foo; end end"
     expect(trim(signature(Registry.at('A.foo')))).to eq @results[:private_class]
   end
 

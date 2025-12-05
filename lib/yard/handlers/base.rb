@@ -462,6 +462,18 @@ module YARD
           end
         end
 
+        if docstring.is_a?(String)
+          if (m = docstring.match(/^\s*@!?visibility\s+(public|private|protected)\b/m))
+            vis_sym = m[1].to_sym
+
+            if object.nil?
+              globals.visibility_origin = :directive
+            elsif object.is_a?(CodeObjects::MethodObject)
+              object.visibility = vis_sym
+            end
+          end
+        end
+
         register_transitive_tags(object)
       end
 
@@ -511,7 +523,17 @@ module YARD
       def register_visibility(object, visibility = self.visibility)
         return unless object.respond_to?(:visibility=)
         return if object.is_a?(NamespaceObject)
-        object.visibility = visibility
+
+        if object.is_a?(CodeObjects::MethodObject)
+          origin = globals.visibility_origin
+          if origin == :keyword
+            object.visibility = visibility if object.scope == scope
+          else
+            object.visibility = visibility
+          end
+        else
+          object.visibility = visibility
+        end
       end
 
       # Registers the same method information on the module function, if

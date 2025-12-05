@@ -175,7 +175,7 @@ RSpec.describe YARD::Handlers::Base do
       create_handler(stmts, parser_type)
       parse(file, parser_type)
       expect(Registry.at('#FOO')).send(creates ? :not_to : :to, be_nil)
-      Handlers::Base.subclasses.delete_if {|k, _v| k.to_s =~ /^InFileHandler/ }
+      Handlers::Base.subclasses.delete_if { |k, _v| k.to_s =~ /^InFileHandler/ }
     end
 
     [:ruby, :ruby18].each do |parser_type|
@@ -209,6 +209,27 @@ RSpec.describe YARD::Handlers::Base do
           test_handler 'xyzzy.rb', stmts, true, parser_type
           test_handler 'x', stmts, true, parser_type
         end
+      end
+    end
+
+    describe 'visibility for singleton method defs' do
+      before { YARD::Registry.clear }
+
+      it 'does not make def self.m2 private after a bare private in class body' do
+        YARD.parse_string(<<-RUBY)
+          class T
+            private
+            def self.m2; end
+          
+            class << self
+              private
+              def m3; end
+            end
+          end
+        RUBY
+
+        expect(YARD::Registry.at('T.m2').visibility).to eq(:public)
+        expect(YARD::Registry.at('T.m3').visibility).to eq(:private)
       end
     end
   end
