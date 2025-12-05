@@ -672,6 +672,23 @@ module YARD
             end
           end unless @comments.empty?
 
+          # Attach comments that fall within an otherwise empty
+          # class or module body. Without this step, a comment used
+          # solely for directives (like @!method) would be treated as
+          # a top-level comment and its directives would not be scoped
+          # to the namespace.
+          unless @comments.empty?
+            root.traverse do |node|
+              next unless [:class, :module, :sclass].include?(node.type)
+              body = node.children.last
+              next unless body && body.type == :list && body.empty?
+              @comments.keys.each do |line|
+                next unless node.line_range.include?(line)
+                add_comment(line, nil, body, true)
+              end
+            end
+          end
+
           # insert all remaining comments
           @comments.each do |line, _comment|
             add_comment(line, nil, root, true)
