@@ -38,6 +38,18 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
     end
 
+    it "works for multiple methods joined with '&' (ducktype)" do
+      @t.name = "#mymethod&#myothermethod&#mythirdmethod"
+      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+
+    it "works for multiple methods joined with ' & ' (ducktype)" do
+      @t.name = "#mymethod & #myothermethod & #mythirdmethod"
+      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+    
     it "works for a constant value" do
       ['false', 'true', 'nil', '4'].each do |name|
         @t.name = name
