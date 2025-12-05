@@ -57,8 +57,10 @@ module YARD
     # Regular expression to match namespaces (const A or complex path A::B)
     NAMESPACEMATCH = /(?:(?:#{NSEPQ}\s*)?#{CONSTANTMATCH})+/
 
-    # Regular expression to match a method name
-    METHODNAMEMATCH = %r{[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|![=~]?|<=>|[<>]=?|\*\*|[-/+%^&*~`|]|\[\]=?}
+    # Regular expression to match an identifier like a variable or method name
+    IDENTIFIERMATCH = %r{[a-zA-Z_]\w*[!?=]?|[-+~]\@|<<|>>|=~|===?|![=~]?|<=>|[<>]=?|\*\*|[-/+%^&*~`|]|\[\]=?}
+
+    METHODNAMEMATCH = IDENTIFIERMATCH
 
     # Regular expression to match a fully qualified method def (self.foo, Class.foo).
     METHODMATCH = /(?:(?:#{NAMESPACEMATCH}|[a-z]\w*)\s*(?:#{CSEPQ}|#{NSEPQ})\s*)?#{METHODNAMEMATCH}/
