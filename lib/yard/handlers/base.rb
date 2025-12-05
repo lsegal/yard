@@ -584,14 +584,9 @@ module YARD
         return if object.root?
         return object unless object.is_a?(Proxy)
 
-        retries = 0
-        while object.is_a?(Proxy)
-          raise NamespaceMissingError, object if retries > max_retries
-          log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
-          parser.parse_remaining_files
-          retries += 1
-        end
-        object
+        log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
+        globals.ordered_parser.files_to_retry << parser.file if globals.ordered_parser
+        raise NamespaceMissingError, object
       end
 
       # @group Macro Support
