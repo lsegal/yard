@@ -30,7 +30,7 @@ module YARD
           {:lib => :maruku, :const => 'Maruku'},
           {:lib => :'rpeg-markdown', :const => 'PEGMarkdown'},
           {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkdown'},
-          {:lib => :commonmarker, :const => 'CommonMarker'}
+          {:lib => :commonmarker, :const => defined?(CommonMarker) ? 'CommonMarker' : "Commonmarker" }
         ],
         :textile => [
           {:lib => :redcloth, :const => 'RedCloth'}

@@ -82,7 +82,7 @@ MARKDOWN
     end
   end
 
-  describe 'CommonMarker', if:  RUBY_VERSION >= '2.3' do
+  describe defined?(CommonMarker) ? 'CommonMarker' : "Commonmarker", if:  RUBY_VERSION >= '2.3' do
     let(:markup) { :markdown }
     let(:markup_provider) { :commonmarker }
 
