@@ -102,7 +102,7 @@ module YARD
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
           :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|\w+/,
-          :symbol => /:#{IDENTIFIERMATCH}/,
+          :symbol => /:#{METHODNAMEMATCH}/,
           :type_next => /[,;]/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,
