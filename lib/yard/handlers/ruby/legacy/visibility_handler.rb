@@ -8,9 +8,10 @@ class YARD::Handlers::Ruby::Legacy::VisibilityHandler < YARD::Handlers::Ruby::Le
     vis = statement.tokens.first.text
     if statement.tokens.size == 1
       self.visibility = vis
+      globals.visibility_origin = :keyword
     else
       tokval_list(statement.tokens[2..-1], :attr).each do |name|
-        MethodObject.new(namespace, name, scope) {|o| o.visibility = vis }
+        MethodObject.new(namespace, name, scope) { |o| o.visibility = vis }
       end
     end
   end

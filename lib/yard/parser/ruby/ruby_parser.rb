@@ -236,7 +236,18 @@ module YARD
 
         def visit_event(node)
           map = @map[MAPPINGS[node.type]]
-          lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+
+          # Pattern matching and `in` syntax creates :case nodes without 'case' tokens,
+          # fall back to the first child node.
+          if node.type == :case && (!map || map.empty?) && (child_node = node[0])
+            lstart = child_node.line_range.first
+            sstart = child_node.source_range.first
+          else
+            lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+          end
+
+          raise "Cannot determine start of node #{node} around #{file}:#{lineno}" if lstart.nil? || sstart.nil?
+
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
           if node.respond_to?(:block)
@@ -259,7 +270,10 @@ module YARD
         def visit_ns_token(token, data, ast_token = false)
           add_token(token, data)
           ch = charno
-          @last_ns_token = [token, data]
+
+          # For purposes of tracking parsing state, don't treat keywords as such
+          # where used as a symbol identifier.
+          @last_ns_token = [@last_ns_token && @last_ns_token.first == :symbeg ? :symbol : token, data]
           @charno += data.length
           @ns_charno = charno
           @newline = [:semicolon, :comment, :kw, :op, :lparen, :lbrace].include?(token)
@@ -657,6 +671,23 @@ module YARD
               add_comment(line, nil, pick, true) if pick
             end
           end unless @comments.empty?
+
+          # Attach comments that fall within an otherwise empty
+          # class or module body. Without this step, a comment used
+          # solely for directives (like @!method) would be treated as
+          # a top-level comment and its directives would not be scoped
+          # to the namespace.
+          unless @comments.empty?
+            root.traverse do |node|
+              next unless [:class, :module, :sclass].include?(node.type)
+              body = node.children.last
+              next unless body && body.type == :list && body.empty?
+              @comments.keys.each do |line|
+                next unless node.line_range.include?(line)
+                add_comment(line, nil, body, true)
+              end
+            end
+          end
 
           # insert all remaining comments
           @comments.each do |line, _comment|

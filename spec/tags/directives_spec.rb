@@ -263,6 +263,16 @@ RSpec.describe YARD::Tags::MethodDirective do
       expect(Registry.at('#foo').parameters).to eq [['a', nil], ['b', nil], ['c', 'nil']]
     end
 
+    it "processes @!method inside an empty class" do
+      YARD.parse_string <<-eof
+        class Foo
+          # @!method bar
+          #   Docstring
+        end
+      eof
+      expect(Registry.at('Foo#bar').docstring).to eq 'Docstring'
+    end
+
     it "is able to define method with module scope (module function)" do
       YARD.parse_string <<-eof
         # @!method foo

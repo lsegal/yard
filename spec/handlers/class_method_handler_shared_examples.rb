@@ -47,45 +47,38 @@ RSpec.shared_examples "class method visibility decorator" do
       StubbedSourceParser.parse_string <<-CODE
         class SingletonClass
 
-          #{'private' unless visibility.to_sym == :private}
+        #{'private' unless visibility.to_sym == :private}
 
-          # != visibility
-          def self.foo
-            'foo'
-          end
-
-          # == visibility
-          def self.bar
-          end
-
-          # == visibility from reopening class.
-          def self.baz
-          end
-
-          #{visibility}_class_method :new, :bar
-
+        # Not decorated; should remain public even if a bare `private` appears.
+        def self.foo
+          'foo'
         end
-      CODE
+
+        # Will be decorated below
+        def self.bar; end
+        def self.baz; end
+
+        #{visibility}_class_method :new, :bar
+      end
+    CODE
 
       StubbedSourceParser.parse_string <<-CODE
-        # Reopening singleton class.
-        class SingletonClass
-          #{visibility}_class_method :baz
+      # Reopening singleton class.
+      class SingletonClass
+        #{visibility}_class_method :baz
 
-          #{'private' unless visibility.to_sym == :private}
-          # != visibility from reopened class. (Verifies class was reopened.)
-          def self.bat
-          end
-
-        end
-      CODE
+        #{'private' unless visibility.to_sym == :private}
+        # Not decorated; should remain public.
+        def self.bat; end
+      end
+    CODE
     end
 
     specify do
-      expect(Registry.at('SingletonClass.foo').visibility).not_to eq visibility
-      expect(Registry.at('SingletonClass.bar').visibility).to     eq visibility
-      expect(Registry.at('SingletonClass.baz').visibility).to     eq visibility
-      expect(Registry.at('SingletonClass.bat').visibility).not_to eq visibility
+      expect(Registry.at('SingletonClass.foo').visibility).to eq(:public)
+      expect(Registry.at('SingletonClass.bar').visibility).to eq(visibility)
+      expect(Registry.at('SingletonClass.baz').visibility).to eq(visibility)
+      expect(Registry.at('SingletonClass.bat').visibility).to eq(:public)
     end
   end unless LEGACY_PARSER # reopened class
 

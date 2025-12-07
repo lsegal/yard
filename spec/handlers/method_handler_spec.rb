@@ -124,6 +124,16 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MethodHa
     expect(P('Foo#d_unnamed_splat').parameters).to eq []
   end
 
+  it "handles **nil with named block" do
+    YARD.parse_string <<-RUBY
+      class KwNilBlock
+        def no_kwargs_with_block(**nil, &block); end
+      end
+    RUBY
+
+    expect(P('KwNilBlock#no_kwargs_with_block').parameters).to eq [['&block', nil]]
+  end if YARD.ruby3?
+
   it "handles overloads" do
     meth = P('Foo#foo')
 

@@ -606,5 +606,101 @@ eof
 
       expect(Registry.at('A#add').docstring).to eq('Adds two numbers')
     end if RUBY_VERSION >= '3.'
+
+    it "doesn't crash with pattern matching following a case statement" do
+      code = <<-RUBY
+case value
+when 1
+  "number"
+end
+
+{} => {}
+      RUBY
+
+      expect {
+        YARD::Parser::Ruby::RubyParser.new(code, nil).parse
+      }.not_to raise_error
+    end if RUBY_VERSION >= '3.'
+
+    it "doesn't crash with `next` following `:def` symbol after initial `next`" do
+      code = <<-RUBY
+foo do
+  next
+  if :def
+    next
+  end
+end
+      RUBY
+
+      expect {
+        YARD::Parser::Ruby::RubyParser.new(code, nil).parse
+      }.not_to raise_error
+    end
+
+    it "doesn't crash with mixed pattern matching syntaxes" do
+      code = <<-RUBY
+case foo
+in bar
+  return
+end
+return if foo && foo in []
+      RUBY
+
+      expect {
+        parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+        parser.parse
+      }.not_to raise_error
+    end if RUBY_VERSION >= '2.7'
+
+    it "provides correct range for various pattern matching statements" do
+      patterns = [
+        "{} => {}",
+        "{a: 1} => {b: 2}",
+        "{x: 'test'} => result",
+        "foo in []"
+      ]
+
+      patterns.each do |pattern|
+        parser = YARD::Parser::Ruby::RubyParser.new(pattern, nil)
+        ast = parser.parse.root
+
+        case_node = nil
+        ast.traverse do |node|
+          if node.type == :case
+            case_node = node
+            break
+          end
+        end
+
+        expect(case_node).not_to be_nil, "Pattern #{pattern} should create a case node"
+        actual_text = pattern[case_node.source_range]
+        expect(actual_text).to eq(pattern),
+          "Pattern #{pattern} should have source range covering the full expression, got #{actual_text.inspect}"
+      end
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct range for `next` statement following `def` _symbol_" do
+      code = <<-RUBY
+foo do
+  if :def
+    next
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      next_node = nil
+      ast.traverse do |node|
+        if node.type == :next
+          next_node = node
+          break
+        end
+      end
+
+      expect(next_node.line_range).to eq(3..3)
+      expect(code[next_node.source_range]).to eq('next')
+    end
   end
 end if HAVE_RIPPER

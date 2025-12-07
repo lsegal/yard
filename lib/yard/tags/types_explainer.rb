@@ -32,7 +32,7 @@ module YARD
 
         def to_s(singular = true)
           if name[0, 1] == "#"
-            singular ? "an object that responds to #{name}" : "objects that respond to #{name}"
+            (singular ? "an object that responds to " : "objects that respond to ") + list_join(name.split(/ *& */), with: "and")
           elsif name[0, 1] =~ /[A-Z]/
             singular ? "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} " + name : "#{name}#{name[-1, 1] =~ /[A-Z]/ ? "'" : ''}s"
           else
@@ -42,12 +42,12 @@ module YARD
 
         private
 
-        def list_join(list)
+        def list_join(list, with: "or")
           index = 0
           list.inject(String.new) do |acc, el|
             acc << el.to_s
             acc << ", " if index < list.size - 2
-            acc << " or " if index == list.size - 2
+            acc << " #{with} " if index == list.size - 2
             index += 1
             acc
           end

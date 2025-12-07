@@ -978,7 +978,7 @@ module YARD
       end
 
       def identify_identifier
-        token = ""
+        token = String.new
         token.concat getc if peek(0) =~ /[$@]/
         token.concat getc if peek(0) == "@"
 
