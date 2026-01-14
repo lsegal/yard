@@ -20,4 +20,7 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
   s.metadata['yard.run'] = 'yri'
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('4.0.0')
+    s.add_dependency 'irb'
+  end
 end

@@ -2,6 +2,9 @@
 source 'https://rubygems.org'
 
 group :development do
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('4.0.0')
+    gem 'irb'
+  end
   gem 'rspec', '>= 3.11.0'
   gem 'rake'
   gem 'rdoc', '= 6.1.2.1'
