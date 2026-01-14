@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.metadata['yard.run'] = 'yri'
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('4.0.0')
     s.add_dependency 'irb'
+    s.add_dependency 'logger'
   end
 end
