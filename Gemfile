@@ -6,6 +6,7 @@ group :development do
     gem 'benchmark'
     gem 'irb'
     gem 'logger'
+    gem 'ostruct'
   end
   gem 'rspec', '>= 3.11.0'
   gem 'rake'
