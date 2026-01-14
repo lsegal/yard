@@ -37,7 +37,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles "x"
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [StringHandler]
-    ast = Parser::Ruby::RubyParser.parse("if x == 2 then true end").ast
+    ast = YARD::Parser::Ruby::RubyParser.parse("if x == 2 then true end").ast
     valid StringHandler, ast[0][0][0]
     invalid StringHandler, ast[0][1]
   end
@@ -56,7 +56,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles(/^if x ==/)
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [RegexHandler]
-    ast = Parser::Ruby::RubyParser.parse("if x == 2 then true end").ast
+    ast = YARD::Parser::Ruby::RubyParser.parse("if x == 2 then true end").ast
     valid RegexHandler, ast
     invalid RegexHandler, ast[0][1]
   end
@@ -75,7 +75,7 @@ RSpec.describe YARD::Handlers::Ruby::Base, '#valid_handler?' do
       handles method_call(:meth)
     end
     allow(Handlers::Base).to receive(:subclasses).and_return [MethCallHandler]
-    ast = Parser::Ruby::RubyParser.parse(<<-"eof").ast
+    ast = YARD::Parser::Ruby::RubyParser.parse(<<-"eof").ast
       meth                   # 0
       meth()                 # 1
       meth(1,2,3)            # 2
