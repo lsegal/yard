@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 group :development do
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('4.0.0')
+    gem 'benchmark'
     gem 'irb'
     gem 'logger'
   end
