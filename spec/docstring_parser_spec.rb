@@ -251,6 +251,15 @@ eof
       eof
     end
 
+    it "does not warn on constant values" do
+      expect(log).to_not receive(:warn)
+      YARD.parse_string <<-eof
+        # @param [false, true, nil, 4, :foo] a
+        # @return [void]
+        def self.bar(a); end
+      eof
+    end
+
     it "warns on mismatching param with inline method modifier" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
