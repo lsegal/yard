@@ -388,12 +388,12 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(parse_link(resolve_links("{file:TEST.txt#abc}"))).to eq(
         :inner_text => "TEST",
         :title => "TEST",
-        :href => "file.TEST.html#abc"
+        :href => "_file/TEST.html#abc"
       )
       expect(parse_link(resolve_links("{file:TEST.txt title}"))).to eq(
         :inner_text => "title",
         :title => "title",
-        :href => "file.TEST.html"
+        :href => "_file/TEST.html"
       )
     end
 

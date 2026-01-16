@@ -61,6 +61,10 @@ module YARD::CodeObjects
 
     def type; :extra_file end
 
+    def source_type; :ruby end
+
+    def parent; YARD::Registry.root end
+
     def ==(other)
       return false unless self.class === other
       other.filename == filename
