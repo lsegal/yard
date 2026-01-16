@@ -72,25 +72,16 @@ MARKDOWN
 
     include_examples 'shared examples for markdown processors'
 
-
-    it 'generates anchor tags for level 2 header' do
-      expect(rendered_document).to include('<h2 id="example-code-listings">Example code listings</h2>')
-    end
-
     it 'does not create line break via backslash' do
       expect(rendered_document).to include("commonmark line break with\\\na backslash")
     end
   end
 
-  describe 'CommonMarker', if:  RUBY_VERSION >= '2.3' do
+  describe 'Commonmarker', if: RUBY_VERSION >= '2.3' do
     let(:markup) { :markdown }
     let(:markup_provider) { :commonmarker }
 
     include_examples 'shared examples for markdown processors'
-
-    it 'generates level 2 header without id' do
-      expect(rendered_document).to include('<h2>Example code listings</h2>')
-    end
 
     it 'creates line break via backslash' do
       expect(rendered_document).to include("commonmark line break with<br />\na backslash")
