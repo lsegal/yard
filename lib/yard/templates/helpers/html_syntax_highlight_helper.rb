@@ -39,7 +39,7 @@ module YARD
           end
           output
         rescue Parser::ParserSyntaxError
-          source =~ /^<span\s+class=/ ? source : h(source)
+          h(source)
         end
 
         def html_syntax_highlight_ruby_legacy(source)
