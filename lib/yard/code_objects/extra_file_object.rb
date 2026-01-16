@@ -80,7 +80,8 @@ module YARD::CodeObjects
     # @param [String] data the file contents
     def parse_contents(data)
       retried = false
-      cut_index = 0
+      cut_index_begin = 0
+      cut_index_end = 0
       data = translate(data)
       data = data.split("\n")
       data.each_with_index do |line, index|
@@ -89,19 +90,21 @@ module YARD::CodeObjects
           if index == 0
             attributes[:markup] = $1
           else
-            cut_index = index
+            cut_index_end = index
             break
           end
         when /^\s*#\s*@(\S+)\s*(.+?)\s*$/
           attributes[$1] = $2
-        when /^\s*<!--\s*$/, /^\s*-->\s*$/
-          # Ignore HTML comments
         else
-          cut_index = index
-          break
+          if index == 0
+            cut_index_begin = 1
+          else
+            cut_index_end = index
+            break
+          end
         end
       end
-      data = data[cut_index..-1] if cut_index > 0
+      data[cut_index_begin...cut_index_end] = [] if cut_index_end > cut_index_begin
       contents = data.join("\n")
 
       if contents.respond_to?(:force_encoding) && attributes[:encoding]
