@@ -398,8 +398,10 @@ module YARD
 
         def on_aref_field(*args)
           @map[:lbracket].pop
-          AstNode.new(:aref_field, args,
-                      :listline => lineno..lineno, :listchar => charno...charno)
+          ll, lc = *@map[:aref].shift
+          sr = args.first.source_range.begin..lc
+          lr = args.first.line_range.begin..ll
+          AstNode.new(:aref_field, args, :char => sr, :line => lr)
         end
 
         def on_array(other)

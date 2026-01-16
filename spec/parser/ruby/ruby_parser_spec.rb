@@ -702,5 +702,55 @@ end
       expect(next_node.line_range).to eq(3..3)
       expect(code[next_node.source_range]).to eq('next')
     end
+
+    # @bug gh-1420
+    it "parses constant assignment with aref after aref assignment correctly" do
+      code = <<-RUBY
+module Foo
+  a = {}
+
+  # Earlier assignment
+  a[:b] = 1
+
+  # This constant fails to parse correctly
+  X = a[:b]
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      # Find the constant assignment node (X = a[:b])
+      assign_node = nil
+      ast.traverse do |node|
+        if node.type == :assign
+          # Check if it's a constant assignment (X = a[:b])
+          # Structure: assign[0] = var_field containing const "X"
+          #           assign[1] = aref node (a[:b])
+          lhs = node[0]
+          rhs = node[1]
+          if lhs && lhs.type == :var_field && lhs[0] && lhs[0].type == :const &&
+             (lhs[0][0] == "X" || lhs[0][0] == :X) && rhs && rhs.type == :aref
+            assign_node = node
+            break
+          end
+        end
+      end
+
+      expect(assign_node).not_to be_nil, "Should find constant assignment X = a[:b]"
+
+      # Check that the aref node (a[:b]) has a valid source_range
+      # The bug causes the ending position to be less than the beginning position
+      aref_node = assign_node[1]
+      expect(aref_node.type).to eq :aref
+      expect(aref_node.source_range).not_to be_nil
+      expect(aref_node.source_range.end).to be >= aref_node.source_range.begin,
+        "aref node source_range should be valid (ending >= beginning), got #{aref_node.source_range.inspect}. " \
+        "This indicates the parser got confused by the previous aref assignment."
+
+      # Verify the source can be extracted correctly
+      extracted_source = code[aref_node.source_range]
+      expect(extracted_source).to eq "a[:b]"
+    end
   end
 end if HAVE_RIPPER
