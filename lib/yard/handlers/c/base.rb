@@ -75,20 +75,17 @@ module YARD
         end
 
         def ensure_variable_defined!(var, max_retries = 1)
-          retries = 0
-          object = nil
+          object = namespace_for_variable(var)
+          return object unless object.is_a?(Proxy)
 
-          loop do
-            object = namespace_for_variable(var)
-            break unless object.is_a?(Proxy)
+          log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
 
-            raise NamespaceMissingError, object if retries > max_retries
-            log.debug "Missing namespace variable #{var} in file `#{parser.file}', moving it to the back of the line."
-            parser.parse_remaining_files
-            retries += 1
+          if globals.ordered_parser
+            retryable_file = parser.file == "(stdin)" ? StringIO.new("void Init_Foo() { #{statement.source} }") : parser.file
+            globals.ordered_parser.files_to_retry << retryable_file
           end
 
-          object
+          raise NamespaceMissingError, object
         end
 
         def namespaces

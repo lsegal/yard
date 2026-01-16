@@ -11,15 +11,13 @@ module YARD
     # Raised when the parser sees a Ruby syntax error
     class ParserSyntaxError < UndocumentableError; end
 
-    # Responsible for parsing a list of files in order. The
-    # {#parse} method of this class can be called from the
-    # {SourceParser#globals} globals state list to re-enter
-    # parsing for the remainder of files in the list recursively.
-    #
-    # @see Processor#parse_remaining_files
+    # Responsible for parsing a list of files in order.
     class OrderedParser
       # @return [Array<String>] the list of remaining files to parse
       attr_accessor :files
+
+      # @return [Array<String>] files to parse again after our first pass
+      attr_accessor :files_to_retry
 
       # Creates a new OrderedParser with the global state and a list
       # of files to parse.
@@ -32,18 +30,32 @@ module YARD
       def initialize(global_state, files)
         @global_state = global_state
         @files = files.dup
+        @files_to_retry = []
         @global_state.ordered_parser = self
       end
 
-      # Parses the remainder of the {#files} list.
-      #
-      # @see Processor#parse_remaining_files
+      # Parses the remainder of the {#files} list. Any files that had issues
+      # parsing will be done in multiple passes until the size of the files
+      # remaining does not change.
       def parse
-        until files.empty?
-          file = files.shift
+        files.each do |file|
           log.capture("Parsing #{file}") do
             SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
           end
+        end
+
+        loop do
+          prev_length = @files_to_retry.length
+          files_to_parse_now = @files_to_retry.dup
+          @files_to_retry = []
+
+          files_to_parse_now.each do |file|
+            log.capture("Re-processing #{file}") do
+              SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
+            end
+          end
+
+          break if @files_to_retry.length >= prev_length
         end
       end
     end
