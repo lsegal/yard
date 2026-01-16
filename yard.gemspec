@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.version       = YARD::VERSION
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
-  s.homepage      = "http://yardoc.org"
+  s.homepage      = "https://yardoc.org"
   s.platform      = Gem::Platform::RUBY
   s.files         = Dir['{lib,docs,po,templates}/**/*', '.yardopts*', 'CHANGELOG.md', 'LICENSE', 'LEGAL', 'README.md']
   s.require_paths = ['lib']
