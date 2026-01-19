@@ -208,15 +208,51 @@ eof
     end
 
     it "warns about invalid named parameters" do
-      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      expect(log).to receive(:warn).with(/#foo @param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
         # @param notaparam foo
         def foo(a) end
       eof
     end
 
-    it "warns about invalid named parameters on @!method directives" do
+    it "does warn about invalid named reference parameters without a splat" do
       expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param notaparam (see #elsewhere)
+        def foo(a) end
+      eof
+    end
+
+    it "does not warn about unknown named parameters that are delegated" do
+      expect(log).not_to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      YARD.parse_string <<-eof
+        # @param notaparam (see #elsewhere)
+        def foo(*a) end
+      eof
+    end
+
+    it "does not warn about unknown named delegated parameters from ref tag list" do
+      expect(log).not_to receive(:warn).with(/@param tag has unknown parameter name: barparam/)
+      YARD.parse_string <<-eof
+        # @param barparam
+        def bar(barparam) end
+        # @param (see #bar)
+        def foo(*a) end
+      eof
+    end
+
+    it "does warn about unknown named delegated parameters from ref tag list without splat" do
+      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: barparam/)
+      YARD.parse_string <<-eof
+        # @param barparam
+        def bar(barparam) end
+        # @param (see #bar)
+        def foo(a) end
+      eof
+    end
+
+    it "warns about invalid named parameters on @!method directives" do
+      expect(log).to receive(:warn).with(/#foo @param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
         # @!method foo(a)
         #   @param notaparam foo
@@ -225,7 +261,7 @@ eof
     end
 
     it "warns about duplicate named parameters" do
-      expect(log).to receive(:warn).with(/@param tag has duplicate parameter name: a/)
+      expect(log).to receive(:warn).with(/#foo @param tag has duplicate parameter name: a/)
       YARD.parse_string <<-eof
         # @param a foo
         # @param a foo
@@ -252,7 +288,7 @@ eof
     end
 
     it "warns on mismatching param with inline method modifier" do
-      expect(log).to receive(:warn).with(/@param tag has unknown parameter name: notaparam/)
+      expect(log).to receive(:warn).with(/::foo @param tag has unknown parameter name: notaparam/)
       YARD.parse_string <<-eof
         # @param [Numeric] notaparam
         # @return [Numeric]
@@ -268,12 +304,12 @@ eof
     end
 
     it "warns if {} wraps single name" do
-      expect(log).to receive(:warn).with(/@see tag \(#1\) should not be wrapped in \{\}/)
+      expect(log).to receive(:warn).with(/Foo @see tag \(#1\) should not be wrapped in \{\}/)
       YARD.parse_string "# @see {invalid}\nclass Foo;end"
     end
 
     it "warns if {} wraps across name and text" do
-      expect(log).to receive(:warn).with(/@see tag \(#1\) should not be wrapped in \{\}/)
+      expect(log).to receive(:warn).with(/Foo @see tag \(#1\) should not be wrapped in \{\}/)
       YARD.parse_string "# @see {invalid tag}\nclass Foo;end"
     end
   end
