@@ -40,9 +40,6 @@ module YARD
 
     self.default_parser = DocstringParser
 
-    # @return [Array<Tags::RefTag>] the list of reference tags
-    attr_reader :ref_tags
-
     # @return [CodeObjects::Base] the object that owns the docstring.
     attr_accessor :object
 
@@ -131,8 +128,7 @@ module YARD
     # @param [String] content the raw comments to be parsed
     def replace(content, parse = true)
       content = content.join("\n") if content.is_a?(Array)
-      @tags = []
-      @ref_tags = []
+      @all_tags = []
       if parse
         super(parse_comments(content))
       else
@@ -153,7 +149,7 @@ module YARD
     def dup
       resolve_reference
       obj = super
-      %w(all summary tags ref_tags).each do |name|
+      %w(all summary all_tags).each do |name|
         val = instance_variable_defined?("@#{name}") && instance_variable_get("@#{name}")
         obj.instance_variable_set("@#{name}", val ? val.dup : nil)
       end
@@ -244,9 +240,9 @@ module YARD
         case tag
         when Tags::Tag
           tag.object = object
-          @tags << tag
-        when Tags::RefTag, Tags::RefTagList
-          @ref_tags << tag
+          @all_tags << tag
+        when Tags::RefTagList
+          @all_tags << tag
         else
           raise ArgumentError, "expected Tag or RefTag, got #{tag.class} (at index #{i})"
         end
@@ -271,9 +267,15 @@ module YARD
     # @param [#to_s] name the tag name to return data for, or nil for all tags
     # @return [Array<Tags::Tag>] the list of tags by the specified tag name
     def tags(name = nil)
-      list = stable_sort_by(@tags + convert_ref_tags, &:tag_name)
+      list = @all_tags.map { |tag| convert_ref_tag(tag) }.flatten
+      list = stable_sort_by(list, &:tag_name)
       return list unless name
       list.select {|tag| tag.tag_name.to_s == name.to_s }
+    end
+
+    # @return [Array<Tags::RefTag, Tags::RefTagList>] the list of reference tags
+    def ref_tags
+      @all_tags.select { |tag| tag.is_a?(Tags::RefTag) || tag.is_a?(Tags::RefTagList) }
     end
 
     # Returns true if at least one tag by the name +name+ was declared
@@ -298,8 +300,7 @@ module YARD
     # @return [void]
     # @since 0.7.0
     def delete_tag_if(&block)
-      @tags.delete_if(&block)
-      @ref_tags.delete_if(&block)
+      @all_tags.delete_if(&block)
     end
 
     # Returns true if the docstring has no content that is visible to a template.
@@ -311,7 +312,7 @@ module YARD
       if only_visible_tags
         empty? && !tags.any? {|tag| Tags::Library.visible_tags.include?(tag.tag_name.to_sym) }
       else
-        empty? && @tags.empty? && @ref_tags.empty?
+        empty? && @all_tags.empty?
       end
     end
 
@@ -340,20 +341,26 @@ module YARD
 
     # Maps valid reference tags
     #
-    # @return [Array<Tags::RefTag>] the list of valid reference tags
-    def convert_ref_tags
-      list = @ref_tags.reject {|t| CodeObjects::Proxy === t.owner }
-
+    # @param tag [Tags::Tag, Tags::RefTagList]
+    # @return [Array<Tags::Tag>] dereferenced tags
+    def convert_ref_tag(tag)
       @ref_tag_recurse_count ||= 0
       @ref_tag_recurse_count += 1
       if @ref_tag_recurse_count > 2
+        tag_and_name = ["@#{tag.tag_name}", tag.name].compact.join(" ")
         log.error "#{@object.file}:#{@object.line}: Detected circular reference tag in " \
-                  "`#{@object}', ignoring all reference tags for this object " \
-                  "(#{@ref_tags.map {|t| "@#{t.tag_name}" }.join(", ")})."
-        @ref_tags = []
-        return @ref_tags
+                  "`#{@object}'. Ignoring reference tag from #{tag_and_name} to `#{tag.owner}'."
+        return []
       end
-      list = list.map(&:tags).flatten
+      if tag.is_a?(Tags::RefTagList)
+        if CodeObjects::Proxy === tag.owner
+          list = []
+        else
+          list = tag.tags
+        end
+      else
+        list = [tag]
+      end
       @ref_tag_recurse_count -= 1
       list
     end
