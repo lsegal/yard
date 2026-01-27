@@ -102,6 +102,7 @@ module YARD
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
           :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|\w+/,
+          :symbol => /:#{METHODNAMEMATCH}/,
           :type_next => /[,;]/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,
@@ -130,7 +131,7 @@ module YARD
               next unless (match.nil? && @scanner.eos?) || (match && token = @scanner.scan(match))
               found = true
               case token_type
-              when :type_name
+              when :type_name, :symbol
                 raise SyntaxError, "expecting END, got name '#{token}'" if name
                 name = token
               when :type_next

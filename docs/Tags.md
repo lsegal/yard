@@ -213,9 +213,10 @@ having exactly those 3 elements) would be listed as: `Array(String, Fixnum, Hash
 Some literals are accepted by virtue of being Ruby literals, but also by YARD
 conventions. Here is a non-exhaustive list of certain accepted literal values:
 
-* `true`, `false`, `nil` &mdash; used when a method returns these explicit literal
-  values. Note that if your method returns both `true` or `false`, you should use
-  the `Boolean` conventional type instead.
+* `true`, `false`, `nil`, `:foo` &mdash; used when a method returns
+  these explicit literal values. Note that if your method returns both
+  `true` or `false`, you should use the `Boolean` conventional type
+  instead.
 * `self` &mdash; has the same meaning as Ruby's "self" keyword in the context of
   parameters or return types. Recommended mostly for {tag:return} tags that are
   chainable.
@@ -280,4 +281,3 @@ Note that you might not need a tag title if you are hiding it. The title
 part can be omitted.
 
 {yard:include_tags}
-
