@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
   s.metadata['yard.run'] = 'yri'
+  s.metadata['changelog_uri'] = 'https://rubydoc.info/gems/yard/file/CHANGELOG.md'
 end
