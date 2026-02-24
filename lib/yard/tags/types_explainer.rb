@@ -4,6 +4,9 @@ require 'strscan'
 module YARD
   module Tags
     class TypesExplainer
+      # Regular expression to match symbol and string literals
+      LITERALMATCH = /:\w+|'[^']*'|"[^"]*"/
+
       # (see Tag#explain_types)
       # @param types [Array<String>] a list of types to parse and summarize
       def self.explain(*types)

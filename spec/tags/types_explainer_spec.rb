@@ -5,6 +5,26 @@ RSpec.describe YARD::Tags::TypesExplainer do
     YARD::Tags::TypesExplainer::Type.new(name)
   end
 
+  describe "LITERALMATCH" do
+    it "matches symbol literals" do
+      expect(":symbol"[described_class::LITERALMATCH]).to eq ":symbol"
+      expect(":some_symbol"[described_class::LITERALMATCH]).to eq ":some_symbol"
+      expect("not_a_symbol"[described_class::LITERALMATCH]).to be nil
+    end
+
+    it "matches single-quoted string literals" do
+      expect("'string'"[described_class::LITERALMATCH]).to eq "'string'"
+      expect("'some string with spaces'"[described_class::LITERALMATCH]).to eq "'some string with spaces'"
+      expect("not_quoted"[described_class::LITERALMATCH]).to be nil
+    end
+
+    it "matches double-quoted string literals" do
+      expect('"string"'[described_class::LITERALMATCH]).to eq '"string"'
+      expect('"some string with spaces"'[described_class::LITERALMATCH]).to eq '"some string with spaces"'
+      expect("not_quoted"[described_class::LITERALMATCH]).to be nil
+    end
+  end
+
   describe YARD::Tags::TypesExplainer::Type, '#to_s' do
     before { @t = described_class.new(nil) }
 
