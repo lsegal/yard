@@ -347,7 +347,12 @@ window.addEventListener(
   "message",
   async (e) => {
     if (e.data.action === "navigate") {
-      const response = await fetch(e.data.url);
+      // Resolve the URL against the iframe's location to handle relative paths correctly
+      const iframe = document.getElementById("nav");
+      const iframeUrl = iframe ? iframe.contentWindow.location.href : window.location.href;
+      const resolvedUrl = new URL(e.data.url, iframeUrl).href;
+
+      const response = await fetch(resolvedUrl);
       const text = await response.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "text/html");
@@ -383,12 +388,12 @@ window.addEventListener(
 
       document.getElementById("class_list_link").classList = classListLink;
 
-      const url = new URL(e.data.url, "https://localhost");
+      const url = new URL(resolvedUrl);
       const hash = decodeURIComponent(url.hash ?? "");
       if (hash) {
         document.getElementById(hash.substring(1)).scrollIntoView();
       }
-      history.pushState({}, document.title, e.data.url);
+      history.pushState({}, document.title, resolvedUrl);
     }
   },
   false
