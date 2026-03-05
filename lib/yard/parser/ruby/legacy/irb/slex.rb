@@ -10,25 +10,14 @@
 #
 #
 
-require "irb/notifier"
-
 # @private
 module IRB
   class SLex
-    DOUT = Notifier::def_notifier("SLex::")
-    D_WARN = DOUT::def_notifier(1, "Warn: ")
-    D_DEBUG = DOUT::def_notifier(2, "Debug: ")
-    D_DETAIL = DOUT::def_notifier(4, "Detail: ")
-
-    DOUT.level = Notifier::D_NOMSG
-
     def initialize
       @head = Node.new("")
     end
 
     def def_rule(token, preproc = nil, postproc = nil, &block)
-      D_DETAIL.pp token
-
       postproc = block if block_given?
       create(token, preproc, postproc)
     end
@@ -70,7 +59,6 @@ module IRB
         return @head.match_io(token)
       end
       ret = @head.match(token)
-      D_DETAIL.exec_if{D_DETAIL.printf "match end: %s:%s\n", ret, token.inspect}
       ret
     end
 
@@ -113,10 +101,8 @@ module IRB
       def create_subnode(chrs, preproc = nil, postproc = nil)
         if chrs.empty?
           if @postproc
-            D_DETAIL.pp node
             raise "node already exists"
           else
-            D_DEBUG.puts "change abstract node to real node."
             @preproc = preproc
             @postproc = postproc
           end
@@ -127,13 +113,8 @@ module IRB
         if node = @Tree[ch]
           if chrs.empty?
             if node.postproc
-              DebugLogger.pp node
-              DebugLogger.pp self
-              DebugLogger.pp ch
-              DebugLogger.pp chrs
               raise "node already exists"
             else
-              D_WARN.puts "change abstract node to real node"
               node.preproc = preproc
               node.postproc = postproc
             end
@@ -159,10 +140,8 @@ module IRB
       #       able to be called arbitrary number of times.
       #
       def match(chrs, op = "")
-        D_DETAIL.print "match>: ", chrs, "op:", op, "\n"
         if chrs.empty?
           if @preproc.nil? || @preproc.call(op, chrs)
-            DOUT.printf(D_DETAIL, "op1: %s\n", op)
             @postproc.call(op, chrs)
           else
             nil
@@ -175,7 +154,6 @@ module IRB
             else
               chrs.unshift ch
               if @postproc and @preproc.nil? || @preproc.call(op, chrs)
-                DOUT.printf(D_DETAIL, "op2: %s\n", op.inspect)
                 ret = @postproc.call(op, chrs)
                 return ret
               else
@@ -185,7 +163,6 @@ module IRB
           else
             chrs.unshift ch
             if @postproc and @preproc.nil? || @preproc.call(op, chrs)
-              DOUT.printf(D_DETAIL, "op3: %s\n", op)
               @postproc.call(op, chrs)
               return ""
             else
@@ -206,7 +183,6 @@ module IRB
         end
         if ch.nil?
           if @preproc.nil? || @preproc.call(op, io)
-            D_DETAIL.printf("op1: %s\n", op)
             @postproc.call(op, io)
           else
             nil
@@ -218,7 +194,6 @@ module IRB
             else
               io.ungetc ch
               if @postproc and @preproc.nil? || @preproc.call(op, io)
-                DOUT.exec_if{D_DETAIL.printf "op2: %s\n", op.inspect}
                 @postproc.call(op, io)
               else
                 nil
@@ -227,7 +202,6 @@ module IRB
           else
             io.ungetc ch
             if @postproc and @preproc.nil? || @preproc.call(op, io)
-              D_DETAIL.printf("op3: %s\n", op)
               @postproc.call(op, io)
             else
               nil
