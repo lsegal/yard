@@ -1,22 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.describe YARD::Tags::TypesExplainer do
-  Type = YARD::Tags::TypesExplainer::Type
-  CollectionType = YARD::Tags::TypesExplainer::CollectionType
-  FixedCollectionType = YARD::Tags::TypesExplainer::FixedCollectionType
-  HashCollectionType = YARD::Tags::TypesExplainer::HashCollectionType
-  Parser = YARD::Tags::TypesExplainer::Parser
-
-  def parse(types)
-    Parser.new(types).parse
+  def type(name)
+    YARD::Tags::TypesExplainer::Type.new(name)
   end
 
-  def parse_fail(types)
-    expect { parse(types) }.to raise_error(SyntaxError)
-  end
-
-  describe Type, '#to_s' do
-    before { @t = Type.new(nil) }
+  describe YARD::Tags::TypesExplainer::Type, '#to_s' do
+    before { @t = described_class.new(nil) }
 
     it "works for a class/module reference" do
       @t.name = "ClassModuleName"
@@ -59,78 +49,86 @@ RSpec.describe YARD::Tags::TypesExplainer do
     end
   end
 
-  describe CollectionType, '#to_s' do
-    before { @t = CollectionType.new("Array", nil) }
+  describe YARD::Tags::TypesExplainer::CollectionType, '#to_s' do
+    before { @t = described_class.new("Array", nil) }
 
     it "can contain one item" do
-      @t.types = [Type.new("Object")]
+      @t.types = [type("Object")]
       expect(@t.to_s).to eq "an Array of (Objects)"
     end
 
     it "can contain more than one item" do
-      @t.types = [Type.new("Object"), Type.new("String"), Type.new("Symbol")]
+      @t.types = [type("Object"), type("String"), type("Symbol")]
       expect(@t.to_s).to eq "an Array of (Objects, Strings or Symbols)"
     end
 
     it "can contain nested collections" do
-      @t.types = [CollectionType.new("List", [Type.new("Object")])]
+      @t.types = [described_class.new("List", [type("Object")])]
       expect(@t.to_s).to eq "an Array of (a List of (Objects))"
     end
   end
 
-  describe FixedCollectionType, '#to_s' do
-    before { @t = FixedCollectionType.new("Array", nil) }
+  describe YARD::Tags::TypesExplainer::FixedCollectionType, '#to_s' do
+    before { @t = described_class.new("Array", nil) }
 
     it "can contain one item" do
-      @t.types = [Type.new("Object")]
+      @t.types = [type("Object")]
       expect(@t.to_s).to eq "an Array containing (an Object)"
     end
 
     it "can contain more than one item" do
-      @t.types = [Type.new("Object"), Type.new("String"), Type.new("Symbol")]
+      @t.types = [type("Object"), type("String"), type("Symbol")]
       expect(@t.to_s).to eq "an Array containing (an Object followed by a String followed by a Symbol)"
     end
 
     it "can contain nested collections" do
-      @t.types = [FixedCollectionType.new("List", [Type.new("Object")])]
+      @t.types = [described_class.new("List", [type("Object")])]
       expect(@t.to_s).to eq "an Array containing (a List containing (an Object))"
     end
   end
 
-  describe FixedCollectionType, '#to_s' do
-    before { @t = HashCollectionType.new("Hash", nil, nil) }
+  describe YARD::Tags::TypesExplainer::HashCollectionType, '#to_s' do
+    before { @t = described_class.new("Hash", nil, nil) }
 
     it "can contain a single key type and value type" do
-      @t.key_types = [Type.new("Object")]
-      @t.value_types = [Type.new("Object")]
+      @t.key_types = [type("Object")]
+      @t.value_types = [type("Object")]
       expect(@t.to_s).to eq "a Hash with keys made of (Objects) and values of (Objects)"
     end
 
     it "can contain multiple key types" do
-      @t.key_types = [Type.new("Key"), Type.new("String")]
-      @t.value_types = [Type.new("Object")]
+      @t.key_types = [type("Key"), type("String")]
+      @t.value_types = [type("Object")]
       expect(@t.to_s).to eq "a Hash with keys made of (Keys or Strings) and values of (Objects)"
     end
 
     it "can contain multiple value types" do
-      @t.key_types = [Type.new("String")]
-      @t.value_types = [Type.new("true"), Type.new("false")]
+      @t.key_types = [type("String")]
+      @t.value_types = [type("true"), type("false")]
       expect(@t.to_s).to eq "a Hash with keys made of (Strings) and values of (true or false)"
     end
   end
 
-  describe Parser, '#parse' do
+  describe YARD::Tags::TypesExplainer::Parser, '#parse' do
+    def parse(types)
+      described_class.new(types).parse
+    end
+
+    def parse_fail(types)
+      expect { parse(types) }.to raise_error(SyntaxError)
+    end
+
     it "parses a regular class name" do
       type = parse("MyClass")
       expect(type.size).to eq 1
-      expect(type.first).to be_a(Type)
+      expect(type.first).to be_a(YARD::Tags::TypesExplainer::Type)
       expect(type.first.name).to eq "MyClass"
     end
 
     it "parses a path reference name" do
       type = parse("A::B")
       expect(type.size).to eq 1
-      expect(type.first).to be_a(Type)
+      expect(type.first).to be_a(YARD::Tags::TypesExplainer::Type)
       expect(type.first.name).to eq "A::B"
     end
 
@@ -145,7 +143,7 @@ RSpec.describe YARD::Tags::TypesExplainer do
 
     it "parses a collection type" do
       type = parse("MyList<String>")
-      expect(type.first).to be_a(CollectionType)
+      expect(type.first).to be_a(YARD::Tags::TypesExplainer::CollectionType)
       expect(type.first.types.size).to eq 1
       expect(type.first.name).to eq "MyList"
       expect(type.first.types.first.name).to eq "String"
