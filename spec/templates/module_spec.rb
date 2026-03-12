@@ -200,4 +200,38 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
     eof
     html_equals(Registry.at('A').format(html_options), :module005)
   end
+
+  it "shows inherited methods from matching groups in the group section, not in flat inherited section" do
+    Registry.clear
+    YARD.parse_string <<-'eof'
+      class Parent
+        # @group DSL Methods
+        def parent_dsl; end
+
+        # @group Other
+        def parent_other; end
+      end
+
+      class Child < Parent
+        # @group DSL Methods
+        def child_dsl; end
+      end
+    eof
+
+    result = Registry.at('Child').format(html_options)
+
+    # The "DSL Methods" section should contain an "inherited from Parent" subsection with parent_dsl
+    dsl_section = result[/(<h2>\s*DSL Methods.*?)<h2>/m, 1]
+    expect(dsl_section).not_to be_nil
+    expect(dsl_section).to include('inherited')
+    expect(dsl_section).to include('parent_dsl')
+
+    # parent_dsl should NOT appear outside the "DSL Methods" section
+    # i.e. it should not appear in the flat inherited section
+    rest_of_page = result.sub(dsl_section, '')
+    expect(rest_of_page).not_to include('parent_dsl')
+
+    # parent_other (in "Other" group, not in Child) should still appear in the flat inherited section
+    expect(result).to include('parent_other')
+  end
 end

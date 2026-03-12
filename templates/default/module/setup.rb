@@ -104,6 +104,26 @@ def inherited_constant_list
   end
 end
 
+def inherited_methods_by_group
+  return @inherited_meths_by_group if defined?(@inherited_meths_by_group)
+  @inherited_meths_by_group = {}
+  return @inherited_meths_by_group unless object.groups
+
+  object.inheritance_tree(true)[1..-1].each do |superclass|
+    next if superclass.is_a?(YARD::CodeObjects::Proxy)
+    next if options.embed_mixins.size > 0 && options.embed_mixins_match?(superclass) != false
+    meths = prune_method_listing(superclass.meths(:included => false, :inherited => false))
+    meths.reject! {|m| object.child(:scope => m.scope, :name => m.name) != nil }
+    meths.reject! {|m| m.is_alias? || m.is_attribute? }
+    meths.each do |m|
+      next unless m.group && object.groups.include?(m.group)
+      (@inherited_meths_by_group[m.group] ||= {})[superclass] ||= []
+      @inherited_meths_by_group[m.group][superclass] << m
+    end
+  end
+  @inherited_meths_by_group
+end
+
 def docstring_full(obj)
   docstring = obj.tags(:overload).size == 1 && obj.docstring.empty? ?
     obj.tag(:overload).docstring : obj.docstring

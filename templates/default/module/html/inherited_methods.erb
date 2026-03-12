@@ -5,6 +5,7 @@
   <% meths = prune_method_listing(superclass.meths(:included => false, :inherited => false)) %>
   <% meths.reject! {|m| object.child(:scope => m.scope, :name => m.name) != nil } %>
   <% meths.reject! {|m| m.is_alias? || m.is_attribute? } %>
+  <% meths.reject! {|m| m.group && object.groups && object.groups.include?(m.group) } %>
   <% next if meths.size == 0 %>
   <% if method_listing.size == 0 && !found_method %><h2>Method Summary</h2><% end %>
   <% found_method = true %>
