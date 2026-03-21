@@ -176,13 +176,17 @@ module YARD
         end
 
         # Returns the validated parser type. Basically, enforces that :ruby
-        # type is never set if the Ripper library is not available
+        # type is never set if neither Prism nor Ripper is available
         #
         # @param [Symbol] type the parser type to set
         # @return [Symbol] the validated parser type
         # @private
         def validated_parser_type(type)
-          !defined?(::Ripper) && type == :ruby ? :ruby18 : type
+          if type == :ruby && !defined?(::Prism) && !defined?(::Ripper)
+            :ruby18
+          else
+            type
+          end
         end
 
         # @group Parser Callbacks
@@ -488,6 +492,13 @@ module YARD
       # Runs a {Handlers::Processor} object to post process the parsed statements.
       # @return [void]
       def post_process
+        prism_result = @parser.respond_to?(:prism_result) && @parser.prism_result
+        if prism_result && defined?(Handlers::PrismProcessor) && ENV['YARD_PARSER'] != 'ripper'
+          post = Handlers::PrismProcessor.new(self)
+          post.process(prism_result)
+          return
+        end
+
         return unless @parser.respond_to?(:enumerator)
 
         enumerator = @parser.enumerator
