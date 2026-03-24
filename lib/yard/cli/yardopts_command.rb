@@ -69,7 +69,8 @@ module YARD
       # @return [Array<String>] an array of options parsed from .yardopts
       def yardopts(file = options_file)
         return [] unless use_yardopts_file
-        File.read_binary(file).shell_split
+
+        File.read_binary(file).lines.reject { |line| line.strip =~ /^#/ }.join.shell_split
       rescue Errno::ENOENT
         []
       end
