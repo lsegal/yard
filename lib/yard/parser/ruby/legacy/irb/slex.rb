@@ -10,7 +10,25 @@
 #
 #
 
-require "irb/notifier"
+begin
+  require "irb/notifier"
+rescue LoadError
+  module IRB
+    module DebugLogger
+      def self.pp(*args) end
+    end
+
+    module Notifier
+      D_NOMSG = 0x00
+      def self.def_notifier(*args) self end
+      def self.pp(*args) end
+      def self.exec_if(*args, &block) end
+      def self.printf(*args) end
+      def self.puts(*args) end
+      def self.level=(value) end
+    end
+  end
+end
 
 # @private
 module IRB
