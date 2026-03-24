@@ -58,7 +58,7 @@ module YARD
       # @param [Symbol] markup examples are +:markdown+, +:textile+, +:rdoc+.
       #   To add a custom markup type, see {MarkupHelper}
       # @return [String] the HTML
-      def htmlify(text, markup = options.markup)
+      def htmlify(text, markup = options.markup, internal = false)
         markup_meth = "html_markup_#{markup}"
         return text unless respond_to?(markup_meth)
         return "" unless text
@@ -70,7 +70,7 @@ module YARD
         end
         html = resolve_links(html)
         unless [:text, :none, :pre, :ruby].include?(markup)
-          html = parse_codeblocks(html)
+          html = parse_codeblocks(html, internal)
         end
         html
       end
@@ -206,6 +206,11 @@ module YARD
 
         new_type, source = parse_lang_for_codeblock(source)
         type ||= new_type || :ruby
+
+        if type.to_s == "ruby" && source =~ /<span\s+class=/
+          return source
+        end
+
         meth = "html_syntax_highlight_#{type}"
         respond_to?(meth) ? send(meth, source) : h(source)
       end
@@ -298,7 +303,7 @@ module YARD
 
       # Inserts an include link while respecting inlining
       def insert_include(text, markup = options.markup)
-        htmlify(text, markup).gsub(%r{\A\s*<p>|</p>\s*\Z}, '')
+        htmlify(text, markup, true).gsub(%r{\A\s*<p>|</p>\s*\Z}, '')
       end
 
       # (see BaseHelper#link_object)
@@ -641,20 +646,25 @@ module YARD
       # @param [String] html the html to search for code in
       # @return [String] highlighted html
       # @see #html_syntax_highlight
-      def parse_codeblocks(html)
+      def parse_codeblocks(html, internal = false)
         html.gsub(%r{<pre((?:\s+\w+="(?:.+?)")*)\s*>(?:\s*<code((?:\s+\w+="(?:.+?)")*)\s*>)?(.+?)(?:</code>\s*)?</pre>}m) do
-          string = $3
+          pre_match, code_match, string = $1, $2, $3
 
           # handle !!!LANG prefix to send to html_syntax_highlight_LANG
           language, = parse_lang_for_codeblock(string)
-          language ||= detect_lang_in_codeblock_attributes($1, $2)
+          language ||= detect_lang_in_codeblock_attributes(pre_match, code_match)
           language ||= object.source_type
 
-          if options.highlight
+          pre_attrs = [%(class="code #{language}")]
+
+          if options.highlight && /\bdata-highlighted="true"/ !~ pre_match
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
+            pre_attrs << 'data-highlighted="true"' if internal
           end
-          classes = ['code', language].compact.join(' ')
-          %(<pre class="#{classes}"><code class="#{language}">#{string}</code></pre>)
+
+          pre_attrs = pre_attrs.compact.join(' ')
+
+          %(<pre #{pre_attrs}><code class="#{language}">#{string}</code></pre>)
         end
       end
 
