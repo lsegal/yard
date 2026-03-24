@@ -189,6 +189,8 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "sets env and env-yard attributes (AsciiDoc specific)" do
+      skip "Missing asciidoctor gem" if markup_class(:asciidoc).nil?
+
       adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
         ifdef::env[]
         Attribute "env" is set, and its value is "{env}".
@@ -204,6 +206,8 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should not include the document title from the AsciiDoc header" do
+      skip "Missing asciidoctor gem" if markup_class(:asciidoc).nil?
+
       adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
         = Project Name
 
