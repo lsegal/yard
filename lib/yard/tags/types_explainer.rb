@@ -4,6 +4,9 @@ require 'strscan'
 module YARD
   module Tags
     class TypesExplainer
+      # Regular expression to match symbol and string literals
+      LITERALMATCH = /:\w+|'[^']*'|"[^"]*"/
+
       # (see Tag#explain_types)
       # @param types [Array<String>] a list of types to parse and summarize
       def self.explain(*types)
@@ -31,16 +34,14 @@ module YARD
         end
 
         def to_s(singular = true)
-          if name[0, 1] == "#"
-            (singular ? "an object that responds to " : "objects that respond to ") + list_join(name.split(/ *& */), with: "and")
-          elsif name[0, 1] =~ /[A-Z]/
+          if name[0, 1] =~ /[A-Z]/
             singular ? "a#{name[0, 1] =~ /[aeiou]/i ? 'n' : ''} " + name : "#{name}#{name[-1, 1] =~ /[A-Z]/ ? "'" : ''}s"
           else
             name
           end
         end
 
-        private
+        protected
 
         def list_join(list, with: "or")
           index = 0
@@ -51,6 +52,20 @@ module YARD
             index += 1
             acc
           end
+        end
+      end
+
+      # @private
+      class LiteralType < Type
+        def to_s(_singular = true)
+          "a literal value #{name}"
+        end
+      end
+
+      # @private
+      class DuckType < Type
+        def to_s(singular = true)
+          (singular ? "an object that responds to " : "objects that respond to ") + list_join(name.split(/ *& */), with: "and")
         end
       end
 
@@ -101,7 +116,7 @@ module YARD
           :collection_end => />/,
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
-          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|\w+/,
+          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|#{LITERALMATCH}|\w+/,
           :type_next => /[,;]/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,
@@ -135,7 +150,7 @@ module YARD
                 name = token
               when :type_next
                 raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if name.nil?
-                type = Type.new(name) unless type
+                type = create_type(name) unless type
                 types << type
                 type = nil
                 name = nil
@@ -148,12 +163,24 @@ module YARD
                 type = HashCollectionType.new(name, parse, parse)
               when :hash_collection_next, :hash_collection_end, :fixed_collection_end, :collection_end, :parse_end
                 raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
-                type = Type.new(name) unless type
+                type = create_type(name) unless type
                 types << type
                 return types
               end
             end
             raise SyntaxError, "invalid character at #{@scanner.peek(1)}" unless found
+          end
+        end
+
+        private
+
+        def create_type(name)
+          if name[0, 1] == ":" || (name[0, 1] =~ /['"]/ && name[-1, 1] =~ /['"]/)
+            LiteralType.new(name)
+          elsif name[0, 1] == "#"
+            DuckType.new(name)
+          else
+            Type.new(name)
           end
         end
       end
