@@ -10,5 +10,13 @@
         <%= yieldall :item => meth %>
       <% end %>
     </ul>
+    <% (inherited_methods_by_group[name] || {}).each do |superclass, meths| %>
+      <h3 class="inherited">Methods <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify superclass %></h3>
+      <p class="inherited"><%= meths.sort_by {|o| o.name.to_s }.map {|m|
+        mname = m.name(true)
+        mname = mname.gsub(/^#/, '') if superclass.type == :module && object.class_mixins.include?(superclass)
+        linkify(m, mname)
+      }.join(", ") %></p>
+    <% end %>
   <% end %>
 <% end %>
