@@ -11,7 +11,7 @@ class Gem::Specification
     @has_rdoc == 'yard'
   end
 
-  undef has_rdoc?
+  undef has_rdoc? if method_defined?(:has_rdoc?)
   def has_rdoc?
     (@has_rdoc ||= true) && @has_rdoc != 'yard'
   end
