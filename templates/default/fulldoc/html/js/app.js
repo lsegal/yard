@@ -347,7 +347,8 @@ window.addEventListener(
   "message",
   async (e) => {
     if (e.data.action === "navigate") {
-      const response = await fetch(e.data.url);
+      var rel_pfx = (typeof relpath === "undefined") ? '' : relpath;
+      const response = await fetch(rel_pfx + e.data.url);
       const text = await response.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "text/html");
@@ -383,12 +384,12 @@ window.addEventListener(
 
       document.getElementById("class_list_link").classList = classListLink;
 
-      const url = new URL(e.data.url, "https://localhost");
+      const url = new URL(rel_pfx + e.data.url, "https://localhost");
       const hash = decodeURIComponent(url.hash ?? "");
       if (hash) {
         document.getElementById(hash.substring(1)).scrollIntoView();
       }
-      history.pushState({}, document.title, e.data.url);
+      history.pushState({}, document.title, rel_pfx + e.data.url);
     }
   },
   false
