@@ -12,7 +12,7 @@ YARD now ships with a built-in Markdown renderer (`YARD::Templates::Helpers::Mar
 that requires **no external gems**. It supports a practical subset of GitHub Flavored Markdown (GFM)
 as well as common RDoc markup forms, including:
 
-- ATX and setext headings (`#`, `=`)
+- Headings (`#`, `=`)
 - Fenced code blocks (`` ``` `` and `~~~`) as well as RDoc formatted `+text+` blocks.
 - Tables, blockquotes, and thematic breaks
 - Ordered and unordered lists (including RDoc-style)
