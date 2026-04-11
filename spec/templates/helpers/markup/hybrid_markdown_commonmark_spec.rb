@@ -10,17 +10,11 @@ RSpec.describe YARD::Templates::Helpers::Markup::HybridMarkdown, 'CommonMark 0.3
   # nested list continuation, and YARD's bare-URL autolinking behavior.
   INTENTIONAL_DIVERGENCE_EXAMPLES = [
     2, 5, 6, 7, 9,
-    49, 57, 60,
-    70,
-    81, 82, 85, 87, 88, 93, 94, 95, 99, 100,
-    113, 115,
-    128,
-    223,
-    237, 238, 242, 249, 252,
-    276, 280, 300,
-    307, 311, 312, 313, 318, 319,
+    88,
+    276, 280,
+    307, 312, 318, 319,
     611,
-    636, 637
+    637
   ].freeze
 
   fixture_path = File.dirname(__FILE__) + '/fixtures/commonmark_0.31.2.json'

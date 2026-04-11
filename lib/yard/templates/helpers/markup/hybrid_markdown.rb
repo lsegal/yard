@@ -1,10 +1,4 @@
-# frozen_string_literal: true
-
-if RUBY_VERSION < '3.5'
-  require 'cgi/util'
-else
-  require 'cgi/escape'
-end
+require 'cgi'
 require 'uri'
 
 module YARD
@@ -33,7 +27,7 @@ module YARD
 
           ATX_HEADING_RE = /^\s{0,3}#{Regexp.escape('#')}{1,6}(?=[ \t]|$)/.freeze
           RDOC_HEADING_RE = /^\s*(=+)[ \t]+(.+?)\s*$/.freeze
-          SETEXT_HEADING_RE = /^\s*(=+|-+)\s*$/.freeze
+          SETEXT_HEADING_RE = /^\s{0,3}(=+|-+)\s*$/.freeze
           FENCE_RE = /^(\s{0,3})(`{3,}|~{3,})([^\n]*)$/.freeze
           THEMATIC_BREAK_RE = /^\s{0,3}(?:(?:-\s*){3,}|(?:\*\s*){3,}|(?:_\s*){3,})\s*$/.freeze
           TABLE_SEPARATOR_RE = /^\s*\|?(?:\s*:?-+:?\s*\|)+(?:\s*:?-+:?\s*)\|?\s*$/.freeze
@@ -109,8 +103,8 @@ module YARD
                 blocks << '<hr />'
                 index += 1
               elsif (heading = parse_setext_heading(lines, index))
-                blocks << heading
-                index += 2
+                blocks << heading[0]
+                index = heading[1]
               elsif (heading = parse_heading(line))
                 blocks << heading
                 index += 1
@@ -160,10 +154,34 @@ module YARD
             return nil if lines[index].strip.empty?
             return nil if lines[index] =~ /^\s{0,3}>/
             return nil if parse_list_marker(lines[index])
-            return nil unless lines[index + 1] =~ SETEXT_HEADING_RE
+            return nil if lines[index] =~ /^(?: {4,}|\t)/
+            return nil if parse_heading(lines[index])
+            return nil if fenced_code_start?(lines[index])
 
-            level = $1.start_with?('=') ? 1 : 2
-            "<h#{level}>#{format_inline(lines[index].strip)}</h#{level}>"
+            content_lines = []
+            current_index = index
+
+            while current_index < lines.length
+              line = lines[current_index]
+              return nil if blank_line?(line)
+
+              if line =~ SETEXT_HEADING_RE
+                return nil if content_lines.empty?
+
+                level = $1.start_with?('=') ? 1 : 2
+                text = content_lines.join("\n")
+                return ["<h#{level}>#{format_inline(text)}</h#{level}>", current_index + 1]
+              end
+
+              if current_index > index && block_boundary?(line)
+                return nil
+              end
+
+              content_lines << normalize_heading_line(line)
+              current_index += 1
+            end
+
+            nil
           end
 
           def parse_fenced_code(lines, index)
@@ -253,9 +271,12 @@ module YARD
             start_attr = ordered && marker[:start] != 1 ? %( start="#{marker[:start]}") : ''
             items = []
             tight = true
+            loose_by_separator = false
             list_indent = marker[:indent]
 
             while index < lines.length
+              break if items.any? && thematic_break?(lines[index]) && leading_spaces(lines[index]) <= list_indent + 3
+
               item_marker = parse_list_marker(lines[index])
               break unless item_marker && same_list_type?(marker, item_marker)
 
@@ -274,14 +295,20 @@ module YARD
 
               while index < lines.length
                 line = lines[index]
+                break if thematic_break?(line) && !indented_to?(line, content_indent)
+                break if setext_underline_line?(line) && !indented_to?(line, content_indent)
+
                 next_marker = parse_list_marker(line)
                 if next_marker && same_list_type?(marker, next_marker) &&
                     (next_marker[:indent] == item_marker[:indent] || (blank_seen && next_marker[:indent] <= list_indent + 3))
-                  tight = false if blank_seen
+                  if blank_seen
+                    tight = false
+                    loose_by_separator = true
+                  end
                   break
                 end
                 break if next_marker && next_marker[:indent] < content_indent
-                break if !blank_seen && line !~ /^(?: {0,#{content_indent}}|\t)/ && block_boundary?(line)
+                break if !blank_seen && !indented_to?(line, content_indent) && block_boundary?(line)
 
                 if blank_line?(line)
                   item_lines << "\n"
@@ -327,20 +354,21 @@ module YARD
 
             items.map! do |item|
               item_html = item[:html]
-              if tight
-                item_html = item_html.sub(/\A<p>(.*?)<\/p>\z/m, '\1')
-                item_html = item_html.sub(/\A<p>(.*?)<\/p>(?=\n<(?:ul|ol|blockquote|pre|h\d|table|hr))/m, '\1')
-                item_html = item_html.sub(/\n<p>(.*?)<\/p>\z/m, "\n\\1")
-              end
+              item_html = "<p>#{item_html}</p>" if !tight && !item_html.empty? && item_html !~ /\A</m
+              item_html = item_html.sub(/\A<p>(.*?)<\/p>(?=\n<(?:ul|ol|blockquote|pre|h\d|table|hr))/m, '\1') if tight
+              item_html = item_html.sub(/\n<p>(.*?)<\/p>\z/m, "\n\\1") if tight
+              item_html = item_html.sub(/\A<p>(.*?)<\/p>\z/m, '\1') if item[:simple] && tight
+
               if item_html.empty?
                 '<li></li>'
-              elsif tight && item[:simple]
+              elsif item[:simple] && tight
                 "<li>#{item_html}</li>"
-              elsif tight && item_html !~ /\A</m
+              elsif item_html !~ /\A</m
                 suffix = item_html.include?("\n") ? "\n" : ''
                 "<li>#{item_html}#{suffix}</li>"
               else
-                "<li>\n#{item_html}\n</li>"
+                suffix = item_html =~ /(?:<\/(?:p|pre|blockquote|ul|ol|dl|table|h\d)>|<hr \/>|<[A-Za-z][A-Za-z0-9-]*>)\z/m ? "\n" : ''
+                "<li>\n#{item_html}#{suffix}</li>"
               end
             end
 
@@ -389,9 +417,11 @@ module YARD
 
             while index < lines.length
               line = lines[index]
-              break if saw_quote && previous_blank && !blockquote_start?(line)
+              break if saw_quote && quoted_lines.last == "\n" && !blockquote_start?(line)
+              break if saw_quote && blank_line?(line) && blockquote_open_fence?(quoted_lines)
+              break if saw_quote && previous_blank
               break if saw_quote && !blank_line?(line) && !blockquote_start?(line) &&
-                (block_boundary?(line) || line =~ /^(?: {4,}|\t)/ || (previous_blank && indented_code_start?(line)))
+                !lazy_blockquote_continuation?(quoted_lines, line)
               break unless blank_line?(line) || blockquote_start?(line) || saw_quote
 
               if blank_line?(line)
@@ -403,7 +433,11 @@ module YARD
                 saw_quote = true
                 previous_blank = false
               else
-                quoted_lines << line
+                if setext_underline_line?(line)
+                  quoted_lines << "    #{line.lstrip}"
+                else
+                  quoted_lines << line
+                end
                 previous_blank = false
               end
               index += 1
@@ -454,7 +488,7 @@ module YARD
               index += 1
             end
 
-            text = buffer.map { |line| line.sub(/^\s{0,3}/, '') }.join("\n").strip
+            text = buffer.map { |line| normalize_paragraph_line(line) }.join("\n").strip
             [text.empty? ? '' : "<p>#{format_inline(text)}</p>", index]
           end
 
@@ -479,13 +513,13 @@ module YARD
           end
 
           def protect_code_spans(text, placeholders)
-            output = ''.dup
+            output = ''
             index = 0
 
             while index < text.length
-              if text[index] == '`' && (index.zero? || text[index - 1] != '\\') && !inside_angle_autolink_candidate?(text, index)
+              if text[index, 1] == '`' && (index.zero? || text[index - 1, 1] != '\\') && !inside_angle_autolink_candidate?(text, index)
                 opener_length = 1
-                opener_length += 1 while index + opener_length < text.length && text[index + opener_length] == '`'
+                opener_length += 1 while index + opener_length < text.length && text[index + opener_length, 1] == '`'
                 closer_index = find_matching_backtick_run(text, index + opener_length, opener_length)
                 if closer_index
                   code = normalize_code_span(restore_placeholders(text[(index + opener_length)...closer_index], placeholders))
@@ -499,7 +533,7 @@ module YARD
                 next
               end
 
-              output << text[index]
+              output << text[index, 1]
               index += 1
             end
 
@@ -540,7 +574,7 @@ module YARD
             text.gsub(/(?<!\\)#{HTML_TAG_RE}/m) do
               match = $&
               match_start = Regexp.last_match.begin(0)
-              if match_start > 0 && text[match_start - 1] == '`'
+              if match_start > 0 && text[match_start - 1, 1] == '`'
                 match
               else
                 store_placeholder(placeholders, match)
@@ -594,10 +628,10 @@ module YARD
             index = 0
 
             while index < text.length
-              char = text[index]
+              char = text[index, 1]
               if char == '*' || char == '_'
                 run_end = index
-                run_end += 1 while run_end < text.length && text[run_end] == char
+                run_end += 1 while run_end < text.length && text[run_end, 1] == char
                 run_length = run_end - index
                 can_open, can_close = delimiter_flags(text, index, run_end, char)
                 token = {
@@ -606,8 +640,8 @@ module YARD
                   :position => output.length,
                   :left_consumed => 0,
                   :right_consumed => 0,
-                  :opening_html => ''.dup,
-                  :closing_html => ''.dup,
+                  :opening_html => '',
+                  :closing_html => '',
                   :can_open => can_open,
                   :can_close => can_close
                 }
@@ -622,7 +656,7 @@ module YARD
                       use = available_delimiter_length(opener) >= 2 &&
                         available_delimiter_length(token) >= 2 ? 2 : 1
                       opener[:right_consumed] += use
-                      opener[:opening_html].prepend(use == 2 ? '<strong>' : '<em>')
+                      opener[:opening_html] = (use == 2 ? '<strong>' : '<em>') + opener[:opening_html]
                       token[:left_consumed] += use
                       token[:closing_html] << (use == 2 ? '</strong>' : '</em>')
                       delimiters.reject! do |candidate|
@@ -732,11 +766,7 @@ module YARD
 
           def normalize_reference_label(label)
             normalized = label.to_s.gsub(/\\([\[\]])/, '\1').gsub(/\s+/, ' ').strip
-            begin
-              normalized.downcase(:fold)
-            rescue ArgumentError, NoMethodError
-              unicode_casefold_compat(normalized)
-            end
+            unicode_casefold_compat(normalized)
           end
 
           def reference_link_html(label, ref)
@@ -763,6 +793,10 @@ module YARD
 
           def thematic_break?(line)
             line =~ THEMATIC_BREAK_RE
+          end
+
+          def setext_underline_line?(line)
+            line =~ SETEXT_HEADING_RE
           end
 
           def fenced_code_start?(line)
@@ -872,9 +906,9 @@ module YARD
           end
 
           def strip_trailing_punctuation(url)
-            trailer = ''.dup
+            trailer = ''
             while url =~ /[),.;:!?]\z/
-              trailer.prepend(url[-1])
+              trailer = url[-1, 1] + trailer
               url = url[0...-1]
             end
             [url, trailer]
@@ -904,7 +938,7 @@ module YARD
             return nil if fence.start_with?('`') && info.include?('`')
 
             lang = info.empty? ? nil : unescape_markdown_punctuation(decode_entities(info.split(/[ \t]/, 2).first))
-            {:char => fence[0], :length => fence.length, :indent => indent, :lang => lang}
+            {:char => fence[0, 1], :length => fence.length, :indent => indent, :lang => lang}
           end
 
           def fence_closer?(line, char, min_length)
@@ -948,7 +982,7 @@ module YARD
           end
 
           def list_item_padding(marker)
-            (1..4).cover?(marker[:padding]) ? marker[:padding] : 1
+            (1..4).include?(marker[:padding]) ? marker[:padding] : 1
           end
 
           def same_list_type?(base, other)
@@ -998,7 +1032,7 @@ module YARD
               if delimiter == '"' || delimiter == "'" || delimiter == '('
                 index += 1
                 start = index
-                buffer = ''.dup
+                buffer = ''
                 while index < definition.length
                   char = definition[index]
                   if char == '\\' && index + 1 < definition.length
@@ -1027,7 +1061,7 @@ module YARD
           end
 
           def replace_inline_constructs(text, placeholders, prefix)
-            output = ''.dup
+            output = ''
             index = 0
 
             while index < text.length
@@ -1075,7 +1109,7 @@ module YARD
           end
 
           def scan_reference_constructs(text, placeholders, kind)
-            output = ''.dup
+            output = ''
             index = 0
 
             while index < text.length
@@ -1225,7 +1259,7 @@ module YARD
             if text[index] == '"' || text[index] == "'"
               delimiter = text[index]
               index += 1
-              buffer = ''.dup
+              buffer = ''
               while index < text.length
                 char = text[index]
                 if char == '\\' && index + 1 < text.length
@@ -1242,7 +1276,7 @@ module YARD
               index += 1
             elsif text[index] == '('
               index += 1
-              buffer = ''.dup
+              buffer = ''
               depth = 1
               while index < text.length
                 char = text[index]
@@ -1362,11 +1396,15 @@ module YARD
           end
 
           def punctuation_char?(char)
-            !char.nil? && char =~ /[\p{P}\p{S}]/
+            !char.nil? && char =~ /[[:punct:]]/
           end
 
           def leading_spaces(line)
             line[/\A */, 0].to_s.length
+          end
+
+          def indented_to?(line, indent)
+            line.start_with?("\t") || leading_spaces(line) >= indent
           end
 
           def strip_list_item_indent(line, content_indent)
@@ -1463,7 +1501,7 @@ module YARD
           end
 
           def split_reference_container_prefix(line)
-            prefix = ''.dup
+            prefix = ''
             content = line.chomp
 
             while content =~ /\A(\s{0,3}> ?)(.*)\z/
@@ -1540,7 +1578,7 @@ module YARD
           end
 
           def percent_encode_url(text, allowed_re)
-            encoded = ''.dup
+            encoded = ''
 
             each_char_compat(text.to_s) do |char|
               if ascii_only_compat?(char) && char =~ /\A#{allowed_re.source}\z/
@@ -1622,6 +1660,51 @@ module YARD
             text.to_s.split(/^/, -1)
           end
 
+          def lazy_blockquote_continuation?(quoted_lines, line)
+            return false if block_boundary?(line)
+            return false if indented_code_start?(line) && !blockquote_paragraph_context?(quoted_lines)
+
+            last_content = quoted_lines.reverse.find { |quoted| !blank_line?(quoted) }
+            return false if last_content && fenced_code_start?(last_content)
+            return false if last_content && indented_code_start?(last_content)
+
+            true
+          end
+
+          def blockquote_open_fence?(quoted_lines)
+            opener = nil
+
+            quoted_lines.each do |quoted|
+              next if blank_line?(quoted)
+
+              if opener
+                opener = nil if fence_closer?(quoted, opener[:char], opener[:length])
+              else
+                opener = parse_fence_opener(quoted)
+              end
+            end
+
+            !opener.nil?
+          end
+
+          def blockquote_paragraph_context?(quoted_lines)
+            last_content = quoted_lines.reverse.find { |quoted| !blank_line?(quoted) }
+            return false unless last_content
+            return false if fenced_code_start?(last_content)
+            return false if parse_heading(last_content)
+            return false if thematic_break?(last_content)
+
+            true
+          end
+
+          def normalize_paragraph_line(line)
+            line.to_s.chomp.sub(/^\s+/, '')
+          end
+
+          def normalize_heading_line(line)
+            normalize_paragraph_line(line).rstrip
+          end
+
           def each_char_compat(text)
             if text.respond_to?(:each_char)
               text.each_char { |char| yield char }
@@ -1648,7 +1731,7 @@ module YARD
 
           def unicode_casefold_compat(text)
             codepoints = text.to_s.unpack('U*')
-            folded = ''.dup
+            folded = ''
 
             codepoints.each do |codepoint|
               append_folded_codepoint(folded, codepoint)
