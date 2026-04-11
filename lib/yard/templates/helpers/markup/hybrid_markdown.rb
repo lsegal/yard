@@ -91,6 +91,7 @@ module YARD
 
           def parse_blocks(lines, index)
             blocks = []
+            previous_block_type = nil
 
             while index < lines.length
               line = lines[index]
@@ -100,39 +101,51 @@ module YARD
               elsif yard_indented_code_start?(lines, index)
                 block, index = parse_yard_indented_code(lines, index)
                 blocks << block
+                previous_block_type = :code
               elsif thematic_break?(line)
                 blocks << '<hr />'
                 index += 1
+                previous_block_type = :hr
               elsif (heading = parse_setext_heading(lines, index))
                 blocks << heading[0]
                 index = heading[1]
+                previous_block_type = :heading
               elsif (heading = parse_heading(line))
                 blocks << heading
                 index += 1
+                previous_block_type = :heading
               elsif fenced_code_start?(line)
                 block, index = parse_fenced_code(lines, index)
                 blocks << block
+                previous_block_type = :code
               elsif table_start?(lines, index)
                 block, index = parse_table(lines, index)
                 blocks << block
+                previous_block_type = :table
               elsif labeled_list_start?(lines, index)
                 block, index = parse_labeled_list(lines, index)
                 blocks << block
+                previous_block_type = :list
               elsif blockquote_start?(line)
                 block, index = parse_blockquote(lines, index)
                 blocks << block
+                previous_block_type = :blockquote
               elsif list_start?(line)
                 block, index = parse_list(lines, index)
                 blocks << block
+                previous_block_type = :list
               elsif html_block_start?(line)
                 block, index = parse_html_block(lines, index)
                 blocks << block
-              elsif indented_code_block_start?(lines, index)
+                previous_block_type = :html
+              elsif indented_code_block_start?(lines, index, previous_block_type)
                 block, index = parse_indented_code(lines, index)
                 blocks << block
+                previous_block_type = :code
               else
                 block, index = parse_paragraph(lines, index)
                 blocks << block unless block.empty?
+                previous_block_type = :paragraph unless block.empty?
               end
             end
 
@@ -331,7 +344,9 @@ module YARD
                   item_lines << stripped
                   blank_seen = false
                 elsif !blank_seen
-                  item_lines << strip_list_item_indent(line, lazy_indent)
+                  stripped = strip_list_item_indent(line, lazy_indent)
+                  stripped = escape_list_marker_text(stripped) if parse_list_marker(stripped)
+                  item_lines << stripped
                   blank_seen = false
                 else
                   break
@@ -813,9 +828,10 @@ module YARD
             leading_columns(line) >= 2
           end
 
-          def indented_code_block_start?(lines, index)
+          def indented_code_block_start?(lines, index, previous_block_type = nil)
             return false unless indented_code_start?(lines[index])
             return true if leading_columns(lines[index]) >= 4
+            return false if previous_block_type == :list
 
             !index.zero? && blank_line?(lines[index - 1])
           end
@@ -1460,6 +1476,21 @@ module YARD
 
           def strip_list_item_indent(line, content_indent)
             consume_columns(line, content_indent, 0, true)
+          end
+
+          def escape_list_marker_text(line)
+            source = line.to_s
+            newline = source.sub!(/\n\z/, '') ? "\n" : ''
+
+            if source =~ /\A([*+-])([ \t].*)\z/
+              "\\#{$1}#{$2}#{newline}"
+            elsif source =~ /\A(\d{1,9}[.)])([ \t].*)\z/
+              "\\#{$1}#{$2}#{newline}"
+            elsif source =~ /\A([A-Za-z]\.)([ \t].*)\z/
+              "\\#{$1}#{$2}#{newline}"
+            else
+              source + newline
+            end
           end
 
           def escape_url(url)

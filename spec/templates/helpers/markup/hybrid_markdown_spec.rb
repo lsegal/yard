@@ -226,6 +226,32 @@ HTML
       expect(to_html("Paragraph\n\n  x = 1\n")).to eq('<p>Paragraph</p><pre><code>x = 1</code></pre>')
     end
 
+    it "treats verbatim text inside nested lists relative to the list indentation" do
+      html = described_class.new("- outer\n  - inner\n\n      code\n").to_html
+      expect(html).to eq(<<-'HTML'.chomp)
+<ul>
+<li>outer
+<ul>
+<li>
+<p>inner</p>
+<pre><code>code
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+HTML
+    end
+
+    it "does not treat insufficiently indented text after a list as a verbatim block" do
+      expect(described_class.new("-    foo\n\n  bar\n").to_html).to eq(<<-'HTML'.chomp)
+<ul>
+<li>foo</li>
+</ul>
+<p>bar</p>
+HTML
+    end
+
     it "treats hyphen rules as horizontal rules" do
       expect(to_html("----")).to eq('<hr />')
     end

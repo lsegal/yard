@@ -9,8 +9,6 @@ RSpec.describe YARD::Templates::Helpers::Markup::HybridMarkdown, 'CommonMark 0.3
   # strict CommonMark, especially around indentation-sensitive block parsing,
   # nested list continuation, and YARD's bare-URL autolinking behavior.
   INTENTIONAL_DIVERGENCE_EXAMPLES = [
-    276, 280,
-    312,
     611 # we intentionally auto-link bare URLs.
   ].freeze
 
