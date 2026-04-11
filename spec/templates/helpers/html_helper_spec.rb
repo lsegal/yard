@@ -156,13 +156,6 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "creates tables (markdown specific)" do
-      log.enter_level(Logger::FATAL) do
-        supports_table = %w(RedcarpetCompat Kramdown::Document CommonMarker)
-        unless supports_table.include?(markup_class(:markdown).to_s)
-          pending "This test depends on a markdown engine that supports tables"
-        end
-      end
-
       markdown = <<-EOF.strip
         City    | State | Country
         --------|-------|--------
@@ -177,12 +170,6 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "handles fenced code blocks (Redcarpet specific)" do
-      log.enter_level(Logger::FATAL) do
-        unless markup_class(:markdown).to_s == 'RedcarpetCompat'
-          pending 'This test is Redcarpet specific'
-        end
-      end
-
       markdown = "Introduction:\n```ruby\nputs\n\nputs\n```"
       html = htmlify(markdown, :markdown)
       expect(html).to match %r{^<p>Introduction:</p>.*<code class="ruby">}m

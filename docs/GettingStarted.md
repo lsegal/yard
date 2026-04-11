@@ -85,13 +85,17 @@ YARD treats it as a normal comment line and it remains part of the docstring.
 
 ## Which Markup Format?
 
-YARD does not impose a specific markup. The above example uses standard RDoc
-markup formatting, but YARD also supports textile and markdown via the
-command-line switch or `.yardopts` file (see below). This means that you are
-free to use whatever formatting you like. This guide is actually written
-using markdown. YARD, however, does add a few important syntaxes that are
-processed no matter which markup formatting you use, such as tag support
-and inter-document linking. These syntaxes are discussed below.
+YARD does not impose a specific markup format. YARD ships with a builtin
+renderer that supports both RDoc and Markdown out of the box—no external gem
+required. You can use either format (or switch between them) without installing
+anything extra. YARD also supports textile, asciidoc, and other formats via
+optional gems.
+
+To select a markup format, use the command-line switch `-m FORMAT` or add
+`--markup FORMAT` to your `.yardopts` file. This guide is written in Markdown.
+YARD adds a few important syntaxes that are processed regardless of which
+markup format you choose, such as tag support and inter-document linking.
+These syntaxes are discussed below.
 
 ## Adding Tags to Documentation
 

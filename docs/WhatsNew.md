@@ -6,6 +6,24 @@
 
 YARD now supports parsing Ruby signature files (.rbs) with full docstring support. This means you can write your documentation in `.rbs` files and have it show up in generated documentation, and use `.rbs` files alongside `.rb` sources to supplement type and API information.
 
+## New built-in Markdown renderer (0.9.40)
+
+YARD now ships with a built-in Markdown renderer (`YARD::Templates::Helpers::Markup::HybridMarkdown`)
+that requires **no external gems**. It supports a practical subset of GitHub Flavored Markdown (GFM)
+as well as common RDoc markup forms, including:
+
+- ATX and setext headings (`#`, `=`)
+- Fenced code blocks (`` ``` `` and `~~~`) as well as RDoc formatted `+text+` blocks.
+- Tables, blockquotes, and thematic breaks
+- Ordered and unordered lists (including RDoc-style)
+- Inline emphasis, code, links, and images
+- HTML passthrough blocks
+
+This renderer is the **default** for both the `rdoc` and `markdown` markup types—no gem
+installation required. If an optional provider gem (e.g. `redcarpet`, `kramdown`,
+`commonmarker`) is installed and selected, YARD will use it instead for extra features such
+as custom extensions or stricter spec compliance.
+
 ## `#-` comment block separators (0.9.40)
 
 YARD now recognizes a trailing `#-` line as a separator between comment

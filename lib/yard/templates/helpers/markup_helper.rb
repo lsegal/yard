@@ -23,6 +23,7 @@ module YARD
       # The default list of markup providers for each markup type
       MARKUP_PROVIDERS = {
         :markdown => [
+          {:lib => :yard, :const => 'YARD::Templates::Helpers::Markup::HybridMarkdown'},
           {:lib => :redcarpet, :const => 'RedcarpetCompat'},
           {:lib => :rdiscount, :const => 'RDiscount'},
           {:lib => :kramdown, :const => 'Kramdown::Document'},
@@ -39,7 +40,8 @@ module YARD
           {:lib => :redcloth, :const => 'RedCloth'}
         ],
         :rdoc => [
-          {:lib => nil, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'}
+          {:lib => :yard, :const => 'YARD::Templates::Helpers::Markup::HybridMarkdown'},
+          {:lib => :rdoc, :const => 'YARD::Templates::Helpers::Markup::RDocMarkup'}
         ],
         :org => [
           {:lib => :'org-ruby', :const => 'Orgmode::Parser'}

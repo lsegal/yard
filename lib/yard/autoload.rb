@@ -287,6 +287,7 @@ module YARD
   module Templates
     module Helpers # Namespace for template helpers
       module Markup # Namespace for markup providers
+        autoload :HybridMarkdown,           __p('templates/helpers/markup/hybrid_markdown')
         autoload :RDocMarkup,               __p('templates/helpers/markup/rdoc_markup')
         autoload :RDocMarkdown,             __p('templates/helpers/markup/rdoc_markdown')
       end

@@ -35,32 +35,32 @@ RSpec.describe YARD::Templates::Helpers::MarkupHelper do
       expect(@gen.markup_class).to eq nil
     end
 
-    it "loads RDocMarkup if rdoc is specified and it is installed" do
+    it "loads HybridMarkdown if rdoc is specified and it is installed" do
       @gen.options.markup = :rdoc
       expect(@gen.load_markup_provider).to be true
-      expect(@gen.markup_class).to eq YARD::Templates::Helpers::Markup::RDocMarkup
+      expect(@gen.markup_class).to eq YARD::Templates::Helpers::Markup::HybridMarkdown
     end
 
     it "fails if RDoc cannot be loaded" do
       @gen.options.markup = :rdoc
+      expect(@gen).to receive(:require).with('yard').and_return(false)
+      expect(@gen).to receive(:eval).with('::YARD::Templates::Helpers::Markup::HybridMarkdown').and_raise(NameError)
+      expect(@gen).to receive(:require).with('rdoc').and_return(true)
       expect(@gen).to receive(:eval).with('::YARD::Templates::Helpers::Markup::RDocMarkup').and_raise(NameError)
       expect(@gen.load_markup_provider).to be false
       expect(@gen.markup_provider).to eq nil
     end
 
-    it "searches through available markup providers for the markup type if none is set" do
-      expect(@gen).to receive(:eval).with('::RedcarpetCompat').and_return(double(:bluecloth))
-      expect(@gen).to receive(:require).with('redcarpet').and_return(true)
-      expect(@gen).not_to receive(:require).with('maruku')
+    it "loads the builtin markdown provider first when none is set" do
       @gen.options.markup = :markdown
-      # this only raises an exception because we mock out require to avoid
-      # loading any libraries but our implementation tries to return the library
-      # name as a constant
       expect(@gen.load_markup_provider).to be true
-      expect(@gen.markup_provider).to eq :redcarpet
+      expect(@gen.markup_class).to eq YARD::Templates::Helpers::Markup::HybridMarkdown
+      expect(@gen.markup_provider).to eq :yard
     end
 
     it "continues searching if some of the providers are unavailable" do
+      expect(@gen).to receive(:eval).with('::YARD::Templates::Helpers::Markup::HybridMarkdown').and_raise(NameError)
+      expect(@gen).to receive(:require).with('yard').and_return(false)
       expect(@gen).to receive(:require).with('redcarpet').and_raise(LoadError)
       expect(@gen).to receive(:require).with('rdiscount').and_raise(LoadError)
       expect(@gen).to receive(:require).with('kramdown').and_raise(LoadError)
@@ -85,7 +85,11 @@ RSpec.describe YARD::Templates::Helpers::MarkupHelper do
     end
 
     it "fails if no provider is found" do
+      expect(@gen).to receive(:require).with('yard').and_return(false)
+      expect(@gen).to receive(:eval).with('::YARD::Templates::Helpers::Markup::HybridMarkdown').and_raise(NameError)
       YARD::Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS[:markdown].each do |p|
+        next unless p[:lib]
+        next if p[:lib] == :yard
         expect(@gen).to receive(:require).with(p[:lib].to_s).and_raise(LoadError)
       end
       @gen.options.markup = :markdown

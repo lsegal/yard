@@ -96,4 +96,38 @@ MARKDOWN
       expect(rendered_document).to include("commonmark line break with<br />\na backslash")
     end
   end
+
+  describe 'HybridMarkdown' do
+    let(:markup) { :markdown }
+    let(:markup_provider) { :yard }
+
+    include_examples 'shared examples for markdown processors'
+
+
+    it 'renders level 2 header' do
+      expect(rendered_document).to match(header_regexp(2, 'Example code listings'))
+    end
+
+    it 'renders indented block of code, and applies Ruby syntax highlight' do
+      expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '1'))
+    end
+
+    it 'renders fenced block of code, and applies Ruby syntax highlight' do
+      expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '2'))
+    end
+
+    it 'renders fenced and annotated block of Ruby code, and applies syntax highlight' do
+      expect(rendered_document).to match(highlighted_ruby_regexp('x', '=', '3'))
+    end
+
+    it 'renders fenced and annotated block of non-Ruby code, and does not apply syntax highlight' do
+      expect(rendered_document).to match('x = 4')
+    end
+
+    it "autolinks URLs" do
+      expect(html_renderer.htmlify('https://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
+        '<p><a href="https://example.com">https://example.com</a></p>'
+      )
+    end
+  end
 end
