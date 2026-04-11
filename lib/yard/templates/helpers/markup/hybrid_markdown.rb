@@ -143,10 +143,15 @@ module YARD
               return heading
             end
 
-            return unless line =~ RDOC_HEADING_RE
+            match = RDOC_HEADING_RE.match(line)
+            return unless match
 
-            level = [$1.length, 6].min
-            "<h#{level}>#{format_inline($2.strip)}</h#{level}>"
+            heading_marks = match[1]
+            heading_text = match[2].strip
+            return nil if heading_text =~ /\A[=\-]+\z/
+
+            level = [heading_marks.length, 6].min
+            "<h#{level}>#{format_inline(heading_text)}</h#{level}>"
           end
 
           def parse_setext_heading(lines, index)
@@ -246,7 +251,7 @@ module YARD
               index += 1
             end
 
-            html = "<table>\n<thead>\n<tr>\n".dup
+            html = "<table>\n<thead>\n<tr>\n"
             header.each_with_index do |cell, i|
               attrs = alignments[i] ? %( align="#{alignments[i]}") : ""
               html << "<th#{attrs}>#{format_inline(cell)}</th>\n"
@@ -315,9 +320,9 @@ module YARD
                   blank_seen = true
                 elsif blank_seen && (line.start_with?("\t") || leading_spaces(line) >= content_indent)
                   break if first_line.empty? && item_lines.all? { |item_line| item_line == "\n" } && !line.start_with?("\t") && leading_spaces(line) == content_indent
+                  item_loose = true if loose_list_item_continuation?(item_lines)
                   stripped = strip_list_item_indent(line, content_indent)
                   item_lines << stripped
-                  item_loose = true
                   blank_seen = false
                 elsif !blank_seen && (line.start_with?("\t") || leading_spaces(line) >= content_indent)
                   stripped = strip_list_item_indent(line, content_indent)
@@ -1003,19 +1008,19 @@ module YARD
               return nil if normalize_reference_label(label).empty?
 
             index = 0
-            index += 1 while index < definition.length && definition[index] =~ /[ \t\n]/
+            index += 1 while index < definition.length && definition[index, 1] =~ /[ \t\n]/
             return nil if index >= definition.length
 
-            if definition[index] == '<'
+            if definition[index, 1] == '<'
               close = definition.index('>', index + 1)
               return nil unless close
               url = definition[(index + 1)...close]
               return nil if url.include?("\n")
               index = close + 1
-                return nil if index < definition.length && definition[index] !~ /[ \t\n]/
+                return nil if index < definition.length && definition[index, 1] !~ /[ \t\n]/
             else
               start = index
-              while index < definition.length && definition[index] !~ /[ \t\n]/
+              while index < definition.length && definition[index, 1] !~ /[ \t\n]/
                 index += 1
               end
               url = definition[start...index]
@@ -1023,18 +1028,18 @@ module YARD
 
               return nil if url.nil? || url.include?('<') || url.include?('>')
 
-            index += 1 while index < definition.length && definition[index] =~ /[ \t\n]/
+            index += 1 while index < definition.length && definition[index, 1] =~ /[ \t\n]/
             title = nil
 
             if index < definition.length
-              delimiter = definition[index]
+              delimiter = definition[index, 1]
               close_delimiter = delimiter == '(' ? ')' : delimiter
               if delimiter == '"' || delimiter == "'" || delimiter == '('
                 index += 1
                 start = index
                 buffer = ''
                 while index < definition.length
-                  char = definition[index]
+                  char = definition[index, 1]
                   if char == '\\' && index + 1 < definition.length
                     buffer << definition[index, 2]
                     index += 2
@@ -1044,10 +1049,10 @@ module YARD
                   buffer << char
                   index += 1
                 end
-                return nil if index >= definition.length || definition[index] != close_delimiter
+                return nil if index >= definition.length || definition[index, 1] != close_delimiter
                 title = buffer
                 index += 1
-                index += 1 while index < definition.length && definition[index] =~ /[ \t\n]/
+                index += 1 while index < definition.length && definition[index, 1] =~ /[ \t\n]/
                 return nil unless index == definition.length
               else
                 return nil
@@ -1066,15 +1071,15 @@ module YARD
 
             while index < text.length
               if prefix
-                if text[index, 2] != '![' || (index > 0 && text[index - 1] == '\\')
-                  output << text[index]
+                if text[index, 2] != '![' || (index > 0 && text[index - 1, 1] == '\\')
+                  output << text[index, 1]
                   index += 1
                   next
                 end
                 label_start = index + 2
               else
-                if text[index] != '[' || (index > 0 && text[index - 1] == '\\')
-                  output << text[index]
+                if text[index, 1] != '[' || (index > 0 && text[index - 1, 1] == '\\')
+                  output << text[index, 1]
                   index += 1
                   next
                 end
@@ -1082,22 +1087,22 @@ module YARD
               end
 
               label_end = find_closing_bracket(text, label_start - 1)
-              unless label_end && text[label_end + 1] == '('
-                output << text[index]
+              unless label_end && text[label_end + 1, 1] == '('
+                output << text[index, 1]
                 index += 1
                 next
               end
 
               dest, title, consumed = parse_inline_destination(text, label_end + 2, placeholders)
               unless consumed
-                output << text[index]
+                output << text[index, 1]
                 index += 1
                 next
               end
 
               label = text[label_start...label_end]
               if !prefix && contains_nested_link?(label, placeholders)
-                output << text[index]
+                output << text[index, 1]
                 index += 1
                 next
               end
@@ -1115,15 +1120,15 @@ module YARD
             while index < text.length
               image = kind == :image
               if image
-                if text[index, 2] != '![' || (index > 0 && text[index - 1] == '\\')
-                  output << text[index]
+                if text[index, 2] != '![' || (index > 0 && text[index - 1, 1] == '\\')
+                  output << text[index, 1]
                   index += 1
                   next
                 end
                 label_open = index + 1
               else
-                if text[index] != '[' || (index > 0 && text[index - 1] == '\\')
-                  output << text[index]
+                if text[index, 1] != '[' || (index > 0 && text[index - 1, 1] == '\\')
+                  output << text[index, 1]
                   index += 1
                   next
                 end
@@ -1132,12 +1137,12 @@ module YARD
 
               label_close = find_closing_bracket(text, label_open)
               unless label_close
-                output << text[index]
+                output << text[index, 1]
                 index += 1
                 next
               end
 
-              next_char = text[label_close + 1]
+              next_char = text[label_close + 1, 1]
               label = restore_placeholders(text[(label_open + 1)...label_close], placeholders)
               html = nil
               consumed = nil
@@ -1157,7 +1162,7 @@ module YARD
                 end
               else
                 if kind == :link && contains_nested_link?(label, placeholders)
-                  output << text[index]
+                  output << text[index, 1]
                   index += 1
                   next
                 end
@@ -1169,7 +1174,7 @@ module YARD
                 output << store_placeholder(placeholders, html)
                 index = consumed
               else
-                output << text[index]
+                output << text[index, 1]
                 index += 1
               end
             end
@@ -1181,7 +1186,7 @@ module YARD
             depth = 0
             index = open_index
             while index < text.length
-              char = text[index]
+              char = text[index, 1]
               if char == '['
                 depth += 1
               elsif char == ']'
@@ -1197,9 +1202,9 @@ module YARD
 
           def find_matching_backtick_run(text, index, length)
             while index < text.length
-              if text[index] == '`'
+              if text[index, 1] == '`'
                 run_length = 1
-                run_length += 1 while index + run_length < text.length && text[index + run_length] == '`'
+                run_length += 1 while index + run_length < text.length && text[index + run_length, 1] == '`'
                 return index if run_length == length
 
                 index += run_length
@@ -1212,11 +1217,11 @@ module YARD
           end
 
           def parse_inline_destination(text, index, placeholders = nil)
-            while index < text.length && text[index] =~ /[ \t\n]/
+            while index < text.length && text[index, 1] =~ /[ \t\n]/
               index += 1
             end
 
-            if text[index] == '<'
+            if text[index, 1] == '<'
               close = text.index('>', index + 1)
               return [nil, nil, nil] unless close
               dest = text[(index + 1)...close]
@@ -1227,7 +1232,7 @@ module YARD
               close = index
               parens = 0
               while close < text.length
-                char = text[close]
+                char = text[close, 1]
                 if char == '\\' && close + 1 < text.length
                   close += 2
                   next
@@ -1251,17 +1256,17 @@ module YARD
               end
             end
 
-            while index < text.length && text[index] =~ /[ \t\n]/
+            while index < text.length && text[index, 1] =~ /[ \t\n]/
               index += 1
             end
 
             title = nil
-            if text[index] == '"' || text[index] == "'"
-              delimiter = text[index]
+            if text[index, 1] == '"' || text[index, 1] == "'"
+              delimiter = text[index, 1]
               index += 1
               buffer = ''
               while index < text.length
-                char = text[index]
+                char = text[index, 1]
                 if char == '\\' && index + 1 < text.length
                   buffer << text[index, 2]
                   index += 2
@@ -1271,15 +1276,15 @@ module YARD
                 buffer << char
                 index += 1
               end
-              return [nil, nil, nil] unless index < text.length && text[index] == delimiter
+              return [nil, nil, nil] unless index < text.length && text[index, 1] == delimiter
               title = buffer
               index += 1
-            elsif text[index] == '('
+            elsif text[index, 1] == '('
               index += 1
               buffer = ''
               depth = 1
               while index < text.length
-                char = text[index]
+                char = text[index, 1]
                 if char == '\\' && index + 1 < text.length
                   buffer << text[index, 2]
                   index += 2
@@ -1294,15 +1299,15 @@ module YARD
                 buffer << char
                 index += 1
               end
-              return [nil, nil, nil] unless index < text.length && text[index] == ')'
+              return [nil, nil, nil] unless index < text.length && text[index, 1] == ')'
               title = buffer
               index += 1
             end
 
-            while index < text.length && text[index] =~ /[ \t\n]/
+            while index < text.length && text[index, 1] =~ /[ \t\n]/
               index += 1
             end
-            return [nil, nil, nil] unless text[index] == ')'
+            return [nil, nil, nil] unless text[index, 1] == ')'
 
             [dest.to_s, title, index + 1]
           end
@@ -1371,8 +1376,8 @@ module YARD
           end
 
           def delimiter_flags(text, run_start, run_end, char)
-            before = run_start.zero? ? nil : text[run_start - 1]
-            after = run_end >= text.length ? nil : text[run_end]
+            before = run_start.zero? ? nil : text[run_start - 1, 1]
+            after = run_end >= text.length ? nil : text[run_end, 1]
             before_whitespace = whitespace_char?(before)
             after_whitespace = whitespace_char?(after)
             before_punctuation = punctuation_char?(before)
@@ -1396,7 +1401,23 @@ module YARD
           end
 
           def punctuation_char?(char)
-            !char.nil? && char =~ /[[:punct:]]/
+            return false if char.nil?
+
+            char =~ /[[:punct:]]/ || unicode_symbol_char?(char)
+          end
+
+          def unicode_symbol_char?(char)
+            codepoint = char.to_s.unpack('U*').first
+            return false unless codepoint
+
+            (0x00A2..0x00A9).include?(codepoint) ||
+              (0x00AC..0x00AE).include?(codepoint) ||
+              (0x00B0..0x00B4).include?(codepoint) ||
+              codepoint == 0x00B6 ||
+              codepoint == 0x00B7 ||
+              codepoint == 0x00D7 ||
+              codepoint == 0x00F7 ||
+              (0x20A0..0x20CF).include?(codepoint)
           end
 
           def leading_spaces(line)
@@ -1523,13 +1544,13 @@ module YARD
 
             index = 1
             while index < text.length
-              char = text[index]
+              char = text[index, 1]
               if char == '\\'
                 index += 2
                 next
               end
               return nil if char == '['
-              return index if char == ']' && text[index + 1] == ':'
+              return index if char == ']' && text[index + 1, 1] == ':'
 
               index += 1
             end
@@ -1544,9 +1565,9 @@ module YARD
             index = 0
 
             while index < text.length
-              if text[index, 2] == '![' && (index.zero? || text[index - 1] != '\\')
+              if text[index, 2] == '![' && (index.zero? || text[index - 1, 1] != '\\')
                 label_open = index + 1
-              elsif text[index] == '[' && (index.zero? || text[index - 1] != '\\')
+              elsif text[index, 1] == '[' && (index.zero? || text[index - 1, 1] != '\\')
                 label_open = index
               else
                 index += 1
@@ -1555,7 +1576,7 @@ module YARD
 
               label_close = find_closing_bracket(text, label_open)
               if label_close
-                next_char = text[label_close + 1]
+                next_char = text[label_close + 1, 1]
                 return true if next_char == '(' || next_char == '['
               end
 
@@ -1703,6 +1724,31 @@ module YARD
 
           def normalize_heading_line(line)
             normalize_paragraph_line(line).rstrip
+          end
+
+          def loose_list_item_continuation?(item_lines)
+            return false if open_fence_in_lines?(item_lines)
+
+            previous = item_lines.reverse.find { |item_line| item_line != "\n" }
+            return true unless previous
+
+            !parse_list_marker(previous.chomp)
+          end
+
+          def open_fence_in_lines?(lines)
+            opener = nil
+
+            lines.each do |line|
+              next if blank_line?(line)
+
+              if opener
+                opener = nil if fence_closer?(line, opener[:char], opener[:length])
+              else
+                opener = parse_fence_opener(line)
+              end
+            end
+
+            !opener.nil?
           end
 
           def each_char_compat(text)

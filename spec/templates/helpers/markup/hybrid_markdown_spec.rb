@@ -159,6 +159,12 @@ HTML
       )
     end
 
+    it "does not open emphasis around unicode currency symbols" do
+      expect(described_class.new("*$*alpha.\n\n*£*bravo.\n\n*€*charlie.\n").to_html).to eq(
+        "<p>*$*alpha.</p>\n<p>*£*bravo.</p>\n<p>*€*charlie.</p>"
+      )
+    end
+
     it "preserves markdown code spans" do
       expect(to_html('Use `puts 1` here')).to eq('<p>Use <code>puts 1</code> here</p>')
     end
