@@ -76,6 +76,7 @@ module YARD
           PLACEHOLDER_RE = /\0(\d+)\0/.freeze
           ESCAPABLE_CHARS_RE = /\\([!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~])/.freeze
           AUTOLINK_RE = /<([A-Za-z][A-Za-z0-9.+-]{1,31}:[^<>\s]*|[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+)>/.freeze
+          TAB_WIDTH = 4
 
           def initialize(text)
             @references = {}
@@ -231,7 +232,7 @@ module YARD
 
             while index < lines.length
               line = lines[index]
-              break unless blank_line?(line) || line =~ /^(?: {2,}|\t)/
+              break unless blank_line?(line) || indented_code_start?(line)
               body << line
               index += 1
             end
@@ -280,7 +281,7 @@ module YARD
             list_indent = marker[:indent]
 
             while index < lines.length
-              break if items.any? && thematic_break?(lines[index]) && leading_spaces(lines[index]) <= list_indent + 3
+              break if items.any? && thematic_break?(lines[index]) && leading_columns(lines[index]) <= list_indent + 3
 
               item_marker = parse_list_marker(lines[index])
               break unless item_marker && same_list_type?(marker, item_marker)
@@ -318,13 +319,14 @@ module YARD
                 if blank_line?(line)
                   item_lines << "\n"
                   blank_seen = true
-                elsif blank_seen && (line.start_with?("\t") || leading_spaces(line) >= content_indent)
-                  break if first_line.empty? && item_lines.all? { |item_line| item_line == "\n" } && !line.start_with?("\t") && leading_spaces(line) == content_indent
+                elsif blank_seen && indented_to?(line, content_indent)
+                  break if first_line.empty? && item_lines.all? { |item_line| item_line == "\n" } &&
+                    leading_columns(line) == content_indent
                   item_loose = true if loose_list_item_continuation?(item_lines)
                   stripped = strip_list_item_indent(line, content_indent)
                   item_lines << stripped
                   blank_seen = false
-                elsif !blank_seen && (line.start_with?("\t") || leading_spaces(line) >= content_indent)
+                elsif !blank_seen && indented_to?(line, content_indent)
                   stripped = strip_list_item_indent(line, content_indent)
                   item_lines << stripped
                   blank_seen = false
@@ -432,9 +434,8 @@ module YARD
               if blank_line?(line)
                 quoted_lines << "\n"
                 previous_blank = true
-              elsif blockquote_start?(line)
-                line =~ BLOCKQUOTE_RE
-                quoted_lines << "#{$1}\n"
+              elsif (stripped = strip_blockquote_marker(line))
+                quoted_lines << stripped
                 saw_quote = true
                 previous_blank = false
               else
@@ -809,25 +810,25 @@ module YARD
           end
 
           def indented_code_start?(line)
-            line =~ /^(?: {2,}|\t)/
+            leading_columns(line) >= 2
           end
 
           def indented_code_block_start?(lines, index)
             return false unless indented_code_start?(lines[index])
-            return true if lines[index] =~ /^(?: {4,}|\t)/
+            return true if leading_columns(lines[index]) >= 4
 
             !index.zero? && blank_line?(lines[index - 1])
           end
 
           def yard_indented_code_start?(lines, index)
-            return false unless lines[index] =~ /^(?: {2,}|\t)!!!([\w.+-]+)[ \t]*$/
+            return false unless leading_columns(lines[index]) >= 2
+            return false unless consume_columns(lines[index], 2) =~ /^!!!([\w.+-]+)[ \t]*$/
             return false if index + 1 >= lines.length
 
-            indented_code_block_start?(lines, index) && lines[index + 1] =~ /^(?: {2,}|\t)/
+            indented_code_block_start?(lines, index) && indented_code_start?(lines[index + 1])
           end
 
           def list_start?(line, interrupt_paragraph = false)
-            return true if line =~ UNORDERED_LIST_RE || line =~ RDOC_ORDERED_LIST_RE
             return false unless (marker = parse_list_marker(line))
             return true unless interrupt_paragraph
 
@@ -843,7 +844,7 @@ module YARD
           end
 
           def blockquote_start?(line)
-            line =~ BLOCKQUOTE_RE
+            !strip_blockquote_marker(line).nil?
           end
 
           def html_block_start?(line, interrupt_paragraph = false)
@@ -875,26 +876,14 @@ module YARD
 
           def unindent(lines)
             indent = lines.reject { |line| blank_line?(line) }.map do |line|
-              line.start_with?("\t") ? 4 : line[/\A +/, 0].to_s.length
+              leading_columns(line)
             end.min || 4
 
-            lines.map do |line|
-              if line.start_with?("\t")
-                line.sub(/^\t/, '')
-              else
-                line.sub(/\A {0,#{indent}}/, '')
-              end
-            end.join
+            lines.map { |line| consume_columns(line, indent) }.join
           end
 
           def unindent_indented_code(lines)
-            lines.map do |line|
-              if line.start_with?("\t")
-                line.sub(/^\t/, '')
-              else
-                line.sub(/^ {0,4}/, '')
-              end
-            end.join
+            lines.map { |line| consume_columns(line, 4) }.join
           end
 
           def code_block(text, lang = nil)
@@ -961,29 +950,58 @@ module YARD
           end
 
           def parse_list_marker(line)
-            if line =~ /^(\s{0,3})([*+-])([ \t]*)(.*)$/
-              match = Regexp.last_match
-              return nil if match[3].empty? && !match[4].empty?
+            source = line.to_s.sub(/\n\z/, '')
+            indent, index = scan_leading_columns(source)
+            return nil if indent > 3
+            return nil if index >= source.length
 
-              return {:ordered => false, :bullet => match[2], :indent => match[1].length,
-                      :marker_length => 1, :padding => match[3].length, :content => match[4]}
+            char = source[index, 1]
+            current_column = indent
+
+            if '*+-'.include?(char)
+              marker_length = 1
+              marker_end = index + 1
+              current_column += 1
+              padding, marker_end = scan_padding_columns(source, marker_end, current_column)
+              content = source[marker_end..-1].to_s
+              return nil if padding.zero? && !content.empty?
+
+              return {:ordered => false, :bullet => char, :indent => indent,
+                      :marker_length => marker_length, :padding => padding, :content => content}
             end
 
-            if line =~ /^(\s{0,3})(\d{1,9})([.)])([ \t]*)(.*)$/
-              match = Regexp.last_match
-              return nil if match[4].empty? && !match[5].empty?
+            number = source[index..-1][/^\d{1,9}/]
+            if number
+              marker_end = index + number.length
+              delimiter = source[marker_end, 1]
+              if delimiter == '.' || delimiter == ')'
+                marker_length = number.length + 1
+                current_column += marker_length
+                marker_end += 1
+                padding, marker_end = scan_padding_columns(source, marker_end, current_column)
+                content = source[marker_end..-1].to_s
+                return nil if padding.zero? && !content.empty?
 
-              return {:ordered => true, :delimiter => match[3], :start => match[2].to_i,
-                      :indent => match[1].length, :marker_length => match[2].length + 1,
-                      :padding => match[4].length, :content => match[5]}
+                return {:ordered => true, :delimiter => delimiter, :start => number.to_i,
+                        :indent => indent, :marker_length => marker_length,
+                        :padding => padding, :content => content}
+              end
             end
 
-            return nil unless line =~ /^\s{0,3}([A-Za-z])\.(?:[ \t]+(.*))$/
+            if source[index, 2] =~ /\A[A-Za-z]\.\z/
+              marker_length = 2
+              marker_end = index + marker_length
+              current_column += marker_length
+              padding, marker_end = scan_padding_columns(source, marker_end, current_column)
+              content = source[marker_end..-1].to_s
+              return nil if padding.zero? && !content.empty?
 
-            match = Regexp.last_match
-            {:ordered => true, :delimiter => '.', :start => 1,
-             :indent => line[/\A */].to_s.length, :marker_length => 2, :padding => 1,
-             :content => (match[2] || '')}
+              return {:ordered => true, :delimiter => '.', :start => 1,
+                      :indent => indent, :marker_length => marker_length,
+                      :padding => padding, :content => content}
+            end
+
+            nil
           end
 
           def list_item_padding(marker)
@@ -1403,7 +1421,7 @@ module YARD
           def punctuation_char?(char)
             return false if char.nil?
 
-            char =~ /[[:punct:]]/ || unicode_symbol_char?(char)
+            ascii_punctuation_char?(char) || unicode_symbol_char?(char)
           end
 
           def unicode_symbol_char?(char)
@@ -1420,20 +1438,28 @@ module YARD
               (0x20A0..0x20CF).include?(codepoint)
           end
 
-          def leading_spaces(line)
-            line[/\A */, 0].to_s.length
+          def ascii_punctuation_char?(char)
+            return false unless ascii_only_compat?(char)
+
+            byte = char.to_s.unpack('C').first
+            return false unless byte
+
+            (0x21..0x2F).include?(byte) ||
+              (0x3A..0x40).include?(byte) ||
+              (0x5B..0x60).include?(byte) ||
+              (0x7B..0x7E).include?(byte)
+          end
+
+          def leading_columns(line)
+            scan_leading_columns(line.to_s).first
           end
 
           def indented_to?(line, indent)
-            line.start_with?("\t") || leading_spaces(line) >= indent
+            leading_columns(line) >= indent
           end
 
           def strip_list_item_indent(line, content_indent)
-            if line.start_with?("\t")
-              line.sub(/^\t/, '')
-            else
-              line.sub(/\A {0,#{content_indent}}/, '')
-            end
+            consume_columns(line, content_indent, 0, true)
           end
 
           def escape_url(url)
@@ -1525,9 +1551,9 @@ module YARD
             prefix = ''
             content = line.chomp
 
-            while content =~ /\A(\s{0,3}> ?)(.*)\z/
-              prefix << $1
-              content = $2
+            while (split = split_blockquote_prefix(content))
+              prefix << split[0]
+              content = split[1].chomp
             end
 
             [prefix, content]
@@ -1681,6 +1707,102 @@ module YARD
             text.to_s.split(/^/, -1)
           end
 
+          def scan_leading_columns(text)
+            index = 0
+            column = 0
+            source = text.to_s
+
+            while index < source.length
+              char = source[index, 1]
+              if char == ' '
+                column += 1
+              elsif char == "\t"
+                column += TAB_WIDTH - (column % TAB_WIDTH)
+              else
+                break
+              end
+              index += 1
+            end
+
+            [column, index]
+          end
+
+          def scan_padding_columns(text, index, start_column)
+            column = start_column
+            padding = 0
+            source = text.to_s
+
+            while index < source.length
+              char = source[index, 1]
+              if char == ' '
+                column += 1
+                padding += 1
+              elsif char == "\t"
+                advance = TAB_WIDTH - (column % TAB_WIDTH)
+                column += advance
+                padding += advance
+              else
+                break
+              end
+              index += 1
+            end
+
+            [padding, index]
+          end
+
+          def consume_columns(text, columns, start_column = 0, normalize_remaining = false)
+            index = 0
+            column = start_column
+            remaining = columns
+            prefix_width = 0
+            source = text.to_s
+
+            while index < source.length && remaining > 0
+              char = source[index, 1]
+              if char == ' '
+                column += 1
+                remaining -= 1
+                index += 1
+              elsif char == "\t"
+                advance = TAB_WIDTH - (column % TAB_WIDTH)
+                if advance <= remaining
+                  column += advance
+                  remaining -= advance
+                  index += 1
+                else
+                  prefix_width += advance - remaining if normalize_remaining
+                  column += advance
+                  remaining = 0
+                  index += 1
+                end
+              else
+                break
+              end
+            end
+
+            if normalize_remaining
+              while index < source.length
+                char = source[index, 1]
+                if char == ' '
+                  prefix_width += 1
+                  column += 1
+                  index += 1
+                elsif char == "\t"
+                  advance = TAB_WIDTH - (column % TAB_WIDTH)
+                  prefix_width += advance
+                  column += advance
+                  index += 1
+                else
+                  break
+                end
+              end
+
+              (' ' * prefix_width) + source[index..-1].to_s
+            else
+              source[index..-1].to_s
+            end
+          end
+
           def lazy_blockquote_continuation?(quoted_lines, line)
             return false if block_boundary?(line)
             return false if indented_code_start?(line) && !blockquote_paragraph_context?(quoted_lines)
@@ -1724,6 +1846,27 @@ module YARD
 
           def normalize_heading_line(line)
             normalize_paragraph_line(line).rstrip
+          end
+
+          def split_blockquote_prefix(line)
+            source = line.to_s
+            indent, index = scan_leading_columns(source)
+            return nil if indent > 3
+            return nil unless source[index, 1] == '>'
+
+            prefix = source[0..index]
+            rest = source[(index + 1)..-1].to_s
+            if rest.start_with?(' ') || rest.start_with?("\t")
+              prefix << rest[0, 1]
+              rest = consume_columns(rest, 1, indent + 1, true)
+            end
+
+            [prefix, rest.end_with?("\n") ? rest : "#{rest}\n"]
+          end
+
+          def strip_blockquote_marker(line)
+            split = split_blockquote_prefix(line)
+            split && split[1]
           end
 
           def loose_list_item_continuation?(item_lines)
