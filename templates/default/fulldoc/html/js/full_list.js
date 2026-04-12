@@ -76,7 +76,20 @@
           if (!targetLink) return false;
           mouseEvent = new MouseEvent("click", {
             bubbles: true,
-            cancelable: true
+            cancelable: true,
+            view: event.view || window,
+            detail: event.detail,
+            screenX: event.screenX,
+            screenY: event.screenY,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            ctrlKey: event.ctrlKey,
+            shiftKey: event.shiftKey,
+            altKey: event.altKey,
+            metaKey: event.metaKey,
+            button: event.button,
+            buttons: event.buttons,
+            relatedTarget: event.relatedTarget
           });
           targetLink.dispatchEvent(mouseEvent);
           event.preventDefault();
