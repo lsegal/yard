@@ -4,27 +4,33 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="<%= abs_url('css', 'style.css') %>?<%= mtime('css/style.css') %>" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="<%= abs_url('css', 'custom.css') %>?<%= mtime('css/custom.css') %>" type="text/css" media="screen" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="<%= abs_url('js', 'jquery.js') %>?<%= mtime('js/jquery.js') %>"></script>
     <script type="text/javascript" charset="utf-8">
       function checkPage(process) {
-        $.ajax({cache: false, url: "<%= router.request.path %>" + (process ? "?process=true" : ""),
-          statusCode: { 200: function() { window.location.reload(true); } } });
-        setTimeout('checkPage()', 2000);
+        fetch("<%= router.request.path %>" + (process ? "?process=true" : ""), { cache: "no-store" })
+          .then(function(response) {
+            if (response.status === 200) window.location.reload();
+          });
+        setTimeout(checkPage, 2000);
       }
       function setFade() {
         centerMessage();
-        $(window).resize(function() { centerMessage(); });
-        $('#fade').fadeIn();
-        $('#processing').fadeIn();
+        window.addEventListener("resize", centerMessage);
+        document.getElementById('fade').style.display = 'block';
+        document.getElementById('processing').style.display = 'block';
       }
       function centerMessage() {
-        $('#fade').css('width', $(window).width() + 'px');
-        $('#fade').css('height', $(window).height() - parseInt($('#fade').css('top')) + 'px');
-        $('#processing').css('left', ($(window).width() / 2 - $('#processing').width() / 2) + 'px');
-        $('#processing').css('top', ($(window).height() / 2 - $('#processing').height() / 2) + 'px');
+        var fade = document.getElementById('fade');
+        var processing = document.getElementById('processing');
+        var fadeTop = parseInt(window.getComputedStyle(fade).top, 10) || 0;
+        fade.style.width = window.innerWidth + 'px';
+        fade.style.height = (window.innerHeight - fadeTop) + 'px';
+        processing.style.left = (window.innerWidth / 2 - processing.offsetWidth / 2) + 'px';
+        processing.style.top = (window.innerHeight / 2 - processing.offsetHeight / 2) + 'px';
       }
-      $(function() { checkPage(true); });
-      $(setFade);
+      document.addEventListener("DOMContentLoaded", function() {
+        checkPage(true);
+        setFade();
+      });
     </script>
     <style type="text/css" media="screen">
       body { overflow: hidden; margin: 12px; display: block; }

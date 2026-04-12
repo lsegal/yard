@@ -1,22 +1,6 @@
 <form class="search" method="get" action="<%= abs_url base_path(router.search_prefix) %>">
   <input name="q" type="search" placeholder="Search" id="search_box" size="30" value="<%= h @query %>">
 </form>
-<script type="text/javascript" charset="utf-8">
-  $(function() {
-    $('#search_box').autocomplete($('#search_box').parent().attr('action'), {
-      width: 200,
-      formatItem: function(item) {
-        var values = item[0].split(",");
-        return values[0] + (values[1] == '' ? "" : " <small>(" + values[1] + ")</small>");
-      }
-    }).result(function(event, item) {
-      var values = item[0].split(",")
-      $('#search_box').val(values[1]);
-      location.href = values[3];
-      return false;
-    });
-  });
-</script>
 
 <div id="menu">
   <% unless @single_library %>

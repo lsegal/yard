@@ -3,17 +3,16 @@
   <head>
     <%= erb(:headers) %>
 		<script type="text/javascript">
-			$(function() {
-				$('.object_link').each(function() {
-					$(this).html($(this).find('a').html())
+			document.addEventListener("DOMContentLoaded", function() {
+				Array.prototype.forEach.call(document.querySelectorAll('.object_link'), function(node) {
+					var link = node.querySelector('a');
+					if (link) node.innerHTML = link.innerHTML;
 				});
-			});
-			$(function() {
 				generateTOC();
-				if ($('#toc li').size() == 0) {
-					$('#sidebar h2.toc').hide();
+				if (document.querySelectorAll('#toc li').length === 0) {
+					document.querySelector('#sidebar h2.toc').style.display = 'none';
 				}
-			})
+			});
 		</script>
   </head>
   <body>
