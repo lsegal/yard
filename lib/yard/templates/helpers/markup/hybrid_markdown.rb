@@ -14,21 +14,6 @@ module YARD
         class HybridMarkdown
           attr_accessor :from_path
 
-          NAMED_ENTITIES = {
-            'nbsp' => [0x00A0].pack('U'),
-            'copy' => [0x00A9].pack('U'),
-            'AElig' => [0x00C6].pack('U'),
-            'Dcaron' => [0x010E].pack('U'),
-            'frac34' => [0x00BE].pack('U'),
-            'HilbertSpace' => [0x210B].pack('U'),
-            'DifferentialD' => [0x2146].pack('U'),
-            'ClockwiseContourIntegral' => [0x2232].pack('U'),
-            'ngE' => [0x2267, 0x0338].pack('U*'),
-            'ouml' => [0x00F6].pack('U'),
-            'quot' => '"',
-            'amp' => '&'
-          }.freeze
-
           ATX_HEADING_RE = /^\s{0,3}#{Regexp.escape('#')}{1,6}(?=[ \t]|$)/.freeze
           RDOC_HEADING_RE = /^\s*(=+)[ \t]+(.+?)\s*$/.freeze
           SETEXT_HEADING_RE = /^\s{0,3}(=+|-+)\s*$/.freeze
@@ -1591,7 +1576,7 @@ module YARD
           end
 
           def whitespace_char?(char)
-            char.nil? || char =~ /\s/ || char == NAMED_ENTITIES['nbsp']
+            char.nil? || char =~ /\s/ || char == HtmlEntities::ENTITIES['nbsp']
           end
 
           def punctuation_char?(char)
@@ -1875,8 +1860,7 @@ module YARD
               codepoint = $1.to_i(16)
             else
               name = entity[1..-2]
-              return [0x00E4].pack('U') if name == 'auml'
-              return NAMED_ENTITIES[name] || CGI.unescapeHTML(entity)
+              return HtmlEntities::ENTITIES[name] || CGI.unescapeHTML(entity)
             end
 
             return [0xFFFD].pack('U') if codepoint.zero?

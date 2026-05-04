@@ -250,6 +250,30 @@ HTML
       expect(to_html('&amp; &#169;')).to eq('<p>&amp; ©</p>')
     end
 
+    it "converts common named entities" do
+      expected = [
+        0x2014, 0x2013, 0x2018, 0x2019, 0x201C, 0x201D, 0x2026, 0x2022,
+        0x00AB, 0x00BB, 0x2039, 0x203A, 0x00A2, 0x00A3, 0x00A5, 0x20AC,
+        0x00A7, 0x00B6, 0x00B0, 0x00B5, 0x00B7, 0x00AE, 0x2122, 0x00B1,
+        0x00D7, 0x00F7
+      ].pack('U*')
+      entities = '&mdash;&ndash;&lsquo;&rsquo;&ldquo;&rdquo;&hellip;&bull;' \
+        '&laquo;&raquo;&lsaquo;&rsaquo;&cent;&pound;&yen;&euro;' \
+        '&sect;&para;&deg;&micro;&middot;&reg;&trade;&plusmn;&times;&divide;'
+
+      expect(to_html(entities)).to eq("<p>#{expected}</p>")
+    end
+
+    it "converts HTML5 named entities beyond Ruby's CGI list" do
+      expected = [0x2233, 0x2267, 0x0338, 0x21D3].pack('U*')
+
+      expect(to_html('&CounterClockwiseContourIntegral;&NotGreaterFullEqual;&Downarrow;')).to eq("<p>#{expected}</p>")
+    end
+
+    it "converts named angle bracket entities without allowing raw HTML" do
+      expect(to_html('&lt;script&gt; &apos;')).to eq("<p>&lt;script&gt; '</p>")
+    end
+
     it "escapes HTML-sensitive characters in regular text" do
       expect(to_html('2 < 3 & "quoted"')).to eq('<p>2 &lt; 3 &amp; &quot;quoted&quot;</p>')
     end
