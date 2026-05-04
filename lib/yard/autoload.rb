@@ -154,6 +154,7 @@ module YARD
     autoload :HandlerAborted,             __p('handlers/base')
     autoload :NamespaceMissingError,      __p('handlers/base')
     autoload :Processor,                  __p('handlers/processor')
+    autoload :PrismProcessor,             __p('handlers/prism_processor')
   end
 
   # Namespace for internationalization (i18n)
@@ -190,6 +191,7 @@ module YARD
       autoload :AstNode,           __p('parser/ruby/ast_node')
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
       autoload :RipperParser,      __p('parser/ruby/ruby_parser')
+      autoload :PrismParser,       __p('parser/ruby/prism_parser')
       autoload :TokenResolver,     __p('parser/ruby/token_resolver')
     end
 

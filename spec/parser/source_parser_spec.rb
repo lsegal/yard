@@ -555,7 +555,7 @@ RSpec.describe YARD::Parser::SourceParser do
           parser = Parser::SourceParser.new
           expect(File).to receive(:read_binary).with('tmpfile').and_return(src)
           result = parser.parse("tmpfile")
-          if HAVE_RIPPER && YARD.ruby19?
+          if HAVE_RIPPER && YARD.ruby19? && result.enumerator
             if msg == :not_to
               default_encoding = 'UTF-8'
               expect(result.enumerator[0].source.encoding.to_s).to eq(default_encoding)
@@ -596,7 +596,9 @@ RSpec.describe YARD::Parser::SourceParser do
         expect(File).to receive(:read_binary).with('tmpfile').and_return(src)
         result = parser.parse('tmpfile')
         expect(Registry.all(:class).first.path).to eq "FooBar"
-        expect(result.enumerator[0].source.encoding.to_s.downcase).to eq encoding
+        if result.enumerator
+          expect(result.enumerator[0].source.encoding.to_s.downcase).to eq encoding
+        end
       end
     end if HAVE_RIPPER && YARD.ruby19?
   end

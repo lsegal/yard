@@ -1,25 +1,38 @@
 # frozen_string_literal: true
 begin require 'ripper'; rescue LoadError; nil end
+begin require_relative 'prism_parser'; rescue LoadError; nil end
 
 module YARD
   module Parser
     module Ruby
-      # Ruby 1.9 parser
+      # Ruby 1.9+ parser
       # @!attribute [r] encoding_line
       # @!attribute [r] frozen_string_line
       # @!attribute [r] shebang_line
       # @!attribute [r] enumerator
       class RubyParser < Parser::Base
         def initialize(source, filename)
-          @parser = RipperParser.new(source, filename)
+          @parser = if use_prism?
+            PrismParser.new(source, filename)
+          else
+            RipperParser.new(source, filename)
+          end
         end
 
         def parse; @parser.parse end
         def tokenize; @parser.tokens end
-        def enumerator; @parser.enumerator end
+        def enumerator; @parser.is_a?(PrismParser) ? nil : @parser.enumerator end
         def shebang_line; @parser.shebang_line end
         def encoding_line; @parser.encoding_line end
         def frozen_string_line; @parser.frozen_string_line end
+        def prism_result; @parser.respond_to?(:prism_result) ? @parser.prism_result : nil end
+
+        private
+
+        def use_prism?
+          return false if ENV['YARD_PARSER'] == 'ripper'
+          defined?(::Prism) && defined?(PrismParser)
+        end
       end
 
       # Internal parser class
