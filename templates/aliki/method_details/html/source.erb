@@ -1,0 +1,9 @@
+<div class="method-controls">
+  <details class="method-source-toggle">
+    <summary>Source</summary>
+  </details>
+</div>
+
+<div class="method-source-code" id="<%= anchor_for(object) %>-source">
+  <pre class="code ruby"><span class="info file"># File '<%= h object.file %>'<% if object.line %>, line <%= object.line %><% end %></span><%= "\n\n" %><%= html_syntax_highlight object.source %></pre>
+</div>
