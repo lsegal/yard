@@ -1,0 +1,172 @@
+/*
+ * YARD integration for the RDoc Aliki theme.
+ *
+ * The imported Aliki stylesheet targets RDoc's generated HTML. These selectors
+ * map YARD's default template fragments onto the same visual system without
+ * replacing YARD's object rendering pipeline.
+ */
+
+main .box_info,
+main .docstring,
+main .tags,
+main .summary,
+main .constants,
+main .method_details_list,
+main .attr_details {
+	margin-block: var(--space-6);
+}
+
+main .box_info {
+	padding: var(--space-4);
+	border: 1px solid var(--color-border-subtle);
+	border-radius: var(--radius-lg);
+	background: var(--color-background-secondary);
+}
+
+main .box_info dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: var(--space-2) var(--space-4);
+	margin: 0;
+}
+
+main .box_info dl + dl {
+	margin-top: var(--space-3);
+}
+
+main .box_info dt {
+	color: var(--color-text-secondary);
+	font-weight: var(--font-weight-semibold);
+}
+
+main .summary {
+	display: grid;
+	gap: var(--space-3);
+	padding: 0;
+	list-style: none;
+}
+
+main .summary li {
+	padding: var(--space-4);
+	border: 1px solid var(--color-border-subtle);
+	border-radius: var(--radius-md);
+	background: var(--color-background-secondary);
+}
+
+main .summary_signature {
+	display: block;
+	font-family: var(--font-family-mono);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-semibold);
+}
+
+main .summary_desc {
+	display: block;
+	margin-top: var(--space-2);
+	color: var(--color-text-secondary);
+}
+
+main .summary_desc .inline,
+main .summary_desc p {
+	display: inline;
+	margin: 0;
+}
+
+main .note.title {
+	display: inline-block;
+	margin-left: var(--space-2);
+	padding: 0 var(--space-2);
+	border-radius: var(--radius-sm);
+	background: var(--color-accent-subtle);
+	color: var(--color-accent-primary);
+	font-size: var(--font-size-xs);
+	font-weight: var(--font-weight-semibold);
+	text-transform: uppercase;
+}
+
+main .constants {
+	padding: var(--space-4);
+	border: 1px solid var(--color-border-subtle);
+	border-radius: var(--radius-lg);
+	background: var(--color-background-secondary);
+}
+
+main .constants dt {
+	margin-top: var(--space-4);
+	font-family: var(--font-family-mono);
+	font-weight: var(--font-weight-semibold);
+}
+
+main .constants dt:first-child {
+	margin-top: 0;
+}
+
+main .constants dd {
+	margin-left: 0;
+}
+
+main .method-detail .docstring,
+main .method-detail .tags {
+	margin-block: var(--space-4) 0;
+}
+
+main .method-detail .docstring {
+	color: var(--color-text-primary);
+}
+
+main .method-detail .tags {
+	color: var(--color-text-secondary);
+}
+
+main .source_code {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+main .source_code td {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	vertical-align: top;
+}
+
+main .source_code .lines {
+	user-select: none;
+	color: var(--color-text-tertiary);
+	text-align: right;
+}
+
+main .inheritanceTree,
+main .summary_toggle,
+main .constants_summary_toggle {
+	font-size: var(--font-size-xs);
+	font-weight: var(--font-weight-normal);
+}
+
+main .fullTree {
+	margin-top: var(--space-2);
+	color: var(--color-text-secondary);
+	font-size: var(--font-size-sm);
+}
+
+main .method-detail h3.signature {
+	margin: 0;
+}
+
+main .method-callseq .object_link {
+	color: inherit;
+}
+
+main .method-source-code .info.file {
+	display: block;
+	color: var(--color-text-tertiary);
+}
+
+main #filecontents > h1:first-child,
+main > h1:first-child {
+	margin-top: 0;
+}
+
+main a {
+	overflow-wrap: anywhere;
+}
