@@ -201,6 +201,27 @@ in the form `Hash<KeyType, ValueType>`, or using the hash specific syntax:
 `Hash{KeyTypes=>ValueTypes}`. In the latter case, KeyTypes or ValueTypes can
 also be a list of types separated by commas.
 
+For more precise type signatures, the hash-specific syntax also supports
+multiple keys mapping to the same value type(s), multiple key/value groups,
+and nested hashes:
+
+* **Multiple keys for the same value type(s)** &mdash; A comma-separated list of
+  keys on the left of `=>` all share the value types on the right. For example,
+  `Hash{:name, :title => String}` describes a Hash where both `:name` and
+  `:title` keys map to String values.
+* **Multiple key/value groups** &mdash; Separate distinct key/value groups with
+  a semicolon (`;`). For example,
+  `Hash{:name => String; :age => Integer}` describes a Hash with a `:name` key
+  that maps to a String and an `:age` key that maps to an Integer.
+* **Nested hashes** &mdash; A value type can itself be a hash, allowing nested
+  structures. For example,
+  `Hash{:user => Hash{:name => String, :age => Integer}}` describes a Hash with
+  a `:user` key whose value is another Hash with `:name` and `:age` keys.
+
+Keys in the hash-specific syntax are commonly [literal values](#Literals) such
+as symbols (`:key`) or strings (`'key'`, `"key"`), but any type listed in the
+[type conventions](#Type_List_Conventions) is allowed.
+
 #### Order-Dependent Lists
 
 An order dependent list is a set of types surrounded by "()" and separated by
