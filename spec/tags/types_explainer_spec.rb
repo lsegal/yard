@@ -5,6 +5,26 @@ RSpec.describe YARD::Tags::TypesExplainer do
     YARD::Tags::TypesExplainer::Type.new(name)
   end
 
+  describe "LITERALMATCH" do
+    it "matches symbol literals" do
+      expect(":symbol"[described_class::LITERALMATCH]).to eq ":symbol"
+      expect(":some_symbol"[described_class::LITERALMATCH]).to eq ":some_symbol"
+      expect("not_a_symbol"[described_class::LITERALMATCH]).to be nil
+    end
+
+    it "matches single-quoted string literals" do
+      expect("'string'"[described_class::LITERALMATCH]).to eq "'string'"
+      expect("'some string with spaces'"[described_class::LITERALMATCH]).to eq "'some string with spaces'"
+      expect("not_quoted"[described_class::LITERALMATCH]).to be nil
+    end
+
+    it "matches double-quoted string literals" do
+      expect('"string"'[described_class::LITERALMATCH]).to eq '"string"'
+      expect('"some string with spaces"'[described_class::LITERALMATCH]).to eq '"some string with spaces"'
+      expect("not_quoted"[described_class::LITERALMATCH]).to be nil
+    end
+  end
+
   describe YARD::Tags::TypesExplainer::Type, '#to_s' do
     before { @t = described_class.new(nil) }
 
@@ -21,30 +41,43 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(@t.to_s).to eq "an Array"
       expect(@t.to_s(false)).to eq "Arrays"
     end
-
-    it "works for a method (ducktype)" do
-      @t.name = "#mymethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod"
-    end
-
-    it "works for multiple methods joined with '&' (ducktype)" do
-      @t.name = "#mymethod&#myothermethod&#mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
-
-    it "works for multiple methods joined with ' & ' (ducktype)" do
-      @t.name = "#mymethod & #myothermethod & #mythirdmethod"
-      expect(@t.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
-      expect(@t.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
-    end
     
     it "works for a constant value" do
-      ['false', 'true', 'nil', '4', ':foo'].each do |name|
+      ['false', 'true', 'nil', '4'].each do |name|
         @t.name = name
         expect(@t.to_s).to eq name
         expect(@t.to_s(false)).to eq name
+      end
+    end
+  end
+
+  describe YARD::Tags::TypesExplainer::DuckType, '#to_s' do
+    it "works for a method (ducktype)" do
+      duck_type = described_class.new("#mymethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod"
+    end
+
+    it "works for multiple methods joined with '&' (ducktype)" do
+      duck_type = described_class.new("#mymethod&#myothermethod&#mythirdmethod")
+      duck_type.name = "#mymethod&#myothermethod&#mythirdmethod"
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+
+    it "works for multiple methods joined with ' & ' (ducktype)" do
+      duck_type = described_class.new("#mymethod & #myothermethod & #mythirdmethod")
+      expect(duck_type.to_s).to eq "an object that responds to #mymethod, #myothermethod and #mythirdmethod"
+      expect(duck_type.to_s(false)).to eq "objects that respond to #mymethod, #myothermethod and #mythirdmethod"
+    end
+  end
+
+  describe YARD::Tags::TypesExplainer::LiteralType, '#to_s' do
+    it "works for literal values" do
+      [':symbol', "'5'"].each do |name|
+        literal_type = described_class.new(name)
+        expect(literal_type.to_s).to eq "a literal value #{name}"
+        expect(literal_type.to_s(false)).to eq "a literal value #{name}"
       end
     end
   end
@@ -141,6 +174,17 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type[3].name).to eq "E"
     end
 
+    it 'parses a list of literal values' do
+      type = parse("true, false, nil, 4, :symbol, '5'")
+      expect(type.size).to eq 6
+      expect(type[0].name).to eq "true"
+      expect(type[1].name).to eq "false"
+      expect(type[2].name).to eq "nil"
+      expect(type[3].name).to eq "4"
+      expect(type[4].name).to eq ":symbol"
+      expect(type[5].name).to eq "'5'"
+    end
+
     it "parses a collection type" do
       type = parse("MyList<String>")
       expect(type.first).to be_a(YARD::Tags::TypesExplainer::CollectionType)
@@ -207,7 +251,8 @@ RSpec.describe YARD::Tags::TypesExplainer do
           a Hash with keys made of (Foos or Bars) and values of (Symbols or Numbers)",
         "#weird_method?, #<=>, #!=" => "an object that responds to #weird_method?;
           an object that responds to #<=>;
-          an object that responds to #!="
+          an object that responds to #!=",
+        ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)

@@ -213,7 +213,7 @@ having exactly those 3 elements) would be listed as: `Array(String, Fixnum, Hash
 Some literals are accepted by virtue of being Ruby literals, but also by YARD
 conventions. Here is a non-exhaustive list of certain accepted literal values:
 
-* `true`, `false`, `nil`, `:foo` &mdash; used when a method returns
+* `true`, `false`, `nil`, `:foo`, `"bar"` &mdash; used when a method returns
   these explicit literal values. Note that if your method returns both
   `true` or `false`, you should use the `Boolean` conventional type
   instead.
