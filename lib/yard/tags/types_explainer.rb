@@ -270,6 +270,18 @@ module YARD
             Type.new(name)
           end
         end
+
+        private
+
+        def create_type(name)
+          if name[0, 1] == ":" || (name[0, 1] =~ /['"]/ && name[-1, 1] =~ /['"]/)
+            LiteralType.new(name)
+          elsif name[0, 1] == "#"
+            DuckType.new(name)
+          else
+            Type.new(name)
+          end
+        end
       end
     end
   end
