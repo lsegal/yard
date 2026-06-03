@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.8.7' if s.respond_to?(:required_ruby_version=)
   s.metadata['yard.run'] = 'yri'
   s.metadata['changelog_uri'] = 'https://rubydoc.info/gems/yard/file/CHANGELOG.md'
+  s.metadata['source_code_uri'] = 'https://github.com/lsegal/yard'
 end
