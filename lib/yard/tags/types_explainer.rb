@@ -186,6 +186,7 @@ module YARD
               raise SyntaxError, "expecting name, got '#{token}'" if name.nil?
               type = create_type(name) unless type
               current_parsed_types << type
+              @terminator_token = token_type
               finished = true
             when :type_name
               raise SyntaxError, "expecting END, got name '#{token}'" if name
@@ -245,9 +246,12 @@ module YARD
             when :hash_collection_value
               # => - current keys map to the next value(s)
               raise SyntaxError, "no keys before =>" if current_keys.empty?
-              values = parse(until_tokens: [:hash_collection_value_end, :parse_end])
+              values = parse(until_tokens: [:hash_collection_value_end, :hash_collection_end, :parse_end])
               key_value_pairs << [current_keys, values]
               current_keys = []
+              # The value parse consumes its terminator_token. A closing '}' (or end of input)
+              # ends the hash; ';' continues to the next key group.
+              finished = true if @terminator_token == :hash_collection_end || @terminator_token == :parse_end
             when :hash_collection_end, :parse_end
               # End of hash
               finished = true

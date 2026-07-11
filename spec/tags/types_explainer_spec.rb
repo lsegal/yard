@@ -213,6 +213,16 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type.map(&:name)).to eq ['false', 'true', 'nil', '4', ':foo']
     end
 
+    it "parses a type following a closed hash collection as a sibling" do
+      type = parse("Hash{Symbol => String}, nil")
+      expect(type.size).to eq 2
+      expect(type[0]).to be_a(YARD::Tags::TypesExplainer::HashCollectionType)
+      expect(type[0].key_types.map(&:name)).to eq ["Symbol"]
+      expect(type[0].value_types.map(&:name)).to eq ["String"]
+      expect(type[1]).to be_a(YARD::Tags::TypesExplainer::Type)
+      expect(type[1].name).to eq "nil"
+    end
+
     it "does not accept two commas in a row" do
       parse_fail "A,,B"
     end
@@ -255,7 +265,8 @@ RSpec.describe YARD::Tags::TypesExplainer do
         ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'",
         "Hash{:key_one, :key_two => String; :key_three => Symbol}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols)",
         "Hash{:key_one, :key_two => String; :key_three => Symbol; :key_four => Hash{:sub_key_one => String}}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols) and keys made of (a literal value :key_four) and values of (a Hash with keys made of (a literal value :sub_key_one) and values of (Strings))",
-        "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)"
+        "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)",
+        "Hash{Symbol => String}, nil" => "a Hash with keys made of (Symbols) and values of (Strings); nil"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)
