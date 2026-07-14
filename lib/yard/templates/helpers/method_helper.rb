@@ -66,6 +66,8 @@ module YARD
 
       # @return [String] formats source code of a constant value
       def format_constant(value)
+        return "" unless value
+
         # last can return nil, so default to empty string
         sp = value.split("\n").last || ""
         sp = sp[/^(\s+)/, 1]
