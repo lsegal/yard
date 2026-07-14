@@ -201,6 +201,19 @@ RSpec.describe YARD::Templates::Engine.template(:default, :module) do
     html_equals(Registry.at('A').format(html_options), :module005)
   end
 
+  it "renders RBS constants without source values in html" do
+    Registry.clear
+    YARD::Parser::SourceParser.parse_string <<-'RBS', :rbs
+class Foo
+  BAR: untyped
+end
+    RBS
+
+    html = Registry.at('Foo').format(html_options)
+    expect(html).to include('id="BAR-constant"')
+    expect(html).to include('<pre class="code"></pre>')
+  end
+
   it "shows inherited methods from matching groups in the group section, not in flat inherited section" do
     Registry.clear
     YARD.parse_string <<-'eof'

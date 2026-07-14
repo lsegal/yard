@@ -115,5 +115,11 @@ RSpec.describe YARD::Templates::Helpers::MethodHelper do
         expect(format_constant("")).to eq ""
       end
     end
+
+    context "when nil is passed as param" do
+      it "returns an empty string" do
+        expect(format_constant(nil)).to eq ""
+      end
+    end
   end
 end
