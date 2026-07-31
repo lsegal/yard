@@ -182,6 +182,9 @@ a list of parametrized types can occur in any order inside of a type. An array
 specified as `Array<String, Fixnum>` can contain any amount of Strings or Fixnums,
 in any order. When the order matters, use "order-dependent lists", described below.
 
+The type name before `<...>` can be omitted, in which case it defaults to
+`Array`: `<String, Fixnum>` means the same thing as `Array<String, Fixnum>`.
+
 #### Duck-Types
 
 Duck-types are allowed in type specifier lists, and are identified by method
@@ -222,12 +225,39 @@ Keys in the hash-specific syntax are commonly [literal values](#Literals) such
 as symbols (`:key`) or strings (`'key'`, `"key"`), but any type listed in the
 [type conventions](#Type_List_Conventions) is allowed.
 
+The type name before `{...}` can be omitted, in which case it defaults to
+`Hash`: `{K=>V}` means the same thing as `Hash{K=>V}`.
+
 #### Order-Dependent Lists
 
 An order dependent list is a set of types surrounded by "()" and separated by
 commas. This list must contain exactly those types in exactly the order specified.
 For instance, an Array containing a String, Fixnum and Hash in that order (and
 having exactly those 3 elements) would be listed as: `Array(String, Fixnum, Hash)`.
+
+The type name before `(...)` can be omitted, in which case it defaults to
+`Array`: `(String, Fixnum, Hash)` means the same thing as
+`Array(String, Fixnum, Hash)`.
+
+#### Grouped Unions
+
+A comma inside an order-dependent list already means "next slot," so there's no
+way to write "a slot that can be either of two types" using a comma there - and
+the same problem applies to any other position where `,` already has a
+different meaning. Wrapping a `|`-separated list in square brackets (`[...]`)
+groups it into a single union type that can be used anywhere a type is
+expected, including as one slot of an order-dependent list:
+`Array([Integer | String], Symbol)` describes a 2-element Array whose first
+element is an `Integer` or a `String`, followed by a `Symbol`.
+
+`[...]` is dedicated entirely to this grouping; unlike `<...>`, `(...)`, and
+`{...}`, it never takes a preceding type name and is never itself a
+collection - `[Integer | String]` alone just means "an Integer or a String",
+identical in meaning to the plain top-level list `Integer, String`, just
+usable in more places. `|` is only meaningful inside `[...]`, and a plain `,`
+is not allowed inside `[...]` - a top-level type list already uses `,` for
+the same "either of these" meaning, so there is no need for two spellings of
+it in the same position.
 
 #### Literals
 

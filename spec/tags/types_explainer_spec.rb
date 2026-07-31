@@ -72,6 +72,19 @@ RSpec.describe YARD::Tags::TypesExplainer do
     end
   end
 
+  describe YARD::Tags::TypesExplainer::GroupType, '#to_s' do
+    it "works for two types" do
+      group = described_class.new([type("Foo"), type("Bar")])
+      expect(group.to_s).to eq "(a Foo or a Bar)"
+      expect(group.to_s(false)).to eq "(Foos or Bars)"
+    end
+
+    it "works for more than two types" do
+      group = described_class.new([type("Foo"), type("Bar"), type("Baz")])
+      expect(group.to_s).to eq "(a Foo, a Bar or a Baz)"
+    end
+  end
+
   describe YARD::Tags::TypesExplainer::LiteralType, '#to_s' do
     it "works for literal values" do
       [':symbol', "'5'"].each do |name|
@@ -203,6 +216,36 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type.first.name).to eq "Array"
     end
 
+    it "parses a grouped union inside square brackets as a GroupType" do
+      type = parse("[String | Symbol]")
+      expect(type.first).to be_a(YARD::Tags::TypesExplainer::GroupType)
+      expect(type.first.types.map(&:name)).to eq ["String", "Symbol"]
+    end
+
+    it "allows a grouped union as a fixed-tuple slot" do
+      type = parse("Array([String | Symbol], Integer)")
+      expect(type.first).to be_a(YARD::Tags::TypesExplainer::FixedCollectionType)
+      expect(type.first.types.first).to be_a(YARD::Tags::TypesExplainer::GroupType)
+      expect(type.first.types.first.types.map(&:name)).to eq ["String", "Symbol"]
+      expect(type.first.types.last.name).to eq "Integer"
+    end
+
+    it "does not allow '|' outside of square brackets" do
+      parse_fail "String | Symbol"
+    end
+
+    it "does not allow '|' inside a collection type" do
+      parse_fail "Array<String | Symbol>"
+    end
+
+    it "does not allow ',' inside square brackets" do
+      parse_fail "[String, Symbol]"
+    end
+
+    it "does not allow '[' to follow a type name" do
+      parse_fail "Foo[String]"
+    end
+
     it "allows a hash collection type without a name" do
       type = parse("{K=>V}")
       expect(type.first.name).to eq "Hash"
@@ -266,6 +309,23 @@ RSpec.describe YARD::Tags::TypesExplainer do
         "Hash{:key_one, :key_two => String; :key_three => Symbol}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols)",
         "Hash{:key_one, :key_two => String; :key_three => Symbol; :key_four => Hash{:sub_key_one => String}}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols) and keys made of (a literal value :key_four) and values of (a Hash with keys made of (a literal value :sub_key_one) and values of (Strings))",
         "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)"
+      }
+      expect.each do |input, expected|
+        explain = YARD::Tags::TypesExplainer.explain(input)
+        expect(explain).to eq expected.delete("\n").squeeze(' ')
+      end
+    end
+
+    it "parses grouped unions (`[A | B]`)" do
+      expect = {
+        # standalone, redundant with a plain top-level union, but legal
+        "[Integer | String]" => "(an Integer or a String)",
+        # the motivating case: a union in a fixed-tuple slot, which `,`
+        # can't express there since it already means "next slot"
+        "Array([Integer | String], Symbol)" =>
+          "an Array containing ((an Integer or a String) followed by a Symbol)",
+        "Hash{String => [Integer | Symbol]}" =>
+          "a Hash with keys made of (Strings) and values of ((Integers or Symbols))"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)

@@ -70,6 +70,19 @@ module YARD
       end
 
       # @private
+      class GroupType < Type
+        attr_accessor :types
+
+        def initialize(types)
+          @types = types
+        end
+
+        def to_s(singular = true)
+          "(" + list_join(types.map {|t| t.to_s(singular) }) + ")"
+        end
+      end
+
+      # @private
       class CollectionType < Type
         attr_accessor :types
 
@@ -154,9 +167,12 @@ module YARD
           :collection_end => />/,
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
+          :group_start => /\[/,
+          :group_end => /\]/,
           :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|#{LITERALMATCH}|\w+/,
           :symbol => /:#{METHODNAMEMATCH}/,
           :type_next => /[,]/,
+          :union_sep => /\|/,
           :whitespace => /\s+/,
           :hash_collection_start => /\{/,
           :hash_collection_value => /=>/,
@@ -181,7 +197,19 @@ module YARD
 
         private
 
-        def parse_until(until_tokens)
+        # @param allow_pipe [Boolean] whether a bare `|` is a legal separator
+        #   in this scope. Only true directly inside `[...]`, YARD's grouping
+        #   syntax: it lets a union be nested as a single type wherever a
+        #   type is expected, including inside constructs where `,` already
+        #   has a different meaning (an order-dependent list's positional
+        #   slots). `,` is not allowed inside `[...]` (and `|` is not allowed
+        #   anywhere else) - the two are never legal in the same scope, so
+        #   there is nothing to disambiguate between them.
+        # @param allow_comma [Boolean] whether a bare `,` is a legal separator
+        #   in this scope. False only directly inside `[...]`.
+        # @return [Array(Array<Type>, Symbol)] the parsed types and the
+        #   token that ended the list
+        def parse_until(until_tokens, allow_pipe: false, allow_comma: true)
           current_parsed_types = []
           type = nil
           name = nil
@@ -199,7 +227,15 @@ module YARD
               raise SyntaxError, "expecting END, got name '#{token}'" if name
               name = token
             when :type_next
+              raise SyntaxError, "',' is not allowed inside '[...]' groups" unless allow_comma
               raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if name.nil?
+              type = create_type(name) unless type
+              current_parsed_types << type
+              name = nil
+              type = nil
+            when :union_sep
+              raise SyntaxError, "'|' is only allowed inside '[...]' groups" unless allow_pipe
+              raise SyntaxError, "expecting name, got '|' at #{@scanner.pos}" if name.nil?
               type = create_type(name) unless type
               current_parsed_types << type
               name = nil
@@ -209,6 +245,11 @@ module YARD
               klass = token_type == :collection_start ? CollectionType : FixedCollectionType
               nested_types, = parse_until([:fixed_collection_end, :collection_end, :parse_end])
               type = klass.new(name, nested_types)
+            when :group_start
+              raise SyntaxError, "'[' cannot follow a type name" if name
+              nested_types, = parse_until([:group_end, :parse_end], allow_pipe: true, allow_comma: false)
+              type = GroupType.new(nested_types)
+              name = "Group"
             when :hash_collection_start
               name ||= "Hash"
               type = parse_hash_collection(name)
