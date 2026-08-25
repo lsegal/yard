@@ -222,13 +222,6 @@ module YARD
         @save_yardoc = true
         @has_markup = false
         @fail_on_warning = false
-
-        if defined?(::Encoding) && ::Encoding.respond_to?(:default_external=)
-          utf8 = ::Encoding.find('utf-8')
-
-          ::Encoding.default_external = utf8 unless ::Encoding.default_external == utf8
-          ::Encoding.default_internal = utf8 unless ::Encoding.default_internal == utf8
-        end
       end
 
       def description

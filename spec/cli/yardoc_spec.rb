@@ -82,6 +82,21 @@ RSpec.describe YARD::CLI::Yardoc do
     it "does not set any locale by default" do
       expect(@yardoc.options.locale).to be nil
     end
+
+    it "does not change Ruby's default encodings" do
+      internal = Encoding.default_internal
+      external = Encoding.default_external
+      Encoding.default_internal = nil
+      Encoding.default_external = Encoding::US_ASCII
+
+      CLI::Yardoc.new
+
+      expect(Encoding.default_internal).to be nil
+      expect(Encoding.default_external).to eq Encoding::US_ASCII
+    ensure
+      Encoding.default_internal = internal
+      Encoding.default_external = external
+    end if defined?(::Encoding)
   end
 
   describe "General options" do
