@@ -103,6 +103,7 @@ class YARD::Handlers::Ruby::Legacy::ClassHandler < YARD::Handlers::Ruby::Legacy:
     case superclass
     when /\A(#{NAMESPACEMATCH})(?:\s|\Z)/,
          /\A(Struct|OStruct)\.new/,
+         /\A(Data)\.define/,
          /\ADelegateClass\((.+?)\)\s*\Z/,
          /\A(#{NAMESPACEMATCH})\(/
       $1
