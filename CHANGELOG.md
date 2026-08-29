@@ -1,5 +1,27 @@
 # main
 
+- Add support for intersection (`Foo & Bar`) types: a value must satisfy
+  every type listed, rather than any one of them, reading as "both a Foo
+  and a Bar" (or "all of a Foo, a Bar, and a Baz" for 3+) to avoid reading
+  like two separate values (closes #1644)
+- Add `|` as a union operator (`Foo | Bar` means an object that's either a
+  Foo or a Bar). Type lists that already mean a union - the top level, a
+  hash's key/value lists, `Array<...>`/`Set<...>` - read `,` and `|` the
+  same way; elsewhere, where a comma-separated list means distinct type
+  parameters or tuple slots (`Array(...)`, or `<...>` for a name other
+  than `Array`/`Set`), `|` groups a union within a single one of them
+  (closes #1699)
+- Add `[...]`, used the same way parentheses are in algebra: to override
+  the default order of operations, e.g. to use a union as one conjunct of
+  an intersection (closes #1699)
+- Document the existing anonymous `<A>`, `(A)`, and `{A=>B}` shorthand forms
+- Stop assuming `Foo<A, B>` always means "A or B": only `Array`/`Set` (known
+  homogeneous collections) keep that implicit-union reading; any other
+  name with 2+ type parameters now reads neutrally as "with type
+  parameters (A, B)", since `<...>` is also conventionally used for a
+  class's distinct type parameters (e.g. `Result<Success, Failure>`).
+  `Hash<KeyType, ValueType>` gets its own dedicated positional rendering,
+  matching `Hash{KeyType=>ValueType}`
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
 
