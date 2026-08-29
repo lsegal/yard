@@ -1,0 +1,19 @@
+<meta charset="<%= charset %>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= h aliki_title %></title>
+
+<script type="text/javascript">
+  var index_rel_prefix = "<%= h aliki_root_prefix %>";
+</script>
+
+<% javascripts.each do |javascript| %>
+  <% if javascript == 'js/theme-toggle.js' %>
+    <script type="text/javascript" charset="utf-8" src="<%= mtime_url(javascript) %>"></script>
+  <% else %>
+    <script type="text/javascript" charset="utf-8" src="<%= mtime_url(javascript) %>" defer></script>
+  <% end %>
+<% end %>
+
+<% stylesheets.each do |stylesheet| %>
+  <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css">
+<% end %>

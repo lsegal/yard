@@ -1,0 +1,29 @@
+<div class="method-header">
+  <div class="method-heading">
+    <a href="#<%= anchor_for(object) %>" title="Link to this method">
+      <% if object.tags(:overload).size == 1 %>
+        <span class="method-callseq"><%= signature(object.tag(:overload), false) %></span>
+      <% elsif object.tags(:overload).size > 1 %>
+        <% object.tags(:overload).each do |overload| %>
+          <span class="method-callseq overload"><%= signature(overload, false) %></span>
+        <% end %>
+      <% else %>
+        <span class="method-callseq"><%= signature(object, false) %></span>
+      <% end %>
+    </a>
+  </div>
+</div>
+
+<% if object.aliases.size > 0 %>
+  <div class="aliases">
+    Also known as:
+    <%= object.aliases.map {|aka| "<span id='#{anchor_for(aka)}'>#{h(aka.name)}</span>" }.join(", ") %>
+  </div>
+<% end %>
+
+<% if owner != object.namespace %>
+  <div class="mixin-from">
+    Originally defined in <%= object.namespace.type %>
+    <%= linkify object, owner.relative_path(object.namespace) %>
+  </div>
+<% end %>
