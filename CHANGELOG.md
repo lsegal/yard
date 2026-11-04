@@ -1,5 +1,6 @@
 # main
 
+- Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
 - Send XHR requests from processing template
