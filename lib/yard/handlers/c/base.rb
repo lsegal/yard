@@ -75,19 +75,8 @@ module YARD
         end
 
         def ensure_variable_defined!(var, max_retries = 1)
-          retries = 0
-          object = nil
-
-          loop do
-            object = namespace_for_variable(var)
-            break unless object.is_a?(Proxy)
-
-            raise NamespaceMissingError, object if retries > max_retries
-            log.debug "Missing namespace variable #{var} in file `#{parser.file}', moving it to the back of the line."
-            parser.parse_remaining_files
-            retries += 1
-          end
-
+          object = namespace_for_variable(var)
+          ensure_loaded!(object, max_retries) if object.is_a?(Proxy)
           object
         end
 

@@ -6,6 +6,11 @@ module YARD
       @table = hash.each_pair { |k, v| [k.to_sym, v] }
     end
 
+    def initialize_copy(other)
+      super
+      @table = @table.dup
+    end
+
     # @private
     def method_missing(name, *args)
       if name.to_s.end_with?('=')

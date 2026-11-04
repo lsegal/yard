@@ -103,7 +103,9 @@ module YARD
       end
 
       # Processes a list of statements by finding handlers to process each
-      # one.
+      # one. A handler that raises {HandlerDeferred} is processed again, with
+      # a copy of the current state, once the {Parser::OrderedParser} has
+      # parsed all files.
       #
       # @param [Array] statements a list of statements
       # @return [void]
@@ -112,6 +114,12 @@ module YARD
           find_handlers(stmt).each do |handler|
             begin
               handler.new(self, stmt).process
+            rescue HandlerDeferred
+              if globals.ordered_parser
+                copy = dup
+                copy.extra_state = extra_state.dup
+                globals.ordered_parser.deferred_statements << [copy, stmt]
+              end
             rescue HandlerAborted
               log.debug "#{handler} cancelled from #{caller.last}"
               log.debug "\tin file '#{file}':#{stmt.line}:\n\n" + stmt.show + "\n"

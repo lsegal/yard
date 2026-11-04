@@ -620,6 +620,35 @@ RSpec.describe YARD::Parser::SourceParser do
       end
     end
 
+    def parse_strings_in_order(*sources)
+      Registry.clear
+      files = sources.map {|source| StringIO.new(source) }
+      YARD::Parser::OrderedParser.new(OpenStruct.new, files).parse
+    end
+
+    it "processes deferred handlers with the state they were deferred in" do
+      parse_strings_in_order(<<-eof, 'module Missing; end', 'class Outer::Inner; end')
+        class Outer
+          # @!group Deferred
+          def before; end
+          class Missing::Inner; end
+          # @!endgroup
+          def after; end
+          private_constant :Inner
+        end
+      eof
+      expect(Registry.at('Missing').children).to eq [Registry.at('Missing::Inner')]
+      expect(Registry.at('Missing::Inner').group).to eq 'Deferred'
+      expect(Registry.at('Outer#after').group).to be nil
+      expect(Registry.at('Outer::Inner').visibility).to eq :private
+    end
+
+    it "warns about objects that are still missing after all files are parsed" do
+      expect(log).to receive(:warn).with(/unrecognized constant: Inner/)
+      parse_strings_in_order("class Outer\n  private_constant :Inner\nend", 'class C; end')
+      expect(Registry.at('Outer::Inner')).to be nil
+    end
+
     it "attempts to order files by length for globs (process toplevel files first)" do
       files = %w(a a/b a/b/c)
       files.each do |file|

@@ -7,6 +7,13 @@ module YARD
     # @since 0.8.4
     class HandlerAborted < ::RuntimeError; end
 
+    # Raised by {Base#ensure_loaded!} when a handler cannot complete until
+    # the remaining files in the {Parser::OrderedParser} have been parsed.
+    # The {Processor} silences the exception and processes the handler
+    # again once all files have been parsed.
+    # @see Processor#process
+    class HandlerDeferred < ::RuntimeError; end
+
     # Raised during processing phase when a handler needs to perform
     # an operation on an object's namespace but the namespace could
     # not be resolved.
@@ -566,8 +573,9 @@ module YARD
       # in a file that has not been handled).
       #
       # Calling this method defers the handler until all other files have been
-      # processed. If the object gets resolved, the rest of the handler continues,
-      # otherwise an exception is raised.
+      # processed, at which point the handler is processed again from the
+      # beginning (see {Processor#process}). If the object cannot be
+      # resolved once all files have been processed, an exception is raised.
       #
       # @example Adding a mixin to the String class programmatically
       #   ensure_loaded! P('String')
@@ -575,23 +583,22 @@ module YARD
       #   P('String').mixins << P('MyMixin')
       #
       # @param [Proxy, CodeObjects::Base] object the object to resolve.
-      # @param [Integer] max_retries the number of times to defer the handler
-      #   before raising a +NamespaceMissingError+.
-      # @raise [NamespaceMissingError] if the object is not resolved within
-      #   +max_retries+ attempts, this exception is raised and the handler
-      #   finishes processing.
+      # @param [Integer] max_retries deprecated and ignored. The handler is
+      #   deferred until +object+ is resolved or no more objects can be resolved.
+      # @raise [HandlerDeferred] if the handler was deferred. This exception
+      #   is silenced by the {Processor}.
+      # @raise [NamespaceMissingError] if the object cannot be resolved, this
+      #   exception is raised and the handler finishes processing.
       def ensure_loaded!(object, max_retries = 1)
         return if object.root?
         return object unless object.is_a?(Proxy)
 
-        retries = 0
-        while object.is_a?(Proxy)
-          raise NamespaceMissingError, object if retries > max_retries
+        if globals.ordered_parser && globals.ordered_parser.deferring?
           log.debug "Missing object #{object} in file `#{parser.file}', moving it to the back of the line."
-          parser.parse_remaining_files
-          retries += 1
+          raise HandlerDeferred
         end
-        object
+
+        raise NamespaceMissingError, object
       end
 
       # @group Macro Support

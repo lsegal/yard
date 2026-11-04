@@ -152,6 +152,7 @@ module YARD
 
     autoload :Base,                       __p('handlers/base')
     autoload :HandlerAborted,             __p('handlers/base')
+    autoload :HandlerDeferred,            __p('handlers/base')
     autoload :NamespaceMissingError,      __p('handlers/base')
     autoload :Processor,                  __p('handlers/processor')
   end
@@ -201,6 +202,7 @@ module YARD
 
     autoload :Base,                __p('parser/base')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
+    autoload :OrderedParser,       __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
   end

@@ -16,7 +16,7 @@ class YARD::Handlers::Ruby::Legacy::PrivateConstantHandler < YARD::Handlers::Rub
     const = Proxy.new(namespace, name)
     ensure_loaded!(const)
     const.visibility = :private
-  rescue NamespaceMissingError
+  rescue YARD::Handlers::NamespaceMissingError
     raise UndocumentableError, "private visibility set on unrecognized constant: #{name}"
   end
 end
