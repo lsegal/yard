@@ -250,6 +250,14 @@ module YARD
             when :type_next
               # Comma - continue collecting keys unless we just processed a value
               # In that case, start a new key group
+            when :fixed_collection_start, :collection_start
+              klass = token_type == :collection_start ? CollectionType : FixedCollectionType
+              nested_types, = parse_until([:fixed_collection_end, :collection_end, :parse_end])
+              key_name = current_keys.last.instance_of?(Type) ? current_keys.pop.name : "Array"
+              current_keys << klass.new(key_name, nested_types)
+            when :hash_collection_start
+              key_name = current_keys.last.instance_of?(Type) ? current_keys.pop.name : "Hash"
+              current_keys << parse_hash_collection(key_name)
             when :hash_collection_value
               # => - current keys map to the next value(s)
               raise SyntaxError, "no keys before =>" if current_keys.empty?

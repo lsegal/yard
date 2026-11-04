@@ -31,7 +31,7 @@ module YARD::CodeObjects
     # method in +:class+ scope, but also creates a new (empty) method
     # as a private +:instance+ method on the same class or module.
     #
-    # @param [NamespaceObject] namespace the namespace
+    # @param [NamespaceObject, :root, nil] namespace the namespace
     # @param [String, Symbol] name the method name
     # @param [Symbol] scope +:instance+, +:class+, or +:module+
     def initialize(namespace, name, scope = :instance, &block)
