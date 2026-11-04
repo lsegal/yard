@@ -161,6 +161,19 @@ module YARD::Handlers::Ruby::StructHandlerMethods
     end
   end
 
+  # Creates reader-only member methods and attaches them to the given
+  # ClassObject. Used for Data classes, whose members are immutable.
+  #
+  # @param [ClassObject] klass the class to generate readers for
+  # @param [Array<String>] members a list of member names
+  def create_readers(klass, members)
+    members.each do |member|
+      next if klass.attributes[:instance][member]
+      klass.attributes[:instance][member] = SymbolHash[:read => nil, :write => nil]
+      create_reader klass, member
+    end
+  end
+
   # Registers an auto-generated member method without reapplying the class's
   # docstring to it. The generated reader or writer receives its own docstring
   # and tags immediately after registration.

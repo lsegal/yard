@@ -218,6 +218,34 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(types.last.name).to eq "nil"
     end
 
+    it "parses a collection type in hash key position" do
+      types = parse("Hash{Array<Symbol> => Proc}")
+
+      expect(types.size).to eq 1
+      expect(types.first).to be_a(YARD::Tags::TypesExplainer::HashCollectionType)
+      expect(types.first.key_types.size).to eq 1
+      expect(types.first.key_types.first).to be_a(YARD::Tags::TypesExplainer::CollectionType)
+      expect(types.first.key_types.first.name).to eq "Array"
+      expect(types.first.key_types.first.types.map(&:name)).to eq ["Symbol"]
+      expect(types.first.value_types.map(&:name)).to eq ["Proc"]
+    end
+
+    it "parses fixed collection and hash types in hash key position" do
+      types = parse("Hash{(String, Integer) => Proc; Hash{Symbol => String}, Symbol => Object}")
+
+      expect(types.size).to eq 1
+      pairs = types.first.key_value_pairs
+      expect(pairs.size).to eq 2
+      expect(pairs[0][0].first).to be_a(YARD::Tags::TypesExplainer::FixedCollectionType)
+      expect(pairs[0][0].first.types.map(&:name)).to eq ["String", "Integer"]
+      expect(pairs[0][1].map(&:name)).to eq ["Proc"]
+      expect(pairs[1][0].first).to be_a(YARD::Tags::TypesExplainer::HashCollectionType)
+      expect(pairs[1][0].first.key_types.map(&:name)).to eq ["Symbol"]
+      expect(pairs[1][0].first.value_types.map(&:name)).to eq ["String"]
+      expect(pairs[1][0].last.name).to eq "Symbol"
+      expect(pairs[1][1].map(&:name)).to eq ["Object"]
+    end
+
     it "parses constant values" do
       type = parse("false, true, nil, 4, :foo")
       expect(type.map(&:name)).to eq ['false', 'true', 'nil', '4', ':foo']
@@ -265,7 +293,8 @@ RSpec.describe YARD::Tags::TypesExplainer do
         ":symbol, 'string'" => "a literal value :symbol; a literal value 'string'",
         "Hash{:key_one, :key_two => String; :key_three => Symbol}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols)",
         "Hash{:key_one, :key_two => String; :key_three => Symbol; :key_four => Hash{:sub_key_one => String}}" => "a Hash with keys made of (a literal value :key_one or a literal value :key_two) and values of (Strings) and keys made of (a literal value :key_three) and values of (Symbols) and keys made of (a literal value :key_four) and values of (a Hash with keys made of (a literal value :sub_key_one) and values of (Strings))",
-        "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)"
+        "Hash{:key_one => String, Number; :key_two => String}" => "a Hash with keys made of (a literal value :key_one) and values of (Strings or Numbers) and keys made of (a literal value :key_two) and values of (Strings)",
+        "Hash{Array<Symbol> => Proc}" => "a Hash with keys made of (an Array of (Symbols)) and values of (Procs)"
       }
       expect.each do |input, expected|
         explain = YARD::Tags::TypesExplainer.explain(input)

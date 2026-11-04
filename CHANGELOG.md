@@ -5,8 +5,11 @@
   deferred and run again from the start once all files are parsed, instead of parsing
   the remaining files recursively. The `max_retries` argument to `ensure_loaded!` and
   `Handlers::C::Base#ensure_variable_defined!` is deprecated and ignored.
+- Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
+- Fix quadratic parsing slowdown on source files containing very large literals
+- Send XHR requests from processing template
 
 # [0.9.45] - July 14th, 2026
 
