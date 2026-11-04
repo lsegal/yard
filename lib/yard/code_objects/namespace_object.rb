@@ -38,9 +38,9 @@ module YARD::CodeObjects
     # @return [Hash] a list of methods
     attr_reader :attributes
 
-    # A hash containing two keys, :class and :instance, each containing
-    # a hash of objects and their alias names.
-    # @return [Hash] a list of methods
+    # Maps alias method objects to the names of the methods they alias.
+    # Class and instance aliases share this hash; each key records its scope.
+    # @return [Hash{MethodObject => Symbol}] alias methods mapped to their target names
     attr_reader :aliases
 
     # Class mixins
