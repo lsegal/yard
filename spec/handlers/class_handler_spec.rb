@@ -244,4 +244,37 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}ClassHan
   it "handles inheritance from 'self'" do
     expect(Registry.at('Outer1::Inner1').superclass).to eq Registry.at('Outer1')
   end
+
+  it "sets Data as superclass of 'class Const < Data.define(:sym)'" do
+    expect(Registry.at('DataPoint').superclass).to eq P(:Data)
+    expect(Registry.at('EmptyDataClass').superclass).to eq P(:Data)
+    expect(Registry.at('DoccedData').superclass).to eq P(:Data)
+  end
+
+  it "creates no attributes for 'class Const < Data.define' without members" do
+    expect(Registry.at('EmptyDataClass').attributes[:instance]).to be_empty
+  end
+
+  it "lets an explicit method definition override a generated Data reader" do
+    expect(Registry.at('DataClassWithMethods#a').docstring).to eq 'Overridden reader.'
+    expect(Registry.at('DataClassWithMethods#double_a')).not_to be nil
+  end
+
+  it "turns 'class Const < Data.define(:sym)' into class Const with attr reader :sym" do
+    obj = Registry.at('DataPoint')
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    attrs = obj.attributes[:instance]
+    [:x, :y].each do |key|
+      expect(attrs).to have_key(key)
+      expect(attrs[key][:read]).not_to be nil
+      expect(attrs[key][:write]).to be nil
+    end
+  end unless LEGACY_PARSER
+
+  it "uses @attr tags for Data member readers without creating writers" do
+    obj = Registry.at('DoccedData#name')
+    expect(obj.docstring).to eq 'the name of the person'
+    expect(obj.tag(:return).types).to eq ['String']
+    expect(Registry.at('DoccedData').attributes[:instance][:name][:write]).to be nil
+  end unless LEGACY_PARSER
 end
