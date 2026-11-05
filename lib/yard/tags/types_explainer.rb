@@ -355,33 +355,8 @@ module YARD
               name = nil
               type = nil
             when :fixed_collection_start, :collection_start
-              is_fixed = token_type == :fixed_collection_start
               name ||= "Array"
-              # Both a fixed tuple's `(...)` and a parameterized type's
-              # `<...>` treat `,` as separating positional type parameters,
-              # and a bare `|` as grouping alternatives within just one of
-              # them (`finish_group`) - parsing doesn't need to know
-              # whether `name` means an implicit union. Whether a name's
-              # type parameters get described as a union (Array, Set) or
-              # neutrally (everything else) is purely a rendering choice,
-              # made below.
-              nested_types, = parse_until(
-                [:fixed_collection_end, :collection_end, :parse_end], slot_pipe: true
-              )
-              type = if is_fixed
-                FixedCollectionType.new(name, nested_types)
-              elsif name == "Hash" && nested_types.size == 2
-                # `Hash<KeyType, ValueType>` is documented as positional
-                # (slot 0 = key type, slot 1 = value type), matching the
-                # dedicated `Hash{K=>V}` syntax - not an implicit union.
-                HashCollectionType.new(name, [nested_types[0]], [nested_types[1]])
-              else
-                # Whether these type parameters get described as a union
-                # (Array, Set) or neutrally (everything else) doesn't
-                # affect parsing, so it's not decided here - see
-                # {CollectionType#union?}.
-                CollectionType.new(name, nested_types)
-              end
+              type = parse_collection(name, fixed: token_type == :fixed_collection_start)
             when :group_start
               raise SyntaxError, "'[' cannot follow a type name" if name
               nested_types, = parse_until([:group_end, :parse_end])
@@ -452,6 +427,12 @@ module YARD
               # ',' and '|' are synonyms here, as everywhere outside '(...)'
               raise SyntaxError, "expecting name, got '#{token}' at #{@scanner.pos}" if key_name.nil?
               finalize_key.call
+            when :fixed_collection_start, :collection_start
+              key_name ||= "Array"
+              key_type = parse_collection(key_name, fixed: token_type == :fixed_collection_start)
+            when :hash_collection_start
+              key_name ||= "Hash"
+              key_type = parse_hash_collection(key_name)
             when :hash_collection_value
               # => - current keys map to the next value(s)
               finalize_key.call
@@ -472,6 +453,40 @@ module YARD
         end
 
         private
+
+        # Parses the type parameters of a `name<...>` or `name(...)` that
+        # has just been opened, in either a type list or a hash's keys.
+        #
+        # Both a fixed tuple's `(...)` and a parameterized type's `<...>`
+        # treat `,` as separating positional type parameters, and a bare
+        # `|` as grouping alternatives within just one of them
+        # (`finish_group`) - parsing doesn't need to know whether `name`
+        # means an implicit union. Whether a name's type parameters get
+        # described as a union (Array, Set) or neutrally (everything
+        # else) is purely a rendering choice, made below.
+        #
+        # @param name [String] the collection's name
+        # @param fixed [Boolean] whether it was opened with `(` rather than `<`
+        # @return [Type] the parsed collection type
+        def parse_collection(name, fixed:)
+          nested_types, = parse_until(
+            [:fixed_collection_end, :collection_end, :parse_end], slot_pipe: true
+          )
+          if fixed
+            FixedCollectionType.new(name, nested_types)
+          elsif name == "Hash" && nested_types.size == 2
+            # `Hash<KeyType, ValueType>` is documented as positional
+            # (slot 0 = key type, slot 1 = value type), matching the
+            # dedicated `Hash{K=>V}` syntax - not an implicit union.
+            HashCollectionType.new(name, [nested_types[0]], [nested_types[1]])
+          else
+            # Whether these type parameters get described as a union
+            # (Array, Set) or neutrally (everything else) doesn't
+            # affect parsing, so it's not decided here - see
+            # {CollectionType#union?}.
+            CollectionType.new(name, nested_types)
+          end
+        end
 
         # Combines the conjuncts of an `A & B & ...` intersection with the
         # final type in the chain. Consecutive duck-types (`#foo & #bar`)

@@ -555,7 +555,7 @@ module YARD
               index += 1
             end
 
-            output.gsub(/(^|[\s>])\+([^\s+\n](?:[^+\n]*?[^\s+\n])?)\+(?=$|[\s<.,;:!?)]|\z)/) do
+            output.gsub(/(^|[\s>])\+([^\s+](?:[^+\n]*?[^\s+])?)\+(?=$|[\s<.,;:!?)]|\z)/) do
               prefix = $1
               prefix + store_placeholder(placeholders, "<code>#{h(restore_placeholders($2, placeholders))}</code>")
             end
