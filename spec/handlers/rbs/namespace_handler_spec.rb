@@ -71,4 +71,23 @@ end
     RBS
     expect(Registry.at('Documented')).to be_a(CodeObjects::ClassObject)
   end
+
+  it "closes a namespace at an end followed by an inline comment" do
+    parse_rbs <<-RBS
+module Outer
+  class Inner
+    def run: () -> void
+  end # Inner
+
+  def after: () -> void
+end
+
+class Top
+end
+    RBS
+    expect(Registry.at('Outer#after')).to be_a(CodeObjects::MethodObject)
+    expect(Registry.at('Outer::Inner#after')).to be_nil
+    expect(Registry.at('Top')).to be_a(CodeObjects::ClassObject)
+    expect(Registry.at('Outer::Top')).to be_nil
+  end
 end

@@ -68,7 +68,7 @@ module YARD
               pending_start_1   = nil
               i += 1
 
-            elsif stop_at_end && stripped == 'end'
+            elsif stop_at_end && strip_inline_comment(stripped).strip == 'end'
               # End of enclosing block.
               return [statements, i + 1]
 
