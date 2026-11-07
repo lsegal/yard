@@ -92,3 +92,8 @@ lib/yard/server/http_utils.rb:
       LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
       OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
       SUCH DAMAGE.
+
+templates/aliki/layout/html/css/rdoc.css and templates/aliki/layout/html/js/*:
+
+   These files are adapted from RDoc's Aliki theme, written by Stan Lo and
+   included under the MIT license.

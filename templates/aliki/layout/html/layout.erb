@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= erb(:headers) %>
+  </head>
+  <body role="document" class="<%= aliki_body_class %> has-toc">
+    <%= erb(:icons) %>
+    <%= erb(:header) %>
+    <%= erb(:sidebar_toggle) %>
+
+    <nav id="navigation" role="navigation" hidden>
+      <%= erb(:navigation) %>
+    </nav>
+
+    <main role="main">
+      <%= yieldall %>
+    </main>
+
+    <%= erb(:aside_toc) %>
+    <%= erb(:footer) %>
+  </body>
+</html>

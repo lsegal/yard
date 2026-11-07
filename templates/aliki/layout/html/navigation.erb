@@ -1,0 +1,53 @@
+<% unless aliki_nav_files.empty? %>
+  <div id="fileindex-section" class="nav-section">
+    <details class="nav-section-collapsible" <%= 'open' if defined?(@file) && @file %>>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon"><svg><use href="#icon-file"></use></svg></span>
+        <span class="nav-section-title">Pages</span>
+        <span class="nav-section-chevron"><svg><use href="#icon-chevron"></use></svg></span>
+      </summary>
+
+      <ul class="nav-list">
+        <% aliki_nav_files.each do |file| %>
+          <li><a href="<%= url_for_file(file) %>"><%= h(file.title) %></a></li>
+        <% end %>
+      </ul>
+    </details>
+  </div>
+<% end %>
+
+<% [[:class, 'Class Methods', 'icon-class-methods'], [:instance, 'Instance Methods', 'icon-instance-methods']].each do |scope, title, icon| %>
+  <% methods = aliki_nav_methods(scope) %>
+  <% unless methods.empty? %>
+    <div class="nav-section">
+      <details class="nav-section-collapsible" open>
+        <summary class="nav-section-header">
+          <span class="nav-section-icon"><svg><use href="#<%= icon %>"></use></svg></span>
+          <span class="nav-section-title"><%= title %></span>
+          <span class="nav-section-chevron"><svg><use href="#icon-chevron"></use></svg></span>
+        </summary>
+        <ul class="nav-list" role="directory">
+          <% methods.each do |method| %>
+            <li><a href="#<%= anchor_for(method) %>"><%= h(method.name) %></a></li>
+          <% end %>
+        </ul>
+      </details>
+    </div>
+  <% end %>
+<% end %>
+
+<div id="classindex-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon"><svg><use href="#icon-layers"></use></svg></span>
+      <span class="nav-section-title">Classes and Modules</span>
+      <span class="nav-section-chevron"><svg><use href="#icon-chevron"></use></svg></span>
+    </summary>
+
+    <ul class="nav-list">
+      <% aliki_nav_objects.each do |obj| %>
+        <li><%= linkify(obj, obj.path) %></li>
+      <% end %>
+    </ul>
+  </details>
+</div>
