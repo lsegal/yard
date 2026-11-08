@@ -109,6 +109,42 @@ end
     expect(obj.tags(:overload).length).to eq 2
   end
 
+  it "handles a signature spanning several lines" do
+    parse_rbs <<-RBS
+class Foo
+  def greet: (
+    String name, # the name
+    Size: Integer
+  ) -> String
+  def wave: (String name)
+          -> String
+  def nod:
+    (String name) -> String
+end
+    RBS
+    %w(Foo#greet Foo#wave Foo#nod).each do |path|
+      obj = Registry.at(path)
+      expect(obj.tags(:param).first.name).to eq 'name'
+      expect(obj.tags(:param).first.types).to eq ['String']
+      expect(obj.tag(:return).types).to eq ['String']
+    end
+    expect(Registry.at('Foo::Size')).to be_nil
+  end
+
+  it "handles an overload spanning several lines" do
+    parse_rbs <<-RBS
+class Foo
+  def fetch: (Integer index) -> String
+           | (
+               String key
+             ) -> Symbol
+end
+    RBS
+    overloads = Registry.at('Foo#fetch').tags(:overload)
+    expect(overloads.length).to eq 2
+    expect(overloads.last.tag(:return).types).to eq ['Symbol']
+  end
+
   it "handles keyword parameters" do
     parse_rbs <<-RBS
 class Foo
