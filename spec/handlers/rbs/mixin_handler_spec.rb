@@ -35,6 +35,28 @@ end
     expect(Registry.at('Foo').mixins(:instance).map(&:path)).to include('Before')
   end
 
+  it "drops type arguments from the mixin name" do
+    parse_rbs <<-RBS
+module Countable[T]
+  def count: () -> Integer
+end
+module Keyed[K, V]
+  def keys: () -> Array[K]
+end
+interface _Items[T]
+  def each: () { (T) -> void } -> void
+end
+class Bag
+  include Countable[Integer]
+  include Keyed[Symbol, Integer]
+  include _Items[Integer]
+end
+    RBS
+    bag = Registry.at('Bag')
+    expect(bag.mixins(:instance).map(&:path)).to eq(['Countable', 'Keyed', '_Items'])
+    expect(bag.meths.map(&:path)).to include('Countable#count', 'Keyed#keys', '_Items#each')
+  end
+
   it "follows a constant alias to the module it names" do
     Registry.clear
     YARD.parse_string <<-RUBY
