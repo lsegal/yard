@@ -58,4 +58,27 @@ end
     expect(obj).to be_a(CodeObjects::ConstantObject)
     expect(obj.tag(:return).types).to eq ['Integer']
   end
+
+  it "registers class and module aliases as constants" do
+    parse_rbs <<-RBS
+module Outer
+  # A sequence.
+  class Seq = Array
+  module Enum = Enumerable
+
+  def after: () -> void
+end
+
+class Top
+end
+    RBS
+    seq = Registry.at('Outer::Seq')
+    expect(seq).to be_a(CodeObjects::ConstantObject)
+    expect(seq.value).to eq 'Array'
+    expect(seq.docstring).to eq 'A sequence.'
+    expect(Registry.at('Outer::Enum')).to be_a(CodeObjects::ConstantObject)
+    expect(Registry.at('Outer::Enum').value).to eq 'Enumerable'
+    expect(Registry.at('Outer#after')).to be_a(CodeObjects::MethodObject)
+    expect(Registry.at('Top')).to be_a(CodeObjects::ClassObject)
+  end
 end
