@@ -10,7 +10,7 @@ class YARD::Handlers::RBS::AttributeHandler < YARD::Handlers::RBS::Base
     attr_name  = statement.name
     rbs_type   = statement.attr_rbs_type
     yard_types = rbs_type ? YARD::Handlers::RBS::MethodHandler.rbs_type_to_yard_types(rbs_type) : nil
-    mscope     = statement.visibility == :class ? :class : :instance
+    mscope     = statement.scope == :class ? :class : :instance
 
     case statement.type
     when :attr_reader
@@ -32,6 +32,7 @@ class YARD::Handlers::RBS::AttributeHandler < YARD::Handlers::RBS::Base
     obj.source ||= "def #{name}\n  @#{name}\nend"
     obj.signature ||= "def #{name}"
     obj = register(obj)
+    obj.visibility = statement.visibility if statement.visibility
     obj.docstring = "Returns the value of attribute #{name}." if obj.docstring.blank?(false)
     apply_tag_types(obj, :return, types)
     namespace.attributes[obj.scope][name] ||= SymbolHash[:read => nil, :write => nil]
@@ -45,6 +46,7 @@ class YARD::Handlers::RBS::AttributeHandler < YARD::Handlers::RBS::Base
     obj.source ||= "def #{name}=(value)\n  @#{name} = value\nend"
     obj.signature ||= "def #{name}=(value)"
     obj = register(obj)
+    obj.visibility = statement.visibility if statement.visibility
     obj.docstring = "Sets the attribute #{name}\n@param value the value to set the attribute #{name} to." if obj.docstring.blank?(false)
     apply_tag_types(obj, :param, types, "value")
     namespace.attributes[obj.scope][name] ||= SymbolHash[:read => nil, :write => nil]

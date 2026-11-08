@@ -11,6 +11,9 @@ module YARD
       #
       # No external gem dependencies are used; the parser is hand-written.
       class RbsParser < YARD::Parser::Base
+        # Optional visibility modifier before a member, e.g. `private def`.
+        MODIFIER = /(?:(?:public|private|protected)\s+)?/
+
         # @param source [String] source code to parse
         # @param filename [String] path to the source file
         def initialize(source, filename)
@@ -137,13 +140,13 @@ module YARD
             parse_namespace(:module, lines, i, docs, crange)
           when /\Ainterface\s/
             parse_namespace(:interface, lines, i, docs, crange)
-          when /\Adef\s/
+          when /\A#{MODIFIER}def\s/
             parse_method_def(sanitized, lines, i, docs, crange)
-          when /\Aattr_reader\s/
+          when /\A#{MODIFIER}attr_reader\s/
             parse_attr(:attr_reader, lines, i, docs, crange)
-          when /\Aattr_writer\s/
+          when /\A#{MODIFIER}attr_writer\s/
             parse_attr(:attr_writer, lines, i, docs, crange)
-          when /\Aattr_accessor\s/
+          when /\A#{MODIFIER}attr_accessor\s/
             parse_attr(:attr_accessor, lines, i, docs, crange)
           when /\A(include|extend|prepend)\s+(\S+)/
             kind = $1.to_sym
@@ -169,8 +172,13 @@ module YARD
             )
             [stmt, i + 1]
           when /\A(public|private|protected)\s*(\z|#)/
-            # Visibility modifier – skip silently.
-            [nil, i + 1]
+            stmt = Statement.new(
+              :type           => :visibility,
+              :name           => $1,
+              :line           => line_num,
+              :source         => stripped
+            )
+            [stmt, i + 1]
           when /\Aend\s*(\z|#)/
             # Stray `end` – skip.
             [nil, i + 1]
@@ -256,14 +264,16 @@ module YARD
 
           # def method_name: overload1
           #                | overload2
-          # Also handles: def self.method_name: ...
-          unless stripped =~ /\Adef\s+(self\.)?(\S+?)\s*:\s*(.*)\z/
+          # Also handles: def self.method_name: ..., def self?.method_name: ...
+          # and a leading `public` or `private` modifier.
+          unless stripped =~ /\A(?:(public|private|protected)\s+)?def\s+(self\??\.)?(\S+?)\s*:\s*(.*)\z/
             return [nil, i + 1]
           end
 
-          is_class_side = !$1.nil?
-          meth_name     = $2
-          first_sig     = $3.strip
+          visibility    = $1 && $1.to_sym
+          meth_scope    = { 'self.' => :class, 'self?.' => :module }.fetch($2, :instance)
+          meth_name     = $3
+          first_sig     = $4.strip
 
           sigs = [first_sig]
           j    = i + 1
@@ -287,7 +297,8 @@ module YARD
             :comments       => docs,
             :comments_range => crange,
             :signatures     => sigs,
-            :visibility     => is_class_side ? :class : :instance
+            :scope          => meth_scope,
+            :visibility     => visibility
           )
 
           [stmt, j]
@@ -298,11 +309,12 @@ module YARD
           line_num = i + 1
           keyword  = type.to_s
 
-          # attr_reader [self.] name : Type
-          if stripped =~ /\A#{Regexp.escape(keyword)}\s+(self\.)?(\w+)\s*:\s*(.*)\z/
-            is_class  = !$1.nil?
-            attr_name = $2
-            attr_type = $3.strip
+          # [public|private] attr_reader [self.] name : Type
+          if stripped =~ /\A(?:(public|private|protected)\s+)?#{Regexp.escape(keyword)}\s+(self\.)?(\w+)\s*:\s*(.*)\z/
+            visibility = $1 && $1.to_sym
+            is_class   = !$2.nil?
+            attr_name  = $3
+            attr_type  = $4.strip
 
             stmt = Statement.new(
               :type           => type,
@@ -312,7 +324,8 @@ module YARD
               :source         => stripped,
               :comments       => docs,
               :comments_range => crange,
-              :visibility     => is_class ? :class : :instance
+              :scope          => is_class ? :class : :instance,
+              :visibility     => visibility
             )
             [stmt, i + 1]
           else
