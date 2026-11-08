@@ -43,6 +43,9 @@ module YARD
         # @return [String, nil] mixin name for :include/:extend/:prepend
         attr_reader :mixin_name
 
+        # @return [String, nil] aliased method name for :alias
+        attr_reader :old_name
+
         # @return [String, nil] RBS type annotation for attrs and constants
         attr_reader :attr_rbs_type
 
@@ -61,6 +64,7 @@ module YARD
           @block             = attrs[:block] || []
           @signatures        = attrs[:signatures] || []
           @mixin_name        = attrs[:mixin_name]
+          @old_name          = attrs[:old_name]
           @attr_rbs_type     = attrs[:attr_rbs_type]
           @visibility        = attrs[:visibility]
         end
