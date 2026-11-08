@@ -143,10 +143,12 @@ module YARD::CodeObjects
     # @see #meths
     def included_meths(opts = {})
       opts = SymbolHash[:scope => [:instance, :class]].update(opts)
+      # Mixins already being expanded further up, so include cycles terminate.
+      visited = (opts[:visited] || []) + [self]
       [opts[:scope]].flatten.map do |scope|
         mixins(scope).inject([]) do |list, mixin|
-          next list if mixin.is_a?(Proxy)
-          arr = mixin.meths(opts.merge(:scope => :instance)).reject do |o|
+          next list if mixin.is_a?(Proxy) || visited.include?(mixin)
+          arr = mixin.meths(opts.merge(:scope => :instance, :visited => visited)).reject do |o|
             next false if opts[:all]
             child(:name => o.name, :scope => scope) || list.find {|o2| o2.name == o.name }
           end
