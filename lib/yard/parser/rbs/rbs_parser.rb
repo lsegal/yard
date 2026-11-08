@@ -158,10 +158,12 @@ module YARD
               :comments_range => crange
             )
             [stmt, i + 1]
-          when /\Aalias\s+(\S+)\s+(\S+)/
+          when /\Aalias\s+(self\.)?(\S+)\s+(?:self\.)?(\S+)/
             stmt = Statement.new(
               :type           => :alias,
-              :name           => $1,
+              :name           => $2,
+              :old_name       => $3,
+              :visibility     => $1 ? :class : :instance,
               :line           => line_num,
               :source         => stripped,
               :comments       => docs,
