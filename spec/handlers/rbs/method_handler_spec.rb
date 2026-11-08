@@ -151,6 +151,33 @@ end
     expect(obj.tags(:yieldparam).first.types).to eq ['String']
   end
 
+  it "handles methods with type parameters" do
+    parse_rbs <<-RBS
+class Foo
+  def map: [U] (U item) -> U
+end
+    RBS
+    obj = Registry.at('Foo#map')
+    expect(obj.tag(:param).name).to eq 'item'
+    expect(obj.tag(:param).types).to eq ['U']
+    expect(obj.tag(:return).types).to eq ['U']
+  end
+
+  it "adds @yield and @yieldparam for an optional block" do
+    parse_rbs <<-RBS
+class Foo
+  def each: (Integer) ?{ (Integer) -> void } -> Integer
+  def each_spaced: (Integer) ? { (Integer) -> void } -> Integer
+end
+    RBS
+    %w(Foo#each Foo#each_spaced).each do |path|
+      obj = Registry.at(path)
+      expect(obj).to have_tag(:yield)
+      expect(obj.tags(:yieldparam).first.types).to eq ['Integer']
+      expect(obj.tag(:return).types).to eq ['Integer']
+    end
+  end
+
   it "preserves docstring comments" do
     parse_rbs <<-RBS
 class Foo
