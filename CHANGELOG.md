@@ -1,5 +1,6 @@
 # main
 
+- Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
 - Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
