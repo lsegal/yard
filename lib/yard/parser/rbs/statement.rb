@@ -46,6 +46,10 @@ module YARD
         # @return [String, nil] RBS type annotation for attrs and constants
         attr_reader :attr_rbs_type
 
+        # @return [String, nil] aliased class or module name for constants
+        #   declared as `class Foo = Bar` or `module Foo = Bar`
+        attr_reader :value
+
         # @return [Symbol, nil] :class or :instance scope hint from parser
         attr_reader :visibility
 
@@ -62,6 +66,7 @@ module YARD
           @signatures        = attrs[:signatures] || []
           @mixin_name        = attrs[:mixin_name]
           @attr_rbs_type     = attrs[:attr_rbs_type]
+          @value             = attrs[:value]
           @visibility        = attrs[:visibility]
         end
 

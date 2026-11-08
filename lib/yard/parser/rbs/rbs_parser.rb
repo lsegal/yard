@@ -131,6 +131,17 @@ module YARD
           crange = comment_start_1 ? (comment_start_1)..(line_num - 1) : nil
 
           case stripped
+          when /\A(?:class|module)\s+([\w:]+)\s*=\s*([\w:]+)\z/
+            stmt = Statement.new(
+              :type           => :constant,
+              :name           => $1,
+              :value          => $2,
+              :line           => line_num,
+              :source         => stripped,
+              :comments       => docs,
+              :comments_range => crange
+            )
+            [stmt, i + 1]
           when /\Aclass\s/
             parse_namespace(:class, lines, i, docs, crange)
           when /\Amodule\s/
