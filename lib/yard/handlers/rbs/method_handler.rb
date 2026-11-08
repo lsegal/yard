@@ -130,6 +130,13 @@ class YARD::Handlers::RBS::MethodHandler < YARD::Handlers::RBS::Base
     params = []
     block_param = nil
 
+    # Skip method type parameters: leading `[...]`.
+    if remaining.start_with?('[')
+      close = find_matching(remaining, 0, '[', ']')
+      raise YARD::Parser::UndocumentableError, "malformed signature (unclosed '['): #{sig}" if close.nil?
+      remaining = remaining[close + 1..-1].lstrip
+    end
+
     # 1. Extract positional/keyword params: leading `(...)`.
     if remaining.start_with?('(')
       close = find_matching(remaining, 0, '(', ')')
@@ -139,7 +146,8 @@ class YARD::Handlers::RBS::MethodHandler < YARD::Handlers::RBS::Base
       params  = parse_params_list(params_str)
     end
 
-    # 2. Extract block type: `{ ... }`.
+    # 2. Extract block type: `{ ... }`, or an optional block `?{ ... }`.
+    remaining = remaining.sub(/\A\?\s*(?=\{)/, '')
     if remaining.start_with?('{')
       close = find_matching(remaining, 0, '{', '}')
       raise YARD::Parser::UndocumentableError, "malformed signature (unclosed '{'): #{sig}" if close.nil?
