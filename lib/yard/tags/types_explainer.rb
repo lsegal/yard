@@ -154,7 +154,7 @@ module YARD
           :collection_end => />/,
           :fixed_collection_start => /\(/,
           :fixed_collection_end => /\)/,
-          :type_name => /#{ISEP}#{METHODNAMEMATCH}|#{NAMESPACEMATCH}|#{LITERALMATCH}|\w+/,
+          :type_name => /#{ISEP}#{METHODNAMEMATCH}|(?:(?:#{NSEPQ}\s*)?_?#{CONSTANTMATCH})+|#{LITERALMATCH}|\w+/,
           :symbol => /:#{METHODNAMEMATCH}/,
           :type_next => /[,]/,
           :whitespace => /\s+/,
