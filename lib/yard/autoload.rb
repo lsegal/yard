@@ -72,11 +72,13 @@ module YARD
     # RBS type signature handlers
     module RBS
       autoload :Base,               __p('handlers/rbs/base')
+      autoload :AliasHandler,       __p('handlers/rbs/alias_handler')
       autoload :AttributeHandler,   __p('handlers/rbs/attribute_handler')
       autoload :ConstantHandler,    __p('handlers/rbs/constant_handler')
       autoload :MethodHandler,      __p('handlers/rbs/method_handler')
       autoload :MixinHandler,       __p('handlers/rbs/mixin_handler')
       autoload :NamespaceHandler,   __p('handlers/rbs/namespace_handler')
+      autoload :VisibilityHandler,  __p('handlers/rbs/visibility_handler')
     end
 
     # CRuby Handlers
@@ -152,6 +154,7 @@ module YARD
 
     autoload :Base,                       __p('handlers/base')
     autoload :HandlerAborted,             __p('handlers/base')
+    autoload :HandlerDeferred,            __p('handlers/base')
     autoload :NamespaceMissingError,      __p('handlers/base')
     autoload :Processor,                  __p('handlers/processor')
   end
@@ -201,6 +204,7 @@ module YARD
 
     autoload :Base,                __p('parser/base')
     autoload :ParserSyntaxError,   __p('parser/source_parser')
+    autoload :OrderedParser,       __p('parser/source_parser')
     autoload :SourceParser,        __p('parser/source_parser')
     autoload :UndocumentableError, __p('parser/source_parser')
   end

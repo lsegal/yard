@@ -9,12 +9,13 @@ module YARD::CodeObjects
     # @param [Boolean] include_mods if true, will include mixed in
     #   modules (which is likely what is wanted).
     # @return [Array<NamespaceObject>] a list of namespace objects
-    def inheritance_tree(include_mods = false)
+    def inheritance_tree(include_mods = false, visited = [])
       return [self] unless include_mods
+      visited += [self]
       [self] + mixins(:instance, :class).map do |m|
-        next if m == self
+        next if visited.include?(m)
         next m unless m.respond_to?(:inheritance_tree)
-        m.inheritance_tree(true)
+        m.is_a?(ModuleObject) ? m.inheritance_tree(true, visited) : m.inheritance_tree(true)
       end.compact.flatten.uniq
     end
   end
