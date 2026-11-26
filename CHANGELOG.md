@@ -1,5 +1,6 @@
 # main
 
+- Support RBS visibility modifiers, `private` sections and `self?` methods
 - Support RBS method signatures that span several lines
 - Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
 - Fix RBS parser not closing a namespace at an `end` followed by an inline

@@ -77,6 +77,7 @@ module YARD
       autoload :MethodHandler,      __p('handlers/rbs/method_handler')
       autoload :MixinHandler,       __p('handlers/rbs/mixin_handler')
       autoload :NamespaceHandler,   __p('handlers/rbs/namespace_handler')
+      autoload :VisibilityHandler,  __p('handlers/rbs/visibility_handler')
     end
 
     # CRuby Handlers
