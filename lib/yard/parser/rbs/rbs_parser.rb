@@ -71,7 +71,7 @@ module YARD
               pending_start_1   = nil
               i += 1
 
-            elsif stop_at_end && stripped == 'end'
+            elsif stop_at_end && strip_inline_comment(stripped).strip == 'end'
               # End of enclosing block.
               return [statements, i + 1]
 
@@ -148,7 +148,7 @@ module YARD
             parse_attr(:attr_writer, lines, i, docs, crange)
           when /\A#{MODIFIER}attr_accessor\s/
             parse_attr(:attr_accessor, lines, i, docs, crange)
-          when /\A(include|extend|prepend)\s+(\S+)/
+          when /\A(include|extend|prepend)\s+([^\s\[]+)/
             kind = $1.to_sym
             name = $2.delete(';')
             stmt = Statement.new(
@@ -275,15 +275,15 @@ module YARD
           meth_name     = $3
           first_sig     = $4.strip
 
+          first_sig, j = read_signature(first_sig, lines, i + 1)
           sigs = [first_sig]
-          j    = i + 1
 
           # Collect `| overload` continuation lines.
           while j < lines.length
-            cont = sanitized.fetch(j, lines[j]).strip
+            cont = sanitized.fetch(j) { strip_inline_comment(lines[j]) }.strip
             if cont =~ /\A\|\s*(.*)\z/
-              sigs << $1.strip
-              j += 1
+              sig, j = read_signature($1.strip, lines, j + 1)
+              sigs << sig
             else
               break
             end
@@ -302,6 +302,32 @@ module YARD
           )
 
           [stmt, j]
+        end
+
+        # Append the lines of a method type that spans several lines to +sig+.
+        def read_signature(sig, lines, j)
+          while j < lines.length
+            line = strip_inline_comment(lines[j]).strip
+            break unless signature_continues?(sig, line)
+            sig = [sig, line].reject(&:empty?).join(' ')
+            j += 1
+          end
+          [sig, j]
+        end
+
+        # True while +sig+ has an unclosed bracket, or no top-level `->` yet and +next_line+ carries it on.
+        def signature_continues?(sig, next_line)
+          depth = 0
+          arrow = false
+          sig.each_char.with_index do |char, index|
+            case char
+            when '(', '[', '{' then depth += 1
+            when ')', ']', '}' then depth -= 1
+            when '-' then arrow ||= depth == 0 && sig[index + 1] == '>'
+            end
+          end
+          return true if depth > 0
+          !arrow && sig != '...' && next_line =~ /\A(->|[(\[{?])/ ? true : false
         end
 
         def parse_attr(type, lines, i, docs, crange)

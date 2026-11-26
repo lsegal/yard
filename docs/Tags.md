@@ -169,18 +169,29 @@ Note that one extra type that is accepted by convention is the `Boolean` type,
 which represents both the `TrueClass` and `FalseClass` types. This type does not
 exist in Ruby, however.
 
-#### Parametrized Types
+#### Parameterized Types
 
 In addition to basic types (like String or Array), YARD conventions allow for
-a "generics" like syntax to specify container objects or other parametrized types.
+a "generics" like syntax to specify container objects or other parameterized types.
 The syntax is `Type<SubType, OtherSubType, ...>`. For instance, an Array might
 contain only String objects, in which case the type specification would be
-`Array<String>`. Multiple parametrized types can be listed, separated by commas.
+`Array<String>`. Multiple type parameters can be listed, separated by commas:
+`Array<String, Fixnum>` can contain any amount of Strings or Fixnums, in any
+order - `Array` and `Set` both treat their type parameters as an implicit
+union, meaning "any of these".
 
-Note that parametrized types are typically not order-dependent, in other words,
-a list of parametrized types can occur in any order inside of a type. An array
-specified as `Array<String, Fixnum>` can contain any amount of Strings or Fixnums,
-in any order. When the order matters, use "order-dependent lists", described below.
+The type name before `<...>` can be omitted, in which case it defaults to
+`Array`: `<String, Fixnum>` means the same thing as `Array<String, Fixnum>`.
+
+Not every type uses its parameters this way, though: `Result<Success, Failure>`
+uses `Success` and `Failure` as two distinct type parameters, not "either of
+these". A type with a single parameter is unambiguous either way. For a name
+that isn't specifically known to mean a union, YARD describes its
+parameters neutrally, without asserting either reading:
+`Result<Success, Failure>` reads as "a Result with type parameters (a
+Success, a Failure)". `Hash<KeyType, ValueType>` is a special case with its
+own dedicated positional rendering (slot 1 is the key type, slot 2 is the
+value type), matching the `Hash{KeyType=>ValueType}` syntax described below.
 
 #### Duck-Types
 
@@ -194,9 +205,24 @@ that responds to the "read" method:
     # @param io [#read] the input object to read from
     def read(io) io.read end
 
+#### Intersection Types
+
+Types joined with `&` describe an intersection: a value that satisfies every
+type listed, rather than any one of them (which is what a union - the `|`
+operator - already means). For instance, an argument that must both
+inherit from `Foo` and respond to `#bar` would be listed as `Foo & #bar`.
+
+    # Accepts any Comparable string.
+    # @param value [String & Comparable] the value to accept
+    def accept(value) end
+
+`&` is legal in every position a type can appear, and always binds tighter
+than any union or slot separator around it - see
+[Operator Precedence](#Operator_Precedence) below.
+
 #### Hashes
 
-Hashes can be specified either via the parametrized type discussed above,
+Hashes can be specified either via the parameterized type discussed above,
 in the form `Hash<KeyType, ValueType>`, or using the hash specific syntax:
 `Hash{KeyTypes=>ValueTypes}`. In the latter case, KeyTypes or ValueTypes can
 also be a list of types separated by commas.
@@ -222,12 +248,73 @@ Keys in the hash-specific syntax are commonly [literal values](#Literals) such
 as symbols (`:key`) or strings (`'key'`, `"key"`), but any type listed in the
 [type conventions](#Type_List_Conventions) is allowed.
 
+The type name before `{...}` can be omitted, in which case it defaults to
+`Hash`: `{K=>V}` means the same thing as `Hash{K=>V}`.
+
 #### Order-Dependent Lists
 
 An order dependent list is a set of types surrounded by "()" and separated by
 commas. This list must contain exactly those types in exactly the order specified.
 For instance, an Array containing a String, Fixnum and Hash in that order (and
 having exactly those 3 elements) would be listed as: `Array(String, Fixnum, Hash)`.
+
+The type name before `(...)` can be omitted, in which case it defaults to
+`Array`: `(String, Fixnum, Hash)` means the same thing as
+`Array(String, Fixnum, Hash)`.
+
+A single slot can itself be a union: `Array(Integer | String, Symbol)` is a
+2-element Array whose first element is an Integer or a String - see
+[Union Operator](#Union_Operator) below.
+
+#### Union Operator
+
+`|` marks a union: a value matching any of the listed types.
+`Integer | String` means an Integer or a String.
+
+Some type lists already mean a union without `|` - a plain comma-separated
+list at the top level, a hash's key or value list, inside `[...]`
+(described below), and inside `Array<...>`/`Set<...>`. In those places `,`
+and `|` come to the same thing, so use whichever reads better:
+`Integer, String` and `Integer | String` describe the same type.
+
+Elsewhere, each comma-separated item is a distinct, positional type
+parameter instead - a fixed-order list like `Array(...)`, or `<...>` for a
+type other than `Array`/`Set` (see
+[Parameterized Types](#Parameterized_Types) above). There, use `|` within a
+single item to say it can be any of several types:
+`Array(Integer | String, Symbol)` is a 2-element Array whose first element
+is an Integer or a String, and `Result<Success | Failure, Other>` is a
+Result whose first type parameter is a Success or a Failure.
+
+#### Operator Precedence
+
+`&`, `,`, and `|` can all appear in the same type, and `&` always binds
+tighter than the union or slot separator around it: `Foo & Bar, Baz` means
+either both a Foo and a Bar, or a Baz - not `Foo`, unioned with `Bar & Baz`.
+
+#### Overriding the Order of Operations
+
+Square brackets `[...]` are used the same way parentheses are in algebra:
+to override the order of operations described above. Types inside `[...]`
+are combined first; hence `[Foo | Bar] & Baz` describes a value that's
+either a Foo or a Bar, and also a Baz - not `Foo`, unioned with
+`Bar & Baz`. Without the brackets, `&` binds tighter than the union
+around it, so `Foo | Bar & Baz` means the latter.
+
+Inside `[...]`, `,` and `|` both mean a union, so `[Foo, Bar]` and
+`[Foo | Bar]` describe the same type.
+
+<p class="note">
+  While you can treat them the same in practice, this <code>[...]</code> is
+  not the same thing as the <code>[Types]</code> brackets that delimit a
+  tag's whole <a href="#Types_Specifier_List">types specifier list</a> -
+  that outer bracket is tag punctuation, not part of any individual type.
+</p>
+
+`[...]` never takes a preceding type name - `[Integer | String]` alone
+just means "an Integer or a String," identical in meaning to the plain
+top-level list `Integer, String`, just usable in more places. It can nest
+inside itself (`[[Foo | Bar] | Baz]`).
 
 #### Literals
 
