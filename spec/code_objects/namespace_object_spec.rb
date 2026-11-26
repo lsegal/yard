@@ -167,5 +167,26 @@ RSpec.describe YARD::CodeObjects::NamespaceObject do
       eof
       expect(Registry.at('A').included_meths(:all => true)).to eq [P('C#bar'), P('B#foo')]
     end
+
+    it "does not recurse forever when mixins include each other" do
+      YARD.parse_string <<-eof
+        module Outer
+          module A; include B; def a; end end
+          module B; include A; def b; end end
+        end
+      eof
+      expect(Registry.at('Outer::A').meths).to eq [P('Outer::A#a'), P('Outer::B#b')]
+      expect(Registry.at('Outer::B').meths).to eq [P('Outer::B#b'), P('Outer::A#a')]
+    end
+
+    it "does not recurse forever when a module is recorded as mixing in itself" do
+      YARD.parse_string <<-eof
+        module Ext
+          def a; end
+          ::Gem.singleton_class.prepend(self)
+        end
+      eof
+      expect(Registry.at('Ext').meths).to eq [P('Ext#a')]
+    end
   end
 end

@@ -138,5 +138,10 @@ RSpec.describe YARD::CodeObjects::ModuleObject do
       recvmod.class_mixins << mod
       expect(recvmod.inheritance_tree(true)).to eq [recvmod, mod]
     end
+
+    it "does not recurse forever when modules include each other" do
+      @mod4.instance_mixins << @mod1
+      expect(@mod1.inheritance_tree(true)).to eq [@mod1, @mod2, @mod3, @mod4]
+    end
   end
 end
