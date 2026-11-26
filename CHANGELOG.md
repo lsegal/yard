@@ -1,6 +1,38 @@
 # main
 
 - Support RBS method signatures that span several lines
+- Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
+- Fix RBS parser not closing a namespace at an `end` followed by an inline
+  comment, which nested every later declaration one level too deep (#1723)
+- Fix stack overflow when many files reference namespaces defined in later files (#1375).
+  A handler that calls `Handlers::Base#ensure_loaded!` on an unresolved object is now
+  deferred and run again from the start once all files are parsed, instead of parsing
+  the remaining files recursively. The `max_retries` argument to `ensure_loaded!` and
+  `Handlers::C::Base#ensure_variable_defined!` is deprecated and ignored.
+- Add support for intersection (`Foo & Bar`) types: a value must satisfy
+  every type listed, rather than any one of them, reading as "both a Foo
+  and a Bar" (or "all of a Foo, a Bar, and a Baz" for 3+) to avoid reading
+  like two separate values (closes #1644)
+- Add `|` as a union operator (`Foo | Bar` means an object that's either a
+  Foo or a Bar). Type lists that already mean a union - the top level, a
+  hash's key/value lists, `Array<...>`/`Set<...>` - read `,` and `|` the
+  same way; elsewhere, where a comma-separated list means distinct type
+  parameters or tuple slots (`Array(...)`, or `<...>` for a name other
+  than `Array`/`Set`), `|` groups a union within a single one of them
+  (closes #1699)
+- Add `[...]`, used the same way parentheses are in algebra: to override
+  the default order of operations, e.g. to use a union as one conjunct of
+  an intersection (closes #1699)
+- Document the existing anonymous `<A>`, `(A)`, and `{A=>B}` shorthand forms
+- Stop assuming `Foo<A, B>` always means "A or B": only `Array`/`Set` (known
+  homogeneous collections) keep that implicit-union reading; any other
+  name with 2+ type parameters now reads neutrally as "with type
+  parameters (A, B)", since `<...>` is also conventionally used for a
+  class's distinct type parameters (e.g. `Result<Success, Failure>`).
+  `Hash<KeyType, ValueType>` gets its own dedicated positional rendering,
+  matching `Hash{KeyType=>ValueType}`
+- Fix spurious "Cannot resolve link" warnings for braces inside fenced code
+  blocks nested in HTML blocks (e.g. `<details>`) in Markdown files (#1706)
 - Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown

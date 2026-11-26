@@ -68,7 +68,7 @@ module YARD
               pending_start_1   = nil
               i += 1
 
-            elsif stop_at_end && stripped == 'end'
+            elsif stop_at_end && strip_inline_comment(stripped).strip == 'end'
               # End of enclosing block.
               return [statements, i + 1]
 
@@ -145,7 +145,7 @@ module YARD
             parse_attr(:attr_writer, lines, i, docs, crange)
           when /\Aattr_accessor\s/
             parse_attr(:attr_accessor, lines, i, docs, crange)
-          when /\A(include|extend|prepend)\s+(\S+)/
+          when /\A(include|extend|prepend)\s+([^\s\[]+)/
             kind = $1.to_sym
             name = $2.delete(';')
             stmt = Statement.new(
