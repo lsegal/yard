@@ -8,9 +8,11 @@ class YARD::Handlers::RBS::MethodHandler < YARD::Handlers::RBS::Base
   handles :method_def
 
   process do
-    meth_scope = statement.visibility == :class ? :class : :instance
-    obj = register MethodObject.new(namespace, statement.name, meth_scope)
+    obj = register MethodObject.new(namespace, statement.name, statement.scope || :instance)
+    obj.visibility = statement.visibility if statement.visibility
     apply_signature_tags(obj, statement.signatures)
+    # Copy the tags to the private instance method of a `self?.` method too.
+    register_module_function(obj)
 
     # For initialize, ensure the return type is the class, not void.
     if statement.name == 'initialize'

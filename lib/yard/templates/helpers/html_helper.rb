@@ -233,47 +233,13 @@ module YARD
       # @param [String] text the text to resolve links in
       # @return [String] HTML with linkified references
       def resolve_links(text)
-        code_tags = 0
-        text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=\W|.+</|$)}m) do |str|
-          closed = $1
-          tag = $2
-          escape = $3
-          name = $4
-          title = $5
-          match = $&
-          if tag
-            code_tags += (closed ? -1 : 1)
-            next str
-          end
-          next str unless code_tags == 0
-
-          next(match[1..-1]) if escape
-
-          next(match) if name[0, 1] == '|'
-
-          if name == '<a' && title =~ %r{href=["'](.+?)["'].*>.*</a>\s*(.*)\Z}
-            name = $1
-            title = $2
-            title = nil if title.empty?
-          end
-
-          name = CGI.unescapeHTML(name)
-
-          if object.is_a?(String)
-            object
+        text.split(%r{(^[ \t]{0,3}(?:`{3,}|~{3,})[^\n]*\n.*?^[ \t]{0,3}(?:`{3,}|~{3,})[ \t]*(?:\n|\z))}m).map do |part|
+          if part =~ %r{\A[ \t]{0,3}(?:`{3,}|~{3,})}m
+            part
           else
-            link = linkify(name, title)
-            if (link == name || link == title) && (name + ' ' + link !~ /\A<a\s.*>/)
-              match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
-              file = (defined?(@file) && @file ? @file.filename : object.file) || '(unknown)'
-              line = (defined?(@file) && @file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
-              log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".") +
-                       "\n\t" + (match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '') if match
-            end
-
-            link
+            resolve_links_in_text(part)
           end
-        end
+        end.join
       end
 
       # (see BaseHelper#link_file)
@@ -605,6 +571,50 @@ module YARD
       # @endgroup
 
       private
+
+      def resolve_links_in_text(text)
+        code_tags = 0
+        text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=\W|.+</|$)}m) do |str|
+          closed = $1
+          tag = $2
+          escape = $3
+          name = $4
+          title = $5
+          match = $&
+          if tag
+            code_tags += (closed ? -1 : 1)
+            next str
+          end
+          next str unless code_tags == 0
+
+          next(match[1..-1]) if escape
+
+          next(match) if name[0, 1] == '|'
+
+          if name == '<a' && title =~ %r{href=["'](.+?)["'].*>.*</a>\s*(.*)\Z}
+            name = $1
+            title = $2
+            title = nil if title.empty?
+          end
+
+          name = CGI.unescapeHTML(name)
+
+          if object.is_a?(String)
+            object
+          else
+            link = linkify(name, title)
+            if (link == name || link == title) && (name + ' ' + link !~ /\A<a\s.*>/)
+              match = /(.+)?(\{#{Regexp.quote name}(?:\s.*?)?\})(.+)?/.match(text)
+              file = (defined?(@file) && @file ? @file.filename : object.file) || '(unknown)'
+              line = (defined?(@file) && @file ? 1 : (object.docstring.line_range ? object.docstring.line_range.first : 1)) + (match ? $`.count("\n") : 0)
+              log.warn "In file `#{file}':#{line}: Cannot resolve link to #{name} from text" + (match ? ":" : ".") +
+                       "\n\t" + (match[1] ? '...' : '') + match[2].delete("\n") + (match[3] ? '...' : '') if match
+            end
+
+            link
+          end
+        end
+      end
 
       # Converts a set of hash options into HTML attributes for a tag
       #
