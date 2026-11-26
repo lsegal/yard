@@ -220,6 +220,13 @@ RSpec.describe YARD::Tags::TypesExplainer do
       expect(type.first.name).to eq "A::B"
     end
 
+    it "parses a path reference name with an RBS interface segment" do
+      type = parse("A::_B")
+      expect(type.size).to eq 1
+      expect(type.first.name).to eq "A::_B"
+      expect(parse("_A::B::_C").first.name).to eq "_A::B::_C"
+    end
+
     it "parses a list of simple names" do
       type = parse("A, B::C, D, E")
       expect(type.size).to eq 4

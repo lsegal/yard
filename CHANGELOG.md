@@ -1,5 +1,7 @@
 # main
 
+- Fix type parser rejecting namespaced RBS interface names such as
+  `Asana::Client::_Projects` (#1735)
 - Fix stack overflow when a module's mixins form a cycle
 - Register RBS method aliases
 - Register RBS class and module aliases (`class Foo = Bar`) as constants
