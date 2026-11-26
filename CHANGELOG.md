@@ -1,5 +1,6 @@
 # main
 
+- Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
 - Fix RBS parser not closing a namespace at an `end` followed by an inline
   comment, which nested every later declaration one level too deep (#1723)
 - Fix stack overflow when many files reference namespaces defined in later files (#1375).
