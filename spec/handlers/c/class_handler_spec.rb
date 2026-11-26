@@ -75,4 +75,14 @@ RSpec.describe YARD::Handlers::C::ClassHandler do
 
     expect(Registry.at('Foo::Bar').type).to eq :class
   end
+
+  it "resolves namespace variable names across multiple passes" do
+    parse_multi_file_init(
+      'cBaz = rb_define_class_under(cBar, "Baz", rb_cObject);',
+      'cBar = rb_define_class_under(cFoo, "Bar", rb_cObject);',
+      'cFoo = rb_define_class("Foo", rb_cObject);'
+    )
+
+    expect(Registry.at('Foo::Bar::Baz').type).to eq :class
+  end
 end
