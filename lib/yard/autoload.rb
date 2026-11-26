@@ -72,6 +72,7 @@ module YARD
     # RBS type signature handlers
     module RBS
       autoload :Base,               __p('handlers/rbs/base')
+      autoload :AliasHandler,       __p('handlers/rbs/alias_handler')
       autoload :AttributeHandler,   __p('handlers/rbs/attribute_handler')
       autoload :ConstantHandler,    __p('handlers/rbs/constant_handler')
       autoload :MethodHandler,      __p('handlers/rbs/method_handler')
