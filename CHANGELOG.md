@@ -1,5 +1,7 @@
 # main
 
+- Fix RBS parser not closing a namespace at an `end` followed by an inline
+  comment, which nested every later declaration one level too deep (#1723)
 - Fix stack overflow when many files reference namespaces defined in later files (#1375).
   A handler that calls `Handlers::Base#ensure_loaded!` on an unresolved object is now
   deferred and run again from the start once all files are parsed, instead of parsing
