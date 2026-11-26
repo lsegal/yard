@@ -4,7 +4,13 @@ class YARD::Handlers::RBS::MixinHandler < YARD::Handlers::RBS::Base
   handles :include, :extend, :prepend
 
   process do
-    mixin = P(namespace, statement.mixin_name)
+    case mixin = Proxy.new(namespace, statement.mixin_name)
+    when ConstantObject # If a constant is included, use its value as the real object
+      mixin = Proxy.new(namespace, mixin.value || statement.mixin_name, :module)
+    else
+      mixin = Proxy.new(namespace, statement.mixin_name, :module)
+    end
+
     case statement.type
     when :include
       mixins = namespace.mixins(:instance)

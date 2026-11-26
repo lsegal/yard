@@ -709,16 +709,21 @@ module YARD
           # insert any lone unadded comments before node
           root.traverse do |node|
             next if node.type == :list || node.parent.type != :list
-            @comments.keys.each do |line|
-              next unless node.line_range.include?(line)
-              pick = nil
-              node.traverse do |subnode|
-                next unless subnode.type == :list
-                pick ||= subnode
-                next unless subnode.line_range.include?(line)
-                pick = subnode
+            lines = @comments.keys.select {|line| node.line_range.include?(line) }
+            next if lines.empty?
+
+            # Collect the list subnodes once rather than re-traversing the
+            # whole subtree for every comment.
+            sublists = []
+            node.traverse {|subnode| sublists << subnode if subnode.type == :list }
+            next if sublists.empty?
+
+            lines.each do |line|
+              pick = sublists.first
+              sublists.each do |subnode|
+                pick = subnode if subnode.line_range.include?(line)
               end
-              add_comment(line, nil, pick, true) if pick
+              add_comment(line, nil, pick, true)
             end
           end unless @comments.empty?
 

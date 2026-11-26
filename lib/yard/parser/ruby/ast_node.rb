@@ -210,7 +210,8 @@ module YARD
           until nodes.empty?
             node = nodes.pop
             yield node
-            nodes += node.children.reverse unless node.children.empty?
+            children = node.children
+            nodes.concat(children.reverse) unless children.empty?
           end
         end
 

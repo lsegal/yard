@@ -34,4 +34,24 @@ end
     RBS
     expect(Registry.at('Foo').mixins(:instance).map(&:path)).to include('Before')
   end
+
+  it "follows a constant alias to the module it names" do
+    Registry.clear
+    YARD.parse_string <<-RUBY
+module Foo
+  module Real
+    def go; end
+  end
+  Filtering = Real
+end
+    RUBY
+    YARD.parse_string(<<-RBS, :rbs)
+module Foo
+  class Host
+    include Foo::Filtering
+  end
+end
+    RBS
+    expect(Registry.at('Foo::Host').mixins(:instance).map(&:path)).to eq(['Foo::Real'])
+  end
 end

@@ -118,3 +118,24 @@ class NotAStruct; end
 class Outer1
   class Inner1 < self; end
 end
+
+class DataPoint < Data.define(:x, :y)
+end
+
+class EmptyDataClass < Data.define
+end
+
+# @attr [String] name the name of the person
+class DoccedData < Data.define(:name)
+end
+
+class DataClassWithMethods < Data.define(:a)
+  # Overridden reader.
+  def a
+    super
+  end
+
+  def double_a
+    a * 2
+  end
+end

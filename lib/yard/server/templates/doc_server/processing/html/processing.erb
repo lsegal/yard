@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="<%= abs_url('css', 'custom.css') %>?<%= mtime('css/custom.css') %>" type="text/css" media="screen" charset="utf-8">
     <script type="text/javascript" charset="utf-8">
       function checkPage(process) {
-        fetch("<%= router.request.path %>" + (process ? "?process=true" : ""), { cache: "no-store" })
+        fetch("<%= router.request.path %>" + (process ? "?process=true" : ""),
+              { cache: "no-store", headers: {"X-Requested-With": "XMLHttpRequest" } })
           .then(function(response) {
             if (response.status === 200) window.location.reload();
           });

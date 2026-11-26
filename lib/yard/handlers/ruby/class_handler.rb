@@ -21,6 +21,8 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       end
       if is_a_struct
         parse_struct_superclass(klass, statement[1])
+      elsif superclass == "Data"
+        parse_data_superclass(klass, statement[1])
       elsif klass
         create_attributes(klass, members_from_tags(klass))
       end
@@ -95,6 +97,11 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
     create_attributes(klass, members)
   end
 
+  def parse_data_superclass(klass, superclass)
+    return unless superclass.call? && superclass.parameters
+    create_readers(klass, extract_parameters(superclass))
+  end
+
   def parse_superclass(superclass)
     return nil unless superclass
 
@@ -113,6 +120,7 @@ class YARD::Handlers::Ruby::ClassHandler < YARD::Handlers::Ruby::Base
       if cname =~ /^O?Struct$/ && superclass.method_name(true) == :new
         return cname
       end
+      return cname if cname == "Data" && superclass.method_name(true) == :define
     end
     nil
   end
