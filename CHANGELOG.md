@@ -1,5 +1,6 @@
 # main
 
+- Support RBS method signatures that span several lines
 - Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
 - Fix RBS parser not closing a namespace at an `end` followed by an inline
   comment, which nested every later declaration one level too deep (#1723)
