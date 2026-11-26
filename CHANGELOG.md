@@ -1,5 +1,6 @@
 # main
 
+- Register RBS class and module aliases (`class Foo = Bar`) as constants
 - Support RBS visibility modifiers, `private` sections and `self?` methods
 - Support RBS method signatures that span several lines
 - Fix RBS `include`, `extend` and `prepend` keeping type arguments in the mixin name
