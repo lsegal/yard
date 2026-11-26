@@ -1,5 +1,6 @@
 # main
 
+- Fix stack overflow when a module's mixins form a cycle
 - Register RBS method aliases
 - Register RBS class and module aliases (`class Foo = Bar`) as constants
 - Support RBS visibility modifiers, `private` sections and `self?` methods
