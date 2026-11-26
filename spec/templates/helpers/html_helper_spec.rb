@@ -175,6 +175,31 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(html).to match %r{^<p>Introduction:</p>.*<code class="ruby">}m
     end
 
+    it "does not resolve braces in fenced code inside an HTML block" do
+      markdown = <<-MARKDOWN
+<details>
+<summary>Example</summary>
+```ruby
+{contents: File.read(path)}
+{body}
+{city: "Paris", temperature: 15.0, conditions: "Cloudy"}
+{keep: 64}
+```
+</details>
+      MARKDOWN
+      markup_options = options
+      markup_options.markup = :markdown
+      markup_options.markup_provider = :redcarpet
+      allow(self).to receive(:options).and_return(markup_options)
+      allow(self).to receive(:object).and_return(Registry.root)
+      markup_helper = YARD::Templates::Helpers::MarkupHelper
+      markup_helper.clear_markup_cache
+
+      expect(log).not_to receive(:warn)
+      htmlify(markdown, :markdown)
+      markup_helper.clear_markup_cache
+    end
+
     it "sets env and env-yard attributes (AsciiDoc specific)" do
       skip "Missing asciidoctor gem" if markup_class(:asciidoc).nil?
 

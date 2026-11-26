@@ -9,7 +9,7 @@ module YARD
         # @return [Symbol] declaration type:
         #   :class, :module, :interface, :method_def,
         #   :attr_reader, :attr_writer, :attr_accessor,
-        #   :include, :extend, :prepend, :constant, :alias
+        #   :include, :extend, :prepend, :constant, :alias, :visibility
         attr_reader :type
 
         # @return [String] the declaration name
@@ -43,10 +43,22 @@ module YARD
         # @return [String, nil] mixin name for :include/:extend/:prepend
         attr_reader :mixin_name
 
+        # @return [String, nil] aliased method name for :alias
+        attr_reader :old_name
+
         # @return [String, nil] RBS type annotation for attrs and constants
         attr_reader :attr_rbs_type
 
-        # @return [Symbol, nil] :class or :instance scope hint from parser
+        # @return [String, nil] aliased class or module name for constants
+        #   declared as `class Foo = Bar` or `module Foo = Bar`
+        attr_reader :value
+
+        # @return [Symbol, nil] :class, :instance or :module (`self?.`) scope
+        #   hint from parser
+        attr_reader :scope
+
+        # @return [Symbol, nil] :public, :private or :protected, from a
+        #   visibility modifier on a method or attribute
         attr_reader :visibility
 
         def initialize(attrs = {})
@@ -61,7 +73,10 @@ module YARD
           @block             = attrs[:block] || []
           @signatures        = attrs[:signatures] || []
           @mixin_name        = attrs[:mixin_name]
+          @old_name          = attrs[:old_name]
           @attr_rbs_type     = attrs[:attr_rbs_type]
+          @value             = attrs[:value]
+          @scope             = attrs[:scope]
           @visibility        = attrs[:visibility]
         end
 

@@ -16,10 +16,20 @@ module YARD
     # {SourceParser#globals} globals state list to re-enter
     # parsing for the remainder of files in the list recursively.
     #
-    # @see Processor#parse_remaining_files
+    # Handlers that need an object from a file later in the list can be
+    # deferred (see {Handlers::Base#ensure_loaded!}). Deferred handlers are
+    # processed again once all files have been parsed.
+    #
+    # @see Handlers::Processor#parse_remaining_files
     class OrderedParser
       # @return [Array<String>] the list of remaining files to parse
       attr_accessor :files
+
+      # @return [Array<Array(Handlers::Processor, Object)>] the statements
+      #   whose handlers were deferred until all files are parsed, each with
+      #   the processor state to process it with
+      # @see Handlers::Base#ensure_loaded!
+      attr_reader :deferred_statements
 
       # Creates a new OrderedParser with the global state and a list
       # of files to parse.
@@ -32,12 +42,15 @@ module YARD
       def initialize(global_state, files)
         @global_state = global_state
         @files = files.dup
+        @deferred_statements = []
+        @deferring = true
         @global_state.ordered_parser = self
       end
 
-      # Parses the remainder of the {#files} list.
+      # Parses the remainder of the {#files} list, then processes any
+      # handlers that were deferred while parsing.
       #
-      # @see Processor#parse_remaining_files
+      # @see Handlers::Processor#parse_remaining_files
       def parse
         until files.empty?
           file = files.shift
@@ -45,6 +58,28 @@ module YARD
             SourceParser.new(SourceParser.parser_type, @global_state).parse(file)
           end
         end
+
+        # Process deferred statements in passes until they all complete. A
+        # pass that ends with as many deferred as it started with made no
+        # progress: the rest wait on objects that will never be resolved, so
+        # they are processed one last time without deferring, which raises
+        # their missing object errors.
+        until @deferred_statements.empty?
+          statements = @deferred_statements
+          @deferred_statements = []
+          statements.each do |processor, statement|
+            log.debug "Re-processing #{processor.file}:#{statement.line}..."
+            processor.process([statement])
+          end
+          @deferring = false if @deferred_statements.size >= statements.size
+        end
+      end
+
+      # @return [Boolean] whether handlers can currently be deferred. Handlers
+      #   can no longer be deferred once all files have been parsed and no
+      #   deferred handler could be resolved.
+      def deferring?
+        @deferring
       end
     end
 
