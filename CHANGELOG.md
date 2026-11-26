@@ -1,5 +1,7 @@
 # main
 
+- Fix the search result count in the file and class lists, and the first click
+  on a search result being lost when the search field loses focus (#1736)
 - Fix type parser rejecting namespaced RBS interface names such as
   `Asana::Client::_Projects` (#1735)
 - Fix stack overflow when a module's mixins form a cycle
