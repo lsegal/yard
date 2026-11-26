@@ -1,5 +1,7 @@
 # main
 
+- Fix RBS parser not closing a namespace at an `end` followed by an inline
+  comment, which nested every later declaration one level too deep (#1723)
 - Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
