@@ -22,6 +22,8 @@
   class's distinct type parameters (e.g. `Result<Success, Failure>`).
   `Hash<KeyType, ValueType>` gets its own dedicated positional rendering,
   matching `Hash{KeyType=>ValueType}`
+- Fix spurious "Cannot resolve link" warnings for braces inside fenced code
+  blocks nested in HTML blocks (e.g. `<details>`) in Markdown files (#1706)
 - Fix TypesExplainer parsing of nested collection types in Hash key position
 - Fix duplicate "View source" links after client-side navigation in default HTML template
 - Fix duplicated character class range warning in HybridMarkdown
