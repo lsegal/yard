@@ -9,7 +9,7 @@ module YARD
         # @return [Symbol] declaration type:
         #   :class, :module, :interface, :method_def,
         #   :attr_reader, :attr_writer, :attr_accessor,
-        #   :include, :extend, :prepend, :constant, :alias
+        #   :include, :extend, :prepend, :constant, :alias, :visibility
         attr_reader :type
 
         # @return [String] the declaration name
@@ -50,7 +50,12 @@ module YARD
         #   declared as `class Foo = Bar` or `module Foo = Bar`
         attr_reader :value
 
-        # @return [Symbol, nil] :class or :instance scope hint from parser
+        # @return [Symbol, nil] :class, :instance or :module (`self?.`) scope
+        #   hint from parser
+        attr_reader :scope
+
+        # @return [Symbol, nil] :public, :private or :protected, from a
+        #   visibility modifier on a method or attribute
         attr_reader :visibility
 
         def initialize(attrs = {})
@@ -67,6 +72,7 @@ module YARD
           @mixin_name        = attrs[:mixin_name]
           @attr_rbs_type     = attrs[:attr_rbs_type]
           @value             = attrs[:value]
+          @scope             = attrs[:scope]
           @visibility        = attrs[:visibility]
         end
 
