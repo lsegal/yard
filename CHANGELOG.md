@@ -1,5 +1,10 @@
 # main
 
+- Fix stack overflow when many files reference namespaces defined in later files (#1375).
+  A handler that calls `Handlers::Base#ensure_loaded!` on an unresolved object is now
+  deferred and run again from the start once all files are parsed, instead of parsing
+  the remaining files recursively. The `max_retries` argument to `ensure_loaded!` and
+  `Handlers::C::Base#ensure_variable_defined!` is deprecated and ignored.
 - Add support for intersection (`Foo & Bar`) types: a value must satisfy
   every type listed, rather than any one of them, reading as "both a Foo
   and a Bar" (or "all of a Foo, a Bar, and a Baz" for 3+) to avoid reading
