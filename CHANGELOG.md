@@ -1,5 +1,9 @@
 # main
 
+# [0.9.46] - November 26th, 2026
+
+[0.9.46]: https://github.com/lsegal/yard/compare/v0.9.45...v0.9.46
+
 - Fix gem archive path traversal in `yard diff`. Reported by Shopify
   (@oss-security-shopify).
   [GHSA-r86q-p7r5-qcmh](https://github.com/lsegal/yard/security/advisories/GHSA-r86q-p7r5-qcmh)

@@ -2,5 +2,5 @@
 # frozen_string_literal: true
 
 module YARD
-  VERSION = '0.9.45'
+  VERSION = '0.9.46'
 end
