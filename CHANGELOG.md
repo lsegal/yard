@@ -3,6 +3,8 @@
 - Fix gem archive path traversal in `yard diff`. Reported by Shopify
   (@oss-security-shopify).
   [GHSA-r86q-p7r5-qcmh](https://github.com/lsegal/yard/security/advisories/GHSA-r86q-p7r5-qcmh)
+- Use the browser's current URL to poll for documentation while a library builds.
+  Reported by zx (@manus-pi).
 - Fix the search result count in the file and class lists, and the first click
   on a search result being lost when the search field loses focus (#1736)
 - Fix type parser rejecting namespaced RBS interface names such as

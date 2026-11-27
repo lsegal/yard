@@ -14,6 +14,21 @@ RSpec.describe "YARD::Server::RackMiddleware" do
     expect(@app.call(Rack::MockRequest.env_for('/'))[0]).to eq 200
   end
 
+  it "renders the processing page without embedding the request path" do
+    library = LibraryVersion.new('foo', nil)
+    allow(library).to receive(:ready?).and_return(false)
+    app = YARD::Server::RackMiddleware.new(@superapp, :libraries => {'foo' => [library]})
+    path = '/docs/foo/PathReflectionMarker'
+
+    env = Rack::MockRequest.env_for(path, 'SCRIPT_NAME' => '/yard&docs')
+    status, _, body = app.call(env)
+    html = body.join
+
+    expect(status).to eq 202
+    expect(html).to include('Processing foo', 'href="/yard&amp;docs/docs"')
+    expect(html).not_to include(path)
+  end
+
   it "passes up to the next middleware on 404" do
     expect(@superapp).to receive(:call).and_return([200, {}, ['OK']])
     expect(@app.call(Rack::MockRequest.env_for('/INVALID'))).to eq [200, {}, ['OK']]
