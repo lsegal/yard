@@ -178,9 +178,11 @@ module YARD
       end
 
       def expand_and_parse(gemfile, io)
-        dir = expand_gem(gemfile, io)
-        generate_yardoc(dir)
-        cleanup(gemfile)
+        Dir.mktmpdir('yard-diff-') do |dir|
+          log.info "Expanding #{gemfile} to #{dir}..."
+          expand_gem(io, File.realpath(dir))
+          generate_yardoc(dir)
+        end
       end
 
       def generate_yardoc(dir)
@@ -189,11 +191,7 @@ module YARD
         end
       end
 
-      def expand_gem(gemfile, io)
-        tmpdir = File.join(Dir.tmpdir, gemfile)
-        FileUtils.mkdir_p(tmpdir)
-        log.info "Expanding #{gemfile} to #{tmpdir}..."
-
+      def expand_gem(io, tmpdir)
         if Gem::VERSION >= '2.0.0'
           require 'rubygems/package/tar_reader'
           reader = Gem::Package::TarReader.new(io)
@@ -202,7 +200,8 @@ module YARD
             Zlib::GzipReader.wrap(pkg) do |gzio|
               tar = Gem::Package::TarReader.new(gzio)
               tar.each do |entry|
-                file = File.join(tmpdir, entry.full_name)
+                next unless entry.file?
+                file = gem_entry_path(tmpdir, entry.full_name)
                 FileUtils.mkdir_p(File.dirname(file))
                 File.open(file, 'wb') do |out|
                   out.write(entry.read)
@@ -223,8 +222,24 @@ module YARD
             end
           end
         end
+      end
 
-        tmpdir
+      def gem_entry_path(root, name)
+        if name =~ %r{\A(?:[/\\]|[a-z]:)}i
+          raise Gem::Package::PathError.new(name, root)
+        end
+
+        if File::ALT_SEPARATOR
+          # Windows aliases paths with trailing dots or spaces and treats colons as streams.
+          components = name.split(%r{[/\\]})
+          if components.any? {|part| part != '.' && part != '..' && part =~ /:|[. ]\z/ }
+            raise Gem::Package::PathError.new(name, root)
+          end
+        end
+
+        path = File.expand_path(File.join(root, name))
+        raise Gem::Package::PathError.new(name, root) unless path.start_with?(root + '/')
+        path
       end
 
       def require_rubygems

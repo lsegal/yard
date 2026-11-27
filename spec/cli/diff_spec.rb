@@ -169,6 +169,42 @@ eof
     end
   end
 
+  describe "Gem extraction" do
+    before do
+      require 'rubygems/package'
+    end
+
+    it "resolves nested paths under the extraction directory" do
+      Dir.mktmpdir do |dir|
+        root = File.realpath(dir)
+        expect(@diff.send(:gem_entry_path, root, './lib/example.rb')).to eq(File.join(root, 'lib/example.rb'))
+      end
+    end
+
+    it "rejects paths outside the extraction directory and paths that resolve to its root" do
+      Dir.mktmpdir do |dir|
+        root = File.realpath(dir)
+        names = ['.', '/example.rb', 'C:/example.rb', '../example.rb', "../#{File.basename(root)}-other/example.rb"]
+        names.concat(['..\example.rb', '.. /example.rb', 'lib/example.rb:stream']) if File::ALT_SEPARATOR
+        names.each do |name|
+          expect { @diff.send(:gem_entry_path, root, name) }.to raise_error(Gem::Package::PathError)
+        end
+      end
+    end
+
+    it "removes the temporary directory when extraction fails" do
+      path = nil
+      expect(@diff).to receive(:expand_gem) do |_io, dir|
+        path = dir
+        expect(File.directory?(path)).to be true
+        raise IOError
+      end
+      expect(@diff).not_to receive(:generate_yardoc)
+      expect { @diff.send(:expand_and_parse, 'example.gem', StringIO.new) }.to raise_error(IOError)
+      expect(File.exist?(path)).to be false
+    end
+  end
+
   describe "File searching" do
     before do
       allow(@diff).to receive(:generate_yardoc)
@@ -223,9 +259,6 @@ eof
       expect(File).to receive(:exist?).with('gem2.gem').and_return(true)
       expect(File).to receive(:open).with('gem1.gem', 'rb')
       expect(File).to receive(:open).with('gem2.gem', 'rb')
-      allow(FileUtils).to receive(:mkdir_p)
-      allow(Gem::Package).to receive(:open)
-      allow(FileUtils).to receive(:rm_rf)
       @diff.run('gem1', 'gem2.gem')
     end
 
@@ -238,9 +271,6 @@ eof
       expect(File).to receive(:exist?).with('gem2.gem').and_return(false)
       expect(OpenURI).to receive(:open_uri).with('https://rubygems.org/downloads/gem1.gem')
       expect(OpenURI).to receive(:open_uri).with('https://rubygems.org/downloads/gem2.gem')
-      allow(FileUtils).to receive(:mkdir_p)
-      allow(Gem::Package).to receive(:open)
-      allow(FileUtils).to receive(:rm_rf)
       @diff.run('gem1', 'gem2.gem')
     end
 
